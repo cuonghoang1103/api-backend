@@ -1,0 +1,631 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-4-1-locality",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-4-1-locality"
+  },
+  "exercises": [
+    {
+      "title": "Locality 1 — Temporal and spatial locality",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "locality of reference",
+        "memory hierarchy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on locality of reference and the memory hierarchy.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về tính cục bộ của tham chiếu và phân cấp bộ nhớ.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Temporal = same address again; spatial = nearby address next.",
+        "Block size above one word is the hardware answer to spatial locality."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 1 — Temporal and spatial locality\n\nAnswer in the answer panel (no code needed).\n\n1. A loop that keeps adding to the same variable sum shows mainly …Vòng lặp liên tục cộng vào biến sum cho thấy chủ yếu …\n2. Reading a[0], a[1], a[2], … of an array shows mainly …Đọc a[0], a[1], a[2], … của mảng cho thấy chủ yếu …\n3. Why is the cache block (line) larger than one word?Vì sao khối (dòng) cache lớn hơn một từ?\n4. Moving down the hierarchy (register → cache → RAM → disk) the access time …Đi xuống phân cấp (thanh ghi → cache → RAM → đĩa) thời gian truy cập …\n5. A program with a very low hit ratio most likely has …Một chương trình có tỉ lệ hit rất thấp nhiều khả năng có …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 1 — Temporal and spatial locality — answer key\n\n1. A loop that keeps adding to the same variable sum shows mainly …Vòng lặp liên tục cộng vào biến sum cho thấy chủ yếu …\n   Answer: b) temporal locality\n   The same address is reused again and again — temporal locality.VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.\n\n2. Reading a[0], a[1], a[2], … of an array shows mainly …Đọc a[0], a[1], a[2], … của mảng cho thấy chủ yếu …\n   Answer: c) spatial locality\n   Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.\n\n3. Why is the cache block (line) larger than one word?Vì sao khối (dòng) cache lớn hơn một từ?\n   Answer: d) To exploit spatial locality\n   Fetching neighbours together turns later sequential accesses into hits.VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.\n\n4. Moving down the hierarchy (register → cache → RAM → disk) the access time …Đi xuống phân cấp (thanh ghi → cache → RAM → đĩa) thời gian truy cập …\n   Answer: a) increases while capacity increases and cost per bit decreases\n   Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.\n\n5. A program with a very low hit ratio most likely has …Một chương trình có tỉ lệ hit rất thấp nhiều khả năng có …\n   Answer: b) poor locality or a working set larger than the cache\n   Misses come from poor reuse (capacity/conflict) or first use (compulsory).VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A loop that keeps adding to the same variable <code>sum</code> shows mainly …</p><p style=\"opacity:.75;font-size:.92em\"><i>Vòng lặp liên tục cộng vào biến <code>sum</code> cho thấy chủ yếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "sequential locality of instructions only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "temporal locality"
+              },
+              {
+                "ma": "c",
+                "noiDung": "spatial locality"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no locality"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The same address is reused again and again — temporal locality.</p><p><i>VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Reading <code>a[0], a[1], a[2], …</code> of an array shows mainly …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đọc <code>a[0], a[1], a[2], …</code> của mảng cho thấy chủ yếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no locality"
+              },
+              {
+                "ma": "b",
+                "noiDung": "random access"
+              },
+              {
+                "ma": "c",
+                "noiDung": "spatial locality"
+              },
+              {
+                "ma": "d",
+                "noiDung": "temporal locality only"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.</p><p><i>VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is the cache block (line) larger than one word?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao khối (dòng) cache lớn hơn một từ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To exploit temporal locality"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To increase the clock rate"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To avoid using the tag"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To exploit spatial locality"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Fetching neighbours together turns later sequential accesses into hits.</p><p><i>VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Moving down the hierarchy (register → cache → RAM → disk) the access time …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đi xuống phân cấp (thanh ghi → cache → RAM → đĩa) thời gian truy cập …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "increases while capacity increases and cost per bit decreases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "decreases"
+              },
+              {
+                "ma": "c",
+                "noiDung": "stays equal"
+              },
+              {
+                "ma": "d",
+                "noiDung": "increases while cost per bit increases"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.</p><p><i>VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A program with a very low hit ratio most likely has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một chương trình có tỉ lệ hit rất thấp nhiều khả năng có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a data bus that is too narrow"
+              },
+              {
+                "ma": "b",
+                "noiDung": "poor locality or a working set larger than the cache"
+              },
+              {
+                "ma": "c",
+                "noiDung": "too many registers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a clock rate that is too high"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Misses come from poor reuse (capacity/conflict) or first use (compulsory).</p><p><i>VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping the names temporal and spatial."
+        },
+        {
+          "loi": "Thinking a bigger cache always raises the hit ratio proportionally."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "temporal locality",
+          "vi": "cục bộ thời gian"
+        },
+        {
+          "en": "spatial locality",
+          "vi": "cục bộ không gian"
+        }
+      ]
+    },
+    {
+      "title": "Locality 2 — Average memory access time (AMAT) with one cache level",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "AMAT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Hit ratio <b>h</b>, cache access time <b>c</b> and total miss time <b>m</b> (cycles). AMAT = h × c + (1 − h) × m. Fill in the AMAT (2 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tỉ lệ hit <b>h</b>, thời gian truy cập cache <b>c</b> và thời gian khi miss <b>m</b> (chu kỳ). AMAT = h × c + (1 − h) × m. Điền AMAT (2 chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Weight each time by its probability.",
+        "(1 − h) is the miss ratio."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 2 — Average memory access time (AMAT) with one cache level\n\nAnswer in the answer panel (no code needed).\n\n1. AMATAMAT\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 2 — Average memory access time (AMAT) with one cache level — answer key\n\n1. AMATAMAT\n   - r1.a: 5.90 / 5.9\n   - r2.a: 10.90 / 10.9\n   - r3.a: 3.48\n   - r4.a: 14.40 / 14.4\n   0.95×2 + 0.05×80 = 5.90; 0.9×1 + 0.10×100 = 10.90; 0.99×2 + 0.01×150 = 3.48; 0.8×3 + 0.20×60 = 14.40.VI: 0.95×2 + 0.05×80 = 5.90; 0.9×1 + 0.10×100 = 10.90; 0.99×2 + 0.01×150 = 3.48; 0.8×3 + 0.20×60 = 14.40.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>0.95×2 + 0.05×80 = 5.90; 0.9×1 + 0.10×100 = 10.90; 0.99×2 + 0.01×150 = 3.48; 0.8×3 + 0.20×60 = 14.40.</p><p><i>VI: 0.95×2 + 0.05×80 = 5.90; 0.9×1 + 0.10×100 = 10.90; 0.99×2 + 0.01×150 = 3.48; 0.8×3 + 0.20×60 = 14.40.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>AMAT</p><p style=\"opacity:.75;font-size:.92em\"><i>AMAT</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "h, c, m"
+              },
+              {
+                "ma": "a",
+                "ten": "AMAT (cycles)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "h = 0.95, c = 2, m = 80"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "h = 0.9, c = 1, m = 100"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "h = 0.99, c = 2, m = 150"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "h = 0.8, c = 3, m = 60"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "5.90",
+                "5.9"
+              ],
+              "r2.a": [
+                "10.90",
+                "10.9"
+              ],
+              "r3.a": [
+                "3.48"
+              ],
+              "r4.a": [
+                "14.40",
+                "14.4"
+              ]
+            },
+            "giaiThich": "<p>0.95×2 + 0.05×80 = 5.90; 0.9×1 + 0.10×100 = 10.90; 0.99×2 + 0.01×150 = 3.48; 0.8×3 + 0.20×60 = 14.40.</p><p><i>VI: 0.95×2 + 0.05×80 = 5.90; 0.9×1 + 0.10×100 = 10.90; 0.99×2 + 0.01×150 = 3.48; 0.8×3 + 0.20×60 = 14.40.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding c and m without weights."
+        },
+        {
+          "loi": "Using h as the miss ratio."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hit ratio",
+          "vi": "tỉ lệ trúng cache"
+        },
+        {
+          "en": "AMAT",
+          "vi": "thời gian truy cập trung bình"
+        }
+      ]
+    },
+    {
+      "title": "Locality 3 — Two cache levels, and the hit ratio you need",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "multi-level cache",
+        "AMAT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p><b>Part A.</b> Two levels: AMAT = t₁ + (1 − h₁) × (t₂ + (1 − h₂) × t_mem) where t₁, t₂ are the L1/L2 access times and h₁, h₂ the hit ratios of each level (h₂ is local). Fill in the AMAT (2 decimals).</p><p><b>Part B.</b> A single cache has c = 2 cycles and m = 100 cycles. What hit ratio is needed to reach the target AMAT? (4 decimals)</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Phần A.</b> Hai tầng: AMAT = t₁ + (1 − h₁) × (t₂ + (1 − h₂) × t_mem), t₁, t₂ là thời gian truy cập L1/L2 còn h₁, h₂ là tỉ lệ hit từng tầng (h₂ là tỉ lệ cục bộ). Điền AMAT (2 chữ số).</p><p><b>Phần B.</b> Một cache có c = 2 chu kỳ, m = 100 chu kỳ. Cần tỉ lệ hit bao nhiêu để đạt AMAT mục tiêu? (4 chữ số)</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Evaluate the inner bracket first (what a miss in L1 costs on average).",
+        "Solve AMAT = h·c + (1−h)·m for h."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 3 — Two cache levels, and the hit ratio you need\n\nAnswer in the answer panel (no code needed).\n\n1. Two-level AMATAMAT hai tầng\n2. Required hit ratioTỉ lệ hit cần có\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 3 — Two cache levels, and the hit ratio you need — answer key\n\n1. Two-level AMATAMAT hai tầng\n   - r1.a: 4.00 / 4\n   - r2.a: 3.60 / 3.6\n   - r3.a: 11.20 / 11.2\n   1 + 0.10×(10 + 0.20×100) = 4.00; 2 + 0.05×(12 + 0.10×200) = 3.60; 1 + 0.15×(8 + 0.50×120) = 11.20.VI: 1 + 0.10×(10 + 0.20×100) = 4.00; 2 + 0.05×(12 + 0.10×200) = 3.60; 1 + 0.15×(8 + 0.50×120) = 11.20.\n\n2. Required hit ratioTỉ lệ hit cần có\n   - r1.h: 0.9184\n   - r2.h: 0.9694\n   - r3.h: 0.9898\n   h = (m − target) / (m − c): 10 → 0.9184; 5 → 0.9694; 3 → 0.9898. The closer to c, the closer h must be to 1.VI: h = (m − mục tiêu) / (m − c): 10 → 0.9184; 5 → 0.9694; 3 → 0.9898.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1 + 0.10×(10 + 0.20×100) = 4.00; 2 + 0.05×(12 + 0.10×200) = 3.60; 1 + 0.15×(8 + 0.50×120) = 11.20.</p><p><i>VI: 1 + 0.10×(10 + 0.20×100) = 4.00; 2 + 0.05×(12 + 0.10×200) = 3.60; 1 + 0.15×(8 + 0.50×120) = 11.20.</i></p><p>h = (m − target) / (m − c): 10 → 0.9184; 5 → 0.9694; 3 → 0.9898. The closer to c, the closer h must be to 1.</p><p><i>VI: h = (m − mục tiêu) / (m − c): 10 → 0.9184; 5 → 0.9694; 3 → 0.9898.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Two-level AMAT</p><p style=\"opacity:.75;font-size:.92em\"><i>AMAT hai tầng</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "h₁, t₁, h₂, t₂, t_mem"
+              },
+              {
+                "ma": "a",
+                "ten": "AMAT"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "h₁ = 0.9, t₁ = 1, h₂ = 0.8, t₂ = 10, t_mem = 100"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "h₁ = 0.95, t₁ = 2, h₂ = 0.9, t₂ = 12, t_mem = 200"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "h₁ = 0.85, t₁ = 1, h₂ = 0.5, t₂ = 8, t_mem = 120"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "4.00",
+                "4"
+              ],
+              "r2.a": [
+                "3.60",
+                "3.6"
+              ],
+              "r3.a": [
+                "11.20",
+                "11.2"
+              ]
+            },
+            "giaiThich": "<p>1 + 0.10×(10 + 0.20×100) = 4.00; 2 + 0.05×(12 + 0.10×200) = 3.60; 1 + 0.15×(8 + 0.50×120) = 11.20.</p><p><i>VI: 1 + 0.10×(10 + 0.20×100) = 4.00; 2 + 0.05×(12 + 0.10×200) = 3.60; 1 + 0.15×(8 + 0.50×120) = 11.20.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Required hit ratio</p><p style=\"opacity:.75;font-size:.92em\"><i>Tỉ lệ hit cần có</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Target AMAT"
+              },
+              {
+                "ma": "h",
+                "ten": "Required h"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "10 cycles"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "5 cycles"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "3 cycles"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.h": [
+                "0.9184"
+              ],
+              "r2.h": [
+                "0.9694"
+              ],
+              "r3.h": [
+                "0.9898"
+              ]
+            },
+            "giaiThich": "<p>h = (m − target) / (m − c): 10 → 0.9184; 5 → 0.9694; 3 → 0.9898. The closer to c, the closer h must be to 1.</p><p><i>VI: h = (m − mục tiêu) / (m − c): 10 → 0.9184; 5 → 0.9694; 3 → 0.9898.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using h₂ as a global ratio instead of a local one."
+        },
+        {
+          "loi": "Dropping t₁ (the L1 access is paid on every reference)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "local hit ratio",
+          "vi": "tỉ lệ hit cục bộ của tầng"
+        }
+      ]
+    },
+    {
+      "title": "Locality 4 — Row-major or column-major? Count the misses",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "spatial locality",
+        "conflict misses"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A 16 × 16 array of 4-byte integers is stored row by row from address 0. The cache is direct-mapped, 16 lines of 32 bytes, initially empty. Three loops read all 256 elements (the third visits <code>a[(k·8) mod 256]</code> for k = 0 … 255). The numbers were obtained with the cache simulator. Fill in hits and misses.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mảng 16 × 16 số nguyên 4 byte lưu theo hàng từ địa chỉ 0. Cache ánh xạ trực tiếp, 16 dòng 32 byte, ban đầu rỗng. Ba vòng lặp đọc cả 256 phần tử (vòng thứ ba đọc <code>a[(k·8) mod 256]</code>, k = 0 … 255). Số liệu do bộ mô phỏng cache tính. Điền số hit và miss.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "How many ints fit in a 32-byte line? Walk along the addresses and mark when a new line starts.",
+        "Direct-mapped: line = block number mod 16 — find which blocks collide."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 4 — Row-major or column-major? Count the misses\n\nAnswer in the answer panel (no code needed).\n\n1. Misses of three traversalsSố miss của ba cách duyệt\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Locality 4 — Row-major or column-major? Count the misses — answer key\n\n1. Misses of three traversalsSố miss của ba cách duyệt\n   - r1.h: 224\n   - r1.m: 32\n   - r2.h: 0\n   - r2.m: 256\n   - r3.h: 0\n   - r3.m: 256\n   Row-major: each 32-byte line holds 8 ints, so 1 miss then 7 hits: 32 misses. Column-major jumps 64 bytes per step, so a column uses only the even-numbered lines (8 of 16): its 16 blocks collide in pairs and every block is evicted before its neighbour element is read: 256 misses. Stride 8 cycles over 32 different blocks that must share 16 lines: each block is evicted before it comes round again: 256 misses.VI: Duyệt theo hàng: mỗi dòng 32 byte chứa 8 int nên 1 miss rồi 7 hit: 32 miss. Duyệt theo cột nhảy 64 byte mỗi bước nên một cột chỉ dùng các dòng chẵn (8 trong 16): 16 khối va chạm từng đôi và mỗi khối bị đuổi trước khi đọc phần tử lân cận: 256 miss. Bước nhảy 8 lặp vòng qua 32 khối khác nhau phải chia nhau 16 dòng: mỗi khối bị đuổi trước khi vòng quay lại: 256 miss.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Row-major: each 32-byte line holds 8 ints, so 1 miss then 7 hits: 32 misses. Column-major jumps 64 bytes per step, so a column uses only the even-numbered lines (8 of 16): its 16 blocks collide in pairs and every block is evicted before its neighbour element is read: 256 misses. Stride 8 cycles over 32 different blocks that must share 16 lines: each block is evicted before it comes round again: 256 misses.</p><p><i>VI: Duyệt theo hàng: mỗi dòng 32 byte chứa 8 int nên 1 miss rồi 7 hit: 32 miss. Duyệt theo cột nhảy 64 byte mỗi bước nên một cột chỉ dùng các dòng chẵn (8 trong 16): 16 khối va chạm từng đôi và mỗi khối bị đuổi trước khi đọc phần tử lân cận: 256 miss. Bước nhảy 8 lặp vòng qua 32 khối khác nhau phải chia nhau 16 dòng: mỗi khối bị đuổi trước khi vòng quay lại: 256 miss.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Misses of three traversals</p><p style=\"opacity:.75;font-size:.92em\"><i>Số miss của ba cách duyệt</i></p>",
+            "cot": [
+              {
+                "ma": "l",
+                "ten": "Loop"
+              },
+              {
+                "ma": "h",
+                "ten": "Hits"
+              },
+              {
+                "ma": "m",
+                "ten": "Misses"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "l": "Row by row: for i { for j { a[i][j] } }"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "l": "Column by column: for j { for i { a[i][j] } }"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "l": "Stride 8: a[(k·8) mod 256]"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.h": "224",
+              "r1.m": "32",
+              "r2.h": "0",
+              "r2.m": "256",
+              "r3.h": "0",
+              "r3.m": "256"
+            },
+            "giaiThich": "<p>Row-major: each 32-byte line holds 8 ints, so 1 miss then 7 hits: 32 misses. Column-major jumps 64 bytes per step, so a column uses only the even-numbered lines (8 of 16): its 16 blocks collide in pairs and every block is evicted before its neighbour element is read: 256 misses. Stride 8 cycles over 32 different blocks that must share 16 lines: each block is evicted before it comes round again: 256 misses.</p><p><i>VI: Duyệt theo hàng: mỗi dòng 32 byte chứa 8 int nên 1 miss rồi 7 hit: 32 miss. Duyệt theo cột nhảy 64 byte mỗi bước nên một cột chỉ dùng các dòng chẵn (8 trong 16): 16 khối va chạm từng đôi và mỗi khối bị đuổi trước khi đọc phần tử lân cận: 256 miss. Bước nhảy 8 lặp vòng qua 32 khối khác nhau phải chia nhau 16 dòng: mỗi khối bị đuổi trước khi vòng quay lại: 256 miss.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a 1 KB array that is bigger than the cache must always miss."
+        },
+        {
+          "loi": "Ignoring conflict misses caused by the stride."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "row-major order",
+          "vi": "lưu theo hàng"
+        },
+        {
+          "en": "conflict miss",
+          "vi": "miss do xung đột"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1323 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-n1-1-marie",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-n1-1-marie"
+  },
+  "exercises": [
+    {
+      "title": "MARIE 1 — The machine and its instruction set",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "MARIE ISA"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on the MARIE teaching computer.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về máy tính giảng dạy MARIE.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First hex digit = opcode, last three = address.",
+        "Comparisons are always against zero."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 1 — The machine and its instruction set\n\nAnswer in the answer panel (no code needed).\n\n1. A MARIE instruction word is 16 bits: …Một từ lệnh MARIE dài 16 bit: …\n2. In MARIE the result of Add X is left in …Trong MARIE kết quả của Add X nằm ở …\n3. What does Skipcond 400 test?Skipcond 400 kiểm tra gì?\n4. JnS X (jump and store) is used to …JnS X (nhảy và lưu) dùng để …\n5. The machine word 3106 (hex) is …Từ máy 3106 (hex) là …\n6. AddI X means …AddI X nghĩa là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 1 — The machine and its instruction set — answer key\n\n1. A MARIE instruction word is 16 bits: …Một từ lệnh MARIE dài 16 bit: …\n   Answer: c) 4 bits of opcode and 12 bits of address\n   12 address bits reach 2¹² = 4096 words.VI: 12 bit địa chỉ với tới 2¹² = 4096 từ.\n\n2. In MARIE the result of Add X is left in …Trong MARIE kết quả của Add X nằm ở …\n   Answer: d) the accumulator AC\n   MARIE is a single-accumulator machine: AC ← AC + M[X].VI: MARIE là máy một thanh ghi tích luỹ: AC ← AC + M[X].\n\n3. What does Skipcond 400 test?Skipcond 400 kiểm tra gì?\n   Answer: a) AC = 0 (skip the next instruction if true)\n   Skipcond 000: AC 0.VI: Skipcond 000: AC 0.\n\n4. JnS X (jump and store) is used to …JnS X (nhảy và lưu) dùng để …\n   Answer: b) call a subroutine: store the return address at X and continue at X + 1\n   The subroutine returns with JumpI X.VI: Chương trình con trả về bằng JumpI X.\n\n5. The machine word 3106 (hex) is …Từ máy 3106 (hex) là …\n   Answer: c) Add 106\n   Opcode 3 = Add; the lower three hex digits are the address.VI: Opcode 3 = Add; ba chữ số hex thấp là địa chỉ.\n\n6. AddI X means …AddI X nghĩa là …\n   Answer: d) AC ← AC + M[M[X]] (indirect)\n   The word at X is the address of the operand.VI: Từ tại X là địa chỉ của toán hạng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A MARIE instruction word is 16 bits: …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một từ lệnh MARIE dài 16 bit: …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6 bits of opcode and 10 bits of address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12 bits of opcode and 4 bits of address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4 bits of opcode and 12 bits of address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8 bits of opcode and 8 bits of address"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>12 address bits reach 2¹² = 4096 words.</p><p><i>VI: 12 bit địa chỉ với tới 2¹² = 4096 từ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In MARIE the result of Add X is left in …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong MARIE kết quả của Add X nằm ở …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "memory location X"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the PC"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the MBR only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the accumulator AC"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>MARIE is a single-accumulator machine: AC ← AC + M[X].</p><p><i>VI: MARIE là máy một thanh ghi tích luỹ: AC ← AC + M[X].</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What does Skipcond 400 test?</p><p style=\"opacity:.75;font-size:.92em\"><i>Skipcond 400 kiểm tra gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "AC = 0 (skip the next instruction if true)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AC < 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "AC > 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PC = 0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.</p><p><i>VI: Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>JnS X (jump and store) is used to …</p><p style=\"opacity:.75;font-size:.92em\"><i>JnS X (nhảy và lưu) dùng để …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "halt the machine"
+              },
+              {
+                "ma": "b",
+                "noiDung": "call a subroutine: store the return address at X and continue at X + 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "jump backwards only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "store AC at X"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The subroutine returns with JumpI X.</p><p><i>VI: Chương trình con trả về bằng JumpI X.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The machine word 3106 (hex) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ máy 3106 (hex) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Store 106"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Subt 106"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Add 106"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Load 106"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Opcode 3 = Add; the lower three hex digits are the address.</p><p><i>VI: Opcode 3 = Add; ba chữ số hex thấp là địa chỉ.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>AddI X means …</p><p style=\"opacity:.75;font-size:.92em\"><i>AddI X nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "AC ← AC + X (immediate)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AC ← AC + M[X]"
+              },
+              {
+                "ma": "c",
+                "noiDung": "M[X] ← AC + 1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AC ← AC + M[M[X]] (indirect)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The word at X is the address of the operand.</p><p><i>VI: Từ tại X là địa chỉ của toán hạng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading Skipcond 800 as “skip if AC is zero”."
+        },
+        {
+          "loi": "Thinking AddI adds an immediate constant."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "accumulator",
+          "vi": "thanh ghi tích luỹ"
+        },
+        {
+          "en": "Skipcond",
+          "vi": "bỏ qua lệnh kế có điều kiện"
+        }
+      ]
+    },
+    {
+      "title": "MARIE 2 — Assemble and disassemble by hand",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "assembly",
+        "machine code"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Opcodes (hex): 0 JnS · 1 Load · 2 Store · 3 Add · 4 Subt · 5 Input · 6 Output · 7 Halt · 8 Skipcond · 9 Jump · A Clear · B AddI · C JumpI. <b>Part A.</b> Give the 4-digit hex machine word of each instruction (addresses are hex; instructions without an operand have 000). <b>Part B.</b> Give the instruction (mnemonic and operand) for each machine word.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã lệnh (hex): 0 JnS · 1 Load · 2 Store · 3 Add · 4 Subt · 5 Input · 6 Output · 7 Halt · 8 Skipcond · 9 Jump · A Clear · B AddI · C JumpI. <b>Phần A.</b> Cho từ máy hex 4 chữ số của mỗi lệnh (địa chỉ là hex; lệnh không có toán hạng thì 000). <b>Phần B.</b> Cho lệnh (mã gợi nhớ và toán hạng) của mỗi từ máy.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The operand is the three right-most hex digits.",
+        "Skipcond 000/400/800 puts the condition in the address field."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 2 — Assemble and disassemble by hand\n\nAnswer in the answer panel (no code needed).\n\n1. AssembleDịch sang mã máy\n2. DisassembleDịch ngược\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 2 — Assemble and disassemble by hand — answer key\n\n1. AssembleDịch sang mã máy\n   - r1.w: 1105 / 1105\n   - r2.w: 3106 / 3106\n   - r3.w: 2107 / 2107\n   - r4.w: 410A / 410a\n   - r5.w: 9100 / 9100\n   - r6.w: 8800 / 8800\n   - r7.w: 8400 / 8400\n   - r8.w: 7000 / 7000\n   - r9.w: 6000 / 6000\n   - r10.w: A000 / a000\n   - r11.w: B110 / b110\n   - r12.w: 0120 / 0120\n   word = opcode digit + 12-bit address: Load 105 = 1105; Add 106 = 3106; Store 107 = 2107; Subt 10A = 410A; Jump 100 = 9100; Skipcond 800 = 8800; Skipcond 400 = 8400; Halt = 7000; Output = 6000; Clear = A000; AddI 110 = B110; JnS 120 = 0120. Skipcond encodes its condition in the top address bits (000, 400, 800).VI: từ = chữ số mã lệnh + địa chỉ 12 bit: Load 105 = 1105; Add 106 = 3106; Store 107 = 2107; Subt 10A = 410A; Jump 100 = 9100; Skipcond 800 = 8800; Skipcond 400 = 8400; Halt = 7000; Output = 6000; Clear = A000; AddI 110 = B110; JnS 120 = 0120.\n\n2. DisassembleDịch ngược\n   - r1.i: Input / input / INPUT\n   - r2.i: Store 108 / store 108 / STORE 108\n   - r3.i: Skipcond 000 / skipcond 000 / SKIPCOND 000\n   - r4.i: JumpI 130 / jumpi 130 / JUMPI 130\n   - r5.i: Load FFF / load fff / LOAD FFF\n   - r6.i: Halt / halt / HALT\n   Read the first hex digit as the opcode and the rest as the address: 5000 = Input; 2108 = Store 108; 8000 = Skipcond 000; C130 = JumpI 130; 1FFF = Load FFF; 7000 = Halt.VI: Chữ số hex đầu là mã lệnh, phần còn lại là địa chỉ: 5000 = Input; 2108 = Store 108; 8000 = Skipcond 000; C130 = JumpI 130; 1FFF = Load FFF; 7000 = Halt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>word = opcode digit + 12-bit address: Load 105 = 1105; Add 106 = 3106; Store 107 = 2107; Subt 10A = 410A; Jump 100 = 9100; Skipcond 800 = 8800; Skipcond 400 = 8400; Halt = 7000; Output = 6000; Clear = A000; AddI 110 = B110; JnS 120 = 0120. Skipcond encodes its condition in the top address bits (000, 400, 800).</p><p><i>VI: từ = chữ số mã lệnh + địa chỉ 12 bit: Load 105 = 1105; Add 106 = 3106; Store 107 = 2107; Subt 10A = 410A; Jump 100 = 9100; Skipcond 800 = 8800; Skipcond 400 = 8400; Halt = 7000; Output = 6000; Clear = A000; AddI 110 = B110; JnS 120 = 0120.</i></p><p>Read the first hex digit as the opcode and the rest as the address: 5000 = Input; 2108 = Store 108; 8000 = Skipcond 000; C130 = JumpI 130; 1FFF = Load FFF; 7000 = Halt.</p><p><i>VI: Chữ số hex đầu là mã lệnh, phần còn lại là địa chỉ: 5000 = Input; 2108 = Store 108; 8000 = Skipcond 000; C130 = JumpI 130; 1FFF = Load FFF; 7000 = Halt.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Assemble</p><p style=\"opacity:.75;font-size:.92em\"><i>Dịch sang mã máy</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Instruction"
+              },
+              {
+                "ma": "w",
+                "ten": "Word (hex)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "Load 105"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "Add 106"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "Store 107"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "Subt 10A"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "Jump 100"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "Skipcond 800"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "Skipcond 400"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "Halt"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "i": "Output"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "i": "Clear"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "i": "AddI 110"
+                }
+              },
+              {
+                "ma": "r12",
+                "o": {
+                  "i": "JnS 120"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w": [
+                "1105",
+                "1105"
+              ],
+              "r2.w": [
+                "3106",
+                "3106"
+              ],
+              "r3.w": [
+                "2107",
+                "2107"
+              ],
+              "r4.w": [
+                "410A",
+                "410a"
+              ],
+              "r5.w": [
+                "9100",
+                "9100"
+              ],
+              "r6.w": [
+                "8800",
+                "8800"
+              ],
+              "r7.w": [
+                "8400",
+                "8400"
+              ],
+              "r8.w": [
+                "7000",
+                "7000"
+              ],
+              "r9.w": [
+                "6000",
+                "6000"
+              ],
+              "r10.w": [
+                "A000",
+                "a000"
+              ],
+              "r11.w": [
+                "B110",
+                "b110"
+              ],
+              "r12.w": [
+                "0120",
+                "0120"
+              ]
+            },
+            "giaiThich": "<p>word = opcode digit + 12-bit address: Load 105 = 1105; Add 106 = 3106; Store 107 = 2107; Subt 10A = 410A; Jump 100 = 9100; Skipcond 800 = 8800; Skipcond 400 = 8400; Halt = 7000; Output = 6000; Clear = A000; AddI 110 = B110; JnS 120 = 0120. Skipcond encodes its condition in the top address bits (000, 400, 800).</p><p><i>VI: từ = chữ số mã lệnh + địa chỉ 12 bit: Load 105 = 1105; Add 106 = 3106; Store 107 = 2107; Subt 10A = 410A; Jump 100 = 9100; Skipcond 800 = 8800; Skipcond 400 = 8400; Halt = 7000; Output = 6000; Clear = A000; AddI 110 = B110; JnS 120 = 0120.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Disassemble</p><p style=\"opacity:.75;font-size:.92em\"><i>Dịch ngược</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "Word (hex)"
+              },
+              {
+                "ma": "i",
+                "ten": "Instruction"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "5000"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "2108"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "8000"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "C130"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "1FFF"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "w": "7000"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.i": [
+                "Input",
+                "input",
+                "INPUT"
+              ],
+              "r2.i": [
+                "Store 108",
+                "store 108",
+                "STORE 108"
+              ],
+              "r3.i": [
+                "Skipcond 000",
+                "skipcond 000",
+                "SKIPCOND 000"
+              ],
+              "r4.i": [
+                "JumpI 130",
+                "jumpi 130",
+                "JUMPI 130"
+              ],
+              "r5.i": [
+                "Load FFF",
+                "load fff",
+                "LOAD FFF"
+              ],
+              "r6.i": [
+                "Halt",
+                "halt",
+                "HALT"
+              ]
+            },
+            "giaiThich": "<p>Read the first hex digit as the opcode and the rest as the address: 5000 = Input; 2108 = Store 108; 8000 = Skipcond 000; C130 = JumpI 130; 1FFF = Load FFF; 7000 = Halt.</p><p><i>VI: Chữ số hex đầu là mã lệnh, phần còn lại là địa chỉ: 5000 = Input; 2108 = Store 108; 8000 = Skipcond 000; C130 = JumpI 130; 1FFF = Load FFF; 7000 = Halt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the address in decimal."
+        },
+        {
+          "loi": "Confusing Load (1) and Store (2)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "machine word",
+          "vi": "từ máy"
+        },
+        {
+          "en": "mnemonic",
+          "vi": "mã gợi nhớ"
+        }
+      ]
+    },
+    {
+      "title": "MARIE 3 — Run a multiplication loop: output and instruction count",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "MARIE loops",
+        "instruction count"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>This program multiplies by repeated addition (the example from the lecture slides): <code>X</code> is the multiplicand, <code>Ctr</code> the multiplier.</p><pre>ORG 100\nLoop, Load Ctr\nSkipcond 400\nJump Body\nJump Done\nBody, Load Sum\nAdd X\nStore Sum\nLoad Ctr\nSubt One\nStore Ctr\nJump Loop\nDone, Load Sum\nOutput\nHalt 000\nX, Dec &lt;X&gt;\nCtr, Dec &lt;Ctr&gt;\nSum, Dec 0\nOne, Dec 1</pre><p>For each pair (X, Ctr) give the number printed by <code>Output</code> and the <b>total number of instructions executed</b> (counting the final Halt).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chương trình này nhân bằng cộng lặp (ví dụ trong slide bài giảng): <code>X</code> là số bị nhân, <code>Ctr</code> là số nhân.</p><pre>ORG 100\nLoop, Load Ctr\nSkipcond 400\nJump Body\nJump Done\nBody, Load Sum\nAdd X\nStore Sum\nLoad Ctr\nSubt One\nStore Ctr\nJump Loop\nDone, Load Sum\nOutput\nHalt 000\nX, Dec &lt;X&gt;\nCtr, Dec &lt;Ctr&gt;\nSum, Dec 0\nOne, Dec 1</pre><p>Với mỗi cặp (X, Ctr) cho số in ra bởi <code>Output</code> và <b>tổng số lệnh đã thực hiện</b> (tính cả Halt cuối).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Output = X × Ctr.",
+        "Count the instructions in one loop pass, multiply by Ctr, then add the instructions of the exit path."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 3 — Run a multiplication loop: output and instruction count\n\nAnswer in the answer panel (no code needed).\n\n1. Output and stepsKết quả và số bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 3 — Run a multiplication loop: output and instruction count — answer key\n\n1. Output and stepsKết quả và số bước\n   - r1.o: 20\n   - r1.s: 46\n   - r2.o: 21\n   - r2.s: 36\n   - r3.o: 0\n   - r3.s: 6\n   - r4.o: 20\n   - r4.s: 106\n   - r5.o: 36\n   - r5.s: 66\n   Each pass of the loop executes 10 instructions (Load, Skipcond, Jump, Load, Add, Store, Load, Subt, Store, Jump) when Ctr ≠ 0; the exit adds Load, Skipcond, Jump, Load, Output, Halt. Steps = 10·Ctr + 6 (so 4 → 46 as in the slides): (5,4) → 20, 46 steps; (7,3) → 21, 36 steps; (9,0) → 0, 6 steps; (2,10) → 20, 106 steps; (6,6) → 36, 66 steps.VI: Mỗi vòng lặp thực hiện 10 lệnh khi Ctr ≠ 0; thoát thêm 6 lệnh. Số bước = 10·Ctr + 6 (4 → 46 như slide): (5,4) → 20, 46 bước; (7,3) → 21, 36 bước; (9,0) → 0, 6 bước; (2,10) → 20, 106 bước; (6,6) → 36, 66 bước.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each pass of the loop executes 10 instructions (Load, Skipcond, Jump, Load, Add, Store, Load, Subt, Store, Jump) when Ctr ≠ 0; the exit adds Load, Skipcond, Jump, Load, Output, Halt. Steps = 10·Ctr + 6 (so 4 → 46 as in the slides): (5,4) → 20, 46 steps; (7,3) → 21, 36 steps; (9,0) → 0, 6 steps; (2,10) → 20, 106 steps; (6,6) → 36, 66 steps.</p><p><i>VI: Mỗi vòng lặp thực hiện 10 lệnh khi Ctr ≠ 0; thoát thêm 6 lệnh. Số bước = 10·Ctr + 6 (4 → 46 như slide): (5,4) → 20, 46 bước; (7,3) → 21, 36 bước; (9,0) → 0, 6 bước; (2,10) → 20, 106 bước; (6,6) → 36, 66 bước.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Output and steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Kết quả và số bước</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "X, Ctr"
+              },
+              {
+                "ma": "o",
+                "ten": "Output"
+              },
+              {
+                "ma": "s",
+                "ten": "Instructions executed"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "X = 5, Ctr = 4"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "X = 7, Ctr = 3"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "X = 9, Ctr = 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "X = 2, Ctr = 10"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "X = 6, Ctr = 6"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "20",
+              "r1.s": "46",
+              "r2.o": "21",
+              "r2.s": "36",
+              "r3.o": "0",
+              "r3.s": "6",
+              "r4.o": "20",
+              "r4.s": "106",
+              "r5.o": "36",
+              "r5.s": "66"
+            },
+            "giaiThich": "<p>Each pass of the loop executes 10 instructions (Load, Skipcond, Jump, Load, Add, Store, Load, Subt, Store, Jump) when Ctr ≠ 0; the exit adds Load, Skipcond, Jump, Load, Output, Halt. Steps = 10·Ctr + 6 (so 4 → 46 as in the slides): (5,4) → 20, 46 steps; (7,3) → 21, 36 steps; (9,0) → 0, 6 steps; (2,10) → 20, 106 steps; (6,6) → 36, 66 steps.</p><p><i>VI: Mỗi vòng lặp thực hiện 10 lệnh khi Ctr ≠ 0; thoát thêm 6 lệnh. Số bước = 10·Ctr + 6 (4 → 46 như slide): (5,4) → 20, 46 bước; (7,3) → 21, 36 bước; (9,0) → 0, 6 bước; (2,10) → 20, 106 bước; (6,6) → 36, 66 bước.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the data words (Dec) as executed instructions."
+        },
+        {
+          "loi": "Forgetting that Skipcond is also an instruction."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "loop iteration",
+          "vi": "một vòng lặp"
+        }
+      ]
+    },
+    {
+      "title": "MARIE 4 — Trace a countdown, instruction by instruction",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "Skipcond",
+        "program trace"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Trace the program below from the first instruction. For each of the first 12 executed instructions give the <b>AC after it</b> and the <b>PC of the next instruction</b> (hex).</p><pre>ORG 100\nStart, Load N\nSkipcond 800\nHalt\nOutput\nSubt One\nStore N\nJump Start\nN, Dec 3\nOne, Dec 1</pre><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lần vết chương trình dưới đây từ lệnh đầu tiên. Với mỗi lệnh trong 12 lệnh được thực hiện đầu tiên, cho <b>AC sau lệnh</b> và <b>PC của lệnh kế</b> (hex).</p><pre>ORG 100\nStart, Load N\nSkipcond 800\nHalt\nOutput\nSubt One\nStore N\nJump Start\nN, Dec 3\nOne, Dec 1</pre><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Skipcond adds 1 to the PC when the condition holds (PC jumps over the next instruction).",
+        "Store does not change the AC."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 4 — Trace a countdown, instruction by instruction\n\nAnswer in the answer panel (no code needed).\n\n1. TraceVết\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 4 — Trace a countdown, instruction by instruction — answer key\n\n1. TraceVết\n   - r1.a: 3\n   - r1.n: 101\n   - r2.a: 3\n   - r2.n: 103\n   - r3.a: 3\n   - r3.n: 104\n   - r4.a: 2\n   - r4.n: 105\n   - r5.a: 2\n   - r5.n: 106\n   - r6.a: 2\n   - r6.n: 100\n   - r7.a: 2\n   - r7.n: 101\n   - r8.a: 2\n   - r8.n: 103\n   - r9.a: 2\n   - r9.n: 104\n   - r10.a: 1\n   - r10.n: 105\n   - r11.a: 1\n   - r11.n: 106\n   - r12.a: 1\n   - r12.n: 100\n   Skipcond 800 skips the Halt while AC > 0; Output prints 3, 2, 1; the program stops when N reaches 0 and the Halt is no longer skipped. AC/PC: 3/101, 3/103, 3/104, 2/105, 2/106, 2/100, 2/101, 2/103, 2/104, 1/105, 1/106, 1/100. Output 3, 2, 1 in 21 instructions.VI: Skipcond 800 bỏ qua Halt khi AC > 0; Output in 3, 2, 1; chương trình dừng khi N về 0 và Halt không còn bị bỏ qua. Kết quả in 3, 2, 1 sau 21 lệnh.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Skipcond 800 skips the Halt while AC > 0; Output prints 3, 2, 1; the program stops when N reaches 0 and the Halt is no longer skipped. AC/PC: 3/101, 3/103, 3/104, 2/105, 2/106, 2/100, 2/101, 2/103, 2/104, 1/105, 1/106, 1/100. Output 3, 2, 1 in 21 instructions.</p><p><i>VI: Skipcond 800 bỏ qua Halt khi AC > 0; Output in 3, 2, 1; chương trình dừng khi N về 0 và Halt không còn bị bỏ qua. Kết quả in 3, 2, 1 sau 21 lệnh.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Trace</p><p style=\"opacity:.75;font-size:.92em\"><i>Vết</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Executed instruction"
+              },
+              {
+                "ma": "a",
+                "ten": "AC after"
+              },
+              {
+                "ma": "n",
+                "ten": "Next PC"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "#1: 100 Load"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "#2: 101 Skipcond"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "#3: 103 Output"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "#4: 104 Subt"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "#5: 105 Store"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "#6: 106 Jump"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "#7: 100 Load"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "#8: 101 Skipcond"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "i": "#9: 103 Output"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "i": "#10: 104 Subt"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "i": "#11: 105 Store"
+                }
+              },
+              {
+                "ma": "r12",
+                "o": {
+                  "i": "#12: 106 Jump"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "3",
+              "r1.n": "101",
+              "r2.a": "3",
+              "r2.n": "103",
+              "r3.a": "3",
+              "r3.n": "104",
+              "r4.a": "2",
+              "r4.n": "105",
+              "r5.a": "2",
+              "r5.n": "106",
+              "r6.a": "2",
+              "r6.n": "100",
+              "r7.a": "2",
+              "r7.n": "101",
+              "r8.a": "2",
+              "r8.n": "103",
+              "r9.a": "2",
+              "r9.n": "104",
+              "r10.a": "1",
+              "r10.n": "105",
+              "r11.a": "1",
+              "r11.n": "106",
+              "r12.a": "1",
+              "r12.n": "100"
+            },
+            "giaiThich": "<p>Skipcond 800 skips the Halt while AC > 0; Output prints 3, 2, 1; the program stops when N reaches 0 and the Halt is no longer skipped. AC/PC: 3/101, 3/103, 3/104, 2/105, 2/106, 2/100, 2/101, 2/103, 2/104, 1/105, 1/106, 1/100. Output 3, 2, 1 in 21 instructions.</p><p><i>VI: Skipcond 800 bỏ qua Halt khi AC > 0; Output in 3, 2, 1; chương trình dừng khi N về 0 và Halt không còn bị bỏ qua. Kết quả in 3, 2, 1 sau 21 lệnh.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that the skipped instruction does not execute."
+        },
+        {
+          "loi": "Reading the next PC as the address of the instruction itself."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trace",
+          "vi": "vết thực hiện"
+        }
+      ]
+    },
+    {
+      "title": "MARIE 5 — Complete the program: print the larger of two inputs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "conditional execution"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>The program reads A and B and prints the larger. Three lines are missing; choose the instruction for each blank (the choices were verified by running the program on many inputs).</p><pre>ORG 100\nInput\nStore A\nInput\nStore B\nLoad A\n&lt;blank 1&gt;\n&lt;blank 2&gt;\n&lt;blank 3&gt;\nLoad A\nOutput\nHalt\nShowB, Load B\nOutput\nHalt\nA, Dec 0\nB, Dec 0</pre><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chương trình đọc A và B rồi in số lớn hơn. Thiếu ba dòng; chọn lệnh cho mỗi chỗ trống (các lựa chọn đã được kiểm bằng cách chạy chương trình trên nhiều bộ dữ liệu).</p><pre>ORG 100\nInput\nStore A\nInput\nStore B\nLoad A\n&lt;blank 1&gt;\n&lt;blank 2&gt;\n&lt;blank 3&gt;\nLoad A\nOutput\nHalt\nShowB, Load B\nOutput\nHalt\nA, Dec 0\nB, Dec 0</pre><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "MARIE has no “greater than” instruction: compute the difference first.",
+        "Skipcond 800 skips when AC is strictly positive."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 5 — Complete the program: print the larger of two inputs\n\nAnswer in the answer panel (no code needed).\n\n1. BlanksChỗ trống\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 5 — Complete the program: print the larger of two inputs — answer key\n\n1. BlanksChỗ trống\n   - r1.i: Subt B\n   - r2.i: Skipcond 800\n   - r3.i: Jump ShowB\n   AC = A, then Subt B gives A − B. Skipcond 800 skips the next line when A − B > 0, so the Jump ShowB is executed only when A ≤ B, and then B is the larger (or equal). When A > B the program falls through to Load A / Output.VI: AC = A, rồi Subt B cho A − B. Skipcond 800 bỏ qua dòng kế khi A − B > 0 nên Jump ShowB chỉ chạy khi A ≤ B, lúc đó B lớn hơn (hoặc bằng). Khi A > B chương trình chạy tiếp xuống Load A / Output.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>AC = A, then Subt B gives A − B. Skipcond 800 skips the next line when A − B > 0, so the Jump ShowB is executed only when A ≤ B, and then B is the larger (or equal). When A > B the program falls through to Load A / Output.</p><p><i>VI: AC = A, rồi Subt B cho A − B. Skipcond 800 bỏ qua dòng kế khi A − B > 0 nên Jump ShowB chỉ chạy khi A ≤ B, lúc đó B lớn hơn (hoặc bằng). Khi A > B chương trình chạy tiếp xuống Load A / Output.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Blanks</p><p style=\"opacity:.75;font-size:.92em\"><i>Chỗ trống</i></p>",
+            "cot": [
+              {
+                "ma": "b",
+                "ten": "Blank"
+              },
+              {
+                "ma": "i",
+                "ten": "Instruction",
+                "luaChon": [
+                  "Subt B",
+                  "Add B",
+                  "Load B",
+                  "Skipcond 800",
+                  "Skipcond 400",
+                  "Skipcond 000",
+                  "Jump ShowB",
+                  "Halt",
+                  "Clear"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "b": "blank 1 (compute A − B in the AC)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "b": "blank 2 (skip the next line when A − B > 0)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "b": "blank 3 (otherwise go and print B)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.i": "Subt B",
+              "r2.i": "Skipcond 800",
+              "r3.i": "Jump ShowB"
+            },
+            "giaiThich": "<p>AC = A, then Subt B gives A − B. Skipcond 800 skips the next line when A − B > 0, so the Jump ShowB is executed only when A ≤ B, and then B is the larger (or equal). When A > B the program falls through to Load A / Output.</p><p><i>VI: AC = A, rồi Subt B cho A − B. Skipcond 800 bỏ qua dòng kế khi A − B > 0 nên Jump ShowB chỉ chạy khi A ≤ B, lúc đó B lớn hơn (hoặc bằng). Khi A > B chương trình chạy tiếp xuống Load A / Output.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using Skipcond 400 (tests equality, not order)."
+        },
+        {
+          "loi": "Adding instead of subtracting."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "comparison by subtraction",
+          "vi": "so sánh bằng phép trừ"
+        }
+      ]
+    },
+    {
+      "title": "MARIE 6 — Which program does the job? (verified by execution)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "reading MARIE code"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Choose the program that does what the question says. Every option was assembled and run on several inputs.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn chương trình làm đúng việc câu hỏi nêu. Mỗi phương án đã được dịch và chạy trên nhiều đầu vào.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Run each option by hand with a small input such as 4.",
+        "Look at where the result ends up in the AC when Output executes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 6 — Which program does the job? (verified by execution)\n\nAnswer in the answer panel (no code needed).\n\n1. Which program prints TWICE its input?Chương trình nào in GẤP ĐÔI số nhập vào?\n2. Which program prints its input MINUS 7?Chương trình nào in số nhập vào TRỪ 7?\n3. Which program prints 3, 2, 1 and stops?Chương trình nào in 3, 2, 1 rồi dừng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# MARIE 6 — Which program does the job? (verified by execution) — answer key\n\n1. Which program prints TWICE its input?Chương trình nào in GẤP ĐÔI số nhập vào?\n   Answer: c) ORG 100 Input Store X Add X Output Halt X, Dec 0\n   Verified by running every option with several inputs: only this one gives the required output for all of them.VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.\n\n2. Which program prints its input MINUS 7?Chương trình nào in số nhập vào TRỪ 7?\n   Answer: d) ORG 100 Input Subt Seven Output Halt Seven, Dec 7\n   Verified by running every option with several inputs: only this one gives the required output for all of them.VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.\n\n3. Which program prints 3, 2, 1 and stops?Chương trình nào in 3, 2, 1 rồi dừng?\n   Answer: a) ORG 100 Loop, Load N Skipcond 800 Jump End Output Subt One Store N Jump Loop End, Halt N, Dec 3 One, Dec 1\n   Skipcond 800 must skip the exit Jump while N > 0, and Store N must save the decremented value; each wrong option breaks one of the two.VI: Skipcond 800 phải bỏ qua Jump thoát khi N > 0 và Store N phải lưu giá trị đã giảm; mỗi phương án sai phá một trong hai điều đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which program prints TWICE its input?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chương trình nào in GẤP ĐÔI số nhập vào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<pre>ORG 100\nInput\nStore X\nLoad X\nOutput\nHalt\nX, Dec 0</pre>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<pre>ORG 100\nInput\nOutput\nOutput\nHalt</pre>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<pre>ORG 100\nInput\nStore X\nAdd X\nOutput\nHalt\nX, Dec 0</pre>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<pre>ORG 100\nInput\nAdd X\nOutput\nHalt\nX, Dec 0</pre>"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Verified by running every option with several inputs: only this one gives the required output for all of them.</p><p><i>VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which program prints its input MINUS 7?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chương trình nào in số nhập vào TRỪ 7?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<pre>ORG 100\nInput\nStore X\nLoad Seven\nSubt X\nOutput\nHalt\nX, Dec 0\nSeven, Dec 7</pre>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<pre>ORG 100\nInput\nAdd Seven\nOutput\nHalt\nSeven, Dec 7</pre>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<pre>ORG 100\nLoad Seven\nOutput\nHalt\nSeven, Dec 7</pre>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<pre>ORG 100\nInput\nSubt Seven\nOutput\nHalt\nSeven, Dec 7</pre>"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Verified by running every option with several inputs: only this one gives the required output for all of them.</p><p><i>VI: Đã kiểm bằng cách chạy từng phương án với nhiều đầu vào: chỉ phương án này cho kết quả đúng với mọi đầu vào.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which program prints 3, 2, 1 and stops?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chương trình nào in 3, 2, 1 rồi dừng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 800\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 000\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 400\nJump End\nOutput\nSubt One\nStore N\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
+              },
+              {
+                "ma": "d",
+                "noiDung": "<pre>ORG 100\nLoop, Load N\nSkipcond 800\nJump End\nOutput\nSubt One\nClear\nJump Loop\nEnd, Halt\nN, Dec 3\nOne, Dec 1</pre>"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Skipcond 800 must skip the exit Jump while N > 0, and Store N must save the decremented value; each wrong option breaks one of the two.</p><p><i>VI: Skipcond 800 phải bỏ qua Jump thoát khi N > 0 và Store N phải lưu giá trị đã giảm; mỗi phương án sai phá một trong hai điều đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that Input overwrites the AC."
+        },
+        {
+          "loi": "Forgetting that Skipcond jumps over exactly one instruction."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Input / Output",
+          "vi": "nhập / xuất"
+        }
+      ]
+    },
+    {
+      "title": "MARIE 7 — Write the machine: fetch, decode, execute",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "fetch–decode–execute",
+        "MARIE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>marieExec(words, start, input)</code>. <code>words</code> is an object mapping addresses (numbers) to 16-bit words (numbers), missing addresses read as 0; <code>start</code> the initial PC; <code>input</code> the list of numbers returned by successive <code>Input</code> instructions (0 when exhausted). Execute until <code>Halt</code> or 10000 instructions. Opcodes: 0 JnS (M[X] ← PC, PC ← X + 1) · 1 Load · 2 Store · 3 Add · 4 Subt · 5 Input · 6 Output · 7 Halt · 8 Skipcond (bits 11–10 of the address field: 00 AC &lt; 0, 01 AC = 0, 10 AC &gt; 0; skip = PC + 1) · 9 Jump · A Clear · B AddI · C JumpI. The AC is 16-bit two’s complement: wrap with <code>&amp; 65535</code>; output values are signed. The PC is incremented right after the fetch. Return <code>{ output, steps, ac, halted }</code> (<code>steps</code> counts executed instructions including Halt, <code>ac</code> signed).</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>marieExec(words, start, input)</code>. <code>words</code> là đối tượng ánh xạ địa chỉ (số) sang từ 16 bit (số), địa chỉ thiếu đọc ra 0; <code>start</code> là PC ban đầu; <code>input</code> là danh sách số do các lệnh <code>Input</code> liên tiếp trả về (0 khi hết). Thực hiện đến <code>Halt</code> hoặc 10000 lệnh. Mã lệnh: 0 JnS (M[X] ← PC, PC ← X + 1) · 1 Load · 2 Store · 3 Add · 4 Subt · 5 Input · 6 Output · 7 Halt · 8 Skipcond (bit 11–10 của trường địa chỉ: 00 AC &lt; 0, 01 AC = 0, 10 AC &gt; 0; bỏ qua = PC + 1) · 9 Jump · A Clear · B AddI · C JumpI. AC là bù 2 16 bit: quấn bằng <code>&amp; 65535</code>; giá trị xuất có dấu. PC tăng ngay sau khi nạp lệnh. Trả <code>{ output, steps, ac, halted }</code> (<code>steps</code> đếm lệnh đã thực hiện gồm cả Halt, <code>ac</code> có dấu).</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "marieExec({100: 0x5000, 101: 0x6000, 102: 0x7000}, 100, [42])",
+          "output": "{\"output\":[42],\"steps\":3,\"ac\":42,\"halted\":true}",
+          "explanation": "Input reads 42, Output prints it, Halt stops: 3 instructions.|||Input đọc 42, Output in ra, Halt dừng: 3 lệnh."
+        }
+      ],
+      "hintsJson": [
+        "Loop: ir = M[PC]; PC++; op = ir >> 12; address = ir & 0xFFF.",
+        "Convert the AC to signed only when you print it or compare it (Skipcond).",
+        "Skipcond reads bits 11–10 of the address field: (ir >> 10) & 3."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function marieExec(words, start, input) {\n  return { output: [], steps: 0, ac: 0, halted: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function marieExec(words, start, input) {\n  var mem = {}, k, pc = start, ac = 0, out = [], steps = 0, inp = input.slice(), halted = false;\n  for (k in words) mem[k] = words[k];\n  var rd = function (a) { return mem[a] === undefined ? 0 : mem[a]; };\n  var sg = function (x) { return x >= 32768 ? x - 65536 : x; };\n  while (!halted && steps < 10000) {\n    var ir = rd(pc), op = ir >> 12, ad = ir & 4095;\n    pc++; steps++;\n    if (op === 0) { mem[ad] = pc; pc = ad + 1; }\n    else if (op === 1) ac = rd(ad);\n    else if (op === 2) mem[ad] = ac;\n    else if (op === 3) ac = (ac + rd(ad)) & 65535;\n    else if (op === 4) ac = (ac - rd(ad) + 65536) & 65535;\n    else if (op === 5) ac = ((inp.length ? inp.shift() : 0) + 65536) & 65535;\n    else if (op === 6) out.push(sg(ac));\n    else if (op === 7) halted = true;\n    else if (op === 8) { var c = (ir >> 10) & 3; if ((c === 0 && sg(ac) < 0) || (c === 1 && ac === 0) || (c === 2 && sg(ac) > 0)) pc++; }\n    else if (op === 9) pc = ad;\n    else if (op === 10) ac = 0;\n    else if (op === 11) ac = (ac + rd(rd(ad) & 4095)) & 65535;\n    else if (op === 12) pc = rd(ad) & 4095;\n  }\n  return { output: out, steps: steps, ac: sg(ac), halted: halted };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A processor is a loop around fetch, decode and execute; MARIE needs fifteen lines for it because the ISA is tiny. The only subtleties are the order PC++ / execute and treating the 16-bit AC as signed when comparing.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: marieExec({\"100\":20480,\"101\":24576,\"102\":28672}, 100, [42])",
+              "vi": "Ca 1"
+            },
+            "goi": "marieExec({\"100\":20480,\"101\":24576,\"102\":28672}, 100, [42])",
+            "mongDoi": {
+              "output": [
+                42
+              ],
+              "steps": 3,
+              "ac": 42,
+              "halted": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: marieExec({\"256\":4367,\"257\":33792,\"258\":37124,\"259\":37131,\"260\":4368,\"261\":12558)",
+              "vi": "Ca 2"
+            },
+            "goi": "marieExec({\"256\":4367,\"257\":33792,\"258\":37124,\"259\":37131,\"260\":4368,\"261\":12558,\"262\":8464,\"263\":4367,\"264\":16657,\"265\":8463,\"266\":37120,\"267\":4368,\"268\":24576,\"269\":28672,\"270\":6,\"271\":5,\"272\":0,\"273\":1}, 256, [])",
+            "mongDoi": {
+              "output": [
+                30
+              ],
+              "steps": 56,
+              "ac": 30,
+              "halted": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: marieExec({\"256\":4359,\"257\":34816,\"258\":28672,\"259\":24576,\"260\":16648,\"261\":8455)",
+              "vi": "Ca 3"
+            },
+            "goi": "marieExec({\"256\":4359,\"257\":34816,\"258\":28672,\"259\":24576,\"260\":16648,\"261\":8455,\"262\":37120,\"263\":3,\"264\":1}, 256, [])",
+            "mongDoi": {
+              "output": [
+                3,
+                2,
+                1
+              ],
+              "steps": 21,
+              "ac": 0,
+              "halted": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: marieExec({\"256\":20480,\"257\":8462,\"258\":20480,\"259\":8463,\"260\":4366,\"261\":16655,)",
+              "vi": "Ca 4"
+            },
+            "goi": "marieExec({\"256\":20480,\"257\":8462,\"258\":20480,\"259\":8463,\"260\":4366,\"261\":16655,\"262\":34816,\"263\":37131,\"264\":4366,\"265\":24576,\"266\":28672,\"267\":4367,\"268\":24576,\"269\":28672,\"270\":0,\"271\":0}, 256, [3,8])",
+            "mongDoi": {
+              "output": [
+                8
+              ],
+              "steps": 11,
+              "ac": 8,
+              "halted": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "marieExec({\"256\":20480,\"257\":8462,\"258\":20480,\"259\":8463,\"260\":4366,\"261\":16655,\"262\":34816,\"263\":37131,\"264\":4366,\"265\":24576,\"266\":28672,\"267\":4367,\"268\":24576,\"269\":28672,\"270\":0,\"271\":0}, 256, [9,2])",
+            "mongDoi": {
+              "output": [
+                9
+              ],
+              "steps": 10,
+              "ac": 9,
+              "halted": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "marieExec({\"256\":4367,\"257\":33792,\"258\":37124,\"259\":37131,\"260\":4368,\"261\":12558,\"262\":8464,\"263\":4367,\"264\":16657,\"265\":8463,\"266\":37120,\"267\":4368,\"268\":24576,\"269\":28672,\"270\":3,\"271\":0,\"272\":0,\"273\":1}, 256, [])",
+            "mongDoi": {
+              "output": [
+                0
+              ],
+              "steps": 6,
+              "ac": 0,
+              "halted": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "marieExec({\"0\":16389,\"1\":24576,\"2\":28672,\"5\":7}, 0, [])",
+            "mongDoi": {
+              "output": [
+                -7
+              ],
+              "steps": 3,
+              "ac": -7,
+              "halted": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "marieExec({\"0\":16,\"1\":28672,\"17\":24576,\"18\":49168}, 0, [])",
+            "mongDoi": {
+              "output": [
+                0
+              ],
+              "steps": 4,
+              "ac": 0,
+              "halted": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Incrementing the PC after the execute step (breaks JnS and the skip)."
+        },
+        {
+          "loi": "Comparing the unsigned 16-bit AC with 0 for “less than”."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

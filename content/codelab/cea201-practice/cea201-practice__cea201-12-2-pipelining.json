@@ -1,0 +1,980 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-12-2-pipelining",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-12-2-pipelining"
+  },
+  "exercises": [
+    {
+      "title": "Pipeline 1 — Stages, hazards and forwarding: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "pipeline hazards"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on instruction pipelining.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về pipeline lệnh.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Data (RAW/WAR/WAW), structural, control.",
+        "Forwarding fixes ALU→ALU but not load→use fully."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 1 — Stages, hazards and forwarding: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. Pipelining improves …Pipeline cải thiện …\n2. A RAW (read after write) hazard means …Hazard RAW (đọc sau ghi) nghĩa là …\n3. Data forwarding (bypassing) …Chuyển tiếp dữ liệu (bypassing) …\n4. Even with forwarding, a load followed immediately by an instruction using the loaded value needs …Dù có chuyển tiếp, lệnh load theo sau là lệnh dùng giá trị vừa nạp cần …\n5. A structural hazard occurs when …Hazard cấu trúc xảy ra khi …\n6. A control hazard is caused by …Hazard điều khiển do …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 1 — Stages, hazards and forwarding: concepts — answer key\n\n1. Pipelining improves …Pipeline cải thiện …\n   Answer: c) throughput (instructions per second), not the latency of one instruction\n   Each instruction still goes through all the stages; more instructions are in flight at once.VI: Mỗi lệnh vẫn đi qua mọi tầng; nhiều lệnh được xử lý đồng thời hơn.\n\n2. A RAW (read after write) hazard means …Hazard RAW (đọc sau ghi) nghĩa là …\n   Answer: d) an instruction needs a result that an earlier instruction has not produced yet\n   It is a true data dependence.VI: Đây là phụ thuộc dữ liệu thật.\n\n3. Data forwarding (bypassing) …Chuyển tiếp dữ liệu (bypassing) …\n   Answer: a) sends a result from a later pipeline stage straight to the ALU input that needs it\n   It avoids waiting for the register-file write-back.VI: Tránh phải chờ ghi lại vào tệp thanh ghi.\n\n4. Even with forwarding, a load followed immediately by an instruction using the loaded value needs …Dù có chuyển tiếp, lệnh load theo sau là lệnh dùng giá trị vừa nạp cần …\n   Answer: b) one stall cycle (load-use hazard)\n   The data are available only at the end of the MEM stage.VI: Dữ liệu chỉ có ở cuối tầng MEM.\n\n5. A structural hazard occurs when …Hazard cấu trúc xảy ra khi …\n   Answer: c) two instructions need the same hardware resource in the same cycle\n   E.g. one memory port used for both instruction fetch and data access.VI: Vd một cổng nhớ dùng cho cả nạp lệnh và truy cập dữ liệu.\n\n6. A control hazard is caused by …Hazard điều khiển do …\n   Answer: d) branches and jumps that change the next instruction address\n   The pipeline does not yet know which instruction to fetch.VI: Pipeline chưa biết nạp lệnh nào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Pipelining improves …</p><p style=\"opacity:.75;font-size:.92em\"><i>Pipeline cải thiện …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only cache hit ratio"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the number of registers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "throughput (instructions per second), not the latency of one instruction"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the latency of every instruction"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each instruction still goes through all the stages; more instructions are in flight at once.</p><p><i>VI: Mỗi lệnh vẫn đi qua mọi tầng; nhiều lệnh được xử lý đồng thời hơn.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A RAW (read after write) hazard means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hazard RAW (đọc sau ghi) nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "two instructions write the same register"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a later instruction overwrites an operand an earlier one still needs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the branch target is unknown"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an instruction needs a result that an earlier instruction has not produced yet"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It is a true data dependence.</p><p><i>VI: Đây là phụ thuộc dữ liệu thật.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Data forwarding (bypassing) …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuyển tiếp dữ liệu (bypassing) …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "sends a result from a later pipeline stage straight to the ALU input that needs it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "removes all branches"
+              },
+              {
+                "ma": "c",
+                "noiDung": "doubles the clock"
+              },
+              {
+                "ma": "d",
+                "noiDung": "writes registers in the ID stage"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It avoids waiting for the register-file write-back.</p><p><i>VI: Tránh phải chờ ghi lại vào tệp thanh ghi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Even with forwarding, a load followed immediately by an instruction using the loaded value needs …</p><p style=\"opacity:.75;font-size:.92em\"><i>Dù có chuyển tiếp, lệnh load theo sau là lệnh dùng giá trị vừa nạp cần …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "two stalls"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one stall cycle (load-use hazard)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no stall"
+              },
+              {
+                "ma": "d",
+                "noiDung": "three stalls"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The data are available only at the end of the MEM stage.</p><p><i>VI: Dữ liệu chỉ có ở cuối tầng MEM.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A structural hazard occurs when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hazard cấu trúc xảy ra khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the branch is mispredicted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the cache misses"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two instructions need the same hardware resource in the same cycle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "two instructions share a register"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>E.g. one memory port used for both instruction fetch and data access.</p><p><i>VI: Vd một cổng nhớ dùng cho cả nạp lệnh và truy cập dữ liệu.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A control hazard is caused by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hazard điều khiển do …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "register dependences"
+              },
+              {
+                "ma": "b",
+                "noiDung": "shared memory ports"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the ALU width"
+              },
+              {
+                "ma": "d",
+                "noiDung": "branches and jumps that change the next instruction address"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The pipeline does not yet know which instruction to fetch.</p><p><i>VI: Pipeline chưa biết nạp lệnh nào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing pipelining makes one instruction faster."
+        },
+        {
+          "loi": "Saying forwarding removes every stall."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hazard",
+          "vi": "hazard (xung đột)"
+        },
+        {
+          "en": "forwarding",
+          "vi": "chuyển tiếp"
+        }
+      ]
+    },
+    {
+      "title": "Pipeline 2 — Speedup of an ideal k-stage pipeline",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "pipeline speedup"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>An ideal pipeline of <b>k</b> stages (no stalls) runs <b>n</b> instructions in <b>k + n − 1</b> cycles; without pipelining each instruction takes k cycles, so n·k in total. Give both cycle counts and the speedup n·k / (k + n − 1) (3 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Pipeline lý tưởng <b>k</b> tầng (không đình trệ) chạy <b>n</b> lệnh trong <b>k + n − 1</b> chu kỳ; không pipeline mỗi lệnh tốn k chu kỳ, tổng n·k. Cho cả hai số chu kỳ và hệ số tăng tốc n·k / (k + n − 1) (3 chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The first instruction needs k cycles; each additional one completes one cycle later.",
+        "Speedup → k as n → ∞."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 2 — Speedup of an ideal k-stage pipeline\n\nAnswer in the answer panel (no code needed).\n\n1. Ideal speedupTăng tốc lý tưởng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 2 — Speedup of an ideal k-stage pipeline — answer key\n\n1. Ideal speedupTăng tốc lý tưởng\n   - r1.a: 14\n   - r1.b: 50\n   - r1.s: 3.571\n   - r2.a: 1004\n   - r2.b: 5000\n   - r2.s: 4.980 / 4.98\n   - r3.a: 107\n   - r3.b: 800\n   - r3.s: 7.477\n   - r4.a: 1000011\n   - r4.b: 12000000\n   - r4.s: 12.000 / 12\n   k=5, n=10: 14 vs 50 cycles ⇒ 3.571; k=5, n=1000: 1004 vs 5000 cycles ⇒ 4.980; k=8, n=100: 107 vs 800 cycles ⇒ 7.477; k=12, n=1000000: 1000011 vs 12000000 cycles ⇒ 12.000. The speedup approaches k for long programs but never exceeds it.VI: k=5, n=10: 14 vs 50 ⇒ 3.571; k=5, n=1000: 1004 vs 5000 ⇒ 4.980; k=8, n=100: 107 vs 800 ⇒ 7.477; k=12, n=1000000: 1000011 vs 12000000 ⇒ 12.000.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>k=5, n=10: 14 vs 50 cycles ⇒ 3.571; k=5, n=1000: 1004 vs 5000 cycles ⇒ 4.980; k=8, n=100: 107 vs 800 cycles ⇒ 7.477; k=12, n=1000000: 1000011 vs 12000000 cycles ⇒ 12.000. The speedup approaches k for long programs but never exceeds it.</p><p><i>VI: k=5, n=10: 14 vs 50 ⇒ 3.571; k=5, n=1000: 1004 vs 5000 ⇒ 4.980; k=8, n=100: 107 vs 800 ⇒ 7.477; k=12, n=1000000: 1000011 vs 12000000 ⇒ 12.000.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Ideal speedup</p><p style=\"opacity:.75;font-size:.92em\"><i>Tăng tốc lý tưởng</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "k, n"
+              },
+              {
+                "ma": "a",
+                "ten": "Pipelined cycles"
+              },
+              {
+                "ma": "b",
+                "ten": "Unpipelined cycles"
+              },
+              {
+                "ma": "s",
+                "ten": "Speedup"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "k = 5, n = 10"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "k = 5, n = 1000"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "k = 8, n = 100"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "k = 12, n = 1000000"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "14",
+              "r1.b": "50",
+              "r1.s": [
+                "3.571"
+              ],
+              "r2.a": "1004",
+              "r2.b": "5000",
+              "r2.s": [
+                "4.980",
+                "4.98"
+              ],
+              "r3.a": "107",
+              "r3.b": "800",
+              "r3.s": [
+                "7.477"
+              ],
+              "r4.a": "1000011",
+              "r4.b": "12000000",
+              "r4.s": [
+                "12.000",
+                "12"
+              ]
+            },
+            "giaiThich": "<p>k=5, n=10: 14 vs 50 cycles ⇒ 3.571; k=5, n=1000: 1004 vs 5000 cycles ⇒ 4.980; k=8, n=100: 107 vs 800 cycles ⇒ 7.477; k=12, n=1000000: 1000011 vs 12000000 cycles ⇒ 12.000. The speedup approaches k for long programs but never exceeds it.</p><p><i>VI: k=5, n=10: 14 vs 50 ⇒ 3.571; k=5, n=1000: 1004 vs 5000 ⇒ 4.980; k=8, n=100: 107 vs 800 ⇒ 7.477; k=12, n=1000000: 1000011 vs 12000000 ⇒ 12.000.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using k × n for the pipelined time."
+        },
+        {
+          "loi": "Expecting a speedup above k."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "throughput",
+          "vi": "thông lượng"
+        }
+      ]
+    },
+    {
+      "title": "Pipeline 3 — Count the cycles with and without forwarding",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "data hazards",
+        "forwarding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Five-stage pipeline IF ID EX MEM WB, one instruction per stage, in order. The register file is written in the first half of WB and read in the second half of ID. <b>Without forwarding</b> a dependent instruction must read in an ID cycle at or after the producer’s WB cycle. <b>With forwarding</b> ALU results go to the next EX, and a loaded value is available to an EX that starts after the load’s MEM. A source register — also the stored register of <code>sw</code> — is needed at the start of EX. Stalls hold the instruction in ID. Give the total number of cycles to complete each sequence (first IF = cycle 1).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Pipeline 5 tầng IF ID EX MEM WB, mỗi tầng một lệnh, theo thứ tự. Tệp thanh ghi ghi ở nửa đầu WB và đọc ở nửa sau ID. <b>Không chuyển tiếp</b>: lệnh phụ thuộc phải đọc ở chu kỳ ID không sớm hơn chu kỳ WB của lệnh sinh ra. <b>Có chuyển tiếp</b>: kết quả ALU đi vào EX kế tiếp, giá trị load có cho EX bắt đầu sau MEM của load. Thanh ghi nguồn — kể cả thanh ghi được lưu của <code>sw</code> — cần từ đầu EX. Đình trệ giữ lệnh ở ID. Cho tổng số chu kỳ hoàn thành mỗi dãy (IF đầu tiên = chu kỳ 1).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Draw the diagram: ideal = n + 4 cycles; add one cycle per stall.",
+        "Without forwarding the consumer’s ID must reach the producer’s WB cycle.",
+        "With forwarding only a load directly followed by its user stalls."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 3 — Count the cycles with and without forwarding\n\nAnswer in the answer panel (no code needed).\n\n1. CyclesSố chu kỳ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 3 — Count the cycles with and without forwarding — answer key\n\n1. CyclesSố chu kỳ\n   - r1.n: 10\n   - r1.f: 8\n   - r2.n: 14\n   - r2.f: 9\n   - r3.n: 12\n   - r3.f: 9\n   S1: 10 / 8 cycles (2 / 0 stalls); S2: 14 / 9 cycles (6 / 1 stalls); S3: 12 / 9 cycles (4 / 1 stalls). An ideal 4-instruction run takes 8 cycles (n + 4).VI: S1: 10 / 8 chu kỳ; S2: 14 / 9 chu kỳ; S3: 12 / 9 chu kỳ. Chạy lý tưởng 4 lệnh tốn 8 chu kỳ (n + 4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>S1: 10 / 8 cycles (2 / 0 stalls); S2: 14 / 9 cycles (6 / 1 stalls); S3: 12 / 9 cycles (4 / 1 stalls). An ideal 4-instruction run takes 8 cycles (n + 4).</p><p><i>VI: S1: 10 / 8 chu kỳ; S2: 14 / 9 chu kỳ; S3: 12 / 9 chu kỳ. Chạy lý tưởng 4 lệnh tốn 8 chu kỳ (n + 4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Cycles</p><p style=\"opacity:.75;font-size:.92em\"><i>Số chu kỳ</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Sequence"
+              },
+              {
+                "ma": "n",
+                "ten": "No forwarding"
+              },
+              {
+                "ma": "f",
+                "ten": "Forwarding"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "S1: add r1,r2,r3 ; sub r4,r1,r5 ; and r6,r1,r7 ; or r8,r1,r9"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "S2: lw r1,0(r2) ; add r3,r1,r4 ; sub r5,r3,r6 ; sw r5,4(r2)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "S3: lw r1,0(r2) ; lw r3,4(r2) ; add r5,r1,r3 ; sw r5,8(r2)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "10",
+              "r1.f": "8",
+              "r2.n": "14",
+              "r2.f": "9",
+              "r3.n": "12",
+              "r3.f": "9"
+            },
+            "giaiThich": "<p>S1: 10 / 8 cycles (2 / 0 stalls); S2: 14 / 9 cycles (6 / 1 stalls); S3: 12 / 9 cycles (4 / 1 stalls). An ideal 4-instruction run takes 8 cycles (n + 4).</p><p><i>VI: S1: 10 / 8 chu kỳ; S2: 14 / 9 chu kỳ; S3: 12 / 9 chu kỳ. Chạy lý tưởng 4 lệnh tốn 8 chu kỳ (n + 4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stalling for ALU→ALU dependences when forwarding is on."
+        },
+        {
+          "loi": "Forgetting that stalls delay all later instructions."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stall (bubble)",
+          "vi": "chu kỳ đình trệ (bong bóng)"
+        }
+      ]
+    },
+    {
+      "title": "Pipeline 4 — Classify the data dependence",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "RAW",
+        "WAR",
+        "WAW"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>For each pair (first, second) name the register dependence: <b>RAW</b> (second reads what the first writes), <b>WAR</b> (second writes what the first reads), <b>WAW</b> (both write the same register) or <b>None</b>. Ignore memory.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cặp (trước, sau) nêu phụ thuộc thanh ghi: <b>RAW</b> (lệnh sau đọc cái lệnh trước ghi), <b>WAR</b> (lệnh sau ghi cái lệnh trước đọc), <b>WAW</b> (cả hai ghi cùng thanh ghi) hoặc <b>None</b>. Bỏ qua bộ nhớ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "List the registers each instruction reads and writes.",
+        "Only RAW is a true dependence; WAR and WAW are name dependences."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 4 — Classify the data dependence\n\nAnswer in the answer panel (no code needed).\n\n1. DependencesPhụ thuộc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 4 — Classify the data dependence — answer key\n\n1. DependencesPhụ thuộc\n   - r1.d: RAW\n   - r2.d: WAR\n   - r3.d: WAW\n   - r4.d: None\n   - r5.d: WAR\n   - r6.d: RAW\n   Add r1,.. ; sub r4,r1: the second reads r1 ⇒ RAW. sub r2: writes r2 which the first read ⇒ WAR. sub r1: both write r1 ⇒ WAW. Independent registers ⇒ None. sw reads r1, lw then writes r1 ⇒ WAR. lw writes r1, sw reads it ⇒ RAW.VI: Đọc cái lệnh trước ghi ⇒ RAW; ghi cái lệnh trước đọc ⇒ WAR; cùng ghi một thanh ghi ⇒ WAW; thanh ghi độc lập ⇒ None.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Add r1,.. ; sub r4,r1: the second reads r1 ⇒ RAW. sub r2: writes r2 which the first read ⇒ WAR. sub r1: both write r1 ⇒ WAW. Independent registers ⇒ None. sw reads r1, lw then writes r1 ⇒ WAR. lw writes r1, sw reads it ⇒ RAW.</p><p><i>VI: Đọc cái lệnh trước ghi ⇒ RAW; ghi cái lệnh trước đọc ⇒ WAR; cùng ghi một thanh ghi ⇒ WAW; thanh ghi độc lập ⇒ None.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Dependences</p><p style=\"opacity:.75;font-size:.92em\"><i>Phụ thuộc</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "First ; second"
+              },
+              {
+                "ma": "d",
+                "ten": "Dependence",
+                "luaChon": [
+                  "RAW",
+                  "WAR",
+                  "WAW",
+                  "None"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "add r1,r2,r3 ; sub r4,r1,r5"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "add r1,r2,r3 ; sub r2,r4,r5"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "add r1,r2,r3 ; sub r1,r4,r5"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "lw r1,0(r2) ; add r3,r4,r5"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "sw r1,0(r2) ; lw r1,4(r3)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "lw r1,0(r2) ; sw r1,4(r3)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "RAW",
+              "r2.d": "WAR",
+              "r3.d": "WAW",
+              "r4.d": "None",
+              "r5.d": "WAR",
+              "r6.d": "RAW"
+            },
+            "giaiThich": "<p>Add r1,.. ; sub r4,r1: the second reads r1 ⇒ RAW. sub r2: writes r2 which the first read ⇒ WAR. sub r1: both write r1 ⇒ WAW. Independent registers ⇒ None. sw reads r1, lw then writes r1 ⇒ WAR. lw writes r1, sw reads it ⇒ RAW.</p><p><i>VI: Đọc cái lệnh trước ghi ⇒ RAW; ghi cái lệnh trước đọc ⇒ WAR; cùng ghi một thanh ghi ⇒ WAW; thanh ghi độc lập ⇒ None.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling WAR a RAW because the register is shared."
+        },
+        {
+          "loi": "Forgetting that sw reads its first register."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "name dependence",
+          "vi": "phụ thuộc tên"
+        }
+      ]
+    },
+    {
+      "title": "Pipeline 5 — CPI with branch penalties",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "branch penalty",
+        "CPI"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Ideal CPI is 1. A fraction <b>f</b> of the instructions are branches; a branch that is <b>mispredicted</b> (or not predicted at all) costs <b>p</b> stall cycles. CPI = 1 + f × p × (1 − accuracy). Fill in the CPI (3 decimals) and, with a 2 GHz clock, the time for 10⁹ instructions (seconds, 3 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>CPI lý tưởng là 1. Một phần <b>f</b> lệnh là rẽ nhánh; nhánh <b>dự đoán sai</b> (hoặc không dự đoán) tốn <b>p</b> chu kỳ đình trệ. CPI = 1 + f × p × (1 − độ chính xác). Điền CPI (3 chữ số) và, với clock 2 GHz, thời gian cho 10⁹ lệnh (giây, 3 chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Time = IC × CPI / f.",
+        "No prediction means every branch pays p."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 5 — CPI with branch penalties\n\nAnswer in the answer panel (no code needed).\n\n1. CPI and timeCPI và thời gian\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pipeline 5 — CPI with branch penalties — answer key\n\n1. CPI and timeCPI và thời gian\n   - r1.c: 1.600 / 1.6\n   - r1.t: 0.800 / 0.8\n   - r2.c: 1.120 / 1.12\n   - r2.t: 0.560 / 0.56\n   - r3.c: 1.060 / 1.06\n   - r3.t: 0.530 / 0.53\n   - r4.c: 1.038\n   - r4.t: 0.519\n   - r5.c: 1.250 / 1.25\n   - r5.t: 0.625\n   CPI = 1 + 0.2×3×1.00 = 1.600; CPI = 1 + 0.2×3×0.20 = 1.120; CPI = 1 + 0.2×3×0.10 = 1.060; CPI = 1 + 0.15×5×0.05 = 1.038; CPI = 1 + 0.25×10×0.10 = 1.250. A deeper pipeline (larger p) makes prediction accuracy more valuable.VI: CPI = 1 + 0.2×3×1.00 = 1.600; CPI = 1 + 0.2×3×0.20 = 1.120; CPI = 1 + 0.2×3×0.10 = 1.060; CPI = 1 + 0.15×5×0.05 = 1.038; CPI = 1 + 0.25×10×0.10 = 1.250. Pipeline sâu hơn (p lớn) làm độ chính xác dự đoán quan trọng hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CPI = 1 + 0.2×3×1.00 = 1.600; CPI = 1 + 0.2×3×0.20 = 1.120; CPI = 1 + 0.2×3×0.10 = 1.060; CPI = 1 + 0.15×5×0.05 = 1.038; CPI = 1 + 0.25×10×0.10 = 1.250. A deeper pipeline (larger p) makes prediction accuracy more valuable.</p><p><i>VI: CPI = 1 + 0.2×3×1.00 = 1.600; CPI = 1 + 0.2×3×0.20 = 1.120; CPI = 1 + 0.2×3×0.10 = 1.060; CPI = 1 + 0.15×5×0.05 = 1.038; CPI = 1 + 0.25×10×0.10 = 1.250. Pipeline sâu hơn (p lớn) làm độ chính xác dự đoán quan trọng hơn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>CPI and time</p><p style=\"opacity:.75;font-size:.92em\"><i>CPI và thời gian</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "f, penalty, accuracy"
+              },
+              {
+                "ma": "c",
+                "ten": "CPI"
+              },
+              {
+                "ma": "t",
+                "ten": "Time (s)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "f = 0.2, p = 3, accuracy = 0 (no prediction)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "f = 0.2, p = 3, accuracy = 0.8"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "f = 0.2, p = 3, accuracy = 0.9"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "f = 0.15, p = 5, accuracy = 0.95"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "f = 0.25, p = 10, accuracy = 0.9"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "1.600",
+                "1.6"
+              ],
+              "r1.t": [
+                "0.800",
+                "0.8"
+              ],
+              "r2.c": [
+                "1.120",
+                "1.12"
+              ],
+              "r2.t": [
+                "0.560",
+                "0.56"
+              ],
+              "r3.c": [
+                "1.060",
+                "1.06"
+              ],
+              "r3.t": [
+                "0.530",
+                "0.53"
+              ],
+              "r4.c": [
+                "1.038"
+              ],
+              "r4.t": [
+                "0.519"
+              ],
+              "r5.c": [
+                "1.250",
+                "1.25"
+              ],
+              "r5.t": [
+                "0.625"
+              ]
+            },
+            "giaiThich": "<p>CPI = 1 + 0.2×3×1.00 = 1.600; CPI = 1 + 0.2×3×0.20 = 1.120; CPI = 1 + 0.2×3×0.10 = 1.060; CPI = 1 + 0.15×5×0.05 = 1.038; CPI = 1 + 0.25×10×0.10 = 1.250. A deeper pipeline (larger p) makes prediction accuracy more valuable.</p><p><i>VI: CPI = 1 + 0.2×3×1.00 = 1.600; CPI = 1 + 0.2×3×0.20 = 1.120; CPI = 1 + 0.2×3×0.10 = 1.060; CPI = 1 + 0.15×5×0.05 = 1.038; CPI = 1 + 0.25×10×0.10 = 1.250. Pipeline sâu hơn (p lớn) làm độ chính xác dự đoán quan trọng hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Charging p to every instruction."
+        },
+        {
+          "loi": "Using accuracy instead of the miss rate (1 − accuracy)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "branch penalty",
+          "vi": "phạt rẽ nhánh"
+        }
+      ]
+    },
+    {
+      "title": "Pipeline 6 — Write a pipeline cycle counter",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "pipeline simulation",
+        "forwarding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>pipelineCycles(lines, forwarding)</code> for the 5-stage pipeline of “Pipeline 3”. <code>lines</code> are strings: <code>\"lw r1, 0(r2)\"</code> (writes r1, reads r2), <code>\"sw r3, 4(r2)\"</code> (writes nothing, reads r3 and r2), <code>\"addi r1, r2, 5\"</code> (writes r1, reads r2) and three-register ALU instructions <code>\"add|sub|and|or|slt rd, rs, rt\"</code> (write rd, read rs and rt). Register <code>r0</code> is never a dependence. Rules: the first ID is cycle 2; an instruction enters ID right after the previous one leaves it; without forwarding its last ID cycle must be ≥ the producer’s WB cycle; with forwarding its EX must start after the producer’s EX (ALU) or MEM (lw) cycle. Return <code>{ cycles, stalls }</code> where <code>cycles</code> is the cycle of the last WB and <code>stalls = cycles − (n + 4)</code> (0 for an empty program).</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>pipelineCycles(lines, forwarding)</code> cho pipeline 5 tầng của “Pipeline 3”. <code>lines</code> là các chuỗi: <code>\"lw r1, 0(r2)\"</code> (ghi r1, đọc r2), <code>\"sw r3, 4(r2)\"</code> (không ghi gì, đọc r3 và r2), <code>\"addi r1, r2, 5\"</code> (ghi r1, đọc r2) và lệnh ALU ba thanh ghi <code>\"add|sub|and|or|slt rd, rs, rt\"</code> (ghi rd, đọc rs và rt). Thanh ghi <code>r0</code> không bao giờ gây phụ thuộc. Quy tắc: ID đầu tiên ở chu kỳ 2; lệnh vào ID ngay khi lệnh trước rời nó; không chuyển tiếp thì chu kỳ ID cuối ≥ chu kỳ WB của lệnh sinh; có chuyển tiếp thì EX phải bắt đầu sau chu kỳ EX (ALU) hoặc MEM (lw) của lệnh sinh. Trả <code>{ cycles, stalls }</code> với <code>cycles</code> là chu kỳ của WB cuối và <code>stalls = cycles − (n + 4)</code> (0 nếu chương trình rỗng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pipelineCycles([\"add r1,r2,r3\",\"sub r4,r1,r5\"], false)",
+          "output": "{\"cycles\":8,\"stalls\":2}",
+          "explanation": "sub must wait for add’s WB in cycle 5: two stalls, 8 cycles.|||sub phải chờ WB của add ở chu kỳ 5: hai đình trệ, 8 chu kỳ."
+        },
+        {
+          "input": "pipelineCycles([\"add r1,r2,r3\",\"sub r4,r1,r5\"], true)",
+          "output": "{\"cycles\":6,\"stalls\":0}",
+          "explanation": "With forwarding there is no stall: n + 4 = 6.|||Có chuyển tiếp thì không đình trệ: n + 4 = 6."
+        }
+      ],
+      "hintsJson": [
+        "Parse each line into {op, dest, src[]}; for lw the base register is a source; for sw both registers are sources.",
+        "Keep idEnd[i], ex[i], mem[i], wb[i]; start with idEnd = previous + 1.",
+        "For every earlier producer j of a source register raise idEnd according to the forwarding rule."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function pipelineCycles(lines, forwarding) {\n  return { cycles: 0, stalls: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function pipelineCycles(lines, forwarding) {\n  var ins = [], i, j;\n  for (i = 0; i < lines.length; i++) {\n    var p = lines[i].replace(/,/g, ' ').replace(/[()]/g, ' ').trim().split(/\\s+/), op = p[0].toLowerCase(), dest = null, src = [];\n    if (op === 'lw') { dest = p[1]; src = [p[3]]; }\n    else if (op === 'sw') { src = [p[1], p[3]]; }\n    else if (op === 'addi') { dest = p[1]; src = [p[2]]; }\n    else { dest = p[1]; src = [p[2], p[3]]; }\n    if (dest === 'r0') dest = null;\n    ins.push({ op: op, dest: dest, src: src });\n  }\n  var idEnd = [], ex = [], mem = [], wb = [];\n  for (i = 0; i < ins.length; i++) {\n    var idE = i === 0 ? 2 : idEnd[i - 1] + 1;\n    for (j = 0; j < i; j++) {\n      if (!ins[j].dest || ins[i].src.indexOf(ins[j].dest) < 0) continue;\n      if (!forwarding) idE = Math.max(idE, wb[j]);\n      else idE = Math.max(idE, (ins[j].op === 'lw' ? mem[j] + 1 : ex[j] + 1) - 1);\n    }\n    idEnd[i] = idE; ex[i] = idE + 1; mem[i] = idE + 2; wb[i] = idE + 3;\n  }\n  var n = ins.length, cycles = n ? wb[n - 1] : 0;\n  return { cycles: cycles, stalls: n ? cycles - (n + 4) : 0 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An in-order pipeline is a scheduling problem: each instruction enters ID right after the previous one and is delayed only by data dependences on earlier results.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: pipelineCycles([\"add r1,r2,r3\",\"sub r4,r1,r5\",\"and r6,r1,r7\",\"or r8,r1,r9\"], false)",
+              "vi": "Ca 1"
+            },
+            "goi": "pipelineCycles([\"add r1,r2,r3\",\"sub r4,r1,r5\",\"and r6,r1,r7\",\"or r8,r1,r9\"], false)",
+            "mongDoi": {
+              "cycles": 10,
+              "stalls": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: pipelineCycles([\"add r1,r2,r3\",\"sub r4,r1,r5\",\"and r6,r1,r7\",\"or r8,r1,r9\"], true)",
+              "vi": "Ca 2"
+            },
+            "goi": "pipelineCycles([\"add r1,r2,r3\",\"sub r4,r1,r5\",\"and r6,r1,r7\",\"or r8,r1,r9\"], true)",
+            "mongDoi": {
+              "cycles": 8,
+              "stalls": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: pipelineCycles([\"lw r1,0(r2)\",\"add r3,r1,r4\",\"sub r5,r3,r6\",\"sw r5,4(r2)\"], false)",
+              "vi": "Ca 3"
+            },
+            "goi": "pipelineCycles([\"lw r1,0(r2)\",\"add r3,r1,r4\",\"sub r5,r3,r6\",\"sw r5,4(r2)\"], false)",
+            "mongDoi": {
+              "cycles": 14,
+              "stalls": 6
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: pipelineCycles([\"lw r1,0(r2)\",\"add r3,r1,r4\",\"sub r5,r3,r6\",\"sw r5,4(r2)\"], true)",
+              "vi": "Ca 4"
+            },
+            "goi": "pipelineCycles([\"lw r1,0(r2)\",\"add r3,r1,r4\",\"sub r5,r3,r6\",\"sw r5,4(r2)\"], true)",
+            "mongDoi": {
+              "cycles": 9,
+              "stalls": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pipelineCycles([\"lw r1,0(r2)\",\"lw r3,4(r2)\",\"add r5,r1,r3\",\"sw r5,8(r2)\"], true)",
+            "mongDoi": {
+              "cycles": 9,
+              "stalls": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "pipelineCycles([\"add r0,r1,r2\",\"add r3,r0,r4\",\"sw r3,0(r0)\"], false)",
+            "mongDoi": {
+              "cycles": 9,
+              "stalls": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "pipelineCycles([], true)",
+            "mongDoi": {
+              "cycles": 0,
+              "stalls": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "pipelineCycles([\"lw r1,0(r2)\",\"lw r2,4(r1)\",\"lw r3,0(r2)\",\"addi r4,r3,1\"], true)",
+            "mongDoi": {
+              "cycles": 11,
+              "stalls": 3
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "pipelineCycles([\"addi r1,r1,1\",\"addi r1,r1,1\",\"addi r1,r1,1\"], false)",
+            "mongDoi": {
+              "cycles": 11,
+              "stalls": 4
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that sw has no destination."
+        },
+        {
+          "loi": "Allowing r0 to create a dependence."
+        },
+        {
+          "loi": "Giving ALU→ALU a stall when forwarding is on."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

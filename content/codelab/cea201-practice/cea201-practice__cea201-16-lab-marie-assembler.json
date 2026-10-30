@@ -1,0 +1,688 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-16-lab-marie-assembler",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-n1-1-marie"
+  },
+  "exercises": [
+    {
+      "title": "Lab 16 — A MARIE assembler and virtual machine",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 75,
+      "points": 60,
+      "concepts": [
+        "assembler",
+        "symbol table",
+        "fetch–decode–execute",
+        "MARIE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> You are building the toolchain for the MARIE simulator used in the course. Write <code>marieLab(src, input)</code> that <b>assembles</b> a MARIE program and <b>runs</b> it.</p>\n<h4>Source format</h4>\n<ul>\n<li>One statement per line; everything after <code>/</code> is a comment; blank lines are ignored. A label is a name followed by a comma: <code>Loop, Load N</code> (a label always precedes a statement on the same line).</li>\n<li><code>ORG hex</code> sets the location counter (hexadecimal); default 000. Every other statement occupies one word and increases the counter by 1. <b>Execution starts at the address of the first statement.</b></li>\n<li>Mnemonics (case-insensitive): <code>JnS Load Store Add Subt Input Output Halt Skipcond Jump Clear AddI JumpI LoadI StoreI</code> with opcodes 0…E. An operand is a label or a hexadecimal address; <code>Input Output Halt Clear</code> may carry an ignored operand (e.g. <code>Halt 000</code>). <code>Skipcond</code> takes its hex literal (000 / 400 / 800) as the address field.</li>\n<li>Data: <code>Dec n</code> (decimal, negative allowed, stored as 16-bit two’s complement) · <code>Hex h</code> · <code>Oct o</code>.</li>\n<li>An unknown mnemonic ⇒ return <code>{ error: \"unknown mnemonic xyz\" }</code> (xyz in lower case).</li>\n</ul>\n<h4>Machine</h4>\n<ul>\n<li>Words are 16 bits; 4096 words of memory, initially 0. AC is 16-bit; arithmetic wraps modulo 2¹⁶; <code>Output</code> prints the AC as a <b>signed</b> number.</li>\n<li>PC is incremented right after the fetch. <code>Input</code> takes the next value of <code>input</code> (0 when exhausted). <code>Skipcond</code> checks bits 11–10 of the address field: 00 AC&lt;0 · 01 AC=0 · 10 AC&gt;0, and skips the next instruction by adding 1 to the PC. <code>JnS X</code> stores the PC at X and continues at X+1. <code>LoadI X</code>: AC ← M[M[X]]; <code>StoreI X</code>: M[M[X]] ← AC.</li>\n<li>Stop at <code>Halt</code> or after 100000 instructions.</li>\n</ul>\n<p>Return <code>{ words, output, steps, ac }</code>: <code>words</code> = the assembled statements in source order as <code>{ addr, word }</code> (<code>addr</code> 3 hex digits, <code>word</code> 4 hex digits, capital letters); <code>output</code> = printed numbers; <code>steps</code> = instructions executed including Halt; <code>ac</code> = final AC (signed).</p>\n<h4>Sample</h4><table><thead><tr><th>source</th><th>output</th></tr></thead><tbody><tr><td>the lecture program that sums N + (N−1) + … + 1 for N = 3</td><td>[6]</td></tr><tr><td>the 5 × 4 multiplication loop</td><td>[20] in 46 instructions</td></tr><tr><td>the pointer-sum with AddI</td><td>[45] in 40 instructions</td></tr></tbody></table>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify <code>input</code>.</li>\n  <li>Forward references (a label used before its definition) must work: use two passes.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Bạn xây bộ công cụ cho trình mô phỏng MARIE dùng trong môn học. Viết <code>marieLab(src, input)</code> vừa <b>dịch</b> vừa <b>chạy</b> chương trình MARIE.</p>\n<h4>Khuôn dạng mã nguồn</h4>\n<ul>\n<li>Mỗi dòng một câu lệnh; mọi thứ sau <code>/</code> là chú thích; dòng trống bỏ qua. Nhãn là tên theo sau bởi dấu phẩy: <code>Loop, Load N</code> (nhãn luôn đứng trước câu lệnh trên cùng dòng).</li>\n<li><code>ORG hex</code> đặt bộ đếm vị trí (hex); mặc định 000. Mọi câu lệnh khác chiếm một từ và tăng bộ đếm 1. <b>Chương trình bắt đầu chạy ở địa chỉ của câu lệnh đầu tiên.</b></li>\n<li>Mã gợi nhớ (không phân biệt hoa thường): <code>JnS Load Store Add Subt Input Output Halt Skipcond Jump Clear AddI JumpI LoadI StoreI</code> với mã 0…E. Toán hạng là nhãn hoặc địa chỉ hex; <code>Input Output Halt Clear</code> có thể kèm toán hạng bị bỏ qua (vd <code>Halt 000</code>). <code>Skipcond</code> lấy hằng hex (000 / 400 / 800) làm trường địa chỉ.</li>\n<li>Dữ liệu: <code>Dec n</code> (thập phân, cho phép âm, lưu dạng bù 2 16 bit) · <code>Hex h</code> · <code>Oct o</code>.</li>\n<li>Mã gợi nhớ lạ ⇒ trả <code>{ error: \"unknown mnemonic xyz\" }</code> (xyz viết thường).</li>\n</ul>\n<h4>Máy</h4>\n<ul>\n<li>Từ 16 bit; bộ nhớ 4096 từ, ban đầu bằng 0. AC 16 bit; số học quấn modulo 2¹⁶; <code>Output</code> in AC dạng số <b>có dấu</b>.</li>\n<li>PC tăng ngay sau khi nạp lệnh. <code>Input</code> lấy giá trị kế tiếp của <code>input</code> (0 khi hết). <code>Skipcond</code> xét bit 11–10 của trường địa chỉ: 00 AC&lt;0 · 01 AC=0 · 10 AC&gt;0 và bỏ qua lệnh kế bằng cách cộng 1 vào PC. <code>JnS X</code> lưu PC vào X và chạy tiếp ở X+1. <code>LoadI X</code>: AC ← M[M[X]]; <code>StoreI X</code>: M[M[X]] ← AC.</li>\n<li>Dừng ở <code>Halt</code> hoặc sau 100000 lệnh.</li>\n</ul>\n<p>Trả <code>{ words, output, steps, ac }</code>: <code>words</code> = các câu lệnh đã dịch theo thứ tự nguồn dạng <code>{ addr, word }</code> (<code>addr</code> 3 chữ số hex, <code>word</code> 4 chữ số hex, chữ hoa); <code>output</code> = các số đã in; <code>steps</code> = số lệnh đã thực hiện gồm Halt; <code>ac</code> = AC cuối (có dấu).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa <code>input</code>.</li>\n  <li>Phải hỗ trợ tham chiếu tới trước (nhãn dùng trước khi định nghĩa): dùng hai lượt.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "marieLab(\"ORG 000\\nInput\\nOutput\\nInput\\nAdd Seven\\nOutput\\nHalt\\nSeven, Dec 7\", [5, 6]).output",
+          "output": "[5,13]",
+          "explanation": "Echo 5, then 6 + 7 = 13.|||In lại 5, rồi 6 + 7 = 13."
+        },
+        {
+          "input": "marieLab(\"ORG 100\\nLoop,   Load N          / AC <- N\\n        Skipcond 800    / AC > 0 ? skip next\\n        Jump Done\\n        Load Sum\\n        Add N\\n        Store Sum\\n        Load N\\n        Subt One\\n        Store N\\n        Jump Loop\\nDone,   Load Sum\\n        Output\\n        Halt 000\\nN,      Dec 3\\nSum,    Dec 0\\nOne,    Dec 1\", []).steps",
+          "output": "33",
+          "explanation": "The lecture sum-loop prints 6.|||Chương trình cộng dồn trong bài giảng in 6."
+        }
+      ],
+      "hintsJson": [
+        "First pass: strip comments, split off the label, handle ORG, record each label’s address and collect the statements. Second pass: encode with the symbol table.",
+        "Encode instructions as (opcode << 12) | address; Dec uses two’s complement (n + 65536) & 65535.",
+        "Write the machine loop last; test with the three lecture programs (outputs 6 · 20 · 45 and 46/40 instructions)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function marieLab(src, input) {\n  // 1. assemble (two passes)  2. run\n  return { words: [], output: [], steps: 0, ac: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution: a two-pass assembler followed by the fetch/decode/execute loop.\nfunction marieLab(src, input) {\n  var OPS = { jns: 0, load: 1, store: 2, add: 3, subt: 4, input: 5, output: 6, halt: 7, skipcond: 8, jump: 9, clear: 10, addi: 11, jumpi: 12, loadi: 13, storei: 14 };\n  var lines = src.split('\\n'), items = [], labels = {}, loc = 0, i, ln;\n  // pass 1: location counter + symbol table\n  for (i = 0; i < lines.length; i++) {\n    ln = lines[i].replace(/\\/.*$/, '').trim();\n    if (!ln) continue;\n    var lab = null, m = /^([A-Za-z_][A-Za-z0-9_]*)\\s*,\\s*(.*)$/.exec(ln);\n    if (m) { lab = m[1]; ln = m[2].trim(); }\n    var parts = ln.split(/\\s+/), op = (parts[0] || '').toLowerCase(), arg = parts[1];\n    if (op === 'org') { loc = parseInt(arg, 16); continue; }\n    if (lab) labels[lab] = loc;\n    if (!op) continue;\n    items.push({ loc: loc, op: op, arg: arg });\n    loc++;\n  }\n  // pass 2: generate machine words\n  var mem = [];\n  for (i = 0; i < 4096; i++) mem.push(0);\n  var hex = function (n, w) { var s = n.toString(16).toUpperCase(); while (s.length < w) s = '0' + s; return s; };\n  var words = [];\n  for (i = 0; i < items.length; i++) {\n    var it = items[i], w;\n    if (it.op === 'dec') w = (parseInt(it.arg, 10) + 65536) & 65535;\n    else if (it.op === 'hex') w = parseInt(it.arg, 16) & 65535;\n    else if (it.op === 'oct') w = parseInt(it.arg, 8) & 65535;\n    else {\n      if (!(it.op in OPS)) return { error: 'unknown mnemonic ' + it.op };\n      var a = it.arg === undefined ? 0 : (it.arg in labels ? labels[it.arg] : parseInt(it.arg, 16));\n      w = (OPS[it.op] << 12) | (a & 4095);\n    }\n    mem[it.loc] = w;\n    words.push({ addr: hex(it.loc, 3), word: hex(w, 4) });\n  }\n  // run\n  var signed = function (x) { return x >= 32768 ? x - 65536 : x; };\n  var pc = items.length ? items[0].loc : 0, ac = 0, out = [], steps = 0, halted = false, inp = (input || []).slice();\n  while (!halted && steps < 100000) {\n    var ir = mem[pc], opc = ir >> 12, ad = ir & 4095;\n    pc++; steps++;\n    if (opc === 0) { mem[ad] = pc; pc = ad + 1; }\n    else if (opc === 1) ac = mem[ad];\n    else if (opc === 2) mem[ad] = ac;\n    else if (opc === 3) ac = (ac + mem[ad]) & 65535;\n    else if (opc === 4) ac = (ac - mem[ad] + 65536) & 65535;\n    else if (opc === 5) ac = ((inp.length ? inp.shift() : 0) + 65536) & 65535;\n    else if (opc === 6) out.push(signed(ac));\n    else if (opc === 7) halted = true;\n    else if (opc === 8) {\n      var c = (ir >> 10) & 3;\n      if ((c === 0 && signed(ac) < 0) || (c === 1 && ac === 0) || (c === 2 && signed(ac) > 0)) pc++;\n    }\n    else if (opc === 9) pc = ad;\n    else if (opc === 10) ac = 0;\n    else if (opc === 11) ac = (ac + mem[mem[ad] & 4095]) & 65535;\n    else if (opc === 12) pc = mem[ad] & 4095;\n    else if (opc === 13) ac = mem[mem[ad] & 4095];\n    else if (opc === 14) mem[mem[ad] & 4095] = ac;\n  }\n  return { words: words, output: out, steps: steps, ac: signed(ac) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An assembler is a two-pass translator (pass 1 builds the symbol table, pass 2 emits code) and the machine is a fetch–decode–execute loop. Together they are the whole path from source text to a running computer — the point of this chapter of the course.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: marieLab(\"ORG 100\\nLoop,   Load N          / AC <- N\\n        Skipcond 800    /)",
+              "vi": "Ca 1"
+            },
+            "goi": "marieLab(\"ORG 100\\nLoop,   Load N          / AC <- N\\n        Skipcond 800    / AC > 0 ? skip next\\n        Jump Done\\n        Load Sum\\n        Add N\\n        Store Sum\\n        Load N\\n        Subt One\\n        Store N\\n        Jump Loop\\nDone,   Load Sum\\n        Output\\n        Halt 000\\nN,      Dec 3\\nSum,    Dec 0\\nOne,    Dec 1\", [])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "100",
+                  "word": "110D"
+                },
+                {
+                  "addr": "101",
+                  "word": "8800"
+                },
+                {
+                  "addr": "102",
+                  "word": "910A"
+                },
+                {
+                  "addr": "103",
+                  "word": "110E"
+                },
+                {
+                  "addr": "104",
+                  "word": "310D"
+                },
+                {
+                  "addr": "105",
+                  "word": "210E"
+                },
+                {
+                  "addr": "106",
+                  "word": "110D"
+                },
+                {
+                  "addr": "107",
+                  "word": "410F"
+                },
+                {
+                  "addr": "108",
+                  "word": "210D"
+                },
+                {
+                  "addr": "109",
+                  "word": "9100"
+                },
+                {
+                  "addr": "10A",
+                  "word": "110E"
+                },
+                {
+                  "addr": "10B",
+                  "word": "6000"
+                },
+                {
+                  "addr": "10C",
+                  "word": "7000"
+                },
+                {
+                  "addr": "10D",
+                  "word": "0003"
+                },
+                {
+                  "addr": "10E",
+                  "word": "0000"
+                },
+                {
+                  "addr": "10F",
+                  "word": "0001"
+                }
+              ],
+              "output": [
+                6
+              ],
+              "steps": 33,
+              "ac": 6
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: marieLab(\"ORG 100\\n        Load   Addr\\n        Store  Next\\n        Load   Num)",
+              "vi": "Ca 2"
+            },
+            "goi": "marieLab(\"ORG 100\\n        Load   Addr\\n        Store  Next\\n        Load   Num\\n        Subt   One\\n        Store  Ctr\\nLoop,   Load   Sum\\n        AddI   Next\\n        Store  Sum\\n        Load   Next\\n        Add    One\\n        Store  Next\\n        Load   Ctr\\n        Subt   One\\n        Store  Ctr\\n        Skipcond 000\\n        Jump   Loop\\n        Load   Sum\\n        Output\\n        Halt   000\\nAddr,   Hex    119\\nNext,   Hex    0\\nNum,    Dec    3\\nSum,    Dec    0\\nCtr,    Hex    0\\nOne,    Dec    1\\n        Dec    10\\n        Dec    15\\n        Dec    20\", [])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "100",
+                  "word": "1113"
+                },
+                {
+                  "addr": "101",
+                  "word": "2114"
+                },
+                {
+                  "addr": "102",
+                  "word": "1115"
+                },
+                {
+                  "addr": "103",
+                  "word": "4118"
+                },
+                {
+                  "addr": "104",
+                  "word": "2117"
+                },
+                {
+                  "addr": "105",
+                  "word": "1116"
+                },
+                {
+                  "addr": "106",
+                  "word": "B114"
+                },
+                {
+                  "addr": "107",
+                  "word": "2116"
+                },
+                {
+                  "addr": "108",
+                  "word": "1114"
+                },
+                {
+                  "addr": "109",
+                  "word": "3118"
+                },
+                {
+                  "addr": "10A",
+                  "word": "2114"
+                },
+                {
+                  "addr": "10B",
+                  "word": "1117"
+                },
+                {
+                  "addr": "10C",
+                  "word": "4118"
+                },
+                {
+                  "addr": "10D",
+                  "word": "2117"
+                },
+                {
+                  "addr": "10E",
+                  "word": "8000"
+                },
+                {
+                  "addr": "10F",
+                  "word": "9105"
+                },
+                {
+                  "addr": "110",
+                  "word": "1116"
+                },
+                {
+                  "addr": "111",
+                  "word": "6000"
+                },
+                {
+                  "addr": "112",
+                  "word": "7000"
+                },
+                {
+                  "addr": "113",
+                  "word": "0119"
+                },
+                {
+                  "addr": "114",
+                  "word": "0000"
+                },
+                {
+                  "addr": "115",
+                  "word": "0003"
+                },
+                {
+                  "addr": "116",
+                  "word": "0000"
+                },
+                {
+                  "addr": "117",
+                  "word": "0000"
+                },
+                {
+                  "addr": "118",
+                  "word": "0001"
+                },
+                {
+                  "addr": "119",
+                  "word": "000A"
+                },
+                {
+                  "addr": "11A",
+                  "word": "000F"
+                },
+                {
+                  "addr": "11B",
+                  "word": "0014"
+                }
+              ],
+              "output": [
+                45
+              ],
+              "steps": 40,
+              "ac": 45
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: marieLab(\"ORG 000\\nInput\\nOutput\\nInput\\nAdd Seven\\nOutput\\nHalt\\nSeven, Dec 7\")",
+              "vi": "Ca 3"
+            },
+            "goi": "marieLab(\"ORG 000\\nInput\\nOutput\\nInput\\nAdd Seven\\nOutput\\nHalt\\nSeven, Dec 7\", [5,6])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "000",
+                  "word": "5000"
+                },
+                {
+                  "addr": "001",
+                  "word": "6000"
+                },
+                {
+                  "addr": "002",
+                  "word": "5000"
+                },
+                {
+                  "addr": "003",
+                  "word": "3006"
+                },
+                {
+                  "addr": "004",
+                  "word": "6000"
+                },
+                {
+                  "addr": "005",
+                  "word": "7000"
+                },
+                {
+                  "addr": "006",
+                  "word": "0007"
+                }
+              ],
+              "output": [
+                5,
+                13
+              ],
+              "steps": 6,
+              "ac": 13
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: marieLab(\"ORG 100\\n        Load   A\\n        JnS    Dbl\\n        Store  A\\n    )",
+              "vi": "Ca 4"
+            },
+            "goi": "marieLab(\"ORG 100\\n        Load   A\\n        JnS    Dbl\\n        Store  A\\n        Load   B\\n        JnS    Dbl\\n        Output\\n        Load   A\\n        Output\\n        Halt\\nA,      Dec    21\\nB,      Dec    -5\\nDbl,    Hex    0\\n        Store  T\\n        Add    T\\n        JumpI  Dbl\\nT,      Dec    0\", [])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "100",
+                  "word": "1109"
+                },
+                {
+                  "addr": "101",
+                  "word": "010B"
+                },
+                {
+                  "addr": "102",
+                  "word": "2109"
+                },
+                {
+                  "addr": "103",
+                  "word": "110A"
+                },
+                {
+                  "addr": "104",
+                  "word": "010B"
+                },
+                {
+                  "addr": "105",
+                  "word": "6000"
+                },
+                {
+                  "addr": "106",
+                  "word": "1109"
+                },
+                {
+                  "addr": "107",
+                  "word": "6000"
+                },
+                {
+                  "addr": "108",
+                  "word": "7000"
+                },
+                {
+                  "addr": "109",
+                  "word": "0015"
+                },
+                {
+                  "addr": "10A",
+                  "word": "FFFB"
+                },
+                {
+                  "addr": "10B",
+                  "word": "0000"
+                },
+                {
+                  "addr": "10C",
+                  "word": "210F"
+                },
+                {
+                  "addr": "10D",
+                  "word": "310F"
+                },
+                {
+                  "addr": "10E",
+                  "word": "C10B"
+                },
+                {
+                  "addr": "10F",
+                  "word": "0000"
+                }
+              ],
+              "output": [
+                -10,
+                42
+              ],
+              "steps": 15,
+              "ac": 42
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "marieLab(\"ORG 200\\nLoad Z\\nSubt One\\nOutput\\nClear\\nOutput\\nHalt\\nZ, Dec 0\\nOne, Dec 1\\nBig, Hex FFFF\\nOct8, Oct 17\", [])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "200",
+                  "word": "1206"
+                },
+                {
+                  "addr": "201",
+                  "word": "4207"
+                },
+                {
+                  "addr": "202",
+                  "word": "6000"
+                },
+                {
+                  "addr": "203",
+                  "word": "A000"
+                },
+                {
+                  "addr": "204",
+                  "word": "6000"
+                },
+                {
+                  "addr": "205",
+                  "word": "7000"
+                },
+                {
+                  "addr": "206",
+                  "word": "0000"
+                },
+                {
+                  "addr": "207",
+                  "word": "0001"
+                },
+                {
+                  "addr": "208",
+                  "word": "FFFF"
+                },
+                {
+                  "addr": "209",
+                  "word": "000F"
+                }
+              ],
+              "output": [
+                -1,
+                0
+              ],
+              "steps": 6,
+              "ac": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "marieLab(\"ORG 100\\nLoop, Load Ctr\\nSkipcond 400\\nJump Body\\nJump Done\\nBody, Load Sum\\nAdd X\\nStore Sum\\nLoad Ctr\\nSubt One\\nStore Ctr\\nJump Loop\\nDone, Load Sum\\nOutput\\nHalt 000\\nX, Dec 5\\nCtr, Dec 4\\nSum, Dec 0\\nOne, Dec 1\", [])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "100",
+                  "word": "110F"
+                },
+                {
+                  "addr": "101",
+                  "word": "8400"
+                },
+                {
+                  "addr": "102",
+                  "word": "9104"
+                },
+                {
+                  "addr": "103",
+                  "word": "910B"
+                },
+                {
+                  "addr": "104",
+                  "word": "1110"
+                },
+                {
+                  "addr": "105",
+                  "word": "310E"
+                },
+                {
+                  "addr": "106",
+                  "word": "2110"
+                },
+                {
+                  "addr": "107",
+                  "word": "110F"
+                },
+                {
+                  "addr": "108",
+                  "word": "4111"
+                },
+                {
+                  "addr": "109",
+                  "word": "210F"
+                },
+                {
+                  "addr": "10A",
+                  "word": "9100"
+                },
+                {
+                  "addr": "10B",
+                  "word": "1110"
+                },
+                {
+                  "addr": "10C",
+                  "word": "6000"
+                },
+                {
+                  "addr": "10D",
+                  "word": "7000"
+                },
+                {
+                  "addr": "10E",
+                  "word": "0005"
+                },
+                {
+                  "addr": "10F",
+                  "word": "0004"
+                },
+                {
+                  "addr": "110",
+                  "word": "0000"
+                },
+                {
+                  "addr": "111",
+                  "word": "0001"
+                }
+              ],
+              "output": [
+                20
+              ],
+              "steps": 46,
+              "ac": 20
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "marieLab(\"ORG 10\\nFoo 1\\nHalt\", [])",
+            "mongDoi": {
+              "error": "unknown mnemonic foo"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "marieLab(\"Input\\nStore X\\nLoad X\\nAdd X\\nOutput\\nHalt\\nX, Dec 0\", [-4])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "000",
+                  "word": "5000"
+                },
+                {
+                  "addr": "001",
+                  "word": "2006"
+                },
+                {
+                  "addr": "002",
+                  "word": "1006"
+                },
+                {
+                  "addr": "003",
+                  "word": "3006"
+                },
+                {
+                  "addr": "004",
+                  "word": "6000"
+                },
+                {
+                  "addr": "005",
+                  "word": "7000"
+                },
+                {
+                  "addr": "006",
+                  "word": "0000"
+                }
+              ],
+              "output": [
+                -8
+              ],
+              "steps": 6,
+              "ac": -8
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "marieLab(\"ORG 100\\nLoadI P\\nOutput\\nLoad V\\nStoreI P\\nLoadI P\\nOutput\\nHalt\\nP, Hex 105\\nV, Dec 77\\nCell, Dec 9\", [])",
+            "mongDoi": {
+              "words": [
+                {
+                  "addr": "100",
+                  "word": "D107"
+                },
+                {
+                  "addr": "101",
+                  "word": "6000"
+                },
+                {
+                  "addr": "102",
+                  "word": "1108"
+                },
+                {
+                  "addr": "103",
+                  "word": "E107"
+                },
+                {
+                  "addr": "104",
+                  "word": "D107"
+                },
+                {
+                  "addr": "105",
+                  "word": "6000"
+                },
+                {
+                  "addr": "106",
+                  "word": "7000"
+                },
+                {
+                  "addr": "107",
+                  "word": "0105"
+                },
+                {
+                  "addr": "108",
+                  "word": "004D"
+                },
+                {
+                  "addr": "109",
+                  "word": "0009"
+                }
+              ],
+              "output": [
+                24576
+              ],
+              "steps": 100000,
+              "ac": 77
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Resolving labels in a single pass (forward references fail)."
+        },
+        {
+          "loi": "Printing the AC unsigned (−1 shows as 65535)."
+        },
+        {
+          "loi": "Incrementing the PC after executing the instruction (JnS and Skipcond break)."
+        },
+        {
+          "loi": "Forgetting that execution starts at the first statement, not at address 0."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

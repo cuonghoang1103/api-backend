@@ -1,0 +1,966 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-8-1-os-support",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-8-1-os-support"
+  },
+  "exercises": [
+    {
+      "title": "OS support 1 — Multiprogramming, paging and virtual memory: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "paging",
+        "virtual memory",
+        "TLB"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on the hardware support an operating system needs.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về phần cứng hỗ trợ hệ điều hành.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Page number translates; offset does not.",
+        "TLB = cache for the page table."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 1 — Multiprogramming, paging and virtual memory: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. Why does multiprogramming raise CPU utilization?Vì sao đa chương trình làm tăng mức sử dụng CPU?\n2. In paging, a virtual address is divided into …Trong phân trang, địa chỉ ảo được chia thành …\n3. A page fault occurs when …Lỗi trang xảy ra khi …\n4. The TLB is …TLB là …\n5. Thrashing happens when …Thrashing xảy ra khi …\n6. Paging removes which problem of contiguous allocation?Phân trang loại bỏ vấn đề nào của cấp phát liên tục?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 1 — Multiprogramming, paging and virtual memory: concepts — answer key\n\n1. Why does multiprogramming raise CPU utilization?Vì sao đa chương trình làm tăng mức sử dụng CPU?\n   Answer: d) While one program waits for I/O the CPU runs another\n   I/O waits are long compared with CPU bursts; overlapping them keeps the CPU busy.VI: Chờ I/O rất dài so với đợt tính toán; chồng chúng lên nhau giữ CPU bận.\n\n2. In paging, a virtual address is divided into …Trong phân trang, địa chỉ ảo được chia thành …\n   Answer: a) page number and offset\n   The page number indexes the page table; the offset is copied unchanged.VI: Số trang tra bảng trang; offset được chép nguyên.\n\n3. A page fault occurs when …Lỗi trang xảy ra khi …\n   Answer: b) the referenced page is not present in main memory\n   The OS must bring the page from disk, a very expensive event.VI: HĐH phải mang trang từ đĩa lên, một sự kiện rất đắt.\n\n4. The TLB is …TLB là …\n   Answer: c) a small cache of recent page-table entries\n   A TLB hit saves the extra memory access needed to read the page table.VI: TLB hit tránh được một lần truy cập bộ nhớ để đọc bảng trang.\n\n5. Thrashing happens when …Thrashing xảy ra khi …\n   Answer: d) processes spend more time paging than executing\n   Too many processes for the available frames cause constant page faults.VI: Quá nhiều tiến trình so với số khung gây lỗi trang liên tục.\n\n6. Paging removes which problem of contiguous allocation?Phân trang loại bỏ vấn đề nào của cấp phát liên tục?\n   Answer: a) External fragmentation\n   Fixed-size frames can be placed anywhere; only the last page of a process wastes space internally.VI: Khung kích thước cố định đặt ở đâu cũng được; chỉ trang cuối của tiến trình lãng phí bên trong.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why does multiprogramming raise CPU utilization?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đa chương trình làm tăng mức sử dụng CPU?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It makes each program faster"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It removes the need for memory"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It doubles the clock rate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "While one program waits for I/O the CPU runs another"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>I/O waits are long compared with CPU bursts; overlapping them keeps the CPU busy.</p><p><i>VI: Chờ I/O rất dài so với đợt tính toán; chồng chúng lên nhau giữ CPU bận.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In paging, a virtual address is divided into …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong phân trang, địa chỉ ảo được chia thành …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "page number and offset"
+              },
+              {
+                "ma": "b",
+                "noiDung": "tag and index"
+              },
+              {
+                "ma": "c",
+                "noiDung": "segment and base"
+              },
+              {
+                "ma": "d",
+                "noiDung": "opcode and operand"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The page number indexes the page table; the offset is copied unchanged.</p><p><i>VI: Số trang tra bảng trang; offset được chép nguyên.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A page fault occurs when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi trang xảy ra khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the cache misses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the referenced page is not present in main memory"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the TLB is full"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the disk is busy"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The OS must bring the page from disk, a very expensive event.</p><p><i>VI: HĐH phải mang trang từ đĩa lên, một sự kiện rất đắt.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The TLB is …</p><p style=\"opacity:.75;font-size:.92em\"><i>TLB là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the page table itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a register holding the PC"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a small cache of recent page-table entries"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a part of the disk controller"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A TLB hit saves the extra memory access needed to read the page table.</p><p><i>VI: TLB hit tránh được một lần truy cập bộ nhớ để đọc bảng trang.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Thrashing happens when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thrashing xảy ra khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the cache is too big"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the TLB is empty"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the bus is idle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "processes spend more time paging than executing"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Too many processes for the available frames cause constant page faults.</p><p><i>VI: Quá nhiều tiến trình so với số khung gây lỗi trang liên tục.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Paging removes which problem of contiguous allocation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân trang loại bỏ vấn đề nào của cấp phát liên tục?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "External fragmentation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Internal fragmentation completely"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The need for an MMU"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Address translation"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fixed-size frames can be placed anywhere; only the last page of a process wastes space internally.</p><p><i>VI: Khung kích thước cố định đặt ở đâu cũng được; chỉ trang cuối của tiến trình lãng phí bên trong.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing a cache miss with a page fault."
+        },
+        {
+          "loi": "Thinking paging eliminates all fragmentation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "page fault",
+          "vi": "lỗi trang"
+        },
+        {
+          "en": "thrashing",
+          "vi": "trì trệ do đảo trang"
+        }
+      ]
+    },
+    {
+      "title": "OS support 2 — Size the page table",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "page table size"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>For a virtual address of <b>V</b> bits, page size <b>P</b> bytes, <b>M</b> physical address bits and a page-table entry of <b>E</b> bytes (single-level table): give the <b>offset bits</b>, the <b>virtual page number bits</b>, the <b>number of frames</b> (as a power of two, 2^k) and the <b>page-table size</b> (as a power of two in bytes, 2^k).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Địa chỉ ảo <b>V</b> bit, trang <b>P</b> byte, địa chỉ vật lý <b>M</b> bit và mục bảng trang <b>E</b> byte (bảng một cấp): cho <b>số bit offset</b>, <b>số bit số trang ảo</b>, <b>số khung</b> (luỹ thừa 2, 2^k) và <b>kích thước bảng trang</b> (luỹ thừa 2 theo byte, 2^k).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "offset = log₂(P); VPN = V − offset; frames = 2^(M − offset).",
+        "Table size = number of virtual pages × entry size."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 2 — Size the page table\n\nAnswer in the answer panel (no code needed).\n\n1. Page table sizingKích thước bảng trang\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 2 — Size the page table — answer key\n\n1. Page table sizingKích thước bảng trang\n   - r1.o: 12\n   - r1.v: 20\n   - r1.f: 2^18 / 262144\n   - r1.t: 2^22 / 4194304\n   - r2.o: 13\n   - r2.v: 19\n   - r2.f: 2^15 / 32768\n   - r2.t: 2^21 / 2097152\n   - r3.o: 12\n   - r3.v: 36\n   - r3.f: 2^20 / 1048576\n   - r3.t: 2^39 / 549755813888\n   - r4.o: 10\n   - r4.v: 6\n   - r4.f: 2^10 / 1024\n   - r4.t: 2^7 / 128\n   V=32, P=4096: offset 12, VPN 20, frames 2^18, table 2^20×4 = 2^22 B; V=32, P=8192: offset 13, VPN 19, frames 2^15, table 2^19×4 = 2^21 B; V=48, P=4096: offset 12, VPN 36, frames 2^20, table 2^36×8 = 2^39 B; V=16, P=1024: offset 10, VPN 6, frames 2^10, table 2^6×2 = 2^7 B.VI: offset 12, VPN 20, khung 2^18, bảng 2^22 B; offset 13, VPN 19, khung 2^15, bảng 2^21 B; offset 12, VPN 36, khung 2^20, bảng 2^39 B; offset 10, VPN 6, khung 2^10, bảng 2^7 B.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>V=32, P=4096: offset 12, VPN 20, frames 2^18, table 2^20×4 = 2^22 B; V=32, P=8192: offset 13, VPN 19, frames 2^15, table 2^19×4 = 2^21 B; V=48, P=4096: offset 12, VPN 36, frames 2^20, table 2^36×8 = 2^39 B; V=16, P=1024: offset 10, VPN 6, frames 2^10, table 2^6×2 = 2^7 B.</p><p><i>VI: offset 12, VPN 20, khung 2^18, bảng 2^22 B; offset 13, VPN 19, khung 2^15, bảng 2^21 B; offset 12, VPN 36, khung 2^20, bảng 2^39 B; offset 10, VPN 6, khung 2^10, bảng 2^7 B.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Page table sizing</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước bảng trang</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "V, P, M, E"
+              },
+              {
+                "ma": "o",
+                "ten": "Offset bits"
+              },
+              {
+                "ma": "v",
+                "ten": "VPN bits"
+              },
+              {
+                "ma": "f",
+                "ten": "Frames"
+              },
+              {
+                "ma": "t",
+                "ten": "Table size (bytes)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "V = 32, P = 4096 B, M = 30, E = 4 B"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "V = 32, P = 8192 B, M = 28, E = 4 B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "V = 48, P = 4096 B, M = 32, E = 8 B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "g": "V = 16, P = 1024 B, M = 20, E = 2 B"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "12",
+              "r1.v": "20",
+              "r1.f": [
+                "2^18",
+                "262144"
+              ],
+              "r1.t": [
+                "2^22",
+                "4194304"
+              ],
+              "r2.o": "13",
+              "r2.v": "19",
+              "r2.f": [
+                "2^15",
+                "32768"
+              ],
+              "r2.t": [
+                "2^21",
+                "2097152"
+              ],
+              "r3.o": "12",
+              "r3.v": "36",
+              "r3.f": [
+                "2^20",
+                "1048576"
+              ],
+              "r3.t": [
+                "2^39",
+                "549755813888"
+              ],
+              "r4.o": "10",
+              "r4.v": "6",
+              "r4.f": [
+                "2^10",
+                "1024"
+              ],
+              "r4.t": [
+                "2^7",
+                "128"
+              ]
+            },
+            "giaiThich": "<p>V=32, P=4096: offset 12, VPN 20, frames 2^18, table 2^20×4 = 2^22 B; V=32, P=8192: offset 13, VPN 19, frames 2^15, table 2^19×4 = 2^21 B; V=48, P=4096: offset 12, VPN 36, frames 2^20, table 2^36×8 = 2^39 B; V=16, P=1024: offset 10, VPN 6, frames 2^10, table 2^6×2 = 2^7 B.</p><p><i>VI: offset 12, VPN 20, khung 2^18, bảng 2^22 B; offset 13, VPN 19, khung 2^15, bảng 2^21 B; offset 12, VPN 36, khung 2^20, bảng 2^39 B; offset 10, VPN 6, khung 2^10, bảng 2^7 B.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using M instead of V for the number of pages."
+        },
+        {
+          "loi": "Forgetting the entry size E."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "VPN (virtual page number)",
+          "vi": "số trang ảo"
+        },
+        {
+          "en": "PTE",
+          "vi": "mục bảng trang"
+        }
+      ]
+    },
+    {
+      "title": "OS support 3 — Translate virtual addresses",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "address translation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Page size is 1024 bytes. The page table (page → frame) is: 0 → 5, 1 → 2, 2 → —, 3 → 7, 4 → —, 5 → 0 (— = not in memory, pages ≥ 6 are outside the address space). Translate each decimal virtual address to a decimal physical address, or answer <b>Fault</b> if the page is absent or does not exist.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trang rộng 1024 byte. Bảng trang (trang → khung): 0 → 5, 1 → 2, 2 → —, 3 → 7, 4 → —, 5 → 0 (— = không có trong bộ nhớ, trang ≥ 6 nằm ngoài không gian địa chỉ). Dịch từng địa chỉ ảo thập phân sang địa chỉ vật lý thập phân, hoặc trả lời <b>Fault</b> nếu trang vắng mặt hoặc không tồn tại.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "page = address div 1024, offset = address mod 1024.",
+        "Check the page table before multiplying."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 3 — Translate virtual addresses\n\nAnswer in the answer panel (no code needed).\n\n1. Address translationDịch địa chỉ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 3 — Translate virtual addresses — answer key\n\n1. Address translationDịch địa chỉ\n   - r1.p: 5220 / 5220\n   - r2.p: 2054 / 2054\n   - r3.p: Fault / fault\n   - r4.p: Fault / fault\n   - r5.p: Fault / fault\n   - r6.p: 0 / 0\n   - r7.p: Fault / fault\n   - r8.p: Fault / fault\n   100: page 0, offset 100 → 5220; 1030: page 1, offset 6 → 2054; 2100: page 2, offset 52 → Fault; 3071: page 2, offset 1023 → Fault; 4200: page 4, offset 104 → Fault; 5120: page 5, offset 0 → 0; 6144: page 6, offset 0 → Fault; 5000: page 4, offset 904 → Fault. physical = frame × 1024 + offset.VI: 100: trang 0, offset 100 → 5220; 1030: trang 1, offset 6 → 2054; 2100: trang 2, offset 52 → Fault; 3071: trang 2, offset 1023 → Fault; 4200: trang 4, offset 104 → Fault; 5120: trang 5, offset 0 → 0; 6144: trang 6, offset 0 → Fault; 5000: trang 4, offset 904 → Fault. vật lý = khung × 1024 + offset.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>100: page 0, offset 100 → 5220; 1030: page 1, offset 6 → 2054; 2100: page 2, offset 52 → Fault; 3071: page 2, offset 1023 → Fault; 4200: page 4, offset 104 → Fault; 5120: page 5, offset 0 → 0; 6144: page 6, offset 0 → Fault; 5000: page 4, offset 904 → Fault. physical = frame × 1024 + offset.</p><p><i>VI: 100: trang 0, offset 100 → 5220; 1030: trang 1, offset 6 → 2054; 2100: trang 2, offset 52 → Fault; 3071: trang 2, offset 1023 → Fault; 4200: trang 4, offset 104 → Fault; 5120: trang 5, offset 0 → 0; 6144: trang 6, offset 0 → Fault; 5000: trang 4, offset 904 → Fault. vật lý = khung × 1024 + offset.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Address translation</p><p style=\"opacity:.75;font-size:.92em\"><i>Dịch địa chỉ</i></p>",
+            "cot": [
+              {
+                "ma": "v",
+                "ten": "Virtual address"
+              },
+              {
+                "ma": "p",
+                "ten": "Physical address / Fault"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "v": "100"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "v": "1030"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "v": "2100"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "v": "3071"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "v": "4200"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "v": "5120"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "v": "6144"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "v": "5000"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": [
+                "5220",
+                "5220"
+              ],
+              "r2.p": [
+                "2054",
+                "2054"
+              ],
+              "r3.p": [
+                "Fault",
+                "fault"
+              ],
+              "r4.p": [
+                "Fault",
+                "fault"
+              ],
+              "r5.p": [
+                "Fault",
+                "fault"
+              ],
+              "r6.p": [
+                "0",
+                "0"
+              ],
+              "r7.p": [
+                "Fault",
+                "fault"
+              ],
+              "r8.p": [
+                "Fault",
+                "fault"
+              ]
+            },
+            "giaiThich": "<p>100: page 0, offset 100 → 5220; 1030: page 1, offset 6 → 2054; 2100: page 2, offset 52 → Fault; 3071: page 2, offset 1023 → Fault; 4200: page 4, offset 104 → Fault; 5120: page 5, offset 0 → 0; 6144: page 6, offset 0 → Fault; 5000: page 4, offset 904 → Fault. physical = frame × 1024 + offset.</p><p><i>VI: 100: trang 0, offset 100 → 5220; 1030: trang 1, offset 6 → 2054; 2100: trang 2, offset 52 → Fault; 3071: trang 2, offset 1023 → Fault; 4200: trang 4, offset 104 → Fault; 5120: trang 5, offset 0 → 0; 6144: trang 6, offset 0 → Fault; 5000: trang 4, offset 904 → Fault. vật lý = khung × 1024 + offset.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the offset to the page number instead of to frame × page size."
+        },
+        {
+          "loi": "Translating a page that is not present."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "physical address",
+          "vi": "địa chỉ vật lý"
+        }
+      ]
+    },
+    {
+      "title": "OS support 4 — Page faults: FIFO versus LRU with 3 and 4 frames",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "page replacement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Reference string: <code>2 3 2 1 5 2 4 5 3 2 5 2 1 6 3 2 1</code>. Memory starts empty (the first loads count as faults). Give the number of page faults.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuỗi tham chiếu: <code>2 3 2 1 5 2 4 5 3 2 5 2 1 6 3 2 1</code>. Bộ nhớ ban đầu rỗng (các lần nạp đầu tính là lỗi). Cho số lỗi trang.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the frame contents after each reference; FIFO ignores hits, LRU renews them.",
+        "Count the first fills as faults."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 4 — Page faults: FIFO versus LRU with 3 and 4 frames\n\nAnswer in the answer panel (no code needed).\n\n1. Page faultsSố lỗi trang\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 4 — Page faults: FIFO versus LRU with 3 and 4 frames — answer key\n\n1. Page faultsSố lỗi trang\n   - r1.f: 14\n   - r2.f: 12\n   - r3.f: 9\n   - r4.f: 9\n   FIFO/3: 14; LRU/3: 12; FIFO/4: 9; LRU/4: 9. More frames never hurt LRU; FIFO can behave oddly (Belady’s anomaly).VI: FIFO/3: 14; LRU/3: 12; FIFO/4: 9; LRU/4: 9.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>FIFO/3: 14; LRU/3: 12; FIFO/4: 9; LRU/4: 9. More frames never hurt LRU; FIFO can behave oddly (Belady’s anomaly).</p><p><i>VI: FIFO/3: 14; LRU/3: 12; FIFO/4: 9; LRU/4: 9.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Page faults</p><p style=\"opacity:.75;font-size:.92em\"><i>Số lỗi trang</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Algorithm, frames"
+              },
+              {
+                "ma": "f",
+                "ten": "Faults"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "FIFO, 3 frames"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "LRU, 3 frames"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "FIFO, 4 frames"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "LRU, 4 frames"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.f": "14",
+              "r2.f": "12",
+              "r3.f": "9",
+              "r4.f": "9"
+            },
+            "giaiThich": "<p>FIFO/3: 14; LRU/3: 12; FIFO/4: 9; LRU/4: 9. More frames never hurt LRU; FIFO can behave oddly (Belady’s anomaly).</p><p><i>VI: FIFO/3: 14; LRU/3: 12; FIFO/4: 9; LRU/4: 9.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Moving a page to the back of the FIFO queue on a hit."
+        },
+        {
+          "loi": "Not counting the initial faults."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Belady’s anomaly",
+          "vi": "nghịch lý Belady"
+        }
+      ]
+    },
+    {
+      "title": "OS support 5 — Effective access time with a TLB and page faults",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "TLB",
+        "effective access time"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A TLB lookup takes <b>t</b> ns, a memory access <b>m</b> ns. With a one-level page table a TLB hit needs 1 memory access (the data), a TLB miss needs 2. EAT = h·(t + m) + (1 − h)·(t + 2m). Give the EAT (ns, 2 decimals). In the last row a page fault happens with probability p = 0.001 per reference and costs 8,000,000 ns: EAT_total = (1 − p) × EAT + p × 8,000,000.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tra TLB mất <b>t</b> ns, một lần truy cập bộ nhớ <b>m</b> ns. Với bảng trang một cấp, TLB hit cần 1 truy cập bộ nhớ (dữ liệu), TLB miss cần 2. EAT = h·(t + m) + (1 − h)·(t + 2m). Cho EAT (ns, 2 chữ số). Ở dòng cuối, lỗi trang xảy ra với xác suất p = 0,001 mỗi tham chiếu và tốn 8.000.000 ns: EAT_tổng = (1 − p) × EAT + p × 8.000.000.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hit: t + m. Miss: t + 2m (page-table walk plus data).",
+        "Add the fault term last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 5 — Effective access time with a TLB and page faults\n\nAnswer in the answer panel (no code needed).\n\n1. EATEAT\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OS support 5 — Effective access time with a TLB and page faults — answer key\n\n1. EATEAT\n   - r1.e: 140.00 / 140\n   - r2.e: 125.00 / 125\n   - r3.e: 91.60 / 91.6\n   - r4.e: 8129.87\n   h=0.8: 140.00 ns; h=0.95: 125.00 ns; h=0.98: 91.60 ns; h=0.9: 8129.87 ns. Even a 0.1% fault rate dominates: disk is ~10⁵ times slower than memory.VI: h=0.8: 140.00 ns; h=0.95: 125.00 ns; h=0.98: 91.60 ns; h=0.9: 8129.87 ns.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>h=0.8: 140.00 ns; h=0.95: 125.00 ns; h=0.98: 91.60 ns; h=0.9: 8129.87 ns. Even a 0.1% fault rate dominates: disk is ~10⁵ times slower than memory.</p><p><i>VI: h=0.8: 140.00 ns; h=0.95: 125.00 ns; h=0.98: 91.60 ns; h=0.9: 8129.87 ns.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>EAT</p><p style=\"opacity:.75;font-size:.92em\"><i>EAT</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Parameters"
+              },
+              {
+                "ma": "e",
+                "ten": "EAT (ns)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "h = 0.8, t = 20 ns, m = 100 ns"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "h = 0.95, t = 20 ns, m = 100 ns"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "h = 0.98, t = 10 ns, m = 80 ns"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "h = 0.9, t = 20 ns, m = 100 ns, p = 0.001"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": [
+                "140.00",
+                "140"
+              ],
+              "r2.e": [
+                "125.00",
+                "125"
+              ],
+              "r3.e": [
+                "91.60",
+                "91.6"
+              ],
+              "r4.e": [
+                "8129.87"
+              ]
+            },
+            "giaiThich": "<p>h=0.8: 140.00 ns; h=0.95: 125.00 ns; h=0.98: 91.60 ns; h=0.9: 8129.87 ns. Even a 0.1% fault rate dominates: disk is ~10⁵ times slower than memory.</p><p><i>VI: h=0.8: 140.00 ns; h=0.95: 125.00 ns; h=0.98: 91.60 ns; h=0.9: 8129.87 ns.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Charging 2 memory accesses on a hit."
+        },
+        {
+          "loi": "Forgetting the TLB lookup time on a miss."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EAT",
+          "vi": "thời gian truy cập hiệu dụng"
+        }
+      ]
+    },
+    {
+      "title": "OS support 6 — Write the MMU: virtual to physical",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "address translation",
+        "page fault"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>translate(table, pageSize, vaddrs)</code>. <code>table</code> is an array: <code>table[p]</code> is the frame of page <code>p</code>, or <code>null</code> if the page is not in memory; pages beyond the array do not exist. Return an array with the physical address of every virtual address, or <code>-1</code> for a page fault / invalid page.</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>translate(table, pageSize, vaddrs)</code>. <code>table</code> là mảng: <code>table[p]</code> là khung của trang <code>p</code>, hoặc <code>null</code> nếu trang không có trong bộ nhớ; trang vượt quá mảng thì không tồn tại. Trả mảng địa chỉ vật lý của từng địa chỉ ảo, hoặc <code>-1</code> nếu lỗi trang / trang không hợp lệ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "translate([5, null, 2], 1024, [100, 1500, 2060, 4000])",
+          "output": "[5220,-1,2060,-1]",
+          "explanation": "Page 0 → frame 5; page 1 absent; page 2 → frame 2; page 3 does not exist.|||Trang 0 → khung 5; trang 1 vắng; trang 2 → khung 2; trang 3 không tồn tại."
+        }
+      ],
+      "hintsJson": [
+        "page = Math.floor(addr / pageSize); offset = addr % pageSize.",
+        "A frame number of 0 is valid — test for null/undefined, not for falsy.",
+        "physical = frame × pageSize + offset."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function translate(table, pageSize, vaddrs) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function translate(table, pageSize, vaddrs) {\n  var out = [];\n  for (var i = 0; i < vaddrs.length; i++) {\n    var page = Math.floor(vaddrs[i] / pageSize), frame = table[page];\n    out.push(frame === undefined || frame === null ? -1 : frame * pageSize + (vaddrs[i] % pageSize));\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The MMU splits the address, looks the page up and either concatenates frame and offset or raises a fault; frame 0 is a legal frame.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: translate([5,null,2], 1024, [100,1500,2060,4000])",
+              "vi": "Ca 1"
+            },
+            "goi": "translate([5,null,2], 1024, [100,1500,2060,4000])",
+            "mongDoi": [
+              5220,
+              -1,
+              2060,
+              -1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: translate([0,1], 4096, [0,4095,4096,8191,8192])",
+              "vi": "Ca 2"
+            },
+            "goi": "translate([0,1], 4096, [0,4095,4096,8191,8192])",
+            "mongDoi": [
+              0,
+              4095,
+              4096,
+              8191,
+              -1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: translate([], 512, [0])",
+              "vi": "Ca 3"
+            },
+            "goi": "translate([], 512, [0])",
+            "mongDoi": [
+              -1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "translate([3,7,null,1,0], 256, [1000,513,700,255,1279,1280])",
+            "mongDoi": [
+              488,
+              -1,
+              -1,
+              1023,
+              255,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "translate([null,null], 100, [5,150])",
+            "mongDoi": [
+              -1,
+              -1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "translate([9], 8, [])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating frame 0 as “absent”."
+        },
+        {
+          "loi": "Reading table[page] beyond the array and using undefined as a frame."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,1235 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-4-2-mapping",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-4-2-mapping"
+  },
+  "exercises": [
+    {
+      "title": "Mapping 1 — Direct, associative and set-associative: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "direct mapping",
+        "associative mapping",
+        "replacement",
+        "write policy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Six concept questions on mapping functions, replacement and write policies.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sáu câu khái niệm về hàm ánh xạ, thuật toán thay thế và chính sách ghi.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Direct = 1 place, fully associative = any place, set-associative = any place within one set.",
+        "sets = lines / ways."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 1 — Direct, associative and set-associative: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. In a direct-mapped cache, a memory block can be placed …Trong cache ánh xạ trực tiếp, một khối bộ nhớ có thể đặt …\n2. What is the main drawback of fully associative mapping?Nhược điểm chính của ánh xạ liên kết đầy đủ là gì?\n3. A 4-way set-associative cache with 64 lines has how many sets?Cache liên kết 4 đường có 64 dòng thì có bao nhiêu tập?\n4. Which replacement algorithm evicts the line that has gone unused for the longest time?Thuật toán thay thế nào đuổi dòng không được dùng lâu nhất?\n5. With a write-back policy, main memory is updated …Với chính sách write-back, bộ nhớ chính được cập nhật …\n6. Increasing the associativity (same size, same block size) usually …Tăng độ liên kết (cùng dung lượng, cùng cỡ khối) thường …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 1 — Direct, associative and set-associative: concepts — answer key\n\n1. In a direct-mapped cache, a memory block can be placed …Trong cache ánh xạ trực tiếp, một khối bộ nhớ có thể đặt …\n   Answer: c) in exactly one line, chosen by (block number) mod (number of lines)\n   One possible line makes the hardware trivial but causes conflict misses.VI: Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.\n\n2. What is the main drawback of fully associative mapping?Nhược điểm chính của ánh xạ liên kết đầy đủ là gì?\n   Answer: d) All tags must be compared in parallel, which is expensive for large caches\n   Every line can hold any block, so every tag is compared at once.VI: Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.\n\n3. A 4-way set-associative cache with 64 lines has how many sets?Cache liên kết 4 đường có 64 dòng thì có bao nhiêu tập?\n   Answer: a) 16\n   sets = lines / ways = 64 / 4 = 16.VI: số tập = số dòng / số đường = 64 / 4 = 16.\n\n4. Which replacement algorithm evicts the line that has gone unused for the longest time?Thuật toán thay thế nào đuổi dòng không được dùng lâu nhất?\n   Answer: b) LRU\n   FIFO looks at load time, LFU at frequency, LRU at recency of use.VI: FIFO xét thời điểm nạp, LFU xét tần suất, LRU xét lần dùng gần nhất.\n\n5. With a write-back policy, main memory is updated …Với chính sách write-back, bộ nhớ chính được cập nhật …\n   Answer: c) only when a dirty line is replaced (or flushed)\n   A dirty bit marks lines changed in the cache; they are written once on eviction.VI: Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.\n\n6. Increasing the associativity (same size, same block size) usually …Tăng độ liên kết (cùng dung lượng, cùng cỡ khối) thường …\n   Answer: d) reduces conflict misses but costs more comparators and time\n   More places for a block means fewer conflicts; more tags to check means more hardware.VI: Nhiều chỗ đặt hơn nên ít xung đột; nhiều tag phải kiểm hơn nên tốn phần cứng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In a direct-mapped cache, a memory block can be placed …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong cache ánh xạ trực tiếp, một khối bộ nhớ có thể đặt …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "in any line of one set of 4 lines"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only in line 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "in exactly one line, chosen by (block number) mod (number of lines)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "in any line"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One possible line makes the hardware trivial but causes conflict misses.</p><p><i>VI: Chỉ một dòng khả dĩ nên phần cứng đơn giản nhưng gây miss do xung đột.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What is the main drawback of fully associative mapping?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhược điểm chính của ánh xạ liên kết đầy đủ là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It causes many conflict misses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It cannot use LRU"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It needs no tag"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All tags must be compared in parallel, which is expensive for large caches"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every line can hold any block, so every tag is compared at once.</p><p><i>VI: Mọi dòng có thể chứa mọi khối nên phải so mọi tag cùng lúc.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A 4-way set-associative cache with 64 lines has how many sets?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cache liên kết 4 đường có 64 dòng thì có bao nhiêu tập?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "16"
+              },
+              {
+                "ma": "b",
+                "noiDung": "64"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "256"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>sets = lines / ways = 64 / 4 = 16.</p><p><i>VI: số tập = số dòng / số đường = 64 / 4 = 16.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which replacement algorithm evicts the line that has gone unused for the longest time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán thay thế nào đuổi dòng không được dùng lâu nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Random"
+              },
+              {
+                "ma": "b",
+                "noiDung": "LRU"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FIFO"
+              },
+              {
+                "ma": "d",
+                "noiDung": "LFU"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>FIFO looks at load time, LFU at frequency, LRU at recency of use.</p><p><i>VI: FIFO xét thời điểm nạp, LFU xét tần suất, LRU xét lần dùng gần nhất.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>With a write-back policy, main memory is updated …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với chính sách write-back, bộ nhớ chính được cập nhật …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "never"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only on reads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only when a dirty line is replaced (or flushed)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "on every write"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A dirty bit marks lines changed in the cache; they are written once on eviction.</p><p><i>VI: Bit bẩn đánh dấu dòng đã đổi trong cache; chúng được ghi một lần khi bị đuổi.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Increasing the associativity (same size, same block size) usually …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tăng độ liên kết (cùng dung lượng, cùng cỡ khối) thường …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "increases conflict misses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reduces compulsory misses to zero"
+              },
+              {
+                "ma": "c",
+                "noiDung": "removes the need for a tag"
+              },
+              {
+                "ma": "d",
+                "noiDung": "reduces conflict misses but costs more comparators and time"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>More places for a block means fewer conflicts; more tags to check means more hardware.</p><p><i>VI: Nhiều chỗ đặt hơn nên ít xung đột; nhiều tag phải kiểm hơn nên tốn phần cứng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing up LRU (use) and FIFO (load)."
+        },
+        {
+          "loi": "Thinking write-through keeps memory stale."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "write-back",
+          "vi": "ghi lại khi thay"
+        },
+        {
+          "en": "dirty bit",
+          "vi": "bit bẩn"
+        }
+      ]
+    },
+    {
+      "title": "Mapping 2 — Split the address into tag, index and offset",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "address mapping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>For each cache, how many bits are the <b>offset</b>, the <b>index</b> (set index) and the <b>tag</b>, and how many <b>sets</b> are there? (A fully associative cache has 1 set and 0 index bits.)</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cache, <b>offset</b>, <b>index</b> (chỉ số tập) và <b>tag</b> có bao nhiêu bit, và có bao nhiêu <b>tập</b>? (Cache liên kết đầy đủ có 1 tập và 0 bit index.)</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Number of lines = cache size / block size. Divide by the ways to get the sets.",
+        "The tag is whatever is left of the address."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 2 — Split the address into tag, index and offset\n\nAnswer in the answer panel (no code needed).\n\n1. Address fieldsCác trường địa chỉ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 2 — Split the address into tag, index and offset — answer key\n\n1. Address fieldsCác trường địa chỉ\n   - r1.o: 16\n   - r1.i: -14\n   - r1.t: 22\n   - r1.s: 0.00006103515625\n   - r2.o: 14\n   - r2.i: -8\n   - r2.t: 26\n   - r2.s: 0.00390625\n   - r3.o: 15\n   - r3.i: -12\n   - r3.t: 29\n   - r3.s: 0.000244140625\n   - r4.o: 10\n   - r4.i: -7\n   - r4.t: 13\n   - r4.s: 0.0078125\n   - r5.o: 13\n   - r5.i: -14\n   - r5.t: 33\n   - r5.s: 0.00006103515625\n   offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (22, -14, 16, 0.00006103515625 sets) (26, -8, 14, 0.00390625 sets) (29, -12, 15, 0.000244140625 sets) (13, -7, 10, 0.0078125 sets) (33, -14, 13, 0.00006103515625 sets)VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (22, -14, 16, 0.00006103515625 tập) (26, -8, 14, 0.00390625 tập) (29, -12, 15, 0.000244140625 tập) (13, -7, 10, 0.0078125 tập) (33, -14, 13, 0.00006103515625 tập)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (22, -14, 16, 0.00006103515625 sets) (26, -8, 14, 0.00390625 sets) (29, -12, 15, 0.000244140625 sets) (13, -7, 10, 0.0078125 sets) (33, -14, 13, 0.00006103515625 sets)</p><p><i>VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (22, -14, 16, 0.00006103515625 tập) (26, -8, 14, 0.00390625 tập) (29, -12, 15, 0.000244140625 tập) (13, -7, 10, 0.0078125 tập) (33, -14, 13, 0.00006103515625 tập)</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Address fields</p><p style=\"opacity:.75;font-size:.92em\"><i>Các trường địa chỉ</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Cache"
+              },
+              {
+                "ma": "o",
+                "ten": "Offset"
+              },
+              {
+                "ma": "i",
+                "ten": "Index"
+              },
+              {
+                "ma": "t",
+                "ten": "Tag"
+              },
+              {
+                "ma": "s",
+                "ten": "Sets"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "24-bit address, 64 KiB cache, 4-byte blocks, direct-mapped"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "32-bit address, 16 KiB cache, 64-byte blocks, direct-mapped"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "32-bit address, 32 KiB cache, 32-byte blocks, 4-way"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "16-bit address, 1 KiB cache, 16-byte blocks, 2-way"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "c": "32-bit address, 8 KiB cache, 64-byte blocks, fully associative"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "16",
+              "r1.i": "-14",
+              "r1.t": "22",
+              "r1.s": "0.00006103515625",
+              "r2.o": "14",
+              "r2.i": "-8",
+              "r2.t": "26",
+              "r2.s": "0.00390625",
+              "r3.o": "15",
+              "r3.i": "-12",
+              "r3.t": "29",
+              "r3.s": "0.000244140625",
+              "r4.o": "10",
+              "r4.i": "-7",
+              "r4.t": "13",
+              "r4.s": "0.0078125",
+              "r5.o": "13",
+              "r5.i": "-14",
+              "r5.t": "33",
+              "r5.s": "0.00006103515625"
+            },
+            "giaiThich": "<p>offset = log₂(block); sets = cache / (block × ways); index = log₂(sets); tag = address − index − offset. (22, -14, 16, 0.00006103515625 sets) (26, -8, 14, 0.00390625 sets) (29, -12, 15, 0.000244140625 sets) (13, -7, 10, 0.0078125 sets) (33, -14, 13, 0.00006103515625 sets)</p><p><i>VI: offset = log₂(khối); số tập = cache / (khối × số đường); index = log₂(số tập); tag = địa chỉ − index − offset. (22, -14, 16, 0.00006103515625 tập) (26, -8, 14, 0.00390625 tập) (29, -12, 15, 0.000244140625 tập) (13, -7, 10, 0.0078125 tập) (33, -14, 13, 0.00006103515625 tập)</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the number of lines (not the sets) for the index of a set-associative cache."
+        },
+        {
+          "loi": "Forgetting the offset bits when computing the tag."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tag",
+          "vi": "thẻ (phần cao của địa chỉ)"
+        },
+        {
+          "en": "set index",
+          "vi": "chỉ số tập"
+        }
+      ]
+    },
+    {
+      "title": "Mapping 3 — Where does this address go? (tag, line, offset)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "address decomposition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A direct-mapped cache has 0.125 lines of 16 bytes on a 16-bit address (tag 12 bits, line index -3 bits, offset 7 bits). For each hexadecimal address give the <b>offset</b> (decimal), the <b>line index</b> (decimal) and the <b>tag</b> (hexadecimal, no prefix).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cache ánh xạ trực tiếp có 0.125 dòng 16 byte trên địa chỉ 16 bit (tag 12 bit, chỉ số dòng -3 bit, offset 7 bit). Với mỗi địa chỉ hex cho <b>offset</b> (thập phân), <b>chỉ số dòng</b> (thập phân) và <b>tag</b> (hex, không tiền tố).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the address in binary and cut it: tag | 3-bit index | 4-bit offset.",
+        "The low hex digit is exactly the offset (4 bits)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 3 — Where does this address go? (tag, line, offset)\n\nAnswer in the answer panel (no code needed).\n\n1. Split of hex addressesTách địa chỉ hex\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 3 — Where does this address go? (tag, line, offset) — answer key\n\n1. Split of hex addressesTách địa chỉ hex\n   - r1.o: 12\n   - r1.i: 0\n   - r1.t: D10 / D10 / d10\n   - r2.o: 0\n   - r2.i: 0\n   - r2.t: 5A8 / 5A8 / 5a8\n   - r3.o: 7\n   - r3.i: 0\n   - r3.t: 1FF8 / 1FF8 / 1ff8\n   - r4.o: 0\n   - r4.i: 0\n   - r4.t: D10 / D10 / d10\n   - r5.o: 1\n   - r5.i: 0\n   - r5.t: 6000 / 6000 / 6000\n   0x1A2C = block 418: offset 12, line 0, tag D10; 0xB50 = block 181: offset 0, line 0, tag 5A8; 0x3FF7 = block 1023: offset 7, line 0, tag 1FF8; 0x1A20 = block 418: offset 0, line 0, tag D10; 0xC001 = block 3072: offset 1, line 0, tag 6000. Offset = address mod 16; line = block mod 8; tag = block div 8.VI: 0x1A2C: offset 12, dòng 0, tag D10; 0xB50: offset 0, dòng 0, tag 5A8; 0x3FF7: offset 7, dòng 0, tag 1FF8; 0x1A20: offset 0, dòng 0, tag D10; 0xC001: offset 1, dòng 0, tag 6000. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>0x1A2C = block 418: offset 12, line 0, tag D10; 0xB50 = block 181: offset 0, line 0, tag 5A8; 0x3FF7 = block 1023: offset 7, line 0, tag 1FF8; 0x1A20 = block 418: offset 0, line 0, tag D10; 0xC001 = block 3072: offset 1, line 0, tag 6000. Offset = address mod 16; line = block mod 8; tag = block div 8.</p><p><i>VI: 0x1A2C: offset 12, dòng 0, tag D10; 0xB50: offset 0, dòng 0, tag 5A8; 0x3FF7: offset 7, dòng 0, tag 1FF8; 0x1A20: offset 0, dòng 0, tag D10; 0xC001: offset 1, dòng 0, tag 6000. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Split of hex addresses</p><p style=\"opacity:.75;font-size:.92em\"><i>Tách địa chỉ hex</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Address"
+              },
+              {
+                "ma": "o",
+                "ten": "Offset"
+              },
+              {
+                "ma": "i",
+                "ten": "Line"
+              },
+              {
+                "ma": "t",
+                "ten": "Tag (hex)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "0x1A2C"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "0x0B50"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "0x3FF7"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "0x1A20"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "0xC001"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "12",
+              "r1.i": "0",
+              "r1.t": [
+                "D10",
+                "D10",
+                "d10"
+              ],
+              "r2.o": "0",
+              "r2.i": "0",
+              "r2.t": [
+                "5A8",
+                "5A8",
+                "5a8"
+              ],
+              "r3.o": "7",
+              "r3.i": "0",
+              "r3.t": [
+                "1FF8",
+                "1FF8",
+                "1ff8"
+              ],
+              "r4.o": "0",
+              "r4.i": "0",
+              "r4.t": [
+                "D10",
+                "D10",
+                "d10"
+              ],
+              "r5.o": "1",
+              "r5.i": "0",
+              "r5.t": [
+                "6000",
+                "6000",
+                "6000"
+              ]
+            },
+            "giaiThich": "<p>0x1A2C = block 418: offset 12, line 0, tag D10; 0xB50 = block 181: offset 0, line 0, tag 5A8; 0x3FF7 = block 1023: offset 7, line 0, tag 1FF8; 0x1A20 = block 418: offset 0, line 0, tag D10; 0xC001 = block 3072: offset 1, line 0, tag 6000. Offset = address mod 16; line = block mod 8; tag = block div 8.</p><p><i>VI: 0x1A2C: offset 12, dòng 0, tag D10; 0xB50: offset 0, dòng 0, tag 5A8; 0x3FF7: offset 7, dòng 0, tag 1FF8; 0x1A20: offset 0, dòng 0, tag D10; 0xC001: offset 1, dòng 0, tag 6000. Offset = địa chỉ mod 16; dòng = khối mod 8; tag = khối div 8.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cutting the fields from the wrong end of the address."
+        },
+        {
+          "loi": "Giving the tag in decimal when hex is asked."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "block number",
+          "vi": "số hiệu khối"
+        }
+      ]
+    },
+    {
+      "title": "Mapping 4 — Direct-mapped trace: hit or miss?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "direct-mapped cache",
+        "hit/miss trace"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A direct-mapped cache has 4 lines of 16 bytes and starts empty. Byte addresses referenced: <code>32, 96, 64, 80, 96, 32, 32, 48, 96, 80, 32, 16</code>. For every reference say <b>Hit</b> or <b>Miss</b>; then give the total number of misses.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cache ánh xạ trực tiếp 4 dòng 16 byte, ban đầu rỗng. Địa chỉ byte được tham chiếu: <code>32, 96, 64, 80, 96, 32, 32, 48, 96, 80, 32, 16</code>. Với mỗi tham chiếu cho biết <b>Hit</b> hay <b>Miss</b>; rồi cho tổng số miss.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First compute block and line for each address; two blocks with the same line number evict each other.",
+        "A hit needs the SAME block in that line, not just a filled line."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 4 — Direct-mapped trace: hit or miss?\n\nAnswer in the answer panel (no code needed).\n\n1. Hit or miss per referenceHit hay miss từng tham chiếu\n2. TotalTổng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 4 — Direct-mapped trace: hit or miss? — answer key\n\n1. Hit or miss per referenceHit hay miss từng tham chiếu\n   - r1.x: Miss\n   - r2.x: Miss\n   - r3.x: Miss\n   - r4.x: Miss\n   - r5.x: Hit\n   - r6.x: Miss\n   - r7.x: Hit\n   - r8.x: Miss\n   - r9.x: Miss\n   - r10.x: Hit\n   - r11.x: Miss\n   - r12.x: Miss\n   block = address div 16, line = block mod 4. #1: block 2 → line 2 miss; #2: block 6 → line 2 miss (evicts block 2); #3: block 4 → line 0 miss; #4: block 5 → line 1 miss; #5: block 6 → line 2 hit; #6: block 2 → line 2 miss (evicts block 6); #7: block 2 → line 2 hit; #8: block 3 → line 3 miss; #9: block 6 → line 2 miss (evicts block 2); #10: block 5 → line 1 hit; #11: block 2 → line 2 miss (evicts block 6); #12: block 1 → line 1 miss (evicts block 5).VI: khối = địa chỉ div 16, dòng = khối mod 4. #1: khối 2 → dòng 2 miss; #2: khối 6 → dòng 2 miss; #3: khối 4 → dòng 0 miss; #4: khối 5 → dòng 1 miss; #5: khối 6 → dòng 2 hit; #6: khối 2 → dòng 2 miss; #7: khối 2 → dòng 2 hit; #8: khối 3 → dòng 3 miss; #9: khối 6 → dòng 2 miss; #10: khối 5 → dòng 1 hit; #11: khối 2 → dòng 2 miss; #12: khối 1 → dòng 1 miss.\n\n2. TotalTổng\n   - r1.v: 9\n   9 misses out of 12.VI: 9 miss trên 12 tham chiếu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>block = address div 16, line = block mod 4. #1: block 2 → line 2 miss; #2: block 6 → line 2 miss (evicts block 2); #3: block 4 → line 0 miss; #4: block 5 → line 1 miss; #5: block 6 → line 2 hit; #6: block 2 → line 2 miss (evicts block 6); #7: block 2 → line 2 hit; #8: block 3 → line 3 miss; #9: block 6 → line 2 miss (evicts block 2); #10: block 5 → line 1 hit; #11: block 2 → line 2 miss (evicts block 6); #12: block 1 → line 1 miss (evicts block 5).</p><p><i>VI: khối = địa chỉ div 16, dòng = khối mod 4. #1: khối 2 → dòng 2 miss; #2: khối 6 → dòng 2 miss; #3: khối 4 → dòng 0 miss; #4: khối 5 → dòng 1 miss; #5: khối 6 → dòng 2 hit; #6: khối 2 → dòng 2 miss; #7: khối 2 → dòng 2 hit; #8: khối 3 → dòng 3 miss; #9: khối 6 → dòng 2 miss; #10: khối 5 → dòng 1 hit; #11: khối 2 → dòng 2 miss; #12: khối 1 → dòng 1 miss.</i></p><p>9 misses out of 12.</p><p><i>VI: 9 miss trên 12 tham chiếu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Hit or miss per reference</p><p style=\"opacity:.75;font-size:.92em\"><i>Hit hay miss từng tham chiếu</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Reference"
+              },
+              {
+                "ma": "x",
+                "ten": "Result",
+                "luaChon": [
+                  "Hit",
+                  "Miss"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "#1: address 32"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "#2: address 96"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "#3: address 64"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "#4: address 80"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "r": "#5: address 96"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "r": "#6: address 32"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "r": "#7: address 32"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "r": "#8: address 48"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "r": "#9: address 96"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "r": "#10: address 80"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "r": "#11: address 32"
+                }
+              },
+              {
+                "ma": "r12",
+                "o": {
+                  "r": "#12: address 16"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.x": "Miss",
+              "r2.x": "Miss",
+              "r3.x": "Miss",
+              "r4.x": "Miss",
+              "r5.x": "Hit",
+              "r6.x": "Miss",
+              "r7.x": "Hit",
+              "r8.x": "Miss",
+              "r9.x": "Miss",
+              "r10.x": "Hit",
+              "r11.x": "Miss",
+              "r12.x": "Miss"
+            },
+            "giaiThich": "<p>block = address div 16, line = block mod 4. #1: block 2 → line 2 miss; #2: block 6 → line 2 miss (evicts block 2); #3: block 4 → line 0 miss; #4: block 5 → line 1 miss; #5: block 6 → line 2 hit; #6: block 2 → line 2 miss (evicts block 6); #7: block 2 → line 2 hit; #8: block 3 → line 3 miss; #9: block 6 → line 2 miss (evicts block 2); #10: block 5 → line 1 hit; #11: block 2 → line 2 miss (evicts block 6); #12: block 1 → line 1 miss (evicts block 5).</p><p><i>VI: khối = địa chỉ div 16, dòng = khối mod 4. #1: khối 2 → dòng 2 miss; #2: khối 6 → dòng 2 miss; #3: khối 4 → dòng 0 miss; #4: khối 5 → dòng 1 miss; #5: khối 6 → dòng 2 hit; #6: khối 2 → dòng 2 miss; #7: khối 2 → dòng 2 hit; #8: khối 3 → dòng 3 miss; #9: khối 6 → dòng 2 miss; #10: khối 5 → dòng 1 hit; #11: khối 2 → dòng 2 miss; #12: khối 1 → dòng 1 miss.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Total</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "Total misses"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "9"
+            },
+            "giaiThich": "<p>9 misses out of 12.</p><p><i>VI: 9 miss trên 12 tham chiếu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating any filled line as a hit."
+        },
+        {
+          "loi": "Forgetting that the first reference to a block is always a miss (compulsory)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "compulsory miss",
+          "vi": "miss bắt buộc (lần đầu)"
+        },
+        {
+          "en": "conflict miss",
+          "vi": "miss do xung đột"
+        }
+      ]
+    },
+    {
+      "title": "Mapping 5 — More associativity, fewer misses? Same references, three caches",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "set-associative cache",
+        "LRU",
+        "FIFO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Use the same reference string as the previous problem (<code>32, 96, 64, 80, 96, 32, 32, 48, 96, 80, 32, 16</code>), 4 lines of 16 bytes. Give the number of <b>misses</b> for each organization and the <b>trace</b> of the 2-way LRU cache (H/M string, e.g. <code>MMHM…</code>).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng lại chuỗi tham chiếu của bài trước (<code>32, 96, 64, 80, 96, 32, 32, 48, 96, 80, 32, 16</code>), 4 dòng 16 byte. Cho số <b>miss</b> của mỗi kiểu tổ chức và <b>vết</b> của cache 2 đường LRU (chuỗi H/M, vd <code>MMHM…</code>).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "With 2 sets, set = block mod 2 and each set holds 2 blocks; LRU evicts the older use.",
+        "Count the distinct blocks in the string and compare with the 4 lines of the fully associative cache."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 5 — More associativity, fewer misses? Same references, three caches\n\nAnswer in the answer panel (no code needed).\n\n1. Misses by organizationSố miss theo kiểu tổ chức\n2. Trace of 2-way LRUVết 2 đường LRU\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 5 — More associativity, fewer misses? Same references, three caches — answer key\n\n1. Misses by organizationSố miss theo kiểu tổ chức\n   - r1.m: 9\n   - r2.m: 7\n   - r3.m: 8\n   - r4.m: 6\n   Direct 9, 2-way LRU 7, 2-way FIFO 8, fully associative 6. Associativity removes conflict misses; the fully associative cache keeps only the 6 compulsory misses (one per distinct block).VI: Trực tiếp 9, 2 đường LRU 7, 2 đường FIFO 8, liên kết đầy đủ 6. Tăng liên kết loại bỏ miss xung đột; cache liên kết đầy đủ chỉ còn 6 miss bắt buộc (mỗi khối khác nhau một lần).\n\n2. Trace of 2-way LRUVết 2 đường LRU\n   - r1.v: MMMMHMHMHHHM\n   Set = block mod 2. Trace: MMMMHMHMHHHM.VI: Tập = khối mod 2. Vết: MMMMHMHMHHHM.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Direct 9, 2-way LRU 7, 2-way FIFO 8, fully associative 6. Associativity removes conflict misses; the fully associative cache keeps only the 6 compulsory misses (one per distinct block).</p><p><i>VI: Trực tiếp 9, 2 đường LRU 7, 2 đường FIFO 8, liên kết đầy đủ 6. Tăng liên kết loại bỏ miss xung đột; cache liên kết đầy đủ chỉ còn 6 miss bắt buộc (mỗi khối khác nhau một lần).</i></p><p>Set = block mod 2. Trace: MMMMHMHMHHHM.</p><p><i>VI: Tập = khối mod 2. Vết: MMMMHMHMHHHM.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Misses by organization</p><p style=\"opacity:.75;font-size:.92em\"><i>Số miss theo kiểu tổ chức</i></p>",
+            "cot": [
+              {
+                "ma": "o",
+                "ten": "Organization"
+              },
+              {
+                "ma": "m",
+                "ten": "Misses"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "o": "Direct-mapped (4 sets × 1 way)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "o": "2-way set-associative, LRU (2 sets)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "o": "2-way set-associative, FIFO (2 sets)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "o": "Fully associative, LRU (1 set × 4 ways)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "9",
+              "r2.m": "7",
+              "r3.m": "8",
+              "r4.m": "6"
+            },
+            "giaiThich": "<p>Direct 9, 2-way LRU 7, 2-way FIFO 8, fully associative 6. Associativity removes conflict misses; the fully associative cache keeps only the 6 compulsory misses (one per distinct block).</p><p><i>VI: Trực tiếp 9, 2 đường LRU 7, 2 đường FIFO 8, liên kết đầy đủ 6. Tăng liên kết loại bỏ miss xung đột; cache liên kết đầy đủ chỉ còn 6 miss bắt buộc (mỗi khối khác nhau một lần).</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Trace of 2-way LRU</p><p style=\"opacity:.75;font-size:.92em\"><i>Vết 2 đường LRU</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "H/M string"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "2-way LRU trace"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "MMMMHMHMHHHM"
+            },
+            "giaiThich": "<p>Set = block mod 2. Trace: MMMMHMHMHHHM.</p><p><i>VI: Tập = khối mod 2. Vết: MMMMHMHMHHHM.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using mod 4 for a 2-way cache (that would be 4 sets)."
+        },
+        {
+          "loi": "Updating the recency only on misses in LRU."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "associativity",
+          "vi": "độ liên kết"
+        }
+      ]
+    },
+    {
+      "title": "Mapping 6 — How many bits does the cache really contain?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "cache size",
+        "tag overhead"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A 32-bit-address cache holds 16 KiB of data in 64-byte blocks. Each line also stores a <b>tag</b>, a <b>valid</b> bit and, for write-back, a <b>dirty</b> bit. Fill in the tag size, the bits stored per line, the total number of bits of the cache and the overhead = (total − data bits) / data bits in percent (2 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cache địa chỉ 32 bit chứa 16 KiB dữ liệu trong khối 64 byte. Mỗi dòng còn lưu <b>tag</b>, bit <b>valid</b> và, với write-back, bit <b>dirty</b>. Điền kích thước tag, số bit mỗi dòng, tổng số bit của cache và tỉ lệ phụ trội = (tổng − bit dữ liệu) / bit dữ liệu (phần trăm, 2 chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "lines = 16384 / 64; bits per line = 8 × 64 + tag + valid (+ dirty).",
+        "Every extra way removes one index bit, so the tag grows by one bit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 6 — How many bits does the cache really contain?\n\nAnswer in the answer panel (no code needed).\n\n1. Total storageTổng dung lượng lưu trữ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Mapping 6 — How many bits does the cache really contain? — answer key\n\n1. Total storageTổng dung lượng lưu trữ\n   - r1.t: 18\n   - r1.l: 531\n   - r1.n: 135936\n   - r1.p: 3.71\n   - r2.t: 19\n   - r2.l: 532\n   - r2.n: 136192\n   - r2.p: 3.91\n   - r3.t: 20\n   - r3.l: 534\n   - r3.n: 136704\n   - r3.p: 4.30 / 4.3\n   - r4.t: 20\n   - r4.l: 533\n   - r4.n: 136448\n   - r4.p: 4.10 / 4.1\n   tag 18, 531 bits/line × 256 lines = 135936 bits, overhead 3.71%; tag 19, 532 bits/line × 256 lines = 136192 bits, overhead 3.91%; tag 20, 534 bits/line × 256 lines = 136704 bits, overhead 4.30%; tag 20, 533 bits/line × 256 lines = 136448 bits, overhead 4.10%.VI: tag 18, 531 bit/dòng × 256 dòng = 135936 bit; tag 19, 532 bit/dòng × 256 dòng = 136192 bit; tag 20, 534 bit/dòng × 256 dòng = 136704 bit; tag 20, 533 bit/dòng × 256 dòng = 136448 bit.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>tag 18, 531 bits/line × 256 lines = 135936 bits, overhead 3.71%; tag 19, 532 bits/line × 256 lines = 136192 bits, overhead 3.91%; tag 20, 534 bits/line × 256 lines = 136704 bits, overhead 4.30%; tag 20, 533 bits/line × 256 lines = 136448 bits, overhead 4.10%.</p><p><i>VI: tag 18, 531 bit/dòng × 256 dòng = 135936 bit; tag 19, 532 bit/dòng × 256 dòng = 136192 bit; tag 20, 534 bit/dòng × 256 dòng = 136704 bit; tag 20, 533 bit/dòng × 256 dòng = 136448 bit.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Total storage</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng dung lượng lưu trữ</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Cache"
+              },
+              {
+                "ma": "t",
+                "ten": "Tag bits"
+              },
+              {
+                "ma": "l",
+                "ten": "Bits per line"
+              },
+              {
+                "ma": "n",
+                "ten": "Total bits"
+              },
+              {
+                "ma": "p",
+                "ten": "Overhead %"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "direct-mapped, write-through"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "2-way, write-through"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "4-way, write-back (dirty bit)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "4-way, write-through"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "18",
+              "r1.l": "531",
+              "r1.n": "135936",
+              "r1.p": [
+                "3.71"
+              ],
+              "r2.t": "19",
+              "r2.l": "532",
+              "r2.n": "136192",
+              "r2.p": [
+                "3.91"
+              ],
+              "r3.t": "20",
+              "r3.l": "534",
+              "r3.n": "136704",
+              "r3.p": [
+                "4.30",
+                "4.3"
+              ],
+              "r4.t": "20",
+              "r4.l": "533",
+              "r4.n": "136448",
+              "r4.p": [
+                "4.10",
+                "4.1"
+              ]
+            },
+            "giaiThich": "<p>tag 18, 531 bits/line × 256 lines = 135936 bits, overhead 3.71%; tag 19, 532 bits/line × 256 lines = 136192 bits, overhead 3.91%; tag 20, 534 bits/line × 256 lines = 136704 bits, overhead 4.30%; tag 20, 533 bits/line × 256 lines = 136448 bits, overhead 4.10%.</p><p><i>VI: tag 18, 531 bit/dòng × 256 dòng = 135936 bit; tag 19, 532 bit/dòng × 256 dòng = 136192 bit; tag 20, 534 bit/dòng × 256 dòng = 136704 bit; tag 20, 533 bit/dòng × 256 dòng = 136448 bit.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting only the data bits."
+        },
+        {
+          "loi": "Forgetting the valid bit (and dirty bit for write-back)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "valid bit",
+          "vi": "bit hợp lệ"
+        },
+        {
+          "en": "overhead",
+          "vi": "phần phụ trội"
+        }
+      ]
+    },
+    {
+      "title": "Mapping 7 — Write a set-associative cache simulator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "cache simulation",
+        "LRU",
+        "FIFO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>cacheTrace(addrs, blockBytes, lines, ways, policy)</code> for a cache with <code>lines</code> lines organised in <code>lines / ways</code> sets, starting empty. A byte address belongs to block <code>⌊addr / blockBytes⌋</code> and set <code>block mod sets</code>. <code>policy</code> is <code>\"LRU\"</code> or <code>\"FIFO\"</code> (FIFO ignores hits). Return <code>{ hits, misses, trace }</code> where <code>trace</code> has one letter per reference, <code>H</code> or <code>M</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>ways = 1</code> is direct-mapped; <code>ways = lines</code> is fully associative.</li>\n  <li>A set may hold at most <code>ways</code> blocks.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>cacheTrace(addrs, blockBytes, lines, ways, policy)</code> cho cache có <code>lines</code> dòng chia thành <code>lines / ways</code> tập, ban đầu rỗng. Địa chỉ byte thuộc khối <code>⌊addr / blockBytes⌋</code> và tập <code>khối mod số tập</code>. <code>policy</code> là <code>\"LRU\"</code> hoặc <code>\"FIFO\"</code> (FIFO bỏ qua hit). Trả <code>{ hits, misses, trace }</code> với <code>trace</code> mỗi tham chiếu một chữ <code>H</code> hoặc <code>M</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>ways = 1</code> là trực tiếp; <code>ways = lines</code> là liên kết đầy đủ.</li>\n  <li>Một tập chứa tối đa <code>ways</code> khối.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cacheTrace([0, 64, 0, 64], 16, 4, 1, \"LRU\")",
+          "output": "{\"hits\":0,\"misses\":4,\"trace\":\"MMMM\"}",
+          "explanation": "Blocks 0 and 4 share line 0 of a direct-mapped cache: they keep evicting each other.|||Khối 0 và 4 cùng dòng 0 của cache trực tiếp: chúng đuổi nhau liên tục."
+        }
+      ],
+      "hintsJson": [
+        "Keep an array of sets; each set is an array of {block, time} objects.",
+        "On a hit with LRU update the time; with FIFO leave it alone.",
+        "When a set is full evict the entry with the smallest time."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function cacheTrace(addrs, blockBytes, lines, ways, policy) {\n  return { hits: 0, misses: 0, trace: \"\" };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function cacheTrace(addrs, blockBytes, lines, ways, policy) {\n  var sets = lines / ways, st = [], i, hits = 0, t = 0, trace = '';\n  for (i = 0; i < sets; i++) st.push([]);\n  for (var k = 0; k < addrs.length; k++) {\n    var block = Math.floor(addrs[k] / blockBytes), set = st[block % sets], pos = -1;\n    for (i = 0; i < set.length; i++) if (set[i].block === block) pos = i;\n    t++;\n    if (pos >= 0) { hits++; trace += 'H'; if (policy === 'LRU') set[pos].t = t; }\n    else {\n      trace += 'M';\n      if (set.length === ways) {\n        var v = 0;\n        for (i = 1; i < set.length; i++) if (set[i].t < set[v].t) v = i;\n        set.splice(v, 1);\n      }\n      set.push({ block: block, t: t });\n    }\n  }\n  return { hits: hits, misses: addrs.length - hits, trace: trace };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Direct, set-associative and fully associative caches are the same machine with a different number of sets: only the set count and the victim choice vary.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: cacheTrace([0,4,8,12,16,0,32,48,64,0,80,16,96,32,0], 16, 4, 1, \"LRU\")",
+              "vi": "Ca 1"
+            },
+            "goi": "cacheTrace([0,4,8,12,16,0,32,48,64,0,80,16,96,32,0], 16, 4, 1, \"LRU\")",
+            "mongDoi": {
+              "hits": 5,
+              "misses": 10,
+              "trace": "MHHHMHMMMMMMMMH"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: cacheTrace([0,4,8,12,16,0,32,48,64,0,80,16,96,32,0], 16, 4, 2, \"LRU\")",
+              "vi": "Ca 2"
+            },
+            "goi": "cacheTrace([0,4,8,12,16,0,32,48,64,0,80,16,96,32,0], 16, 4, 2, \"LRU\")",
+            "mongDoi": {
+              "hits": 4,
+              "misses": 11,
+              "trace": "MHHHMHMMMMMMMMM"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: cacheTrace([0,4,8,12,16,0,32,48,64,0,80,16,96,32,0], 16, 4, 4, \"FIFO\")",
+              "vi": "Ca 3"
+            },
+            "goi": "cacheTrace([0,4,8,12,16,0,32,48,64,0,80,16,96,32,0], 16, 4, 4, \"FIFO\")",
+            "mongDoi": {
+              "hits": 4,
+              "misses": 11,
+              "trace": "MHHHMHMMMMMMMMM"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: cacheTrace([0,64,0,64], 16, 4, 1, \"LRU\")",
+              "vi": "Ca 4"
+            },
+            "goi": "cacheTrace([0,64,0,64], 16, 4, 1, \"LRU\")",
+            "mongDoi": {
+              "hits": 0,
+              "misses": 4,
+              "trace": "MMMM"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "cacheTrace([32,96,64,80,96,32,32,48,96,80,32,16], 16, 4, 2, \"FIFO\")",
+            "mongDoi": {
+              "hits": 4,
+              "misses": 8,
+              "trace": "MMMMHMHMMHHM"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "cacheTrace([0,8,16,24,32,40,0], 8, 4, 4, \"LRU\")",
+            "mongDoi": {
+              "hits": 0,
+              "misses": 7,
+              "trace": "MMMMMMM"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "cacheTrace([5,5,5], 4, 2, 1, \"FIFO\")",
+            "mongDoi": {
+              "hits": 2,
+              "misses": 1,
+              "trace": "MHH"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "cacheTrace([0,32,64,0,32,64,0], 32, 2, 2, \"LRU\")",
+            "mongDoi": {
+              "hits": 0,
+              "misses": 7,
+              "trace": "MMMMMMM"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Updating the time on a FIFO hit."
+        },
+        {
+          "loi": "Using the address (not the block) to find the set."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

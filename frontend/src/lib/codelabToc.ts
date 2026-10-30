@@ -29,6 +29,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'ky-nang-practice': 'ssg105-communication-and-in-group-working-skills',
   'dbi202-practice': 'introduction-to-databases',
   'osg202-practice': 'operating-systems',
+  'cea201-practice': 'computer-organization-and-architecture',
 });
 
 /**
@@ -119,6 +120,28 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     9: 'Bảo mật',
     13: 'Luyện FE — đề thi thử có đồng hồ',
     14: 'Chuyên sâu cho backend: luồng, bộ nhớ trên máy chủ',
+  },
+  // CEA201 (30/10/2026) — số chương theo khoá computer-organization-and-architecture (content/academy/CEA201.mjs); 16–18 = các bài nâng cao N1–N3.
+  'cea201-practice': {
+    1: 'Giới thiệu: tổ chức vs kiến trúc',
+    2: 'Tiến hoá & hiệu năng máy tính',
+    3: 'Chu trình lệnh, ngắt & bus',
+    4: 'Bộ nhớ cache',
+    5: 'Bộ nhớ trong & sửa lỗi',
+    6: 'Bộ nhớ ngoài: đĩa, RAID, SSD',
+    7: 'Nhập/Xuất (I/O)',
+    8: 'Hỗ trợ hệ điều hành & bộ nhớ ảo',
+    9: 'Logic số',
+    10: 'Tập lệnh & biểu diễn dữ liệu',
+    11: 'Chế độ địa chỉ',
+    12: 'Cấu trúc bộ xử lý & pipeline',
+    13: 'RISC và CISC',
+    14: 'Song song mức lệnh & superscalar',
+    15: 'Đa lõi & nhất quán cache',
+    16: 'Hợp ngữ MARIE (thực hành)',
+    17: 'Dự đoán rẽ nhánh',
+    18: 'Thực hiện suy đoán: Spectre/Meltdown',
+    20: 'Luyện FE — đề thi thử có đồng hồ',
   },
   // Kỹ năng nghề — số chương theo SSG105 (Ch3 Written communication, Ch4 Presentations).
   'ky-nang-practice': {

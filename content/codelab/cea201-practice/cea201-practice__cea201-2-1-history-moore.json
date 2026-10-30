@@ -1,0 +1,380 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-2-1-history-moore",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-2-1-history-moore"
+  },
+  "exercises": [
+    {
+      "title": "History 1 — Generations of computers and Moore’s law: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "history of computing",
+        "Moore’s law"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on the evolution of computer hardware.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về sự tiến hoá của phần cứng máy tính.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Moore’s law counts transistors, not speed.",
+        "Each generation is named after its main component technology."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# History 1 — Generations of computers and Moore’s law: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. Moore’s law states that …Định luật Moore nói rằng …\n2. The main technology of the second generation of computers was …Công nghệ chính của thế hệ máy tính thứ hai là …\n3. The IAS machine is important because it introduced …Máy IAS quan trọng vì nó giới thiệu …\n4. The “memory wall” refers to …“Bức tường bộ nhớ” nói đến …\n5. Why did clock rates stop rising around 2004?Vì sao tốc độ clock ngừng tăng khoảng năm 2004?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# History 1 — Generations of computers and Moore’s law: concepts — answer key\n\n1. Moore’s law states that …Định luật Moore nói rằng …\n   Answer: b) the number of transistors on a chip doubles roughly every two years\n   An observation, not a law of physics; it drove cheaper and faster chips for decades.VI: Một quan sát, không phải định luật vật lý; nó thúc đẩy chip rẻ và nhanh hơn suốt nhiều thập kỷ.\n\n2. The main technology of the second generation of computers was …Công nghệ chính của thế hệ máy tính thứ hai là …\n   Answer: c) transistors\n   First: vacuum tubes; second: transistors; third: ICs; later: LSI/VLSI and microprocessors.VI: Thứ nhất: đèn chân không; thứ hai: transistor; thứ ba: IC; sau đó LSI/VLSI và vi xử lý.\n\n3. The IAS machine is important because it introduced …Máy IAS quan trọng vì nó giới thiệu …\n   Answer: d) the stored-program concept that von Neumann described\n   Program and data in the same memory.VI: Chương trình và dữ liệu trong cùng một bộ nhớ.\n\n4. The “memory wall” refers to …“Bức tường bộ nhớ” nói đến …\n   Answer: a) processor speed growing much faster than memory speed\n   It motivates caches and the memory hierarchy.VI: Nó là động cơ cho cache và phân cấp bộ nhớ.\n\n5. Why did clock rates stop rising around 2004?Vì sao tốc độ clock ngừng tăng khoảng năm 2004?\n   Answer: b) Power density and heat grow with frequency\n   The “power wall” moved the industry to multicore.VI: “Bức tường công suất” đẩy ngành sang đa lõi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Moore’s law states that …</p><p style=\"opacity:.75;font-size:.92em\"><i>Định luật Moore nói rằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the size of programs doubles every month"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the number of transistors on a chip doubles roughly every two years"
+              },
+              {
+                "ma": "c",
+                "noiDung": "processor clock speed doubles every year"
+              },
+              {
+                "ma": "d",
+                "noiDung": "memory prices double every year"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An observation, not a law of physics; it drove cheaper and faster chips for decades.</p><p><i>VI: Một quan sát, không phải định luật vật lý; nó thúc đẩy chip rẻ và nhanh hơn suốt nhiều thập kỷ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The main technology of the second generation of computers was …</p><p style=\"opacity:.75;font-size:.92em\"><i>Công nghệ chính của thế hệ máy tính thứ hai là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "integrated circuits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "microprocessors"
+              },
+              {
+                "ma": "c",
+                "noiDung": "transistors"
+              },
+              {
+                "ma": "d",
+                "noiDung": "vacuum tubes"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>First: vacuum tubes; second: transistors; third: ICs; later: LSI/VLSI and microprocessors.</p><p><i>VI: Thứ nhất: đèn chân không; thứ hai: transistor; thứ ba: IC; sau đó LSI/VLSI và vi xử lý.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The IAS machine is important because it introduced …</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy IAS quan trọng vì nó giới thiệu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the transistor"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the hard disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the graphical user interface"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the stored-program concept that von Neumann described"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Program and data in the same memory.</p><p><i>VI: Chương trình và dữ liệu trong cùng một bộ nhớ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The “memory wall” refers to …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Bức tường bộ nhớ” nói đến …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "processor speed growing much faster than memory speed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a physical wall in the data centre"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a limit on memory capacity"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a security feature of the OS"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It motivates caches and the memory hierarchy.</p><p><i>VI: Nó là động cơ cho cache và phân cấp bộ nhớ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why did clock rates stop rising around 2004?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao tốc độ clock ngừng tăng khoảng năm 2004?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Memory became too fast"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Power density and heat grow with frequency"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Transistors stopped shrinking"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Software could not use faster clocks"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The “power wall” moved the industry to multicore.</p><p><i>VI: “Bức tường công suất” đẩy ngành sang đa lõi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading Moore’s law as a statement about clock speed."
+        },
+        {
+          "loi": "Confusing the first and second generations."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Moore’s law",
+          "vi": "định luật Moore"
+        }
+      ]
+    },
+    {
+      "title": "History 2 — Moore’s law as arithmetic",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Moore’s law"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>If the transistor count doubles every <b>T</b> years, after <b>t</b> years it has grown by the factor 2^(t/T). Give the growth factor (integer) for each row. Then, for each doubling period T, how many years does it take for the count to grow by a factor of <b>1000</b>? (t = T × log₂ 1000, 1 decimal)</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nếu số transistor tăng gấp đôi sau mỗi <b>T</b> năm thì sau <b>t</b> năm nó tăng theo hệ số 2^(t/T). Cho hệ số tăng (số nguyên) mỗi dòng. Rồi với mỗi chu kỳ gấp đôi T, mất bao nhiêu năm để số lượng tăng <b>1000</b> lần? (t = T × log₂ 1000, 1 chữ số thập phân)</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Number of doublings = t / T.",
+        "1000 ≈ 2¹⁰, so about 10 doublings."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# History 2 — Moore’s law as arithmetic\n\nAnswer in the answer panel (no code needed).\n\n1. Growth factorHệ số tăng\n2. Years for ×1000Số năm để ×1000\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# History 2 — Moore’s law as arithmetic — answer key\n\n1. Growth factorHệ số tăng\n   - r1.f: 32\n   - r2.f: 1024\n   - r3.f: 1024\n   - r4.f: 4096\n   - r5.f: 16\n   2^(10/2) = 32; 2^(20/2) = 1024; 2^(15/1.5) = 1024; 2^(30/2.5) = 4096; 2^(12/3) = 16.VI: 2^(10/2) = 32; 2^(20/2) = 1024; 2^(15/1.5) = 1024; 2^(30/2.5) = 4096; 2^(12/3) = 16.\n\n2. Years for ×1000Số năm để ×1000\n   - r1.y: 10.0 / 10\n   - r2.y: 19.9\n   - r3.y: 29.9\n   T=1: 10.0 years; T=2: 19.9 years; T=3: 29.9 years (log₂ 1000 ≈ 9.97 doublings).VI: T=1: 10.0 năm; T=2: 19.9 năm; T=3: 29.9 năm (log₂ 1000 ≈ 9,97 lần gấp đôi).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>2^(10/2) = 32; 2^(20/2) = 1024; 2^(15/1.5) = 1024; 2^(30/2.5) = 4096; 2^(12/3) = 16.</p><p><i>VI: 2^(10/2) = 32; 2^(20/2) = 1024; 2^(15/1.5) = 1024; 2^(30/2.5) = 4096; 2^(12/3) = 16.</i></p><p>T=1: 10.0 years; T=2: 19.9 years; T=3: 29.9 years (log₂ 1000 ≈ 9.97 doublings).</p><p><i>VI: T=1: 10.0 năm; T=2: 19.9 năm; T=3: 29.9 năm (log₂ 1000 ≈ 9,97 lần gấp đôi).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Growth factor</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ số tăng</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "t, T"
+              },
+              {
+                "ma": "f",
+                "ten": "Factor"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "t = 10 years, T = 2 years"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "t = 20 years, T = 2 years"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "t = 15 years, T = 1.5 years"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "t = 30 years, T = 2.5 years"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "t = 12 years, T = 3 years"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.f": "32",
+              "r2.f": "1024",
+              "r3.f": "1024",
+              "r4.f": "4096",
+              "r5.f": "16"
+            },
+            "giaiThich": "<p>2^(10/2) = 32; 2^(20/2) = 1024; 2^(15/1.5) = 1024; 2^(30/2.5) = 4096; 2^(12/3) = 16.</p><p><i>VI: 2^(10/2) = 32; 2^(20/2) = 1024; 2^(15/1.5) = 1024; 2^(30/2.5) = 4096; 2^(12/3) = 16.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Years for ×1000</p><p style=\"opacity:.75;font-size:.92em\"><i>Số năm để ×1000</i></p>",
+            "cot": [
+              {
+                "ma": "T",
+                "ten": "Doubling period T"
+              },
+              {
+                "ma": "y",
+                "ten": "Years"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "T": "1 years"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "T": "2 years"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "T": "3 years"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.y": [
+                "10.0",
+                "10"
+              ],
+              "r2.y": [
+                "19.9"
+              ],
+              "r3.y": [
+                "29.9"
+              ]
+            },
+            "giaiThich": "<p>T=1: 10.0 years; T=2: 19.9 years; T=3: 29.9 years (log₂ 1000 ≈ 9.97 doublings).</p><p><i>VI: T=1: 10.0 năm; T=2: 19.9 năm; T=3: 29.9 năm (log₂ 1000 ≈ 9,97 lần gấp đôi).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Multiplying t by T instead of dividing."
+        },
+        {
+          "loi": "Treating Moore’s law as linear growth."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exponential growth",
+          "vi": "tăng trưởng mũ"
+        }
+      ]
+    }
+  ]
+}

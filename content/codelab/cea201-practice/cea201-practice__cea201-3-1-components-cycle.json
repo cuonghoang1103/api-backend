@@ -1,0 +1,813 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-3-1-components-cycle",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-3-1-components-cycle"
+  },
+  "exercises": [
+    {
+      "title": "Cycle 1 — PC, MAR, MBR, IR: what does each register do?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "PC",
+        "MAR",
+        "MBR",
+        "IR"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Five questions about the registers that drive the fetch–execute cycle.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về các thanh ghi điều khiển chu trình nạp–thực hiện.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "MAR = “where”, MBR = “what”.",
+        "PC always points at the NEXT instruction while the current one executes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do?\n\nAnswer in the answer panel (no code needed).\n\n1. Which register holds the address of the NEXT instruction to fetch?Thanh ghi nào giữ địa chỉ của lệnh SẮP được nạp?\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do? — answer key\n\n1. Which register holds the address of the NEXT instruction to fetch?Thanh ghi nào giữ địa chỉ của lệnh SẮP được nạp?\n   Answer: a) PC (program counter)\n   The PC points to the next instruction; the IR holds the instruction being executed.VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.\n\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n   Answer: b) MBR (memory buffer register)\n   MAR holds the address going out; MBR holds the data coming in or going out.VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.\n\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n   Answer: c) It is incremented to point to the next instruction\n   The control unit increments the PC after (or while) the instruction is fetched.VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.\n\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n   Answer: d) instructions and data in the same memory\n   The same memory holds both, so a program can be loaded, changed and treated as data.VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.\n\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n   Answer: a) processor–memory, processor–I/O, data processing, control\n   Stallings groups instruction effects into these four categories.VI: Stallings nhóm tác dụng lệnh thành bốn loại này.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which register holds the address of the NEXT instruction to fetch?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thanh ghi nào giữ địa chỉ của lệnh SẮP được nạp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PC (program counter)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "IR (instruction register)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MBR (memory buffer register)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AC (accumulator)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The PC points to the next instruction; the IR holds the instruction being executed.</p><p><i>VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>During a memory read, the word that comes back from memory is first placed in …</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The address bus"
+              },
+              {
+                "ma": "b",
+                "noiDung": "MBR (memory buffer register)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MAR (memory address register)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PC"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>MAR holds the address going out; MBR holds the data coming in or going out.</p><p><i>VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In the fetch phase, what happens to the PC (no jump)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is cleared"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is copied into the MBR and left unchanged forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is incremented to point to the next instruction"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is loaded with the operand address"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The control unit increments the PC after (or while) the instruction is fetched.</p><p><i>VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A “stored-program” (von Neumann) computer keeps …</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "instructions in the CPU and data in memory"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only data in memory; instructions are wired"
+              },
+              {
+                "ma": "c",
+                "noiDung": "programs on the keyboard buffer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "instructions and data in the same memory"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The same memory holds both, so a program can be loaded, changed and treated as data.</p><p><i>VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The four basic actions of an instruction are …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn loại tác vụ cơ bản của một lệnh là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "processor–memory, processor–I/O, data processing, control"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fetch, decode, encode, store"
+              },
+              {
+                "ma": "c",
+                "noiDung": "read, write, copy, delete"
+              },
+              {
+                "ma": "d",
+                "noiDung": "compile, link, load, run"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Stallings groups instruction effects into these four categories.</p><p><i>VI: Stallings nhóm tác dụng lệnh thành bốn loại này.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the IR holds the address of the next instruction."
+        },
+        {
+          "loi": "Confusing MAR with MBR (address versus data)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "MAR / MBR",
+          "vi": "thanh ghi địa chỉ / đệm bộ nhớ"
+        },
+        {
+          "en": "stored-program computer",
+          "vi": "máy chương trình lưu trong bộ nhớ"
+        }
+      ]
+    },
+    {
+      "title": "Cycle 2 — Order the fetch phase and the interrupt cycle",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "fetch phase",
+        "interrupt cycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Arrange each list in the correct order.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp mỗi danh sách theo đúng thứ tự.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Data comes back through the MBR; the IR is loaded from the MBR.",
+        "Interrupts are recognized only between instructions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 2 — Order the fetch phase and the interrupt cycle\n\nAnswer in the answer panel (no code needed).\n\n1. Order the steps of fetching and starting one instruction.Sắp thứ tự các bước nạp và bắt đầu một lệnh.\n2. Order the steps of the interrupt cycle.Sắp thứ tự các bước của chu trình ngắt.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 2 — Order the fetch phase and the interrupt cycle — answer key\n\n1. Order the steps of fetching and starting one instruction.Sắp thứ tự các bước nạp và bắt đầu một lệnh.\n   Answer: s1) MAR ← PC (the address of the next instruction goes on the address bus)  →  s2) The control unit issues a memory READ  →  s3) Memory puts the instruction word into the MBR  →  s4) IR ← MBR (the instruction is latched)  →  s5) PC ← PC + 1 (point to the next instruction)  →  s6) Decode the opcode in the IR and execute\n   The address leaves through MAR, the word returns through MBR, then IR; the PC increment is part of the fetch.VI: Địa chỉ đi ra qua MAR, từ lệnh về qua MBR rồi vào IR; tăng PC thuộc pha nạp.\n\n2. Order the steps of the interrupt cycle.Sắp thứ tự các bước của chu trình ngắt.\n   Answer: s1) The processor finishes the current instruction (execute phase)  →  s2) The processor checks for a pending interrupt  →  s3) It saves the PC (and PSW) of the interrupted program  →  s4) PC ← starting address of the interrupt handler  →  s5) The handler runs and services the device  →  s6) The saved PC is restored and the original program resumes\n   Interrupts are checked at the END of an instruction, never in the middle.VI: Ngắt được kiểm tra ở CUỐI lệnh, không bao giờ giữa chừng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The address leaves through MAR, the word returns through MBR, then IR; the PC increment is part of the fetch.</p><p><i>VI: Địa chỉ đi ra qua MAR, từ lệnh về qua MBR rồi vào IR; tăng PC thuộc pha nạp.</i></p><p>Interrupts are checked at the END of an instruction, never in the middle.</p><p><i>VI: Ngắt được kiểm tra ở CUỐI lệnh, không bao giờ giữa chừng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the steps of fetching and starting one instruction.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự các bước nạp và bắt đầu một lệnh.</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "Memory puts the instruction word into the MBR"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "IR ← MBR (the instruction is latched)"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "PC ← PC + 1 (point to the next instruction)"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "Decode the opcode in the IR and execute"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "MAR ← PC (the address of the next instruction goes on the address bus)"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "The control unit issues a memory READ"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6"
+            ],
+            "giaiThich": "<p>The address leaves through MAR, the word returns through MBR, then IR; the PC increment is part of the fetch.</p><p><i>VI: Địa chỉ đi ra qua MAR, từ lệnh về qua MBR rồi vào IR; tăng PC thuộc pha nạp.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Order the steps of the interrupt cycle.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thứ tự các bước của chu trình ngắt.</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "PC ← starting address of the interrupt handler"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The handler runs and services the device"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "The saved PC is restored and the original program resumes"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "The processor finishes the current instruction (execute phase)"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "The processor checks for a pending interrupt"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "It saves the PC (and PSW) of the interrupted program"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6"
+            ],
+            "giaiThich": "<p>Interrupts are checked at the END of an instruction, never in the middle.</p><p><i>VI: Ngắt được kiểm tra ở CUỐI lệnh, không bao giờ giữa chừng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Loading the IR directly from the PC."
+        },
+        {
+          "loi": "Restoring the saved PC before the handler has run."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interrupt handler",
+          "vi": "trình xử lý ngắt"
+        },
+        {
+          "en": "PSW",
+          "vi": "từ trạng thái chương trình"
+        }
+      ]
+    },
+    {
+      "title": "Cycle 3 — Trace a tiny program: the AC after every instruction",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "instruction trace"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A MARIE-style machine runs the program below (memory locations A, B, C, D hold the decimal values shown). Fill in the <b>AC</b> after each instruction and the <b>PC</b> the processor will fetch from next (hexadecimal).</p><pre>ORG 100\nLoad A\nAdd B\nSubt C\nStore D\nHalt\nA, Dec 12\nB, Dec 30\nC, Dec 7\nD, Dec 0</pre><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một máy kiểu MARIE chạy chương trình dưới đây (ô A, B, C, D chứa giá trị thập phân như trên). Điền <b>AC</b> sau mỗi lệnh và <b>PC</b> của lần nạp kế tiếp (hệ 16).</p><pre>ORG 100\nLoad A\nAdd B\nSubt C\nStore D\nHalt\nA, Dec 12\nB, Dec 30\nC, Dec 7\nD, Dec 0</pre><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Load replaces the AC; Add and Subt combine the AC with memory.",
+        "Store copies the AC into memory and does not change the AC."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 3 — Trace a tiny program: the AC after every instruction\n\nAnswer in the answer panel (no code needed).\n\n1. Execution traceVết thực hiện\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 3 — Trace a tiny program: the AC after every instruction — answer key\n\n1. Execution traceVết thực hiện\n   - r1.a: 12\n   - r1.n: 101\n   - r2.a: 42\n   - r2.n: 102\n   - r3.a: 35\n   - r3.n: 103\n   - r4.a: 35\n   - r4.n: 104\n   - r5.a: 35\n   - r5.n: 105\n   AC: 12 → 12+30 = 42 → 42−7 = 35 → Store keeps 35; Halt leaves everything unchanged. The PC just counts 101, 102, … because there is no jump.VI: AC: 12 → 12+30 = 42 → 42−7 = 35 → Store giữ nguyên 35; Halt không đổi gì. PC chỉ đếm 101, 102, … vì không có nhảy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>AC: 12 → 12+30 = 42 → 42−7 = 35 → Store keeps 35; Halt leaves everything unchanged. The PC just counts 101, 102, … because there is no jump.</p><p><i>VI: AC: 12 → 12+30 = 42 → 42−7 = 35 → Store giữ nguyên 35; Halt không đổi gì. PC chỉ đếm 101, 102, … vì không có nhảy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Execution trace</p><p style=\"opacity:.75;font-size:.92em\"><i>Vết thực hiện</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Instruction"
+              },
+              {
+                "ma": "a",
+                "ten": "AC after"
+              },
+              {
+                "ma": "n",
+                "ten": "Next PC (hex)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "100: Load A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "101: Add B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "102: Subt C"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "103: Store D"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "104: Halt"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "12"
+              ],
+              "r1.n": [
+                "101"
+              ],
+              "r2.a": [
+                "42"
+              ],
+              "r2.n": [
+                "102"
+              ],
+              "r3.a": [
+                "35"
+              ],
+              "r3.n": [
+                "103"
+              ],
+              "r4.a": [
+                "35"
+              ],
+              "r4.n": [
+                "104"
+              ],
+              "r5.a": [
+                "35"
+              ],
+              "r5.n": [
+                "105"
+              ]
+            },
+            "giaiThich": "<p>AC: 12 → 12+30 = 42 → 42−7 = 35 → Store keeps 35; Halt leaves everything unchanged. The PC just counts 101, 102, … because there is no jump.</p><p><i>VI: AC: 12 → 12+30 = 42 → 42−7 = 35 → Store giữ nguyên 35; Halt không đổi gì. PC chỉ đếm 101, 102, … vì không có nhảy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating Store as if it cleared the AC."
+        },
+        {
+          "loi": "Forgetting that the PC already points to the next instruction while the current one executes."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "accumulator (AC)",
+          "vi": "thanh ghi tích luỹ"
+        }
+      ]
+    },
+    {
+      "title": "Cycle 4 — How many memory accesses does an instruction need?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "instruction cycle",
+        "memory accesses"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Count the memory accesses during one complete instruction cycle (the instruction fetch counts as one; a direct operand read or write is one; an indirect operand needs one extra access to get the address).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm số lần truy cập bộ nhớ trong một chu trình lệnh đầy đủ (nạp lệnh tính 1; đọc/ghi toán hạng trực tiếp tính 1; toán hạng gián tiếp cần thêm 1 lần để lấy địa chỉ).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Always start from 1 for the instruction fetch.",
+        "Indirect addressing reads the pointer first, then the data."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 4 — How many memory accesses does an instruction need?\n\nAnswer in the answer panel (no code needed).\n\n1. Memory accesses per instructionSố lần truy cập bộ nhớ mỗi lệnh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cycle 4 — How many memory accesses does an instruction need? — answer key\n\n1. Memory accesses per instructionSố lần truy cập bộ nhớ mỗi lệnh\n   - r1.n: 2\n   - r2.n: 3\n   - r3.n: 2\n   - r4.n: 1\n   - r5.n: 3\n   Fetch (1) + operand: direct 1, indirect 2, none 0. Totals: 2, 3, 2, 1, 3.VI: Nạp lệnh (1) + toán hạng: trực tiếp 1, gián tiếp 2, không có 0. Tổng: 2, 3, 2, 1, 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fetch (1) + operand: direct 1, indirect 2, none 0. Totals: 2, 3, 2, 1, 3.</p><p><i>VI: Nạp lệnh (1) + toán hạng: trực tiếp 1, gián tiếp 2, không có 0. Tổng: 2, 3, 2, 1, 3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Memory accesses per instruction</p><p style=\"opacity:.75;font-size:.92em\"><i>Số lần truy cập bộ nhớ mỗi lệnh</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "Instruction"
+              },
+              {
+                "ma": "n",
+                "ten": "Memory accesses"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "Direct add: ADD X (operand in memory)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "Indirect add: ADD (X) (address of the operand in memory)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "Store: STORE X"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "Register-only: ADD R1, R2"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "Indirect store: STORE (X)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "2",
+              "r2.n": "3",
+              "r3.n": "2",
+              "r4.n": "1",
+              "r5.n": "3"
+            },
+            "giaiThich": "<p>Fetch (1) + operand: direct 1, indirect 2, none 0. Totals: 2, 3, 2, 1, 3.</p><p><i>VI: Nạp lệnh (1) + toán hạng: trực tiếp 1, gián tiếp 2, không có 0. Tổng: 2, 3, 2, 1, 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the instruction fetch."
+        },
+        {
+          "loi": "Counting an operand access for a register-only instruction."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "indirect addressing",
+          "vi": "định địa chỉ gián tiếp"
+        }
+      ]
+    },
+    {
+      "title": "Cycle 5 — Simulate when interrupts are really serviced",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "interrupt cycle",
+        "instruction boundary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>The processor runs <code>lengths.length</code> instructions; instruction <code>i</code> takes <code>lengths[i]</code> cycles. Interrupts arrive at the cycle numbers in <code>raises</code> (sorted). An interrupt is recognized only <b>at the end of an instruction</b> — if one or more have arrived (time ≤ current time) the processor runs a handler of <code>isrCost</code> cycles for each, in arrival order, before fetching the next instruction.</p><p>Write <code>isrStarts(lengths, raises, isrCost)</code> returning <code>{ starts, finish }</code>: <code>starts</code> is the cycle at which each handler begins, <code>finish</code> the cycle when the last instruction (or handler) ends. Time starts at 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Interrupts that arrive after the last instruction are not served.</li>\n  <li>Handlers are not interrupted.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ xử lý chạy <code>lengths.length</code> lệnh; lệnh <code>i</code> mất <code>lengths[i]</code> chu kỳ. Ngắt đến ở các chu kỳ trong <code>raises</code> (đã sắp). Ngắt chỉ được nhận <b>ở cuối một lệnh</b> — nếu đã có ngắt đến (thời điểm ≤ hiện tại) thì bộ xử lý chạy trình xử lý <code>isrCost</code> chu kỳ cho từng ngắt, theo thứ tự đến, trước khi nạp lệnh kế.</p><p>Viết <code>isrStarts(lengths, raises, isrCost)</code> trả <code>{ starts, finish }</code>: <code>starts</code> là chu kỳ bắt đầu mỗi trình xử lý, <code>finish</code> là chu kỳ kết thúc lệnh/trình xử lý cuối. Thời gian bắt đầu từ 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ngắt đến sau lệnh cuối không được phục vụ.</li>\n  <li>Trình xử lý không bị ngắt.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "isrStarts([4, 6, 5], [3, 12], 2)",
+          "output": "{\"starts\":[4,12],\"finish\":19}",
+          "explanation": "The interrupt of cycle 3 waits until instruction 0 ends at cycle 4 (handler 4–6); the one of cycle 12 is served when instruction 1 ends at 12; the program ends at 19.|||Ngắt ở chu kỳ 3 chờ lệnh 0 xong ở chu kỳ 4 (xử lý 4–6); ngắt ở 12 được phục vụ khi lệnh 1 xong ở 12; chương trình kết thúc ở 19."
+        }
+      ],
+      "hintsJson": [
+        "Keep a clock t. After each instruction: t += length; then loop while an interrupt has already arrived.",
+        "Record t as a handler start, then add isrCost to t. Use an index into raises.",
+        "Do not look at interrupts before the end of an instruction."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function isrStarts(lengths, raises, isrCost) {\n  return { starts: [], finish: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function isrStarts(lengths, raises, isrCost) {\n  // lengths[i] = cycles of instruction i; raises = sorted interrupt arrival times; one interrupt is served after each instruction\n  var t = 0, next = 0, starts = [];\n  for (var i = 0; i < lengths.length; i++) {\n    t += lengths[i];\n    while (next < raises.length && raises[next] <= t) {\n      starts.push(t);\n      t += isrCost;\n      next++;\n    }\n  }\n  return { starts: starts, finish: t };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The processor checks for interrupts only at instruction boundaries; pending interrupts are served in order, each adding isrCost to the timeline.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: isrStarts([4,6,5], [3,12], 2)",
+              "vi": "Ca 1"
+            },
+            "goi": "isrStarts([4,6,5], [3,12], 2)",
+            "mongDoi": {
+              "starts": [
+                4,
+                12
+              ],
+              "finish": 19
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: isrStarts([3,3,3,3], [1,2,3], 5)",
+              "vi": "Ca 2"
+            },
+            "goi": "isrStarts([3,3,3,3], [1,2,3], 5)",
+            "mongDoi": {
+              "starts": [
+                3,
+                8,
+                13
+              ],
+              "finish": 27
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: isrStarts([10], [20], 4)",
+              "vi": "Ca 3"
+            },
+            "goi": "isrStarts([10], [20], 4)",
+            "mongDoi": {
+              "starts": [],
+              "finish": 10
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: isrStarts([5,5,5], [], 3)",
+              "vi": "Ca 4"
+            },
+            "goi": "isrStarts([5,5,5], [], 3)",
+            "mongDoi": {
+              "starts": [],
+              "finish": 15
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "isrStarts([2,8,4,6], [0,9,9,30], 3)",
+            "mongDoi": {
+              "starts": [
+                2,
+                13,
+                16
+              ],
+              "finish": 29
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "isrStarts([7,7], [7,7], 1)",
+            "mongDoi": {
+              "starts": [
+                7,
+                8
+              ],
+              "finish": 16
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "isrStarts([1,1,1,1,1], [1,3,4], 2)",
+            "mongDoi": {
+              "starts": [
+                1,
+                3,
+                5
+              ],
+              "finish": 11
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Serving an interrupt in the middle of an instruction."
+        },
+        {
+          "loi": "Forgetting that several interrupts can be pending at the same time."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

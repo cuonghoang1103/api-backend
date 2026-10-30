@@ -1,0 +1,235 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-12-lab-pipeline-diagram",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-quiz-ch12"
+  },
+  "exercises": [
+    {
+      "title": "Lab 12 — Pipeline timing diagram generator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 60,
+      "concepts": [
+        "pipeline diagram",
+        "stalls",
+        "forwarding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> A teaching assistant wants the timing diagrams of the course drawn automatically. Write <code>pipelineLab(lines, forwarding)</code> for the classic 5-stage in-order pipeline <code>IF ID EX MEM WB</code> and return <code>{ cycles, stalls, diagram }</code>.</p>\n<ol>\n<li>Instruction forms: <code>lw rt, off(rs)</code> (writes rt, reads rs) · <code>sw rt, off(rs)</code> (reads rt and rs, writes nothing) · <code>addi rt, rs, imm</code> (writes rt, reads rs) · <code>add|sub|and|or|slt rd, rs, rt</code> (writes rd, reads rs and rt). <code>r0</code> never creates a dependence.</li>\n<li>The first instruction is in IF at cycle 1 and in ID at cycle 2. Instruction <i>i</i> enters ID at the cycle after instruction <i>i−1</i> <b>leaves</b> ID; instruction <i>i</i> enters IF when instruction <i>i−1</i> enters ID, and waits there (stays “IF”) until it can enter ID.</li>\n<li>No forwarding: the <b>last</b> ID cycle of a consumer is ≥ the WB cycle of every producer of one of its source registers (write in the first half, read in the second half of the same cycle). Forwarding: the consumer’s EX is after the producer’s EX (ALU/addi) or MEM (lw); a store’s data register is needed at the start of EX too.</li>\n<li>After its last ID cycle an instruction takes EX, MEM, WB in three consecutive cycles.</li>\n</ol>\n<p><code>diagram</code> is an array with one string per instruction: <code>cycles</code> tokens joined by one space; token = <code>IF</code> (also while waiting), <code>ID</code> (also while stalled), <code>EX</code>, <code>MEM</code>, <code>WB</code>, or <code>.</code> for a cycle outside its life. <code>cycles</code> = the cycle of the last WB, <code>stalls</code> = <code>cycles − (n + 4)</code>.</p>\n<h4>Sample (no forwarding)</h4><table><thead><tr><th>instruction</th><th>diagram</th></tr></thead><tbody><tr><td>add r1, r2, r3</td><td>IF ID EX MEM WB . . .</td></tr><tr><td>sub r4, r1, r5</td><td>. IF ID ID ID EX MEM WB</td></tr></tbody></table>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify <code>lines</code>.</li>\n  <li>The result for an empty program is <code>{ cycles: 0, stalls: 0, diagram: [] }</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Trợ giảng muốn tự động vẽ sơ đồ thời gian của khoá học. Viết <code>pipelineLab(lines, forwarding)</code> cho pipeline 5 tầng theo thứ tự <code>IF ID EX MEM WB</code> kinh điển và trả <code>{ cycles, stalls, diagram }</code>.</p>\n<ol>\n<li>Dạng lệnh: <code>lw rt, off(rs)</code> (ghi rt, đọc rs) · <code>sw rt, off(rs)</code> (đọc rt và rs, không ghi) · <code>addi rt, rs, imm</code> (ghi rt, đọc rs) · <code>add|sub|and|or|slt rd, rs, rt</code> (ghi rd, đọc rs và rt). <code>r0</code> không bao giờ gây phụ thuộc.</li>\n<li>Lệnh đầu ở IF chu kỳ 1 và ở ID chu kỳ 2. Lệnh <i>i</i> vào ID ở chu kỳ sau khi lệnh <i>i−1</i> <b>rời</b> ID; lệnh <i>i</i> vào IF khi lệnh <i>i−1</i> vào ID và chờ ở đó (vẫn là “IF”) đến khi vào được ID.</li>\n<li>Không chuyển tiếp: chu kỳ ID <b>cuối</b> của lệnh dùng ≥ chu kỳ WB của mọi lệnh sinh ra một thanh ghi nguồn của nó (ghi nửa đầu, đọc nửa sau cùng chu kỳ). Chuyển tiếp: EX của lệnh dùng sau EX của lệnh sinh (ALU/addi) hoặc sau MEM (lw); thanh ghi dữ liệu của lệnh store cũng cần từ đầu EX.</li>\n<li>Sau chu kỳ ID cuối, lệnh làm EX, MEM, WB ở ba chu kỳ liên tiếp.</li>\n</ol>\n<p><code>diagram</code> là mảng một chuỗi cho mỗi lệnh: <code>cycles</code> token nối bằng một dấu cách; token = <code>IF</code> (cả khi chờ), <code>ID</code> (cả khi đình trệ), <code>EX</code>, <code>MEM</code>, <code>WB</code>, hoặc <code>.</code> cho chu kỳ ngoài đời lệnh. <code>cycles</code> = chu kỳ của WB cuối, <code>stalls</code> = <code>cycles − (n + 4)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa <code>lines</code>.</li>\n  <li>Chương trình rỗng cho <code>{ cycles: 0, stalls: 0, diagram: [] }</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pipelineLab([\"add r1, r2, r3\", \"sub r4, r1, r5\"], false)",
+          "output": "{\"cycles\":8,\"stalls\":2,\"diagram\":[\"IF ID EX MEM WB . . .\",\". IF ID ID ID EX MEM WB\"]}",
+          "explanation": "sub waits in ID for cycles 3–5 (add’s WB is in cycle 5).|||sub chờ ở ID các chu kỳ 3–5 (WB của add ở chu kỳ 5)."
+        }
+      ],
+      "hintsJson": [
+        "Compute the numbers first (ifS, idS, idEnd, ex, mem, wb per instruction) and test cycles/stalls; only then build the strings.",
+        "idS[i] = idEnd[i−1] + 1 and ifS[i] = idS[i−1]; every dependence only raises idEnd[i].",
+        "Token for cycle c: c in [ifS, idS) → IF; [idS, idEnd] → ID; c = ex → EX; c = mem → MEM; c = wb → WB; otherwise “.”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function pipelineLab(lines, forwarding) {\n  return { cycles: 0, stalls: 0, diagram: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pipelineLab(lines, forwarding) {\n  var ins = [], i, j;\n  for (i = 0; i < lines.length; i++) {\n    var p = lines[i].replace(/,/g, ' ').replace(/[()]/g, ' ').trim().split(/\\s+/), op = p[0].toLowerCase(), dest = null, src = [];\n    if (op === 'lw') { dest = p[1]; src = [p[3]]; }\n    else if (op === 'sw') { src = [p[1], p[3]]; }\n    else if (op === 'addi') { dest = p[1]; src = [p[2]]; }\n    else { dest = p[1]; src = [p[2], p[3]]; }\n    if (dest === 'r0') dest = null;\n    ins.push({ op: op, dest: dest, src: src });\n  }\n  var ifS = [], idS = [], idE = [], ex = [], mem = [], wb = [];\n  for (i = 0; i < ins.length; i++) {\n    idS[i] = i === 0 ? 2 : idE[i - 1] + 1;\n    ifS[i] = i === 0 ? 1 : idS[i - 1];\n    var e = idS[i];\n    for (j = 0; j < i; j++) {\n      if (!ins[j].dest || ins[i].src.indexOf(ins[j].dest) < 0) continue;\n      if (!forwarding) e = Math.max(e, wb[j]);\n      else e = Math.max(e, (ins[j].op === 'lw' ? mem[j] + 1 : ex[j] + 1) - 1);\n    }\n    idE[i] = e; ex[i] = e + 1; mem[i] = e + 2; wb[i] = e + 3;\n  }\n  var n = ins.length, cycles = n ? wb[n - 1] : 0, diagram = [];\n  for (i = 0; i < n; i++) {\n    var row = [];\n    for (var c = 1; c <= cycles; c++) {\n      var t = '.';\n      if (c >= ifS[i] && c < idS[i]) t = 'IF';\n      else if (c >= idS[i] && c <= idE[i]) t = 'ID';\n      else if (c === ex[i]) t = 'EX';\n      else if (c === mem[i]) t = 'MEM';\n      else if (c === wb[i]) t = 'WB';\n      row.push(t);\n    }\n    diagram.push(row.join(' '));\n  }\n  return { cycles: cycles, stalls: n ? cycles - (n + 4) : 0, diagram: diagram };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An in-order pipeline is determined by one number per instruction: the last ID cycle. Everything else (IF waiting, EX/MEM/WB) follows from it, and the diagram is just the occupancy of each stage per cycle.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: pipelineLab([\"add r1, r2, r3\",\"sub r4, r1, r5\",\"and r6, r1, r7\",\"or r8, r1, r9\"], )",
+              "vi": "Ca 1"
+            },
+            "goi": "pipelineLab([\"add r1, r2, r3\",\"sub r4, r1, r5\",\"and r6, r1, r7\",\"or r8, r1, r9\"], false)",
+            "mongDoi": {
+              "cycles": 10,
+              "stalls": 2,
+              "diagram": [
+                "IF ID EX MEM WB . . . . .",
+                ". IF ID ID ID EX MEM WB . .",
+                ". . IF IF IF ID EX MEM WB .",
+                ". . . . . IF ID EX MEM WB"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: pipelineLab([\"add r1, r2, r3\",\"sub r4, r1, r5\",\"and r6, r1, r7\",\"or r8, r1, r9\"], )",
+              "vi": "Ca 2"
+            },
+            "goi": "pipelineLab([\"add r1, r2, r3\",\"sub r4, r1, r5\",\"and r6, r1, r7\",\"or r8, r1, r9\"], true)",
+            "mongDoi": {
+              "cycles": 8,
+              "stalls": 0,
+              "diagram": [
+                "IF ID EX MEM WB . . .",
+                ". IF ID EX MEM WB . .",
+                ". . IF ID EX MEM WB .",
+                ". . . IF ID EX MEM WB"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: pipelineLab([\"lw r1, 0(r2)\",\"add r3, r1, r4\",\"sub r5, r3, r6\",\"sw r5, 4(r2)\"], fal)",
+              "vi": "Ca 3"
+            },
+            "goi": "pipelineLab([\"lw r1, 0(r2)\",\"add r3, r1, r4\",\"sub r5, r3, r6\",\"sw r5, 4(r2)\"], false)",
+            "mongDoi": {
+              "cycles": 14,
+              "stalls": 6,
+              "diagram": [
+                "IF ID EX MEM WB . . . . . . . . .",
+                ". IF ID ID ID EX MEM WB . . . . . .",
+                ". . IF IF IF ID ID ID EX MEM WB . . .",
+                ". . . . . IF IF IF ID ID ID EX MEM WB"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: pipelineLab([\"lw r1, 0(r2)\",\"add r3, r1, r4\",\"sub r5, r3, r6\",\"sw r5, 4(r2)\"], tru)",
+              "vi": "Ca 4"
+            },
+            "goi": "pipelineLab([\"lw r1, 0(r2)\",\"add r3, r1, r4\",\"sub r5, r3, r6\",\"sw r5, 4(r2)\"], true)",
+            "mongDoi": {
+              "cycles": 9,
+              "stalls": 1,
+              "diagram": [
+                "IF ID EX MEM WB . . . .",
+                ". IF ID ID EX MEM WB . .",
+                ". . IF IF ID EX MEM WB .",
+                ". . . . IF ID EX MEM WB"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pipelineLab([\"lw r1, 0(r2)\",\"lw r2, 4(r1)\",\"lw r3, 0(r2)\",\"addi r4, r3, 1\",\"sw r4, 8(r2)\"], true)",
+            "mongDoi": {
+              "cycles": 12,
+              "stalls": 3,
+              "diagram": [
+                "IF ID EX MEM WB . . . . . . .",
+                ". IF ID ID EX MEM WB . . . . .",
+                ". . IF IF ID ID EX MEM WB . . .",
+                ". . . . IF IF ID ID EX MEM WB .",
+                ". . . . . . IF IF ID EX MEM WB"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "pipelineLab([\"lw r1, 0(r2)\",\"lw r2, 4(r1)\",\"lw r3, 0(r2)\",\"addi r4, r3, 1\",\"sw r4, 8(r2)\"], false)",
+            "mongDoi": {
+              "cycles": 17,
+              "stalls": 8,
+              "diagram": [
+                "IF ID EX MEM WB . . . . . . . . . . . .",
+                ". IF ID ID ID EX MEM WB . . . . . . . . .",
+                ". . IF IF IF ID ID ID EX MEM WB . . . . . .",
+                ". . . . . IF IF IF ID ID ID EX MEM WB . . .",
+                ". . . . . . . . IF IF IF ID ID ID EX MEM WB"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "pipelineLab([\"add r0, r1, r2\",\"add r3, r0, r4\"], false)",
+            "mongDoi": {
+              "cycles": 6,
+              "stalls": 0,
+              "diagram": [
+                "IF ID EX MEM WB .",
+                ". IF ID EX MEM WB"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "pipelineLab([], true)",
+            "mongDoi": {
+              "cycles": 0,
+              "stalls": 0,
+              "diagram": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "pipelineLab([\"sw r1, 0(r2)\"], true)",
+            "mongDoi": {
+              "cycles": 5,
+              "stalls": 0,
+              "diagram": [
+                "IF ID EX MEM WB"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Drawing the stall bubble in the wrong instruction (the stalled one stays in ID, the next one stays in IF)."
+        },
+        {
+          "loi": "Forgetting that sw’s data register is a source."
+        },
+        {
+          "loi": "Treating r0 as a normal register."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

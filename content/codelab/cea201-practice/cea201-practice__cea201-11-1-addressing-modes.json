@@ -1,0 +1,850 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-11-1-addressing-modes",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-11-1-addressing-modes"
+  },
+  "exercises": [
+    {
+      "title": "Addressing 1 — Immediate, direct, indirect, register and displacement",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "addressing modes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on addressing modes.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về các chế độ địa chỉ.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "EA = where the operand is; operand = what is there.",
+        "Count the memory references including the instruction fetch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 1 — Immediate, direct, indirect, register and displacement\n\nAnswer in the answer panel (no code needed).\n\n1. In immediate addressing the operand …Trong định địa chỉ tức thời toán hạng …\n2. Indirect addressing needs (for the operand) … memory referencesĐịnh địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)\n3. The main advantage of register addressing is …Ưu điểm chính của định địa chỉ thanh ghi là …\n4. Displacement addressing computes EA = …Định địa chỉ có độ dời tính EA = …\n5. Which mode is best for walking through an array element by element?Chế độ nào hợp để duyệt từng phần tử một mảng?\n6. PC-relative addressing is mainly used for …Định địa chỉ tương đối PC chủ yếu dùng cho …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 1 — Immediate, direct, indirect, register and displacement — answer key\n\n1. In immediate addressing the operand …Trong định địa chỉ tức thời toán hạng …\n   Answer: c) is part of the instruction itself\n   No memory access is needed for the operand, but its size is limited by the instruction field.VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.\n\n2. Indirect addressing needs (for the operand) … memory referencesĐịnh địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)\n   Answer: d) two (the pointer, then the data)\n   The address field names a location that contains the real address.VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.\n\n3. The main advantage of register addressing is …Ưu điểm chính của định địa chỉ thanh ghi là …\n   Answer: a) no memory access and a short address field\n   A few register bits name the operand; access is as fast as the register file.VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.\n\n4. Displacement addressing computes EA = …Định địa chỉ có độ dời tính EA = …\n   Answer: b) A + (R)\n   The instruction holds a constant A, a register holds a base or index.VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.\n\n5. Which mode is best for walking through an array element by element?Chế độ nào hợp để duyệt từng phần tử một mảng?\n   Answer: c) Indexed (base + scaled index) or register indirect with auto-increment\n   The index register changes while the base stays the same.VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.\n\n6. PC-relative addressing is mainly used for …Định địa chỉ tương đối PC chủ yếu dùng cho …\n   Answer: d) branches and position-independent code\n   The target is encoded as an offset from the (next) instruction, so code can be moved.VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In immediate addressing the operand …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong định địa chỉ tức thời toán hạng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is in a register"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is on the stack only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is part of the instruction itself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is in the memory location named by the instruction"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>No memory access is needed for the operand, but its size is limited by the instruction field.</p><p><i>VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Indirect addressing needs (for the operand) … memory references</p><p style=\"opacity:.75;font-size:.92em\"><i>Định địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "zero"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "three"
+              },
+              {
+                "ma": "d",
+                "noiDung": "two (the pointer, then the data)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The address field names a location that contains the real address.</p><p><i>VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The main advantage of register addressing is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ưu điểm chính của định địa chỉ thanh ghi là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no memory access and a short address field"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a very large address space"
+              },
+              {
+                "ma": "c",
+                "noiDung": "self-modifying code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "automatic bounds checking"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A few register bits name the operand; access is as fast as the register file.</p><p><i>VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Displacement addressing computes EA = …</p><p style=\"opacity:.75;font-size:.92em\"><i>Định địa chỉ có độ dời tính EA = …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(R) only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A + (R)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(A)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The instruction holds a constant A, a register holds a base or index.</p><p><i>VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which mode is best for walking through an array element by element?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chế độ nào hợp để duyệt từng phần tử một mảng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Direct"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Implied"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Indexed (base + scaled index) or register indirect with auto-increment"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Immediate"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The index register changes while the base stays the same.</p><p><i>VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>PC-relative addressing is mainly used for …</p><p style=\"opacity:.75;font-size:.92em\"><i>Định địa chỉ tương đối PC chủ yếu dùng cho …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "large constants"
+              },
+              {
+                "ma": "b",
+                "noiDung": "stack operations only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "I/O ports"
+              },
+              {
+                "ma": "d",
+                "noiDung": "branches and position-independent code"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The target is encoded as an offset from the (next) instruction, so code can be moved.</p><p><i>VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating the instruction’s address field as the operand in indirect mode."
+        },
+        {
+          "loi": "Confusing base and index registers."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "effective address (EA)",
+          "vi": "địa chỉ hiệu dụng"
+        },
+        {
+          "en": "displacement",
+          "vi": "độ dời"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 2 — Effective address and operand value",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "effective address"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Machine state: memory <code>M[100] = 250, M[150] = 300, M[200] = 100, M[250] = 77, M[300] = 42, M[308] = 9, M[504] = 11, M[512] = 33</code>; registers <code>R1 = 200, R2 = 300, R3 = 4</code>; unlisted memory locations hold 0. For each operand specifier give the <b>effective address</b> (— if the operand is not in memory) and the <b>operand value</b>.  A location that is not listed contains 0.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trạng thái máy: bộ nhớ <code>M[100] = 250, M[150] = 300, M[200] = 100, M[250] = 77, M[300] = 42, M[308] = 9, M[504] = 11, M[512] = 33</code>; thanh ghi <code>R1 = 200, R2 = 300, R3 = 4</code>; các ô nhớ không liệt kê chứa 0. Với mỗi toán hạng cho <b>địa chỉ hiệu dụng</b> (— nếu toán hạng không ở bộ nhớ) và <b>giá trị toán hạng</b>. Ô nhớ không được liệt kê chứa 0.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Work out the EA first, then read memory at that address (unless the mode has no EA).",
+        "Indirect reads memory twice."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 2 — Effective address and operand value\n\nAnswer in the answer panel (no code needed).\n\n1. Effective addressesĐịa chỉ hiệu dụng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 2 — Effective address and operand value — answer key\n\n1. Effective addressesĐịa chỉ hiệu dụng\n   - r1.e: — / - / none\n   - r1.v: 100\n   - r2.e: 100\n   - r2.v: 250\n   - r3.e: 250\n   - r3.v: 77\n   - r4.e: — / - / none\n   - r4.v: 200\n   - r5.e: 200\n   - r5.v: 100\n   - r6.e: 308\n   - r6.v: 9\n   - r7.e: 512\n   - r7.v: 33\n   - r8.e: 104\n   - r8.v: 0\n   Immediate: EA —, operand 100; Direct: EA 100, operand 250; Indirect: EA 250, operand 77; Register: EA —, operand 200; Register indirect: EA 200, operand 100; Displacement: EA 308, operand 9; PC-relative: EA 512, operand 33; Indexed: EA 104, operand 0. Indexed 100(R3) = 104, which holds nothing (0).VI: Immediate: EA —, toán hạng 100; Direct: EA 100, toán hạng 250; Indirect: EA 250, toán hạng 77; Register: EA —, toán hạng 200; Register indirect: EA 200, toán hạng 100; Displacement: EA 308, toán hạng 9; PC-relative: EA 512, toán hạng 33; Indexed: EA 104, toán hạng 0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Immediate: EA —, operand 100; Direct: EA 100, operand 250; Indirect: EA 250, operand 77; Register: EA —, operand 200; Register indirect: EA 200, operand 100; Displacement: EA 308, operand 9; PC-relative: EA 512, operand 33; Indexed: EA 104, operand 0. Indexed 100(R3) = 104, which holds nothing (0).</p><p><i>VI: Immediate: EA —, toán hạng 100; Direct: EA 100, toán hạng 250; Indirect: EA 250, toán hạng 77; Register: EA —, toán hạng 200; Register indirect: EA 200, toán hạng 100; Displacement: EA 308, toán hạng 9; PC-relative: EA 512, toán hạng 33; Indexed: EA 104, toán hạng 0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Effective addresses</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ hiệu dụng</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Mode"
+              },
+              {
+                "ma": "e",
+                "ten": "EA"
+              },
+              {
+                "ma": "v",
+                "ten": "Operand"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "Immediate  #100"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "Direct  100"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "Indirect  (100)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "Register  R1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "Register indirect  (R1)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "m": "Displacement  8(R2)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "m": "PC-relative  +12 (PC already points to the next instruction, 500)"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "m": "Indexed  100(R3), scaled ×1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": [
+                "—",
+                "-",
+                "none"
+              ],
+              "r1.v": "100",
+              "r2.e": [
+                "100"
+              ],
+              "r2.v": "250",
+              "r3.e": [
+                "250"
+              ],
+              "r3.v": "77",
+              "r4.e": [
+                "—",
+                "-",
+                "none"
+              ],
+              "r4.v": "200",
+              "r5.e": [
+                "200"
+              ],
+              "r5.v": "100",
+              "r6.e": [
+                "308"
+              ],
+              "r6.v": "9",
+              "r7.e": [
+                "512"
+              ],
+              "r7.v": "33",
+              "r8.e": [
+                "104"
+              ],
+              "r8.v": "0"
+            },
+            "giaiThich": "<p>Immediate: EA —, operand 100; Direct: EA 100, operand 250; Indirect: EA 250, operand 77; Register: EA —, operand 200; Register indirect: EA 200, operand 100; Displacement: EA 308, operand 9; PC-relative: EA 512, operand 33; Indexed: EA 104, operand 0. Indexed 100(R3) = 104, which holds nothing (0).</p><p><i>VI: Immediate: EA —, toán hạng 100; Direct: EA 100, toán hạng 250; Indirect: EA 250, toán hạng 77; Register: EA —, toán hạng 200; Register indirect: EA 200, toán hạng 100; Displacement: EA 308, toán hạng 9; PC-relative: EA 512, toán hạng 33; Indexed: EA 104, toán hạng 0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving the pointer value as the operand in indirect mode."
+        },
+        {
+          "loi": "Adding the displacement to the memory content instead of to the register."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "operand value",
+          "vi": "giá trị toán hạng"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 3 — Memory references per mode",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "addressing cost"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>How many memory references does an instruction with one <b>source operand read</b> make in total, counting the instruction fetch?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một lệnh có một toán hạng nguồn cần <b>đọc</b> thực hiện tổng cộng bao nhiêu tham chiếu bộ nhớ, tính cả nạp lệnh?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start from 1 for the instruction itself.",
+        "A register is not memory."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 3 — Memory references per mode\n\nAnswer in the answer panel (no code needed).\n\n1. References per modeSố tham chiếu mỗi chế độ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 3 — Memory references per mode — answer key\n\n1. References per modeSố tham chiếu mỗi chế độ\n   - r1.n: 1\n   - r2.n: 2\n   - r3.n: 3\n   - r4.n: 1\n   - r5.n: 2\n   - r6.n: 2\n   - r7.n: 3\n   Fetch 1 + operand: immediate 0, register 0, direct 1, register indirect 1, displacement 1, indirect 2, double indirect 2. Totals: 1, 2, 3, 1, 2, 2, 3.VI: Nạp lệnh 1 + toán hạng: tức thời 0, thanh ghi 0, trực tiếp 1, gián tiếp thanh ghi 1, độ dời 1, gián tiếp 2. Tổng: 1, 2, 3, 1, 2, 2, 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fetch 1 + operand: immediate 0, register 0, direct 1, register indirect 1, displacement 1, indirect 2, double indirect 2. Totals: 1, 2, 3, 1, 2, 2, 3.</p><p><i>VI: Nạp lệnh 1 + toán hạng: tức thời 0, thanh ghi 0, trực tiếp 1, gián tiếp thanh ghi 1, độ dời 1, gián tiếp 2. Tổng: 1, 2, 3, 1, 2, 2, 3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>References per mode</p><p style=\"opacity:.75;font-size:.92em\"><i>Số tham chiếu mỗi chế độ</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Mode"
+              },
+              {
+                "ma": "n",
+                "ten": "Memory references"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "Immediate"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "Direct"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "Indirect"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "Register"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "Register indirect"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "m": "Displacement"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "m": "Memory indirect through a register (double indirect, (R))"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "1",
+              "r2.n": "2",
+              "r3.n": "3",
+              "r4.n": "1",
+              "r5.n": "2",
+              "r6.n": "2",
+              "r7.n": "3"
+            },
+            "giaiThich": "<p>Fetch 1 + operand: immediate 0, register 0, direct 1, register indirect 1, displacement 1, indirect 2, double indirect 2. Totals: 1, 2, 3, 1, 2, 2, 3.</p><p><i>VI: Nạp lệnh 1 + toán hạng: tức thời 0, thanh ghi 0, trực tiếp 1, gián tiếp thanh ghi 1, độ dời 1, gián tiếp 2. Tổng: 1, 2, 3, 1, 2, 2, 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the register as a memory reference."
+        },
+        {
+          "loi": "Forgetting the instruction fetch."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "memory reference",
+          "vi": "tham chiếu bộ nhớ"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 4 — Address of an array element",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "indexed addressing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Scaled-index addressing computes <code>EA = base + index × scale + displacement</code>. Give the decimal address of each element access.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Định địa chỉ chỉ số có tỉ lệ tính <code>EA = cơ sở + chỉ số × tỉ lệ + độ dời</code>. Cho địa chỉ thập phân của mỗi lần truy cập phần tử.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Multiply the index by the element size (scale) before adding.",
+        "Convert hex bases to decimal."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 4 — Address of an array element\n\nAnswer in the answer panel (no code needed).\n\n1. Element addressesĐịa chỉ phần tử\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Addressing 4 — Address of an array element — answer key\n\n1. Element addressesĐịa chỉ phần tử\n   - r1.e: 1000\n   - r2.e: 1020\n   - r3.e: 2072\n   - r4.e: 4102\n   - r5.e: 33027\n   1000 + 0×4 + 0 = 1000; 1000 + 5×4 + 0 = 1020; 2000 + 7×8 + 16 = 2072; 4096 + 3×2 + 0 = 4102; 32768 + 255×1 + 4 = 33027.VI: 1000 + 0×4 + 0 = 1000; 1000 + 5×4 + 0 = 1020; 2000 + 7×8 + 16 = 2072; 4096 + 3×2 + 0 = 4102; 32768 + 255×1 + 4 = 33027.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1000 + 0×4 + 0 = 1000; 1000 + 5×4 + 0 = 1020; 2000 + 7×8 + 16 = 2072; 4096 + 3×2 + 0 = 4102; 32768 + 255×1 + 4 = 33027.</p><p><i>VI: 1000 + 0×4 + 0 = 1000; 1000 + 5×4 + 0 = 1020; 2000 + 7×8 + 16 = 2072; 4096 + 3×2 + 0 = 4102; 32768 + 255×1 + 4 = 33027.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Element addresses</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ phần tử</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "base, index, scale, displacement"
+              },
+              {
+                "ma": "e",
+                "ten": "EA"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "base = 1000, index = 0, scale = 4, disp = 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "base = 1000, index = 5, scale = 4, disp = 0"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "base = 2000, index = 7, scale = 8, disp = 16"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "base = 4096, index = 3, scale = 2, disp = 0"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "base = 32768, index = 255, scale = 1, disp = 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": "1000",
+              "r2.e": "1020",
+              "r3.e": "2072",
+              "r4.e": "4102",
+              "r5.e": "33027"
+            },
+            "giaiThich": "<p>1000 + 0×4 + 0 = 1000; 1000 + 5×4 + 0 = 1020; 2000 + 7×8 + 16 = 2072; 4096 + 3×2 + 0 = 4102; 32768 + 255×1 + 4 = 33027.</p><p><i>VI: 1000 + 0×4 + 0 = 1000; 1000 + 5×4 + 0 = 1020; 2000 + 7×8 + 16 = 2072; 4096 + 3×2 + 0 = 4102; 32768 + 255×1 + 4 = 33027.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the index without the scale."
+        },
+        {
+          "loi": "Forgetting the displacement."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scale",
+          "vi": "hệ số tỉ lệ"
+        }
+      ]
+    },
+    {
+      "title": "Addressing 5 — Write the operand fetch unit",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "addressing modes",
+        "operand fetch"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>effAddr(mode, operand, state)</code> with <code>state = { mem, regs, pc }</code> (<code>mem</code>: object address → value, missing locations read as 0; <code>regs</code>: object name → value; <code>pc</code> = address of the NEXT instruction). Return <code>{ ea, value }</code> where <code>ea</code> is <code>null</code> when the operand is not in memory. Modes: <code>IMM</code> (operand = constant), <code>REG</code> (operand = register name), <code>DIR</code> (operand = address), <code>IND</code> (operand = address of a pointer), <code>REGIND</code> (operand = register name holding the address), <code>DISP</code> (operand = <code>[displacement, regName]</code>), <code>PCREL</code> (operand = offset), <code>INDEXED</code> (operand = <code>[base, regName, scale]</code>, EA = base + reg × scale).</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>effAddr(mode, operand, state)</code> với <code>state = { mem, regs, pc }</code> (<code>mem</code>: đối tượng địa chỉ → giá trị, ô thiếu đọc ra 0; <code>regs</code>: tên → giá trị; <code>pc</code> = địa chỉ lệnh KẾ TIẾP). Trả <code>{ ea, value }</code> với <code>ea</code> là <code>null</code> khi toán hạng không ở bộ nhớ. Chế độ: <code>IMM</code> (toán hạng = hằng), <code>REG</code> (toán hạng = tên thanh ghi), <code>DIR</code> (toán hạng = địa chỉ), <code>IND</code> (toán hạng = địa chỉ ô con trỏ), <code>REGIND</code> (toán hạng = tên thanh ghi chứa địa chỉ), <code>DISP</code> (toán hạng = <code>[độ dời, tênThanhGhi]</code>), <code>PCREL</code> (toán hạng = độ lệch), <code>INDEXED</code> (toán hạng = <code>[cơ sở, tênThanhGhi, tỉ lệ]</code>, EA = cơ sở + thanh ghi × tỉ lệ).</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "effAddr(\"IND\", 100, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+          "output": "{\"ea\":250,\"value\":77}",
+          "explanation": "M[100] = 250 is the real address; M[250] = 77.|||M[100] = 250 là địa chỉ thật; M[250] = 77."
+        }
+      ],
+      "hintsJson": [
+        "Compute ea first in each branch, then read mem[ea] || 0 once.",
+        "IMM and REG have no effective address: return ea = null.",
+        "Zero is a valid value — do not test with ||0 on the address."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function effAddr(mode, operand, state) {\n  return { ea: null, value: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function effAddr(mode, operand, state) {\n  var mem = state.mem, regs = state.regs, ea, v;\n  var m = function (a) { return mem[a] === undefined ? 0 : mem[a]; };\n  if (mode === 'IMM') return { ea: null, value: operand };\n  if (mode === 'REG') return { ea: null, value: regs[operand] };\n  if (mode === 'DIR') ea = operand;\n  else if (mode === 'IND') ea = m(operand);\n  else if (mode === 'REGIND') ea = regs[operand];\n  else if (mode === 'DISP') ea = operand[0] + regs[operand[1]];\n  else if (mode === 'PCREL') ea = state.pc + operand;\n  else if (mode === 'INDEXED') ea = operand[0] + regs[operand[1]] * operand[2];\n  v = m(ea);\n  return { ea: ea, value: v };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All memory modes reduce to “compute an EA, then read once”; they differ only in how the EA is produced.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: effAddr(\"IMM\", 7, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308)",
+              "vi": "Ca 1"
+            },
+            "goi": "effAddr(\"IMM\", 7, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": null,
+              "value": 7
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: effAddr(\"DIR\", 100, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"3)",
+              "vi": "Ca 2"
+            },
+            "goi": "effAddr(\"DIR\", 100, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": 100,
+              "value": 250
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: effAddr(\"IND\", 100, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"3)",
+              "vi": "Ca 3"
+            },
+            "goi": "effAddr(\"IND\", 100, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": 250,
+              "value": 77
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: effAddr(\"DISP\", [8,\"R2\"], {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\")",
+              "vi": "Ca 4"
+            },
+            "goi": "effAddr(\"DISP\", [8,\"R2\"], {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": 308,
+              "value": 9
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "effAddr(\"REGIND\", \"R1\", {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": 200,
+              "value": 100
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "effAddr(\"PCREL\", 12, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": 512,
+              "value": 33
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "effAddr(\"INDEXED\", [100,\"R3\",2], {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": 108,
+              "value": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "effAddr(\"REG\", \"R2\", {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": null,
+              "value": 300
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "effAddr(\"DIR\", 999, {\"mem\":{\"100\":250,\"150\":300,\"200\":100,\"250\":77,\"300\":42,\"308\":9,\"504\":11,\"512\":33},\"regs\":{\"R1\":200,\"R2\":300,\"R3\":4},\"pc\":500})",
+            "mongDoi": {
+              "ea": 999,
+              "value": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the memory twice for direct mode."
+        },
+        {
+          "loi": "Returning undefined instead of 0 for a missing location."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

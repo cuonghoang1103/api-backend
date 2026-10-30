@@ -1,0 +1,665 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-5-1-ram-rom",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-5-1-ram-rom"
+  },
+  "exercises": [
+    {
+      "title": "Memory 1 — SRAM, DRAM and the ROM family",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "SRAM",
+        "DRAM",
+        "ROM",
+        "flash"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on semiconductor memory.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về bộ nhớ bán dẫn.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Capacitor ⇒ refresh; flip-flop ⇒ fast but big.",
+        "Non-volatile ≠ read-only: flash and EEPROM can be rewritten."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 1 — SRAM, DRAM and the ROM family\n\nAnswer in the answer panel (no code needed).\n\n1. Why does DRAM need refreshing?Vì sao DRAM cần làm tươi (refresh)?\n2. Which is used for cache memory and why?Loại nào dùng cho cache và vì sao?\n3. Which statement about ROM is correct?Phát biểu nào về ROM đúng?\n4. Flash memory differs from EEPROM mainly in that it …Flash khác EEPROM chủ yếu ở chỗ …\n5. Row and column addresses are multiplexed on DRAM chips in order to …Địa chỉ hàng/cột được ghép kênh trên chip DRAM nhằm …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 1 — SRAM, DRAM and the ROM family — answer key\n\n1. Why does DRAM need refreshing?Vì sao DRAM cần làm tươi (refresh)?\n   Answer: d) It stores bits as charge in capacitors that leak away\n   A leaking capacitor must be re-read and re-written periodically.VI: Tụ điện rò điện nên phải đọc và ghi lại định kỳ.\n\n2. Which is used for cache memory and why?Loại nào dùng cho cache và vì sao?\n   Answer: a) SRAM — faster, no refresh, but larger and more expensive per bit\n   Cache needs speed; SRAM cells (6 transistors) are fast but bulky.VI: Cache cần tốc độ; ô SRAM (6 transistor) nhanh nhưng to.\n\n3. Which statement about ROM is correct?Phát biểu nào về ROM đúng?\n   Answer: b) It keeps its contents without power (non-volatile)\n   ROM, PROM, EPROM, EEPROM and flash are non-volatile.VI: ROM, PROM, EPROM, EEPROM và flash không mất dữ liệu khi tắt nguồn.\n\n4. Flash memory differs from EEPROM mainly in that it …Flash khác EEPROM chủ yếu ở chỗ …\n   Answer: c) erases and writes in blocks, giving higher density and lower cost\n   Block erase makes flash dense and cheap, the basis of SSDs and USB sticks.VI: Xoá theo khối giúp flash dày và rẻ, nền tảng của SSD và USB.\n\n5. Row and column addresses are multiplexed on DRAM chips in order to …Địa chỉ hàng/cột được ghép kênh trên chip DRAM nhằm …\n   Answer: d) halve the number of address pins\n   The same pins carry the row address first and the column address next.VI: Cùng các chân mang địa chỉ hàng trước rồi địa chỉ cột sau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why does DRAM need refreshing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao DRAM cần làm tươi (refresh)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It uses flip-flops that lose state at random"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Its address lines are multiplexed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is non-volatile"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It stores bits as charge in capacitors that leak away"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A leaking capacitor must be re-read and re-written periodically.</p><p><i>VI: Tụ điện rò điện nên phải đọc và ghi lại định kỳ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which is used for cache memory and why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Loại nào dùng cho cache và vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SRAM — faster, no refresh, but larger and more expensive per bit"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DRAM — it is cheaper and faster"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ROM — it never changes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Flash — it is non-volatile"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Cache needs speed; SRAM cells (6 transistors) are fast but bulky.</p><p><i>VI: Cache cần tốc độ; ô SRAM (6 transistor) nhanh nhưng to.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which statement about ROM is correct?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về ROM đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Its contents are lost at power-off"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It keeps its contents without power (non-volatile)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is faster than SRAM"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It needs periodic refresh"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>ROM, PROM, EPROM, EEPROM and flash are non-volatile.</p><p><i>VI: ROM, PROM, EPROM, EEPROM và flash không mất dữ liệu khi tắt nguồn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Flash memory differs from EEPROM mainly in that it …</p><p style=\"opacity:.75;font-size:.92em\"><i>Flash khác EEPROM chủ yếu ở chỗ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is volatile"
+              },
+              {
+                "ma": "b",
+                "noiDung": "needs a refresh cycle"
+              },
+              {
+                "ma": "c",
+                "noiDung": "erases and writes in blocks, giving higher density and lower cost"
+              },
+              {
+                "ma": "d",
+                "noiDung": "cannot be electrically erased"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Block erase makes flash dense and cheap, the basis of SSDs and USB sticks.</p><p><i>VI: Xoá theo khối giúp flash dày và rẻ, nền tảng của SSD và USB.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Row and column addresses are multiplexed on DRAM chips in order to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ hàng/cột được ghép kênh trên chip DRAM nhằm …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "double the data bus width"
+              },
+              {
+                "ma": "b",
+                "noiDung": "speed up refresh"
+              },
+              {
+                "ma": "c",
+                "noiDung": "avoid the need for a clock"
+              },
+              {
+                "ma": "d",
+                "noiDung": "halve the number of address pins"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The same pins carry the row address first and the column address next.</p><p><i>VI: Cùng các chân mang địa chỉ hàng trước rồi địa chỉ cột sau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking SRAM needs refresh."
+        },
+        {
+          "loi": "Calling flash “read-only memory”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "volatile",
+          "vi": "mất dữ liệu khi mất nguồn"
+        },
+        {
+          "en": "refresh",
+          "vi": "làm tươi"
+        }
+      ]
+    },
+    {
+      "title": "Memory 2 — Build a memory module from chips",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "memory organization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A module of <b>W</b> words × <b>B</b> bits is built from chips of <b>w</b> words × <b>b</b> bits (K = 2¹⁰, M = 2²⁰). Give the <b>number of chips</b> (rows of chips for more words × chips side by side for more bits), the <b>address lines</b> of the module and of one chip, and the number of <b>chip-select</b> address bits (the module address bits not used by one chip).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một module <b>W</b> từ × <b>B</b> bit được dựng từ các chip <b>w</b> từ × <b>b</b> bit (K = 2¹⁰, M = 2²⁰). Cho <b>số chip</b> (hàng chip để tăng số từ × chip cạnh nhau để tăng số bit), <b>đường địa chỉ</b> của module và của một chip, và số bit địa chỉ <b>chọn chip</b> (bit địa chỉ module mà một chip không dùng).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "chips = (W / w) × (B / b).",
+        "The high address bits select the row of chips; the low bits go to every chip."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 2 — Build a memory module from chips\n\nAnswer in the answer panel (no code needed).\n\n1. Module from chipsModule dựng từ chip\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 2 — Build a memory module from chips — answer key\n\n1. Module from chipsModule dựng từ chip\n   - r1.n: 4\n   - r1.a: 20\n   - r1.c: 18\n   - r1.s: 2\n   - r2.n: 16\n   - r2.a: 22\n   - r2.c: 20\n   - r2.s: 2\n   - r3.n: 16\n   - r3.a: 24\n   - r3.c: 22\n   - r3.s: 2\n   - r4.n: 32\n   - r4.a: 26\n   - r4.c: 24\n   - r4.s: 2\n   1M×8 from 256K×8: 4 rows × 1 columns = 4 chips; 20 = 18 + 2 address bits; 4M×32 from 1M×8: 4 rows × 4 columns = 16 chips; 22 = 20 + 2 address bits; 16M×16 from 4M×4: 4 rows × 4 columns = 16 chips; 24 = 22 + 2 address bits; 64M×64 from 16M×8: 4 rows × 8 columns = 32 chips; 26 = 24 + 2 address bits.VI: 1M×8 từ 256K×8: 4 hàng × 1 cột = 4 chip; 4M×32 từ 1M×8: 4 hàng × 4 cột = 16 chip; 16M×16 từ 4M×4: 4 hàng × 4 cột = 16 chip; 64M×64 từ 16M×8: 4 hàng × 8 cột = 32 chip.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1M×8 from 256K×8: 4 rows × 1 columns = 4 chips; 20 = 18 + 2 address bits; 4M×32 from 1M×8: 4 rows × 4 columns = 16 chips; 22 = 20 + 2 address bits; 16M×16 from 4M×4: 4 rows × 4 columns = 16 chips; 24 = 22 + 2 address bits; 64M×64 from 16M×8: 4 rows × 8 columns = 32 chips; 26 = 24 + 2 address bits.</p><p><i>VI: 1M×8 từ 256K×8: 4 hàng × 1 cột = 4 chip; 4M×32 từ 1M×8: 4 hàng × 4 cột = 16 chip; 16M×16 từ 4M×4: 4 hàng × 4 cột = 16 chip; 64M×64 từ 16M×8: 4 hàng × 8 cột = 32 chip.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Module from chips</p><p style=\"opacity:.75;font-size:.92em\"><i>Module dựng từ chip</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Module / chip"
+              },
+              {
+                "ma": "n",
+                "ten": "Chips"
+              },
+              {
+                "ma": "a",
+                "ten": "Module addr lines"
+              },
+              {
+                "ma": "c",
+                "ten": "Chip addr lines"
+              },
+              {
+                "ma": "s",
+                "ten": "Chip-select bits"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "1M × 8 from 256K × 8"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "4M × 32 from 1M × 8"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "16M × 16 from 4M × 4"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "64M × 64 from 16M × 8"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "4",
+              "r1.a": "20",
+              "r1.c": "18",
+              "r1.s": "2",
+              "r2.n": "16",
+              "r2.a": "22",
+              "r2.c": "20",
+              "r2.s": "2",
+              "r3.n": "16",
+              "r3.a": "24",
+              "r3.c": "22",
+              "r3.s": "2",
+              "r4.n": "32",
+              "r4.a": "26",
+              "r4.c": "24",
+              "r4.s": "2"
+            },
+            "giaiThich": "<p>1M×8 from 256K×8: 4 rows × 1 columns = 4 chips; 20 = 18 + 2 address bits; 4M×32 from 1M×8: 4 rows × 4 columns = 16 chips; 22 = 20 + 2 address bits; 16M×16 from 4M×4: 4 rows × 4 columns = 16 chips; 24 = 22 + 2 address bits; 64M×64 from 16M×8: 4 rows × 8 columns = 32 chips; 26 = 24 + 2 address bits.</p><p><i>VI: 1M×8 từ 256K×8: 4 hàng × 1 cột = 4 chip; 4M×32 từ 1M×8: 4 hàng × 4 cột = 16 chip; 16M×16 từ 4M×4: 4 hàng × 4 cột = 16 chip; 64M×64 từ 16M×8: 4 hàng × 8 cột = 32 chip.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Multiplying capacities in bits and forgetting the shape of the chip."
+        },
+        {
+          "loi": "Using the number of chips as the number of select bits."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chip select",
+          "vi": "chọn chip"
+        }
+      ]
+    },
+    {
+      "title": "Memory 3 — DRAM refresh overhead and multiplexed address pins",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "DRAM refresh",
+        "address multiplexing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p><b>Part A.</b> Every row must be refreshed once per refresh period; refreshing one row takes <i>t</i> ns. Give the fraction of time the DRAM is busy refreshing (%, 3 decimals).</p><p><b>Part B.</b> A DRAM chip of the given capacity has a <i>b</i>-bit word. With a square array of cells, rows = columns. How many address pins are needed when the row and column address are <b>multiplexed</b> (the same pins used twice)? (Treat the array as 2ⁿ words arranged in 2^(n/2) rows × 2^(n/2) columns.)</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Phần A.</b> Mỗi hàng phải được làm tươi một lần mỗi chu kỳ làm tươi; làm tươi một hàng mất <i>t</i> ns. Cho tỉ lệ thời gian DRAM bận làm tươi (%, 3 chữ số).</p><p><b>Phần B.</b> Chip DRAM có dung lượng cho trước, từ <i>b</i> bit. Với mảng ô vuông, số hàng = số cột. Cần bao nhiêu chân địa chỉ khi địa chỉ hàng và cột được <b>ghép kênh</b> (dùng chung chân hai lần)? (Coi mảng là 2ⁿ từ xếp thành 2^(n/2) hàng × 2^(n/2) cột.)</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Busy fraction = rows × time per row ÷ period (convert to the same unit).",
+        "Multiplexing halves the pin count: n bits become n/2 pins used twice (RAS, then CAS)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 3 — DRAM refresh overhead and multiplexed address pins\n\nAnswer in the answer panel (no code needed).\n\n1. Refresh overheadPhụ trội làm tươi\n2. Multiplexed pinsChân ghép kênh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 3 — DRAM refresh overhead and multiplexed address pins — answer key\n\n1. Refresh overheadPhụ trội làm tươi\n   - r1.o: 0.640 / 0.64\n   - r2.o: 1.152\n   - r3.o: 4.096\n   8192×50 ns / 64 ms = 0.640%; 16384×45 ns / 64 ms = 1.152%; 32768×40 ns / 32 ms = 4.096%. Refresh costs a small but real slice of bandwidth.VI: 8192×50 ns / 64 ms = 0.640%; 16384×45 ns / 64 ms = 1.152%; 32768×40 ns / 32 ms = 4.096%.\n\n2. Multiplexed pinsChân ghép kênh\n   - r1.w: 2^22 / 4194304\n   - r1.p: 11\n   - r2.w: 2^23 / 8388608\n   - r2.p: 11.5\n   - r3.w: 2^24 / 16777216\n   - r3.p: 12\n   16 Mbit / 4 = 2^22 words ⇒ 11 multiplexed pins (instead of 22); 64 Mbit / 8 = 2^23 words ⇒ 11.5 multiplexed pins (instead of 23); 256 Mbit / 16 = 2^24 words ⇒ 12 multiplexed pins (instead of 24).VI: 16 Mbit / 4 = 2^22 từ ⇒ 11 chân; 64 Mbit / 8 = 2^23 từ ⇒ 11.5 chân; 256 Mbit / 16 = 2^24 từ ⇒ 12 chân.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>8192×50 ns / 64 ms = 0.640%; 16384×45 ns / 64 ms = 1.152%; 32768×40 ns / 32 ms = 4.096%. Refresh costs a small but real slice of bandwidth.</p><p><i>VI: 8192×50 ns / 64 ms = 0.640%; 16384×45 ns / 64 ms = 1.152%; 32768×40 ns / 32 ms = 4.096%.</i></p><p>16 Mbit / 4 = 2^22 words ⇒ 11 multiplexed pins (instead of 22); 64 Mbit / 8 = 2^23 words ⇒ 11.5 multiplexed pins (instead of 23); 256 Mbit / 16 = 2^24 words ⇒ 12 multiplexed pins (instead of 24).</p><p><i>VI: 16 Mbit / 4 = 2^22 từ ⇒ 11 chân; 64 Mbit / 8 = 2^23 từ ⇒ 11.5 chân; 256 Mbit / 16 = 2^24 từ ⇒ 12 chân.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Refresh overhead</p><p style=\"opacity:.75;font-size:.92em\"><i>Phụ trội làm tươi</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Rows, period, time per row"
+              },
+              {
+                "ma": "o",
+                "ten": "Busy (%)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "8192 rows, 64 ms, 50 ns/row"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "16384 rows, 64 ms, 45 ns/row"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "32768 rows, 32 ms, 40 ns/row"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": [
+                "0.640",
+                "0.64"
+              ],
+              "r2.o": [
+                "1.152"
+              ],
+              "r3.o": [
+                "4.096"
+              ]
+            },
+            "giaiThich": "<p>8192×50 ns / 64 ms = 0.640%; 16384×45 ns / 64 ms = 1.152%; 32768×40 ns / 32 ms = 4.096%. Refresh costs a small but real slice of bandwidth.</p><p><i>VI: 8192×50 ns / 64 ms = 0.640%; 16384×45 ns / 64 ms = 1.152%; 32768×40 ns / 32 ms = 4.096%.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Multiplexed pins</p><p style=\"opacity:.75;font-size:.92em\"><i>Chân ghép kênh</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Chip"
+              },
+              {
+                "ma": "w",
+                "ten": "Words (2ⁿ)"
+              },
+              {
+                "ma": "p",
+                "ten": "Address pins"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "16 Mbit, 4-bit word"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "64 Mbit, 8-bit word"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "256 Mbit, 16-bit word"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w": [
+                "2^22",
+                "4194304"
+              ],
+              "r1.p": "11",
+              "r2.w": [
+                "2^23",
+                "8388608"
+              ],
+              "r2.p": "11.5",
+              "r3.w": [
+                "2^24",
+                "16777216"
+              ],
+              "r3.p": "12"
+            },
+            "giaiThich": "<p>16 Mbit / 4 = 2^22 words ⇒ 11 multiplexed pins (instead of 22); 64 Mbit / 8 = 2^23 words ⇒ 11.5 multiplexed pins (instead of 23); 256 Mbit / 16 = 2^24 words ⇒ 12 multiplexed pins (instead of 24).</p><p><i>VI: 16 Mbit / 4 = 2^22 từ ⇒ 11 chân; 64 Mbit / 8 = 2^23 từ ⇒ 11.5 chân; 256 Mbit / 16 = 2^24 từ ⇒ 12 chân.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing ns with ms."
+        },
+        {
+          "loi": "Giving n instead of n/2 pins."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RAS / CAS",
+          "vi": "xung chọn hàng / cột"
+        }
+      ]
+    },
+    {
+      "title": "Memory 4 — Choose the right memory technology",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "memory technologies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Match each use to the most suitable technology: SRAM, DRAM, Flash or Mask ROM.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi nhu cầu với công nghệ phù hợp nhất: SRAM, DRAM, Flash hoặc Mask ROM.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: must it be fast? must it survive power-off? will it be rewritten?",
+        "Mask ROM is programmed at the factory."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 4 — Choose the right memory technology\n\nAnswer in the answer panel (no code needed).\n\n1. Technology per useCông nghệ cho từng nhu cầu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Memory 4 — Choose the right memory technology — answer key\n\n1. Technology per useCông nghệ cho từng nhu cầu\n   - r1.t: SRAM\n   - r2.t: DRAM\n   - r3.t: Flash\n   - r4.t: Mask ROM\n   - r5.t: Flash\n   - r6.t: SRAM\n   Speed-critical and small ⇒ SRAM; large and cheap but volatile ⇒ DRAM; rewritable and non-volatile ⇒ Flash; fixed forever and mass-produced ⇒ Mask ROM.VI: Cần tốc độ và nhỏ ⇒ SRAM; lớn, rẻ nhưng mất dữ liệu ⇒ DRAM; ghi lại được và không mất dữ liệu ⇒ Flash; cố định vĩnh viễn và sản xuất hàng loạt ⇒ Mask ROM.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Speed-critical and small ⇒ SRAM; large and cheap but volatile ⇒ DRAM; rewritable and non-volatile ⇒ Flash; fixed forever and mass-produced ⇒ Mask ROM.</p><p><i>VI: Cần tốc độ và nhỏ ⇒ SRAM; lớn, rẻ nhưng mất dữ liệu ⇒ DRAM; ghi lại được và không mất dữ liệu ⇒ Flash; cố định vĩnh viễn và sản xuất hàng loạt ⇒ Mask ROM.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Technology per use</p><p style=\"opacity:.75;font-size:.92em\"><i>Công nghệ cho từng nhu cầu</i></p>",
+            "cot": [
+              {
+                "ma": "u",
+                "ten": "Use"
+              },
+              {
+                "ma": "t",
+                "ten": "Technology",
+                "luaChon": [
+                  "SRAM",
+                  "DRAM",
+                  "Flash",
+                  "Mask ROM"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "u": "Level-1 cache of a processor"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "u": "Main memory of a laptop"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "u": "Firmware that is updated a few times in the product’s life"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "u": "Boot code in millions of identical toys, never changed"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "u": "Solid-state drive"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "u": "Register file inside the CPU"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "SRAM",
+              "r2.t": "DRAM",
+              "r3.t": "Flash",
+              "r4.t": "Mask ROM",
+              "r5.t": "Flash",
+              "r6.t": "SRAM"
+            },
+            "giaiThich": "<p>Speed-critical and small ⇒ SRAM; large and cheap but volatile ⇒ DRAM; rewritable and non-volatile ⇒ Flash; fixed forever and mass-produced ⇒ Mask ROM.</p><p><i>VI: Cần tốc độ và nhỏ ⇒ SRAM; lớn, rẻ nhưng mất dữ liệu ⇒ DRAM; ghi lại được và không mất dữ liệu ⇒ Flash; cố định vĩnh viễn và sản xuất hàng loạt ⇒ Mask ROM.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing DRAM for a cache."
+        },
+        {
+          "loi": "Choosing a rewritable memory where the content never changes (cost)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mask ROM",
+          "vi": "ROM lập trình bằng mặt nạ ở nhà máy"
+        }
+      ]
+    }
+  ]
+}

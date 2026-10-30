@@ -1,0 +1,1226 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-9-1-boolean-gates",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-9-1-boolean-gates"
+  },
+  "exercises": [
+    {
+      "title": "Logic 1 — Laws, De Morgan and universal gates",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Boolean laws",
+        "universal gates"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on Boolean algebra.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về đại số Boole.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "De Morgan swaps AND/OR and complements.",
+        "Use a truth table to verify any doubtful identity."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 1 — Laws, De Morgan and universal gates\n\nAnswer in the answer panel (no code needed).\n\n1. De Morgan: NOT (A AND B) equals …De Morgan: NOT (A AND B) bằng …\n2. Which gates are “universal” (any function can be built from only that gate)?Cổng nào là “vạn năng” (mọi hàm xây được chỉ từ cổng đó)?\n3. A + A·B simplifies to …A + A·B rút gọn thành …\n4. The XOR of A and B is 1 when …XOR của A và B bằng 1 khi …\n5. A truth table of n inputs has how many rows?Bảng chân trị n ngõ vào có bao nhiêu dòng?\n6. A minterm of 3 variables is …Một minterm của 3 biến là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 1 — Laws, De Morgan and universal gates — answer key\n\n1. De Morgan: NOT (A AND B) equals …De Morgan: NOT (A AND B) bằng …\n   Answer: c) (NOT A) OR (NOT B)\n   Complementing an AND turns it into an OR of complements.VI: Lấy bù của AND thành OR của các bù.\n\n2. Which gates are “universal” (any function can be built from only that gate)?Cổng nào là “vạn năng” (mọi hàm xây được chỉ từ cổng đó)?\n   Answer: d) NAND and NOR\n   NAND alone gives NOT, AND and OR; so does NOR.VI: Chỉ NAND đã cho NOT, AND, OR; NOR cũng vậy.\n\n3. A + A·B simplifies to …A + A·B rút gọn thành …\n   Answer: a) A\n   Absorption law: A·(1 + B) = A.VI: Luật hấp thụ: A·(1 + B) = A.\n\n4. The XOR of A and B is 1 when …XOR của A và B bằng 1 khi …\n   Answer: b) A and B differ\n   XOR = A·B′ + A′·B.VI: XOR = A·B′ + A′·B.\n\n5. A truth table of n inputs has how many rows?Bảng chân trị n ngõ vào có bao nhiêu dòng?\n   Answer: c) 2ⁿ\n   Each input has 2 values.VI: Mỗi ngõ vào có 2 giá trị.\n\n6. A minterm of 3 variables is …Một minterm của 3 biến là …\n   Answer: d) a product containing every variable once, true on exactly one row\n   Sum-of-products form ORs the minterms of the rows where F = 1.VI: Dạng tổng các tích OR các minterm của dòng có F = 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>De Morgan: NOT (A AND B) equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>De Morgan: NOT (A AND B) bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A OR B"
+              },
+              {
+                "ma": "b",
+                "noiDung": "NOT A"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(NOT A) OR (NOT B)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(NOT A) AND (NOT B)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Complementing an AND turns it into an OR of complements.</p><p><i>VI: Lấy bù của AND thành OR của các bù.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which gates are “universal” (any function can be built from only that gate)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cổng nào là “vạn năng” (mọi hàm xây được chỉ từ cổng đó)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "AND and OR"
+              },
+              {
+                "ma": "b",
+                "noiDung": "XOR and XNOR"
+              },
+              {
+                "ma": "c",
+                "noiDung": "NOT only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "NAND and NOR"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>NAND alone gives NOT, AND and OR; so does NOR.</p><p><i>VI: Chỉ NAND đã cho NOT, AND, OR; NOR cũng vậy.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A + A·B simplifies to …</p><p style=\"opacity:.75;font-size:.92em\"><i>A + A·B rút gọn thành …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A·B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A + B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Absorption law: A·(1 + B) = A.</p><p><i>VI: Luật hấp thụ: A·(1 + B) = A.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The XOR of A and B is 1 when …</p><p style=\"opacity:.75;font-size:.92em\"><i>XOR của A và B bằng 1 khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "either is 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A and B differ"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A and B are both 1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A and B are equal"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>XOR = A·B′ + A′·B.</p><p><i>VI: XOR = A·B′ + A′·B.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A truth table of n inputs has how many rows?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng chân trị n ngõ vào có bao nhiêu dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2n"
+              },
+              {
+                "ma": "b",
+                "noiDung": "n!"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2ⁿ"
+              },
+              {
+                "ma": "d",
+                "noiDung": "n²"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each input has 2 values.</p><p><i>VI: Mỗi ngõ vào có 2 giá trị.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A minterm of 3 variables is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một minterm của 3 biến là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a sum of all variables"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a single variable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a product true on all rows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a product containing every variable once, true on exactly one row"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Sum-of-products form ORs the minterms of the rows where F = 1.</p><p><i>VI: Dạng tổng các tích OR các minterm của dòng có F = 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Complementing only one side of De Morgan."
+        },
+        {
+          "loi": "Believing XOR is “A or B”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "minterm",
+          "vi": "minterm (tích chuẩn)"
+        },
+        {
+          "en": "De Morgan’s laws",
+          "vi": "định lý De Morgan"
+        }
+      ]
+    },
+    {
+      "title": "Logic 2 — Fill the truth tables",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "truth tables"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Complete the output column (0 or 1) for each of the four functions of A, B, C. (′ = NOT, · = AND, + = OR, ⊕ = XOR.)</p><p><i>This set has 4 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hoàn thành cột ngõ ra (0 hoặc 1) cho mỗi hàm trong bốn hàm của A, B, C. (′ = NOT, · = AND, + = OR, ⊕ = XOR.)</p><p><i>Bộ này có 4 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Evaluate the NOT first, then AND, then OR.",
+        "XOR of three variables is 1 when an odd number of inputs are 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 2 — Fill the truth tables\n\nAnswer in the answer panel (no code needed).\n\n1. F = A·B + C′F = A·B + C′\n2. G = (A + B)′·CG = (A + B)′·C\n3. H = A ⊕ B ⊕ CH = A ⊕ B ⊕ C\n4. M = A·B + B·C + A·CM = A·B + B·C + A·C\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 2 — Fill the truth tables — answer key\n\n1. F = A·B + C′F = A·B + C′\n   - r1.o: 1\n   - r2.o: 0\n   - r3.o: 1\n   - r4.o: 0\n   - r5.o: 1\n   - r6.o: 0\n   - r7.o: 1\n   - r8.o: 1\n   F = A·B + C′: outputs for ABC = 000…111: 10101011.VI: F = A·B + C′: ngõ ra cho ABC = 000…111: 10101011.\n\n2. G = (A + B)′·CG = (A + B)′·C\n   - r1.o: 0\n   - r2.o: 1\n   - r3.o: 0\n   - r4.o: 0\n   - r5.o: 0\n   - r6.o: 0\n   - r7.o: 0\n   - r8.o: 0\n   G = (A + B)′·C: outputs for ABC = 000…111: 01000000.VI: G = (A + B)′·C: ngõ ra cho ABC = 000…111: 01000000.\n\n3. H = A ⊕ B ⊕ CH = A ⊕ B ⊕ C\n   - r1.o: 0\n   - r2.o: 1\n   - r3.o: 1\n   - r4.o: 0\n   - r5.o: 1\n   - r6.o: 0\n   - r7.o: 0\n   - r8.o: 1\n   H = A ⊕ B ⊕ C: outputs for ABC = 000…111: 01101001.VI: H = A ⊕ B ⊕ C: ngõ ra cho ABC = 000…111: 01101001.\n\n4. M = A·B + B·C + A·CM = A·B + B·C + A·C\n   - r1.o: 0\n   - r2.o: 0\n   - r3.o: 0\n   - r4.o: 1\n   - r5.o: 0\n   - r6.o: 1\n   - r7.o: 1\n   - r8.o: 1\n   M = A·B + B·C + A·C: outputs for ABC = 000…111: 00010111.VI: M = A·B + B·C + A·C: ngõ ra cho ABC = 000…111: 00010111.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>F = A·B + C′: outputs for ABC = 000…111: 10101011.</p><p><i>VI: F = A·B + C′: ngõ ra cho ABC = 000…111: 10101011.</i></p><p>G = (A + B)′·C: outputs for ABC = 000…111: 01000000.</p><p><i>VI: G = (A + B)′·C: ngõ ra cho ABC = 000…111: 01000000.</i></p><p>H = A ⊕ B ⊕ C: outputs for ABC = 000…111: 01101001.</p><p><i>VI: H = A ⊕ B ⊕ C: ngõ ra cho ABC = 000…111: 01101001.</i></p><p>M = A·B + B·C + A·C: outputs for ABC = 000…111: 00010111.</p><p><i>VI: M = A·B + B·C + A·C: ngõ ra cho ABC = 000…111: 00010111.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>F = A·B + C′</p><p style=\"opacity:.75;font-size:.92em\"><i>F = A·B + C′</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "A B C"
+              },
+              {
+                "ma": "o",
+                "ten": "Output",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "0 0 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "0 0 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "0 1 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "0 1 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "1 0 0"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "1 0 1"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "1 1 0"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "1 1 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "1",
+              "r2.o": "0",
+              "r3.o": "1",
+              "r4.o": "0",
+              "r5.o": "1",
+              "r6.o": "0",
+              "r7.o": "1",
+              "r8.o": "1"
+            },
+            "giaiThich": "<p>F = A·B + C′: outputs for ABC = 000…111: 10101011.</p><p><i>VI: F = A·B + C′: ngõ ra cho ABC = 000…111: 10101011.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>G = (A + B)′·C</p><p style=\"opacity:.75;font-size:.92em\"><i>G = (A + B)′·C</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "A B C"
+              },
+              {
+                "ma": "o",
+                "ten": "Output",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "0 0 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "0 0 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "0 1 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "0 1 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "1 0 0"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "1 0 1"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "1 1 0"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "1 1 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "0",
+              "r2.o": "1",
+              "r3.o": "0",
+              "r4.o": "0",
+              "r5.o": "0",
+              "r6.o": "0",
+              "r7.o": "0",
+              "r8.o": "0"
+            },
+            "giaiThich": "<p>G = (A + B)′·C: outputs for ABC = 000…111: 01000000.</p><p><i>VI: G = (A + B)′·C: ngõ ra cho ABC = 000…111: 01000000.</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>H = A ⊕ B ⊕ C</p><p style=\"opacity:.75;font-size:.92em\"><i>H = A ⊕ B ⊕ C</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "A B C"
+              },
+              {
+                "ma": "o",
+                "ten": "Output",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "0 0 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "0 0 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "0 1 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "0 1 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "1 0 0"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "1 0 1"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "1 1 0"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "1 1 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "0",
+              "r2.o": "1",
+              "r3.o": "1",
+              "r4.o": "0",
+              "r5.o": "1",
+              "r6.o": "0",
+              "r7.o": "0",
+              "r8.o": "1"
+            },
+            "giaiThich": "<p>H = A ⊕ B ⊕ C: outputs for ABC = 000…111: 01101001.</p><p><i>VI: H = A ⊕ B ⊕ C: ngõ ra cho ABC = 000…111: 01101001.</i></p>"
+          },
+          {
+            "ma": "b4",
+            "de": "<p>M = A·B + B·C + A·C</p><p style=\"opacity:.75;font-size:.92em\"><i>M = A·B + B·C + A·C</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "A B C"
+              },
+              {
+                "ma": "o",
+                "ten": "Output",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "0 0 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "0 0 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "0 1 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "0 1 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "1 0 0"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "1 0 1"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "1 1 0"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "1 1 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "0",
+              "r2.o": "0",
+              "r3.o": "0",
+              "r4.o": "1",
+              "r5.o": "0",
+              "r6.o": "1",
+              "r7.o": "1",
+              "r8.o": "1"
+            },
+            "giaiThich": "<p>M = A·B + B·C + A·C: outputs for ABC = 000…111: 00010111.</p><p><i>VI: M = A·B + B·C + A·C: ngõ ra cho ABC = 000…111: 00010111.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading ′ as a typo instead of NOT."
+        },
+        {
+          "loi": "Giving AND precedence over NOT."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "truth table",
+          "vi": "bảng chân trị"
+        }
+      ]
+    },
+    {
+      "title": "Logic 3 — Which simplified expression is equivalent?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Boolean simplification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Choose the expression that is logically equivalent to the given one (each option was verified against the truth table).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn biểu thức tương đương logic với biểu thức đã cho (mỗi phương án đã được kiểm với bảng chân trị).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Group terms and factor: X·B + X·B′ = X.",
+        "When in doubt, build the truth table of the expression and of each option."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 3 — Which simplified expression is equivalent?\n\nAnswer in the answer panel (no code needed).\n\n1. F = A·B + A·B′ + A′·BF = A·B + A·B′ + A′·B\n2. F = (A + B)·(A + B′)F = (A + B)·(A + B′)\n3. F = (A + B)′ + A′·BF = (A + B)′ + A′·B\n4. F = A·B·C + A·B·C′ + A·B′·CF = A·B·C + A·B·C′ + A·B′·C\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 3 — Which simplified expression is equivalent? — answer key\n\n1. F = A·B + A·B′ + A′·BF = A·B + A·B′ + A′·B\n   Answer: d) A + B\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n2. F = (A + B)·(A + B′)F = (A + B)·(A + B′)\n   Answer: a) A\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n3. F = (A + B)′ + A′·BF = (A + B)′ + A′·B\n   Answer: b) A′\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n\n4. F = A·B·C + A·B·C′ + A·B′·CF = A·B·C + A·B·C′ + A·B′·C\n   Answer: c) A·(B + C)\n   Verified by comparing all rows of the truth table; the others differ on at least one row.VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>F = A·B + A·B′ + A′·B</p><p style=\"opacity:.75;font-size:.92em\"><i>F = A·B + A·B′ + A′·B</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A ⊕ B"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A·B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A′·B′"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A + B"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>F = (A + B)·(A + B′)</p><p style=\"opacity:.75;font-size:.92em\"><i>F = (A + B)·(A + B′)</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A"
+              },
+              {
+                "ma": "b",
+                "noiDung": "B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A + B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A·B′"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>F = (A + B)′ + A′·B</p><p style=\"opacity:.75;font-size:.92em\"><i>F = (A + B)′ + A′·B</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A + B′"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A′"
+              },
+              {
+                "ma": "c",
+                "noiDung": "B′"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A′·B′"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>F = A·B·C + A·B·C′ + A·B′·C</p><p style=\"opacity:.75;font-size:.92em\"><i>F = A·B·C + A·B·C′ + A·B′·C</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A + B + C"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A·B + C"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A·(B + C)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A·B·C"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Verified by comparing all rows of the truth table; the others differ on at least one row.</p><p><i>VI: Đã kiểm bằng cách so mọi dòng của bảng chân trị; các phương án còn lại sai ở ít nhất một dòng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying absorption in the wrong direction."
+        },
+        {
+          "loi": "Forgetting that X + X′ = 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "absorption",
+          "vi": "hấp thụ"
+        },
+        {
+          "en": "factoring",
+          "vi": "đặt nhân tử chung"
+        }
+      ]
+    },
+    {
+      "title": "Logic 4 — Building everything from NAND gates",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "NAND universality"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>How many 2-input NAND gates does the <b>standard</b> construction need for each function? (NOT: tie both inputs together; AND: NAND then NOT; OR: NOT both inputs then NAND; XOR: the classic 4-gate circuit; NOR: OR then NOT.) The constructions were checked by simulating all input combinations.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cách dựng <b>chuẩn</b> mỗi hàm cần bao nhiêu cổng NAND 2 ngõ vào? (NOT: nối hai ngõ vào; AND: NAND rồi NOT; OR: NOT cả hai ngõ vào rồi NAND; XOR: mạch 4 cổng kinh điển; NOR: OR rồi NOT.) Các cách dựng đã được kiểm bằng mô phỏng mọi tổ hợp ngõ vào.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "NAND(A, A) = A′.",
+        "AND = NOT(NAND), OR = NAND of the complements."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 4 — Building everything from NAND gates\n\nAnswer in the answer panel (no code needed).\n\n1. NAND countSố cổng NAND\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 4 — Building everything from NAND gates — answer key\n\n1. NAND countSố cổng NAND\n   - r1.n: 1\n   - r2.n: 2\n   - r3.n: 3\n   - r4.n: 4\n   - r5.n: 4\n   NOT 1; AND 2; OR 3; XOR 4; NOR 4 (OR = 3, plus a NOT = 1).VI: NOT 1; AND 2; OR 3; XOR 4; NOR 4 (OR = 3, thêm NOT = 1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NOT 1; AND 2; OR 3; XOR 4; NOR 4 (OR = 3, plus a NOT = 1).</p><p><i>VI: NOT 1; AND 2; OR 3; XOR 4; NOR 4 (OR = 3, thêm NOT = 1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>NAND count</p><p style=\"opacity:.75;font-size:.92em\"><i>Số cổng NAND</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Function"
+              },
+              {
+                "ma": "n",
+                "ten": "NAND gates"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "NOT"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "AND"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "OR"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "XOR"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "f": "NOR"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "1",
+              "r2.n": "2",
+              "r3.n": "3",
+              "r4.n": "4",
+              "r5.n": "4"
+            },
+            "giaiThich": "<p>NOT 1; AND 2; OR 3; XOR 4; NOR 4 (OR = 3, plus a NOT = 1).</p><p><i>VI: NOT 1; AND 2; OR 3; XOR 4; NOR 4 (OR = 3, thêm NOT = 1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the NOT inputs of OR as free."
+        },
+        {
+          "loi": "Forgetting the final NOT in AND and NOR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "universal gate",
+          "vi": "cổng vạn năng"
+        }
+      ]
+    },
+    {
+      "title": "Logic 5 — Evaluate a gate network",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "combinational circuit evaluation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Network: <code>x = NAND(A, B)</code>, <code>y = NOR(x, C)</code>, <code>z = XOR(y, A)</code>, <code>w = AND(z, C)</code>. For each input vector give the values of <b>y</b>, <b>z</b> and <b>w</b>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mạng: <code>x = NAND(A, B)</code>, <code>y = NOR(x, C)</code>, <code>z = XOR(y, A)</code>, <code>w = AND(z, C)</code>. Với mỗi bộ ngõ vào cho giá trị <b>y</b>, <b>z</b> và <b>w</b>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compute x first, then feed it to the next gate.",
+        "NOR is 1 only when both inputs are 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 5 — Evaluate a gate network\n\nAnswer in the answer panel (no code needed).\n\n1. Network outputsNgõ ra của mạng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Logic 5 — Evaluate a gate network — answer key\n\n1. Network outputsNgõ ra của mạng\n   - r1.y: 0\n   - r1.z: 0\n   - r1.w: 0\n   - r2.y: 0\n   - r2.z: 0\n   - r2.w: 0\n   - r3.y: 1\n   - r3.z: 0\n   - r3.w: 0\n   - r4.y: 0\n   - r4.z: 1\n   - r4.w: 1\n   - r5.y: 0\n   - r5.z: 1\n   - r5.w: 1\n   Evaluate in order x, y, z, w. 000: y=0 z=0 w=0; 011: y=0 z=0 w=0; 110: y=1 z=0 w=0; 101: y=0 z=1 w=1; 111: y=0 z=1 w=1.VI: Tính theo thứ tự x, y, z, w. 000: y=0 z=0 w=0; 011: y=0 z=0 w=0; 110: y=1 z=0 w=0; 101: y=0 z=1 w=1; 111: y=0 z=1 w=1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Evaluate in order x, y, z, w. 000: y=0 z=0 w=0; 011: y=0 z=0 w=0; 110: y=1 z=0 w=0; 101: y=0 z=1 w=1; 111: y=0 z=1 w=1.</p><p><i>VI: Tính theo thứ tự x, y, z, w. 000: y=0 z=0 w=0; 011: y=0 z=0 w=0; 110: y=1 z=0 w=0; 101: y=0 z=1 w=1; 111: y=0 z=1 w=1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Network outputs</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngõ ra của mạng</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "A B C"
+              },
+              {
+                "ma": "y",
+                "ten": "y"
+              },
+              {
+                "ma": "z",
+                "ten": "z"
+              },
+              {
+                "ma": "w",
+                "ten": "w"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "0 0 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "0 1 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "1 1 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "1 0 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "1 1 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.y": "0",
+              "r1.z": "0",
+              "r1.w": "0",
+              "r2.y": "0",
+              "r2.z": "0",
+              "r2.w": "0",
+              "r3.y": "1",
+              "r3.z": "0",
+              "r3.w": "0",
+              "r4.y": "0",
+              "r4.z": "1",
+              "r4.w": "1",
+              "r5.y": "0",
+              "r5.z": "1",
+              "r5.w": "1"
+            },
+            "giaiThich": "<p>Evaluate in order x, y, z, w. 000: y=0 z=0 w=0; 011: y=0 z=0 w=0; 110: y=1 z=0 w=0; 101: y=0 z=1 w=1; 111: y=0 z=1 w=1.</p><p><i>VI: Tính theo thứ tự x, y, z, w. 000: y=0 z=0 w=0; 011: y=0 z=0 w=0; 110: y=1 z=0 w=0; 101: y=0 z=1 w=1; 111: y=0 z=1 w=1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skipping the intermediate wire x."
+        },
+        {
+          "loi": "Reading NAND as AND."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "netlist",
+          "vi": "danh sách cổng nối dây"
+        }
+      ]
+    },
+    {
+      "title": "Logic 6 — Write a gate-level circuit evaluator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "netlist simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A circuit is a list of gates in a valid evaluation order: <code>[outWire, type, in1, in2]</code> (NOT has only <code>in1</code>), with <code>type</code> one of <code>AND OR NAND NOR XOR XNOR NOT</code>. Write <code>evalCircuit(gates, inputs, outputs)</code>: <code>inputs</code> maps primary input names to 0/1; return the array of the values (0/1) of the wires named in <code>outputs</code>, in that order.</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Mạch là danh sách cổng theo thứ tự tính hợp lệ: <code>[dâyRa, loại, vào1, vào2]</code> (NOT chỉ có <code>vào1</code>), <code>loại</code> là một trong <code>AND OR NAND NOR XOR XNOR NOT</code>. Viết <code>evalCircuit(gates, inputs, outputs)</code>: <code>inputs</code> ánh xạ tên ngõ vào sang 0/1; trả mảng giá trị (0/1) của các dây trong <code>outputs</code> theo thứ tự đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "evalCircuit([['s','XOR','a','b'],['c','AND','a','b']], {a:1,b:1}, ['s','c'])",
+          "output": "[0,1]",
+          "explanation": "A half adder: 1 + 1 = sum 0, carry 1.|||Bộ cộng nửa: 1 + 1 = tổng 0, nhớ 1."
+        }
+      ],
+      "hintsJson": [
+        "Keep an object mapping wire names to values and fill it gate by gate.",
+        "Use bitwise operators on 0/1 values, e.g. NAND = (a & b) ^ 1.",
+        "The inputs object may contain truthy values other than 1 — normalize with `? 1 : 0`."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function evalCircuit(gates, inputs, outputs) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function evalCircuit(gates, inputs, outputs) {\n  var v = {}, k;\n  for (k in inputs) v[k] = inputs[k] ? 1 : 0;\n  for (var i = 0; i < gates.length; i++) {\n    var g = gates[i], a = v[g[2]], b = g.length > 3 ? v[g[3]] : 0, r;\n    if (g[1] === 'AND') r = a & b;\n    else if (g[1] === 'OR') r = a | b;\n    else if (g[1] === 'NAND') r = (a & b) ^ 1;\n    else if (g[1] === 'NOR') r = (a | b) ^ 1;\n    else if (g[1] === 'XOR') r = a ^ b;\n    else if (g[1] === 'XNOR') r = (a ^ b) ^ 1;\n    else r = a ^ 1;\n    v[g[0]] = r;\n  }\n  return outputs.map(function (o) { return v[o]; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A combinational circuit is just a dependency-ordered list of Boolean functions; evaluating it is a single pass.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: evalCircuit([[\"s\",\"XOR\",\"a\",\"b\"],[\"c\",\"AND\",\"a\",\"b\"]], {\"a\":1,\"b\":1}, [\"s\",\"c\"])",
+              "vi": "Ca 1"
+            },
+            "goi": "evalCircuit([[\"s\",\"XOR\",\"a\",\"b\"],[\"c\",\"AND\",\"a\",\"b\"]], {\"a\":1,\"b\":1}, [\"s\",\"c\"])",
+            "mongDoi": [
+              0,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: evalCircuit([[\"s\",\"XOR\",\"a\",\"b\"],[\"c\",\"AND\",\"a\",\"b\"]], {\"a\":1,\"b\":0}, [\"s\",\"c\"])",
+              "vi": "Ca 2"
+            },
+            "goi": "evalCircuit([[\"s\",\"XOR\",\"a\",\"b\"],[\"c\",\"AND\",\"a\",\"b\"]], {\"a\":1,\"b\":0}, [\"s\",\"c\"])",
+            "mongDoi": [
+              1,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: evalCircuit([[\"ab\",\"AND\",\"A\",\"B\"],[\"bc\",\"AND\",\"B\",\"C\"],[\"ac\",\"AND\",\"A\",\"C\"],[\"t\",\")",
+              "vi": "Ca 3"
+            },
+            "goi": "evalCircuit([[\"ab\",\"AND\",\"A\",\"B\"],[\"bc\",\"AND\",\"B\",\"C\"],[\"ac\",\"AND\",\"A\",\"C\"],[\"t\",\"OR\",\"ab\",\"bc\"],[\"m\",\"OR\",\"t\",\"ac\"]], {\"A\":1,\"B\":0,\"C\":1}, [\"m\"])",
+            "mongDoi": [
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 4: evalCircuit([[\"t\",\"NAND\",\"A\",\"B\"],[\"u\",\"NAND\",\"A\",\"t\"],[\"v\",\"NAND\",\"B\",\"t\"],[\"y\",\")",
+              "vi": "Ca 4"
+            },
+            "goi": "evalCircuit([[\"t\",\"NAND\",\"A\",\"B\"],[\"u\",\"NAND\",\"A\",\"t\"],[\"v\",\"NAND\",\"B\",\"t\"],[\"y\",\"NAND\",\"u\",\"v\"]], {\"A\":1,\"B\":0}, [\"y\"])",
+            "mongDoi": [
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "evalCircuit([[\"x\",\"NAND\",\"A\",\"B\"],[\"y\",\"NOR\",\"x\",\"C\"],[\"z\",\"XOR\",\"y\",\"A\"],[\"w\",\"AND\",\"z\",\"C\"]], {\"A\":1,\"B\":1,\"C\":1}, [\"y\",\"z\",\"w\"])",
+            "mongDoi": [
+              0,
+              1,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "evalCircuit([[\"ab\",\"AND\",\"A\",\"B\"],[\"bc\",\"AND\",\"B\",\"C\"],[\"ac\",\"AND\",\"A\",\"C\"],[\"t\",\"OR\",\"ab\",\"bc\"],[\"m\",\"OR\",\"t\",\"ac\"]], {\"A\":0,\"B\":0,\"C\":1}, [\"m\",\"ab\"])",
+            "mongDoi": [
+              0,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "evalCircuit([[\"n\",\"NOT\",\"a\"],[\"q\",\"XNOR\",\"n\",\"b\"]], {\"a\":0,\"b\":1}, [\"n\",\"q\"])",
+            "mongDoi": [
+              1,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "evalCircuit([[\"x\",\"NAND\",\"A\",\"A\"],[\"z\",\"NAND\",\"B\",\"B\"],[\"t\",\"NAND\",\"x\",\"z\"],[\"y\",\"NAND\",\"t\",\"t\"]], {\"A\":0,\"B\":0}, [\"y\"])",
+            "mongDoi": [
+              1
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that NOT has one input."
+        },
+        {
+          "loi": "Evaluating the gates in a different order than listed."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

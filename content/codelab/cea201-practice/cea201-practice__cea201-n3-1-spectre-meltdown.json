@@ -1,0 +1,322 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-n3-1-spectre-meltdown",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-n3-1-spectre-meltdown"
+  },
+  "exercises": [
+    {
+      "title": "Speculation 1 — Side channels from speculative execution: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "speculative execution",
+        "side channels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions about why speculation can leak data, and how systems defend.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về việc thực hiện suy đoán có thể làm lộ dữ liệu thế nào và cách phòng thủ.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Architectural state is rolled back; micro-architectural state is not.",
+        "Think about what an attacker can observe: time."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Speculation 1 — Side channels from speculative execution: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. A speculative instruction that turns out to be on the wrong path is discarded. What survives?Một lệnh suy đoán hoá ra nằm sai đường sẽ bị huỷ. Cái gì còn lại?\n2. A cache timing side channel works because …Kênh phụ thời gian cache hoạt động vì …\n3. Which is a software mitigation for bounds-check bypass?Biện pháp phần mềm nào chống bỏ qua kiểm tra biên?\n4. Meltdown-class attacks are mitigated in the OS mainly by …Các tấn công kiểu Meltdown được hệ điều hành giảm thiểu chủ yếu bằng …\n5. Why is the performance feature itself, not a bug in one program, the root cause?Vì sao chính tính năng tăng hiệu năng, chứ không phải lỗi của một chương trình, là gốc rễ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Speculation 1 — Side channels from speculative execution: concepts — answer key\n\n1. A speculative instruction that turns out to be on the wrong path is discarded. What survives?Một lệnh suy đoán hoá ra nằm sai đường sẽ bị huỷ. Cái gì còn lại?\n   Answer: b) Micro-architectural state such as cache contents\n   Rollback restores the architectural state, not the cache; that residue is the side channel.VI: Rollback khôi phục trạng thái kiến trúc, không khôi phục cache; phần dư đó là kênh phụ.\n\n2. A cache timing side channel works because …Kênh phụ thời gian cache hoạt động vì …\n   Answer: c) an access to a cached line is measurably faster than a miss\n   An attacker infers which lines were touched by timing later accesses.VI: Kẻ tấn công suy ra dòng nào đã được chạm bằng cách đo thời gian các truy cập sau.\n\n3. Which is a software mitigation for bounds-check bypass?Biện pháp phần mềm nào chống bỏ qua kiểm tra biên?\n   Answer: d) Insert a speculation barrier or mask the index so out-of-bounds speculation reads nothing useful\n   Fences, index masking or retpolines limit what speculation can reach.VI: Rào chắn, che chỉ số hay retpoline giới hạn những gì suy đoán với tới.\n\n4. Meltdown-class attacks are mitigated in the OS mainly by …Các tấn công kiểu Meltdown được hệ điều hành giảm thiểu chủ yếu bằng …\n   Answer: a) separating kernel and user page tables (kernel page-table isolation)\n   Kernel memory is simply not mapped while user code runs.VI: Bộ nhớ nhân đơn giản là không được ánh xạ khi mã người dùng chạy.\n\n5. Why is the performance feature itself, not a bug in one program, the root cause?Vì sao chính tính năng tăng hiệu năng, chứ không phải lỗi của một chương trình, là gốc rễ?\n   Answer: b) Speculation changes shared micro-architectural state before the checks complete\n   Hardware must be fixed or restricted, software can only reduce exposure.VI: Phải sửa/giới hạn phần cứng, phần mềm chỉ giảm mức phơi bày.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A speculative instruction that turns out to be on the wrong path is discarded. What survives?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lệnh suy đoán hoá ra nằm sai đường sẽ bị huỷ. Cái gì còn lại?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The memory values written by the instruction"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Micro-architectural state such as cache contents"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The architectural registers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The program counter"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Rollback restores the architectural state, not the cache; that residue is the side channel.</p><p><i>VI: Rollback khôi phục trạng thái kiến trúc, không khôi phục cache; phần dư đó là kênh phụ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A cache timing side channel works because …</p><p style=\"opacity:.75;font-size:.92em\"><i>Kênh phụ thời gian cache hoạt động vì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the clock changes with the data"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the operating system reports addresses"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an access to a cached line is measurably faster than a miss"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the cache encrypts data"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>An attacker infers which lines were touched by timing later accesses.</p><p><i>VI: Kẻ tấn công suy ra dòng nào đã được chạm bằng cách đo thời gian các truy cập sau.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which is a software mitigation for bounds-check bypass?</p><p style=\"opacity:.75;font-size:.92em\"><i>Biện pháp phần mềm nào chống bỏ qua kiểm tra biên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Increase the clock rate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Disable the keyboard"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use a bigger disk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Insert a speculation barrier or mask the index so out-of-bounds speculation reads nothing useful"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Fences, index masking or retpolines limit what speculation can reach.</p><p><i>VI: Rào chắn, che chỉ số hay retpoline giới hạn những gì suy đoán với tới.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Meltdown-class attacks are mitigated in the OS mainly by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các tấn công kiểu Meltdown được hệ điều hành giảm thiểu chủ yếu bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "separating kernel and user page tables (kernel page-table isolation)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "adding more RAM"
+              },
+              {
+                "ma": "c",
+                "noiDung": "turning off the cache"
+              },
+              {
+                "ma": "d",
+                "noiDung": "shortening the pipeline"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Kernel memory is simply not mapped while user code runs.</p><p><i>VI: Bộ nhớ nhân đơn giản là không được ánh xạ khi mã người dùng chạy.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why is the performance feature itself, not a bug in one program, the root cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao chính tính năng tăng hiệu năng, chứ không phải lỗi của một chương trình, là gốc rễ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The network is insecure"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Speculation changes shared micro-architectural state before the checks complete"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The compiler is wrong"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The OS scheduler is wrong"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Hardware must be fixed or restricted, software can only reduce exposure.</p><p><i>VI: Phải sửa/giới hạn phần cứng, phần mềm chỉ giảm mức phơi bày.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a squashed instruction leaves no trace at all."
+        },
+        {
+          "loi": "Believing the problem is only in one vendor’s CPU."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "side channel",
+          "vi": "kênh phụ"
+        },
+        {
+          "en": "speculative execution",
+          "vi": "thực hiện suy đoán"
+        }
+      ]
+    },
+    {
+      "title": "Speculation 2 — Order the stages of a bounds-check-bypass leak (concept level)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "Spectre v1"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>This is the conceptual sequence of a Spectre-variant-1 style leak (no code). Put the stages in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đây là chuỗi khái niệm của một vụ rò kiểu Spectre biến thể 1 (không có mã). Sắp các giai đoạn theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The predictor must be trained before it can be fooled.",
+        "The measurement comes last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Speculation 2 — Order the stages of a bounds-check-bypass leak (concept level)\n\nAnswer in the answer panel (no code needed).\n\n1. Stages of a bounds-check-bypass leakCác giai đoạn của vụ rò do bỏ qua kiểm tra biên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Speculation 2 — Order the stages of a bounds-check-bypass leak (concept level) — answer key\n\n1. Stages of a bounds-check-bypass leakCác giai đoạn của vụ rò do bỏ qua kiểm tra biên\n   Answer: s1) The attacker runs the victim code many times with valid indices so the branch predictor learns “the bounds check passes”  →  s2) The attacker supplies an out-of-bounds index and evicts the data needed to resolve the check, so the check resolves slowly  →  s3) The processor speculates past the check and executes the loads using the out-of-bounds index  →  s4) A secret-dependent cache line is brought into the cache by the speculative load  →  s5) The processor discovers the misprediction and discards the speculative results; registers are restored but the cache line stays  →  s6) The attacker times accesses to the candidate cache lines and infers the secret from the one that is fast\n   Training, mis-speculation, residue in the cache, then timing: the defence breaks any link of the chain (barriers, masking, isolation, timer coarsening).VI: Huấn luyện, suy đoán sai, dấu vết trong cache, rồi đo thời gian: phòng thủ cắt bất kỳ mắt xích nào (rào chắn, che chỉ số, cô lập, làm thô bộ đếm giờ).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Training, mis-speculation, residue in the cache, then timing: the defence breaks any link of the chain (barriers, masking, isolation, timer coarsening).</p><p><i>VI: Huấn luyện, suy đoán sai, dấu vết trong cache, rồi đo thời gian: phòng thủ cắt bất kỳ mắt xích nào (rào chắn, che chỉ số, cô lập, làm thô bộ đếm giờ).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Stages of a bounds-check-bypass leak</p><p style=\"opacity:.75;font-size:.92em\"><i>Các giai đoạn của vụ rò do bỏ qua kiểm tra biên</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "The processor speculates past the check and executes the loads using the out-of-bounds index"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "A secret-dependent cache line is brought into the cache by the speculative load"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The processor discovers the misprediction and discards the speculative results; registers are restored but the cache line stays"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "The attacker times accesses to the candidate cache lines and infers the secret from the one that is fast"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "The attacker runs the victim code many times with valid indices so the branch predictor learns “the bounds check passes”"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "The attacker supplies an out-of-bounds index and evicts the data needed to resolve the check, so the check resolves slowly"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6"
+            ],
+            "giaiThich": "<p>Training, mis-speculation, residue in the cache, then timing: the defence breaks any link of the chain (barriers, masking, isolation, timer coarsening).</p><p><i>VI: Huấn luyện, suy đoán sai, dấu vết trong cache, rồi đo thời gian: phòng thủ cắt bất kỳ mắt xích nào (rào chắn, che chỉ số, cô lập, làm thô bộ đếm giờ).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Placing the timing measurement before the speculation."
+        },
+        {
+          "loi": "Believing the architectural registers keep the secret."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "branch predictor training",
+          "vi": "huấn luyện bộ dự đoán"
+        }
+      ]
+    }
+  ]
+}

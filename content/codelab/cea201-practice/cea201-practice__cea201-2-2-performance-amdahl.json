@@ -1,0 +1,913 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-2-2-performance-amdahl",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-2-2-performance-amdahl"
+  },
+  "exercises": [
+    {
+      "title": "Performance 1 — Clock, CPI, instruction count: who controls what?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "CPU time equation",
+        "CPI",
+        "MIPS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Five concept questions on the CPU performance equation <code>T = IC × CPI / f</code>.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu khái niệm về công thức hiệu năng CPU <code>T = IC × CPI / f</code>.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write T = IC × CPI / f and ask which term a change touches.",
+        "MIPS = f / (CPI × 10⁶) hides how much work each instruction does."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 1 — Clock, CPI, instruction count: who controls what?\n\nAnswer in the answer panel (no code needed).\n\n1. Which factor of T = IC × CPI / f is mainly decided by the compiler and the ISA?Thừa số nào của T = IC × CPI / f chủ yếu do trình biên dịch và ISA quyết định?\n2. A faster clock always makes a program run proportionally faster.Clock nhanh hơn luôn làm chương trình chạy nhanh tỉ lệ thuận.\n3. Why can MIPS be a misleading way to compare two different ISAs?Vì sao MIPS có thể gây hiểu lầm khi so sánh hai ISA khác nhau?\n4. The best way to compare the performance of two computers for your workload is …Cách tốt nhất để so sánh hiệu năng hai máy cho khối lượng công việc của bạn là …\n5. Which change lowers CPI without changing the ISA?Thay đổi nào làm giảm CPI mà không đổi ISA?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 1 — Clock, CPI, instruction count: who controls what? — answer key\n\n1. Which factor of T = IC × CPI / f is mainly decided by the compiler and the ISA?Thừa số nào của T = IC × CPI / f chủ yếu do trình biên dịch và ISA quyết định?\n   Answer: c) IC (instruction count)\n   IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.\n\n2. A faster clock always makes a program run proportionally faster.Clock nhanh hơn luôn làm chương trình chạy nhanh tỉ lệ thuận.\n   Answer: d) False: CPI and memory stalls may grow, and IC does not change\n   T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.\n\n3. Why can MIPS be a misleading way to compare two different ISAs?Vì sao MIPS có thể gây hiểu lầm khi so sánh hai ISA khác nhau?\n   Answer: a) Instructions of different ISAs do different amounts of work\n   One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.\n\n4. The best way to compare the performance of two computers for your workload is …Cách tốt nhất để so sánh hiệu năng hai máy cho khối lượng công việc của bạn là …\n   Answer: b) to run your real programs (or a benchmark suite that represents them) and compare execution time\n   Execution time of representative programs is the only consistent measure.VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.\n\n5. Which change lowers CPI without changing the ISA?Thay đổi nào làm giảm CPI mà không đổi ISA?\n   Answer: c) A deeper pipeline with better branch prediction and a larger cache\n   CPI is an organization property: caches, pipelining and prediction reduce stall cycles.VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which factor of T = IC × CPI / f is mainly decided by the compiler and the ISA?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thừa số nào của T = IC × CPI / f chủ yếu do trình biên dịch và ISA quyết định?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The size of the main memory"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The bus width only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "IC (instruction count)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "f (clock rate)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.</p><p><i>VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A faster clock always makes a program run proportionally faster.</p><p style=\"opacity:.75;font-size:.92em\"><i>Clock nhanh hơn luôn làm chương trình chạy nhanh tỉ lệ thuận.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "True: T is inversely proportional to f in every case"
+              },
+              {
+                "ma": "b",
+                "noiDung": "True, but only for integer programs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "False: clock rate has no influence on T"
+              },
+              {
+                "ma": "d",
+                "noiDung": "False: CPI and memory stalls may grow, and IC does not change"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.</p><p><i>VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why can MIPS be a misleading way to compare two different ISAs?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao MIPS có thể gây hiểu lầm khi so sánh hai ISA khác nhau?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Instructions of different ISAs do different amounts of work"
+              },
+              {
+                "ma": "b",
+                "noiDung": "MIPS counts only floating-point operations"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MIPS ignores the clock rate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "MIPS is always larger for CISC"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.</p><p><i>VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The best way to compare the performance of two computers for your workload is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách tốt nhất để so sánh hiệu năng hai máy cho khối lượng công việc của bạn là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "to compare MIPS ratings"
+              },
+              {
+                "ma": "b",
+                "noiDung": "to run your real programs (or a benchmark suite that represents them) and compare execution time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "to compare the clock rates"
+              },
+              {
+                "ma": "d",
+                "noiDung": "to compare the number of cores"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Execution time of representative programs is the only consistent measure.</p><p><i>VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which change lowers CPI without changing the ISA?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi nào làm giảm CPI mà không đổi ISA?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Lowering the clock rate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Using a bigger hard disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A deeper pipeline with better branch prediction and a larger cache"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Adding more instructions to the ISA"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>CPI is an organization property: caches, pipelining and prediction reduce stall cycles.</p><p><i>VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing T depends on the clock rate alone."
+        },
+        {
+          "loi": "Comparing machines with different ISAs by MIPS or by GHz."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CPI",
+          "vi": "số chu kỳ trung bình trên một lệnh"
+        },
+        {
+          "en": "benchmark",
+          "vi": "chương trình đo chuẩn"
+        }
+      ]
+    },
+    {
+      "title": "Performance 2 — CPU time from IC, CPI and clock rate",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "CPU time"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Compute the CPU time <b>T = IC × CPI / f</b> in seconds for each program (give 3 decimals, e.g. <code>0.667</code>).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính thời gian CPU <b>T = IC × CPI / f</b> (giây) cho từng chương trình (3 chữ số thập phân, vd <code>0.667</code>).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Multiply IC by CPI to get the total number of cycles, then divide by f in Hz.",
+        "Convert GHz to Hz: × 10⁹."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 2 — CPU time from IC, CPI and clock rate\n\nAnswer in the answer panel (no code needed).\n\n1. CPU timeThời gian CPU\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 2 — CPU time from IC, CPI and clock rate — answer key\n\n1. CPU timeThời gian CPU\n   - r1.t: 1.000 / 1\n   - r2.t: 0.500 / 0.5\n   - r3.t: 2.400 / 2.4\n   - r4.t: 8.000 / 8\n   T = IC × CPI / f. P1: 1.000 s; P2: 0.500 s; P3: 2.400 s; P4: 8.000 s.VI: T = IC × CPI / f. P1: 1.000 s; P2: 0.500 s; P3: 2.400 s; P4: 8.000 s.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>T = IC × CPI / f. P1: 1.000 s; P2: 0.500 s; P3: 2.400 s; P4: 8.000 s.</p><p><i>VI: T = IC × CPI / f. P1: 1.000 s; P2: 0.500 s; P3: 2.400 s; P4: 8.000 s.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>CPU time</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời gian CPU</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Program"
+              },
+              {
+                "ma": "t",
+                "ten": "T (s)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "P1: IC = 2.0e+9, CPI = 1.5, f = 3 GHz"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "P2: IC = 5.0e+8, CPI = 2, f = 2 GHz"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "P3: IC = 1.2e+10, CPI = 0.8, f = 4 GHz"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "P4: IC = 3.0e+9, CPI = 4, f = 1.5 GHz"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "1.000",
+                "1"
+              ],
+              "r2.t": [
+                "0.500",
+                "0.5"
+              ],
+              "r3.t": [
+                "2.400",
+                "2.4"
+              ],
+              "r4.t": [
+                "8.000",
+                "8"
+              ]
+            },
+            "giaiThich": "<p>T = IC × CPI / f. P1: 1.000 s; P2: 0.500 s; P3: 2.400 s; P4: 8.000 s.</p><p><i>VI: T = IC × CPI / f. P1: 1.000 s; P2: 0.500 s; P3: 2.400 s; P4: 8.000 s.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dividing by f in GHz while IC is in plain instructions (a factor of 10⁹ off)."
+        },
+        {
+          "loi": "Forgetting CPI."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IC (instruction count)",
+          "vi": "số lệnh thực hiện"
+        },
+        {
+          "en": "clock rate",
+          "vi": "tần số xung nhịp"
+        }
+      ]
+    },
+    {
+      "title": "Performance 3 — Weighted CPI of an instruction mix and MIPS",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "weighted CPI",
+        "MIPS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Each program is an instruction mix given as <i>fraction × CPI</i>. For a 2 GHz processor compute the average CPI (2 decimals) and the MIPS rating = f / (CPI × 10⁶) (1 decimal).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi chương trình là một hỗn hợp lệnh dạng <i>tỉ lệ × CPI</i>. Với bộ xử lý 2 GHz, tính CPI trung bình (2 chữ số) và MIPS = f / (CPI × 10⁶) (1 chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Weighted average: multiply each fraction by its CPI and add.",
+        "MIPS = 2000 / CPI when f = 2 GHz."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 3 — Weighted CPI of an instruction mix and MIPS\n\nAnswer in the answer panel (no code needed).\n\n1. Average CPI and MIPS at 2 GHzCPI trung bình và MIPS ở 2 GHz\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 3 — Weighted CPI of an instruction mix and MIPS — answer key\n\n1. Average CPI and MIPS at 2 GHzCPI trung bình và MIPS ở 2 GHz\n   - r1.c: 1.90 / 1.9\n   - r1.p: 1052.6\n   - r2.c: 2.60 / 2.6\n   - r2.p: 769.2\n   - r3.c: 1.80 / 1.8\n   - r3.p: 1111.1\n   CPI = Σ fraction × CPI. P1: CPI 1.90, MIPS 1052.6; P2: CPI 2.60, MIPS 769.2; P3: CPI 1.80, MIPS 1111.1.VI: CPI = Σ tỉ lệ × CPI. P1: CPI 1.90, MIPS 1052.6; P2: CPI 2.60, MIPS 769.2; P3: CPI 1.80, MIPS 1111.1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>CPI = Σ fraction × CPI. P1: CPI 1.90, MIPS 1052.6; P2: CPI 2.60, MIPS 769.2; P3: CPI 1.80, MIPS 1111.1.</p><p><i>VI: CPI = Σ tỉ lệ × CPI. P1: CPI 1.90, MIPS 1052.6; P2: CPI 2.60, MIPS 769.2; P3: CPI 1.80, MIPS 1111.1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Average CPI and MIPS at 2 GHz</p><p style=\"opacity:.75;font-size:.92em\"><i>CPI trung bình và MIPS ở 2 GHz</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Mix (fraction × CPI)"
+              },
+              {
+                "ma": "c",
+                "ten": "Average CPI"
+              },
+              {
+                "ma": "p",
+                "ten": "MIPS"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "P1: 0.5×1 + 0.3×2 + 0.2×4"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "P2: 0.4×1 + 0.4×3 + 0.2×5"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "P3: 0.6×1 + 0.25×2 + 0.1×3 + 0.05×8"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "1.90",
+                "1.9"
+              ],
+              "r1.p": [
+                "1052.6"
+              ],
+              "r2.c": [
+                "2.60",
+                "2.6"
+              ],
+              "r2.p": [
+                "769.2"
+              ],
+              "r3.c": [
+                "1.80",
+                "1.8"
+              ],
+              "r3.p": [
+                "1111.1"
+              ]
+            },
+            "giaiThich": "<p>CPI = Σ fraction × CPI. P1: CPI 1.90, MIPS 1052.6; P2: CPI 2.60, MIPS 769.2; P3: CPI 1.80, MIPS 1111.1.</p><p><i>VI: CPI = Σ tỉ lệ × CPI. P1: CPI 1.90, MIPS 1052.6; P2: CPI 2.60, MIPS 769.2; P3: CPI 1.80, MIPS 1111.1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Averaging the CPIs without weights."
+        },
+        {
+          "loi": "Using f in GHz directly in the MIPS formula."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "instruction mix",
+          "vi": "tỉ lệ các loại lệnh"
+        }
+      ]
+    },
+    {
+      "title": "Performance 4 — Amdahl’s law: overall speedup and its limit",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Amdahl’s law"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A fraction <b>f</b> of the run time is made <b>s</b> times faster. Give the overall speedup 1 / ((1 − f) + f / s) (2 decimals) and the limit when s → ∞, i.e. 1 / (1 − f).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một phần <b>f</b> của thời gian chạy được tăng tốc <b>s</b> lần. Cho tăng tốc tổng thể 1 / ((1 − f) + f / s) (2 chữ số) và giới hạn khi s → ∞, tức 1 / (1 − f).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Time after = (1 − f) + f / s of the old time; speedup is the reciprocal.",
+        "As s grows, f / s → 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 4 — Amdahl’s law: overall speedup and its limit\n\nAnswer in the answer panel (no code needed).\n\n1. Speedup and limitTăng tốc và giới hạn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 4 — Amdahl’s law: overall speedup and its limit — answer key\n\n1. Speedup and limitTăng tốc và giới hạn\n   - r1.u: 1.33\n   - r1.l: 2.00 / 2\n   - r2.u: 2.50 / 2.5\n   - r2.l: 5.00 / 5\n   - r3.u: 5.26\n   - r3.l: 10.00 / 10\n   - r4.u: 10.26\n   - r4.l: 20.00 / 20\n   f=0.5, s=2: 1.33 (limit 2.00); f=0.8, s=4: 2.50 (limit 5.00); f=0.9, s=10: 5.26 (limit 10.00); f=0.95, s=20: 10.26 (limit 20.00). The serial part (1 − f) caps the benefit.VI: f=0.5, s=2: 1.33 (giới hạn 2.00); f=0.8, s=4: 2.50 (giới hạn 5.00); f=0.9, s=10: 5.26 (giới hạn 10.00); f=0.95, s=20: 10.26 (giới hạn 20.00). Phần tuần tự (1 − f) chặn trần lợi ích.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>f=0.5, s=2: 1.33 (limit 2.00); f=0.8, s=4: 2.50 (limit 5.00); f=0.9, s=10: 5.26 (limit 10.00); f=0.95, s=20: 10.26 (limit 20.00). The serial part (1 − f) caps the benefit.</p><p><i>VI: f=0.5, s=2: 1.33 (giới hạn 2.00); f=0.8, s=4: 2.50 (giới hạn 5.00); f=0.9, s=10: 5.26 (giới hạn 10.00); f=0.95, s=20: 10.26 (giới hạn 20.00). Phần tuần tự (1 − f) chặn trần lợi ích.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Speedup and limit</p><p style=\"opacity:.75;font-size:.92em\"><i>Tăng tốc và giới hạn</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "f, s"
+              },
+              {
+                "ma": "u",
+                "ten": "Speedup"
+              },
+              {
+                "ma": "l",
+                "ten": "Limit (s → ∞)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "f = 0.5, s = 2"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "f = 0.8, s = 4"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "f = 0.9, s = 10"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "f = 0.95, s = 20"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.u": [
+                "1.33"
+              ],
+              "r1.l": [
+                "2.00",
+                "2"
+              ],
+              "r2.u": [
+                "2.50",
+                "2.5"
+              ],
+              "r2.l": [
+                "5.00",
+                "5"
+              ],
+              "r3.u": [
+                "5.26"
+              ],
+              "r3.l": [
+                "10.00",
+                "10"
+              ],
+              "r4.u": [
+                "10.26"
+              ],
+              "r4.l": [
+                "20.00",
+                "20"
+              ]
+            },
+            "giaiThich": "<p>f=0.5, s=2: 1.33 (limit 2.00); f=0.8, s=4: 2.50 (limit 5.00); f=0.9, s=10: 5.26 (limit 10.00); f=0.95, s=20: 10.26 (limit 20.00). The serial part (1 − f) caps the benefit.</p><p><i>VI: f=0.5, s=2: 1.33 (giới hạn 2.00); f=0.8, s=4: 2.50 (giới hạn 5.00); f=0.9, s=10: 5.26 (giới hạn 10.00); f=0.95, s=20: 10.26 (giới hạn 20.00). Phần tuần tự (1 − f) chặn trần lợi ích.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Multiplying f by s instead of dividing."
+        },
+        {
+          "loi": "Using f as the portion that is NOT improved."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "speedup",
+          "vi": "hệ số tăng tốc"
+        },
+        {
+          "en": "serial fraction",
+          "vi": "phần tuần tự"
+        }
+      ]
+    },
+    {
+      "title": "Performance 5 — Which machine is faster, and by how much?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "CPU time",
+        "speedup"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>The same program runs on two machines. <table><thead><tr><th></th><th>IC</th><th>CPI</th><th>f</th></tr></thead><tbody><tr><td>A</td><td>1.0 × 10⁹</td><td>1.6</td><td>2.5 GHz</td></tr><tr><td>B</td><td>0.9 × 10⁹</td><td>2.4</td><td>3.2 GHz</td></tr></tbody></table> Compute both CPU times (3 decimals), the speedup of the faster over the slower (2 decimals) and the MIPS of each (1 decimal).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cùng một chương trình chạy trên hai máy. <table><thead><tr><th></th><th>IC</th><th>CPI</th><th>f</th></tr></thead><tbody><tr><td>A</td><td>1.0 × 10⁹</td><td>1.6</td><td>2.5 GHz</td></tr><tr><td>B</td><td>0.9 × 10⁹</td><td>2.4</td><td>3.2 GHz</td></tr></tbody></table> Tính thời gian CPU của cả hai (3 chữ số), hệ số nhanh hơn của máy nhanh so với máy chậm (2 chữ số) và MIPS mỗi máy (1 chữ số).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compute T for each machine first; only then compare.",
+        "Speedup = T(slower) / T(faster)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 5 — Which machine is faster, and by how much?\n\nAnswer in the answer panel (no code needed).\n\n1. Machine A and BMáy A và B\n2. Speedup of the faster machineHệ số nhanh hơn của máy nhanh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Performance 5 — Which machine is faster, and by how much? — answer key\n\n1. Machine A and BMáy A và B\n   - r1.t: 0.640 / 0.64\n   - r1.p: 1562.5\n   - r2.t: 0.675\n   - r2.p: 1333.3\n   T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×; B has the higher clock and the higher MIPS, but compare T, not GHz.VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần.\n\n2. Speedup of the faster machineHệ số nhanh hơn của máy nhanh\n   - r1.v: 1.05\n   0.675 / 0.640 = 1.05.VI: 0.675 / 0.640 = 1.05.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×; B has the higher clock and the higher MIPS, but compare T, not GHz.</p><p><i>VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần.</i></p><p>0.675 / 0.640 = 1.05.</p><p><i>VI: 0.675 / 0.640 = 1.05.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Machine A and B</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy A và B</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Machine"
+              },
+              {
+                "ma": "t",
+                "ten": "T (s)"
+              },
+              {
+                "ma": "p",
+                "ten": "MIPS"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "B"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "0.640",
+                "0.64"
+              ],
+              "r1.p": [
+                "1562.5"
+              ],
+              "r2.t": [
+                "0.675"
+              ],
+              "r2.p": [
+                "1333.3"
+              ]
+            },
+            "giaiThich": "<p>T_A = 0.640 s, T_B = 0.675 s. A is faster by 1.05×; B has the higher clock and the higher MIPS, but compare T, not GHz.</p><p><i>VI: T_A = 0.640 s, T_B = 0.675 s. Máy A nhanh hơn 1.05 lần.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Speedup of the faster machine</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ số nhanh hơn của máy nhanh</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "T(slower) / T(faster)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "1.05"
+              ]
+            },
+            "giaiThich": "<p>0.675 / 0.640 = 1.05.</p><p><i>VI: 0.675 / 0.640 = 1.05.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Declaring the machine with the higher clock the winner without computing T."
+        },
+        {
+          "loi": "Inverting the ratio (faster / slower)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "speedup",
+          "vi": "hệ số tăng tốc"
+        }
+      ]
+    },
+    {
+      "title": "Performance 6 — How many cores do you need? (Amdahl, solved in code)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Amdahl",
+        "parallel speedup"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>coresNeeded(f, target)</code>: the <b>smallest integer number of cores n</b> such that the Amdahl speedup <code>1 / ((1 − f) + f / n)</code> reaches <b>at least</b> <code>target</code>. If even infinitely many cores cannot reach the target (that is, <code>1 / (1 − f) ≤ target</code>), return <code>-1</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>0 &lt; f &lt; 1</code>, <code>target &gt; 1</code>.</li>\n  <li>Return an integer or -1.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>coresNeeded(f, target)</code>: <b>số nhân nguyên nhỏ nhất n</b> sao cho tăng tốc Amdahl <code>1 / ((1 − f) + f / n)</code> đạt <b>ít nhất</b> <code>target</code>. Nếu ngay cả vô hạn nhân cũng không đạt (tức <code>1 / (1 − f) ≤ target</code>) thì trả <code>-1</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>0 &lt; f &lt; 1</code>, <code>target &gt; 1</code>.</li>\n  <li>Trả số nguyên hoặc -1.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "coresNeeded(0.9, 5)",
+          "output": "9",
+          "explanation": "With 9 cores: 1 / (0.1 + 0.9/9) = 5.0 exactly, with 8 cores only 4.7.|||Với 9 nhân: 1 / (0.1 + 0,9/9) = 5,0; với 8 nhân chỉ 4,7."
+        }
+      ],
+      "hintsJson": [
+        "If 1 / (1 − f) ≤ target the answer is −1 (the serial part blocks you).",
+        "Otherwise increase n from 1 until the speedup reaches the target — it always terminates.",
+        "Beware of floating-point: compare with a tiny epsilon (1e-12) so that an exact 5.0 counts."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function coresNeeded(f, target) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function coresNeeded(f, target) {\n  // Even with infinitely many cores the speedup is capped at 1/(1-f).\n  if (1 / (1 - f) <= target) return -1;\n  var n = 1;\n  // epsilon: 1/(0.1+0.9/9) is 5 up to rounding error\n  while (1 / ((1 - f) + f / n) < target - 1e-12) n++;\n  return n;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Speedup(n) is increasing in n and bounded by 1/(1−f). The loop finds the first n that reaches the target; for exact targets use a small epsilon because of floating point.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: coresNeeded(0.9, 5)",
+              "vi": "Ca 1"
+            },
+            "goi": "coresNeeded(0.9, 5)",
+            "mongDoi": 9
+          },
+          {
+            "moTa": {
+              "en": "Case 2: coresNeeded(0.95, 10)",
+              "vi": "Ca 2"
+            },
+            "goi": "coresNeeded(0.95, 10)",
+            "mongDoi": 19
+          },
+          {
+            "moTa": {
+              "en": "Case 3: coresNeeded(0.5, 2)",
+              "vi": "Ca 3"
+            },
+            "goi": "coresNeeded(0.5, 2)",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "Case 4: coresNeeded(0.99, 50)",
+              "vi": "Ca 4"
+            },
+            "goi": "coresNeeded(0.99, 50)",
+            "mongDoi": 99
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "coresNeeded(0.8, 4)",
+            "mongDoi": 16,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "coresNeeded(0.75, 3)",
+            "mongDoi": 9,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "coresNeeded(0.999, 100)",
+            "mongDoi": 111,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "coresNeeded(0.6, 1.5)",
+            "mongDoi": 3,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the −1 case and looping forever."
+        },
+        {
+          "loi": "Using “>” instead of “≥” so the exact target is missed."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -34,6 +34,8 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   'introduction-to-databases': 'dbi202-practice',
   // OSG202 (30/10/2026): lập lịch CPU, thay trang, Banker, đĩa, i-node… — content/codelab/osg202-practice (máy chấm choice/order/table/js).
   'operating-systems': 'osg202-practice',
+  // CEA201 (30/10/2026): cache, Hamming, RAID, pipeline, MESI, MARIE… — content/codelab/cea201-practice (máy chấm choice/order/table/js).
+  'computer-organization-and-architecture': 'cea201-practice',
 });
 
 /**
@@ -61,6 +63,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'academy', ma: 'CSD201', ten: 'Data Structures and Algorithms', courseSlug: 'data-structures-and-algorithms', trackSlug: 'csd201-practice' },
   { loai: 'academy', ma: 'PRJ301', ten: 'Java Web Application Development', courseSlug: 'java-web-application-development', trackSlug: 'prj301-practice' },
   { loai: 'academy', ma: 'OSG202', ten: 'Operating Systems', courseSlug: 'operating-systems', trackSlug: 'osg202-practice' },
+  { loai: 'academy', ma: 'CEA201', ten: 'Computer Organization and Architecture', courseSlug: 'computer-organization-and-architecture', trackSlug: 'cea201-practice' },
   { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
 ] as MucDanhMuc[]);
 

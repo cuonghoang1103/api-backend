@@ -1,0 +1,199 @@
+{
+  "groupSlug": "fptu",
+  "slug": "cea201-practice",
+  "name": "CEA201 — Luyện tập",
+  "language": "javascript",
+  "color": "#8b5cf6",
+  "docsUrl": "https://williamstallings.com/ComputerOrganization/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn CEA201 (Computer Organization and Architecture) bám giáo trình Stallings và dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính (cache, Hamming, RAID, pipeline, MESI, dự đoán rẽ nhánh, bù 2, IEEE 754, MARIE); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt; mỗi chương một Lab (cache, pipeline, ALU, trình dịch + máy ảo MARIE) và hai đề FE thi thử cuối môn.",
+  "modules": [
+    {
+      "slug": "cea201-1-1-org-vs-arch",
+      "name": "1.1 Organization vs Architecture",
+      "level": "BEGINNER",
+      "description": "Luyện: Organization versus architecture: concepts · Is it architecture or organization?"
+    },
+    {
+      "slug": "cea201-2-1-history-moore",
+      "name": "2.1 A brief history & Moore’s law",
+      "level": "BEGINNER",
+      "description": "Luyện: Generations of computers and Moore’s law: concepts · Moore’s law as arithmetic"
+    },
+    {
+      "slug": "cea201-2-2-performance-amdahl",
+      "name": "2.2 Performance: clock, CPI, MIPS & Amdahl’s law",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Clock, CPI, instruction count: who controls what? · CPU time from IC, CPI and clock rate · Weighted CPI of an instruction mix and MIPS · Amdahl’s law: overall speedup and its limit · Which machine is faster, and by how much? · How many cores do you need? (Amdahl, solved in code)"
+    },
+    {
+      "slug": "cea201-3-1-components-cycle",
+      "name": "3.1 Components & the instruction cycle",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PC, MAR, MBR, IR: what does each register do? · Order the fetch phase and the interrupt cycle · Trace a tiny program: the AC after every instruction · How many memory accesses does an instruction need? · Simulate when interrupts are really serviced"
+    },
+    {
+      "slug": "cea201-3-2-bus",
+      "name": "3.2 The bus & interconnection",
+      "level": "BEGINNER",
+      "description": "Luyện: Address, data and control lines · Bus bandwidth and address space · Order an asynchronous read handshake · Sizing the buses of a small system"
+    },
+    {
+      "slug": "cea201-4-1-locality",
+      "name": "4.1 Locality & the cache principle",
+      "level": "BEGINNER",
+      "description": "Luyện: Temporal and spatial locality · Average memory access time (AMAT) with one cache level · Two cache levels, and the hit ratio you need · Row-major or column-major? Count the misses"
+    },
+    {
+      "slug": "cea201-4-2-mapping",
+      "name": "4.2 Cache mapping & replacement",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Direct, associative and set-associative: concepts · Split the address into tag, index and offset · Where does this address go? (tag, line, offset) · Direct-mapped trace: hit or miss? · More associativity, fewer misses? Same references, three caches · How many bits does the cache really contain? · Write a set-associative cache simulator"
+    },
+    {
+      "slug": "cea201-4-lab-cache-simulator",
+      "name": "Lab 4 — A configurable cache simulator",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A configurable cache simulator (mapping, replacement, write policy)"
+    },
+    {
+      "slug": "cea201-5-1-ram-rom",
+      "name": "5.1 RAM, ROM, DRAM vs SRAM",
+      "level": "BEGINNER",
+      "description": "Luyện: SRAM, DRAM and the ROM family · Build a memory module from chips · DRAM refresh overhead and multiplexed address pins · Choose the right memory technology"
+    },
+    {
+      "slug": "cea201-5-2-error-correction",
+      "name": "5.2 Memory organization & error correction",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Parity, Hamming distance and SEC-DED · How many check bits do you need? · Encode with a Hamming code (even parity) · Find and fix the bad bit · Write a Hamming decoder"
+    },
+    {
+      "slug": "cea201-6-1-magnetic-disk",
+      "name": "6.1 Magnetic disk & how it stores data",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Platters, tracks, sectors and access time · Capacity from the geometry · Access time of one request · Sequential versus random: the same 1 MiB · What does fragmentation cost?"
+    },
+    {
+      "slug": "cea201-6-2-raid-ssd",
+      "name": "6.2 RAID, SSD & optical storage",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Levels, striping, mirroring, parity and SSDs · Usable capacity and guaranteed fault tolerance · Compute parity and rebuild a lost disk (XOR) · The small-write penalty · Rebuild a failed disk"
+    },
+    {
+      "slug": "cea201-7-1-io-techniques",
+      "name": "7.1 I/O modules & three techniques",
+      "level": "BEGINNER",
+      "description": "Luyện: Programmed I/O, interrupts, DMA and I/O addressing · How much CPU does an 8 MB/s stream cost? · Order a DMA read from disk · Memory-mapped I/O: read the address map"
+    },
+    {
+      "slug": "cea201-8-1-os-support",
+      "name": "8.1 Scheduling, memory management & virtual memory",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Multiprogramming, paging and virtual memory: concepts · Size the page table · Translate virtual addresses · Page faults: FIFO versus LRU with 3 and 4 frames · Effective access time with a TLB and page faults · Write the MMU: virtual to physical"
+    },
+    {
+      "slug": "cea201-9-1-boolean-gates",
+      "name": "9.1 Boolean algebra & logic gates",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Laws, De Morgan and universal gates · Fill the truth tables · Which simplified expression is equivalent? · Building everything from NAND gates · Evaluate a gate network · Write a gate-level circuit evaluator"
+    },
+    {
+      "slug": "cea201-9-2-circuits",
+      "name": "9.2 Combinational & sequential circuits",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Decoders, multiplexers, adders and flip-flops: concepts · The full-adder truth table · Ripple-carry addition, carry and overflow · Follow a flip-flop through clock edges · Order the design of a combinational circuit · Build a ripple-carry adder with flags"
+    },
+    {
+      "slug": "cea201-9-lab-alu",
+      "name": "Lab 9 — An n-bit ALU with condition flags",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: An n-bit ALU with condition flags"
+    },
+    {
+      "slug": "cea201-10-1-instruction-anatomy",
+      "name": "10.1 Anatomy of a machine instruction",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Opcode, operands and instruction types · How many bits are left for the immediate? · 3-, 2-, 1- and 0-address machines: count the instructions · Run a stack-machine program · Write a stack-machine interpreter"
+    },
+    {
+      "slug": "cea201-10-2-data-representation",
+      "name": "10.2 Data representation: integers & floating point",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Signed numbers and floating point: concepts · Base conversion · Two’s complement: encode and decode · Range of n-bit integers · Add in 8-bit two’s complement: result and overflow · IEEE 754 single precision: encode · Decode an 8-bit mini-float"
+    },
+    {
+      "slug": "cea201-11-1-addressing-modes",
+      "name": "11.1 Addressing modes",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Immediate, direct, indirect, register and displacement · Effective address and operand value · Memory references per mode · Address of an array element · Write the operand fetch unit"
+    },
+    {
+      "slug": "cea201-12-1-registers-cycle",
+      "name": "12.1 Processor organisation & registers",
+      "level": "BEGINNER",
+      "description": "Luyện: Registers, ALU, control unit and the PSW · Fetch and execute three instructions (hex) · Order the micro-operations of an indirect load · Multicycle versus single-cycle execution time"
+    },
+    {
+      "slug": "cea201-12-2-pipelining",
+      "name": "12.2 Instruction pipelining",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Stages, hazards and forwarding: concepts · Speedup of an ideal k-stage pipeline · Count the cycles with and without forwarding · Classify the data dependence · CPI with branch penalties · Write a pipeline cycle counter"
+    },
+    {
+      "slug": "cea201-12-lab-pipeline-diagram",
+      "name": "Lab 12 — Pipeline timing diagram generator",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Pipeline timing diagram generator"
+    },
+    {
+      "slug": "cea201-13-1-risc-cisc",
+      "name": "13.1 RISC vs CISC",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: RISC versus CISC characteristics · Who wins: fewer complex instructions or more simple ones? · Register windows: how many registers? · Simulate window overflow and underflow traps"
+    },
+    {
+      "slug": "cea201-14-1-ilp-superscalar",
+      "name": "14.1 ILP & superscalar",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Superscalar, dependences and renaming: concepts · Which dependences exist? Which survive renaming? · Issue cycles: in-order versus out-of-order, 2-wide and 4-wide · Write the instruction scheduler"
+    },
+    {
+      "slug": "cea201-15-1-multicore",
+      "name": "15.1 Multicore & cache coherence",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Parallel organizations and cache coherence: concepts · Classify with Flynn’s taxonomy · MESI trace for one memory block · Amdahl on n cores: speedup and efficiency · Write a MESI coherence simulator"
+    },
+    {
+      "slug": "cea201-n1-1-marie",
+      "name": "16.1 Practical assembly language with MARIE",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The machine and its instruction set · Assemble and disassemble by hand · Run a multiplication loop: output and instruction count · Trace a countdown, instruction by instruction · Complete the program: print the larger of two inputs · Which program does the job? (verified by execution) · Write the machine: fetch, decode, execute"
+    },
+    {
+      "slug": "cea201-16-lab-marie-assembler",
+      "name": "Lab 16 — A MARIE assembler and virtual machine",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A MARIE assembler and virtual machine"
+    },
+    {
+      "slug": "cea201-n2-1-branch-prediction",
+      "name": "17.1 Branch prediction",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Why predict branches, and how · Follow a 2-bit counter step by step · Mispredictions of three predictors on four branch patterns · Simulate a branch history table"
+    },
+    {
+      "slug": "cea201-n3-1-spectre-meltdown",
+      "name": "18.1 Speculative execution & Spectre / Meltdown",
+      "level": "BEGINNER",
+      "description": "Luyện: Side channels from speculative execution: concepts · Order the stages of a bounds-check-bypass leak (concept level)"
+    },
+    {
+      "slug": "cea201-20-fe-mock",
+      "name": "20 FE practice: two mock final exams",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: 20 questions (concepts and calculations) · 20 questions (more calculations)"
+    }
+  ]
+}

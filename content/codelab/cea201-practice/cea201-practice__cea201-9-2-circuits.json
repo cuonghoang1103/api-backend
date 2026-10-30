@@ -1,0 +1,1119 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-9-2-circuits",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-9-2-circuits"
+  },
+  "exercises": [
+    {
+      "title": "Circuits 1 — Decoders, multiplexers, adders and flip-flops: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "decoder",
+        "multiplexer",
+        "adder",
+        "flip-flop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on the building blocks of a datapath.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về các khối xây dựng của đường dữ liệu.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Decoder: n → 2ⁿ. Mux: 2ⁿ → 1 with n selects.",
+        "n flip-flops give up to 2ⁿ states."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 1 — Decoders, multiplexers, adders and flip-flops: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. A 3-to-8 decoder has …Bộ giải mã 3-sang-8 có …\n2. An 8-to-1 multiplexer needs how many select lines?Bộ chọn kênh 8-sang-1 cần bao nhiêu đường chọn?\n3. A half adder computes …Bộ cộng nửa tính …\n4. The difference between a latch/flip-flop and a combinational circuit is that it …Khác biệt giữa chốt/flip-flop và mạch tổ hợp là nó …\n5. A T flip-flop with T = 1 …Flip-flop T với T = 1 …\n6. How many flip-flops are needed for a counter with 10 states?Cần bao nhiêu flip-flop cho bộ đếm 10 trạng thái?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 1 — Decoders, multiplexers, adders and flip-flops: concepts — answer key\n\n1. A 3-to-8 decoder has …Bộ giải mã 3-sang-8 có …\n   Answer: d) 3 inputs and 8 outputs, exactly one of which is 1\n   It turns a binary number into a one-hot output.VI: Nó biến số nhị phân thành đầu ra one-hot.\n\n2. An 8-to-1 multiplexer needs how many select lines?Bộ chọn kênh 8-sang-1 cần bao nhiêu đường chọn?\n   Answer: a) 3\n   log₂ 8 = 3.VI: log₂ 8 = 3.\n\n3. A half adder computes …Bộ cộng nửa tính …\n   Answer: b) sum = A ⊕ B and carry = A·B\n   No carry-in, so it adds two bits only.VI: Không có nhớ vào nên chỉ cộng hai bit.\n\n4. The difference between a latch/flip-flop and a combinational circuit is that it …Khác biệt giữa chốt/flip-flop và mạch tổ hợp là nó …\n   Answer: c) stores state: the output depends on the past inputs\n   Sequential circuits have memory.VI: Mạch tuần tự có bộ nhớ.\n\n5. A T flip-flop with T = 1 …Flip-flop T với T = 1 …\n   Answer: d) toggles on every clock edge\n   T = 0 holds; T = 1 toggles — the basis of binary counters.VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.\n\n6. How many flip-flops are needed for a counter with 10 states?Cần bao nhiêu flip-flop cho bộ đếm 10 trạng thái?\n   Answer: a) 4\n   ⌈log₂ 10⌉ = 4.VI: ⌈log₂ 10⌉ = 4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A 3-to-8 decoder has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ giải mã 3-sang-8 có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "8 inputs and 3 outputs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3 inputs and 3 outputs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8 inputs and 8 outputs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3 inputs and 8 outputs, exactly one of which is 1"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It turns a binary number into a one-hot output.</p><p><i>VI: Nó biến số nhị phân thành đầu ra one-hot.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>An 8-to-1 multiplexer needs how many select lines?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ chọn kênh 8-sang-1 cần bao nhiêu đường chọn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>log₂ 8 = 3.</p><p><i>VI: log₂ 8 = 3.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A half adder computes …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ cộng nửa tính …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "carry = A ⊕ B ⊕ Cin"
+              },
+              {
+                "ma": "b",
+                "noiDung": "sum = A ⊕ B and carry = A·B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sum = A·B and carry = A ⊕ B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "sum = A + B only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>No carry-in, so it adds two bits only.</p><p><i>VI: Không có nhớ vào nên chỉ cộng hai bit.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The difference between a latch/flip-flop and a combinational circuit is that it …</p><p style=\"opacity:.75;font-size:.92em\"><i>Khác biệt giữa chốt/flip-flop và mạch tổ hợp là nó …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is always slower"
+              },
+              {
+                "ma": "b",
+                "noiDung": "has no clock"
+              },
+              {
+                "ma": "c",
+                "noiDung": "stores state: the output depends on the past inputs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "has no inputs"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Sequential circuits have memory.</p><p><i>VI: Mạch tuần tự có bộ nhớ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A T flip-flop with T = 1 …</p><p style=\"opacity:.75;font-size:.92em\"><i>Flip-flop T với T = 1 …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "holds its value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "always sets"
+              },
+              {
+                "ma": "c",
+                "noiDung": "always resets"
+              },
+              {
+                "ma": "d",
+                "noiDung": "toggles on every clock edge"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>T = 0 holds; T = 1 toggles — the basis of binary counters.</p><p><i>VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>How many flip-flops are needed for a counter with 10 states?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cần bao nhiêu flip-flop cho bộ đếm 10 trạng thái?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "10"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>⌈log₂ 10⌉ = 4.</p><p><i>VI: ⌈log₂ 10⌉ = 4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing the number of select lines and data inputs of a mux."
+        },
+        {
+          "loi": "Forgetting that sequential circuits need a clock."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "one-hot",
+          "vi": "chỉ một bit bằng 1"
+        },
+        {
+          "en": "flip-flop",
+          "vi": "flip-flop (phần tử nhớ 1 bit)"
+        }
+      ]
+    },
+    {
+      "title": "Circuits 2 — The full-adder truth table",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "full adder"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A full adder adds A + B + Cin. Give Sum and Cout for every input combination.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ cộng đầy đủ cộng A + B + Cin. Cho Sum và Cout với mọi tổ hợp ngõ vào.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count the ones: the binary value of the count is (Cout Sum).",
+        "Sum = 1 for an odd count."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 2 — The full-adder truth table\n\nAnswer in the answer panel (no code needed).\n\n1. Full adderBộ cộng đầy đủ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 2 — The full-adder truth table — answer key\n\n1. Full adderBộ cộng đầy đủ\n   - r1.s: 0\n   - r1.c: 0\n   - r2.s: 1\n   - r2.c: 0\n   - r3.s: 1\n   - r3.c: 0\n   - r4.s: 0\n   - r4.c: 1\n   - r5.s: 1\n   - r5.c: 0\n   - r6.s: 0\n   - r6.c: 1\n   - r7.s: 0\n   - r7.c: 1\n   - r8.s: 1\n   - r8.c: 1\n   Sum = A ⊕ B ⊕ Cin (odd number of ones); Cout = 1 when at least two inputs are 1 (majority). The binary value of Cout·Sum equals A + B + Cin.VI: Sum = A ⊕ B ⊕ Cin (số lẻ bit 1); Cout = 1 khi có ít nhất hai ngõ vào bằng 1 (đa số). Giá trị nhị phân Cout·Sum bằng A + B + Cin.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sum = A ⊕ B ⊕ Cin (odd number of ones); Cout = 1 when at least two inputs are 1 (majority). The binary value of Cout·Sum equals A + B + Cin.</p><p><i>VI: Sum = A ⊕ B ⊕ Cin (số lẻ bit 1); Cout = 1 khi có ít nhất hai ngõ vào bằng 1 (đa số). Giá trị nhị phân Cout·Sum bằng A + B + Cin.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Full adder</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ cộng đầy đủ</i></p>",
+            "cot": [
+              {
+                "ma": "i",
+                "ten": "A B Cin"
+              },
+              {
+                "ma": "s",
+                "ten": "Sum",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "Cout",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "i": "0 0 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "i": "0 0 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "i": "0 1 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "i": "0 1 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "i": "1 0 0"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "i": "1 0 1"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "i": "1 1 0"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "i": "1 1 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "0",
+              "r1.c": "0",
+              "r2.s": "1",
+              "r2.c": "0",
+              "r3.s": "1",
+              "r3.c": "0",
+              "r4.s": "0",
+              "r4.c": "1",
+              "r5.s": "1",
+              "r5.c": "0",
+              "r6.s": "0",
+              "r6.c": "1",
+              "r7.s": "0",
+              "r7.c": "1",
+              "r8.s": "1",
+              "r8.c": "1"
+            },
+            "giaiThich": "<p>Sum = A ⊕ B ⊕ Cin (odd number of ones); Cout = 1 when at least two inputs are 1 (majority). The binary value of Cout·Sum equals A + B + Cin.</p><p><i>VI: Sum = A ⊕ B ⊕ Cin (số lẻ bit 1); Cout = 1 khi có ít nhất hai ngõ vào bằng 1 (đa số). Giá trị nhị phân Cout·Sum bằng A + B + Cin.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving Cout = 1 for a single 1 input."
+        },
+        {
+          "loi": "Confusing Sum with OR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "carry-out",
+          "vi": "nhớ ra"
+        }
+      ]
+    },
+    {
+      "title": "Circuits 3 — Ripple-carry addition, carry and overflow",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "binary addition",
+        "overflow"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A 4-bit ripple-carry adder adds two numbers. Give the <b>4-bit sum</b>, the <b>carry-out</b> of the top bit, and the <b>signed overflow</b> flag (two’s complement: overflow when both operands have the same sign and the sum has a different sign).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ cộng nối tiếp 4 bit cộng hai số. Cho <b>tổng 4 bit</b>, <b>nhớ ra</b> của bit cao nhất và cờ <b>tràn có dấu</b> (bù 2: tràn khi hai toán hạng cùng dấu nhưng tổng khác dấu).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Add from the right, carrying into the next bit.",
+        "Signed overflow only when the operands have equal sign bits and the result differs."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 3 — Ripple-carry addition, carry and overflow\n\nAnswer in the answer panel (no code needed).\n\n1. Ripple-carryCộng nối tiếp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 3 — Ripple-carry addition, carry and overflow — answer key\n\n1. Ripple-carryCộng nối tiếp\n   - r1.s: 1001\n   - r1.c: 0\n   - r1.o: 1\n   - r2.s: 0000\n   - r2.c: 1\n   - r2.o: 0\n   - r3.s: 1000\n   - r3.c: 0\n   - r3.o: 1\n   - r4.s: 0000\n   - r4.c: 1\n   - r4.o: 1\n   - r5.s: 0000\n   - r5.c: 1\n   - r5.o: 0\n   0110+0011 = 1001, carry 0, overflow 1; 1011+0101 = 0000, carry 1, overflow 0; 0111+0001 = 1000, carry 0, overflow 1; 1000+1000 = 0000, carry 1, overflow 1; 1111+0001 = 0000, carry 1, overflow 0. Carry-out and signed overflow are different flags (carry matters for unsigned, overflow for signed numbers).VI: 0110+0011 = 1001, nhớ 0, tràn 1; 1011+0101 = 0000, nhớ 1, tràn 0; 0111+0001 = 1000, nhớ 0, tràn 1; 1000+1000 = 0000, nhớ 1, tràn 1; 1111+0001 = 0000, nhớ 1, tràn 0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>0110+0011 = 1001, carry 0, overflow 1; 1011+0101 = 0000, carry 1, overflow 0; 0111+0001 = 1000, carry 0, overflow 1; 1000+1000 = 0000, carry 1, overflow 1; 1111+0001 = 0000, carry 1, overflow 0. Carry-out and signed overflow are different flags (carry matters for unsigned, overflow for signed numbers).</p><p><i>VI: 0110+0011 = 1001, nhớ 0, tràn 1; 1011+0101 = 0000, nhớ 1, tràn 0; 0111+0001 = 1000, nhớ 0, tràn 1; 1000+1000 = 0000, nhớ 1, tràn 1; 1111+0001 = 0000, nhớ 1, tràn 0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Ripple-carry</p><p style=\"opacity:.75;font-size:.92em\"><i>Cộng nối tiếp</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "A + B"
+              },
+              {
+                "ma": "s",
+                "ten": "Sum"
+              },
+              {
+                "ma": "c",
+                "ten": "Carry-out"
+              },
+              {
+                "ma": "o",
+                "ten": "Overflow",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "0110 + 0011"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "1011 + 0101"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "0111 + 0001"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "1000 + 1000"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "1111 + 0001"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "1001",
+              "r1.c": "0",
+              "r1.o": "1",
+              "r2.s": "0000",
+              "r2.c": "1",
+              "r2.o": "0",
+              "r3.s": "1000",
+              "r3.c": "0",
+              "r3.o": "1",
+              "r4.s": "0000",
+              "r4.c": "1",
+              "r4.o": "1",
+              "r5.s": "0000",
+              "r5.c": "1",
+              "r5.o": "0"
+            },
+            "giaiThich": "<p>0110+0011 = 1001, carry 0, overflow 1; 1011+0101 = 0000, carry 1, overflow 0; 0111+0001 = 1000, carry 0, overflow 1; 1000+1000 = 0000, carry 1, overflow 1; 1111+0001 = 0000, carry 1, overflow 0. Carry-out and signed overflow are different flags (carry matters for unsigned, overflow for signed numbers).</p><p><i>VI: 0110+0011 = 1001, nhớ 0, tràn 1; 1011+0101 = 0000, nhớ 1, tràn 0; 0111+0001 = 1000, nhớ 0, tràn 1; 1000+1000 = 0000, nhớ 1, tràn 1; 1111+0001 = 0000, nhớ 1, tràn 0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Equating carry-out with overflow."
+        },
+        {
+          "loi": "Starting the addition from the left."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "overflow",
+          "vi": "tràn số"
+        },
+        {
+          "en": "carry",
+          "vi": "nhớ"
+        }
+      ]
+    },
+    {
+      "title": "Circuits 4 — Follow a flip-flop through clock edges",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "flip-flops"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>All flip-flops start with Q = 0 and change only on a rising clock edge. For every edge give Q <b>after</b> the edge. <b>D</b>: Q takes D. <b>T</b>: Q toggles when T = 1. <b>JK</b>: J=1,K=0 sets; J=0,K=1 resets; J=K=1 toggles; J=K=0 holds.</p><p><i>This set has 3 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi flip-flop bắt đầu với Q = 0 và chỉ đổi ở sườn lên của clock. Với mỗi sườn cho Q <b>sau</b> sườn đó. <b>D</b>: Q lấy giá trị D. <b>T</b>: Q đảo khi T = 1. <b>JK</b>: J=1,K=0 đặt; J=0,K=1 xoá; J=K=1 đảo; J=K=0 giữ.</p><p><i>Bộ này có 3 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep the current Q and update it at each edge using the rule of the flip-flop.",
+        "JK with J=K=1 is a toggle, like T=1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 4 — Follow a flip-flop through clock edges\n\nAnswer in the answer panel (no code needed).\n\n1. D flip-flopFlip-flop D\n2. T flip-flopFlip-flop T\n3. JK flip-flopFlip-flop JK\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 4 — Follow a flip-flop through clock edges — answer key\n\n1. D flip-flopFlip-flop D\n   - r1.q: 1\n   - r2.q: 1\n   - r3.q: 0\n   - r4.q: 1\n   - r5.q: 0\n   - r6.q: 0\n   - r7.q: 1\n   A D flip-flop simply copies D at each edge: 1101001.VI: Flip-flop D chỉ chép D ở mỗi sườn: 1101001.\n\n2. T flip-flopFlip-flop T\n   - r1.q: 1\n   - r2.q: 1\n   - r3.q: 0\n   - r4.q: 1\n   - r5.q: 0\n   - r6.q: 0\n   - r7.q: 1\n   Q toggles when T = 1: 1101001.VI: Q đảo khi T = 1: 1101001.\n\n3. JK flip-flopFlip-flop JK\n   - r1.q: 1\n   - r2.q: 1\n   - r3.q: 0\n   - r4.q: 1\n   - r5.q: 0\n   - r6.q: 0\n   - r7.q: 1\n   Q: 1101001. J=K=1 toggles; J=K=0 holds.VI: Q: 1101001. J=K=1 đảo; J=K=0 giữ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A D flip-flop simply copies D at each edge: 1101001.</p><p><i>VI: Flip-flop D chỉ chép D ở mỗi sườn: 1101001.</i></p><p>Q toggles when T = 1: 1101001.</p><p><i>VI: Q đảo khi T = 1: 1101001.</i></p><p>Q: 1101001. J=K=1 toggles; J=K=0 holds.</p><p><i>VI: Q: 1101001. J=K=1 đảo; J=K=0 giữ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>D flip-flop</p><p style=\"opacity:.75;font-size:.92em\"><i>Flip-flop D</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Edge, D"
+              },
+              {
+                "ma": "q",
+                "ten": "Q",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "edge 1: D = 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "edge 2: D = 1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "edge 3: D = 0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "edge 4: D = 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "edge 5: D = 0"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "e": "edge 6: D = 0"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "e": "edge 7: D = 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "1",
+              "r2.q": "1",
+              "r3.q": "0",
+              "r4.q": "1",
+              "r5.q": "0",
+              "r6.q": "0",
+              "r7.q": "1"
+            },
+            "giaiThich": "<p>A D flip-flop simply copies D at each edge: 1101001.</p><p><i>VI: Flip-flop D chỉ chép D ở mỗi sườn: 1101001.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>T flip-flop</p><p style=\"opacity:.75;font-size:.92em\"><i>Flip-flop T</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Edge, T"
+              },
+              {
+                "ma": "q",
+                "ten": "Q",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "edge 1: T = 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "edge 2: T = 0"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "edge 3: T = 1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "edge 4: T = 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "edge 5: T = 1"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "e": "edge 6: T = 0"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "e": "edge 7: T = 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "1",
+              "r2.q": "1",
+              "r3.q": "0",
+              "r4.q": "1",
+              "r5.q": "0",
+              "r6.q": "0",
+              "r7.q": "1"
+            },
+            "giaiThich": "<p>Q toggles when T = 1: 1101001.</p><p><i>VI: Q đảo khi T = 1: 1101001.</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>JK flip-flop</p><p style=\"opacity:.75;font-size:.92em\"><i>Flip-flop JK</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Edge, J, K"
+              },
+              {
+                "ma": "q",
+                "ten": "Q",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "edge 1: J = 1, K = 0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "edge 2: J = 0, K = 0"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "edge 3: J = 1, K = 1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "edge 4: J = 1, K = 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "edge 5: J = 0, K = 1"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "e": "edge 6: J = 0, K = 0"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "e": "edge 7: J = 1, K = 0"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "1",
+              "r2.q": "1",
+              "r3.q": "0",
+              "r4.q": "1",
+              "r5.q": "0",
+              "r6.q": "0",
+              "r7.q": "1"
+            },
+            "giaiThich": "<p>Q: 1101001. J=K=1 toggles; J=K=0 holds.</p><p><i>VI: Q: 1101001. J=K=1 đảo; J=K=0 giữ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Changing Q between edges."
+        },
+        {
+          "loi": "Applying the JK rule to the pair of the previous edge."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "clock edge",
+          "vi": "sườn xung nhịp"
+        },
+        {
+          "en": "toggle",
+          "vi": "đảo trạng thái"
+        }
+      ]
+    },
+    {
+      "title": "Circuits 5 — Order the design of a combinational circuit",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "combinational design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Put the classic design procedure in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp quy trình thiết kế kinh điển theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "You cannot simplify before you have an expression.",
+        "Verify last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 5 — Order the design of a combinational circuit\n\nAnswer in the answer panel (no code needed).\n\n1. Design a combinational circuitThiết kế mạch tổ hợp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Circuits 5 — Order the design of a combinational circuit — answer key\n\n1. Design a combinational circuitThiết kế mạch tổ hợp\n   Answer: s1) State the problem: inputs, outputs and what each output must be  →  s2) Write the truth table  →  s3) Derive the Boolean expression (sum of minterms)  →  s4) Simplify it (laws or a Karnaugh map)  →  s5) Draw the gate-level circuit and verify it against the truth table\n   Truth table first; simplification reduces gates and delay; verify at the end.VI: Bảng chân trị trước; rút gọn giảm số cổng và độ trễ; kiểm lại ở cuối.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Truth table first; simplification reduces gates and delay; verify at the end.</p><p><i>VI: Bảng chân trị trước; rút gọn giảm số cổng và độ trễ; kiểm lại ở cuối.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Design a combinational circuit</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết kế mạch tổ hợp</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "Derive the Boolean expression (sum of minterms)"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Simplify it (laws or a Karnaugh map)"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "Draw the gate-level circuit and verify it against the truth table"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "State the problem: inputs, outputs and what each output must be"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Write the truth table"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>Truth table first; simplification reduces gates and delay; verify at the end.</p><p><i>VI: Bảng chân trị trước; rút gọn giảm số cổng và độ trễ; kiểm lại ở cuối.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Drawing the circuit before the truth table."
+        },
+        {
+          "loi": "Skipping verification."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Karnaugh map",
+          "vi": "bản đồ Karnaugh"
+        }
+      ]
+    },
+    {
+      "title": "Circuits 6 — Build a ripple-carry adder with flags",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "ripple-carry adder",
+        "overflow"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>addBits(a, b)</code> where <code>a</code> and <code>b</code> are binary strings of the same length (MSB first). Simulate a ripple-carry adder bit by bit using only boolean operators (full adders) and return <code>{ sum, carryOut, overflow }</code>: <code>sum</code> is the binary string of the same length, <code>carryOut</code> the carry out of the MSB (0/1) and <code>overflow</code> a boolean — the signed overflow, equal to <code>carry into MSB XOR carry out of MSB</code>.</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>addBits(a, b)</code> với <code>a</code>, <code>b</code> là chuỗi nhị phân cùng độ dài (MSB trước). Mô phỏng bộ cộng nối tiếp từng bit chỉ bằng phép toán logic (bộ cộng đầy đủ) và trả <code>{ sum, carryOut, overflow }</code>: <code>sum</code> là chuỗi nhị phân cùng độ dài, <code>carryOut</code> là nhớ ra khỏi MSB (0/1), <code>overflow</code> là boolean — tràn có dấu, bằng <code>nhớ vào MSB XOR nhớ ra MSB</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "addBits(\"0111\", \"0001\")",
+          "output": "{\"sum\":\"1000\",\"carryOut\":0,\"overflow\":true}",
+          "explanation": "7 + 1 = 8 does not fit in 4-bit two’s complement: carry into MSB = 1, carry out = 0 ⇒ overflow.|||7 + 1 = 8 không vừa 4 bit bù 2: nhớ vào MSB = 1, nhớ ra = 0 ⇒ tràn."
+        }
+      ],
+      "hintsJson": [
+        "Walk from the last character to the first, keeping the carry.",
+        "Full adder: sum = x ^ y ^ c, new carry = (x & y) | (c & (x ^ y)).",
+        "Remember the carry that enters the MSB column before you update it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function addBits(a, b) {\n  return { sum: \"\", carryOut: 0, overflow: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function addBits(a, b) {\n  var n = a.length, c = 0, s = '', cin = 0;\n  for (var i = n - 1; i >= 0; i--) {\n    var x = a[i] === '1' ? 1 : 0, y = b[i] === '1' ? 1 : 0;\n    if (i === 0) cin = c;\n    var sum = x ^ y ^ c;\n    c = (x & y) | (c & (x ^ y));\n    s = sum + s;\n  }\n  return { sum: s, carryOut: c, overflow: (cin ^ c) === 1 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Signed overflow is the XOR of the carries into and out of the sign bit; unsigned overflow is just the carry out.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: addBits(\"0111\", \"0001\")",
+              "vi": "Ca 1"
+            },
+            "goi": "addBits(\"0111\", \"0001\")",
+            "mongDoi": {
+              "sum": "1000",
+              "carryOut": 0,
+              "overflow": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: addBits(\"1111\", \"0001\")",
+              "vi": "Ca 2"
+            },
+            "goi": "addBits(\"1111\", \"0001\")",
+            "mongDoi": {
+              "sum": "0000",
+              "carryOut": 1,
+              "overflow": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: addBits(\"0101\", \"0010\")",
+              "vi": "Ca 3"
+            },
+            "goi": "addBits(\"0101\", \"0010\")",
+            "mongDoi": {
+              "sum": "0111",
+              "carryOut": 0,
+              "overflow": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: addBits(\"1000\", \"1000\")",
+              "vi": "Ca 4"
+            },
+            "goi": "addBits(\"1000\", \"1000\")",
+            "mongDoi": {
+              "sum": "0000",
+              "carryOut": 1,
+              "overflow": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "addBits(\"10110010\", \"01101111\")",
+            "mongDoi": {
+              "sum": "00100001",
+              "carryOut": 1,
+              "overflow": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "addBits(\"11111111\", \"11111111\")",
+            "mongDoi": {
+              "sum": "11111110",
+              "carryOut": 1,
+              "overflow": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "addBits(\"0\", \"0\")",
+            "mongDoi": {
+              "sum": "0",
+              "carryOut": 0,
+              "overflow": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "addBits(\"01111111\", \"01111111\")",
+            "mongDoi": {
+              "sum": "11111110",
+              "carryOut": 0,
+              "overflow": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the carry-out alone as the overflow flag."
+        },
+        {
+          "loi": "Using parseInt and + (no per-bit simulation, and it breaks the overflow flag)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

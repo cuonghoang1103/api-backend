@@ -1,0 +1,658 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-3-2-bus",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-3-2-bus"
+  },
+  "exercises": [
+    {
+      "title": "Bus 1 — Address, data and control lines",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "bus",
+        "arbitration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions about system buses and arbitration.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về bus hệ thống và phân xử bus.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "n address lines ⇒ 2ⁿ addresses.",
+        "Data width ≠ address width."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 1 — Address, data and control lines\n\nAnswer in the answer panel (no code needed).\n\n1. The width of the ADDRESS bus determines …Độ rộng bus ĐỊA CHỈ quyết định …\n2. The width of the DATA bus determines …Độ rộng bus DỮ LIỆU quyết định …\n3. Why do systems use bus ARBITRATION?Vì sao hệ thống dùng PHÂN XỬ bus?\n4. In an ASYNCHRONOUS bus, transfers are timed by …Ở bus BẤT ĐỒNG BỘ, việc truyền được định thời bởi …\n5. Compared to a shared bus, a point-to-point interconnect (PCIe, QPI) …So với bus dùng chung, kết nối điểm-điểm (PCIe, QPI) …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 1 — Address, data and control lines — answer key\n\n1. The width of the ADDRESS bus determines …Độ rộng bus ĐỊA CHỈ quyết định …\n   Answer: a) the maximum memory capacity that can be addressed\n   n address lines can name 2ⁿ locations.VI: n đường địa chỉ gọi tên được 2ⁿ vị trí.\n\n2. The width of the DATA bus determines …Độ rộng bus DỮ LIỆU quyết định …\n   Answer: b) how many bits can be transferred at one time\n   A wider data bus moves more bits per bus cycle, raising bandwidth.VI: Bus dữ liệu rộng hơn chuyển nhiều bit hơn mỗi chu kỳ bus, tăng băng thông.\n\n3. Why do systems use bus ARBITRATION?Vì sao hệ thống dùng PHÂN XỬ bus?\n   Answer: c) Only one master may drive the bus at a time\n   When several masters want the bus, arbitration (centralized or distributed) chooses one.VI: Khi nhiều master cùng muốn bus, phân xử (tập trung hoặc phân tán) chọn một.\n\n4. In an ASYNCHRONOUS bus, transfers are timed by …Ở bus BẤT ĐỒNG BỘ, việc truyền được định thời bởi …\n   Answer: d) a handshake between master and slave\n   Request/acknowledge signals replace the common clock.VI: Tín hiệu yêu cầu/xác nhận thay cho xung nhịp chung.\n\n5. Compared to a shared bus, a point-to-point interconnect (PCIe, QPI) …So với bus dùng chung, kết nối điểm-điểm (PCIe, QPI) …\n   Answer: a) avoids bus contention and clocking problems and scales to higher speeds\n   Dedicated serial links remove the shared-bus bottleneck.VI: Liên kết nối tiếp riêng loại bỏ nút cổ chai của bus dùng chung.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The width of the ADDRESS bus determines …</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ rộng bus ĐỊA CHỈ quyết định …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the maximum memory capacity that can be addressed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the number of bits moved per transfer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the clock rate"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the number of devices on the bus"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>n address lines can name 2ⁿ locations.</p><p><i>VI: n đường địa chỉ gọi tên được 2ⁿ vị trí.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The width of the DATA bus determines …</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ rộng bus DỮ LIỆU quyết định …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the cache line size only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "how many bits can be transferred at one time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the maximum memory size"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the number of control signals"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A wider data bus moves more bits per bus cycle, raising bandwidth.</p><p><i>VI: Bus dữ liệu rộng hơn chuyển nhiều bit hơn mỗi chu kỳ bus, tăng băng thông.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why do systems use bus ARBITRATION?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao hệ thống dùng PHÂN XỬ bus?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To encrypt the data"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To widen the address bus"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only one master may drive the bus at a time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To increase the clock rate"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>When several masters want the bus, arbitration (centralized or distributed) chooses one.</p><p><i>VI: Khi nhiều master cùng muốn bus, phân xử (tập trung hoặc phân tán) chọn một.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In an ASYNCHRONOUS bus, transfers are timed by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở bus BẤT ĐỒNG BỘ, việc truyền được định thời bởi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a global clock"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the operating system"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the cache controller"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a handshake between master and slave"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Request/acknowledge signals replace the common clock.</p><p><i>VI: Tín hiệu yêu cầu/xác nhận thay cho xung nhịp chung.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Compared to a shared bus, a point-to-point interconnect (PCIe, QPI) …</p><p style=\"opacity:.75;font-size:.92em\"><i>So với bus dùng chung, kết nối điểm-điểm (PCIe, QPI) …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "avoids bus contention and clocking problems and scales to higher speeds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is cheaper because it needs fewer wires in every case"
+              },
+              {
+                "ma": "c",
+                "noiDung": "cannot use serial links"
+              },
+              {
+                "ma": "d",
+                "noiDung": "supports only one device"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Dedicated serial links remove the shared-bus bottleneck.</p><p><i>VI: Liên kết nối tiếp riêng loại bỏ nút cổ chai của bus dùng chung.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing up the address bus with the data bus."
+        },
+        {
+          "loi": "Believing a wider address bus makes transfers faster."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "arbitration",
+          "vi": "phân xử bus"
+        },
+        {
+          "en": "handshake",
+          "vi": "bắt tay"
+        }
+      ]
+    },
+    {
+      "title": "Bus 2 — Bus bandwidth and address space",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "bus bandwidth",
+        "address lines"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Peak bandwidth (MB/s, 10⁶ bytes) = width/8 × clock × transfers per cycle (1 for single data rate, 2 for double). Fill in the bandwidth, and for a bus with <b>A</b> address lines, the number of addressable bytes (give powers of two as 2^A).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Băng thông đỉnh (MB/s, 10⁶ byte) = độ rộng/8 × clock × số lần truyền mỗi chu kỳ (1 với SDR, 2 với DDR). Điền băng thông và với bus có <b>A</b> đường địa chỉ, số byte địa chỉ hoá được (viết luỹ thừa 2 dạng 2^A).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Convert bits to bytes first (÷ 8).",
+        "2^10 = 1 Ki, 2^20 = 1 Mi, 2^30 = 1 Gi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 2 — Bus bandwidth and address space\n\nAnswer in the answer panel (no code needed).\n\n1. BandwidthBăng thông\n2. Address spaceKhông gian địa chỉ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 2 — Bus bandwidth and address space — answer key\n\n1. BandwidthBăng thông\n   - r1.b: 400.0 / 400\n   - r2.b: 1064.0 / 1064\n   - r3.b: 3200.0 / 3200\n   - r4.b: 17056.0 / 17056\n   4 B × 100 MHz × 1 = 400.0 MB/s; 8 B × 133 MHz × 1 = 1064.0 MB/s; 2 B × 800 MHz × 2 = 3200.0 MB/s; 8 B × 1066 MHz × 2 = 17056.0 MB/s.VI: 4 B × 100 MHz × 1 = 400.0 MB/s; 8 B × 133 MHz × 1 = 1064.0 MB/s; 2 B × 800 MHz × 2 = 3200.0 MB/s; 8 B × 1066 MHz × 2 = 17056.0 MB/s.\n\n2. Address spaceKhông gian địa chỉ\n   - r1.n: 2^20 / 1048576\n   - r1.m: 1 MiB / 1MiB\n   - r2.n: 2^24 / 16777216\n   - r2.m: 16 MiB / 16MiB\n   - r3.n: 2^32 / 4294967296\n   - r3.m: 4 GiB / 4GiB\n   - r4.n: 2^36 / 68719476736\n   - r4.m: 64 GiB / 64GiB\n   2^A bytes: 2^20 = 1 MiB, 2^24 = 16 MiB, 2^32 = 4 GiB, 2^36 = 64 GiB.VI: 2^A byte: 2^20 = 1 MiB, 2^24 = 16 MiB, 2^32 = 4 GiB, 2^36 = 64 GiB.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 B × 100 MHz × 1 = 400.0 MB/s; 8 B × 133 MHz × 1 = 1064.0 MB/s; 2 B × 800 MHz × 2 = 3200.0 MB/s; 8 B × 1066 MHz × 2 = 17056.0 MB/s.</p><p><i>VI: 4 B × 100 MHz × 1 = 400.0 MB/s; 8 B × 133 MHz × 1 = 1064.0 MB/s; 2 B × 800 MHz × 2 = 3200.0 MB/s; 8 B × 1066 MHz × 2 = 17056.0 MB/s.</i></p><p>2^A bytes: 2^20 = 1 MiB, 2^24 = 16 MiB, 2^32 = 4 GiB, 2^36 = 64 GiB.</p><p><i>VI: 2^A byte: 2^20 = 1 MiB, 2^24 = 16 MiB, 2^32 = 4 GiB, 2^36 = 64 GiB.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Bandwidth</p><p style=\"opacity:.75;font-size:.92em\"><i>Băng thông</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Bus"
+              },
+              {
+                "ma": "b",
+                "ten": "MB/s"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "32-bit data, 100 MHz, single data rate"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "64-bit data, 133 MHz, single data rate"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "16-bit data, 800 MHz, double data rate"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "64-bit data, 1066 MHz, double data rate"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": [
+                "400.0",
+                "400"
+              ],
+              "r2.b": [
+                "1064.0",
+                "1064"
+              ],
+              "r3.b": [
+                "3200.0",
+                "3200"
+              ],
+              "r4.b": [
+                "17056.0",
+                "17056"
+              ]
+            },
+            "giaiThich": "<p>4 B × 100 MHz × 1 = 400.0 MB/s; 8 B × 133 MHz × 1 = 1064.0 MB/s; 2 B × 800 MHz × 2 = 3200.0 MB/s; 8 B × 1066 MHz × 2 = 17056.0 MB/s.</p><p><i>VI: 4 B × 100 MHz × 1 = 400.0 MB/s; 8 B × 133 MHz × 1 = 1064.0 MB/s; 2 B × 800 MHz × 2 = 3200.0 MB/s; 8 B × 1066 MHz × 2 = 17056.0 MB/s.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Address space</p><p style=\"opacity:.75;font-size:.92em\"><i>Không gian địa chỉ</i></p>",
+            "cot": [
+              {
+                "ma": "l",
+                "ten": "Address lines"
+              },
+              {
+                "ma": "n",
+                "ten": "Addressable bytes"
+              },
+              {
+                "ma": "m",
+                "ten": "In MiB / GiB"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "l": "20"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "l": "24"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "l": "32"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "l": "36"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "2^20",
+                "1048576"
+              ],
+              "r1.m": [
+                "1 MiB",
+                "1MiB"
+              ],
+              "r2.n": [
+                "2^24",
+                "16777216"
+              ],
+              "r2.m": [
+                "16 MiB",
+                "16MiB"
+              ],
+              "r3.n": [
+                "2^32",
+                "4294967296"
+              ],
+              "r3.m": [
+                "4 GiB",
+                "4GiB"
+              ],
+              "r4.n": [
+                "2^36",
+                "68719476736"
+              ],
+              "r4.m": [
+                "64 GiB",
+                "64GiB"
+              ]
+            },
+            "giaiThich": "<p>2^A bytes: 2^20 = 1 MiB, 2^24 = 16 MiB, 2^32 = 4 GiB, 2^36 = 64 GiB.</p><p><i>VI: 2^A byte: 2^20 = 1 MiB, 2^24 = 16 MiB, 2^32 = 4 GiB, 2^36 = 64 GiB.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving the width in bits."
+        },
+        {
+          "loi": "Forgetting the double-data-rate factor."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "peak bandwidth",
+          "vi": "băng thông đỉnh"
+        },
+        {
+          "en": "DDR",
+          "vi": "tốc độ dữ liệu kép"
+        }
+      ]
+    },
+    {
+      "title": "Bus 3 — Order an asynchronous read handshake",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "asynchronous bus"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>On an asynchronous bus the master and slave coordinate with two control lines: <b>MSYN</b> (master ready) and <b>SSYN</b> (slave ready). Put the read cycle in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên bus bất đồng bộ, master và slave phối hợp bằng hai đường điều khiển: <b>MSYN</b> (master sẵn sàng) và <b>SSYN</b> (slave sẵn sàng). Sắp thứ tự một chu kỳ đọc.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The master always starts; the slave always answers.",
+        "The cycle ends only after both lines are back to idle."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 3 — Order an asynchronous read handshake\n\nAnswer in the answer panel (no code needed).\n\n1. Asynchronous read cycleChu kỳ đọc bất đồng bộ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 3 — Order an asynchronous read handshake — answer key\n\n1. Asynchronous read cycleChu kỳ đọc bất đồng bộ\n   Answer: s1) The master puts the address and the READ command on the bus  →  s2) The master asserts MSYN  →  s3) The slave decodes the address, puts the data on the bus and asserts SSYN  →  s4) The master reads the data and negates MSYN  →  s5) The slave sees MSYN negated, removes the data and negates SSYN\n   A full handshake: each signal change is a reply to the previous one, so no clock is needed.VI: Bắt tay đầy đủ: mỗi thay đổi tín hiệu là câu trả lời cho thay đổi trước, nên không cần clock.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A full handshake: each signal change is a reply to the previous one, so no clock is needed.</p><p><i>VI: Bắt tay đầy đủ: mỗi thay đổi tín hiệu là câu trả lời cho thay đổi trước, nên không cần clock.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Asynchronous read cycle</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu kỳ đọc bất đồng bộ</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "The master asserts MSYN"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "The slave decodes the address, puts the data on the bus and asserts SSYN"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "The master reads the data and negates MSYN"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The slave sees MSYN negated, removes the data and negates SSYN"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "The master puts the address and the READ command on the bus"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>A full handshake: each signal change is a reply to the previous one, so no clock is needed.</p><p><i>VI: Bắt tay đầy đủ: mỗi thay đổi tín hiệu là câu trả lời cho thay đổi trước, nên không cần clock.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the data before SSYN is asserted."
+        },
+        {
+          "loi": "Dropping SSYN before MSYN is negated."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "handshake",
+          "vi": "bắt tay"
+        },
+        {
+          "en": "MSYN / SSYN",
+          "vi": "tín hiệu master/slave sẵn sàng"
+        }
+      ]
+    },
+    {
+      "title": "Bus 4 — Sizing the buses of a small system",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "address lines",
+        "bus transfers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A byte-addressable memory of the given size sits on a bus with the given data width. How many <b>address lines</b> are needed, and how many <b>bus transfers</b> does it take to move one cache line of the given size?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ nhớ đánh địa chỉ theo byte có dung lượng cho trước nằm trên bus có độ rộng dữ liệu cho trước. Cần bao nhiêu <b>đường địa chỉ</b> và cần bao nhiêu <b>lần truyền bus</b> để chuyển một dòng cache có kích thước cho trước?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "log₂(bytes) = number of address lines.",
+        "transfers = line size in bytes ÷ (data width in bits ÷ 8)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 4 — Sizing the buses of a small system\n\nAnswer in the answer panel (no code needed).\n\n1. Address lines and transfersĐường địa chỉ và số lần truyền\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bus 4 — Sizing the buses of a small system — answer key\n\n1. Address lines and transfersĐường địa chỉ và số lần truyền\n   - r1.a: 32\n   - r1.t: 16\n   - r2.a: 33\n   - r2.t: 32\n   - r3.a: 34\n   - r3.t: 256\n   - r4.a: 31\n   - r4.t: 32\n   4 GiB ⇒ 32 lines; 64 B / 4 B = 16 transfers; 8 GiB ⇒ 33 lines; 256 B / 8 B = 32 transfers; 16 GiB ⇒ 34 lines; 1024 B / 4 B = 256 transfers; 2 GiB ⇒ 31 lines; 64 B / 2 B = 32 transfers.VI: 4 GiB ⇒ 32 đường; 64 B / 4 B = 16 lần truyền; 8 GiB ⇒ 33 đường; 256 B / 8 B = 32 lần truyền; 16 GiB ⇒ 34 đường; 1024 B / 4 B = 256 lần truyền; 2 GiB ⇒ 31 đường; 64 B / 2 B = 32 lần truyền.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 GiB ⇒ 32 lines; 64 B / 4 B = 16 transfers; 8 GiB ⇒ 33 lines; 256 B / 8 B = 32 transfers; 16 GiB ⇒ 34 lines; 1024 B / 4 B = 256 transfers; 2 GiB ⇒ 31 lines; 64 B / 2 B = 32 transfers.</p><p><i>VI: 4 GiB ⇒ 32 đường; 64 B / 4 B = 16 lần truyền; 8 GiB ⇒ 33 đường; 256 B / 8 B = 32 lần truyền; 16 GiB ⇒ 34 đường; 1024 B / 4 B = 256 lần truyền; 2 GiB ⇒ 31 đường; 64 B / 2 B = 32 lần truyền.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Address lines and transfers</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường địa chỉ và số lần truyền</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "System"
+              },
+              {
+                "ma": "a",
+                "ten": "Address lines"
+              },
+              {
+                "ma": "t",
+                "ten": "Transfers per line"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "4 GiB memory, 32-bit data bus, 64-byte cache line"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "8 GiB memory, 64-bit data bus, 256-byte cache line"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "16 GiB memory, 32-bit data bus, 1024-byte cache line"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "2 GiB memory, 16-bit data bus, 64-byte cache line"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "32",
+              "r1.t": "16",
+              "r2.a": "33",
+              "r2.t": "32",
+              "r3.a": "34",
+              "r3.t": "256",
+              "r4.a": "31",
+              "r4.t": "32"
+            },
+            "giaiThich": "<p>4 GiB ⇒ 32 lines; 64 B / 4 B = 16 transfers; 8 GiB ⇒ 33 lines; 256 B / 8 B = 32 transfers; 16 GiB ⇒ 34 lines; 1024 B / 4 B = 256 transfers; 2 GiB ⇒ 31 lines; 64 B / 2 B = 32 transfers.</p><p><i>VI: 4 GiB ⇒ 32 đường; 64 B / 4 B = 16 lần truyền; 8 GiB ⇒ 33 đường; 256 B / 8 B = 32 lần truyền; 16 GiB ⇒ 34 đường; 1024 B / 4 B = 256 lần truyền; 2 GiB ⇒ 31 đường; 64 B / 2 B = 32 lần truyền.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dividing the cache line size in bits by the width in bytes."
+        },
+        {
+          "loi": "Using GiB as the number of address lines."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cache line",
+          "vi": "dòng cache"
+        }
+      ]
+    }
+  ]
+}

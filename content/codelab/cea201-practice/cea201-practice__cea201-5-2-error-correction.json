@@ -1,0 +1,775 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-5-2-error-correction",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-5-2-error-correction"
+  },
+  "exercises": [
+    {
+      "title": "ECC 1 — Parity, Hamming distance and SEC-DED",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "parity",
+        "Hamming code",
+        "SEC-DED"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on error detection and correction.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về phát hiện và sửa lỗi.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Distance 3 corrects 1; distance 4 corrects 1 and detects 2.",
+        "Syndrome = XOR of the positions of all 1-bits of the received word."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 1 — Parity, Hamming distance and SEC-DED\n\nAnswer in the answer panel (no code needed).\n\n1. A single even-parity bit can …Một bit chẵn lẻ (even parity) có thể …\n2. To correct 1 error a code needs a minimum Hamming distance of …Để sửa 1 lỗi, mã cần khoảng cách Hamming tối thiểu là …\n3. SEC-DED means …SEC-DED nghĩa là …\n4. In a Hamming code, a non-zero syndrome tells us …Trong mã Hamming, hội chứng khác 0 cho ta biết …\n5. Parity bits of a Hamming code are placed at positions …Các bit kiểm tra của mã Hamming nằm ở vị trí …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 1 — Parity, Hamming distance and SEC-DED — answer key\n\n1. A single even-parity bit can …Một bit chẵn lẻ (even parity) có thể …\n   Answer: d) detect any odd number of bit errors but cannot locate them\n   Parity says only “an odd number of bits flipped”.VI: Parity chỉ cho biết “một số lẻ bit đã đổi”.\n\n2. To correct 1 error a code needs a minimum Hamming distance of …Để sửa 1 lỗi, mã cần khoảng cách Hamming tối thiểu là …\n   Answer: a) 3\n   Distance d corrects ⌊(d−1)/2⌋ errors: 3 → 1.VI: Khoảng cách d sửa được ⌊(d−1)/2⌋ lỗi: 3 → 1.\n\n3. SEC-DED means …SEC-DED nghĩa là …\n   Answer: b) single-error correction, double-error detection\n   One extra overall parity bit turns Hamming (distance 3) into distance 4.VI: Thêm một bit chẵn lẻ tổng biến Hamming (khoảng cách 3) thành khoảng cách 4.\n\n4. In a Hamming code, a non-zero syndrome tells us …Trong mã Hamming, hội chứng khác 0 cho ta biết …\n   Answer: c) the position of the bit in error\n   With even parity the syndrome equals the position (1-based) of the flipped bit.VI: Với parity chẵn, hội chứng bằng vị trí (đánh từ 1) của bit bị lật.\n\n5. Parity bits of a Hamming code are placed at positions …Các bit kiểm tra của mã Hamming nằm ở vị trí …\n   Answer: d) 1, 2, 4, 8, … (powers of two)\n   Each power-of-two position checks the positions whose binary index contains that bit.VI: Mỗi vị trí luỹ thừa 2 kiểm các vị trí mà chỉ số nhị phân chứa bit đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A single even-parity bit can …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bit chẵn lẻ (even parity) có thể …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "correct a single-bit error"
+              },
+              {
+                "ma": "b",
+                "noiDung": "detect and correct two-bit errors"
+              },
+              {
+                "ma": "c",
+                "noiDung": "detect only 2-bit errors"
+              },
+              {
+                "ma": "d",
+                "noiDung": "detect any odd number of bit errors but cannot locate them"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Parity says only “an odd number of bits flipped”.</p><p><i>VI: Parity chỉ cho biết “một số lẻ bit đã đổi”.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>To correct 1 error a code needs a minimum Hamming distance of …</p><p style=\"opacity:.75;font-size:.92em\"><i>Để sửa 1 lỗi, mã cần khoảng cách Hamming tối thiểu là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Distance d corrects ⌊(d−1)/2⌋ errors: 3 → 1.</p><p><i>VI: Khoảng cách d sửa được ⌊(d−1)/2⌋ lỗi: 3 → 1.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>SEC-DED means …</p><p style=\"opacity:.75;font-size:.92em\"><i>SEC-DED nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "secure error code, direct error detection"
+              },
+              {
+                "ma": "b",
+                "noiDung": "single-error correction, double-error detection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "single-error detection, double-error correction"
+              },
+              {
+                "ma": "d",
+                "noiDung": "serial error check, dual error design"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>One extra overall parity bit turns Hamming (distance 3) into distance 4.</p><p><i>VI: Thêm một bit chẵn lẻ tổng biến Hamming (khoảng cách 3) thành khoảng cách 4.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In a Hamming code, a non-zero syndrome tells us …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong mã Hamming, hội chứng khác 0 cho ta biết …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "which parity bit is wrong only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "that the data are correct"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the position of the bit in error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the number of data bits"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>With even parity the syndrome equals the position (1-based) of the flipped bit.</p><p><i>VI: Với parity chẵn, hội chứng bằng vị trí (đánh từ 1) của bit bị lật.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Parity bits of a Hamming code are placed at positions …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các bit kiểm tra của mã Hamming nằm ở vị trí …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1, 3, 5, 7, …"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the last r positions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2, 3, 5, 7, …"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1, 2, 4, 8, … (powers of two)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Each power-of-two position checks the positions whose binary index contains that bit.</p><p><i>VI: Mỗi vị trí luỹ thừa 2 kiểm các vị trí mà chỉ số nhị phân chứa bit đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking parity can correct."
+        },
+        {
+          "loi": "Putting parity bits at the end instead of at powers of two."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "syndrome",
+          "vi": "hội chứng lỗi"
+        },
+        {
+          "en": "Hamming distance",
+          "vi": "khoảng cách Hamming"
+        }
+      ]
+    },
+    {
+      "title": "ECC 2 — How many check bits do you need?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Hamming code size"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A Hamming code that corrects one error (SEC) needs the smallest <b>r</b> with 2ʳ ≥ m + r + 1. SEC-DED adds one overall parity bit. Fill in r, the SEC code word length m + r, and the number of check bits for SEC-DED.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mã Hamming sửa một lỗi (SEC) cần <b>r</b> nhỏ nhất thoả 2ʳ ≥ m + r + 1. SEC-DED thêm một bit chẵn lẻ tổng. Điền r, độ dài từ mã SEC m + r và số bit kiểm tra của SEC-DED.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Try r = 1, 2, 3… until 2ʳ ≥ m + r + 1.",
+        "SEC-DED = SEC + 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 2 — How many check bits do you need?\n\nAnswer in the answer panel (no code needed).\n\n1. Check bitsSố bit kiểm tra\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 2 — How many check bits do you need? — answer key\n\n1. Check bitsSố bit kiểm tra\n   - r1.r: 3\n   - r1.n: 7\n   - r1.d: 4\n   - r2.r: 4\n   - r2.n: 12\n   - r2.d: 5\n   - r3.r: 5\n   - r3.n: 21\n   - r3.d: 6\n   - r4.r: 6\n   - r4.n: 38\n   - r4.d: 7\n   - r5.r: 7\n   - r5.n: 71\n   - r5.d: 8\n   - r6.r: 8\n   - r6.n: 136\n   - r6.d: 9\n   m=4: r=3, n=7, SEC-DED 4; m=8: r=4, n=12, SEC-DED 5; m=16: r=5, n=21, SEC-DED 6; m=32: r=6, n=38, SEC-DED 7; m=64: r=7, n=71, SEC-DED 8; m=128: r=8, n=136, SEC-DED 9. The relative cost falls as words get wider (that is why servers use 64+8).VI: m=4: r=3, n=7, SEC-DED 4; m=8: r=4, n=12, SEC-DED 5; m=16: r=5, n=21, SEC-DED 6; m=32: r=6, n=38, SEC-DED 7; m=64: r=7, n=71, SEC-DED 8; m=128: r=8, n=136, SEC-DED 9. Chi phí tương đối giảm khi từ dài hơn (vì thế máy chủ dùng 64+8).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>m=4: r=3, n=7, SEC-DED 4; m=8: r=4, n=12, SEC-DED 5; m=16: r=5, n=21, SEC-DED 6; m=32: r=6, n=38, SEC-DED 7; m=64: r=7, n=71, SEC-DED 8; m=128: r=8, n=136, SEC-DED 9. The relative cost falls as words get wider (that is why servers use 64+8).</p><p><i>VI: m=4: r=3, n=7, SEC-DED 4; m=8: r=4, n=12, SEC-DED 5; m=16: r=5, n=21, SEC-DED 6; m=32: r=6, n=38, SEC-DED 7; m=64: r=7, n=71, SEC-DED 8; m=128: r=8, n=136, SEC-DED 9. Chi phí tương đối giảm khi từ dài hơn (vì thế máy chủ dùng 64+8).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Check bits</p><p style=\"opacity:.75;font-size:.92em\"><i>Số bit kiểm tra</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Data bits m"
+              },
+              {
+                "ma": "r",
+                "ten": "r (SEC)"
+              },
+              {
+                "ma": "n",
+                "ten": "m + r"
+              },
+              {
+                "ma": "d",
+                "ten": "r + 1 (SEC-DED)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "4"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "8"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "16"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "32"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "64"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "m": "128"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "3",
+              "r1.n": "7",
+              "r1.d": "4",
+              "r2.r": "4",
+              "r2.n": "12",
+              "r2.d": "5",
+              "r3.r": "5",
+              "r3.n": "21",
+              "r3.d": "6",
+              "r4.r": "6",
+              "r4.n": "38",
+              "r4.d": "7",
+              "r5.r": "7",
+              "r5.n": "71",
+              "r5.d": "8",
+              "r6.r": "8",
+              "r6.n": "136",
+              "r6.d": "9"
+            },
+            "giaiThich": "<p>m=4: r=3, n=7, SEC-DED 4; m=8: r=4, n=12, SEC-DED 5; m=16: r=5, n=21, SEC-DED 6; m=32: r=6, n=38, SEC-DED 7; m=64: r=7, n=71, SEC-DED 8; m=128: r=8, n=136, SEC-DED 9. The relative cost falls as words get wider (that is why servers use 64+8).</p><p><i>VI: m=4: r=3, n=7, SEC-DED 4; m=8: r=4, n=12, SEC-DED 5; m=16: r=5, n=21, SEC-DED 6; m=32: r=6, n=38, SEC-DED 7; m=64: r=7, n=71, SEC-DED 8; m=128: r=8, n=136, SEC-DED 9. Chi phí tương đối giảm khi từ dài hơn (vì thế máy chủ dùng 64+8).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the “+ r” inside m + r + 1."
+        },
+        {
+          "loi": "Adding the overall parity bit twice."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SEC",
+          "vi": "sửa một lỗi"
+        }
+      ]
+    },
+    {
+      "title": "ECC 3 — Encode with a Hamming code (even parity)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "Hamming encoding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Positions are numbered from 1 at the LEFT; parity bits sit at positions 1, 2, 4, 8 (even parity); the data bits fill the other positions from left to right. Write the complete code word (a string of 0/1 with no spaces).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vị trí đánh số từ 1 ở bên TRÁI; bit kiểm tra ở vị trí 1, 2, 4, 8 (parity chẵn); bit dữ liệu lấp các vị trí còn lại từ trái sang phải. Viết từ mã đầy đủ (chuỗi 0/1 không có dấu cách).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Place the data first (parity positions = 0), then compute each parity so that its group has an even number of 1s.",
+        "The group of p_k is every position whose binary representation has bit k set."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 3 — Encode with a Hamming code (even parity)\n\nAnswer in the answer panel (no code needed).\n\n1. Hamming encodingMã hoá Hamming\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 3 — Encode with a Hamming code (even parity) — answer key\n\n1. Hamming encodingMã hoá Hamming\n   - r1.c: 0110011\n   - r2.c: 1100110\n   - r3.c: 1111111\n   - r4.c: 101001110010\n   - r5.c: 010111001001\n   p1 covers positions 1,3,5,7,…; p2 covers 2,3,6,7,…; p4 covers 4,5,6,7,12,…; p8 covers 8–15. 1011 → 0110011; 0110 → 1100110; 1111 → 1111111; 10110010 → 101001110010; 01101001 → 010111001001.VI: 1011 → 0110011; 0110 → 1100110; 1111 → 1111111; 10110010 → 101001110010; 01101001 → 010111001001.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>p1 covers positions 1,3,5,7,…; p2 covers 2,3,6,7,…; p4 covers 4,5,6,7,12,…; p8 covers 8–15. 1011 → 0110011; 0110 → 1100110; 1111 → 1111111; 10110010 → 101001110010; 01101001 → 010111001001.</p><p><i>VI: 1011 → 0110011; 0110 → 1100110; 1111 → 1111111; 10110010 → 101001110010; 01101001 → 010111001001.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Hamming encoding</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã hoá Hamming</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Data"
+              },
+              {
+                "ma": "c",
+                "ten": "Code word"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "1011"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "0110"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "1111"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "10110010"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "01101001"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "0110011",
+              "r2.c": "1100110",
+              "r3.c": "1111111",
+              "r4.c": "101001110010",
+              "r5.c": "010111001001"
+            },
+            "giaiThich": "<p>p1 covers positions 1,3,5,7,…; p2 covers 2,3,6,7,…; p4 covers 4,5,6,7,12,…; p8 covers 8–15. 1011 → 0110011; 0110 → 1100110; 1111 → 1111111; 10110010 → 101001110010; 01101001 → 010111001001.</p><p><i>VI: 1011 → 0110011; 0110 → 1100110; 1111 → 1111111; 10110010 → 101001110010; 01101001 → 010111001001.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the data bits in the wrong positions (they skip the powers of two)."
+        },
+        {
+          "loi": "Using odd parity."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "even parity",
+          "vi": "parity chẵn"
+        }
+      ]
+    },
+    {
+      "title": "ECC 4 — Find and fix the bad bit",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "Hamming decoding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>These 12-bit Hamming code words (even parity, parity at positions 1, 2, 4, 8) were read from memory; each has at most one flipped bit. Give the <b>syndrome</b> (decimal; 0 = no error) and the corrected <b>data bits</b> (8 bits).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các từ mã Hamming 12 bit (parity chẵn, kiểm tra ở vị trí 1, 2, 4, 8) được đọc từ bộ nhớ; mỗi từ có tối đa một bit bị lật. Cho <b>hội chứng</b> (thập phân; 0 = không lỗi) và <b>bit dữ liệu</b> đã sửa (8 bit).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "XOR the (1-based) positions of all the 1 bits.",
+        "Flip the bit at the syndrome position, then drop the parity positions 1, 2, 4, 8."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 4 — Find and fix the bad bit\n\nAnswer in the answer panel (no code needed).\n\n1. Syndrome and corrected dataHội chứng và dữ liệu đã sửa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ECC 4 — Find and fix the bad bit — answer key\n\n1. Syndrome and corrected dataHội chứng và dữ liệu đã sửa\n   - r1.s: 0\n   - r1.d: 10110010\n   - r2.s: 3\n   - r2.d: 10110010\n   - r3.s: 4\n   - r3.d: 10110010\n   - r4.s: 9\n   - r4.d: 10110010\n   - r5.s: 12\n   - r5.d: 10110010\n   Syndrome = XOR of the positions holding a 1. 101001110010: syndrome 0 → data 10110010; 100001110010: syndrome 3 → data 10110010; 101101110010: syndrome 4 → data 10110010; 101001111010: syndrome 9 → data 10110010; 101001110011: syndrome 12 → data 10110010. A flipped parity bit gives a power-of-two syndrome but the data are already right.VI: 101001110010: hội chứng 0 → dữ liệu 10110010; 100001110010: hội chứng 3 → dữ liệu 10110010; 101101110010: hội chứng 4 → dữ liệu 10110010; 101001111010: hội chứng 9 → dữ liệu 10110010; 101001110011: hội chứng 12 → dữ liệu 10110010. Lật bit kiểm tra cho hội chứng là luỹ thừa 2 nhưng dữ liệu vẫn đúng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Syndrome = XOR of the positions holding a 1. 101001110010: syndrome 0 → data 10110010; 100001110010: syndrome 3 → data 10110010; 101101110010: syndrome 4 → data 10110010; 101001111010: syndrome 9 → data 10110010; 101001110011: syndrome 12 → data 10110010. A flipped parity bit gives a power-of-two syndrome but the data are already right.</p><p><i>VI: 101001110010: hội chứng 0 → dữ liệu 10110010; 100001110010: hội chứng 3 → dữ liệu 10110010; 101101110010: hội chứng 4 → dữ liệu 10110010; 101001111010: hội chứng 9 → dữ liệu 10110010; 101001110011: hội chứng 12 → dữ liệu 10110010. Lật bit kiểm tra cho hội chứng là luỹ thừa 2 nhưng dữ liệu vẫn đúng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Syndrome and corrected data</p><p style=\"opacity:.75;font-size:.92em\"><i>Hội chứng và dữ liệu đã sửa</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "Received word"
+              },
+              {
+                "ma": "s",
+                "ten": "Syndrome"
+              },
+              {
+                "ma": "d",
+                "ten": "Data"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "101001110010"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "100001110010"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "101101110010"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "101001111010"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "101001110011"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "0",
+              "r1.d": "10110010",
+              "r2.s": "3",
+              "r2.d": "10110010",
+              "r3.s": "4",
+              "r3.d": "10110010",
+              "r4.s": "9",
+              "r4.d": "10110010",
+              "r5.s": "12",
+              "r5.d": "10110010"
+            },
+            "giaiThich": "<p>Syndrome = XOR of the positions holding a 1. 101001110010: syndrome 0 → data 10110010; 100001110010: syndrome 3 → data 10110010; 101101110010: syndrome 4 → data 10110010; 101001111010: syndrome 9 → data 10110010; 101001110011: syndrome 12 → data 10110010. A flipped parity bit gives a power-of-two syndrome but the data are already right.</p><p><i>VI: 101001110010: hội chứng 0 → dữ liệu 10110010; 100001110010: hội chứng 3 → dữ liệu 10110010; 101101110010: hội chứng 4 → dữ liệu 10110010; 101001111010: hội chứng 9 → dữ liệu 10110010; 101001110011: hội chứng 12 → dữ liệu 10110010. Lật bit kiểm tra cho hội chứng là luỹ thừa 2 nhưng dữ liệu vẫn đúng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting positions from 0."
+        },
+        {
+          "loi": "Forgetting that the error can be in a parity bit itself."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "syndrome",
+          "vi": "hội chứng"
+        }
+      ]
+    },
+    {
+      "title": "ECC 5 — Write a Hamming decoder",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Hamming decoding",
+        "bit manipulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>hammingFix(word)</code> for a Hamming code word given as a string of <code>0</code>/<code>1</code> of any length (positions numbered from 1 at the left, even parity, parity bits at the powers of two). Return <code>{ syndrome, data }</code>: <code>syndrome</code> is the position of the flipped bit (0 if none) and <code>data</code> the data bits after correction (without the parity positions), as a string.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Assume at most one bit is wrong.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>hammingFix(word)</code> cho từ mã Hamming dạng chuỗi <code>0</code>/<code>1</code> độ dài bất kỳ (vị trí đánh từ 1 ở bên trái, parity chẵn, bit kiểm tra ở các vị trí luỹ thừa 2). Trả <code>{ syndrome, data }</code>: <code>syndrome</code> là vị trí bit bị lật (0 nếu không có) và <code>data</code> là các bit dữ liệu sau khi sửa (bỏ các vị trí kiểm tra), dạng chuỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giả sử tối đa một bit sai.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hammingFix(\"0110011\")",
+          "output": "{\"syndrome\":0,\"data\":\"1011\"}",
+          "explanation": "A valid word: syndrome 0, data 1011.|||Từ hợp lệ: hội chứng 0, dữ liệu 1011."
+        },
+        {
+          "input": "hammingFix(\"0110111\")",
+          "output": "{\"syndrome\":5,\"data\":\"1011\"}",
+          "explanation": "Bit 5 flipped: the syndrome is 5.|||Bit 5 bị lật: hội chứng là 5."
+        }
+      ],
+      "hintsJson": [
+        "The syndrome is the XOR of the indices i (1-based) where word[i-1] is \"1\".",
+        "If it is non-zero flip that position, then collect the bits whose index is not a power of two: (i & (i − 1)) !== 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function hammingFix(word) {\n  return { syndrome: 0, data: \"\" };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function hammingFix(codeWord) {\n  var s = 0, i, w = codeWord.split('');\n  for (i = 1; i <= w.length; i++) if (w[i - 1] === '1') s ^= i;\n  if (s > 0 && s <= w.length) w[s - 1] = w[s - 1] === '1' ? '0' : '1';\n  var d = '';\n  for (i = 1; i <= w.length; i++) if ((i & (i - 1)) !== 0) d += w[i - 1];\n  return { syndrome: s, data: d };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Even-parity Hamming codes make the XOR of the positions of the set bits equal to zero; a single flipped bit changes that XOR by exactly its position.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: hammingFix(\"0110011\")",
+              "vi": "Ca 1"
+            },
+            "goi": "hammingFix(\"0110011\")",
+            "mongDoi": {
+              "syndrome": 0,
+              "data": "1011"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: hammingFix(\"0110111\")",
+              "vi": "Ca 2"
+            },
+            "goi": "hammingFix(\"0110111\")",
+            "mongDoi": {
+              "syndrome": 5,
+              "data": "1011"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: hammingFix(\"101001111010\")",
+              "vi": "Ca 3"
+            },
+            "goi": "hammingFix(\"101001111010\")",
+            "mongDoi": {
+              "syndrome": 9,
+              "data": "10110010"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: hammingFix(\"111\")",
+              "vi": "Ca 4"
+            },
+            "goi": "hammingFix(\"111\")",
+            "mongDoi": {
+              "syndrome": 0,
+              "data": "1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "hammingFix(\"00111010001110101\")",
+            "mongDoi": {
+              "syndrome": 17,
+              "data": "110100111010"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "hammingFix(\"0000000\")",
+            "mongDoi": {
+              "syndrome": 0,
+              "data": "0000"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "hammingFix(\"0011010010101011010101\")",
+            "mongDoi": {
+              "syndrome": 1,
+              "data": "10101010101010101"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Off-by-one: strings are 0-based, positions are 1-based."
+        },
+        {
+          "loi": "Including the parity positions in the returned data."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

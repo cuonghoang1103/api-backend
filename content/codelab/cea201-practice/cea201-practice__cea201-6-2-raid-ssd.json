@@ -1,0 +1,817 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-6-2-raid-ssd",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-6-2-raid-ssd"
+  },
+  "exercises": [
+    {
+      "title": "RAID 1 — Levels, striping, mirroring, parity and SSDs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "RAID",
+        "SSD"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on RAID and solid-state drives.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về RAID và ổ thể rắn.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "0 = speed, 1 = copy, 5 = one parity, 6 = two parities.",
+        "SSD = flash: no seek, but limited erase cycles."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 1 — Levels, striping, mirroring, parity and SSDs\n\nAnswer in the answer panel (no code needed).\n\n1. RAID 0 provides …RAID 0 cung cấp …\n2. RAID 1 stores …RAID 1 lưu …\n3. RAID 5 distributes …RAID 5 phân tán …\n4. What does RAID 6 add over RAID 5?RAID 6 thêm gì so với RAID 5?\n5. Why do SSDs apply wear levelling?Vì sao SSD dùng cân bằng mài mòn (wear levelling)?\n6. Compared with a hard disk, an SSD …So với đĩa cứng, SSD …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 1 — Levels, striping, mirroring, parity and SSDs — answer key\n\n1. RAID 0 provides …RAID 0 cung cấp …\n   Answer: c) striping for speed with no redundancy\n   One failed disk destroys the whole array.VI: Một đĩa hỏng làm mất cả mảng.\n\n2. RAID 1 stores …RAID 1 lưu …\n   Answer: d) two copies of the data on separate disks (mirroring)\n   Half the raw capacity is usable; reads can be served from either copy.VI: Một nửa dung lượng thô dùng được; đọc có thể phục vụ từ bản nào cũng được.\n\n3. RAID 5 distributes …RAID 5 phân tán …\n   Answer: a) parity blocks across all the disks\n   Rotating parity avoids a single parity-disk bottleneck.VI: Parity xoay vòng tránh nút cổ chai ở một đĩa parity.\n\n4. What does RAID 6 add over RAID 5?RAID 6 thêm gì so với RAID 5?\n   Answer: b) A second independent parity: it survives two disk failures\n   Two parity blocks per stripe allow two erasures to be recovered.VI: Hai khối parity mỗi dải cho phép phục hồi hai ổ hỏng.\n\n5. Why do SSDs apply wear levelling?Vì sao SSD dùng cân bằng mài mòn (wear levelling)?\n   Answer: c) Flash cells survive only a limited number of erase cycles, so writes are spread out\n   Spreading erases evenly makes all blocks wear out together, later.VI: Rải đều lần xoá để mọi khối mòn cùng lúc và muộn hơn.\n\n6. Compared with a hard disk, an SSD …So với đĩa cứng, SSD …\n   Answer: d) has no mechanical seek or rotation, so random access is far faster\n   No moving parts removes the positioning cost.VI: Không có bộ phận chuyển động nên không có chi phí định vị.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>RAID 0 provides …</p><p style=\"opacity:.75;font-size:.92em\"><i>RAID 0 cung cấp …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "single parity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "double parity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "striping for speed with no redundancy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "mirroring"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One failed disk destroys the whole array.</p><p><i>VI: Một đĩa hỏng làm mất cả mảng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>RAID 1 stores …</p><p style=\"opacity:.75;font-size:.92em\"><i>RAID 1 lưu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "parity on one dedicated disk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "data only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "parity spread across all disks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "two copies of the data on separate disks (mirroring)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Half the raw capacity is usable; reads can be served from either copy.</p><p><i>VI: Một nửa dung lượng thô dùng được; đọc có thể phục vụ từ bản nào cũng được.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>RAID 5 distributes …</p><p style=\"opacity:.75;font-size:.92em\"><i>RAID 5 phân tán …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "parity blocks across all the disks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "data on one disk and parity on another"
+              },
+              {
+                "ma": "c",
+                "noiDung": "copies on every disk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Rotating parity avoids a single parity-disk bottleneck.</p><p><i>VI: Parity xoay vòng tránh nút cổ chai ở một đĩa parity.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What does RAID 6 add over RAID 5?</p><p style=\"opacity:.75;font-size:.92em\"><i>RAID 6 thêm gì so với RAID 5?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Smaller capacity cost than RAID 5"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A second independent parity: it survives two disk failures"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mirroring"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Faster writes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Two parity blocks per stripe allow two erasures to be recovered.</p><p><i>VI: Hai khối parity mỗi dải cho phép phục hồi hai ổ hỏng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why do SSDs apply wear levelling?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao SSD dùng cân bằng mài mòn (wear levelling)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To refresh DRAM"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To compress data"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Flash cells survive only a limited number of erase cycles, so writes are spread out"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To make reads faster"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Spreading erases evenly makes all blocks wear out together, later.</p><p><i>VI: Rải đều lần xoá để mọi khối mòn cùng lúc và muộn hơn.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Compared with a hard disk, an SSD …</p><p style=\"opacity:.75;font-size:.92em\"><i>So với đĩa cứng, SSD …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "always has lower cost per GB"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is volatile"
+              },
+              {
+                "ma": "c",
+                "noiDung": "needs a longer seek"
+              },
+              {
+                "ma": "d",
+                "noiDung": "has no mechanical seek or rotation, so random access is far faster"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>No moving parts removes the positioning cost.</p><p><i>VI: Không có bộ phận chuyển động nên không có chi phí định vị.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking RAID 0 is redundant."
+        },
+        {
+          "loi": "Treating RAID as a substitute for backups."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "striping",
+          "vi": "chia dải"
+        },
+        {
+          "en": "mirroring",
+          "vi": "nhân bản (gương)"
+        },
+        {
+          "en": "wear levelling",
+          "vi": "cân bằng mài mòn"
+        }
+      ]
+    },
+    {
+      "title": "RAID 2 — Usable capacity and guaranteed fault tolerance",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "RAID levels"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Each disk holds 4 TB. For each array give the <b>usable capacity</b> (TB) and the number of disk failures it is <b>guaranteed</b> to survive (RAID 10 can survive more failures if they hit different mirror pairs, but only 1 is guaranteed).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi đĩa 4 TB. Với mỗi mảng cho <b>dung lượng dùng được</b> (TB) và số đĩa hỏng mà nó <b>chắc chắn</b> chịu được (RAID 10 có thể chịu nhiều hơn nếu các lỗi rơi vào các cặp gương khác nhau, nhưng chỉ 1 là chắc chắn).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "RAID 0: n; RAID 1/10: n/2; RAID 5: n − 1; RAID 6: n − 2.",
+        "Guaranteed = true in the worst case."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 2 — Usable capacity and guaranteed fault tolerance\n\nAnswer in the answer panel (no code needed).\n\n1. RAID capacity and toleranceDung lượng và khả năng chịu lỗi của RAID\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 2 — Usable capacity and guaranteed fault tolerance — answer key\n\n1. RAID capacity and toleranceDung lượng và khả năng chịu lỗi của RAID\n   - r1.u: 16\n   - r1.f: 0\n   - r2.u: 8\n   - r2.f: 1\n   - r3.u: 12\n   - r3.f: 1\n   - r4.u: 16\n   - r4.f: 2\n   - r5.u: 16\n   - r5.f: 1\n   RAID 0, 4 disks: 16 TB, 0 failure(s); RAID 1, 4 disks: 8 TB, 1 failure(s); RAID 5, 4 disks: 12 TB, 1 failure(s); RAID 6, 6 disks: 16 TB, 2 failure(s); RAID 10, 8 disks: 16 TB, 1 failure(s).VI: RAID 0, 4 đĩa: 16 TB, chịu 0 lỗi; RAID 1, 4 đĩa: 8 TB, chịu 1 lỗi; RAID 5, 4 đĩa: 12 TB, chịu 1 lỗi; RAID 6, 6 đĩa: 16 TB, chịu 2 lỗi; RAID 10, 8 đĩa: 16 TB, chịu 1 lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RAID 0, 4 disks: 16 TB, 0 failure(s); RAID 1, 4 disks: 8 TB, 1 failure(s); RAID 5, 4 disks: 12 TB, 1 failure(s); RAID 6, 6 disks: 16 TB, 2 failure(s); RAID 10, 8 disks: 16 TB, 1 failure(s).</p><p><i>VI: RAID 0, 4 đĩa: 16 TB, chịu 0 lỗi; RAID 1, 4 đĩa: 8 TB, chịu 1 lỗi; RAID 5, 4 đĩa: 12 TB, chịu 1 lỗi; RAID 6, 6 đĩa: 16 TB, chịu 2 lỗi; RAID 10, 8 đĩa: 16 TB, chịu 1 lỗi.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>RAID capacity and tolerance</p><p style=\"opacity:.75;font-size:.92em\"><i>Dung lượng và khả năng chịu lỗi của RAID</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Array"
+              },
+              {
+                "ma": "u",
+                "ten": "Usable (TB)"
+              },
+              {
+                "ma": "f",
+                "ten": "Guaranteed failures"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "RAID 0 with 4 disks"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "RAID 1 with 4 disks"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "RAID 5 with 4 disks"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "RAID 6 with 6 disks"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "RAID 10 with 8 disks"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.u": "16",
+              "r1.f": "0",
+              "r2.u": "8",
+              "r2.f": "1",
+              "r3.u": "12",
+              "r3.f": "1",
+              "r4.u": "16",
+              "r4.f": "2",
+              "r5.u": "16",
+              "r5.f": "1"
+            },
+            "giaiThich": "<p>RAID 0, 4 disks: 16 TB, 0 failure(s); RAID 1, 4 disks: 8 TB, 1 failure(s); RAID 5, 4 disks: 12 TB, 1 failure(s); RAID 6, 6 disks: 16 TB, 2 failure(s); RAID 10, 8 disks: 16 TB, 1 failure(s).</p><p><i>VI: RAID 0, 4 đĩa: 16 TB, chịu 0 lỗi; RAID 1, 4 đĩa: 8 TB, chịu 1 lỗi; RAID 5, 4 đĩa: 12 TB, chịu 1 lỗi; RAID 6, 6 đĩa: 16 TB, chịu 2 lỗi; RAID 10, 8 đĩa: 16 TB, chịu 1 lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving RAID 5 a capacity of n/2."
+        },
+        {
+          "loi": "Claiming RAID 10 survives any two failures."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "usable capacity",
+          "vi": "dung lượng hữu dụng"
+        }
+      ]
+    },
+    {
+      "title": "RAID 3 — Compute parity and rebuild a lost disk (XOR)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "RAID 5 parity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>In RAID 5 the parity of a stripe is the XOR of its data blocks. <b>Part A.</b> Compute the parity block (decimal) of each stripe of 4 data blocks. <b>Part B.</b> In the stripes below one block (marked <b>?</b>) was lost with a failed disk — rebuild it (decimal). Values are 8-bit.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong RAID 5 parity của một dải là XOR các khối dữ liệu. <b>Phần A.</b> Tính khối parity (thập phân) của từng dải 4 khối dữ liệu. <b>Phần B.</b> Ở các dải dưới đây một khối (ký hiệu <b>?</b>) mất cùng ổ hỏng — dựng lại nó (thập phân). Giá trị 8 bit.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "XOR is its own inverse: a ⊕ a = 0.",
+        "The XOR of data and parity together is always 0, so the lost block is the XOR of the others."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 3 — Compute parity and rebuild a lost disk (XOR)\n\nAnswer in the answer panel (no code needed).\n\n1. ParityParity\n2. RebuildDựng lại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 3 — Compute parity and rebuild a lost disk (XOR) — answer key\n\n1. ParityParity\n   - r1.p: 32\n   - r2.p: 23\n   - r3.p: 58\n   178 ⊕ 108 ⊕ 225 ⊕ 31 = 32; 165 ⊕ 60 ⊕ 15 ⊕ 129 = 23; 201 ⊕ 17 ⊕ 96 ⊕ 130 = 58.VI: 178 ⊕ 108 ⊕ 225 ⊕ 31 = 32; 165 ⊕ 60 ⊕ 15 ⊕ 129 = 23; 201 ⊕ 17 ⊕ 96 ⊕ 130 = 58.\n\n2. RebuildDựng lại\n   - r1.x: 178\n   - r2.x: 60\n   - r3.x: 96\n   XOR of all surviving blocks (data and parity) = the lost block: 178, 60, 96.VI: XOR mọi khối còn lại (dữ liệu và parity) = khối bị mất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>178 ⊕ 108 ⊕ 225 ⊕ 31 = 32; 165 ⊕ 60 ⊕ 15 ⊕ 129 = 23; 201 ⊕ 17 ⊕ 96 ⊕ 130 = 58.</p><p><i>VI: 178 ⊕ 108 ⊕ 225 ⊕ 31 = 32; 165 ⊕ 60 ⊕ 15 ⊕ 129 = 23; 201 ⊕ 17 ⊕ 96 ⊕ 130 = 58.</i></p><p>XOR of all surviving blocks (data and parity) = the lost block: 178, 60, 96.</p><p><i>VI: XOR mọi khối còn lại (dữ liệu và parity) = khối bị mất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Parity</p><p style=\"opacity:.75;font-size:.92em\"><i>Parity</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Stripe data"
+              },
+              {
+                "ma": "p",
+                "ten": "Parity"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "178, 108, 225, 31"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "165, 60, 15, 129"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "201, 17, 96, 130"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "32",
+              "r2.p": "23",
+              "r3.p": "58"
+            },
+            "giaiThich": "<p>178 ⊕ 108 ⊕ 225 ⊕ 31 = 32; 165 ⊕ 60 ⊕ 15 ⊕ 129 = 23; 201 ⊕ 17 ⊕ 96 ⊕ 130 = 58.</p><p><i>VI: 178 ⊕ 108 ⊕ 225 ⊕ 31 = 32; 165 ⊕ 60 ⊕ 15 ⊕ 129 = 23; 201 ⊕ 17 ⊕ 96 ⊕ 130 = 58.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Rebuild</p><p style=\"opacity:.75;font-size:.92em\"><i>Dựng lại</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Stripe (data and parity, one lost)"
+              },
+              {
+                "ma": "x",
+                "ten": "Lost value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "?, 108, 225, 31, 32"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "165, ?, 15, 129, 23"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "201, 17, ?, 130, 58"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.x": "178",
+              "r2.x": "60",
+              "r3.x": "96"
+            },
+            "giaiThich": "<p>XOR of all surviving blocks (data and parity) = the lost block: 178, 60, 96.</p><p><i>VI: XOR mọi khối còn lại (dữ liệu và parity) = khối bị mất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the blocks instead of XOR-ing them."
+        },
+        {
+          "loi": "Forgetting to include the parity block when rebuilding."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "XOR",
+          "vi": "cộng loại trừ"
+        },
+        {
+          "en": "parity block",
+          "vi": "khối parity"
+        }
+      ]
+    },
+    {
+      "title": "RAID 4 — The small-write penalty",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "small write problem"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Each disk delivers 150 random IOPS. A random <b>read</b> costs 1 disk I/O in every level. A random <b>write</b> costs 1 (RAID 0), 2 (RAID 1 and 10), 4 (RAID 5: read old data, read old parity, write new data, write new parity) or 6 (RAID 6) disk I/Os. Give the array’s random read IOPS and random write IOPS.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi đĩa cho 150 IOPS ngẫu nhiên. Một lần <b>đọc</b> ngẫu nhiên tốn 1 I/O đĩa ở mọi cấp. Một lần <b>ghi</b> ngẫu nhiên tốn 1 (RAID 0), 2 (RAID 1 và 10), 4 (RAID 5: đọc dữ liệu cũ, đọc parity cũ, ghi dữ liệu mới, ghi parity mới) hoặc 6 (RAID 6) I/O đĩa. Cho IOPS đọc và IOPS ghi ngẫu nhiên của mảng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Total disk I/O capacity = disks × 150; divide by the I/Os per operation.",
+        "Reads use every disk (1 I/O each)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 4 — The small-write penalty\n\nAnswer in the answer panel (no code needed).\n\n1. Random IOPSIOPS ngẫu nhiên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RAID 4 — The small-write penalty — answer key\n\n1. Random IOPSIOPS ngẫu nhiên\n   - r1.r: 600\n   - r1.w: 600.0 / 600\n   - r2.r: 600\n   - r2.w: 300.0 / 300\n   - r3.r: 900\n   - r3.w: 225.0 / 225\n   - r4.r: 1200\n   - r4.w: 200.0 / 200\n   - r5.r: 1200\n   - r5.w: 600.0 / 600\n   RAID 0: read 600, write 600; RAID 1: read 600, write 300; RAID 5: read 900, write 225; RAID 6: read 1200, write 200; RAID 10: read 1200, write 600. Parity RAID is cheap on capacity but pays on small writes.VI: RAID 0: đọc 600, ghi 600; RAID 1: đọc 600, ghi 300; RAID 5: đọc 900, ghi 225; RAID 6: đọc 1200, ghi 200; RAID 10: đọc 1200, ghi 600.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RAID 0: read 600, write 600; RAID 1: read 600, write 300; RAID 5: read 900, write 225; RAID 6: read 1200, write 200; RAID 10: read 1200, write 600. Parity RAID is cheap on capacity but pays on small writes.</p><p><i>VI: RAID 0: đọc 600, ghi 600; RAID 1: đọc 600, ghi 300; RAID 5: đọc 900, ghi 225; RAID 6: đọc 1200, ghi 200; RAID 10: đọc 1200, ghi 600.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Random IOPS</p><p style=\"opacity:.75;font-size:.92em\"><i>IOPS ngẫu nhiên</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Array"
+              },
+              {
+                "ma": "r",
+                "ten": "Read IOPS"
+              },
+              {
+                "ma": "w",
+                "ten": "Write IOPS"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "RAID 0, 4 disks × 150 IOPS"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "RAID 1, 4 disks × 150 IOPS"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "RAID 5, 6 disks × 150 IOPS"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "RAID 6, 8 disks × 150 IOPS"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "RAID 10, 8 disks × 150 IOPS"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "600",
+              "r1.w": [
+                "600.0",
+                "600"
+              ],
+              "r2.r": "600",
+              "r2.w": [
+                "300.0",
+                "300"
+              ],
+              "r3.r": "900",
+              "r3.w": [
+                "225.0",
+                "225"
+              ],
+              "r4.r": "1200",
+              "r4.w": [
+                "200.0",
+                "200"
+              ],
+              "r5.r": "1200",
+              "r5.w": [
+                "600.0",
+                "600"
+              ]
+            },
+            "giaiThich": "<p>RAID 0: read 600, write 600; RAID 1: read 600, write 300; RAID 5: read 900, write 225; RAID 6: read 1200, write 200; RAID 10: read 1200, write 600. Parity RAID is cheap on capacity but pays on small writes.</p><p><i>VI: RAID 0: đọc 600, ghi 600; RAID 1: đọc 600, ghi 300; RAID 5: đọc 900, ghi 225; RAID 6: đọc 1200, ghi 200; RAID 10: đọc 1200, ghi 600.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the read-modify-write cost of RAID 5."
+        },
+        {
+          "loi": "Applying the write penalty to reads."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IOPS",
+          "vi": "số thao tác I/O mỗi giây"
+        },
+        {
+          "en": "small-write penalty",
+          "vi": "phí ghi nhỏ"
+        }
+      ]
+    },
+    {
+      "title": "RAID 5 — Rebuild a failed disk",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "RAID 5",
+        "XOR parity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A RAID 5 array has <code>stripes</code>: <code>stripes[i]</code> is the list of the blocks of stripe <i>i</i> across the disks (data and parity, the parity may be on any disk). Disk number <code>failed</code> died and its entries are unreadable (their values in the input must be ignored). Write <code>raid5Rebuild(stripes, failed)</code> returning the list of the values that were stored on the failed disk, stripe by stripe.</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Mảng RAID 5 có <code>stripes</code>: <code>stripes[i]</code> là danh sách các khối của dải <i>i</i> trên các đĩa (dữ liệu và parity, parity có thể ở đĩa bất kỳ). Đĩa số <code>failed</code> đã hỏng và các phần tử của nó không đọc được (giá trị trong đầu vào phải bị bỏ qua). Viết <code>raid5Rebuild(stripes, failed)</code> trả danh sách giá trị từng nằm trên đĩa hỏng, theo từng dải.</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "raid5Rebuild([[5, 6, 3], [1, 2, 3]], 0)",
+          "output": "[5,1]",
+          "explanation": "6 xor 3 = 5 and 2 xor 3 = 1.|||6 xor 3 = 5 và 2 xor 3 = 1."
+        }
+      ],
+      "hintsJson": [
+        "In every stripe the XOR of ALL blocks (data and parity) is 0.",
+        "Therefore the missing block is the XOR of the surviving blocks.",
+        "Use the operator ^ and skip index failed."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function raid5Rebuild(stripes, failed) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function raid5Rebuild(stripes, failed) {\n  var out = [];\n  for (var i = 0; i < stripes.length; i++) {\n    var x = 0;\n    for (var j = 0; j < stripes[i].length; j++) if (j !== failed) x ^= stripes[i][j];\n    out.push(x);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Parity = d₁ ⊕ d₂ ⊕ … ⊕ dₙ, so any one block equals the XOR of all the others; that is why a single failure of any disk (data or parity) is recoverable.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: raid5Rebuild([[5,6,3],[1,2,3]], 0)",
+              "vi": "Ca 1"
+            },
+            "goi": "raid5Rebuild([[5,6,3],[1,2,3]], 0)",
+            "mongDoi": [
+              5,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: raid5Rebuild([[10,20,30,0],[7,7,0,7]], 3)",
+              "vi": "Ca 2"
+            },
+            "goi": "raid5Rebuild([[10,20,30,0],[7,7,0,7]], 3)",
+            "mongDoi": [
+              0,
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: raid5Rebuild([[255,1,254]], 1)",
+              "vi": "Ca 3"
+            },
+            "goi": "raid5Rebuild([[255,1,254]], 1)",
+            "mongDoi": [
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "raid5Rebuild([[90,61,17,33,99],[1,2,3,4,5],[200,100,50,25,12]], 2)",
+            "mongDoi": [
+              37,
+              2,
+              185
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "raid5Rebuild([], 0)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "raid5Rebuild([[0,0],[9,9]], 1)",
+            "mongDoi": [
+              0,
+              9
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Including the failed disk’s garbage value in the XOR."
+        },
+        {
+          "loi": "Adding instead of XOR-ing."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

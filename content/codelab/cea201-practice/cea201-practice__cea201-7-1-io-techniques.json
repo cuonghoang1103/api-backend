@@ -1,0 +1,614 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-7-1-io-techniques",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-7-1-io-techniques"
+  },
+  "exercises": [
+    {
+      "title": "I/O 1 — Programmed I/O, interrupts, DMA and I/O addressing",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "programmed I/O",
+        "interrupt-driven I/O",
+        "DMA"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on the three I/O techniques.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về ba kỹ thuật I/O.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Polling wastes CPU; interrupts free the CPU but cost per word; DMA frees both.",
+        "Memory-mapped = one address space."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 1 — Programmed I/O, interrupts, DMA and I/O addressing\n\nAnswer in the answer panel (no code needed).\n\n1. In programmed (polling) I/O the processor …Trong I/O lập trình (thăm dò) bộ xử lý …\n2. With interrupt-driven I/O the processor …Với I/O điều khiển bằng ngắt, bộ xử lý …\n3. DMA is best suited for …DMA phù hợp nhất với …\n4. In memory-mapped I/O …Trong I/O ánh xạ bộ nhớ …\n5. “Cycle stealing” by a DMA controller means …“Cycle stealing” của bộ điều khiển DMA nghĩa là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 1 — Programmed I/O, interrupts, DMA and I/O addressing — answer key\n\n1. In programmed (polling) I/O the processor …Trong I/O lập trình (thăm dò) bộ xử lý …\n   Answer: b) repeatedly tests the device status until it is ready, wasting CPU time\n   Busy-waiting keeps the CPU occupied for the whole transfer.VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.\n\n2. With interrupt-driven I/O the processor …Với I/O điều khiển bằng ngắt, bộ xử lý …\n   Answer: c) can do other work while the device is busy, but still moves every word itself\n   The device interrupts when ready; the CPU still executes the transfer instructions.VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.\n\n3. DMA is best suited for …DMA phù hợp nhất với …\n   Answer: d) large block transfers such as disk and network traffic\n   The DMA controller moves blocks between device and memory and interrupts once at the end.VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.\n\n4. In memory-mapped I/O …Trong I/O ánh xạ bộ nhớ …\n   Answer: a) device registers share the memory address space and are accessed by ordinary load/store\n   It removes the need for special I/O instructions but uses up memory addresses.VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.\n\n5. “Cycle stealing” by a DMA controller means …“Cycle stealing” của bộ điều khiển DMA nghĩa là …\n   Answer: b) it takes over the bus for single memory cycles, delaying the CPU slightly\n   The CPU and DMA share the bus; DMA gets individual cycles.VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In programmed (polling) I/O the processor …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong I/O lập trình (thăm dò) bộ xử lý …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "transfers data without any CPU involvement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "repeatedly tests the device status until it is ready, wasting CPU time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is told by the device through an interrupt"
+              },
+              {
+                "ma": "d",
+                "noiDung": "never executes I/O instructions"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Busy-waiting keeps the CPU occupied for the whole transfer.</p><p><i>VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With interrupt-driven I/O the processor …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với I/O điều khiển bằng ngắt, bộ xử lý …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "waits in a loop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "needs a DMA controller"
+              },
+              {
+                "ma": "c",
+                "noiDung": "can do other work while the device is busy, but still moves every word itself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "moves no data at all"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The device interrupts when ready; the CPU still executes the transfer instructions.</p><p><i>VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>DMA is best suited for …</p><p style=\"opacity:.75;font-size:.92em\"><i>DMA phù hợp nhất với …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a keyboard"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one-byte transfers only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "instruction fetch"
+              },
+              {
+                "ma": "d",
+                "noiDung": "large block transfers such as disk and network traffic"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The DMA controller moves blocks between device and memory and interrupts once at the end.</p><p><i>VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In memory-mapped I/O …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong I/O ánh xạ bộ nhớ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "device registers share the memory address space and are accessed by ordinary load/store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "there are special IN/OUT instructions only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "I/O ports have a separate address space"
+              },
+              {
+                "ma": "d",
+                "noiDung": "devices cannot use interrupts"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It removes the need for special I/O instructions but uses up memory addresses.</p><p><i>VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>“Cycle stealing” by a DMA controller means …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Cycle stealing” của bộ điều khiển DMA nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it disables the cache"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it takes over the bus for single memory cycles, delaying the CPU slightly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it steals CPU registers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it modifies the program counter"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The CPU and DMA share the bus; DMA gets individual cycles.</p><p><i>VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing interrupt-driven I/O removes all CPU involvement."
+        },
+        {
+          "loi": "Mixing memory-mapped with isolated I/O."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "polling",
+          "vi": "thăm dò"
+        },
+        {
+          "en": "DMA",
+          "vi": "truy cập bộ nhớ trực tiếp"
+        },
+        {
+          "en": "cycle stealing",
+          "vi": "trộm chu kỳ"
+        }
+      ]
+    },
+    {
+      "title": "I/O 2 — How much CPU does an 8 MB/s stream cost?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "I/O CPU cost"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A device streams 8 MB/s (8 × 10⁶ bytes per second) into memory on a 2 GHz CPU. Compute the share of the CPU consumed by each technique (%, 2 decimals; polling occupies the CPU 100 % while the transfer runs).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một thiết bị đẩy dòng dữ liệu 8 MB/s (8 × 10⁶ byte/giây) vào bộ nhớ trên CPU 2 GHz. Tính phần CPU bị tiêu tốn bởi từng kỹ thuật (%, 2 chữ số; thăm dò chiếm CPU 100 % suốt lúc truyền).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Events per second = 8·10⁶ / bytes per event.",
+        "CPU share = events/s × cycles per event / 2·10⁹ cycles/s."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 2 — How much CPU does an 8 MB/s stream cost?\n\nAnswer in the answer panel (no code needed).\n\n1. CPU sharePhần CPU bị dùng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 2 — How much CPU does an 8 MB/s stream cost? — answer key\n\n1. CPU sharePhần CPU bị dùng\n   - r1.c: 100.00 / 100\n   - r2.c: 60.00 / 60\n   - r3.c: 0.20 / 0.2\n   - r4.c: 0.01\n   events/s × cycles per event ÷ 2·10⁹: 100.00%, 60.00%, 0.20%, 0.01%. Interrupt per word: 2·10⁶ interrupts per second; DMA: 1953 or 122 per second.VI: số sự kiện/giây × chu kỳ mỗi sự kiện ÷ 2·10⁹: 100.00%, 60.00%, 0.20%, 0.01%.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>events/s × cycles per event ÷ 2·10⁹: 100.00%, 60.00%, 0.20%, 0.01%. Interrupt per word: 2·10⁶ interrupts per second; DMA: 1953 or 122 per second.</p><p><i>VI: số sự kiện/giây × chu kỳ mỗi sự kiện ÷ 2·10⁹: 100.00%, 60.00%, 0.20%, 0.01%.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>CPU share</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần CPU bị dùng</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Technique"
+              },
+              {
+                "ma": "c",
+                "ten": "CPU (%)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "Polling (CPU is busy for the whole transfer)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "Interrupt per 4-byte word, 600 cycles per interrupt"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "DMA per 4 KiB block: 500 cycles setup + 1500 cycles completion interrupt"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "DMA per 64 KiB block: same 2000 cycles per block"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "100.00",
+                "100"
+              ],
+              "r2.c": [
+                "60.00",
+                "60"
+              ],
+              "r3.c": [
+                "0.20",
+                "0.2"
+              ],
+              "r4.c": [
+                "0.01"
+              ]
+            },
+            "giaiThich": "<p>events/s × cycles per event ÷ 2·10⁹: 100.00%, 60.00%, 0.20%, 0.01%. Interrupt per word: 2·10⁶ interrupts per second; DMA: 1953 or 122 per second.</p><p><i>VI: số sự kiện/giây × chu kỳ mỗi sự kiện ÷ 2·10⁹: 100.00%, 60.00%, 0.20%, 0.01%.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using MB (10⁶) for the DMA block size."
+        },
+        {
+          "loi": "Charging the setup but forgetting the completion interrupt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "per-word interrupt",
+          "vi": "ngắt cho từng từ"
+        }
+      ]
+    },
+    {
+      "title": "I/O 3 — Order a DMA read from disk",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "DMA"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Arrange the steps of reading a block from a disk into memory by DMA.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp các bước đọc một khối từ đĩa vào bộ nhớ bằng DMA.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Setup first, interrupt last.",
+        "The CPU is free in between."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 3 — Order a DMA read from disk\n\nAnswer in the answer panel (no code needed).\n\n1. DMA transferTruyền bằng DMA\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 3 — Order a DMA read from disk — answer key\n\n1. DMA transferTruyền bằng DMA\n   Answer: s1) The CPU programs the DMA controller with the device, the memory address, the direction and the byte count  →  s2) The CPU continues with other work  →  s3) The DMA controller requests the bus and moves the words between the device and memory, one cycle at a time  →  s4) The DMA controller decrements its count until it reaches zero  →  s5) The DMA controller raises one interrupt to tell the CPU the transfer is complete\n   The CPU is involved only at the start and at the end.VI: CPU chỉ tham gia ở đầu và cuối.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The CPU is involved only at the start and at the end.</p><p><i>VI: CPU chỉ tham gia ở đầu và cuối.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>DMA transfer</p><p style=\"opacity:.75;font-size:.92em\"><i>Truyền bằng DMA</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "The CPU continues with other work"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "The DMA controller requests the bus and moves the words between the device and memory, one cycle at a time"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "The DMA controller decrements its count until it reaches zero"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The DMA controller raises one interrupt to tell the CPU the transfer is complete"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "The CPU programs the DMA controller with the device, the memory address, the direction and the byte count"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>The CPU is involved only at the start and at the end.</p><p><i>VI: CPU chỉ tham gia ở đầu và cuối.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Placing the interrupt before the last word is moved."
+        },
+        {
+          "loi": "Making the CPU copy every word."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DMA controller",
+          "vi": "bộ điều khiển DMA"
+        }
+      ]
+    },
+    {
+      "title": "I/O 4 — Memory-mapped I/O: read the address map",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "memory-mapped I/O"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A 16-bit system uses memory-mapped I/O. Map: <code>0000–BFFF</code> RAM, <code>C000–EFFF</code> ROM, <code>F000–FFFF</code> device registers. For each address say which region it belongs to; then give how many bytes of address space are consumed by ROM + I/O.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hệ 16 bit dùng I/O ánh xạ bộ nhớ. Bản đồ: <code>0000–BFFF</code> RAM, <code>C000–EFFF</code> ROM, <code>F000–FFFF</code> thanh ghi thiết bị. Với mỗi địa chỉ cho biết thuộc vùng nào; rồi cho số byte không gian địa chỉ bị ROM + I/O chiếm.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare the address with the region limits (hex).",
+        "The space is 2¹⁶ = 65,536 bytes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 4 — Memory-mapped I/O: read the address map\n\nAnswer in the answer panel (no code needed).\n\n1. Region of an addressVùng của địa chỉ\n2. Address space consumedKhông gian địa chỉ bị chiếm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I/O 4 — Memory-mapped I/O: read the address map — answer key\n\n1. Region of an addressVùng của địa chỉ\n   - r1.r: RAM\n   - r2.r: RAM\n   - r3.r: ROM\n   - r4.r: ROM\n   - r5.r: I/O\n   - r6.r: I/O\n   0000–BFFF RAM; C000–EFFF ROM; F000–FFFF I/O. Results: RAM, RAM, ROM, ROM, I/O, I/O.VI: Kết quả: RAM, RAM, ROM, ROM, I/O, I/O.\n\n2. Address space consumedKhông gian địa chỉ bị chiếm\n   - r1.v: 16384 / 16384 / 16 KiB\n   0xC000–0xFFFF = 16384 bytes = 16 KiB (a quarter of the 64 KiB space).VI: 0xC000–0xFFFF = 16384 byte = 16 KiB (một phần tư không gian 64 KiB).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>0000–BFFF RAM; C000–EFFF ROM; F000–FFFF I/O. Results: RAM, RAM, ROM, ROM, I/O, I/O.</p><p><i>VI: Kết quả: RAM, RAM, ROM, ROM, I/O, I/O.</i></p><p>0xC000–0xFFFF = 16384 bytes = 16 KiB (a quarter of the 64 KiB space).</p><p><i>VI: 0xC000–0xFFFF = 16384 byte = 16 KiB (một phần tư không gian 64 KiB).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Region of an address</p><p style=\"opacity:.75;font-size:.92em\"><i>Vùng của địa chỉ</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Address"
+              },
+              {
+                "ma": "r",
+                "ten": "Region",
+                "luaChon": [
+                  "RAM",
+                  "ROM",
+                  "I/O"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "0x0000"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "0xBFFF"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "0xC000"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "0xEF00"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "0xF000"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "a": "0xFF10"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "RAM",
+              "r2.r": "RAM",
+              "r3.r": "ROM",
+              "r4.r": "ROM",
+              "r5.r": "I/O",
+              "r6.r": "I/O"
+            },
+            "giaiThich": "<p>0000–BFFF RAM; C000–EFFF ROM; F000–FFFF I/O. Results: RAM, RAM, ROM, ROM, I/O, I/O.</p><p><i>VI: Kết quả: RAM, RAM, ROM, ROM, I/O, I/O.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Address space consumed</p><p style=\"opacity:.75;font-size:.92em\"><i>Không gian địa chỉ bị chiếm</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Bytes"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "ROM + I/O (bytes)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "16384",
+                "16384",
+                "16 KiB"
+              ]
+            },
+            "giaiThich": "<p>0xC000–0xFFFF = 16384 bytes = 16 KiB (a quarter of the 64 KiB space).</p><p><i>VI: 0xC000–0xFFFF = 16384 byte = 16 KiB (một phần tư không gian 64 KiB).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating 0xBFFF as ROM (it is the last RAM byte)."
+        },
+        {
+          "loi": "Forgetting that I/O registers use up memory addresses."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "memory-mapped I/O",
+          "vi": "I/O ánh xạ bộ nhớ"
+        }
+      ]
+    }
+  ]
+}

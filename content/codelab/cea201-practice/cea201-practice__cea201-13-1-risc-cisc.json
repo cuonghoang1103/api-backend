@@ -1,0 +1,654 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-13-1-risc-cisc",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-13-1-risc-cisc"
+  },
+  "exercises": [
+    {
+      "title": "RISC 1 — RISC versus CISC characteristics",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "RISC",
+        "CISC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on RISC and CISC.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về RISC và CISC.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "RISC = simple + regular + registers; CISC = rich + compact.",
+        "The performance equation tells which trade-off wins."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RISC 1 — RISC versus CISC characteristics\n\nAnswer in the answer panel (no code needed).\n\n1. Which is a typical RISC characteristic?Đặc trưng nào là điển hình của RISC?\n2. A typical CISC trait is …Một đặc điểm điển hình của CISC là …\n3. Why do RISC machines have large register files?Vì sao máy RISC có tệp thanh ghi lớn?\n4. RISC programs usually have … instructions than CISC programsChương trình RISC thường có … lệnh hơn chương trình CISC\n5. Modern x86 processors …Các bộ xử lý x86 hiện đại …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RISC 1 — RISC versus CISC characteristics — answer key\n\n1. Which is a typical RISC characteristic?Đặc trưng nào là điển hình của RISC?\n   Answer: c) Fixed-length instructions and a load/store architecture\n   Simple, regular instructions are easy to decode and pipeline.VI: Lệnh đơn giản, đều đặn dễ giải mã và pipeline.\n\n2. A typical CISC trait is …Một đặc điểm điển hình của CISC là …\n   Answer: d) instructions that can reference memory operands directly and have variable length\n   It aims for compact code and a rich instruction set.VI: Nhắm tới mã gọn và tập lệnh phong phú.\n\n3. Why do RISC machines have large register files?Vì sao máy RISC có tệp thanh ghi lớn?\n   Answer: a) Most operands are kept in registers, avoiding slow memory accesses\n   Procedure calls and local variables benefit from registers (windows).VI: Gọi thủ tục và biến cục bộ hưởng lợi từ thanh ghi (cửa sổ).\n\n4. RISC programs usually have … instructions than CISC programsChương trình RISC thường có … lệnh hơn chương trình CISC\n   Answer: b) more (but each is simpler and faster)\n   A larger IC is offset by a lower CPI and a faster clock.VI: IC lớn hơn được bù bằng CPI thấp hơn và clock nhanh hơn.\n\n5. Modern x86 processors …Các bộ xử lý x86 hiện đại …\n   Answer: c) translate CISC instructions into RISC-like micro-operations internally\n   The front end decodes x86 into µops executed by a RISC-style core.VI: Phần trước giải mã x86 thành µop chạy trên lõi kiểu RISC.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which is a typical RISC characteristic?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đặc trưng nào là điển hình của RISC?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Variable-length instructions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Microcoded complex instructions only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Fixed-length instructions and a load/store architecture"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Many complex addressing modes"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Simple, regular instructions are easy to decode and pipeline.</p><p><i>VI: Lệnh đơn giản, đều đặn dễ giải mã và pipeline.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A typical CISC trait is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đặc điểm điển hình của CISC là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a large uniform register file only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "single-cycle execution of every instruction"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no microcode"
+              },
+              {
+                "ma": "d",
+                "noiDung": "instructions that can reference memory operands directly and have variable length"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It aims for compact code and a rich instruction set.</p><p><i>VI: Nhắm tới mã gọn và tập lệnh phong phú.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why do RISC machines have large register files?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao máy RISC có tệp thanh ghi lớn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Most operands are kept in registers, avoiding slow memory accesses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Registers are cheaper than ALUs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To remove the need for a cache"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because instructions are long"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Procedure calls and local variables benefit from registers (windows).</p><p><i>VI: Gọi thủ tục và biến cục bộ hưởng lợi từ thanh ghi (cửa sổ).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>RISC programs usually have … instructions than CISC programs</p><p style=\"opacity:.75;font-size:.92em\"><i>Chương trình RISC thường có … lệnh hơn chương trình CISC</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no"
+              },
+              {
+                "ma": "b",
+                "noiDung": "more (but each is simpler and faster)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fewer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "exactly the same number of"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A larger IC is offset by a lower CPI and a faster clock.</p><p><i>VI: IC lớn hơn được bù bằng CPI thấp hơn và clock nhanh hơn.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Modern x86 processors …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các bộ xử lý x86 hiện đại …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "have no pipeline"
+              },
+              {
+                "ma": "b",
+                "noiDung": "cannot run complex instructions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "translate CISC instructions into RISC-like micro-operations internally"
+              },
+              {
+                "ma": "d",
+                "noiDung": "are pure RISC machines"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The front end decodes x86 into µops executed by a RISC-style core.</p><p><i>VI: Phần trước giải mã x86 thành µop chạy trên lõi kiểu RISC.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming RISC always produces smaller programs."
+        },
+        {
+          "loi": "Thinking modern x86 is purely CISC inside."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "load/store architecture",
+          "vi": "kiến trúc nạp/lưu"
+        },
+        {
+          "en": "micro-operation",
+          "vi": "vi thao tác"
+        }
+      ]
+    },
+    {
+      "title": "RISC 2 — Who wins: fewer complex instructions or more simple ones?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "RISC vs CISC performance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A CISC program executes 10⁹ instructions. The RISC version executes <i>ratio</i> × 10⁹. Compute the CPU time of each (seconds, 3 decimals) and the speedup of the faster over the slower (2 decimals). Columns are: CISC CPI · CISC clock (GHz) · RISC IC ratio · RISC CPI · RISC clock (GHz).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chương trình CISC thực hiện 10⁹ lệnh. Bản RISC thực hiện <i>tỉ lệ</i> × 10⁹. Tính thời gian CPU mỗi bản (giây, 3 chữ số) và hệ số nhanh hơn của bản nhanh so với bản chậm (2 chữ số). Các cột: CPI CISC · clock CISC (GHz) · tỉ lệ IC RISC · CPI RISC · clock RISC (GHz).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Apply T = IC × CPI / f to each design.",
+        "Speedup = slower / faster."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RISC 2 — Who wins: fewer complex instructions or more simple ones?\n\nAnswer in the answer panel (no code needed).\n\n1. CISC versus RISCCISC so với RISC\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RISC 2 — Who wins: fewer complex instructions or more simple ones? — answer key\n\n1. CISC versus RISCCISC so với RISC\n   - r1.c: 2.000 / 2\n   - r1.r: 0.910 / 0.91\n   - r1.s: 2.20 / 2.2\n   - r2.c: 1.750 / 1.75\n   - r2.r: 0.900 / 0.9\n   - r2.s: 1.94\n   - r3.c: 1.500 / 1.5\n   - r3.r: 2.400 / 2.4\n   - r3.s: 1.60 / 1.6\n   T = IC × CPI / f. CISC 2.000 s vs RISC 0.910 s; CISC 1.750 s vs RISC 0.900 s; CISC 1.500 s vs RISC 2.400 s. In rows 1–2 the RISC program executes 20–30 % more instructions but with a much lower CPI, so it wins; in row 3 it needs 2.4× the instructions for almost no CPI gain, so CISC wins — compute, do not assume.VI: T = IC × CPI / f. CISC 2.000 s so với RISC 0.910 s; CISC 1.750 s so với RISC 0.900 s; CISC 1.500 s so với RISC 2.400 s.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>T = IC × CPI / f. CISC 2.000 s vs RISC 0.910 s; CISC 1.750 s vs RISC 0.900 s; CISC 1.500 s vs RISC 2.400 s. In rows 1–2 the RISC program executes 20–30 % more instructions but with a much lower CPI, so it wins; in row 3 it needs 2.4× the instructions for almost no CPI gain, so CISC wins — compute, do not assume.</p><p><i>VI: T = IC × CPI / f. CISC 2.000 s so với RISC 0.910 s; CISC 1.750 s so với RISC 0.900 s; CISC 1.500 s so với RISC 2.400 s.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>CISC versus RISC</p><p style=\"opacity:.75;font-size:.92em\"><i>CISC so với RISC</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "CISC CPI, GHz; RISC ratio, CPI, GHz"
+              },
+              {
+                "ma": "c",
+                "ten": "T CISC (s)"
+              },
+              {
+                "ma": "r",
+                "ten": "T RISC (s)"
+              },
+              {
+                "ma": "s",
+                "ten": "Speedup of faster"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "CISC CPI = 4, 2 GHz; RISC ×1.4, CPI = 1.3, 2 GHz"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "CISC CPI = 3.5, 2 GHz; RISC ×1.5, CPI = 1.2, 2 GHz"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "CISC CPI = 3, 2 GHz; RISC ×2.4, CPI = 2, 2 GHz"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "2.000",
+                "2"
+              ],
+              "r1.r": [
+                "0.910",
+                "0.91"
+              ],
+              "r1.s": [
+                "2.20",
+                "2.2"
+              ],
+              "r2.c": [
+                "1.750",
+                "1.75"
+              ],
+              "r2.r": [
+                "0.900",
+                "0.9"
+              ],
+              "r2.s": [
+                "1.94"
+              ],
+              "r3.c": [
+                "1.500",
+                "1.5"
+              ],
+              "r3.r": [
+                "2.400",
+                "2.4"
+              ],
+              "r3.s": [
+                "1.60",
+                "1.6"
+              ]
+            },
+            "giaiThich": "<p>T = IC × CPI / f. CISC 2.000 s vs RISC 0.910 s; CISC 1.750 s vs RISC 0.900 s; CISC 1.500 s vs RISC 2.400 s. In rows 1–2 the RISC program executes 20–30 % more instructions but with a much lower CPI, so it wins; in row 3 it needs 2.4× the instructions for almost no CPI gain, so CISC wins — compute, do not assume.</p><p><i>VI: T = IC × CPI / f. CISC 2.000 s so với RISC 0.910 s; CISC 1.750 s so với RISC 0.900 s; CISC 1.500 s so với RISC 2.400 s.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing CPI only."
+        },
+        {
+          "loi": "Forgetting that the RISC program has more instructions."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IC ratio",
+          "vi": "tỉ lệ số lệnh"
+        }
+      ]
+    },
+    {
+      "title": "RISC 3 — Register windows: how many registers?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "register windows"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A SPARC-like machine has <b>G</b> global registers and <b>W</b> register windows. Each window has 8 <i>in</i>, 8 <i>local</i> and 8 <i>out</i> registers, and the <i>out</i> registers of one window are the <i>in</i> registers of the next (they overlap), so every additional window adds 16 physical registers. Give the total number of physical registers G + 16·W, the number of registers visible to a procedure (G + 24), and, for a call depth <b>D</b> counted from the first window (the program starts in window 1), and — for a chain of D nested calls that all complete before any return — the number of overflow traps = max(0, D − W + 1).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một máy kiểu SPARC có <b>G</b> thanh ghi toàn cục và <b>W</b> cửa sổ thanh ghi. Mỗi cửa sổ có 8 thanh ghi <i>in</i>, 8 <i>local</i> và 8 <i>out</i>, và các thanh ghi <i>out</i> của cửa sổ này là <i>in</i> của cửa sổ kế (chồng lên nhau), nên mỗi cửa sổ thêm 16 thanh ghi vật lý. Cho tổng số thanh ghi vật lý G + 16·W, số thanh ghi một thủ tục nhìn thấy (G + 24) và, và — với chuỗi D lời gọi lồng nhau chưa trả về — số bẫy tràn = max(0, D − W + 1).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each new window adds 16 registers because 8 are shared with the neighbour.",
+        "Overflow only occurs when the call depth exceeds the windows available."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RISC 3 — Register windows: how many registers?\n\nAnswer in the answer panel (no code needed).\n\n1. Register windowsCửa sổ thanh ghi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# RISC 3 — Register windows: how many registers? — answer key\n\n1. Register windowsCửa sổ thanh ghi\n   - r1.t: 72\n   - r1.v: 32\n   - r1.o: 0\n   - r2.t: 136\n   - r2.v: 32\n   - r2.o: 3\n   - r3.t: 136\n   - r3.v: 32\n   - r3.o: 0\n   - r4.t: 264\n   - r4.v: 32\n   - r4.o: 5\n   G=8, W=4, D=3: 72 physical, 32 visible, 0 overflows; G=8, W=8, D=10: 136 physical, 32 visible, 3 overflows; G=8, W=8, D=7: 136 physical, 32 visible, 0 overflows; G=8, W=16, D=20: 264 physical, 32 visible, 5 overflows. Shallow call chains never touch memory.VI: G=8, W=4, D=3: 72 vật lý, 32 thấy được, 0 tràn; G=8, W=8, D=10: 136 vật lý, 32 thấy được, 3 tràn; G=8, W=8, D=7: 136 vật lý, 32 thấy được, 0 tràn; G=8, W=16, D=20: 264 vật lý, 32 thấy được, 5 tràn. Chuỗi gọi nông không chạm bộ nhớ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>G=8, W=4, D=3: 72 physical, 32 visible, 0 overflows; G=8, W=8, D=10: 136 physical, 32 visible, 3 overflows; G=8, W=8, D=7: 136 physical, 32 visible, 0 overflows; G=8, W=16, D=20: 264 physical, 32 visible, 5 overflows. Shallow call chains never touch memory.</p><p><i>VI: G=8, W=4, D=3: 72 vật lý, 32 thấy được, 0 tràn; G=8, W=8, D=10: 136 vật lý, 32 thấy được, 3 tràn; G=8, W=8, D=7: 136 vật lý, 32 thấy được, 0 tràn; G=8, W=16, D=20: 264 vật lý, 32 thấy được, 5 tràn. Chuỗi gọi nông không chạm bộ nhớ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Register windows</p><p style=\"opacity:.75;font-size:.92em\"><i>Cửa sổ thanh ghi</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "G, W, D"
+              },
+              {
+                "ma": "t",
+                "ten": "Physical registers"
+              },
+              {
+                "ma": "v",
+                "ten": "Visible"
+              },
+              {
+                "ma": "o",
+                "ten": "Overflows"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "G = 8, W = 4, D = 3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "G = 8, W = 8, D = 10"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "G = 8, W = 8, D = 7"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "G = 8, W = 16, D = 20"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "72",
+              "r1.v": "32",
+              "r1.o": "0",
+              "r2.t": "136",
+              "r2.v": "32",
+              "r2.o": "3",
+              "r3.t": "136",
+              "r3.v": "32",
+              "r3.o": "0",
+              "r4.t": "264",
+              "r4.v": "32",
+              "r4.o": "5"
+            },
+            "giaiThich": "<p>G=8, W=4, D=3: 72 physical, 32 visible, 0 overflows; G=8, W=8, D=10: 136 physical, 32 visible, 3 overflows; G=8, W=8, D=7: 136 physical, 32 visible, 0 overflows; G=8, W=16, D=20: 264 physical, 32 visible, 5 overflows. Shallow call chains never touch memory.</p><p><i>VI: G=8, W=4, D=3: 72 vật lý, 32 thấy được, 0 tràn; G=8, W=8, D=10: 136 vật lý, 32 thấy được, 3 tràn; G=8, W=8, D=7: 136 vật lý, 32 thấy được, 0 tràn; G=8, W=16, D=20: 264 vật lý, 32 thấy được, 5 tràn. Chuỗi gọi nông không chạm bộ nhớ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding 24 per window (ignoring the overlap)."
+        },
+        {
+          "loi": "Counting the globals as part of every window."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "register window",
+          "vi": "cửa sổ thanh ghi"
+        }
+      ]
+    },
+    {
+      "title": "RISC 4 — Simulate window overflow and underflow traps",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "register windows",
+        "overflow",
+        "underflow"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>The CPU holds up to <code>W</code> register windows. The program starts running in 1 window (depth 1). A call <code>\"C\"</code> makes the callee’s window the current one: if all <code>W</code> windows are already resident, the oldest is spilled to memory (<b>overflow trap</b>), otherwise a new window becomes resident. A return <code>\"R\"</code> goes back to the caller: if the caller’s window is not resident (only the current window is), it must be reloaded from memory (<b>underflow trap</b>); otherwise one window is simply released. A return at depth 1 is ignored. Write <code>windowTraps(events, W)</code> returning <code>{ overflows, underflows, depth }</code> (final call depth).</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>CPU giữ tối đa <code>W</code> cửa sổ thanh ghi. Chương trình bắt đầu chạy với 1 cửa sổ (độ sâu 1). Lời gọi <code>\"C\"</code> biến cửa sổ của hàm được gọi thành cửa sổ hiện tại: nếu cả <code>W</code> cửa sổ đã có mặt thì cửa sổ cũ nhất bị đẩy ra bộ nhớ (<b>bẫy tràn</b>), ngược lại một cửa sổ mới có mặt. Lệnh trả về <code>\"R\"</code> quay lại hàm gọi: nếu cửa sổ của hàm gọi không có mặt (chỉ có cửa sổ hiện tại) thì phải nạp lại từ bộ nhớ (<b>bẫy cạn</b>); ngược lại chỉ giải phóng một cửa sổ. Trả về ở độ sâu 1 bị bỏ qua. Viết <code>windowTraps(events, W)</code> trả <code>{ overflows, underflows, depth }</code> (độ sâu cuối).</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "windowTraps([\"C\",\"C\",\"C\",\"R\",\"R\",\"R\"], 2)",
+          "output": "{\"overflows\":2,\"underflows\":2,\"depth\":1}",
+          "explanation": "With 2 windows the second call overflows and the matching return underflows.|||Với 2 cửa sổ, lời gọi thứ hai gây tràn và lệnh trả về tương ứng gây cạn."
+        }
+      ],
+      "hintsJson": [
+        "Track two numbers: total call depth and how many windows are resident.",
+        "Overflow when calling with resident = W; underflow when returning with resident = 1 and depth > 1.",
+        "Ignore a return at depth 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function windowTraps(events, W) {\n  return { overflows: 0, underflows: 0, depth: 1 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function windowTraps(events, W) {\n  var depth = 1, resident = 1, over = 0, under = 0;\n  for (var i = 0; i < events.length; i++) {\n    if (events[i] === 'C') {\n      depth++;\n      if (resident === W) over++; else resident++;\n    } else if (depth > 1) {\n      depth--;\n      if (resident > 1) resident--; else under++;\n    }\n  }\n  return { overflows: over, underflows: under, depth: depth };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Windows make a call cheap until the call chain gets deeper than the hardware; then each extra call/return pays a memory spill/fill. Deep recursion makes windows thrash.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: windowTraps([\"C\",\"C\",\"C\",\"R\",\"R\",\"R\"], 2)",
+              "vi": "Ca 1"
+            },
+            "goi": "windowTraps([\"C\",\"C\",\"C\",\"R\",\"R\",\"R\"], 2)",
+            "mongDoi": {
+              "overflows": 2,
+              "underflows": 2,
+              "depth": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: windowTraps([\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\",\"R\",\"R\",\"R\",\"C\",\"C\",\"C\",\"R\",\"R\",\")",
+              "vi": "Ca 2"
+            },
+            "goi": "windowTraps([\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\",\"R\",\"R\",\"R\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\"], 4)",
+            "mongDoi": {
+              "overflows": 3,
+              "underflows": 3,
+              "depth": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: windowTraps([\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\",\"R\",\"R\",\"R\",\"C\",\"C\",\"C\",\"R\",\"R\",\")",
+              "vi": "Ca 3"
+            },
+            "goi": "windowTraps([\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\",\"R\",\"R\",\"R\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\"], 8)",
+            "mongDoi": {
+              "overflows": 0,
+              "underflows": 0,
+              "depth": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: windowTraps([\"R\",\"R\",\"C\",\"R\"], 3)",
+              "vi": "Ca 4"
+            },
+            "goi": "windowTraps([\"R\",\"R\",\"C\",\"R\"], 3)",
+            "mongDoi": {
+              "overflows": 0,
+              "underflows": 0,
+              "depth": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "windowTraps([\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\",\"R\",\"R\",\"R\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\",\"C\",\"C\",\"C\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\",\"R\",\"R\",\"R\",\"C\",\"C\",\"C\",\"R\",\"R\",\"R\"], 3)",
+            "mongDoi": {
+              "overflows": 10,
+              "underflows": 10,
+              "depth": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "windowTraps([], 5)",
+            "mongDoi": {
+              "overflows": 0,
+              "underflows": 0,
+              "depth": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "windowTraps([\"C\",\"R\",\"C\",\"R\",\"C\",\"R\"], 1)",
+            "mongDoi": {
+              "overflows": 3,
+              "underflows": 3,
+              "depth": 1
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting an underflow for every return."
+        },
+        {
+          "loi": "Letting resident exceed W."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

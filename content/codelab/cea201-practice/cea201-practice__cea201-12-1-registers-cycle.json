@@ -1,0 +1,674 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-12-1-registers-cycle",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-12-1-registers-cycle"
+  },
+  "exercises": [
+    {
+      "title": "Processor 1 — Registers, ALU, control unit and the PSW",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "processor organisation",
+        "registers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on processor organisation.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về tổ chức bộ xử lý.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hidden registers support the cycle; visible ones hold program data.",
+        "The control unit does not compute data."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 1 — Registers, ALU, control unit and the PSW\n\nAnswer in the answer panel (no code needed).\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n3. The control unit …Đơn vị điều khiển …\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n5. An instruction cycle with indirect addressing consists of …Chu trình lệnh có định địa chỉ gián tiếp gồm …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 1 — Registers, ALU, control unit and the PSW — answer key\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n   Answer: b) User-visible registers (general purpose, data, address, condition codes)\n   MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.\n\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n   Answer: c) condition codes, interrupt enable and mode bits\n   Flags such as zero, sign, carry, overflow and the supervisor/user mode.VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.\n\n3. The control unit …Đơn vị điều khiển …\n   Answer: d) generates the control signals that sequence the micro-operations\n   It decodes the opcode and activates the right data paths.VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.\n\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n   Answer: a) registers only; only load and store touch memory\n   This keeps instructions simple and pipeline-friendly.VI: Giữ lệnh đơn giản và hợp với pipeline.\n\n5. An instruction cycle with indirect addressing consists of …Chu trình lệnh có định địa chỉ gián tiếp gồm …\n   Answer: b) fetch, indirect, execute (and interrupt)\n   The indirect cycle reads the pointer before the operand.VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which registers can the programmer name directly in instructions?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The internal ALU latches"
+              },
+              {
+                "ma": "b",
+                "noiDung": "User-visible registers (general purpose, data, address, condition codes)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "MAR and MBR"
+              },
+              {
+                "ma": "d",
+                "noiDung": "IR"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).</p><p><i>VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The program status word (PSW) typically holds …</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ trạng thái chương trình (PSW) thường chứa …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the stack contents"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the cache tags"
+              },
+              {
+                "ma": "c",
+                "noiDung": "condition codes, interrupt enable and mode bits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the program text"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Flags such as zero, sign, carry, overflow and the supervisor/user mode.</p><p><i>VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The control unit …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đơn vị điều khiển …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "performs arithmetic"
+              },
+              {
+                "ma": "b",
+                "noiDung": "stores the program"
+              },
+              {
+                "ma": "c",
+                "noiDung": "holds the registers only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "generates the control signals that sequence the micro-operations"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It decodes the opcode and activates the right data paths.</p><p><i>VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In a load/store (RISC-style) machine, arithmetic instructions operate on …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "registers only; only load and store touch memory"
+              },
+              {
+                "ma": "b",
+                "noiDung": "memory operands only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "immediate operands only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the stack only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>This keeps instructions simple and pipeline-friendly.</p><p><i>VI: Giữ lệnh đơn giản và hợp với pipeline.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An instruction cycle with indirect addressing consists of …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu trình lệnh có định địa chỉ gián tiếp gồm …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "indirect only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fetch, indirect, execute (and interrupt)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only execute"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only fetch and interrupt"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The indirect cycle reads the pointer before the operand.</p><p><i>VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing the PSW with the PC."
+        },
+        {
+          "loi": "Thinking the programmer can load the IR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PSW",
+          "vi": "từ trạng thái chương trình"
+        },
+        {
+          "en": "control unit",
+          "vi": "đơn vị điều khiển"
+        }
+      ]
+    },
+    {
+      "title": "Processor 2 — Fetch and execute three instructions (hex)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "instruction fetch",
+        "instruction execute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A 16-bit machine has a 4-bit opcode (1 = LOAD AC from memory, 5 = ADD memory to AC, 2 = STORE AC to memory) and a 12-bit address. Initial state: <code>PC = 300</code>, <code>AC = 0000</code>; memory <code>[300] = 1940, [301] = 5941, [302] = 2941, [940] = 0003, [941] = 0002</code> (all hex). Give <b>PC</b>, <b>IR</b> and <b>AC</b> (4 hex digits for IR and AC, 3 for PC) after each fetch and execute step.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Máy 16 bit có opcode 4 bit (1 = LOAD AC từ bộ nhớ, 5 = ADD bộ nhớ vào AC, 2 = STORE AC vào bộ nhớ) và địa chỉ 12 bit. Trạng thái đầu: <code>PC = 300</code>, <code>AC = 0000</code>; bộ nhớ <code>[300] = 1940, [301] = 5941, [302] = 2941, [940] = 0003, [941] = 0002</code> (hex). Cho <b>PC</b>, <b>IR</b> và <b>AC</b> (IR và AC 4 chữ số hex, PC 3 chữ số) sau mỗi bước nạp và thực hiện.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Opcode = top hex digit, address = lower three hex digits.",
+        "The fetch increments the PC before the execute step."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 2 — Fetch and execute three instructions (hex)\n\nAnswer in the answer panel (no code needed).\n\n1. Fetch and execute traceVết nạp và thực hiện\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 2 — Fetch and execute three instructions (hex) — answer key\n\n1. Fetch and execute traceVết nạp và thực hiện\n   - r1.p: 301 / 301\n   - r1.i: 1940\n   - r1.a: 0000\n   - r2.p: 301 / 301\n   - r2.i: 1940\n   - r2.a: 0003\n   - r3.p: 302 / 302\n   - r3.i: 5941\n   - r3.a: 0003\n   - r4.p: 302 / 302\n   - r4.i: 5941\n   - r4.a: 0005\n   - r5.p: 303 / 303\n   - r5.i: 2941\n   - r5.a: 0005\n   - r6.p: 303 / 303\n   - r6.i: 2941\n   - r6.a: 0005\n   Fetch: IR ← M[PC], PC ← PC + 1. Execute: LOAD gives AC = 0003; ADD gives 0003 + 0002 = 0005; STORE writes 0005 into [941] (AC unchanged).VI: Nạp: IR ← M[PC], PC ← PC + 1. Thực hiện: LOAD cho AC = 0003; ADD cho 0003 + 0002 = 0005; STORE ghi 0005 vào [941] (AC không đổi).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fetch: IR ← M[PC], PC ← PC + 1. Execute: LOAD gives AC = 0003; ADD gives 0003 + 0002 = 0005; STORE writes 0005 into [941] (AC unchanged).</p><p><i>VI: Nạp: IR ← M[PC], PC ← PC + 1. Thực hiện: LOAD cho AC = 0003; ADD cho 0003 + 0002 = 0005; STORE ghi 0005 vào [941] (AC không đổi).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fetch and execute trace</p><p style=\"opacity:.75;font-size:.92em\"><i>Vết nạp và thực hiện</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Step"
+              },
+              {
+                "ma": "p",
+                "ten": "PC"
+              },
+              {
+                "ma": "i",
+                "ten": "IR"
+              },
+              {
+                "ma": "a",
+                "ten": "AC"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "fetch #1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "execute #1"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "fetch #2"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "execute #2"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "fetch #3"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "s": "execute #3"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": [
+                "301",
+                "301"
+              ],
+              "r1.i": [
+                "1940"
+              ],
+              "r1.a": [
+                "0000"
+              ],
+              "r2.p": [
+                "301",
+                "301"
+              ],
+              "r2.i": [
+                "1940"
+              ],
+              "r2.a": [
+                "0003"
+              ],
+              "r3.p": [
+                "302",
+                "302"
+              ],
+              "r3.i": [
+                "5941"
+              ],
+              "r3.a": [
+                "0003"
+              ],
+              "r4.p": [
+                "302",
+                "302"
+              ],
+              "r4.i": [
+                "5941"
+              ],
+              "r4.a": [
+                "0005"
+              ],
+              "r5.p": [
+                "303",
+                "303"
+              ],
+              "r5.i": [
+                "2941"
+              ],
+              "r5.a": [
+                "0005"
+              ],
+              "r6.p": [
+                "303",
+                "303"
+              ],
+              "r6.i": [
+                "2941"
+              ],
+              "r6.a": [
+                "0005"
+              ]
+            },
+            "giaiThich": "<p>Fetch: IR ← M[PC], PC ← PC + 1. Execute: LOAD gives AC = 0003; ADD gives 0003 + 0002 = 0005; STORE writes 0005 into [941] (AC unchanged).</p><p><i>VI: Nạp: IR ← M[PC], PC ← PC + 1. Thực hiện: LOAD cho AC = 0003; ADD cho 0003 + 0002 = 0005; STORE ghi 0005 vào [941] (AC không đổi).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Incrementing the PC after the execute step."
+        },
+        {
+          "loi": "Changing the AC during a STORE."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IR",
+          "vi": "thanh ghi lệnh"
+        }
+      ]
+    },
+    {
+      "title": "Processor 3 — Order the micro-operations of an indirect load",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "indirect cycle",
+        "micro-operations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>The instruction <code>LOAD (X)</code> (indirect) has just been fetched into the IR. Put the micro-operations in the right order, starting from the beginning of the fetch.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lệnh <code>LOAD (X)</code> (gián tiếp) vừa được nạp vào IR. Sắp các vi thao tác theo đúng thứ tự, bắt đầu từ đầu pha nạp.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every memory read is MAR ← address then MBR ← M[MAR].",
+        "The pointer read comes before the data read."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 3 — Order the micro-operations of an indirect load\n\nAnswer in the answer panel (no code needed).\n\n1. Fetch, indirect and execute cyclesChu kỳ nạp, gián tiếp và thực hiện\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 3 — Order the micro-operations of an indirect load — answer key\n\n1. Fetch, indirect and execute cyclesChu kỳ nạp, gián tiếp và thực hiện\n   Answer: s1) MAR ← PC  →  s2) MBR ← M[MAR]; PC ← PC + 1  →  s3) IR ← MBR  →  s4) MAR ← IR(address)  →  s5) MBR ← M[MAR] (this is the pointer)  →  s6) MAR ← MBR  →  s7) MBR ← M[MAR] (this is the data)  →  s8) AC ← MBR\n   Two memory reads after the fetch: one for the pointer (indirect cycle) and one for the data (execute cycle).VI: Sau nạp lệnh có hai lần đọc bộ nhớ: một cho con trỏ (chu kỳ gián tiếp) và một cho dữ liệu (chu kỳ thực hiện).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two memory reads after the fetch: one for the pointer (indirect cycle) and one for the data (execute cycle).</p><p><i>VI: Sau nạp lệnh có hai lần đọc bộ nhớ: một cho con trỏ (chu kỳ gián tiếp) và một cho dữ liệu (chu kỳ thực hiện).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Fetch, indirect and execute cycles</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu kỳ nạp, gián tiếp và thực hiện</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "MAR ← IR(address)"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "MBR ← M[MAR] (this is the pointer)"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "MAR ← MBR"
+              },
+              {
+                "ma": "s7",
+                "noiDung": "MBR ← M[MAR] (this is the data)"
+              },
+              {
+                "ma": "s8",
+                "noiDung": "AC ← MBR"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "MAR ← PC"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "MBR ← M[MAR]; PC ← PC + 1"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "IR ← MBR"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6",
+              "s7",
+              "s8"
+            ],
+            "giaiThich": "<p>Two memory reads after the fetch: one for the pointer (indirect cycle) and one for the data (execute cycle).</p><p><i>VI: Sau nạp lệnh có hai lần đọc bộ nhớ: một cho con trỏ (chu kỳ gián tiếp) và một cho dữ liệu (chu kỳ thực hiện).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the data directly from the instruction’s address field."
+        },
+        {
+          "loi": "Loading the AC before the data have arrived in the MBR."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "micro-operation",
+          "vi": "vi thao tác"
+        }
+      ]
+    },
+    {
+      "title": "Processor 4 — Multicycle versus single-cycle execution time",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "CPI",
+        "multicycle datapath"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A multicycle processor needs 4 cycles for R-type (45 %), 5 for loads (25 %), 4 for stores (10 %) and 3 for branches (20 %), with a 2 ns clock. A single-cycle design executes every instruction in one cycle of 10 ns (the slowest instruction, a load, needs five 2 ns steps). For 10⁹ instructions give the <b>average CPI</b> of the multicycle design (2 decimals), the execution times of both designs (seconds, 2 decimals) and the speedup of the better design over the other (2 decimals).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ xử lý nhiều chu kỳ cần 4 chu kỳ cho R-type (45 %), 5 cho load (25 %), 4 cho store (10 %) và 3 cho rẽ nhánh (20 %), clock 2 ns. Thiết kế một chu kỳ thực hiện mọi lệnh trong một chu kỳ 10 ns (lệnh chậm nhất, load, cần năm bước 2 ns). Với 10⁹ lệnh cho <b>CPI trung bình</b> của thiết kế nhiều chu kỳ (2 chữ số), thời gian thực hiện của cả hai (giây, 2 chữ số) và hệ số nhanh hơn của thiết kế tốt hơn (2 chữ số).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "CPI = Σ fraction × cycles. Time = IC × CPI × clock period.",
+        "Single-cycle has CPI = 1 but a long period."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 4 — Multicycle versus single-cycle execution time\n\nAnswer in the answer panel (no code needed).\n\n1. Execution timeThời gian thực hiện\n2. SpeedupHệ số nhanh hơn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Processor 4 — Multicycle versus single-cycle execution time — answer key\n\n1. Execution timeThời gian thực hiện\n   - r1.c: 4.05\n   - r1.t: 8.10 / 8.1\n   - r2.c: 1 / 1.00\n   - r2.t: 10.00 / 10\n   Multicycle CPI = 0.45×4 + 0.25×5 + 0.1×4 + 0.2×3 = 4.05; time = 10⁹ × 4.05 × 2 ns = 8.10 s; single-cycle: 10⁹ × 10 ns = 10.00 s. Speedup 1.23.VI: CPI nhiều chu kỳ = 4.05; thời gian = 8.10 s; một chu kỳ: 10,00 s. Nhanh hơn 1.23 lần.\n\n2. SpeedupHệ số nhanh hơn\n   - r1.v: 1.23\n   10.00 / 8.10 = 1.23: the multicycle design wins because simple instructions no longer pay for the slowest one.VI: 10,00 / 8.10 = 1.23: thiết kế nhiều chu kỳ thắng vì lệnh đơn giản không phải trả giá cho lệnh chậm nhất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Multicycle CPI = 0.45×4 + 0.25×5 + 0.1×4 + 0.2×3 = 4.05; time = 10⁹ × 4.05 × 2 ns = 8.10 s; single-cycle: 10⁹ × 10 ns = 10.00 s. Speedup 1.23.</p><p><i>VI: CPI nhiều chu kỳ = 4.05; thời gian = 8.10 s; một chu kỳ: 10,00 s. Nhanh hơn 1.23 lần.</i></p><p>10.00 / 8.10 = 1.23: the multicycle design wins because simple instructions no longer pay for the slowest one.</p><p><i>VI: 10,00 / 8.10 = 1.23: thiết kế nhiều chu kỳ thắng vì lệnh đơn giản không phải trả giá cho lệnh chậm nhất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Execution time</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời gian thực hiện</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Design"
+              },
+              {
+                "ma": "c",
+                "ten": "CPI"
+              },
+              {
+                "ma": "t",
+                "ten": "Time (s)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "Multicycle (2 ns clock)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "Single-cycle (10 ns clock)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": [
+                "4.05"
+              ],
+              "r1.t": [
+                "8.10",
+                "8.1"
+              ],
+              "r2.c": [
+                "1",
+                "1.00"
+              ],
+              "r2.t": [
+                "10.00",
+                "10"
+              ]
+            },
+            "giaiThich": "<p>Multicycle CPI = 0.45×4 + 0.25×5 + 0.1×4 + 0.2×3 = 4.05; time = 10⁹ × 4.05 × 2 ns = 8.10 s; single-cycle: 10⁹ × 10 ns = 10.00 s. Speedup 1.23.</p><p><i>VI: CPI nhiều chu kỳ = 4.05; thời gian = 8.10 s; một chu kỳ: 10,00 s. Nhanh hơn 1.23 lần.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Speedup</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ số nhanh hơn</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "T(single) / T(multi)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "1.23"
+              ]
+            },
+            "giaiThich": "<p>10.00 / 8.10 = 1.23: the multicycle design wins because simple instructions no longer pay for the slowest one.</p><p><i>VI: 10,00 / 8.10 = 1.23: thiết kế nhiều chu kỳ thắng vì lệnh đơn giản không phải trả giá cho lệnh chậm nhất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that the single-cycle clock must fit the slowest instruction."
+        },
+        {
+          "loi": "Multiplying by the clock rate instead of the period."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "multicycle",
+          "vi": "nhiều chu kỳ"
+        }
+      ]
+    }
+  ]
+}

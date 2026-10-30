@@ -1,0 +1,702 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-n2-1-branch-prediction",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-n2-1-branch-prediction"
+  },
+  "exercises": [
+    {
+      "title": "Prediction 1 — Why predict branches, and how",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "branch prediction"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on branch prediction.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về dự đoán rẽ nhánh.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prediction wrong ⇒ flush the speculative work.",
+        "Hysteresis (two bits) avoids flipping on a single exception."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prediction 1 — Why predict branches, and how\n\nAnswer in the answer panel (no code needed).\n\n1. Why does a deep pipeline need branch prediction?Vì sao pipeline sâu cần dự đoán rẽ nhánh?\n2. A 2-bit saturating counter predicts “taken” when its value is …Bộ đếm bão hoà 2 bit dự đoán “nhảy” khi giá trị là …\n3. Why is a 2-bit predictor better than a 1-bit one for loops?Vì sao bộ dự đoán 2 bit tốt hơn 1 bit cho vòng lặp?\n4. A branch target buffer (BTB) stores …Bộ đệm đích rẽ nhánh (BTB) lưu …\n5. “Always predict backward branches taken” is an example of …“Luôn dự đoán nhánh lùi là nhảy” là ví dụ của …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prediction 1 — Why predict branches, and how — answer key\n\n1. Why does a deep pipeline need branch prediction?Vì sao pipeline sâu cần dự đoán rẽ nhánh?\n   Answer: d) Without it the front end stalls for many cycles until the branch is resolved\n   The penalty grows with the number of stages between fetch and branch resolution.VI: Phạt tăng theo số tầng giữa nạp lệnh và lúc nhánh được xác định.\n\n2. A 2-bit saturating counter predicts “taken” when its value is …Bộ đếm bão hoà 2 bit dự đoán “nhảy” khi giá trị là …\n   Answer: a) 2 or 3\n   00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken.VI: 00 chắc chắn không nhảy, 01 yếu không nhảy, 10 yếu nhảy, 11 chắc chắn nhảy.\n\n3. Why is a 2-bit predictor better than a 1-bit one for loops?Vì sao bộ dự đoán 2 bit tốt hơn 1 bit cho vòng lặp?\n   Answer: b) A single exception (loop exit) does not flip the prediction\n   A 1-bit predictor mispredicts twice per loop execution (exit and re-entry); 2-bit only once.VI: Dự đoán 1 bit sai hai lần mỗi lần chạy vòng lặp (thoát và vào lại); 2 bit chỉ sai một lần.\n\n4. A branch target buffer (BTB) stores …Bộ đệm đích rẽ nhánh (BTB) lưu …\n   Answer: c) the predicted target addresses of recently executed branches\n   Knowing the target early lets the fetch stage redirect immediately.VI: Biết đích sớm cho phép tầng nạp chuyển hướng ngay.\n\n5. “Always predict backward branches taken” is an example of …“Luôn dự đoán nhánh lùi là nhảy” là ví dụ của …\n   Answer: d) static prediction\n   Backward branches are usually loops.VI: Nhánh lùi thường là vòng lặp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why does a deep pipeline need branch prediction?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao pipeline sâu cần dự đoán rẽ nhánh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Branches change the clock rate"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Branches write registers late"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Branches use more cache"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Without it the front end stalls for many cycles until the branch is resolved"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The penalty grows with the number of stages between fetch and branch resolution.</p><p><i>VI: Phạt tăng theo số tầng giữa nạp lệnh và lúc nhánh được xác định.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 2-bit saturating counter predicts “taken” when its value is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ đếm bão hoà 2 bit dự đoán “nhảy” khi giá trị là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2 or 3"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0 only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1 or 2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3 only"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken.</p><p><i>VI: 00 chắc chắn không nhảy, 01 yếu không nhảy, 10 yếu nhảy, 11 chắc chắn nhảy.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is a 2-bit predictor better than a 1-bit one for loops?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bộ dự đoán 2 bit tốt hơn 1 bit cho vòng lặp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It needs no table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A single exception (loop exit) does not flip the prediction"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It stores more history addresses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It predicts the target address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A 1-bit predictor mispredicts twice per loop execution (exit and re-entry); 2-bit only once.</p><p><i>VI: Dự đoán 1 bit sai hai lần mỗi lần chạy vòng lặp (thoát và vào lại); 2 bit chỉ sai một lần.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A branch target buffer (BTB) stores …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ đệm đích rẽ nhánh (BTB) lưu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the page table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the interrupt vector"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the predicted target addresses of recently executed branches"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the data of the registers"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Knowing the target early lets the fetch stage redirect immediately.</p><p><i>VI: Biết đích sớm cho phép tầng nạp chuyển hướng ngay.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>“Always predict backward branches taken” is an example of …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Luôn dự đoán nhánh lùi là nhảy” là ví dụ của …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "dynamic prediction with history"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a branch target buffer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "delayed branching"
+              },
+              {
+                "ma": "d",
+                "noiDung": "static prediction"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Backward branches are usually loops.</p><p><i>VI: Nhánh lùi thường là vòng lặp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing the direction predictor with the BTB."
+        },
+        {
+          "loi": "Thinking 1-bit predictors do well on loops."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BTB",
+          "vi": "bộ đệm đích rẽ nhánh"
+        },
+        {
+          "en": "saturating counter",
+          "vi": "bộ đếm bão hoà"
+        }
+      ]
+    },
+    {
+      "title": "Prediction 2 — Follow a 2-bit counter step by step",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "2-bit predictor"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A 2-bit saturating counter starts at 0 (strongly not taken). It predicts T when the value is 2 or 3. After every branch it counts up on T (max 3) and down on N (min 0). Outcomes of one branch: <code>T T T T N T T T T N</code>. For each branch give the <b>prediction</b>, whether it was <b>correct</b>, and finally the total number of mispredictions.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ đếm bão hoà 2 bit bắt đầu ở 0 (chắc chắn không nhảy). Nó dự đoán T khi giá trị là 2 hoặc 3. Sau mỗi nhánh đếm lên khi T (tối đa 3) và xuống khi N (tối thiểu 0). Kết quả của một nhánh: <code>T T T T N T T T T N</code>. Với mỗi nhánh cho <b>dự đoán</b>, <b>đúng/sai</b>, và cuối cùng tổng số lần đoán sai.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the counter value before each branch and read the prediction from it.",
+        "Update the counter AFTER comparing."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prediction 2 — Follow a 2-bit counter step by step\n\nAnswer in the answer panel (no code needed).\n\n1. Prediction per branchDự đoán từng nhánh\n2. TotalTổng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prediction 2 — Follow a 2-bit counter step by step — answer key\n\n1. Prediction per branchDự đoán từng nhánh\n   - r1.p: N\n   - r1.c: No\n   - r2.p: N\n   - r2.c: No\n   - r3.p: T\n   - r3.c: Yes\n   - r4.p: T\n   - r4.c: Yes\n   - r5.p: T\n   - r5.c: No\n   - r6.p: T\n   - r6.c: Yes\n   - r7.p: T\n   - r7.c: Yes\n   - r8.p: T\n   - r8.c: Yes\n   - r9.p: T\n   - r9.c: Yes\n   - r10.p: T\n   - r10.c: No\n   Counter values before each branch: 0 1 2 3 3 2 3 3 3 3. Predictions NNTTTTTTTT; 4 mispredictions.VI: Giá trị bộ đếm trước mỗi nhánh: 0 1 2 3 3 2 3 3 3 3. Dự đoán NNTTTTTTTT; 4 lần sai.\n\n2. TotalTổng\n   - r1.v: 4\n   4 mispredictions out of 10.VI: 4 lần sai trên 10.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Counter values before each branch: 0 1 2 3 3 2 3 3 3 3. Predictions NNTTTTTTTT; 4 mispredictions.</p><p><i>VI: Giá trị bộ đếm trước mỗi nhánh: 0 1 2 3 3 2 3 3 3 3. Dự đoán NNTTTTTTTT; 4 lần sai.</i></p><p>4 mispredictions out of 10.</p><p><i>VI: 4 lần sai trên 10.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Prediction per branch</p><p style=\"opacity:.75;font-size:.92em\"><i>Dự đoán từng nhánh</i></p>",
+            "cot": [
+              {
+                "ma": "o",
+                "ten": "Branch outcome"
+              },
+              {
+                "ma": "p",
+                "ten": "Prediction",
+                "luaChon": [
+                  "T",
+                  "N"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "Correct?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "o": "#1: T"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "o": "#2: T"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "o": "#3: T"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "o": "#4: T"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "o": "#5: N"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "o": "#6: T"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "o": "#7: T"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "o": "#8: T"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "o": "#9: T"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "o": "#10: N"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "N",
+              "r1.c": "No",
+              "r2.p": "N",
+              "r2.c": "No",
+              "r3.p": "T",
+              "r3.c": "Yes",
+              "r4.p": "T",
+              "r4.c": "Yes",
+              "r5.p": "T",
+              "r5.c": "No",
+              "r6.p": "T",
+              "r6.c": "Yes",
+              "r7.p": "T",
+              "r7.c": "Yes",
+              "r8.p": "T",
+              "r8.c": "Yes",
+              "r9.p": "T",
+              "r9.c": "Yes",
+              "r10.p": "T",
+              "r10.c": "No"
+            },
+            "giaiThich": "<p>Counter values before each branch: 0 1 2 3 3 2 3 3 3 3. Predictions NNTTTTTTTT; 4 mispredictions.</p><p><i>VI: Giá trị bộ đếm trước mỗi nhánh: 0 1 2 3 3 2 3 3 3 3. Dự đoán NNTTTTTTTT; 4 lần sai.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Total</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "Mispredictions"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "4"
+            },
+            "giaiThich": "<p>4 mispredictions out of 10.</p><p><i>VI: 4 lần sai trên 10.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Updating the counter before predicting."
+        },
+        {
+          "loi": "Predicting T whenever the counter is non-zero."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "misprediction",
+          "vi": "dự đoán sai"
+        }
+      ]
+    },
+    {
+      "title": "Prediction 3 — Mispredictions of three predictors on four branch patterns",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "predictor comparison"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Count the mispredictions of each scheme on each outcome string: <b>always taken</b>; a <b>1-bit</b> predictor (remembers the last outcome, starts with N); a <b>2-bit</b> saturating counter starting at 0.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm số lần đoán sai của mỗi sơ đồ trên từng chuỗi kết quả: <b>luôn nhảy</b>; bộ dự đoán <b>1 bit</b> (nhớ kết quả gần nhất, bắt đầu bằng N); bộ đếm bão hoà <b>2 bit</b> bắt đầu từ 0.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Simulate each predictor along the string.",
+        "Always-taken mispredicts exactly at the N outcomes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prediction 3 — Mispredictions of three predictors on four branch patterns\n\nAnswer in the answer panel (no code needed).\n\n1. MispredictionsSố lần đoán sai\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Prediction 3 — Mispredictions of three predictors on four branch patterns — answer key\n\n1. MispredictionsSố lần đoán sai\n   - r1.a: 4\n   - r1.o: 8\n   - r1.t: 6\n   - r2.a: 5\n   - r2.o: 10\n   - r2.t: 5\n   - r3.a: 0\n   - r3.o: 1\n   - r3.t: 2\n   - r4.a: 3\n   - r4.o: 1\n   - r4.t: 2\n   TTTTNTTTTNTTTTNTTTTN: 4 / 8 / 6; TNTNTNTNTN: 5 / 10 / 5; TTTTTTTTTT: 0 / 1 / 2; NNNTTTTTTT: 3 / 1 / 2. On the loop pattern (a taken-branch loop with one exit per 5) the 1-bit predictor misses twice per loop execution (the exit and the first branch after it) but the 2-bit counter only once; on TNTN… the 1-bit predictor is wrong every time; on short all-T or N-then-T strings the 2-bit counter pays one extra warm-up miss.VI: TTTTNTTTTNTTTTNTTTTN: 4 / 8 / 6; TNTNTNTNTN: 5 / 10 / 5; TTTTTTTTTT: 0 / 1 / 2; NNNTTTTTTT: 3 / 1 / 2. Với mẫu vòng lặp (nhánh nhảy, cứ 5 lần có một lần thoát) bộ dự đoán 1 bit sai hai lần mỗi vòng (lúc thoát và lần đầu ngay sau đó) còn bộ đếm 2 bit chỉ sai một lần; với TNTN… bộ 1 bit sai mọi lần; với chuỗi ngắn toàn T hoặc N rồi T bộ đếm 2 bit mất thêm một lần sai khởi động.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>TTTTNTTTTNTTTTNTTTTN: 4 / 8 / 6; TNTNTNTNTN: 5 / 10 / 5; TTTTTTTTTT: 0 / 1 / 2; NNNTTTTTTT: 3 / 1 / 2. On the loop pattern (a taken-branch loop with one exit per 5) the 1-bit predictor misses twice per loop execution (the exit and the first branch after it) but the 2-bit counter only once; on TNTN… the 1-bit predictor is wrong every time; on short all-T or N-then-T strings the 2-bit counter pays one extra warm-up miss.</p><p><i>VI: TTTTNTTTTNTTTTNTTTTN: 4 / 8 / 6; TNTNTNTNTN: 5 / 10 / 5; TTTTTTTTTT: 0 / 1 / 2; NNNTTTTTTT: 3 / 1 / 2. Với mẫu vòng lặp (nhánh nhảy, cứ 5 lần có một lần thoát) bộ dự đoán 1 bit sai hai lần mỗi vòng (lúc thoát và lần đầu ngay sau đó) còn bộ đếm 2 bit chỉ sai một lần; với TNTN… bộ 1 bit sai mọi lần; với chuỗi ngắn toàn T hoặc N rồi T bộ đếm 2 bit mất thêm một lần sai khởi động.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Mispredictions</p><p style=\"opacity:.75;font-size:.92em\"><i>Số lần đoán sai</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Pattern"
+              },
+              {
+                "ma": "a",
+                "ten": "Always taken"
+              },
+              {
+                "ma": "o",
+                "ten": "1-bit"
+              },
+              {
+                "ma": "t",
+                "ten": "2-bit"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "TTTTNTTTTNTTTTNTTTTN"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "TNTNTNTNTN"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "TTTTTTTTTT"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "NNNTTTTTTT"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "4",
+              "r1.o": "8",
+              "r1.t": "6",
+              "r2.a": "5",
+              "r2.o": "10",
+              "r2.t": "5",
+              "r3.a": "0",
+              "r3.o": "1",
+              "r3.t": "2",
+              "r4.a": "3",
+              "r4.o": "1",
+              "r4.t": "2"
+            },
+            "giaiThich": "<p>TTTTNTTTTNTTTTNTTTTN: 4 / 8 / 6; TNTNTNTNTN: 5 / 10 / 5; TTTTTTTTTT: 0 / 1 / 2; NNNTTTTTTT: 3 / 1 / 2. On the loop pattern (a taken-branch loop with one exit per 5) the 1-bit predictor misses twice per loop execution (the exit and the first branch after it) but the 2-bit counter only once; on TNTN… the 1-bit predictor is wrong every time; on short all-T or N-then-T strings the 2-bit counter pays one extra warm-up miss.</p><p><i>VI: TTTTNTTTTNTTTTNTTTTN: 4 / 8 / 6; TNTNTNTNTN: 5 / 10 / 5; TTTTTTTTTT: 0 / 1 / 2; NNNTTTTTTT: 3 / 1 / 2. Với mẫu vòng lặp (nhánh nhảy, cứ 5 lần có một lần thoát) bộ dự đoán 1 bit sai hai lần mỗi vòng (lúc thoát và lần đầu ngay sau đó) còn bộ đếm 2 bit chỉ sai một lần; với TNTN… bộ 1 bit sai mọi lần; với chuỗi ngắn toàn T hoặc N rồi T bộ đếm 2 bit mất thêm một lần sai khởi động.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting the 1-bit predictor at T."
+        },
+        {
+          "loi": "Counting the warm-up as free."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dynamic prediction",
+          "vi": "dự đoán động"
+        }
+      ]
+    },
+    {
+      "title": "Prediction 4 — Simulate a branch history table",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "branch history table",
+        "aliasing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A branch history table (BHT) has <code>entries</code> n-bit saturating counters indexed by <code>⌊pc / 4⌋ mod entries</code> (different branches may alias). Each counter starts at <code>2^(bits−1) − 1</code> (weakly not taken); it predicts taken when the counter is ≥ <code>2^(bits−1)</code>; after the branch it counts up when taken (max <code>2^bits − 1</code>) and down otherwise (min 0). Write <code>predictBHT(branches, entries, bits)</code> where <code>branches</code> is a list of <code>{ pc, taken }</code> executed in order. Return <code>{ mispredicts, rate }</code>, <code>rate = mispredicts / branches.length</code> rounded with <code>Math.round(x * 10000) / 10000</code> (0 for an empty list).</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Bảng lịch sử rẽ nhánh (BHT) có <code>entries</code> bộ đếm bão hoà n bit đánh chỉ số bởi <code>⌊pc / 4⌋ mod entries</code> (các nhánh khác nhau có thể trùng chỉ số). Mỗi bộ đếm bắt đầu ở <code>2^(bits−1) − 1</code> (yếu không nhảy); dự đoán nhảy khi bộ đếm ≥ <code>2^(bits−1)</code>; sau nhánh đếm lên khi nhảy (tối đa <code>2^bits − 1</code>) và xuống nếu không (tối thiểu 0). Viết <code>predictBHT(branches, entries, bits)</code> với <code>branches</code> là danh sách <code>{ pc, taken }</code> theo thứ tự thực hiện. Trả <code>{ mispredicts, rate }</code>, <code>rate = mispredicts / branches.length</code> làm tròn bằng <code>Math.round(x * 10000) / 10000</code> (0 nếu danh sách rỗng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "predictBHT([{pc:256,taken:true},{pc:260,taken:false},{pc:256,taken:true},{pc:260,taken:false}], 4, 2)",
+          "output": "{\"mispredicts\":1,\"rate\":0.25}",
+          "explanation": "pc 256 and 260 use different entries; the first T is mispredicted (counter 1 → N), then it is learned.|||pc 256 và 260 dùng ô khác nhau; lần T đầu bị đoán sai (bộ đếm 1 → N), sau đó học được."
+        }
+      ],
+      "hintsJson": [
+        "Index = Math.floor(pc / 4) % entries.",
+        "Predict before updating; saturate with Math.min/Math.max.",
+        "Smaller tables make different branches share a counter (aliasing)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function predictBHT(branches, entries, bits) {\n  return { mispredicts: 0, rate: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function predictBHT(branches, entries, bits) {\n  var max = Math.pow(2, bits) - 1, half = Math.pow(2, bits - 1), table = [], i, miss = 0;\n  for (i = 0; i < entries; i++) table.push(half - 1);\n  for (i = 0; i < branches.length; i++) {\n    var idx = Math.floor(branches[i].pc / 4) % entries, taken = branches[i].taken ? 1 : 0, pred = table[idx] >= half ? 1 : 0;\n    if (pred !== taken) miss++;\n    table[idx] = taken ? Math.min(max, table[idx] + 1) : Math.max(0, table[idx] - 1);\n  }\n  return { mispredicts: miss, rate: branches.length ? Math.round((miss / branches.length) * 10000) / 10000 : 0 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A BHT is a direct-mapped table of small counters; its accuracy depends on the pattern of each branch and on aliasing between branches that map to the same entry.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: predictBHT([{\"pc\":256,\"taken\":true},{\"pc\":260,\"taken\":false},{\"pc\":256,\"taken\":tr)",
+              "vi": "Ca 1"
+            },
+            "goi": "predictBHT([{\"pc\":256,\"taken\":true},{\"pc\":260,\"taken\":false},{\"pc\":256,\"taken\":true},{\"pc\":260,\"taken\":false}], 4, 2)",
+            "mongDoi": {
+              "mispredicts": 1,
+              "rate": 0.25
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":)",
+              "vi": "Ca 2"
+            },
+            "goi": "predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true}], 8, 2)",
+            "mongDoi": {
+              "mispredicts": 49,
+              "rate": 0.4083
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":)",
+              "vi": "Ca 3"
+            },
+            "goi": "predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true}], 8, 1)",
+            "mongDoi": {
+              "mispredicts": 57,
+              "rate": 0.475
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":)",
+              "vi": "Ca 4"
+            },
+            "goi": "predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true}], 1, 2)",
+            "mongDoi": {
+              "mispredicts": 33,
+              "rate": 0.275
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true}], 64, 3)",
+            "mongDoi": {
+              "mispredicts": 49,
+              "rate": 0.4083
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "predictBHT([], 4, 2)",
+            "mongDoi": {
+              "mispredicts": 0,
+              "rate": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "predictBHT([{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":true},{\"pc\":1040,\"taken\":true},{\"pc\":2048,\"taken\":true},{\"pc\":1024,\"taken\":false},{\"pc\":1040,\"taken\":false},{\"pc\":2048,\"taken\":true}], 4, 2)",
+            "mongDoi": {
+              "mispredicts": 9,
+              "rate": 0.3
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using pc % entries (forgetting the divide by 4)."
+        },
+        {
+          "loi": "Starting the counters at 0 instead of the weakly-not-taken value."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

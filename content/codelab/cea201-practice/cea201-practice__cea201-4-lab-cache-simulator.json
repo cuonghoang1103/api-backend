@@ -1,0 +1,305 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-4-lab-cache-simulator",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-quiz-ch4"
+  },
+  "exercises": [
+    {
+      "title": "Lab 4 — A configurable cache simulator (mapping, replacement, write policy)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 60,
+      "concepts": [
+        "cache simulation",
+        "write-back",
+        "write-through",
+        "write-allocate"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p><b>Scenario.</b> You are validating the memory-system design of a small embedded CPU. Write <code>cacheLab(cfg, ops)</code> that replays a list of memory operations <code>[['R', addr], ['W', addr], …]</code> on a cache described by <code>cfg = { blockBytes, lines, ways, policy, write }</code>:</p>\n<ol>\n<li>The cache has <code>lines</code> lines in <code>lines / ways</code> sets; block = ⌊addr / blockBytes⌋, set = block mod sets. It starts empty.</li>\n<li><code>policy</code> is <code>\"LRU\"</code> or <code>\"FIFO\"</code> (FIFO ignores hits). When a set is full evict the victim chosen by the policy.</li>\n<li>Every miss — for reads <b>and</b> writes (<i>write-allocate</i>) — fetches the block from memory (<code>memReads</code> counts these fetches).</li>\n<li><code>write = \"through\"</code>: every write operation also writes memory (<code>memWrites</code> counts write operations). <code>write = \"back\"</code>: a write only marks the line dirty; memory is written once for each dirty line when it is evicted, and once for each dirty line still in the cache at the end (final flush).</li>\n</ol>\n<p>Return <code>{ hits, misses, hitRatio, memReads, memWrites, missBlocks }</code> — <code>hitRatio</code> = hits / operations rounded to 4 decimals (<code>Math.round(x * 10000) / 10000</code>); <code>missBlocks</code> = block numbers of the misses in order.</p>\n<h4>Sample run (16-byte blocks, 4 lines, direct-mapped, LRU, write-back)</h4><table><thead><tr><th>#</th><th>op</th></tr></thead><tbody><tr><td>1</td><td>R 0</td></tr><tr><td>2</td><td>W 4</td></tr><tr><td>3</td><td>R 64</td></tr><tr><td>4</td><td>W 0</td></tr><tr><td>5</td><td>R 128</td></tr><tr><td>6</td><td>R 4</td></tr></tbody></table>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify <code>ops</code> or <code>cfg</code>.</li>\n  <li>A write that misses first loads the block (write-allocate) and then counts as a write.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Tình huống.</b> Bạn đang kiểm chứng thiết kế hệ nhớ của một CPU nhúng nhỏ. Viết <code>cacheLab(cfg, ops)</code> phát lại danh sách thao tác nhớ <code>[['R', addr], ['W', addr], …]</code> trên cache mô tả bởi <code>cfg = { blockBytes, lines, ways, policy, write }</code>:</p>\n<ol>\n<li>Cache có <code>lines</code> dòng chia thành <code>lines / ways</code> tập; khối = ⌊addr / blockBytes⌋, tập = khối mod số tập. Ban đầu rỗng.</li>\n<li><code>policy</code> là <code>\"LRU\"</code> hoặc <code>\"FIFO\"</code> (FIFO bỏ qua hit). Tập đầy thì đuổi nạn nhân theo chính sách.</li>\n<li>Mỗi miss — cả đọc <b>và</b> ghi (<i>write-allocate</i>) — nạp khối từ bộ nhớ (<code>memReads</code> đếm số lần nạp).</li>\n<li><code>write = \"through\"</code>: mỗi thao tác ghi đều ghi bộ nhớ (<code>memWrites</code> đếm số thao tác ghi). <code>write = \"back\"</code>: ghi chỉ đánh dấu dòng bẩn; bộ nhớ được ghi một lần cho mỗi dòng bẩn khi bị đuổi, và một lần cho mỗi dòng bẩn còn trong cache lúc kết thúc (xả cuối).</li>\n</ol>\n<p>Trả <code>{ hits, misses, hitRatio, memReads, memWrites, missBlocks }</code> — <code>hitRatio</code> = hits / số thao tác làm tròn 4 chữ số (<code>Math.round(x * 10000) / 10000</code>); <code>missBlocks</code> = số hiệu khối của các lần miss theo thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa <code>ops</code> hay <code>cfg</code>.</li>\n  <li>Ghi bị miss thì nạp khối trước (write-allocate) rồi mới tính là ghi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":1,\"policy\":\"LRU\",\"write\":\"back\"}, [[\"R\",0],[\"W\",4],[\"R\",64],[\"W\",0]])",
+          "output": "{\"hits\":1,\"misses\":3,\"hitRatio\":0.25,\"memReads\":3,\"memWrites\":2,\"missBlocks\":[0,4,0]}",
+          "explanation": "Blocks 0 and 4 collide on line 0: the write to block 0 makes it dirty, and bringing block 4 in writes it back.|||Khối 0 và 4 va chạm ở dòng 0: ghi vào khối 0 làm nó bẩn, nạp khối 4 vào thì ghi trả khối 0."
+        }
+      ],
+      "hintsJson": [
+        "Build the set structure first and make read-only runs match the Mapping 7 exercise.",
+        "Add the dirty bit and the two write policies one at a time; keep counters for fetches and memory writes.",
+        "Do not forget the final flush of dirty lines in write-back mode, and that a write HIT in write-back only sets the dirty bit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function cacheLab(cfg, ops) {\n  return { hits: 0, misses: 0, hitRatio: 0, memReads: 0, memWrites: 0, missBlocks: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction cacheLab(cfg, ops) {\n  var sets = cfg.lines / cfg.ways, st = [], i, hits = 0, t = 0, reads = 0, writes = 0, missBlocks = [];\n  for (i = 0; i < sets; i++) st.push([]);\n  for (var k = 0; k < ops.length; k++) {\n    var isW = ops[k][0] === 'W', block = Math.floor(ops[k][1] / cfg.blockBytes), set = st[block % sets], pos = -1;\n    for (i = 0; i < set.length; i++) if (set[i].block === block) pos = i;\n    t++;\n    if (pos >= 0) { hits++; if (cfg.policy === 'LRU') set[pos].t = t; }\n    else {\n      missBlocks.push(block); reads++;\n      if (set.length === cfg.ways) {\n        var v = 0;\n        for (i = 1; i < set.length; i++) if (set[i].t < set[v].t) v = i;\n        if (cfg.write === 'back' && set[v].dirty) writes++;\n        set.splice(v, 1);\n      }\n      set.push({ block: block, t: t, dirty: false });\n      pos = set.length - 1;\n    }\n    if (isW) {\n      if (cfg.write === 'through') writes++;\n      else set[pos].dirty = true;\n    }\n  }\n  if (cfg.write === 'back') for (i = 0; i < sets; i++) for (var j = 0; j < st[i].length; j++) if (st[i][j].dirty) writes++;\n  return { hits: hits, misses: ops.length - hits, hitRatio: Math.round(hits / ops.length * 10000) / 10000, memReads: reads, memWrites: writes, missBlocks: missBlocks };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the core of every cache model: a set-associative container with a victim policy, plus a dirty bit that defers memory writes. Write-through writes memory on every store; write-back trades extra state (dirty bits and a final flush) for far fewer memory writes when the same line is written repeatedly.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":1,\"policy\":\"LRU\",\"write\":\"back\"}, [[)",
+              "vi": "Ca 1"
+            },
+            "goi": "cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":1,\"policy\":\"LRU\",\"write\":\"back\"}, [[\"R\",0],[\"W\",4],[\"R\",64],[\"W\",0],[\"R\",128],[\"R\",4],[\"W\",64],[\"R\",192],[\"R\",0],[\"W\",128]])",
+            "mongDoi": {
+              "hits": 1,
+              "misses": 9,
+              "hitRatio": 0.1,
+              "memReads": 9,
+              "memWrites": 4,
+              "missBlocks": [
+                0,
+                4,
+                0,
+                8,
+                0,
+                4,
+                12,
+                0,
+                8
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":1,\"policy\":\"LRU\",\"write\":\"through\"},)",
+              "vi": "Ca 2"
+            },
+            "goi": "cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":1,\"policy\":\"LRU\",\"write\":\"through\"}, [[\"R\",0],[\"W\",4],[\"R\",64],[\"W\",0],[\"R\",128],[\"R\",4],[\"W\",64],[\"R\",192],[\"R\",0],[\"W\",128]])",
+            "mongDoi": {
+              "hits": 1,
+              "misses": 9,
+              "hitRatio": 0.1,
+              "memReads": 9,
+              "memWrites": 4,
+              "missBlocks": [
+                0,
+                4,
+                0,
+                8,
+                0,
+                4,
+                12,
+                0,
+                8
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":2,\"policy\":\"LRU\",\"write\":\"back\"}, [[)",
+              "vi": "Ca 3"
+            },
+            "goi": "cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":2,\"policy\":\"LRU\",\"write\":\"back\"}, [[\"R\",0],[\"W\",4],[\"R\",64],[\"W\",0],[\"R\",128],[\"R\",4],[\"W\",64],[\"R\",192],[\"R\",0],[\"W\",128]])",
+            "mongDoi": {
+              "hits": 3,
+              "misses": 7,
+              "hitRatio": 0.3,
+              "memReads": 7,
+              "memWrites": 3,
+              "missBlocks": [
+                0,
+                4,
+                8,
+                4,
+                12,
+                0,
+                8
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":4,\"policy\":\"FIFO\",\"write\":\"back\"}, [)",
+              "vi": "Ca 4"
+            },
+            "goi": "cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":4,\"policy\":\"FIFO\",\"write\":\"back\"}, [[\"R\",0],[\"W\",4],[\"R\",64],[\"W\",0],[\"R\",128],[\"R\",4],[\"W\",64],[\"R\",192],[\"R\",0],[\"W\",128]])",
+            "mongDoi": {
+              "hits": 6,
+              "misses": 4,
+              "hitRatio": 0.6,
+              "memReads": 4,
+              "memWrites": 3,
+              "missBlocks": [
+                0,
+                4,
+                8,
+                12
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "cacheLab({\"blockBytes\":8,\"lines\":8,\"ways\":2,\"policy\":\"LRU\",\"write\":\"back\"}, [[\"W\",0],[\"R\",37],[\"R\",74],[\"W\",111],[\"R\",148],[\"R\",185],[\"W\",222],[\"R\",3],[\"R\",40],[\"W\",77],[\"R\",114],[\"R\",151],[\"W\",188],[\"R\",225],[\"R\",6],[\"W\",43],[\"R\",80],[\"R\",117],[\"W\",154],[\"R\",191],[\"R\",228],[\"W\",9],[\"R\",46],[\"R\",83]])",
+            "mongDoi": {
+              "hits": 9,
+              "misses": 15,
+              "hitRatio": 0.375,
+              "memReads": 15,
+              "memWrites": 8,
+              "missBlocks": [
+                0,
+                4,
+                9,
+                13,
+                18,
+                23,
+                27,
+                5,
+                9,
+                14,
+                28,
+                10,
+                14,
+                19,
+                1
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "cacheLab({\"blockBytes\":8,\"lines\":8,\"ways\":2,\"policy\":\"FIFO\",\"write\":\"through\"}, [[\"W\",0],[\"R\",37],[\"R\",74],[\"W\",111],[\"R\",148],[\"R\",185],[\"W\",222],[\"R\",3],[\"R\",40],[\"W\",77],[\"R\",114],[\"R\",151],[\"W\",188],[\"R\",225],[\"R\",6],[\"W\",43],[\"R\",80],[\"R\",117],[\"W\",154],[\"R\",191],[\"R\",228],[\"W\",9],[\"R\",46],[\"R\",83]])",
+            "mongDoi": {
+              "hits": 7,
+              "misses": 17,
+              "hitRatio": 0.2917,
+              "memReads": 17,
+              "memWrites": 8,
+              "missBlocks": [
+                0,
+                4,
+                9,
+                13,
+                18,
+                23,
+                27,
+                5,
+                9,
+                14,
+                28,
+                0,
+                10,
+                19,
+                23,
+                1,
+                5
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "cacheLab({\"blockBytes\":32,\"lines\":2,\"ways\":1,\"policy\":\"LRU\",\"write\":\"back\"}, [[\"W\",0],[\"W\",4],[\"W\",8],[\"R\",64],[\"W\",64]])",
+            "mongDoi": {
+              "hits": 3,
+              "misses": 2,
+              "hitRatio": 0.6,
+              "memReads": 2,
+              "memWrites": 2,
+              "missBlocks": [
+                0,
+                2
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "cacheLab({\"blockBytes\":16,\"lines\":4,\"ways\":4,\"policy\":\"LRU\",\"write\":\"back\"}, [[\"R\",0],[\"R\",16],[\"R\",32],[\"R\",48],[\"R\",0],[\"R\",64],[\"R\",16]])",
+            "mongDoi": {
+              "hits": 1,
+              "misses": 6,
+              "hitRatio": 0.1429,
+              "memReads": 6,
+              "memWrites": 0,
+              "missBlocks": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                1
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "cacheLab({\"blockBytes\":4,\"lines\":4,\"ways\":1,\"policy\":\"LRU\",\"write\":\"back\"}, [[\"R\",0]])",
+            "mongDoi": {
+              "hits": 0,
+              "misses": 1,
+              "hitRatio": 0,
+              "memReads": 1,
+              "memWrites": 0,
+              "missBlocks": [
+                0
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Counting a write-back at every write instead of at eviction/flush."
+        },
+        {
+          "loi": "Not marking the line dirty when the write misses (the block was just loaded and is written at once)."
+        },
+        {
+          "loi": "Updating LRU time only on misses."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

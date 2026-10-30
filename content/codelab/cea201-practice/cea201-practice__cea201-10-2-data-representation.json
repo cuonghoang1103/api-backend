@@ -1,0 +1,1236 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-10-2-data-representation",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-quiz-ch10"
+  },
+  "exercises": [
+    {
+      "title": "Data 1 — Signed numbers and floating point: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "two’s complement",
+        "IEEE 754"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on integer and floating-point representation.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về biểu diễn số nguyên và số thực dấu chấm động.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "n bits ⇒ 2ⁿ patterns, split in two halves by the sign bit.",
+        "Bias moves the exponent into an unsigned field."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 1 — Signed numbers and floating point: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. The range of an n-bit two’s-complement integer is …Miền của số nguyên bù 2 n bit là …\n2. Why is two’s complement preferred over sign-magnitude?Vì sao bù 2 được ưa hơn dấu–độ lớn?\n3. Sign extension of an 8-bit two’s-complement number to 16 bits is done by …Mở rộng dấu số bù 2 8 bit lên 16 bit được thực hiện bằng cách …\n4. In IEEE 754 single precision, the exponent field is …Trong IEEE 754 đơn, trường mũ là …\n5. Why is 0.1 not exactly representable in binary floating point?Vì sao 0,1 không biểu diễn chính xác được trong dấu chấm động nhị phân?\n6. An overflow in two’s-complement addition is detected when …Tràn khi cộng bù 2 được phát hiện khi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 1 — Signed numbers and floating point: concepts — answer key\n\n1. The range of an n-bit two’s-complement integer is …Miền của số nguyên bù 2 n bit là …\n   Answer: d) −2ⁿ⁻¹ … 2ⁿ⁻¹ − 1\n   There is one more negative value than positive; zero has a single representation.VI: Có nhiều hơn một giá trị âm; số 0 chỉ có một biểu diễn.\n\n2. Why is two’s complement preferred over sign-magnitude?Vì sao bù 2 được ưa hơn dấu–độ lớn?\n   Answer: a) One zero and the same adder works for signed and unsigned addition\n   No special hardware for the sign; subtraction = add the complement.VI: Không cần phần cứng riêng cho dấu; phép trừ = cộng số bù.\n\n3. Sign extension of an 8-bit two’s-complement number to 16 bits is done by …Mở rộng dấu số bù 2 8 bit lên 16 bit được thực hiện bằng cách …\n   Answer: b) copying the sign bit into all the new high-order bits\n   Copying the sign preserves the value.VI: Chép bit dấu giữ nguyên giá trị.\n\n4. In IEEE 754 single precision, the exponent field is …Trong IEEE 754 đơn, trường mũ là …\n   Answer: c) 8 bits with a bias of 127\n   value = (−1)ˢ × 1.fraction × 2^(E − 127) for normalized numbers.VI: giá trị = (−1)ˢ × 1,phần lẻ × 2^(E − 127) với số chuẩn hoá.\n\n5. Why is 0.1 not exactly representable in binary floating point?Vì sao 0,1 không biểu diễn chính xác được trong dấu chấm động nhị phân?\n   Answer: d) Its binary expansion is infinite (0.000110011…)\n   Only dyadic fractions (k / 2ⁿ) are exact.VI: Chỉ phân số nhị phân k / 2ⁿ mới chính xác.\n\n6. An overflow in two’s-complement addition is detected when …Tràn khi cộng bù 2 được phát hiện khi …\n   Answer: a) two operands of the same sign give a result of the opposite sign\n   Adding numbers of different signs can never overflow.VI: Cộng hai số khác dấu không bao giờ tràn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The range of an n-bit two’s-complement integer is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Miền của số nguyên bù 2 n bit là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "−2ⁿ⁻¹ + 1 … 2ⁿ⁻¹ − 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0 … 2ⁿ − 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "−2ⁿ … 2ⁿ"
+              },
+              {
+                "ma": "d",
+                "noiDung": "−2ⁿ⁻¹ … 2ⁿ⁻¹ − 1"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>There is one more negative value than positive; zero has a single representation.</p><p><i>VI: Có nhiều hơn một giá trị âm; số 0 chỉ có một biểu diễn.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is two’s complement preferred over sign-magnitude?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bù 2 được ưa hơn dấu–độ lớn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One zero and the same adder works for signed and unsigned addition"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It uses fewer bits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It represents larger numbers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It needs no sign bit"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>No special hardware for the sign; subtraction = add the complement.</p><p><i>VI: Không cần phần cứng riêng cho dấu; phép trừ = cộng số bù.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Sign extension of an 8-bit two’s-complement number to 16 bits is done by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mở rộng dấu số bù 2 8 bit lên 16 bit được thực hiện bằng cách …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "shifting left by 8"
+              },
+              {
+                "ma": "b",
+                "noiDung": "copying the sign bit into all the new high-order bits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "filling the new bits with 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "filling the new bits with 1 always"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Copying the sign preserves the value.</p><p><i>VI: Chép bit dấu giữ nguyên giá trị.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In IEEE 754 single precision, the exponent field is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong IEEE 754 đơn, trường mũ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "8 bits in two’s complement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "7 bits with a bias of 63"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8 bits with a bias of 127"
+              },
+              {
+                "ma": "d",
+                "noiDung": "11 bits with a bias of 1023"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>value = (−1)ˢ × 1.fraction × 2^(E − 127) for normalized numbers.</p><p><i>VI: giá trị = (−1)ˢ × 1,phần lẻ × 2^(E − 127) với số chuẩn hoá.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why is 0.1 not exactly representable in binary floating point?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao 0,1 không biểu diễn chính xác được trong dấu chấm động nhị phân?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is negative"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The exponent is too small"
+              },
+              {
+                "ma": "c",
+                "noiDung": "IEEE 754 forbids it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Its binary expansion is infinite (0.000110011…)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Only dyadic fractions (k / 2ⁿ) are exact.</p><p><i>VI: Chỉ phân số nhị phân k / 2ⁿ mới chính xác.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>An overflow in two’s-complement addition is detected when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tràn khi cộng bù 2 được phát hiện khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "two operands of the same sign give a result of the opposite sign"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a carry leaves the MSB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the result is zero"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the operands have different signs"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Adding numbers of different signs can never overflow.</p><p><i>VI: Cộng hai số khác dấu không bao giờ tràn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing that a carry-out always means signed overflow."
+        },
+        {
+          "loi": "Zero-extending a negative number."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "two’s complement",
+          "vi": "số bù 2"
+        },
+        {
+          "en": "bias",
+          "vi": "độ lệch (excess)"
+        }
+      ]
+    },
+    {
+      "title": "Data 2 — Base conversion",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "number bases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Convert each decimal number to <b>binary</b> (no leading zeros) and to <b>hexadecimal</b> (capital letters, no prefix); then convert the given hex values back to decimal.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đổi mỗi số thập phân sang <b>nhị phân</b> (không số 0 đứng đầu) và sang <b>thập lục phân</b> (chữ hoa, không tiền tố); sau đó đổi các giá trị hex cho sẵn về thập phân.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Divide by 2 repeatedly, or use powers of two.",
+        "Group the binary digits by 4 from the right to get hex."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 2 — Base conversion\n\nAnswer in the answer panel (no code needed).\n\n1. Decimal to binary and hexThập phân sang nhị phân và hex\n2. Hex to decimalHex sang thập phân\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 2 — Base conversion — answer key\n\n1. Decimal to binary and hexThập phân sang nhị phân và hex\n   - r1.b: 11001010\n   - r1.h: CA / ca\n   - r2.b: 11111111\n   - r2.h: FF / ff\n   - r3.b: 1111101000\n   - r3.h: 3E8 / 3e8\n   - r4.b: 111111111111\n   - r4.h: FFF / fff\n   - r5.b: 101101\n   - r5.h: 2D / 2d\n   202 = 11001010₂ = CA₁₆; 255 = 11111111₂ = FF₁₆; 1000 = 1111101000₂ = 3E8₁₆; 4095 = 111111111111₂ = FFF₁₆; 45 = 101101₂ = 2D₁₆. Each hex digit is exactly 4 bits.VI: 202 = 11001010₂ = CA₁₆; 255 = 11111111₂ = FF₁₆; 1000 = 1111101000₂ = 3E8₁₆; 4095 = 111111111111₂ = FFF₁₆; 45 = 101101₂ = 2D₁₆. Mỗi chữ số hex là đúng 4 bit.\n\n2. Hex to decimalHex sang thập phân\n   - r1.d: 127\n   - r2.d: 163\n   - r3.d: 448\n   - r4.d: 65535\n   7F = 127; A3 = 163; 1C0 = 448; FFFF = 65535.VI: 7F = 127; A3 = 163; 1C0 = 448; FFFF = 65535.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>202 = 11001010₂ = CA₁₆; 255 = 11111111₂ = FF₁₆; 1000 = 1111101000₂ = 3E8₁₆; 4095 = 111111111111₂ = FFF₁₆; 45 = 101101₂ = 2D₁₆. Each hex digit is exactly 4 bits.</p><p><i>VI: 202 = 11001010₂ = CA₁₆; 255 = 11111111₂ = FF₁₆; 1000 = 1111101000₂ = 3E8₁₆; 4095 = 111111111111₂ = FFF₁₆; 45 = 101101₂ = 2D₁₆. Mỗi chữ số hex là đúng 4 bit.</i></p><p>7F = 127; A3 = 163; 1C0 = 448; FFFF = 65535.</p><p><i>VI: 7F = 127; A3 = 163; 1C0 = 448; FFFF = 65535.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Decimal to binary and hex</p><p style=\"opacity:.75;font-size:.92em\"><i>Thập phân sang nhị phân và hex</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Decimal"
+              },
+              {
+                "ma": "b",
+                "ten": "Binary"
+              },
+              {
+                "ma": "h",
+                "ten": "Hex"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "202"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "255"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "1000"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "4095"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "45"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": "11001010",
+              "r1.h": [
+                "CA",
+                "ca"
+              ],
+              "r2.b": "11111111",
+              "r2.h": [
+                "FF",
+                "ff"
+              ],
+              "r3.b": "1111101000",
+              "r3.h": [
+                "3E8",
+                "3e8"
+              ],
+              "r4.b": "111111111111",
+              "r4.h": [
+                "FFF",
+                "fff"
+              ],
+              "r5.b": "101101",
+              "r5.h": [
+                "2D",
+                "2d"
+              ]
+            },
+            "giaiThich": "<p>202 = 11001010₂ = CA₁₆; 255 = 11111111₂ = FF₁₆; 1000 = 1111101000₂ = 3E8₁₆; 4095 = 111111111111₂ = FFF₁₆; 45 = 101101₂ = 2D₁₆. Each hex digit is exactly 4 bits.</p><p><i>VI: 202 = 11001010₂ = CA₁₆; 255 = 11111111₂ = FF₁₆; 1000 = 1111101000₂ = 3E8₁₆; 4095 = 111111111111₂ = FFF₁₆; 45 = 101101₂ = 2D₁₆. Mỗi chữ số hex là đúng 4 bit.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Hex to decimal</p><p style=\"opacity:.75;font-size:.92em\"><i>Hex sang thập phân</i></p>",
+            "cot": [
+              {
+                "ma": "h",
+                "ten": "Hex"
+              },
+              {
+                "ma": "d",
+                "ten": "Decimal"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "h": "7F"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "h": "A3"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "h": "1C0"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "h": "FFFF"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "127",
+              "r2.d": "163",
+              "r3.d": "448",
+              "r4.d": "65535"
+            },
+            "giaiThich": "<p>7F = 127; A3 = 163; 1C0 = 448; FFFF = 65535.</p><p><i>VI: 7F = 127; A3 = 163; 1C0 = 448; FFFF = 65535.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the remainders of repeated division top-down (they must be read bottom-up)."
+        },
+        {
+          "loi": "Grouping the bits from the left."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hexadecimal",
+          "vi": "thập lục phân"
+        }
+      ]
+    },
+    {
+      "title": "Data 3 — Two’s complement: encode and decode",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "two’s complement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p><b>Part A.</b> Write each decimal as an <b>8-bit two’s complement</b> pattern. <b>Part B.</b> Read each 8-bit pattern as a signed decimal.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p><b>Phần A.</b> Viết mỗi số thập phân thành mẫu <b>bù 2 8 bit</b>. <b>Phần B.</b> Đọc mỗi mẫu 8 bit thành số thập phân có dấu.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Negative: invert all bits of the magnitude, then add 1.",
+        "Decoding: if the top bit is 1, subtract 2⁸."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 3 — Two’s complement: encode and decode\n\nAnswer in the answer panel (no code needed).\n\n1. EncodeMã hoá\n2. DecodeGiải mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 3 — Two’s complement: encode and decode — answer key\n\n1. EncodeMã hoá\n   - r1.b: 00000101\n   - r2.b: 11111011\n   - r3.b: 01100100\n   - r4.b: 10011100\n   - r5.b: 10000000\n   - r6.b: 01111111\n   - r7.b: 11111111\n   5 → 00000101; -5 → 11111011; 100 → 01100100; -100 → 10011100; -128 → 10000000; 127 → 01111111; -1 → 11111111. Negative n: invert the bits of |n| and add 1.VI: 5 → 00000101; -5 → 11111011; 100 → 01100100; -100 → 10011100; -128 → 10000000; 127 → 01111111; -1 → 11111111. Số âm: đảo bit của |n| rồi cộng 1.\n\n2. DecodeGiải mã\n   - r1.d: -1\n   - r2.d: -128\n   - r3.d: -76\n   - r4.d: 126\n   - r5.d: -63\n   11111111 → -1; 10000000 → -128; 10110100 → -76; 01111110 → 126; 11000001 → -63. If the MSB is 1, the value is the unsigned value − 256.VI: 11111111 → -1; 10000000 → -128; 10110100 → -76; 01111110 → 126; 11000001 → -63. Nếu MSB là 1, giá trị = giá trị không dấu − 256.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>5 → 00000101; -5 → 11111011; 100 → 01100100; -100 → 10011100; -128 → 10000000; 127 → 01111111; -1 → 11111111. Negative n: invert the bits of |n| and add 1.</p><p><i>VI: 5 → 00000101; -5 → 11111011; 100 → 01100100; -100 → 10011100; -128 → 10000000; 127 → 01111111; -1 → 11111111. Số âm: đảo bit của |n| rồi cộng 1.</i></p><p>11111111 → -1; 10000000 → -128; 10110100 → -76; 01111110 → 126; 11000001 → -63. If the MSB is 1, the value is the unsigned value − 256.</p><p><i>VI: 11111111 → -1; 10000000 → -128; 10110100 → -76; 01111110 → 126; 11000001 → -63. Nếu MSB là 1, giá trị = giá trị không dấu − 256.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Encode</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã hoá</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Decimal"
+              },
+              {
+                "ma": "b",
+                "ten": "8-bit pattern"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "5"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "-5"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "100"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "-100"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "-128"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "d": "127"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "d": "-1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": "00000101",
+              "r2.b": "11111011",
+              "r3.b": "01100100",
+              "r4.b": "10011100",
+              "r5.b": "10000000",
+              "r6.b": "01111111",
+              "r7.b": "11111111"
+            },
+            "giaiThich": "<p>5 → 00000101; -5 → 11111011; 100 → 01100100; -100 → 10011100; -128 → 10000000; 127 → 01111111; -1 → 11111111. Negative n: invert the bits of |n| and add 1.</p><p><i>VI: 5 → 00000101; -5 → 11111011; 100 → 01100100; -100 → 10011100; -128 → 10000000; 127 → 01111111; -1 → 11111111. Số âm: đảo bit của |n| rồi cộng 1.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Decode</p><p style=\"opacity:.75;font-size:.92em\"><i>Giải mã</i></p>",
+            "cot": [
+              {
+                "ma": "b",
+                "ten": "8-bit pattern"
+              },
+              {
+                "ma": "d",
+                "ten": "Signed decimal"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "b": "11111111"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "b": "10000000"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "b": "10110100"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "b": "01111110"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "b": "11000001"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "-1",
+              "r2.d": "-128",
+              "r3.d": "-76",
+              "r4.d": "126",
+              "r5.d": "-63"
+            },
+            "giaiThich": "<p>11111111 → -1; 10000000 → -128; 10110100 → -76; 01111110 → 126; 11000001 → -63. If the MSB is 1, the value is the unsigned value − 256.</p><p><i>VI: 11111111 → -1; 10000000 → -128; 10110100 → -76; 01111110 → 126; 11000001 → -63. Nếu MSB là 1, giá trị = giá trị không dấu − 256.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to add 1 after inverting (that gives one’s complement)."
+        },
+        {
+          "loi": "Reading a leading 1 as +128."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "one’s complement",
+          "vi": "số bù 1"
+        }
+      ]
+    },
+    {
+      "title": "Data 4 — Range of n-bit integers",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "integer range"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>For each width give the smallest and largest value as <b>unsigned</b> and as <b>two’s-complement signed</b> integers.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi độ rộng cho giá trị nhỏ nhất và lớn nhất của số nguyên <b>không dấu</b> và <b>có dấu bù 2</b>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Unsigned: 0 to 2ⁿ − 1. Signed: −2ⁿ⁻¹ to 2ⁿ⁻¹ − 1.",
+        "The two ranges contain the same number of patterns."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 4 — Range of n-bit integers\n\nAnswer in the answer panel (no code needed).\n\n1. Integer rangesMiền số nguyên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 4 — Range of n-bit integers — answer key\n\n1. Integer rangesMiền số nguyên\n   - r1.u: 15\n   - r1.lo: -8\n   - r1.hi: 7\n   - r2.u: 255\n   - r2.lo: -128\n   - r2.hi: 127\n   - r3.u: 65535\n   - r3.lo: -32768\n   - r3.hi: 32767\n   - r4.u: 4294967295\n   - r4.lo: -2147483648\n   - r4.hi: 2147483647\n   4 bits: 0..15; -8..7; 8 bits: 0..255; -128..127; 16 bits: 0..65535; -32768..32767; 32 bits: 0..4294967295; -2147483648..2147483647.VI: 4 bit: 0..15; -8..7; 8 bit: 0..255; -128..127; 16 bit: 0..65535; -32768..32767; 32 bit: 0..4294967295; -2147483648..2147483647.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 bits: 0..15; -8..7; 8 bits: 0..255; -128..127; 16 bits: 0..65535; -32768..32767; 32 bits: 0..4294967295; -2147483648..2147483647.</p><p><i>VI: 4 bit: 0..15; -8..7; 8 bit: 0..255; -128..127; 16 bit: 0..65535; -32768..32767; 32 bit: 0..4294967295; -2147483648..2147483647.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Integer ranges</p><p style=\"opacity:.75;font-size:.92em\"><i>Miền số nguyên</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "Bits"
+              },
+              {
+                "ma": "u",
+                "ten": "Max unsigned"
+              },
+              {
+                "ma": "lo",
+                "ten": "Min signed"
+              },
+              {
+                "ma": "hi",
+                "ten": "Max signed"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "4"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "8"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "16"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "32"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.u": "15",
+              "r1.lo": "-8",
+              "r1.hi": "7",
+              "r2.u": "255",
+              "r2.lo": "-128",
+              "r2.hi": "127",
+              "r3.u": "65535",
+              "r3.lo": "-32768",
+              "r3.hi": "32767",
+              "r4.u": "4294967295",
+              "r4.lo": "-2147483648",
+              "r4.hi": "2147483647"
+            },
+            "giaiThich": "<p>4 bits: 0..15; -8..7; 8 bits: 0..255; -128..127; 16 bits: 0..65535; -32768..32767; 32 bits: 0..4294967295; -2147483648..2147483647.</p><p><i>VI: 4 bit: 0..15; -8..7; 8 bit: 0..255; -128..127; 16 bit: 0..65535; -32768..32767; 32 bit: 0..4294967295; -2147483648..2147483647.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using 2ⁿ instead of 2ⁿ − 1."
+        },
+        {
+          "loi": "Giving the signed range as ±(2ⁿ⁻¹ − 1)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unsigned",
+          "vi": "không dấu"
+        }
+      ]
+    },
+    {
+      "title": "Data 5 — Add in 8-bit two’s complement: result and overflow",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "two’s complement addition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Add the two numbers in <b>8-bit two’s complement</b>. Give the 8-bit result pattern, the signed decimal value it represents, and whether the addition <b>overflowed</b>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cộng hai số trong <b>bù 2 8 bit</b>. Cho mẫu kết quả 8 bit, giá trị thập phân có dấu mà nó biểu diễn và việc phép cộng có <b>tràn</b> hay không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Encode both, add as unsigned 8-bit numbers and drop the carry.",
+        "Overflow iff the true sum is outside −128 … 127."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 5 — Add in 8-bit two’s complement: result and overflow\n\nAnswer in the answer panel (no code needed).\n\n1. 8-bit additionCộng 8 bit\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 5 — Add in 8-bit two’s complement: result and overflow — answer key\n\n1. 8-bit additionCộng 8 bit\n   - r1.b: 01111111\n   - r1.v: 127\n   - r1.o: No\n   - r2.b: 10010110\n   - r2.v: -106\n   - r2.o: Yes\n   - r3.b: 10000000\n   - r3.v: -128\n   - r3.o: No\n   - r4.b: 01111111\n   - r4.v: 127\n   - r4.o: Yes\n   - r5.b: 10000000\n   - r5.v: -128\n   - r5.o: Yes\n   - r6.b: 00000000\n   - r6.v: 0\n   - r6.o: No\n   100+27: 01111111 = 127; 100+50: 10010110 = -106 (overflow: true sum 150 is outside −128..127); -100+-28: 10000000 = -128; -100+-29: 01111111 = 127 (overflow: true sum -129 is outside −128..127); 64+64: 10000000 = -128 (overflow: true sum 128 is outside −128..127); -50+50: 00000000 = 0.VI: 100+27: 01111111 = 127; 100+50: 10010110 = -106 (tràn); -100+-28: 10000000 = -128; -100+-29: 01111111 = 127 (tràn); 64+64: 10000000 = -128 (tràn); -50+50: 00000000 = 0.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>100+27: 01111111 = 127; 100+50: 10010110 = -106 (overflow: true sum 150 is outside −128..127); -100+-28: 10000000 = -128; -100+-29: 01111111 = 127 (overflow: true sum -129 is outside −128..127); 64+64: 10000000 = -128 (overflow: true sum 128 is outside −128..127); -50+50: 00000000 = 0.</p><p><i>VI: 100+27: 01111111 = 127; 100+50: 10010110 = -106 (tràn); -100+-28: 10000000 = -128; -100+-29: 01111111 = 127 (tràn); 64+64: 10000000 = -128 (tràn); -50+50: 00000000 = 0.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>8-bit addition</p><p style=\"opacity:.75;font-size:.92em\"><i>Cộng 8 bit</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "a + b"
+              },
+              {
+                "ma": "b",
+                "ten": "Result bits"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              },
+              {
+                "ma": "o",
+                "ten": "Overflow",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "100 + 27"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "100 + 50"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "-100 + -28"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "-100 + -29"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "64 + 64"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "-50 + 50"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": "01111111",
+              "r1.v": "127",
+              "r1.o": "No",
+              "r2.b": "10010110",
+              "r2.v": "-106",
+              "r2.o": "Yes",
+              "r3.b": "10000000",
+              "r3.v": "-128",
+              "r3.o": "No",
+              "r4.b": "01111111",
+              "r4.v": "127",
+              "r4.o": "Yes",
+              "r5.b": "10000000",
+              "r5.v": "-128",
+              "r5.o": "Yes",
+              "r6.b": "00000000",
+              "r6.v": "0",
+              "r6.o": "No"
+            },
+            "giaiThich": "<p>100+27: 01111111 = 127; 100+50: 10010110 = -106 (overflow: true sum 150 is outside −128..127); -100+-28: 10000000 = -128; -100+-29: 01111111 = 127 (overflow: true sum -129 is outside −128..127); 64+64: 10000000 = -128 (overflow: true sum 128 is outside −128..127); -50+50: 00000000 = 0.</p><p><i>VI: 100+27: 01111111 = 127; 100+50: 10010110 = -106 (tràn); -100+-28: 10000000 = -128; -100+-29: 01111111 = 127 (tràn); 64+64: 10000000 = -128 (tràn); -50+50: 00000000 = 0.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting the carry-out as overflow."
+        },
+        {
+          "loi": "Saying that adding numbers of opposite signs can overflow."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "overflow",
+          "vi": "tràn số"
+        }
+      ]
+    },
+    {
+      "title": "Data 6 — IEEE 754 single precision: encode",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "IEEE 754"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Give for each value the <b>sign bit</b>, the <b>biased exponent</b> (decimal, bias 127) and the 32-bit pattern in <b>hex</b> (8 capital letters). (Values that are not exact are rounded to nearest by the hardware.)</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi giá trị cho <b>bit dấu</b>, <b>số mũ lệch</b> (thập phân, bias 127) và mẫu 32 bit dạng <b>hex</b> (8 chữ hoa). (Giá trị không chính xác được phần cứng làm tròn tới giá trị gần nhất.)</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Convert to binary, normalize to 1.xxx × 2^e, then E = e + 127.",
+        "The leading 1 of the significand is implicit and not stored."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 6 — IEEE 754 single precision: encode\n\nAnswer in the answer panel (no code needed).\n\n1. IEEE 754 encodingMã hoá IEEE 754\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Data 6 — IEEE 754 single precision: encode — answer key\n\n1. IEEE 754 encodingMã hoá IEEE 754\n   - r1.s: 1\n   - r1.e: 133\n   - r1.h: C2ED4000 / c2ed4000\n   - r2.s: 0\n   - r2.e: 124\n   - r2.h: 3E200000 / 3e200000\n   - r3.s: 0\n   - r3.e: 127\n   - r3.h: 3F800000 / 3f800000\n   - r4.s: 1\n   - r4.e: 123\n   - r4.h: BDCCCCCD / bdcccccd\n   - r5.s: 0\n   - r5.e: 133\n   - r5.h: 42C80000 / 42c80000\n   - r6.s: 0\n   - r6.e: 129\n   - r6.h: 40B80000 / 40b80000\n   -118.625: s=1, E=133, hex C2ED4000; 0.15625: s=0, E=124, hex 3E200000; 1: s=0, E=127, hex 3F800000; -0.1: s=1, E=123, hex BDCCCCCD; 100: s=0, E=133, hex 42C80000; 5.75: s=0, E=129, hex 40B80000. E.g. −118.625 = −1110110.101₂ = −1.110110101₂ × 2⁶, so E = 6 + 127 = 133.VI: -118.625: s=1, E=133, hex C2ED4000; 0.15625: s=0, E=124, hex 3E200000; 1: s=0, E=127, hex 3F800000; -0.1: s=1, E=123, hex BDCCCCCD; 100: s=0, E=133, hex 42C80000; 5.75: s=0, E=129, hex 40B80000. Vd −118,625 = −1,110110101₂ × 2⁶ nên E = 6 + 127 = 133.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>-118.625: s=1, E=133, hex C2ED4000; 0.15625: s=0, E=124, hex 3E200000; 1: s=0, E=127, hex 3F800000; -0.1: s=1, E=123, hex BDCCCCCD; 100: s=0, E=133, hex 42C80000; 5.75: s=0, E=129, hex 40B80000. E.g. −118.625 = −1110110.101₂ = −1.110110101₂ × 2⁶, so E = 6 + 127 = 133.</p><p><i>VI: -118.625: s=1, E=133, hex C2ED4000; 0.15625: s=0, E=124, hex 3E200000; 1: s=0, E=127, hex 3F800000; -0.1: s=1, E=123, hex BDCCCCCD; 100: s=0, E=133, hex 42C80000; 5.75: s=0, E=129, hex 40B80000. Vd −118,625 = −1,110110101₂ × 2⁶ nên E = 6 + 127 = 133.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>IEEE 754 encoding</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã hoá IEEE 754</i></p>",
+            "cot": [
+              {
+                "ma": "v",
+                "ten": "Value"
+              },
+              {
+                "ma": "s",
+                "ten": "Sign"
+              },
+              {
+                "ma": "e",
+                "ten": "Biased exp."
+              },
+              {
+                "ma": "h",
+                "ten": "Hex"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "v": "-118.625"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "v": "0.15625"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "v": "1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "v": "-0.1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "v": "100"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "v": "5.75"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "1",
+              "r1.e": "133",
+              "r1.h": [
+                "C2ED4000",
+                "c2ed4000"
+              ],
+              "r2.s": "0",
+              "r2.e": "124",
+              "r2.h": [
+                "3E200000",
+                "3e200000"
+              ],
+              "r3.s": "0",
+              "r3.e": "127",
+              "r3.h": [
+                "3F800000",
+                "3f800000"
+              ],
+              "r4.s": "1",
+              "r4.e": "123",
+              "r4.h": [
+                "BDCCCCCD",
+                "bdcccccd"
+              ],
+              "r5.s": "0",
+              "r5.e": "133",
+              "r5.h": [
+                "42C80000",
+                "42c80000"
+              ],
+              "r6.s": "0",
+              "r6.e": "129",
+              "r6.h": [
+                "40B80000",
+                "40b80000"
+              ]
+            },
+            "giaiThich": "<p>-118.625: s=1, E=133, hex C2ED4000; 0.15625: s=0, E=124, hex 3E200000; 1: s=0, E=127, hex 3F800000; -0.1: s=1, E=123, hex BDCCCCCD; 100: s=0, E=133, hex 42C80000; 5.75: s=0, E=129, hex 40B80000. E.g. −118.625 = −1110110.101₂ = −1.110110101₂ × 2⁶, so E = 6 + 127 = 133.</p><p><i>VI: -118.625: s=1, E=133, hex C2ED4000; 0.15625: s=0, E=124, hex 3E200000; 1: s=0, E=127, hex 3F800000; -0.1: s=1, E=123, hex BDCCCCCD; 100: s=0, E=133, hex 42C80000; 5.75: s=0, E=129, hex 40B80000. Vd −118,625 = −1,110110101₂ × 2⁶ nên E = 6 + 127 = 133.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to add the bias."
+        },
+        {
+          "loi": "Storing the implicit leading 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "significand",
+          "vi": "phần định trị"
+        },
+        {
+          "en": "biased exponent",
+          "vi": "số mũ lệch"
+        }
+      ]
+    },
+    {
+      "title": "Data 7 — Decode an 8-bit mini-float",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "floating point",
+        "denormals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Real hardware formats are a fixed recipe. A tiny 8-bit float has <b>1 sign bit</b>, <b>4 exponent bits</b> (bias 7) and <b>3 fraction bits</b>. Write <code>decodeMini(bits)</code> (an 8-character 0/1 string) returning its value:</p><ul><li>exponent 1…14 (normalized): <code>(−1)ˢ × (1 + f/8) × 2^(E − 7)</code></li><li>exponent 0 (denormalized, includes zero): <code>(−1)ˢ × (f/8) × 2^(−6)</code></li><li>exponent 15: <code>\"inf\"</code> / <code>\"-inf\"</code> when f = 0, else <code>\"nan\"</code> (return these strings)</li></ul>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Định dạng thực của phần cứng là một công thức cố định. Một số thực 8 bit nhỏ có <b>1 bit dấu</b>, <b>4 bit mũ</b> (bias 7) và <b>3 bit phần lẻ</b>. Viết <code>decodeMini(bits)</code> (chuỗi 0/1 dài 8 ký tự) trả giá trị của nó:</p><ul><li>mũ 1…14 (chuẩn hoá): <code>(−1)ˢ × (1 + f/8) × 2^(E − 7)</code></li><li>mũ 0 (không chuẩn hoá, gồm số 0): <code>(−1)ˢ × (f/8) × 2^(−6)</code></li><li>mũ 15: <code>\"inf\"</code> / <code>\"-inf\"</code> khi f = 0, ngược lại <code>\"nan\"</code> (trả các chuỗi này)</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "decodeMini(\"00111000\")",
+          "output": "1",
+          "explanation": "E = 7, f = 0: 1.0 × 2⁰ = 1.|||E = 7, f = 0: 1,0 × 2⁰ = 1."
+        },
+        {
+          "input": "decodeMini(\"01000100\")",
+          "output": "3",
+          "explanation": "E = 8, f = 4: 1.5 × 2¹ = 3.|||E = 8, f = 4: 1,5 × 2¹ = 3."
+        }
+      ],
+      "hintsJson": [
+        "Slice the string: sign = bits[0], exponent = bits.slice(1, 5), fraction = bits.slice(5); parse with parseInt(…, 2).",
+        "Handle E = 15 and E = 0 before the general formula.",
+        "Math.pow(2, e) gives exact powers of two, so the results are exact."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function decodeMini(bits) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function decodeMini(bits) {\n  // 1 sign, 4 exponent (bias 7), 3 fraction\n  var s = bits[0] === '1' ? -1 : 1, e = parseInt(bits.slice(1, 5), 2), f = parseInt(bits.slice(5), 2);\n  if (e === 15) return f === 0 ? (s < 0 ? '-inf' : 'inf') : 'nan';\n  if (e === 0) return s * (f / 8) * Math.pow(2, -6);\n  return s * (1 + f / 8) * Math.pow(2, e - 7);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>IEEE-754-style formats all follow the same pattern: special exponent values mean zero/denormal and infinity/NaN, everything in between is a normalized number with an implicit leading 1 and a bias.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: decodeMini(\"00111000\")",
+              "vi": "Ca 1"
+            },
+            "goi": "decodeMini(\"00111000\")",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 2: decodeMini(\"01000100\")",
+              "vi": "Ca 2"
+            },
+            "goi": "decodeMini(\"01000100\")",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Case 3: decodeMini(\"10111010\")",
+              "vi": "Ca 3"
+            },
+            "goi": "decodeMini(\"10111010\")",
+            "mongDoi": -1.25
+          },
+          {
+            "moTa": {
+              "en": "Case 4: decodeMini(\"00000011\")",
+              "vi": "Ca 4"
+            },
+            "goi": "decodeMini(\"00000011\")",
+            "mongDoi": 0.005859375
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "decodeMini(\"01110000\")",
+            "mongDoi": 128,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "decodeMini(\"11110000\")",
+            "mongDoi": -128,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "decodeMini(\"01111001\")",
+            "mongDoi": "nan",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "decodeMini(\"00000000\")",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "decodeMini(\"01111110\")",
+            "mongDoi": "nan",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using 1 + f/8 for denormals (the implicit 1 is absent)."
+        },
+        {
+          "loi": "Forgetting that −0 is just 0 here (−1 × 0 = −0 compares equal to 0)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

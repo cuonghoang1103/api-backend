@@ -1,0 +1,363 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-1-1-org-vs-arch",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-1-1-org-vs-arch"
+  },
+  "exercises": [
+    {
+      "title": "Basics 1 — Organization versus architecture: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "organization vs architecture",
+        "structure and function"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on the two views of a computer.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về hai góc nhìn của một máy tính.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Architecture = what the programmer sees; organization = how it is built.",
+        "Function = what it does; structure = how the parts are related."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Basics 1 — Organization versus architecture: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. Computer architecture refers to …Kiến trúc máy tính đề cập đến …\n2. Computer organization refers to …Tổ chức máy tính đề cập đến …\n3. Why can a family of computers share an architecture but differ in organization?Vì sao một họ máy có thể chung kiến trúc nhưng khác tổ chức?\n4. Which of the following is a FUNCTION of a computer?Cái nào sau đây là CHỨC NĂNG của máy tính?\n5. The four main structural components of a computer are …Bốn thành phần cấu trúc chính của máy tính là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Basics 1 — Organization versus architecture: concepts — answer key\n\n1. Computer architecture refers to …Kiến trúc máy tính đề cập đến …\n   Answer: c) the attributes visible to the programmer that affect the logical execution of a program\n   Instruction set, data representation, addressing and I/O mechanisms are architectural.VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.\n\n2. Computer organization refers to …Tổ chức máy tính đề cập đến …\n   Answer: d) the operational units and their interconnections that realize the architecture\n   Control signals, interfaces and memory technology are organizational.VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.\n\n3. Why can a family of computers share an architecture but differ in organization?Vì sao một họ máy có thể chung kiến trúc nhưng khác tổ chức?\n   Answer: a) Different price/performance points are built by implementing the same instruction set with different hardware\n   Binary compatibility across generations (e.g. x86) relies on this separation.VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.\n\n4. Which of the following is a FUNCTION of a computer?Cái nào sau đây là CHỨC NĂNG của máy tính?\n   Answer: b) Data processing\n   The four functions are data processing, data storage, data movement and control; the others are structure.VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.\n\n5. The four main structural components of a computer are …Bốn thành phần cấu trúc chính của máy tính là …\n   Answer: c) CPU, main memory, I/O and system interconnection\n   Each top-level component can be decomposed again (CPU = ALU + registers + control unit).VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Computer architecture refers to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiến trúc máy tính đề cập đến …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the speed of the hard disk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the colour of the case"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the attributes visible to the programmer that affect the logical execution of a program"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the physical layout of the circuit boards"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Instruction set, data representation, addressing and I/O mechanisms are architectural.</p><p><i>VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Computer organization refers to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổ chức máy tính đề cập đến …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the instruction set"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the programming language"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the file system"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the operational units and their interconnections that realize the architecture"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Control signals, interfaces and memory technology are organizational.</p><p><i>VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why can a family of computers share an architecture but differ in organization?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một họ máy có thể chung kiến trúc nhưng khác tổ chức?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Different price/performance points are built by implementing the same instruction set with different hardware"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because organization is defined by the programmer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because the architecture changes every model"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because organization does not exist"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Binary compatibility across generations (e.g. x86) relies on this separation.</p><p><i>VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which of the following is a FUNCTION of a computer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào sau đây là CHỨC NĂNG của máy tính?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ALU"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Data processing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The CPU"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The bus"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The four functions are data processing, data storage, data movement and control; the others are structure.</p><p><i>VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The four main structural components of a computer are …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn thành phần cấu trúc chính của máy tính là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "keyboard, monitor, mouse and printer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "compiler, linker, loader and OS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "CPU, main memory, I/O and system interconnection"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ALU, registers, control unit and cache"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each top-level component can be decomposed again (CPU = ALU + registers + control unit).</p><p><i>VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating cache size as architecture."
+        },
+        {
+          "loi": "Mixing function and structure."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "architecture",
+          "vi": "kiến trúc"
+        },
+        {
+          "en": "organization",
+          "vi": "tổ chức"
+        }
+      ]
+    },
+    {
+      "title": "Basics 2 — Is it architecture or organization?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "architecture",
+        "organization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Classify each attribute.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng thuộc tính.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Would a program’s source or machine code change if this attribute changed?",
+        "Implementation techniques are organization."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Basics 2 — Is it architecture or organization?\n\nAnswer in the answer panel (no code needed).\n\n1. Architecture or organizationKiến trúc hay tổ chức\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Basics 2 — Is it architecture or organization? — answer key\n\n1. Architecture or organizationKiến trúc hay tổ chức\n   - r1.c: Architecture\n   - r2.c: Architecture\n   - r3.c: Architecture\n   - r4.c: Organization\n   - r5.c: Organization\n   - r6.c: Organization\n   - r7.c: Organization\n   - r8.c: Architecture\n   If a programmer (or compiler) can see it and it changes how a program must be written, it is architecture; if it is a hardware implementation detail, it is organization.VI: Nếu lập trình viên (hay trình biên dịch) thấy được và nó đổi cách viết chương trình thì là kiến trúc; nếu là chi tiết cài đặt phần cứng thì là tổ chức.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>If a programmer (or compiler) can see it and it changes how a program must be written, it is architecture; if it is a hardware implementation detail, it is organization.</p><p><i>VI: Nếu lập trình viên (hay trình biên dịch) thấy được và nó đổi cách viết chương trình thì là kiến trúc; nếu là chi tiết cài đặt phần cứng thì là tổ chức.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Architecture or organization</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiến trúc hay tổ chức</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Attribute"
+              },
+              {
+                "ma": "c",
+                "ten": "Category",
+                "luaChon": [
+                  "Architecture",
+                  "Organization"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "The instruction set"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "The number of bits used to represent data types"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "The addressing modes available to the programmer"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "The control signals that execute an instruction"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "The size of the cache and its mapping function"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "a": "Whether memory is built from SRAM or DRAM"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "a": "The interface between the computer and its peripherals (hardware)"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "a": "The I/O mechanisms the programmer can invoke (instructions, ports)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "Architecture",
+              "r2.c": "Architecture",
+              "r3.c": "Architecture",
+              "r4.c": "Organization",
+              "r5.c": "Organization",
+              "r6.c": "Organization",
+              "r7.c": "Organization",
+              "r8.c": "Architecture"
+            },
+            "giaiThich": "<p>If a programmer (or compiler) can see it and it changes how a program must be written, it is architecture; if it is a hardware implementation detail, it is organization.</p><p><i>VI: Nếu lập trình viên (hay trình biên dịch) thấy được và nó đổi cách viết chương trình thì là kiến trúc; nếu là chi tiết cài đặt phần cứng thì là tổ chức.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the cache in the architecture box."
+        },
+        {
+          "loi": "Putting the I/O instructions in the organization box."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "binary compatibility",
+          "vi": "tương thích nhị phân"
+        }
+      ]
+    }
+  ]
+}

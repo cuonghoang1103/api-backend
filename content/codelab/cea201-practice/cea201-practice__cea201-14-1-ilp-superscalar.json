@@ -1,0 +1,756 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-14-1-ilp-superscalar",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-14-1-ilp-superscalar"
+  },
+  "exercises": [
+    {
+      "title": "ILP 1 — Superscalar, dependences and renaming: concepts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "superscalar",
+        "dependences",
+        "renaming"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on instruction-level parallelism.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về song song mức lệnh.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Name dependence vs true dependence.",
+        "Width helps only when there are independent instructions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ILP 1 — Superscalar, dependences and renaming: concepts\n\nAnswer in the answer panel (no code needed).\n\n1. A superscalar processor …Bộ xử lý superscalar …\n2. Which dependence is a TRUE dependence that renaming cannot remove?Phụ thuộc nào là phụ thuộc THẬT mà đổi tên không loại được?\n3. Register renaming eliminates …Đổi tên thanh ghi loại bỏ …\n4. Out-of-order execution mainly helps when …Thực hiện sai thứ tự giúp nhiều nhất khi …\n5. The upper bound on IPC of a program is limited by …Cận trên của IPC của chương trình bị giới hạn bởi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ILP 1 — Superscalar, dependences and renaming: concepts — answer key\n\n1. A superscalar processor …Bộ xử lý superscalar …\n   Answer: a) can issue more than one instruction per clock cycle\n   Multiple functional units and wide issue give IPC > 1.VI: Nhiều khối chức năng và phát lệnh rộng cho IPC > 1.\n\n2. Which dependence is a TRUE dependence that renaming cannot remove?Phụ thuộc nào là phụ thuộc THẬT mà đổi tên không loại được?\n   Answer: b) RAW (read after write)\n   WAR and WAW are name dependences caused by reusing register names.VI: WAR và WAW là phụ thuộc tên do dùng lại tên thanh ghi.\n\n3. Register renaming eliminates …Đổi tên thanh ghi loại bỏ …\n   Answer: c) WAR and WAW hazards\n   Each write gets a fresh physical register.VI: Mỗi lần ghi nhận một thanh ghi vật lý mới.\n\n4. Out-of-order execution mainly helps when …Thực hiện sai thứ tự giúp nhiều nhất khi …\n   Answer: d) an instruction is stalled but later independent instructions could run\n   Independent work is found beyond the stalled instruction.VI: Tìm việc độc lập vượt qua lệnh đang đình trệ.\n\n5. The upper bound on IPC of a program is limited by …Cận trên của IPC của chương trình bị giới hạn bởi …\n   Answer: a) its true data dependences and the issue width\n   A serial chain of RAW dependences cannot be sped up by width.VI: Chuỗi RAW tuần tự không tăng tốc được dù rộng đến đâu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A superscalar processor …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ xử lý superscalar …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "can issue more than one instruction per clock cycle"
+              },
+              {
+                "ma": "b",
+                "noiDung": "has a single pipeline stage"
+              },
+              {
+                "ma": "c",
+                "noiDung": "executes only one instruction at a time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "uses a single execution unit"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Multiple functional units and wide issue give IPC > 1.</p><p><i>VI: Nhiều khối chức năng và phát lệnh rộng cho IPC > 1.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which dependence is a TRUE dependence that renaming cannot remove?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phụ thuộc nào là phụ thuộc THẬT mà đổi tên không loại được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None of them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "RAW (read after write)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "WAR"
+              },
+              {
+                "ma": "d",
+                "noiDung": "WAW"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>WAR and WAW are name dependences caused by reusing register names.</p><p><i>VI: WAR và WAW là phụ thuộc tên do dùng lại tên thanh ghi.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Register renaming eliminates …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đổi tên thanh ghi loại bỏ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "branch hazards"
+              },
+              {
+                "ma": "b",
+                "noiDung": "structural hazards"
+              },
+              {
+                "ma": "c",
+                "noiDung": "WAR and WAW hazards"
+              },
+              {
+                "ma": "d",
+                "noiDung": "RAW hazards"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each write gets a fresh physical register.</p><p><i>VI: Mỗi lần ghi nhận một thanh ghi vật lý mới.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Out-of-order execution mainly helps when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thực hiện sai thứ tự giúp nhiều nhất khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "all instructions depend on the previous one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the program has no branches"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the clock is slow"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an instruction is stalled but later independent instructions could run"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Independent work is found beyond the stalled instruction.</p><p><i>VI: Tìm việc độc lập vượt qua lệnh đang đình trệ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The upper bound on IPC of a program is limited by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cận trên của IPC của chương trình bị giới hạn bởi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "its true data dependences and the issue width"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the size of the disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the bus width only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the operating system"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A serial chain of RAW dependences cannot be sped up by width.</p><p><i>VI: Chuỗi RAW tuần tự không tăng tốc được dù rộng đến đâu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking renaming removes RAW."
+        },
+        {
+          "loi": "Expecting IPC to grow linearly with width."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "IPC",
+          "vi": "số lệnh mỗi chu kỳ"
+        },
+        {
+          "en": "register renaming",
+          "vi": "đổi tên thanh ghi"
+        }
+      ]
+    },
+    {
+      "title": "ILP 2 — Which dependences exist? Which survive renaming?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "RAW",
+        "WAR",
+        "WAW",
+        "renaming"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>For each pair (first ; second), list the register dependences present (choose the single best answer; a pair here has at most one), and say whether it <b>survives register renaming</b> (only true RAW dependences survive).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cặp (trước ; sau), nêu phụ thuộc thanh ghi có mặt (chọn một đáp án; mỗi cặp ở đây có tối đa một loại) và cho biết nó có <b>còn sau khi đổi tên thanh ghi</b> hay không (chỉ phụ thuộc RAW thật còn lại).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the read-set and write-set of each instruction.",
+        "Only a value that is actually passed along is a true dependence."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ILP 2 — Which dependences exist? Which survive renaming?\n\nAnswer in the answer panel (no code needed).\n\n1. Dependences and renamingPhụ thuộc và đổi tên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ILP 2 — Which dependences exist? Which survive renaming? — answer key\n\n1. Dependences and renamingPhụ thuộc và đổi tên\n   - r1.d: RAW\n   - r1.r: Yes\n   - r2.d: RAW\n   - r2.r: Yes\n   - r3.d: WAR\n   - r3.r: No\n   - r4.d: WAW\n   - r4.r: No\n   - r5.d: None\n   - r5.r: No\n   - r6.d: RAW\n   - r6.r: Yes\n   - r7.d: WAW\n   - r7.r: No\n   RAW = the second reads what the first writes; WAR = the second overwrites what the first reads; WAW = both write the same register. After renaming, WAR and WAW disappear, RAW stays.VI: RAW = lệnh sau đọc cái lệnh trước ghi; WAR = lệnh sau ghi đè cái lệnh trước đọc; WAW = cùng ghi một thanh ghi. Sau đổi tên, WAR và WAW biến mất, RAW còn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RAW = the second reads what the first writes; WAR = the second overwrites what the first reads; WAW = both write the same register. After renaming, WAR and WAW disappear, RAW stays.</p><p><i>VI: RAW = lệnh sau đọc cái lệnh trước ghi; WAR = lệnh sau ghi đè cái lệnh trước đọc; WAW = cùng ghi một thanh ghi. Sau đổi tên, WAR và WAW biến mất, RAW còn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Dependences and renaming</p><p style=\"opacity:.75;font-size:.92em\"><i>Phụ thuộc và đổi tên</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "First ; second"
+              },
+              {
+                "ma": "d",
+                "ten": "Dependence",
+                "luaChon": [
+                  "RAW",
+                  "WAR",
+                  "WAW",
+                  "None"
+                ]
+              },
+              {
+                "ma": "r",
+                "ten": "Survives renaming?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "add r1,r2,r3 ; sub r4,r1,r5"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "sub r4,r1,r5 ; mul r6,r4,r7"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "add r1,r2,r3 ; sub r2,r4,r5"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "add r1,r2,r3 ; add r1,r6,r7"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "add r1,r2,r3 ; sub r4,r5,r6"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "add r3,r1,r4 ; sw r3,0(r2)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "p": "lw r1,0(r2) ; lw r1,8(r5)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "RAW",
+              "r1.r": "Yes",
+              "r2.d": "RAW",
+              "r2.r": "Yes",
+              "r3.d": "WAR",
+              "r3.r": "No",
+              "r4.d": "WAW",
+              "r4.r": "No",
+              "r5.d": "None",
+              "r5.r": "No",
+              "r6.d": "RAW",
+              "r6.r": "Yes",
+              "r7.d": "WAW",
+              "r7.r": "No"
+            },
+            "giaiThich": "<p>RAW = the second reads what the first writes; WAR = the second overwrites what the first reads; WAW = both write the same register. After renaming, WAR and WAW disappear, RAW stays.</p><p><i>VI: RAW = lệnh sau đọc cái lệnh trước ghi; WAR = lệnh sau ghi đè cái lệnh trước đọc; WAW = cùng ghi một thanh ghi. Sau đổi tên, WAR và WAW biến mất, RAW còn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating any shared register as RAW."
+        },
+        {
+          "loi": "Believing renaming removes the data flow."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "name dependence",
+          "vi": "phụ thuộc tên"
+        }
+      ]
+    },
+    {
+      "title": "ILP 3 — Issue cycles: in-order versus out-of-order, 2-wide and 4-wide",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "in-order vs out-of-order issue",
+        "IPC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Ten instructions <code>I0…I9</code> have these true dependences (instruction ← producers): I0 ← —; I1 ← I0; I2 ← I0; I3 ← I1, I2; I4 ← —; I5 ← I4; I6 ← I3, I5; I7 ← —; I8 ← I7; I9 ← I6, I8. Every instruction has latency 1: a consumer may issue in the cycle after its last producer issued. Each cycle the machine issues up to <b>w</b> instructions. <b>In-order</b> issue stops at the first instruction that is not ready; <b>out-of-order</b> issue scans all waiting instructions oldest first. Give the total number of cycles (the last issue cycle) and the IPC (2 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mười lệnh <code>I0…I9</code> có các phụ thuộc thật sau (lệnh ← lệnh sinh ra): I0 ← —; I1 ← I0; I2 ← I0; I3 ← I1, I2; I4 ← —; I5 ← I4; I6 ← I3, I5; I7 ← —; I8 ← I7; I9 ← I6, I8. Mọi lệnh có độ trễ 1: lệnh dùng có thể phát ở chu kỳ sau khi lệnh sinh cuối cùng của nó được phát. Mỗi chu kỳ máy phát tối đa <b>w</b> lệnh. Phát <b>đúng thứ tự</b> dừng ở lệnh đầu tiên chưa sẵn sàng; phát <b>sai thứ tự</b> quét mọi lệnh đang chờ, cũ nhất trước. Cho tổng số chu kỳ (chu kỳ phát cuối) và IPC (2 chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Simulate cycle by cycle; write which instructions are ready at the start of each cycle.",
+        "Longest dependence chain = lower bound on cycles."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ILP 3 — Issue cycles: in-order versus out-of-order, 2-wide and 4-wide\n\nAnswer in the answer panel (no code needed).\n\n1. Cycles and IPCChu kỳ và IPC\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# ILP 3 — Issue cycles: in-order versus out-of-order, 2-wide and 4-wide — answer key\n\n1. Cycles and IPCChu kỳ và IPC\n   - r1.c: 10\n   - r1.i: 1.00 / 1\n   - r2.c: 7\n   - r2.i: 1.43\n   - r3.c: 6\n   - r3.i: 1.67\n   - r4.c: 7\n   - r4.i: 1.43\n   - r5.c: 5\n   - r5.i: 2.00 / 2\n   Out-of-order beats in-order at equal width because independent instructions are found beyond a stalled one; extra width stops helping once the dependence chain (I0→I1→I3→I6→I9) limits the schedule. 1-wide in-order: 10 cycles; 2-wide in-order: 7 cycles; 2-wide OoO: 6 cycles; 4-wide in-order: 7 cycles; 4-wide OoO: 5 cycles.VI: Sai thứ tự thắng đúng thứ tự ở cùng độ rộng vì tìm được lệnh độc lập vượt qua lệnh đình trệ; thêm độ rộng hết có ích khi chuỗi phụ thuộc (I0→I1→I3→I6→I9) giới hạn lịch.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Out-of-order beats in-order at equal width because independent instructions are found beyond a stalled one; extra width stops helping once the dependence chain (I0→I1→I3→I6→I9) limits the schedule. 1-wide in-order: 10 cycles; 2-wide in-order: 7 cycles; 2-wide OoO: 6 cycles; 4-wide in-order: 7 cycles; 4-wide OoO: 5 cycles.</p><p><i>VI: Sai thứ tự thắng đúng thứ tự ở cùng độ rộng vì tìm được lệnh độc lập vượt qua lệnh đình trệ; thêm độ rộng hết có ích khi chuỗi phụ thuộc (I0→I1→I3→I6→I9) giới hạn lịch.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Cycles and IPC</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu kỳ và IPC</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Machine"
+              },
+              {
+                "ma": "c",
+                "ten": "Cycles"
+              },
+              {
+                "ma": "i",
+                "ten": "IPC"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "1-wide in-order"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "2-wide in-order"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "2-wide out-of-order"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "4-wide in-order"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "4-wide out-of-order"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "10",
+              "r1.i": [
+                "1.00",
+                "1"
+              ],
+              "r2.c": "7",
+              "r2.i": [
+                "1.43"
+              ],
+              "r3.c": "6",
+              "r3.i": [
+                "1.67"
+              ],
+              "r4.c": "7",
+              "r4.i": [
+                "1.43"
+              ],
+              "r5.c": "5",
+              "r5.i": [
+                "2.00",
+                "2"
+              ]
+            },
+            "giaiThich": "<p>Out-of-order beats in-order at equal width because independent instructions are found beyond a stalled one; extra width stops helping once the dependence chain (I0→I1→I3→I6→I9) limits the schedule. 1-wide in-order: 10 cycles; 2-wide in-order: 7 cycles; 2-wide OoO: 6 cycles; 4-wide in-order: 7 cycles; 4-wide OoO: 5 cycles.</p><p><i>VI: Sai thứ tự thắng đúng thứ tự ở cùng độ rộng vì tìm được lệnh độc lập vượt qua lệnh đình trệ; thêm độ rộng hết có ích khi chuỗi phụ thuộc (I0→I1→I3→I6→I9) giới hạn lịch.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting a consumer issue in the same cycle as its producer."
+        },
+        {
+          "loi": "Letting in-order issue skip a stalled instruction."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "issue width",
+          "vi": "độ rộng phát lệnh"
+        }
+      ]
+    },
+    {
+      "title": "ILP 4 — Write the instruction scheduler",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "instruction scheduling",
+        "IPC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>issueSched(deps, width, outOfOrder)</code>. <code>deps[i]</code> lists the indices of the instructions that produce operands of instruction <code>i</code> (all smaller than <code>i</code>). Instruction latency is 1: it may issue in cycle <i>c</i> if every producer issued in a cycle &lt; <i>c</i>. Each cycle up to <code>width</code> instructions issue. In-order (<code>outOfOrder = false</code>): instructions issue in program order and issue stops at the first one that is not ready. Out-of-order: scan all instructions not yet issued, oldest first, issuing the ready ones until the width is used. Return <code>{ issue, cycles, ipc }</code>: <code>issue[i]</code> is the cycle in which instruction <i>i</i> issued (cycles start at 1), <code>cycles</code> the last issue cycle, <code>ipc = n / cycles</code> rounded to 2 decimals with <code>Math.round(x * 100) / 100</code>.</p>\n<h4>Requirements</h4>\n<ul>\n\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>issueSched(deps, width, outOfOrder)</code>. <code>deps[i]</code> liệt kê chỉ số các lệnh sinh toán hạng của lệnh <code>i</code> (đều nhỏ hơn <code>i</code>). Độ trễ lệnh là 1: nó phát được ở chu kỳ <i>c</i> nếu mọi lệnh sinh đã phát ở chu kỳ &lt; <i>c</i>. Mỗi chu kỳ phát tối đa <code>width</code> lệnh. Đúng thứ tự (<code>outOfOrder = false</code>): lệnh phát theo thứ tự chương trình và dừng ở lệnh đầu tiên chưa sẵn sàng. Sai thứ tự: quét mọi lệnh chưa phát, cũ nhất trước, phát lệnh sẵn sàng cho đến khi hết độ rộng. Trả <code>{ issue, cycles, ipc }</code>: <code>issue[i]</code> là chu kỳ phát lệnh <i>i</i> (bắt đầu từ 1), <code>cycles</code> là chu kỳ phát cuối, <code>ipc = n / cycles</code> làm tròn 2 chữ số bằng <code>Math.round(x * 100) / 100</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "issueSched([[], [0], []], 2, false)",
+          "output": "{\"issue\":[1,2,2],\"cycles\":2,\"ipc\":1.5}",
+          "explanation": "Cycle 1: I0 issues, I1 is not ready so in-order issue stops (I2 waits). Cycle 2: I1 and I2.|||Chu kỳ 1: I0 phát, I1 chưa sẵn sàng nên phát đúng thứ tự dừng (I2 chờ). Chu kỳ 2: I1 và I2."
+        }
+      ],
+      "hintsJson": [
+        "Keep issue[] initialised to 0 (not issued).",
+        "A producer is “done” for cycle c when 0 < issue[p] < c.",
+        "In-order keeps a pointer to the next instruction; out-of-order loops over all of them every cycle."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function issueSched(deps, width, outOfOrder) {\n  return { issue: [], cycles: 0, ipc: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function issueSched(deps, width, outOfOrder) {\n  var n = deps.length, issue = [], next = 0, cycle = 0, done = 0, i, k;\n  for (i = 0; i < n; i++) issue.push(0);\n  while (done < n) {\n    cycle++;\n    var slots = width, ready = function (x) {\n      for (var d = 0; d < deps[x].length; d++) if (issue[deps[x][d]] === 0 || issue[deps[x][d]] >= cycle) return false;\n      return true;\n    };\n    if (outOfOrder) {\n      for (k = 0; k < n && slots > 0; k++) if (issue[k] === 0 && ready(k)) { issue[k] = cycle; slots--; done++; }\n    } else {\n      while (next < n && slots > 0 && ready(next)) { issue[next] = cycle; next++; slots--; done++; }\n    }\n    if (cycle > 10 * n + 10) break;\n  }\n  return { issue: issue, cycles: cycle, ipc: Math.round((n / cycle) * 100) / 100 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The only difference between the two schedulers is the window of instructions examined: one (the oldest) versus all. That single difference is the whole point of out-of-order execution.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: issueSched([[],[0],[]], 2, false)",
+              "vi": "Ca 1"
+            },
+            "goi": "issueSched([[],[0],[]], 2, false)",
+            "mongDoi": {
+              "issue": [
+                1,
+                2,
+                2
+              ],
+              "cycles": 2,
+              "ipc": 1.5
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: issueSched([[],[0],[0],[1,2],[],[4],[3,5],[],[7],[6,8]], 2, false)",
+              "vi": "Ca 2"
+            },
+            "goi": "issueSched([[],[0],[0],[1,2],[],[4],[3,5],[],[7],[6,8]], 2, false)",
+            "mongDoi": {
+              "issue": [
+                1,
+                2,
+                2,
+                3,
+                3,
+                4,
+                5,
+                5,
+                6,
+                7
+              ],
+              "cycles": 7,
+              "ipc": 1.43
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: issueSched([[],[0],[0],[1,2],[],[4],[3,5],[],[7],[6,8]], 2, true)",
+              "vi": "Ca 3"
+            },
+            "goi": "issueSched([[],[0],[0],[1,2],[],[4],[3,5],[],[7],[6,8]], 2, true)",
+            "mongDoi": {
+              "issue": [
+                1,
+                2,
+                2,
+                3,
+                1,
+                3,
+                4,
+                4,
+                5,
+                6
+              ],
+              "cycles": 6,
+              "ipc": 1.67
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: issueSched([[],[0],[0],[1,2],[],[4],[3,5],[],[7],[6,8]], 4, true)",
+              "vi": "Ca 4"
+            },
+            "goi": "issueSched([[],[0],[0],[1,2],[],[4],[3,5],[],[7],[6,8]], 4, true)",
+            "mongDoi": {
+              "issue": [
+                1,
+                2,
+                2,
+                3,
+                1,
+                2,
+                4,
+                1,
+                2,
+                5
+              ],
+              "cycles": 5,
+              "ipc": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "issueSched([[],[0],[0],[1,2],[],[4],[3,5],[],[7],[6,8]], 1, true)",
+            "mongDoi": {
+              "issue": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10
+              ],
+              "cycles": 10,
+              "ipc": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "issueSched([[],[],[],[]], 2, false)",
+            "mongDoi": {
+              "issue": [
+                1,
+                1,
+                2,
+                2
+              ],
+              "cycles": 2,
+              "ipc": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "issueSched([[],[0],[1],[2]], 4, true)",
+            "mongDoi": {
+              "issue": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "cycles": 4,
+              "ipc": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "issueSched([[],[0],[0],[0],[1,2,3]], 3, false)",
+            "mongDoi": {
+              "issue": [
+                1,
+                2,
+                2,
+                2,
+                3
+              ],
+              "cycles": 3,
+              "ipc": 1.67
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting a consumer issue in the cycle in which its producer issues."
+        },
+        {
+          "loi": "Using the same loop for in-order and out-of-order."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

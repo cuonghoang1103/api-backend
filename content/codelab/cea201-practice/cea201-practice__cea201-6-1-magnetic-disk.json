@@ -1,0 +1,788 @@
+{
+  "trackSlug": "cea201-practice",
+  "moduleSlug": "cea201-6-1-magnetic-disk",
+  "lesson": {
+    "course": "computer-organization-and-architecture",
+    "slug": "cea201-6-1-magnetic-disk"
+  },
+  "exercises": [
+    {
+      "title": "Disk 1 — Platters, tracks, sectors and access time",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "disk access time"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Concept questions on how a hard disk stores and finds data.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi khái niệm về cách đĩa cứng lưu và tìm dữ liệu.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mechanical delays (ms) dwarf electronic ones (µs).",
+        "Half a revolution on average."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 1 — Platters, tracks, sectors and access time\n\nAnswer in the answer panel (no code needed).\n\n1. The access time of a disk is the sum of …Thời gian truy cập của đĩa là tổng của …\n2. Average rotational latency of a 7200 rpm disk is about …Độ trễ quay trung bình của đĩa 7200 vòng/phút khoảng …\n3. Why are sequential reads much faster than random reads on a hard disk?Vì sao đọc tuần tự nhanh hơn nhiều so với đọc ngẫu nhiên trên đĩa cứng?\n4. Zoned bit recording stores …Ghi vùng (zoned bit recording) lưu …\n5. A cylinder is …Cylinder là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 1 — Platters, tracks, sectors and access time — answer key\n\n1. The access time of a disk is the sum of …Thời gian truy cập của đĩa là tổng của …\n   Answer: b) seek time, rotational latency and transfer time\n   Move the head, wait for the sector, read it.VI: Dời đầu từ, chờ sector, đọc nó.\n\n2. Average rotational latency of a 7200 rpm disk is about …Độ trễ quay trung bình của đĩa 7200 vòng/phút khoảng …\n   Answer: c) 4.17 ms (half a revolution)\n   One revolution takes 60000/7200 = 8.33 ms; on average we wait half of it.VI: Một vòng mất 60000/7200 = 8,33 ms; trung bình phải chờ nửa vòng.\n\n3. Why are sequential reads much faster than random reads on a hard disk?Vì sao đọc tuần tự nhanh hơn nhiều so với đọc ngẫu nhiên trên đĩa cứng?\n   Answer: d) They pay the seek and rotation once instead of per block\n   Mechanical positioning dominates; transfer is cheap once positioned.VI: Việc định vị cơ khí chiếm ưu thế; truyền thì rẻ khi đã vào đúng chỗ.\n\n4. Zoned bit recording stores …Ghi vùng (zoned bit recording) lưu …\n   Answer: a) more sectors on the longer outer tracks\n   The outer tracks are longer, so they hold more sectors at the same density.VI: Rãnh ngoài dài hơn nên chứa nhiều sector hơn ở cùng mật độ.\n\n5. A cylinder is …Cylinder là …\n   Answer: b) the set of tracks at the same arm position on all platter surfaces\n   Reading a cylinder needs no head movement, only head switching.VI: Đọc một cylinder không cần dời cần đọc, chỉ đổi đầu đọc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The access time of a disk is the sum of …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời gian truy cập của đĩa là tổng của …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "seek time only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "seek time, rotational latency and transfer time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "seek time and cache time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "rotational latency and bus time"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Move the head, wait for the sector, read it.</p><p><i>VI: Dời đầu từ, chờ sector, đọc nó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Average rotational latency of a 7200 rpm disk is about …</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ trễ quay trung bình của đĩa 7200 vòng/phút khoảng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "0.5 ms"
+              },
+              {
+                "ma": "b",
+                "noiDung": "16.7 ms"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4.17 ms (half a revolution)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8.33 ms (a full revolution)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One revolution takes 60000/7200 = 8.33 ms; on average we wait half of it.</p><p><i>VI: Một vòng mất 60000/7200 = 8,33 ms; trung bình phải chờ nửa vòng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why are sequential reads much faster than random reads on a hard disk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đọc tuần tự nhanh hơn nhiều so với đọc ngẫu nhiên trên đĩa cứng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The disk reads faster when data are sequential"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The cache is bigger"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Random reads need more CPU"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They pay the seek and rotation once instead of per block"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Mechanical positioning dominates; transfer is cheap once positioned.</p><p><i>VI: Việc định vị cơ khí chiếm ưu thế; truyền thì rẻ khi đã vào đúng chỗ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Zoned bit recording stores …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ghi vùng (zoned bit recording) lưu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "more sectors on the longer outer tracks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the same number of sectors on every track"
+              },
+              {
+                "ma": "c",
+                "noiDung": "data only on the inner tracks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "parity on the outer tracks"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The outer tracks are longer, so they hold more sectors at the same density.</p><p><i>VI: Rãnh ngoài dài hơn nên chứa nhiều sector hơn ở cùng mật độ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A cylinder is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cylinder là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a platter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the set of tracks at the same arm position on all platter surfaces"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one track of one surface"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a group of sectors on one track"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Reading a cylinder needs no head movement, only head switching.</p><p><i>VI: Đọc một cylinder không cần dời cần đọc, chỉ đổi đầu đọc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using a full rotation as the average latency."
+        },
+        {
+          "loi": "Ignoring the seek time when comparing two disks."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "seek time",
+          "vi": "thời gian dời đầu từ"
+        },
+        {
+          "en": "rotational latency",
+          "vi": "độ trễ quay"
+        }
+      ]
+    },
+    {
+      "title": "Disk 2 — Capacity from the geometry",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "disk geometry"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>A disk has <b>P</b> platters (2 surfaces each, one head per surface), <b>C</b> cylinders (tracks per surface), <b>S</b> sectors per track and <b>B</b>-byte sectors. Give the total capacity in <b>GB</b> (10⁹ bytes, 2 decimals) and the capacity of one <b>cylinder</b> in KiB.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đĩa có <b>P</b> mâm (mỗi mâm 2 mặt, mỗi mặt một đầu đọc), <b>C</b> cylinder (số rãnh mỗi mặt), <b>S</b> sector mỗi rãnh và sector <b>B</b> byte. Cho tổng dung lượng theo <b>GB</b> (10⁹ byte, 2 chữ số) và dung lượng một <b>cylinder</b> theo KiB.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "surfaces = 2 × platters; capacity = surfaces × cylinders × sectors × bytes.",
+        "A cylinder holds surfaces × sectors × bytes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 2 — Capacity from the geometry\n\nAnswer in the answer panel (no code needed).\n\n1. CapacityDung lượng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 2 — Capacity from the geometry — answer key\n\n1. CapacityDung lượng\n   - r1.t: 102.40 / 102.4\n   - r1.c: 1000\n   - r2.t: 5242.88\n   - r2.c: 25600\n   - r3.t: 13.11\n   - r3.c: 256\n   2×2×100000×500×512 = 102400000000 B = 102.40 GB; cylinder 1000 KiB; 4×2×200000×800×4096 = 5242880000000 B = 5242.88 GB; cylinder 25600 KiB; 1×2×50000×256×512 = 13107200000 B = 13.11 GB; cylinder 256 KiB.VI: 102.40 GB; cylinder 1000 KiB; 5242.88 GB; cylinder 25600 KiB; 13.11 GB; cylinder 256 KiB.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>2×2×100000×500×512 = 102400000000 B = 102.40 GB; cylinder 1000 KiB; 4×2×200000×800×4096 = 5242880000000 B = 5242.88 GB; cylinder 25600 KiB; 1×2×50000×256×512 = 13107200000 B = 13.11 GB; cylinder 256 KiB.</p><p><i>VI: 102.40 GB; cylinder 1000 KiB; 5242.88 GB; cylinder 25600 KiB; 13.11 GB; cylinder 256 KiB.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Capacity</p><p style=\"opacity:.75;font-size:.92em\"><i>Dung lượng</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "Geometry"
+              },
+              {
+                "ma": "t",
+                "ten": "Total (GB)"
+              },
+              {
+                "ma": "c",
+                "ten": "Cylinder (KiB)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "P = 2, C = 100000, S = 500, B = 512 bytes"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "P = 4, C = 200000, S = 800, B = 4096 bytes"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "P = 1, C = 50000, S = 256, B = 512 bytes"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "102.40",
+                "102.4"
+              ],
+              "r1.c": [
+                "1000"
+              ],
+              "r2.t": [
+                "5242.88"
+              ],
+              "r2.c": [
+                "25600"
+              ],
+              "r3.t": [
+                "13.11"
+              ],
+              "r3.c": [
+                "256"
+              ]
+            },
+            "giaiThich": "<p>2×2×100000×500×512 = 102400000000 B = 102.40 GB; cylinder 1000 KiB; 4×2×200000×800×4096 = 5242880000000 B = 5242.88 GB; cylinder 25600 KiB; 1×2×50000×256×512 = 13107200000 B = 13.11 GB; cylinder 256 KiB.</p><p><i>VI: 102.40 GB; cylinder 1000 KiB; 5242.88 GB; cylinder 25600 KiB; 13.11 GB; cylinder 256 KiB.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting one surface per platter."
+        },
+        {
+          "loi": "Mixing 10⁹ and 2³⁰."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cylinder",
+          "vi": "cylinder (các rãnh cùng vị trí cần)"
+        }
+      ]
+    },
+    {
+      "title": "Disk 3 — Access time of one request",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "seek",
+        "rotational latency",
+        "transfer time"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Average rotational latency = ½ revolution; transfer time = (bytes / bytes-per-track) × revolution time; access time = seek + latency + transfer. Fill in the rotation time of one revolution, the latency, and the total access time (ms, 3 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Độ trễ quay trung bình = ½ vòng; thời gian truyền = (số byte / byte mỗi rãnh) × thời gian một vòng; thời gian truy cập = seek + độ trễ + truyền. Điền thời gian một vòng, độ trễ và tổng thời gian truy cập (ms, 3 chữ số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "60000 / rpm gives milliseconds per revolution.",
+        "Transfer time = fraction of the track read × revolution time."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 3 — Access time of one request\n\nAnswer in the answer panel (no code needed).\n\n1. Access timeThời gian truy cập\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 3 — Access time of one request — answer key\n\n1. Access timeThời gian truy cập\n   - r1.r: 8.333\n   - r1.l: 4.167\n   - r1.t: 8.188\n   - r2.r: 11.111\n   - r2.l: 5.556\n   - r2.t: 14.611\n   - r3.r: 4.000 / 4\n   - r3.l: 2.000 / 2\n   - r3.t: 5.007\n   - r4.r: 8.333\n   - r4.l: 4.167\n   - r4.t: 17.233\n   4 + 4.167 + 0.021 = 8.188 ms; 9 + 5.556 + 0.056 = 14.611 ms; 3 + 2.000 + 0.007 = 5.007 ms; 12 + 4.167 + 1.067 = 17.233 ms. Seek and latency dominate small reads.VI: 4 + 4.167 + 0.021 = 8.188 ms; 9 + 5.556 + 0.056 = 14.611 ms; 3 + 2.000 + 0.007 = 5.007 ms; 12 + 4.167 + 1.067 = 17.233 ms.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 + 4.167 + 0.021 = 8.188 ms; 9 + 5.556 + 0.056 = 14.611 ms; 3 + 2.000 + 0.007 = 5.007 ms; 12 + 4.167 + 1.067 = 17.233 ms. Seek and latency dominate small reads.</p><p><i>VI: 4 + 4.167 + 0.021 = 8.188 ms; 9 + 5.556 + 0.056 = 14.611 ms; 3 + 2.000 + 0.007 = 5.007 ms; 12 + 4.167 + 1.067 = 17.233 ms.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Access time</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời gian truy cập</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Disk and request"
+              },
+              {
+                "ma": "r",
+                "ten": "Revolution (ms)"
+              },
+              {
+                "ma": "l",
+                "ten": "Latency (ms)"
+              },
+              {
+                "ma": "t",
+                "ten": "Access (ms)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "seek 4 ms, 7200 rpm, read 512 B, track = 204800 B"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "seek 9 ms, 5400 rpm, read 4096 B, track = 819200 B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "seek 3 ms, 15000 rpm, read 512 B, track = 307200 B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "seek 12 ms, 7200 rpm, read 65536 B, track = 512000 B"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": [
+                "8.333"
+              ],
+              "r1.l": [
+                "4.167"
+              ],
+              "r1.t": [
+                "8.188"
+              ],
+              "r2.r": [
+                "11.111"
+              ],
+              "r2.l": [
+                "5.556"
+              ],
+              "r2.t": [
+                "14.611"
+              ],
+              "r3.r": [
+                "4.000",
+                "4"
+              ],
+              "r3.l": [
+                "2.000",
+                "2"
+              ],
+              "r3.t": [
+                "5.007"
+              ],
+              "r4.r": [
+                "8.333"
+              ],
+              "r4.l": [
+                "4.167"
+              ],
+              "r4.t": [
+                "17.233"
+              ]
+            },
+            "giaiThich": "<p>4 + 4.167 + 0.021 = 8.188 ms; 9 + 5.556 + 0.056 = 14.611 ms; 3 + 2.000 + 0.007 = 5.007 ms; 12 + 4.167 + 1.067 = 17.233 ms. Seek and latency dominate small reads.</p><p><i>VI: 4 + 4.167 + 0.021 = 8.188 ms; 9 + 5.556 + 0.056 = 14.611 ms; 3 + 2.000 + 0.007 = 5.007 ms; 12 + 4.167 + 1.067 = 17.233 ms.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using seconds for rpm and milliseconds for seek."
+        },
+        {
+          "loi": "Using a full revolution as latency."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "revolution",
+          "vi": "một vòng quay"
+        }
+      ]
+    },
+    {
+      "title": "Disk 4 — Sequential versus random: the same 1 MiB",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "sequential vs random access"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Disk: seek 8 ms, 7200 rpm, 500 sectors × 512 B per track (track = 256,000 B). Read 1 MiB (1,048,576 B) either as <b>one sequential run</b> (one seek + one latency + transfer of the whole amount, ignoring track switches) or as <b>256 random 4 KiB reads</b> (each pays seek + latency + its transfer). Fill in both times (ms, 1 decimal), the ratio random / sequential (1 decimal) and the throughput of each (MB/s with 10⁶ bytes, 1 decimal).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the CEA201 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đĩa: seek 8 ms, 7200 vòng/phút, 500 sector × 512 B mỗi rãnh (rãnh = 256.000 B). Đọc 1 MiB (1.048.576 B) hoặc <b>một lượt tuần tự</b> (một seek + một độ trễ + truyền toàn bộ, bỏ qua đổi rãnh) hoặc <b>256 lần đọc ngẫu nhiên 4 KiB</b> (mỗi lần trả seek + độ trễ + truyền). Điền cả hai thời gian (ms, 1 chữ số), tỉ số ngẫu nhiên / tuần tự (1 chữ số) và thông lượng mỗi kiểu (MB/s theo 10⁶ byte, 1 chữ số).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn CEA201, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Random: 256 × (seek + latency + 4096-byte transfer).",
+        "Throughput = 1.048576 MB ÷ time in seconds."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 4 — Sequential versus random: the same 1 MiB\n\nAnswer in the answer panel (no code needed).\n\n1. Sequential vs randomTuần tự và ngẫu nhiên\n2. RatioTỉ số\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 4 — Sequential versus random: the same 1 MiB — answer key\n\n1. Sequential vs randomTuần tự và ngẫu nhiên\n   - r1.t: 46.3\n   - r1.m: 22.6\n   - r2.t: 3148.8\n   - r2.m: 0.3\n   Sequential 46.3 ms (22.6 MB/s); random 256 × 12.300 = 3148.8 ms (0.3 MB/s).VI: Tuần tự 46.3 ms (22.6 MB/s); ngẫu nhiên 256 × 12.300 = 3148.8 ms (0.3 MB/s).\n\n2. RatioTỉ số\n   - r1.v: 68.0 / 68\n   3148.8 / 46.3 = 68.0×: the cost of positioning 256 times.VI: 3148.8 / 46.3 = 68.0 lần: cái giá của việc định vị 256 lần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sequential 46.3 ms (22.6 MB/s); random 256 × 12.300 = 3148.8 ms (0.3 MB/s).</p><p><i>VI: Tuần tự 46.3 ms (22.6 MB/s); ngẫu nhiên 256 × 12.300 = 3148.8 ms (0.3 MB/s).</i></p><p>3148.8 / 46.3 = 68.0×: the cost of positioning 256 times.</p><p><i>VI: 3148.8 / 46.3 = 68.0 lần: cái giá của việc định vị 256 lần.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Sequential vs random</p><p style=\"opacity:.75;font-size:.92em\"><i>Tuần tự và ngẫu nhiên</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Pattern"
+              },
+              {
+                "ma": "t",
+                "ten": "Time (ms)"
+              },
+              {
+                "ma": "m",
+                "ten": "Throughput (MB/s)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "One sequential run"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "k": "256 random 4 KiB reads"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": [
+                "46.3"
+              ],
+              "r1.m": [
+                "22.6"
+              ],
+              "r2.t": [
+                "3148.8"
+              ],
+              "r2.m": [
+                "0.3"
+              ]
+            },
+            "giaiThich": "<p>Sequential 46.3 ms (22.6 MB/s); random 256 × 12.300 = 3148.8 ms (0.3 MB/s).</p><p><i>VI: Tuần tự 46.3 ms (22.6 MB/s); ngẫu nhiên 256 × 12.300 = 3148.8 ms (0.3 MB/s).</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Ratio</p><p style=\"opacity:.75;font-size:.92em\"><i>Tỉ số</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "random time / sequential time"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": [
+                "68.0",
+                "68"
+              ]
+            },
+            "giaiThich": "<p>3148.8 / 46.3 = 68.0×: the cost of positioning 256 times.</p><p><i>VI: 3148.8 / 46.3 = 68.0 lần: cái giá của việc định vị 256 lần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Paying the seek only once for the random case."
+        },
+        {
+          "loi": "Dividing MiB by milliseconds."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "throughput",
+          "vi": "thông lượng"
+        }
+      ]
+    },
+    {
+      "title": "Disk 5 — What does fragmentation cost?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "fragmentation",
+        "seek",
+        "latency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "cea201"
+      ],
+      "problemHtml": "<p>Write <code>diskReport(cfg, files)</code>. <code>cfg = { seekMs, rpm, bytesPerTrack }</code>; each file is <code>{ bytes, fragments }</code>: the file is stored in <code>fragments</code> separate pieces, and every piece costs one seek plus an average rotational latency (half a revolution); the data transfer time of the whole file is <code>bytes / bytesPerTrack</code> revolutions. Return <code>{ times, total }</code>: the read time of every file in ms, each rounded to 3 decimals (<code>Math.round(t * 1000) / 1000</code>), and the sum of those rounded values rounded again to 3 decimals.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>fragments ≥ 1</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>diskReport(cfg, files)</code>. <code>cfg = { seekMs, rpm, bytesPerTrack }</code>; mỗi tệp là <code>{ bytes, fragments }</code>: tệp nằm ở <code>fragments</code> mảnh rời nhau, mỗi mảnh tốn một seek cộng độ trễ quay trung bình (nửa vòng); thời gian truyền dữ liệu cả tệp là <code>bytes / bytesPerTrack</code> vòng. Trả <code>{ times, total }</code>: thời gian đọc từng tệp theo ms, mỗi giá trị làm tròn 3 chữ số (<code>Math.round(t * 1000) / 1000</code>), và tổng các giá trị đã làm tròn đó cũng làm tròn 3 chữ số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>fragments ≥ 1</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "diskReport({ seekMs: 8, rpm: 7200, bytesPerTrack: 256000 }, [{ bytes: 256000, fragments: 1 }])",
+          "output": "{\"times\":[20.5],\"total\":20.5}",
+          "explanation": "8 + 4.167 (half a revolution) + 8.333 (one full track) = 20.5 ms.|||8 + 4,167 (nửa vòng) + 8,333 (cả một rãnh) = 20,5 ms."
+        }
+      ],
+      "hintsJson": [
+        "One revolution = 60000 / rpm ms.",
+        "time = fragments × (seek + rev / 2) + bytes / bytesPerTrack × rev.",
+        "Round each file, then add and round the total."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function diskReport(cfg, files) {\n  return { times: [], total: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function diskReport(cfg, files) {\n  var rot = 60000 / cfg.rpm, times = [], total = 0;\n  for (var i = 0; i < files.length; i++) {\n    var t = files[i].fragments * (cfg.seekMs + rot / 2) + (files[i].bytes / cfg.bytesPerTrack) * rot;\n    t = Math.round(t * 1000) / 1000;\n    times.push(t); total += t;\n  }\n  return { times: times, total: Math.round(total * 1000) / 1000 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Splitting a file into F pieces multiplies the positioning cost by F while the transfer time is unchanged — the reason defragmentation helps hard disks and not SSDs.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: diskReport({\"seekMs\":8,\"rpm\":7200,\"bytesPerTrack\":256000}, [{\"bytes\":256000,\"frag)",
+              "vi": "Ca 1"
+            },
+            "goi": "diskReport({\"seekMs\":8,\"rpm\":7200,\"bytesPerTrack\":256000}, [{\"bytes\":256000,\"fragments\":1},{\"bytes\":1048576,\"fragments\":4}])",
+            "mongDoi": {
+              "times": [
+                20.5,
+                82.8
+              ],
+              "total": 103.3
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: diskReport({\"seekMs\":4,\"rpm\":15000,\"bytesPerTrack\":300000}, [{\"bytes\":4096,\"fragm)",
+              "vi": "Ca 2"
+            },
+            "goi": "diskReport({\"seekMs\":4,\"rpm\":15000,\"bytesPerTrack\":300000}, [{\"bytes\":4096,\"fragments\":1},{\"bytes\":4096,\"fragments\":8}])",
+            "mongDoi": {
+              "times": [
+                6.055,
+                48.055
+              ],
+              "total": 54.11
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: diskReport({\"seekMs\":8,\"rpm\":7200,\"bytesPerTrack\":256000}, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "diskReport({\"seekMs\":8,\"rpm\":7200,\"bytesPerTrack\":256000}, [])",
+            "mongDoi": {
+              "times": [],
+              "total": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "diskReport({\"seekMs\":12,\"rpm\":5400,\"bytesPerTrack\":200000}, [{\"bytes\":10000000,\"fragments\":25},{\"bytes\":512,\"fragments\":1},{\"bytes\":99999,\"fragments\":3}])",
+            "mongDoi": {
+              "times": [
+                994.444,
+                17.584,
+                58.222
+              ],
+              "total": 1070.25
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "diskReport({\"seekMs\":8,\"rpm\":7200,\"bytesPerTrack\":256000}, [{\"bytes\":123456,\"fragments\":2}])",
+            "mongDoi": {
+              "times": [
+                28.352
+              ],
+              "total": 28.352
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Charging one seek per file regardless of fragments."
+        },
+        {
+          "loi": "Summing the unrounded times."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

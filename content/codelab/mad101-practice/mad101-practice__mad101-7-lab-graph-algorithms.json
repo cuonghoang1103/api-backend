@@ -1,0 +1,1037 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-7-lab-graph-algorithms",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-7-1-do-thi"
+  },
+  "exercises": [
+    {
+      "title": "Graph lab 1 — Sizes of the connected components",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "connected components",
+        "union–find"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A graph has vertices 0…n−1 and the undirected edges <code>[u, v]</code>. Write <code>componentSizes(n, edges)</code> returning the sizes of its connected components in <em>descending</em> order (an isolated vertex is a component of size 1). Use union–find or a search. For n = 0 return an empty array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Sort numerically, not as strings.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồ thị có đỉnh 0…n−1 và các cạnh vô hướng <code>[u, v]</code>. Viết <code>componentSizes(n, edges)</code> trả kích thước các thành phần liên thông theo thứ tự <em>giảm dần</em> (đỉnh cô lập là thành phần cỡ 1). Dùng union–find hoặc tìm kiếm. Với n = 0 trả mảng rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sắp theo số, không sắp theo chuỗi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "componentSizes(6, [[0,1],[1,2],[3,4]])",
+          "output": "[3,2,1]",
+          "explanation": "{0,1,2}, {3,4}, {5}.|||{0,1,2}, {3,4}, {5}."
+        }
+      ],
+      "hintsJson": [
+        "Union the endpoints of each edge, then count members per representative.",
+        "Path compression makes find nearly constant time."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function componentSizes(n, edges) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function componentSizes(n, edges) {\n  var parent = [], i;\n  for (i = 0; i < n; i++) parent.push(i);\n  function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }\n  edges.forEach(function (e) { parent[find(e[0])] = find(e[1]); });\n  var size = {};\n  for (i = 0; i < n; i++) { var r = find(i); size[r] = (size[r] || 0) + 1; }\n  return Object.keys(size).map(function (k) { return size[k]; }).sort(function (a, b) { return b - a; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Connectedness is an equivalence relation; its classes are the components, and union–find maintains the classes under merging.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: componentSizes(6, [[0,1],[1,2],[3,4]])",
+              "vi": "Ca 1"
+            },
+            "goi": "componentSizes(6, [[0,1],[1,2],[3,4]])",
+            "mongDoi": [
+              3,
+              2,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: componentSizes(0, [])",
+              "vi": "Ca 2"
+            },
+            "goi": "componentSizes(0, [])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Case 3: componentSizes(4, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "componentSizes(4, [])",
+            "mongDoi": [
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "componentSizes(12, [[0,1],[2,3],[3,4],[5,6],[6,7],[7,8],[8,9],[9,5]])",
+            "mongDoi": [
+              5,
+              3,
+              2,
+              1,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "componentSizes(3, [[0,1],[1,2],[2,0]])",
+            "mongDoi": [
+              3
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting only components with at least one edge."
+        },
+        {
+          "loi": "Sorting with the default comparator (10 sorts before 2)."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Graph lab 2 — Does an Euler circuit exist?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Euler circuit"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>hasEulerCircuit(n, edges)</code> returning <code>true</code> when the undirected multigraph on vertices 0…n−1 (parallel edges and loops allowed; a loop adds 2 to its vertex’s degree) has a closed walk using every edge exactly once. Rule: every vertex has even degree <em>and</em> all vertices with at least one edge lie in one connected component. A graph with no edges counts as having an (empty) Euler circuit.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Isolated vertices do not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>hasEulerCircuit(n, edges)</code> trả <code>true</code> khi đa đồ thị vô hướng trên các đỉnh 0…n−1 (cho phép cạnh song song và khuyên; khuyên cộng 2 vào bậc đỉnh) có đường đi đóng dùng mỗi cạnh đúng một lần. Quy tắc: mọi đỉnh bậc chẵn <em>và</em> mọi đỉnh có ít nhất một cạnh nằm trong một thành phần liên thông. Đồ thị không có cạnh được coi là có chu trình Euler (rỗng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đỉnh cô lập không ảnh hưởng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hasEulerCircuit(4, [[0,1],[1,2],[2,3],[3,0]])",
+          "output": "true",
+          "explanation": "A 4-cycle.|||Chu trình 4 đỉnh."
+        },
+        {
+          "input": "hasEulerCircuit(6, [[0,1],[1,2],[2,0],[3,4],[4,5],[5,3]])",
+          "output": "false",
+          "explanation": "Even degrees but two components with edges.|||Bậc chẵn nhưng có hai thành phần có cạnh."
+        }
+      ],
+      "hintsJson": [
+        "Count degrees (loops add 2), check parity, then check how many components contain an edge.",
+        "A loop [v, v] increases deg[v] by 2: in the code deg[e[0]]++ and deg[e[1]]++ does exactly that."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function hasEulerCircuit(n, edges) {\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function hasEulerCircuit(n, edges) {\n  var deg = [], i;\n  for (i = 0; i < n; i++) deg.push(0);\n  var parent = [];\n  for (i = 0; i < n; i++) parent.push(i);\n  function find(x) { while (parent[x] !== x) x = parent[x]; return x; }\n  edges.forEach(function (e) { deg[e[0]]++; deg[e[1]]++; parent[find(e[0])] = find(e[1]); });\n  var roots = {};\n  for (i = 0; i < n; i++) { if (deg[i] % 2 !== 0) return false; if (deg[i] > 0) roots[find(i)] = true; }\n  return Object.keys(roots).length <= 1;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Euler’s theorem: a graph whose edges form one connected piece has an Euler circuit iff all degrees are even.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: hasEulerCircuit(4, [[0,1],[1,2],[2,3],[3,0]])",
+              "vi": "Ca 1"
+            },
+            "goi": "hasEulerCircuit(4, [[0,1],[1,2],[2,3],[3,0]])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 2: hasEulerCircuit(6, [[0,1],[1,2],[2,0],[3,4],[4,5],[5,3]])",
+              "vi": "Ca 2"
+            },
+            "goi": "hasEulerCircuit(6, [[0,1],[1,2],[2,0],[3,4],[4,5],[5,3]])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Case 3: hasEulerCircuit(3, [[0,1],[1,2]])",
+              "vi": "Ca 3"
+            },
+            "goi": "hasEulerCircuit(3, [[0,1],[1,2]])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "hasEulerCircuit(5, [])",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "hasEulerCircuit(5, [[0,1],[0,1],[2,2]])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "hasEulerCircuit(4, [[0,1],[1,2],[2,0],[0,3],[3,0]])",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ignoring connectivity (two disjoint cycles are not one circuit)."
+        },
+        {
+          "loi": "Requiring the isolated vertices to be in the same component."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Graph lab 3 — Two-colour a graph (bipartite test)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "bipartite",
+        "graph colouring"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>isBipartite(n, edges)</code> for an undirected graph on vertices 0…n−1 (several components, loops possible). Colour each component with a BFS: give a neighbour the opposite colour; if an edge joins two vertices of the same colour (a loop does!), the graph is not bipartite. Return a boolean.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Start a fresh search from every uncoloured vertex.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>isBipartite(n, edges)</code> cho đồ thị vô hướng trên các đỉnh 0…n−1 (nhiều thành phần, có thể có khuyên). Tô màu mỗi thành phần bằng BFS: láng giềng nhận màu ngược lại; nếu có cạnh nối hai đỉnh cùng màu (khuyên cũng vậy!) thì đồ thị không hai phía. Trả boolean.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bắt đầu tìm kiếm mới từ mỗi đỉnh chưa tô màu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "isBipartite(4, [[0,1],[1,2],[2,3],[3,0]])",
+          "output": "true",
+          "explanation": "Even cycle.|||Chu trình chẵn."
+        },
+        {
+          "input": "isBipartite(3, [[0,1],[1,2],[2,0]])",
+          "output": "false",
+          "explanation": "Odd cycle.|||Chu trình lẻ."
+        }
+      ],
+      "hintsJson": [
+        "colour[v] = −1 means unvisited.",
+        "Remember that a self-loop makes u adjacent to itself, hence the same colour."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function isBipartite(n, edges) {\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function isBipartite(n, edges) {\n  var adj = [], color = [], i;\n  for (i = 0; i < n; i++) { adj.push([]); color.push(-1); }\n  edges.forEach(function (e) { adj[e[0]].push(e[1]); adj[e[1]].push(e[0]); });\n  for (var s = 0; s < n; s++) {\n    if (color[s] !== -1) continue;\n    color[s] = 0;\n    var queue = [s];\n    while (queue.length) {\n      var u = queue.shift();\n      for (i = 0; i < adj[u].length; i++) {\n        var v = adj[u][i];\n        if (color[v] === -1) { color[v] = 1 - color[u]; queue.push(v); } else if (color[v] === color[u]) return false;\n      }\n    }\n  }\n  return true;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A graph is bipartite iff it has no odd cycle; BFS colouring finds a conflict exactly when an odd cycle exists.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: isBipartite(4, [[0,1],[1,2],[2,3],[3,0]])",
+              "vi": "Ca 1"
+            },
+            "goi": "isBipartite(4, [[0,1],[1,2],[2,3],[3,0]])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 2: isBipartite(3, [[0,1],[1,2],[2,0]])",
+              "vi": "Ca 2"
+            },
+            "goi": "isBipartite(3, [[0,1],[1,2],[2,0]])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Case 3: isBipartite(0, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "isBipartite(0, [])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "isBipartite(5, [[0,1],[2,3],[3,4],[4,2]])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "isBipartite(6, [[0,3],[0,4],[0,5],[1,3],[1,4],[1,5],[2,3],[2,4],[2,5]])",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "isBipartite(2, [[1,1]])",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting the search only from vertex 0 (misses other components)."
+        },
+        {
+          "loi": "Not detecting conflicts on non-tree edges."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Graph lab 4 — Depth-first order",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "DFS",
+        "recursion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>dfsOrder(edges, start)</code> for an undirected graph (edges <code>[u, v]</code> of string vertices) returning the vertices in the order a recursive DFS from <code>start</code> first visits them, taking neighbours in alphabetical order. Unreachable vertices are omitted.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A start vertex that is in no edge gives [start].</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>dfsOrder(edges, start)</code> cho đồ thị vô hướng (cạnh <code>[u, v]</code> giữa các đỉnh chuỗi) trả các đỉnh theo thứ tự DFS đệ quy từ <code>start</code> thăm lần đầu, lấy láng giềng theo thứ tự chữ cái. Bỏ các đỉnh không tới được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đỉnh bắt đầu không thuộc cạnh nào cho [start].</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "dfsOrder([[\"A\",\"B\"],[\"A\",\"C\"],[\"B\",\"D\"],[\"C\",\"D\"]],\"A\")",
+          "output": "[\"A\",\"B\",\"D\",\"C\"]",
+          "explanation": "A → B → D → C: after D the search backtracks to A and takes C.|||A → B → D → C: sau D quay lại A rồi sang C."
+        }
+      ],
+      "hintsJson": [
+        "Mark when entering the vertex (before the recursive calls on neighbours).",
+        "Sort the neighbour lists once."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function dfsOrder(edges, start) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function dfsOrder(edges, start) {\n  var adj = {};\n  edges.forEach(function (e) { (adj[e[0]] = adj[e[0]] || []).push(e[1]); (adj[e[1]] = adj[e[1]] || []).push(e[0]); });\n  Object.keys(adj).forEach(function (k) { adj[k].sort(); });\n  var seen = {}, order = [];\n  function go(u) {\n    seen[u] = true; order.push(u);\n    var nb = adj[u] || [];\n    for (var i = 0; i < nb.length; i++) if (!seen[nb[i]]) go(nb[i]);\n  }\n  go(start);\n  return order;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>DFS pushes as deep as possible; the recursion stack is the path from the start to the current vertex.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: dfsOrder([[\"A\",\"B\"],[\"A\",\"C\"],[\"B\",\"D\"],[\"C\",\"D\"]], \"A\")",
+              "vi": "Ca 1"
+            },
+            "goi": "dfsOrder([[\"A\",\"B\"],[\"A\",\"C\"],[\"B\",\"D\"],[\"C\",\"D\"]], \"A\")",
+            "mongDoi": [
+              "A",
+              "B",
+              "D",
+              "C"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: dfsOrder([[\"A\",\"B\"]], \"Z\")",
+              "vi": "Ca 2"
+            },
+            "goi": "dfsOrder([[\"A\",\"B\"]], \"Z\")",
+            "mongDoi": [
+              "Z"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: dfsOrder([[\"A\",\"D\"],[\"A\",\"B\"],[\"B\",\"C\"],[\"B\",\"E\"],[\"C\",\"F\"],[\"D\",\"E\"],[\"E\",\"F\"])",
+              "vi": "Ca 3"
+            },
+            "goi": "dfsOrder([[\"A\",\"D\"],[\"A\",\"B\"],[\"B\",\"C\"],[\"B\",\"E\"],[\"C\",\"F\"],[\"D\",\"E\"],[\"E\",\"F\"],[\"D\",\"G\"]], \"A\")",
+            "mongDoi": [
+              "A",
+              "B",
+              "C",
+              "F",
+              "E",
+              "D",
+              "G"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "dfsOrder([[\"C\",\"A\"],[\"A\",\"B\"],[\"B\",\"C\"],[\"C\",\"D\"]], \"D\")",
+            "mongDoi": [
+              "D",
+              "C",
+              "A",
+              "B"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "dfsOrder([[\"M\",\"N\"],[\"O\",\"P\"]], \"M\")",
+            "mongDoi": [
+              "M",
+              "N"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Marking a vertex only after its recursive calls (infinite recursion on cycles)."
+        },
+        {
+          "loi": "Visiting neighbours in input order instead of alphabetical."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Graph lab 5 — Topological sorting (build order)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "topological sort",
+        "DAG"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Tasks 0…n−1 have prerequisites: an edge <code>[a, b]</code> means task a must come before task b. Write <code>topologicalOrder(n, edges)</code> returning an order in which all prerequisites are respected, using Kahn’s algorithm and always choosing the <em>smallest-numbered</em> available task, so the answer is unique. If the prerequisites contain a cycle return <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Duplicate edges may appear; they must not break the in-degree counting.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các công việc 0…n−1 có tiên quyết: cạnh <code>[a, b]</code> nghĩa là việc a phải đứng trước việc b. Viết <code>topologicalOrder(n, edges)</code> trả thứ tự tôn trọng mọi tiên quyết, dùng thuật toán Kahn và luôn chọn việc <em>có số nhỏ nhất</em> trong số các việc sẵn sàng để đáp án duy nhất. Nếu tiên quyết chứa chu trình trả <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Có thể có cạnh trùng; chúng không được làm hỏng việc đếm bậc vào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "topologicalOrder(4, [[0,1],[0,2],[1,3],[2,3]])",
+          "output": "[0,1,2,3]",
+          "explanation": "0 first, then 1 and 2, then 3.|||0 trước, rồi 1 và 2, cuối cùng 3."
+        },
+        {
+          "input": "topologicalOrder(2, [[0,1],[1,0]])",
+          "output": "null",
+          "explanation": "A cycle has no valid order.|||Chu trình không có thứ tự hợp lệ."
+        }
+      ],
+      "hintsJson": [
+        "In-degree of every task; a task is ready when its in-degree is 0.",
+        "If fewer than n tasks were output, a cycle blocked the rest."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function topologicalOrder(n, edges) {\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function topologicalOrder(n, edges) {\n  var indeg = [], adj = [], i;\n  for (i = 0; i < n; i++) { indeg.push(0); adj.push([]); }\n  edges.forEach(function (e) { adj[e[0]].push(e[1]); indeg[e[1]]++; });\n  var ready = [], order = [];\n  for (i = 0; i < n; i++) if (indeg[i] === 0) ready.push(i);\n  while (ready.length) {\n    ready.sort(function (a, b) { return a - b; });\n    var u = ready.shift();\n    order.push(u);\n    adj[u].forEach(function (v) { indeg[v]--; if (indeg[v] === 0) ready.push(v); });\n  }\n  return order.length === n ? order : null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A directed graph has a topological order iff it is acyclic; Kahn repeatedly removes a source (a vertex with no incoming edge).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: topologicalOrder(4, [[0,1],[0,2],[1,3],[2,3]])",
+              "vi": "Ca 1"
+            },
+            "goi": "topologicalOrder(4, [[0,1],[0,2],[1,3],[2,3]])",
+            "mongDoi": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: topologicalOrder(2, [[0,1],[1,0]])",
+              "vi": "Ca 2"
+            },
+            "goi": "topologicalOrder(2, [[0,1],[1,0]])",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Case 3: topologicalOrder(3, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "topologicalOrder(3, [])",
+            "mongDoi": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "topologicalOrder(6, [[5,2],[5,0],[4,0],[4,1],[2,3],[3,1]])",
+            "mongDoi": [
+              4,
+              5,
+              0,
+              2,
+              3,
+              1
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "topologicalOrder(5, [[0,1],[0,1],[1,2],[3,2]])",
+            "mongDoi": [
+              0,
+              1,
+              3,
+              2,
+              4
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "topologicalOrder(3, [[0,1],[1,2],[2,1]])",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not re-sorting the ready list after adding new ready tasks."
+        },
+        {
+          "loi": "Using in-degree 1 instead of 0 as the ready condition."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Graph lab 6 — Is this a valid topological order?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "topological order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Directed prerequisites: 5→2, 5→0, 4→0, 4→1, 2→3, 3→1 (tasks 0…5). A listing is a valid topological order if for every edge a→b, a appears before b. Decide for each candidate.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tiên quyết có hướng: 5→2, 5→0, 4→0, 4→1, 2→3, 3→1 (việc 0…5). Một thứ tự là sắp xếp tô pô hợp lệ nếu với mọi cạnh a→b, a đứng trước b. Quyết định cho từng ứng viên.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For each edge a→b check that the position of a is smaller than the position of b.",
+        "A single violated edge makes the whole order invalid."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graph lab 6 — Is this a valid topological order?\n\nAnswer in the answer panel (no code needed).\n\n1. Candidate ordersCác thứ tự ứng viên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graph lab 6 — Is this a valid topological order? — answer key\n\n1. Candidate ordersCác thứ tự ứng viên\n   - r1.v: Yes\n   - r2.v: Yes\n   - r3.v: Yes\n   - r4.v: No\n   - r5.v: No\n   - r6.v: Yes\n   4 5 0 2 3 1: valid; 5 4 2 3 1 0: valid; 5 2 4 0 3 1: valid; 4 5 2 0 1 3: INVALID (3→1 violated); 0 1 2 3 4 5: INVALID (5→2, 5→0, 4→0, 4→1, 3→1 violated); 5 4 0 2 3 1: valid.VI: 4 5 0 2 3 1: hợp lệ; 5 4 2 3 1 0: hợp lệ; 5 2 4 0 3 1: hợp lệ; 4 5 2 0 1 3: KHÔNG hợp lệ; 0 1 2 3 4 5: KHÔNG hợp lệ; 5 4 0 2 3 1: hợp lệ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 5 0 2 3 1: valid; 5 4 2 3 1 0: valid; 5 2 4 0 3 1: valid; 4 5 2 0 1 3: INVALID (3→1 violated); 0 1 2 3 4 5: INVALID (5→2, 5→0, 4→0, 4→1, 3→1 violated); 5 4 0 2 3 1: valid.</p><p><i>VI: 4 5 0 2 3 1: hợp lệ; 5 4 2 3 1 0: hợp lệ; 5 2 4 0 3 1: hợp lệ; 4 5 2 0 1 3: KHÔNG hợp lệ; 0 1 2 3 4 5: KHÔNG hợp lệ; 5 4 0 2 3 1: hợp lệ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Candidate orders</p><p style=\"opacity:.75;font-size:.92em\"><i>Các thứ tự ứng viên</i></p>",
+            "cot": [
+              {
+                "ma": "o",
+                "ten": "Order"
+              },
+              {
+                "ma": "v",
+                "ten": "Valid?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "o": "4 5 0 2 3 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "o": "5 4 2 3 1 0"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "o": "5 2 4 0 3 1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "o": "4 5 2 0 1 3"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "o": "0 1 2 3 4 5"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "o": "5 4 0 2 3 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "Yes",
+              "r2.v": "Yes",
+              "r3.v": "Yes",
+              "r4.v": "No",
+              "r5.v": "No",
+              "r6.v": "Yes"
+            },
+            "giaiThich": "<p>4 5 0 2 3 1: valid; 5 4 2 3 1 0: valid; 5 2 4 0 3 1: valid; 4 5 2 0 1 3: INVALID (3→1 violated); 0 1 2 3 4 5: INVALID (5→2, 5→0, 4→0, 4→1, 3→1 violated); 5 4 0 2 3 1: valid.</p><p><i>VI: 4 5 0 2 3 1: hợp lệ; 5 4 2 3 1 0: hợp lệ; 5 2 4 0 3 1: hợp lệ; 4 5 2 0 1 3: KHÔNG hợp lệ; 0 1 2 3 4 5: KHÔNG hợp lệ; 5 4 0 2 3 1: hợp lệ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking only some of the edges."
+        },
+        {
+          "loi": "Thinking the order must be sorted by number."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "topological order",
+          "vi": "thứ tự tô pô"
+        }
+      ]
+    },
+    {
+      "title": "Graph lab 7 — Planarity, colouring and Hamilton facts",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "planar graphs",
+        "colouring"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Euler’s formula v − e + f = 2 for connected planar graphs, and the bounds e ≤ 3v − 6 (v ≥ 3), e ≤ 2v − 4 (bipartite).</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Công thức Euler v − e + f = 2 cho đồ thị phẳng liên thông, và các cận e ≤ 3v − 6 (v ≥ 3), e ≤ 2v − 4 (hai phía).</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Use the edge bounds as quick non-planarity certificates; they do not prove planarity.",
+        "Chromatic number ≥ clique size; odd cycles need 3."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graph lab 7 — Planarity, colouring and Hamilton facts\n\nAnswer in the answer panel (no code needed).\n\n1. A connected planar graph has 8 vertices and 14 edges. How many faces (regions)?Đồ thị phẳng liên thông có 8 đỉnh, 14 cạnh. Có bao nhiêu miền (mặt)?\n2. Is K₅ planar?K₅ có phẳng không?\n3. Is K₃,₃ planar?K₃,₃ có phẳng không?\n4. The chromatic number of an odd cycle C₅ is …Sắc số của chu trình lẻ C₅ là …\n5. The chromatic number of K₆ is …Sắc số của K₆ là …\n6. Dirac’s theorem: a simple graph with n ≥ 3 vertices and every degree ≥ n/2 has …Định lý Dirac: đồ thị đơn n ≥ 3 đỉnh và mọi bậc ≥ n/2 có …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graph lab 7 — Planarity, colouring and Hamilton facts — answer key\n\n1. A connected planar graph has 8 vertices and 14 edges. How many faces (regions)?Đồ thị phẳng liên thông có 8 đỉnh, 14 cạnh. Có bao nhiêu miền (mặt)?\n   Answer: c) 8\n   f = 2 − v + e = 2 − 8 + 14 = 8.VI: f = 2 − v + e = 8.\n\n2. Is K₅ planar?K₅ có phẳng không?\n   Answer: d) No: it has 10 edges > 3·5 − 6 = 9\n   The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.\n\n3. Is K₃,₃ planar?K₃,₃ có phẳng không?\n   Answer: a) No: bipartite with 9 edges > 2·6 − 4 = 8\n   It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.\n\n4. The chromatic number of an odd cycle C₅ is …Sắc số của chu trình lẻ C₅ là …\n   Answer: b) 3\n   Two colours alternate around an even cycle but fail on an odd one.VI: Hai màu xen kẽ được trên chu trình chẵn nhưng hỏng ở chu trình lẻ.\n\n5. The chromatic number of K₆ is …Sắc số của K₆ là …\n   Answer: c) 6\n   Every pair of vertices is adjacent, so all colours differ.VI: Mọi cặp đỉnh kề nhau nên mọi màu khác nhau.\n\n6. Dirac’s theorem: a simple graph with n ≥ 3 vertices and every degree ≥ n/2 has …Định lý Dirac: đồ thị đơn n ≥ 3 đỉnh và mọi bậc ≥ n/2 có …\n   Answer: d) a Hamilton cycle\n   It is a sufficient condition for a Hamilton cycle, not a necessary one.VI: Đó là điều kiện đủ cho chu trình Hamilton, không phải điều kiện cần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>f = 2 − v + e = 2 − 8 + 14 = 8.</p><p><i>VI: f = 2 − v + e = 8.</i></p><p>The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.</p><p><i>VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.</i></p><p>It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.</p><p><i>VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.</i></p><p>Two colours alternate around an even cycle but fail on an odd one.</p><p><i>VI: Hai màu xen kẽ được trên chu trình chẵn nhưng hỏng ở chu trình lẻ.</i></p><p>Every pair of vertices is adjacent, so all colours differ.</p><p><i>VI: Mọi cặp đỉnh kề nhau nên mọi màu khác nhau.</i></p><p>It is a sufficient condition for a Hamilton cycle, not a necessary one.</p><p><i>VI: Đó là điều kiện đủ cho chu trình Hamilton, không phải điều kiện cần.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A connected planar graph has 8 vertices and 14 edges. How many faces (regions)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đồ thị phẳng liên thông có 8 đỉnh, 14 cạnh. Có bao nhiêu miền (mặt)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "22"
+              },
+              {
+                "ma": "b",
+                "noiDung": "-2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "6"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>f = 2 − v + e = 2 − 8 + 14 = 8.</p><p><i>VI: f = 2 − v + e = 8.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Is K₅ planar?</p><p style=\"opacity:.75;font-size:.92em\"><i>K₅ có phẳng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes: it has 5 vertices"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes: it has 10 edges"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only after removing a vertex it is not"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No: it has 10 edges > 3·5 − 6 = 9"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The bound e ≤ 3v − 6 fails, so K₅ cannot be drawn without crossings.</p><p><i>VI: Cận e ≤ 3v − 6 không thoả nên K₅ không vẽ được không giao nhau.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Is K₃,₃ planar?</p><p style=\"opacity:.75;font-size:.92em\"><i>K₃,₃ có phẳng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No: bipartite with 9 edges > 2·6 − 4 = 8"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes: 9 ≤ 3·6 − 6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It depends on the drawing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It has no triangles, so the stronger bound e ≤ 2v − 4 applies and is violated.</p><p><i>VI: Không có tam giác nên áp dụng cận mạnh hơn e ≤ 2v − 4 và bị vi phạm.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The chromatic number of an odd cycle C₅ is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắc số của chu trình lẻ C₅ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Two colours alternate around an even cycle but fail on an odd one.</p><p><i>VI: Hai màu xen kẽ được trên chu trình chẵn nhưng hỏng ở chu trình lẻ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The chromatic number of K₆ is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắc số của K₆ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every pair of vertices is adjacent, so all colours differ.</p><p><i>VI: Mọi cặp đỉnh kề nhau nên mọi màu khác nhau.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Dirac’s theorem: a simple graph with n ≥ 3 vertices and every degree ≥ n/2 has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Định lý Dirac: đồ thị đơn n ≥ 3 đỉnh và mọi bậc ≥ n/2 có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an Euler circuit"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a bridge"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no cycle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a Hamilton cycle"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It is a sufficient condition for a Hamilton cycle, not a necessary one.</p><p><i>VI: Đó là điều kiện đủ cho chu trình Hamilton, không phải điều kiện cần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using e ≤ 3v − 6 to conclude a graph is planar (it is only a necessary condition)."
+        },
+        {
+          "loi": "Confusing Euler (edges) and Hamilton (vertices) conditions."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chromatic number",
+          "vi": "sắc số"
+        },
+        {
+          "en": "planar graph",
+          "vi": "đồ thị phẳng"
+        }
+      ]
+    }
+  ]
+}

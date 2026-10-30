@@ -1,0 +1,1535 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-6-1-dem-to-hop",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-6-1-dem-to-hop"
+  },
+  "exercises": [
+    {
+      "title": "Counting 1 — Rules and vocabulary",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "counting rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>When to add, when to multiply, and when order matters.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi nào cộng, khi nào nhân, và khi nào thứ tự quan trọng.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Stages that all must happen multiply; alternatives that exclude each other add.",
+        "Decide order-matters / repetition first, then pick the formula."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 1 — Rules and vocabulary\n\nAnswer in the answer panel (no code needed).\n\n1. A task has two independent stages with 4 and 6 ways. The total number of ways is …Một công việc có hai giai đoạn độc lập với 4 và 6 cách. Tổng số cách là …\n2. Choose a representative from 12 men OR 15 women (no overlap): number of ways is …Chọn một đại diện từ 12 nam HOẶC 15 nữ (không trùng): số cách là …\n3. Order matters and there is no repetition: use …Thứ tự quan trọng và không lặp: dùng …\n4. Order does not matter, no repetition: use …Thứ tự không quan trọng, không lặp: dùng …\n5. C(n, r) equals …C(n, r) bằng …\n6. The pigeonhole principle says: if k + 1 objects go into k boxes, then …Nguyên lý chuồng bồ câu: nếu k + 1 vật vào k hộp thì …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 1 — Rules and vocabulary — answer key\n\n1. A task has two independent stages with 4 and 6 ways. The total number of ways is …Một công việc có hai giai đoạn độc lập với 4 và 6 cách. Tổng số cách là …\n   Answer: c) 24 (product rule)\n   Independent stages multiply: 4·6.VI: Các giai đoạn độc lập thì nhân: 4·6.\n\n2. Choose a representative from 12 men OR 15 women (no overlap): number of ways is …Chọn một đại diện từ 12 nam HOẶC 15 nữ (không trùng): số cách là …\n   Answer: d) 27 (sum rule)\n   Alternatives that cannot happen together add.VI: Các phương án không đồng thời thì cộng.\n\n3. Order matters and there is no repetition: use …Thứ tự quan trọng và không lặp: dùng …\n   Answer: a) permutations P(n, r)\n   P(n, r) = n!/(n − r)!.VI: P(n, r) = n!/(n − r)!.\n\n4. Order does not matter, no repetition: use …Thứ tự không quan trọng, không lặp: dùng …\n   Answer: b) C(n, r)\n   C(n, r) = P(n, r)/r!: divide out the orderings.VI: C(n, r) = P(n, r)/r!: chia bỏ các thứ tự.\n\n5. C(n, r) equals …C(n, r) bằng …\n   Answer: c) C(n, n − r)\n   Choosing r objects to take is the same as choosing n − r to leave.VI: Chọn r vật để lấy cũng như chọn n − r vật để bỏ.\n\n6. The pigeonhole principle says: if k + 1 objects go into k boxes, then …Nguyên lý chuồng bồ câu: nếu k + 1 vật vào k hộp thì …\n   Answer: d) some box has at least 2 objects\n   It guarantees a collision but does not say which box.VI: Nó đảm bảo có đụng độ nhưng không nói hộp nào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>Independent stages multiply: 4·6.</p><p><i>VI: Các giai đoạn độc lập thì nhân: 4·6.</i></p><p>Alternatives that cannot happen together add.</p><p><i>VI: Các phương án không đồng thời thì cộng.</i></p><p>P(n, r) = n!/(n − r)!.</p><p><i>VI: P(n, r) = n!/(n − r)!.</i></p><p>C(n, r) = P(n, r)/r!: divide out the orderings.</p><p><i>VI: C(n, r) = P(n, r)/r!: chia bỏ các thứ tự.</i></p><p>Choosing r objects to take is the same as choosing n − r to leave.</p><p><i>VI: Chọn r vật để lấy cũng như chọn n − r vật để bỏ.</i></p><p>It guarantees a collision but does not say which box.</p><p><i>VI: Nó đảm bảo có đụng độ nhưng không nói hộp nào.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A task has two independent stages with 4 and 6 ways. The total number of ways is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một công việc có hai giai đoạn độc lập với 4 và 6 cách. Tổng số cách là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "46"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2⁴"
+              },
+              {
+                "ma": "c",
+                "noiDung": "24 (product rule)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10 (sum rule)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Independent stages multiply: 4·6.</p><p><i>VI: Các giai đoạn độc lập thì nhân: 4·6.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Choose a representative from 12 men OR 15 women (no overlap): number of ways is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn một đại diện từ 12 nam HOẶC 15 nữ (không trùng): số cách là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "180"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12¹⁵"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "27 (sum rule)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Alternatives that cannot happen together add.</p><p><i>VI: Các phương án không đồng thời thì cộng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Order matters and there is no repetition: use …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự quan trọng và không lặp: dùng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "permutations P(n, r)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "combinations C(n, r)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nʳ"
+              },
+              {
+                "ma": "d",
+                "noiDung": "C(n + r − 1, r)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>P(n, r) = n!/(n − r)!.</p><p><i>VI: P(n, r) = n!/(n − r)!.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Order does not matter, no repetition: use …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự không quan trọng, không lặp: dùng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "r!"
+              },
+              {
+                "ma": "b",
+                "noiDung": "C(n, r)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "P(n, r)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nʳ"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>C(n, r) = P(n, r)/r!: divide out the orderings.</p><p><i>VI: C(n, r) = P(n, r)/r!: chia bỏ các thứ tự.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>C(n, r) equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>C(n, r) bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "P(n, r)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "C(r, n)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "C(n, n − r)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "C(n, r − 1)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Choosing r objects to take is the same as choosing n − r to leave.</p><p><i>VI: Chọn r vật để lấy cũng như chọn n − r vật để bỏ.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>The pigeonhole principle says: if k + 1 objects go into k boxes, then …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nguyên lý chuồng bồ câu: nếu k + 1 vật vào k hộp thì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every box has exactly one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "some box is empty"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no box has 2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "some box has at least 2 objects"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It guarantees a collision but does not say which box.</p><p><i>VI: Nó đảm bảo có đụng độ nhưng không nói hộp nào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding where independent stages call for multiplying."
+        },
+        {
+          "loi": "Using P(n, r) when the selection is an unordered group."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "product rule",
+          "vi": "quy tắc nhân"
+        },
+        {
+          "en": "sum rule",
+          "vi": "quy tắc cộng"
+        },
+        {
+          "en": "permutation",
+          "vi": "hoán vị/chỉnh hợp"
+        },
+        {
+          "en": "combination",
+          "vi": "tổ hợp"
+        }
+      ]
+    },
+    {
+      "title": "Counting 2 — P(n, r), C(n, r) and factorials",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "P(n,r)",
+        "C(n,r)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Compute the number of r-permutations P(n, r) and the number of r-combinations C(n, r). Remember 0! = 1.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính số chỉnh hợp P(n, r) và số tổ hợp C(n, r). Nhớ 0! = 1.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "P(n, r) = n(n−1)…(n−r+1) — r factors.",
+        "C(n, r) = P(n, r)/r!; use symmetry C(n, r) = C(n, n−r) to shorten."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 2 — P(n, r), C(n, r) and factorials\n\nAnswer in the answer panel (no code needed).\n\n1. Permutations and combinationsChỉnh hợp và tổ hợp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 2 — P(n, r), C(n, r) and factorials — answer key\n\n1. Permutations and combinationsChỉnh hợp và tổ hợp\n   - r1.p: 20\n   - r1.c: 10\n   - r2.p: 336\n   - r2.c: 56\n   - r3.p: 5040\n   - r3.c: 210\n   - r4.p: 479001600\n   - r4.c: 1\n   - r5.p: 6840\n   - r5.c: 1140\n   - r6.p: 1\n   - r6.c: 1\n   - r7.p: 870\n   - r7.c: 435\n   n=5, r=2: P=20, C=10; n=8, r=3: P=336, C=56; n=10, r=4: P=5040, C=210; n=12, r=12: P=479001600, C=1; n=20, r=3: P=6840, C=1140; n=6, r=0: P=1, C=1; n=30, r=2: P=870, C=435.VI: n=5, r=2: P=20, C=10; n=8, r=3: P=336, C=56; n=10, r=4: P=5040, C=210; n=12, r=12: P=479001600, C=1; n=20, r=3: P=6840, C=1140; n=6, r=0: P=1, C=1; n=30, r=2: P=870, C=435.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>n=5, r=2: P=20, C=10; n=8, r=3: P=336, C=56; n=10, r=4: P=5040, C=210; n=12, r=12: P=479001600, C=1; n=20, r=3: P=6840, C=1140; n=6, r=0: P=1, C=1; n=30, r=2: P=870, C=435.</p><p><i>VI: n=5, r=2: P=20, C=10; n=8, r=3: P=336, C=56; n=10, r=4: P=5040, C=210; n=12, r=12: P=479001600, C=1; n=20, r=3: P=6840, C=1140; n=6, r=0: P=1, C=1; n=30, r=2: P=870, C=435.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Permutations and combinations</p><p style=\"opacity:.75;font-size:.92em\"><i>Chỉnh hợp và tổ hợp</i></p>",
+            "cot": [
+              {
+                "ma": "nr",
+                "ten": "n, r"
+              },
+              {
+                "ma": "p",
+                "ten": "P(n, r)"
+              },
+              {
+                "ma": "c",
+                "ten": "C(n, r)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "nr": "n = 5,  r = 2"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "nr": "n = 8,  r = 3"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "nr": "n = 10,  r = 4"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "nr": "n = 12,  r = 12"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "nr": "n = 20,  r = 3"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "nr": "n = 6,  r = 0"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "nr": "n = 30,  r = 2"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "20",
+              "r1.c": "10",
+              "r2.p": "336",
+              "r2.c": "56",
+              "r3.p": "5040",
+              "r3.c": "210",
+              "r4.p": "479001600",
+              "r4.c": "1",
+              "r5.p": "6840",
+              "r5.c": "1140",
+              "r6.p": "1",
+              "r6.c": "1",
+              "r7.p": "870",
+              "r7.c": "435"
+            },
+            "giaiThich": "<p>n=5, r=2: P=20, C=10; n=8, r=3: P=336, C=56; n=10, r=4: P=5040, C=210; n=12, r=12: P=479001600, C=1; n=20, r=3: P=6840, C=1140; n=6, r=0: P=1, C=1; n=30, r=2: P=870, C=435.</p><p><i>VI: n=5, r=2: P=20, C=10; n=8, r=3: P=336, C=56; n=10, r=4: P=5040, C=210; n=12, r=12: P=479001600, C=1; n=20, r=3: P=6840, C=1140; n=6, r=0: P=1, C=1; n=30, r=2: P=870, C=435.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing P(n, 0) = 0 (it is 1)."
+        },
+        {
+          "loi": "Dividing by (n−r)! instead of r! to get the combination."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "r-permutation",
+          "vi": "chỉnh hợp chập r"
+        }
+      ]
+    },
+    {
+      "title": "Counting 3 — Word problems with the product rule",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "product rule",
+        "complement"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Typical exam questions: passwords, committees, arrangements and poker hands. All answers were computed by program.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu thi điển hình: mật khẩu, uỷ ban, sắp xếp và bài poker. Mọi đáp án do chương trình tính.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“At least one” is usually easiest as total minus none.",
+        "For repeated letters divide by the factorial of each letter’s count."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 3 — Word problems with the product rule\n\nAnswer in the answer panel (no code needed).\n\n1. A password has 3 letters (A–Z, repetition allowed) followed by 2 digits (0–9, repetition allowed). How many are there?Mật khẩu gồm 3 chữ cái (A–Z, cho lặp) rồi 2 chữ số (0–9, cho lặp). Có bao nhiêu mật khẩu?\n2. Same format but all 3 letters must be different and the 2 digits different. How many?Cùng dạng nhưng 3 chữ cái phải khác nhau và 2 chữ số khác nhau. Có bao nhiêu?\n3. A committee of 4 is chosen from 7 men and 5 women. How many committees have exactly 2 women?Chọn uỷ ban 4 người từ 7 nam và 5 nữ. Có bao nhiêu uỷ ban có đúng 2 nữ?\n4. Same committee: how many have at least 1 woman?Cùng uỷ ban: có bao nhiêu uỷ ban có ít nhất 1 nữ?\n5. How many distinct arrangements of the letters of MISSISSIPPI?Có bao nhiêu cách sắp xếp khác nhau các chữ của MISSISSIPPI?\n6. In how many ways can 7 people sit at a round table (rotations considered the same)?Có bao nhiêu cách xếp 7 người quanh bàn tròn (xoay là như nhau)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 3 — Word problems with the product rule — answer key\n\n1. A password has 3 letters (A–Z, repetition allowed) followed by 2 digits (0–9, repetition allowed). How many are there?Mật khẩu gồm 3 chữ cái (A–Z, cho lặp) rồi 2 chữ số (0–9, cho lặp). Có bao nhiêu mật khẩu?\n   Answer: d) 1757600\n   26³ · 10² = 1,757,600.VI: 26³ · 10² = 1.757.600.\n\n2. Same format but all 3 letters must be different and the 2 digits different. How many?Cùng dạng nhưng 3 chữ cái phải khác nhau và 2 chữ số khác nhau. Có bao nhiêu?\n   Answer: a) 1404000\n   P(26,3)·P(10,2) = 15600·90 = 1,404,000.VI: P(26,3)·P(10,2) = 15600·90 = 1.404.000.\n\n3. A committee of 4 is chosen from 7 men and 5 women. How many committees have exactly 2 women?Chọn uỷ ban 4 người từ 7 nam và 5 nữ. Có bao nhiêu uỷ ban có đúng 2 nữ?\n   Answer: b) 210\n   C(5,2)·C(7,2) = 10·21 = 210.VI: C(5,2)·C(7,2) = 10·21 = 210.\n\n4. Same committee: how many have at least 1 woman?Cùng uỷ ban: có bao nhiêu uỷ ban có ít nhất 1 nữ?\n   Answer: c) 460\n   Complement: all C(12,4) = 495 minus all-men C(7,4) = 35 gives 460. (Note C(5,1)·C(11,3) overcounts.)VI: Phần bù: tất cả C(12,4) = 495 trừ toàn nam C(7,4) = 35 được 460. (C(5,1)·C(11,3) đếm trùng.)\n\n5. How many distinct arrangements of the letters of MISSISSIPPI?Có bao nhiêu cách sắp xếp khác nhau các chữ của MISSISSIPPI?\n   Answer: d) 34650\n   11!/(4!·4!·2!·1!) = 34,650 (I:4, S:4, P:2, M:1).VI: 11!/(4!·4!·2!·1!) = 34.650 (I:4, S:4, P:2, M:1).\n\n6. In how many ways can 7 people sit at a round table (rotations considered the same)?Có bao nhiêu cách xếp 7 người quanh bàn tròn (xoay là như nhau)?\n   Answer: a) 720\n   Fix one person: (7 − 1)! = 720.VI: Cố định một người: (7 − 1)! = 720.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>26³ · 10² = 1,757,600.</p><p><i>VI: 26³ · 10² = 1.757.600.</i></p><p>P(26,3)·P(10,2) = 15600·90 = 1,404,000.</p><p><i>VI: P(26,3)·P(10,2) = 15600·90 = 1.404.000.</i></p><p>C(5,2)·C(7,2) = 10·21 = 210.</p><p><i>VI: C(5,2)·C(7,2) = 10·21 = 210.</i></p><p>Complement: all C(12,4) = 495 minus all-men C(7,4) = 35 gives 460. (Note C(5,1)·C(11,3) overcounts.)</p><p><i>VI: Phần bù: tất cả C(12,4) = 495 trừ toàn nam C(7,4) = 35 được 460. (C(5,1)·C(11,3) đếm trùng.)</i></p><p>11!/(4!·4!·2!·1!) = 34,650 (I:4, S:4, P:2, M:1).</p><p><i>VI: 11!/(4!·4!·2!·1!) = 34.650 (I:4, S:4, P:2, M:1).</i></p><p>Fix one person: (7 − 1)! = 720.</p><p><i>VI: Cố định một người: (7 − 1)! = 720.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A password has 3 letters (A–Z, repetition allowed) followed by 2 digits (0–9, repetition allowed). How many are there?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mật khẩu gồm 3 chữ cái (A–Z, cho lặp) rồi 2 chữ số (0–9, cho lặp). Có bao nhiêu mật khẩu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1404000"
+              },
+              {
+                "ma": "b",
+                "noiDung": "17676"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1560"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1757600"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>26³ · 10² = 1,757,600.</p><p><i>VI: 26³ · 10² = 1.757.600.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Same format but all 3 letters must be different and the 2 digits different. How many?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng dạng nhưng 3 chữ cái phải khác nhau và 2 chữ số khác nhau. Có bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1404000"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1757600"
+              },
+              {
+                "ma": "c",
+                "noiDung": "117000"
+              },
+              {
+                "ma": "d",
+                "noiDung": "15690"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>P(26,3)·P(10,2) = 15600·90 = 1,404,000.</p><p><i>VI: P(26,3)·P(10,2) = 15600·90 = 1.404.000.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A committee of 4 is chosen from 7 men and 5 women. How many committees have exactly 2 women?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chọn uỷ ban 4 người từ 7 nam và 5 nữ. Có bao nhiêu uỷ ban có đúng 2 nữ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "66"
+              },
+              {
+                "ma": "b",
+                "noiDung": "210"
+              },
+              {
+                "ma": "c",
+                "noiDung": "495"
+              },
+              {
+                "ma": "d",
+                "noiDung": "31"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>C(5,2)·C(7,2) = 10·21 = 210.</p><p><i>VI: C(5,2)·C(7,2) = 10·21 = 210.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Same committee: how many have at least 1 woman?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng uỷ ban: có bao nhiêu uỷ ban có ít nhất 1 nữ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "825"
+              },
+              {
+                "ma": "b",
+                "noiDung": "490"
+              },
+              {
+                "ma": "c",
+                "noiDung": "460"
+              },
+              {
+                "ma": "d",
+                "noiDung": "495"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Complement: all C(12,4) = 495 minus all-men C(7,4) = 35 gives 460. (Note C(5,1)·C(11,3) overcounts.)</p><p><i>VI: Phần bù: tất cả C(12,4) = 495 trừ toàn nam C(7,4) = 35 được 460. (C(5,1)·C(11,3) đếm trùng.)</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>How many distinct arrangements of the letters of MISSISSIPPI?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu cách sắp xếp khác nhau các chữ của MISSISSIPPI?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "39916800"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1663200"
+              },
+              {
+                "ma": "c",
+                "noiDung": "11550"
+              },
+              {
+                "ma": "d",
+                "noiDung": "34650"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>11!/(4!·4!·2!·1!) = 34,650 (I:4, S:4, P:2, M:1).</p><p><i>VI: 11!/(4!·4!·2!·1!) = 34.650 (I:4, S:4, P:2, M:1).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>In how many ways can 7 people sit at a round table (rotations considered the same)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu cách xếp 7 người quanh bàn tròn (xoay là như nhau)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "720"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5040"
+              },
+              {
+                "ma": "c",
+                "noiDung": "49"
+              },
+              {
+                "ma": "d",
+                "noiDung": "360"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fix one person: (7 − 1)! = 720.</p><p><i>VI: Cố định một người: (7 − 1)! = 720.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using C(n, r) for sequences where order matters (passwords)."
+        },
+        {
+          "loi": "Counting a committee’s “at least 1 woman” as C(5,1)·C(11,3), which counts a committee once per woman."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "complement counting",
+          "vi": "đếm bằng phần bù"
+        }
+      ]
+    },
+    {
+      "title": "Counting 4 — Stars and bars",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "combinations with repetition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Count the non-negative integer solutions of x₁ + … + x_k = n. If every variable must be at least L, substitute y_i = x_i − L: the problem becomes n − k·L stars into k bins, C(n − kL + k − 1, k − 1). Fill in the number of solutions.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm số nghiệm nguyên không âm của x₁ + … + x_k = n. Nếu mỗi biến phải ≥ L, đặt y_i = x_i − L: bài toán trở thành n − k·L sao vào k ngăn, C(n − kL + k − 1, k − 1). Điền số nghiệm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First remove the forced minimum from every variable.",
+        "k variables → k − 1 bars among n′ + k − 1 symbols."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 4 — Stars and bars\n\nAnswer in the answer panel (no code needed).\n\n1. Stars and barsSao và vạch\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 4 — Stars and bars — answer key\n\n1. Stars and barsSao và vạch\n   - r1.sol: 66\n   - r2.sol: 455\n   - r3.sol: 15\n   - r4.sol: 364\n   - r5.sol: 495\n   - r6.sol: 21\n   n=10, k=3, L=0: C(12, 2) = 66; n=12, k=4, L=0: C(15, 3) = 455; n=10, k=3, L=2: C(6, 2) = 15; n=15, k=4, L=1: C(14, 3) = 364; n=8, k=5, L=0: C(12, 4) = 495; n=20, k=3, L=5: C(7, 2) = 21.VI: n=10, k=3, L=0: 66; n=12, k=4, L=0: 455; n=10, k=3, L=2: 15; n=15, k=4, L=1: 364; n=8, k=5, L=0: 495; n=20, k=3, L=5: 21.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>n=10, k=3, L=0: C(12, 2) = 66; n=12, k=4, L=0: C(15, 3) = 455; n=10, k=3, L=2: C(6, 2) = 15; n=15, k=4, L=1: C(14, 3) = 364; n=8, k=5, L=0: C(12, 4) = 495; n=20, k=3, L=5: C(7, 2) = 21.</p><p><i>VI: n=10, k=3, L=0: 66; n=12, k=4, L=0: 455; n=10, k=3, L=2: 15; n=15, k=4, L=1: 364; n=8, k=5, L=0: 495; n=20, k=3, L=5: 21.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Stars and bars</p><p style=\"opacity:.75;font-size:.92em\"><i>Sao và vạch</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Problem"
+              },
+              {
+                "ma": "sol",
+                "ten": "# solutions"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "x₁ + … + x₃ = 10,  each x_i ≥ 0  (k = 3 variables)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "x₁ + … + x₄ = 12,  each x_i ≥ 0  (k = 4 variables)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "x₁ + … + x₃ = 10,  each x_i ≥ 2  (k = 3 variables)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "x₁ + … + x₄ = 15,  each x_i ≥ 1  (k = 4 variables)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "x₁ + … + x₅ = 8,  each x_i ≥ 0  (k = 5 variables)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "p": "x₁ + … + x₃ = 20,  each x_i ≥ 5  (k = 3 variables)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.sol": "66",
+              "r2.sol": "455",
+              "r3.sol": "15",
+              "r4.sol": "364",
+              "r5.sol": "495",
+              "r6.sol": "21"
+            },
+            "giaiThich": "<p>n=10, k=3, L=0: C(12, 2) = 66; n=12, k=4, L=0: C(15, 3) = 455; n=10, k=3, L=2: C(6, 2) = 15; n=15, k=4, L=1: C(14, 3) = 364; n=8, k=5, L=0: C(12, 4) = 495; n=20, k=3, L=5: C(7, 2) = 21.</p><p><i>VI: n=10, k=3, L=0: 66; n=12, k=4, L=0: 455; n=10, k=3, L=2: 15; n=15, k=4, L=1: 364; n=8, k=5, L=0: 495; n=20, k=3, L=5: 21.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using C(n, k) instead of C(n + k − 1, k − 1)."
+        },
+        {
+          "loi": "Forgetting to subtract k·L before applying the formula."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stars and bars",
+          "vi": "sao và vạch"
+        }
+      ]
+    },
+    {
+      "title": "Counting 5 — The binomial theorem",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "binomial theorem"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>In (a·x + b·y)ⁿ the coefficient of xᵏyⁿ⁻ᵏ is C(n, k)·aᵏ·bⁿ⁻ᵏ. Compute the requested coefficient, and for the last column the sum of all coefficients of the expansion (set x = y = 1: (a + b)ⁿ).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong (a·x + b·y)ⁿ hệ số của xᵏyⁿ⁻ᵏ là C(n, k)·aᵏ·bⁿ⁻ᵏ. Tính hệ số yêu cầu, và ở cột cuối là tổng mọi hệ số của khai triển (đặt x = y = 1: (a + b)ⁿ).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep the sign of b inside the power: (−3)⁵ is negative.",
+        "Sum of coefficients = value of the expression at x = y = 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 5 — The binomial theorem\n\nAnswer in the answer panel (no code needed).\n\n1. CoefficientsHệ số\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 5 — The binomial theorem — answer key\n\n1. CoefficientsHệ số\n   - r1.c: 80\n   - r1.s: 243\n   - r2.c: 15\n   - r2.s: 0\n   - r3.c: 108864\n   - r3.s: 390625\n   - r4.c: 210\n   - r4.s: 1024\n   - r5.c: -20412\n   - r5.s: -1\n   (2x+(1)y)^5, k=3: C(5,3)·2^3·(1)^2 = 80; sum 243; (1x+(-1)y)^6, k=2: C(6,2)·1^2·(-1)^4 = 15; sum 0; (3x+(2)y)^8, k=5: C(8,5)·3^5·(2)^3 = 108864; sum 390625; (1x+(1)y)^10, k=4: C(10,4)·1^4·(1)^6 = 210; sum 1024; (2x+(-3)y)^7, k=2: C(7,2)·2^2·(-3)^5 = -20412; sum -1.VI: k=3: 80; tổng 243; k=2: 15; tổng 0; k=5: 108864; tổng 390625; k=4: 210; tổng 1024; k=2: -20412; tổng -1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(2x+(1)y)^5, k=3: C(5,3)·2^3·(1)^2 = 80; sum 243; (1x+(-1)y)^6, k=2: C(6,2)·1^2·(-1)^4 = 15; sum 0; (3x+(2)y)^8, k=5: C(8,5)·3^5·(2)^3 = 108864; sum 390625; (1x+(1)y)^10, k=4: C(10,4)·1^4·(1)^6 = 210; sum 1024; (2x+(-3)y)^7, k=2: C(7,2)·2^2·(-3)^5 = -20412; sum -1.</p><p><i>VI: k=3: 80; tổng 243; k=2: 15; tổng 0; k=5: 108864; tổng 390625; k=4: 210; tổng 1024; k=2: -20412; tổng -1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Coefficients</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ số</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Expression, k"
+              },
+              {
+                "ma": "c",
+                "ten": "Coefficient of xᵏyⁿ⁻ᵏ"
+              },
+              {
+                "ma": "s",
+                "ten": "Sum of all coefficients"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "(2x + 1y)^5,  k = 3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "(1x − 1y)^6,  k = 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "(3x + 2y)^8,  k = 5"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "(1x + 1y)^10,  k = 4"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "(2x − 3y)^7,  k = 2"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "80",
+              "r1.s": "243",
+              "r2.c": "15",
+              "r2.s": "0",
+              "r3.c": "108864",
+              "r3.s": "390625",
+              "r4.c": "210",
+              "r4.s": "1024",
+              "r5.c": "-20412",
+              "r5.s": "-1"
+            },
+            "giaiThich": "<p>(2x+(1)y)^5, k=3: C(5,3)·2^3·(1)^2 = 80; sum 243; (1x+(-1)y)^6, k=2: C(6,2)·1^2·(-1)^4 = 15; sum 0; (3x+(2)y)^8, k=5: C(8,5)·3^5·(2)^3 = 108864; sum 390625; (1x+(1)y)^10, k=4: C(10,4)·1^4·(1)^6 = 210; sum 1024; (2x+(-3)y)^7, k=2: C(7,2)·2^2·(-3)^5 = -20412; sum -1.</p><p><i>VI: k=3: 80; tổng 243; k=2: 15; tổng 0; k=5: 108864; tổng 390625; k=4: 210; tổng 1024; k=2: -20412; tổng -1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping the factor aᵏ (or bⁿ⁻ᵏ) when a or b is not 1."
+        },
+        {
+          "loi": "Losing the sign when b is negative and the exponent is odd."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "binomial coefficient",
+          "vi": "hệ số nhị thức"
+        }
+      ]
+    },
+    {
+      "title": "Counting 6 — Pigeonhole, derangements and inclusion–exclusion",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "pigeonhole",
+        "derangements",
+        "inclusion–exclusion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Harder counting questions that combine ideas.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu đếm khó hơn kết hợp nhiều ý.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Pigeonhole: n·(k − 1) + 1 guarantees k in one of n boxes.",
+        "Inclusion–exclusion: singles − pairs + triple, using lcms."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 6 — Pigeonhole, derangements and inclusion–exclusion\n\nAnswer in the answer panel (no code needed).\n\n1. How many students must be in a class to guarantee that at least 5 were born in the same month?Lớp tối thiểu bao nhiêu học sinh để chắc chắn có ít nhất 5 người sinh cùng tháng?\n2. A drawer holds 10 black and 8 white socks. The minimum number of socks to draw in the dark to be sure of a matching pair is …Ngăn kéo có 10 tất đen và 8 tất trắng. Số tất tối thiểu phải lấy trong bóng tối để chắc chắn có một đôi cùng màu là …\n3. 5 letters are put into 5 addressed envelopes at random. The number of ways that NO letter is in its correct envelope is …Bỏ ngẫu nhiên 5 thư vào 5 phong bì có địa chỉ. Số cách không có thư nào đúng phong bì là …\n4. How many integers from 1 to 1000 are divisible by 3, 5 or 7?Có bao nhiêu số nguyên từ 1 đến 1000 chia hết cho 3, 5 hoặc 7?\n5. How many onto functions are there from a 6-element set to a 3-element set?Có bao nhiêu toàn ánh từ tập 6 phần tử lên tập 3 phần tử?\n6. What is the smallest n such that among ANY n integers two always have the same remainder when divided by 9?n nhỏ nhất để trong n số nguyên BẤT KỲ luôn có hai số cùng số dư khi chia cho 9 là?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting 6 — Pigeonhole, derangements and inclusion–exclusion — answer key\n\n1. How many students must be in a class to guarantee that at least 5 were born in the same month?Lớp tối thiểu bao nhiêu học sinh để chắc chắn có ít nhất 5 người sinh cùng tháng?\n   Answer: c) 49\n   12·(5 − 1) + 1 = 49.VI: 12·(5 − 1) + 1 = 49.\n\n2. A drawer holds 10 black and 8 white socks. The minimum number of socks to draw in the dark to be sure of a matching pair is …Ngăn kéo có 10 tất đen và 8 tất trắng. Số tất tối thiểu phải lấy trong bóng tối để chắc chắn có một đôi cùng màu là …\n   Answer: d) 3\n   Two colours ⇒ 2 + 1 = 3 socks.VI: Hai màu ⇒ 2 + 1 = 3 chiếc.\n\n3. 5 letters are put into 5 addressed envelopes at random. The number of ways that NO letter is in its correct envelope is …Bỏ ngẫu nhiên 5 thư vào 5 phong bì có địa chỉ. Số cách không có thư nào đúng phong bì là …\n   Answer: a) 44\n   Derangement number D₅ = 44 (D_n = n!·Σ (−1)^k/k!).VI: Số mất trật tự D₅ = 44.\n\n4. How many integers from 1 to 1000 are divisible by 3, 5 or 7?Có bao nhiêu số nguyên từ 1 đến 1000 chia hết cho 3, 5 hoặc 7?\n   Answer: b) 543\n   333 + 200 + 142 − 66 − 47 − 28 + 9 = 543.VI: 333 + 200 + 142 − 66 − 47 − 28 + 9 = 543.\n\n5. How many onto functions are there from a 6-element set to a 3-element set?Có bao nhiêu toàn ánh từ tập 6 phần tử lên tập 3 phần tử?\n   Answer: c) 540\n   3⁶ − 3·2⁶ + 3·1⁶ = 729 − 192 + 3 = 540.VI: 3⁶ − 3·2⁶ + 3 = 540.\n\n6. What is the smallest n such that among ANY n integers two always have the same remainder when divided by 9?n nhỏ nhất để trong n số nguyên BẤT KỲ luôn có hai số cùng số dư khi chia cho 9 là?\n   Answer: d) 10\n   There are 9 remainders (boxes), so 9 + 1 = 10 integers force a repeat; 9 integers can have all different remainders.VI: Có 9 số dư (hộp) nên 9 + 1 = 10 số nguyên buộc có lặp; 9 số có thể có mọi số dư khác nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>12·(5 − 1) + 1 = 49.</p><p><i>VI: 12·(5 − 1) + 1 = 49.</i></p><p>Two colours ⇒ 2 + 1 = 3 socks.</p><p><i>VI: Hai màu ⇒ 2 + 1 = 3 chiếc.</i></p><p>Derangement number D₅ = 44 (D_n = n!·Σ (−1)^k/k!).</p><p><i>VI: Số mất trật tự D₅ = 44.</i></p><p>333 + 200 + 142 − 66 − 47 − 28 + 9 = 543.</p><p><i>VI: 333 + 200 + 142 − 66 − 47 − 28 + 9 = 543.</i></p><p>3⁶ − 3·2⁶ + 3·1⁶ = 729 − 192 + 3 = 540.</p><p><i>VI: 3⁶ − 3·2⁶ + 3 = 540.</i></p><p>There are 9 remainders (boxes), so 9 + 1 = 10 integers force a repeat; 9 integers can have all different remainders.</p><p><i>VI: Có 9 số dư (hộp) nên 9 + 1 = 10 số nguyên buộc có lặp; 9 số có thể có mọi số dư khác nhau.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many students must be in a class to guarantee that at least 5 were born in the same month?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lớp tối thiểu bao nhiêu học sinh để chắc chắn có ít nhất 5 người sinh cùng tháng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "17"
+              },
+              {
+                "ma": "b",
+                "noiDung": "48"
+              },
+              {
+                "ma": "c",
+                "noiDung": "49"
+              },
+              {
+                "ma": "d",
+                "noiDung": "60"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>12·(5 − 1) + 1 = 49.</p><p><i>VI: 12·(5 − 1) + 1 = 49.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A drawer holds 10 black and 8 white socks. The minimum number of socks to draw in the dark to be sure of a matching pair is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngăn kéo có 10 tất đen và 8 tất trắng. Số tất tối thiểu phải lấy trong bóng tối để chắc chắn có một đôi cùng màu là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "9"
+              },
+              {
+                "ma": "c",
+                "noiDung": "11"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Two colours ⇒ 2 + 1 = 3 socks.</p><p><i>VI: Hai màu ⇒ 2 + 1 = 3 chiếc.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>5 letters are put into 5 addressed envelopes at random. The number of ways that NO letter is in its correct envelope is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bỏ ngẫu nhiên 5 thư vào 5 phong bì có địa chỉ. Số cách không có thư nào đúng phong bì là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "44"
+              },
+              {
+                "ma": "b",
+                "noiDung": "119"
+              },
+              {
+                "ma": "c",
+                "noiDung": "60"
+              },
+              {
+                "ma": "d",
+                "noiDung": "9"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Derangement number D₅ = 44 (D_n = n!·Σ (−1)^k/k!).</p><p><i>VI: Số mất trật tự D₅ = 44.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How many integers from 1 to 1000 are divisible by 3, 5 or 7?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu số nguyên từ 1 đến 1000 chia hết cho 3, 5 hoặc 7?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "457"
+              },
+              {
+                "ma": "b",
+                "noiDung": "543"
+              },
+              {
+                "ma": "c",
+                "noiDung": "675"
+              },
+              {
+                "ma": "d",
+                "noiDung": "534"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>333 + 200 + 142 − 66 − 47 − 28 + 9 = 543.</p><p><i>VI: 333 + 200 + 142 − 66 − 47 − 28 + 9 = 543.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>How many onto functions are there from a 6-element set to a 3-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu toàn ánh từ tập 6 phần tử lên tập 3 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "537"
+              },
+              {
+                "ma": "b",
+                "noiDung": "150"
+              },
+              {
+                "ma": "c",
+                "noiDung": "540"
+              },
+              {
+                "ma": "d",
+                "noiDung": "729"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>3⁶ − 3·2⁶ + 3·1⁶ = 729 − 192 + 3 = 540.</p><p><i>VI: 3⁶ − 3·2⁶ + 3 = 540.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>What is the smallest n such that among ANY n integers two always have the same remainder when divided by 9?</p><p style=\"opacity:.75;font-size:.92em\"><i>n nhỏ nhất để trong n số nguyên BẤT KỲ luôn có hai số cùng số dư khi chia cho 9 là?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "9"
+              },
+              {
+                "ma": "b",
+                "noiDung": "18"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>There are 9 remainders (boxes), so 9 + 1 = 10 integers force a repeat; 9 integers can have all different remainders.</p><p><i>VI: Có 9 số dư (hộp) nên 9 + 1 = 10 số nguyên buộc có lặp; 9 số có thể có mọi số dư khác nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using n·k instead of n·(k − 1) + 1."
+        },
+        {
+          "loi": "Adding the three divisor counts without subtracting overlaps."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "derangement",
+          "vi": "hoán vị mất trật tự"
+        }
+      ]
+    },
+    {
+      "title": "Counting 7 — Compute C(n, k) with Pascal’s triangle",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "Pascal’s triangle",
+        "combinations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>combinations(n, k)</code> returning C(n, k), using Pascal’s rule C(n, k) = C(n−1, k−1) + C(n−1, k) (build the triangle row by row). Return 0 when k &lt; 0 or k &gt; n. The tests use n up to 50; values stay below 2⁵³, but computing n!/(k!(n−k)!) with factorials would overflow.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not use floating-point factorials.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>combinations(n, k)</code> trả C(n, k) bằng quy tắc Pascal C(n, k) = C(n−1, k−1) + C(n−1, k) (dựng tam giác từng hàng). Trả 0 khi k &lt; 0 hoặc k &gt; n. Test dùng n tới 50; giá trị dưới 2⁵³ nhưng tính n!/(k!(n−k)!) bằng giai thừa sẽ tràn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không dùng giai thừa dấu phẩy động.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "combinations(5,2)",
+          "output": "10",
+          "explanation": "Row 5 of Pascal: 1 5 10 10 5 1.|||Hàng 5 của Pascal: 1 5 10 10 5 1."
+        }
+      ],
+      "hintsJson": [
+        "Build the next row from the previous one: each inner entry is the sum of the two above.",
+        "Row n has n + 1 entries, indexed 0…n."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function combinations(n, k) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function combinations(n, k) {\n  if (k < 0 || k > n) return 0;\n  var row = [1], i, j;\n  for (i = 1; i <= n; i++) {\n    var next = [1];\n    for (j = 1; j < i; j++) next.push(row[j - 1] + row[j]);\n    next.push(1);\n    row = next;\n  }\n  return row[k];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Pascal’s rule is the combinatorial identity “either the element is chosen or it is not”, turned into an addition-only algorithm.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: combinations(5, 2)",
+              "vi": "Ca 1"
+            },
+            "goi": "combinations(5, 2)",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Case 2: combinations(0, 0)",
+              "vi": "Ca 2"
+            },
+            "goi": "combinations(0, 0)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 3: combinations(10, 11)",
+              "vi": "Ca 3"
+            },
+            "goi": "combinations(10, 11)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Case 4: combinations(10, -1)",
+              "vi": "Ca 4"
+            },
+            "goi": "combinations(10, -1)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "combinations(30, 15)",
+            "mongDoi": 155117520,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "combinations(50, 25)",
+            "mongDoi": 126410606437752,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "combinations(40, 5)",
+            "mongDoi": 658008,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Off-by-one: row i has i + 1 entries."
+        },
+        {
+          "loi": "Using factorials and exceeding 2⁵³."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Counting 8 — Generate all k-subsets",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "backtracking",
+        "combinations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>kSubsets(arr, k)</code> that returns all subsets of <code>arr</code> of size exactly k, each as an array in the order of <code>arr</code>, listed in <em>lexicographic order of positions</em>: [arr[0], arr[1]] comes before [arr[0], arr[2]], which comes before [arr[1], arr[2]]. There are C(n, k) of them. <code>k = 0</code> returns <code>[[]]</code>. Use backtracking: choose the next element from the positions after the last chosen one.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Copy the current partial subset before pushing it into the result.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>kSubsets(arr, k)</code> trả mọi tập con của <code>arr</code> có đúng k phần tử, mỗi tập là mảng theo thứ tự của <code>arr</code>, liệt kê theo <em>thứ tự từ điển của vị trí</em>: [arr[0], arr[1]] đứng trước [arr[0], arr[2]], rồi đến [arr[1], arr[2]]. Có C(n, k) tập. <code>k = 0</code> trả <code>[[]]</code>. Dùng quay lui: chọn phần tử kế từ các vị trí sau phần tử vừa chọn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sao chép tập con tạm thời trước khi đẩy vào kết quả.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "kSubsets([1,2,3,4],2)",
+          "output": "[[1,2],[1,3],[1,4],[2,3],[2,4],[3,4]]",
+          "explanation": "C(4,2) = 6 subsets in lexicographic order.|||C(4,2) = 6 tập con theo thứ tự từ điển."
+        }
+      ],
+      "hintsJson": [
+        "A helper go(start, current) loops i from start and recurses with i + 1.",
+        "Stop when current.length === k."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function kSubsets(arr, k) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function kSubsets(arr, k) {\n  var out = [];\n  function go(start, cur) {\n    if (cur.length === k) { out.push(cur.slice()); return; }\n    for (var i = start; i < arr.length; i++) { cur.push(arr[i]); go(i + 1, cur); cur.pop(); }\n  }\n  go(0, []);\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requiring positions to increase removes the ordering redundancy: each subset is generated exactly once, so the output size is C(n, k) = P(n, k) / k!.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: kSubsets([1,2,3,4], 2)",
+              "vi": "Ca 1"
+            },
+            "goi": "kSubsets([1,2,3,4], 2)",
+            "mongDoi": [
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                4
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: kSubsets([1,2,3], 0)",
+              "vi": "Ca 2"
+            },
+            "goi": "kSubsets([1,2,3], 0)",
+            "mongDoi": [
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: kSubsets([1,2,3], 3)",
+              "vi": "Ca 3"
+            },
+            "goi": "kSubsets([1,2,3], 3)",
+            "mongDoi": [
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 4: kSubsets([1,2], 3)",
+              "vi": "Ca 4"
+            },
+            "goi": "kSubsets([1,2], 3)",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "kSubsets([\"a\",\"b\",\"c\",\"d\",\"e\"], 3)",
+            "mongDoi": [
+              [
+                "a",
+                "b",
+                "c"
+              ],
+              [
+                "a",
+                "b",
+                "d"
+              ],
+              [
+                "a",
+                "b",
+                "e"
+              ],
+              [
+                "a",
+                "c",
+                "d"
+              ],
+              [
+                "a",
+                "c",
+                "e"
+              ],
+              [
+                "a",
+                "d",
+                "e"
+              ],
+              [
+                "b",
+                "c",
+                "d"
+              ],
+              [
+                "b",
+                "c",
+                "e"
+              ],
+              [
+                "b",
+                "d",
+                "e"
+              ],
+              [
+                "c",
+                "d",
+                "e"
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "kSubsets([5,6,7,8,9,10], 4)",
+            "mongDoi": [
+              [
+                5,
+                6,
+                7,
+                8
+              ],
+              [
+                5,
+                6,
+                7,
+                9
+              ],
+              [
+                5,
+                6,
+                7,
+                10
+              ],
+              [
+                5,
+                6,
+                8,
+                9
+              ],
+              [
+                5,
+                6,
+                8,
+                10
+              ],
+              [
+                5,
+                6,
+                9,
+                10
+              ],
+              [
+                5,
+                7,
+                8,
+                9
+              ],
+              [
+                5,
+                7,
+                8,
+                10
+              ],
+              [
+                5,
+                7,
+                9,
+                10
+              ],
+              [
+                5,
+                8,
+                9,
+                10
+              ],
+              [
+                6,
+                7,
+                8,
+                9
+              ],
+              [
+                6,
+                7,
+                8,
+                10
+              ],
+              [
+                6,
+                7,
+                9,
+                10
+              ],
+              [
+                6,
+                8,
+                9,
+                10
+              ],
+              [
+                7,
+                8,
+                9,
+                10
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Pushing the same array object instead of a copy."
+        },
+        {
+          "loi": "Starting each loop at 0, which produces ordered tuples (permutations) instead of subsets."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

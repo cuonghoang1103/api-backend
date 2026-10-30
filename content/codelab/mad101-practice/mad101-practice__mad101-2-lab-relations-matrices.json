@@ -1,0 +1,1774 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-2-lab-relations-matrices",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-2-2-ham-day"
+  },
+  "exercises": [
+    {
+      "title": "Relations 1 — Properties of relations (concepts)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "relations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A relation R on A is a set of ordered pairs. Check you can state the five standard properties precisely.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quan hệ R trên A là tập các cặp có thứ tự. Kiểm tra bạn phát biểu chính xác năm tính chất chuẩn.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write each property as a one-line “for all … if … then …”.",
+        "Test on a tiny example such as A = {1,2}."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 1 — Properties of relations (concepts)\n\nAnswer in the answer panel (no code needed).\n\n1. R is reflexive on A if …R phản xạ trên A nếu …\n2. R is symmetric if …R đối xứng nếu …\n3. R is antisymmetric if …R phản đối xứng nếu …\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 1 — Properties of relations (concepts) — answer key\n\n1. R is reflexive on A if …R phản xạ trên A nếu …\n   Answer: d) (a, a) ∈ R for every a ∈ A\n   Every element is related to itself.VI: Mỗi phần tử có quan hệ với chính nó.\n\n2. R is symmetric if …R đối xứng nếu …\n   Answer: a) (a, b) ∈ R ⇒ (b, a) ∈ R\n   Every arrow has a return arrow.VI: Mỗi mũi tên đều có mũi tên quay lại.\n\n3. R is antisymmetric if …R phản đối xứng nếu …\n   Answer: b) (a, b) and (b, a) in R imply a = b\n   Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.\n\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n   Answer: c) reflexive, symmetric and transitive\n   Reflexive + antisymmetric + transitive is a partial order instead.VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.\n\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n   Answer: d) partition A into disjoint non-empty blocks\n   Every element lies in exactly one class.VI: Mỗi phần tử thuộc đúng một lớp.\n\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n   Answer: a) a partial order\n   Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.VI: Phản xạ, phản đối xứng, bắc cầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p><p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p><p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p><p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p><p>Every element lies in exactly one class.</p><p><i>VI: Mỗi phần tử thuộc đúng một lớp.</i></p><p>Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.</p><p><i>VI: Phản xạ, phản đối xứng, bắc cầu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>R is reflexive on A if …</p><p style=\"opacity:.75;font-size:.92em\"><i>R phản xạ trên A nếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+              },
+              {
+                "ma": "b",
+                "noiDung": "(a, a) ∉ R for every a"
+              },
+              {
+                "ma": "c",
+                "noiDung": "R = A × A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(a, a) ∈ R for every a ∈ A"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>R is symmetric if …</p><p style=\"opacity:.75;font-size:.92em\"><i>R đối xứng nếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+              },
+              {
+                "ma": "b",
+                "noiDung": "(a, b), (b, a) ∈ R ⇒ a = b"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(a, b), (b, c) ∈ R ⇒ (a, c) ∈ R"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(a, a) ∈ R for all a"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>R is antisymmetric if …</p><p style=\"opacity:.75;font-size:.92em\"><i>R phản đối xứng nếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "R contains no loops"
+              },
+              {
+                "ma": "b",
+                "noiDung": "(a, b) and (b, a) in R imply a = b"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no pair (a, b) with a ≠ b is in R"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>An equivalence relation is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Quan hệ tương đương là quan hệ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "symmetric and antisymmetric"
+              },
+              {
+                "ma": "b",
+                "noiDung": "transitive only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reflexive, symmetric and transitive"
+              },
+              {
+                "ma": "d",
+                "noiDung": "reflexive, antisymmetric and transitive"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The equivalence classes of an equivalence relation on A …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các lớp tương đương của một quan hệ tương đương trên A …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "overlap in general"
+              },
+              {
+                "ma": "b",
+                "noiDung": "are always singletons"
+              },
+              {
+                "ma": "c",
+                "noiDung": "need not cover A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "partition A into disjoint non-empty blocks"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every element lies in exactly one class.</p><p><i>VI: Mỗi phần tử thuộc đúng một lớp.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>“x divides y” on the positive integers is …</p><p style=\"opacity:.75;font-size:.92em\"><i>“x chia hết y” trên các số nguyên dương là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a partial order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an equivalence relation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "symmetric"
+              },
+              {
+                "ma": "d",
+                "noiDung": "not transitive"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.</p><p><i>VI: Phản xạ, phản đối xứng, bắc cầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking antisymmetric means “not symmetric”."
+        },
+        {
+          "loi": "Forgetting that equality is both symmetric and antisymmetric."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reflexive",
+          "vi": "phản xạ"
+        },
+        {
+          "en": "symmetric",
+          "vi": "đối xứng"
+        },
+        {
+          "en": "antisymmetric",
+          "vi": "phản đối xứng"
+        },
+        {
+          "en": "transitive",
+          "vi": "bắc cầu"
+        },
+        {
+          "en": "partial order",
+          "vi": "thứ tự bộ phận"
+        }
+      ]
+    },
+    {
+      "title": "Relations 2 — Which properties hold?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "relation properties"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For each relation decide whether it is reflexive, symmetric, antisymmetric and transitive, then whether it is an equivalence relation or a partial order.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi quan hệ xác định nó có phản xạ, đối xứng, phản đối xứng, bắc cầu không, rồi xem nó là quan hệ tương đương hay thứ tự bộ phận.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For transitivity, for every chain (a,b),(b,c) look for (a,c).",
+        "The diagonal pairs (a,a) decide reflexivity; a missing one breaks it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 2 — Which properties hold?\n\nAnswer in the answer panel (no code needed).\n\n1. Relation propertiesTính chất quan hệ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 2 — Which properties hold? — answer key\n\n1. Relation propertiesTính chất quan hệ\n   - r1.rf: Yes\n   - r1.sy: Yes\n   - r1.an: No\n   - r1.tr: Yes\n   - r1.kd: Equivalence\n   - r2.rf: Yes\n   - r2.sy: No\n   - r2.an: Yes\n   - r2.tr: Yes\n   - r2.kd: Partial order\n   - r3.rf: No\n   - r3.sy: No\n   - r3.an: Yes\n   - r3.tr: Yes\n   - r3.kd: Neither\n   - r4.rf: No\n   - r4.sy: Yes\n   - r4.an: No\n   - r4.tr: No\n   - r4.kd: Neither\n   - r5.rf: Yes\n   - r5.sy: Yes\n   - r5.an: No\n   - r5.tr: Yes\n   - r5.kd: Equivalence\n   A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (2,1)}: refl true, sym true, anti false, trans true; A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (1,3) (2,3)}: refl true, sym false, anti true, trans true; A = {1,2,3}, R = {(1,2) (2,3) (1,3)}: refl false, sym false, anti true, trans true; A = {1,2,3}, R = {(1,2) (2,1) (2,3) (3,2)}: refl false, sym true, anti false, trans false; A = {1,2,3,4}, R = {(1,1) (2,2) (3,3) (4,4) (1,3) (3,1) (2,4) (4,2)}: refl true, sym true, anti false, trans true.VI: A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (2,1)}: phản xạ true, đối xứng true, phản đối xứng false, bắc cầu true; A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (1,3) (2,3)}: phản xạ true, đối xứng false, phản đối xứng true, bắc cầu true; A = {1,2,3}, R = {(1,2) (2,3) (1,3)}: phản xạ false, đối xứng false, phản đối xứng true, bắc cầu true; A = {1,2,3}, R = {(1,2) (2,1) (2,3) (3,2)}: phản xạ false, đối xứng true, phản đối xứng false, bắc cầu false; A = {1,2,3,4}, R = {(1,1) (2,2) (3,3) (4,4) (1,3) (3,1) (2,4) (4,2)}: phản xạ true, đối xứng true, phản đối xứng false, bắc cầu true.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (2,1)}: refl true, sym true, anti false, trans true; A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (1,3) (2,3)}: refl true, sym false, anti true, trans true; A = {1,2,3}, R = {(1,2) (2,3) (1,3)}: refl false, sym false, anti true, trans true; A = {1,2,3}, R = {(1,2) (2,1) (2,3) (3,2)}: refl false, sym true, anti false, trans false; A = {1,2,3,4}, R = {(1,1) (2,2) (3,3) (4,4) (1,3) (3,1) (2,4) (4,2)}: refl true, sym true, anti false, trans true.</p><p><i>VI: A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (2,1)}: phản xạ true, đối xứng true, phản đối xứng false, bắc cầu true; A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (1,3) (2,3)}: phản xạ true, đối xứng false, phản đối xứng true, bắc cầu true; A = {1,2,3}, R = {(1,2) (2,3) (1,3)}: phản xạ false, đối xứng false, phản đối xứng true, bắc cầu true; A = {1,2,3}, R = {(1,2) (2,1) (2,3) (3,2)}: phản xạ false, đối xứng true, phản đối xứng false, bắc cầu false; A = {1,2,3,4}, R = {(1,1) (2,2) (3,3) (4,4) (1,3) (3,1) (2,4) (4,2)}: phản xạ true, đối xứng true, phản đối xứng false, bắc cầu true.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Relation properties</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính chất quan hệ</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Relation"
+              },
+              {
+                "ma": "rf",
+                "ten": "Reflexive",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "sy",
+                "ten": "Symmetric",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "an",
+                "ten": "Antisymmetric",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "tr",
+                "ten": "Transitive",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "kd",
+                "ten": "Kind",
+                "luaChon": [
+                  "Equivalence",
+                  "Partial order",
+                  "Neither"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (2,1)}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (1,3) (2,3)}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "A = {1,2,3}, R = {(1,2) (2,3) (1,3)}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "A = {1,2,3}, R = {(1,2) (2,1) (2,3) (3,2)}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "r": "A = {1,2,3,4}, R = {(1,1) (2,2) (3,3) (4,4) (1,3) (3,1) (2,4) (4,2)}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.rf": "Yes",
+              "r1.sy": "Yes",
+              "r1.an": "No",
+              "r1.tr": "Yes",
+              "r1.kd": "Equivalence",
+              "r2.rf": "Yes",
+              "r2.sy": "No",
+              "r2.an": "Yes",
+              "r2.tr": "Yes",
+              "r2.kd": "Partial order",
+              "r3.rf": "No",
+              "r3.sy": "No",
+              "r3.an": "Yes",
+              "r3.tr": "Yes",
+              "r3.kd": "Neither",
+              "r4.rf": "No",
+              "r4.sy": "Yes",
+              "r4.an": "No",
+              "r4.tr": "No",
+              "r4.kd": "Neither",
+              "r5.rf": "Yes",
+              "r5.sy": "Yes",
+              "r5.an": "No",
+              "r5.tr": "Yes",
+              "r5.kd": "Equivalence"
+            },
+            "giaiThich": "<p>A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (2,1)}: refl true, sym true, anti false, trans true; A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (1,3) (2,3)}: refl true, sym false, anti true, trans true; A = {1,2,3}, R = {(1,2) (2,3) (1,3)}: refl false, sym false, anti true, trans true; A = {1,2,3}, R = {(1,2) (2,1) (2,3) (3,2)}: refl false, sym true, anti false, trans false; A = {1,2,3,4}, R = {(1,1) (2,2) (3,3) (4,4) (1,3) (3,1) (2,4) (4,2)}: refl true, sym true, anti false, trans true.</p><p><i>VI: A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (2,1)}: phản xạ true, đối xứng true, phản đối xứng false, bắc cầu true; A = {1,2,3}, R = {(1,1) (2,2) (3,3) (1,2) (1,3) (2,3)}: phản xạ true, đối xứng false, phản đối xứng true, bắc cầu true; A = {1,2,3}, R = {(1,2) (2,3) (1,3)}: phản xạ false, đối xứng false, phản đối xứng true, bắc cầu true; A = {1,2,3}, R = {(1,2) (2,1) (2,3) (3,2)}: phản xạ false, đối xứng true, phản đối xứng false, bắc cầu false; A = {1,2,3,4}, R = {(1,1) (2,2) (3,3) (4,4) (1,3) (3,1) (2,4) (4,2)}: phản xạ true, đối xứng true, phản đối xứng false, bắc cầu true.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Missing the transitivity failure: (1,2),(2,3) present but (1,3) absent."
+        },
+        {
+          "loi": "Calling a relation with both (1,2) and (2,1) antisymmetric."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "equivalence relation",
+          "vi": "quan hệ tương đương"
+        }
+      ]
+    },
+    {
+      "title": "Relations 3 — Zero–one matrices and R²",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "matrix of a relation",
+        "composition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>R on {1,2,3,4} is (1,2), (2,3), (3,3), (4,1), (4,4). Fill the zero–one matrix M_R (row i, column j is 1 when (i, j) ∈ R), then the matrix of R² = R∘R (the Boolean product M_R ⊙ M_R), and R³.</p><p><i>This set has 3 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R trên {1,2,3,4} là (1,2), (2,3), (3,3), (4,1), (4,4). Điền ma trận 0–1 M_R (dòng i cột j bằng 1 khi (i, j) ∈ R), rồi ma trận của R² = R∘R (tích Boole M_R ⊙ M_R) và R³.</p><p><i>Bộ này có 3 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "(M²)[i][j] = 1 exactly when some k has M[i][k] = 1 and M[k][j] = 1 (a 2-step path).",
+        "Do R³ as M² ⊙ M (not M ⊙ M ⊙ M from scratch)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 3 — Zero–one matrices and R²\n\nAnswer in the answer panel (no code needed).\n\n1. M_RM_R\n2. M_R² (R²)M_R² (R²)\n3. M_R³ (R³)M_R³ (R³)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 3 — Zero–one matrices and R² — answer key\n\n1. M_RM_R\n   - r1.c1: 0\n   - r1.c2: 1\n   - r1.c3: 0\n   - r1.c4: 0\n   - r2.c1: 0\n   - r2.c2: 0\n   - r2.c3: 1\n   - r2.c4: 0\n   - r3.c1: 0\n   - r3.c2: 0\n   - r3.c3: 1\n   - r3.c4: 0\n   - r4.c1: 1\n   - r4.c2: 0\n   - r4.c3: 0\n   - r4.c4: 1\n   M_R = 0100 / 0010 / 0010 / 1001 (rows 1–4).VI: M_R = 0100 / 0010 / 0010 / 1001 (các dòng 1–4).\n\n2. M_R² (R²)M_R² (R²)\n   - r1.c1: 0\n   - r1.c2: 0\n   - r1.c3: 1\n   - r1.c4: 0\n   - r2.c1: 0\n   - r2.c2: 0\n   - r2.c3: 1\n   - r2.c4: 0\n   - r3.c1: 0\n   - r3.c2: 0\n   - r3.c3: 1\n   - r3.c4: 0\n   - r4.c1: 1\n   - r4.c2: 1\n   - r4.c3: 0\n   - r4.c4: 1\n   M_R² (R²) = 0010 / 0010 / 0010 / 1101 (rows 1–4).VI: M_R² (R²) = 0010 / 0010 / 0010 / 1101 (các dòng 1–4).\n\n3. M_R³ (R³)M_R³ (R³)\n   - r1.c1: 0\n   - r1.c2: 0\n   - r1.c3: 1\n   - r1.c4: 0\n   - r2.c1: 0\n   - r2.c2: 0\n   - r2.c3: 1\n   - r2.c4: 0\n   - r3.c1: 0\n   - r3.c2: 0\n   - r3.c3: 1\n   - r3.c4: 0\n   - r4.c1: 1\n   - r4.c2: 1\n   - r4.c3: 1\n   - r4.c4: 1\n   M_R³ (R³) = 0010 / 0010 / 0010 / 1111 (rows 1–4).VI: M_R³ (R³) = 0010 / 0010 / 0010 / 1111 (các dòng 1–4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>M_R = 0100 / 0010 / 0010 / 1001 (rows 1–4).</p><p><i>VI: M_R = 0100 / 0010 / 0010 / 1001 (các dòng 1–4).</i></p><p>M_R² (R²) = 0010 / 0010 / 0010 / 1101 (rows 1–4).</p><p><i>VI: M_R² (R²) = 0010 / 0010 / 0010 / 1101 (các dòng 1–4).</i></p><p>M_R³ (R³) = 0010 / 0010 / 0010 / 1111 (rows 1–4).</p><p><i>VI: M_R³ (R³) = 0010 / 0010 / 0010 / 1111 (các dòng 1–4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>M_R</p><p style=\"opacity:.75;font-size:.92em\"><i>M_R</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "row"
+              },
+              {
+                "ma": "c1",
+                "ten": "col 1",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c2",
+                "ten": "col 2",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c3",
+                "ten": "col 3",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c4",
+                "ten": "col 4",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "row 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "row 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "row 3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "row 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c1": "0",
+              "r1.c2": "1",
+              "r1.c3": "0",
+              "r1.c4": "0",
+              "r2.c1": "0",
+              "r2.c2": "0",
+              "r2.c3": "1",
+              "r2.c4": "0",
+              "r3.c1": "0",
+              "r3.c2": "0",
+              "r3.c3": "1",
+              "r3.c4": "0",
+              "r4.c1": "1",
+              "r4.c2": "0",
+              "r4.c3": "0",
+              "r4.c4": "1"
+            },
+            "giaiThich": "<p>M_R = 0100 / 0010 / 0010 / 1001 (rows 1–4).</p><p><i>VI: M_R = 0100 / 0010 / 0010 / 1001 (các dòng 1–4).</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>M_R² (R²)</p><p style=\"opacity:.75;font-size:.92em\"><i>M_R² (R²)</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "row"
+              },
+              {
+                "ma": "c1",
+                "ten": "col 1",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c2",
+                "ten": "col 2",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c3",
+                "ten": "col 3",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c4",
+                "ten": "col 4",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "row 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "row 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "row 3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "row 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c1": "0",
+              "r1.c2": "0",
+              "r1.c3": "1",
+              "r1.c4": "0",
+              "r2.c1": "0",
+              "r2.c2": "0",
+              "r2.c3": "1",
+              "r2.c4": "0",
+              "r3.c1": "0",
+              "r3.c2": "0",
+              "r3.c3": "1",
+              "r3.c4": "0",
+              "r4.c1": "1",
+              "r4.c2": "1",
+              "r4.c3": "0",
+              "r4.c4": "1"
+            },
+            "giaiThich": "<p>M_R² (R²) = 0010 / 0010 / 0010 / 1101 (rows 1–4).</p><p><i>VI: M_R² (R²) = 0010 / 0010 / 0010 / 1101 (các dòng 1–4).</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>M_R³ (R³)</p><p style=\"opacity:.75;font-size:.92em\"><i>M_R³ (R³)</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "row"
+              },
+              {
+                "ma": "c1",
+                "ten": "col 1",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c2",
+                "ten": "col 2",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c3",
+                "ten": "col 3",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              },
+              {
+                "ma": "c4",
+                "ten": "col 4",
+                "luaChon": [
+                  "0",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "row 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "row 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "row 3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "row 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c1": "0",
+              "r1.c2": "0",
+              "r1.c3": "1",
+              "r1.c4": "0",
+              "r2.c1": "0",
+              "r2.c2": "0",
+              "r2.c3": "1",
+              "r2.c4": "0",
+              "r3.c1": "0",
+              "r3.c2": "0",
+              "r3.c3": "1",
+              "r3.c4": "0",
+              "r4.c1": "1",
+              "r4.c2": "1",
+              "r4.c3": "1",
+              "r4.c4": "1"
+            },
+            "giaiThich": "<p>M_R³ (R³) = 0010 / 0010 / 0010 / 1111 (rows 1–4).</p><p><i>VI: M_R³ (R³) = 0010 / 0010 / 0010 / 1111 (các dòng 1–4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using ordinary integer multiplication and writing 2 in a cell (Boolean product uses OR/AND)."
+        },
+        {
+          "loi": "Multiplying columns by rows instead of rows by columns."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Boolean product",
+          "vi": "tích Boole"
+        },
+        {
+          "en": "zero–one matrix",
+          "vi": "ma trận 0–1"
+        }
+      ]
+    },
+    {
+      "title": "Relations 4 — Closures: how many pairs?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "closures",
+        "reachability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Elements are numbered 0…n−1. For each relation give the number of ordered pairs in its <b>reflexive closure</b>, <b>symmetric closure</b> and <b>transitive closure</b>. The transitive closure adds every pair joined by a path of any length.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần tử đánh số 0…n−1. Với mỗi quan hệ cho số cặp có thứ tự trong <b>bao đóng phản xạ</b>, <b>bao đóng đối xứng</b> và <b>bao đóng bắc cầu</b>. Bao đóng bắc cầu thêm mọi cặp nối bởi đường đi độ dài bất kỳ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Reflexive closure: add the missing diagonal pairs; symmetric closure: add every missing reverse pair.",
+        "Transitive closure: draw the graph and list all pairs reachable by a directed path (cycles produce loops too)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 4 — Closures: how many pairs?\n\nAnswer in the answer panel (no code needed).\n\n1. Closure sizesKích thước bao đóng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 4 — Closures: how many pairs? — answer key\n\n1. Closure sizesKích thước bao đóng\n   - r1.rf: 7\n   - r1.sy: 6\n   - r1.tr: 6\n   - r2.rf: 7\n   - r2.sy: 4\n   - r2.tr: 5\n   - r3.rf: 9\n   - r3.sy: 8\n   - r3.tr: 10\n   - r4.rf: 5\n   - r4.sy: 5\n   - r4.tr: 4\n   n=4: refl 7, sym 6, trans 6; n=4: refl 7, sym 4, trans 5; n=5: refl 9, sym 8, trans 10; n=3: refl 5, sym 5, trans 4. Warshall’s algorithm computes the transitive closure.VI: n=4: phản xạ 7, đối xứng 6, bắc cầu 6; n=4: phản xạ 7, đối xứng 4, bắc cầu 5; n=5: phản xạ 9, đối xứng 8, bắc cầu 10; n=3: phản xạ 5, đối xứng 5, bắc cầu 4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>n=4: refl 7, sym 6, trans 6; n=4: refl 7, sym 4, trans 5; n=5: refl 9, sym 8, trans 10; n=3: refl 5, sym 5, trans 4. Warshall’s algorithm computes the transitive closure.</p><p><i>VI: n=4: phản xạ 7, đối xứng 6, bắc cầu 6; n=4: phản xạ 7, đối xứng 4, bắc cầu 5; n=5: phản xạ 9, đối xứng 8, bắc cầu 10; n=3: phản xạ 5, đối xứng 5, bắc cầu 4.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Closure sizes</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước bao đóng</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "n and R"
+              },
+              {
+                "ma": "rf",
+                "ten": "|reflexive closure|"
+              },
+              {
+                "ma": "sy",
+                "ten": "|symmetric closure|"
+              },
+              {
+                "ma": "tr",
+                "ten": "|transitive closure|"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "n = 4, R = {(0,1) (1,2) (2,3)}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "n = 4, R = {(0,1) (1,0) (2,3)}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "n = 5, R = {(0,1) (1,2) (2,0) (3,4)}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "n = 3, R = {(0,0) (0,1) (1,2)}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.rf": "7",
+              "r1.sy": "6",
+              "r1.tr": "6",
+              "r2.rf": "7",
+              "r2.sy": "4",
+              "r2.tr": "5",
+              "r3.rf": "9",
+              "r3.sy": "8",
+              "r3.tr": "10",
+              "r4.rf": "5",
+              "r4.sy": "5",
+              "r4.tr": "4"
+            },
+            "giaiThich": "<p>n=4: refl 7, sym 6, trans 6; n=4: refl 7, sym 4, trans 5; n=5: refl 9, sym 8, trans 10; n=3: refl 5, sym 5, trans 4. Warshall’s algorithm computes the transitive closure.</p><p><i>VI: n=4: phản xạ 7, đối xứng 6, bắc cầu 6; n=4: phản xạ 7, đối xứng 4, bắc cầu 5; n=5: phản xạ 9, đối xứng 8, bắc cầu 10; n=3: phản xạ 5, đối xứng 5, bắc cầu 4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that a cycle a → b → c → a puts (a,a) in the transitive closure."
+        },
+        {
+          "loi": "Counting a pair twice in the symmetric closure when both directions exist."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "closure",
+          "vi": "bao đóng"
+        },
+        {
+          "en": "Warshall’s algorithm",
+          "vi": "thuật toán Warshall"
+        }
+      ]
+    },
+    {
+      "title": "Relations 5 — Equivalence classes and partitions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "equivalence classes",
+        "counting relations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Counting equivalence classes and equivalence relations.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm lớp tương đương và quan hệ tương đương.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Equivalence relations = partitions; relation counts = 2^(number of free pairs).",
+        "Symmetry ties (a,b) to (b,a), halving the off-diagonal freedom."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 5 — Equivalence classes and partitions\n\nAnswer in the answer panel (no code needed).\n\n1. x ~ y iff x ≡ y (mod 5) on {0,…,22}. How many equivalence classes are there?x ~ y khi x ≡ y (mod 5) trên {0,…,22}. Có bao nhiêu lớp tương đương?\n2. Same relation: how many elements does the class of 3 have?Cùng quan hệ: lớp của 3 có bao nhiêu phần tử?\n3. How many equivalence relations exist on a 4-element set (Bell number B₄)?Có bao nhiêu quan hệ tương đương trên tập 4 phần tử (số Bell B₄)?\n4. How many relations (any kind) exist on a 3-element set?Có bao nhiêu quan hệ (bất kỳ) trên tập 3 phần tử?\n5. How many reflexive relations exist on a 4-element set?Có bao nhiêu quan hệ phản xạ trên tập 4 phần tử?\n6. How many symmetric relations exist on a 4-element set?Có bao nhiêu quan hệ đối xứng trên tập 4 phần tử?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 5 — Equivalence classes and partitions — answer key\n\n1. x ~ y iff x ≡ y (mod 5) on {0,…,22}. How many equivalence classes are there?x ~ y khi x ≡ y (mod 5) trên {0,…,22}. Có bao nhiêu lớp tương đương?\n   Answer: d) 5\n   One class per residue 0,1,2,3,4.VI: Mỗi số dư 0,1,2,3,4 là một lớp.\n\n2. Same relation: how many elements does the class of 3 have?Cùng quan hệ: lớp của 3 có bao nhiêu phần tử?\n   Answer: a) 4\n   Elements 3, 8, 13, 18: 4 (residues 0, 1, 2 have five elements, residues 3, 4 have four).VI: Các phần tử 3, 8, 13, 18: 4 (số dư 0, 1, 2 có năm phần tử, số dư 3, 4 có bốn).\n\n3. How many equivalence relations exist on a 4-element set (Bell number B₄)?Có bao nhiêu quan hệ tương đương trên tập 4 phần tử (số Bell B₄)?\n   Answer: b) 15\n   Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.\n\n4. How many relations (any kind) exist on a 3-element set?Có bao nhiêu quan hệ (bất kỳ) trên tập 3 phần tử?\n   Answer: c) 512\n   Each of the 9 possible pairs is in or out: 2⁹ = 512.VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.\n\n5. How many reflexive relations exist on a 4-element set?Có bao nhiêu quan hệ phản xạ trên tập 4 phần tử?\n   Answer: d) 4096\n   The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.\n\n6. How many symmetric relations exist on a 4-element set?Có bao nhiêu quan hệ đối xứng trên tập 4 phần tử?\n   Answer: a) 1024\n   4 diagonal pairs + 6 unordered off-diagonal pairs = 10 independent choices: 2¹⁰ = 1024.VI: 4 cặp chéo + 6 cặp không thứ tự = 10 lựa chọn độc lập: 2¹⁰ = 1024.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>One class per residue 0,1,2,3,4.</p><p><i>VI: Mỗi số dư 0,1,2,3,4 là một lớp.</i></p><p>Elements 3, 8, 13, 18: 4 (residues 0, 1, 2 have five elements, residues 3, 4 have four).</p><p><i>VI: Các phần tử 3, 8, 13, 18: 4 (số dư 0, 1, 2 có năm phần tử, số dư 3, 4 có bốn).</i></p><p>Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.</p><p><i>VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.</i></p><p>Each of the 9 possible pairs is in or out: 2⁹ = 512.</p><p><i>VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.</i></p><p>The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.</p><p><i>VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.</i></p><p>4 diagonal pairs + 6 unordered off-diagonal pairs = 10 independent choices: 2¹⁰ = 1024.</p><p><i>VI: 4 cặp chéo + 6 cặp không thứ tự = 10 lựa chọn độc lập: 2¹⁰ = 1024.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>x ~ y iff x ≡ y (mod 5) on {0,…,22}. How many equivalence classes are there?</p><p style=\"opacity:.75;font-size:.92em\"><i>x ~ y khi x ≡ y (mod 5) trên {0,…,22}. Có bao nhiêu lớp tương đương?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "22"
+              },
+              {
+                "ma": "c",
+                "noiDung": "23"
+              },
+              {
+                "ma": "d",
+                "noiDung": "5"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One class per residue 0,1,2,3,4.</p><p><i>VI: Mỗi số dư 0,1,2,3,4 là một lớp.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Same relation: how many elements does the class of 3 have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng quan hệ: lớp của 3 có bao nhiêu phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4.6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Elements 3, 8, 13, 18: 4 (residues 0, 1, 2 have five elements, residues 3, 4 have four).</p><p><i>VI: Các phần tử 3, 8, 13, 18: 4 (số dư 0, 1, 2 có năm phần tử, số dư 3, 4 có bốn).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How many equivalence relations exist on a 4-element set (Bell number B₄)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu quan hệ tương đương trên tập 4 phần tử (số Bell B₄)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "8"
+              },
+              {
+                "ma": "b",
+                "noiDung": "15"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "24"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.</p><p><i>VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How many relations (any kind) exist on a 3-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu quan hệ (bất kỳ) trên tập 3 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "27"
+              },
+              {
+                "ma": "b",
+                "noiDung": "9"
+              },
+              {
+                "ma": "c",
+                "noiDung": "512"
+              },
+              {
+                "ma": "d",
+                "noiDung": "18"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each of the 9 possible pairs is in or out: 2⁹ = 512.</p><p><i>VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>How many reflexive relations exist on a 4-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu quan hệ phản xạ trên tập 4 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "65536"
+              },
+              {
+                "ma": "b",
+                "noiDung": "16"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1024"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4096"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.</p><p><i>VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>How many symmetric relations exist on a 4-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu quan hệ đối xứng trên tập 4 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1024"
+              },
+              {
+                "ma": "b",
+                "noiDung": "65536"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4096"
+              },
+              {
+                "ma": "d",
+                "noiDung": "64"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>4 diagonal pairs + 6 unordered off-diagonal pairs = 10 independent choices: 2¹⁰ = 1024.</p><p><i>VI: 4 cặp chéo + 6 cặp không thứ tự = 10 lựa chọn độc lập: 2¹⁰ = 1024.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting ordered pairs when the question allows only symmetric choices."
+        },
+        {
+          "loi": "Forgetting the diagonal in the reflexive count."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "partition",
+          "vi": "phân hoạch"
+        },
+        {
+          "en": "Bell number",
+          "vi": "số Bell"
+        }
+      ]
+    },
+    {
+      "title": "Relations 6 — Compute the transitive closure with Warshall",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Warshall"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Order the steps of Warshall’s algorithm for an n×n Boolean matrix W.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước của thuật toán Warshall cho ma trận Boole n×n W.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "k is the outermost loop.",
+        "The update uses only already-computed entries of the same matrix."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 6 — Compute the transitive closure with Warshall\n\nAnswer in the answer panel (no code needed).\n\n1. Warshall’s algorithm.Thuật toán Warshall.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations 6 — Compute the transitive closure with Warshall — answer key\n\n1. Warshall’s algorithm.Thuật toán Warshall.\n   Answer: s1) Set W₀ = M_R.  →  s2) For k = 1 to n (the allowed intermediate vertex):  →  s3) For every i and j: W[i][j] ← W[i][j] ∨ (W[i][k] ∧ W[k][j]).  →  s4) After the last k, W is the matrix of the transitive closure R*.\n   The outer loop over k is the key: after round k, W records paths whose intermediate vertices are among 1…k.VI: Vòng ngoài theo k là mấu chốt: sau vòng k, W ghi các đường đi chỉ qua trung gian trong 1…k.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The outer loop over k is the key: after round k, W records paths whose intermediate vertices are among 1…k.</p><p><i>VI: Vòng ngoài theo k là mấu chốt: sau vòng k, W ghi các đường đi chỉ qua trung gian trong 1…k.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Warshall’s algorithm.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Warshall.</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "For k = 1 to n (the allowed intermediate vertex):"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "For every i and j: W[i][j] ← W[i][j] ∨ (W[i][k] ∧ W[k][j])."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "After the last k, W is the matrix of the transitive closure R*."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Set W₀ = M_R."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4"
+            ],
+            "giaiThich": "<p>The outer loop over k is the key: after round k, W records paths whose intermediate vertices are among 1…k.</p><p><i>VI: Vòng ngoài theo k là mấu chốt: sau vòng k, W ghi các đường đi chỉ qua trung gian trong 1…k.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting k as the innermost loop (gives a wrong closure)."
+        },
+        {
+          "loi": "Using AND instead of OR for the update."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "intermediate vertex",
+          "vi": "đỉnh trung gian"
+        }
+      ]
+    },
+    {
+      "title": "Relations 7 — Test the four properties in code",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "relation properties",
+        "adjacency matrix"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>relationProperties(n, pairs)</code>. The elements are 0…n−1 and <code>pairs</code> is an array of <code>[a, b]</code>. Return <code>{ reflexive, symmetric, antisymmetric, transitive }</code> (booleans). Build a Boolean matrix first so every lookup is O(1).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>An empty relation on a non-empty set is symmetric, antisymmetric and transitive but not reflexive.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>relationProperties(n, pairs)</code>. Phần tử là 0…n−1 và <code>pairs</code> là mảng các <code>[a, b]</code>. Trả <code>{ reflexive, symmetric, antisymmetric, transitive }</code> (boolean). Dựng ma trận Boole trước để mỗi lần tra cứu là O(1).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Quan hệ rỗng trên tập khác rỗng là đối xứng, phản đối xứng, bắc cầu nhưng không phản xạ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "relationProperties(3, [[0,0],[1,1],[2,2],[0,1],[1,0]])",
+          "output": "{\"reflexive\":true,\"symmetric\":true,\"antisymmetric\":false,\"transitive\":true}",
+          "explanation": "An equivalence relation with classes {0,1} and {2}.|||Quan hệ tương đương với các lớp {0,1} và {2}."
+        }
+      ],
+      "hintsJson": [
+        "Transitivity: for every (i,j) in R and every k with (j,k) in R, require (i,k).",
+        "Antisymmetry only needs to look at i ≠ j."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function relationProperties(n, pairs) {\n  return { reflexive: false, symmetric: false, antisymmetric: false, transitive: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function relationProperties(n, pairs) {\n  var m = [], i, j, k;\n  for (i = 0; i < n; i++) { m.push([]); for (j = 0; j < n; j++) m[i].push(false); }\n  pairs.forEach(function (p) { m[p[0]][p[1]] = true; });\n  var reflexive = true, symmetric = true, antisymmetric = true, transitive = true;\n  for (i = 0; i < n; i++) {\n    if (!m[i][i]) reflexive = false;\n    for (j = 0; j < n; j++) {\n      if (m[i][j] && !m[j][i]) symmetric = false;\n      if (i !== j && m[i][j] && m[j][i]) antisymmetric = false;\n      if (m[i][j]) for (k = 0; k < n; k++) if (m[j][k] && !m[i][k]) transitive = false;\n    }\n  }\n  return { reflexive: reflexive, symmetric: symmetric, antisymmetric: antisymmetric, transitive: transitive };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four O(n²)–O(n³) loops over the matrix, one per definition; the cubic one is transitivity.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: relationProperties(3, [[0,0],[1,1],[2,2],[0,1],[1,0]])",
+              "vi": "Ca 1"
+            },
+            "goi": "relationProperties(3, [[0,0],[1,1],[2,2],[0,1],[1,0]])",
+            "mongDoi": {
+              "reflexive": true,
+              "symmetric": true,
+              "antisymmetric": false,
+              "transitive": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: relationProperties(3, [[0,1],[1,2]])",
+              "vi": "Ca 2"
+            },
+            "goi": "relationProperties(3, [[0,1],[1,2]])",
+            "mongDoi": {
+              "reflexive": false,
+              "symmetric": false,
+              "antisymmetric": true,
+              "transitive": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: relationProperties(3, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "relationProperties(3, [])",
+            "mongDoi": {
+              "reflexive": false,
+              "symmetric": true,
+              "antisymmetric": true,
+              "transitive": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "relationProperties(0, [])",
+            "mongDoi": {
+              "reflexive": true,
+              "symmetric": true,
+              "antisymmetric": true,
+              "transitive": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "relationProperties(4, [[0,0],[1,1],[2,2],[3,3],[0,1],[1,2],[0,2]])",
+            "mongDoi": {
+              "reflexive": true,
+              "symmetric": false,
+              "antisymmetric": true,
+              "transitive": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "relationProperties(3, [[0,1],[1,0],[0,0],[1,1]])",
+            "mongDoi": {
+              "reflexive": false,
+              "symmetric": true,
+              "antisymmetric": false,
+              "transitive": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating antisymmetric as “not symmetric”."
+        },
+        {
+          "loi": "Skipping i = j in the symmetric test (harmless) but also in the reflexive test (wrong)."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Relations 8 — Warshall’s transitive closure",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Warshall",
+        "transitive closure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Implement <code>transitiveClosure(n, pairs)</code> with Warshall’s algorithm. Return the closure as an array of <code>[i, j]</code> pairs sorted by <code>i</code> and then by <code>j</code>. Duplicate input pairs must not produce duplicates in the output. The relation may contain cycles, in which case loops <code>[i, i]</code> appear.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The outermost loop must be the intermediate vertex k.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cài <code>transitiveClosure(n, pairs)</code> bằng thuật toán Warshall. Trả bao đóng là mảng các cặp <code>[i, j]</code> sắp theo <code>i</code> rồi <code>j</code>. Cặp trùng ở đầu vào không được sinh trùng ở đầu ra. Quan hệ có thể có chu trình, khi đó xuất hiện vòng <code>[i, i]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Vòng ngoài cùng phải là đỉnh trung gian k.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "transitiveClosure(3, [[0,1],[1,2]])",
+          "output": "[[0,1],[0,2],[1,2]]",
+          "explanation": "0→1→2 adds (0,2).|||0→1→2 thêm (0,2)."
+        }
+      ],
+      "hintsJson": [
+        "Use an n×n Boolean matrix and loop k, i, j in that order.",
+        "Collect the pairs in row-major order at the end — this gives the required sorting for free."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function transitiveClosure(n, pairs) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function transitiveClosure(n, pairs) {\n  var m = [], i, j, k, out = [];\n  for (i = 0; i < n; i++) { m.push([]); for (j = 0; j < n; j++) m[i].push(false); }\n  pairs.forEach(function (p) { m[p[0]][p[1]] = true; });\n  for (k = 0; k < n; k++) for (i = 0; i < n; i++) for (j = 0; j < n; j++) if (m[i][k] && m[k][j]) m[i][j] = true;\n  for (i = 0; i < n; i++) for (j = 0; j < n; j++) if (m[i][j]) out.push([i, j]);\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>After iteration k, W[i][j] is true iff there is a path from i to j whose intermediate vertices are all ≤ k; after n rounds it is the full reachability relation.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: transitiveClosure(3, [[0,1],[1,2]])",
+              "vi": "Ca 1"
+            },
+            "goi": "transitiveClosure(3, [[0,1],[1,2]])",
+            "mongDoi": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: transitiveClosure(3, [[0,1],[1,2],[2,0]])",
+              "vi": "Ca 2"
+            },
+            "goi": "transitiveClosure(3, [[0,1],[1,2],[2,0]])",
+            "mongDoi": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                2,
+                0
+              ],
+              [
+                2,
+                1
+              ],
+              [
+                2,
+                2
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: transitiveClosure(2, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "transitiveClosure(2, [])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "transitiveClosure(4, [[0,1],[0,1],[2,3]])",
+            "mongDoi": [
+              [
+                0,
+                1
+              ],
+              [
+                2,
+                3
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "transitiveClosure(5, [[0,1],[1,2],[2,3],[3,4]])",
+            "mongDoi": [
+              [
+                0,
+                1
+              ],
+              [
+                0,
+                2
+              ],
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                3
+              ],
+              [
+                1,
+                4
+              ],
+              [
+                2,
+                3
+              ],
+              [
+                2,
+                4
+              ],
+              [
+                3,
+                4
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "transitiveClosure(1, [[0,0]])",
+            "mongDoi": [
+              [
+                0,
+                0
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the loops as i, j, k (the closure is then incomplete)."
+        },
+        {
+          "loi": "Returning the matrix instead of the list of pairs."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Relations 9 — Matrix powers count walks",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "matrix multiplication",
+        "walks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>matPower(A, e)</code> that returns the integer matrix A<sup>e</sup> for a square matrix A (array of rows) and an exponent e ≥ 0. A⁰ is the identity matrix. In a graph, entry (i, j) of A<sup>e</sup> counts walks of length e from i to j.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Multiply with the ordinary rule: C[i][j] = Σ_k A[i][k]·B[k][j].</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>matPower(A, e)</code> trả ma trận nguyên A<sup>e</sup> cho ma trận vuông A (mảng các dòng) và số mũ e ≥ 0. A⁰ là ma trận đơn vị. Trong đồ thị, phần tử (i, j) của A<sup>e</sup> đếm số đường đi (walk) độ dài e từ i tới j.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhân theo quy tắc thường: C[i][j] = Σ_k A[i][k]·B[k][j].</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "matPower([[0,1],[1,1]], 5)",
+          "output": "[[3,5],[5,8]]",
+          "explanation": "The Fibonacci matrix: entries are consecutive Fibonacci numbers.|||Ma trận Fibonacci: các phần tử là số Fibonacci liên tiếp."
+        }
+      ],
+      "hintsJson": [
+        "Start from the identity and multiply by A e times.",
+        "The triple loop i, j, k computes one product."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function matPower(A, e) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function matPower(A, e) {\n  var n = A.length, R = [], i, j, k, t;\n  for (i = 0; i < n; i++) { R.push([]); for (j = 0; j < n; j++) R[i].push(i === j ? 1 : 0); }\n  for (t = 0; t < e; t++) {\n    var C = [];\n    for (i = 0; i < n; i++) { C.push([]); for (j = 0; j < n; j++) { var s = 0; for (k = 0; k < n; k++) s += R[i][k] * A[k][j]; C[i].push(s); } }\n    R = C;\n  }\n  return R;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Repeated multiplication is O(n³·e); squaring would reduce it to O(n³ log e) but is not required.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: matPower([[0,1],[1,1]], 5)",
+              "vi": "Ca 1"
+            },
+            "goi": "matPower([[0,1],[1,1]], 5)",
+            "mongDoi": [
+              [
+                3,
+                5
+              ],
+              [
+                5,
+                8
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: matPower([[1,2],[3,4]], 0)",
+              "vi": "Ca 2"
+            },
+            "goi": "matPower([[1,2],[3,4]], 0)",
+            "mongDoi": [
+              [
+                1,
+                0
+              ],
+              [
+                0,
+                1
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: matPower([[2]], 10)",
+              "vi": "Ca 3"
+            },
+            "goi": "matPower([[2]], 10)",
+            "mongDoi": [
+              [
+                1024
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "matPower([[0,1,0],[0,0,1],[1,0,0]], 3)",
+            "mongDoi": [
+              [
+                1,
+                0,
+                0
+              ],
+              [
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                0,
+                1
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "matPower([[1,1,0],[1,0,1],[0,1,1]], 4)",
+            "mongDoi": [
+              [
+                6,
+                5,
+                5
+              ],
+              [
+                5,
+                6,
+                5
+              ],
+              [
+                5,
+                5,
+                6
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting from the zero matrix."
+        },
+        {
+          "loi": "Mutating the array that is still being read while multiplying."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

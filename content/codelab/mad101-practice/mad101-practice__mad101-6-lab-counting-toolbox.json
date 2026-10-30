@@ -1,0 +1,1053 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-6-lab-counting-toolbox",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-6-1-dem-to-hop"
+  },
+  "exercises": [
+    {
+      "title": "Counting lab 1 — Pascal’s triangle and binomial identities",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "Pascal identities"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For each n compute: the sum of row n (Σ C(n, k) = 2ⁿ), the alternating sum (Σ (−1)ᵏ C(n, k) = 0 for n ≥ 1), the central coefficient C(n, n/2), and Σ C(n, k)² = C(2n, n) (Vandermonde).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi n tính: tổng hàng n (Σ C(n, k) = 2ⁿ), tổng đan dấu (Σ (−1)ᵏ C(n, k) = 0 với n ≥ 1), hệ số giữa C(n, n/2) và Σ C(n, k)² = C(2n, n) (Vandermonde).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Set x = y = 1 for the row sum and x = 1, y = −1 for the alternating sum.",
+        "Σ C(n, k)² counts choosing n objects from 2n: C(2n, n)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting lab 1 — Pascal’s triangle and binomial identities\n\nAnswer in the answer panel (no code needed).\n\n1. Row identitiesĐẳng thức theo hàng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting lab 1 — Pascal’s triangle and binomial identities — answer key\n\n1. Row identitiesĐẳng thức theo hàng\n   - r1.s: 16\n   - r1.a: 0\n   - r1.c: 6\n   - r1.q: 70\n   - r2.s: 64\n   - r2.a: 0\n   - r2.c: 20\n   - r2.q: 924\n   - r3.s: 256\n   - r3.a: 0\n   - r3.c: 70\n   - r3.q: 12870\n   - r4.s: 1024\n   - r4.a: 0\n   - r4.c: 252\n   - r4.q: 184756\n   - r5.s: 4096\n   - r5.a: 0\n   - r5.c: 924\n   - r5.q: 2704156\n   n=4: 2ⁿ=16, alternating 0, central 6, ΣC²=C(8,4)=70; n=6: 2ⁿ=64, alternating 0, central 20, ΣC²=C(12,6)=924; n=8: 2ⁿ=256, alternating 0, central 70, ΣC²=C(16,8)=12870; n=10: 2ⁿ=1024, alternating 0, central 252, ΣC²=C(20,10)=184756; n=12: 2ⁿ=4096, alternating 0, central 924, ΣC²=C(24,12)=2704156.VI: n=4: 16, 0, 6, 70; n=6: 64, 0, 20, 924; n=8: 256, 0, 70, 12870; n=10: 1024, 0, 252, 184756; n=12: 4096, 0, 924, 2704156.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>n=4: 2ⁿ=16, alternating 0, central 6, ΣC²=C(8,4)=70; n=6: 2ⁿ=64, alternating 0, central 20, ΣC²=C(12,6)=924; n=8: 2ⁿ=256, alternating 0, central 70, ΣC²=C(16,8)=12870; n=10: 2ⁿ=1024, alternating 0, central 252, ΣC²=C(20,10)=184756; n=12: 2ⁿ=4096, alternating 0, central 924, ΣC²=C(24,12)=2704156.</p><p><i>VI: n=4: 16, 0, 6, 70; n=6: 64, 0, 20, 924; n=8: 256, 0, 70, 12870; n=10: 1024, 0, 252, 184756; n=12: 4096, 0, 924, 2704156.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Row identities</p><p style=\"opacity:.75;font-size:.92em\"><i>Đẳng thức theo hàng</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "n"
+              },
+              {
+                "ma": "s",
+                "ten": "Σ C(n, k)"
+              },
+              {
+                "ma": "a",
+                "ten": "Σ (−1)ᵏ C(n, k)"
+              },
+              {
+                "ma": "c",
+                "ten": "C(n, n/2)"
+              },
+              {
+                "ma": "q",
+                "ten": "Σ C(n, k)²"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "4"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "6"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "8"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "10"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "n": "12"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "16",
+              "r1.a": "0",
+              "r1.c": "6",
+              "r1.q": "70",
+              "r2.s": "64",
+              "r2.a": "0",
+              "r2.c": "20",
+              "r2.q": "924",
+              "r3.s": "256",
+              "r3.a": "0",
+              "r3.c": "70",
+              "r3.q": "12870",
+              "r4.s": "1024",
+              "r4.a": "0",
+              "r4.c": "252",
+              "r4.q": "184756",
+              "r5.s": "4096",
+              "r5.a": "0",
+              "r5.c": "924",
+              "r5.q": "2704156"
+            },
+            "giaiThich": "<p>n=4: 2ⁿ=16, alternating 0, central 6, ΣC²=C(8,4)=70; n=6: 2ⁿ=64, alternating 0, central 20, ΣC²=C(12,6)=924; n=8: 2ⁿ=256, alternating 0, central 70, ΣC²=C(16,8)=12870; n=10: 2ⁿ=1024, alternating 0, central 252, ΣC²=C(20,10)=184756; n=12: 2ⁿ=4096, alternating 0, central 924, ΣC²=C(24,12)=2704156.</p><p><i>VI: n=4: 16, 0, 6, 70; n=6: 64, 0, 20, 924; n=8: 256, 0, 70, 12870; n=10: 1024, 0, 252, 184756; n=12: 4096, 0, 924, 2704156.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing 2n instead of 2ⁿ."
+        },
+        {
+          "loi": "Claiming the alternating sum is 1 (it is 0 for n ≥ 1)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Vandermonde’s identity",
+          "vi": "đẳng thức Vandermonde"
+        }
+      ]
+    },
+    {
+      "title": "Counting lab 2 — Probability as a ratio of counts",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "discrete probability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>With equally likely outcomes, P(E) = |E| / |S|. Reduce fractions to lowest terms. All counts below were produced by program.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với các kết quả đồng khả năng, P(E) = |E| / |S|. Rút gọn phân số về tối giản. Mọi số đếm dưới đây do chương trình tạo.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count the sample space first, with the same rules (ordered vs unordered) as the event.",
+        "For “at least one” compute 1 − P(none)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting lab 2 — Probability as a ratio of counts\n\nAnswer in the answer panel (no code needed).\n\n1. Two fair dice: P(sum = 8)?Hai xúc xắc đều: P(tổng = 8)?\n2. Two fair dice: P(at least one six)?Hai xúc xắc đều: P(ít nhất một mặt 6)?\n3. 4 coin flips: P(exactly 2 heads)?Tung 4 đồng xu: P(đúng 2 mặt ngửa)?\n4. Draw 3 cards from a 52-card deck: P(all red)?Rút 3 lá từ bộ bài 52: P(cả ba đỏ)?\n5. Draw 2 cards: P(they form a pair (same rank))?Rút 2 lá: P(tạo thành một đôi cùng giá trị)?\n6. 5-card hand: P(all five cards of the same suit — a flush, straights included)?Bộ 5 lá: P(cả năm lá cùng chất — thùng, tính cả sảnh)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting lab 2 — Probability as a ratio of counts — answer key\n\n1. Two fair dice: P(sum = 8)?Hai xúc xắc đều: P(tổng = 8)?\n   Answer: c) 5/36\n   Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.\n\n2. Two fair dice: P(at least one six)?Hai xúc xắc đều: P(ít nhất một mặt 6)?\n   Answer: d) 11/36\n   1 − (5/6)² = 11/36.VI: 1 − (5/6)² = 11/36.\n\n3. 4 coin flips: P(exactly 2 heads)?Tung 4 đồng xu: P(đúng 2 mặt ngửa)?\n   Answer: a) 3/8\n   C(4,2)/2⁴ = 6/16 = 3/8.VI: C(4,2)/2⁴ = 6/16 = 3/8.\n\n4. Draw 3 cards from a 52-card deck: P(all red)?Rút 3 lá từ bộ bài 52: P(cả ba đỏ)?\n   Answer: b) 2/17\n   C(26,3)/C(52,3) = 2600/22100 = 2/17.VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.\n\n5. Draw 2 cards: P(they form a pair (same rank))?Rút 2 lá: P(tạo thành một đôi cùng giá trị)?\n   Answer: c) 1/17\n   13·C(4,2)/C(52,2) = 78/1326 = 1/17.VI: 13·C(4,2)/C(52,2) = 78/1326 = 1/17.\n\n6. 5-card hand: P(all five cards of the same suit — a flush, straights included)?Bộ 5 lá: P(cả năm lá cùng chất — thùng, tính cả sảnh)?\n   Answer: d) 33/16660\n   4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.</p><p><i>VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.</i></p><p>1 − (5/6)² = 11/36.</p><p><i>VI: 1 − (5/6)² = 11/36.</i></p><p>C(4,2)/2⁴ = 6/16 = 3/8.</p><p><i>VI: C(4,2)/2⁴ = 6/16 = 3/8.</i></p><p>C(26,3)/C(52,3) = 2600/22100 = 2/17.</p><p><i>VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.</i></p><p>13·C(4,2)/C(52,2) = 78/1326 = 1/17.</p><p><i>VI: 13·C(4,2)/C(52,2) = 78/1326 = 1/17.</i></p><p>4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</p><p><i>VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Two fair dice: P(sum = 8)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai xúc xắc đều: P(tổng = 8)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "7/36"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1/9"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5/36"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1/6"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.</p><p><i>VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Two fair dice: P(at least one six)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai xúc xắc đều: P(ít nhất một mặt 6)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5/18"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1/3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "25/36"
+              },
+              {
+                "ma": "d",
+                "noiDung": "11/36"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>1 − (5/6)² = 11/36.</p><p><i>VI: 1 − (5/6)² = 11/36.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>4 coin flips: P(exactly 2 heads)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tung 4 đồng xu: P(đúng 2 mặt ngửa)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3/8"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1/4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1/2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1/16"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>C(4,2)/2⁴ = 6/16 = 3/8.</p><p><i>VI: C(4,2)/2⁴ = 6/16 = 3/8.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Draw 3 cards from a 52-card deck: P(all red)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Rút 3 lá từ bộ bài 52: P(cả ba đỏ)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1/4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2/17"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1/8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3/17"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>C(26,3)/C(52,3) = 2600/22100 = 2/17.</p><p><i>VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Draw 2 cards: P(they form a pair (same rank))?</p><p style=\"opacity:.75;font-size:.92em\"><i>Rút 2 lá: P(tạo thành một đôi cùng giá trị)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2/13"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1/26"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1/17"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1/13"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>13·C(4,2)/C(52,2) = 78/1326 = 1/17.</p><p><i>VI: 13·C(4,2)/C(52,2) = 78/1326 = 1/17.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>5-card hand: P(all five cards of the same suit — a flush, straights included)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bộ 5 lá: P(cả năm lá cùng chất — thùng, tính cả sảnh)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1/4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1/13"
+              },
+              {
+                "ma": "c",
+                "noiDung": "33/66640"
+              },
+              {
+                "ma": "d",
+                "noiDung": "33/16660"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</p><p><i>VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing ordered counts in the numerator with unordered counts in the denominator."
+        },
+        {
+          "loi": "Not reducing the fraction."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sample space",
+          "vi": "không gian mẫu"
+        },
+        {
+          "en": "event",
+          "vi": "biến cố"
+        }
+      ]
+    },
+    {
+      "title": "Counting lab 3 — Balls into boxes: four cases",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "distributions",
+        "partitions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Distribute n balls into k boxes (a box may stay empty). The answer depends on whether balls and boxes are distinguishable. (a) distinguishable balls, distinguishable boxes: kⁿ; (b) identical balls, distinguishable boxes: C(n + k − 1, k − 1); (c) distinguishable balls, identical boxes: S(n,1) + … + S(n,k) (Stirling numbers of the second kind); (d) identical balls and boxes: the number of partitions of n into at most k parts.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân n quả bóng vào k hộp (hộp có thể rỗng). Đáp án phụ thuộc bóng và hộp có phân biệt hay không. (a) bóng khác nhau, hộp khác nhau: kⁿ; (b) bóng giống nhau, hộp khác nhau: C(n + k − 1, k − 1); (c) bóng khác nhau, hộp giống nhau: S(n,1) + … + S(n,k) (số Stirling loại hai); (d) bóng và hộp đều giống nhau: số phân hoạch của n thành tối đa k phần.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "(b) is stars and bars; (d) can be listed by hand: write n as a non-increasing sum of at most k positive parts.",
+        "(c): Stirling S(n,j) counts splitting n labelled balls into exactly j non-empty unlabelled groups."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting lab 3 — Balls into boxes: four cases\n\nAnswer in the answer panel (no code needed).\n\n1. Four distribution problemsBốn bài toán phân phối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Counting lab 3 — Balls into boxes: four cases — answer key\n\n1. Four distribution problemsBốn bài toán phân phối\n   - r1.a: 243\n   - r1.b: 21\n   - r1.c: 41\n   - r1.d: 5\n   - r2.a: 16\n   - r2.b: 5\n   - r2.c: 8\n   - r2.d: 3\n   - r3.a: 729\n   - r3.b: 28\n   - r3.c: 122\n   - r3.d: 7\n   - r4.a: 16384\n   - r4.b: 120\n   - r4.c: 715\n   - r4.d: 11\n   n=5,k=3: 243, 21, 41, 5; n=4,k=2: 16, 5, 8, 3; n=6,k=3: 729, 28, 122, 7; n=7,k=4: 16384, 120, 715, 11.VI: n=5,k=3: 243, 21, 41, 5; n=4,k=2: 16, 5, 8, 3; n=6,k=3: 729, 28, 122, 7; n=7,k=4: 16384, 120, 715, 11.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>n=5,k=3: 243, 21, 41, 5; n=4,k=2: 16, 5, 8, 3; n=6,k=3: 729, 28, 122, 7; n=7,k=4: 16384, 120, 715, 11.</p><p><i>VI: n=5,k=3: 243, 21, 41, 5; n=4,k=2: 16, 5, 8, 3; n=6,k=3: 729, 28, 122, 7; n=7,k=4: 16384, 120, 715, 11.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Four distribution problems</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn bài toán phân phối</i></p>",
+            "cot": [
+              {
+                "ma": "nk",
+                "ten": "n balls, k boxes"
+              },
+              {
+                "ma": "a",
+                "ten": "(a) dist. / dist."
+              },
+              {
+                "ma": "b",
+                "ten": "(b) identical balls / dist. boxes"
+              },
+              {
+                "ma": "c",
+                "ten": "(c) dist. balls / identical boxes"
+              },
+              {
+                "ma": "d",
+                "ten": "(d) identical / identical"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "nk": "n = 5,  k = 3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "nk": "n = 4,  k = 2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "nk": "n = 6,  k = 3"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "nk": "n = 7,  k = 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "243",
+              "r1.b": "21",
+              "r1.c": "41",
+              "r1.d": "5",
+              "r2.a": "16",
+              "r2.b": "5",
+              "r2.c": "8",
+              "r2.d": "3",
+              "r3.a": "729",
+              "r3.b": "28",
+              "r3.c": "122",
+              "r3.d": "7",
+              "r4.a": "16384",
+              "r4.b": "120",
+              "r4.c": "715",
+              "r4.d": "11"
+            },
+            "giaiThich": "<p>n=5,k=3: 243, 21, 41, 5; n=4,k=2: 16, 5, 8, 3; n=6,k=3: 729, 28, 122, 7; n=7,k=4: 16384, 120, 715, 11.</p><p><i>VI: n=5,k=3: 243, 21, 41, 5; n=4,k=2: 16, 5, 8, 3; n=6,k=3: 729, 28, 122, 7; n=7,k=4: 16384, 120, 715, 11.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using kⁿ for identical balls."
+        },
+        {
+          "loi": "Counting each partition of the balls in (d) with its box order (that is case (b))."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Stirling number of the second kind",
+          "vi": "số Stirling loại hai"
+        },
+        {
+          "en": "integer partition",
+          "vi": "phân hoạch số nguyên"
+        }
+      ]
+    },
+    {
+      "title": "Counting lab 4 — Count derangements with a recurrence",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "derangements",
+        "recurrence"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A derangement of n objects is a permutation with no fixed point. Write <code>derangementCount(n)</code> using D(0) = 1, D(1) = 0 and D(n) = (n − 1)·(D(n−1) + D(n−2)). Values for n up to 18 fit exactly in a JavaScript number.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Iterate; keep the last two values.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hoán vị mất trật tự của n vật là hoán vị không có điểm bất động. Viết <code>derangementCount(n)</code> dùng D(0) = 1, D(1) = 0 và D(n) = (n − 1)·(D(n−1) + D(n−2)). Giá trị với n tới 18 vừa chính xác trong số JavaScript.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lặp; giữ hai giá trị gần nhất.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "derangementCount(4)",
+          "output": "9",
+          "explanation": "9 of the 24 permutations of 4 objects have no fixed point.|||9 trong 24 hoán vị của 4 vật không có điểm bất động."
+        }
+      ],
+      "hintsJson": [
+        "Start with a = D(0) = 1, b = D(1) = 0 and iterate i = 2…n.",
+        "D(n) ≈ n!/e."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function derangementCount(n) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function derangementCount(n) {\n  if (n === 0) return 1;\n  var a = 1, b = 0;\n  for (var i = 2; i <= n; i++) { var t = (i - 1) * (a + b); a = b; b = t; }\n  return b;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Object n goes to one of n − 1 other places; the displaced object either points back (D(n−2) ways) or not (D(n−1) ways).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: derangementCount(0)",
+              "vi": "Ca 1"
+            },
+            "goi": "derangementCount(0)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 2: derangementCount(1)",
+              "vi": "Ca 2"
+            },
+            "goi": "derangementCount(1)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Case 3: derangementCount(4)",
+              "vi": "Ca 3"
+            },
+            "goi": "derangementCount(4)",
+            "mongDoi": 9
+          },
+          {
+            "moTa": {
+              "en": "Case 4: derangementCount(5)",
+              "vi": "Ca 4"
+            },
+            "goi": "derangementCount(5)",
+            "mongDoi": 44
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "derangementCount(10)",
+            "mongDoi": 1334961,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "derangementCount(18)",
+            "mongDoi": 2355301661033953,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using n − 1 on the wrong factor: it multiplies the SUM D(n−1) + D(n−2)."
+        },
+        {
+          "loi": "Returning 0 for n = 0 (D(0) = 1: the empty permutation)."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Counting lab 5 — Count integer partitions",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "partitions",
+        "dynamic programming"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>partitionCount(n)</code> returning the number of ways to write n as a sum of positive integers where order does not matter (4 = 4 = 3+1 = 2+2 = 2+1+1 = 1+1+1+1 gives 5). Use the coin-change style dynamic programme: process part sizes j = 1…n one at a time and update ways[i] += ways[i − j] for i from j to n.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>p(0) = 1. n is at most 100 in the tests (p(100) = 190,569,292).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>partitionCount(n)</code> trả số cách viết n thành tổng các số nguyên dương không kể thứ tự (4 = 4 = 3+1 = 2+2 = 2+1+1 = 1+1+1+1 cho 5). Dùng quy hoạch động kiểu đổi tiền: xử lý từng cỡ phần j = 1…n và cập nhật ways[i] += ways[i − j] với i từ j đến n.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>p(0) = 1. n tối đa 100 trong test (p(100) = 190.569.292).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "partitionCount(4)",
+          "output": "5",
+          "explanation": "The partitions listed in the statement.|||Các phân hoạch ghi ở đề."
+        },
+        {
+          "input": "partitionCount(7)",
+          "output": "15",
+          "explanation": "p(7) = 15.|||p(7) = 15."
+        }
+      ],
+      "hintsJson": [
+        "The outer loop is over the part size; this makes each multiset of parts counted once, not each sequence.",
+        "Initialise ways[0] = 1, the rest 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function partitionCount(n) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function partitionCount(n) {\n  var p = [1], i, j;\n  for (i = 1; i <= n; i++) p.push(0);\n  for (j = 1; j <= n; j++) for (i = j; i <= n; i++) p[i] += p[i - j];\n  return p[n];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Outer loop on part size ⇒ unordered; swapping the loops counts ordered sums, which is 2^(n−1) for compositions of n.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: partitionCount(0)",
+              "vi": "Ca 1"
+            },
+            "goi": "partitionCount(0)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 2: partitionCount(4)",
+              "vi": "Ca 2"
+            },
+            "goi": "partitionCount(4)",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "Case 3: partitionCount(7)",
+              "vi": "Ca 3"
+            },
+            "goi": "partitionCount(7)",
+            "mongDoi": 15
+          },
+          {
+            "moTa": {
+              "en": "Case 4: partitionCount(20)",
+              "vi": "Ca 4"
+            },
+            "goi": "partitionCount(20)",
+            "mongDoi": 627
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "partitionCount(50)",
+            "mongDoi": 204226,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "partitionCount(100)",
+            "mongDoi": 190569292,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the part-size loop inside the amount loop (counts compositions = ordered sums)."
+        },
+        {
+          "loi": "Starting the inner loop at 1 instead of j."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Counting lab 6 — Stirling numbers of the second kind",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Stirling numbers",
+        "set partitions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>S(n, k) is the number of ways to split n labelled objects into exactly k non-empty unlabelled groups. Write <code>stirlingSecond(n, k)</code> using S(0,0) = 1, S(n,0) = 0 for n &gt; 0, S(0,k) = 0 for k &gt; 0 and the recurrence S(n, k) = S(n−1, k−1) + k·S(n−1, k) (object n forms its own group, or joins one of the k existing groups).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>k may exceed n; the answer is then 0.</li>\n</ul>",
+      "problemHtmlVi": "<p>S(n, k) là số cách chia n vật có nhãn thành đúng k nhóm không rỗng không nhãn. Viết <code>stirlingSecond(n, k)</code> dùng S(0,0) = 1, S(n,0) = 0 với n &gt; 0, S(0,k) = 0 với k &gt; 0 và S(n, k) = S(n−1, k−1) + k·S(n−1, k) (vật n lập nhóm riêng, hoặc vào một trong k nhóm sẵn có).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>k có thể lớn hơn n; khi đó đáp án là 0.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "stirlingSecond(4,2)",
+          "output": "7",
+          "explanation": "{1}{234}, {2}{134}, {3}{124}, {4}{123} and {12}{34}, {13}{24}, {14}{23}.|||{1}{234}, {2}{134}, {3}{124}, {4}{123} và {12}{34}, {13}{24}, {14}{23}."
+        }
+      ],
+      "hintsJson": [
+        "Fill a table (n+1)×(k+1) row by row.",
+        "The sum over k of S(n,k) is the Bell number B(n)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function stirlingSecond(n, k) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function stirlingSecond(n, k) {\n  var s = [], i, j;\n  for (i = 0; i <= n; i++) { s.push([]); for (j = 0; j <= k; j++) s[i].push(0); }\n  s[0][0] = 1;\n  for (i = 1; i <= n; i++) for (j = 1; j <= k; j++) s[i][j] = s[i - 1][j - 1] + j * s[i - 1][j];\n  return s[n][k];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the same “object n joins an existing group or starts a new one” argument behind the surjection count k!·S(n,k).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: stirlingSecond(4, 2)",
+              "vi": "Ca 1"
+            },
+            "goi": "stirlingSecond(4, 2)",
+            "mongDoi": 7
+          },
+          {
+            "moTa": {
+              "en": "Case 2: stirlingSecond(0, 0)",
+              "vi": "Ca 2"
+            },
+            "goi": "stirlingSecond(0, 0)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Case 3: stirlingSecond(5, 0)",
+              "vi": "Ca 3"
+            },
+            "goi": "stirlingSecond(5, 0)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Case 4: stirlingSecond(3, 5)",
+              "vi": "Ca 4"
+            },
+            "goi": "stirlingSecond(3, 5)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "stirlingSecond(10, 3)",
+            "mongDoi": 9330,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "stirlingSecond(12, 6)",
+            "mongDoi": 1323652,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the factor k in front of S(n−1, k)."
+        },
+        {
+          "loi": "Mixing S(n,k) with the unsigned Stirling numbers of the first kind."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Counting lab 7 — Next permutation in lexicographic order",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "permutations",
+        "lexicographic order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>nextPermutation(a)</code> returning the permutation of the integer array <code>a</code> that comes right after it in lexicographic order (the array may contain repeated values), or <code>null</code> when <code>a</code> is already the last (non-increasing) arrangement. Do not mutate the input. Algorithm: find the rightmost i with a[i] &lt; a[i+1]; find the rightmost j &gt; i with a[j] &gt; a[i]; swap them; reverse the suffix after i. It generates the n! permutations one by one.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>O(n) time per call.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>nextPermutation(a)</code> trả hoán vị đứng ngay sau <code>a</code> theo thứ tự từ điển (mảng có thể chứa giá trị lặp), hoặc <code>null</code> khi <code>a</code> đã là cách xếp cuối (không tăng). Không sửa mảng đầu vào. Thuật toán: tìm i lớn nhất có a[i] &lt; a[i+1]; tìm j lớn nhất &gt; i có a[j] &gt; a[i]; hoán đổi; đảo phần đuôi sau i. Nó sinh lần lượt n! hoán vị.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>O(n) thời gian mỗi lần gọi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "nextPermutation([1,2,3])",
+          "output": "[1,3,2]",
+          "explanation": "i = 1 (2 < 3), j = 2: swap then reverse the one-element suffix.|||i = 1 (2 < 3), j = 2: hoán đổi rồi đảo đuôi một phần tử."
+        },
+        {
+          "input": "nextPermutation([3,2,1])",
+          "output": "null",
+          "explanation": "The last permutation.|||Hoán vị cuối cùng."
+        }
+      ],
+      "hintsJson": [
+        "Scan from the right for the first ascent; if there is none the array is the last permutation.",
+        "After the swap the suffix is non-increasing, so reversing it makes it the smallest."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function nextPermutation(a) {\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function nextPermutation(a) {\n  var arr = a.slice(), i = arr.length - 2, j, t;\n  while (i >= 0 && arr[i] >= arr[i + 1]) i--;\n  if (i < 0) return null;\n  j = arr.length - 1;\n  while (arr[j] <= arr[i]) j--;\n  t = arr[i]; arr[i] = arr[j]; arr[j] = t;\n  var lo = i + 1, hi = arr.length - 1;\n  while (lo < hi) { t = arr[lo]; arr[lo] = arr[hi]; arr[hi] = t; lo++; hi--; }\n  return arr;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The suffix after the pivot is in descending order — already the largest arrangement of those elements — so the next permutation must change the pivot to the next larger element and then minimise the suffix.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: nextPermutation([1,2,3])",
+              "vi": "Ca 1"
+            },
+            "goi": "nextPermutation([1,2,3])",
+            "mongDoi": [
+              1,
+              3,
+              2
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: nextPermutation([3,2,1])",
+              "vi": "Ca 2"
+            },
+            "goi": "nextPermutation([3,2,1])",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Case 3: nextPermutation([1,1,2])",
+              "vi": "Ca 3"
+            },
+            "goi": "nextPermutation([1,1,2])",
+            "mongDoi": [
+              1,
+              2,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "nextPermutation([])",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "nextPermutation([1,3,2,4])",
+            "mongDoi": [
+              1,
+              3,
+              4,
+              2
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "nextPermutation([2,3,1,3,3])",
+            "mongDoi": [
+              2,
+              3,
+              3,
+              1,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "nextPermutation([5])",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sorting the suffix with the default string sort."
+        },
+        {
+          "loi": "Using ≥ vs > incorrectly with duplicates (a[i] >= a[i+1] must continue scanning)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

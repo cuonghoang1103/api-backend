@@ -1,0 +1,1031 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-8-lab-spanning-trees-and-codes",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-8-1-cay"
+  },
+  "exercises": [
+    {
+      "title": "Tree lab 1 — Is this graph a tree?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "tree characterisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>isTree(n, edges)</code> for an undirected graph on vertices 0…n−1. A tree is connected and acyclic; equivalently it has exactly n − 1 edges and no cycle. Return a boolean (n = 0 is not a tree). Loops and repeated edges count as cycles.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Check the edge count first, then detect cycles with union–find.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>isTree(n, edges)</code> cho đồ thị vô hướng trên các đỉnh 0…n−1. Cây liên thông và không có chu trình; tương đương có đúng n − 1 cạnh và không có chu trình. Trả boolean (n = 0 không là cây). Khuyên và cạnh lặp được coi là chu trình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm số cạnh trước, rồi phát hiện chu trình bằng union–find.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "isTree(4, [[0,1],[1,2],[1,3]])",
+          "output": "true",
+          "explanation": "A star: 3 edges, no cycle.|||Hình sao: 3 cạnh, không chu trình."
+        },
+        {
+          "input": "isTree(4, [[0,1],[1,2],[2,0]])",
+          "output": "false",
+          "explanation": "A triangle plus an isolated vertex: vertex 3 is disconnected.|||Tam giác cộng đỉnh cô lập: đỉnh 3 không liên thông."
+        }
+      ],
+      "hintsJson": [
+        "n − 1 edges and no cycle together imply connected.",
+        "When union finds both ends already joined, a cycle exists."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function isTree(n, edges) {\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function isTree(n, edges) {\n  if (n === 0) return false;\n  if (edges.length !== n - 1) return false;\n  var parent = [], i;\n  for (i = 0; i < n; i++) parent.push(i);\n  function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }\n  for (i = 0; i < edges.length; i++) {\n    var a = find(edges[i][0]), b = find(edges[i][1]);\n    if (a === b) return false;\n    parent[a] = b;\n  }\n  return true;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For n vertices, any two of {connected, acyclic, n − 1 edges} imply the third.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: isTree(4, [[0,1],[1,2],[1,3]])",
+              "vi": "Ca 1"
+            },
+            "goi": "isTree(4, [[0,1],[1,2],[1,3]])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 2: isTree(4, [[0,1],[1,2],[2,0]])",
+              "vi": "Ca 2"
+            },
+            "goi": "isTree(4, [[0,1],[1,2],[2,0]])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Case 3: isTree(1, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "isTree(1, [])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 4: isTree(0, [])",
+              "vi": "Ca 4"
+            },
+            "goi": "isTree(0, [])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "isTree(5, [[0,1],[2,3],[3,4],[4,2]])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "isTree(3, [[0,1],[0,1]])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "isTree(6, [[0,1],[1,2],[2,3],[3,4],[4,5]])",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking only the edge count."
+        },
+        {
+          "loi": "Checking only for cycles (a forest with fewer than n − 1 edges is not a tree)."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Tree lab 2 — Root, height and leaves from a parent array",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "rooted trees",
+        "height"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A rooted tree on vertices 0…n−1 is stored as <code>parent</code>, where <code>parent[v]</code> is the parent of v and the root has parent −1. Write <code>treeStats(parent)</code> returning <code>{ root, height, leaves }</code>: the root index, the height (edges on the longest root-to-leaf path) and the number of leaves (vertices with no child). A single vertex has height 0 and counts as a leaf.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Parents may appear after their children in the array (not sorted by depth).</li>\n</ul>",
+      "problemHtmlVi": "<p>Cây có gốc trên các đỉnh 0…n−1 lưu bằng <code>parent</code>, trong đó <code>parent[v]</code> là cha của v và gốc có cha −1. Viết <code>treeStats(parent)</code> trả <code>{ root, height, leaves }</code>: chỉ số gốc, chiều cao (số cạnh của đường dài nhất từ gốc tới lá) và số lá (đỉnh không có con). Một đỉnh đơn có chiều cao 0 và tính là lá.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cha có thể đứng sau con trong mảng (không sắp theo độ sâu).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "treeStats([-1,0,0,1,1])",
+          "output": "{\"root\":0,\"height\":2,\"leaves\":3}",
+          "explanation": "Root 0; children 1, 2; vertex 1 has children 3, 4.|||Gốc 0; con 1, 2; đỉnh 1 có con 3, 4."
+        }
+      ],
+      "hintsJson": [
+        "Mark vertices that appear as somebody’s parent: the others are leaves.",
+        "Compute depth with memoised recursion up the parent chain."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function treeStats(parent) {\n  return { root: -1, height: 0, leaves: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function treeStats(parent) {\n  var n = parent.length, depth = [], root = -1, i, hasChild = [];\n  for (i = 0; i < n; i++) { depth.push(-1); hasChild.push(false); }\n  for (i = 0; i < n; i++) { if (parent[i] === -1) root = i; else hasChild[parent[i]] = true; }\n  function d(v) { if (depth[v] !== -1) return depth[v]; depth[v] = parent[v] === -1 ? 0 : d(parent[v]) + 1; return depth[v]; }\n  var height = 0, leaves = 0;\n  for (i = 0; i < n; i++) { if (d(i) > height) height = d(i); if (!hasChild[i]) leaves++; }\n  return { root: root, height: height, leaves: leaves };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Depth(v) = depth(parent) + 1; the height is the maximum depth over all vertices.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: treeStats([-1,0,0,1,1])",
+              "vi": "Ca 1"
+            },
+            "goi": "treeStats([-1,0,0,1,1])",
+            "mongDoi": {
+              "root": 0,
+              "height": 2,
+              "leaves": 3
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: treeStats([-1])",
+              "vi": "Ca 2"
+            },
+            "goi": "treeStats([-1])",
+            "mongDoi": {
+              "root": 0,
+              "height": 0,
+              "leaves": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: treeStats([2,2,-1,0,3])",
+              "vi": "Ca 3"
+            },
+            "goi": "treeStats([2,2,-1,0,3])",
+            "mongDoi": {
+              "root": 2,
+              "height": 3,
+              "leaves": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "treeStats([3,3,3,-1,0,1])",
+            "mongDoi": {
+              "root": 3,
+              "height": 2,
+              "leaves": 3
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "treeStats([-1,0,1,2,3,4,5,6])",
+            "mongDoi": {
+              "root": 0,
+              "height": 7,
+              "leaves": 1
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming parent[v] < v."
+        },
+        {
+          "loi": "Counting the root as a leaf when it has children."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Tree lab 3 — Prim’s algorithm",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "Prim",
+        "greedy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>primWeight(n, edges)</code> returning the total weight of a minimum spanning tree of the connected weighted graph on vertices 0…n−1, grown from vertex 0 (<code>edges</code> are <code>[u, v, w]</code>). Return −1 when the graph is not connected, and 0 when n ≤ 1. An O(V·E) implementation (rescan all edges each round) is acceptable.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Only edges with exactly one endpoint in the tree are candidates.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>primWeight(n, edges)</code> trả tổng trọng số cây khung nhỏ nhất của đồ thị có trọng số liên thông trên các đỉnh 0…n−1, mọc từ đỉnh 0 (<code>edges</code> là <code>[u, v, w]</code>). Trả −1 khi đồ thị không liên thông, trả 0 khi n ≤ 1. Cài O(V·E) (quét lại mọi cạnh mỗi vòng) là chấp nhận được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ các cạnh có đúng một đầu trong cây là ứng viên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "primWeight(4, [[0,1,1],[1,2,2],[2,3,3],[3,0,4],[0,2,5]])",
+          "output": "6",
+          "explanation": "Edges 1 + 2 + 3.|||Các cạnh 1 + 2 + 3."
+        }
+      ],
+      "hintsJson": [
+        "Maintain inTree[]; each round choose the cheapest crossing edge.",
+        "If no crossing edge exists while vertices remain, the graph is disconnected."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function primWeight(n, edges) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function primWeight(n, edges) {\n  if (n <= 1) return 0;\n  var inTree = [], i, total = 0, count = 1;\n  for (i = 0; i < n; i++) inTree.push(false);\n  inTree[0] = true;\n  while (count < n) {\n    var best = null;\n    edges.forEach(function (e) {\n      if (inTree[e[0]] !== inTree[e[1]] && (best === null || e[2] < best[2])) best = e;\n    });\n    if (best === null) return -1;\n    inTree[best[0]] = true; inTree[best[1]] = true;\n    total += best[2]; count++;\n  }\n  return total;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cut property again: the cheapest edge between the tree and the rest is always safe.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: primWeight(4, [[0,1,1],[1,2,2],[2,3,3],[3,0,4],[0,2,5]])",
+              "vi": "Ca 1"
+            },
+            "goi": "primWeight(4, [[0,1,1],[1,2,2],[2,3,3],[3,0,4],[0,2,5]])",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "Case 2: primWeight(1, [])",
+              "vi": "Ca 2"
+            },
+            "goi": "primWeight(1, [])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Case 3: primWeight(3, [[0,1,4]])",
+              "vi": "Ca 3"
+            },
+            "goi": "primWeight(3, [[0,1,4]])",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "primWeight(7, [[0,1,7],[0,3,5],[1,2,8],[1,3,9],[1,4,7],[2,4,5],[3,4,15],[3,5,6],[4,5,8],[4,6,9],[5,6,11]])",
+            "mongDoi": 39,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "primWeight(5, [[0,1,3],[1,2,3],[2,3,3],[3,4,3],[0,4,1]])",
+            "mongDoi": 10,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing the cheapest edge overall (it may be inside the tree)."
+        },
+        {
+          "loi": "Forgetting to return −1 for disconnected graphs."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Tree lab 4 — Total cost of a Huffman code",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "Huffman",
+        "greedy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>huffmanCost(freqs)</code> for an array of positive symbol frequencies, returning the total number of bits Σ f<sub>i</sub>·len<sub>i</sub> of an optimal prefix code. Repeatedly remove the two smallest weights, add their sum to the total, and insert the sum back. With zero or one symbol the cost is 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not mutate the input array.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>huffmanCost(freqs)</code> cho mảng tần số ký hiệu dương, trả tổng số bit Σ f<sub>i</sub>·len<sub>i</sub> của mã tiền tố tối ưu. Liên tục lấy hai trọng số nhỏ nhất, cộng tổng của chúng vào kết quả và đưa tổng đó trở lại. Với 0 hoặc 1 ký hiệu thì chi phí là 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa mảng đầu vào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "huffmanCost([45,13,12,16,9,5])",
+          "output": "224",
+          "explanation": "The textbook example: 224 bits.|||Ví dụ giáo trình: 224 bit."
+        },
+        {
+          "input": "huffmanCost([1,1,2,4])",
+          "output": "14",
+          "explanation": "Merges: 2, 4, 8 ⇒ 14.|||Các lần gộp: 2, 4, 8 ⇒ 14."
+        }
+      ],
+      "hintsJson": [
+        "The sum of the merged weights equals Σ f·depth: each merge adds one bit to every symbol beneath it.",
+        "A sorted array plus splice is enough for small inputs."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function huffmanCost(freqs) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function huffmanCost(freqs) {\n  var w = freqs.slice().sort(function (a, b) { return a - b; }), total = 0;\n  if (w.length < 2) return 0;\n  while (w.length > 1) {\n    var a = w.shift(), b = w.shift(), s = a + b;\n    total += s;\n    var i = 0;\n    while (i < w.length && w[i] < s) i++;\n    w.splice(i, 0, s);\n  }\n  return total;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Greedy merging of the two rarest symbols is optimal (Huffman’s theorem); the cost equals the weighted external path length.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: huffmanCost([45,13,12,16,9,5])",
+              "vi": "Ca 1"
+            },
+            "goi": "huffmanCost([45,13,12,16,9,5])",
+            "mongDoi": 224
+          },
+          {
+            "moTa": {
+              "en": "Case 2: huffmanCost([1,1,2,4])",
+              "vi": "Ca 2"
+            },
+            "goi": "huffmanCost([1,1,2,4])",
+            "mongDoi": 14
+          },
+          {
+            "moTa": {
+              "en": "Case 3: huffmanCost([5])",
+              "vi": "Ca 3"
+            },
+            "goi": "huffmanCost([5])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Case 4: huffmanCost([])",
+              "vi": "Ca 4"
+            },
+            "goi": "huffmanCost([])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "huffmanCost([3,3,3,3])",
+            "mongDoi": 24,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "huffmanCost([10,1,1,1,1,100,7])",
+            "mongDoi": 161,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sorting with the default (string) comparator."
+        },
+        {
+          "loi": "Forgetting to put the merged weight back."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Tree lab 5 — Evaluate a postfix expression with a stack",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "expression trees",
+        "stack"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>evalPostfix(tokens)</code> for a valid postfix (reverse Polish) expression given as an array of strings: numbers and the operators <code>+ - * /</code>. Push numbers on a stack; on an operator pop the <em>right</em> operand first, then the left one, apply the operator and push the result. Return the single value left on the stack. Division is ordinary floating-point division.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Tokens like \"12\" or \"-3\" are numbers; use Number(token).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>evalPostfix(tokens)</code> cho biểu thức hậu tố (Ba Lan đảo) hợp lệ là mảng chuỗi: số và các toán tử <code>+ - * /</code>. Đẩy số vào ngăn xếp; gặp toán tử thì lấy toán hạng <em>phải</em> trước rồi đến toán hạng trái, áp toán tử và đẩy kết quả. Trả giá trị duy nhất còn lại. Phép chia là chia dấu phẩy động thông thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Token như \"12\" hoặc \"-3\" là số; dùng Number(token).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "evalPostfix([\"2\",\"3\",\"*\",\"8\",\"4\",\"-\",\"+\"])",
+          "output": "10",
+          "explanation": "(2·3) + (8 − 4).|||(2·3) + (8 − 4)."
+        }
+      ],
+      "hintsJson": [
+        "The top of the stack is the right operand.",
+        "A negative number token \"-3\" has length 2; test the operator by equality, not by the first character."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function evalPostfix(tokens) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function evalPostfix(tokens) {\n  var st = [];\n  tokens.forEach(function (t) {\n    if (t === '+' || t === '-' || t === '*' || t === '/') {\n      var b = st.pop(), a = st.pop();\n      st.push(t === '+' ? a + b : t === '-' ? a - b : t === '*' ? a * b : a / b);\n    } else st.push(Number(t));\n  });\n  return st.pop();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Postfix is the post-order traversal of the expression tree; the stack mimics the recursion.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: evalPostfix([\"2\",\"3\",\"*\",\"8\",\"4\",\"-\",\"+\"])",
+              "vi": "Ca 1"
+            },
+            "goi": "evalPostfix([\"2\",\"3\",\"*\",\"8\",\"4\",\"-\",\"+\"])",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Case 2: evalPostfix([\"5\"])",
+              "vi": "Ca 2"
+            },
+            "goi": "evalPostfix([\"5\"])",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "Case 3: evalPostfix([\"9\",\"3\",\"/\",\"2\",\"-\"])",
+              "vi": "Ca 3"
+            },
+            "goi": "evalPostfix([\"9\",\"3\",\"/\",\"2\",\"-\"])",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "evalPostfix([\"-3\",\"4\",\"+\"])",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "evalPostfix([\"1\",\"2\",\"3\",\"4\",\"*\",\"+\",\"-\"])",
+            "mongDoi": -13,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "evalPostfix([\"10\",\"4\",\"-\",\"3\",\"2\",\"*\",\"/\"])",
+            "mongDoi": 1,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping the operands of − and /."
+        },
+        {
+          "loi": "Treating \"-3\" as an operator because it starts with \"-\"."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Tree lab 6 — Decision trees and the sorting lower bound",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "decision trees",
+        "lower bounds"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A comparison sort is a binary decision tree with at least n! leaves, so its height is at least ⌈log₂ n!⌉. Compute n!, that bound, and the comparisons n·⌈log₂ n⌉ − 2^⌈log₂ n⌉ + 1 used by merge-style binary insertion for comparison.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp so sánh là cây quyết định nhị phân có ít nhất n! lá nên chiều cao ít nhất ⌈log₂ n!⌉. Tính n!, cận đó, và số so sánh n·⌈log₂ n⌉ − 2^⌈log₂ n⌉ + 1 của chèn nhị phân kiểu trộn để đối chiếu.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "⌈log₂ x⌉ is the number of bits needed to write x − 1 in binary… or simply find the smallest k with 2ᵏ ≥ x.",
+        "For n! compute successive products."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tree lab 6 — Decision trees and the sorting lower bound\n\nAnswer in the answer panel (no code needed).\n\n1. Lower bound for comparison sortsCận dưới cho sắp xếp so sánh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tree lab 6 — Decision trees and the sorting lower bound — answer key\n\n1. Lower bound for comparison sortsCận dưới cho sắp xếp so sánh\n   - r1.f: 6\n   - r1.l: 3\n   - r1.m: 3\n   - r2.f: 24\n   - r2.l: 5\n   - r2.m: 5\n   - r3.f: 120\n   - r3.l: 7\n   - r3.m: 8\n   - r4.f: 720\n   - r4.l: 10\n   - r4.m: 11\n   - r5.f: 5040\n   - r5.l: 13\n   - r5.m: 14\n   - r6.f: 40320\n   - r6.l: 16\n   - r6.m: 17\n   - r7.f: 362880\n   - r7.l: 19\n   - r7.m: 21\n   - r8.f: 3628800\n   - r8.l: 22\n   - r8.m: 25\n   n=3: n!=6, bound 3, merge-insertion 3; n=4: n!=24, bound 5, merge-insertion 5; n=5: n!=120, bound 7, merge-insertion 8; n=6: n!=720, bound 10, merge-insertion 11; n=7: n!=5040, bound 13, merge-insertion 14; n=8: n!=40320, bound 16, merge-insertion 17; n=9: n!=362880, bound 19, merge-insertion 21; n=10: n!=3628800, bound 22, merge-insertion 25. The two columns are close for small n, and the bound is Θ(n log n).VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>n=3: n!=6, bound 3, merge-insertion 3; n=4: n!=24, bound 5, merge-insertion 5; n=5: n!=120, bound 7, merge-insertion 8; n=6: n!=720, bound 10, merge-insertion 11; n=7: n!=5040, bound 13, merge-insertion 14; n=8: n!=40320, bound 16, merge-insertion 17; n=9: n!=362880, bound 19, merge-insertion 21; n=10: n!=3628800, bound 22, merge-insertion 25. The two columns are close for small n, and the bound is Θ(n log n).</p><p><i>VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Lower bound for comparison sorts</p><p style=\"opacity:.75;font-size:.92em\"><i>Cận dưới cho sắp xếp so sánh</i></p>",
+            "cot": [
+              {
+                "ma": "n",
+                "ten": "n"
+              },
+              {
+                "ma": "f",
+                "ten": "n!"
+              },
+              {
+                "ma": "l",
+                "ten": "⌈log₂ n!⌉"
+              },
+              {
+                "ma": "m",
+                "ten": "n·⌈log₂ n⌉ − 2^⌈log₂ n⌉ + 1"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "n": "3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "n": "4"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "n": "5"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "n": "6"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "n": "7"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "n": "8"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "n": "9"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "n": "10"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.f": "6",
+              "r1.l": "3",
+              "r1.m": "3",
+              "r2.f": "24",
+              "r2.l": "5",
+              "r2.m": "5",
+              "r3.f": "120",
+              "r3.l": "7",
+              "r3.m": "8",
+              "r4.f": "720",
+              "r4.l": "10",
+              "r4.m": "11",
+              "r5.f": "5040",
+              "r5.l": "13",
+              "r5.m": "14",
+              "r6.f": "40320",
+              "r6.l": "16",
+              "r6.m": "17",
+              "r7.f": "362880",
+              "r7.l": "19",
+              "r7.m": "21",
+              "r8.f": "3628800",
+              "r8.l": "22",
+              "r8.m": "25"
+            },
+            "giaiThich": "<p>n=3: n!=6, bound 3, merge-insertion 3; n=4: n!=24, bound 5, merge-insertion 5; n=5: n!=120, bound 7, merge-insertion 8; n=6: n!=720, bound 10, merge-insertion 11; n=7: n!=5040, bound 13, merge-insertion 14; n=8: n!=40320, bound 16, merge-insertion 17; n=9: n!=362880, bound 19, merge-insertion 21; n=10: n!=3628800, bound 22, merge-insertion 25. The two columns are close for small n, and the bound is Θ(n log n).</p><p><i>VI: n=3: 6, 3, 3; n=4: 24, 5, 5; n=5: 120, 7, 8; n=6: 720, 10, 11; n=7: 5040, 13, 14; n=8: 40320, 16, 17; n=9: 362880, 19, 21; n=10: 3628800, 22, 25.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using log₂ n instead of log₂ n! for the bound."
+        },
+        {
+          "loi": "Rounding down instead of up."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decision tree",
+          "vi": "cây quyết định"
+        }
+      ]
+    },
+    {
+      "title": "Tree lab 7 — Counting trees",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "counting trees"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Classic counts: labelled trees (Cayley), binary tree shapes (Catalan), and edges of spanning forests.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phép đếm kinh điển: cây có nhãn (Cayley), hình dạng cây nhị phân (Catalan) và số cạnh rừng khung.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Cayley: nⁿ⁻² labelled trees; Catalan for unlabelled binary shapes.",
+        "Forest: edges = vertices − number of trees."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tree lab 7 — Counting trees\n\nAnswer in the answer panel (no code needed).\n\n1. How many different labelled trees exist on 6 labelled vertices (Cayley: nⁿ⁻²)?Có bao nhiêu cây có nhãn khác nhau trên 6 đỉnh có nhãn (Cayley: nⁿ⁻²)?\n2. How many different shapes of binary search trees can be built from 5 distinct keys (all insertion orders considered)?Có bao nhiêu hình dạng cây tìm kiếm nhị phân khác nhau từ 5 khoá phân biệt (xét mọi thứ tự chèn)?\n3. A forest has 20 vertices and 4 trees. How many edges does it have?Một rừng có 20 đỉnh và 4 cây. Rừng có bao nhiêu cạnh?\n4. A full binary tree has 31 vertices. How many leaves does it have?Cây nhị phân đầy đủ có 31 đỉnh. Có bao nhiêu lá?\n5. What is the maximum number of vertices of a binary tree of height 5?Số đỉnh tối đa của cây nhị phân chiều cao 5 là?\n6. Every tree with at least two vertices has …Mọi cây có ít nhất hai đỉnh có …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tree lab 7 — Counting trees — answer key\n\n1. How many different labelled trees exist on 6 labelled vertices (Cayley: nⁿ⁻²)?Có bao nhiêu cây có nhãn khác nhau trên 6 đỉnh có nhãn (Cayley: nⁿ⁻²)?\n   Answer: a) 1296\n   6⁴ = 1296.VI: 6⁴ = 1296.\n\n2. How many different shapes of binary search trees can be built from 5 distinct keys (all insertion orders considered)?Có bao nhiêu hình dạng cây tìm kiếm nhị phân khác nhau từ 5 khoá phân biệt (xét mọi thứ tự chèn)?\n   Answer: b) 42\n   The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).\n\n3. A forest has 20 vertices and 4 trees. How many edges does it have?Một rừng có 20 đỉnh và 4 cây. Rừng có bao nhiêu cạnh?\n   Answer: c) 16\n   Each tree has (vertices − 1) edges: 20 − 4 = 16.VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.\n\n4. A full binary tree has 31 vertices. How many leaves does it have?Cây nhị phân đầy đủ có 31 đỉnh. Có bao nhiêu lá?\n   Answer: d) 16\n   n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.\n\n5. What is the maximum number of vertices of a binary tree of height 5?Số đỉnh tối đa của cây nhị phân chiều cao 5 là?\n   Answer: a) 63\n   1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.\n\n6. Every tree with at least two vertices has …Mọi cây có ít nhất hai đỉnh có …\n   Answer: b) at least two leaves\n   Take a longest path: both its ends have degree 1.VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) a · 2) b · 3) c · 4) d · 5) a · 6) b.</p><p>6⁴ = 1296.</p><p><i>VI: 6⁴ = 1296.</i></p><p>The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).</p><p><i>VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).</i></p><p>Each tree has (vertices − 1) edges: 20 − 4 = 16.</p><p><i>VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.</i></p><p>n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.</p><p><i>VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.</i></p><p>1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.</p><p><i>VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.</i></p><p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many different labelled trees exist on 6 labelled vertices (Cayley: nⁿ⁻²)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu cây có nhãn khác nhau trên 6 đỉnh có nhãn (Cayley: nⁿ⁻²)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1296"
+              },
+              {
+                "ma": "b",
+                "noiDung": "46656"
+              },
+              {
+                "ma": "c",
+                "noiDung": "30"
+              },
+              {
+                "ma": "d",
+                "noiDung": "64"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>6⁴ = 1296.</p><p><i>VI: 6⁴ = 1296.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How many different shapes of binary search trees can be built from 5 distinct keys (all insertion orders considered)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu hình dạng cây tìm kiếm nhị phân khác nhau từ 5 khoá phân biệt (xét mọi thứ tự chèn)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "14"
+              },
+              {
+                "ma": "b",
+                "noiDung": "42"
+              },
+              {
+                "ma": "c",
+                "noiDung": "120"
+              },
+              {
+                "ma": "d",
+                "noiDung": "32"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).</p><p><i>VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A forest has 20 vertices and 4 trees. How many edges does it have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một rừng có 20 đỉnh và 4 cây. Rừng có bao nhiêu cạnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "20"
+              },
+              {
+                "ma": "b",
+                "noiDung": "24"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16"
+              },
+              {
+                "ma": "d",
+                "noiDung": "19"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each tree has (vertices − 1) edges: 20 − 4 = 16.</p><p><i>VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A full binary tree has 31 vertices. How many leaves does it have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây nhị phân đầy đủ có 31 đỉnh. Có bao nhiêu lá?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "15"
+              },
+              {
+                "ma": "b",
+                "noiDung": "31"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8"
+              },
+              {
+                "ma": "d",
+                "noiDung": "16"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.</p><p><i>VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>What is the maximum number of vertices of a binary tree of height 5?</p><p style=\"opacity:.75;font-size:.92em\"><i>Số đỉnh tối đa của cây nhị phân chiều cao 5 là?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "63"
+              },
+              {
+                "ma": "b",
+                "noiDung": "32"
+              },
+              {
+                "ma": "c",
+                "noiDung": "31"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.</p><p><i>VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Every tree with at least two vertices has …</p><p style=\"opacity:.75;font-size:.92em\"><i>Mọi cây có ít nhất hai đỉnh có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no leaves"
+              },
+              {
+                "ma": "b",
+                "noiDung": "at least two leaves"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exactly one leaf"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a cycle"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using nⁿ instead of nⁿ⁻²."
+        },
+        {
+          "loi": "Counting 2ʰ instead of 2^(h+1) − 1 vertices."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Cayley’s formula",
+          "vi": "công thức Cayley"
+        },
+        {
+          "en": "forest",
+          "vi": "rừng"
+        }
+      ]
+    }
+  ]
+}

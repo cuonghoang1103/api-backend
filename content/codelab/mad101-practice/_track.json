@@ -1,0 +1,115 @@
+{
+  "groupSlug": "fptu",
+  "slug": "mad101-practice",
+  "name": "MAD101 — Luyện tập",
+  "language": "javascript",
+  "color": "#0ea5e9",
+  "docsUrl": "https://www.mheducation.com/highered/product/discrete-mathematics-its-applications-rosen/M9781259676512.html",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn MAD101 (Toán rời rạc) bám giáo trình Rosen và dạng đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ tính bằng mã (bảng chân trị, tập hợp và hàm, Big-O, Euclid và đồng dư, truy hồi, đếm, đồ thị Dijkstra, cây khung, Huffman); bài khó là viết hàm chạy thật trong trình duyệt; mỗi chương một Lab (quan hệ và ma trận, bộ công cụ số học, đệ quy, đếm, thuật toán đồ thị, cây) và hai đề FE thi thử cuối môn.",
+  "modules": [
+    {
+      "slug": "mad101-1-1-logic-menh-de",
+      "name": "1.1 Propositional logic",
+      "level": "BEGINNER",
+      "description": "Luyện: Logic 1 — Propositions and connectives · Logic 2 — Fill the truth tables of the five connectives · Logic 3 — Truth tables with three variables · Logic 4 — Translating English: only if, unless, necessary, sufficient · Logic 5 — Evaluate a formula in the right order · Logic 6 — Write a formula evaluator · Logic 7 — Tautology, contradiction or contingency?"
+    },
+    {
+      "slug": "mad101-1-2-tuong-duong-vi-tu",
+      "name": "1.2 Equivalences, predicates & inference",
+      "level": "BEGINNER",
+      "description": "Luyện: Equivalence 1 — Name the law · Equivalence 2 — Are these two formulas equivalent? · Equivalence 3 — Quantifiers over a finite domain · Equivalence 4 — Negations and nested quantifiers · Equivalence 5 — Prove ¬(p → q) ≡ p ∧ ¬q by a chain of laws · Equivalence 6 — Rules of inference: valid or fallacy? · Equivalence 7 — Decide logical equivalence in code"
+    },
+    {
+      "slug": "mad101-2-1-tap-hop",
+      "name": "2.1 Sets & set operations",
+      "level": "BEGINNER",
+      "description": "Luyện: Sets 1 — Notation, subsets and power sets · Sets 2 — Compute unions, intersections and differences · Sets 3 — Sets as bit strings · Sets 4 — Cardinality and inclusion–exclusion · Sets 5 — Prove A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) element-wise · Sets 6 — Fill the Venn diagram regions · Sets 7 — Implement the set operations · Sets 8 — Generate the power set and count subsets by property"
+    },
+    {
+      "slug": "mad101-2-2-ham-day",
+      "name": "2.2 Functions & sequences",
+      "level": "BEGINNER",
+      "description": "Luyện: Functions 1 — Domain, range and one-to-one / onto · Functions 2 — Floor, ceiling and rounding · Functions 3 — Classify finite functions · Functions 4 — How many functions of each kind? · Functions 5 — Composition and inverses · Functions 6 — Sequences and summations · Functions 7 — Classify a function in code · Functions 8 — Compose and invert"
+    },
+    {
+      "slug": "mad101-2-lab-relations-matrices",
+      "name": "2.L Lab: relations, closures & matrices",
+      "level": "BEGINNER",
+      "description": "Luyện: Relations 1 — Properties of relations (concepts) · Relations 2 — Which properties hold? · Relations 3 — Zero–one matrices and R² · Relations 4 — Closures: how many pairs? · Relations 5 — Equivalence classes and partitions · Relations 6 — Compute the transitive closure with Warshall · Relations 7 — Test the four properties in code · Relations 8 — Warshall’s transitive closure · Relations 9 — Matrix powers count walks"
+    },
+    {
+      "slug": "mad101-3-1-big-o",
+      "name": "3.1 Growth of functions & Big-O",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Big-O 1 — Definitions: O, Ω, Θ · Big-O 2 — Count the work() calls · Big-O 3 — Classify the expression · Big-O 4 — Numbers behind the notation · Big-O 5 — Rank the growth rates · Big-O 6 — Count the comparisons of insertion sort · Big-O 7 — Find the point where one cost overtakes another"
+    },
+    {
+      "slug": "mad101-4-1-so-hoc-mo-dun",
+      "name": "4.1 Division & modular arithmetic",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Number theory 1 — Divisibility and modular vocabulary · Number theory 2 — Quotient and remainder (including negatives) · Number theory 3 — gcd, lcm and prime factorization · Number theory 4 — Trace the Euclidean algorithm · Number theory 5 — Modular inverses and Bézout · Number theory 6 — Linear congruences and the Chinese Remainder Theorem · Number theory 7 — Fermat, modular powers, φ and base conversion · Number theory 8 — Order the algorithm steps"
+    },
+    {
+      "slug": "mad101-4-lab-number-theory-toolkit",
+      "name": "4.L Lab: number-theory toolkit in code",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Toolkit 1 — Sieve of Eratosthenes · Toolkit 2 — Prime factorization · Toolkit 3 — Fast modular exponentiation · Toolkit 4 — Modular inverse with extended Euclid · Toolkit 5 — Chinese Remainder Theorem · Toolkit 6 — A toy RSA by hand · Toolkit 7 — Applications: Caesar, check digits, hashing, pseudo-random numbers · Toolkit 8 — Linear congruential generator and its period"
+    },
+    {
+      "slug": "mad101-5-1-quy-nap",
+      "name": "5.1 Induction & recursion",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Induction 1 — Structure of an induction proof · Induction 2 — Evaluate recursive definitions · Induction 3 — Sum formulas: evaluate the closed form · Induction 4 — Put the proof in order · Induction 5 — Setting up and evaluating recurrences · Induction 6 — Solve a linear homogeneous recurrence · Induction 7 — Evaluate any linear recurrence · Induction 8 — Count ways with a recurrence (dynamic programming)"
+    },
+    {
+      "slug": "mad101-5-lab-recursion-workshop",
+      "name": "5.L Lab: recursion workshop",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Recursion lab 1 — Cost of naive recursion · Recursion lab 2 — Memoised Fibonacci · Recursion lab 3 — Generate the Tower of Hanoi moves · Recursion lab 4 — Lattice paths with obstacles · Recursion lab 5 — Generate balanced parentheses · Recursion lab 6 — Recursion vs iteration: which statements are true?"
+    },
+    {
+      "slug": "mad101-6-1-dem-to-hop",
+      "name": "6.1 Counting principles & combinatorics",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Counting 1 — Rules and vocabulary · Counting 2 — P(n, r), C(n, r) and factorials · Counting 3 — Word problems with the product rule · Counting 4 — Stars and bars · Counting 5 — The binomial theorem · Counting 6 — Pigeonhole, derangements and inclusion–exclusion · Counting 7 — Compute C(n, k) with Pascal’s triangle · Counting 8 — Generate all k-subsets"
+    },
+    {
+      "slug": "mad101-6-lab-counting-toolbox",
+      "name": "6.L Lab: counting toolbox",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Counting lab 1 — Pascal’s triangle and binomial identities · Counting lab 2 — Probability as a ratio of counts · Counting lab 3 — Balls into boxes: four cases · Counting lab 4 — Count derangements with a recurrence · Counting lab 5 — Count integer partitions · Counting lab 6 — Stirling numbers of the second kind · Counting lab 7 — Next permutation in lexicographic order"
+    },
+    {
+      "slug": "mad101-7-1-do-thi",
+      "name": "7.1 Graphs & shortest paths",
+      "level": "ADVANCED",
+      "description": "Luyện: Graphs 1 — Vocabulary and basic facts · Graphs 2 — Degrees and edge counts · Graphs 3 — Adjacency matrix and walk counts · Graphs 4 — Breadth-first and depth-first order · Graphs 5 — Euler, bipartite and connected components · Graphs 6 — Dijkstra’s shortest paths · Graphs 7 — Implement breadth-first search · Graphs 8 — Implement Dijkstra’s algorithm"
+    },
+    {
+      "slug": "mad101-7-lab-graph-algorithms",
+      "name": "7.L Lab: graph algorithms",
+      "level": "ADVANCED",
+      "description": "Luyện: Graph lab 1 — Sizes of the connected components · Graph lab 2 — Does an Euler circuit exist? · Graph lab 3 — Two-colour a graph (bipartite test) · Graph lab 4 — Depth-first order · Graph lab 5 — Topological sorting (build order) · Graph lab 6 — Is this a valid topological order? · Graph lab 7 — Planarity, colouring and Hamilton facts"
+    },
+    {
+      "slug": "mad101-8-1-cay",
+      "name": "8.1 Trees & spanning trees",
+      "level": "ADVANCED",
+      "description": "Luyện: Trees 1 — Definitions and basic facts · Trees 2 — Full m-ary tree counts · Trees 3 — Binary search tree: insert, traverse, measure · Trees 4 — Expression trees: prefix, postfix and value · Trees 5 — Minimum spanning trees by Kruskal and Prim · Trees 6 — Order the algorithm steps · Trees 7 — Huffman coding: how many bits? · Trees 8 — Build a BST and traverse it · Trees 9 — Kruskal’s algorithm in code"
+    },
+    {
+      "slug": "mad101-8-lab-spanning-trees-and-codes",
+      "name": "8.L Lab: trees in code",
+      "level": "ADVANCED",
+      "description": "Luyện: Tree lab 1 — Is this graph a tree? · Tree lab 2 — Root, height and leaves from a parent array · Tree lab 3 — Prim’s algorithm · Tree lab 4 — Total cost of a Huffman code · Tree lab 5 — Evaluate a postfix expression with a stack · Tree lab 6 — Decision trees and the sorting lower bound · Tree lab 7 — Counting trees"
+    },
+    {
+      "slug": "mad101-20-fe-mock",
+      "name": "20 FE practice: two mock final exams",
+      "level": "ADVANCED",
+      "description": "Luyện: FE mock A — 20 questions across all chapters · FE mock B — 20 questions (more calculations)"
+    }
+  ]
+}

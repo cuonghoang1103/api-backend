@@ -1,0 +1,1315 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-5-1-quy-nap",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-5-1-quy-nap"
+  },
+  "exercises": [
+    {
+      "title": "Induction 1 — Structure of an induction proof",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "induction"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>What each part of an induction proof must contain, and when to use strong induction or structural induction.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi phần của một chứng minh quy nạp phải có gì, và khi nào dùng quy nạp mạnh hay quy nạp cấu trúc.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Basis + step; name the induction variable and the statement P(n) explicitly.",
+        "Use strong induction when the recurrence refers to more than the previous term."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 1 — Structure of an induction proof\n\nAnswer in the answer panel (no code needed).\n\n1. To prove ∀n ≥ 1 P(n) by (weak) induction you prove …Để chứng minh ∀n ≥ 1 P(n) bằng quy nạp (yếu) ta chứng minh …\n2. In the inductive step, the inductive hypothesis is …Trong bước quy nạp, giả thiết quy nạp là …\n3. Strong induction assumes …Quy nạp mạnh giả sử …\n4. Proving a statement for n = 1 … 1000 by checking each one does NOT prove it for all n because …Kiểm tra từng n = 1 … 1000 KHÔNG chứng minh được cho mọi n vì …\n5. A recursive definition of a function on nonnegative integers needs …Định nghĩa đệ quy của hàm trên số nguyên không âm cần …\n6. Structural induction is used to prove properties of …Quy nạp cấu trúc dùng để chứng minh tính chất của …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 1 — Structure of an induction proof — answer key\n\n1. To prove ∀n ≥ 1 P(n) by (weak) induction you prove …Để chứng minh ∀n ≥ 1 P(n) bằng quy nạp (yếu) ta chứng minh …\n   Answer: c) P(1), and P(k) → P(k+1) for every k ≥ 1\n   Basis step plus inductive step: the domino chain.VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.\n\n2. In the inductive step, the inductive hypothesis is …Trong bước quy nạp, giả thiết quy nạp là …\n   Answer: d) the assumption that P(k) is true\n   We assume P(k) and must derive P(k+1) from it.VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.\n\n3. Strong induction assumes …Quy nạp mạnh giả sử …\n   Answer: a) P(j) for all j with base ≤ j ≤ k\n   The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …\n\n4. Proving a statement for n = 1 … 1000 by checking each one does NOT prove it for all n because …Kiểm tra từng n = 1 … 1000 KHÔNG chứng minh được cho mọi n vì …\n   Answer: b) a counter-example may exist beyond the checked range\n   Examples never constitute a proof of a universal statement.VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.\n\n5. A recursive definition of a function on nonnegative integers needs …Định nghĩa đệ quy của hàm trên số nguyên không âm cần …\n   Answer: c) initial value(s) and a rule using smaller arguments\n   Without the initial values the recursion never ends.VI: Không có giá trị đầu thì đệ quy không dừng.\n\n6. Structural induction is used to prove properties of …Quy nạp cấu trúc dùng để chứng minh tính chất của …\n   Answer: d) recursively defined sets (trees, strings, formulas)\n   Basis: the base elements; step: every constructor preserves the property.VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>Basis step plus inductive step: the domino chain.</p><p><i>VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.</i></p><p>We assume P(k) and must derive P(k+1) from it.</p><p><i>VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.</i></p><p>The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …</p><p><i>VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …</i></p><p>Examples never constitute a proof of a universal statement.</p><p><i>VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.</i></p><p>Without the initial values the recursion never ends.</p><p><i>VI: Không có giá trị đầu thì đệ quy không dừng.</i></p><p>Basis: the base elements; step: every constructor preserves the property.</p><p><i>VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>To prove ∀n ≥ 1 P(n) by (weak) induction you prove …</p><p style=\"opacity:.75;font-size:.92em\"><i>Để chứng minh ∀n ≥ 1 P(n) bằng quy nạp (yếu) ta chứng minh …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "P(1) and P(2) only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "P(k+1) → P(k)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "P(1), and P(k) → P(k+1) for every k ≥ 1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "P(k) for every k directly"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Basis step plus inductive step: the domino chain.</p><p><i>VI: Bước cơ sở cộng bước quy nạp: chuỗi domino.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In the inductive step, the inductive hypothesis is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bước quy nạp, giả thiết quy nạp là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the claim P(k+1)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the basis step"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a proof that P(k) is false"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the assumption that P(k) is true"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>We assume P(k) and must derive P(k+1) from it.</p><p><i>VI: Ta giả sử P(k) rồi suy ra P(k+1) từ nó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Strong induction assumes …</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy nạp mạnh giả sử …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "P(j) for all j with base ≤ j ≤ k"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only P(k)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "P(k+1)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The step for k+1 may use every earlier case — needed when f(k+1) depends on f(k−1), f(k−5), …</p><p><i>VI: Bước k+1 được dùng mọi trường hợp trước — cần khi f(k+1) phụ thuộc f(k−1), f(k−5), …</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Proving a statement for n = 1 … 1000 by checking each one does NOT prove it for all n because …</p><p style=\"opacity:.75;font-size:.92em\"><i>Kiểm tra từng n = 1 … 1000 KHÔNG chứng minh được cho mọi n vì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "basis steps must use n = 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a counter-example may exist beyond the checked range"
+              },
+              {
+                "ma": "c",
+                "noiDung": "checking is always invalid"
+              },
+              {
+                "ma": "d",
+                "noiDung": "induction only works up to 1000"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Examples never constitute a proof of a universal statement.</p><p><i>VI: Ví dụ không bao giờ là chứng minh cho mệnh đề phổ quát.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A recursive definition of a function on nonnegative integers needs …</p><p style=\"opacity:.75;font-size:.92em\"><i>Định nghĩa đệ quy của hàm trên số nguyên không âm cần …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only initial values"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a loop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "initial value(s) and a rule using smaller arguments"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only a rule"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Without the initial values the recursion never ends.</p><p><i>VI: Không có giá trị đầu thì đệ quy không dừng.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Structural induction is used to prove properties of …</p><p style=\"opacity:.75;font-size:.92em\"><i>Quy nạp cấu trúc dùng để chứng minh tính chất của …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "real numbers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "only integers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "finite sums only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "recursively defined sets (trees, strings, formulas)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Basis: the base elements; step: every constructor preserves the property.</p><p><i>VI: Cơ sở: các phần tử gốc; bước: mọi phép dựng đều bảo toàn tính chất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming P(k+1) in order to prove P(k+1) (circular reasoning)."
+        },
+        {
+          "loi": "Omitting the basis step."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "basis step",
+          "vi": "bước cơ sở"
+        },
+        {
+          "en": "inductive hypothesis",
+          "vi": "giả thiết quy nạp"
+        },
+        {
+          "en": "strong induction",
+          "vi": "quy nạp mạnh"
+        },
+        {
+          "en": "structural induction",
+          "vi": "quy nạp cấu trúc"
+        }
+      ]
+    },
+    {
+      "title": "Induction 2 — Evaluate recursive definitions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "recursive definition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Compute the requested values by applying the recursive rule step by step (do not guess a closed form first). Note: for h the first index is 1.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính các giá trị yêu cầu bằng cách áp quy tắc đệ quy từng bước (đừng đoán công thức đóng trước). Lưu ý: h bắt đầu từ chỉ số 1.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the list f(0), f(1), f(2), … in order; each entry uses only the previous one(s).",
+        "Check g with the closed form n² and h with n!."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 2 — Evaluate recursive definitions\n\nAnswer in the answer panel (no code needed).\n\n1. Recursive valuesGiá trị đệ quy\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 2 — Evaluate recursive definitions — answer key\n\n1. Recursive valuesGiá trị đệ quy\n   - r1.v3: 67\n   - r1.v5: 607\n   - r1.v7: 5467\n   - r2.v3: 3\n   - r2.v5: 8\n   - r2.v7: 21\n   - r3.v3: 9\n   - r3.v5: 25\n   - r3.v7: 49\n   - r4.v3: 6\n   - r4.v5: 120\n   - r4.v7: 5040\n   - r5.v3: 19\n   - r5.v5: 89\n   - r5.v7: 375\n   f(0) = 2, f(n) = 3·f(n−1) + 1: n=3 → 67, n=5 → 607, n=7 → 5467; a(0) = 1, a(1) = 1, a(n) = a(n−1) + a(n−2): n=3 → 3, n=5 → 8, n=7 → 21; g(0) = 0, g(n) = g(n−1) + 2n − 1: n=3 → 9, n=5 → 25, n=7 → 49; h(1) = 1, h(n) = n·h(n−1): n=3 → 6, n=5 → 120, n=7 → 5040; t(0) = 1, t(n) = 2·t(n−1) + n: n=3 → 19, n=5 → 89, n=7 → 375.VI: f(0) = 2, f(n) = 3·f(n−1) + 1: n=3 → 67, n=5 → 607, n=7 → 5467; a(0) = 1, a(1) = 1, a(n) = a(n−1) + a(n−2): n=3 → 3, n=5 → 8, n=7 → 21; g(0) = 0, g(n) = g(n−1) + 2n − 1: n=3 → 9, n=5 → 25, n=7 → 49; h(1) = 1, h(n) = n·h(n−1): n=3 → 6, n=5 → 120, n=7 → 5040; t(0) = 1, t(n) = 2·t(n−1) + n: n=3 → 19, n=5 → 89, n=7 → 375.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>f(0) = 2,  f(n) = 3·f(n−1) + 1: n=3 → 67, n=5 → 607, n=7 → 5467; a(0) = 1, a(1) = 1,  a(n) = a(n−1) + a(n−2): n=3 → 3, n=5 → 8, n=7 → 21; g(0) = 0,  g(n) = g(n−1) + 2n − 1: n=3 → 9, n=5 → 25, n=7 → 49; h(1) = 1,  h(n) = n·h(n−1): n=3 → 6, n=5 → 120, n=7 → 5040; t(0) = 1,  t(n) = 2·t(n−1) + n: n=3 → 19, n=5 → 89, n=7 → 375.</p><p><i>VI: f(0) = 2,  f(n) = 3·f(n−1) + 1: n=3 → 67, n=5 → 607, n=7 → 5467; a(0) = 1, a(1) = 1,  a(n) = a(n−1) + a(n−2): n=3 → 3, n=5 → 8, n=7 → 21; g(0) = 0,  g(n) = g(n−1) + 2n − 1: n=3 → 9, n=5 → 25, n=7 → 49; h(1) = 1,  h(n) = n·h(n−1): n=3 → 6, n=5 → 120, n=7 → 5040; t(0) = 1,  t(n) = 2·t(n−1) + n: n=3 → 19, n=5 → 89, n=7 → 375.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Recursive values</p><p style=\"opacity:.75;font-size:.92em\"><i>Giá trị đệ quy</i></p>",
+            "cot": [
+              {
+                "ma": "d",
+                "ten": "Definition"
+              },
+              {
+                "ma": "v3",
+                "ten": "value at n = 3"
+              },
+              {
+                "ma": "v5",
+                "ten": "value at n = 5"
+              },
+              {
+                "ma": "v7",
+                "ten": "value at n = 7"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "d": "f(0) = 2,  f(n) = 3·f(n−1) + 1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "d": "a(0) = 1, a(1) = 1,  a(n) = a(n−1) + a(n−2)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "d": "g(0) = 0,  g(n) = g(n−1) + 2n − 1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "d": "h(1) = 1,  h(n) = n·h(n−1)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "d": "t(0) = 1,  t(n) = 2·t(n−1) + n"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v3": "67",
+              "r1.v5": "607",
+              "r1.v7": "5467",
+              "r2.v3": "3",
+              "r2.v5": "8",
+              "r2.v7": "21",
+              "r3.v3": "9",
+              "r3.v5": "25",
+              "r3.v7": "49",
+              "r4.v3": "6",
+              "r4.v5": "120",
+              "r4.v7": "5040",
+              "r5.v3": "19",
+              "r5.v5": "89",
+              "r5.v7": "375"
+            },
+            "giaiThich": "<p>f(0) = 2,  f(n) = 3·f(n−1) + 1: n=3 → 67, n=5 → 607, n=7 → 5467; a(0) = 1, a(1) = 1,  a(n) = a(n−1) + a(n−2): n=3 → 3, n=5 → 8, n=7 → 21; g(0) = 0,  g(n) = g(n−1) + 2n − 1: n=3 → 9, n=5 → 25, n=7 → 49; h(1) = 1,  h(n) = n·h(n−1): n=3 → 6, n=5 → 120, n=7 → 5040; t(0) = 1,  t(n) = 2·t(n−1) + n: n=3 → 19, n=5 → 89, n=7 → 375.</p><p><i>VI: f(0) = 2,  f(n) = 3·f(n−1) + 1: n=3 → 67, n=5 → 607, n=7 → 5467; a(0) = 1, a(1) = 1,  a(n) = a(n−1) + a(n−2): n=3 → 3, n=5 → 8, n=7 → 21; g(0) = 0,  g(n) = g(n−1) + 2n − 1: n=3 → 9, n=5 → 25, n=7 → 49; h(1) = 1,  h(n) = n·h(n−1): n=3 → 6, n=5 → 120, n=7 → 5040; t(0) = 1,  t(n) = 2·t(n−1) + n: n=3 → 19, n=5 → 89, n=7 → 375.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting a(n) from the wrong initial pair: a(0) = a(1) = 1 means a(2) = 2."
+        },
+        {
+          "loi": "Applying the rule to n before the previous value is known."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "recurrence",
+          "vi": "hệ thức truy hồi"
+        }
+      ]
+    },
+    {
+      "title": "Induction 3 — Sum formulas: evaluate the closed form",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "summation formulas"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Standard sums that are proved by induction. Evaluate each for n = 10 and n = 20 (use the closed form shown in the answer after submitting, or add the terms).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các tổng chuẩn được chứng minh bằng quy nạp. Tính mỗi tổng với n = 10 và n = 20 (dùng công thức đóng hoặc cộng từng số hạng).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Memorise Σi, Σi², Σi³ and the geometric sum.",
+        "Check: Σ(2i − 1) is the sum of the first n odd numbers — a perfect square."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 3 — Sum formulas: evaluate the closed form\n\nAnswer in the answer panel (no code needed).\n\n1. Closed formsCông thức đóng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 3 — Sum formulas: evaluate the closed form — answer key\n\n1. Closed formsCông thức đóng\n   - r1.a: 55\n   - r1.b: 210\n   - r2.a: 385\n   - r2.b: 2870\n   - r3.a: 3025\n   - r3.b: 44100\n   - r4.a: 100\n   - r4.b: 400\n   - r5.a: 2047\n   - r5.b: 2097151\n   Σ i (i = 1…n) = n(n+1)/2: n=10 → 55, n=20 → 210; Σ i² (i = 1…n) = n(n+1)(2n+1)/6: n=10 → 385, n=20 → 2870; Σ i³ (i = 1…n) = [n(n+1)/2]²: n=10 → 3025, n=20 → 44100; Σ (2i − 1) (i = 1…n) = n²: n=10 → 100, n=20 → 400; Σ 2^i (i = 0…n) = 2^(n+1) − 1: n=10 → 2047, n=20 → 2097151.VI: Σ i (i = 1…n) = n(n+1)/2: n=10 → 55, n=20 → 210; Σ i² (i = 1…n) = n(n+1)(2n+1)/6: n=10 → 385, n=20 → 2870; Σ i³ (i = 1…n) = [n(n+1)/2]²: n=10 → 3025, n=20 → 44100; Σ (2i − 1) (i = 1…n) = n²: n=10 → 100, n=20 → 400; Σ 2^i (i = 0…n) = 2^(n+1) − 1: n=10 → 2047, n=20 → 2097151.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Σ i  (i = 1…n) = n(n+1)/2: n=10 → 55, n=20 → 210; Σ i²  (i = 1…n) = n(n+1)(2n+1)/6: n=10 → 385, n=20 → 2870; Σ i³  (i = 1…n) = [n(n+1)/2]²: n=10 → 3025, n=20 → 44100; Σ (2i − 1)  (i = 1…n) = n²: n=10 → 100, n=20 → 400; Σ 2^i  (i = 0…n) = 2^(n+1) − 1: n=10 → 2047, n=20 → 2097151.</p><p><i>VI: Σ i  (i = 1…n) = n(n+1)/2: n=10 → 55, n=20 → 210; Σ i²  (i = 1…n) = n(n+1)(2n+1)/6: n=10 → 385, n=20 → 2870; Σ i³  (i = 1…n) = [n(n+1)/2]²: n=10 → 3025, n=20 → 44100; Σ (2i − 1)  (i = 1…n) = n²: n=10 → 100, n=20 → 400; Σ 2^i  (i = 0…n) = 2^(n+1) − 1: n=10 → 2047, n=20 → 2097151.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Closed forms</p><p style=\"opacity:.75;font-size:.92em\"><i>Công thức đóng</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Sum"
+              },
+              {
+                "ma": "a",
+                "ten": "n = 10"
+              },
+              {
+                "ma": "b",
+                "ten": "n = 20"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "Σ i  (i = 1…n)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "Σ i²  (i = 1…n)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "Σ i³  (i = 1…n)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "Σ (2i − 1)  (i = 1…n)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "s": "Σ 2^i  (i = 0…n)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "55",
+              "r1.b": "210",
+              "r2.a": "385",
+              "r2.b": "2870",
+              "r3.a": "3025",
+              "r3.b": "44100",
+              "r4.a": "100",
+              "r4.b": "400",
+              "r5.a": "2047",
+              "r5.b": "2097151"
+            },
+            "giaiThich": "<p>Σ i  (i = 1…n) = n(n+1)/2: n=10 → 55, n=20 → 210; Σ i²  (i = 1…n) = n(n+1)(2n+1)/6: n=10 → 385, n=20 → 2870; Σ i³  (i = 1…n) = [n(n+1)/2]²: n=10 → 3025, n=20 → 44100; Σ (2i − 1)  (i = 1…n) = n²: n=10 → 100, n=20 → 400; Σ 2^i  (i = 0…n) = 2^(n+1) − 1: n=10 → 2047, n=20 → 2097151.</p><p><i>VI: Σ i  (i = 1…n) = n(n+1)/2: n=10 → 55, n=20 → 210; Σ i²  (i = 1…n) = n(n+1)(2n+1)/6: n=10 → 385, n=20 → 2870; Σ i³  (i = 1…n) = [n(n+1)/2]²: n=10 → 3025, n=20 → 44100; Σ (2i − 1)  (i = 1…n) = n²: n=10 → 100, n=20 → 400; Σ 2^i  (i = 0…n) = 2^(n+1) − 1: n=10 → 2047, n=20 → 2097151.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using Σ i³ = (n(n+1)/2) without squaring."
+        },
+        {
+          "loi": "Counting 2^i from i = 1 when the sum starts at i = 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "closed form",
+          "vi": "công thức đóng"
+        }
+      ]
+    },
+    {
+      "title": "Induction 4 — Put the proof in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "induction proofs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Arrange the lines of two classic proofs: a sum by weak induction and the 4¢/5¢ stamp problem by strong induction.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các dòng của hai chứng minh kinh điển: một tổng bằng quy nạp yếu và bài tem 4¢/5¢ bằng quy nạp mạnh.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The basis comes first, then the assumption, then the algebra, then the conclusion.",
+        "Strong induction: the number of base cases equals how far back the step looks."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 4 — Put the proof in order\n\nAnswer in the answer panel (no code needed).\n\n1. Prove 1 + 2 + … + n = n(n+1)/2 for all n ≥ 1.Chứng minh 1 + 2 + … + n = n(n+1)/2 với mọi n ≥ 1.\n2. Prove every amount of n ≥ 12 cents can be paid with 4¢ and 5¢ stamps (strong induction).Chứng minh mọi số tiền n ≥ 12 xu trả được bằng tem 4¢ và 5¢ (quy nạp mạnh).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 4 — Put the proof in order — answer key\n\n1. Prove 1 + 2 + … + n = n(n+1)/2 for all n ≥ 1.Chứng minh 1 + 2 + … + n = n(n+1)/2 với mọi n ≥ 1.\n   Answer: s1) Basis: for n = 1 the left side is 1 and the right side is 1·2/2 = 1.  →  s2) Assume 1 + … + k = k(k+1)/2 for some k ≥ 1 (hypothesis).  →  s3) Then 1 + … + k + (k+1) = k(k+1)/2 + (k+1).  →  s4) Factor: = (k+1)(k/2 + 1) = (k+1)(k+2)/2.  →  s5) This is the formula for n = k + 1, so by induction it holds for all n ≥ 1.\n   The step adds one term to both sides and shows the right side keeps its shape.VI: Bước quy nạp cộng một số hạng vào hai vế và chứng tỏ vế phải giữ nguyên dạng.\n\n2. Prove every amount of n ≥ 12 cents can be paid with 4¢ and 5¢ stamps (strong induction).Chứng minh mọi số tiền n ≥ 12 xu trả được bằng tem 4¢ và 5¢ (quy nạp mạnh).\n   Answer: s1) Basis: 12 = 3·4, 13 = 2·4 + 5, 14 = 4 + 2·5, 15 = 3·5.  →  s2) Assume every amount from 12 up to k can be paid, where k ≥ 15.  →  s3) Consider k + 1 ≥ 16; then k + 1 − 4 ≥ 12 and k + 1 − 4 ≤ k.  →  s4) By the hypothesis k + 1 − 4 can be paid; add one 4¢ stamp.  →  s5) So k + 1 can be paid; the claim holds for all n ≥ 12.\n   Four base cases are needed because the step goes back 4 places.VI: Cần bốn trường hợp cơ sở vì bước quy nạp lùi 4 vị trí.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The step adds one term to both sides and shows the right side keeps its shape.</p><p><i>VI: Bước quy nạp cộng một số hạng vào hai vế và chứng tỏ vế phải giữ nguyên dạng.</i></p><p>Four base cases are needed because the step goes back 4 places.</p><p><i>VI: Cần bốn trường hợp cơ sở vì bước quy nạp lùi 4 vị trí.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Prove 1 + 2 + … + n = n(n+1)/2 for all n ≥ 1.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chứng minh 1 + 2 + … + n = n(n+1)/2 với mọi n ≥ 1.</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "Then 1 + … + k + (k+1) = k(k+1)/2 + (k+1)."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Factor: = (k+1)(k/2 + 1) = (k+1)(k+2)/2."
+              },
+              {
+                "ma": "s5",
+                "noiDung": "This is the formula for n = k + 1, so by induction it holds for all n ≥ 1."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Basis: for n = 1 the left side is 1 and the right side is 1·2/2 = 1."
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Assume 1 + … + k = k(k+1)/2 for some k ≥ 1 (hypothesis)."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>The step adds one term to both sides and shows the right side keeps its shape.</p><p><i>VI: Bước quy nạp cộng một số hạng vào hai vế và chứng tỏ vế phải giữ nguyên dạng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Prove every amount of n ≥ 12 cents can be paid with 4¢ and 5¢ stamps (strong induction).</p><p style=\"opacity:.75;font-size:.92em\"><i>Chứng minh mọi số tiền n ≥ 12 xu trả được bằng tem 4¢ và 5¢ (quy nạp mạnh).</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "By the hypothesis k + 1 − 4 can be paid; add one 4¢ stamp."
+              },
+              {
+                "ma": "s5",
+                "noiDung": "So k + 1 can be paid; the claim holds for all n ≥ 12."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Basis: 12 = 3·4, 13 = 2·4 + 5, 14 = 4 + 2·5, 15 = 3·5."
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Assume every amount from 12 up to k can be paid, where k ≥ 15."
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Consider k + 1 ≥ 16; then k + 1 − 4 ≥ 12 and k + 1 − 4 ≤ k."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>Four base cases are needed because the step goes back 4 places.</p><p><i>VI: Cần bốn trường hợp cơ sở vì bước quy nạp lùi 4 vị trí.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Proving the step without ever stating the hypothesis."
+        },
+        {
+          "loi": "Using one base case where the step reaches back four places."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "basis",
+          "vi": "cơ sở"
+        }
+      ]
+    },
+    {
+      "title": "Induction 5 — Setting up and evaluating recurrences",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "modelling with recurrences"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Model each situation with a recurrence, then evaluate it. All numbers below were computed by program from the recurrence.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô hình hoá mỗi tình huống bằng hệ thức truy hồi rồi tính giá trị. Mọi số dưới đây được chương trình tính từ hệ thức.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Condition on the last move/column/character to find the recurrence.",
+        "Compute the first few terms by hand to check the recurrence before trusting it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 5 — Setting up and evaluating recurrences\n\nAnswer in the answer panel (no code needed).\n\n1. Tower of Hanoi: the minimum number of moves for 8 discs is …Tháp Hà Nội: số lần chuyển tối thiểu cho 8 đĩa là …\n2. Binary strings of length 8 with no two consecutive 0s number …Số xâu nhị phân độ dài 8 không có hai số 0 liền nhau là …\n3. Ways to climb 10 stairs taking 1, 2 or 3 steps at a time …Số cách leo 10 bậc, mỗi lần 1, 2 hoặc 3 bậc …\n4. Domino tilings of a 2×9 board with 2×1 dominoes …Số cách lát bảng 2×9 bằng domino 2×1 …\n5. Compound interest: 1000 at 5% per year compounded yearly. After 10 years (rounded down to an integer) …Lãi kép: 1000 với lãi 5%/năm, ghép lãi hằng năm. Sau 10 năm (làm tròn xuống số nguyên) …\n6. The naive recursive fib(10) (fib(n) = fib(n−1) + fib(n−2)) makes … calls in total (including the first).fib(10) đệ quy ngây thơ thực hiện tổng cộng … lời gọi (kể cả lời gọi đầu).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 5 — Setting up and evaluating recurrences — answer key\n\n1. Tower of Hanoi: the minimum number of moves for 8 discs is …Tháp Hà Nội: số lần chuyển tối thiểu cho 8 đĩa là …\n   Answer: a) 255\n   H(n) = 2H(n−1) + 1, H(1) = 1 ⇒ H(n) = 2ⁿ − 1 = 255.VI: H(n) = 2H(n−1) + 1, H(1) = 1 ⇒ H(n) = 2ⁿ − 1 = 255.\n\n2. Binary strings of length 8 with no two consecutive 0s number …Số xâu nhị phân độ dài 8 không có hai số 0 liền nhau là …\n   Answer: b) 55\n   a(n) = a(n−1) + a(n−2), a(1) = 2, a(2) = 3 ⇒ a(8) = 55 (a Fibonacci number).VI: a(n) = a(n−1) + a(n−2), a(1) = 2, a(2) = 3 ⇒ a(8) = 55.\n\n3. Ways to climb 10 stairs taking 1, 2 or 3 steps at a time …Số cách leo 10 bậc, mỗi lần 1, 2 hoặc 3 bậc …\n   Answer: c) 274\n   c(n) = c(n−1) + c(n−2) + c(n−3), c(0) = c(1) = 1, c(2) = 2.VI: c(n) = c(n−1) + c(n−2) + c(n−3), c(0) = c(1) = 1, c(2) = 2.\n\n4. Domino tilings of a 2×9 board with 2×1 dominoes …Số cách lát bảng 2×9 bằng domino 2×1 …\n   Answer: d) 55\n   t(n) = t(n−1) + t(n−2) (last column vertical or two horizontals): t(9) = 55.VI: t(n) = t(n−1) + t(n−2): t(9) = 55.\n\n5. Compound interest: 1000 at 5% per year compounded yearly. After 10 years (rounded down to an integer) …Lãi kép: 1000 với lãi 5%/năm, ghép lãi hằng năm. Sau 10 năm (làm tròn xuống số nguyên) …\n   Answer: a) 1628\n   P(n) = 1.05·P(n−1) ⇒ P(10) = 1000·1.05¹⁰ ≈ 1628.89.VI: P(n) = 1,05·P(n−1) ⇒ P(10) ≈ 1628,89.\n\n6. The naive recursive fib(10) (fib(n) = fib(n−1) + fib(n−2)) makes … calls in total (including the first).fib(10) đệ quy ngây thơ thực hiện tổng cộng … lời gọi (kể cả lời gọi đầu).\n   Answer: b) 177\n   C(n) = C(n−1) + C(n−2) + 1: C(10) = 177 — exponential, hence memoisation.VI: C(n) = C(n−1) + C(n−2) + 1: C(10) = 177 — mũ, vì vậy cần ghi nhớ kết quả.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) a · 2) b · 3) c · 4) d · 5) a · 6) b.</p><p>H(n) = 2H(n−1) + 1, H(1) = 1 ⇒ H(n) = 2ⁿ − 1 = 255.</p><p><i>VI: H(n) = 2H(n−1) + 1, H(1) = 1 ⇒ H(n) = 2ⁿ − 1 = 255.</i></p><p>a(n) = a(n−1) + a(n−2), a(1) = 2, a(2) = 3 ⇒ a(8) = 55 (a Fibonacci number).</p><p><i>VI: a(n) = a(n−1) + a(n−2), a(1) = 2, a(2) = 3 ⇒ a(8) = 55.</i></p><p>c(n) = c(n−1) + c(n−2) + c(n−3), c(0) = c(1) = 1, c(2) = 2.</p><p><i>VI: c(n) = c(n−1) + c(n−2) + c(n−3), c(0) = c(1) = 1, c(2) = 2.</i></p><p>t(n) = t(n−1) + t(n−2) (last column vertical or two horizontals): t(9) = 55.</p><p><i>VI: t(n) = t(n−1) + t(n−2): t(9) = 55.</i></p><p>P(n) = 1.05·P(n−1) ⇒ P(10) = 1000·1.05¹⁰ ≈ 1628.89.</p><p><i>VI: P(n) = 1,05·P(n−1) ⇒ P(10) ≈ 1628,89.</i></p><p>C(n) = C(n−1) + C(n−2) + 1: C(10) = 177 — exponential, hence memoisation.</p><p><i>VI: C(n) = C(n−1) + C(n−2) + 1: C(10) = 177 — mũ, vì vậy cần ghi nhớ kết quả.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Tower of Hanoi: the minimum number of moves for 8 discs is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tháp Hà Nội: số lần chuyển tối thiểu cho 8 đĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "255"
+              },
+              {
+                "ma": "b",
+                "noiDung": "256"
+              },
+              {
+                "ma": "c",
+                "noiDung": "64"
+              },
+              {
+                "ma": "d",
+                "noiDung": "15"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>H(n) = 2H(n−1) + 1, H(1) = 1 ⇒ H(n) = 2ⁿ − 1 = 255.</p><p><i>VI: H(n) = 2H(n−1) + 1, H(1) = 1 ⇒ H(n) = 2ⁿ − 1 = 255.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Binary strings of length 8 with no two consecutive 0s number …</p><p style=\"opacity:.75;font-size:.92em\"><i>Số xâu nhị phân độ dài 8 không có hai số 0 liền nhau là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "89"
+              },
+              {
+                "ma": "b",
+                "noiDung": "55"
+              },
+              {
+                "ma": "c",
+                "noiDung": "256"
+              },
+              {
+                "ma": "d",
+                "noiDung": "34"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>a(n) = a(n−1) + a(n−2), a(1) = 2, a(2) = 3 ⇒ a(8) = 55 (a Fibonacci number).</p><p><i>VI: a(n) = a(n−1) + a(n−2), a(1) = 2, a(2) = 3 ⇒ a(8) = 55.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Ways to climb 10 stairs taking 1, 2 or 3 steps at a time …</p><p style=\"opacity:.75;font-size:.92em\"><i>Số cách leo 10 bậc, mỗi lần 1, 2 hoặc 3 bậc …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "590"
+              },
+              {
+                "ma": "b",
+                "noiDung": "149"
+              },
+              {
+                "ma": "c",
+                "noiDung": "274"
+              },
+              {
+                "ma": "d",
+                "noiDung": "55"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>c(n) = c(n−1) + c(n−2) + c(n−3), c(0) = c(1) = 1, c(2) = 2.</p><p><i>VI: c(n) = c(n−1) + c(n−2) + c(n−3), c(0) = c(1) = 1, c(2) = 2.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Domino tilings of a 2×9 board with 2×1 dominoes …</p><p style=\"opacity:.75;font-size:.92em\"><i>Số cách lát bảng 2×9 bằng domino 2×1 …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "512"
+              },
+              {
+                "ma": "b",
+                "noiDung": "18"
+              },
+              {
+                "ma": "c",
+                "noiDung": "34"
+              },
+              {
+                "ma": "d",
+                "noiDung": "55"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>t(n) = t(n−1) + t(n−2) (last column vertical or two horizontals): t(9) = 55.</p><p><i>VI: t(n) = t(n−1) + t(n−2): t(9) = 55.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Compound interest: 1000 at 5% per year compounded yearly. After 10 years (rounded down to an integer) …</p><p style=\"opacity:.75;font-size:.92em\"><i>Lãi kép: 1000 với lãi 5%/năm, ghép lãi hằng năm. Sau 10 năm (làm tròn xuống số nguyên) …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1628"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1500"
+              },
+              {
+                "ma": "c",
+                "noiDung": "57665"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1551"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>P(n) = 1.05·P(n−1) ⇒ P(10) = 1000·1.05¹⁰ ≈ 1628.89.</p><p><i>VI: P(n) = 1,05·P(n−1) ⇒ P(10) ≈ 1628,89.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>The naive recursive fib(10) (fib(n) = fib(n−1) + fib(n−2)) makes … calls in total (including the first).</p><p style=\"opacity:.75;font-size:.92em\"><i>fib(10) đệ quy ngây thơ thực hiện tổng cộng … lời gọi (kể cả lời gọi đầu).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "109"
+              },
+              {
+                "ma": "b",
+                "noiDung": "177"
+              },
+              {
+                "ma": "c",
+                "noiDung": "55"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1024"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>C(n) = C(n−1) + C(n−2) + 1: C(10) = 177 — exponential, hence memoisation.</p><p><i>VI: C(n) = C(n−1) + C(n−2) + 1: C(10) = 177 — mũ, vì vậy cần ghi nhớ kết quả.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using 2ⁿ for the strings without consecutive 0s."
+        },
+        {
+          "loi": "Forgetting the “+ 1” in the call-count recurrence."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "recurrence relation",
+          "vi": "hệ thức truy hồi"
+        },
+        {
+          "en": "memoisation",
+          "vi": "ghi nhớ kết quả"
+        }
+      ]
+    },
+    {
+      "title": "Induction 6 — Solve a linear homogeneous recurrence",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "linear recurrences"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For a(n) = c₁·a(n−1) + c₂·a(n−2) the characteristic equation is r² − c₁r − c₂ = 0. With distinct roots r₁ &gt; r₂ the solution is a(n) = α·r₁ⁿ + β·r₂ⁿ; α and β follow from a(0) and a(1). Fill r₁, r₂, α, β and the value a(6).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với a(n) = c₁·a(n−1) + c₂·a(n−2), phương trình đặc trưng là r² − c₁r − c₂ = 0. Với hai nghiệm phân biệt r₁ &gt; r₂ nghiệm là a(n) = α·r₁ⁿ + β·r₂ⁿ; α, β suy ra từ a(0) và a(1). Điền r₁, r₂, α, β và giá trị a(6).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Factor r² − c₁r − c₂ (or use the quadratic formula; the discriminant is c₁² + 4c₂).",
+        "Solve α + β = a(0), α·r₁ + β·r₂ = a(1). Verify with a(2) = c₁a(1) + c₂a(0)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 6 — Solve a linear homogeneous recurrence\n\nAnswer in the answer panel (no code needed).\n\n1. Characteristic rootsNghiệm đặc trưng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Induction 6 — Solve a linear homogeneous recurrence — answer key\n\n1. Characteristic rootsNghiệm đặc trưng\n   - r1.r1: 3\n   - r1.r2: 2\n   - r1.al: 3\n   - r1.be: -1\n   - r1.a6: 2123\n   - r2.r1: 2\n   - r2.r2: 1\n   - r2.al: 2\n   - r2.be: -1\n   - r2.a6: 127\n   - r3.r1: 2\n   - r3.r2: -1\n   - r3.al: 3\n   - r3.be: -1\n   - r3.a6: 191\n   - r4.r1: 5\n   - r4.r2: 2\n   - r4.al: 3\n   - r4.be: 2\n   - r4.a6: 47003\n   - r5.r1: 3\n   - r5.r2: -1\n   - r5.al: 2\n   - r5.be: 2\n   - r5.a6: 1460\n   c=(5,-6): roots 3, 2; α=3, β=-1; a(6)=2123; c=(3,-2): roots 2, 1; α=2, β=-1; a(6)=127; c=(1,2): roots 2, -1; α=3, β=-1; a(6)=191; c=(7,-10): roots 5, 2; α=3, β=2; a(6)=47003; c=(2,3): roots 3, -1; α=2, β=2; a(6)=1460. α + β = a(0) and α·r₁ + β·r₂ = a(1).VI: c=(5,-6): nghiệm 3, 2; α=3, β=-1; c=(3,-2): nghiệm 2, 1; α=2, β=-1; c=(1,2): nghiệm 2, -1; α=3, β=-1; c=(7,-10): nghiệm 5, 2; α=3, β=2; c=(2,3): nghiệm 3, -1; α=2, β=2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>c=(5,-6): roots 3, 2; α=3, β=-1; a(6)=2123; c=(3,-2): roots 2, 1; α=2, β=-1; a(6)=127; c=(1,2): roots 2, -1; α=3, β=-1; a(6)=191; c=(7,-10): roots 5, 2; α=3, β=2; a(6)=47003; c=(2,3): roots 3, -1; α=2, β=2; a(6)=1460. α + β = a(0) and α·r₁ + β·r₂ = a(1).</p><p><i>VI: c=(5,-6): nghiệm 3, 2; α=3, β=-1; c=(3,-2): nghiệm 2, 1; α=2, β=-1; c=(1,2): nghiệm 2, -1; α=3, β=-1; c=(7,-10): nghiệm 5, 2; α=3, β=2; c=(2,3): nghiệm 3, -1; α=2, β=2.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Characteristic roots</p><p style=\"opacity:.75;font-size:.92em\"><i>Nghiệm đặc trưng</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Recurrence"
+              },
+              {
+                "ma": "r1",
+                "ten": "r₁ (larger)"
+              },
+              {
+                "ma": "r2",
+                "ten": "r₂"
+              },
+              {
+                "ma": "al",
+                "ten": "α"
+              },
+              {
+                "ma": "be",
+                "ten": "β"
+              },
+              {
+                "ma": "a6",
+                "ten": "a(6)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "a(n) = 5·a(n−1) + (-6)·a(n−2),  a(0) = 2, a(1) = 7"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "a(n) = 3·a(n−1) + (-2)·a(n−2),  a(0) = 1, a(1) = 3"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "a(n) = 1·a(n−1) + (2)·a(n−2),  a(0) = 2, a(1) = 7"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "a(n) = 7·a(n−1) + (-10)·a(n−2),  a(0) = 5, a(1) = 19"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "a(n) = 2·a(n−1) + (3)·a(n−2),  a(0) = 4, a(1) = 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r1": "3",
+              "r1.r2": "2",
+              "r1.al": "3",
+              "r1.be": "-1",
+              "r1.a6": "2123",
+              "r2.r1": "2",
+              "r2.r2": "1",
+              "r2.al": "2",
+              "r2.be": "-1",
+              "r2.a6": "127",
+              "r3.r1": "2",
+              "r3.r2": "-1",
+              "r3.al": "3",
+              "r3.be": "-1",
+              "r3.a6": "191",
+              "r4.r1": "5",
+              "r4.r2": "2",
+              "r4.al": "3",
+              "r4.be": "2",
+              "r4.a6": "47003",
+              "r5.r1": "3",
+              "r5.r2": "-1",
+              "r5.al": "2",
+              "r5.be": "2",
+              "r5.a6": "1460"
+            },
+            "giaiThich": "<p>c=(5,-6): roots 3, 2; α=3, β=-1; a(6)=2123; c=(3,-2): roots 2, 1; α=2, β=-1; a(6)=127; c=(1,2): roots 2, -1; α=3, β=-1; a(6)=191; c=(7,-10): roots 5, 2; α=3, β=2; a(6)=47003; c=(2,3): roots 3, -1; α=2, β=2; a(6)=1460. α + β = a(0) and α·r₁ + β·r₂ = a(1).</p><p><i>VI: c=(5,-6): nghiệm 3, 2; α=3, β=-1; c=(3,-2): nghiệm 2, 1; α=2, β=-1; c=(1,2): nghiệm 2, -1; α=3, β=-1; c=(7,-10): nghiệm 5, 2; α=3, β=2; c=(2,3): nghiệm 3, -1; α=2, β=2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the characteristic equation with the wrong sign of c₂."
+        },
+        {
+          "loi": "Mixing up which root goes with α."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "characteristic equation",
+          "vi": "phương trình đặc trưng"
+        }
+      ]
+    },
+    {
+      "title": "Induction 7 — Evaluate any linear recurrence",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "recurrences",
+        "iteration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>recurrence(coefs, init, n)</code> for a(i) = coefs[0]·a(i−1) + coefs[1]·a(i−2) + … + coefs[k−1]·a(i−k), where <code>init</code> holds a(0) … a(k−1). Return a(n) (n ≥ 0; if n &lt; k return init[n]). Build the sequence iteratively; do not use naive recursion (n can be 60).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Values stay below 2⁵³ in the tests.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>recurrence(coefs, init, n)</code> cho a(i) = coefs[0]·a(i−1) + coefs[1]·a(i−2) + … + coefs[k−1]·a(i−k), với <code>init</code> chứa a(0) … a(k−1). Trả a(n) (n ≥ 0; nếu n &lt; k trả init[n]). Dựng dãy bằng vòng lặp; không dùng đệ quy ngây thơ (n có thể là 60).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giá trị luôn dưới 2⁵³ trong test.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "recurrence([1,1],[0,1],10)",
+          "output": "55",
+          "explanation": "Fibonacci numbers.|||Dãy Fibonacci."
+        },
+        {
+          "input": "recurrence([3,-2],[1,3],5)",
+          "output": "63",
+          "explanation": "a(n) = 2^(n+1) − 1.|||a(n) = 2^(n+1) − 1."
+        }
+      ],
+      "hintsJson": [
+        "Keep an array; append a(i) computed from the last k entries.",
+        "The loop runs from index k up to n."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function recurrence(coefs, init, n) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function recurrence(coefs, init, n) {\n  var a = init.slice();\n  while (a.length <= n) {\n    var i = a.length, s = 0;\n    for (var k = 0; k < coefs.length; k++) s += coefs[k] * a[i - 1 - k];\n    a.push(s);\n  }\n  return a[n];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Iteration computes each term once: O(n·k). The naive recursion recomputes terms exponentially often.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: recurrence([1,1], [0,1], 10)",
+              "vi": "Ca 1"
+            },
+            "goi": "recurrence([1,1], [0,1], 10)",
+            "mongDoi": 55
+          },
+          {
+            "moTa": {
+              "en": "Case 2: recurrence([3,-2], [1,3], 5)",
+              "vi": "Ca 2"
+            },
+            "goi": "recurrence([3,-2], [1,3], 5)",
+            "mongDoi": 63
+          },
+          {
+            "moTa": {
+              "en": "Case 3: recurrence([2], [1], 6)",
+              "vi": "Ca 3"
+            },
+            "goi": "recurrence([2], [1], 6)",
+            "mongDoi": 64
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "recurrence([1,1,1], [1,1,2], 10)",
+            "mongDoi": 274,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "recurrence([5,-6], [2,7], 12)",
+            "mongDoi": 1590227,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "recurrence([1,1], [0,1], 60)",
+            "mongDoi": 1548008755920,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "recurrence([2,1], [3,8], 1)",
+            "mongDoi": 8,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Indexing a(i−k) with the wrong coefficient (coefs[0] belongs to a(i−1))."
+        },
+        {
+          "loi": "Using recursion without memoisation (time-out for n = 60)."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Induction 8 — Count ways with a recurrence (dynamic programming)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "dynamic programming",
+        "counting recurrences"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A climber may take any step size from the array <code>steps</code> (distinct positive integers). Write <code>climbWays(n, steps)</code> returning the number of ordered sequences of steps that add up to exactly n (<code>climbWays(0, …)</code> is 1: the empty climb). The recurrence is w(i) = Σ over s ∈ steps with s ≤ i of w(i − s).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>n up to 50; the answer fits a double exactly in the tests.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người leo có thể bước độ dài bất kỳ trong mảng <code>steps</code> (số nguyên dương phân biệt). Viết <code>climbWays(n, steps)</code> trả số dãy bước có thứ tự cộng đúng bằng n (<code>climbWays(0, …)</code> bằng 1: không bước nào). Hệ thức: w(i) = Σ với s ∈ steps, s ≤ i của w(i − s).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>n tới 50; đáp án vừa đủ chính xác trong số double ở test.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "climbWays(4, [1,2])",
+          "output": "5",
+          "explanation": "1111, 112, 121, 211, 22.|||1111, 112, 121, 211, 22."
+        },
+        {
+          "input": "climbWays(5, [2])",
+          "output": "0",
+          "explanation": "An odd total cannot be made from 2s only.|||Tổng lẻ không tạo được chỉ bằng bước 2."
+        }
+      ],
+      "hintsJson": [
+        "Create w[0..n] with w[0] = 1 and fill upward.",
+        "Skip step sizes larger than the current index."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function climbWays(n, steps) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function climbWays(n, steps) {\n  var w = [1], i;\n  for (i = 1; i <= n; i++) {\n    var s = 0;\n    for (var j = 0; j < steps.length; j++) if (i - steps[j] >= 0) s += w[i - steps[j]];\n    w.push(s);\n  }\n  return w[n];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The last step is some s, and before it the climber stood at i − s: the cases are disjoint, so the counts add. This is the sum rule in recurrence form.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: climbWays(4, [1,2])",
+              "vi": "Ca 1"
+            },
+            "goi": "climbWays(4, [1,2])",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "Case 2: climbWays(5, [2])",
+              "vi": "Ca 2"
+            },
+            "goi": "climbWays(5, [2])",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Case 3: climbWays(0, [1,3])",
+              "vi": "Ca 3"
+            },
+            "goi": "climbWays(0, [1,3])",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "climbWays(10, [1,2,3])",
+            "mongDoi": 274,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "climbWays(20, [1,5,10])",
+            "mongDoi": 197,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "climbWays(50, [1,2])",
+            "mongDoi": 20365011074,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "climbWays(7, [3,4])",
+            "mongDoi": 2,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting combinations instead of ordered sequences (1+2 and 2+1 are different)."
+        },
+        {
+          "loi": "Forgetting w[0] = 1."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

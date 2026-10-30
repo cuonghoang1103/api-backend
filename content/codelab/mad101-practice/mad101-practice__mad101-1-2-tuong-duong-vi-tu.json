@@ -1,0 +1,1275 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-1-2-tuong-duong-vi-tu",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-1-2-tuong-duong-vi-tu"
+  },
+  "exercises": [
+    {
+      "title": "Equivalence 1 — Name the law",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "equivalence laws"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Match each transformation with the law of logic that justifies it.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi phép biến đổi với luật logic biện minh cho nó.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "De Morgan always changes the connective; distributive and associative laws do not.",
+        "Say each law aloud in words before matching."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 1 — Name the law\n\nAnswer in the answer panel (no code needed).\n\n1. ¬(p ∧ q) ≡ ¬p ∨ ¬q is …¬(p ∧ q) ≡ ¬p ∨ ¬q là …\n2. p ∨ (p ∧ q) ≡ p is …p ∨ (p ∧ q) ≡ p là …\n3. p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …\n4. ¬∀x P(x) is equivalent to …¬∀x P(x) tương đương với …\n5. p → q ≡ ¬p ∨ q is called …p → q ≡ ¬p ∨ q được gọi là …\n6. ¬¬p ≡ p is …¬¬p ≡ p là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 1 — Name the law — answer key\n\n1. ¬(p ∧ q) ≡ ¬p ∨ ¬q is …¬(p ∧ q) ≡ ¬p ∨ ¬q là …\n   Answer: d) De Morgan’s law\n   De Morgan: a negation flips ∧ into ∨ and negates each part.VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.\n\n2. p ∨ (p ∧ q) ≡ p is …p ∨ (p ∧ q) ≡ p là …\n   Answer: a) the absorption law\n   The extra q is “absorbed”: if p is false, p ∧ q is false too.VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.\n\n3. p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …\n   Answer: b) the distributive law\n   ∧ distributes over ∨, exactly like × over + in arithmetic.VI: ∧ phân phối trên ∨ giống × trên + trong số học.\n\n4. ¬∀x P(x) is equivalent to …¬∀x P(x) tương đương với …\n   Answer: c) ∃x ¬P(x)\n   A universal claim fails exactly when a counter-example exists.VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.\n\n5. p → q ≡ ¬p ∨ q is called …p → q ≡ ¬p ∨ q được gọi là …\n   Answer: d) the implication-as-disjunction equivalence\n   It lets us rewrite → inside a proof by chains of equivalences.VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.\n\n6. ¬¬p ≡ p is …¬¬p ≡ p là …\n   Answer: a) the double-negation law\n   Two negations cancel.VI: Hai lần phủ định triệt tiêu nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>De Morgan: a negation flips ∧ into ∨ and negates each part.</p><p><i>VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.</i></p><p>The extra q is “absorbed”: if p is false, p ∧ q is false too.</p><p><i>VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.</i></p><p>∧ distributes over ∨, exactly like × over + in arithmetic.</p><p><i>VI: ∧ phân phối trên ∨ giống × trên + trong số học.</i></p><p>A universal claim fails exactly when a counter-example exists.</p><p><i>VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.</i></p><p>It lets us rewrite → inside a proof by chains of equivalences.</p><p><i>VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.</i></p><p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>¬(p ∧ q) ≡ ¬p ∨ ¬q is …</p><p style=\"opacity:.75;font-size:.92em\"><i>¬(p ∧ q) ≡ ¬p ∨ ¬q là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the distributive law"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the absorption law"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the double-negation law"
+              },
+              {
+                "ma": "d",
+                "noiDung": "De Morgan’s law"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>De Morgan: a negation flips ∧ into ∨ and negates each part.</p><p><i>VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>p ∨ (p ∧ q) ≡ p is …</p><p style=\"opacity:.75;font-size:.92em\"><i>p ∨ (p ∧ q) ≡ p là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the absorption law"
+              },
+              {
+                "ma": "b",
+                "noiDung": "De Morgan’s law"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the idempotent law"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the commutative law"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The extra q is “absorbed”: if p is false, p ∧ q is false too.</p><p><i>VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "De Morgan’s law"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the distributive law"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the associative law"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the absorption law"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>∧ distributes over ∨, exactly like × over + in arithmetic.</p><p><i>VI: ∧ phân phối trên ∨ giống × trên + trong số học.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>¬∀x P(x) is equivalent to …</p><p style=\"opacity:.75;font-size:.92em\"><i>¬∀x P(x) tương đương với …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "∃x P(x)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "¬∃x ¬P(x)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "∃x ¬P(x)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "∀x ¬P(x)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A universal claim fails exactly when a counter-example exists.</p><p><i>VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>p → q ≡ ¬p ∨ q is called …</p><p style=\"opacity:.75;font-size:.92em\"><i>p → q ≡ ¬p ∨ q được gọi là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the contrapositive law"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the converse law"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the idempotent law"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the implication-as-disjunction equivalence"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It lets us rewrite → inside a proof by chains of equivalences.</p><p><i>VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>¬¬p ≡ p is …</p><p style=\"opacity:.75;font-size:.92em\"><i>¬¬p ≡ p là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the double-negation law"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the identity law"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the negation law"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the domination law"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing ¬(p ∧ q) ≡ ¬p ∧ ¬q (forgetting to flip the connective)."
+        },
+        {
+          "loi": "Mixing up absorption and idempotent laws."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "De Morgan’s laws",
+          "vi": "luật De Morgan"
+        },
+        {
+          "en": "absorption",
+          "vi": "hấp thụ"
+        },
+        {
+          "en": "distributive",
+          "vi": "phân phối"
+        }
+      ]
+    },
+    {
+      "title": "Equivalence 2 — Are these two formulas equivalent?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "equivalence"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For each pair choose <b>Yes</b> if the two formulas have identical truth tables, otherwise <b>No</b>. A single differing row is enough to answer No.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi cặp chọn <b>Yes</b> nếu hai công thức có bảng chân trị giống hệt nhau, ngược lại chọn <b>No</b>. Chỉ cần một dòng khác nhau là trả lời No.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for the first row where the two sides differ; p = T, q = F is the most common culprit for implications.",
+        "The converse and the inverse of an implication are NOT equivalent to it."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 2 — Are these two formulas equivalent?\n\nAnswer in the answer panel (no code needed).\n\n1. Equivalent pairsCác cặp tương đương\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 2 — Are these two formulas equivalent? — answer key\n\n1. Equivalent pairsCác cặp tương đương\n   - r1.eq: Yes\n   - r2.eq: No\n   - r3.eq: Yes\n   - r4.eq: No\n   - r5.eq: Yes\n   - r6.eq: Yes\n   - r7.eq: No\n   - r8.eq: Yes\n   - r9.eq: Yes\n   - r10.eq: Yes\n   p → q vs ¬p ∨ q: equivalent; p → q vs q → p: NOT equivalent; p → q vs ¬q → ¬p: equivalent; ¬(p ∧ q) vs ¬p ∧ ¬q: NOT equivalent; ¬(p ∨ q) vs ¬p ∧ ¬q: equivalent; p ∧ (q ∨ r) vs (p ∧ q) ∨ (p ∧ r): equivalent; p ∨ (q ∧ r) vs (p ∨ q) ∧ r: NOT equivalent; p ↔ q vs (p → q) ∧ (q → p): equivalent; ¬(p → q) vs p ∧ ¬q: equivalent; p ⊕ q vs ¬(p ↔ q): equivalent.VI: p → q vs ¬p ∨ q: tương đương; p → q vs q → p: KHÔNG tương đương; p → q vs ¬q → ¬p: tương đương; ¬(p ∧ q) vs ¬p ∧ ¬q: KHÔNG tương đương; ¬(p ∨ q) vs ¬p ∧ ¬q: tương đương; p ∧ (q ∨ r) vs (p ∧ q) ∨ (p ∧ r): tương đương; p ∨ (q ∧ r) vs (p ∨ q) ∧ r: KHÔNG tương đương; p ↔ q vs (p → q) ∧ (q → p): tương đương; ¬(p → q) vs p ∧ ¬q: tương đương; p ⊕ q vs ¬(p ↔ q): tương đương.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>p → q vs ¬p ∨ q: equivalent; p → q vs q → p: NOT equivalent; p → q vs ¬q → ¬p: equivalent; ¬(p ∧ q) vs ¬p ∧ ¬q: NOT equivalent; ¬(p ∨ q) vs ¬p ∧ ¬q: equivalent; p ∧ (q ∨ r) vs (p ∧ q) ∨ (p ∧ r): equivalent; p ∨ (q ∧ r) vs (p ∨ q) ∧ r: NOT equivalent; p ↔ q vs (p → q) ∧ (q → p): equivalent; ¬(p → q) vs p ∧ ¬q: equivalent; p ⊕ q vs ¬(p ↔ q): equivalent.</p><p><i>VI: p → q vs ¬p ∨ q: tương đương; p → q vs q → p: KHÔNG tương đương; p → q vs ¬q → ¬p: tương đương; ¬(p ∧ q) vs ¬p ∧ ¬q: KHÔNG tương đương; ¬(p ∨ q) vs ¬p ∧ ¬q: tương đương; p ∧ (q ∨ r) vs (p ∧ q) ∨ (p ∧ r): tương đương; p ∨ (q ∧ r) vs (p ∨ q) ∧ r: KHÔNG tương đương; p ↔ q vs (p → q) ∧ (q → p): tương đương; ¬(p → q) vs p ∧ ¬q: tương đương; p ⊕ q vs ¬(p ↔ q): tương đương.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Equivalent pairs</p><p style=\"opacity:.75;font-size:.92em\"><i>Các cặp tương đương</i></p>",
+            "cot": [
+              {
+                "ma": "pair",
+                "ten": "Pair"
+              },
+              {
+                "ma": "eq",
+                "ten": "Equivalent?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "pair": "p → q  vs  ¬p ∨ q"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "pair": "p → q  vs  q → p"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "pair": "p → q  vs  ¬q → ¬p"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "pair": "¬(p ∧ q)  vs  ¬p ∧ ¬q"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "pair": "¬(p ∨ q)  vs  ¬p ∧ ¬q"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "pair": "p ∧ (q ∨ r)  vs  (p ∧ q) ∨ (p ∧ r)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "pair": "p ∨ (q ∧ r)  vs  (p ∨ q) ∧ r"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "pair": "p ↔ q  vs  (p → q) ∧ (q → p)"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "pair": "¬(p → q)  vs  p ∧ ¬q"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "pair": "p ⊕ q  vs  ¬(p ↔ q)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.eq": "Yes",
+              "r2.eq": "No",
+              "r3.eq": "Yes",
+              "r4.eq": "No",
+              "r5.eq": "Yes",
+              "r6.eq": "Yes",
+              "r7.eq": "No",
+              "r8.eq": "Yes",
+              "r9.eq": "Yes",
+              "r10.eq": "Yes"
+            },
+            "giaiThich": "<p>p → q vs ¬p ∨ q: equivalent; p → q vs q → p: NOT equivalent; p → q vs ¬q → ¬p: equivalent; ¬(p ∧ q) vs ¬p ∧ ¬q: NOT equivalent; ¬(p ∨ q) vs ¬p ∧ ¬q: equivalent; p ∧ (q ∨ r) vs (p ∧ q) ∨ (p ∧ r): equivalent; p ∨ (q ∧ r) vs (p ∨ q) ∧ r: NOT equivalent; p ↔ q vs (p → q) ∧ (q → p): equivalent; ¬(p → q) vs p ∧ ¬q: equivalent; p ⊕ q vs ¬(p ↔ q): equivalent.</p><p><i>VI: p → q vs ¬p ∨ q: tương đương; p → q vs q → p: KHÔNG tương đương; p → q vs ¬q → ¬p: tương đương; ¬(p ∧ q) vs ¬p ∧ ¬q: KHÔNG tương đương; ¬(p ∨ q) vs ¬p ∧ ¬q: tương đương; p ∧ (q ∨ r) vs (p ∧ q) ∨ (p ∧ r): tương đương; p ∨ (q ∧ r) vs (p ∨ q) ∧ r: KHÔNG tương đương; p ↔ q vs (p → q) ∧ (q → p): tương đương; ¬(p → q) vs p ∧ ¬q: tương đương; p ⊕ q vs ¬(p ↔ q): tương đương.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Distributing ∨ over ∧ onto only one conjunct: p ∨ (q ∧ r) is NOT (p ∨ q) ∧ r — the law needs (p ∨ q) ∧ (p ∨ r)."
+        },
+        {
+          "loi": "Treating p → q and q → p as equivalent."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "logically equivalent",
+          "vi": "tương đương logic"
+        }
+      ]
+    },
+    {
+      "title": "Equivalence 3 — Quantifiers over a finite domain",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "quantifiers",
+        "finite domain"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>On a finite domain a quantifier is just a loop: ∀ is “every element passes”, ∃ is “some element passes”. For each predicate and domain decide ∀x P(x), ∃x P(x) and ∀x ¬P(x), and count the elements satisfying P.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên miền hữu hạn, lượng từ chỉ là vòng lặp: ∀ là “mọi phần tử đều đạt”, ∃ là “có phần tử đạt”. Với mỗi vị từ và miền hãy xác định ∀x P(x), ∃x P(x), ∀x ¬P(x) và đếm số phần tử thoả P.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Evaluate P on every element first, then combine the results.",
+        "∀x ¬P(x) is true only when the count is 0; ∃x P(x) is true when the count is at least 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 3 — Quantifiers over a finite domain\n\nAnswer in the answer panel (no code needed).\n\n1. Quantifiers on finite domainsLượng từ trên miền hữu hạn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 3 — Quantifiers over a finite domain — answer key\n\n1. Quantifiers on finite domainsLượng từ trên miền hữu hạn\n   - r1.fa: F\n   - r1.ex: T\n   - r1.no: F\n   - r1.n: 3\n   - r2.fa: F\n   - r2.ex: T\n   - r2.no: F\n   - r2.n: 4\n   - r3.fa: T\n   - r3.ex: T\n   - r3.no: F\n   - r3.n: 7\n   - r4.fa: F\n   - r4.ex: T\n   - r4.no: F\n   - r4.n: 3\n   - r5.fa: T\n   - r5.ex: T\n   - r5.no: F\n   - r5.n: 6\n   - r6.fa: F\n   - r6.ex: T\n   - r6.no: F\n   - r6.n: 4\n   x² > 10 on {1,2,3,4,5,6}: ∀=false, ∃=true, ∀¬=false, count 3; x is odd on {1,2,3,4,5,6,7}: ∀=false, ∃=true, ∀¬=false, count 4; x + 3 ≤ 9 on {0,1,2,3,4,5,6}: ∀=true, ∃=true, ∀¬=false, count 7; x mod 3 = 0 on {3,4,5,6,7,8,9}: ∀=false, ∃=true, ∀¬=false, count 3; x² ≥ x on {0,1,2,3,4,5}: ∀=true, ∃=true, ∀¬=false, count 6; 2x is a multiple of 4 on {1,2,3,4,5,6,7,8}: ∀=false, ∃=true, ∀¬=false, count 4.VI: x² > 10 trên {1,2,3,4,5,6}: ∀=false, ∃=true, ∀¬=false, đếm 3; x is odd trên {1,2,3,4,5,6,7}: ∀=false, ∃=true, ∀¬=false, đếm 4; x + 3 ≤ 9 trên {0,1,2,3,4,5,6}: ∀=true, ∃=true, ∀¬=false, đếm 7; x mod 3 = 0 trên {3,4,5,6,7,8,9}: ∀=false, ∃=true, ∀¬=false, đếm 3; x² ≥ x trên {0,1,2,3,4,5}: ∀=true, ∃=true, ∀¬=false, đếm 6; 2x is a multiple of 4 trên {1,2,3,4,5,6,7,8}: ∀=false, ∃=true, ∀¬=false, đếm 4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>x² > 10 on {1,2,3,4,5,6}: ∀=false, ∃=true, ∀¬=false, count 3; x is odd on {1,2,3,4,5,6,7}: ∀=false, ∃=true, ∀¬=false, count 4; x + 3 ≤ 9 on {0,1,2,3,4,5,6}: ∀=true, ∃=true, ∀¬=false, count 7; x mod 3 = 0 on {3,4,5,6,7,8,9}: ∀=false, ∃=true, ∀¬=false, count 3; x² ≥ x on {0,1,2,3,4,5}: ∀=true, ∃=true, ∀¬=false, count 6; 2x is a multiple of 4 on {1,2,3,4,5,6,7,8}: ∀=false, ∃=true, ∀¬=false, count 4.</p><p><i>VI: x² > 10 trên {1,2,3,4,5,6}: ∀=false, ∃=true, ∀¬=false, đếm 3; x is odd trên {1,2,3,4,5,6,7}: ∀=false, ∃=true, ∀¬=false, đếm 4; x + 3 ≤ 9 trên {0,1,2,3,4,5,6}: ∀=true, ∃=true, ∀¬=false, đếm 7; x mod 3 = 0 trên {3,4,5,6,7,8,9}: ∀=false, ∃=true, ∀¬=false, đếm 3; x² ≥ x trên {0,1,2,3,4,5}: ∀=true, ∃=true, ∀¬=false, đếm 6; 2x is a multiple of 4 trên {1,2,3,4,5,6,7,8}: ∀=false, ∃=true, ∀¬=false, đếm 4.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Quantifiers on finite domains</p><p style=\"opacity:.75;font-size:.92em\"><i>Lượng từ trên miền hữu hạn</i></p>",
+            "cot": [
+              {
+                "ma": "pd",
+                "ten": "P(x) and domain"
+              },
+              {
+                "ma": "fa",
+                "ten": "∀x P(x)",
+                "luaChon": [
+                  "T",
+                  "F"
+                ]
+              },
+              {
+                "ma": "ex",
+                "ten": "∃x P(x)",
+                "luaChon": [
+                  "T",
+                  "F"
+                ]
+              },
+              {
+                "ma": "no",
+                "ten": "∀x ¬P(x)",
+                "luaChon": [
+                  "T",
+                  "F"
+                ]
+              },
+              {
+                "ma": "n",
+                "ten": "#x with P(x)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "pd": "P(x): x² > 10;  x ∈ {1, 2, 3, 4, 5, 6}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "pd": "P(x): x is odd;  x ∈ {1, 2, 3, 4, 5, 6, 7}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "pd": "P(x): x + 3 ≤ 9;  x ∈ {0, 1, 2, 3, 4, 5, 6}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "pd": "P(x): x mod 3 = 0;  x ∈ {3, 4, 5, 6, 7, 8, 9}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "pd": "P(x): x² ≥ x;  x ∈ {0, 1, 2, 3, 4, 5}"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "pd": "P(x): 2x is a multiple of 4;  x ∈ {1, 2, 3, 4, 5, 6, 7, 8}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.fa": "F",
+              "r1.ex": "T",
+              "r1.no": "F",
+              "r1.n": "3",
+              "r2.fa": "F",
+              "r2.ex": "T",
+              "r2.no": "F",
+              "r2.n": "4",
+              "r3.fa": "T",
+              "r3.ex": "T",
+              "r3.no": "F",
+              "r3.n": "7",
+              "r4.fa": "F",
+              "r4.ex": "T",
+              "r4.no": "F",
+              "r4.n": "3",
+              "r5.fa": "T",
+              "r5.ex": "T",
+              "r5.no": "F",
+              "r5.n": "6",
+              "r6.fa": "F",
+              "r6.ex": "T",
+              "r6.no": "F",
+              "r6.n": "4"
+            },
+            "giaiThich": "<p>x² > 10 on {1,2,3,4,5,6}: ∀=false, ∃=true, ∀¬=false, count 3; x is odd on {1,2,3,4,5,6,7}: ∀=false, ∃=true, ∀¬=false, count 4; x + 3 ≤ 9 on {0,1,2,3,4,5,6}: ∀=true, ∃=true, ∀¬=false, count 7; x mod 3 = 0 on {3,4,5,6,7,8,9}: ∀=false, ∃=true, ∀¬=false, count 3; x² ≥ x on {0,1,2,3,4,5}: ∀=true, ∃=true, ∀¬=false, count 6; 2x is a multiple of 4 on {1,2,3,4,5,6,7,8}: ∀=false, ∃=true, ∀¬=false, count 4.</p><p><i>VI: x² > 10 trên {1,2,3,4,5,6}: ∀=false, ∃=true, ∀¬=false, đếm 3; x is odd trên {1,2,3,4,5,6,7}: ∀=false, ∃=true, ∀¬=false, đếm 4; x + 3 ≤ 9 trên {0,1,2,3,4,5,6}: ∀=true, ∃=true, ∀¬=false, đếm 7; x mod 3 = 0 trên {3,4,5,6,7,8,9}: ∀=false, ∃=true, ∀¬=false, đếm 3; x² ≥ x trên {0,1,2,3,4,5}: ∀=true, ∃=true, ∀¬=false, đếm 6; 2x is a multiple of 4 trên {1,2,3,4,5,6,7,8}: ∀=false, ∃=true, ∀¬=false, đếm 4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering ∃ = F when only some elements pass (∃ needs just one)."
+        },
+        {
+          "loi": "Confusing ∀x ¬P(x) with ¬∀x P(x)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "universal quantifier",
+          "vi": "lượng từ với mọi"
+        },
+        {
+          "en": "existential quantifier",
+          "vi": "lượng từ tồn tại"
+        }
+      ]
+    },
+    {
+      "title": "Equivalence 4 — Negations and nested quantifiers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "negating quantifiers",
+        "quantifier order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Negate quantified statements correctly and decide whether nested quantifier statements hold. Order of quantifiers matters!</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phủ định đúng các mệnh đề có lượng từ và quyết định các mệnh đề lượng từ lồng nhau có đúng không. Thứ tự lượng từ rất quan trọng!</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Negation: flip every quantifier from left to right, then negate the predicate.",
+        "To test ∀x ∃y on a finite domain, for each x search a y."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 4 — Negations and nested quantifiers\n\nAnswer in the answer panel (no code needed).\n\n1. The negation of ∀x ∃y (x + y = 0) is …Phủ định của ∀x ∃y (x + y = 0) là …\n2. Domain {−5,…,5}: ∀x ∃y (x + y = 0) is …Miền {−5,…,5}: ∀x ∃y (x + y = 0) là …\n3. Domain {0,…,5}: ∀x ∃y (x + y = 0) is …Miền {0,…,5}: ∀x ∃y (x + y = 0) là …\n4. Domain {−5,…,5}: ∃y ∀x (x + y = 0) is …Miền {−5,…,5}: ∃y ∀x (x + y = 0) là …\n5. Swapping ∀x ∃y into ∃y ∀x …Đổi ∀x ∃y thành ∃y ∀x …\n6. Domain {−5,…,5}: ∀x ∃y (x·y = 1) is …Miền {−5,…,5}: ∀x ∃y (x·y = 1) là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 4 — Negations and nested quantifiers — answer key\n\n1. The negation of ∀x ∃y (x + y = 0) is …Phủ định của ∀x ∃y (x + y = 0) là …\n   Answer: d) ∃x ∀y (x + y ≠ 0)\n   Push ¬ inward: each quantifier flips and the predicate is negated.VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.\n\n2. Domain {−5,…,5}: ∀x ∃y (x + y = 0) is …Miền {−5,…,5}: ∀x ∃y (x + y = 0) là …\n   Answer: a) TRUE (take y = −x; checked: true)\n   Every x has its opposite −x in the symmetric domain.VI: Mỗi x có số đối −x trong miền đối xứng.\n\n3. Domain {0,…,5}: ∀x ∃y (x + y = 0) is …Miền {0,…,5}: ∀x ∃y (x + y = 0) là …\n   Answer: b) FALSE (checked: false); x = 1 has no partner\n   Negative numbers are not in the domain, so only x = 0 has a partner.VI: Số âm không thuộc miền nên chỉ x = 0 có cặp.\n\n4. Domain {−5,…,5}: ∃y ∀x (x + y = 0) is …Miền {−5,…,5}: ∃y ∀x (x + y = 0) là …\n   Answer: c) FALSE (checked: false)\n   A single y would have to equal −x for every x at once.VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc.\n\n5. Swapping ∀x ∃y into ∃y ∀x …Đổi ∀x ∃y thành ∃y ∀x …\n   Answer: d) can change the truth value\n   ∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.\n\n6. Domain {−5,…,5}: ∀x ∃y (x·y = 1) is …Miền {−5,…,5}: ∀x ∃y (x·y = 1) là …\n   Answer: a) FALSE (checked: false); x = 0 or x = 2 has no partner\n   1/x is not an integer for most x, and x = 0 never works.VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>Push ¬ inward: each quantifier flips and the predicate is negated.</p><p><i>VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.</i></p><p>Every x has its opposite −x in the symmetric domain.</p><p><i>VI: Mỗi x có số đối −x trong miền đối xứng.</i></p><p>Negative numbers are not in the domain, so only x = 0 has a partner.</p><p><i>VI: Số âm không thuộc miền nên chỉ x = 0 có cặp.</i></p><p>A single y would have to equal −x for every x at once.</p><p><i>VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc.</i></p><p>∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.</p><p><i>VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.</i></p><p>1/x is not an integer for most x, and x = 0 never works.</p><p><i>VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The negation of ∀x ∃y (x + y = 0) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phủ định của ∀x ∃y (x + y = 0) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "∀x ∃y (x + y ≠ 0)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "∃x ∃y (x + y ≠ 0)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "∀x ∀y (x + y ≠ 0)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "∃x ∀y (x + y ≠ 0)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Push ¬ inward: each quantifier flips and the predicate is negated.</p><p><i>VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Domain {−5,…,5}: ∀x ∃y (x + y = 0) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Miền {−5,…,5}: ∀x ∃y (x + y = 0) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TRUE (take y = −x; checked: true)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "FALSE"
+              },
+              {
+                "ma": "c",
+                "noiDung": "undefined on a finite domain"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TRUE only for x = 0"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every x has its opposite −x in the symmetric domain.</p><p><i>VI: Mỗi x có số đối −x trong miền đối xứng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Domain {0,…,5}: ∀x ∃y (x + y = 0) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Miền {0,…,5}: ∀x ∃y (x + y = 0) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "undefined"
+              },
+              {
+                "ma": "b",
+                "noiDung": "FALSE (checked: false); x = 1 has no partner"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TRUE"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TRUE with y = −x"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Negative numbers are not in the domain, so only x = 0 has a partner.</p><p><i>VI: Số âm không thuộc miền nên chỉ x = 0 có cặp.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Domain {−5,…,5}: ∃y ∀x (x + y = 0) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Miền {−5,…,5}: ∃y ∀x (x + y = 0) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TRUE (y = −x)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TRUE for the empty domain only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FALSE (checked: false)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TRUE (y = 0)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A single y would have to equal −x for every x at once.</p><p><i>VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Swapping ∀x ∃y into ∃y ∀x …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đổi ∀x ∃y thành ∃y ∀x …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "never changes the truth value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "is the same as negating"
+              },
+              {
+                "ma": "c",
+                "noiDung": "is only allowed with ∨"
+              },
+              {
+                "ma": "d",
+                "noiDung": "can change the truth value"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.</p><p><i>VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Domain {−5,…,5}: ∀x ∃y (x·y = 1) is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Miền {−5,…,5}: ∀x ∃y (x·y = 1) là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "FALSE (checked: false); x = 0 or x = 2 has no partner"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TRUE"
+              },
+              {
+                "ma": "c",
+                "noiDung": "TRUE with y = 1/x"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TRUE only for x = 1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>1/x is not an integer for most x, and x = 0 never works.</p><p><i>VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping quantifiers without changing the meaning (∀∃ and ∃∀ are different)."
+        },
+        {
+          "loi": "Negating only the predicate and keeping the quantifiers."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "nested quantifiers",
+          "vi": "lượng từ lồng nhau"
+        },
+        {
+          "en": "counter-example",
+          "vi": "phản ví dụ"
+        }
+      ]
+    },
+    {
+      "title": "Equivalence 5 — Prove ¬(p → q) ≡ p ∧ ¬q by a chain of laws",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "proof by equivalences"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Arrange the lines of the standard proof. Each line is equivalent to the previous one; the justification is shown at the end of the line.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các dòng của chứng minh chuẩn. Mỗi dòng tương đương dòng trước; lý do ghi ở cuối dòng.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start by removing → using ¬p ∨ q.",
+        "Push the negation inward with De Morgan before cancelling double negations."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 5 — Prove ¬(p → q) ≡ p ∧ ¬q by a chain of laws\n\nAnswer in the answer panel (no code needed).\n\n1. Order the proof of ¬(p → q) ≡ p ∧ ¬q.Sắp chứng minh ¬(p → q) ≡ p ∧ ¬q.\n2. Order the proof of (p ∧ q) → p being a tautology.Sắp chứng minh (p ∧ q) → p là hằng đúng.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 5 — Prove ¬(p → q) ≡ p ∧ ¬q by a chain of laws — answer key\n\n1. Order the proof of ¬(p → q) ≡ p ∧ ¬q.Sắp chứng minh ¬(p → q) ≡ p ∧ ¬q.\n   Answer: s1) ¬(p → q) — start  →  s2) ≡ ¬(¬p ∨ q) — implication as disjunction  →  s3) ≡ ¬¬p ∧ ¬q — De Morgan  →  s4) ≡ p ∧ ¬q — double negation\n   Each step uses exactly one law and the whole chain was verified with the truth-table checker.VI: Mỗi bước dùng đúng một luật và toàn chuỗi đã kiểm bằng bảng chân trị.\n\n2. Order the proof of (p ∧ q) → p being a tautology.Sắp chứng minh (p ∧ q) → p là hằng đúng.\n   Answer: s1) (p ∧ q) → p — start  →  s2) ≡ ¬(p ∧ q) ∨ p — implication as disjunction  →  s3) ≡ (¬p ∨ ¬q) ∨ p — De Morgan  →  s4) ≡ (¬p ∨ p) ∨ ¬q — commutative / associative  →  s5) ≡ T ∨ ¬q ≡ T — negation and domination\n   The disjunction contains p and ¬p, so it is always true.VI: Tuyển chứa cả p và ¬p nên luôn đúng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each step uses exactly one law and the whole chain was verified with the truth-table checker.</p><p><i>VI: Mỗi bước dùng đúng một luật và toàn chuỗi đã kiểm bằng bảng chân trị.</i></p><p>The disjunction contains p and ¬p, so it is always true.</p><p><i>VI: Tuyển chứa cả p và ¬p nên luôn đúng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Order the proof of ¬(p → q) ≡ p ∧ ¬q.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp chứng minh ¬(p → q) ≡ p ∧ ¬q.</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "≡ ¬(¬p ∨ q)  — implication as disjunction"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "≡ ¬¬p ∧ ¬q  — De Morgan"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "≡ p ∧ ¬q  — double negation"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "¬(p → q)  — start"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4"
+            ],
+            "giaiThich": "<p>Each step uses exactly one law and the whole chain was verified with the truth-table checker.</p><p><i>VI: Mỗi bước dùng đúng một luật và toàn chuỗi đã kiểm bằng bảng chân trị.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Order the proof of (p ∧ q) → p being a tautology.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp chứng minh (p ∧ q) → p là hằng đúng.</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "≡ (¬p ∨ p) ∨ ¬q  — commutative / associative"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "≡ T ∨ ¬q ≡ T  — negation and domination"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "(p ∧ q) → p  — start"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "≡ ¬(p ∧ q) ∨ p  — implication as disjunction"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "≡ (¬p ∨ ¬q) ∨ p  — De Morgan"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>The disjunction contains p and ¬p, so it is always true.</p><p><i>VI: Tuyển chứa cả p và ¬p nên luôn đúng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying De Morgan before removing the implication."
+        },
+        {
+          "loi": "Forgetting the double negation ¬¬p."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chain of equivalences",
+          "vi": "chuỗi tương đương"
+        }
+      ]
+    },
+    {
+      "title": "Equivalence 6 — Rules of inference: valid or fallacy?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "rules of inference",
+        "fallacies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For each argument form decide whether it is <b>Valid</b> (the conclusion is true whenever all premises are) or <b>Invalid</b>, and name the form.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi dạng suy luận hãy quyết định nó <b>Valid</b> (kết luận đúng mỗi khi mọi tiền đề đúng) hay <b>Invalid</b>, và gọi tên dạng đó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A form is invalid if one row makes every premise true and the conclusion false — find that row.",
+        "Modus ponens/tollens are valid; the “converse-shaped” versions are the classic fallacies."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 6 — Rules of inference: valid or fallacy?\n\nAnswer in the answer panel (no code needed).\n\n1. Argument formsCác dạng suy luận\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Equivalence 6 — Rules of inference: valid or fallacy? — answer key\n\n1. Argument formsCác dạng suy luận\n   - r1.v: Valid\n   - r1.n: Modus ponens\n   - r2.v: Valid\n   - r2.n: Modus tollens\n   - r3.v: Invalid\n   - r3.n: Affirming the conclusion (fallacy)\n   - r4.v: Invalid\n   - r4.n: Denying the hypothesis (fallacy)\n   - r5.v: Valid\n   - r5.n: Hypothetical syllogism\n   - r6.v: Valid\n   - r6.n: Disjunctive syllogism\n   - r7.v: Valid\n   - r7.n: Simplification\n   - r8.v: Valid\n   - r8.n: Addition\n   - r9.v: Valid\n   - r9.n: Resolution\n   p → q, p ⊢ q: valid (Modus ponens); p → q, ¬q ⊢ ¬p: valid (Modus tollens); p → q, q ⊢ p: INVALID (Affirming the conclusion (fallacy)); p → q, ¬p ⊢ ¬q: INVALID (Denying the hypothesis (fallacy)); p → q, q → r ⊢ p → r: valid (Hypothetical syllogism); p ∨ q, ¬p ⊢ q: valid (Disjunctive syllogism); p ∧ q ⊢ p: valid (Simplification); p ⊢ p ∨ q: valid (Addition); p ∨ q, ¬p ∨ r ⊢ q ∨ r: valid (Resolution).VI: p → q, p ⊢ q: hợp lệ (Modus ponens); p → q, ¬q ⊢ ¬p: hợp lệ (Modus tollens); p → q, q ⊢ p: KHÔNG hợp lệ (Affirming the conclusion (fallacy)); p → q, ¬p ⊢ ¬q: KHÔNG hợp lệ (Denying the hypothesis (fallacy)); p → q, q → r ⊢ p → r: hợp lệ (Hypothetical syllogism); p ∨ q, ¬p ⊢ q: hợp lệ (Disjunctive syllogism); p ∧ q ⊢ p: hợp lệ (Simplification); p ⊢ p ∨ q: hợp lệ (Addition); p ∨ q, ¬p ∨ r ⊢ q ∨ r: hợp lệ (Resolution).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>p → q,  p  ⊢  q: valid (Modus ponens); p → q,  ¬q  ⊢  ¬p: valid (Modus tollens); p → q,  q  ⊢  p: INVALID (Affirming the conclusion (fallacy)); p → q,  ¬p  ⊢  ¬q: INVALID (Denying the hypothesis (fallacy)); p → q,  q → r  ⊢  p → r: valid (Hypothetical syllogism); p ∨ q,  ¬p  ⊢  q: valid (Disjunctive syllogism); p ∧ q  ⊢  p: valid (Simplification); p  ⊢  p ∨ q: valid (Addition); p ∨ q,  ¬p ∨ r  ⊢  q ∨ r: valid (Resolution).</p><p><i>VI: p → q,  p  ⊢  q: hợp lệ (Modus ponens); p → q,  ¬q  ⊢  ¬p: hợp lệ (Modus tollens); p → q,  q  ⊢  p: KHÔNG hợp lệ (Affirming the conclusion (fallacy)); p → q,  ¬p  ⊢  ¬q: KHÔNG hợp lệ (Denying the hypothesis (fallacy)); p → q,  q → r  ⊢  p → r: hợp lệ (Hypothetical syllogism); p ∨ q,  ¬p  ⊢  q: hợp lệ (Disjunctive syllogism); p ∧ q  ⊢  p: hợp lệ (Simplification); p  ⊢  p ∨ q: hợp lệ (Addition); p ∨ q,  ¬p ∨ r  ⊢  q ∨ r: hợp lệ (Resolution).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Argument forms</p><p style=\"opacity:.75;font-size:.92em\"><i>Các dạng suy luận</i></p>",
+            "cot": [
+              {
+                "ma": "arg",
+                "ten": "Premises ⊢ conclusion"
+              },
+              {
+                "ma": "v",
+                "ten": "Valid?",
+                "luaChon": [
+                  "Valid",
+                  "Invalid"
+                ]
+              },
+              {
+                "ma": "n",
+                "ten": "Name",
+                "luaChon": [
+                  "Modus ponens",
+                  "Modus tollens",
+                  "Hypothetical syllogism",
+                  "Disjunctive syllogism",
+                  "Simplification",
+                  "Addition",
+                  "Resolution",
+                  "Affirming the conclusion (fallacy)",
+                  "Denying the hypothesis (fallacy)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "arg": "p → q,  p  ⊢  q"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "arg": "p → q,  ¬q  ⊢  ¬p"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "arg": "p → q,  q  ⊢  p"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "arg": "p → q,  ¬p  ⊢  ¬q"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "arg": "p → q,  q → r  ⊢  p → r"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "arg": "p ∨ q,  ¬p  ⊢  q"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "arg": "p ∧ q  ⊢  p"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "arg": "p  ⊢  p ∨ q"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "arg": "p ∨ q,  ¬p ∨ r  ⊢  q ∨ r"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "Valid",
+              "r1.n": "Modus ponens",
+              "r2.v": "Valid",
+              "r2.n": "Modus tollens",
+              "r3.v": "Invalid",
+              "r3.n": "Affirming the conclusion (fallacy)",
+              "r4.v": "Invalid",
+              "r4.n": "Denying the hypothesis (fallacy)",
+              "r5.v": "Valid",
+              "r5.n": "Hypothetical syllogism",
+              "r6.v": "Valid",
+              "r6.n": "Disjunctive syllogism",
+              "r7.v": "Valid",
+              "r7.n": "Simplification",
+              "r8.v": "Valid",
+              "r8.n": "Addition",
+              "r9.v": "Valid",
+              "r9.n": "Resolution"
+            },
+            "giaiThich": "<p>p → q,  p  ⊢  q: valid (Modus ponens); p → q,  ¬q  ⊢  ¬p: valid (Modus tollens); p → q,  q  ⊢  p: INVALID (Affirming the conclusion (fallacy)); p → q,  ¬p  ⊢  ¬q: INVALID (Denying the hypothesis (fallacy)); p → q,  q → r  ⊢  p → r: valid (Hypothetical syllogism); p ∨ q,  ¬p  ⊢  q: valid (Disjunctive syllogism); p ∧ q  ⊢  p: valid (Simplification); p  ⊢  p ∨ q: valid (Addition); p ∨ q,  ¬p ∨ r  ⊢  q ∨ r: valid (Resolution).</p><p><i>VI: p → q,  p  ⊢  q: hợp lệ (Modus ponens); p → q,  ¬q  ⊢  ¬p: hợp lệ (Modus tollens); p → q,  q  ⊢  p: KHÔNG hợp lệ (Affirming the conclusion (fallacy)); p → q,  ¬p  ⊢  ¬q: KHÔNG hợp lệ (Denying the hypothesis (fallacy)); p → q,  q → r  ⊢  p → r: hợp lệ (Hypothetical syllogism); p ∨ q,  ¬p  ⊢  q: hợp lệ (Disjunctive syllogism); p ∧ q  ⊢  p: hợp lệ (Simplification); p  ⊢  p ∨ q: hợp lệ (Addition); p ∨ q,  ¬p ∨ r  ⊢  q ∨ r: hợp lệ (Resolution).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Accepting “p → q, q ⊢ p” (affirming the conclusion)."
+        },
+        {
+          "loi": "Accepting “p → q, ¬p ⊢ ¬q”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "argument form",
+          "vi": "dạng suy luận"
+        },
+        {
+          "en": "fallacy",
+          "vi": "nguỵ biện"
+        },
+        {
+          "en": "valid argument",
+          "vi": "suy luận hợp lệ"
+        }
+      ]
+    },
+    {
+      "title": "Equivalence 7 — Decide logical equivalence in code",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "truth-table method",
+        "logical equivalence"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Using the nested-array formula format of the previous lesson, write <code>equivalent(f, g)</code> that returns <code>true</code> when the two formulas have the same truth value under every assignment of <em>all</em> the variables that occur in either formula, and <code>false</code> otherwise. The formulas may mention different variables (for example <code>p</code> and <code>p ∨ (q ∧ ¬q)</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Collect the variables of BOTH formulas before looping over assignments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng định dạng công thức mảng lồng như bài trước, viết <code>equivalent(f, g)</code> trả <code>true</code> khi hai công thức có cùng giá trị với mọi bộ gán của <em>tất cả</em> các biến xuất hiện trong một trong hai công thức, ngược lại <code>false</code>. Hai công thức có thể chứa các biến khác nhau (ví dụ <code>p</code> và <code>p ∨ (q ∧ ¬q)</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thu biến của CẢ HAI công thức trước khi duyệt các bộ gán.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "equivalent([\"imp\",[\"var\",\"p\"],[\"var\",\"q\"]], [\"or\",[\"not\",[\"var\",\"p\"]],[\"var\",\"q\"]])",
+          "output": "true",
+          "explanation": "p → q ≡ ¬p ∨ q.|||p → q ≡ ¬p ∨ q."
+        },
+        {
+          "input": "equivalent([\"imp\",[\"var\",\"p\"],[\"var\",\"q\"]], [\"imp\",[\"var\",\"q\"],[\"var\",\"p\"]])",
+          "output": "false",
+          "explanation": "Converse: differs at p = T, q = F.|||Mệnh đề đảo: khác ở p = T, q = F."
+        }
+      ],
+      "hintsJson": [
+        "Union of the variable sets, then 2ⁿ assignments with a bit mask.",
+        "Return false at the first assignment where the two values differ; return true after the loop."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function equivalent(f, g) {\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function equivalent(f, g) {\n  var names = {};\n  function collect(x) { if (x[0] === 'var') names[x[1]] = 1; else for (var i = 1; i < x.length; i++) if (Array.isArray(x[i])) collect(x[i]); }\n  collect(f); collect(g);\n  var vs = Object.keys(names), n = vs.length;\n  function ev(h, env) {\n    switch (h[0]) {\n      case 'var': return !!env[h[1]];\n      case 'T': return true;\n      case 'F': return false;\n      case 'not': return !ev(h[1], env);\n      case 'and': return ev(h[1], env) && ev(h[2], env);\n      case 'or': return ev(h[1], env) || ev(h[2], env);\n      case 'xor': return ev(h[1], env) !== ev(h[2], env);\n      case 'imp': return !ev(h[1], env) || ev(h[2], env);\n      default: return ev(h[1], env) === ev(h[2], env);\n    }\n  }\n  for (var m = 0; m < (1 << n); m++) {\n    var env = {};\n    for (var i = 0; i < n; i++) env[vs[i]] = ((m >> i) & 1) === 1;\n    if (ev(f, env) !== ev(g, env)) return false;\n  }\n  return true;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two formulas are equivalent when their truth tables coincide on all rows. The extra variables must be included so that “p” and “p ∨ (q ∧ ¬q)” are compared on all four rows.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: equivalent([\"imp\",[\"var\",\"p\"],[\"var\",\"q\"]], [\"or\",[\"not\",[\"var\",\"p\"]],[\"var\",\"q\"])",
+              "vi": "Ca 1"
+            },
+            "goi": "equivalent([\"imp\",[\"var\",\"p\"],[\"var\",\"q\"]], [\"or\",[\"not\",[\"var\",\"p\"]],[\"var\",\"q\"]])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 2: equivalent([\"imp\",[\"var\",\"p\"],[\"var\",\"q\"]], [\"imp\",[\"var\",\"q\"],[\"var\",\"p\"]])",
+              "vi": "Ca 2"
+            },
+            "goi": "equivalent([\"imp\",[\"var\",\"p\"],[\"var\",\"q\"]], [\"imp\",[\"var\",\"q\"],[\"var\",\"p\"]])",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Case 3: equivalent([\"not\",[\"and\",[\"var\",\"p\"],[\"var\",\"q\"]]], [\"or\",[\"not\",[\"var\",\"p\"]],[\"n)",
+              "vi": "Ca 3"
+            },
+            "goi": "equivalent([\"not\",[\"and\",[\"var\",\"p\"],[\"var\",\"q\"]]], [\"or\",[\"not\",[\"var\",\"p\"]],[\"not\",[\"var\",\"q\"]]])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 4: equivalent([\"var\",\"p\"], [\"or\",[\"var\",\"p\"],[\"and\",[\"var\",\"q\"],[\"not\",[\"var\",\"q\"]]])",
+              "vi": "Ca 4"
+            },
+            "goi": "equivalent([\"var\",\"p\"], [\"or\",[\"var\",\"p\"],[\"and\",[\"var\",\"q\"],[\"not\",[\"var\",\"q\"]]]])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "equivalent([\"and\",[\"var\",\"p\"],[\"or\",[\"var\",\"q\"],[\"var\",\"r\"]]], [\"or\",[\"and\",[\"var\",\"p\"],[\"var\",\"q\"]],[\"and\",[\"var\",\"p\"],[\"var\",\"r\"]]])",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "equivalent([\"not\",[\"or\",[\"var\",\"p\"],[\"var\",\"q\"]]], [\"or\",[\"not\",[\"var\",\"p\"]],[\"not\",[\"var\",\"q\"]]])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "equivalent([\"xor\",[\"var\",\"p\"],[\"var\",\"q\"]], [\"not\",[\"iff\",[\"var\",\"p\"],[\"var\",\"q\"]]])",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "equivalent([\"T\"], [\"or\",[\"var\",\"p\"],[\"not\",[\"var\",\"p\"]]])",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looping only over the variables of f (g may contain extra variables)."
+        },
+        {
+          "loi": "Comparing the formulas as JSON strings instead of their truth values."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

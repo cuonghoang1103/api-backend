@@ -30,6 +30,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'dbi202-practice': 'introduction-to-databases',
   'osg202-practice': 'operating-systems',
   'cea201-practice': 'computer-organization-and-architecture',
+  'mad101-practice': 'discrete-mathematics',
 });
 
 /**
@@ -141,6 +142,18 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     16: 'Hợp ngữ MARIE (thực hành)',
     17: 'Dự đoán rẽ nhánh',
     18: 'Thực hiện suy đoán: Spectre/Meltdown',
+    20: 'Luyện FE — đề thi thử có đồng hồ',
+  },
+  // MAD101 (30/10/2026) — số chương theo khoá discrete-mathematics (content/academy/MAD101.mjs); Lab của chương xếp sau các bài luyện.
+  'mad101-practice': {
+    1: 'Logic & chứng minh',
+    2: 'Tập hợp, hàm, dãy; quan hệ & ma trận',
+    3: 'Độ phức tạp thuật toán (Big-O)',
+    4: 'Số học: chia hết, đồng dư, Euclid, nguyên tố',
+    5: 'Quy nạp, đệ quy & hệ thức truy hồi',
+    6: 'Đếm & tổ hợp',
+    7: 'Đồ thị & đường đi ngắn nhất',
+    8: 'Cây & cây khung nhỏ nhất',
     20: 'Luyện FE — đề thi thử có đồng hồ',
   },
   // Kỹ năng nghề — số chương theo SSG105 (Ch3 Written communication, Ch4 Presentations).

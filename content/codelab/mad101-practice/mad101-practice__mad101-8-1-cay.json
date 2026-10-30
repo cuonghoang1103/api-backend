@@ -1,0 +1,1692 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-8-1-cay",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-8-1-cay"
+  },
+  "exercises": [
+    {
+      "title": "Trees 1 — Definitions and basic facts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "trees"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A tree is a connected undirected graph with no simple circuits (Rosen §11.1). Check the facts you will use all chapter.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cây là đồ thị vô hướng liên thông không có chu trình đơn (Rosen §11.1). Kiểm tra các sự kiện bạn sẽ dùng suốt chương.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Memorise: edges = vertices − 1.",
+        "For m-ary trees: n = m·i + 1 and l = (m − 1)·i + 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 1 — Definitions and basic facts\n\nAnswer in the answer panel (no code needed).\n\n1. A tree with n vertices has exactly … edges.Cây có n đỉnh có đúng … cạnh.\n2. Between any two vertices of a tree there is …Giữa hai đỉnh bất kỳ của cây có …\n3. A full m-ary tree with i internal vertices has … vertices.Cây m-phân đầy đủ có i đỉnh trong có … đỉnh.\n4. A binary tree of height h has at most … leaves.Cây nhị phân chiều cao h có tối đa … lá.\n5. In-order traversal of a binary SEARCH tree visits keys …Duyệt trung thứ tự (in-order) cây tìm kiếm nhị phân thăm các khoá …\n6. A spanning tree of a connected graph G is …Cây khung của đồ thị liên thông G là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 1 — Definitions and basic facts — answer key\n\n1. A tree with n vertices has exactly … edges.Cây có n đỉnh có đúng … cạnh.\n   Answer: c) n − 1\n   Adding any edge to a tree makes a cycle; removing any edge disconnects it.VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.\n\n2. Between any two vertices of a tree there is …Giữa hai đỉnh bất kỳ của cây có …\n   Answer: d) exactly one simple path\n   Uniqueness of the path is equivalent to having no cycle.VI: Đường đi duy nhất tương đương với không có chu trình.\n\n3. A full m-ary tree with i internal vertices has … vertices.Cây m-phân đầy đủ có i đỉnh trong có … đỉnh.\n   Answer: a) m·i + 1\n   Every vertex except the root is a child: n = m·i + 1.VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.\n\n4. A binary tree of height h has at most … leaves.Cây nhị phân chiều cao h có tối đa … lá.\n   Answer: b) 2ʰ\n   Each level at most doubles the number of nodes.VI: Mỗi mức tối đa gấp đôi số nút.\n\n5. In-order traversal of a binary SEARCH tree visits keys …Duyệt trung thứ tự (in-order) cây tìm kiếm nhị phân thăm các khoá …\n   Answer: c) in increasing order\n   Left subtree VI: Cây con trái\n\n6. A spanning tree of a connected graph G is …Cây khung của đồ thị liên thông G là …\n   Answer: d) a subgraph that is a tree containing every vertex of G\n   It spans (touches) all the vertices, uses |V| − 1 edges, and is acyclic.VI: Nó chứa mọi đỉnh, dùng |V| − 1 cạnh và không có chu trình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>Adding any edge to a tree makes a cycle; removing any edge disconnects it.</p><p><i>VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.</i></p><p>Uniqueness of the path is equivalent to having no cycle.</p><p><i>VI: Đường đi duy nhất tương đương với không có chu trình.</i></p><p>Every vertex except the root is a child: n = m·i + 1.</p><p><i>VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.</i></p><p>Each level at most doubles the number of nodes.</p><p><i>VI: Mỗi mức tối đa gấp đôi số nút.</i></p><p>Left subtree < root < right subtree, recursively.</p><p><i>VI: Cây con trái < gốc < cây con phải, đệ quy.</i></p><p>It spans (touches) all the vertices, uses |V| − 1 edges, and is acyclic.</p><p><i>VI: Nó chứa mọi đỉnh, dùng |V| − 1 cạnh và không có chu trình.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A tree with n vertices has exactly … edges.</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây có n đỉnh có đúng … cạnh.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "n + 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2n"
+              },
+              {
+                "ma": "c",
+                "noiDung": "n − 1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "n"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Adding any edge to a tree makes a cycle; removing any edge disconnects it.</p><p><i>VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Between any two vertices of a tree there is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Giữa hai đỉnh bất kỳ của cây có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "at least two simple paths"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no path"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a Hamilton cycle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "exactly one simple path"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Uniqueness of the path is equivalent to having no cycle.</p><p><i>VI: Đường đi duy nhất tương đương với không có chu trình.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A full m-ary tree with i internal vertices has … vertices.</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây m-phân đầy đủ có i đỉnh trong có … đỉnh.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "m·i + 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "m·i"
+              },
+              {
+                "ma": "c",
+                "noiDung": "i + m"
+              },
+              {
+                "ma": "d",
+                "noiDung": "i²"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every vertex except the root is a child: n = m·i + 1.</p><p><i>VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A binary tree of height h has at most … leaves.</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây nhị phân chiều cao h có tối đa … lá.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "h"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2ʰ"
+              },
+              {
+                "ma": "c",
+                "noiDung": "h²"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2h"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each level at most doubles the number of nodes.</p><p><i>VI: Mỗi mức tối đa gấp đôi số nút.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In-order traversal of a binary SEARCH tree visits keys …</p><p style=\"opacity:.75;font-size:.92em\"><i>Duyệt trung thứ tự (in-order) cây tìm kiếm nhị phân thăm các khoá …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "level by level"
+              },
+              {
+                "ma": "b",
+                "noiDung": "in insertion order"
+              },
+              {
+                "ma": "c",
+                "noiDung": "in increasing order"
+              },
+              {
+                "ma": "d",
+                "noiDung": "in decreasing order"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Left subtree < root < right subtree, recursively.</p><p><i>VI: Cây con trái < gốc < cây con phải, đệ quy.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A spanning tree of a connected graph G is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây khung của đồ thị liên thông G là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "any tree inside G"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a Hamilton path only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the set of leaves"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a subgraph that is a tree containing every vertex of G"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It spans (touches) all the vertices, uses |V| − 1 edges, and is acyclic.</p><p><i>VI: Nó chứa mọi đỉnh, dùng |V| − 1 cạnh và không có chu trình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting n edges for a tree on n vertices."
+        },
+        {
+          "loi": "Confusing “full” (every internal node has m children) with “complete”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "spanning tree",
+          "vi": "cây khung"
+        },
+        {
+          "en": "full m-ary tree",
+          "vi": "cây m-phân đầy đủ"
+        },
+        {
+          "en": "leaf",
+          "vi": "lá"
+        },
+        {
+          "en": "internal vertex",
+          "vi": "đỉnh trong"
+        }
+      ]
+    },
+    {
+      "title": "Trees 2 — Full m-ary tree counts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "m-ary trees"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For a full m-ary tree: n = m·i + 1 vertices, l = (m − 1)·i + 1 leaves, n = i + l. Complete the table; the second table starts from the number of leaves, and the last column gives the minimum possible height ⌈log_m l⌉.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với cây m-phân đầy đủ: n = m·i + 1 đỉnh, l = (m − 1)·i + 1 lá, n = i + l. Hoàn thành bảng; bảng thứ hai xuất phát từ số lá, cột cuối cho chiều cao tối thiểu ⌈log_m l⌉.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "From l: i = (l − 1)/(m − 1), then n = m·i + 1.",
+        "Height: the smallest h with mʰ ≥ l."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 2 — Full m-ary tree counts\n\nAnswer in the answer panel (no code needed).\n\n1. From the internal verticesTừ số đỉnh trong\n2. From the leavesTừ số lá\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 2 — Full m-ary tree counts — answer key\n\n1. From the internal verticesTừ số đỉnh trong\n   - r1.n: 21\n   - r1.l: 11\n   - r2.n: 22\n   - r2.l: 15\n   - r3.n: 21\n   - r3.l: 16\n   - r4.n: 61\n   - r4.l: 49\n   m=2, i=10: n=21, l=11; m=3, i=7: n=22, l=15; m=4, i=5: n=21, l=16; m=5, i=12: n=61, l=49.VI: m=2, i=10: n=21, l=11; m=3, i=7: n=22, l=15; m=4, i=5: n=21, l=16; m=5, i=12: n=61, l=49.\n\n2. From the leavesTừ số lá\n   - r1.i: 32\n   - r1.n: 65\n   - r1.h: 6\n   - r2.i: 12\n   - r2.n: 37\n   - r2.h: 3\n   - r3.i: 6\n   - r3.n: 25\n   - r3.h: 3\n   m=2, l=33: i=32, n=65, h≥6; m=3, l=25: i=12, n=37, h≥3; m=4, l=19: i=6, n=25, h≥3.VI: m=2, l=33: i=32, n=65, h≥6; m=3, l=25: i=12, n=37, h≥3; m=4, l=19: i=6, n=25, h≥3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>m=2, i=10: n=21, l=11; m=3, i=7: n=22, l=15; m=4, i=5: n=21, l=16; m=5, i=12: n=61, l=49.</p><p><i>VI: m=2, i=10: n=21, l=11; m=3, i=7: n=22, l=15; m=4, i=5: n=21, l=16; m=5, i=12: n=61, l=49.</i></p><p>m=2, l=33: i=32, n=65, h≥6; m=3, l=25: i=12, n=37, h≥3; m=4, l=19: i=6, n=25, h≥3.</p><p><i>VI: m=2, l=33: i=32, n=65, h≥6; m=3, l=25: i=12, n=37, h≥3; m=4, l=19: i=6, n=25, h≥3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>From the internal vertices</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ số đỉnh trong</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "m, i"
+              },
+              {
+                "ma": "n",
+                "ten": "vertices n"
+              },
+              {
+                "ma": "l",
+                "ten": "leaves l"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "m = 2,  i = 10"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "m = 3,  i = 7"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "m = 4,  i = 5"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "g": "m = 5,  i = 12"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "21",
+              "r1.l": "11",
+              "r2.n": "22",
+              "r2.l": "15",
+              "r3.n": "21",
+              "r3.l": "16",
+              "r4.n": "61",
+              "r4.l": "49"
+            },
+            "giaiThich": "<p>m=2, i=10: n=21, l=11; m=3, i=7: n=22, l=15; m=4, i=5: n=21, l=16; m=5, i=12: n=61, l=49.</p><p><i>VI: m=2, i=10: n=21, l=11; m=3, i=7: n=22, l=15; m=4, i=5: n=21, l=16; m=5, i=12: n=61, l=49.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>From the leaves</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ số lá</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "m, l"
+              },
+              {
+                "ma": "i",
+                "ten": "internal i"
+              },
+              {
+                "ma": "n",
+                "ten": "vertices n"
+              },
+              {
+                "ma": "h",
+                "ten": "min height"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "m = 2,  l = 33"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "m = 3,  l = 25"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "m = 4,  l = 19"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.i": "32",
+              "r1.n": "65",
+              "r1.h": "6",
+              "r2.i": "12",
+              "r2.n": "37",
+              "r2.h": "3",
+              "r3.i": "6",
+              "r3.n": "25",
+              "r3.h": "3"
+            },
+            "giaiThich": "<p>m=2, l=33: i=32, n=65, h≥6; m=3, l=25: i=12, n=37, h≥3; m=4, l=19: i=6, n=25, h≥3.</p><p><i>VI: m=2, l=33: i=32, n=65, h≥6; m=3, l=25: i=12, n=37, h≥3; m=4, l=19: i=6, n=25, h≥3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using n = m·i instead of m·i + 1 (forgetting the root)."
+        },
+        {
+          "loi": "Rounding the minimum height down instead of up."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "height",
+          "vi": "chiều cao"
+        }
+      ]
+    },
+    {
+      "title": "Trees 3 — Binary search tree: insert, traverse, measure",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "BST",
+        "tree traversal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Insert the keys one by one into an empty binary search tree (smaller to the left, larger-or-equal to the right). Then give the pre-order, in-order and post-order traversals (comma-separated), the height (edges on the longest root-to-leaf path) and the number of leaves.</p><p><i>This set has 3 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chèn lần lượt các khoá vào cây tìm kiếm nhị phân rỗng (nhỏ hơn sang trái, lớn hơn hoặc bằng sang phải). Cho các phép duyệt tiền thứ tự, trung thứ tự, hậu thứ tự (cách nhau dấu phẩy), chiều cao (số cạnh của đường dài nhất từ gốc đến lá) và số lá.</p><p><i>Bộ này có 3 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The first key is the root; each later key walks down comparing with the node it meets.",
+        "In-order of a BST is the sorted list — use it to check your tree."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 3 — Binary search tree: insert, traverse, measure\n\nAnswer in the answer panel (no code needed).\n\n1. Insert order: 8, 3, 10, 1, 6, 14, 4, 7, 13Thứ tự chèn: 8, 3, 10, 1, 6, 14, 4, 7, 13\n2. Insert order: 5, 2, 8, 1, 4, 7, 9, 3Thứ tự chèn: 5, 2, 8, 1, 4, 7, 9, 3\n3. Insert order: 10, 5, 15, 3, 7, 12, 20, 1Thứ tự chèn: 10, 5, 15, 3, 7, 12, 20, 1\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 3 — Binary search tree: insert, traverse, measure — answer key\n\n1. Insert order: 8, 3, 10, 1, 6, 14, 4, 7, 13Thứ tự chèn: 8, 3, 10, 1, 6, 14, 4, 7, 13\n   - r1.a: 8 3 1 6 4 7 10 14 13 / 8,3,1,6,4,7,10,14,13 / 8, 3, 1, 6, 4, 7, 10, 14, 13 / 831647101413\n   - r2.a: 1 3 4 6 7 8 10 13 14 / 1,3,4,6,7,8,10,13,14 / 1, 3, 4, 6, 7, 8, 10, 13, 14 / 134678101314\n   - r3.a: 1 4 7 6 3 13 14 10 8 / 1,4,7,6,3,13,14,10,8 / 1, 4, 7, 6, 3, 13, 14, 10, 8 / 147631314108\n   - r4.a: 3\n   - r5.a: 4\n   pre 8,3,1,6,4,7,10,14,13; in 1,3,4,6,7,8,10,13,14; post 1,4,7,6,3,13,14,10,8; height 3; leaves 4.VI: tiền 8,3,1,6,4,7,10,14,13; trung 1,3,4,6,7,8,10,13,14; hậu 1,4,7,6,3,13,14,10,8.\n\n2. Insert order: 5, 2, 8, 1, 4, 7, 9, 3Thứ tự chèn: 5, 2, 8, 1, 4, 7, 9, 3\n   - r1.a: 5 2 1 4 3 8 7 9 / 5,2,1,4,3,8,7,9 / 5, 2, 1, 4, 3, 8, 7, 9 / 52143879\n   - r2.a: 1 2 3 4 5 7 8 9 / 1,2,3,4,5,7,8,9 / 1, 2, 3, 4, 5, 7, 8, 9 / 12345789\n   - r3.a: 1 3 4 2 7 9 8 5 / 1,3,4,2,7,9,8,5 / 1, 3, 4, 2, 7, 9, 8, 5 / 13427985\n   - r4.a: 3\n   - r5.a: 4\n   pre 5,2,1,4,3,8,7,9; in 1,2,3,4,5,7,8,9; post 1,3,4,2,7,9,8,5; height 3; leaves 4.VI: tiền 5,2,1,4,3,8,7,9; trung 1,2,3,4,5,7,8,9; hậu 1,3,4,2,7,9,8,5.\n\n3. Insert order: 10, 5, 15, 3, 7, 12, 20, 1Thứ tự chèn: 10, 5, 15, 3, 7, 12, 20, 1\n   - r1.a: 10 5 3 1 7 15 12 20 / 10,5,3,1,7,15,12,20 / 10, 5, 3, 1, 7, 15, 12, 20 / 105317151220\n   - r2.a: 1 3 5 7 10 12 15 20 / 1,3,5,7,10,12,15,20 / 1, 3, 5, 7, 10, 12, 15, 20 / 135710121520\n   - r3.a: 1 3 7 5 12 20 15 10 / 1,3,7,5,12,20,15,10 / 1, 3, 7, 5, 12, 20, 15, 10 / 137512201510\n   - r4.a: 3\n   - r5.a: 4\n   pre 10,5,3,1,7,15,12,20; in 1,3,5,7,10,12,15,20; post 1,3,7,5,12,20,15,10; height 3; leaves 4.VI: tiền 10,5,3,1,7,15,12,20; trung 1,3,5,7,10,12,15,20; hậu 1,3,7,5,12,20,15,10.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>pre 8,3,1,6,4,7,10,14,13; in 1,3,4,6,7,8,10,13,14; post 1,4,7,6,3,13,14,10,8; height 3; leaves 4.</p><p><i>VI: tiền 8,3,1,6,4,7,10,14,13; trung 1,3,4,6,7,8,10,13,14; hậu 1,4,7,6,3,13,14,10,8.</i></p><p>pre 5,2,1,4,3,8,7,9; in 1,2,3,4,5,7,8,9; post 1,3,4,2,7,9,8,5; height 3; leaves 4.</p><p><i>VI: tiền 5,2,1,4,3,8,7,9; trung 1,2,3,4,5,7,8,9; hậu 1,3,4,2,7,9,8,5.</i></p><p>pre 10,5,3,1,7,15,12,20; in 1,3,5,7,10,12,15,20; post 1,3,7,5,12,20,15,10; height 3; leaves 4.</p><p><i>VI: tiền 10,5,3,1,7,15,12,20; trung 1,3,5,7,10,12,15,20; hậu 1,3,7,5,12,20,15,10.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Insert order: 8, 3, 10, 1, 6, 14, 4, 7, 13</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự chèn: 8, 3, 10, 1, 6, 14, 4, 7, 13</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "Pre-order"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "In-order"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "Post-order"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "Height"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "Leaves"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "8 3 1 6 4 7 10 14 13",
+                "8,3,1,6,4,7,10,14,13",
+                "8, 3, 1, 6, 4, 7, 10, 14, 13",
+                "831647101413"
+              ],
+              "r2.a": [
+                "1 3 4 6 7 8 10 13 14",
+                "1,3,4,6,7,8,10,13,14",
+                "1, 3, 4, 6, 7, 8, 10, 13, 14",
+                "134678101314"
+              ],
+              "r3.a": [
+                "1 4 7 6 3 13 14 10 8",
+                "1,4,7,6,3,13,14,10,8",
+                "1, 4, 7, 6, 3, 13, 14, 10, 8",
+                "147631314108"
+              ],
+              "r4.a": "3",
+              "r5.a": "4"
+            },
+            "giaiThich": "<p>pre 8,3,1,6,4,7,10,14,13; in 1,3,4,6,7,8,10,13,14; post 1,4,7,6,3,13,14,10,8; height 3; leaves 4.</p><p><i>VI: tiền 8,3,1,6,4,7,10,14,13; trung 1,3,4,6,7,8,10,13,14; hậu 1,4,7,6,3,13,14,10,8.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Insert order: 5, 2, 8, 1, 4, 7, 9, 3</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự chèn: 5, 2, 8, 1, 4, 7, 9, 3</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "Pre-order"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "In-order"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "Post-order"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "Height"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "Leaves"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "5 2 1 4 3 8 7 9",
+                "5,2,1,4,3,8,7,9",
+                "5, 2, 1, 4, 3, 8, 7, 9",
+                "52143879"
+              ],
+              "r2.a": [
+                "1 2 3 4 5 7 8 9",
+                "1,2,3,4,5,7,8,9",
+                "1, 2, 3, 4, 5, 7, 8, 9",
+                "12345789"
+              ],
+              "r3.a": [
+                "1 3 4 2 7 9 8 5",
+                "1,3,4,2,7,9,8,5",
+                "1, 3, 4, 2, 7, 9, 8, 5",
+                "13427985"
+              ],
+              "r4.a": "3",
+              "r5.a": "4"
+            },
+            "giaiThich": "<p>pre 5,2,1,4,3,8,7,9; in 1,2,3,4,5,7,8,9; post 1,3,4,2,7,9,8,5; height 3; leaves 4.</p><p><i>VI: tiền 5,2,1,4,3,8,7,9; trung 1,2,3,4,5,7,8,9; hậu 1,3,4,2,7,9,8,5.</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>Insert order: 10, 5, 15, 3, 7, 12, 20, 1</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự chèn: 10, 5, 15, 3, 7, 12, 20, 1</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "Pre-order"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "In-order"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "Post-order"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "Height"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "Leaves"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "10 5 3 1 7 15 12 20",
+                "10,5,3,1,7,15,12,20",
+                "10, 5, 3, 1, 7, 15, 12, 20",
+                "105317151220"
+              ],
+              "r2.a": [
+                "1 3 5 7 10 12 15 20",
+                "1,3,5,7,10,12,15,20",
+                "1, 3, 5, 7, 10, 12, 15, 20",
+                "135710121520"
+              ],
+              "r3.a": [
+                "1 3 7 5 12 20 15 10",
+                "1,3,7,5,12,20,15,10",
+                "1, 3, 7, 5, 12, 20, 15, 10",
+                "137512201510"
+              ],
+              "r4.a": "3",
+              "r5.a": "4"
+            },
+            "giaiThich": "<p>pre 10,5,3,1,7,15,12,20; in 1,3,5,7,10,12,15,20; post 1,3,7,5,12,20,15,10; height 3; leaves 4.</p><p><i>VI: tiền 10,5,3,1,7,15,12,20; trung 1,3,5,7,10,12,15,20; hậu 1,3,7,5,12,20,15,10.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing pre-order (root, left, right) with post-order (left, right, root)."
+        },
+        {
+          "loi": "Counting height in vertices instead of edges."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pre-order",
+          "vi": "duyệt tiền thứ tự"
+        },
+        {
+          "en": "in-order",
+          "vi": "duyệt trung thứ tự"
+        },
+        {
+          "en": "post-order",
+          "vi": "duyệt hậu thứ tự"
+        }
+      ]
+    },
+    {
+      "title": "Trees 4 — Expression trees: prefix, postfix and value",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "expression trees"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Each expression is given fully parenthesised (so its tree is unambiguous). Write the prefix (Polish) and postfix (reverse Polish) forms with the tokens separated by single spaces, and the value.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi biểu thức cho dạng đầy đủ ngoặc (cây rõ ràng). Viết dạng tiền tố (Ba Lan) và hậu tố (Ba Lan đảo) với các token cách nhau một dấu cách, và giá trị.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Draw the tree: the main operator is the root; pre-order gives prefix, post-order gives postfix.",
+        "Evaluate postfix with a stack: push numbers; on an operator pop two, apply, push the result."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 4 — Expression trees: prefix, postfix and value\n\nAnswer in the answer panel (no code needed).\n\n1. Expression treesCây biểu thức\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 4 — Expression trees: prefix, postfix and value — answer key\n\n1. Expression treesCây biểu thức\n   - r1.pre: + * 2 3 - 8 4\n   - r1.post: 2 3 * 8 4 - +\n   - r1.v: 10\n   - r2.pre: * + 3 4 - 9 / 6 2\n   - r2.post: 3 4 + 9 6 2 / - *\n   - r2.v: 42\n   - r3.pre: - / * 4 5 2 + 1 * 2 3\n   - r3.post: 4 5 * 2 / 1 2 3 * + -\n   - r3.v: 3\n   ((2 * 3) + (8 - 4)): prefix + * 2 3 - 8 4; postfix 2 3 * 8 4 - +; value 10 | ((3 + 4) * (9 - (6 / 2))): prefix * + 3 4 - 9 / 6 2; postfix 3 4 + 9 6 2 / - *; value 42 | (((4 * 5) / 2) - (1 + (2 * 3))): prefix - / * 4 5 2 + 1 * 2 3; postfix 4 5 * 2 / 1 2 3 * + -; value 3.VI: prefix + * 2 3 - 8 4; postfix 2 3 * 8 4 - +; = 10 | prefix * + 3 4 - 9 / 6 2; postfix 3 4 + 9 6 2 / - *; = 42 | prefix - / * 4 5 2 + 1 * 2 3; postfix 4 5 * 2 / 1 2 3 * + -; = 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>((2 * 3) + (8 - 4)): prefix + * 2 3 - 8 4; postfix 2 3 * 8 4 - +; value 10 | ((3 + 4) * (9 - (6 / 2))): prefix * + 3 4 - 9 / 6 2; postfix 3 4 + 9 6 2 / - *; value 42 | (((4 * 5) / 2) - (1 + (2 * 3))): prefix - / * 4 5 2 + 1 * 2 3; postfix 4 5 * 2 / 1 2 3 * + -; value 3.</p><p><i>VI: prefix + * 2 3 - 8 4; postfix 2 3 * 8 4 - +; = 10 | prefix * + 3 4 - 9 / 6 2; postfix 3 4 + 9 6 2 / - *; = 42 | prefix - / * 4 5 2 + 1 * 2 3; postfix 4 5 * 2 / 1 2 3 * + -; = 3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Expression trees</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây biểu thức</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Infix"
+              },
+              {
+                "ma": "pre",
+                "ten": "Prefix"
+              },
+              {
+                "ma": "post",
+                "ten": "Postfix"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "((2 * 3) + (8 - 4))"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "((3 + 4) * (9 - (6 / 2)))"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "(((4 * 5) / 2) - (1 + (2 * 3)))"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.pre": "+ * 2 3 - 8 4",
+              "r1.post": "2 3 * 8 4 - +",
+              "r1.v": "10",
+              "r2.pre": "* + 3 4 - 9 / 6 2",
+              "r2.post": "3 4 + 9 6 2 / - *",
+              "r2.v": "42",
+              "r3.pre": "- / * 4 5 2 + 1 * 2 3",
+              "r3.post": "4 5 * 2 / 1 2 3 * + -",
+              "r3.v": "3"
+            },
+            "giaiThich": "<p>((2 * 3) + (8 - 4)): prefix + * 2 3 - 8 4; postfix 2 3 * 8 4 - +; value 10 | ((3 + 4) * (9 - (6 / 2))): prefix * + 3 4 - 9 / 6 2; postfix 3 4 + 9 6 2 / - *; value 42 | (((4 * 5) / 2) - (1 + (2 * 3))): prefix - / * 4 5 2 + 1 * 2 3; postfix 4 5 * 2 / 1 2 3 * + -; value 3.</p><p><i>VI: prefix + * 2 3 - 8 4; postfix 2 3 * 8 4 - +; = 10 | prefix * + 3 4 - 9 / 6 2; postfix 3 4 + 9 6 2 / - *; = 42 | prefix - / * 4 5 2 + 1 * 2 3; postfix 4 5 * 2 / 1 2 3 * + -; = 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping operand order for − and ÷ in postfix (the left operand comes first)."
+        },
+        {
+          "loi": "Using in-order for “prefix”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Polish notation",
+          "vi": "ký pháp Ba Lan"
+        },
+        {
+          "en": "reverse Polish notation",
+          "vi": "ký pháp Ba Lan đảo"
+        }
+      ]
+    },
+    {
+      "title": "Trees 5 — Minimum spanning trees by Kruskal and Prim",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "MST"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Weighted graph on A–G with edges (weight): AB(7), AD(5), BC(8), BD(9), BE(7), CE(5), DE(15), DF(6), EF(8), EG(9), FG(11). Kruskal: sort the edges by weight and add each one that does not close a cycle. Prim from A: repeatedly add the cheapest edge leaving the tree. Give the number of edges of any spanning tree, the minimum total weight, and the first five edges Kruskal adds in order (ties broken alphabetically; edge names like <code>AD</code>).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồ thị có trọng số trên A–G với các cạnh (trọng số): AB(7), AD(5), BC(8), BD(9), BE(7), CE(5), DE(15), DF(6), EF(8), EG(9), FG(11). Kruskal: sắp cạnh theo trọng số và thêm cạnh nào không tạo chu trình. Prim từ A: liên tục thêm cạnh rẻ nhất rời khỏi cây. Cho số cạnh của mọi cây khung, tổng trọng số nhỏ nhất, và năm cạnh đầu Kruskal thêm theo thứ tự (hoà thì theo chữ cái; tên cạnh như <code>AD</code>).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Skip an edge when both ends are already in the same component.",
+        "Both algorithms give the same total weight (the tree may differ when weights tie)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 5 — Minimum spanning trees by Kruskal and Prim\n\nAnswer in the answer panel (no code needed).\n\n1. Minimum spanning treeCây khung nhỏ nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 5 — Minimum spanning trees by Kruskal and Prim — answer key\n\n1. Minimum spanning treeCây khung nhỏ nhất\n   - r1.a: 6\n   - r2.a: 39\n   - r3.a: AD\n   - r4.a: CE\n   - r5.a: DF\n   - r6.a: AB\n   - r7.a: BE\n   - r8.a: 7\n   Kruskal picks AD(5), CE(5), DF(6), AB(7), BE(7), EG(9) = 39. Prim from A adds AD(5), DF(6), AB(7), BE(7), CE(5), EG(9).VI: Kruskal chọn AD(5), CE(5), DF(6), AB(7), BE(7), EG(9) = 39.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Kruskal picks AD(5), CE(5), DF(6), AB(7), BE(7), EG(9) = 39. Prim from A adds AD(5), DF(6), AB(7), BE(7), CE(5), EG(9).</p><p><i>VI: Kruskal chọn AD(5), CE(5), DF(6), AB(7), BE(7), EG(9) = 39.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Minimum spanning tree</p><p style=\"opacity:.75;font-size:.92em\"><i>Cây khung nhỏ nhất</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Question"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "Edges in a spanning tree"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "k": "Minimum total weight"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "k": "Kruskal: edge 1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "k": "Kruskal: edge 2"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "k": "Kruskal: edge 3"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "k": "Kruskal: edge 4"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "k": "Kruskal: edge 5"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "k": "Prim from A: weight of the 3rd edge added"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "6",
+              "r2.a": "39",
+              "r3.a": "AD",
+              "r4.a": "CE",
+              "r5.a": "DF",
+              "r6.a": "AB",
+              "r7.a": "BE",
+              "r8.a": "7"
+            },
+            "giaiThich": "<p>Kruskal picks AD(5), CE(5), DF(6), AB(7), BE(7), EG(9) = 39. Prim from A adds AD(5), DF(6), AB(7), BE(7), CE(5), EG(9).</p><p><i>VI: Kruskal chọn AD(5), CE(5), DF(6), AB(7), BE(7), EG(9) = 39.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding an edge that closes a cycle: after AB and BE, the edge BC(8) must be skipped because B and C are already joined through E."
+        },
+        {
+          "loi": "Stopping before n − 1 edges are chosen."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Kruskal’s algorithm",
+          "vi": "thuật toán Kruskal"
+        },
+        {
+          "en": "Prim’s algorithm",
+          "vi": "thuật toán Prim"
+        },
+        {
+          "en": "minimum spanning tree",
+          "vi": "cây khung nhỏ nhất"
+        }
+      ]
+    },
+    {
+      "title": "Trees 6 — Order the algorithm steps",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "MST algorithms",
+        "BST insertion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Arrange the steps of the tree algorithms.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước của thuật toán trên cây.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kruskal sorts first; Prim picks a start vertex first.",
+        "In a BST insertion you stop at the first empty position."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 6 — Order the algorithm steps\n\nAnswer in the answer panel (no code needed).\n\n1. Kruskal’s algorithm.Thuật toán Kruskal.\n2. Prim’s algorithm.Thuật toán Prim.\n3. Insert key 6 into a BST whose root is 8 (left child 3, right child 10).Chèn khoá 6 vào BST có gốc 8 (con trái 3, con phải 10).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 6 — Order the algorithm steps — answer key\n\n1. Kruskal’s algorithm.Thuật toán Kruskal.\n   Answer: s1) Sort all edges by weight (ascending).  →  s2) Start with every vertex in its own component and T = ∅.  →  s3) Take the next edge; if its ends are in different components, add it to T and merge them.  →  s4) Otherwise skip the edge (it would create a cycle).  →  s5) Stop when T has n − 1 edges.\n   The disjoint-set structure makes the cycle test almost constant time.VI: Cấu trúc tập rời làm phép kiểm chu trình gần như hằng.\n\n2. Prim’s algorithm.Thuật toán Prim.\n   Answer: s1) Start the tree with an arbitrary vertex.  →  s2) Look at all edges with exactly one end in the tree.  →  s3) Add the cheapest of them together with its new vertex.  →  s4) Repeat until all vertices are in the tree.\n   Prim grows one tree; Kruskal merges a forest.VI: Prim lớn dần một cây; Kruskal gộp một rừng.\n\n3. Insert key 6 into a BST whose root is 8 (left child 3, right child 10).Chèn khoá 6 vào BST có gốc 8 (con trái 3, con phải 10).\n   Answer: s1) Compare 6 with the root 8: 6 < 8, go left.  →  s2) Compare 6 with 3: 6 ≥ 3, go right.  →  s3) The right child of 3 is empty.  →  s4) Create the new node 6 there.\n   A new key always ends as a leaf.VI: Khoá mới luôn kết thúc ở vị trí lá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The disjoint-set structure makes the cycle test almost constant time.</p><p><i>VI: Cấu trúc tập rời làm phép kiểm chu trình gần như hằng.</i></p><p>Prim grows one tree; Kruskal merges a forest.</p><p><i>VI: Prim lớn dần một cây; Kruskal gộp một rừng.</i></p><p>A new key always ends as a leaf.</p><p><i>VI: Khoá mới luôn kết thúc ở vị trí lá.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Kruskal’s algorithm.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Kruskal.</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "Take the next edge; if its ends are in different components, add it to T and merge them."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Otherwise skip the edge (it would create a cycle)."
+              },
+              {
+                "ma": "s5",
+                "noiDung": "Stop when T has n − 1 edges."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Sort all edges by weight (ascending)."
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Start with every vertex in its own component and T = ∅."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>The disjoint-set structure makes the cycle test almost constant time.</p><p><i>VI: Cấu trúc tập rời làm phép kiểm chu trình gần như hằng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Prim’s algorithm.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Prim.</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "Look at all edges with exactly one end in the tree."
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Add the cheapest of them together with its new vertex."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Repeat until all vertices are in the tree."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Start the tree with an arbitrary vertex."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4"
+            ],
+            "giaiThich": "<p>Prim grows one tree; Kruskal merges a forest.</p><p><i>VI: Prim lớn dần một cây; Kruskal gộp một rừng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Insert key 6 into a BST whose root is 8 (left child 3, right child 10).</p><p style=\"opacity:.75;font-size:.92em\"><i>Chèn khoá 6 vào BST có gốc 8 (con trái 3, con phải 10).</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "Compare 6 with 3: 6 ≥ 3, go right."
+              },
+              {
+                "ma": "s3",
+                "noiDung": "The right child of 3 is empty."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Create the new node 6 there."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Compare 6 with the root 8: 6 < 8, go left."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4"
+            ],
+            "giaiThich": "<p>A new key always ends as a leaf.</p><p><i>VI: Khoá mới luôn kết thúc ở vị trí lá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting Kruskal without sorting."
+        },
+        {
+          "loi": "Placing a new BST key at the root."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "disjoint set",
+          "vi": "tập rời nhau"
+        }
+      ]
+    },
+    {
+      "title": "Trees 7 — Huffman coding: how many bits?",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "Huffman",
+        "prefix codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Frequencies are counts of each symbol in a message. Build the Huffman tree (repeatedly merge the two smallest weights). The total length of the Huffman-coded message in bits is Σ frequency × code length — equal to the sum of all merged weights. A fixed-length code needs ⌈log₂ k⌉ bits per symbol for k symbols. Give both totals and the average Huffman bits per symbol (2 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tần số là số lần mỗi ký hiệu trong thông điệp. Dựng cây Huffman (liên tục gộp hai trọng số nhỏ nhất). Tổng độ dài thông điệp mã Huffman theo bit là Σ tần số × độ dài mã — bằng tổng các trọng số được gộp. Mã độ dài cố định cần ⌈log₂ k⌉ bit mỗi ký hiệu với k ký hiệu. Cho cả hai tổng và số bit Huffman trung bình mỗi ký hiệu (2 chữ số thập phân).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep a sorted list; replace the two smallest by their sum; the sum of all the sums you create is the total bit count.",
+        "Ties between equal weights change the tree but never the total cost."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 7 — Huffman coding: how many bits?\n\nAnswer in the answer panel (no code needed).\n\n1. Huffman totalsTổng Huffman\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Trees 7 — Huffman coding: how many bits? — answer key\n\n1. Huffman totalsTổng Huffman\n   - r1.h: 224\n   - r1.x: 300\n   - r1.avg: 2.24\n   - r2.h: 220\n   - r2.x: 300\n   - r2.avg: 2.20 / 2.2\n   - r3.h: 224\n   - r3.x: 300\n   - r3.avg: 2.24\n   - r4.h: 14\n   - r4.x: 16\n   - r4.avg: 1.75\n   a:45 b:13 c:12 d:16 e:9 f:5: Huffman 224 bits, fixed 300, avg 2.24; a:40 b:20 c:15 d:15 e:10: Huffman 220 bits, fixed 300, avg 2.20; a:5 b:9 c:12 d:13 e:16 f:45: Huffman 224 bits, fixed 300, avg 2.24; x:1 y:1 z:2 w:4: Huffman 14 bits, fixed 16, avg 1.75.VI: Huffman 224 bit, cố định 300, trung bình 2.24; Huffman 220 bit, cố định 300, trung bình 2.20; Huffman 224 bit, cố định 300, trung bình 2.24; Huffman 14 bit, cố định 16, trung bình 1.75.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a:45 b:13 c:12 d:16 e:9 f:5: Huffman 224 bits, fixed 300, avg 2.24; a:40 b:20 c:15 d:15 e:10: Huffman 220 bits, fixed 300, avg 2.20; a:5 b:9 c:12 d:13 e:16 f:45: Huffman 224 bits, fixed 300, avg 2.24; x:1 y:1 z:2 w:4: Huffman 14 bits, fixed 16, avg 1.75.</p><p><i>VI: Huffman 224 bit, cố định 300, trung bình 2.24; Huffman 220 bit, cố định 300, trung bình 2.20; Huffman 224 bit, cố định 300, trung bình 2.24; Huffman 14 bit, cố định 16, trung bình 1.75.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Huffman totals</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng Huffman</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Frequencies"
+              },
+              {
+                "ma": "h",
+                "ten": "Huffman bits"
+              },
+              {
+                "ma": "x",
+                "ten": "Fixed-length bits"
+              },
+              {
+                "ma": "avg",
+                "ten": "Avg bits/symbol"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "f": "a:45  b:13  c:12  d:16  e:9  f:5"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "f": "a:40  b:20  c:15  d:15  e:10"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "f": "a:5  b:9  c:12  d:13  e:16  f:45"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "f": "x:1  y:1  z:2  w:4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.h": "224",
+              "r1.x": "300",
+              "r1.avg": [
+                "2.24"
+              ],
+              "r2.h": "220",
+              "r2.x": "300",
+              "r2.avg": [
+                "2.20",
+                "2.2"
+              ],
+              "r3.h": "224",
+              "r3.x": "300",
+              "r3.avg": [
+                "2.24"
+              ],
+              "r4.h": "14",
+              "r4.x": "16",
+              "r4.avg": [
+                "1.75"
+              ]
+            },
+            "giaiThich": "<p>a:45 b:13 c:12 d:16 e:9 f:5: Huffman 224 bits, fixed 300, avg 2.24; a:40 b:20 c:15 d:15 e:10: Huffman 220 bits, fixed 300, avg 2.20; a:5 b:9 c:12 d:13 e:16 f:45: Huffman 224 bits, fixed 300, avg 2.24; x:1 y:1 z:2 w:4: Huffman 14 bits, fixed 16, avg 1.75.</p><p><i>VI: Huffman 224 bit, cố định 300, trung bình 2.24; Huffman 220 bit, cố định 300, trung bình 2.20; Huffman 224 bit, cố định 300, trung bình 2.24; Huffman 14 bit, cố định 16, trung bình 1.75.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the number of merges instead of summing the merged weights."
+        },
+        {
+          "loi": "Using ⌊log₂ k⌋ instead of ⌈log₂ k⌉ for the fixed-length code."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prefix code",
+          "vi": "mã tiền tố"
+        },
+        {
+          "en": "Huffman coding",
+          "vi": "mã hoá Huffman"
+        }
+      ]
+    },
+    {
+      "title": "Trees 8 — Build a BST and traverse it",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "BST",
+        "traversals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>treeTraversals(values)</code>. Insert the numbers one by one into an initially empty binary search tree (keys smaller than a node go left; equal or larger go right) and return <code>{ pre, inOrder, post, height }</code> where the three traversals are arrays of keys and <code>height</code> is the number of edges on the longest root-to-leaf path (−1 for the empty tree).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Duplicates are inserted to the right.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>treeTraversals(values)</code>. Chèn lần lượt các số vào cây tìm kiếm nhị phân ban đầu rỗng (khoá nhỏ hơn nút đi trái; bằng hoặc lớn hơn đi phải) và trả <code>{ pre, inOrder, post, height }</code> với ba phép duyệt là mảng khoá và <code>height</code> là số cạnh của đường dài nhất từ gốc tới lá (−1 cho cây rỗng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá trùng được chèn sang phải.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "treeTraversals([5,3,8])",
+          "output": "{\"pre\":[5,3,8],\"inOrder\":[3,5,8],\"post\":[3,8,5],\"height\":1}",
+          "explanation": "Root 5 with children 3 and 8.|||Gốc 5 với hai con 3 và 8."
+        }
+      ],
+      "hintsJson": [
+        "Represent nodes as objects { v, l, r }; insertion is a loop or recursion.",
+        "A recursive helper that pushes into three arrays gives all traversals in one go (pre before, in between, post after the recursive calls)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function treeTraversals(values) {\n  return { pre: [], inOrder: [], post: [], height: -1 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function treeTraversals(values) {\n  var root = null;\n  values.forEach(function (v) {\n    var node = { v: v, l: null, r: null };\n    if (!root) { root = node; return; }\n    var cur = root;\n    for (;;) {\n      if (v < cur.v) { if (!cur.l) { cur.l = node; break; } cur = cur.l; } else { if (!cur.r) { cur.r = node; break; } cur = cur.r; }\n    }\n  });\n  var pre = [], inn = [], post = [];\n  function go(n) { if (!n) return; pre.push(n.v); go(n.l); inn.push(n.v); go(n.r); post.push(n.v); }\n  go(root);\n  function h(n) { return n ? 1 + Math.max(h(n.l), h(n.r)) : -1; }\n  return { pre: pre, inOrder: inn, post: post, height: h(root) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The same recursion visits the root three times; where you record it decides the traversal.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: treeTraversals([5,3,8])",
+              "vi": "Ca 1"
+            },
+            "goi": "treeTraversals([5,3,8])",
+            "mongDoi": {
+              "pre": [
+                5,
+                3,
+                8
+              ],
+              "inOrder": [
+                3,
+                5,
+                8
+              ],
+              "post": [
+                3,
+                8,
+                5
+              ],
+              "height": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: treeTraversals([])",
+              "vi": "Ca 2"
+            },
+            "goi": "treeTraversals([])",
+            "mongDoi": {
+              "pre": [],
+              "inOrder": [],
+              "post": [],
+              "height": -1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: treeTraversals([8,3,10,1,6,14,4,7,13])",
+              "vi": "Ca 3"
+            },
+            "goi": "treeTraversals([8,3,10,1,6,14,4,7,13])",
+            "mongDoi": {
+              "pre": [
+                8,
+                3,
+                1,
+                6,
+                4,
+                7,
+                10,
+                14,
+                13
+              ],
+              "inOrder": [
+                1,
+                3,
+                4,
+                6,
+                7,
+                8,
+                10,
+                13,
+                14
+              ],
+              "post": [
+                1,
+                4,
+                7,
+                6,
+                3,
+                13,
+                14,
+                10,
+                8
+              ],
+              "height": 3
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "treeTraversals([1,2,3,4,5])",
+            "mongDoi": {
+              "pre": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "inOrder": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "post": [
+                5,
+                4,
+                3,
+                2,
+                1
+              ],
+              "height": 4
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "treeTraversals([4,4,4])",
+            "mongDoi": {
+              "pre": [
+                4,
+                4,
+                4
+              ],
+              "inOrder": [
+                4,
+                4,
+                4
+              ],
+              "post": [
+                4,
+                4,
+                4
+              ],
+              "height": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "treeTraversals([10,5,15,3,7,12,20,1])",
+            "mongDoi": {
+              "pre": [
+                10,
+                5,
+                3,
+                1,
+                7,
+                15,
+                12,
+                20
+              ],
+              "inOrder": [
+                1,
+                3,
+                5,
+                7,
+                10,
+                12,
+                15,
+                20
+              ],
+              "post": [
+                1,
+                3,
+                7,
+                5,
+                12,
+                20,
+                15,
+                10
+              ],
+              "height": 3
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Pushing the node value in the wrong place of the recursion."
+        },
+        {
+          "loi": "Returning height in vertices (an empty tree is −1, a single node 0)."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Trees 9 — Kruskal’s algorithm in code",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "Kruskal",
+        "union–find"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>kruskalWeight(n, edges)</code> for a weighted undirected graph on vertices 0…n−1 (<code>edges</code> are <code>[u, v, w]</code>, weights may repeat; loops and parallel edges are possible). Return <code>{ weight, edgesUsed, spanning }</code>: the total weight of the minimum spanning <em>forest</em> found by Kruskal, how many edges it uses, and whether those edges form a spanning tree (edgesUsed === n − 1). Use union–find for the cycle test.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A disconnected graph gives spanning = false.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>kruskalWeight(n, edges)</code> cho đồ thị vô hướng có trọng số trên các đỉnh 0…n−1 (<code>edges</code> là <code>[u, v, w]</code>, trọng số có thể trùng; có thể có khuyên và cạnh song song). Trả <code>{ weight, edgesUsed, spanning }</code>: tổng trọng số của <em>rừng</em> khung nhỏ nhất Kruskal tìm được, số cạnh dùng, và các cạnh đó có tạo thành cây khung không (edgesUsed === n − 1). Dùng union–find để kiểm chu trình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đồ thị không liên thông cho spanning = false.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "kruskalWeight(4, [[0,1,1],[1,2,2],[2,3,3],[3,0,4],[0,2,5]])",
+          "output": "{\"weight\":6,\"edgesUsed\":3,\"spanning\":true}",
+          "explanation": "Edges 1, 2, 3 form a spanning tree; the rest close cycles.|||Các cạnh 1, 2, 3 tạo cây khung; còn lại đóng chu trình."
+        }
+      ],
+      "hintsJson": [
+        "Sort a copy of the edge list by weight (numeric comparator).",
+        "Union the two roots when they differ; skip loops automatically (same root)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function kruskalWeight(n, edges) {\n  return { weight: 0, edgesUsed: 0, spanning: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function kruskalWeight(n, edges) {\n  var parent = [], i;\n  for (i = 0; i < n; i++) parent.push(i);\n  function find(x) { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; }\n  var sorted = edges.slice().sort(function (a, b) { return a[2] - b[2]; });\n  var weight = 0, used = 0;\n  sorted.forEach(function (e) {\n    var a = find(e[0]), b = find(e[1]);\n    if (a !== b) { parent[a] = b; weight += e[2]; used++; }\n  });\n  return { weight: weight, edgesUsed: used, spanning: used === n - 1 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The cut property: the lightest edge crossing any cut belongs to some MST, so the greedy choice is safe.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: kruskalWeight(4, [[0,1,1],[1,2,2],[2,3,3],[3,0,4],[0,2,5]])",
+              "vi": "Ca 1"
+            },
+            "goi": "kruskalWeight(4, [[0,1,1],[1,2,2],[2,3,3],[3,0,4],[0,2,5]])",
+            "mongDoi": {
+              "weight": 6,
+              "edgesUsed": 3,
+              "spanning": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: kruskalWeight(3, [[0,1,5]])",
+              "vi": "Ca 2"
+            },
+            "goi": "kruskalWeight(3, [[0,1,5]])",
+            "mongDoi": {
+              "weight": 5,
+              "edgesUsed": 1,
+              "spanning": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: kruskalWeight(1, [])",
+              "vi": "Ca 3"
+            },
+            "goi": "kruskalWeight(1, [])",
+            "mongDoi": {
+              "weight": 0,
+              "edgesUsed": 0,
+              "spanning": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "kruskalWeight(7, [[0,1,7],[0,3,5],[1,2,8],[1,3,9],[1,4,7],[2,4,5],[3,4,15],[3,5,6],[4,5,8],[4,6,9],[5,6,11]])",
+            "mongDoi": {
+              "weight": 39,
+              "edgesUsed": 6,
+              "spanning": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "kruskalWeight(4, [[0,0,1],[0,1,2],[0,1,1],[2,3,4]])",
+            "mongDoi": {
+              "weight": 5,
+              "edgesUsed": 2,
+              "spanning": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "kruskalWeight(5, [[0,1,2],[2,3,2],[1,2,2],[3,4,2],[0,4,2]])",
+            "mongDoi": {
+              "weight": 8,
+              "edgesUsed": 4,
+              "spanning": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sorting the original input array (mutating the caller’s data)."
+        },
+        {
+          "loi": "Comparing find(u) with v instead of find(v)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,1861 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-2-1-tap-hop",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-2-1-tap-hop"
+  },
+  "exercises": [
+    {
+      "title": "Sets 1 — Notation, subsets and power sets",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "sets",
+        "subsets"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Core vocabulary of sets (Rosen §2.1): membership, subsets, the empty set, power sets and Cartesian products.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ vựng cốt lõi của tập hợp (Rosen §2.1): thuộc, tập con, tập rỗng, tập luỹ thừa và tích Descartes.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Distinguish “∈” (member) from “⊆” (subset): a set inside braces is one element.",
+        "Counting rules: |P(A)| = 2^|A|, |A × B| = |A|·|B|."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 1 — Notation, subsets and power sets\n\nAnswer in the answer panel (no code needed).\n\n1. Which statement is TRUE?Khẳng định nào ĐÚNG?\n2. If A = {1, {2}, 3}, then …Nếu A = {1, {2}, 3} thì …\n3. A set with n elements has … subsets.Một tập có n phần tử có … tập con.\n4. |A × B| equals …|A × B| bằng …\n5. A ⊕ B (symmetric difference) contains …A ⊕ B (hiệu đối xứng) chứa …\n6. |{∅, {∅}}| equals …|{∅, {∅}}| bằng …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 1 — Notation, subsets and power sets — answer key\n\n1. Which statement is TRUE?Khẳng định nào ĐÚNG?\n   Answer: c) ∅ ⊆ A for every set A\n   The empty set is a subset of every set; it is a member only of sets that contain it.VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.\n\n2. If A = {1, {2}, 3}, then …Nếu A = {1, {2}, 3} thì …\n   Answer: d) {2} ∈ A but 2 ∉ A\n   {2} is an element of A (a set inside a set); the number 2 is not.VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.\n\n3. A set with n elements has … subsets.Một tập có n phần tử có … tập con.\n   Answer: a) 2ⁿ\n   Each element is either in or out of a subset: 2 choices, n times.VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.\n\n4. |A × B| equals …|A × B| bằng …\n   Answer: b) |A|·|B|\n   Each element of A pairs with each element of B.VI: Mỗi phần tử của A ghép với mỗi phần tử của B.\n\n5. A ⊕ B (symmetric difference) contains …A ⊕ B (hiệu đối xứng) chứa …\n   Answer: c) elements in exactly one of A, B\n   A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).\n\n6. |{∅, {∅}}| equals …|{∅, {∅}}| bằng …\n   Answer: d) 2\n   The two elements are ∅ and {∅}.VI: Hai phần tử là ∅ và {∅}.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p><p>{2} is an element of A (a set inside a set); the number 2 is not.</p><p><i>VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.</i></p><p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p><p>Each element of A pairs with each element of B.</p><p><i>VI: Mỗi phần tử của A ghép với mỗi phần tử của B.</i></p><p>A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</p><p><i>VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</i></p><p>The two elements are ∅ and {∅}.</p><p><i>VI: Hai phần tử là ∅ và {∅}.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which statement is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khẳng định nào ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A ⊂ A for every set A"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{∅} = ∅"
+              },
+              {
+                "ma": "c",
+                "noiDung": "∅ ⊆ A for every set A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "∅ ∈ A for every set A"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>If A = {1, {2}, 3}, then …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nếu A = {1, {2}, 3} thì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2 ∈ A"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{1, 3} ∈ A"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{2} ⊆ A"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{2} ∈ A but 2 ∉ A"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>{2} is an element of A (a set inside a set); the number 2 is not.</p><p><i>VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A set with n elements has … subsets.</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tập có n phần tử có … tập con.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2ⁿ"
+              },
+              {
+                "ma": "b",
+                "noiDung": "n²"
+              },
+              {
+                "ma": "c",
+                "noiDung": "n!"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2n"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>|A × B| equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>|A × B| bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2^(|A|+|B|)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "|A|·|B|"
+              },
+              {
+                "ma": "c",
+                "noiDung": "|A| + |B|"
+              },
+              {
+                "ma": "d",
+                "noiDung": "|A|^|B|"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each element of A pairs with each element of B.</p><p><i>VI: Mỗi phần tử của A ghép với mỗi phần tử của B.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A ⊕ B (symmetric difference) contains …</p><p style=\"opacity:.75;font-size:.92em\"><i>A ⊕ B (hiệu đối xứng) chứa …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "elements in A but not in B only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "all elements of A ∪ B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "elements in exactly one of A, B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "elements in both A and B"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</p><p><i>VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>|{∅, {∅}}| equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>|{∅, {∅}}| bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The two elements are ∅ and {∅}.</p><p><i>VI: Hai phần tử là ∅ và {∅}.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing ∅ with {∅}: the first has 0 elements, the second has 1."
+        },
+        {
+          "loi": "Using ∈ where ⊆ is meant."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "power set",
+          "vi": "tập luỹ thừa"
+        },
+        {
+          "en": "Cartesian product",
+          "vi": "tích Descartes"
+        },
+        {
+          "en": "symmetric difference",
+          "vi": "hiệu đối xứng"
+        }
+      ]
+    },
+    {
+      "title": "Sets 2 — Compute unions, intersections and differences",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "set operations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Universe U = {1,…,10}. For every pair of sets write the result in ascending order, e.g. <code>1,2,5</code> (braces are optional). Write <code>∅</code> for the empty set.</p><p><i>This set has 3 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vũ trụ U = {1,…,10}. Với mỗi cặp tập, viết kết quả theo thứ tự tăng dần, ví dụ <code>1,2,5</code> (có thể thêm ngoặc nhọn). Tập rỗng viết <code>∅</code>.</p><p><i>Bộ này có 3 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Mark each element of U as in A, in B, in both or in neither; every operation is just a rule on those four categories.",
+        "A ⊕ B contains elements in exactly one of the two sets."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 2 — Compute unions, intersections and differences\n\nAnswer in the answer panel (no code needed).\n\n1. A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}\n2. A = {2, 4, 6, 8, 10}, B = {3, 6, 9}A = {2, 4, 6, 8, 10}, B = {3, 6, 9}\n3. A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 2 — Compute unions, intersections and differences — answer key\n\n1. A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}A = {1, 2, 3, 5, 8}, B = {2, 4, 5, 9}\n   - r1.res: 1,2,3,4,5,8,9 / {1,2,3,4,5,8,9} / {1, 2, 3, 4, 5, 8, 9} / 1, 2, 3, 4, 5, 8, 9 / 1 2 3 4 5 8 9\n   - r2.res: 2,5 / {2,5} / {2, 5} / 2, 5 / 2 5\n   - r3.res: 1,3,8 / {1,3,8} / {1, 3, 8} / 1, 3, 8 / 1 3 8\n   - r4.res: 4,9 / {4,9} / {4, 9} / 4, 9 / 4 9\n   - r5.res: 1,3,4,8,9 / {1,3,4,8,9} / {1, 3, 4, 8, 9} / 1, 3, 4, 8, 9 / 1 3 4 8 9\n   - r6.res: 4,6,7,9,10 / {4,6,7,9,10} / {4, 6, 7, 9, 10} / 4, 6, 7, 9, 10 / 4 6 7 9 10\n   A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.VI: A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.\n\n2. A = {2, 4, 6, 8, 10}, B = {3, 6, 9}A = {2, 4, 6, 8, 10}, B = {3, 6, 9}\n   - r1.res: 2,3,4,6,8,9,10 / {2,3,4,6,8,9,10} / {2, 3, 4, 6, 8, 9, 10} / 2, 3, 4, 6, 8, 9, 10 / 2 3 4 6 8 9 10\n   - r2.res: 6 / {6} / {6} / 6 / 6\n   - r3.res: 2,4,8,10 / {2,4,8,10} / {2, 4, 8, 10} / 2, 4, 8, 10 / 2 4 8 10\n   - r4.res: 3,9 / {3,9} / {3, 9} / 3, 9 / 3 9\n   - r5.res: 2,3,4,8,9,10 / {2,3,4,8,9,10} / {2, 3, 4, 8, 9, 10} / 2, 3, 4, 8, 9, 10 / 2 3 4 8 9 10\n   - r6.res: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.VI: A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.\n\n3. A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}A = {1, 3, 5, 7, 9}, B = {2, 4, 6, 8, 10}\n   - r1.res: 1,2,3,4,5,6,7,8,9,10 / {1,2,3,4,5,6,7,8,9,10} / {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} / 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 / 1 2 3 4 5 6 7 8 9 10\n   - r2.res: ∅ / {} / { } / empty / ø\n   - r3.res: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   - r4.res: 2,4,6,8,10 / {2,4,6,8,10} / {2, 4, 6, 8, 10} / 2, 4, 6, 8, 10 / 2 4 6 8 10\n   - r5.res: 1,2,3,4,5,6,7,8,9,10 / {1,2,3,4,5,6,7,8,9,10} / {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} / 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 / 1 2 3 4 5 6 7 8 9 10\n   - r6.res: 2,4,6,8,10 / {2,4,6,8,10} / {2, 4, 6, 8, 10} / 2, 4, 6, 8, 10 / 2 4 6 8 10\n   A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</i></p><p>A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</p><p><i>VI: A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</i></p><p>A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>A = {1, 2, 3, 5, 8},  B = {2, 4, 5, 9}</p><p style=\"opacity:.75;font-size:.92em\"><i>A = {1, 2, 3, 5, 8},  B = {2, 4, 5, 9}</i></p>",
+            "cot": [
+              {
+                "ma": "op",
+                "ten": "Operation"
+              },
+              {
+                "ma": "res",
+                "ten": "Result"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "op": "A ∪ B"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "op": "A ∩ B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "op": "A − B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "op": "B − A"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "op": "A ⊕ B"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "op": "Ā (complement in U)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.res": [
+                "1,2,3,4,5,8,9",
+                "{1,2,3,4,5,8,9}",
+                "{1, 2, 3, 4, 5, 8, 9}",
+                "1, 2, 3, 4, 5, 8, 9",
+                "1 2 3 4 5 8 9"
+              ],
+              "r2.res": [
+                "2,5",
+                "{2,5}",
+                "{2, 5}",
+                "2, 5",
+                "2 5"
+              ],
+              "r3.res": [
+                "1,3,8",
+                "{1,3,8}",
+                "{1, 3, 8}",
+                "1, 3, 8",
+                "1 3 8"
+              ],
+              "r4.res": [
+                "4,9",
+                "{4,9}",
+                "{4, 9}",
+                "4, 9",
+                "4 9"
+              ],
+              "r5.res": [
+                "1,3,4,8,9",
+                "{1,3,4,8,9}",
+                "{1, 3, 4, 8, 9}",
+                "1, 3, 4, 8, 9",
+                "1 3 4 8 9"
+              ],
+              "r6.res": [
+                "4,6,7,9,10",
+                "{4,6,7,9,10}",
+                "{4, 6, 7, 9, 10}",
+                "4, 6, 7, 9, 10",
+                "4 6 7 9 10"
+              ]
+            },
+            "giaiThich": "<p>A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,8,9}; A ∩ B = {2,5}; A − B = {1,3,8}; B − A = {4,9}; A ⊕ B = {1,3,4,8,9}; Ā = {4,6,7,9,10}.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>A = {2, 4, 6, 8, 10},  B = {3, 6, 9}</p><p style=\"opacity:.75;font-size:.92em\"><i>A = {2, 4, 6, 8, 10},  B = {3, 6, 9}</i></p>",
+            "cot": [
+              {
+                "ma": "op",
+                "ten": "Operation"
+              },
+              {
+                "ma": "res",
+                "ten": "Result"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "op": "A ∪ B"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "op": "A ∩ B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "op": "A − B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "op": "B − A"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "op": "A ⊕ B"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "op": "Ā (complement in U)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.res": [
+                "2,3,4,6,8,9,10",
+                "{2,3,4,6,8,9,10}",
+                "{2, 3, 4, 6, 8, 9, 10}",
+                "2, 3, 4, 6, 8, 9, 10",
+                "2 3 4 6 8 9 10"
+              ],
+              "r2.res": [
+                "6",
+                "{6}",
+                "{6}",
+                "6",
+                "6"
+              ],
+              "r3.res": [
+                "2,4,8,10",
+                "{2,4,8,10}",
+                "{2, 4, 8, 10}",
+                "2, 4, 8, 10",
+                "2 4 8 10"
+              ],
+              "r4.res": [
+                "3,9",
+                "{3,9}",
+                "{3, 9}",
+                "3, 9",
+                "3 9"
+              ],
+              "r5.res": [
+                "2,3,4,8,9,10",
+                "{2,3,4,8,9,10}",
+                "{2, 3, 4, 8, 9, 10}",
+                "2, 3, 4, 8, 9, 10",
+                "2 3 4 8 9 10"
+              ],
+              "r6.res": [
+                "1,3,5,7,9",
+                "{1,3,5,7,9}",
+                "{1, 3, 5, 7, 9}",
+                "1, 3, 5, 7, 9",
+                "1 3 5 7 9"
+              ]
+            },
+            "giaiThich": "<p>A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</p><p><i>VI: A ∪ B = {2,3,4,6,8,9,10}; A ∩ B = {6}; A − B = {2,4,8,10}; B − A = {3,9}; A ⊕ B = {2,3,4,8,9,10}; Ā = {1,3,5,7,9}.</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>A = {1, 3, 5, 7, 9},  B = {2, 4, 6, 8, 10}</p><p style=\"opacity:.75;font-size:.92em\"><i>A = {1, 3, 5, 7, 9},  B = {2, 4, 6, 8, 10}</i></p>",
+            "cot": [
+              {
+                "ma": "op",
+                "ten": "Operation"
+              },
+              {
+                "ma": "res",
+                "ten": "Result"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "op": "A ∪ B"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "op": "A ∩ B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "op": "A − B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "op": "B − A"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "op": "A ⊕ B"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "op": "Ā (complement in U)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.res": [
+                "1,2,3,4,5,6,7,8,9,10",
+                "{1,2,3,4,5,6,7,8,9,10}",
+                "{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}",
+                "1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
+                "1 2 3 4 5 6 7 8 9 10"
+              ],
+              "r2.res": [
+                "∅",
+                "{}",
+                "{ }",
+                "empty",
+                "ø"
+              ],
+              "r3.res": [
+                "1,3,5,7,9",
+                "{1,3,5,7,9}",
+                "{1, 3, 5, 7, 9}",
+                "1, 3, 5, 7, 9",
+                "1 3 5 7 9"
+              ],
+              "r4.res": [
+                "2,4,6,8,10",
+                "{2,4,6,8,10}",
+                "{2, 4, 6, 8, 10}",
+                "2, 4, 6, 8, 10",
+                "2 4 6 8 10"
+              ],
+              "r5.res": [
+                "1,2,3,4,5,6,7,8,9,10",
+                "{1,2,3,4,5,6,7,8,9,10}",
+                "{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}",
+                "1, 2, 3, 4, 5, 6, 7, 8, 9, 10",
+                "1 2 3 4 5 6 7 8 9 10"
+              ],
+              "r6.res": [
+                "2,4,6,8,10",
+                "{2,4,6,8,10}",
+                "{2, 4, 6, 8, 10}",
+                "2, 4, 6, 8, 10",
+                "2 4 6 8 10"
+              ]
+            },
+            "giaiThich": "<p>A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</p><p><i>VI: A ∪ B = {1,2,3,4,5,6,7,8,9,10}; A ∩ B = {∅}; A − B = {1,3,5,7,9}; B − A = {2,4,6,8,10}; A ⊕ B = {1,2,3,4,5,6,7,8,9,10}; Ā = {2,4,6,8,10}.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that A − B and B − A are different."
+        },
+        {
+          "loi": "Leaving out the elements of U that belong to neither set when computing the complement."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "complement",
+          "vi": "phần bù"
+        },
+        {
+          "en": "difference",
+          "vi": "hiệu"
+        }
+      ]
+    },
+    {
+      "title": "Sets 3 — Sets as bit strings",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "bit strings",
+        "bitwise operations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A subset of the ordered universe U = (1,2,…,10) is stored as a 10-bit string: bit i is 1 when element i belongs to the set. Union is bitwise OR, intersection is bitwise AND, symmetric difference is XOR. Fill in each bit string (10 characters, no spaces) and then convert the result back to a set.</p><p><i>This set has 3 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tập con của vũ trụ có thứ tự U = (1,2,…,10) lưu bằng xâu 10 bit: bit i bằng 1 khi phần tử i thuộc tập. Hợp là OR từng bit, giao là AND, hiệu đối xứng là XOR. Điền từng xâu bit (10 ký tự, không dấu cách) rồi đổi kết quả về tập.</p><p><i>Bộ này có 3 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the string position by position: position 1 stands for the element 1, position 10 for the element 10.",
+        "Do the three operations bit by bit, aligning the strings in two rows."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 3 — Sets as bit strings\n\nAnswer in the answer panel (no code needed).\n\n1. A = {1, 3, 5, 7, 9}, B = {1, 2, 3, 4, 5}A = {1, 3, 5, 7, 9}, B = {1, 2, 3, 4, 5}\n2. A = {2, 3, 5, 7}, B = {1, 3, 5, 7, 9}A = {2, 3, 5, 7}, B = {1, 3, 5, 7, 9}\n3. A = {4, 5, 6, 7, 8}, B = {2, 4, 6, 8, 10}A = {4, 5, 6, 7, 8}, B = {2, 4, 6, 8, 10}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 3 — Sets as bit strings — answer key\n\n1. A = {1, 3, 5, 7, 9}, B = {1, 2, 3, 4, 5}A = {1, 3, 5, 7, 9}, B = {1, 2, 3, 4, 5}\n   - r1.bits: 1010101010\n   - r1.set: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   - r2.bits: 1111100000\n   - r2.set: 1,2,3,4,5 / {1,2,3,4,5} / {1, 2, 3, 4, 5} / 1, 2, 3, 4, 5 / 1 2 3 4 5\n   - r3.bits: 1111101010\n   - r3.set: 1,2,3,4,5,7,9 / {1,2,3,4,5,7,9} / {1, 2, 3, 4, 5, 7, 9} / 1, 2, 3, 4, 5, 7, 9 / 1 2 3 4 5 7 9\n   - r4.bits: 1010100000\n   - r4.set: 1,3,5 / {1,3,5} / {1, 3, 5} / 1, 3, 5 / 1 3 5\n   - r5.bits: 0101001010\n   - r5.set: 2,4,7,9 / {2,4,7,9} / {2, 4, 7, 9} / 2, 4, 7, 9 / 2 4 7 9\n   A=1010101010, B=1111100000, OR=1111101010, AND=1010100000, XOR=0101001010.VI: A=1010101010, B=1111100000, OR=1111101010, AND=1010100000, XOR=0101001010.\n\n2. A = {2, 3, 5, 7}, B = {1, 3, 5, 7, 9}A = {2, 3, 5, 7}, B = {1, 3, 5, 7, 9}\n   - r1.bits: 0110101000\n   - r1.set: 2,3,5,7 / {2,3,5,7} / {2, 3, 5, 7} / 2, 3, 5, 7 / 2 3 5 7\n   - r2.bits: 1010101010\n   - r2.set: 1,3,5,7,9 / {1,3,5,7,9} / {1, 3, 5, 7, 9} / 1, 3, 5, 7, 9 / 1 3 5 7 9\n   - r3.bits: 1110101010\n   - r3.set: 1,2,3,5,7,9 / {1,2,3,5,7,9} / {1, 2, 3, 5, 7, 9} / 1, 2, 3, 5, 7, 9 / 1 2 3 5 7 9\n   - r4.bits: 0010101000\n   - r4.set: 3,5,7 / {3,5,7} / {3, 5, 7} / 3, 5, 7 / 3 5 7\n   - r5.bits: 1100000010\n   - r5.set: 1,2,9 / {1,2,9} / {1, 2, 9} / 1, 2, 9 / 1 2 9\n   A=0110101000, B=1010101010, OR=1110101010, AND=0010101000, XOR=1100000010.VI: A=0110101000, B=1010101010, OR=1110101010, AND=0010101000, XOR=1100000010.\n\n3. A = {4, 5, 6, 7, 8}, B = {2, 4, 6, 8, 10}A = {4, 5, 6, 7, 8}, B = {2, 4, 6, 8, 10}\n   - r1.bits: 0001111100\n   - r1.set: 4,5,6,7,8 / {4,5,6,7,8} / {4, 5, 6, 7, 8} / 4, 5, 6, 7, 8 / 4 5 6 7 8\n   - r2.bits: 0101010101\n   - r2.set: 2,4,6,8,10 / {2,4,6,8,10} / {2, 4, 6, 8, 10} / 2, 4, 6, 8, 10 / 2 4 6 8 10\n   - r3.bits: 0101111101\n   - r3.set: 2,4,5,6,7,8,10 / {2,4,5,6,7,8,10} / {2, 4, 5, 6, 7, 8, 10} / 2, 4, 5, 6, 7, 8, 10 / 2 4 5 6 7 8 10\n   - r4.bits: 0001010100\n   - r4.set: 4,6,8 / {4,6,8} / {4, 6, 8} / 4, 6, 8 / 4 6 8\n   - r5.bits: 0100101001\n   - r5.set: 2,5,7,10 / {2,5,7,10} / {2, 5, 7, 10} / 2, 5, 7, 10 / 2 5 7 10\n   A=0001111100, B=0101010101, OR=0101111101, AND=0001010100, XOR=0100101001.VI: A=0001111100, B=0101010101, OR=0101111101, AND=0001010100, XOR=0100101001.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A=1010101010, B=1111100000, OR=1111101010, AND=1010100000, XOR=0101001010.</p><p><i>VI: A=1010101010, B=1111100000, OR=1111101010, AND=1010100000, XOR=0101001010.</i></p><p>A=0110101000, B=1010101010, OR=1110101010, AND=0010101000, XOR=1100000010.</p><p><i>VI: A=0110101000, B=1010101010, OR=1110101010, AND=0010101000, XOR=1100000010.</i></p><p>A=0001111100, B=0101010101, OR=0101111101, AND=0001010100, XOR=0100101001.</p><p><i>VI: A=0001111100, B=0101010101, OR=0101111101, AND=0001010100, XOR=0100101001.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>A = {1, 3, 5, 7, 9},  B = {1, 2, 3, 4, 5}</p><p style=\"opacity:.75;font-size:.92em\"><i>A = {1, 3, 5, 7, 9},  B = {1, 2, 3, 4, 5}</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "What"
+              },
+              {
+                "ma": "bits",
+                "ten": "Bit string"
+              },
+              {
+                "ma": "set",
+                "ten": "As a set"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "A ∪ B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "A ∩ B"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "A ⊕ B"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.bits": "1010101010",
+              "r1.set": [
+                "1,3,5,7,9",
+                "{1,3,5,7,9}",
+                "{1, 3, 5, 7, 9}",
+                "1, 3, 5, 7, 9",
+                "1 3 5 7 9"
+              ],
+              "r2.bits": "1111100000",
+              "r2.set": [
+                "1,2,3,4,5",
+                "{1,2,3,4,5}",
+                "{1, 2, 3, 4, 5}",
+                "1, 2, 3, 4, 5",
+                "1 2 3 4 5"
+              ],
+              "r3.bits": "1111101010",
+              "r3.set": [
+                "1,2,3,4,5,7,9",
+                "{1,2,3,4,5,7,9}",
+                "{1, 2, 3, 4, 5, 7, 9}",
+                "1, 2, 3, 4, 5, 7, 9",
+                "1 2 3 4 5 7 9"
+              ],
+              "r4.bits": "1010100000",
+              "r4.set": [
+                "1,3,5",
+                "{1,3,5}",
+                "{1, 3, 5}",
+                "1, 3, 5",
+                "1 3 5"
+              ],
+              "r5.bits": "0101001010",
+              "r5.set": [
+                "2,4,7,9",
+                "{2,4,7,9}",
+                "{2, 4, 7, 9}",
+                "2, 4, 7, 9",
+                "2 4 7 9"
+              ]
+            },
+            "giaiThich": "<p>A=1010101010, B=1111100000, OR=1111101010, AND=1010100000, XOR=0101001010.</p><p><i>VI: A=1010101010, B=1111100000, OR=1111101010, AND=1010100000, XOR=0101001010.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>A = {2, 3, 5, 7},  B = {1, 3, 5, 7, 9}</p><p style=\"opacity:.75;font-size:.92em\"><i>A = {2, 3, 5, 7},  B = {1, 3, 5, 7, 9}</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "What"
+              },
+              {
+                "ma": "bits",
+                "ten": "Bit string"
+              },
+              {
+                "ma": "set",
+                "ten": "As a set"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "A ∪ B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "A ∩ B"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "A ⊕ B"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.bits": "0110101000",
+              "r1.set": [
+                "2,3,5,7",
+                "{2,3,5,7}",
+                "{2, 3, 5, 7}",
+                "2, 3, 5, 7",
+                "2 3 5 7"
+              ],
+              "r2.bits": "1010101010",
+              "r2.set": [
+                "1,3,5,7,9",
+                "{1,3,5,7,9}",
+                "{1, 3, 5, 7, 9}",
+                "1, 3, 5, 7, 9",
+                "1 3 5 7 9"
+              ],
+              "r3.bits": "1110101010",
+              "r3.set": [
+                "1,2,3,5,7,9",
+                "{1,2,3,5,7,9}",
+                "{1, 2, 3, 5, 7, 9}",
+                "1, 2, 3, 5, 7, 9",
+                "1 2 3 5 7 9"
+              ],
+              "r4.bits": "0010101000",
+              "r4.set": [
+                "3,5,7",
+                "{3,5,7}",
+                "{3, 5, 7}",
+                "3, 5, 7",
+                "3 5 7"
+              ],
+              "r5.bits": "1100000010",
+              "r5.set": [
+                "1,2,9",
+                "{1,2,9}",
+                "{1, 2, 9}",
+                "1, 2, 9",
+                "1 2 9"
+              ]
+            },
+            "giaiThich": "<p>A=0110101000, B=1010101010, OR=1110101010, AND=0010101000, XOR=1100000010.</p><p><i>VI: A=0110101000, B=1010101010, OR=1110101010, AND=0010101000, XOR=1100000010.</i></p>"
+          },
+          {
+            "ma": "b3",
+            "de": "<p>A = {4, 5, 6, 7, 8},  B = {2, 4, 6, 8, 10}</p><p style=\"opacity:.75;font-size:.92em\"><i>A = {4, 5, 6, 7, 8},  B = {2, 4, 6, 8, 10}</i></p>",
+            "cot": [
+              {
+                "ma": "w",
+                "ten": "What"
+              },
+              {
+                "ma": "bits",
+                "ten": "Bit string"
+              },
+              {
+                "ma": "set",
+                "ten": "As a set"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "w": "A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "w": "B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "w": "A ∪ B"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "w": "A ∩ B"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "w": "A ⊕ B"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.bits": "0001111100",
+              "r1.set": [
+                "4,5,6,7,8",
+                "{4,5,6,7,8}",
+                "{4, 5, 6, 7, 8}",
+                "4, 5, 6, 7, 8",
+                "4 5 6 7 8"
+              ],
+              "r2.bits": "0101010101",
+              "r2.set": [
+                "2,4,6,8,10",
+                "{2,4,6,8,10}",
+                "{2, 4, 6, 8, 10}",
+                "2, 4, 6, 8, 10",
+                "2 4 6 8 10"
+              ],
+              "r3.bits": "0101111101",
+              "r3.set": [
+                "2,4,5,6,7,8,10",
+                "{2,4,5,6,7,8,10}",
+                "{2, 4, 5, 6, 7, 8, 10}",
+                "2, 4, 5, 6, 7, 8, 10",
+                "2 4 5 6 7 8 10"
+              ],
+              "r4.bits": "0001010100",
+              "r4.set": [
+                "4,6,8",
+                "{4,6,8}",
+                "{4, 6, 8}",
+                "4, 6, 8",
+                "4 6 8"
+              ],
+              "r5.bits": "0100101001",
+              "r5.set": [
+                "2,5,7,10",
+                "{2,5,7,10}",
+                "{2, 5, 7, 10}",
+                "2, 5, 7, 10",
+                "2 5 7 10"
+              ]
+            },
+            "giaiThich": "<p>A=0001111100, B=0101010101, OR=0101111101, AND=0001010100, XOR=0100101001.</p><p><i>VI: A=0001111100, B=0101010101, OR=0101111101, AND=0001010100, XOR=0100101001.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the string right-to-left."
+        },
+        {
+          "loi": "Using OR where XOR is required for ⊕."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bit string",
+          "vi": "xâu bit"
+        },
+        {
+          "en": "bitwise",
+          "vi": "từng bit"
+        }
+      ]
+    },
+    {
+      "title": "Sets 4 — Cardinality and inclusion–exclusion",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "cardinality",
+        "inclusion–exclusion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Counting questions on set sizes: power sets, Cartesian products, subsets with conditions and the inclusion–exclusion principle.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu đếm kích thước tập: tập luỹ thừa, tích Descartes, tập con có điều kiện và nguyên lý bao hàm–loại trừ.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Inclusion–exclusion: add singles, subtract pairs, add the triple.",
+        "For divisibility, the intersection is the multiples of the lcm, not of the product."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 4 — Cardinality and inclusion–exclusion\n\nAnswer in the answer panel (no code needed).\n\n1. How many subsets does a 9-element set have?Tập 9 phần tử có bao nhiêu tập con?\n2. |A| = 7, |B| = 6: how many elements does A × B have?|A| = 7, |B| = 6: A × B có bao nhiêu phần tử?\n3. A has 8 elements. How many subsets contain two given elements?A có 8 phần tử. Có bao nhiêu tập con chứa hai phần tử cho trước?\n4. In a class of 100, 40 study A, 30 study B, 25 study C, 12 study A and B, 10 A and C, 8 B and C, 4 all three. How many study at least one?Lớp 100 người, 40 học A, 30 học B, 25 học C, 12 học A và B, 10 A và C, 8 B và C, 4 học cả ba. Bao nhiêu người học ít nhất một môn?\n5. Same class (100 students): how many study none of A, B, C?Cùng lớp (100 học sinh): bao nhiêu người không học môn nào?\n6. How many integers in 1..200 are divisible by 4 or 6?Có bao nhiêu số nguyên trong 1..200 chia hết cho 4 hoặc 6?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 4 — Cardinality and inclusion–exclusion — answer key\n\n1. How many subsets does a 9-element set have?Tập 9 phần tử có bao nhiêu tập con?\n   Answer: d) 512\n   2⁹ = 512.VI: 2⁹ = 512.\n\n2. |A| = 7, |B| = 6: how many elements does A × B have?|A| = 7, |B| = 6: A × B có bao nhiêu phần tử?\n   Answer: a) 42\n   7 × 6 = 42.VI: 7 × 6 = 42.\n\n3. A has 8 elements. How many subsets contain two given elements?A có 8 phần tử. Có bao nhiêu tập con chứa hai phần tử cho trước?\n   Answer: b) 64\n   The two are forced in; the other 6 are free: 2⁶ = 64.VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.\n\n4. In a class of 100, 40 study A, 30 study B, 25 study C, 12 study A and B, 10 A and C, 8 B and C, 4 all three. How many study at least one?Lớp 100 người, 40 học A, 30 học B, 25 học C, 12 học A và B, 10 A và C, 8 B và C, 4 học cả ba. Bao nhiêu người học ít nhất một môn?\n   Answer: c) 69\n   |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.\n\n5. Same class (100 students): how many study none of A, B, C?Cùng lớp (100 học sinh): bao nhiêu người không học môn nào?\n   Answer: d) 31\n   100 − 69 = 31.VI: 100 − 69 = 31.\n\n6. How many integers in 1..200 are divisible by 4 or 6?Có bao nhiêu số nguyên trong 1..200 chia hết cho 4 hoặc 6?\n   Answer: a) 67\n   ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p><p>7 × 6 = 42.</p><p><i>VI: 7 × 6 = 42.</i></p><p>The two are forced in; the other 6 are free: 2⁶ = 64.</p><p><i>VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.</i></p><p>|A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</p><p><i>VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</i></p><p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p><p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many subsets does a 9-element set have?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tập 9 phần tử có bao nhiêu tập con?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "81"
+              },
+              {
+                "ma": "b",
+                "noiDung": "18"
+              },
+              {
+                "ma": "c",
+                "noiDung": "256"
+              },
+              {
+                "ma": "d",
+                "noiDung": "512"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>|A| = 7, |B| = 6: how many elements does A × B have?</p><p style=\"opacity:.75;font-size:.92em\"><i>|A| = 7, |B| = 6: A × B có bao nhiêu phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "42"
+              },
+              {
+                "ma": "b",
+                "noiDung": "13"
+              },
+              {
+                "ma": "c",
+                "noiDung": "117649"
+              },
+              {
+                "ma": "d",
+                "noiDung": "8192"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>7 × 6 = 42.</p><p><i>VI: 7 × 6 = 42.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A has 8 elements. How many subsets contain two given elements?</p><p style=\"opacity:.75;font-size:.92em\"><i>A có 8 phần tử. Có bao nhiêu tập con chứa hai phần tử cho trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "36"
+              },
+              {
+                "ma": "b",
+                "noiDung": "64"
+              },
+              {
+                "ma": "c",
+                "noiDung": "254"
+              },
+              {
+                "ma": "d",
+                "noiDung": "128"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The two are forced in; the other 6 are free: 2⁶ = 64.</p><p><i>VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In a class of 100, 40 study A, 30 study B, 25 study C, 12 study A and B, 10 A and C, 8 B and C, 4 all three. How many study at least one?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lớp 100 người, 40 học A, 30 học B, 25 học C, 12 học A và B, 10 A và C, 8 B và C, 4 học cả ba. Bao nhiêu người học ít nhất một môn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "73"
+              },
+              {
+                "ma": "b",
+                "noiDung": "65"
+              },
+              {
+                "ma": "c",
+                "noiDung": "69"
+              },
+              {
+                "ma": "d",
+                "noiDung": "95"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>|A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</p><p><i>VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Same class (100 students): how many study none of A, B, C?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng lớp (100 học sinh): bao nhiêu người không học môn nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "69"
+              },
+              {
+                "ma": "b",
+                "noiDung": "27"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5"
+              },
+              {
+                "ma": "d",
+                "noiDung": "31"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>How many integers in 1..200 are divisible by 4 or 6?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu số nguyên trong 1..200 chia hết cho 4 hoặc 6?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "67"
+              },
+              {
+                "ma": "b",
+                "noiDung": "83"
+              },
+              {
+                "ma": "c",
+                "noiDung": "99"
+              },
+              {
+                "ma": "d",
+                "noiDung": "75.00000000000001"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the three sizes and forgetting the overlaps."
+        },
+        {
+          "loi": "Using 4·6 = 24 instead of lcm = 12 for the overlap."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "inclusion–exclusion",
+          "vi": "bao hàm–loại trừ"
+        },
+        {
+          "en": "cardinality",
+          "vi": "lực lượng"
+        }
+      ]
+    },
+    {
+      "title": "Sets 5 — Prove A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) element-wise",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "set identity proofs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Arrange the lines of the ⊆ half of an element-chasing proof (take an arbitrary element and follow it).</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các dòng của nửa chứng minh ⊆ theo kiểu theo dõi phần tử (lấy phần tử bất kỳ rồi lần theo).</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "In an element proof the first line introduces an arbitrary element and the last line states the target membership.",
+        "The case split follows the “or” in the middle."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 5 — Prove A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) element-wise\n\nAnswer in the answer panel (no code needed).\n\n1. Prove A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).Chứng minh A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).\n2. Order the algorithm that counts |A ∪ B ∪ C|.Sắp thuật toán đếm |A ∪ B ∪ C|.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 5 — Prove A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) element-wise — answer key\n\n1. Prove A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).Chứng minh A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).\n   Answer: s1) Let x ∈ A ∩ (B ∪ C) be arbitrary.  →  s2) Then x ∈ A and x ∈ B ∪ C.  →  s3) So x ∈ A and (x ∈ B or x ∈ C).  →  s4) Case x ∈ B: then x ∈ A ∩ B; case x ∈ C: then x ∈ A ∩ C.  →  s5) In both cases x ∈ (A ∩ B) ∪ (A ∩ C). Hence the inclusion.\n   Always start from an arbitrary element, unfold the definition of ∩, split on the “or”, and fold back.VI: Luôn bắt đầu từ phần tử bất kỳ, khai triển định nghĩa ∩, chia trường hợp theo “hoặc”, rồi gộp lại.\n\n2. Order the algorithm that counts |A ∪ B ∪ C|.Sắp thuật toán đếm |A ∪ B ∪ C|.\n   Answer: s1) Add |A| + |B| + |C|.  →  s2) Subtract |A ∩ B|, |A ∩ C| and |B ∩ C|.  →  s3) Add back |A ∩ B ∩ C|.  →  s4) Report the final value.\n   The triple intersection was subtracted three times and added three times, so it needs one add-back.VI: Giao ba tập bị trừ ba lần và cộng ba lần nên cần cộng lại một lần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Always start from an arbitrary element, unfold the definition of ∩, split on the “or”, and fold back.</p><p><i>VI: Luôn bắt đầu từ phần tử bất kỳ, khai triển định nghĩa ∩, chia trường hợp theo “hoặc”, rồi gộp lại.</i></p><p>The triple intersection was subtracted three times and added three times, so it needs one add-back.</p><p><i>VI: Giao ba tập bị trừ ba lần và cộng ba lần nên cần cộng lại một lần.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Prove A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).</p><p style=\"opacity:.75;font-size:.92em\"><i>Chứng minh A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "So x ∈ A and (x ∈ B or x ∈ C)."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Case x ∈ B: then x ∈ A ∩ B; case x ∈ C: then x ∈ A ∩ C."
+              },
+              {
+                "ma": "s5",
+                "noiDung": "In both cases x ∈ (A ∩ B) ∪ (A ∩ C). Hence the inclusion."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Let x ∈ A ∩ (B ∪ C) be arbitrary."
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Then x ∈ A and x ∈ B ∪ C."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>Always start from an arbitrary element, unfold the definition of ∩, split on the “or”, and fold back.</p><p><i>VI: Luôn bắt đầu từ phần tử bất kỳ, khai triển định nghĩa ∩, chia trường hợp theo “hoặc”, rồi gộp lại.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Order the algorithm that counts |A ∪ B ∪ C|.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thuật toán đếm |A ∪ B ∪ C|.</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "Subtract |A ∩ B|, |A ∩ C| and |B ∩ C|."
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Add back |A ∩ B ∩ C|."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Report the final value."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Add |A| + |B| + |C|."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4"
+            ],
+            "giaiThich": "<p>The triple intersection was subtracted three times and added three times, so it needs one add-back.</p><p><i>VI: Giao ba tập bị trừ ba lần và cộng ba lần nên cần cộng lại một lần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting from a specific element instead of an arbitrary one."
+        },
+        {
+          "loi": "Forgetting to close both cases."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "arbitrary element",
+          "vi": "phần tử tuỳ ý"
+        }
+      ]
+    },
+    {
+      "title": "Sets 6 — Fill the Venn diagram regions",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "Venn regions",
+        "inclusion–exclusion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Three sets A, B, C inside a universe of N people. Given the sizes of every set and every intersection, compute the region counts: people in <b>at least one</b> set, in <b>none</b>, in <b>exactly one</b>, in <b>exactly two</b>, and in <b>only A</b>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ba tập A, B, C trong tập N người. Cho kích thước mọi tập và mọi giao, tính số người ở từng miền: <b>ít nhất một</b> tập, <b>không</b> tập nào, <b>đúng một</b>, <b>đúng hai</b> và <b>chỉ A</b>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start from the centre: the triple intersection, then “exactly two” by subtracting it from each pair.",
+        "Check: only-A + only-B + only-C + exactly-two + triple = union."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 6 — Fill the Venn diagram regions\n\nAnswer in the answer panel (no code needed).\n\n1. Venn regionsCác miền Venn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets 6 — Fill the Venn diagram regions — answer key\n\n1. Venn regionsCác miền Venn\n   - r1.un: 69\n   - r1.none: 31\n   - r1.one: 47\n   - r1.two: 18\n   - r1.oa: 22\n   - r2.un: 95\n   - r2.none: 55\n   - r2.one: 60\n   - r2.two: 30\n   - r2.oa: 30\n   - r3.un: 66\n   - r3.none: 14\n   - r3.one: 50\n   - r3.two: 13\n   - r3.oa: 22\n   (40,30,25,12,10,8,4,100): union 69, none 31, exactly one 47, exactly two 18, only A 22; (60,45,30,20,15,10,5,150): union 95, none 55, exactly one 60, exactly two 30, only A 30; (35,28,22,9,7,6,3,80): union 66, none 14, exactly one 50, exactly two 13, only A 22. Exactly two = Σ|pair| − 3|triple|; exactly one = Σ|single| − 2Σ|pair| + 3|triple|; only A = |A| − |A∩B| − |A∩C| + |A∩B∩C|.VI: (40,30,25,12,10,8,4,100): hợp 69, không 31, đúng một 47, đúng hai 18, chỉ A 22; (60,45,30,20,15,10,5,150): hợp 95, không 55, đúng một 60, đúng hai 30, chỉ A 30; (35,28,22,9,7,6,3,80): hợp 66, không 14, đúng một 50, đúng hai 13, chỉ A 22.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(40,30,25,12,10,8,4,100): union 69, none 31, exactly one 47, exactly two 18, only A 22; (60,45,30,20,15,10,5,150): union 95, none 55, exactly one 60, exactly two 30, only A 30; (35,28,22,9,7,6,3,80): union 66, none 14, exactly one 50, exactly two 13, only A 22. Exactly two = Σ|pair| − 3|triple|; exactly one = Σ|single| − 2Σ|pair| + 3|triple|; only A = |A| − |A∩B| − |A∩C| + |A∩B∩C|.</p><p><i>VI: (40,30,25,12,10,8,4,100): hợp 69, không 31, đúng một 47, đúng hai 18, chỉ A 22; (60,45,30,20,15,10,5,150): hợp 95, không 55, đúng một 60, đúng hai 30, chỉ A 30; (35,28,22,9,7,6,3,80): hợp 66, không 14, đúng một 50, đúng hai 13, chỉ A 22.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Venn regions</p><p style=\"opacity:.75;font-size:.92em\"><i>Các miền Venn</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "|A|,|B|,|C|, |A∩B|,|A∩C|,|B∩C|, |A∩B∩C|, N"
+              },
+              {
+                "ma": "un",
+                "ten": "At least one"
+              },
+              {
+                "ma": "none",
+                "ten": "None"
+              },
+              {
+                "ma": "one",
+                "ten": "Exactly one"
+              },
+              {
+                "ma": "two",
+                "ten": "Exactly two"
+              },
+              {
+                "ma": "oa",
+                "ten": "Only A"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "40, 30, 25, 12, 10, 8, 4, 100"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "60, 45, 30, 20, 15, 10, 5, 150"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "35, 28, 22, 9, 7, 6, 3, 80"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.un": "69",
+              "r1.none": "31",
+              "r1.one": "47",
+              "r1.two": "18",
+              "r1.oa": "22",
+              "r2.un": "95",
+              "r2.none": "55",
+              "r2.one": "60",
+              "r2.two": "30",
+              "r2.oa": "30",
+              "r3.un": "66",
+              "r3.none": "14",
+              "r3.one": "50",
+              "r3.two": "13",
+              "r3.oa": "22"
+            },
+            "giaiThich": "<p>(40,30,25,12,10,8,4,100): union 69, none 31, exactly one 47, exactly two 18, only A 22; (60,45,30,20,15,10,5,150): union 95, none 55, exactly one 60, exactly two 30, only A 30; (35,28,22,9,7,6,3,80): union 66, none 14, exactly one 50, exactly two 13, only A 22. Exactly two = Σ|pair| − 3|triple|; exactly one = Σ|single| − 2Σ|pair| + 3|triple|; only A = |A| − |A∩B| − |A∩C| + |A∩B∩C|.</p><p><i>VI: (40,30,25,12,10,8,4,100): hợp 69, không 31, đúng một 47, đúng hai 18, chỉ A 22; (60,45,30,20,15,10,5,150): hợp 95, không 55, đúng một 60, đúng hai 30, chỉ A 30; (35,28,22,9,7,6,3,80): hợp 66, không 14, đúng một 50, đúng hai 13, chỉ A 22.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using |A∩B| as the “exactly two (A and B)” region without removing the centre."
+        },
+        {
+          "loi": "Subtracting the pairs without adding the triple back in the union formula."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Venn diagram",
+          "vi": "biểu đồ Venn"
+        }
+      ]
+    },
+    {
+      "title": "Sets 7 — Implement the set operations",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "arrays as sets",
+        "filter"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>setOps(A, B)</code> for two arrays of integers (they may contain duplicates, which a set ignores). Return an object <code>{ union, inter, diff, symdiff }</code> where each field is an array of distinct integers in ascending order: <code>union</code> = A ∪ B, <code>inter</code> = A ∩ B, <code>diff</code> = A − B and <code>symdiff</code> = A ⊕ B.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Remove duplicates first; sort numerically (not as strings).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>setOps(A, B)</code> cho hai mảng số nguyên (có thể trùng, tập hợp bỏ qua trùng). Trả đối tượng <code>{ union, inter, diff, symdiff }</code>, mỗi trường là mảng số nguyên phân biệt tăng dần: <code>union</code> = A ∪ B, <code>inter</code> = A ∩ B, <code>diff</code> = A − B, <code>symdiff</code> = A ⊕ B.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Loại trùng trước; sắp theo số (không phải chuỗi).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setOps([1,2,3,3],[3,4])",
+          "output": "{\"union\":[1,2,3,4],\"inter\":[3],\"diff\":[1,2],\"symdiff\":[1,2,4]}",
+          "explanation": "Duplicates ignored; 3 is the only common element.|||Bỏ qua trùng; 3 là phần tử chung duy nhất."
+        }
+      ],
+      "hintsJson": [
+        "Write a small uniq helper first, then derive the four results with filter.",
+        "Array.prototype.sort sorts as strings by default — pass (x, y) => x − y."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function setOps(A, B) {\n  return { union: [], inter: [], diff: [], symdiff: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function setOps(A, B) {\n  function uniq(x) { var out = []; x.forEach(function (v) { if (out.indexOf(v) < 0) out.push(v); }); return out; }\n  var a = uniq(A), b = uniq(B), asc = function (x, y) { return x - y; };\n  var union = uniq(a.concat(b)).sort(asc);\n  var inter = a.filter(function (v) { return b.indexOf(v) >= 0; }).sort(asc);\n  var diff = a.filter(function (v) { return b.indexOf(v) < 0; }).sort(asc);\n  var symdiff = diff.concat(b.filter(function (v) { return a.indexOf(v) < 0; })).sort(asc);\n  return { union: union, inter: inter, diff: diff, symdiff: symdiff };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A set has no order and no duplicates; the canonical representation is a sorted array of distinct values. Each operation is a filter on membership.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: setOps([1,2,3], [3,4,5])",
+              "vi": "Ca 1"
+            },
+            "goi": "setOps([1,2,3], [3,4,5])",
+            "mongDoi": {
+              "union": [
+                1,
+                2,
+                3,
+                4,
+                5
+              ],
+              "inter": [
+                3
+              ],
+              "diff": [
+                1,
+                2
+              ],
+              "symdiff": [
+                1,
+                2,
+                4,
+                5
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: setOps([], [1,2])",
+              "vi": "Ca 2"
+            },
+            "goi": "setOps([], [1,2])",
+            "mongDoi": {
+              "union": [
+                1,
+                2
+              ],
+              "inter": [],
+              "diff": [],
+              "symdiff": [
+                1,
+                2
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: setOps([5,5,1], [1,5,5])",
+              "vi": "Ca 3"
+            },
+            "goi": "setOps([5,5,1], [1,5,5])",
+            "mongDoi": {
+              "union": [
+                1,
+                5
+              ],
+              "inter": [
+                1,
+                5
+              ],
+              "diff": [],
+              "symdiff": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "setOps([10,2,33], [2,10,4])",
+            "mongDoi": {
+              "union": [
+                2,
+                4,
+                10,
+                33
+              ],
+              "inter": [
+                2,
+                10
+              ],
+              "diff": [
+                33
+              ],
+              "symdiff": [
+                4,
+                33
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "setOps([1,3,5,7,9], [2,4,6,8])",
+            "mongDoi": {
+              "union": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ],
+              "inter": [],
+              "diff": [
+                1,
+                3,
+                5,
+                7,
+                9
+              ],
+              "symdiff": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "setOps([-1,-2,0], [0,1,-1])",
+            "mongDoi": {
+              "union": [
+                -2,
+                -1,
+                0,
+                1
+              ],
+              "inter": [
+                -1,
+                0
+              ],
+              "diff": [
+                -2
+              ],
+              "symdiff": [
+                -2,
+                1
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Default sort puts 10 before 2."
+        },
+        {
+          "loi": "Computing symmetric difference as (A ∪ B) − (A ∩ B) while forgetting to sort or de-duplicate."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Sets 8 — Generate the power set and count subsets by property",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "power set",
+        "bit masks",
+        "brute force"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>subsetsWithSum(A, target)</code> that returns every subset of the array <code>A</code> (distinct integers, at most 12 elements) whose elements add up to <code>target</code>. Enumerate subsets in the order of the bit mask <code>m = 0 … 2ⁿ − 1</code>, where bit <code>i</code> of <code>m</code> says whether <code>A[i]</code> is included; each subset keeps the order of <code>A</code>. The empty subset has sum 0 and belongs to the answer when target is 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return an array of arrays, in increasing mask order.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>subsetsWithSum(A, target)</code> trả mọi tập con của mảng <code>A</code> (số nguyên phân biệt, tối đa 12 phần tử) có tổng bằng <code>target</code>. Duyệt tập con theo mặt nạ bit <code>m = 0 … 2ⁿ − 1</code>, bit <code>i</code> của <code>m</code> cho biết có lấy <code>A[i]</code> hay không; mỗi tập con giữ thứ tự của <code>A</code>. Tập rỗng có tổng 0 và thuộc đáp án khi target = 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả mảng các mảng, theo thứ tự mặt nạ tăng dần.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "subsetsWithSum([1,2,3,4], 5)",
+          "output": "[[2,3],[1,4]]",
+          "explanation": "Mask 6 gives [2,3] and mask 9 gives [1,4]; masks are visited in increasing order.|||Mặt nạ 6 cho [2,3], mặt nạ 9 cho [1,4]; duyệt mặt nạ tăng dần."
+        }
+      ],
+      "hintsJson": [
+        "Loop m over all 2ⁿ masks and build the subset from the set bits.",
+        "Keep a running sum while you build the subset, then compare to target."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function subsetsWithSum(A, target) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function subsetsWithSum(A, target) {\n  var out = [];\n  for (var m = 0; m < (1 << A.length); m++) {\n    var s = [], t = 0;\n    for (var i = 0; i < A.length; i++) if (m & (1 << i)) { s.push(A[i]); t += A[i]; }\n    if (t === target) out.push(s);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A subset of an n-element set corresponds to an n-bit mask, so the power set has 2ⁿ members; filtering them by a property is brute-force enumeration — the same idea behind subset-sum.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: subsetsWithSum([1,2,3,4], 5)",
+              "vi": "Ca 1"
+            },
+            "goi": "subsetsWithSum([1,2,3,4], 5)",
+            "mongDoi": [
+              [
+                2,
+                3
+              ],
+              [
+                1,
+                4
+              ]
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: subsetsWithSum([3,1], 0)",
+              "vi": "Ca 2"
+            },
+            "goi": "subsetsWithSum([3,1], 0)",
+            "mongDoi": [
+              []
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: subsetsWithSum([2,4,6], 7)",
+              "vi": "Ca 3"
+            },
+            "goi": "subsetsWithSum([2,4,6], 7)",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "subsetsWithSum([1,2,3,4,5,6], 9)",
+            "mongDoi": [
+              [
+                2,
+                3,
+                4
+              ],
+              [
+                1,
+                3,
+                5
+              ],
+              [
+                4,
+                5
+              ],
+              [
+                1,
+                2,
+                6
+              ],
+              [
+                3,
+                6
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "subsetsWithSum([-1,1,2], 1)",
+            "mongDoi": [
+              [
+                1
+              ],
+              [
+                -1,
+                2
+              ]
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "subsetsWithSum([5], 5)",
+            "mongDoi": [
+              [
+                5
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skipping the empty subset when target = 0."
+        },
+        {
+          "loi": "Reusing the same inner array between iterations (push a fresh array each time)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

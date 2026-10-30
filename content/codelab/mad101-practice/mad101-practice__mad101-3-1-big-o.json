@@ -1,0 +1,1255 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-3-1-big-o",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-3-1-big-o"
+  },
+  "exercises": [
+    {
+      "title": "Big-O 1 — Definitions: O, Ω, Θ",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Big-O",
+        "Theta",
+        "Omega"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Concept check on asymptotic notation (Rosen §3.2).</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kiểm tra khái niệm ký hiệu tiệm cận (Rosen §3.2).</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Big-O ignores constants and lower-order terms.",
+        "Order to remember: 1 < log n < n < n log n < n² < n³ < 2ⁿ < n!."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 1 — Definitions: O, Ω, Θ\n\nAnswer in the answer panel (no code needed).\n\n1. f(n) is O(g(n)) means …f(n) là O(g(n)) nghĩa là …\n2. Which is the tightest simple bound on 4n³ + 100n² + 7?Chặn đơn giản chặt nhất cho 4n³ + 100n² + 7 là?\n3. f(n) is Θ(g(n)) when …f(n) là Θ(g(n)) khi …\n4. Which of the following grows fastest?Hàm nào tăng nhanh nhất?\n5. An algorithm that runs in 5n² + 3n steps is …Thuật toán chạy 5n² + 3n bước là …\n6. log₂ n and log₁₀ n differ by …log₂ n và log₁₀ n khác nhau bởi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 1 — Definitions: O, Ω, Θ — answer key\n\n1. f(n) is O(g(n)) means …f(n) là O(g(n)) nghĩa là …\n   Answer: b) f(n) ≤ C·g(n) for all n > k, for some constants C and k\n   Big-O is an upper bound that holds from some point on, up to a constant factor.VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.\n\n2. Which is the tightest simple bound on 4n³ + 100n² + 7?Chặn đơn giản chặt nhất cho 4n³ + 100n² + 7 là?\n   Answer: c) O(n³)\n   Drop lower-order terms and the constant factor: n³ dominates.VI: Bỏ các số hạng bậc thấp và hệ số hằng: n³ trội hơn.\n\n3. f(n) is Θ(g(n)) when …f(n) là Θ(g(n)) khi …\n   Answer: d) f is both O(g) and Ω(g)\n   Θ is a tight bound: both upper and lower.VI: Θ là chặn chặt: vừa chặn trên vừa chặn dưới.\n\n4. Which of the following grows fastest?Hàm nào tăng nhanh nhất?\n   Answer: a) n!\n   Factorial beats exponential, which beats every polynomial.VI: Giai thừa vượt luỹ thừa, luỹ thừa vượt mọi đa thức.\n\n5. An algorithm that runs in 5n² + 3n steps is …Thuật toán chạy 5n² + 3n bước là …\n   Answer: b) O(n²) and also O(n³)\n   Big-O is an upper bound: any larger class is also a valid, though loose, bound.VI: Big-O là chặn trên: lớp lớn hơn cũng là chặn hợp lệ nhưng lỏng.\n\n6. log₂ n and log₁₀ n differ by …log₂ n và log₁₀ n khác nhau bởi …\n   Answer: c) a constant factor, so they are the same Big-O class\n   log_a n = log_b n / log_b a — only a constant.VI: log_a n = log_b n / log_b a — chỉ khác một hằng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) b · 2) c · 3) d · 4) a · 5) b · 6) c.</p><p>Big-O is an upper bound that holds from some point on, up to a constant factor.</p><p><i>VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.</i></p><p>Drop lower-order terms and the constant factor: n³ dominates.</p><p><i>VI: Bỏ các số hạng bậc thấp và hệ số hằng: n³ trội hơn.</i></p><p>Θ is a tight bound: both upper and lower.</p><p><i>VI: Θ là chặn chặt: vừa chặn trên vừa chặn dưới.</i></p><p>Factorial beats exponential, which beats every polynomial.</p><p><i>VI: Giai thừa vượt luỹ thừa, luỹ thừa vượt mọi đa thức.</i></p><p>Big-O is an upper bound: any larger class is also a valid, though loose, bound.</p><p><i>VI: Big-O là chặn trên: lớp lớn hơn cũng là chặn hợp lệ nhưng lỏng.</i></p><p>log_a n = log_b n / log_b a — only a constant.</p><p><i>VI: log_a n = log_b n / log_b a — chỉ khác một hằng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>f(n) is O(g(n)) means …</p><p style=\"opacity:.75;font-size:.92em\"><i>f(n) là O(g(n)) nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "f and g have the same derivative"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f(n) ≤ C·g(n) for all n > k, for some constants C and k"
+              },
+              {
+                "ma": "c",
+                "noiDung": "f(n) = g(n) for all n"
+              },
+              {
+                "ma": "d",
+                "noiDung": "f(n) ≥ C·g(n) for large n"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Big-O is an upper bound that holds from some point on, up to a constant factor.</p><p><i>VI: Big-O là chặn trên đúng từ một điểm trở đi, sai khác một hệ số hằng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which is the tightest simple bound on 4n³ + 100n² + 7?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chặn đơn giản chặt nhất cho 4n³ + 100n² + 7 là?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "O(n⁴) only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "O(2ⁿ) only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "O(n³)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "O(n²)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Drop lower-order terms and the constant factor: n³ dominates.</p><p><i>VI: Bỏ các số hạng bậc thấp và hệ số hằng: n³ trội hơn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>f(n) is Θ(g(n)) when …</p><p style=\"opacity:.75;font-size:.92em\"><i>f(n) là Θ(g(n)) khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "f is O(g) only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f is smaller than g"
+              },
+              {
+                "ma": "c",
+                "noiDung": "f(n) = g(n)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "f is both O(g) and Ω(g)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Θ is a tight bound: both upper and lower.</p><p><i>VI: Θ là chặn chặt: vừa chặn trên vừa chặn dưới.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which of the following grows fastest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hàm nào tăng nhanh nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "n!"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2ⁿ"
+              },
+              {
+                "ma": "c",
+                "noiDung": "n³"
+              },
+              {
+                "ma": "d",
+                "noiDung": "n log n"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Factorial beats exponential, which beats every polynomial.</p><p><i>VI: Giai thừa vượt luỹ thừa, luỹ thừa vượt mọi đa thức.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An algorithm that runs in 5n² + 3n steps is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán chạy 5n² + 3n bước là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "O(log n)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "O(n²) and also O(n³)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "O(n) only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "O(n²) but not O(n³)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Big-O is an upper bound: any larger class is also a valid, though loose, bound.</p><p><i>VI: Big-O là chặn trên: lớp lớn hơn cũng là chặn hợp lệ nhưng lỏng.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>log₂ n and log₁₀ n differ by …</p><p style=\"opacity:.75;font-size:.92em\"><i>log₂ n và log₁₀ n khác nhau bởi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an exponent"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing — they are equal"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a constant factor, so they are the same Big-O class"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a polynomial factor"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>log_a n = log_b n / log_b a — only a constant.</p><p><i>VI: log_a n = log_b n / log_b a — chỉ khác một hằng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing O(n²) means “exactly n² steps”."
+        },
+        {
+          "loi": "Keeping the base of a logarithm inside the Big-O class."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "asymptotic",
+          "vi": "tiệm cận"
+        },
+        {
+          "en": "upper bound",
+          "vi": "chặn trên"
+        },
+        {
+          "en": "tight bound",
+          "vi": "chặn chặt"
+        }
+      ]
+    },
+    {
+      "title": "Big-O 2 — Count the work() calls",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "counting operations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For n = 16, how many times is <code>work()</code> called by each loop pattern? Then name the Big-O class of the pattern. (Count by running the loops mentally or on paper.)</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với n = 16, <code>work()</code> được gọi bao nhiêu lần ở mỗi mẫu vòng lặp? Rồi gọi tên lớp Big-O. (Đếm bằng cách chạy tay vòng lặp.)</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Triangular loops run 0 + 1 + … + (n−1) = n(n−1)/2 times.",
+        "A counter that doubles up to n runs ⌈log₂ n⌉ times."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 2 — Count the work() calls\n\nAnswer in the answer panel (no code needed).\n\n1. Loop patterns, n = 16Mẫu vòng lặp, n = 16\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 2 — Count the work() calls — answer key\n\n1. Loop patterns, n = 16Mẫu vòng lặp, n = 16\n   - r1.k: 16\n   - r1.o: O(n)\n   - r2.k: 256\n   - r2.o: O(n²)\n   - r3.k: 120\n   - r3.o: O(n²)\n   - r4.k: 4\n   - r4.o: O(log n)\n   - r5.k: 64\n   - r5.o: O(n log n)\n   - r6.k: 4096\n   - r6.o: O(n³)\n   for i in 0..n−1: work(): 16 calls, O(n); for i in 0..n−1: for j in 0..n−1: work(): 256 calls, O(n²); for i in 0..n−1: for j in 0..i−1: work(): 120 calls, O(n²); for (i = 1; i VI: for i in 0..n−1: work(): 16 lần gọi, O(n); for i in 0..n−1: for j in 0..n−1: work(): 256 lần gọi, O(n²); for i in 0..n−1: for j in 0..i−1: work(): 120 lần gọi, O(n²); for (i = 1; i\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>for i in 0..n−1: work(): 16 calls, O(n); for i in 0..n−1: for j in 0..n−1: work(): 256 calls, O(n²); for i in 0..n−1: for j in 0..i−1: work(): 120 calls, O(n²); for (i = 1; i < n; i *= 2): work(): 4 calls, O(log n); for i in 0..n−1: for (j = 1; j < n; j *= 2): work(): 64 calls, O(n log n); for i in 0..n−1, j in 0..n−1, k in 0..n−1: work(): 4096 calls, O(n³).</p><p><i>VI: for i in 0..n−1: work(): 16 lần gọi, O(n); for i in 0..n−1: for j in 0..n−1: work(): 256 lần gọi, O(n²); for i in 0..n−1: for j in 0..i−1: work(): 120 lần gọi, O(n²); for (i = 1; i < n; i *= 2): work(): 4 lần gọi, O(log n); for i in 0..n−1: for (j = 1; j < n; j *= 2): work(): 64 lần gọi, O(n log n); for i in 0..n−1, j in 0..n−1, k in 0..n−1: work(): 4096 lần gọi, O(n³).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Loop patterns, n = 16</p><p style=\"opacity:.75;font-size:.92em\"><i>Mẫu vòng lặp, n = 16</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Pattern"
+              },
+              {
+                "ma": "k",
+                "ten": "Calls for n = 16"
+              },
+              {
+                "ma": "o",
+                "ten": "Class",
+                "luaChon": [
+                  "O(1)",
+                  "O(log n)",
+                  "O(n)",
+                  "O(n log n)",
+                  "O(n²)",
+                  "O(n³)",
+                  "O(2ⁿ)",
+                  "O(n!)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "for i in 0..n−1: work()"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "for i in 0..n−1: for j in 0..n−1: work()"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "for i in 0..n−1: for j in 0..i−1: work()"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "for (i = 1; i < n; i *= 2): work()"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "c": "for i in 0..n−1: for (j = 1; j < n; j *= 2): work()"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "c": "for i in 0..n−1, j in 0..n−1, k in 0..n−1: work()"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "16",
+              "r1.o": "O(n)",
+              "r2.k": "256",
+              "r2.o": "O(n²)",
+              "r3.k": "120",
+              "r3.o": "O(n²)",
+              "r4.k": "4",
+              "r4.o": "O(log n)",
+              "r5.k": "64",
+              "r5.o": "O(n log n)",
+              "r6.k": "4096",
+              "r6.o": "O(n³)"
+            },
+            "giaiThich": "<p>for i in 0..n−1: work(): 16 calls, O(n); for i in 0..n−1: for j in 0..n−1: work(): 256 calls, O(n²); for i in 0..n−1: for j in 0..i−1: work(): 120 calls, O(n²); for (i = 1; i < n; i *= 2): work(): 4 calls, O(log n); for i in 0..n−1: for (j = 1; j < n; j *= 2): work(): 64 calls, O(n log n); for i in 0..n−1, j in 0..n−1, k in 0..n−1: work(): 4096 calls, O(n³).</p><p><i>VI: for i in 0..n−1: work(): 16 lần gọi, O(n); for i in 0..n−1: for j in 0..n−1: work(): 256 lần gọi, O(n²); for i in 0..n−1: for j in 0..i−1: work(): 120 lần gọi, O(n²); for (i = 1; i < n; i *= 2): work(): 4 lần gọi, O(log n); for i in 0..n−1: for (j = 1; j < n; j *= 2): work(): 64 lần gọi, O(n log n); for i in 0..n−1, j in 0..n−1, k in 0..n−1: work(): 4096 lần gọi, O(n³).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the doubling loop as n/2 iterations."
+        },
+        {
+          "loi": "Counting the triangular nested loop as n² (it is n(n−1)/2 — same class, different count)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "basic operation",
+          "vi": "phép toán cơ bản"
+        }
+      ]
+    },
+    {
+      "title": "Big-O 3 — Classify the expression",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Big-O classification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Pick the tightest Big-O class from the drop-down for each expression. Simplify first (expand products, cancel fractions).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn lớp Big-O chặt nhất từ danh sách cho mỗi biểu thức. Rút gọn trước (khai triển tích, giản ước phân số).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Expand/simplify first; then keep only the fastest-growing term.",
+        "Any polynomial is smaller than 2ⁿ eventually, even n¹⁰⁰."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 3 — Classify the expression\n\nAnswer in the answer panel (no code needed).\n\n1. Tightest Big-O classLớp Big-O chặt nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 3 — Classify the expression — answer key\n\n1. Tightest Big-O classLớp Big-O chặt nhất\n   - r1.o: O(n²)\n   - r2.o: O(n)\n   - r3.o: O(n log n)\n   - r4.o: O(2ⁿ)\n   - r5.o: O(n³)\n   - r6.o: O(log n)\n   - r7.o: O(n!)\n   - r8.o: O(1)\n   - r9.o: O(n)\n   (n+1)(n+2)(n+3) expands to n³ + 6n² + 11n + 6; (n² + 3n)/n = n + 3. 3n² + 5n log n + 7: O(n²); 100n + 2000: O(n); n log n + n: O(n log n); 2ⁿ + n¹⁰⁰: O(2ⁿ); (n + 1)(n + 2)(n + 3): O(n³); 5 log n + 1000: O(log n); n! + 2ⁿ: O(n!); 7777: O(1); (n² + 3n)/n: O(n).VI: 3n² + 5n log n + 7: O(n²); 100n + 2000: O(n); n log n + n: O(n log n); 2ⁿ + n¹⁰⁰: O(2ⁿ); (n + 1)(n + 2)(n + 3): O(n³); 5 log n + 1000: O(log n); n! + 2ⁿ: O(n!); 7777: O(1); (n² + 3n)/n: O(n).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(n+1)(n+2)(n+3) expands to n³ + 6n² + 11n + 6; (n² + 3n)/n = n + 3. 3n² + 5n log n + 7: O(n²); 100n + 2000: O(n); n log n + n: O(n log n); 2ⁿ + n¹⁰⁰: O(2ⁿ); (n + 1)(n + 2)(n + 3): O(n³); 5 log n + 1000: O(log n); n! + 2ⁿ: O(n!); 7777: O(1); (n² + 3n)/n: O(n).</p><p><i>VI: 3n² + 5n log n + 7: O(n²); 100n + 2000: O(n); n log n + n: O(n log n); 2ⁿ + n¹⁰⁰: O(2ⁿ); (n + 1)(n + 2)(n + 3): O(n³); 5 log n + 1000: O(log n); n! + 2ⁿ: O(n!); 7777: O(1); (n² + 3n)/n: O(n).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Tightest Big-O class</p><p style=\"opacity:.75;font-size:.92em\"><i>Lớp Big-O chặt nhất</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "f(n)"
+              },
+              {
+                "ma": "o",
+                "ten": "Class",
+                "luaChon": [
+                  "O(1)",
+                  "O(log n)",
+                  "O(n)",
+                  "O(n log n)",
+                  "O(n²)",
+                  "O(n³)",
+                  "O(2ⁿ)",
+                  "O(n!)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "3n² + 5n log n + 7"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "100n + 2000"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "n log n + n"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "2ⁿ + n¹⁰⁰"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "(n + 1)(n + 2)(n + 3)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "e": "5 log n + 1000"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "e": "n! + 2ⁿ"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "e": "7777"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "e": "(n² + 3n)/n"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.o": "O(n²)",
+              "r2.o": "O(n)",
+              "r3.o": "O(n log n)",
+              "r4.o": "O(2ⁿ)",
+              "r5.o": "O(n³)",
+              "r6.o": "O(log n)",
+              "r7.o": "O(n!)",
+              "r8.o": "O(1)",
+              "r9.o": "O(n)"
+            },
+            "giaiThich": "<p>(n+1)(n+2)(n+3) expands to n³ + 6n² + 11n + 6; (n² + 3n)/n = n + 3. 3n² + 5n log n + 7: O(n²); 100n + 2000: O(n); n log n + n: O(n log n); 2ⁿ + n¹⁰⁰: O(2ⁿ); (n + 1)(n + 2)(n + 3): O(n³); 5 log n + 1000: O(log n); n! + 2ⁿ: O(n!); 7777: O(1); (n² + 3n)/n: O(n).</p><p><i>VI: 3n² + 5n log n + 7: O(n²); 100n + 2000: O(n); n log n + n: O(n log n); 2ⁿ + n¹⁰⁰: O(2ⁿ); (n + 1)(n + 2)(n + 3): O(n³); 5 log n + 1000: O(log n); n! + 2ⁿ: O(n!); 7777: O(1); (n² + 3n)/n: O(n).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Judging (n² + 3n)/n as O(n²) without cancelling."
+        },
+        {
+          "loi": "Thinking n¹⁰⁰ eventually beats 2ⁿ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dominant term",
+          "vi": "số hạng trội"
+        }
+      ]
+    },
+    {
+      "title": "Big-O 4 — Numbers behind the notation",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "concrete costs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Concrete numbers show why Big-O matters: comparison counts of searching and sorting, and where an exponential overtakes a polynomial.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Con số cụ thể cho thấy vì sao Big-O quan trọng: số phép so sánh khi tìm kiếm và sắp xếp, và điểm hàm mũ vượt đa thức.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Multiplying the input by 10 multiplies a Θ(n²) cost by 100, a Θ(n) cost by 10, and adds ≈ 3.3 to a Θ(log n) cost.",
+        "For crossovers, evaluate both sides for n = 8…12."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 4 — Numbers behind the notation\n\nAnswer in the answer panel (no code needed).\n\n1. Linear search of a 1,024-element array needs at most … comparisons.Tìm tuyến tính trong mảng 1.024 phần tử cần tối đa … phép so sánh.\n2. Binary search of a sorted array of 1,000,000 elements needs at most about … comparisons.Tìm nhị phân trong mảng đã sắp 1.000.000 phần tử cần tối đa khoảng … phép so sánh.\n3. Bubble sort on n = 40 elements always performs … comparisons (no early exit).Sắp xếp nổi bọt n = 40 luôn thực hiện … phép so sánh (không dừng sớm).\n4. An algorithm takes 1 ms for n = 1,000 and is Θ(n²). Estimated time for n = 10,000 is … ms.Thuật toán mất 1 ms với n = 1.000 và là Θ(n²). Thời gian ước tính với n = 10.000 là … ms.\n5. The smallest n from which 2ⁿ > n³ holds for every larger n is …n nhỏ nhất từ đó 2ⁿ > n³ đúng với mọi n lớn hơn là …\n6. How many times does a loop run that halves n = 1,000 until it reaches 1 (i = ⌊i/2⌋ starting at 1000)?Vòng lặp chia đôi n = 1.000 đến khi bằng 1 (i = ⌊i/2⌋ bắt đầu từ 1000) chạy bao nhiêu lần?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 4 — Numbers behind the notation — answer key\n\n1. Linear search of a 1,024-element array needs at most … comparisons.Tìm tuyến tính trong mảng 1.024 phần tử cần tối đa … phép so sánh.\n   Answer: c) 1024\n   One comparison per element in the worst case: 1,024.VI: Tối đa mỗi phần tử một phép so sánh: 1.024.\n\n2. Binary search of a sorted array of 1,000,000 elements needs at most about … comparisons.Tìm nhị phân trong mảng đã sắp 1.000.000 phần tử cần tối đa khoảng … phép so sánh.\n   Answer: d) 20\n   ⌊log₂ 1,000,000⌋ + 1 = 20.VI: ⌊log₂ 1.000.000⌋ + 1 = 20.\n\n3. Bubble sort on n = 40 elements always performs … comparisons (no early exit).Sắp xếp nổi bọt n = 40 luôn thực hiện … phép so sánh (không dừng sớm).\n   Answer: a) 780\n   n(n−1)/2 = 780.VI: n(n−1)/2 = 780.\n\n4. An algorithm takes 1 ms for n = 1,000 and is Θ(n²). Estimated time for n = 10,000 is … ms.Thuật toán mất 1 ms với n = 1.000 và là Θ(n²). Thời gian ước tính với n = 10.000 là … ms.\n   Answer: b) 100\n   10× the input means 10² = 100× the time.VI: Đầu vào gấp 10 thì thời gian gấp 10² = 100 lần.\n\n5. The smallest n from which 2ⁿ > n³ holds for every larger n is …n nhỏ nhất từ đó 2ⁿ > n³ đúng với mọi n lớn hơn là …\n   Answer: c) 10\n   2⁹ = 512 1000 = 10³, and from then on 2ⁿ stays ahead (n = 10). (Careful: n = 1 also satisfies it, but not n = 2…9.)VI: 2⁹ = 512 1000, và từ đó 2ⁿ luôn dẫn trước (n = 10).\n\n6. How many times does a loop run that halves n = 1,000 until it reaches 1 (i = ⌊i/2⌋ starting at 1000)?Vòng lặp chia đôi n = 1.000 đến khi bằng 1 (i = ⌊i/2⌋ bắt đầu từ 1000) chạy bao nhiêu lần?\n   Answer: d) 9\n   1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1: 9 halvings.VI: 1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1: 9 lần chia đôi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>One comparison per element in the worst case: 1,024.</p><p><i>VI: Tối đa mỗi phần tử một phép so sánh: 1.024.</i></p><p>⌊log₂ 1,000,000⌋ + 1 = 20.</p><p><i>VI: ⌊log₂ 1.000.000⌋ + 1 = 20.</i></p><p>n(n−1)/2 = 780.</p><p><i>VI: n(n−1)/2 = 780.</i></p><p>10× the input means 10² = 100× the time.</p><p><i>VI: Đầu vào gấp 10 thì thời gian gấp 10² = 100 lần.</i></p><p>2⁹ = 512 < 729 = 9³ but 2¹⁰ = 1024 > 1000 = 10³, and from then on 2ⁿ stays ahead (n = 10). (Careful: n = 1 also satisfies it, but not n = 2…9.)</p><p><i>VI: 2⁹ = 512 < 729 nhưng 2¹⁰ = 1024 > 1000, và từ đó 2ⁿ luôn dẫn trước (n = 10).</i></p><p>1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1: 9 halvings.</p><p><i>VI: 1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1: 9 lần chia đôi.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Linear search of a 1,024-element array needs at most … comparisons.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tìm tuyến tính trong mảng 1.024 phần tử cần tối đa … phép so sánh.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "512"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2048"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1024"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One comparison per element in the worst case: 1,024.</p><p><i>VI: Tối đa mỗi phần tử một phép so sánh: 1.024.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Binary search of a sorted array of 1,000,000 elements needs at most about … comparisons.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tìm nhị phân trong mảng đã sắp 1.000.000 phần tử cần tối đa khoảng … phép so sánh.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1000"
+              },
+              {
+                "ma": "b",
+                "noiDung": "500000"
+              },
+              {
+                "ma": "c",
+                "noiDung": "100"
+              },
+              {
+                "ma": "d",
+                "noiDung": "20"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>⌊log₂ 1,000,000⌋ + 1 = 20.</p><p><i>VI: ⌊log₂ 1.000.000⌋ + 1 = 20.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Bubble sort on n = 40 elements always performs … comparisons (no early exit).</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp xếp nổi bọt n = 40 luôn thực hiện … phép so sánh (không dừng sớm).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "780"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1600"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1560"
+              },
+              {
+                "ma": "d",
+                "noiDung": "213"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>n(n−1)/2 = 780.</p><p><i>VI: n(n−1)/2 = 780.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>An algorithm takes 1 ms for n = 1,000 and is Θ(n²). Estimated time for n = 10,000 is … ms.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán mất 1 ms với n = 1.000 và là Θ(n²). Thời gian ước tính với n = 10.000 là … ms.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "20"
+              },
+              {
+                "ma": "b",
+                "noiDung": "100"
+              },
+              {
+                "ma": "c",
+                "noiDung": "10"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1000"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>10× the input means 10² = 100× the time.</p><p><i>VI: Đầu vào gấp 10 thì thời gian gấp 10² = 100 lần.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The smallest n from which 2ⁿ > n³ holds for every larger n is …</p><p style=\"opacity:.75;font-size:.92em\"><i>n nhỏ nhất từ đó 2ⁿ > n³ đúng với mọi n lớn hơn là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "8"
+              },
+              {
+                "ma": "b",
+                "noiDung": "12"
+              },
+              {
+                "ma": "c",
+                "noiDung": "10"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>2⁹ = 512 < 729 = 9³ but 2¹⁰ = 1024 > 1000 = 10³, and from then on 2ⁿ stays ahead (n = 10). (Careful: n = 1 also satisfies it, but not n = 2…9.)</p><p><i>VI: 2⁹ = 512 < 729 nhưng 2¹⁰ = 1024 > 1000, và từ đó 2ⁿ luôn dẫn trước (n = 10).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>How many times does a loop run that halves n = 1,000 until it reaches 1 (i = ⌊i/2⌋ starting at 1000)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vòng lặp chia đôi n = 1.000 đến khi bằng 1 (i = ⌊i/2⌋ bắt đầu từ 1000) chạy bao nhiêu lần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "10"
+              },
+              {
+                "ma": "b",
+                "noiDung": "500"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1000"
+              },
+              {
+                "ma": "d",
+                "noiDung": "9"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1: 9 halvings.</p><p><i>VI: 1000 → 500 → 250 → 125 → 62 → 31 → 15 → 7 → 3 → 1: 9 lần chia đôi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Predicting the time of a quadratic algorithm by multiplying by 10."
+        },
+        {
+          "loi": "Forgetting that 2ⁿ < n³ for 2 ≤ n ≤ 9."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "worst case",
+          "vi": "trường hợp xấu nhất"
+        }
+      ]
+    },
+    {
+      "title": "Big-O 5 — Rank the growth rates",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "growth hierarchy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Put the functions in increasing order of growth rate (slowest first).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các hàm theo tốc độ tăng dần (chậm nhất trước).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare at n = 1000 mentally: log n ≈ 10, √n ≈ 32, n log n ≈ 10,000.",
+        "Any exponential with base > 1 beats every polynomial."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 5 — Rank the growth rates\n\nAnswer in the answer panel (no code needed).\n\n1. Slowest to fastest.Từ chậm nhất đến nhanh nhất.\n2. Slowest to fastest (harder).Từ chậm nhất đến nhanh nhất (khó hơn).\n3. Slowest to fastest (exponential family).Từ chậm nhất đến nhanh nhất (họ hàm mũ).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Big-O 5 — Rank the growth rates — answer key\n\n1. Slowest to fastest.Từ chậm nhất đến nhanh nhất.\n   Answer: s1) 1  →  s2) log n  →  s3) n  →  s4) n log n  →  s5) n²  →  s6) 2ⁿ  →  s7) n!\n   Standard hierarchy: constant, logarithmic, linear, linearithmic, quadratic, exponential, factorial.VI: Thứ bậc chuẩn: hằng, logarit, tuyến tính, n log n, bình phương, mũ, giai thừa.\n\n2. Slowest to fastest (harder).Từ chậm nhất đến nhanh nhất (khó hơn).\n   Answer: s1) log n  →  s2) √n  →  s3) n  →  s4) n log n  →  s5) n^1.5  →  s6) n²  →  s7) n³\n   √n = n^0.5 VI: n^0,5\n\n3. Slowest to fastest (exponential family).Từ chậm nhất đến nhanh nhất (họ hàm mũ).\n   Answer: s1) n¹⁰  →  s2) 1.5ⁿ  →  s3) 2ⁿ  →  s4) 3ⁿ  →  s5) n!  →  s6) nⁿ\n   Larger base grows faster; n! VI: Cơ số lớn hơn tăng nhanh hơn; n!\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Standard hierarchy: constant, logarithmic, linear, linearithmic, quadratic, exponential, factorial.</p><p><i>VI: Thứ bậc chuẩn: hằng, logarit, tuyến tính, n log n, bình phương, mũ, giai thừa.</i></p><p>√n = n^0.5 < n < n log n < n^1.5 < n² < n³; logarithm is below every positive power.</p><p><i>VI: n^0,5 < n < n log n < n^1,5 < n² < n³; logarit nằm dưới mọi luỹ thừa dương.</i></p><p>Larger base grows faster; n! < nⁿ.</p><p><i>VI: Cơ số lớn hơn tăng nhanh hơn; n! < nⁿ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Slowest to fastest.</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ chậm nhất đến nhanh nhất.</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "n log n"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "n²"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "2ⁿ"
+              },
+              {
+                "ma": "s7",
+                "noiDung": "n!"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "1"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "log n"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "n"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6",
+              "s7"
+            ],
+            "giaiThich": "<p>Standard hierarchy: constant, logarithmic, linear, linearithmic, quadratic, exponential, factorial.</p><p><i>VI: Thứ bậc chuẩn: hằng, logarit, tuyến tính, n log n, bình phương, mũ, giai thừa.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Slowest to fastest (harder).</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ chậm nhất đến nhanh nhất (khó hơn).</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "n"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "n log n"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "n^1.5"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "n²"
+              },
+              {
+                "ma": "s7",
+                "noiDung": "n³"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "log n"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "√n"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6",
+              "s7"
+            ],
+            "giaiThich": "<p>√n = n^0.5 < n < n log n < n^1.5 < n² < n³; logarithm is below every positive power.</p><p><i>VI: n^0,5 < n < n log n < n^1,5 < n² < n³; logarit nằm dưới mọi luỹ thừa dương.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Slowest to fastest (exponential family).</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ chậm nhất đến nhanh nhất (họ hàm mũ).</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "2ⁿ"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "3ⁿ"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "n!"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "nⁿ"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "n¹⁰"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "1.5ⁿ"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6"
+            ],
+            "giaiThich": "<p>Larger base grows faster; n! < nⁿ.</p><p><i>VI: Cơ số lớn hơn tăng nhanh hơn; n! < nⁿ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Placing n log n above n²."
+        },
+        {
+          "loi": "Believing a logarithm can beat √n."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "growth rate",
+          "vi": "tốc độ tăng"
+        }
+      ]
+    },
+    {
+      "title": "Big-O 6 — Count the comparisons of insertion sort",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "best and worst case",
+        "insertion sort"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Insertion sort scans each element leftwards until it finds one that is not larger. Write <code>insertionSortComparisons(arr)</code> that runs the algorithm on a copy of <code>arr</code> and returns the exact number of <em>element comparisons</em> <code>a[j] &gt; key</code> that were executed. A sorted array costs n − 1 comparisons (best case, Θ(n)); a reversed array costs n(n − 1)/2 (worst case, Θ(n²)).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not mutate the input array.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp chèn lùi mỗi phần tử sang trái đến khi gặp phần tử không lớn hơn. Viết <code>insertionSortComparisons(arr)</code> chạy thuật toán trên bản sao của <code>arr</code> và trả số <em>phép so sánh phần tử</em> <code>a[j] &gt; key</code> đã thực hiện. Mảng đã sắp tốn n − 1 phép (tốt nhất, Θ(n)); mảng đảo ngược tốn n(n − 1)/2 (xấu nhất, Θ(n²)).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa mảng đầu vào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "insertionSortComparisons([1,2,3,4])",
+          "output": "3",
+          "explanation": "Best case: one comparison per inserted element.|||Tốt nhất: mỗi phần tử chèn một phép so sánh."
+        },
+        {
+          "input": "insertionSortComparisons([4,3,2,1])",
+          "output": "6",
+          "explanation": "Worst case: 1 + 2 + 3 = 6.|||Xấu nhất: 1 + 2 + 3 = 6."
+        }
+      ],
+      "hintsJson": [
+        "Increment the counter every time you evaluate a[j] > key, including the last failing test.",
+        "Stop scanning when a[j] <= key or j < 0 (no comparison is made when j < 0)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function insertionSortComparisons(arr) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function insertionSortComparisons(arr) {\n  var a = arr.slice(), c = 0;\n  for (var i = 1; i < a.length; i++) {\n    var key = a[i], j = i - 1;\n    while (j >= 0) {\n      c++;\n      if (a[j] > key) { a[j + 1] = a[j]; j--; } else break;\n    }\n    a[j + 1] = key;\n  }\n  return c;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The cost depends on the input order, which is why we quote best, average and worst cases separately: Θ(n), Θ(n²), Θ(n²).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: insertionSortComparisons([1,2,3,4])",
+              "vi": "Ca 1"
+            },
+            "goi": "insertionSortComparisons([1,2,3,4])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Case 2: insertionSortComparisons([4,3,2,1])",
+              "vi": "Ca 2"
+            },
+            "goi": "insertionSortComparisons([4,3,2,1])",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "Case 3: insertionSortComparisons([2,1,3,1])",
+              "vi": "Ca 3"
+            },
+            "goi": "insertionSortComparisons([2,1,3,1])",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "insertionSortComparisons([])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "insertionSortComparisons([5,1,4,2,8,3])",
+            "mongDoi": 11,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "insertionSortComparisons([7])",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "insertionSortComparisons([3,3,3,3])",
+            "mongDoi": 3,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting only the successful shifts."
+        },
+        {
+          "loi": "Counting a comparison after j has fallen below 0."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Big-O 7 — Find the point where one cost overtakes another",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 22,
+      "points": 30,
+      "concepts": [
+        "crossover",
+        "asymptotic dominance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>The cost model of an algorithm is one of <code>\"log n\"</code> (log₂), <code>\"n\"</code>, <code>\"n log n\"</code>, <code>\"n^2\"</code>, <code>\"n^3\"</code>, <code>\"2^n\"</code> or <code>\"n!\"</code>. Write <code>permanentCrossover(a, b)</code> returning the smallest integer <code>N</code> in 2…60 such that cost<sub>a</sub>(n) &gt; cost<sub>b</sub>(n) for <em>every</em> n from N to 60 inclusive. If a does not stay above b up to 60 (for example a grows slower), return −1. Beware: a(n) might exceed b(n) for small n and then fall behind — only a <em>permanent</em> takeover counts.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Scan n downwards from 60 while a is still above b.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô hình chi phí của thuật toán là một trong <code>\"log n\"</code> (log₂), <code>\"n\"</code>, <code>\"n log n\"</code>, <code>\"n^2\"</code>, <code>\"n^3\"</code>, <code>\"2^n\"</code>, <code>\"n!\"</code>. Viết <code>permanentCrossover(a, b)</code> trả số nguyên <code>N</code> nhỏ nhất trong 2…60 sao cho cost<sub>a</sub>(n) &gt; cost<sub>b</sub>(n) với <em>mọi</em> n từ N đến 60. Nếu a không giữ trên b đến 60 (ví dụ a tăng chậm hơn) trả −1. Chú ý: a(n) có thể vượt b(n) ở n nhỏ rồi tụt lại — chỉ vượt <em>vĩnh viễn</em> mới tính.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Duyệt n giảm dần từ 60 chừng nào a còn trên b.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "permanentCrossover(\"2^n\", \"n^3\")",
+          "output": "10",
+          "explanation": "2^10 = 1024 > 1000 and 2^n stays ahead afterwards.|||2^10 = 1024 > 1000 và 2^n luôn dẫn trước sau đó."
+        },
+        {
+          "input": "permanentCrossover(\"n\", \"n^2\")",
+          "output": "-1",
+          "explanation": "n is never above n² for n ≥ 2.|||n không bao giờ trên n² khi n ≥ 2."
+        }
+      ],
+      "hintsJson": [
+        "Start at n = 60: if a(60) <= b(60) the answer is −1; otherwise walk down until the inequality fails.",
+        "Use a lookup object from names to functions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function permanentCrossover(a, b) {\n  return -1;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function permanentCrossover(a, b) {\n  var cost = {\n    'log n': function (n) { return Math.log2(n); },\n    'n': function (n) { return n; },\n    'n log n': function (n) { return n * Math.log2(n); },\n    'n^2': function (n) { return n * n; },\n    'n^3': function (n) { return n * n * n; },\n    '2^n': function (n) { return Math.pow(2, n); },\n    'n!': function (n) { var r = 1; for (var i = 2; i <= n; i++) r *= i; return r; },\n  };\n  var best = -1;\n  for (var n = 60; n >= 2; n--) {\n    if (cost[a](n) > cost[b](n)) best = n; else break;\n  }\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Asymptotic dominance only needs the inequality to hold from some N onwards; scanning downward from the end finds the earliest N after which it never fails.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: permanentCrossover(\"2^n\", \"n^3\")",
+              "vi": "Ca 1"
+            },
+            "goi": "permanentCrossover(\"2^n\", \"n^3\")",
+            "mongDoi": 10
+          },
+          {
+            "moTa": {
+              "en": "Case 2: permanentCrossover(\"n\", \"n^2\")",
+              "vi": "Ca 2"
+            },
+            "goi": "permanentCrossover(\"n\", \"n^2\")",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "Case 3: permanentCrossover(\"n^2\", \"n log n\")",
+              "vi": "Ca 3"
+            },
+            "goi": "permanentCrossover(\"n^2\", \"n log n\")",
+            "mongDoi": 2
+          },
+          {
+            "moTa": {
+              "en": "Case 4: permanentCrossover(\"n!\", \"2^n\")",
+              "vi": "Ca 4"
+            },
+            "goi": "permanentCrossover(\"n!\", \"2^n\")",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "permanentCrossover(\"n log n\", \"n\")",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "permanentCrossover(\"n^3\", \"2^n\")",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "permanentCrossover(\"2^n\", \"n^2\")",
+            "mongDoi": 5,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "permanentCrossover(\"n^2\", \"log n\")",
+            "mongDoi": 2,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the first n where a(n) > b(n) without checking that it stays true for every larger n (compare n^3 with 2^n: n^3 leads for 2 ≤ n ≤ 9 but loses afterwards)."
+        },
+        {
+          "loi": "Computing 60! with an integer type that overflows — JavaScript numbers are doubles and handle it."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

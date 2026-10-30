@@ -1,0 +1,1458 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-7-1-do-thi",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-7-1-do-thi"
+  },
+  "exercises": [
+    {
+      "title": "Graphs 1 — Vocabulary and basic facts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "graph vocabulary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Terminology of graph theory (Rosen §10.1–10.5).</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thuật ngữ lý thuyết đồ thị (Rosen §10.1–10.5).</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Euler concerns edges, Hamilton concerns vertices.",
+        "Handshake: count each edge from both ends."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 1 — Vocabulary and basic facts\n\nAnswer in the answer panel (no code needed).\n\n1. The Handshaking Theorem says the sum of the degrees equals …Định lý bắt tay nói tổng bậc bằng …\n2. In any undirected graph the number of vertices of odd degree is …Trong đồ thị vô hướng mọi số đỉnh bậc lẻ …\n3. A simple graph has no …Đồ thị đơn không có …\n4. A path that uses every edge exactly once and returns to its start is …Đường đi dùng mỗi cạnh đúng một lần và quay về điểm đầu là …\n5. A connected graph has an Euler circuit iff …Đồ thị liên thông có chu trình Euler khi và chỉ khi …\n6. A graph is bipartite iff …Đồ thị là hai phía khi và chỉ khi …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 1 — Vocabulary and basic facts — answer key\n\n1. The Handshaking Theorem says the sum of the degrees equals …Định lý bắt tay nói tổng bậc bằng …\n   Answer: c) 2·|E|\n   Each edge contributes 1 to the degree of each of its two ends.VI: Mỗi cạnh đóng góp 1 vào bậc của mỗi đầu mút.\n\n2. In any undirected graph the number of vertices of odd degree is …Trong đồ thị vô hướng mọi số đỉnh bậc lẻ …\n   Answer: d) even\n   The degree sum 2|E| is even, so odd terms must come in pairs.VI: Tổng bậc 2|E| chẵn nên số số hạng lẻ phải chẵn.\n\n3. A simple graph has no …Đồ thị đơn không có …\n   Answer: a) loops or multiple edges\n   “Simple” forbids self-loops and parallel edges.VI: “Đơn” cấm khuyên và cạnh song song.\n\n4. A path that uses every edge exactly once and returns to its start is …Đường đi dùng mỗi cạnh đúng một lần và quay về điểm đầu là …\n   Answer: b) an Euler circuit\n   Euler circuit: every edge once. Hamilton cycle: every vertex once.VI: Chu trình Euler: mỗi cạnh một lần. Chu trình Hamilton: mỗi đỉnh một lần.\n\n5. A connected graph has an Euler circuit iff …Đồ thị liên thông có chu trình Euler khi và chỉ khi …\n   Answer: c) every vertex has even degree\n   Exactly two odd vertices gives an Euler path (not a circuit).VI: Đúng hai đỉnh bậc lẻ cho đường Euler (không phải chu trình).\n\n6. A graph is bipartite iff …Đồ thị là hai phía khi và chỉ khi …\n   Answer: d) it has no odd cycle\n   Equivalent: its vertices can be 2-coloured so every edge joins different colours.VI: Tương đương: có thể tô 2 màu sao cho mọi cạnh nối hai màu khác nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>Each edge contributes 1 to the degree of each of its two ends.</p><p><i>VI: Mỗi cạnh đóng góp 1 vào bậc của mỗi đầu mút.</i></p><p>The degree sum 2|E| is even, so odd terms must come in pairs.</p><p><i>VI: Tổng bậc 2|E| chẵn nên số số hạng lẻ phải chẵn.</i></p><p>“Simple” forbids self-loops and parallel edges.</p><p><i>VI: “Đơn” cấm khuyên và cạnh song song.</i></p><p>Euler circuit: every edge once. Hamilton cycle: every vertex once.</p><p><i>VI: Chu trình Euler: mỗi cạnh một lần. Chu trình Hamilton: mỗi đỉnh một lần.</i></p><p>Exactly two odd vertices gives an Euler path (not a circuit).</p><p><i>VI: Đúng hai đỉnh bậc lẻ cho đường Euler (không phải chu trình).</i></p><p>Equivalent: its vertices can be 2-coloured so every edge joins different colours.</p><p><i>VI: Tương đương: có thể tô 2 màu sao cho mọi cạnh nối hai màu khác nhau.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The Handshaking Theorem says the sum of the degrees equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>Định lý bắt tay nói tổng bậc bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "|V|"
+              },
+              {
+                "ma": "b",
+                "noiDung": "|V|·|E|"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2·|E|"
+              },
+              {
+                "ma": "d",
+                "noiDung": "|E|"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Each edge contributes 1 to the degree of each of its two ends.</p><p><i>VI: Mỗi cạnh đóng góp 1 vào bậc của mỗi đầu mút.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In any undirected graph the number of vertices of odd degree is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong đồ thị vô hướng mọi số đỉnh bậc lẻ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "odd"
+              },
+              {
+                "ma": "b",
+                "noiDung": "zero"
+              },
+              {
+                "ma": "c",
+                "noiDung": "at least 2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "even"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The degree sum 2|E| is even, so odd terms must come in pairs.</p><p><i>VI: Tổng bậc 2|E| chẵn nên số số hạng lẻ phải chẵn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A simple graph has no …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đồ thị đơn không có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "loops or multiple edges"
+              },
+              {
+                "ma": "b",
+                "noiDung": "cycles"
+              },
+              {
+                "ma": "c",
+                "noiDung": "isolated vertices"
+              },
+              {
+                "ma": "d",
+                "noiDung": "odd degrees"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>“Simple” forbids self-loops and parallel edges.</p><p><i>VI: “Đơn” cấm khuyên và cạnh song song.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A path that uses every edge exactly once and returns to its start is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường đi dùng mỗi cạnh đúng một lần và quay về điểm đầu là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a simple path"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an Euler circuit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a Hamilton cycle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a spanning tree"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Euler circuit: every edge once. Hamilton cycle: every vertex once.</p><p><i>VI: Chu trình Euler: mỗi cạnh một lần. Chu trình Hamilton: mỗi đỉnh một lần.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A connected graph has an Euler circuit iff …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đồ thị liên thông có chu trình Euler khi và chỉ khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it has a cycle"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it is complete"
+              },
+              {
+                "ma": "c",
+                "noiDung": "every vertex has even degree"
+              },
+              {
+                "ma": "d",
+                "noiDung": "exactly two vertices have odd degree"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Exactly two odd vertices gives an Euler path (not a circuit).</p><p><i>VI: Đúng hai đỉnh bậc lẻ cho đường Euler (không phải chu trình).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>A graph is bipartite iff …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đồ thị là hai phía khi và chỉ khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it has no cycle"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every vertex has degree 2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it is a tree only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it has no odd cycle"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Equivalent: its vertices can be 2-coloured so every edge joins different colours.</p><p><i>VI: Tương đương: có thể tô 2 màu sao cho mọi cạnh nối hai màu khác nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing Euler and Hamilton."
+        },
+        {
+          "loi": "Thinking a graph with two odd vertices has an Euler circuit (only a path)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "degree",
+          "vi": "bậc"
+        },
+        {
+          "en": "Euler circuit",
+          "vi": "chu trình Euler"
+        },
+        {
+          "en": "bipartite",
+          "vi": "hai phía"
+        },
+        {
+          "en": "simple graph",
+          "vi": "đồ thị đơn"
+        }
+      ]
+    },
+    {
+      "title": "Graphs 2 — Degrees and edge counts",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "degree",
+        "graph families"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Graph: edges AB, AC, BC, BD, CD, CE, DE, EF. Give the degree of each vertex. Then give the number of edges of the standard graph families K<sub>n</sub> (complete), K<sub>m,n</sub>, C<sub>n</sub> (cycle), W<sub>n</sub> (wheel on n vertices) and Q<sub>n</sub> (hypercube).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồ thị: các cạnh AB, AC, BC, BD, CD, CE, DE, EF. Cho bậc của từng đỉnh. Sau đó cho số cạnh của các họ đồ thị chuẩn K<sub>n</sub> (đầy đủ), K<sub>m,n</sub>, C<sub>n</sub> (chu trình), W<sub>n</sub> (bánh xe n đỉnh) và Q<sub>n</sub> (siêu lập phương).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Degree = number of edge ends at the vertex.",
+        "For the families use the formulas; Q₄ has 16 vertices each of degree 4: 16·4/2 edges."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 2 — Degrees and edge counts\n\nAnswer in the answer panel (no code needed).\n\n1. DegreesBậc\n2. Edges of standard graphsSố cạnh của các đồ thị chuẩn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 2 — Degrees and edge counts — answer key\n\n1. DegreesBậc\n   - r1.d: 2\n   - r2.d: 3\n   - r3.d: 4\n   - r4.d: 3\n   - r5.d: 3\n   - r6.d: 1\n   Degrees: A=2, B=3, C=4, D=3, E=3, F=1; sum 16 = 2·8.VI: Bậc: A=2, B=3, C=4, D=3, E=3, F=1; tổng 16 = 2·8.\n\n2. Edges of standard graphsSố cạnh của các đồ thị chuẩn\n   - r1.e: 15\n   - r2.e: 12\n   - r3.e: 7\n   - r4.e: 10\n   - r5.e: 32\n   K₆: 15; K₃,₄: 12; C₇: 7; W₆ (6 vertices): 10; Q₄: 32. K_n: n(n−1)/2; K_{m,n}: mn; C_n: n; W_n: 2(n−1); Q_n: n·2^(n−1).VI: K₆: 15; K₃,₄: 12; C₇: 7; W₆ (6 vertices): 10; Q₄: 32.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Degrees: A=2, B=3, C=4, D=3, E=3, F=1; sum 16 = 2·8.</p><p><i>VI: Bậc: A=2, B=3, C=4, D=3, E=3, F=1; tổng 16 = 2·8.</i></p><p>K₆: 15; K₃,₄: 12; C₇: 7; W₆ (6 vertices): 10; Q₄: 32. K_n: n(n−1)/2; K_{m,n}: mn; C_n: n; W_n: 2(n−1); Q_n: n·2^(n−1).</p><p><i>VI: K₆: 15; K₃,₄: 12; C₇: 7; W₆ (6 vertices): 10; Q₄: 32.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Degrees</p><p style=\"opacity:.75;font-size:.92em\"><i>Bậc</i></p>",
+            "cot": [
+              {
+                "ma": "v",
+                "ten": "Vertex"
+              },
+              {
+                "ma": "d",
+                "ten": "degree"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "v": "A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "v": "B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "v": "C"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "v": "D"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "v": "E"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "v": "F"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "2",
+              "r2.d": "3",
+              "r3.d": "4",
+              "r4.d": "3",
+              "r5.d": "3",
+              "r6.d": "1"
+            },
+            "giaiThich": "<p>Degrees: A=2, B=3, C=4, D=3, E=3, F=1; sum 16 = 2·8.</p><p><i>VI: Bậc: A=2, B=3, C=4, D=3, E=3, F=1; tổng 16 = 2·8.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Edges of standard graphs</p><p style=\"opacity:.75;font-size:.92em\"><i>Số cạnh của các đồ thị chuẩn</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "Graph"
+              },
+              {
+                "ma": "e",
+                "ten": "|E|"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "K₆"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "K₃,₄"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "C₇"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "g": "W₆ (6 vertices)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "g": "Q₄"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": "15",
+              "r2.e": "12",
+              "r3.e": "7",
+              "r4.e": "10",
+              "r5.e": "32"
+            },
+            "giaiThich": "<p>K₆: 15; K₃,₄: 12; C₇: 7; W₆ (6 vertices): 10; Q₄: 32. K_n: n(n−1)/2; K_{m,n}: mn; C_n: n; W_n: 2(n−1); Q_n: n·2^(n−1).</p><p><i>VI: K₆: 15; K₃,₄: 12; C₇: 7; W₆ (6 vertices): 10; Q₄: 32.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting a vertex’s neighbours but forgetting an edge that appears later in the list."
+        },
+        {
+          "loi": "Using n(n−1) (ordered pairs) for K_n."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "wheel",
+          "vi": "đồ thị bánh xe"
+        },
+        {
+          "en": "hypercube",
+          "vi": "siêu lập phương"
+        }
+      ]
+    },
+    {
+      "title": "Graphs 3 — Adjacency matrix and walk counts",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "adjacency matrix",
+        "walks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Graph on A, B, C, D with edges AB, AC, BC, CD, DA (undirected). Fill its adjacency matrix (rows and columns in the order A, B, C, D). Then, using powers of the matrix, give the number of walks of length 2 and length 3 between the listed vertex pairs (indices 1–4 are A–D).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồ thị trên A, B, C, D với các cạnh AB, AC, BC, CD, DA (vô hướng). Điền ma trận kề (dòng và cột theo thứ tự A, B, C, D). Sau đó dùng luỹ thừa ma trận để cho số đường đi (walk) độ dài 2 và 3 giữa các cặp đỉnh liệt kê (chỉ số 1–4 là A–D).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For an undirected simple graph the matrix is symmetric with zeros on the diagonal.",
+        "Entry (i, j) of Aᵏ counts walks of length k; the diagonal of A² is the degree sequence."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 3 — Adjacency matrix and walk counts\n\nAnswer in the answer panel (no code needed).\n\n1. Adjacency matrixMa trận kề\n2. Walk countsSố walk\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 3 — Adjacency matrix and walk counts — answer key\n\n1. Adjacency matrixMa trận kề\n   - r1.c0: 0\n   - r1.c1: 1\n   - r1.c2: 1\n   - r1.c3: 1\n   - r2.c0: 1\n   - r2.c1: 0\n   - r2.c2: 1\n   - r2.c3: 0\n   - r3.c0: 1\n   - r3.c1: 1\n   - r3.c2: 0\n   - r3.c3: 1\n   - r4.c0: 1\n   - r4.c1: 0\n   - r4.c2: 1\n   - r4.c3: 0\n   Rows: 0111 / 1010 / 1101 / 1010.VI: Các dòng: 0111 / 1010 / 1101 / 1010.\n\n2. Walk countsSố walk\n   - r1.w2: 3\n   - r1.w3: 4\n   - r2.w2: 2\n   - r2.w3: 5\n   - r3.w2: 2\n   - r3.w3: 2\n   - r4.w2: 3\n   - r4.w3: 4\n   - r5.w2: 2\n   - r5.w3: 2\n   A→A: A²=3, A³=4; A→C: A²=2, A³=5; B→D: A²=2, A³=2; C→C: A²=3, A³=4; D→B: A²=2, A³=2.VI: A→A: A²=3, A³=4; A→C: A²=2, A³=5; B→D: A²=2, A³=2; C→C: A²=3, A³=4; D→B: A²=2, A³=2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows: 0111 / 1010 / 1101 / 1010.</p><p><i>VI: Các dòng: 0111 / 1010 / 1101 / 1010.</i></p><p>A→A: A²=3, A³=4; A→C: A²=2, A³=5; B→D: A²=2, A³=2; C→C: A²=3, A³=4; D→B: A²=2, A³=2.</p><p><i>VI: A→A: A²=3, A³=4; A→C: A²=2, A³=5; B→D: A²=2, A³=2; C→C: A²=3, A³=4; D→B: A²=2, A³=2.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Adjacency matrix</p><p style=\"opacity:.75;font-size:.92em\"><i>Ma trận kề</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "row"
+              },
+              {
+                "ma": "c0",
+                "ten": "A",
+                "luaChon": [
+                  "0",
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "ma": "c1",
+                "ten": "B",
+                "luaChon": [
+                  "0",
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "ma": "c2",
+                "ten": "C",
+                "luaChon": [
+                  "0",
+                  "1",
+                  "2"
+                ]
+              },
+              {
+                "ma": "c3",
+                "ten": "D",
+                "luaChon": [
+                  "0",
+                  "1",
+                  "2"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "B"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "C"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "D"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c0": "0",
+              "r1.c1": "1",
+              "r1.c2": "1",
+              "r1.c3": "1",
+              "r2.c0": "1",
+              "r2.c1": "0",
+              "r2.c2": "1",
+              "r2.c3": "0",
+              "r3.c0": "1",
+              "r3.c1": "1",
+              "r3.c2": "0",
+              "r3.c3": "1",
+              "r4.c0": "1",
+              "r4.c1": "0",
+              "r4.c2": "1",
+              "r4.c3": "0"
+            },
+            "giaiThich": "<p>Rows: 0111 / 1010 / 1101 / 1010.</p><p><i>VI: Các dòng: 0111 / 1010 / 1101 / 1010.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Walk counts</p><p style=\"opacity:.75;font-size:.92em\"><i>Số walk</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "From → to"
+              },
+              {
+                "ma": "w2",
+                "ten": "length 2"
+              },
+              {
+                "ma": "w3",
+                "ten": "length 3"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "A → A"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "A → C"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "B → D"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "p": "C → C"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "p": "D → B"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w2": "3",
+              "r1.w3": "4",
+              "r2.w2": "2",
+              "r2.w3": "5",
+              "r3.w2": "2",
+              "r3.w3": "2",
+              "r4.w2": "3",
+              "r4.w3": "4",
+              "r5.w2": "2",
+              "r5.w3": "2"
+            },
+            "giaiThich": "<p>A→A: A²=3, A³=4; A→C: A²=2, A³=5; B→D: A²=2, A³=2; C→C: A²=3, A³=4; D→B: A²=2, A³=2.</p><p><i>VI: A→A: A²=3, A³=4; A→C: A²=2, A³=5; B→D: A²=2, A³=2; C→C: A²=3, A³=4; D→B: A²=2, A³=2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Filling only the upper triangle."
+        },
+        {
+          "loi": "Counting only simple paths when the question asks for walks (vertices may repeat)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "adjacency matrix",
+          "vi": "ma trận kề"
+        },
+        {
+          "en": "walk",
+          "vi": "đường đi (cho phép lặp)"
+        }
+      ]
+    },
+    {
+      "title": "Graphs 4 — Breadth-first and depth-first order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "BFS",
+        "DFS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Start both searches at A and always visit neighbours in alphabetical order. Give the order in which vertices are first visited (BFS uses a queue, DFS a stack/recursion). Write the vertices separated by commas, e.g. <code>A,B,C</code>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cả hai tìm kiếm bắt đầu từ A và luôn thăm láng giềng theo thứ tự chữ cái. Cho thứ tự các đỉnh được thăm lần đầu (BFS dùng hàng đợi, DFS dùng ngăn xếp/đệ quy). Viết các đỉnh cách nhau bằng dấu phẩy, vd <code>A,B,C</code>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "BFS: finish all neighbours of a vertex (in order) before going deeper.",
+        "DFS: go as deep as possible on the first unvisited neighbour, then backtrack."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 4 — Breadth-first and depth-first order\n\nAnswer in the answer panel (no code needed).\n\n1. BFS and DFS ordersThứ tự BFS và DFS\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 4 — Breadth-first and depth-first order — answer key\n\n1. BFS and DFS ordersThứ tự BFS và DFS\n   - r1.bfs: A,B,C,D,E,F / A, B, C, D, E, F / A B C D E F / A-B-C-D-E-F / A - B - C - D - E - F / A → B → C → D → E → F / A->B->C->D->E->F / A -> B -> C -> D -> E -> F / ABCDEF\n   - r1.dfs: A,B,D,C,E,F / A, B, D, C, E, F / A B D C E F / A-B-D-C-E-F / A - B - D - C - E - F / A → B → D → C → E → F / A->B->D->C->E->F / A -> B -> D -> C -> E -> F / ABDCEF\n   - r2.bfs: A,B,D,C,E,G,F / A, B, D, C, E, G, F / A B D C E G F / A-B-D-C-E-G-F / A - B - D - C - E - G - F / A → B → D → C → E → G → F / A->B->D->C->E->G->F / A -> B -> D -> C -> E -> G -> F / ABDCEGF\n   - r2.dfs: A,B,C,F,E,D,G / A, B, C, F, E, D, G / A B C F E D G / A-B-C-F-E-D-G / A - B - C - F - E - D - G / A → B → C → F → E → D → G / A->B->C->F->E->D->G / A -> B -> C -> F -> E -> D -> G / ABCFEDG\n   AB AC BD CD CE DF EF: BFS A,B,C,D,E,F; DFS A,B,D,C,E,F | AD AB BC BE CF DE EF DG: BFS A,B,D,C,E,G,F; DFS A,B,C,F,E,D,G.VI: BFS A,B,C,D,E,F; DFS A,B,D,C,E,F | BFS A,B,D,C,E,G,F; DFS A,B,C,F,E,D,G.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>AB AC BD CD CE DF EF: BFS A,B,C,D,E,F; DFS A,B,D,C,E,F | AD AB BC BE CF DE EF DG: BFS A,B,D,C,E,G,F; DFS A,B,C,F,E,D,G.</p><p><i>VI: BFS A,B,C,D,E,F; DFS A,B,D,C,E,F | BFS A,B,D,C,E,G,F; DFS A,B,C,F,E,D,G.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>BFS and DFS orders</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự BFS và DFS</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "Graph (edges)"
+              },
+              {
+                "ma": "bfs",
+                "ten": "BFS order"
+              },
+              {
+                "ma": "dfs",
+                "ten": "DFS order"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "AB AC BD CD CE DF EF"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "AD AB BC BE CF DE EF DG"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.bfs": [
+                "A,B,C,D,E,F",
+                "A, B, C, D, E, F",
+                "A B C D E F",
+                "A-B-C-D-E-F",
+                "A - B - C - D - E - F",
+                "A → B → C → D → E → F",
+                "A->B->C->D->E->F",
+                "A -> B -> C -> D -> E -> F",
+                "ABCDEF"
+              ],
+              "r1.dfs": [
+                "A,B,D,C,E,F",
+                "A, B, D, C, E, F",
+                "A B D C E F",
+                "A-B-D-C-E-F",
+                "A - B - D - C - E - F",
+                "A → B → D → C → E → F",
+                "A->B->D->C->E->F",
+                "A -> B -> D -> C -> E -> F",
+                "ABDCEF"
+              ],
+              "r2.bfs": [
+                "A,B,D,C,E,G,F",
+                "A, B, D, C, E, G, F",
+                "A B D C E G F",
+                "A-B-D-C-E-G-F",
+                "A - B - D - C - E - G - F",
+                "A → B → D → C → E → G → F",
+                "A->B->D->C->E->G->F",
+                "A -> B -> D -> C -> E -> G -> F",
+                "ABDCEGF"
+              ],
+              "r2.dfs": [
+                "A,B,C,F,E,D,G",
+                "A, B, C, F, E, D, G",
+                "A B C F E D G",
+                "A-B-C-F-E-D-G",
+                "A - B - C - F - E - D - G",
+                "A → B → C → F → E → D → G",
+                "A->B->C->F->E->D->G",
+                "A -> B -> C -> F -> E -> D -> G",
+                "ABCFEDG"
+              ]
+            },
+            "giaiThich": "<p>AB AC BD CD CE DF EF: BFS A,B,C,D,E,F; DFS A,B,D,C,E,F | AD AB BC BE CF DE EF DG: BFS A,B,D,C,E,G,F; DFS A,B,C,F,E,D,G.</p><p><i>VI: BFS A,B,C,D,E,F; DFS A,B,D,C,E,F | BFS A,B,D,C,E,G,F; DFS A,B,C,F,E,D,G.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Marking vertices visited when they are popped instead of when first discovered (changes BFS order on some graphs)."
+        },
+        {
+          "loi": "Mixing the BFS and DFS orders."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breadth-first search",
+          "vi": "tìm kiếm theo chiều rộng"
+        },
+        {
+          "en": "depth-first search",
+          "vi": "tìm kiếm theo chiều sâu"
+        }
+      ]
+    },
+    {
+      "title": "Graphs 5 — Euler, bipartite and connected components",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "Euler",
+        "bipartite",
+        "components"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For each graph decide: does it have an Euler <b>circuit</b>, only an Euler <b>path</b>, or <b>none</b>? Is it <b>bipartite</b>? How many connected components does it have?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi đồ thị quyết định: có <b>chu trình</b> Euler, chỉ có <b>đường</b> Euler, hay <b>không có</b>? Có <b>hai phía</b> không? Có bao nhiêu thành phần liên thông?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count odd-degree vertices: 0 → circuit, 2 → path, otherwise none (the graph must also be connected on its edges).",
+        "An odd cycle (triangle, 5-cycle) forbids bipartiteness."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 5 — Euler, bipartite and connected components\n\nAnswer in the answer panel (no code needed).\n\n1. Graph propertiesTính chất đồ thị\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 5 — Euler, bipartite and connected components — answer key\n\n1. Graph propertiesTính chất đồ thị\n   - r1.eu: path\n   - r1.bi: No\n   - r1.cc: 1\n   - r2.eu: circuit\n   - r2.bi: Yes\n   - r2.cc: 1\n   - r3.eu: none\n   - r3.bi: No\n   - r3.cc: 1\n   - r4.eu: circuit\n   - r4.bi: No\n   - r4.cc: 1\n   - r5.eu: none\n   - r5.bi: No\n   - r5.cc: 2\n   - r6.eu: path\n   - r6.bi: Yes\n   - r6.cc: 1\n   triangle + pendant: Euler path, bipartite false, components 1; 4-cycle: Euler circuit, bipartite true, components 1; K4: Euler none, bipartite false, components 1; 5-cycle: Euler circuit, bipartite false, components 1; two triangles: Euler none, bipartite false, components 2; path of 5: Euler path, bipartite true, components 1.VI: triangle + pendant: Euler path, hai phía false, 1 thành phần; 4-cycle: Euler circuit, hai phía true, 1 thành phần; K4: Euler none, hai phía false, 1 thành phần; 5-cycle: Euler circuit, hai phía false, 1 thành phần; two triangles: Euler none, hai phía false, 2 thành phần; path of 5: Euler path, hai phía true, 1 thành phần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>triangle + pendant: Euler path, bipartite false, components 1; 4-cycle: Euler circuit, bipartite true, components 1; K4: Euler none, bipartite false, components 1; 5-cycle: Euler circuit, bipartite false, components 1; two triangles: Euler none, bipartite false, components 2; path of 5: Euler path, bipartite true, components 1.</p><p><i>VI: triangle + pendant: Euler path, hai phía false, 1 thành phần; 4-cycle: Euler circuit, hai phía true, 1 thành phần; K4: Euler none, hai phía false, 1 thành phần; 5-cycle: Euler circuit, hai phía false, 1 thành phần; two triangles: Euler none, hai phía false, 2 thành phần; path of 5: Euler path, hai phía true, 1 thành phần.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Graph properties</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính chất đồ thị</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "Graph"
+              },
+              {
+                "ma": "eu",
+                "ten": "Euler",
+                "luaChon": [
+                  "circuit",
+                  "path",
+                  "none"
+                ]
+              },
+              {
+                "ma": "bi",
+                "ten": "Bipartite?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "cc",
+                "ten": "# components"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "triangle + pendant: ab bc ca cd"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "4-cycle: ab bc cd da"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "K4: ab ac ad bc bd cd"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "g": "5-cycle: ab bc cd de ea"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "g": "two triangles: ab bc ca de ef fd"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "g": "path of 5: ab bc cd de"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.eu": "path",
+              "r1.bi": "No",
+              "r1.cc": "1",
+              "r2.eu": "circuit",
+              "r2.bi": "Yes",
+              "r2.cc": "1",
+              "r3.eu": "none",
+              "r3.bi": "No",
+              "r3.cc": "1",
+              "r4.eu": "circuit",
+              "r4.bi": "No",
+              "r4.cc": "1",
+              "r5.eu": "none",
+              "r5.bi": "No",
+              "r5.cc": "2",
+              "r6.eu": "path",
+              "r6.bi": "Yes",
+              "r6.cc": "1"
+            },
+            "giaiThich": "<p>triangle + pendant: Euler path, bipartite false, components 1; 4-cycle: Euler circuit, bipartite true, components 1; K4: Euler none, bipartite false, components 1; 5-cycle: Euler circuit, bipartite false, components 1; two triangles: Euler none, bipartite false, components 2; path of 5: Euler path, bipartite true, components 1.</p><p><i>VI: triangle + pendant: Euler path, hai phía false, 1 thành phần; 4-cycle: Euler circuit, hai phía true, 1 thành phần; K4: Euler none, hai phía false, 1 thành phần; 5-cycle: Euler circuit, hai phía false, 1 thành phần; two triangles: Euler none, hai phía false, 2 thành phần; path of 5: Euler path, hai phía true, 1 thành phần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Declaring “two triangles” Eulerian: each triangle has an Euler circuit but the graph is disconnected."
+        },
+        {
+          "loi": "Calling the 4-cycle non-bipartite."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "connected component",
+          "vi": "thành phần liên thông"
+        }
+      ]
+    },
+    {
+      "title": "Graphs 6 — Dijkstra’s shortest paths",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "Dijkstra"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Weighted undirected graph with edges (weight): AB(4), AC(2), BC(1), BD(5), CD(8), CE(10), DE(2), DF(6), EF(3). Run Dijkstra’s algorithm from A. Give the shortest distance to every vertex, the vertex order in which they are finalised (ties by letter), and the shortest path to F (vertices separated by commas).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đồ thị vô hướng có trọng số với các cạnh (trọng số): AB(4), AC(2), BC(1), BD(5), CD(8), CE(10), DE(2), DF(6), EF(3). Chạy thuật toán Dijkstra từ A. Cho khoảng cách ngắn nhất tới mỗi đỉnh, thứ tự các đỉnh được chốt (hoà thì theo chữ cái) và đường đi ngắn nhất tới F (các đỉnh cách nhau bằng dấu phẩy).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Maintain tentative distances; repeatedly finalise the smallest tentative vertex and relax its edges.",
+        "The path comes from the “previous” pointers recorded at the last improvement."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 6 — Dijkstra’s shortest paths\n\nAnswer in the answer panel (no code needed).\n\n1. Distances from AKhoảng cách từ A\n2. Order and pathThứ tự và đường đi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Graphs 6 — Dijkstra’s shortest paths — answer key\n\n1. Distances from AKhoảng cách từ A\n   - r1.d: 3\n   - r2.d: 2\n   - r3.d: 8\n   - r4.d: 10\n   - r5.d: 13\n   Distances: B=3, C=2, D=8, E=10, F=13.VI: Khoảng cách: B=3, C=2, D=8, E=10, F=13.\n\n2. Order and pathThứ tự và đường đi\n   - r1.a: A,C,B,D,E,F / A, C, B, D, E, F / A C B D E F / A-C-B-D-E-F / A - C - B - D - E - F / A → C → B → D → E → F / A->C->B->D->E->F / A -> C -> B -> D -> E -> F / ACBDEF\n   - r2.a: A,C,B,D,E,F / A, C, B, D, E, F / A C B D E F / A-C-B-D-E-F / A - C - B - D - E - F / A → C → B → D → E → F / A->C->B->D->E->F / A -> C -> B -> D -> E -> F / ACBDEF\n   Order: A,C,B,D,E,F; path to F: A,C,B,D,E,F (length 13).VI: Thứ tự: A,C,B,D,E,F; đường tới F: A,C,B,D,E,F (độ dài 13).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Distances: B=3, C=2, D=8, E=10, F=13.</p><p><i>VI: Khoảng cách: B=3, C=2, D=8, E=10, F=13.</i></p><p>Order: A,C,B,D,E,F; path to F: A,C,B,D,E,F (length 13).</p><p><i>VI: Thứ tự: A,C,B,D,E,F; đường tới F: A,C,B,D,E,F (độ dài 13).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Distances from A</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoảng cách từ A</i></p>",
+            "cot": [
+              {
+                "ma": "v",
+                "ten": "Vertex"
+              },
+              {
+                "ma": "d",
+                "ten": "dist(A, v)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "v": "B"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "v": "C"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "v": "D"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "v": "E"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "v": "F"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "3",
+              "r2.d": "2",
+              "r3.d": "8",
+              "r4.d": "10",
+              "r5.d": "13"
+            },
+            "giaiThich": "<p>Distances: B=3, C=2, D=8, E=10, F=13.</p><p><i>VI: Khoảng cách: B=3, C=2, D=8, E=10, F=13.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Order and path</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự và đường đi</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Question"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "k": "Order in which vertices are finalised (starting with A)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "k": "Shortest path from A to F"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": [
+                "A,C,B,D,E,F",
+                "A, C, B, D, E, F",
+                "A C B D E F",
+                "A-C-B-D-E-F",
+                "A - C - B - D - E - F",
+                "A → C → B → D → E → F",
+                "A->C->B->D->E->F",
+                "A -> C -> B -> D -> E -> F",
+                "ACBDEF"
+              ],
+              "r2.a": [
+                "A,C,B,D,E,F",
+                "A, C, B, D, E, F",
+                "A C B D E F",
+                "A-C-B-D-E-F",
+                "A - C - B - D - E - F",
+                "A → C → B → D → E → F",
+                "A->C->B->D->E->F",
+                "A -> C -> B -> D -> E -> F",
+                "ACBDEF"
+              ]
+            },
+            "giaiThich": "<p>Order: A,C,B,D,E,F; path to F: A,C,B,D,E,F (length 13).</p><p><i>VI: Thứ tự: A,C,B,D,E,F; đường tới F: A,C,B,D,E,F (độ dài 13).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Finalising a vertex before comparing all tentative distances."
+        },
+        {
+          "loi": "Adding the edge weights of a non-shortest path."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "relaxation",
+          "vi": "nới lỏng cạnh"
+        },
+        {
+          "en": "tentative distance",
+          "vi": "khoảng cách tạm thời"
+        }
+      ]
+    },
+    {
+      "title": "Graphs 7 — Implement breadth-first search",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "BFS",
+        "adjacency list"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>bfsOrder(edges, start)</code> for an undirected graph given as an array of <code>[u, v]</code> edges between string vertices. Return the array of vertices in the order a BFS from <code>start</code> visits them, always taking neighbours in alphabetical order. Vertices not reachable from <code>start</code> are not included. If <code>start</code> does not appear in any edge, the result is just <code>[start]</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Mark a vertex as seen when it is enqueued.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>bfsOrder(edges, start)</code> cho đồ thị vô hướng cho bởi mảng các cạnh <code>[u, v]</code> giữa các đỉnh dạng chuỗi. Trả mảng đỉnh theo thứ tự BFS từ <code>start</code> thăm, luôn lấy láng giềng theo thứ tự chữ cái. Đỉnh không tới được từ <code>start</code> không đưa vào. Nếu <code>start</code> không xuất hiện trong cạnh nào, kết quả chỉ là <code>[start]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đánh dấu đã thấy khi đỉnh được đưa vào hàng đợi.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "bfsOrder([[\"A\",\"B\"],[\"A\",\"C\"],[\"B\",\"D\"],[\"C\",\"D\"]],\"A\")",
+          "output": "[\"A\",\"B\",\"C\",\"D\"]",
+          "explanation": "Level 0: A; level 1: B, C; level 2: D.|||Mức 0: A; mức 1: B, C; mức 2: D."
+        }
+      ],
+      "hintsJson": [
+        "Build an adjacency map with both directions; sort each neighbour list.",
+        "Use an array as a queue: push at the back, shift from the front."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function bfsOrder(edges, start) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function bfsOrder(edges, start) {\n  var adj = {}, i;\n  edges.forEach(function (e) { (adj[e[0]] = adj[e[0]] || []).push(e[1]); (adj[e[1]] = adj[e[1]] || []).push(e[0]); });\n  Object.keys(adj).forEach(function (k) { adj[k].sort(); });\n  if (!adj[start]) return [start];\n  var seen = {}, queue = [start], order = [];\n  seen[start] = true;\n  while (queue.length) {\n    var u = queue.shift();\n    order.push(u);\n    for (i = 0; i < adj[u].length; i++) if (!seen[adj[u][i]]) { seen[adj[u][i]] = true; queue.push(adj[u][i]); }\n  }\n  return order;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>BFS discovers vertices in non-decreasing distance (in edges) from the start; the queue keeps the frontier in order.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: bfsOrder([[\"A\",\"B\"],[\"A\",\"C\"],[\"B\",\"D\"],[\"C\",\"D\"]], \"A\")",
+              "vi": "Ca 1"
+            },
+            "goi": "bfsOrder([[\"A\",\"B\"],[\"A\",\"C\"],[\"B\",\"D\"],[\"C\",\"D\"]], \"A\")",
+            "mongDoi": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: bfsOrder([[\"A\",\"B\"]], \"Z\")",
+              "vi": "Ca 2"
+            },
+            "goi": "bfsOrder([[\"A\",\"B\"]], \"Z\")",
+            "mongDoi": [
+              "Z"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: bfsOrder([[\"B\",\"A\"],[\"C\",\"A\"],[\"D\",\"B\"],[\"E\",\"C\"],[\"F\",\"E\"]], \"A\")",
+              "vi": "Ca 3"
+            },
+            "goi": "bfsOrder([[\"B\",\"A\"],[\"C\",\"A\"],[\"D\",\"B\"],[\"E\",\"C\"],[\"F\",\"E\"]], \"A\")",
+            "mongDoi": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "bfsOrder([[\"A\",\"D\"],[\"A\",\"B\"],[\"B\",\"C\"],[\"B\",\"E\"],[\"C\",\"F\"],[\"D\",\"E\"],[\"E\",\"F\"],[\"D\",\"G\"]], \"A\")",
+            "mongDoi": [
+              "A",
+              "B",
+              "D",
+              "C",
+              "E",
+              "G",
+              "F"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "bfsOrder([[\"X\",\"Y\"],[\"Y\",\"Z\"],[\"P\",\"Q\"]], \"Y\")",
+            "mongDoi": [
+              "Y",
+              "X",
+              "Z"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "bfsOrder([], \"A\")",
+            "mongDoi": [
+              "A"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding the edge in one direction only."
+        },
+        {
+          "loi": "Marking visited on dequeue: a vertex can be enqueued twice."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Graphs 8 — Implement Dijkstra’s algorithm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "Dijkstra",
+        "shortest path"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>shortestDistances(edges, source)</code> for an undirected weighted graph: <code>edges</code> is an array of <code>[u, v, w]</code> with positive integer weights. Return an object mapping every vertex that appears in the edges (and the source) to its shortest distance from <code>source</code>; use <code>-1</code> for unreachable vertices. A simple O(V²) Dijkstra (scan for the unfinished vertex with the smallest tentative distance) is enough.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Weights are positive, so a finalised vertex never improves.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>shortestDistances(edges, source)</code> cho đồ thị vô hướng có trọng số: <code>edges</code> là mảng các <code>[u, v, w]</code> với trọng số nguyên dương. Trả đối tượng ánh xạ mỗi đỉnh xuất hiện trong cạnh (và nguồn) tới khoảng cách ngắn nhất từ <code>source</code>; dùng <code>-1</code> cho đỉnh không tới được. Dijkstra O(V²) đơn giản (quét tìm đỉnh chưa chốt có khoảng cách tạm nhỏ nhất) là đủ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trọng số dương nên đỉnh đã chốt không thể tốt hơn.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "shortestDistances([[\"A\",\"B\",4],[\"A\",\"C\",2],[\"B\",\"C\",1]],\"A\")",
+          "output": "{\"A\":0,\"B\":3,\"C\":2}",
+          "explanation": "A→C→B costs 3 < 4.|||A→C→B tốn 3 < 4."
+        }
+      ],
+      "hintsJson": [
+        "Keep dist (−1 = unknown) and done flags; loop: pick the smallest unfinished known vertex, finalise it, relax its neighbours.",
+        "Stop when no unfinished vertex has a known distance."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function shortestDistances(edges, source) {\n  return {};\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function shortestDistances(edges, source) {\n  var adj = {}, dist = {}, done = {};\n  edges.forEach(function (e) {\n    (adj[e[0]] = adj[e[0]] || []).push([e[1], e[2]]);\n    (adj[e[1]] = adj[e[1]] || []).push([e[0], e[2]]);\n  });\n  Object.keys(adj).forEach(function (v) { dist[v] = -1; });\n  if (dist[source] === undefined) { dist[source] = 0; return dist; }\n  dist[source] = 0;\n  for (;;) {\n    var best = null;\n    Object.keys(dist).forEach(function (v) { if (!done[v] && dist[v] >= 0 && (best === null || dist[v] < dist[best])) best = v; });\n    if (best === null) break;\n    done[best] = true;\n    (adj[best] || []).forEach(function (p) {\n      var nd = dist[best] + p[1];\n      if (dist[p[0]] === -1 || nd < dist[p[0]]) dist[p[0]] = nd;\n    });\n  }\n  return dist;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With non-negative weights, the unfinished vertex with the smallest tentative distance can no longer be improved: any other route to it must leave the finished set through a vertex that is at least as far.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: shortestDistances([[\"A\",\"B\",4],[\"A\",\"C\",2],[\"B\",\"C\",1]], \"A\")",
+              "vi": "Ca 1"
+            },
+            "goi": "shortestDistances([[\"A\",\"B\",4],[\"A\",\"C\",2],[\"B\",\"C\",1]], \"A\")",
+            "mongDoi": {
+              "A": 0,
+              "B": 3,
+              "C": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: shortestDistances([[\"A\",\"B\",4],[\"A\",\"C\",2],[\"B\",\"C\",1],[\"B\",\"D\",5],[\"C\",\"D\",8],[\"C\",\"E\",)",
+              "vi": "Ca 2"
+            },
+            "goi": "shortestDistances([[\"A\",\"B\",4],[\"A\",\"C\",2],[\"B\",\"C\",1],[\"B\",\"D\",5],[\"C\",\"D\",8],[\"C\",\"E\",10],[\"D\",\"E\",2],[\"D\",\"F\",6],[\"E\",\"F\",3]], \"A\")",
+            "mongDoi": {
+              "A": 0,
+              "B": 3,
+              "C": 2,
+              "D": 8,
+              "E": 10,
+              "F": 13
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: shortestDistances([[\"A\",\"B\",1],[\"C\",\"D\",1]], \"A\")",
+              "vi": "Ca 3"
+            },
+            "goi": "shortestDistances([[\"A\",\"B\",1],[\"C\",\"D\",1]], \"A\")",
+            "mongDoi": {
+              "A": 0,
+              "B": 1,
+              "C": -1,
+              "D": -1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "shortestDistances([[\"A\",\"B\",4],[\"A\",\"C\",2],[\"B\",\"C\",1],[\"B\",\"D\",5],[\"C\",\"D\",8],[\"C\",\"E\",10],[\"D\",\"E\",2],[\"D\",\"F\",6],[\"E\",\"F\",3]], \"F\")",
+            "mongDoi": {
+              "A": 13,
+              "B": 10,
+              "C": 11,
+              "D": 5,
+              "E": 3,
+              "F": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "shortestDistances([[\"S\",\"A\",7],[\"S\",\"B\",2],[\"B\",\"A\",3],[\"A\",\"T\",1],[\"B\",\"T\",8]], \"S\")",
+            "mongDoi": {
+              "S": 0,
+              "A": 5,
+              "B": 2,
+              "T": 6
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "shortestDistances([], \"A\")",
+            "mongDoi": {
+              "A": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating −1 as the smallest distance when picking the next vertex."
+        },
+        {
+          "loi": "Relaxing with the edge weight alone instead of dist[u] + w."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

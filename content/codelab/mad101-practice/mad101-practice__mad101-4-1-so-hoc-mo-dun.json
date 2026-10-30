@@ -1,0 +1,1513 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-4-1-so-hoc-mo-dun",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-4-1-so-hoc-mo-dun"
+  },
+  "exercises": [
+    {
+      "title": "Number theory 1 — Divisibility and modular vocabulary",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "divisibility",
+        "modular arithmetic"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Definitions from Rosen §4.1–4.3: divisibility, mod, congruence, primes, gcd and relative primality.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Định nghĩa từ Rosen §4.1–4.3: chia hết, mod, đồng dư, số nguyên tố, ƯCLN và nguyên tố cùng nhau.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of congruence as “same remainder”.",
+        "The remainder in a division by m is always in 0…m−1, even for negative dividends."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 1 — Divisibility and modular vocabulary\n\nAnswer in the answer panel (no code needed).\n\n1. a | b means …a | b nghĩa là …\n2. a ≡ b (mod m) means …a ≡ b (mod m) nghĩa là …\n3. −7 mod 3 equals …−7 mod 3 bằng …\n4. Integers a and b are relatively prime when …Hai số nguyên a, b nguyên tố cùng nhau khi …\n5. For positive a, b: gcd(a, b)·lcm(a, b) equals …Với a, b dương: gcd(a, b)·lcm(a, b) bằng …\n6. The Fundamental Theorem of Arithmetic says every integer n > 1 …Định lý cơ bản của số học nói mọi số nguyên n > 1 …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 1 — Divisibility and modular vocabulary — answer key\n\n1. a | b means …a | b nghĩa là …\n   Answer: c) b = a·k for some integer k\n   a divides b when b is an integer multiple of a (a ≠ 0).VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).\n\n2. a ≡ b (mod m) means …a ≡ b (mod m) nghĩa là …\n   Answer: d) m divides a − b\n   Equivalent: a and b leave the same remainder when divided by m.VI: Tương đương: a và b có cùng số dư khi chia cho m.\n\n3. −7 mod 3 equals …−7 mod 3 bằng …\n   Answer: a) 2\n   −7 = 3·(−3) + 2, and a remainder is never negative.VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.\n\n4. Integers a and b are relatively prime when …Hai số nguyên a, b nguyên tố cùng nhau khi …\n   Answer: b) gcd(a, b) = 1\n   They share no prime factor — even if neither number is prime (e.g. 8 and 15).VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).\n\n5. For positive a, b: gcd(a, b)·lcm(a, b) equals …Với a, b dương: gcd(a, b)·lcm(a, b) bằng …\n   Answer: c) a·b\n   This identity gives lcm quickly once gcd is known.VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.\n\n6. The Fundamental Theorem of Arithmetic says every integer n > 1 …Định lý cơ bản của số học nói mọi số nguyên n > 1 …\n   Answer: d) is a product of primes, uniquely up to order\n   Existence and uniqueness of prime factorization.VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>a divides b when b is an integer multiple of a (a ≠ 0).</p><p><i>VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).</i></p><p>Equivalent: a and b leave the same remainder when divided by m.</p><p><i>VI: Tương đương: a và b có cùng số dư khi chia cho m.</i></p><p>−7 = 3·(−3) + 2, and a remainder is never negative.</p><p><i>VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.</i></p><p>They share no prime factor — even if neither number is prime (e.g. 8 and 15).</p><p><i>VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).</i></p><p>This identity gives lcm quickly once gcd is known.</p><p><i>VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.</i></p><p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>a | b means …</p><p style=\"opacity:.75;font-size:.92em\"><i>a | b nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a < b"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a and b are coprime"
+              },
+              {
+                "ma": "c",
+                "noiDung": "b = a·k for some integer k"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a = b·k for some integer k"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>a divides b when b is an integer multiple of a (a ≠ 0).</p><p><i>VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>a ≡ b (mod m) means …</p><p style=\"opacity:.75;font-size:.92em\"><i>a ≡ b (mod m) nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a = b"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a mod m < b mod m"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a·b is a multiple of m"
+              },
+              {
+                "ma": "d",
+                "noiDung": "m divides a − b"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Equivalent: a and b leave the same remainder when divided by m.</p><p><i>VI: Tương đương: a và b có cùng số dư khi chia cho m.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>−7 mod 3 equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>−7 mod 3 bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2"
+              },
+              {
+                "ma": "b",
+                "noiDung": "−1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "−2"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>−7 = 3·(−3) + 2, and a remainder is never negative.</p><p><i>VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Integers a and b are relatively prime when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai số nguyên a, b nguyên tố cùng nhau khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "lcm(a, b) = 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "gcd(a, b) = 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "both are prime"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a | b"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>They share no prime factor — even if neither number is prime (e.g. 8 and 15).</p><p><i>VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>For positive a, b: gcd(a, b)·lcm(a, b) equals …</p><p style=\"opacity:.75;font-size:.92em\"><i>Với a, b dương: gcd(a, b)·lcm(a, b) bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "gcd(a, b)²"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a/b"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a·b"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a + b"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>This identity gives lcm quickly once gcd is known.</p><p><i>VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>The Fundamental Theorem of Arithmetic says every integer n > 1 …</p><p style=\"opacity:.75;font-size:.92em\"><i>Định lý cơ bản của số học nói mọi số nguyên n > 1 …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "is prime"
+              },
+              {
+                "ma": "b",
+                "noiDung": "has exactly two divisors"
+              },
+              {
+                "ma": "c",
+                "noiDung": "can be written as a sum of two primes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "is a product of primes, uniquely up to order"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing −7 mod 3 = −1 (that is the remainder of truncating division in C/Java, not the mathematical mod)."
+        },
+        {
+          "loi": "Assuming relatively prime numbers must themselves be prime."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "congruence",
+          "vi": "đồng dư"
+        },
+        {
+          "en": "relatively prime",
+          "vi": "nguyên tố cùng nhau"
+        },
+        {
+          "en": "gcd",
+          "vi": "ƯCLN"
+        },
+        {
+          "en": "lcm",
+          "vi": "BCNN"
+        }
+      ]
+    },
+    {
+      "title": "Number theory 2 — Quotient and remainder (including negatives)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "division algorithm"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For a = m·q + r with 0 ≤ r &lt; m give q = a div m (rounded <em>down</em>) and r = a mod m.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với a = m·q + r và 0 ≤ r &lt; m hãy cho q = a div m (làm tròn <em>xuống</em>) và r = a mod m.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The quotient is ⌊a/m⌋; the remainder is a − m·q.",
+        "For negative a, the quotient goes further down so that the remainder stays non-negative."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 2 — Quotient and remainder (including negatives)\n\nAnswer in the answer panel (no code needed).\n\n1. div and moddiv và mod\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 2 — Quotient and remainder (including negatives) — answer key\n\n1. div and moddiv và mod\n   - r1.q: 9\n   - r1.r: 2\n   - r2.q: -10\n   - r2.r: 3\n   - r3.q: 14\n   - r3.r: 2\n   - r4.q: -4\n   - r4.r: 3\n   - r5.q: 0\n   - r5.r: 0\n   - r6.q: 12\n   - r6.r: 34\n   - r7.q: -1\n   - r7.r: 25\n   47 = 5·(9) + 2; -47 = 5·(-10) + 3; 100 = 7·(14) + 2; -13 = 4·(-4) + 3; 0 = 9·(0) + 0; 1234 = 100·(12) + 34; -1 = 26·(-1) + 25.VI: 47 = 5·(9) + 2; -47 = 5·(-10) + 3; 100 = 7·(14) + 2; -13 = 4·(-4) + 3; 0 = 9·(0) + 0; 1234 = 100·(12) + 34; -1 = 26·(-1) + 25.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>47 = 5·(9) + 2; -47 = 5·(-10) + 3; 100 = 7·(14) + 2; -13 = 4·(-4) + 3; 0 = 9·(0) + 0; 1234 = 100·(12) + 34; -1 = 26·(-1) + 25.</p><p><i>VI: 47 = 5·(9) + 2; -47 = 5·(-10) + 3; 100 = 7·(14) + 2; -13 = 4·(-4) + 3; 0 = 9·(0) + 0; 1234 = 100·(12) + 34; -1 = 26·(-1) + 25.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>div and mod</p><p style=\"opacity:.75;font-size:.92em\"><i>div và mod</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "a, m"
+              },
+              {
+                "ma": "q",
+                "ten": "a div m"
+              },
+              {
+                "ma": "r",
+                "ten": "a mod m"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "a = 47,  m = 5"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "a": "a = -47,  m = 5"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "a": "a = 100,  m = 7"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "a": "a = -13,  m = 4"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "a": "a = 0,  m = 9"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "a": "a = 1234,  m = 100"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "a": "a = -1,  m = 26"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "9",
+              "r1.r": "2",
+              "r2.q": "-10",
+              "r2.r": "3",
+              "r3.q": "14",
+              "r3.r": "2",
+              "r4.q": "-4",
+              "r4.r": "3",
+              "r5.q": "0",
+              "r5.r": "0",
+              "r6.q": "12",
+              "r6.r": "34",
+              "r7.q": "-1",
+              "r7.r": "25"
+            },
+            "giaiThich": "<p>47 = 5·(9) + 2; -47 = 5·(-10) + 3; 100 = 7·(14) + 2; -13 = 4·(-4) + 3; 0 = 9·(0) + 0; 1234 = 100·(12) + 34; -1 = 26·(-1) + 25.</p><p><i>VI: 47 = 5·(9) + 2; -47 = 5·(-10) + 3; 100 = 7·(14) + 2; -13 = 4·(-4) + 3; 0 = 9·(0) + 0; 1234 = 100·(12) + 34; -1 = 26·(-1) + 25.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing −47 = 5·(−9) − 2 (negative remainder)."
+        },
+        {
+          "loi": "Truncating toward zero for negative dividends."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quotient",
+          "vi": "thương"
+        },
+        {
+          "en": "remainder",
+          "vi": "số dư"
+        }
+      ]
+    },
+    {
+      "title": "Number theory 3 — gcd, lcm and prime factorization",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "factorization",
+        "gcd",
+        "lcm"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Factorize each number into primes (write like <code>2^3*3^2*5</code>), then give gcd and lcm of the pair. For lcm take the larger exponent of each prime, for gcd the smaller.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân tích mỗi số ra thừa số nguyên tố (viết dạng <code>2^3*3^2*5</code>), rồi cho ƯCLN và BCNN của cặp. BCNN lấy số mũ lớn hơn của mỗi nguyên tố, ƯCLN lấy số mũ nhỏ hơn.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Divide by 2, 3, 5, 7, … until the quotient is 1.",
+        "Check: gcd·lcm = a·b."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 3 — gcd, lcm and prime factorization\n\nAnswer in the answer panel (no code needed).\n\n1. Factorizations, gcd, lcmPhân tích, ƯCLN, BCNN\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 3 — gcd, lcm and prime factorization — answer key\n\n1. Factorizations, gcd, lcmPhân tích, ƯCLN, BCNN\n   - r1.fa: 2^2*3*7 / 2^2 * 3 * 7 / 2^2·3·7 / 2^2 · 3 · 7 / 2^2×3×7 / 2^2 × 3 × 7 / 2^2 x 3 x 7 / 2^2 3 7\n   - r1.fb: 2^2*3^2 / 2^2 * 3^2 / 2^2·3^2 / 2^2 · 3^2 / 2^2×3^2 / 2^2 × 3^2 / 2^2 x 3^2 / 2^2 3^2\n   - r1.g: 12\n   - r1.l: 252\n   - r2.fa: 2^3*3^2*5 / 2^3 * 3^2 * 5 / 2^3·3^2·5 / 2^3 · 3^2 · 5 / 2^3×3^2×5 / 2^3 × 3^2 × 5 / 2^3 x 3^2 x 5 / 2^3 3^2 5\n   - r2.fb: 2*3*5^2 / 2 * 3 * 5^2 / 2·3·5^2 / 2 · 3 · 5^2 / 2×3×5^2 / 2 × 3 × 5^2 / 2 x 3 x 5^2 / 2 3 5^2\n   - r2.g: 30\n   - r2.l: 1800\n   - r3.fa: 7*11*13 / 7 * 11 * 13 / 7·11·13 / 7 · 11 · 13 / 7×11×13 / 7 × 11 × 13 / 7 x 11 x 13 / 7 11 13\n   - r3.fb: 11*13 / 11 * 13 / 11·13 / 11 · 13 / 11×13 / 11 × 13 / 11 x 13 / 11 13\n   - r3.g: 143\n   - r3.l: 1001\n   - r4.fa: 17 / 17 / 17 / 17 / 17 / 17 / 17 / 17\n   - r4.fb: 3*17 / 3 * 17 / 3·17 / 3 · 17 / 3×17 / 3 × 17 / 3 x 17 / 3 17\n   - r4.g: 17\n   - r4.l: 51\n   - r5.fa: 2*3*5*7*11 / 2 * 3 * 5 * 7 * 11 / 2·3·5·7·11 / 2 · 3 · 5 · 7 · 11 / 2×3×5×7×11 / 2 × 3 × 5 × 7 × 11 / 2 x 3 x 5 x 7 x 11 / 2 3 5 7 11\n   - r5.fb: 3*5*7*11 / 3 * 5 * 7 * 11 / 3·5·7·11 / 3 · 5 · 7 · 11 / 3×5×7×11 / 3 × 5 × 7 × 11 / 3 x 5 x 7 x 11 / 3 5 7 11\n   - r5.g: 1155\n   - r5.l: 2310\n   84 = 2^2 * 3 * 7, 36 = 2^2 * 3^2, gcd 12, lcm 252; 360 = 2^3 * 3^2 * 5, 150 = 2 * 3 * 5^2, gcd 30, lcm 1800; 1001 = 7 * 11 * 13, 143 = 11 * 13, gcd 143, lcm 1001; 17 = 17, 51 = 3 * 17, gcd 17, lcm 51; 2310 = 2 * 3 * 5 * 7 * 11, 1155 = 3 * 5 * 7 * 11, gcd 1155, lcm 2310.VI: 84 = 2^2 * 3 * 7, 36 = 2^2 * 3^2, gcd 12, lcm 252; 360 = 2^3 * 3^2 * 5, 150 = 2 * 3 * 5^2, gcd 30, lcm 1800; 1001 = 7 * 11 * 13, 143 = 11 * 13, gcd 143, lcm 1001; 17 = 17, 51 = 3 * 17, gcd 17, lcm 51; 2310 = 2 * 3 * 5 * 7 * 11, 1155 = 3 * 5 * 7 * 11, gcd 1155, lcm 2310.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>84 = 2^2 * 3 * 7, 36 = 2^2 * 3^2, gcd 12, lcm 252; 360 = 2^3 * 3^2 * 5, 150 = 2 * 3 * 5^2, gcd 30, lcm 1800; 1001 = 7 * 11 * 13, 143 = 11 * 13, gcd 143, lcm 1001; 17 = 17, 51 = 3 * 17, gcd 17, lcm 51; 2310 = 2 * 3 * 5 * 7 * 11, 1155 = 3 * 5 * 7 * 11, gcd 1155, lcm 2310.</p><p><i>VI: 84 = 2^2 * 3 * 7, 36 = 2^2 * 3^2, gcd 12, lcm 252; 360 = 2^3 * 3^2 * 5, 150 = 2 * 3 * 5^2, gcd 30, lcm 1800; 1001 = 7 * 11 * 13, 143 = 11 * 13, gcd 143, lcm 1001; 17 = 17, 51 = 3 * 17, gcd 17, lcm 51; 2310 = 2 * 3 * 5 * 7 * 11, 1155 = 3 * 5 * 7 * 11, gcd 1155, lcm 2310.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Factorizations, gcd, lcm</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân tích, ƯCLN, BCNN</i></p>",
+            "cot": [
+              {
+                "ma": "ab",
+                "ten": "a, b"
+              },
+              {
+                "ma": "fa",
+                "ten": "a factorized"
+              },
+              {
+                "ma": "fb",
+                "ten": "b factorized"
+              },
+              {
+                "ma": "g",
+                "ten": "gcd"
+              },
+              {
+                "ma": "l",
+                "ten": "lcm"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "ab": "a = 84,  b = 36"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "ab": "a = 360,  b = 150"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "ab": "a = 1001,  b = 143"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "ab": "a = 17,  b = 51"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "ab": "a = 2310,  b = 1155"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.fa": [
+                "2^2*3*7",
+                "2^2 * 3 * 7",
+                "2^2·3·7",
+                "2^2 · 3 · 7",
+                "2^2×3×7",
+                "2^2 × 3 × 7",
+                "2^2 x 3 x 7",
+                "2^2 3 7"
+              ],
+              "r1.fb": [
+                "2^2*3^2",
+                "2^2 * 3^2",
+                "2^2·3^2",
+                "2^2 · 3^2",
+                "2^2×3^2",
+                "2^2 × 3^2",
+                "2^2 x 3^2",
+                "2^2 3^2"
+              ],
+              "r1.g": "12",
+              "r1.l": "252",
+              "r2.fa": [
+                "2^3*3^2*5",
+                "2^3 * 3^2 * 5",
+                "2^3·3^2·5",
+                "2^3 · 3^2 · 5",
+                "2^3×3^2×5",
+                "2^3 × 3^2 × 5",
+                "2^3 x 3^2 x 5",
+                "2^3 3^2 5"
+              ],
+              "r2.fb": [
+                "2*3*5^2",
+                "2 * 3 * 5^2",
+                "2·3·5^2",
+                "2 · 3 · 5^2",
+                "2×3×5^2",
+                "2 × 3 × 5^2",
+                "2 x 3 x 5^2",
+                "2 3 5^2"
+              ],
+              "r2.g": "30",
+              "r2.l": "1800",
+              "r3.fa": [
+                "7*11*13",
+                "7 * 11 * 13",
+                "7·11·13",
+                "7 · 11 · 13",
+                "7×11×13",
+                "7 × 11 × 13",
+                "7 x 11 x 13",
+                "7 11 13"
+              ],
+              "r3.fb": [
+                "11*13",
+                "11 * 13",
+                "11·13",
+                "11 · 13",
+                "11×13",
+                "11 × 13",
+                "11 x 13",
+                "11 13"
+              ],
+              "r3.g": "143",
+              "r3.l": "1001",
+              "r4.fa": [
+                "17",
+                "17",
+                "17",
+                "17",
+                "17",
+                "17",
+                "17",
+                "17"
+              ],
+              "r4.fb": [
+                "3*17",
+                "3 * 17",
+                "3·17",
+                "3 · 17",
+                "3×17",
+                "3 × 17",
+                "3 x 17",
+                "3 17"
+              ],
+              "r4.g": "17",
+              "r4.l": "51",
+              "r5.fa": [
+                "2*3*5*7*11",
+                "2 * 3 * 5 * 7 * 11",
+                "2·3·5·7·11",
+                "2 · 3 · 5 · 7 · 11",
+                "2×3×5×7×11",
+                "2 × 3 × 5 × 7 × 11",
+                "2 x 3 x 5 x 7 x 11",
+                "2 3 5 7 11"
+              ],
+              "r5.fb": [
+                "3*5*7*11",
+                "3 * 5 * 7 * 11",
+                "3·5·7·11",
+                "3 · 5 · 7 · 11",
+                "3×5×7×11",
+                "3 × 5 × 7 × 11",
+                "3 x 5 x 7 x 11",
+                "3 5 7 11"
+              ],
+              "r5.g": "1155",
+              "r5.l": "2310"
+            },
+            "giaiThich": "<p>84 = 2^2 * 3 * 7, 36 = 2^2 * 3^2, gcd 12, lcm 252; 360 = 2^3 * 3^2 * 5, 150 = 2 * 3 * 5^2, gcd 30, lcm 1800; 1001 = 7 * 11 * 13, 143 = 11 * 13, gcd 143, lcm 1001; 17 = 17, 51 = 3 * 17, gcd 17, lcm 51; 2310 = 2 * 3 * 5 * 7 * 11, 1155 = 3 * 5 * 7 * 11, gcd 1155, lcm 2310.</p><p><i>VI: 84 = 2^2 * 3 * 7, 36 = 2^2 * 3^2, gcd 12, lcm 252; 360 = 2^3 * 3^2 * 5, 150 = 2 * 3 * 5^2, gcd 30, lcm 1800; 1001 = 7 * 11 * 13, 143 = 11 * 13, gcd 143, lcm 1001; 17 = 17, 51 = 3 * 17, gcd 17, lcm 51; 2310 = 2 * 3 * 5 * 7 * 11, 1155 = 3 * 5 * 7 * 11, gcd 1155, lcm 2310.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the larger exponent for gcd."
+        },
+        {
+          "loi": "Stopping the factorization before the quotient is 1 (leaving a composite factor)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prime factorization",
+          "vi": "phân tích thừa số nguyên tố"
+        }
+      ]
+    },
+    {
+      "title": "Number theory 4 — Trace the Euclidean algorithm",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Euclid"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Compute gcd(1071, 462) by repeated division: at each step a = b·q + r, then continue with (a, b) ← (b, r) until r = 0. Fill each row; the last non-zero remainder is the gcd.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính gcd(1071, 462) bằng chia liên tiếp: mỗi bước a = b·q + r, rồi tiếp tục với (a, b) ← (b, r) đến khi r = 0. Điền từng dòng; số dư khác 0 cuối cùng là ƯCLN.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The new a is the old b, and the new b is the old remainder.",
+        "Stop when the remainder reaches 0; the gcd is the last non-zero remainder (= the last b)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 4 — Trace the Euclidean algorithm\n\nAnswer in the answer panel (no code needed).\n\n1. Euclid on (1071, 462)Euclid trên (1071, 462)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 4 — Trace the Euclidean algorithm — answer key\n\n1. Euclid on (1071, 462)Euclid trên (1071, 462)\n   - r1.q: 2\n   - r1.r: 147\n   - r2.a: 462\n   - r2.b: 147\n   - r2.q: 3\n   - r2.r: 21\n   - r3.a: 147\n   - r3.b: 21\n   - r3.q: 7\n   - r3.r: 0\n   Rows: 1071 = 462·2 + 147; 462 = 147·3 + 21; 147 = 21·7 + 0. gcd = 21.VI: Các dòng: 1071 = 462·2 + 147; 462 = 147·3 + 21; 147 = 21·7 + 0. ƯCLN = 21.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows: 1071 = 462·2 + 147; 462 = 147·3 + 21; 147 = 21·7 + 0. gcd = 21.</p><p><i>VI: Các dòng: 1071 = 462·2 + 147; 462 = 147·3 + 21; 147 = 21·7 + 0. ƯCLN = 21.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Euclid on (1071, 462)</p><p style=\"opacity:.75;font-size:.92em\"><i>Euclid trên (1071, 462)</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "a"
+              },
+              {
+                "ma": "b",
+                "ten": "b"
+              },
+              {
+                "ma": "q",
+                "ten": "q = a div b"
+              },
+              {
+                "ma": "r",
+                "ten": "r = a mod b"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "a": "1071",
+                  "b": "462"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {}
+              },
+              {
+                "ma": "r3",
+                "o": {}
+              }
+            ],
+            "dapAn": {
+              "r1.q": "2",
+              "r1.r": "147",
+              "r2.a": "462",
+              "r2.b": "147",
+              "r2.q": "3",
+              "r2.r": "21",
+              "r3.a": "147",
+              "r3.b": "21",
+              "r3.q": "7",
+              "r3.r": "0"
+            },
+            "giaiThich": "<p>Rows: 1071 = 462·2 + 147; 462 = 147·3 + 21; 147 = 21·7 + 0. gcd = 21.</p><p><i>VI: Các dòng: 1071 = 462·2 + 147; 462 = 147·3 + 21; 147 = 21·7 + 0. ƯCLN = 21.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reusing the old a instead of the old b in the next row."
+        },
+        {
+          "loi": "Reporting the last remainder (0) as the gcd."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Euclidean algorithm",
+          "vi": "thuật toán Euclid"
+        }
+      ]
+    },
+    {
+      "title": "Number theory 5 — Modular inverses and Bézout",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "modular inverse",
+        "extended Euclid"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>The inverse of a modulo m exists exactly when gcd(a, m) = 1; it is the x in 0…m−1 with a·x ≡ 1 (mod m). Write <code>none</code> when no inverse exists.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nghịch đảo của a theo mô-đun m tồn tại khi và chỉ khi gcd(a, m) = 1; đó là x trong 0…m−1 với a·x ≡ 1 (mod m). Viết <code>none</code> khi không tồn tại.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "If gcd(a, m) ≠ 1, answer none immediately.",
+        "Otherwise back-substitute through the Euclidean steps to write 1 = a·x + m·y; then x mod m is the inverse. You can also verify a·x mod m = 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 5 — Modular inverses and Bézout\n\nAnswer in the answer panel (no code needed).\n\n1. Modular inversesNghịch đảo mô-đun\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 5 — Modular inverses and Bézout — answer key\n\n1. Modular inversesNghịch đảo mô-đun\n   - r1.g: 1\n   - r1.inv: 5\n   - r2.g: 1\n   - r2.inv: 5\n   - r3.g: 1\n   - r3.inv: 2753\n   - r4.g: 2\n   - r4.inv: none / no inverse / does not exist\n   - r5.g: 1\n   - r5.inv: 19\n   - r6.g: 1\n   - r6.inv: 3\n   3⁻¹ mod 7: 5; 5⁻¹ mod 12: 5; 17⁻¹ mod 3120: 2753; 4⁻¹ mod 10: none (gcd 2); 10⁻¹ mod 21: 19; 9⁻¹ mod 26: 3. The inverse is the Bézout coefficient of a in 1 = a·x + m·y.VI: 3⁻¹ mod 7: 5; 5⁻¹ mod 12: 5; 17⁻¹ mod 3120: 2753; 4⁻¹ mod 10: không có (gcd 2); 10⁻¹ mod 21: 19; 9⁻¹ mod 26: 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>3⁻¹ mod 7: 5; 5⁻¹ mod 12: 5; 17⁻¹ mod 3120: 2753; 4⁻¹ mod 10: none (gcd 2); 10⁻¹ mod 21: 19; 9⁻¹ mod 26: 3. The inverse is the Bézout coefficient of a in 1 = a·x + m·y.</p><p><i>VI: 3⁻¹ mod 7: 5; 5⁻¹ mod 12: 5; 17⁻¹ mod 3120: 2753; 4⁻¹ mod 10: không có (gcd 2); 10⁻¹ mod 21: 19; 9⁻¹ mod 26: 3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Modular inverses</p><p style=\"opacity:.75;font-size:.92em\"><i>Nghịch đảo mô-đun</i></p>",
+            "cot": [
+              {
+                "ma": "am",
+                "ten": "a, m"
+              },
+              {
+                "ma": "g",
+                "ten": "gcd(a, m)"
+              },
+              {
+                "ma": "inv",
+                "ten": "a⁻¹ mod m"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "am": "a = 3,  m = 7"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "am": "a = 5,  m = 12"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "am": "a = 17,  m = 3120"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "am": "a = 4,  m = 10"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "am": "a = 10,  m = 21"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "am": "a = 9,  m = 26"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.g": "1",
+              "r1.inv": "5",
+              "r2.g": "1",
+              "r2.inv": "5",
+              "r3.g": "1",
+              "r3.inv": "2753",
+              "r4.g": "2",
+              "r4.inv": [
+                "none",
+                "no inverse",
+                "does not exist"
+              ],
+              "r5.g": "1",
+              "r5.inv": "19",
+              "r6.g": "1",
+              "r6.inv": "3"
+            },
+            "giaiThich": "<p>3⁻¹ mod 7: 5; 5⁻¹ mod 12: 5; 17⁻¹ mod 3120: 2753; 4⁻¹ mod 10: none (gcd 2); 10⁻¹ mod 21: 19; 9⁻¹ mod 26: 3. The inverse is the Bézout coefficient of a in 1 = a·x + m·y.</p><p><i>VI: 3⁻¹ mod 7: 5; 5⁻¹ mod 12: 5; 17⁻¹ mod 3120: 2753; 4⁻¹ mod 10: không có (gcd 2); 10⁻¹ mod 21: 19; 9⁻¹ mod 26: 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving a negative x without reducing mod m."
+        },
+        {
+          "loi": "Searching for an inverse when gcd(a, m) > 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "modular inverse",
+          "vi": "nghịch đảo mô-đun"
+        },
+        {
+          "en": "Bézout’s theorem",
+          "vi": "đẳng thức Bézout"
+        }
+      ]
+    },
+    {
+      "title": "Number theory 6 — Linear congruences and the Chinese Remainder Theorem",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "linear congruence",
+        "CRT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Solve a·x ≡ b (mod m): list <em>all</em> solutions in 0…m−1 in ascending order (<code>none</code> if there is no solution). Then solve the CRT systems: the unique x modulo the product of the moduli.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giải a·x ≡ b (mod m): liệt kê <em>mọi</em> nghiệm trong 0…m−1 theo thứ tự tăng (<code>none</code> nếu vô nghiệm). Sau đó giải hệ CRT: x duy nhất theo mô-đun tích các mô-đun.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "gcd(a, m) = g: no solution unless g | b; if it divides, divide everything by g and solve with the inverse.",
+        "CRT: x = Σ r_i·M_i·(M_i⁻¹ mod m_i) mod M with M_i = M/m_i."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 6 — Linear congruences and the Chinese Remainder Theorem\n\nAnswer in the answer panel (no code needed).\n\n1. a·x ≡ b (mod m)a·x ≡ b (mod m)\n2. CRT systemsHệ CRT\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 6 — Linear congruences and the Chinese Remainder Theorem — answer key\n\n1. a·x ≡ b (mod m)a·x ≡ b (mod m)\n   - r1.sol: 6 / (6) / [6] / 6 / (6) / [6] / 6\n   - r2.sol: 4,9 / (4,9) / [4,9] / 4, 9 / (4, 9) / [4, 9] / 4 9\n   - r3.sol: 4,9 / (4,9) / [4,9] / 4, 9 / (4, 9) / [4, 9] / 4 9\n   - r4.sol: 5 / (5) / [5] / 5 / (5) / [5] / 5\n   - r5.sol: 2,5,8,11,14,17,20 / (2,5,8,11,14,17,20) / [2,5,8,11,14,17,20] / 2, 5, 8, 11, 14, 17, 20 / (2, 5, 8, 11, 14, 17, 20) / [2, 5, 8, 11, 14, 17, 20] / 2 5 8 11 14 17 20\n   3x ≡ 4 (mod 7): 6; 6x ≡ 4 (mod 10): 4,9; 4x ≡ 6 (mod 10): 4,9; 5x ≡ 1 (mod 12): 5; 14x ≡ 7 (mod 21): 2,5,8,11,14,17,20. With g = gcd(a, m): solutions exist iff g | b, and then there are g of them.VI: 3x ≡ 4 (mod 7): 6; 6x ≡ 4 (mod 10): 4,9; 4x ≡ 6 (mod 10): 4,9; 5x ≡ 1 (mod 12): 5; 14x ≡ 7 (mod 21): 2,5,8,11,14,17,20.\n\n2. CRT systemsHệ CRT\n   - r1.x: 23\n   - r2.x: 58\n   - r3.x: 18\n   x≡2(3),x≡3(5),x≡2(7) ⇒ x = 23 mod 105; x≡1(3),x≡2(4),x≡3(5) ⇒ x = 58 mod 60; x≡3(5),x≡4(7) ⇒ x = 18 mod 35.VI: x = 23 mod 105; x = 58 mod 60; x = 18 mod 35.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>3x ≡ 4 (mod 7): 6; 6x ≡ 4 (mod 10): 4,9; 4x ≡ 6 (mod 10): 4,9; 5x ≡ 1 (mod 12): 5; 14x ≡ 7 (mod 21): 2,5,8,11,14,17,20. With g = gcd(a, m): solutions exist iff g | b, and then there are g of them.</p><p><i>VI: 3x ≡ 4 (mod 7): 6; 6x ≡ 4 (mod 10): 4,9; 4x ≡ 6 (mod 10): 4,9; 5x ≡ 1 (mod 12): 5; 14x ≡ 7 (mod 21): 2,5,8,11,14,17,20.</i></p><p>x≡2(3),x≡3(5),x≡2(7) ⇒ x = 23 mod 105; x≡1(3),x≡2(4),x≡3(5) ⇒ x = 58 mod 60; x≡3(5),x≡4(7) ⇒ x = 18 mod 35.</p><p><i>VI: x = 23 mod 105; x = 58 mod 60; x = 18 mod 35.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>a·x ≡ b (mod m)</p><p style=\"opacity:.75;font-size:.92em\"><i>a·x ≡ b (mod m)</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Congruence"
+              },
+              {
+                "ma": "sol",
+                "ten": "Solutions in 0…m−1"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "3x ≡ 4 (mod 7)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "6x ≡ 4 (mod 10)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "4x ≡ 6 (mod 10)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "5x ≡ 1 (mod 12)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "c": "14x ≡ 7 (mod 21)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.sol": [
+                "6",
+                "(6)",
+                "[6]",
+                "6",
+                "(6)",
+                "[6]",
+                "6"
+              ],
+              "r2.sol": [
+                "4,9",
+                "(4,9)",
+                "[4,9]",
+                "4, 9",
+                "(4, 9)",
+                "[4, 9]",
+                "4 9"
+              ],
+              "r3.sol": [
+                "4,9",
+                "(4,9)",
+                "[4,9]",
+                "4, 9",
+                "(4, 9)",
+                "[4, 9]",
+                "4 9"
+              ],
+              "r4.sol": [
+                "5",
+                "(5)",
+                "[5]",
+                "5",
+                "(5)",
+                "[5]",
+                "5"
+              ],
+              "r5.sol": [
+                "2,5,8,11,14,17,20",
+                "(2,5,8,11,14,17,20)",
+                "[2,5,8,11,14,17,20]",
+                "2, 5, 8, 11, 14, 17, 20",
+                "(2, 5, 8, 11, 14, 17, 20)",
+                "[2, 5, 8, 11, 14, 17, 20]",
+                "2 5 8 11 14 17 20"
+              ]
+            },
+            "giaiThich": "<p>3x ≡ 4 (mod 7): 6; 6x ≡ 4 (mod 10): 4,9; 4x ≡ 6 (mod 10): 4,9; 5x ≡ 1 (mod 12): 5; 14x ≡ 7 (mod 21): 2,5,8,11,14,17,20. With g = gcd(a, m): solutions exist iff g | b, and then there are g of them.</p><p><i>VI: 3x ≡ 4 (mod 7): 6; 6x ≡ 4 (mod 10): 4,9; 4x ≡ 6 (mod 10): 4,9; 5x ≡ 1 (mod 12): 5; 14x ≡ 7 (mod 21): 2,5,8,11,14,17,20.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>CRT systems</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ CRT</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "System"
+              },
+              {
+                "ma": "x",
+                "ten": "x mod M"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "x ≡ 2 (mod 3),  x ≡ 3 (mod 5),  x ≡ 2 (mod 7)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "x ≡ 1 (mod 3),  x ≡ 2 (mod 4),  x ≡ 3 (mod 5)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "x ≡ 3 (mod 5),  x ≡ 4 (mod 7)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.x": "23",
+              "r2.x": "58",
+              "r3.x": "18"
+            },
+            "giaiThich": "<p>x≡2(3),x≡3(5),x≡2(7) ⇒ x = 23 mod 105; x≡1(3),x≡2(4),x≡3(5) ⇒ x = 58 mod 60; x≡3(5),x≡4(7) ⇒ x = 18 mod 35.</p><p><i>VI: x = 23 mod 105; x = 58 mod 60; x = 18 mod 35.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Listing only one solution when g > 1 (there are g solutions mod m)."
+        },
+        {
+          "loi": "Mixing up which modulus each inverse is taken with."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Chinese Remainder Theorem",
+          "vi": "định lý số dư Trung Hoa"
+        }
+      ]
+    },
+    {
+      "title": "Number theory 7 — Fermat, modular powers, φ and base conversion",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "modular exponentiation",
+        "totient",
+        "bases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Computation questions of the kind that fill a discrete-math exam. Use Fermat’s little theorem (a^(p−1) ≡ 1 mod p for prime p ∤ a) to shorten exponents.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu tính toán hay gặp trong đề toán rời rạc. Dùng định lý Fermat nhỏ (a^(p−1) ≡ 1 mod p với p nguyên tố, p ∤ a) để rút gọn số mũ.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Reduce the exponent by the order of the base (p − 1 for Fermat, or a smaller cycle you find).",
+        "Binary: repeatedly divide by 2 and read remainders upward."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 7 — Fermat, modular powers, φ and base conversion\n\nAnswer in the answer panel (no code needed).\n\n1. 7²²² mod 11 = ?7²²² mod 11 = ?\n2. 3²⁰⁰ mod 13 = ?3²⁰⁰ mod 13 = ?\n3. φ(36) (the number of integers 1…36 coprime to 36) = ?φ(36) (số số nguyên 1…36 nguyên tố cùng nhau với 36) = ?\n4. How many positive divisors does 360 have?360 có bao nhiêu ước nguyên dương?\n5. (177)₁₀ written in binary has … ones.(177)₁₀ viết nhị phân có … chữ số 1.\n6. (2AE0B)₁₆ in decimal is …(2AE0B)₁₆ trong hệ thập phân là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 7 — Fermat, modular powers, φ and base conversion — answer key\n\n1. 7²²² mod 11 = ?7²²² mod 11 = ?\n   Answer: a) 5\n   Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2, so 7²²² ≡ 7² = 49 ≡ 5 (mod 11).VI: Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2 nên 7²²² ≡ 49 ≡ 5.\n\n2. 3²⁰⁰ mod 13 = ?3²⁰⁰ mod 13 = ?\n   Answer: b) 9\n   3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.\n\n3. φ(36) (the number of integers 1…36 coprime to 36) = ?φ(36) (số số nguyên 1…36 nguyên tố cùng nhau với 36) = ?\n   Answer: c) 12\n   36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.\n\n4. How many positive divisors does 360 have?360 có bao nhiêu ước nguyên dương?\n   Answer: d) 24\n   360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.VI: 360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.\n\n5. (177)₁₀ written in binary has … ones.(177)₁₀ viết nhị phân có … chữ số 1.\n   Answer: a) 4\n   177 = 10110001₂ (128 + 32 + 16 + 1).VI: 177 = 10110001₂ (128 + 32 + 16 + 1).\n\n6. (2AE0B)₁₆ in decimal is …(2AE0B)₁₆ trong hệ thập phân là …\n   Answer: b) 175627\n   2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) a · 2) b · 3) c · 4) d · 5) a · 6) b.</p><p>Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2, so 7²²² ≡ 7² = 49 ≡ 5 (mod 11).</p><p><i>VI: Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2 nên 7²²² ≡ 49 ≡ 5.</i></p><p>3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.</p><p><i>VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.</i></p><p>36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</p><p><i>VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</i></p><p>360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</p><p><i>VI: 360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</i></p><p>177 = 10110001₂ (128 + 32 + 16 + 1).</p><p><i>VI: 177 = 10110001₂ (128 + 32 + 16 + 1).</i></p><p>2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</p><p><i>VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>7²²² mod 11 = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>7²²² mod 11 = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "7"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2, so 7²²² ≡ 7² = 49 ≡ 5 (mod 11).</p><p><i>VI: Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2 nên 7²²² ≡ 49 ≡ 5.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>3²⁰⁰ mod 13 = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>3²⁰⁰ mod 13 = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "12"
+              },
+              {
+                "ma": "b",
+                "noiDung": "9"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.</p><p><i>VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>φ(36) (the number of integers 1…36 coprime to 36) = ?</p><p style=\"opacity:.75;font-size:.92em\"><i>φ(36) (số số nguyên 1…36 nguyên tố cùng nhau với 36) = ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "36"
+              },
+              {
+                "ma": "b",
+                "noiDung": "6"
+              },
+              {
+                "ma": "c",
+                "noiDung": "12"
+              },
+              {
+                "ma": "d",
+                "noiDung": "18"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</p><p><i>VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How many positive divisors does 360 have?</p><p style=\"opacity:.75;font-size:.92em\"><i>360 có bao nhiêu ước nguyên dương?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "12"
+              },
+              {
+                "ma": "b",
+                "noiDung": "30"
+              },
+              {
+                "ma": "c",
+                "noiDung": "18"
+              },
+              {
+                "ma": "d",
+                "noiDung": "24"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</p><p><i>VI: 360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>(177)₁₀ written in binary has … ones.</p><p style=\"opacity:.75;font-size:.92em\"><i>(177)₁₀ viết nhị phân có … chữ số 1.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "6"
+              },
+              {
+                "ma": "d",
+                "noiDung": "5"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>177 = 10110001₂ (128 + 32 + 16 + 1).</p><p><i>VI: 177 = 10110001₂ (128 + 32 + 16 + 1).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>(2AE0B)₁₆ in decimal is …</p><p style=\"opacity:.75;font-size:.92em\"><i>(2AE0B)₁₆ trong hệ thập phân là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "172032"
+              },
+              {
+                "ma": "b",
+                "noiDung": "175627"
+              },
+              {
+                "ma": "c",
+                "noiDung": "175643"
+              },
+              {
+                "ma": "d",
+                "noiDung": "171531"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</p><p><i>VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to reduce the base first."
+        },
+        {
+          "loi": "Using φ(n) = n − 1 for composite n."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Fermat’s little theorem",
+          "vi": "định lý Fermat nhỏ"
+        },
+        {
+          "en": "Euler’s totient",
+          "vi": "hàm φ Euler"
+        }
+      ]
+    },
+    {
+      "title": "Number theory 8 — Order the algorithm steps",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "algorithms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Put the steps of two classic number-theory algorithms in order.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước của hai thuật toán số học kinh điển.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The sieve starts marking at p², because smaller multiples were crossed out by smaller primes.",
+        "In square-and-multiply, the odd test happens before squaring."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 8 — Order the algorithm steps\n\nAnswer in the answer panel (no code needed).\n\n1. The sieve of Eratosthenes for primes ≤ n.Sàng Eratosthenes cho số nguyên tố ≤ n.\n2. Fast modular exponentiation (square-and-multiply) for b^e mod m.Luỹ thừa mô-đun nhanh (bình phương–nhân) cho b^e mod m.\n3. Euclid’s algorithm for gcd(a, b).Thuật toán Euclid cho gcd(a, b).\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Number theory 8 — Order the algorithm steps — answer key\n\n1. The sieve of Eratosthenes for primes ≤ n.Sàng Eratosthenes cho số nguyên tố ≤ n.\n   Answer: s1) List the integers 2, 3, …, n.  →  s2) Take the smallest unmarked number p; it is prime.  →  s3) Cross out p², p² + p, p² + 2p, … up to n.  →  s4) Repeat while p² ≤ n.  →  s5) The unmarked numbers left are the primes.\n   Only primes up to √n need to sieve: for n = 100 these are 2, 3, 5, 7.VI: Chỉ cần sàng bằng các số nguyên tố ≤ √n: với n = 100 là 2, 3, 5, 7.\n\n2. Fast modular exponentiation (square-and-multiply) for b^e mod m.Luỹ thừa mô-đun nhanh (bình phương–nhân) cho b^e mod m.\n   Answer: s1) Set result = 1 and reduce b mod m.  →  s2) While e > 0: if e is odd, result = result·b mod m.  →  s3) Square the base: b = b·b mod m.  →  s4) Halve the exponent: e = ⌊e/2⌋.  →  s5) When e = 0 return result.\n   It needs only ⌊log₂ e⌋ + 1 rounds, each with at most two modular multiplications.VI: Chỉ cần ⌊log₂ e⌋ + 1 vòng, mỗi vòng tối đa hai phép nhân mô-đun.\n\n3. Euclid’s algorithm for gcd(a, b).Thuật toán Euclid cho gcd(a, b).\n   Answer: s1) While b ≠ 0 do the following:  →  s2) Compute r = a mod b.  →  s3) Set a = b and b = r.  →  s4) When b = 0 the answer is a.\n   Each step shrinks the pair; the last non-zero remainder is the gcd.VI: Mỗi bước thu nhỏ cặp số; số dư khác 0 cuối cùng là ƯCLN.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Only primes up to √n need to sieve: for n = 100 these are 2, 3, 5, 7.</p><p><i>VI: Chỉ cần sàng bằng các số nguyên tố ≤ √n: với n = 100 là 2, 3, 5, 7.</i></p><p>It needs only ⌊log₂ e⌋ + 1 rounds, each with at most two modular multiplications.</p><p><i>VI: Chỉ cần ⌊log₂ e⌋ + 1 vòng, mỗi vòng tối đa hai phép nhân mô-đun.</i></p><p>Each step shrinks the pair; the last non-zero remainder is the gcd.</p><p><i>VI: Mỗi bước thu nhỏ cặp số; số dư khác 0 cuối cùng là ƯCLN.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>The sieve of Eratosthenes for primes ≤ n.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sàng Eratosthenes cho số nguyên tố ≤ n.</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "Cross out p², p² + p, p² + 2p, … up to n."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "Repeat while p² ≤ n."
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The unmarked numbers left are the primes."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "List the integers 2, 3, …, n."
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Take the smallest unmarked number p; it is prime."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>Only primes up to √n need to sieve: for n = 100 these are 2, 3, 5, 7.</p><p><i>VI: Chỉ cần sàng bằng các số nguyên tố ≤ √n: với n = 100 là 2, 3, 5, 7.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Fast modular exponentiation (square-and-multiply) for b^e mod m.</p><p style=\"opacity:.75;font-size:.92em\"><i>Luỹ thừa mô-đun nhanh (bình phương–nhân) cho b^e mod m.</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "Halve the exponent: e = ⌊e/2⌋."
+              },
+              {
+                "ma": "s5",
+                "noiDung": "When e = 0 return result."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Set result = 1 and reduce b mod m."
+              },
+              {
+                "ma": "s2",
+                "noiDung": "While e > 0: if e is odd, result = result·b mod m."
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Square the base: b = b·b mod m."
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>It needs only ⌊log₂ e⌋ + 1 rounds, each with at most two modular multiplications.</p><p><i>VI: Chỉ cần ⌊log₂ e⌋ + 1 vòng, mỗi vòng tối đa hai phép nhân mô-đun.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Euclid’s algorithm for gcd(a, b).</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Euclid cho gcd(a, b).</i></p>",
+            "muc": [
+              {
+                "ma": "s2",
+                "noiDung": "Compute r = a mod b."
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Set a = b and b = r."
+              },
+              {
+                "ma": "s4",
+                "noiDung": "When b = 0 the answer is a."
+              },
+              {
+                "ma": "s1",
+                "noiDung": "While b ≠ 0 do the following:"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4"
+            ],
+            "giaiThich": "<p>Each step shrinks the pair; the last non-zero remainder is the gcd.</p><p><i>VI: Mỗi bước thu nhỏ cặp số; số dư khác 0 cuối cùng là ƯCLN.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting to cross out at 2p instead of p²."
+        },
+        {
+          "loi": "Squaring before using the current bit."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sieve",
+          "vi": "sàng"
+        }
+      ]
+    }
+  ]
+}

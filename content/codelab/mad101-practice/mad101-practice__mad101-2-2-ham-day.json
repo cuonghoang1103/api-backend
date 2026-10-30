@@ -1,0 +1,1433 @@
+{
+  "trackSlug": "mad101-practice",
+  "moduleSlug": "mad101-2-2-ham-day",
+  "lesson": {
+    "course": "discrete-mathematics",
+    "slug": "mad101-2-2-ham-day"
+  },
+  "exercises": [
+    {
+      "title": "Functions 1 — Domain, range and one-to-one / onto",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "functions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Vocabulary of functions (Rosen §2.3): domain, codomain, range, injective, surjective, bijective.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Từ vựng về hàm (Rosen §2.3): miền xác định, miền giá trị đích, tập ảnh, đơn ánh, toàn ánh, song ánh.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Injective = no collisions; surjective = no leftovers in the codomain.",
+        "Always state the domain and codomain before judging."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 1 — Domain, range and one-to-one / onto\n\nAnswer in the answer panel (no code needed).\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n2. f is onto (surjective) if …f là toàn ánh nếu …\n3. Only a bijection has an …Chỉ song ánh mới có …\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 1 — Domain, range and one-to-one / onto — answer key\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n   Answer: c) different inputs always give different outputs\n   f(a) = f(b) ⇒ a = b.VI: f(a) = f(b) ⇒ a = b.\n\n2. f is onto (surjective) if …f là toàn ánh nếu …\n   Answer: d) the range equals the codomain\n   Every element of the codomain is the image of at least one input.VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.\n\n3. Only a bijection has an …Chỉ song ánh mới có …\n   Answer: a) inverse function\n   A bijection is both one-to-one and onto, so reversing the arrows is again a function.VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.\n\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n   Answer: b) neither one-to-one nor onto\n   f(2) = f(−2) (not injective) and 3 is never a square (not surjective).VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).\n\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n   Answer: c) a bijection\n   Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.\n\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n   Answer: d) |A| = |B|\n   A bijection pairs the elements one for one.VI: Song ánh ghép các phần tử một-một.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>f(a) = f(b) ⇒ a = b.</p><p><i>VI: f(a) = f(b) ⇒ a = b.</i></p><p>Every element of the codomain is the image of at least one input.</p><p><i>VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.</i></p><p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p><p>f(2) = f(−2) (not injective) and 3 is never a square (not surjective).</p><p><i>VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).</i></p><p>Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.</p><p><i>VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.</i></p><p>A bijection pairs the elements one for one.</p><p><i>VI: Song ánh ghép các phần tử một-một.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A function f: A → B is one-to-one (injective) if …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hàm f: A → B là đơn ánh nếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "every input has an output"
+              },
+              {
+                "ma": "b",
+                "noiDung": "f(x) = x for all x"
+              },
+              {
+                "ma": "c",
+                "noiDung": "different inputs always give different outputs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "every element of B is hit"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>f(a) = f(b) ⇒ a = b.</p><p><i>VI: f(a) = f(b) ⇒ a = b.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>f is onto (surjective) if …</p><p style=\"opacity:.75;font-size:.92em\"><i>f là toàn ánh nếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no two inputs share an output"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the domain equals the codomain"
+              },
+              {
+                "ma": "c",
+                "noiDung": "f is increasing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the range equals the codomain"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every element of the codomain is the image of at least one input.</p><p><i>VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Only a bijection has an …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chỉ song ánh mới có …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "inverse function"
+              },
+              {
+                "ma": "b",
+                "noiDung": "image"
+              },
+              {
+                "ma": "c",
+                "noiDung": "composition"
+              },
+              {
+                "ma": "d",
+                "noiDung": "domain"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>f(x) = x² from ℤ to ℤ is …</p><p style=\"opacity:.75;font-size:.92em\"><i>f(x) = x² từ ℤ vào ℤ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a bijection"
+              },
+              {
+                "ma": "b",
+                "noiDung": "neither one-to-one nor onto"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one-to-one but not onto"
+              },
+              {
+                "ma": "d",
+                "noiDung": "onto but not one-to-one"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>f(2) = f(−2) (not injective) and 3 is never a square (not surjective).</p><p><i>VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>f(x) = 2x + 1 from ℝ to ℝ is …</p><p style=\"opacity:.75;font-size:.92em\"><i>f(x) = 2x + 1 từ ℝ vào ℝ là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "onto but not one-to-one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "neither"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a bijection"
+              },
+              {
+                "ma": "d",
+                "noiDung": "one-to-one but not onto"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.</p><p><i>VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>If f: A → B is a bijection between finite sets, then …</p><p style=\"opacity:.75;font-size:.92em\"><i>Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "|A| < |B|"
+              },
+              {
+                "ma": "b",
+                "noiDung": "|A| > |B|"
+              },
+              {
+                "ma": "c",
+                "noiDung": "|A| and |B| are unrelated"
+              },
+              {
+                "ma": "d",
+                "noiDung": "|A| = |B|"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A bijection pairs the elements one for one.</p><p><i>VI: Song ánh ghép các phần tử một-một.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Judging x² without noting which domain (ℤ vs ℕ vs ℝ≥0) is used."
+        },
+        {
+          "loi": "Mixing up the range with the codomain."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "injective",
+          "vi": "đơn ánh"
+        },
+        {
+          "en": "surjective",
+          "vi": "toàn ánh"
+        },
+        {
+          "en": "bijective",
+          "vi": "song ánh"
+        },
+        {
+          "en": "codomain",
+          "vi": "miền giá trị đích"
+        }
+      ]
+    },
+    {
+      "title": "Functions 2 — Floor, ceiling and rounding",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "floor and ceiling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>⌊x⌋ is the greatest integer ≤ x; ⌈x⌉ is the least integer ≥ x; rounding is ⌊x + ½⌋. Careful with negative numbers: ⌊−3.2⌋ = −4.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>⌊x⌋ là số nguyên lớn nhất ≤ x; ⌈x⌉ là số nguyên nhỏ nhất ≥ x; làm tròn là ⌊x + ½⌋. Cẩn thận số âm: ⌊−3,2⌋ = −4.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Place x on the number line; ⌊x⌋ is the integer to its left (or x itself).",
+        "⌈x⌉ = −⌊−x⌋."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 2 — Floor, ceiling and rounding\n\nAnswer in the answer panel (no code needed).\n\n1. Floor, ceiling, roundingSàn, trần, làm tròn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 2 — Floor, ceiling and rounding — answer key\n\n1. Floor, ceiling, roundingSàn, trần, làm tròn\n   - r1.fl: 3\n   - r1.ce: 4\n   - r1.ro: 3\n   - r2.fl: -4\n   - r2.ce: -3\n   - r2.ro: -3\n   - r3.fl: 7\n   - r3.ce: 8\n   - r3.ro: 8\n   - r4.fl: -1\n   - r4.ce: 0\n   - r4.ro: 0\n   - r5.fl: 5\n   - r5.ce: 5\n   - r5.ro: 5\n   - r6.fl: -2\n   - r6.ce: -2\n   - r6.ro: -2\n   - r7.fl: 8\n   - r7.ce: 9\n   - r7.ro: 9\n   x=3.2: ⌊x⌋=3, ⌈x⌉=4, round=3; x=-3.2: ⌊x⌋=-4, ⌈x⌉=-3, round=-3; x=7.5: ⌊x⌋=7, ⌈x⌉=8, round=8; x=-0.5: ⌊x⌋=-1, ⌈x⌉=0, round=0; x=5: ⌊x⌋=5, ⌈x⌉=5, round=5; x=-2: ⌊x⌋=-2, ⌈x⌉=-2, round=-2; x=8.99: ⌊x⌋=8, ⌈x⌉=9, round=9.VI: x=3.2: ⌊x⌋=3, ⌈x⌉=4, làm tròn=3; x=-3.2: ⌊x⌋=-4, ⌈x⌉=-3, làm tròn=-3; x=7.5: ⌊x⌋=7, ⌈x⌉=8, làm tròn=8; x=-0.5: ⌊x⌋=-1, ⌈x⌉=0, làm tròn=0; x=5: ⌊x⌋=5, ⌈x⌉=5, làm tròn=5; x=-2: ⌊x⌋=-2, ⌈x⌉=-2, làm tròn=-2; x=8.99: ⌊x⌋=8, ⌈x⌉=9, làm tròn=9.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>x=3.2: ⌊x⌋=3, ⌈x⌉=4, round=3; x=-3.2: ⌊x⌋=-4, ⌈x⌉=-3, round=-3; x=7.5: ⌊x⌋=7, ⌈x⌉=8, round=8; x=-0.5: ⌊x⌋=-1, ⌈x⌉=0, round=0; x=5: ⌊x⌋=5, ⌈x⌉=5, round=5; x=-2: ⌊x⌋=-2, ⌈x⌉=-2, round=-2; x=8.99: ⌊x⌋=8, ⌈x⌉=9, round=9.</p><p><i>VI: x=3.2: ⌊x⌋=3, ⌈x⌉=4, làm tròn=3; x=-3.2: ⌊x⌋=-4, ⌈x⌉=-3, làm tròn=-3; x=7.5: ⌊x⌋=7, ⌈x⌉=8, làm tròn=8; x=-0.5: ⌊x⌋=-1, ⌈x⌉=0, làm tròn=0; x=5: ⌊x⌋=5, ⌈x⌉=5, làm tròn=5; x=-2: ⌊x⌋=-2, ⌈x⌉=-2, làm tròn=-2; x=8.99: ⌊x⌋=8, ⌈x⌉=9, làm tròn=9.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Floor, ceiling, rounding</p><p style=\"opacity:.75;font-size:.92em\"><i>Sàn, trần, làm tròn</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "x"
+              },
+              {
+                "ma": "fl",
+                "ten": "⌊x⌋"
+              },
+              {
+                "ma": "ce",
+                "ten": "⌈x⌉"
+              },
+              {
+                "ma": "ro",
+                "ten": "⌊x + ½⌋"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "3.2"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "-3.2"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "7.5"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "-0.5"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "5"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "-2"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "8.99"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.fl": "3",
+              "r1.ce": "4",
+              "r1.ro": "3",
+              "r2.fl": "-4",
+              "r2.ce": "-3",
+              "r2.ro": "-3",
+              "r3.fl": "7",
+              "r3.ce": "8",
+              "r3.ro": "8",
+              "r4.fl": "-1",
+              "r4.ce": "0",
+              "r4.ro": "0",
+              "r5.fl": "5",
+              "r5.ce": "5",
+              "r5.ro": "5",
+              "r6.fl": "-2",
+              "r6.ce": "-2",
+              "r6.ro": "-2",
+              "r7.fl": "8",
+              "r7.ce": "9",
+              "r7.ro": "9"
+            },
+            "giaiThich": "<p>x=3.2: ⌊x⌋=3, ⌈x⌉=4, round=3; x=-3.2: ⌊x⌋=-4, ⌈x⌉=-3, round=-3; x=7.5: ⌊x⌋=7, ⌈x⌉=8, round=8; x=-0.5: ⌊x⌋=-1, ⌈x⌉=0, round=0; x=5: ⌊x⌋=5, ⌈x⌉=5, round=5; x=-2: ⌊x⌋=-2, ⌈x⌉=-2, round=-2; x=8.99: ⌊x⌋=8, ⌈x⌉=9, round=9.</p><p><i>VI: x=3.2: ⌊x⌋=3, ⌈x⌉=4, làm tròn=3; x=-3.2: ⌊x⌋=-4, ⌈x⌉=-3, làm tròn=-3; x=7.5: ⌊x⌋=7, ⌈x⌉=8, làm tròn=8; x=-0.5: ⌊x⌋=-1, ⌈x⌉=0, làm tròn=0; x=5: ⌊x⌋=5, ⌈x⌉=5, làm tròn=5; x=-2: ⌊x⌋=-2, ⌈x⌉=-2, làm tròn=-2; x=8.99: ⌊x⌋=8, ⌈x⌉=9, làm tròn=9.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Truncating toward zero: ⌊−3.2⌋ is −4, not −3."
+        },
+        {
+          "loi": "Believing ⌈x⌉ = ⌊x⌋ + 1 for every x (false when x is an integer)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "floor",
+          "vi": "hàm sàn"
+        },
+        {
+          "en": "ceiling",
+          "vi": "hàm trần"
+        }
+      ]
+    },
+    {
+      "title": "Functions 3 — Classify finite functions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "injective",
+        "surjective"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A function from {0,…,n−1} to {0,…,m−1} is given by the list [f(0), f(1), …]. Decide whether it is one-to-one, onto, and a bijection.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàm từ {0,…,n−1} vào {0,…,m−1} cho bởi danh sách [f(0), f(1), …]. Quyết định nó có đơn ánh, toàn ánh, song ánh hay không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for a repeated value (not one-to-one) and a missing value in 0…m−1 (not onto).",
+        "Compare n (list length) with m first — it rules out whole cases."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 3 — Classify finite functions\n\nAnswer in the answer panel (no code needed).\n\n1. One-to-one / ontoĐơn ánh / toàn ánh\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 3 — Classify finite functions — answer key\n\n1. One-to-one / ontoĐơn ánh / toàn ánh\n   - r1.i: Yes\n   - r1.s: Yes\n   - r1.b: Yes\n   - r2.i: No\n   - r2.s: No\n   - r2.b: No\n   - r3.i: Yes\n   - r3.s: Yes\n   - r3.b: Yes\n   - r4.i: Yes\n   - r4.s: No\n   - r4.b: No\n   - r5.i: No\n   - r5.s: Yes\n   - r5.b: No\n   - r6.i: No\n   - r6.s: Yes\n   - r6.b: No\n   [2,0,1,3] m=4: injective true, surjective true; [0,0,1,2] m=4: injective false, surjective false; [1,3,2,0] m=4: injective true, surjective true; [0,1,2] m=5: injective true, surjective false; [0,1,2,0,1] m=3: injective false, surjective true; [3,1,2,0,1] m=4: injective false, surjective true. Injective needs n ≤ m; surjective needs n ≥ m; a bijection needs n = m and no repeats.VI: [2,0,1,3] m=4: đơn ánh true, toàn ánh true; [0,0,1,2] m=4: đơn ánh false, toàn ánh false; [1,3,2,0] m=4: đơn ánh true, toàn ánh true; [0,1,2] m=5: đơn ánh true, toàn ánh false; [0,1,2,0,1] m=3: đơn ánh false, toàn ánh true; [3,1,2,0,1] m=4: đơn ánh false, toàn ánh true.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>[2,0,1,3] m=4: injective true, surjective true; [0,0,1,2] m=4: injective false, surjective false; [1,3,2,0] m=4: injective true, surjective true; [0,1,2] m=5: injective true, surjective false; [0,1,2,0,1] m=3: injective false, surjective true; [3,1,2,0,1] m=4: injective false, surjective true. Injective needs n ≤ m; surjective needs n ≥ m; a bijection needs n = m and no repeats.</p><p><i>VI: [2,0,1,3] m=4: đơn ánh true, toàn ánh true; [0,0,1,2] m=4: đơn ánh false, toàn ánh false; [1,3,2,0] m=4: đơn ánh true, toàn ánh true; [0,1,2] m=5: đơn ánh true, toàn ánh false; [0,1,2,0,1] m=3: đơn ánh false, toàn ánh true; [3,1,2,0,1] m=4: đơn ánh false, toàn ánh true.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>One-to-one / onto</p><p style=\"opacity:.75;font-size:.92em\"><i>Đơn ánh / toàn ánh</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "f and codomain size m"
+              },
+              {
+                "ma": "i",
+                "ten": "One-to-one?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "s",
+                "ten": "Onto?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "b",
+                "ten": "Bijection?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "g": "f = [2, 0, 1, 3],  m = 4"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "g": "f = [0, 0, 1, 2],  m = 4"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "g": "f = [1, 3, 2, 0],  m = 4"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "g": "f = [0, 1, 2],  m = 5"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "g": "f = [0, 1, 2, 0, 1],  m = 3"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "g": "f = [3, 1, 2, 0, 1],  m = 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.i": "Yes",
+              "r1.s": "Yes",
+              "r1.b": "Yes",
+              "r2.i": "No",
+              "r2.s": "No",
+              "r2.b": "No",
+              "r3.i": "Yes",
+              "r3.s": "Yes",
+              "r3.b": "Yes",
+              "r4.i": "Yes",
+              "r4.s": "No",
+              "r4.b": "No",
+              "r5.i": "No",
+              "r5.s": "Yes",
+              "r5.b": "No",
+              "r6.i": "No",
+              "r6.s": "Yes",
+              "r6.b": "No"
+            },
+            "giaiThich": "<p>[2,0,1,3] m=4: injective true, surjective true; [0,0,1,2] m=4: injective false, surjective false; [1,3,2,0] m=4: injective true, surjective true; [0,1,2] m=5: injective true, surjective false; [0,1,2,0,1] m=3: injective false, surjective true; [3,1,2,0,1] m=4: injective false, surjective true. Injective needs n ≤ m; surjective needs n ≥ m; a bijection needs n = m and no repeats.</p><p><i>VI: [2,0,1,3] m=4: đơn ánh true, toàn ánh true; [0,0,1,2] m=4: đơn ánh false, toàn ánh false; [1,3,2,0] m=4: đơn ánh true, toàn ánh true; [0,1,2] m=5: đơn ánh true, toàn ánh false; [0,1,2,0,1] m=3: đơn ánh false, toàn ánh true; [3,1,2,0,1] m=4: đơn ánh false, toàn ánh true.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a function a bijection although the list is shorter than m (not onto)."
+        },
+        {
+          "loi": "Judging onto-ness against the range instead of the stated codomain."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bijection",
+          "vi": "song ánh"
+        }
+      ]
+    },
+    {
+      "title": "Functions 4 — How many functions of each kind?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "counting functions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Counting functions between finite sets: all functions mⁿ-style, one-to-one (falling factorial), onto (inclusion–exclusion) and bijections (n!).</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đếm hàm giữa các tập hữu hạn: mọi hàm (luỹ thừa), đơn ánh (chỉnh hợp), toàn ánh (bao hàm–loại trừ) và song ánh (n!).</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For one-to-one: choose images one input at a time, decreasing the number of free outputs.",
+        "Onto counts use inclusion–exclusion on the missed outputs."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 4 — How many functions of each kind?\n\nAnswer in the answer panel (no code needed).\n\n1. How many functions are there from a 4-element set to a 3-element set?Có bao nhiêu hàm từ tập 4 phần tử vào tập 3 phần tử?\n2. How many one-to-one functions are there from a 3-element set to a 6-element set?Có bao nhiêu đơn ánh từ tập 3 phần tử vào tập 6 phần tử?\n3. How many bijections are there from a 5-element set onto itself?Có bao nhiêu song ánh từ tập 5 phần tử lên chính nó?\n4. How many onto functions are there from a 5-element set to a 3-element set?Có bao nhiêu toàn ánh từ tập 5 phần tử lên tập 3 phần tử?\n5. How many one-to-one functions exist from a 7-element set to a 5-element set?Có bao nhiêu đơn ánh từ tập 7 phần tử vào tập 5 phần tử?\n6. How many functions from {1,2,3} to {a,b} are NOT onto?Có bao nhiêu hàm từ {1,2,3} vào {a,b} KHÔNG toàn ánh?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 4 — How many functions of each kind? — answer key\n\n1. How many functions are there from a 4-element set to a 3-element set?Có bao nhiêu hàm từ tập 4 phần tử vào tập 3 phần tử?\n   Answer: b) 81\n   Each of the 4 inputs has 3 choices: 3⁴ = 81.VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.\n\n2. How many one-to-one functions are there from a 3-element set to a 6-element set?Có bao nhiêu đơn ánh từ tập 3 phần tử vào tập 6 phần tử?\n   Answer: c) 120\n   6·5·4 = 120: each input takes a still-unused output.VI: 6·5·4 = 120: mỗi đầu vào lấy một đầu ra chưa dùng.\n\n3. How many bijections are there from a 5-element set onto itself?Có bao nhiêu song ánh từ tập 5 phần tử lên chính nó?\n   Answer: d) 120\n   5! = 120.VI: 5! = 120.\n\n4. How many onto functions are there from a 5-element set to a 3-element set?Có bao nhiêu toàn ánh từ tập 5 phần tử lên tập 3 phần tử?\n   Answer: a) 150\n   3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.\n\n5. How many one-to-one functions exist from a 7-element set to a 5-element set?Có bao nhiêu đơn ánh từ tập 7 phần tử vào tập 5 phần tử?\n   Answer: b) 0\n   Pigeonhole: 7 inputs cannot fit 5 distinct outputs, so there are none.VI: Chuồng bồ câu: 7 đầu vào không thể có 5 đầu ra phân biệt nên không có đơn ánh.\n\n6. How many functions from {1,2,3} to {a,b} are NOT onto?Có bao nhiêu hàm từ {1,2,3} vào {a,b} KHÔNG toàn ánh?\n   Answer: c) 2\n   All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: 1) b · 2) c · 3) d · 4) a · 5) b · 6) c.</p><p>Each of the 4 inputs has 3 choices: 3⁴ = 81.</p><p><i>VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.</i></p><p>6·5·4 = 120: each input takes a still-unused output.</p><p><i>VI: 6·5·4 = 120: mỗi đầu vào lấy một đầu ra chưa dùng.</i></p><p>5! = 120.</p><p><i>VI: 5! = 120.</i></p><p>3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.</p><p><i>VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.</i></p><p>Pigeonhole: 7 inputs cannot fit 5 distinct outputs, so there are none.</p><p><i>VI: Chuồng bồ câu: 7 đầu vào không thể có 5 đầu ra phân biệt nên không có đơn ánh.</i></p><p>All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.</p><p><i>VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many functions are there from a 4-element set to a 3-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu hàm từ tập 4 phần tử vào tập 3 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "24"
+              },
+              {
+                "ma": "b",
+                "noiDung": "81"
+              },
+              {
+                "ma": "c",
+                "noiDung": "64"
+              },
+              {
+                "ma": "d",
+                "noiDung": "12"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each of the 4 inputs has 3 choices: 3⁴ = 81.</p><p><i>VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How many one-to-one functions are there from a 3-element set to a 6-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu đơn ánh từ tập 3 phần tử vào tập 6 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "729"
+              },
+              {
+                "ma": "b",
+                "noiDung": "18"
+              },
+              {
+                "ma": "c",
+                "noiDung": "120"
+              },
+              {
+                "ma": "d",
+                "noiDung": "216"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>6·5·4 = 120: each input takes a still-unused output.</p><p><i>VI: 6·5·4 = 120: mỗi đầu vào lấy một đầu ra chưa dùng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How many bijections are there from a 5-element set onto itself?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu song ánh từ tập 5 phần tử lên chính nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "25"
+              },
+              {
+                "ma": "b",
+                "noiDung": "20"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3125"
+              },
+              {
+                "ma": "d",
+                "noiDung": "120"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>5! = 120.</p><p><i>VI: 5! = 120.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How many onto functions are there from a 5-element set to a 3-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu toàn ánh từ tập 5 phần tử lên tập 3 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "150"
+              },
+              {
+                "ma": "b",
+                "noiDung": "243"
+              },
+              {
+                "ma": "c",
+                "noiDung": "147"
+              },
+              {
+                "ma": "d",
+                "noiDung": "148"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.</p><p><i>VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>How many one-to-one functions exist from a 7-element set to a 5-element set?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu đơn ánh từ tập 7 phần tử vào tập 5 phần tử?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "120"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "78125"
+              },
+              {
+                "ma": "d",
+                "noiDung": "210"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Pigeonhole: 7 inputs cannot fit 5 distinct outputs, so there are none.</p><p><i>VI: Chuồng bồ câu: 7 đầu vào không thể có 5 đầu ra phân biệt nên không có đơn ánh.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>How many functions from {1,2,3} to {a,b} are NOT onto?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có bao nhiêu hàm từ {1,2,3} vào {a,b} KHÔNG toàn ánh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "8"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "6"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.</p><p><i>VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using m·n instead of mⁿ."
+        },
+        {
+          "loi": "Forgetting that no one-to-one function exists when |A| > |B|."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "falling factorial",
+          "vi": "giai thừa giảm"
+        },
+        {
+          "en": "pigeonhole principle",
+          "vi": "nguyên lý chuồng bồ câu"
+        }
+      ]
+    },
+    {
+      "title": "Functions 5 — Composition and inverses",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "composition",
+        "inverse"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Functions on {0,1,2,3} are given as lists [f(0), f(1), f(2), f(3)]. (g∘f)(x) = g(f(x)) — apply f first. Write results as comma-separated lists, e.g. <code>2,0,1,3</code>.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàm trên {0,1,2,3} cho bởi danh sách [f(0), f(1), f(2), f(3)]. (g∘f)(x) = g(f(x)) — áp f trước. Viết kết quả dạng danh sách cách nhau bởi dấu phẩy, ví dụ <code>2,0,1,3</code>.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "(g∘f)[x] = g[f[x]]: use f’s answer as an index into g.",
+        "To invert, for every x put x at position f[x] of the new list."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 5 — Composition and inverses\n\nAnswer in the answer panel (no code needed).\n\n1. Composition and inverseHàm hợp và hàm ngược\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 5 — Composition and inverses — answer key\n\n1. Composition and inverseHàm hợp và hàm ngược\n   - r1.gf: 3,1,2,0 / (3,1,2,0) / [3,1,2,0] / 3, 1, 2, 0 / (3, 1, 2, 0) / [3, 1, 2, 0] / 3 1 2 0\n   - r1.fg2: 0,3,2,1 / (0,3,2,1) / [0,3,2,1] / 0, 3, 2, 1 / (0, 3, 2, 1) / [0, 3, 2, 1] / 0 3 2 1\n   - r1.inv: 2,0,1,3 / (2,0,1,3) / [2,0,1,3] / 2, 0, 1, 3 / (2, 0, 1, 3) / [2, 0, 1, 3] / 2 0 1 3\n   - r2.gf: 2,1,0,3 / (2,1,0,3) / [2,1,0,3] / 2, 1, 0, 3 / (2, 1, 0, 3) / [2, 1, 0, 3] / 2 1 0 3\n   - r2.fg2: 0,3,2,1 / (0,3,2,1) / [0,3,2,1] / 0, 3, 2, 1 / (0, 3, 2, 1) / [0, 3, 2, 1] / 0 3 2 1\n   - r2.inv: 1,2,3,0 / (1,2,3,0) / [1,2,3,0] / 1, 2, 3, 0 / (1, 2, 3, 0) / [1, 2, 3, 0] / 1 2 3 0\n   - r3.gf: 3,1,2,0 / (3,1,2,0) / [3,1,2,0] / 3, 1, 2, 0 / (3, 1, 2, 0) / [3, 1, 2, 0] / 3 1 2 0\n   - r3.fg2: 3,1,2,0 / (3,1,2,0) / [3,1,2,0] / 3, 1, 2, 0 / (3, 1, 2, 0) / [3, 1, 2, 0] / 3 1 2 0\n   - r3.inv: 0,2,1,3 / (0,2,1,3) / [0,2,1,3] / 0, 2, 1, 3 / (0, 2, 1, 3) / [0, 2, 1, 3] / 0 2 1 3\n   f=[1,2,0,3], g=[2,3,1,0]: g∘f=[3,1,2,0], f∘g=[0,3,2,1], f⁻¹=[2,0,1,3]; f=[3,0,1,2], g=[1,0,3,2]: g∘f=[2,1,0,3], f∘g=[0,3,2,1], f⁻¹=[1,2,3,0]; f=[0,2,1,3], g=[3,2,1,0]: g∘f=[3,1,2,0], f∘g=[3,1,2,0], f⁻¹=[0,2,1,3]. Composition is not commutative in general; f⁻¹(y) is the x with f(x) = y.VI: f=[1,2,0,3], g=[2,3,1,0]: g∘f=[3,1,2,0], f∘g=[0,3,2,1], f⁻¹=[2,0,1,3]; f=[3,0,1,2], g=[1,0,3,2]: g∘f=[2,1,0,3], f∘g=[0,3,2,1], f⁻¹=[1,2,3,0]; f=[0,2,1,3], g=[3,2,1,0]: g∘f=[3,1,2,0], f∘g=[3,1,2,0], f⁻¹=[0,2,1,3].\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>f=[1,2,0,3], g=[2,3,1,0]: g∘f=[3,1,2,0], f∘g=[0,3,2,1], f⁻¹=[2,0,1,3]; f=[3,0,1,2], g=[1,0,3,2]: g∘f=[2,1,0,3], f∘g=[0,3,2,1], f⁻¹=[1,2,3,0]; f=[0,2,1,3], g=[3,2,1,0]: g∘f=[3,1,2,0], f∘g=[3,1,2,0], f⁻¹=[0,2,1,3]. Composition is not commutative in general; f⁻¹(y) is the x with f(x) = y.</p><p><i>VI: f=[1,2,0,3], g=[2,3,1,0]: g∘f=[3,1,2,0], f∘g=[0,3,2,1], f⁻¹=[2,0,1,3]; f=[3,0,1,2], g=[1,0,3,2]: g∘f=[2,1,0,3], f∘g=[0,3,2,1], f⁻¹=[1,2,3,0]; f=[0,2,1,3], g=[3,2,1,0]: g∘f=[3,1,2,0], f∘g=[3,1,2,0], f⁻¹=[0,2,1,3].</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Composition and inverse</p><p style=\"opacity:.75;font-size:.92em\"><i>Hàm hợp và hàm ngược</i></p>",
+            "cot": [
+              {
+                "ma": "fg",
+                "ten": "f and g"
+              },
+              {
+                "ma": "gf",
+                "ten": "g∘f"
+              },
+              {
+                "ma": "fg2",
+                "ten": "f∘g"
+              },
+              {
+                "ma": "inv",
+                "ten": "f⁻¹"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "fg": "f = [1,2,0,3],  g = [2,3,1,0]"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "fg": "f = [3,0,1,2],  g = [1,0,3,2]"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "fg": "f = [0,2,1,3],  g = [3,2,1,0]"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.gf": [
+                "3,1,2,0",
+                "(3,1,2,0)",
+                "[3,1,2,0]",
+                "3, 1, 2, 0",
+                "(3, 1, 2, 0)",
+                "[3, 1, 2, 0]",
+                "3 1 2 0"
+              ],
+              "r1.fg2": [
+                "0,3,2,1",
+                "(0,3,2,1)",
+                "[0,3,2,1]",
+                "0, 3, 2, 1",
+                "(0, 3, 2, 1)",
+                "[0, 3, 2, 1]",
+                "0 3 2 1"
+              ],
+              "r1.inv": [
+                "2,0,1,3",
+                "(2,0,1,3)",
+                "[2,0,1,3]",
+                "2, 0, 1, 3",
+                "(2, 0, 1, 3)",
+                "[2, 0, 1, 3]",
+                "2 0 1 3"
+              ],
+              "r2.gf": [
+                "2,1,0,3",
+                "(2,1,0,3)",
+                "[2,1,0,3]",
+                "2, 1, 0, 3",
+                "(2, 1, 0, 3)",
+                "[2, 1, 0, 3]",
+                "2 1 0 3"
+              ],
+              "r2.fg2": [
+                "0,3,2,1",
+                "(0,3,2,1)",
+                "[0,3,2,1]",
+                "0, 3, 2, 1",
+                "(0, 3, 2, 1)",
+                "[0, 3, 2, 1]",
+                "0 3 2 1"
+              ],
+              "r2.inv": [
+                "1,2,3,0",
+                "(1,2,3,0)",
+                "[1,2,3,0]",
+                "1, 2, 3, 0",
+                "(1, 2, 3, 0)",
+                "[1, 2, 3, 0]",
+                "1 2 3 0"
+              ],
+              "r3.gf": [
+                "3,1,2,0",
+                "(3,1,2,0)",
+                "[3,1,2,0]",
+                "3, 1, 2, 0",
+                "(3, 1, 2, 0)",
+                "[3, 1, 2, 0]",
+                "3 1 2 0"
+              ],
+              "r3.fg2": [
+                "3,1,2,0",
+                "(3,1,2,0)",
+                "[3,1,2,0]",
+                "3, 1, 2, 0",
+                "(3, 1, 2, 0)",
+                "[3, 1, 2, 0]",
+                "3 1 2 0"
+              ],
+              "r3.inv": [
+                "0,2,1,3",
+                "(0,2,1,3)",
+                "[0,2,1,3]",
+                "0, 2, 1, 3",
+                "(0, 2, 1, 3)",
+                "[0, 2, 1, 3]",
+                "0 2 1 3"
+              ]
+            },
+            "giaiThich": "<p>f=[1,2,0,3], g=[2,3,1,0]: g∘f=[3,1,2,0], f∘g=[0,3,2,1], f⁻¹=[2,0,1,3]; f=[3,0,1,2], g=[1,0,3,2]: g∘f=[2,1,0,3], f∘g=[0,3,2,1], f⁻¹=[1,2,3,0]; f=[0,2,1,3], g=[3,2,1,0]: g∘f=[3,1,2,0], f∘g=[3,1,2,0], f⁻¹=[0,2,1,3]. Composition is not commutative in general; f⁻¹(y) is the x with f(x) = y.</p><p><i>VI: f=[1,2,0,3], g=[2,3,1,0]: g∘f=[3,1,2,0], f∘g=[0,3,2,1], f⁻¹=[2,0,1,3]; f=[3,0,1,2], g=[1,0,3,2]: g∘f=[2,1,0,3], f∘g=[0,3,2,1], f⁻¹=[1,2,3,0]; f=[0,2,1,3], g=[3,2,1,0]: g∘f=[3,1,2,0], f∘g=[3,1,2,0], f⁻¹=[0,2,1,3].</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying g first (computing f∘g when g∘f is asked)."
+        },
+        {
+          "loi": "Inverting by reversing the list instead of swapping inputs and outputs."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "composition",
+          "vi": "hàm hợp"
+        },
+        {
+          "en": "inverse function",
+          "vi": "hàm ngược"
+        }
+      ]
+    },
+    {
+      "title": "Functions 6 — Sequences and summations",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "sequences",
+        "summations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>For each sequence compute the requested term and the sum of the first terms. Use the closed forms: arithmetic Σ = n(2a + (n−1)d)/2, geometric Σ = a(rⁿ − 1)/(r − 1).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the MAD101 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi dãy tính số hạng yêu cầu và tổng các số hạng đầu. Dùng công thức đóng: cấp số cộng Σ = n(2a + (n−1)d)/2, cấp số nhân Σ = a(rⁿ − 1)/(r − 1).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn MAD101, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Check the starting index of the sequence before substituting n = 8.",
+        "Write out the 8 terms when no closed form is at hand — it is only 8 additions."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 6 — Sequences and summations\n\nAnswer in the answer panel (no code needed).\n\n1. Terms and sumsSố hạng và tổng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Functions 6 — Sequences and summations — answer key\n\n1. Terms and sumsSố hạng và tổng\n   - r1.t: 29\n   - r1.sum: 148\n   - r2.t: 13122\n   - r2.sum: 19680\n   - r3.t: 65\n   - r3.sum: 212\n   - r4.t: 8\n   - r4.sum: 4\n   a_n = 5 + 3n (n ≥ 0): a₈ = 29, Σ₁⁸ = 148; a_n = 2·3ⁿ (n ≥ 0): a₈ = 13122, Σ₁⁸ = 19680; a_n = n² + 1 (n ≥ 1): a₈ = 65, Σ₁⁸ = 212; a_n = (−1)ⁿ·n (n ≥ 1): a₈ = 8, Σ₁⁸ = 4.VI: a_n = 5 + 3n (n ≥ 0): a₈ = 29, Σ₁⁸ = 148; a_n = 2·3ⁿ (n ≥ 0): a₈ = 13122, Σ₁⁸ = 19680; a_n = n² + 1 (n ≥ 1): a₈ = 65, Σ₁⁸ = 212; a_n = (−1)ⁿ·n (n ≥ 1): a₈ = 8, Σ₁⁸ = 4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a_n = 5 + 3n (n ≥ 0): a₈ = 29, Σ₁⁸ = 148; a_n = 2·3ⁿ (n ≥ 0): a₈ = 13122, Σ₁⁸ = 19680; a_n = n² + 1 (n ≥ 1): a₈ = 65, Σ₁⁸ = 212; a_n = (−1)ⁿ·n (n ≥ 1): a₈ = 8, Σ₁⁸ = 4.</p><p><i>VI: a_n = 5 + 3n (n ≥ 0): a₈ = 29, Σ₁⁸ = 148; a_n = 2·3ⁿ (n ≥ 0): a₈ = 13122, Σ₁⁸ = 19680; a_n = n² + 1 (n ≥ 1): a₈ = 65, Σ₁⁸ = 212; a_n = (−1)ⁿ·n (n ≥ 1): a₈ = 8, Σ₁⁸ = 4.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Terms and sums</p><p style=\"opacity:.75;font-size:.92em\"><i>Số hạng và tổng</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Sequence"
+              },
+              {
+                "ma": "t",
+                "ten": "a₈"
+              },
+              {
+                "ma": "sum",
+                "ten": "Sum of a₁ … a₈"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "s": "a_n = 5 + 3n (n ≥ 0)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "s": "a_n = 2·3ⁿ (n ≥ 0)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "s": "a_n = n² + 1 (n ≥ 1)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "s": "a_n = (−1)ⁿ·n (n ≥ 1)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "29",
+              "r1.sum": "148",
+              "r2.t": "13122",
+              "r2.sum": "19680",
+              "r3.t": "65",
+              "r3.sum": "212",
+              "r4.t": "8",
+              "r4.sum": "4"
+            },
+            "giaiThich": "<p>a_n = 5 + 3n (n ≥ 0): a₈ = 29, Σ₁⁸ = 148; a_n = 2·3ⁿ (n ≥ 0): a₈ = 13122, Σ₁⁸ = 19680; a_n = n² + 1 (n ≥ 1): a₈ = 65, Σ₁⁸ = 212; a_n = (−1)ⁿ·n (n ≥ 1): a₈ = 8, Σ₁⁸ = 4.</p><p><i>VI: a_n = 5 + 3n (n ≥ 0): a₈ = 29, Σ₁⁸ = 148; a_n = 2·3ⁿ (n ≥ 0): a₈ = 13122, Σ₁⁸ = 19680; a_n = n² + 1 (n ≥ 1): a₈ = 65, Σ₁⁸ = 212; a_n = (−1)ⁿ·n (n ≥ 1): a₈ = 8, Σ₁⁸ = 4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting the sum at a₀ when the sequence starts at n = 1."
+        },
+        {
+          "loi": "Using the arithmetic-sum formula on a geometric sequence."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "arithmetic progression",
+          "vi": "cấp số cộng"
+        },
+        {
+          "en": "geometric progression",
+          "vi": "cấp số nhân"
+        }
+      ]
+    },
+    {
+      "title": "Functions 7 — Classify a function in code",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "injective",
+        "surjective"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>A function from {0, …, n−1} to {0, …, m−1} is the array <code>f</code> with <code>f[x]</code> = f(x). Write <code>functionType(f, m)</code> returning <code>{ injective, surjective, bijective }</code> (three booleans). Remember that onto-ness is measured against the full codomain {0, …, m−1}, which may be larger than the set of values that appear.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Use a lookup object or array of seen values.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàm từ {0, …, n−1} vào {0, …, m−1} là mảng <code>f</code> với <code>f[x]</code> = f(x). Viết <code>functionType(f, m)</code> trả <code>{ injective, surjective, bijective }</code> (ba boolean). Nhớ rằng toàn ánh đo theo toàn bộ đích {0, …, m−1}, có thể lớn hơn tập giá trị xuất hiện.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng đối tượng hoặc mảng đánh dấu giá trị đã gặp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "functionType([2,0,1,3], 4)",
+          "output": "{\"injective\":true,\"surjective\":true,\"bijective\":true}",
+          "explanation": "A permutation: bijective.|||Một hoán vị: song ánh."
+        },
+        {
+          "input": "functionType([0,1,2], 5)",
+          "output": "{\"injective\":true,\"surjective\":false,\"bijective\":false}",
+          "explanation": "Distinct values (injective) but 3 and 4 are missed.|||Giá trị phân biệt (đơn ánh) nhưng 3 và 4 không được chạm tới."
+        }
+      ],
+      "hintsJson": [
+        "Injective: no value appears twice; surjective: every value 0…m−1 appears.",
+        "bijective = injective && surjective."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function functionType(f, m) {\n  return { injective: false, surjective: false, bijective: false };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function functionType(f, m) {\n  var seen = {}, injective = true, i;\n  for (i = 0; i < f.length; i++) { if (seen[f[i]]) injective = false; seen[f[i]] = true; }\n  var surjective = true;\n  for (i = 0; i < m; i++) if (!seen[i]) surjective = false;\n  return { injective: injective, surjective: surjective, bijective: injective && surjective };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One pass with a “seen” table answers both questions: a repeat means not injective, a hole means not surjective.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: functionType([2,0,1,3], 4)",
+              "vi": "Ca 1"
+            },
+            "goi": "functionType([2,0,1,3], 4)",
+            "mongDoi": {
+              "injective": true,
+              "surjective": true,
+              "bijective": true
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: functionType([0,1,2], 5)",
+              "vi": "Ca 2"
+            },
+            "goi": "functionType([0,1,2], 5)",
+            "mongDoi": {
+              "injective": true,
+              "surjective": false,
+              "bijective": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: functionType([0,0,1], 2)",
+              "vi": "Ca 3"
+            },
+            "goi": "functionType([0,0,1], 2)",
+            "mongDoi": {
+              "injective": false,
+              "surjective": true,
+              "bijective": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "functionType([1,0,1,0,2], 3)",
+            "mongDoi": {
+              "injective": false,
+              "surjective": true,
+              "bijective": false
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "functionType([], 0)",
+            "mongDoi": {
+              "injective": true,
+              "surjective": true,
+              "bijective": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "functionType([3,1,2,0,4], 5)",
+            "mongDoi": {
+              "injective": true,
+              "surjective": true,
+              "bijective": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking surjectivity only against the values that appear."
+        },
+        {
+          "loi": "Declaring bijective when f.length ≠ m."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Functions 8 — Compose and invert",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "inverse function",
+        "bijection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "mad101"
+      ],
+      "problemHtml": "<p>Write <code>inverseFunction(f)</code>. The array <code>f</code> describes a function from {0, …, n−1} to {0, …, n−1} (the same set). If f is a bijection return its inverse as an array <code>g</code> with <code>g[f[x]] = x</code>; otherwise return <code>null</code>. A value outside 0…n−1 or a repeated value means f is not a bijection of this set.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Single pass is enough if you detect collisions as you fill.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>inverseFunction(f)</code>. Mảng <code>f</code> mô tả hàm từ {0, …, n−1} vào chính {0, …, n−1}. Nếu f là song ánh trả hàm ngược dạng mảng <code>g</code> với <code>g[f[x]] = x</code>; ngược lại trả <code>null</code>. Giá trị ngoài 0…n−1 hoặc bị lặp nghĩa là f không là song ánh của tập này.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một lượt duyệt là đủ nếu phát hiện va chạm khi điền.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "inverseFunction([1,2,0])",
+          "output": "[2,0,1]",
+          "explanation": "f(0)=1, f(1)=2, f(2)=0 ⇒ f⁻¹(1)=0, f⁻¹(2)=1, f⁻¹(0)=2.|||f(0)=1, f(1)=2, f(2)=0 ⇒ f⁻¹(1)=0, f⁻¹(2)=1, f⁻¹(0)=2."
+        },
+        {
+          "input": "inverseFunction([0,0,1])",
+          "output": "null",
+          "explanation": "Value 0 repeats: not one-to-one.|||Giá trị 0 lặp: không đơn ánh."
+        }
+      ],
+      "hintsJson": [
+        "Create g filled with a marker (−1) and set g[f[x]] = x; if the slot is already used, return null.",
+        "Also reject values that are negative or ≥ n."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function inverseFunction(f) {\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function inverseFunction(f) {\n  var n = f.length, inv = [], i;\n  for (i = 0; i < n; i++) inv.push(-1);\n  for (i = 0; i < n; i++) {\n    if (f[i] < 0 || f[i] >= n || inv[f[i]] !== -1) return null;\n    inv[f[i]] = i;\n  }\n  return inv;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An inverse exists only for bijections. Filling g[f[x]] = x succeeds exactly when every target is written once, which also proves surjectivity on a finite set of the same size.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: inverseFunction([1,2,0])",
+              "vi": "Ca 1"
+            },
+            "goi": "inverseFunction([1,2,0])",
+            "mongDoi": [
+              2,
+              0,
+              1
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: inverseFunction([0,0,1])",
+              "vi": "Ca 2"
+            },
+            "goi": "inverseFunction([0,0,1])",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Case 3: inverseFunction([0])",
+              "vi": "Ca 3"
+            },
+            "goi": "inverseFunction([0])",
+            "mongDoi": [
+              0
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "inverseFunction([3,2,1,0])",
+            "mongDoi": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "inverseFunction([0,5])",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "inverseFunction([2,0,1,4,3])",
+            "mongDoi": [
+              1,
+              2,
+              0,
+              4,
+              3
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "inverseFunction([])",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reversing the array instead of swapping index and value."
+        },
+        {
+          "loi": "Not checking range, so f = [0, 5] produces an out-of-range write."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -2893,7 +2893,8 @@
               }
             ]
           }
-        ]
+        ],
+        "loiGiaiSauKhiDat": true
       },
       "gradeKind": "react",
       "kind": "pe",

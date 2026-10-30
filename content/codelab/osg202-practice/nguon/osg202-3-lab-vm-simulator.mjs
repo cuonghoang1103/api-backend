@@ -62,7 +62,7 @@ const LAB = jsDe({
 <ol>
 <li>Tách mỗi địa chỉ thành <code>page = ⌊addr / pageSize⌋</code> và <code>offset = addr mod pageSize</code>.</li>
 <li><b>TLB</b>: kết hợp đầy đủ, <code>tlbSize</code> ô, thay theo LRU; hit không tốn gì thêm. <code>tlbSize = 0</code> nghĩa là không có TLB.</li>
-<li>Khi TLB trượt, tra <b>bảng trang</b> (trang có trong khung không?). Nếu không có là <b>lỗi trang</b>: dùng khung trống số nhỏ nhất, hoặc nếu hết khung thì đuổi nạn nhân do <code>algo</code> chọn — <code>'FIFO'</code> (nạp sớm nhất) hoặc <code>'LRU'</code> (dùng lâu nhất; mọi tham chiếu, TLB hit hay không, đều cập nhật thời điểm dùng). Trang bị đuổi cũng phải bị xoá khỏi TLB.</li>
+<li>Khi TLB trượt, tra <b>bảng trang</b> (trang có trong khung không?). Nếu không có là <b>lỗi trang</b>: dùng khung trống số nhỏ nhất, hoặc nếu hết khung thì đuổi nạn nhân do <code>algo</code> chọn — <code>'FIFO'</code> (nạp sớm nhất) hoặc <code>'LRU'</code> (lâu chưa dùng nhất; mọi tham chiếu, TLB hit hay không, đều cập nhật thời điểm dùng). Trang bị đuổi cũng phải bị xoá khỏi TLB.</li>
 <li>Sau khi trượt, bản dịch được chèn vào TLB (đuổi mục LRU khi đầy).</li>
 <li>Địa chỉ vật lý = <code>frame × pageSize + offset</code>.</li>
 </ol>

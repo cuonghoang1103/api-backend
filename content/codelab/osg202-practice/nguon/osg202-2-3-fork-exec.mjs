@@ -45,7 +45,6 @@ const E2 = tinh({
   ],
   goiY: ['Think about who calls wait(): the PARENT. Zombie = child is dead and waiting for it.', 'exec never creates a process; fork never loads a new program.'],
   loiHayGap: ['Mixing up zombie (child dead, parent alive) and orphan (parent dead, child alive).', 'Thinking exec() returns the new program’s exit status to the caller.'],
-  giaiThich: '<p>a · a · a · a · a.</p>',
   thuatNgu: [tn('zombie', 'tiến trình đã chết nhưng cha chưa wait()'), tn('orphan', 'tiến trình mồ côi (cha đã chết)')],
   khaiNiem: ['fork', 'exec', 'zombie', 'orphan'],
 });
@@ -99,7 +98,7 @@ const E4 = tinh({
   ],
   goiY: ['stdio buffers live in user memory, so fork() copies them together with everything else.', 'Compile and run it twice: once to the terminal, once with | cat.'],
   loiHayGap: ['Thinking fork() duplicates only the CPU registers and not the user-space buffer.', 'Believing wait() changes what the child prints.'],
-  giaiThich: '<p>b · b · a · a. A classic exam trap: the duplicated stdio buffer.</p>',
+  giaiThich: '<p>A classic exam trap: the duplicated stdio buffer.</p>',
   thuatNgu: [tn('stdio buffer', 'bộ đệm thư viện C ở không gian người dùng'), tn('fflush', 'đẩy bộ đệm ra thiết bị')],
   khaiNiem: ['fork', 'stdio buffering', 'wait'],
 });

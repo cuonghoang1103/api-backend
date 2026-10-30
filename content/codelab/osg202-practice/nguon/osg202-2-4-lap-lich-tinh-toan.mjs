@@ -26,7 +26,7 @@ const E1 = tinh({
   goiY: ['Draw the Gantt chart first: the order is just the arrival order.', 'Waiting time = start time − arrival time for a non-preemptive algorithm (a process only waits before it first runs).'],
   loiHayGap: ['Computing waiting time as completion − burst (forgetting to subtract the arrival time).', 'Starting P2 at time 0 instead of when P1 finishes.'],
   giaiThich: `<p>${gantt(r1.gantt)}. Waiting: ${P1.map((p) => `${p.id}=${r1.wt[p.id]}`).join(', ')}.</p>`,
-  thuatNgu: [{ en: 'turnaround time', vi: 'thời gian hoàn thành: từ lúc đến tới lúc xong' }, { en: 'waiting time', vi: 'thời gian chờ trong hàng đợi sẵn sàng' }, { en: 'FCFS', vi: 'đến trước phục vụ trước' }],
+  thuatNgu: [{ en: 'turnaround time', vi: 'thời gian quay vòng: từ lúc đến tới lúc xong' }, { en: 'waiting time', vi: 'thời gian chờ trong hàng đợi sẵn sàng' }, { en: 'FCFS', vi: 'đến trước phục vụ trước' }],
   khaiNiem: ['FCFS', 'turnaround time', 'waiting time'],
 });
 
@@ -50,7 +50,6 @@ const E2 = tinh({
   ],
   goiY: ['Read the key words: “long job blocks short jobs”, “optimal”, “never gets the CPU”.', 'Think about the extreme quantum values for Round Robin: 1 unit vs infinity.'],
   loiHayGap: ['Confusing starvation (priority scheduling, SRTF) with deadlock (circular wait).', 'Believing that Round Robin is “better than FCFS” for every metric — it usually has a larger average turnaround for equal bursts.'],
-  giaiThich: '<p>a · b · a · a · a.</p>',
   thuatNgu: [{ en: 'convoy effect', vi: 'hiệu ứng đoàn xe: việc ngắn kẹt sau việc dài' }, { en: 'starvation', vi: 'đói: tiến trình chờ vô hạn' }, { en: 'aging', vi: 'lão hoá: tăng ưu tiên theo thời gian chờ' }],
   khaiNiem: ['convoy effect', 'starvation', 'aging'],
 });

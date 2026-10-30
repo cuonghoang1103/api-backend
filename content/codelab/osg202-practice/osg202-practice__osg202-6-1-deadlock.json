@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Deadlock 1 — The four conditions and the ostrich — answer key\n\n1. Which set lists the four necessary conditions for deadlock?Tập nào liệt kê bốn điều kiện cần của deadlock?\n   Answer: d) Mutual exclusion, hold and wait, no preemption, circular wait\n   All four must hold simultaneously (Coffman 1971). Break any one and deadlock is impossible.VI: Cả bốn phải đồng thời xảy ra (Coffman 1971). Phá một điều kiện là hết deadlock.\n\n2. The “ostrich algorithm” for deadlock means …“Thuật toán đà điểu” với deadlock nghĩa là …\n   Answer: a) ignore the problem and let the user reboot if it happens\n   Used by UNIX and Windows for most resources: deadlock is rare and prevention is costly.VI: UNIX và Windows dùng cho hầu hết tài nguyên: deadlock hiếm, ngăn chặn thì đắt.\n\n3. Which condition is broken by the rule “a process must request ALL its resources at once before it starts”?Điều kiện nào bị phá bởi quy tắc “tiến trình phải xin TẤT CẢ tài nguyên một lần trước khi bắt đầu”?\n   Answer: b) Hold and wait\n   A process never holds one resource while waiting for another.VI: Tiến trình không bao giờ giữ một tài nguyên trong khi chờ tài nguyên khác.\n\n4. “Number all resource types and require processes to request them in increasing order” breaks …“Đánh số mọi loại tài nguyên và buộc tiến trình xin theo thứ tự tăng dần” phá …\n   Answer: c) Circular wait\n   A cycle would need some process to wait for a lower-numbered resource while holding a higher one, which the rule forbids.VI: Chu trình cần một tiến trình chờ tài nguyên số thấp khi đang giữ số cao, điều quy tắc cấm.\n\n5. Deadlock versus starvation: which statement is correct?Deadlock so với starvation: phát biểu nào đúng?\n   Answer: d) In deadlock a set of processes is blocked forever waiting for each other; in starvation a process waits indefinitely while others progress\n   Starvation can be cured by aging; deadlock needs prevention, avoidance or recovery.VI: Starvation chữa bằng aging; deadlock cần ngăn chặn, tránh hoặc phục hồi.\n"
+          "code": "# Deadlock 1 — The four conditions and the ostrich — answer key\n\n1. Which set lists the four necessary conditions for deadlock?Tập nào liệt kê bốn điều kiện cần của deadlock?\n   Answer: a) Mutual exclusion, hold and wait, no preemption, circular wait\n   All four must hold simultaneously (Coffman 1971). Break any one and deadlock is impossible.VI: Cả bốn phải đồng thời xảy ra (Coffman 1971). Phá một điều kiện là hết deadlock.\n\n2. The “ostrich algorithm” for deadlock means …“Thuật toán đà điểu” với deadlock nghĩa là …\n   Answer: d) ignore the problem and let the user reboot if it happens\n   Used by UNIX and Windows for most resources: deadlock is rare and prevention is costly.VI: UNIX và Windows dùng cho hầu hết tài nguyên: deadlock hiếm, ngăn chặn thì đắt.\n\n3. Which condition is broken by the rule “a process must request ALL its resources at once before it starts”?Điều kiện nào bị phá bởi quy tắc “tiến trình phải xin TẤT CẢ tài nguyên một lần trước khi bắt đầu”?\n   Answer: c) Hold and wait\n   A process never holds one resource while waiting for another.VI: Tiến trình không bao giờ giữ một tài nguyên trong khi chờ tài nguyên khác.\n\n4. “Number all resource types and require processes to request them in increasing order” breaks …“Đánh số mọi loại tài nguyên và buộc tiến trình xin theo thứ tự tăng dần” phá …\n   Answer: a) Circular wait\n   A cycle would need some process to wait for a lower-numbered resource while holding a higher one, which the rule forbids.VI: Chu trình cần một tiến trình chờ tài nguyên số thấp khi đang giữ số cao, điều quy tắc cấm.\n\n5. Deadlock versus starvation: which statement is correct?Deadlock so với starvation: phát biểu nào đúng?\n   Answer: a) In deadlock a set of processes is blocked forever waiting for each other; in starvation a process waits indefinitely while others progress\n   Starvation can be cured by aging; deadlock needs prevention, avoidance or recovery.VI: Starvation chữa bằng aging; deadlock cần ngăn chặn, tránh hoặc phục hồi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Mutual exclusion, hold and wait, no preemption, circular wait</p><p>All four must hold simultaneously (Coffman 1971). Break any one and deadlock is impossible.</p><p><i>VI: Cả bốn phải đồng thời xảy ra (Coffman 1971). Phá một điều kiện là hết deadlock.</i></p></li><li><p><b>d)</b> ignore the problem and let the user reboot if it happens</p><p>Used by UNIX and Windows for most resources: deadlock is rare and prevention is costly.</p><p><i>VI: UNIX và Windows dùng cho hầu hết tài nguyên: deadlock hiếm, ngăn chặn thì đắt.</i></p></li><li><p><b>c)</b> Hold and wait</p><p>A process never holds one resource while waiting for another.</p><p><i>VI: Tiến trình không bao giờ giữ một tài nguyên trong khi chờ tài nguyên khác.</i></p></li><li><p><b>a)</b> Circular wait</p><p>A cycle would need some process to wait for a lower-numbered resource while holding a higher one, which the rule forbids.</p><p><i>VI: Chu trình cần một tiến trình chờ tài nguyên số thấp khi đang giữ số cao, điều quy tắc cấm.</i></p></li><li><p><b>a)</b> In deadlock a set of processes is blocked forever waiting for each other; in starvation a process waits indefinitely while others progress</p><p>Starvation can be cured by aging; deadlock needs prevention, avoidance or recovery.</p><p><i>VI: Starvation chữa bằng aging; deadlock cần ngăn chặn, tránh hoặc phục hồi.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Mutual exclusion, starvation, paging, circular wait"
+                "noiDung": "Mutual exclusion, hold and wait, no preemption, circular wait"
               },
               {
                 "ma": "b",
-                "noiDung": "Hold and wait, aging, no preemption, spooling"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Race, hold and wait, preemption, circular wait"
               },
               {
+                "ma": "c",
+                "noiDung": "Mutual exclusion, starvation, paging, circular wait"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Mutual exclusion, hold and wait, no preemption, circular wait"
+                "noiDung": "Hold and wait, aging, no preemption, spooling"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>All four must hold simultaneously (Coffman 1971). Break any one and deadlock is impossible.</p><p><i>VI: Cả bốn phải đồng thời xảy ra (Coffman 1971). Phá một điều kiện là hết deadlock.</i></p>"
           },
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ignore the problem and let the user reboot if it happens"
+                "noiDung": "never grant a resource that could lead to a cycle"
               },
               {
                 "ma": "b",
-                "noiDung": "detect and kill a process"
+                "noiDung": "detect the cycle and kill one process in it at once"
               },
               {
                 "ma": "c",
-                "noiDung": "never grant resources"
+                "noiDung": "preempt every resource as soon as a cycle shows up"
               },
               {
                 "ma": "d",
-                "noiDung": "preempt every resource"
+                "noiDung": "ignore the problem and let the user reboot if it happens"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Used by UNIX and Windows for most resources: deadlock is rare and prevention is costly.</p><p><i>VI: UNIX và Windows dùng cho hầu hết tài nguyên: deadlock hiếm, ngăn chặn thì đắt.</i></p>"
           },
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Circular wait"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Hold and wait"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Mutual exclusion"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "No preemption"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hold and wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Circular wait"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>A process never holds one resource while waiting for another.</p><p><i>VI: Tiến trình không bao giờ giữ một tài nguyên trong khi chờ tài nguyên khác.</i></p>"
           },
@@ -141,7 +141,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Mutual exclusion"
+                "noiDung": "Circular wait"
               },
               {
                 "ma": "b",
@@ -149,7 +149,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Circular wait"
+                "noiDung": "Mutual exclusion"
               },
               {
                 "ma": "d",
@@ -157,7 +157,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>A cycle would need some process to wait for a lower-numbered resource while holding a higher one, which the rule forbids.</p><p><i>VI: Chu trình cần một tiến trình chờ tài nguyên số thấp khi đang giữ số cao, điều quy tắc cấm.</i></p>"
           },
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "They are the same"
+                "noiDung": "In deadlock a set of processes is blocked forever waiting for each other; in starvation a process waits indefinitely while others progress"
               },
               {
                 "ma": "b",
-                "noiDung": "Starvation needs a cycle"
+                "noiDung": "Starvation needs a cycle in the wait-for graph; in deadlock a process waits indefinitely while others progress"
               },
               {
                 "ma": "c",
-                "noiDung": "Deadlock only happens with CPU scheduling"
+                "noiDung": "They are the same: in both, every process of the system is blocked forever waiting for an event"
               },
               {
                 "ma": "d",
-                "noiDung": "In deadlock a set of processes is blocked forever waiting for each other; in starvation a process waits indefinitely while others progress"
+                "noiDung": "Deadlock happens only with CPU scheduling; starvation happens only with memory and I/O resources"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Starvation can be cured by aging; deadlock needs prevention, avoidance or recovery.</p><p><i>VI: Starvation chữa bằng aging; deadlock cần ngăn chặn, tránh hoặc phục hồi.</i></p>"
           }
@@ -518,10 +518,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Deadlock 4 — Prevention, avoidance, detection or recovery? — answer key\n\n1. The OS lets deadlock happen, periodically runs a cycle search and then kills one process of the cycle. This is …OS để deadlock xảy ra, định kỳ tìm chu trình rồi giết một tiến trình trong chu trình. Đây là …\n   Answer: b) Detection and recovery\n   Detection needs the allocation state and a recovery action (kill, rollback, preempt).VI: Phát hiện cần trạng thái cấp phát và một hành động phục hồi (giết, quay lui, thu hồi).\n\n2. The OS refuses a request because granting it would lead to an unsafe state. This is …OS từ chối yêu cầu vì cấp phát sẽ dẫn tới trạng thái không an toàn. Đây là …\n   Answer: c) Deadlock avoidance (Banker’s algorithm)\n   Avoidance needs advance knowledge of each process’s maximum demand.VI: Tránh cần biết trước nhu cầu tối đa của mỗi tiến trình.\n\n3. Which statement about safe states is TRUE?Phát biểu nào về trạng thái an toàn là ĐÚNG?\n   Answer: d) Every deadlocked state is unsafe, but an unsafe state is not necessarily deadlocked yet\n   Unsafe means there is no guaranteed order of completion; deadlock may or may not follow depending on future requests.VI: Không an toàn nghĩa là không có thứ tự hoàn thành được đảm bảo; deadlock có xảy ra hay không còn tuỳ yêu cầu sau này.\n\n4. Recovery by rollback to a checkpoint is possible only if …Phục hồi bằng quay về điểm kiểm tra (checkpoint) chỉ làm được nếu …\n   Answer: a) processes save their state periodically\n   Without saved state, the work of the victim process is lost.VI: Không lưu trạng thái thì công việc của tiến trình nạn nhân bị mất.\n\n5. Why do general-purpose OSes mostly use the ostrich algorithm?Vì sao hệ điều hành đa dụng chủ yếu dùng thuật toán đà điểu?\n   Answer: b) Deadlock is rare and prevention/avoidance would restrict users and cost performance\n   The engineering trade-off: pay a small probability of a reboot rather than constant overhead.VI: Đánh đổi kỹ thuật: chấp nhận xác suất nhỏ phải khởi động lại thay vì chịu chi phí liên tục.\n"
+          "code": "# Deadlock 4 — Prevention, avoidance, detection or recovery? — answer key\n\n1. The OS lets deadlock happen, periodically runs a cycle search and then kills one process of the cycle. This is …OS để deadlock xảy ra, định kỳ tìm chu trình rồi giết một tiến trình trong chu trình. Đây là …\n   Answer: a) Detection and recovery\n   Detection needs the allocation state and a recovery action (kill, rollback, preempt).VI: Phát hiện cần trạng thái cấp phát và một hành động phục hồi (giết, quay lui, thu hồi).\n\n2. The OS refuses a request because granting it would lead to an unsafe state. This is …OS từ chối yêu cầu vì cấp phát sẽ dẫn tới trạng thái không an toàn. Đây là …\n   Answer: a) Deadlock avoidance (Banker’s algorithm)\n   Avoidance needs advance knowledge of each process’s maximum demand.VI: Tránh cần biết trước nhu cầu tối đa của mỗi tiến trình.\n\n3. Which statement about safe states is TRUE?Phát biểu nào về trạng thái an toàn là ĐÚNG?\n   Answer: c) Every deadlocked state is unsafe, but an unsafe state is not necessarily deadlocked yet\n   Unsafe means there is no guaranteed order of completion; deadlock may or may not follow depending on future requests.VI: Không an toàn nghĩa là không có thứ tự hoàn thành được đảm bảo; deadlock có xảy ra hay không còn tuỳ yêu cầu sau này.\n\n4. Recovery by rollback to a checkpoint is possible only if …Phục hồi bằng quay về điểm kiểm tra (checkpoint) chỉ làm được nếu …\n   Answer: a) processes save their state periodically\n   Without saved state, the work of the victim process is lost.VI: Không lưu trạng thái thì công việc của tiến trình nạn nhân bị mất.\n\n5. Why do general-purpose OSes mostly use the ostrich algorithm?Vì sao hệ điều hành đa dụng chủ yếu dùng thuật toán đà điểu?\n   Answer: a) Deadlock is rare and prevention/avoidance would restrict users and cost performance\n   The engineering trade-off: pay a small probability of a reboot rather than constant overhead.VI: Đánh đổi kỹ thuật: chấp nhận xác suất nhỏ phải khởi động lại thay vì chịu chi phí liên tục.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>b · c · d · a · b.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Detection and recovery</p><p>Detection needs the allocation state and a recovery action (kill, rollback, preempt).</p><p><i>VI: Phát hiện cần trạng thái cấp phát và một hành động phục hồi (giết, quay lui, thu hồi).</i></p></li><li><p><b>a)</b> Deadlock avoidance (Banker’s algorithm)</p><p>Avoidance needs advance knowledge of each process’s maximum demand.</p><p><i>VI: Tránh cần biết trước nhu cầu tối đa của mỗi tiến trình.</i></p></li><li><p><b>c)</b> Every deadlocked state is unsafe, but an unsafe state is not necessarily deadlocked yet</p><p>Unsafe means there is no guaranteed order of completion; deadlock may or may not follow depending on future requests.</p><p><i>VI: Không an toàn nghĩa là không có thứ tự hoàn thành được đảm bảo; deadlock có xảy ra hay không còn tuỳ yêu cầu sau này.</i></p></li><li><p><b>a)</b> processes save their state periodically</p><p>Without saved state, the work of the victim process is lost.</p><p><i>VI: Không lưu trạng thái thì công việc của tiến trình nạn nhân bị mất.</i></p></li><li><p><b>a)</b> Deadlock is rare and prevention/avoidance would restrict users and cost performance</p><p>The engineering trade-off: pay a small probability of a reboot rather than constant overhead.</p><p><i>VI: Đánh đổi kỹ thuật: chấp nhận xác suất nhỏ phải khởi động lại thay vì chịu chi phí liên tục.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -534,11 +534,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The ostrich algorithm"
+                "noiDung": "Detection and recovery"
               },
               {
                 "ma": "b",
-                "noiDung": "Detection and recovery"
+                "noiDung": "Avoidance"
               },
               {
                 "ma": "c",
@@ -546,11 +546,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Avoidance"
+                "noiDung": "The ostrich algorithm"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Detection needs the allocation state and a recovery action (kill, rollback, preempt).</p><p><i>VI: Phát hiện cần trạng thái cấp phát và một hành động phục hồi (giết, quay lui, thu hồi).</i></p>"
           },
@@ -560,7 +560,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Ostrich"
+                "noiDung": "Deadlock avoidance (Banker’s algorithm)"
               },
               {
                 "ma": "b",
@@ -568,15 +568,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Deadlock avoidance (Banker’s algorithm)"
+                "noiDung": "Detection"
               },
               {
                 "ma": "d",
-                "noiDung": "Detection"
+                "noiDung": "Ostrich"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Avoidance needs advance knowledge of each process’s maximum demand.</p><p><i>VI: Tránh cần biết trước nhu cầu tối đa của mỗi tiến trình.</i></p>"
           },
@@ -594,15 +594,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Safe states do not exist with multiple resource types"
+                "noiDung": "Every deadlocked state is unsafe, but an unsafe state is not necessarily deadlocked yet"
               },
               {
                 "ma": "d",
-                "noiDung": "Every deadlocked state is unsafe, but an unsafe state is not necessarily deadlocked yet"
+                "noiDung": "Safe states do not exist with multiple resource types"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Unsafe means there is no guaranteed order of completion; deadlock may or may not follow depending on future requests.</p><p><i>VI: Không an toàn nghĩa là không có thứ tự hoàn thành được đảm bảo; deadlock có xảy ra hay không còn tuỳ yêu cầu sau này.</i></p>"
           },
@@ -616,7 +616,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "resources are infinite"
+                "noiDung": "there is a single CPU"
               },
               {
                 "ma": "c",
@@ -624,7 +624,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "there is a single CPU"
+                "noiDung": "resources are infinite"
               }
             ],
             "dapAn": [
@@ -638,23 +638,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "They detect it in hardware"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Deadlock is rare and prevention/avoidance would restrict users and cost performance"
               },
               {
+                "ma": "b",
+                "noiDung": "The hardware detects each cycle and restarts the blocked processes"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Deadlocks are impossible in UNIX"
+                "noiDung": "Deadlocks are impossible in UNIX, because files can always be locked in order"
               },
               {
                 "ma": "d",
-                "noiDung": "The Banker’s algorithm is O(1)"
+                "noiDung": "The Banker’s algorithm runs in O(1), so the OS can call it on every request"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The engineering trade-off: pay a small probability of a reboot rather than constant overhead.</p><p><i>VI: Đánh đổi kỹ thuật: chấp nhận xác suất nhỏ phải khởi động lại thay vì chịu chi phí liên tục.</i></p>"
           }

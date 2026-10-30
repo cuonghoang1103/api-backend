@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Threads 1 — What do threads share and what is private? — answer key\n\n1. Which of these is PRIVATE to each thread of a process?Thứ nào là RIÊNG của mỗi luồng trong một tiến trình?\n   Answer: b) Stack and registers (including the program counter)\n   Each thread needs its own execution state (PC, registers, stack); everything else lives in the shared address space of the process.VI: Mỗi luồng cần trạng thái thực thi riêng (PC, thanh ghi, stack); mọi thứ khác nằm trong không gian địa chỉ chung của tiến trình.\n\n2. One thread of a multithreaded process calls exit() / segfaults on a NULL pointer. What happens?Một luồng của tiến trình đa luồng gọi exit() / lỗi segmentation fault. Điều gì xảy ra?\n   Answer: c) The whole process (all its threads) terminates\n   Threads share the address space and the process; a fatal fault or exit() ends the entire process.VI: Các luồng chung không gian địa chỉ và tiến trình; lỗi nghiêm trọng hay exit() kết thúc cả tiến trình.\n\n3. Compared with creating a process, creating a thread is cheaper mainly because …So với tạo tiến trình, tạo luồng rẻ hơn chủ yếu vì …\n   Answer: d) no new address space or page table has to be built\n   A new thread reuses the address space, open files and heap; only a stack and a small control block are created.VI: Luồng mới dùng lại không gian địa chỉ, tệp mở và heap; chỉ cần tạo stack và một khối điều khiển nhỏ.\n\n4. With pure USER-LEVEL threads (many-to-one) a thread calls a blocking read(). What happens to the other threads of the process?Với luồng CẤP NGƯỜI DÙNG thuần (nhiều–một), một luồng gọi read() chặn. Các luồng khác của tiến trình ra sao?\n   Answer: a) They all block, because the kernel sees one schedulable entity\n   The kernel knows only the process; a blocking system call blocks the whole process, which is the main weakness of user-level threads.VI: Kernel chỉ biết tiến trình; lời gọi hệ thống chặn làm chặn cả tiến trình, đó là điểm yếu chính của luồng cấp người dùng.\n\n5. Which model lets a multithreaded process use several CPU cores at the same time?Mô hình nào cho phép tiến trình đa luồng dùng nhiều lõi CPU cùng lúc?\n   Answer: b) Kernel-level (one-to-one) threads\n   The kernel schedules kernel threads on any core. A many-to-one library has one kernel thread, hence one core. (Processes with fork() can also use several cores, but option a is the thread answer.)VI: Kernel lập lịch luồng kernel trên bất kỳ lõi nào. Thư viện nhiều–một chỉ có một luồng kernel nên chỉ một lõi.\n"
+          "code": "# Threads 1 — What do threads share and what is private? — answer key\n\n1. Which of these is PRIVATE to each thread of a process?Thứ nào là RIÊNG của mỗi luồng trong một tiến trình?\n   Answer: c) Stack and registers (including the program counter)\n   Each thread needs its own execution state (PC, registers, stack); everything else lives in the shared address space of the process.VI: Mỗi luồng cần trạng thái thực thi riêng (PC, thanh ghi, stack); mọi thứ khác nằm trong không gian địa chỉ chung của tiến trình.\n\n2. One thread of a multithreaded process calls exit() / segfaults on a NULL pointer. What happens?Một luồng của tiến trình đa luồng gọi exit() / lỗi segmentation fault. Điều gì xảy ra?\n   Answer: a) The whole process (all its threads) terminates\n   Threads share the address space and the process; a fatal fault or exit() ends the entire process.VI: Các luồng chung không gian địa chỉ và tiến trình; lỗi nghiêm trọng hay exit() kết thúc cả tiến trình.\n\n3. Compared with creating a process, creating a thread is cheaper mainly because …So với tạo tiến trình, tạo luồng rẻ hơn chủ yếu vì …\n   Answer: c) no new address space or page table has to be built\n   A new thread reuses the address space, open files and heap; only a stack and a small control block are created.VI: Luồng mới dùng lại không gian địa chỉ, tệp mở và heap; chỉ cần tạo stack và một khối điều khiển nhỏ.\n\n4. With pure USER-LEVEL threads (many-to-one) a thread calls a blocking read(). What happens to the other threads of the process?Với luồng CẤP NGƯỜI DÙNG thuần (nhiều–một), một luồng gọi read() chặn. Các luồng khác của tiến trình ra sao?\n   Answer: d) They all block, because the kernel sees one schedulable entity\n   The kernel knows only the process; a blocking system call blocks the whole process, which is the main weakness of user-level threads.VI: Kernel chỉ biết tiến trình; lời gọi hệ thống chặn làm chặn cả tiến trình, đó là điểm yếu chính của luồng cấp người dùng.\n\n5. Which model lets a multithreaded process use several CPU cores at the same time?Mô hình nào cho phép tiến trình đa luồng dùng nhiều lõi CPU cùng lúc?\n   Answer: c) Kernel-level (one-to-one) threads\n   The kernel schedules kernel threads on any core. A many-to-one library has one kernel thread, hence one core. (Processes created with fork() can also use several cores, but the question asks about one multithreaded process, so the answer is kernel-level threads.)VI: Kernel lập lịch luồng kernel trên bất kỳ lõi nào. Thư viện nhiều–một chỉ có một luồng kernel nên chỉ một lõi. (Các tiến trình tạo bằng fork() cũng dùng được nhiều lõi, nhưng câu hỏi nói về MỘT tiến trình đa luồng nên đáp án là luồng kernel.)\n"
         }
       ],
-      "solutionExplanationHtml": "<p>b · c · d · a · b.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Stack and registers (including the program counter)</p><p>Each thread needs its own execution state (PC, registers, stack); everything else lives in the shared address space of the process.</p><p><i>VI: Mỗi luồng cần trạng thái thực thi riêng (PC, thanh ghi, stack); mọi thứ khác nằm trong không gian địa chỉ chung của tiến trình.</i></p></li><li><p><b>a)</b> The whole process (all its threads) terminates</p><p>Threads share the address space and the process; a fatal fault or exit() ends the entire process.</p><p><i>VI: Các luồng chung không gian địa chỉ và tiến trình; lỗi nghiêm trọng hay exit() kết thúc cả tiến trình.</i></p></li><li><p><b>c)</b> no new address space or page table has to be built</p><p>A new thread reuses the address space, open files and heap; only a stack and a small control block are created.</p><p><i>VI: Luồng mới dùng lại không gian địa chỉ, tệp mở và heap; chỉ cần tạo stack và một khối điều khiển nhỏ.</i></p></li><li><p><b>d)</b> They all block, because the kernel sees one schedulable entity</p><p>The kernel knows only the process; a blocking system call blocks the whole process, which is the main weakness of user-level threads.</p><p><i>VI: Kernel chỉ biết tiến trình; lời gọi hệ thống chặn làm chặn cả tiến trình, đó là điểm yếu chính của luồng cấp người dùng.</i></p></li><li><p><b>c)</b> Kernel-level (one-to-one) threads</p><p>The kernel schedules kernel threads on any core. A many-to-one library has one kernel thread, hence one core. (Processes created with fork() can also use several cores, but the question asks about one multithreaded process, so the answer is kernel-level threads.)</p><p><i>VI: Kernel lập lịch luồng kernel trên bất kỳ lõi nào. Thư viện nhiều–một chỉ có một luồng kernel nên chỉ một lõi. (Các tiến trình tạo bằng fork() cũng dùng được nhiều lõi, nhưng câu hỏi nói về MỘT tiến trình đa luồng nên đáp án là luồng kernel.)</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Open file descriptors"
+                "noiDung": "Global variables and the program code"
               },
               {
                 "ma": "b",
-                "noiDung": "Stack and registers (including the program counter)"
+                "noiDung": "The heap and everything allocated with malloc"
               },
               {
                 "ma": "c",
-                "noiDung": "Global variables"
+                "noiDung": "Stack and registers (including the program counter)"
               },
               {
                 "ma": "d",
-                "noiDung": "The heap"
+                "noiDung": "Open file descriptors and the working directory"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Each thread needs its own execution state (PC, registers, stack); everything else lives in the shared address space of the process.</p><p><i>VI: Mỗi luồng cần trạng thái thực thi riêng (PC, thanh ghi, stack); mọi thứ khác nằm trong không gian địa chỉ chung của tiến trình.</i></p>"
           },
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The other threads keep running"
-              },
-              {
-                "ma": "b",
-                "noiDung": "The parent thread restarts it"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The whole process (all its threads) terminates"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Only that thread ends"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The other threads keep running"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The parent thread restarts it"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Threads share the address space and the process; a fatal fault or exit() ends the entire process.</p><p><i>VI: Các luồng chung không gian địa chỉ và tiến trình; lỗi nghiêm trọng hay exit() kết thúc cả tiến trình.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "threads run on a separate CPU"
-              },
-              {
-                "ma": "b",
                 "noiDung": "threads need no stack"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "the kernel is not involved at all"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "no new address space or page table has to be built"
+              },
+              {
+                "ma": "d",
+                "noiDung": "threads run on a separate CPU"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>A new thread reuses the address space, open files and heap; only a stack and a small control block are created.</p><p><i>VI: Luồng mới dùng lại không gian địa chỉ, tệp mở và heap; chỉ cần tạo stack và một khối điều khiển nhỏ.</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "They all block, because the kernel sees one schedulable entity"
+                "noiDung": "They continue normally, because each thread has its own kernel stack"
               },
               {
                 "ma": "b",
-                "noiDung": "They continue normally"
+                "noiDung": "They move to another process until the read returns"
               },
               {
                 "ma": "c",
-                "noiDung": "They are killed"
+                "noiDung": "They are killed, because the library cannot save their state"
               },
               {
                 "ma": "d",
-                "noiDung": "They move to another process"
+                "noiDung": "They all block, because the kernel sees one schedulable entity"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The kernel knows only the process; a blocking system call blocks the whole process, which is the main weakness of user-level threads.</p><p><i>VI: Kernel chỉ biết tiến trình; lời gọi hệ thống chặn làm chặn cả tiến trình, đó là điểm yếu chính của luồng cấp người dùng.</i></p>"
           },
@@ -168,15 +168,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "None; a process uses one core"
+                "noiDung": "Pure user-level threads on a non-preemptive library"
               },
               {
                 "ma": "b",
-                "noiDung": "Kernel-level (one-to-one) threads"
+                "noiDung": "None; a process uses one core"
               },
               {
                 "ma": "c",
-                "noiDung": "Pure user-level threads on a non-preemptive library"
+                "noiDung": "Kernel-level (one-to-one) threads"
               },
               {
                 "ma": "d",
@@ -184,9 +184,9 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
-            "giaiThich": "<p>The kernel schedules kernel threads on any core. A many-to-one library has one kernel thread, hence one core. (Processes with fork() can also use several cores, but option a is the thread answer.)</p><p><i>VI: Kernel lập lịch luồng kernel trên bất kỳ lõi nào. Thư viện nhiều–một chỉ có một luồng kernel nên chỉ một lõi.</i></p>"
+            "giaiThich": "<p>The kernel schedules kernel threads on any core. A many-to-one library has one kernel thread, hence one core. (Processes created with fork() can also use several cores, but the question asks about one multithreaded process, so the answer is kernel-level threads.)</p><p><i>VI: Kernel lập lịch luồng kernel trên bất kỳ lõi nào. Thư viện nhiều–một chỉ có một luồng kernel nên chỉ một lõi. (Các tiến trình tạo bằng fork() cũng dùng được nhiều lõi, nhưng câu hỏi nói về MỘT tiến trình đa luồng nên đáp án là luồng kernel.)</i></p>"
           }
         ]
       },
@@ -523,10 +523,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Threads 4 — Pthreads: join, detach and thread-safe code — answer key\n\n1. What does pthread_join(t, NULL) do?pthread_join(t, NULL) làm gì?\n   Answer: a) Blocks the caller until thread t terminates\n   join is the thread version of wait(): it waits for a thread to finish and releases its resources.VI: join là bản luồng của wait(): chờ luồng kết thúc và thu hồi tài nguyên.\n\n2. main() creates a thread and returns without joining it. What is the usual result?main() tạo một luồng rồi return mà không join. Kết quả thường gặp?\n   Answer: b) The process exits and the thread is cut off\n   Returning from main() calls exit(), which ends every thread; use pthread_join or pthread_exit(main).VI: return khỏi main() gọi exit() kết thúc mọi luồng; dùng pthread_join hoặc pthread_exit.\n\n3. Two threads both execute x = x + 1 on a shared int x without synchronisation. This is …Hai luồng cùng chạy x = x + 1 trên biến int x chung mà không đồng bộ. Đây là …\n   Answer: c) a data race: the result is unpredictable\n   x = x + 1 is load, add, store: not atomic.VI: x = x + 1 là load, add, store: không nguyên tử.\n\n4. A function that uses a static local buffer and is called from two threads is …Hàm dùng bộ đệm static cục bộ và được gọi từ hai luồng là …\n   Answer: d) not thread-safe (not reentrant)\n   The static buffer is shared by every caller. strtok() and ctime() are classic examples; strtok_r and ctime_r are the reentrant versions.VI: Bộ đệm static dùng chung cho mọi nơi gọi. strtok() và ctime() là ví dụ kinh điển; strtok_r và ctime_r là bản reentrant.\n\n5. A thread pool is mainly used to …Thread pool chủ yếu dùng để …\n   Answer: a) avoid the cost of creating a thread per request and to bound concurrency\n   Reusing a fixed set of threads removes creation cost and caps the number of concurrent threads.VI: Tái sử dụng một tập luồng cố định bỏ chi phí tạo luồng và giới hạn số luồng đồng thời.\n"
+          "code": "# Threads 4 — Pthreads: join, detach and thread-safe code — answer key\n\n1. What does pthread_join(t, NULL) do?pthread_join(t, NULL) làm gì?\n   Answer: d) Blocks the caller until thread t terminates\n   join is the thread version of wait(): it waits for a thread to finish and releases its resources.VI: join là bản luồng của wait(): chờ luồng kết thúc và thu hồi tài nguyên.\n\n2. main() creates a thread and returns without joining it. What is the usual result?main() tạo một luồng rồi return mà không join. Kết quả thường gặp?\n   Answer: a) The process exits and the thread is cut off\n   Returning from main() calls exit(), which ends every thread; use pthread_join or pthread_exit(main).VI: return khỏi main() gọi exit() kết thúc mọi luồng; dùng pthread_join hoặc pthread_exit.\n\n3. Two threads both execute x = x + 1 on a shared int x without synchronisation. This is …Hai luồng cùng chạy x = x + 1 trên biến int x chung mà không đồng bộ. Đây là …\n   Answer: a) a data race: the result is unpredictable\n   x = x + 1 is load, add, store: not atomic.VI: x = x + 1 là load, add, store: không nguyên tử.\n\n4. A function that uses a static local buffer and is called from two threads is …Hàm dùng bộ đệm static cục bộ và được gọi từ hai luồng là …\n   Answer: c) not thread-safe (not reentrant)\n   The static buffer is shared by every caller. strtok() and ctime() are classic examples; strtok_r and ctime_r are the reentrant versions.VI: Bộ đệm static dùng chung cho mọi nơi gọi. strtok() và ctime() là ví dụ kinh điển; strtok_r và ctime_r là bản reentrant.\n\n5. A thread pool is mainly used to …Thread pool chủ yếu dùng để …\n   Answer: b) avoid the cost of creating a thread per request and to bound concurrency\n   Reusing a fixed set of threads removes creation cost and caps the number of concurrent threads.VI: Tái sử dụng một tập luồng cố định bỏ chi phí tạo luồng và giới hạn số luồng đồng thời.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Blocks the caller until thread t terminates</p><p>join is the thread version of wait(): it waits for a thread to finish and releases its resources.</p><p><i>VI: join là bản luồng của wait(): chờ luồng kết thúc và thu hồi tài nguyên.</i></p></li><li><p><b>a)</b> The process exits and the thread is cut off</p><p>Returning from main() calls exit(), which ends every thread; use pthread_join or pthread_exit(main).</p><p><i>VI: return khỏi main() gọi exit() kết thúc mọi luồng; dùng pthread_join hoặc pthread_exit.</i></p></li><li><p><b>a)</b> a data race: the result is unpredictable</p><p>x = x + 1 is load, add, store: not atomic.</p><p><i>VI: x = x + 1 là load, add, store: không nguyên tử.</i></p></li><li><p><b>c)</b> not thread-safe (not reentrant)</p><p>The static buffer is shared by every caller. strtok() and ctime() are classic examples; strtok_r and ctime_r are the reentrant versions.</p><p><i>VI: Bộ đệm static dùng chung cho mọi nơi gọi. strtok() và ctime() là ví dụ kinh điển; strtok_r và ctime_r là bản reentrant.</i></p></li><li><p><b>b)</b> avoid the cost of creating a thread per request and to bound concurrency</p><p>Reusing a fixed set of threads removes creation cost and caps the number of concurrent threads.</p><p><i>VI: Tái sử dụng một tập luồng cố định bỏ chi phí tạo luồng và giới hạn số luồng đồng thời.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -539,23 +539,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Blocks the caller until thread t terminates"
+                "noiDung": "Merges two threads into one"
               },
               {
                 "ma": "b",
-                "noiDung": "Starts thread t"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Kills thread t"
               },
               {
+                "ma": "c",
+                "noiDung": "Starts thread t"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Merges two threads into one"
+                "noiDung": "Blocks the caller until thread t terminates"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>join is the thread version of wait(): it waits for a thread to finish and releases its resources.</p><p><i>VI: join là bản luồng của wait(): chờ luồng kết thúc và thu hồi tài nguyên.</i></p>"
           },
@@ -565,11 +565,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "main() waits automatically"
+                "noiDung": "The process exits and the thread is cut off"
               },
               {
                 "ma": "b",
-                "noiDung": "The process exits and the thread is cut off"
+                "noiDung": "main() waits automatically"
               },
               {
                 "ma": "c",
@@ -581,7 +581,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Returning from main() calls exit(), which ends every thread; use pthread_join or pthread_exit(main).</p><p><i>VI: return khỏi main() gọi exit() kết thúc mọi luồng; dùng pthread_join hoặc pthread_exit.</i></p>"
           },
@@ -591,23 +591,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a deadlock"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a memory leak"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a data race: the result is unpredictable"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "always safe, because + is atomic"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a deadlock"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a memory leak"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>x = x + 1 is load, add, store: not atomic.</p><p><i>VI: x = x + 1 là load, add, store: không nguyên tử.</i></p>"
           },
@@ -617,7 +617,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "automatically thread-safe"
+                "noiDung": "illegal in C"
               },
               {
                 "ma": "b",
@@ -625,15 +625,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "illegal in C"
+                "noiDung": "not thread-safe (not reentrant)"
               },
               {
                 "ma": "d",
-                "noiDung": "not thread-safe (not reentrant)"
+                "noiDung": "automatically thread-safe"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>The static buffer is shared by every caller. strtok() and ctime() are classic examples; strtok_r and ctime_r are the reentrant versions.</p><p><i>VI: Bộ đệm static dùng chung cho mọi nơi gọi. strtok() và ctime() là ví dụ kinh điển; strtok_r và ctime_r là bản reentrant.</i></p>"
           },
@@ -643,23 +643,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "avoid the cost of creating a thread per request and to bound concurrency"
+                "noiDung": "make the threads share registers so that switches cost nothing"
               },
               {
                 "ma": "b",
-                "noiDung": "make threads share registers"
+                "noiDung": "avoid the cost of creating a thread per request and to bound concurrency"
               },
               {
                 "ma": "c",
-                "noiDung": "avoid using mutexes"
+                "noiDung": "avoid using mutexes, because a pool serialises all access to shared data"
               },
               {
                 "ma": "d",
-                "noiDung": "run threads at higher privilege"
+                "noiDung": "run request handlers at higher privilege than normal threads"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Reusing a fixed set of threads removes creation cost and caps the number of concurrent threads.</p><p><i>VI: Tái sử dụng một tập luồng cố định bỏ chi phí tạo luồng và giới hạn số luồng đồng thời.</i></p>"
           }

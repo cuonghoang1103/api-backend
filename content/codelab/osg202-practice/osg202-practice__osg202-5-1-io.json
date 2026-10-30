@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# I/O 1 — Polling, interrupts, DMA and memory-mapped I/O — answer key\n\n1. In programmed I/O with polling the CPU …Với I/O lập trình theo kiểu thăm dò (polling) CPU …\n   Answer: b) repeatedly reads the device status register until the device is ready\n   Busy waiting wastes CPU time but is simple and fast for very quick devices.VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.\n\n2. What is the main advantage of interrupt-driven I/O over polling?Ưu điểm chính của I/O dùng ngắt so với polling?\n   Answer: c) The CPU can do other work while the device is busy\n   The device signals completion; the CPU runs other processes meanwhile.VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.\n\n3. A DMA controller is used to …Bộ điều khiển DMA dùng để …\n   Answer: d) transfer a block between a device and memory without CPU involvement per byte\n   The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.\n\n4. Memory-mapped I/O means …Memory-mapped I/O nghĩa là …\n   Answer: a) device registers are given addresses in the normal address space and accessed with ordinary load/store instructions\n   Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.\n\n5. What does a device driver do?Trình điều khiển thiết bị (driver) làm gì?\n   Answer: b) Hides the hardware details of one device behind a standard interface for the rest of the OS\n   Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.\n"
+          "code": "# I/O 1 — Polling, interrupts, DMA and memory-mapped I/O — answer key\n\n1. In programmed I/O with polling the CPU …Với I/O lập trình theo kiểu thăm dò (polling) CPU …\n   Answer: a) repeatedly reads the device status register until the device is ready\n   Busy waiting wastes CPU time but is simple and fast for very quick devices.VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.\n\n2. What is the main advantage of interrupt-driven I/O over polling?Ưu điểm chính của I/O dùng ngắt so với polling?\n   Answer: a) The CPU can do other work while the device is busy\n   The device signals completion; the CPU runs other processes meanwhile.VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.\n\n3. A DMA controller is used to …Bộ điều khiển DMA dùng để …\n   Answer: b) transfer a block between a device and memory without CPU involvement per byte\n   The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.\n\n4. Memory-mapped I/O means …Memory-mapped I/O nghĩa là …\n   Answer: a) device registers are given addresses in the normal address space and accessed with ordinary load/store instructions\n   Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.\n\n5. What does a device driver do?Trình điều khiển thiết bị (driver) làm gì?\n   Answer: b) Hides the hardware details of one device behind a standard interface for the rest of the OS\n   Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>b · c · d · a · b.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> repeatedly reads the device status register until the device is ready</p><p>Busy waiting wastes CPU time but is simple and fast for very quick devices.</p><p><i>VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.</i></p></li><li><p><b>a)</b> The CPU can do other work while the device is busy</p><p>The device signals completion; the CPU runs other processes meanwhile.</p><p><i>VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.</i></p></li><li><p><b>b)</b> transfer a block between a device and memory without CPU involvement per byte</p><p>The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.</p><p><i>VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.</i></p></li><li><p><b>a)</b> device registers are given addresses in the normal address space and accessed with ordinary load/store instructions</p><p>Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.</p><p><i>VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.</i></p></li><li><p><b>b)</b> Hides the hardware details of one device behind a standard interface for the rest of the OS</p><p>Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.</p><p><i>VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -65,23 +65,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "never touches the data"
-              },
-              {
-                "ma": "b",
                 "noiDung": "repeatedly reads the device status register until the device is ready"
               },
               {
+                "ma": "b",
+                "noiDung": "never touches the data, because the controller copies it to memory"
+              },
+              {
                 "ma": "c",
-                "noiDung": "sleeps until an interrupt"
+                "noiDung": "sleeps until the device raises an interrupt to say it is ready"
               },
               {
                 "ma": "d",
-                "noiDung": "lets the DMA controller copy data"
+                "noiDung": "lets the DMA controller copy the data, then checks the count once"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Busy waiting wastes CPU time but is simple and fast for very quick devices.</p><p><i>VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.</i></p>"
           },
@@ -91,23 +91,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It is always faster per byte"
-              },
-              {
-                "ma": "b",
-                "noiDung": "It removes the need for an OS"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The CPU can do other work while the device is busy"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "It is always faster per byte"
+              },
+              {
+                "ma": "c",
                 "noiDung": "It needs no driver"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It removes the need for an OS"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The device signals completion; the CPU runs other processes meanwhile.</p><p><i>VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.</i></p>"
           },
@@ -117,23 +117,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "translate virtual addresses"
+                "noiDung": "schedule the processes that are waiting for a block from a device"
               },
               {
                 "ma": "b",
-                "noiDung": "schedule processes"
+                "noiDung": "transfer a block between a device and memory without CPU involvement per byte"
               },
               {
                 "ma": "c",
-                "noiDung": "cache the page table"
+                "noiDung": "translate the virtual addresses of a block before the CPU reads them"
               },
               {
                 "ma": "d",
-                "noiDung": "transfer a block between a device and memory without CPU involvement per byte"
+                "noiDung": "cache the entries of the page table between a device and the MMU"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.</p><p><i>VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.</i></p>"
           },
@@ -147,15 +147,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the device’s data is copied into the page cache"
+                "noiDung": "the data of the device is copied into the page cache and read with ordinary load instructions"
               },
               {
                 "ma": "c",
-                "noiDung": "files are mapped with mmap"
+                "noiDung": "device registers have a separate address space that only special IN/OUT instructions can reach"
               },
               {
                 "ma": "d",
-                "noiDung": "the CPU has special IN/OUT instructions only"
+                "noiDung": "files on the device are mapped with mmap, so programs read them as ordinary memory"
               }
             ],
             "dapAn": [
@@ -169,7 +169,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Compiles user programs"
+                "noiDung": "Decides which process may use a device next and for how long"
               },
               {
                 "ma": "b",
@@ -177,11 +177,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Schedules processes"
+                "noiDung": "Maintains the page table of each process that uses the device"
               },
               {
                 "ma": "d",
-                "noiDung": "Manages the page table"
+                "noiDung": "Translates the system calls of user programs into source code"
               }
             ],
             "dapAn": [
@@ -257,7 +257,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# I/O 2 — The I/O software stack and a DMA transfer — answer key\n\n1. I/O software layers, user to hardwareCác tầng phần mềm I/O, từ người dùng xuống phần cứng\n   Answer: l1) User-level I/O software (e.g. printf, libraries)  →  l2) Device-independent OS software (naming, buffering, protection)  →  l3) Device drivers  →  l4) Interrupt handlers  →  l5) Hardware (controller and device)\n   A request goes down: user library → device-independent layer (which device? buffer? permission?) → driver (device specific commands) → interrupt handler (completion) → hardware.VI: Yêu cầu đi xuống: thư viện người dùng → tầng độc lập thiết bị (thiết bị nào? đệm? quyền?) → driver (lệnh riêng thiết bị) → trình xử lý ngắt (hoàn tất) → phần cứng.\n\n2. Steps of a DMA readCác bước của một lần đọc DMA\n   Answer: d1) The CPU programs the DMA controller: memory address, byte count, direction  →  d2) The DMA controller asks the disk controller to read a block  →  d3) The disk controller moves the data into its internal buffer  →  d4) The DMA controller writes the data into memory over the bus, address by address  →  d5) The count reaches zero and the DMA controller interrupts the CPU\n   Setup (CPU) → disk read request → controller buffer → DMA writes memory (the CPU is free meanwhile) → completion interrupt.VI: Thiết lập (CPU) → yêu cầu đĩa đọc → bộ đệm controller → DMA ghi vào bộ nhớ (CPU rảnh trong lúc đó) → ngắt báo xong.\n"
+          "code": "# I/O 2 — The I/O software stack and a DMA transfer — answer key\n\n1. I/O software layers, user to hardwareCác tầng phần mềm I/O, từ người dùng xuống phần cứng\n   Answer: m5) User-level I/O software (e.g. printf, libraries)  →  m3) Device-independent OS software (naming, buffering, protection)  →  m1) Device drivers  →  m4) Interrupt handlers  →  m2) Hardware (controller and device)\n   A request goes down: user library → device-independent layer (which device? buffer? permission?) → driver (device specific commands) → interrupt handler (completion) → hardware.VI: Yêu cầu đi xuống: thư viện người dùng → tầng độc lập thiết bị (thiết bị nào? đệm? quyền?) → driver (lệnh riêng thiết bị) → trình xử lý ngắt (hoàn tất) → phần cứng.\n\n2. Steps of a DMA readCác bước của một lần đọc DMA\n   Answer: m4) The CPU programs the DMA controller: memory address, byte count, direction  →  m3) The DMA controller asks the disk controller to read a block  →  m5) The disk controller moves the data into its internal buffer  →  m2) The DMA controller writes the data into memory over the bus, address by address  →  m1) The count reaches zero and the DMA controller interrupts the CPU\n   Setup (CPU) → disk read request → controller buffer → DMA writes memory (the CPU is free meanwhile) → completion interrupt.VI: Thiết lập (CPU) → yêu cầu đĩa đọc → bộ đệm controller → DMA ghi vào bộ nhớ (CPU rảnh trong lúc đó) → ngắt báo xong.\n"
         }
       ],
       "solutionExplanationHtml": "<p>user → device-independent → drivers → interrupt handlers → hardware; setup → request → buffer → bus write → interrupt.</p>",
@@ -272,32 +272,32 @@
             "de": "<p>I/O software layers, user to hardware</p><p style=\"opacity:.75;font-size:.92em\"><i>Các tầng phần mềm I/O, từ người dùng xuống phần cứng</i></p>",
             "muc": [
               {
-                "ma": "l3",
+                "ma": "m1",
                 "noiDung": "Device drivers"
               },
               {
-                "ma": "l4",
-                "noiDung": "Interrupt handlers"
-              },
-              {
-                "ma": "l5",
+                "ma": "m2",
                 "noiDung": "Hardware (controller and device)"
               },
               {
-                "ma": "l1",
-                "noiDung": "User-level I/O software (e.g. printf, libraries)"
+                "ma": "m3",
+                "noiDung": "Device-independent OS software (naming, buffering, protection)"
               },
               {
-                "ma": "l2",
-                "noiDung": "Device-independent OS software (naming, buffering, protection)"
+                "ma": "m4",
+                "noiDung": "Interrupt handlers"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "User-level I/O software (e.g. printf, libraries)"
               }
             ],
             "dapAn": [
-              "l1",
-              "l2",
-              "l3",
-              "l4",
-              "l5"
+              "m5",
+              "m3",
+              "m1",
+              "m4",
+              "m2"
             ],
             "giaiThich": "<p>A request goes down: user library → device-independent layer (which device? buffer? permission?) → driver (device specific commands) → interrupt handler (completion) → hardware.</p><p><i>VI: Yêu cầu đi xuống: thư viện người dùng → tầng độc lập thiết bị (thiết bị nào? đệm? quyền?) → driver (lệnh riêng thiết bị) → trình xử lý ngắt (hoàn tất) → phần cứng.</i></p>"
           },
@@ -306,32 +306,32 @@
             "de": "<p>Steps of a DMA read</p><p style=\"opacity:.75;font-size:.92em\"><i>Các bước của một lần đọc DMA</i></p>",
             "muc": [
               {
-                "ma": "d4",
-                "noiDung": "The DMA controller writes the data into memory over the bus, address by address"
-              },
-              {
-                "ma": "d5",
+                "ma": "m1",
                 "noiDung": "The count reaches zero and the DMA controller interrupts the CPU"
               },
               {
-                "ma": "d1",
-                "noiDung": "The CPU programs the DMA controller: memory address, byte count, direction"
+                "ma": "m2",
+                "noiDung": "The DMA controller writes the data into memory over the bus, address by address"
               },
               {
-                "ma": "d2",
+                "ma": "m3",
                 "noiDung": "The DMA controller asks the disk controller to read a block"
               },
               {
-                "ma": "d3",
+                "ma": "m4",
+                "noiDung": "The CPU programs the DMA controller: memory address, byte count, direction"
+              },
+              {
+                "ma": "m5",
                 "noiDung": "The disk controller moves the data into its internal buffer"
               }
             ],
             "dapAn": [
-              "d1",
-              "d2",
-              "d3",
-              "d4",
-              "d5"
+              "m4",
+              "m3",
+              "m5",
+              "m2",
+              "m1"
             ],
             "giaiThich": "<p>Setup (CPU) → disk read request → controller buffer → DMA writes memory (the CPU is free meanwhile) → completion interrupt.</p><p><i>VI: Thiết lập (CPU) → yêu cầu đĩa đọc → bộ đệm controller → DMA ghi vào bộ nhớ (CPU rảnh trong lúc đó) → ngắt báo xong.</i></p>"
           }

@@ -102,7 +102,6 @@ const E5 = tinh({
   ],
   goiY: ['Think about who can be forgotten: far requests under SSTF.', 'A circular list gives every cylinder the same maximum wait.'],
   loiHayGap: ['Thinking FCFS can starve requests (it is fair, just slow).', 'Thinking SCAN serves the middle cylinders twice as often by accident (it is true that they are visited more often than the edges).'],
-  giaiThich: '<p>a · a · a · a · a.</p>',
   thuatNgu: [tn('elevator', 'thang máy: SCAN')],
   khaiNiem: ['disk scheduling properties'],
 });

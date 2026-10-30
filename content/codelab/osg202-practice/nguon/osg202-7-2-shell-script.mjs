@@ -10,14 +10,13 @@ const E1 = tinh({
   loai: 'choice',
   cauHoi: [
     mc('c1', ['<code>x=hello; echo \'$x\' "$x"</code> prints …', '<code>x=hello; echo \'$x\' "$x"</code> in ra …'], [['a', '$x hello'], ['b', 'hello hello'], ['c', '$x $x'], ['d', 'hello $x']], 'a', ['Single quotes block all expansion; double quotes still expand variables.', 'Nháy đơn chặn mọi khai triển; nháy kép vẫn khai triển biến.']),
-    mc('c2', ['What is <code>$?</code>?', '<code>$?</code> là gì?'], [['a', 'The exit status of the last command (0 = success)'], ['b', 'The PID of the shell'], ['c', 'The number of arguments'], ['d', 'The last argument']], 'a', ['$$ is the PID, $# the argument count, $@ the arguments.', '$$ là PID, $# số đối số, $@ các đối số.']),
-    mc('c3', ['Why write <code>"$@"</code> instead of <code>$*</code> when passing arguments on?', 'Vì sao nên viết <code>"$@"</code> thay vì <code>$*</code> khi chuyển tiếp đối số?'], [['a', '"$@" keeps each argument as one word, even if it contains spaces'], ['b', '$* is slower'], ['c', '"$@" sorts the arguments'], ['d', '$* is not valid in bash']], 'a', ['Unquoted $* is re-split on whitespace: “b c” becomes two words.', '$* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.']),
+    mc('c2', ['What is <code>$?</code>?', '<code>$?</code> là gì?'], [['a', 'The exit status of the last command (0 = success)'], ['b', 'The process ID of the current shell'], ['c', 'The number of arguments of the script (0 = none)'], ['d', 'The last argument of the previous command']], 'a', ['$$ is the PID, $# the argument count, $@ the arguments.', '$$ là PID, $# số đối số, $@ các đối số.']),
+    mc('c3', ['Why write <code>"$@"</code> instead of <code>$*</code> when passing arguments on?', 'Vì sao nên viết <code>"$@"</code> thay vì <code>$*</code> khi chuyển tiếp đối số?'], [['a', '"$@" keeps each argument as one word, even if it contains spaces'], ['b', '$* is slower, because it starts one subshell per word'], ['c', '"$@" sorts the arguments before passing them on'], ['d', '$* is not valid in bash, only in the old Bourne shell']], 'a', ['Unquoted $* is re-split on whitespace: “b c” becomes two words.', '$* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.']),
     mc('c4', ['What does <code>${f%.*}</code> do for f=report.tar.gz?', '<code>${f%.*}</code> làm gì với f=report.tar.gz?'], [['a', 'Removes the shortest suffix matching .* → report.tar'], ['b', 'Removes the longest suffix → report'], ['c', 'Removes the prefix'], ['d', 'Returns gz']], 'a', ['% = shortest suffix, %% = longest suffix; # and ## do the same for prefixes.', '% = hậu tố ngắn nhất, %% = dài nhất; # và ## làm vậy cho tiền tố.']),
     mc('c5', ['The first line <code>#!/bin/bash</code> of a script is called …', 'Dòng đầu <code>#!/bin/bash</code> của script gọi là …'], [['a', 'the shebang: it names the interpreter the kernel runs'], ['b', 'a comment that is ignored by everything'], ['c', 'the exit code'], ['d', 'a variable assignment']], 'a', ['exec of a file starting with #! makes the kernel start the named interpreter with the script path.', 'exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.']),
   ],
   goiY: ['Single quotes = literal; double quotes = expand $ and `.', '% removes from the END, # removes from the START.'],
   loiHayGap: ['Using $* when arguments may contain spaces.', 'Confusing $? with $#.'],
-  giaiThich: '<p>a · a · a · a · a.</p>',
   thuatNgu: [tn('shebang', '#! chỉ trình thông dịch'), tn('exit status', 'mã thoát')],
   khaiNiem: ['variables', 'quoting', 'parameter expansion'],
 });
@@ -47,7 +46,7 @@ const E2 = tinh({
 
 const EX = [
   ['[ 3 -gt 5 ]; echo $?', '1'], ['(exit 3); echo $?', '3'], ['echo hi | grep -q x; echo $?', '1'], ['test -d /; echo $?', '0'], ['f(){ return 7; }; f; echo $?', '7'],
-  ['true && false || echo C; echo $?', 'C 0'], ['false || true && echo D', 'D'],
+  ['true && false || echo C; echo $?', 'C 0'], ['false || true && echo D; echo $?', 'D 0'],
 ];
 const E3 = tinh({
   tieuDe: 'Shell 3 — Exit codes and && / || chains',
@@ -59,7 +58,7 @@ const E3 = tinh({
     cot: [{ ma: 'c', ten: 'Snippet' }, { ma: 'o', ten: 'Output' }],
     hang: EX.map(([c], i) => ({ ma: `c${i}`, o: { c } })),
     dapAn: Object.fromEntries(EX.map(([, o], i) => [`c${i}.o`, o])),
-    giaiThich: giai('0 means success. [ 3 -gt 5 ] is false → 1; (exit 3) runs in a subshell and its status becomes $?; grep -q x fails → 1. In `true && false || echo C` the && yields 1, so the || branch runs and prints C, and the status of the whole list is that of echo = 0. `false || true && echo D` evaluates left to right: false → run true (0) → run echo.', '0 là thành công. [ 3 -gt 5 ] sai → 1; (exit 3) chạy trong subshell, mã của nó thành $?; grep -q x thất bại → 1. Với `true && false || echo C` thì && cho 1, nhánh || chạy và in C, mã của cả danh sách là của echo = 0. `false || true && echo D` tính từ trái sang phải: false → chạy true (0) → chạy echo.'),
+    giaiThich: giai('0 means success. [ 3 -gt 5 ] is false → 1; (exit 3) runs in a subshell and its status becomes $?; grep -q x fails → 1. In `true && false || echo C` the && yields 1, so the || branch runs and prints C, and the status of the whole list is that of echo = 0. `false || true && echo D` evaluates left to right: false → run true (0) → run echo, whose status 0 is what the last $? prints.', '0 là thành công. [ 3 -gt 5 ] sai → 1; (exit 3) chạy trong subshell, mã của nó thành $?; grep -q x thất bại → 1. Với `true && false || echo C` thì && cho 1, nhánh || chạy và in C, mã của cả danh sách là của echo = 0. `false || true && echo D` tính từ trái sang phải: false → chạy true (0) → chạy echo, và mã 0 của echo là thứ $? cuối in ra.'),
   }],
   goiY: ['&& runs the right side only if the left succeeded; || only if it failed. Both associate to the left.', '$? always refers to the LAST command executed.'],
   loiHayGap: ['Thinking a && b || c is “if a then b else c” (c also runs when b fails).', 'Expecting `exit 3` inside parentheses to end the whole shell.'],
@@ -121,7 +120,6 @@ const E5 = tinh({
   ],
   goiY: ['A subshell is a fork: its variable changes are private.', 'Pipeline stages run in parallel as separate processes.'],
   loiHayGap: ['Expecting a variable set in a pipeline loop to survive.', 'Confusing $$ with $!.'],
-  giaiThich: '<p>a · a · a · a · a.</p>',
   thuatNgu: [tn('process substitution', 'thay thế tiến trình <( )'), tn('trap', 'bắt tín hiệu hoặc sự kiện thoát')],
   khaiNiem: ['subshell', 'pipelines', 'jobs', 'trap'],
 });

@@ -4,6 +4,7 @@
  * Chữ: mọi trường nhận `[en, vi]` hoặc `{ en, vi }`; riêng câu trong choice/order/table là HTML song ngữ (hai()).
  */
 import { doiDau } from '../../web-foundations-practice/nguon/_luoc-do.mjs';
+import { xaoCauHoi, xaoThuTu, loiGiaiTracNghiem } from '../../_chung/tracNghiem.mjs';
 export { doiDau };
 export * as S from './_sim.mjs';
 
@@ -17,7 +18,7 @@ export const hai = (en, vi) => `<p>${en}</p>${vi ? `<p style="opacity:.75;font-s
 export const giai = (en, vi) => `<p>${en}</p>${vi ? `<p><i>VI: ${vi}</i></p>` : ''}`;
 /** Lựa chọn nhanh: ['a', 'nội dung'] … ⇒ [{ma, noiDung}] */
 export const lc = (...ds) => ds.map(([ma, noiDung]) => ({ ma, noiDung }));
-const chu = (h) => String(h || '').replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+const chu = (h) => String(h || '').replace(/<\/?[a-zA-Z][^>]*>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 export const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 export const pre = (s) => `<pre>${esc(s)}</pre>`;
 
@@ -47,19 +48,15 @@ export function tinh(q0) {
   const q = { ...q0 };
   const loai = q.loai || 'choice';
   if (loai === 'choice') {
-    // Xoay lựa chọn theo cách xác định để đáp án đúng không luôn là “a”; gán lại mã a,b,c,d theo vị trí mới.
-    const chuCai = ['a', 'b', 'c', 'd', 'e', 'f'];
-    let seed = q.tieuDe.length;
-    q.cauHoi = q.cauHoi.map((c, i) => {
-      const n = c.luaChon.length; const k = (seed + i * 3 + 1) % n;
-      const moi = xoay(c.luaChon, k).map((o, j) => ({ ma: chuCai[j], noiDung: o.noiDung, cu: o.ma }));
-      const anh = Object.fromEntries(moi.map((o) => [o.cu, o.ma]));
-      const dap = Array.isArray(c.dapAn[0]) ? [c.dapAn[0].map((m) => anh[m]).sort()] : c.dapAn.map((m) => anh[m]);
-      return { ...c, luaChon: moi.map(({ ma, noiDung }) => ({ ma, noiDung })), dapAn: dap };
-    });
-    const kq = q.cauHoi.map((c) => (Array.isArray(c.dapAn[0]) ? c.dapAn[0] : c.dapAn).join('+')).join(' · ');
-    if (typeof q.giaiThich === 'string') q.giaiThich = q.giaiThich.replace(/^<p>[a-d](?:\+[a-d])*(?: · [a-d](?:\+[a-d])*)*\./, `<p>${kq}.`);
+    // Xáo theo băm nội dung; chữ cái trong lời giải SINH SAU khi xáo — không viết tay (xem _chung/tracNghiem.mjs).
+    q.cauHoi = xaoCauHoi(q.cauHoi);
+    q.giaiThich = loiGiaiTracNghiem(q.cauHoi, q.giaiThich);
   }
+  if (loai === 'order') {
+    q.cauHoi = q.cauHoi.map(xaoThuTu);
+    if (!q.giaiThich) q.giaiThich = q.cauHoi.map((c) => c.giaiThich).join('');
+  }
+  if (loai === 'table' && !q.giaiThich) q.giaiThich = q.bang.map((b) => b.giaiThich).join('');
   const ds = loai === 'table' ? q.bang : q.cauHoi;
   const de = ds.map((c, i) => `${i + 1}. ${chu(c.de)}`).join('\n');
   let dap;
@@ -140,7 +137,7 @@ export const L = (en, vi) => ({ en, vi });
 export function mc(ma, de, opts, dap, gt, nhieu) {
   return { ma, de: hai(de[0], de[1]), luaChon: lc(...opts), dapAn: Array.isArray(dap) ? (nhieu ? [dap] : dap) : [dap], ...(nhieu ? { nhieu: true } : {}), giaiThich: giai(gt[0], gt[1]) };
 }
-/** Trộn xác định (không ngẫu nhiên) để mục “order” không nằm sẵn đúng thứ tự: dịch vòng k bước. */
+/** Dịch vòng k bước. Thứ tự hiện của “order” và “choice” do tinh() xáo lại theo nội dung. */
 export function xoay(a, k) { return a.slice(k % a.length).concat(a.slice(0, k % a.length)); }
 /** Tên thuật ngữ rút gọn. */
 export const tn = (en, vi) => ({ en, vi });
@@ -157,7 +154,7 @@ export function so4(dung, nhieu, fmt) {
   return duyNhat.slice(0, 4);
 }
 
-/** Câu trắc nghiệm số: đáp án đúng (hiện đầu, tinh() sẽ xoay) + 3 nhiễu. */
+/** Câu trắc nghiệm số: đáp án đúng (viết đầu, tinh() sẽ xáo) + 3 nhiễu. */
 export function mcNum(ma, de, dung, nhieu, fmt, gt) {
   const ds = so4(dung, nhieu, fmt);
   return mc(ma, de, ds.map((t, i) => ['abcd'[i], t]), 'a', gt);

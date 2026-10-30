@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Server memory 1 — Resident memory, overcommit and the OOM killer — answer key\n\n1. What is the difference between VSZ and RSS in ps?VSZ và RSS trong ps khác nhau thế nào?\n   Answer: d) VSZ is the virtual address space size; RSS is the part currently resident in RAM\n   A process may reserve far more virtual memory than it touches.VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.\n\n2. Linux memory overcommit means that …Memory overcommit của Linux nghĩa là …\n   Answer: a) malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched\n   Allocation is lazy; real pages are assigned on first touch.VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.\n\n3. When RAM and swap are exhausted, the kernel’s OOM killer …Khi RAM và swap cạn, OOM killer của kernel …\n   Answer: b) kills a process chosen by badness score (oom_score) with SIGKILL\n   You can bias the choice with oom_score_adj (−1000 disables killing the process).VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).\n\n4. A container with a 512 MB memory limit grows past it. What happens?Container có giới hạn bộ nhớ 512 MB vượt quá giới hạn. Điều gì xảy ra?\n   Answer: c) The cgroup OOM killer kills a process of the container (exit code 137)\n   The cgroup limit is enforced inside the container’s control group.VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.\n\n5. Which setting protects the database process from the OOM killer first?Thiết lập nào bảo vệ tiến trình cơ sở dữ liệu khỏi OOM killer trước tiên?\n   Answer: d) A very low (negative) oom_score_adj for that process\n   oom_score_adj = −1000 exempts it; the killer picks other victims.VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.\n"
+          "code": "# Server memory 1 — Resident memory, overcommit and the OOM killer — answer key\n\n1. What is the difference between VSZ and RSS in ps?VSZ và RSS trong ps khác nhau thế nào?\n   Answer: c) VSZ is the virtual address space size; RSS is the part currently resident in RAM\n   A process may reserve far more virtual memory than it touches.VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.\n\n2. Linux memory overcommit means that …Memory overcommit của Linux nghĩa là …\n   Answer: c) malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched\n   Allocation is lazy; real pages are assigned on first touch.VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.\n\n3. When RAM and swap are exhausted, the kernel’s OOM killer …Khi RAM và swap cạn, OOM killer của kernel …\n   Answer: a) kills a process chosen by badness score (oom_score) with SIGKILL\n   You can bias the choice with oom_score_adj (−1000 disables killing the process).VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).\n\n4. A container with a 512 MB memory limit grows past it. What happens?Container có giới hạn bộ nhớ 512 MB vượt quá giới hạn. Điều gì xảy ra?\n   Answer: a) The cgroup OOM killer kills a process of the container (exit code 137)\n   The cgroup limit is enforced inside the container’s control group.VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.\n\n5. Which setting protects the database process from the OOM killer first?Thiết lập nào bảo vệ tiến trình cơ sở dữ liệu khỏi OOM killer trước tiên?\n   Answer: c) A very low (negative) oom_score_adj for that process\n   oom_score_adj = −1000 exempts it; the killer picks other victims.VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> VSZ is the virtual address space size; RSS is the part currently resident in RAM</p><p>A process may reserve far more virtual memory than it touches.</p><p><i>VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.</i></p></li><li><p><b>c)</b> malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched</p><p>Allocation is lazy; real pages are assigned on first touch.</p><p><i>VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.</i></p></li><li><p><b>a)</b> kills a process chosen by badness score (oom_score) with SIGKILL</p><p>You can bias the choice with oom_score_adj (−1000 disables killing the process).</p><p><i>VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).</i></p></li><li><p><b>a)</b> The cgroup OOM killer kills a process of the container (exit code 137)</p><p>The cgroup limit is enforced inside the container’s control group.</p><p><i>VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.</i></p></li><li><p><b>c)</b> A very low (negative) oom_score_adj for that process</p><p>oom_score_adj = −1000 exempts it; the killer picks other victims.</p><p><i>VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "VSZ is swap; RSS is disk"
-              },
-              {
-                "ma": "b",
                 "noiDung": "They are always equal"
               },
               {
+                "ma": "b",
+                "noiDung": "VSZ is swap; RSS is disk"
+              },
+              {
                 "ma": "c",
-                "noiDung": "RSS counts shared libraries once per process only"
+                "noiDung": "VSZ is the virtual address space size; RSS is the part currently resident in RAM"
               },
               {
                 "ma": "d",
-                "noiDung": "VSZ is the virtual address space size; RSS is the part currently resident in RAM"
+                "noiDung": "RSS counts shared libraries once per process only"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>A process may reserve far more virtual memory than it touches.</p><p><i>VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.</i></p>"
           },
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched"
+                "noiDung": "the kernel never swaps, so all the memory promised must fit in physical RAM"
               },
               {
                 "ma": "b",
-                "noiDung": "malloc always fails when RAM is full"
+                "noiDung": "malloc always fails as soon as RAM is full, even when swap is still free"
               },
               {
                 "ma": "c",
-                "noiDung": "Pages are compressed"
+                "noiDung": "malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched"
               },
               {
                 "ma": "d",
-                "noiDung": "The kernel never swaps"
+                "noiDung": "pages are compressed in RAM so that every malloc is fully backed before it returns"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Allocation is lazy; real pages are assigned on first touch.</p><p><i>VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "pauses all processes"
-              },
-              {
-                "ma": "b",
                 "noiDung": "kills a process chosen by badness score (oom_score) with SIGKILL"
               },
               {
+                "ma": "b",
+                "noiDung": "pauses all processes"
+              },
+              {
                 "ma": "c",
-                "noiDung": "reboots the machine"
+                "noiDung": "asks processes to free memory politely"
               },
               {
                 "ma": "d",
-                "noiDung": "asks processes to free memory politely"
+                "noiDung": "reboots the machine"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>You can bias the choice with oom_score_adj (−1000 disables killing the process).</p><p><i>VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Memory is added automatically"
-              },
-              {
-                "ma": "b",
-                "noiDung": "The limit is ignored"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The cgroup OOM killer kills a process of the container (exit code 137)"
               },
               {
+                "ma": "b",
+                "noiDung": "The limit is raised automatically by the container runtime"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The limit is ignored as long as the host still has free RAM"
+              },
+              {
                 "ma": "d",
-                "noiDung": "The host kills the whole host"
+                "noiDung": "The kernel of the host panics and the whole host reboots"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The cgroup limit is enforced inside the container’s control group.</p><p><i>VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.</i></p>"
           },
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A larger page size"
+                "noiDung": "Adding more swap and leaving the score unchanged"
               },
               {
                 "ma": "b",
-                "noiDung": "More swap only"
+                "noiDung": "Using a larger page size for the shared buffers"
               },
               {
                 "ma": "c",
-                "noiDung": "Running it as root"
+                "noiDung": "A very low (negative) oom_score_adj for that process"
               },
               {
                 "ma": "d",
-                "noiDung": "A very low (negative) oom_score_adj for that process"
+                "noiDung": "Running the database process as the root user"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>oom_score_adj = −1000 exempts it; the killer picks other victims.</p><p><i>VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.</i></p>"
           }

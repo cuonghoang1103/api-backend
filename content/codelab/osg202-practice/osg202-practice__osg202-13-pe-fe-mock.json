@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock 1 — Introduction, processes, scheduling and memory (15 questions) — answer key\n\n1. Which statement about the kernel is correct?Phát biểu nào về kernel là đúng?\n   Answer: c) Privileged instructions can be executed only in kernel mode\n   Only the kernel may execute privileged instructions; a system call traps into kernel mode.VI: Chỉ kernel mới chạy được lệnh đặc quyền; lời gọi hệ thống trap vào chế độ kernel.\n\n2. Processes (arrival, burst): P1 (0, 8), P2 (1, 4), P3 (2, 9), P4 (3, 5). The average waiting time under FCFS is …Tiến trình (đến, burst): P1 (0, 8), P2 (1, 4), P3 (2, 9), P4 (3, 5). Thời gian chờ trung bình theo FCFS là …\n   Answer: d) 8.75\n   FCFS runs them in arrival order: waiting = P1: 0, P2: 7, P3: 10, P4: 18, average 8.75.VI: FCFS chạy theo thứ tự đến: chờ = P1: 0, P2: 7, P3: 10, P4: 18, trung bình 8.75.\n\n3. For the same processes, the average waiting time under preemptive SJF (SRTF) is …Với cùng các tiến trình, thời gian chờ trung bình theo SJF có ngắt (SRTF) là …\n   Answer: a) 6.5\n   SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; average waiting 6.5 (non-preemptive SJF gives 7.75).VI: SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; waiting trung bình 6.5 (SJF không ngắt cho 7.75).\n\n4. Round Robin with quantum 4 on the same processes: P2 completes at time …Round Robin quantum 4 trên cùng các tiến trình: P2 hoàn thành ở thời điểm …\n   Answer: b) 8\n   RR Gantt: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].VI: Gantt RR: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].\n\n5. Each process waits for I/O 80% of the time. With 4 processes in memory the CPU utilisation is about …Mỗi tiến trình chờ I/O 80% thời gian. Với 4 tiến trình trong bộ nhớ, mức dùng CPU xấp xỉ …\n   Answer: c) 59%\n   1 − 0.8⁴ = 59%.VI: 1 − 0,8⁴ = 59%.\n\n6. 90% of a program can be parallelised. The maximum speed-up with 10 cores is …90% chương trình song song hoá được. Speed-up tối đa với 10 lõi là …\n   Answer: d) 5.26\n   1 / (0.1 + 0.9/10) = 5.26 (never above 10 whatever the cores).VI: 1 / (0,1 + 0,9/10) = 5,26 (không bao giờ quá 10 dù bao nhiêu lõi).\n\n7. What is the output of: fork(); fork(); printf(\"x\"); (stdout is a terminal, newline-flushed)?Đầu ra của: fork(); fork(); printf(\"x\"); (stdout là terminal, đẩy theo dòng)?\n   Answer: a) 4 times x\n   Two forks give 2² = 4 processes, each prints once.VI: Hai fork cho 2² = 4 tiến trình, mỗi tiến trình in một lần.\n\n8. Semaphore S is initialised to 0. Process A: S1; up(S). Process B: down(S); S2. Which statement holds?Semaphore S khởi tạo 0. Tiến trình A: S1; up(S). Tiến trình B: down(S); S2. Phát biểu nào đúng?\n   Answer: b) S1 always executes before S2\n   B blocks on down(S) until A has finished S1 and called up.VI: B bị chặn ở down(S) tới khi A xong S1 và gọi up.\n\n9. 32-bit virtual addresses, 4 KB pages, 4-byte page-table entries. The size of a single-level page table is …Địa chỉ ảo 32 bit, trang 4 KB, mục bảng trang 4 byte. Kích thước bảng trang một cấp là …\n   Answer: c) 4 MB\n   2²⁰ entries × 4 B = 4 MB.VI: 2²⁰ mục × 4 B = 4 MB.\n\n10. Reference string 2 3 2 1 5 2 4 5 3 2 5 2 with 3 frames. The number of page faults of FIFO is …Chuỗi tham chiếu 2 3 2 1 5 2 4 5 3 2 5 2 với 3 khung. Số lỗi trang của FIFO là …\n   Answer: d) 9\n   FIFO 9, LRU 7, OPT 6.VI: FIFO 9, LRU 7, OPT 6.\n\n11. For the same string and 3 frames the optimal algorithm (OPT) causes … page faults.Với cùng chuỗi và 3 khung, thuật toán tối ưu (OPT) gây … lỗi trang.\n   Answer: a) 6\n   OPT = 6: no algorithm can do better.VI: OPT = 6: không thuật toán nào tốt hơn.\n\n12. TLB lookup 20 ns, memory access 100 ns, hit ratio 90%, one-level page table. The effective access time is …Tra TLB 20 ns, truy cập bộ nhớ 100 ns, tỉ lệ hit 90%, bảng trang một cấp. Thời gian truy cập hiệu dụng là …\n   Answer: b) 130 ns\n   0.9 × 120 + 0.1 × 220 = 130 ns.VI: 0,9 × 120 + 0,1 × 220 = 130 ns.\n\n13. Belady’s anomaly means that for some algorithm …Nghịch lý Belady nghĩa là với một số thuật toán …\n   Answer: c) adding page frames can increase the number of page faults (FIFO)\n   It happens with FIFO; LRU and OPT are stack algorithms.VI: Xảy ra với FIFO; LRU và OPT là thuật toán dạng ngăn xếp.\n\n14. Page size 4096, page table: page 0 → frame 5, page 1 → frame 2, page 2 → frame 9. The physical address of virtual address 8200 is …Trang 4096, bảng trang: trang 0 → khung 5, trang 1 → khung 2, trang 2 → khung 9. Địa chỉ vật lý của địa chỉ ảo 8200 là …\n   Answer: d) 36872\n   8200 = page 2, offset 8 → 9 × 4096 + 8 = 36872.VI: 8200 = trang 2, offset 8 → 9 × 4096 + 8 = 36872.\n\n15. A system spends most of its time swapping pages and CPU utilisation is low. This is …Hệ thống dành phần lớn thời gian hoán đổi trang và mức dùng CPU thấp. Đây là …\n   Answer: a) thrashing\n   Too many processes for the available frames.VI: Quá nhiều tiến trình so với số khung hiện có.\n"
+          "code": "# FE mock 1 — Introduction, processes, scheduling and memory (15 questions) — answer key\n\n1. Which statement about the kernel is correct?Phát biểu nào về kernel là đúng?\n   Answer: a) Privileged instructions can be executed only in kernel mode\n   Only the kernel may execute privileged instructions; a system call traps into kernel mode.VI: Chỉ kernel mới chạy được lệnh đặc quyền; lời gọi hệ thống trap vào chế độ kernel.\n\n2. Processes (arrival, burst): P1 (0, 8), P2 (1, 4), P3 (2, 9), P4 (3, 5). The average waiting time under FCFS is …Tiến trình (đến, burst): P1 (0, 8), P2 (1, 4), P3 (2, 9), P4 (3, 5). Thời gian chờ trung bình theo FCFS là …\n   Answer: a) 8.75\n   FCFS runs them in arrival order: waiting = P1: 0, P2: 7, P3: 10, P4: 18, average 8.75.VI: FCFS chạy theo thứ tự đến: chờ = P1: 0, P2: 7, P3: 10, P4: 18, trung bình 8.75.\n\n3. For the same processes, the average waiting time under preemptive SJF (SRTF) is …Với cùng các tiến trình, thời gian chờ trung bình theo SJF có ngắt (SRTF) là …\n   Answer: d) 6.5\n   SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; average waiting 6.5 (non-preemptive SJF gives 7.75).VI: SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; waiting trung bình 6.5 (SJF không ngắt cho 7.75).\n\n4. Round Robin with quantum 4 on the same processes: P2 completes at time …Round Robin quantum 4 trên cùng các tiến trình: P2 hoàn thành ở thời điểm …\n   Answer: d) 8\n   RR Gantt: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].VI: Gantt RR: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].\n\n5. Each process waits for I/O 80% of the time. With 4 processes in memory the CPU utilisation is about …Mỗi tiến trình chờ I/O 80% thời gian. Với 4 tiến trình trong bộ nhớ, mức dùng CPU xấp xỉ …\n   Answer: b) 59%\n   1 − 0.8⁴ = 59%.VI: 1 − 0,8⁴ = 59%.\n\n6. 90% of a program can be parallelised. The maximum speed-up with 10 cores is …90% chương trình song song hoá được. Speed-up tối đa với 10 lõi là …\n   Answer: a) 5.26\n   1 / (0.1 + 0.9/10) = 5.26 (never above 10 whatever the cores).VI: 1 / (0,1 + 0,9/10) = 5,26 (không bao giờ quá 10 dù bao nhiêu lõi).\n\n7. What is the output of: fork(); fork(); printf(\"x\"); (stdout is a terminal, newline-flushed)?Đầu ra của: fork(); fork(); printf(\"x\"); (stdout là terminal, đẩy theo dòng)?\n   Answer: a) 4 times x\n   Two forks give 2² = 4 processes, each prints once.VI: Hai fork cho 2² = 4 tiến trình, mỗi tiến trình in một lần.\n\n8. Semaphore S is initialised to 0. Process A: S1; up(S). Process B: down(S); S2. Which statement holds?Semaphore S khởi tạo 0. Tiến trình A: S1; up(S). Tiến trình B: down(S); S2. Phát biểu nào đúng?\n   Answer: b) S1 always executes before S2\n   B blocks on down(S) until A has finished S1 and called up.VI: B bị chặn ở down(S) tới khi A xong S1 và gọi up.\n\n9. 32-bit virtual addresses, 4 KB pages, 4-byte page-table entries. The size of a single-level page table is …Địa chỉ ảo 32 bit, trang 4 KB, mục bảng trang 4 byte. Kích thước bảng trang một cấp là …\n   Answer: a) 4 MB\n   2²⁰ entries × 4 B = 4 MB.VI: 2²⁰ mục × 4 B = 4 MB.\n\n10. Reference string 2 3 2 1 5 2 4 5 3 2 5 2 with 3 frames. The number of page faults of FIFO is …Chuỗi tham chiếu 2 3 2 1 5 2 4 5 3 2 5 2 với 3 khung. Số lỗi trang của FIFO là …\n   Answer: b) 9\n   FIFO 9, LRU 7, OPT 6.VI: FIFO 9, LRU 7, OPT 6.\n\n11. For the same string and 3 frames the optimal algorithm (OPT) causes … page faults.Với cùng chuỗi và 3 khung, thuật toán tối ưu (OPT) gây … lỗi trang.\n   Answer: d) 6\n   OPT = 6: no algorithm can do better.VI: OPT = 6: không thuật toán nào tốt hơn.\n\n12. TLB lookup 20 ns, memory access 100 ns, hit ratio 90%, one-level page table. The effective access time is …Tra TLB 20 ns, truy cập bộ nhớ 100 ns, tỉ lệ hit 90%, bảng trang một cấp. Thời gian truy cập hiệu dụng là …\n   Answer: d) 130 ns\n   0.9 × 120 + 0.1 × 220 = 130 ns.VI: 0,9 × 120 + 0,1 × 220 = 130 ns.\n\n13. Belady’s anomaly means that for some algorithm …Nghịch lý Belady nghĩa là với một số thuật toán …\n   Answer: c) adding page frames can increase the number of page faults (FIFO)\n   It happens with FIFO; LRU and OPT are stack algorithms.VI: Xảy ra với FIFO; LRU và OPT là thuật toán dạng ngăn xếp.\n\n14. Page size 4096, page table: page 0 → frame 5, page 1 → frame 2, page 2 → frame 9. The physical address of virtual address 8200 is …Trang 4096, bảng trang: trang 0 → khung 5, trang 1 → khung 2, trang 2 → khung 9. Địa chỉ vật lý của địa chỉ ảo 8200 là …\n   Answer: c) 36872\n   8200 = page 2, offset 8 → 9 × 4096 + 8 = 36872.VI: 8200 = trang 2, offset 8 → 9 × 4096 + 8 = 36872.\n\n15. A system spends most of its time swapping pages and CPU utilisation is low. This is …Hệ thống dành phần lớn thời gian hoán đổi trang và mức dùng CPU thấp. Đây là …\n   Answer: b) thrashing\n   Too many processes for the available frames.VI: Quá nhiều tiến trình so với số khung hiện có.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers are listed under each question after submission; recompute any you missed with the matching lesson exercise (2.4 scheduling, 3.2 replacement, 3.3 TLB).</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Privileged instructions can be executed only in kernel mode</p><p>Only the kernel may execute privileged instructions; a system call traps into kernel mode.</p><p><i>VI: Chỉ kernel mới chạy được lệnh đặc quyền; lời gọi hệ thống trap vào chế độ kernel.</i></p></li><li><p><b>a)</b> 8.75</p><p>FCFS runs them in arrival order: waiting = P1: 0, P2: 7, P3: 10, P4: 18, average 8.75.</p><p><i>VI: FCFS chạy theo thứ tự đến: chờ = P1: 0, P2: 7, P3: 10, P4: 18, trung bình 8.75.</i></p></li><li><p><b>d)</b> 6.5</p><p>SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; average waiting 6.5 (non-preemptive SJF gives 7.75).</p><p><i>VI: SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; waiting trung bình 6.5 (SJF không ngắt cho 7.75).</i></p></li><li><p><b>d)</b> 8</p><p>RR Gantt: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].</p><p><i>VI: Gantt RR: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].</i></p></li><li><p><b>b)</b> 59%</p><p>1 − 0.8⁴ = 59%.</p><p><i>VI: 1 − 0,8⁴ = 59%.</i></p></li><li><p><b>a)</b> 5.26</p><p>1 / (0.1 + 0.9/10) = 5.26 (never above 10 whatever the cores).</p><p><i>VI: 1 / (0,1 + 0,9/10) = 5,26 (không bao giờ quá 10 dù bao nhiêu lõi).</i></p></li><li><p><b>a)</b> 4 times x</p><p>Two forks give 2² = 4 processes, each prints once.</p><p><i>VI: Hai fork cho 2² = 4 tiến trình, mỗi tiến trình in một lần.</i></p></li><li><p><b>b)</b> S1 always executes before S2</p><p>B blocks on down(S) until A has finished S1 and called up.</p><p><i>VI: B bị chặn ở down(S) tới khi A xong S1 và gọi up.</i></p></li><li><p><b>a)</b> 4 MB</p><p>2²⁰ entries × 4 B = 4 MB.</p><p><i>VI: 2²⁰ mục × 4 B = 4 MB.</i></p></li><li><p><b>b)</b> 9</p><p>FIFO 9, LRU 7, OPT 6.</p><p><i>VI: FIFO 9, LRU 7, OPT 6.</i></p></li><li><p><b>d)</b> 6</p><p>OPT = 6: no algorithm can do better.</p><p><i>VI: OPT = 6: không thuật toán nào tốt hơn.</i></p></li><li><p><b>d)</b> 130 ns</p><p>0.9 × 120 + 0.1 × 220 = 130 ns.</p><p><i>VI: 0,9 × 120 + 0,1 × 220 = 130 ns.</i></p></li><li><p><b>c)</b> adding page frames can increase the number of page faults (FIFO)</p><p>It happens with FIFO; LRU and OPT are stack algorithms.</p><p><i>VI: Xảy ra với FIFO; LRU và OPT là thuật toán dạng ngăn xếp.</i></p></li><li><p><b>c)</b> 36872</p><p>8200 = page 2, offset 8 → 9 × 4096 + 8 = 36872.</p><p><i>VI: 8200 = trang 2, offset 8 → 9 × 4096 + 8 = 36872.</i></p></li><li><p><b>b)</b> thrashing</p><p>Too many processes for the available frames.</p><p><i>VI: Quá nhiều tiến trình so với số khung hiện có.</i></p></li></ol><p>Answers are listed under each question after submission; recompute any you missed with the matching lesson exercise (2.4 scheduling, 3.2 replacement, 3.3 TLB).</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "User programs may disable interrupts"
-              },
-              {
-                "ma": "b",
-                "noiDung": "A system call never changes the CPU mode"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Privileged instructions can be executed only in kernel mode"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "The shell runs in kernel mode"
+              },
+              {
+                "ma": "c",
+                "noiDung": "User programs may disable interrupts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A system call never changes the CPU mode"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Only the kernel may execute privileged instructions; a system call traps into kernel mode.</p><p><i>VI: Chỉ kernel mới chạy được lệnh đặc quyền; lời gọi hệ thống trap vào chế độ kernel.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "7.75"
+                "noiDung": "8.75"
               },
               {
                 "ma": "b",
-                "noiDung": "15.25"
-              },
-              {
-                "ma": "c",
                 "noiDung": "11.75"
               },
               {
+                "ma": "c",
+                "noiDung": "15.25"
+              },
+              {
                 "ma": "d",
-                "noiDung": "8.75"
+                "noiDung": "7.75"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>FCFS runs them in arrival order: waiting = P1: 0, P2: 7, P3: 10, P4: 18, average 8.75.</p><p><i>VI: FCFS chạy theo thứ tự đến: chờ = P1: 0, P2: 7, P3: 10, P4: 18, trung bình 8.75.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "6.5"
-              },
-              {
-                "ma": "b",
                 "noiDung": "7.75"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "8.75"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "11.75"
+              },
+              {
+                "ma": "d",
+                "noiDung": "6.5"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; average waiting 6.5 (non-preemptive SJF gives 7.75).</p><p><i>VI: SRTF: P1[0-1] P2[1-5] P4[5-10] P1[10-17] P3[17-26]; waiting trung bình 6.5 (SJF không ngắt cho 7.75).</i></p>"
           },
@@ -144,7 +144,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "8"
+                "noiDung": "5"
               },
               {
                 "ma": "c",
@@ -152,11 +152,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "5"
+                "noiDung": "8"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>RR Gantt: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].</p><p><i>VI: Gantt RR: P1[0-4] P2[4-8] P3[8-12] P4[12-16] P1[16-20] P3[20-24] P4[24-25] P3[25-26].</i></p>"
           },
@@ -170,19 +170,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "95%"
-              },
-              {
-                "ma": "c",
                 "noiDung": "59%"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "41%"
+              },
+              {
+                "ma": "d",
+                "noiDung": "95%"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>1 − 0.8⁴ = 59%.</p><p><i>VI: 1 − 0,8⁴ = 59%.</i></p>"
           },
@@ -192,23 +192,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "10"
+                "noiDung": "5.26"
               },
               {
                 "ma": "b",
-                "noiDung": "9"
-              },
-              {
-                "ma": "c",
                 "noiDung": "9.17"
               },
               {
+                "ma": "c",
+                "noiDung": "9"
+              },
+              {
                 "ma": "d",
-                "noiDung": "5.26"
+                "noiDung": "10"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>1 / (0.1 + 0.9/10) = 5.26 (never above 10 whatever the cores).</p><p><i>VI: 1 / (0,1 + 0,9/10) = 5,26 (không bao giờ quá 10 dù bao nhiêu lõi).</i></p>"
           },
@@ -222,11 +222,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "2 times x"
+                "noiDung": "3 times x"
               },
               {
                 "ma": "c",
-                "noiDung": "3 times x"
+                "noiDung": "2 times x"
               },
               {
                 "ma": "d",
@@ -244,7 +244,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A and B run in mutual exclusion"
+                "noiDung": "S2 may execute before S1"
               },
               {
                 "ma": "b",
@@ -252,7 +252,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "S2 may execute before S1"
+                "noiDung": "A and B run in mutual exclusion"
               },
               {
                 "ma": "d",
@@ -270,23 +270,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "16 MB"
-              },
-              {
-                "ma": "b",
-                "noiDung": "4 KB"
-              },
-              {
-                "ma": "c",
                 "noiDung": "4 MB"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "1 MB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "16 MB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4 KB"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>2²⁰ entries × 4 B = 4 MB.</p><p><i>VI: 2²⁰ mục × 4 B = 4 MB.</i></p>"
           },
@@ -300,7 +300,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "6"
+                "noiDung": "9"
               },
               {
                 "ma": "c",
@@ -308,11 +308,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "9"
+                "noiDung": "6"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>FIFO 9, LRU 7, OPT 6.</p><p><i>VI: FIFO 9, LRU 7, OPT 6.</i></p>"
           },
@@ -322,7 +322,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "6"
+                "noiDung": "5"
               },
               {
                 "ma": "b",
@@ -330,15 +330,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "5"
+                "noiDung": "8"
               },
               {
                 "ma": "d",
-                "noiDung": "8"
+                "noiDung": "6"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>OPT = 6: no algorithm can do better.</p><p><i>VI: OPT = 6: không thuật toán nào tốt hơn.</i></p>"
           },
@@ -348,23 +348,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "120 ns"
+                "noiDung": "140 ns"
               },
               {
                 "ma": "b",
-                "noiDung": "130 ns"
-              },
-              {
-                "ma": "c",
                 "noiDung": "110 ns"
               },
               {
+                "ma": "c",
+                "noiDung": "120 ns"
+              },
+              {
                 "ma": "d",
-                "noiDung": "140 ns"
+                "noiDung": "130 ns"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>0.9 × 120 + 0.1 × 220 = 130 ns.</p><p><i>VI: 0,9 × 120 + 0,1 × 220 = 130 ns.</i></p>"
           },
@@ -374,11 +374,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "LRU always faults more than FIFO"
+                "noiDung": "LRU always causes more page faults than FIFO on any string"
               },
               {
                 "ma": "b",
-                "noiDung": "OPT can be implemented"
+                "noiDung": "removing page frames always lowers the number of page faults"
               },
               {
                 "ma": "c",
@@ -386,7 +386,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "removing frames removes faults"
+                "noiDung": "the optimal algorithm can be implemented without future knowledge"
               }
             ],
             "dapAn": [
@@ -404,19 +404,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "20488"
-              },
-              {
-                "ma": "c",
                 "noiDung": "36864"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "36872"
+              },
+              {
+                "ma": "d",
+                "noiDung": "20488"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>8200 = page 2, offset 8 → 9 × 4096 + 8 = 36872.</p><p><i>VI: 8200 = trang 2, offset 8 → 9 × 4096 + 8 = 36872.</i></p>"
           },
@@ -426,23 +426,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "thrashing"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a race condition"
-              },
-              {
-                "ma": "c",
                 "noiDung": "internal fragmentation"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "thrashing"
+              },
+              {
+                "ma": "c",
                 "noiDung": "a deadlock"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a race condition"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Too many processes for the available frames.</p><p><i>VI: Quá nhiều tiến trình so với số khung hiện có.</i></p>"
           }
@@ -505,10 +505,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock 2 — File systems, I/O and deadlock (15 questions) — answer key\n\n1. UNIX i-node: 12 direct pointers, one single-indirect pointer, 1 KB blocks, 4-byte pointers. The maximum number of data blocks is …I-node UNIX: 12 con trỏ trực tiếp, một con trỏ gián tiếp đơn, khối 1 KB, con trỏ 4 byte. Số khối dữ liệu tối đa là …\n   Answer: c) 268\n   12 + 1024/4 = 12 + 256 = 268 blocks.VI: 12 + 1024/4 = 12 + 256 = 268 khối.\n\n2. Which item is NOT stored in a UNIX i-node?Mục nào KHÔNG được lưu trong i-node UNIX?\n   Answer: d) The file name\n   Names live in directory entries.VI: Tên nằm trong mục thư mục.\n\n3. After ln -s a s and rm a, cat s …Sau ln -s a s và rm a, cat s …\n   Answer: a) fails with “No such file or directory”\n   The symbolic link is dangling.VI: Symlink bị treo.\n\n4. umask 027: the permissions of a newly created DIRECTORY (default 777) are …umask 027: quyền của THƯ MỤC mới tạo (mặc định 777) là …\n   Answer: b) 750\n   777 & ~027 = 750.VI: 777 & ~027 = 750.\n\n5. Head at 50, requests 82 170 43 140 24 16 190. Total head movement under SSTF is …Đầu ở 50, yêu cầu 82 170 43 140 24 16 190. Tổng quãng đầu đọc theo SSTF là …\n   Answer: c) 208\n   FCFS 642, SSTF 208, SCAN(up, to 199 then back) 332, LOOK 314.VI: FCFS 642, SSTF 208, SCAN(lên, tới 199 rồi quay lại) 332, LOOK 314.\n\n6. Same queue and head, moving UP first: the total movement of LOOK is …Cùng hàng đợi và đầu đọc, đi LÊN trước: tổng quãng của LOOK là …\n   Answer: d) 314\n   LOOK goes up to the highest request (190) and back to the lowest (16): 314.VI: LOOK lên tới yêu cầu cao nhất (190) rồi về thấp nhất (16): 314.\n\n7. RAID 5 with 5 disks of 2 TB each gives a usable capacity of …RAID 5 với 5 ổ, mỗi ổ 2 TB cho dung lượng dùng được …\n   Answer: a) 8 TB\n   (5 − 1) × 2 = 8 TB.VI: (5 − 1) × 2 = 8 TB.\n\n8. The main benefit of DMA is that …Lợi ích chính của DMA là …\n   Answer: b) the CPU does not copy each byte of a block transfer\n   The CPU only programs the transfer and takes one interrupt at the end.VI: CPU chỉ lập trình chuyến chuyển và nhận một ngắt ở cuối.\n\n9. 7200 rpm disk: the average rotational latency is …Đĩa 7200 vòng/phút: độ trễ quay trung bình là …\n   Answer: c) 4.17 ms\n   A rotation takes 8.33 ms; the average wait is half: 4.17 ms.VI: Một vòng quay 8,33 ms; chờ trung bình bằng một nửa: 4,17 ms.\n\n10. Banker’s algorithm on the state: Available (3,3,2), Allocation P0 (0,1,0) P1 (2,0,0) P2 (3,0,2) P3 (2,1,1) P4 (0,0,2), Max P0 (7,5,3) P1 (3,2,2) P2 (9,0,2) P3 (2,2,2) P4 (4,3,3). Need of P1 is …Thuật toán nhà băng với trạng thái: Available (3,3,2), Allocation P0 (0,1,0) P1 (2,0,0) P2 (3,0,2) P3 (2,1,1) P4 (0,0,2), Max P0 (7,5,3) P1 (3,2,2) P2 (9,0,2) P3 (2,2,2) P4 (4,3,3). Need của P1 là …\n   Answer: d) (1,2,2)\n   Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).VI: Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).\n\n11. For that state, which statement is true?Với trạng thái đó, phát biểu nào đúng?\n   Answer: a) The state is safe; one safe sequence is\n   Work grows as processes finish; all five complete. Request P1 (1,0,2) would be GRANT.VI: Work tăng khi các tiến trình xong; cả năm đều hoàn thành. Yêu cầu P1 (1,0,2) sẽ là GRANT.\n\n12. Which set of conditions must ALL hold for a deadlock?Tập điều kiện nào PHẢI đồng thời xảy ra để có deadlock?\n   Answer: b) Mutual exclusion, hold and wait, no preemption, circular wait\n   Coffman’s four conditions.VI: Bốn điều kiện Coffman.\n\n13. Requesting resources in a fixed global order breaks which condition?Xin tài nguyên theo thứ tự toàn cục cố định phá điều kiện nào?\n   Answer: c) Circular wait\n   No cycle can form among ordered requests.VI: Không thể hình thành chu trình khi xin theo thứ tự.\n\n14. A 1 TB disk with 4 KB blocks uses a bitmap for free space. Its size is …Đĩa 1 TB, khối 4 KB dùng bitmap cho vùng trống. Kích thước bitmap là …\n   Answer: d) 32 MB\n   2⁴⁰ / 2¹² = 2²⁸ bits = 2²⁵ bytes = 32 MB.VI: 2⁴⁰ / 2¹² = 2²⁸ bit = 2²⁵ byte = 32 MB.\n\n15. In a resource-allocation graph with single-instance resources, a deadlock exists if and only if …Trong đồ thị cấp phát tài nguyên với tài nguyên một bản, có deadlock khi và chỉ khi …\n   Answer: a) the graph contains a cycle\n   With multiple instances a cycle is only necessary.VI: Với nhiều bản, chu trình chỉ là điều kiện cần.\n"
+          "code": "# FE mock 2 — File systems, I/O and deadlock (15 questions) — answer key\n\n1. UNIX i-node: 12 direct pointers, one single-indirect pointer, 1 KB blocks, 4-byte pointers. The maximum number of data blocks is …I-node UNIX: 12 con trỏ trực tiếp, một con trỏ gián tiếp đơn, khối 1 KB, con trỏ 4 byte. Số khối dữ liệu tối đa là …\n   Answer: b) 268\n   12 + 1024/4 = 12 + 256 = 268 blocks.VI: 12 + 1024/4 = 12 + 256 = 268 khối.\n\n2. Which item is NOT stored in a UNIX i-node?Mục nào KHÔNG được lưu trong i-node UNIX?\n   Answer: d) The file name\n   Names live in directory entries.VI: Tên nằm trong mục thư mục.\n\n3. After ln -s a s and rm a, cat s …Sau ln -s a s và rm a, cat s …\n   Answer: c) fails with “No such file or directory”\n   The symbolic link is dangling.VI: Symlink bị treo.\n\n4. umask 027: the permissions of a newly created DIRECTORY (default 777) are …umask 027: quyền của THƯ MỤC mới tạo (mặc định 777) là …\n   Answer: d) 750\n   777 & ~027 = 750.VI: 777 & ~027 = 750.\n\n5. Head at 50, requests 82 170 43 140 24 16 190. Total head movement under SSTF is …Đầu ở 50, yêu cầu 82 170 43 140 24 16 190. Tổng quãng đầu đọc theo SSTF là …\n   Answer: c) 208\n   FCFS 642, SSTF 208, SCAN(up, to 199 then back) 332, LOOK 314.VI: FCFS 642, SSTF 208, SCAN(lên, tới 199 rồi quay lại) 332, LOOK 314.\n\n6. Same queue and head, moving UP first: the total movement of LOOK is …Cùng hàng đợi và đầu đọc, đi LÊN trước: tổng quãng của LOOK là …\n   Answer: a) 314\n   LOOK goes up to the highest request (190) and back to the lowest (16): 314.VI: LOOK lên tới yêu cầu cao nhất (190) rồi về thấp nhất (16): 314.\n\n7. RAID 5 with 5 disks of 2 TB each gives a usable capacity of …RAID 5 với 5 ổ, mỗi ổ 2 TB cho dung lượng dùng được …\n   Answer: c) 8 TB\n   (5 − 1) × 2 = 8 TB.VI: (5 − 1) × 2 = 8 TB.\n\n8. The main benefit of DMA is that …Lợi ích chính của DMA là …\n   Answer: b) the CPU does not copy each byte of a block transfer\n   The CPU only programs the transfer and takes one interrupt at the end.VI: CPU chỉ lập trình chuyến chuyển và nhận một ngắt ở cuối.\n\n9. 7200 rpm disk: the average rotational latency is …Đĩa 7200 vòng/phút: độ trễ quay trung bình là …\n   Answer: c) 4.17 ms\n   A rotation takes 8.33 ms; the average wait is half: 4.17 ms.VI: Một vòng quay 8,33 ms; chờ trung bình bằng một nửa: 4,17 ms.\n\n10. Banker’s algorithm on the state: Available (3,3,2), Allocation P0 (0,1,0) P1 (2,0,0) P2 (3,0,2) P3 (2,1,1) P4 (0,0,2), Max P0 (7,5,3) P1 (3,2,2) P2 (9,0,2) P3 (2,2,2) P4 (4,3,3). Need of P1 is …Thuật toán nhà băng với trạng thái: Available (3,3,2), Allocation P0 (0,1,0) P1 (2,0,0) P2 (3,0,2) P3 (2,1,1) P4 (0,0,2), Max P0 (7,5,3) P1 (3,2,2) P2 (9,0,2) P3 (2,2,2) P4 (4,3,3). Need của P1 là …\n   Answer: c) (1,2,2)\n   Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).VI: Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).\n\n11. For that state, which statement is true?Với trạng thái đó, phát biểu nào đúng?\n   Answer: d) The state is safe; one safe sequence is <P1, P3, P0, P2, P4>\n   Work grows as processes finish; all five complete. Request P1 (1,0,2) would be GRANT.VI: Work tăng khi các tiến trình xong; cả năm đều hoàn thành. Yêu cầu P1 (1,0,2) sẽ là GRANT.\n\n12. Which set of conditions must ALL hold for a deadlock?Tập điều kiện nào PHẢI đồng thời xảy ra để có deadlock?\n   Answer: c) Mutual exclusion, hold and wait, no preemption, circular wait\n   Coffman’s four conditions.VI: Bốn điều kiện Coffman.\n\n13. Requesting resources in a fixed global order breaks which condition?Xin tài nguyên theo thứ tự toàn cục cố định phá điều kiện nào?\n   Answer: a) Circular wait\n   No cycle can form among ordered requests.VI: Không thể hình thành chu trình khi xin theo thứ tự.\n\n14. A 1 TB disk with 4 KB blocks uses a bitmap for free space. Its size is …Đĩa 1 TB, khối 4 KB dùng bitmap cho vùng trống. Kích thước bitmap là …\n   Answer: d) 32 MB\n   2⁴⁰ / 2¹² = 2²⁸ bits = 2²⁵ bytes = 32 MB.VI: 2⁴⁰ / 2¹² = 2²⁸ bit = 2²⁵ byte = 32 MB.\n\n15. In a resource-allocation graph with single-instance resources, a deadlock exists if and only if …Trong đồ thị cấp phát tài nguyên với tài nguyên một bản, có deadlock khi và chỉ khi …\n   Answer: d) the graph contains a cycle\n   With multiple instances a cycle is only necessary.VI: Với nhiều bản, chu trình chỉ là điều kiện cần.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Review lessons 4.2 (i-nodes), 5.2 (disk scheduling) and 6.2 (Banker) for the questions you missed.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 268</p><p>12 + 1024/4 = 12 + 256 = 268 blocks.</p><p><i>VI: 12 + 1024/4 = 12 + 256 = 268 khối.</i></p></li><li><p><b>d)</b> The file name</p><p>Names live in directory entries.</p><p><i>VI: Tên nằm trong mục thư mục.</i></p></li><li><p><b>c)</b> fails with “No such file or directory”</p><p>The symbolic link is dangling.</p><p><i>VI: Symlink bị treo.</i></p></li><li><p><b>d)</b> 750</p><p>777 & ~027 = 750.</p><p><i>VI: 777 & ~027 = 750.</i></p></li><li><p><b>c)</b> 208</p><p>FCFS 642, SSTF 208, SCAN(up, to 199 then back) 332, LOOK 314.</p><p><i>VI: FCFS 642, SSTF 208, SCAN(lên, tới 199 rồi quay lại) 332, LOOK 314.</i></p></li><li><p><b>a)</b> 314</p><p>LOOK goes up to the highest request (190) and back to the lowest (16): 314.</p><p><i>VI: LOOK lên tới yêu cầu cao nhất (190) rồi về thấp nhất (16): 314.</i></p></li><li><p><b>c)</b> 8 TB</p><p>(5 − 1) × 2 = 8 TB.</p><p><i>VI: (5 − 1) × 2 = 8 TB.</i></p></li><li><p><b>b)</b> the CPU does not copy each byte of a block transfer</p><p>The CPU only programs the transfer and takes one interrupt at the end.</p><p><i>VI: CPU chỉ lập trình chuyến chuyển và nhận một ngắt ở cuối.</i></p></li><li><p><b>c)</b> 4.17 ms</p><p>A rotation takes 8.33 ms; the average wait is half: 4.17 ms.</p><p><i>VI: Một vòng quay 8,33 ms; chờ trung bình bằng một nửa: 4,17 ms.</i></p></li><li><p><b>c)</b> (1,2,2)</p><p>Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).</p><p><i>VI: Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).</i></p></li><li><p><b>d)</b> The state is safe; one safe sequence is &lt;P1, P3, P0, P2, P4&gt;</p><p>Work grows as processes finish; all five complete. Request P1 (1,0,2) would be GRANT.</p><p><i>VI: Work tăng khi các tiến trình xong; cả năm đều hoàn thành. Yêu cầu P1 (1,0,2) sẽ là GRANT.</i></p></li><li><p><b>c)</b> Mutual exclusion, hold and wait, no preemption, circular wait</p><p>Coffman’s four conditions.</p><p><i>VI: Bốn điều kiện Coffman.</i></p></li><li><p><b>a)</b> Circular wait</p><p>No cycle can form among ordered requests.</p><p><i>VI: Không thể hình thành chu trình khi xin theo thứ tự.</i></p></li><li><p><b>d)</b> 32 MB</p><p>2⁴⁰ / 2¹² = 2²⁸ bits = 2²⁵ bytes = 32 MB.</p><p><i>VI: 2⁴⁰ / 2¹² = 2²⁸ bit = 2²⁵ byte = 32 MB.</i></p></li><li><p><b>d)</b> the graph contains a cycle</p><p>With multiple instances a cycle is only necessary.</p><p><i>VI: Với nhiều bản, chu trình chỉ là điều kiện cần.</i></p></li></ol><p>Review lessons 4.2 (i-nodes), 5.2 (disk scheduling) and 6.2 (Banker) for the questions you missed.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -521,23 +521,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "3072"
+                "noiDung": "1036"
               },
               {
                 "ma": "b",
-                "noiDung": "256"
-              },
-              {
-                "ma": "c",
                 "noiDung": "268"
               },
               {
+                "ma": "c",
+                "noiDung": "3072"
+              },
+              {
                 "ma": "d",
-                "noiDung": "1036"
+                "noiDung": "256"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>12 + 1024/4 = 12 + 256 = 268 blocks.</p><p><i>VI: 12 + 1024/4 = 12 + 256 = 268 khối.</i></p>"
           },
@@ -573,23 +573,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "fails with “No such file or directory”"
+                "noiDung": "prints the name “a”"
               },
               {
                 "ma": "b",
-                "noiDung": "prints the old content of a"
-              },
-              {
-                "ma": "c",
                 "noiDung": "creates a new a"
               },
               {
+                "ma": "c",
+                "noiDung": "fails with “No such file or directory”"
+              },
+              {
                 "ma": "d",
-                "noiDung": "prints the name “a”"
+                "noiDung": "prints the old content of a"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>The symbolic link is dangling.</p><p><i>VI: Symlink bị treo.</i></p>"
           },
@@ -599,23 +599,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "751"
-              },
-              {
-                "ma": "b",
-                "noiDung": "750"
-              },
-              {
-                "ma": "c",
                 "noiDung": "755"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "640"
+              },
+              {
+                "ma": "c",
+                "noiDung": "751"
+              },
+              {
+                "ma": "d",
+                "noiDung": "750"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>777 & ~027 = 750.</p><p><i>VI: 777 & ~027 = 750.</i></p>"
           },
@@ -625,11 +625,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "332"
+                "noiDung": "642"
               },
               {
                 "ma": "b",
-                "noiDung": "314"
+                "noiDung": "332"
               },
               {
                 "ma": "c",
@@ -637,7 +637,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "642"
+                "noiDung": "314"
               }
             ],
             "dapAn": [
@@ -651,23 +651,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "332"
+                "noiDung": "314"
               },
               {
                 "ma": "b",
-                "noiDung": "208"
-              },
-              {
-                "ma": "c",
                 "noiDung": "642"
               },
               {
+                "ma": "c",
+                "noiDung": "208"
+              },
+              {
                 "ma": "d",
-                "noiDung": "314"
+                "noiDung": "332"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>LOOK goes up to the highest request (190) and back to the lowest (16): 314.</p><p><i>VI: LOOK lên tới yêu cầu cao nhất (190) rồi về thấp nhất (16): 314.</i></p>"
           },
@@ -677,7 +677,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "8 TB"
+                "noiDung": "4 TB"
               },
               {
                 "ma": "b",
@@ -685,15 +685,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "6 TB"
+                "noiDung": "8 TB"
               },
               {
                 "ma": "d",
-                "noiDung": "4 TB"
+                "noiDung": "6 TB"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>(5 − 1) × 2 = 8 TB.</p><p><i>VI: (5 − 1) × 2 = 8 TB.</i></p>"
           },
@@ -703,7 +703,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "memory becomes faster"
+                "noiDung": "no interrupt is needed at the end of the transfer"
               },
               {
                 "ma": "b",
@@ -711,11 +711,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "no interrupt is ever needed"
+                "noiDung": "main memory runs faster during a block transfer"
               },
               {
                 "ma": "d",
-                "noiDung": "devices need no driver"
+                "noiDung": "the operating system needs no driver for the device"
               }
             ],
             "dapAn": [
@@ -759,19 +759,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "(2,0,0)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "(3,2,2)"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "(1,2,2)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(2,0,0)"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).</p><p><i>VI: Need = Max − Allocation = (3,2,2) − (2,0,0) = (1,2,2).</i></p>"
           },
@@ -781,23 +781,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The state is safe; one safe sequence is <P1, P3, P0, P2, P4>"
+                "noiDung": "No process can ever finish, because Available is smaller than every Max"
               },
               {
                 "ma": "b",
-                "noiDung": "The state is unsafe"
+                "noiDung": "The state is unsafe; no process can get its full Need from Available"
               },
               {
                 "ma": "c",
-                "noiDung": "The system is deadlocked"
+                "noiDung": "The system is deadlocked; every process already waits for another"
               },
               {
                 "ma": "d",
-                "noiDung": "No process can ever finish"
+                "noiDung": "The state is safe; one safe sequence is &lt;P1, P3, P0, P2, P4&gt;"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Work grows as processes finish; all five complete. Request P1 (1,0,2) would be GRANT.</p><p><i>VI: Work tăng khi các tiến trình xong; cả năm đều hoàn thành. Yêu cầu P1 (1,0,2) sẽ là GRANT.</i></p>"
           },
@@ -807,23 +807,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Race, starvation, aging, preemption"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Mutual exclusion, hold and wait, no preemption, circular wait"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Mutual exclusion, starvation, aging, circular wait"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Hold and wait, preemption, paging, spooling"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mutual exclusion, hold and wait, no preemption, circular wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Race, starvation, aging, preemption"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Coffman’s four conditions.</p><p><i>VI: Bốn điều kiện Coffman.</i></p>"
           },
@@ -833,23 +833,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Hold and wait"
-              },
-              {
-                "ma": "b",
-                "noiDung": "No preemption"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Circular wait"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Mutual exclusion"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hold and wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No preemption"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>No cycle can form among ordered requests.</p><p><i>VI: Không thể hình thành chu trình khi xin theo thứ tự.</i></p>"
           },
@@ -859,7 +859,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4 MB"
+                "noiDung": "128 MB"
               },
               {
                 "ma": "b",
@@ -867,7 +867,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "128 MB"
+                "noiDung": "4 MB"
               },
               {
                 "ma": "d",
@@ -885,23 +885,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the graph contains a cycle"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a process has no outgoing edge"
-              },
-              {
-                "ma": "c",
                 "noiDung": "there are more processes than resources"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "a resource has two edges"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a process has no outgoing edge"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the graph contains a cycle"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>With multiple instances a cycle is only necessary.</p><p><i>VI: Với nhiều bản, chu trình chỉ là điều kiện cần.</i></p>"
           }
@@ -964,10 +964,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# FE mock 3 — Mixed paper with Linux, security and virtualization (15 questions) — answer key\n\n1. In a NUMA multiprocessor, …Trong hệ đa xử lý NUMA, …\n   Answer: b) the access time to memory depends on which memory module is addressed\n   Non-Uniform Memory Access: local memory is faster than remote memory.VI: Truy cập bộ nhớ không đồng đều: bộ nhớ cục bộ nhanh hơn từ xa.\n\n2. Two threads on different cores update different variables that share one cache line, slowing each other. This is called …Hai luồng trên hai lõi cập nhật các biến khác nhau nằm cùng một dòng cache và làm chậm nhau. Hiện tượng này gọi là …\n   Answer: c) false sharing\n   The cache-coherence protocol bounces the line between the cores.VI: Giao thức nhất quán cache chuyền dòng cache qua lại giữa các lõi.\n\n3. The principle of least privilege says that …Nguyên tắc đặc quyền tối thiểu nói rằng …\n   Answer: d) every process should run with only the rights it needs\n   It limits the damage of a compromised program.VI: Nó giới hạn thiệt hại khi một chương trình bị chiếm quyền.\n\n4. A buffer overflow on the stack is dangerous mainly because it can …Tràn bộ đệm trên stack nguy hiểm chủ yếu vì có thể …\n   Answer: a) overwrite the saved return address and redirect execution\n   Control-flow hijack; defences include stack canaries, NX and ASLR.VI: Chiếm điều khiển luồng chạy; phòng thủ gồm canary, NX và ASLR.\n\n5. Why are passwords stored as salted hashes?Vì sao mật khẩu được lưu dạng băm có muối (salt)?\n   Answer: b) A random salt per user defeats precomputed (rainbow) tables and makes identical passwords hash differently\n   The salt is stored with the hash; it is not secret.VI: Salt được lưu cùng giá trị băm; nó không bí mật.\n\n6. Access-control list versus capability: which is correct?Danh sách kiểm soát truy cập (ACL) so với capability: phát biểu nào đúng?\n   Answer: c) An ACL is stored with the object (who may access it); a capability is held by the subject (what it may access)\n   Two views of the access matrix: columns (ACL) and rows (capabilities).VI: Hai cách nhìn ma trận truy cập: theo cột (ACL) và theo hàng (capability).\n\n7. A Type 1 hypervisor …Hypervisor loại 1 …\n   Answer: d) runs directly on the hardware and hosts guest operating systems\n   Type 2 runs on top of a host OS.VI: Loại 2 chạy trên một OS chủ.\n\n8. Containers on Linux differ from virtual machines in that …Container trên Linux khác máy ảo ở chỗ …\n   Answer: a) they share the host kernel and are isolated with namespaces and cgroups\n   That is why containers start in milliseconds but cannot run a different kernel.VI: Vì vậy container khởi động trong mili giây nhưng không chạy được kernel khác.\n\n9. On Linux, fork() is cheap mainly because of …Trên Linux fork() rẻ chủ yếu nhờ …\n   Answer: b) copy-on-write: parent and child share pages until one writes\n   Pages are marked read-only and copied lazily on the first write.VI: Trang đánh dấu chỉ đọc và chỉ sao chép khi có ghi đầu tiên.\n\n10. In bash, cmd1 | cmd2 connects …Trong bash, cmd1 | cmd2 nối …\n   Answer: c) the standard output of cmd1 to the standard input of cmd2\n   Both processes run concurrently, connected by a pipe.VI: Cả hai tiến trình chạy đồng thời, nối bằng pipe.\n\n11. x=5; echo $((x*2+1)) prints …x=5; echo $((x*2+1)) in ra …\n   Answer: d) 11\n   Arithmetic expansion: 5×2+1 = 11.VI: Khai triển số học: 5×2+1 = 11.\n\n12. A process receives SIGKILL. Which statement is correct?Một tiến trình nhận SIGKILL. Phát biểu nào đúng?\n   Answer: a) It cannot be caught, blocked or ignored\n   SIGTERM allows cleanup; SIGKILL does not.VI: SIGTERM cho phép dọn dẹp; SIGKILL thì không.\n\n13. A server process allocates 2 GB, but only 600 MB of its pages have ever been touched. Its resident set (RSS) is about …Tiến trình máy chủ cấp phát 2 GB nhưng chỉ chạm tới 600 MB trang. RSS của nó xấp xỉ …\n   Answer: b) 600 MB\n   RSS counts pages actually in RAM; VSZ counts the allocation (2 GB).VI: RSS đếm trang thực sự trong RAM; VSZ đếm phần đã cấp (2 GB).\n\n14. A container exits with code 137. The most likely cause is …Container thoát với mã 137. Nguyên nhân khả dĩ nhất là …\n   Answer: c) it was killed by SIGKILL (128 + 9), typically by the OOM killer\n   Exit code = 128 + signal number: 137 = 128 + 9; a clean SIGTERM would give 143.VI: Mã thoát = 128 + số tín hiệu: 137 = 128 + 9; SIGTERM sạch cho 143.\n\n15. Which design lets a single thread serve thousands of idle connections efficiently on Linux?Thiết kế nào cho phép một luồng phục vụ hàng nghìn kết nối rảnh hiệu quả trên Linux?\n   Answer: d) Non-blocking sockets with epoll (event loop)\n   epoll reports only the ready descriptors, so the cost does not grow with idle connections.VI: epoll chỉ báo các descriptor đã sẵn sàng nên chi phí không tăng theo số kết nối rảnh.\n"
+          "code": "# FE mock 3 — Mixed paper with Linux, security and virtualization (15 questions) — answer key\n\n1. In a NUMA multiprocessor, …Trong hệ đa xử lý NUMA, …\n   Answer: c) the access time to memory depends on which memory module is addressed\n   Non-Uniform Memory Access: local memory is faster than remote memory.VI: Truy cập bộ nhớ không đồng đều: bộ nhớ cục bộ nhanh hơn từ xa.\n\n2. Two threads on different cores update different variables that share one cache line, slowing each other. This is called …Hai luồng trên hai lõi cập nhật các biến khác nhau nằm cùng một dòng cache và làm chậm nhau. Hiện tượng này gọi là …\n   Answer: b) false sharing\n   The cache-coherence protocol bounces the line between the cores.VI: Giao thức nhất quán cache chuyền dòng cache qua lại giữa các lõi.\n\n3. The principle of least privilege says that …Nguyên tắc đặc quyền tối thiểu nói rằng …\n   Answer: b) every process should run with only the rights it needs\n   It limits the damage of a compromised program.VI: Nó giới hạn thiệt hại khi một chương trình bị chiếm quyền.\n\n4. A buffer overflow on the stack is dangerous mainly because it can …Tràn bộ đệm trên stack nguy hiểm chủ yếu vì có thể …\n   Answer: c) overwrite the saved return address and redirect execution\n   Control-flow hijack; defences include stack canaries, NX and ASLR.VI: Chiếm điều khiển luồng chạy; phòng thủ gồm canary, NX và ASLR.\n\n5. Why are passwords stored as salted hashes?Vì sao mật khẩu được lưu dạng băm có muối (salt)?\n   Answer: c) A random salt per user defeats precomputed (rainbow) tables and makes identical passwords hash differently\n   The salt is stored with the hash; it is not secret.VI: Salt được lưu cùng giá trị băm; nó không bí mật.\n\n6. Access-control list versus capability: which is correct?Danh sách kiểm soát truy cập (ACL) so với capability: phát biểu nào đúng?\n   Answer: b) An ACL is stored with the object (who may access it); a capability is held by the subject (what it may access)\n   Two views of the access matrix: columns (ACL) and rows (capabilities).VI: Hai cách nhìn ma trận truy cập: theo cột (ACL) và theo hàng (capability).\n\n7. A Type 1 hypervisor …Hypervisor loại 1 …\n   Answer: a) runs directly on the hardware and hosts guest operating systems\n   Type 2 runs on top of a host OS.VI: Loại 2 chạy trên một OS chủ.\n\n8. Containers on Linux differ from virtual machines in that …Container trên Linux khác máy ảo ở chỗ …\n   Answer: b) they share the host kernel and are isolated with namespaces and cgroups\n   That is why containers start in milliseconds but cannot run a different kernel.VI: Vì vậy container khởi động trong mili giây nhưng không chạy được kernel khác.\n\n9. On Linux, fork() is cheap mainly because of …Trên Linux fork() rẻ chủ yếu nhờ …\n   Answer: a) copy-on-write: parent and child share pages until one writes\n   Pages are marked read-only and copied lazily on the first write.VI: Trang đánh dấu chỉ đọc và chỉ sao chép khi có ghi đầu tiên.\n\n10. In bash, cmd1 | cmd2 connects …Trong bash, cmd1 | cmd2 nối …\n   Answer: a) the standard output of cmd1 to the standard input of cmd2\n   Both processes run concurrently, connected by a pipe.VI: Cả hai tiến trình chạy đồng thời, nối bằng pipe.\n\n11. x=5; echo $((x*2+1)) prints …x=5; echo $((x*2+1)) in ra …\n   Answer: a) 11\n   Arithmetic expansion: 5×2+1 = 11.VI: Khai triển số học: 5×2+1 = 11.\n\n12. A process receives SIGKILL. Which statement is correct?Một tiến trình nhận SIGKILL. Phát biểu nào đúng?\n   Answer: b) It cannot be caught, blocked or ignored\n   SIGTERM allows cleanup; SIGKILL does not.VI: SIGTERM cho phép dọn dẹp; SIGKILL thì không.\n\n13. A server process allocates 2 GB, but only 600 MB of its pages have ever been touched. Its resident set (RSS) is about …Tiến trình máy chủ cấp phát 2 GB nhưng chỉ chạm tới 600 MB trang. RSS của nó xấp xỉ …\n   Answer: c) 600 MB\n   RSS counts pages actually in RAM; VSZ counts the allocation (2 GB).VI: RSS đếm trang thực sự trong RAM; VSZ đếm phần đã cấp (2 GB).\n\n14. A container exits with code 137. The most likely cause is …Container thoát với mã 137. Nguyên nhân khả dĩ nhất là …\n   Answer: a) it was killed by SIGKILL (128 + 9), typically by the OOM killer\n   Exit code = 128 + signal number: 137 = 128 + 9; a clean SIGTERM would give 143.VI: Mã thoát = 128 + số tín hiệu: 137 = 128 + 9; SIGTERM sạch cho 143.\n\n15. Which design lets a single thread serve thousands of idle connections efficiently on Linux?Thiết kế nào cho phép một luồng phục vụ hàng nghìn kết nối rảnh hiệu quả trên Linux?\n   Answer: d) Non-blocking sockets with epoll (event loop)\n   epoll reports only the ready descriptors, so the cost does not grow with idle connections.VI: epoll chỉ báo các descriptor đã sẵn sàng nên chi phí không tăng theo số kết nối rảnh.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Review the matching lessons: chapter 8–10 summaries and the CS.5–CS.7 backend lessons.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> the access time to memory depends on which memory module is addressed</p><p>Non-Uniform Memory Access: local memory is faster than remote memory.</p><p><i>VI: Truy cập bộ nhớ không đồng đều: bộ nhớ cục bộ nhanh hơn từ xa.</i></p></li><li><p><b>b)</b> false sharing</p><p>The cache-coherence protocol bounces the line between the cores.</p><p><i>VI: Giao thức nhất quán cache chuyền dòng cache qua lại giữa các lõi.</i></p></li><li><p><b>b)</b> every process should run with only the rights it needs</p><p>It limits the damage of a compromised program.</p><p><i>VI: Nó giới hạn thiệt hại khi một chương trình bị chiếm quyền.</i></p></li><li><p><b>c)</b> overwrite the saved return address and redirect execution</p><p>Control-flow hijack; defences include stack canaries, NX and ASLR.</p><p><i>VI: Chiếm điều khiển luồng chạy; phòng thủ gồm canary, NX và ASLR.</i></p></li><li><p><b>c)</b> A random salt per user defeats precomputed (rainbow) tables and makes identical passwords hash differently</p><p>The salt is stored with the hash; it is not secret.</p><p><i>VI: Salt được lưu cùng giá trị băm; nó không bí mật.</i></p></li><li><p><b>b)</b> An ACL is stored with the object (who may access it); a capability is held by the subject (what it may access)</p><p>Two views of the access matrix: columns (ACL) and rows (capabilities).</p><p><i>VI: Hai cách nhìn ma trận truy cập: theo cột (ACL) và theo hàng (capability).</i></p></li><li><p><b>a)</b> runs directly on the hardware and hosts guest operating systems</p><p>Type 2 runs on top of a host OS.</p><p><i>VI: Loại 2 chạy trên một OS chủ.</i></p></li><li><p><b>b)</b> they share the host kernel and are isolated with namespaces and cgroups</p><p>That is why containers start in milliseconds but cannot run a different kernel.</p><p><i>VI: Vì vậy container khởi động trong mili giây nhưng không chạy được kernel khác.</i></p></li><li><p><b>a)</b> copy-on-write: parent and child share pages until one writes</p><p>Pages are marked read-only and copied lazily on the first write.</p><p><i>VI: Trang đánh dấu chỉ đọc và chỉ sao chép khi có ghi đầu tiên.</i></p></li><li><p><b>a)</b> the standard output of cmd1 to the standard input of cmd2</p><p>Both processes run concurrently, connected by a pipe.</p><p><i>VI: Cả hai tiến trình chạy đồng thời, nối bằng pipe.</i></p></li><li><p><b>a)</b> 11</p><p>Arithmetic expansion: 5×2+1 = 11.</p><p><i>VI: Khai triển số học: 5×2+1 = 11.</i></p></li><li><p><b>b)</b> It cannot be caught, blocked or ignored</p><p>SIGTERM allows cleanup; SIGKILL does not.</p><p><i>VI: SIGTERM cho phép dọn dẹp; SIGKILL thì không.</i></p></li><li><p><b>c)</b> 600 MB</p><p>RSS counts pages actually in RAM; VSZ counts the allocation (2 GB).</p><p><i>VI: RSS đếm trang thực sự trong RAM; VSZ đếm phần đã cấp (2 GB).</i></p></li><li><p><b>a)</b> it was killed by SIGKILL (128 + 9), typically by the OOM killer</p><p>Exit code = 128 + signal number: 137 = 128 + 9; a clean SIGTERM would give 143.</p><p><i>VI: Mã thoát = 128 + số tín hiệu: 137 = 128 + 9; SIGTERM sạch cho 143.</i></p></li><li><p><b>d)</b> Non-blocking sockets with epoll (event loop)</p><p>epoll reports only the ready descriptors, so the cost does not grow with idle connections.</p><p><i>VI: epoll chỉ báo các descriptor đã sẵn sàng nên chi phí không tăng theo số kết nối rảnh.</i></p></li></ol><p>Review the matching lessons: chapter 8–10 summaries and the CS.5–CS.7 backend lessons.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -980,23 +980,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "caches are unnecessary"
+                "noiDung": "there is no shared address space"
               },
               {
                 "ma": "b",
-                "noiDung": "the access time to memory depends on which memory module is addressed"
-              },
-              {
-                "ma": "c",
                 "noiDung": "all memory is equally far from all CPUs"
               },
               {
+                "ma": "c",
+                "noiDung": "the access time to memory depends on which memory module is addressed"
+              },
+              {
                 "ma": "d",
-                "noiDung": "there is no shared address space"
+                "noiDung": "caches are unnecessary"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Non-Uniform Memory Access: local memory is faster than remote memory.</p><p><i>VI: Truy cập bộ nhớ không đồng đều: bộ nhớ cục bộ nhanh hơn từ xa.</i></p>"
           },
@@ -1006,23 +1006,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "priority inversion"
+                "noiDung": "a deadlock"
               },
               {
                 "ma": "b",
-                "noiDung": "Belady’s anomaly"
-              },
-              {
-                "ma": "c",
                 "noiDung": "false sharing"
               },
               {
+                "ma": "c",
+                "noiDung": "Belady’s anomaly"
+              },
+              {
                 "ma": "d",
-                "noiDung": "a deadlock"
+                "noiDung": "priority inversion"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>The cache-coherence protocol bounces the line between the cores.</p><p><i>VI: Giao thức nhất quán cache chuyền dòng cache qua lại giữa các lõi.</i></p>"
           },
@@ -1032,23 +1032,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "every user should be root"
-              },
-              {
-                "ma": "b",
-                "noiDung": "files should be world-writable"
-              },
-              {
-                "ma": "c",
                 "noiDung": "passwords should be short"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "every process should run with only the rights it needs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "every user should be root"
+              },
+              {
+                "ma": "d",
+                "noiDung": "files should be world-writable"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>It limits the damage of a compromised program.</p><p><i>VI: Nó giới hạn thiệt hại khi một chương trình bị chiếm quyền.</i></p>"
           },
@@ -1058,23 +1058,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "overwrite the saved return address and redirect execution"
+                "noiDung": "delete the TLB entries of every other running process"
               },
               {
                 "ma": "b",
-                "noiDung": "slow down the disk"
+                "noiDung": "change the page size of the process and confuse the MMU"
               },
               {
                 "ma": "c",
-                "noiDung": "change the page size"
+                "noiDung": "overwrite the saved return address and redirect execution"
               },
               {
                 "ma": "d",
-                "noiDung": "delete the TLB"
+                "noiDung": "slow down the disk because the stack is written to swap"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Control-flow hijack; defences include stack canaries, NX and ASLR.</p><p><i>VI: Chiếm điều khiển luồng chạy; phòng thủ gồm canary, NX và ASLR.</i></p>"
           },
@@ -1084,23 +1084,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The salt is the secret key"
+                "noiDung": "A random salt per user makes the hash reversible, so the system can recover a lost password"
               },
               {
                 "ma": "b",
-                "noiDung": "A random salt per user defeats precomputed (rainbow) tables and makes identical passwords hash differently"
+                "noiDung": "A random salt per user shortens every hash, so the password file takes less disk space"
               },
               {
                 "ma": "c",
-                "noiDung": "Salt makes the hash reversible"
+                "noiDung": "A random salt per user defeats precomputed (rainbow) tables and makes identical passwords hash differently"
               },
               {
                 "ma": "d",
-                "noiDung": "Salt shortens the hash"
+                "noiDung": "The salt is a secret key shared by all users, so a stolen hash file cannot be read at all"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>The salt is stored with the hash; it is not secret.</p><p><i>VI: Salt được lưu cùng giá trị băm; nó không bí mật.</i></p>"
           },
@@ -1110,23 +1110,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A capability is a list stored in the file"
+                "noiDung": "An ACL and a capability are both lists stored in the file; they differ only in the format of their entries"
               },
               {
                 "ma": "b",
-                "noiDung": "An ACL is held by the process"
-              },
-              {
-                "ma": "c",
                 "noiDung": "An ACL is stored with the object (who may access it); a capability is held by the subject (what it may access)"
               },
               {
+                "ma": "c",
+                "noiDung": "Both are stored only with the object, but an ACL names users while a capability names groups"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Both are stored only with the object"
+                "noiDung": "An ACL is held by the subject (what it may access); a capability is stored with the object (who may access it)"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Two views of the access matrix: columns (ACL) and rows (capabilities).</p><p><i>VI: Hai cách nhìn ma trận truy cập: theo cột (ACL) và theo hàng (capability).</i></p>"
           },
@@ -1136,7 +1136,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "runs as an ordinary application on a host OS"
+                "noiDung": "runs directly on the hardware and hosts guest operating systems"
               },
               {
                 "ma": "b",
@@ -1144,15 +1144,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "needs no CPU support"
+                "noiDung": "runs as an ordinary application on a host OS"
               },
               {
                 "ma": "d",
-                "noiDung": "runs directly on the hardware and hosts guest operating systems"
+                "noiDung": "needs no CPU support"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Type 2 runs on top of a host OS.</p><p><i>VI: Loại 2 chạy trên một OS chủ.</i></p>"
           },
@@ -1162,23 +1162,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "they share the host kernel and are isolated with namespaces and cgroups"
+                "noiDung": "each boots its own kernel, and only the disk image is shared with the host"
               },
               {
                 "ma": "b",
-                "noiDung": "each has its own kernel"
+                "noiDung": "they share the host kernel and are isolated with namespaces and cgroups"
               },
               {
                 "ma": "c",
-                "noiDung": "they need a hypervisor"
+                "noiDung": "they cannot limit memory or CPU, because cgroups exist only for virtual machines"
               },
               {
                 "ma": "d",
-                "noiDung": "they cannot limit memory"
+                "noiDung": "they need a hypervisor that emulates a full set of hardware devices"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>That is why containers start in milliseconds but cannot run a different kernel.</p><p><i>VI: Vì vậy container khởi động trong mili giây nhưng không chạy được kernel khác.</i></p>"
           },
@@ -1188,23 +1188,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a larger page size"
-              },
-              {
-                "ma": "b",
                 "noiDung": "copy-on-write: parent and child share pages until one writes"
               },
               {
+                "ma": "b",
+                "noiDung": "a larger page size that shrinks the page table to copy"
+              },
+              {
                 "ma": "c",
-                "noiDung": "copying all memory at once"
+                "noiDung": "copying all memory at once with a fast DMA transfer"
               },
               {
                 "ma": "d",
-                "noiDung": "running in user mode only"
+                "noiDung": "running only in user mode, without a system call"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Pages are marked read-only and copied lazily on the first write.</p><p><i>VI: Trang đánh dấu chỉ đọc và chỉ sao chép khi có ghi đầu tiên.</i></p>"
           },
@@ -1214,23 +1214,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "stderr of cmd2 to cmd1"
-              },
-              {
-                "ma": "b",
-                "noiDung": "the files of both commands"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the standard output of cmd1 to the standard input of cmd2"
               },
               {
+                "ma": "b",
+                "noiDung": "the standard error of cmd2 to the standard input of cmd1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the open files of cmd1 to the open files of cmd2"
+              },
+              {
                 "ma": "d",
-                "noiDung": "the exit status of cmd1 to cmd2"
+                "noiDung": "the exit status of cmd1 to the arguments of cmd2"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Both processes run concurrently, connected by a pipe.</p><p><i>VI: Cả hai tiến trình chạy đồng thời, nối bằng pipe.</i></p>"
           },
@@ -1240,7 +1240,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "10"
+                "noiDung": "11"
               },
               {
                 "ma": "b",
@@ -1248,15 +1248,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "12"
+                "noiDung": "10"
               },
               {
                 "ma": "d",
-                "noiDung": "11"
+                "noiDung": "12"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Arithmetic expansion: 5×2+1 = 11.</p><p><i>VI: Khai triển số học: 5×2+1 = 11.</i></p>"
           },
@@ -1266,11 +1266,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It cannot be caught, blocked or ignored"
+                "noiDung": "The process can run a cleanup handler"
               },
               {
                 "ma": "b",
-                "noiDung": "The process can run a cleanup handler"
+                "noiDung": "It cannot be caught, blocked or ignored"
               },
               {
                 "ma": "c",
@@ -1282,7 +1282,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>SIGTERM allows cleanup; SIGKILL does not.</p><p><i>VI: SIGTERM cho phép dọn dẹp; SIGKILL thì không.</i></p>"
           },
@@ -1296,19 +1296,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "600 MB"
+                "noiDung": "1448 MB"
               },
               {
                 "ma": "c",
-                "noiDung": "2048 MB"
+                "noiDung": "600 MB"
               },
               {
                 "ma": "d",
-                "noiDung": "1448 MB"
+                "noiDung": "2048 MB"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>RSS counts pages actually in RAM; VSZ counts the allocation (2 GB).</p><p><i>VI: RSS đếm trang thực sự trong RAM; VSZ đếm phần đã cấp (2 GB).</i></p>"
           },
@@ -1318,23 +1318,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a syntax error in the shell script"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a clean SIGTERM shutdown"
-              },
-              {
-                "ma": "c",
                 "noiDung": "it was killed by SIGKILL (128 + 9), typically by the OOM killer"
               },
               {
+                "ma": "b",
+                "noiDung": "it stopped on a clean SIGTERM shutdown (128 + 15) after docker stop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it finished successfully, and 137 is the normal exit code of a container"
+              },
+              {
                 "ma": "d",
-                "noiDung": "it finished successfully"
+                "noiDung": "the entrypoint had a syntax error, which the shell reports as code 137"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Exit code = 128 + signal number: 137 = 128 + 9; a clean SIGTERM would give 143.</p><p><i>VI: Mã thoát = 128 + số tín hiệu: 137 = 128 + 9; SIGTERM sạch cho 143.</i></p>"
           },
@@ -1344,15 +1344,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "One blocking thread per connection with a 8 MB stack"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Busy polling each socket in a loop"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "fork() per connection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One blocking thread per connection with a 8 MB stack"
               },
               {
                 "ma": "d",

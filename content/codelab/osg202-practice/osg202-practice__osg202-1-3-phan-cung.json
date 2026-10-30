@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Hardware 1 — Interrupts, traps and the memory hierarchy (concepts) — answer key\n\n1. What is the difference between an interrupt and a trap?Interrupt khác trap ở chỗ nào?\n   Answer: b) An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)\n   Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.\n\n2. Where does the CPU find the address of the interrupt handler?CPU tìm địa chỉ trình xử lý ngắt ở đâu?\n   Answer: c) In the interrupt vector table, indexed by the interrupt number\n   The vector holds one handler address per interrupt number.VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.\n\n3. Going down the memory hierarchy (registers → cache → RAM → disk), capacity …Đi xuống tầng bộ nhớ (thanh ghi → cache → RAM → đĩa), dung lượng …\n   Answer: d) increases while speed decreases and cost per byte falls\n   The classic trade-off: faster memory is smaller and costlier.VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.\n\n4. Why does caching work?Vì sao cache hoạt động hiệu quả?\n   Answer: a) Programs show locality of reference (temporal and spatial)\n   Recently used data and its neighbours are likely to be used again.VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.\n\n5. While an interrupt handler runs, the OS usually …Trong lúc trình xử lý ngắt chạy, OS thường …\n   Answer: b) masks (disables) interrupts of the same or lower priority for a short time\n   Handlers must be short and non-reentrant for the same line; the heavy part is deferred.VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.\n"
+          "code": "# Hardware 1 — Interrupts, traps and the memory hierarchy (concepts) — answer key\n\n1. What is the difference between an interrupt and a trap?Interrupt khác trap ở chỗ nào?\n   Answer: c) An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)\n   Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.\n\n2. Where does the CPU find the address of the interrupt handler?CPU tìm địa chỉ trình xử lý ngắt ở đâu?\n   Answer: c) In the interrupt vector table, indexed by the interrupt number\n   The vector holds one handler address per interrupt number.VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.\n\n3. Going down the memory hierarchy (registers → cache → RAM → disk), capacity …Đi xuống tầng bộ nhớ (thanh ghi → cache → RAM → đĩa), dung lượng …\n   Answer: b) increases while speed decreases and cost per byte falls\n   The classic trade-off: faster memory is smaller and costlier.VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.\n\n4. Why does caching work?Vì sao cache hoạt động hiệu quả?\n   Answer: b) Programs show locality of reference (temporal and spatial)\n   Recently used data and its neighbours are likely to be used again.VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.\n\n5. While an interrupt handler runs, the OS usually …Trong lúc trình xử lý ngắt chạy, OS thường …\n   Answer: c) masks (disables) interrupts of the same or lower priority for a short time\n   Handlers must be short and non-reentrant for the same line; the heavy part is deferred.VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>b · c · d · a · b.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)</p><p>Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.</p><p><i>VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.</i></p></li><li><p><b>c)</b> In the interrupt vector table, indexed by the interrupt number</p><p>The vector holds one handler address per interrupt number.</p><p><i>VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.</i></p></li><li><p><b>b)</b> increases while speed decreases and cost per byte falls</p><p>The classic trade-off: faster memory is smaller and costlier.</p><p><i>VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.</i></p></li><li><p><b>b)</b> Programs show locality of reference (temporal and spatial)</p><p>Recently used data and its neighbours are likely to be used again.</p><p><i>VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.</i></p></li><li><p><b>c)</b> masks (disables) interrupts of the same or lower priority for a short time</p><p>Handlers must be short and non-reentrant for the same line; the heavy part is deferred.</p><p><i>VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Interrupts only happen in user mode"
+                "noiDung": "They are identical: both are synchronous and both are raised by the running instruction"
               },
               {
                 "ma": "b",
-                "noiDung": "An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)"
+                "noiDung": "A trap is asynchronous (a device signals); an interrupt is synchronous (caused by the instruction)"
               },
               {
                 "ma": "c",
-                "noiDung": "They are identical"
+                "noiDung": "An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)"
               },
               {
                 "ma": "d",
-                "noiDung": "Traps come from devices"
+                "noiDung": "An interrupt happens only in user mode; a trap happens only in kernel mode"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.</p><p><i>VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.</i></p>"
           },
@@ -90,11 +90,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "In the register file"
+                "noiDung": "In the register file, in a register reserved for each device"
               },
               {
                 "ma": "b",
-                "noiDung": "On the disk"
+                "noiDung": "In the TLB, indexed by the virtual page of the device"
               },
               {
                 "ma": "c",
@@ -102,7 +102,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "In the TLB"
+                "noiDung": "On the disk, in a file named after the device driver"
               }
             ],
             "dapAn": [
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "decreases and speed increases"
+                "noiDung": "stays the same while speed and cost per byte both fall"
               },
               {
                 "ma": "b",
-                "noiDung": "stays the same"
+                "noiDung": "increases while speed decreases and cost per byte falls"
               },
               {
                 "ma": "c",
-                "noiDung": "increases together with speed"
+                "noiDung": "increases while speed increases and cost per byte falls"
               },
               {
                 "ma": "d",
-                "noiDung": "increases while speed decreases and cost per byte falls"
+                "noiDung": "decreases while speed decreases and cost per byte rises"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>The classic trade-off: faster memory is smaller and costlier.</p><p><i>VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Programs show locality of reference (temporal and spatial)"
+                "noiDung": "The OS prefetches every page of a program when it starts"
               },
               {
                 "ma": "b",
-                "noiDung": "The cache is bigger than RAM"
+                "noiDung": "Programs show locality of reference (temporal and spatial)"
               },
               {
                 "ma": "c",
-                "noiDung": "Memory is always idle"
+                "noiDung": "Main memory is idle most of the time and can answer early"
               },
               {
                 "ma": "d",
-                "noiDung": "The OS prefetches everything"
+                "noiDung": "The cache is bigger than RAM, so most data fit inside it"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Recently used data and its neighbours are likely to be used again.</p><p><i>VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.</i></p>"
           },
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "reboots the device"
+                "noiDung": "reboots the device that raised the interrupt, then clears the pending flag"
               },
               {
                 "ma": "b",
-                "noiDung": "masks (disables) interrupts of the same or lower priority for a short time"
+                "noiDung": "keeps every interrupt enabled, so that a handler can nest without any limit"
               },
               {
                 "ma": "c",
-                "noiDung": "keeps all interrupts enabled"
+                "noiDung": "masks (disables) interrupts of the same or lower priority for a short time"
               },
               {
                 "ma": "d",
-                "noiDung": "switches to a user process"
+                "noiDung": "switches to a user process, which finishes the work of the handler"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Handlers must be short and non-reentrant for the same line; the heavy part is deferred.</p><p><i>VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.</i></p>"
           }
@@ -384,7 +384,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Hardware 3 — Order the steps of interrupt handling — answer key\n\n1. Interrupt handlingXử lý ngắt\n   Answer: s1) The device raises an interrupt request on its line  →  s2) The CPU finishes the current instruction  →  s3) The CPU pushes the program counter and status word on the stack and switches to kernel mode  →  s4) The CPU loads the handler address from the interrupt vector  →  s5) The handler saves the registers it will use, services the device and restores the registers  →  s6) The return-from-interrupt instruction restores PC and status; the interrupted program continues\n   The CPU is never interrupted in the middle of an instruction; it saves just enough state in hardware, jumps through the vector, and the handler restores everything before the return.VI: CPU không bao giờ bị ngắt giữa chừng một lệnh; phần cứng lưu đủ trạng thái tối thiểu, nhảy qua vector, và trình xử lý khôi phục mọi thứ trước khi quay lại.\n"
+          "code": "# Hardware 3 — Order the steps of interrupt handling — answer key\n\n1. Interrupt handlingXử lý ngắt\n   Answer: m2) The device raises an interrupt request on its line  →  m4) The CPU finishes the current instruction  →  m5) The CPU pushes the program counter and status word on the stack and switches to kernel mode  →  m3) The CPU loads the handler address from the interrupt vector  →  m1) The handler saves the registers it will use, services the device and restores the registers  →  m6) The return-from-interrupt instruction restores PC and status; the interrupted program continues\n   The CPU is never interrupted in the middle of an instruction; it saves just enough state in hardware, jumps through the vector, and the handler restores everything before the return.VI: CPU không bao giờ bị ngắt giữa chừng một lệnh; phần cứng lưu đủ trạng thái tối thiểu, nhảy qua vector, và trình xử lý khôi phục mọi thứ trước khi quay lại.\n"
         }
       ],
       "solutionExplanationHtml": "<p>request → finish instruction → push PC/PSW + kernel mode → vector → handler → return.</p>",
@@ -399,37 +399,37 @@
             "de": "<p>Interrupt handling</p><p style=\"opacity:.75;font-size:.92em\"><i>Xử lý ngắt</i></p>",
             "muc": [
               {
-                "ma": "s3",
-                "noiDung": "The CPU pushes the program counter and status word on the stack and switches to kernel mode"
-              },
-              {
-                "ma": "s4",
-                "noiDung": "The CPU loads the handler address from the interrupt vector"
-              },
-              {
-                "ma": "s5",
+                "ma": "m1",
                 "noiDung": "The handler saves the registers it will use, services the device and restores the registers"
               },
               {
-                "ma": "s6",
-                "noiDung": "The return-from-interrupt instruction restores PC and status; the interrupted program continues"
-              },
-              {
-                "ma": "s1",
+                "ma": "m2",
                 "noiDung": "The device raises an interrupt request on its line"
               },
               {
-                "ma": "s2",
+                "ma": "m3",
+                "noiDung": "The CPU loads the handler address from the interrupt vector"
+              },
+              {
+                "ma": "m4",
                 "noiDung": "The CPU finishes the current instruction"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The CPU pushes the program counter and status word on the stack and switches to kernel mode"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The return-from-interrupt instruction restores PC and status; the interrupted program continues"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6"
+              "m2",
+              "m4",
+              "m5",
+              "m3",
+              "m1",
+              "m6"
             ],
             "giaiThich": "<p>The CPU is never interrupted in the middle of an instruction; it saves just enough state in hardware, jumps through the vector, and the handler restores everything before the return.</p><p><i>VI: CPU không bao giờ bị ngắt giữa chừng một lệnh; phần cứng lưu đủ trạng thái tối thiểu, nhảy qua vector, và trình xử lý khôi phục mọi thứ trước khi quay lại.</i></p>"
           }

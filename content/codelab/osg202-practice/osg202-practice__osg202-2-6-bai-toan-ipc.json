@@ -175,7 +175,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Classical IPC 2 — Order the producer, then spot the deadlock — answer key\n\n1. Correct producer bodyThân nhà sản xuất đúng\n   Answer: s1) down(empty)  →  s2) down(mutex)  →  s3) insert_item(item)  →  s4) up(mutex)  →  s5) up(full)\n   Wait for a free slot (empty) BEFORE taking the mutex; then insert under the mutex; release the mutex; finally announce the new item with up(full). If the producer took the mutex first and the buffer were full, it would sleep on empty while holding the mutex, so the consumer could never enter to free a slot: deadlock.VI: Chờ ô trống (empty) TRƯỚC khi lấy mutex; chèn trong mutex; nhả mutex; cuối cùng báo có mục mới bằng up(full). Nếu lấy mutex trước và bộ đệm đầy, nhà sản xuất ngủ trên empty khi đang giữ mutex nên người tiêu thụ không vào được để giải phóng ô: deadlock.\n"
+          "code": "# Classical IPC 2 — Order the producer, then spot the deadlock — answer key\n\n1. Correct producer bodyThân nhà sản xuất đúng\n   Answer: m4) down(empty)  →  m1) down(mutex)  →  m5) insert_item(item)  →  m3) up(mutex)  →  m2) up(full)\n   Wait for a free slot (empty) BEFORE taking the mutex; then insert under the mutex; release the mutex; finally announce the new item with up(full). If the producer took the mutex first and the buffer were full, it would sleep on empty while holding the mutex, so the consumer could never enter to free a slot: deadlock.VI: Chờ ô trống (empty) TRƯỚC khi lấy mutex; chèn trong mutex; nhả mutex; cuối cùng báo có mục mới bằng up(full). Nếu lấy mutex trước và bộ đệm đầy, nhà sản xuất ngủ trên empty khi đang giữ mutex nên người tiêu thụ không vào được để giải phóng ô: deadlock.\n"
         }
       ],
       "solutionExplanationHtml": "<p>down(empty) → down(mutex) → insert → up(mutex) → up(full).</p>",
@@ -190,32 +190,32 @@
             "de": "<p>Correct producer body</p><p style=\"opacity:.75;font-size:.92em\"><i>Thân nhà sản xuất đúng</i></p>",
             "muc": [
               {
-                "ma": "s3",
-                "noiDung": "insert_item(item)"
+                "ma": "m1",
+                "noiDung": "down(mutex)"
               },
               {
-                "ma": "s4",
-                "noiDung": "up(mutex)"
-              },
-              {
-                "ma": "s5",
+                "ma": "m2",
                 "noiDung": "up(full)"
               },
               {
-                "ma": "s1",
+                "ma": "m3",
+                "noiDung": "up(mutex)"
+              },
+              {
+                "ma": "m4",
                 "noiDung": "down(empty)"
               },
               {
-                "ma": "s2",
-                "noiDung": "down(mutex)"
+                "ma": "m5",
+                "noiDung": "insert_item(item)"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m4",
+              "m1",
+              "m5",
+              "m3",
+              "m2"
             ],
             "giaiThich": "<p>Wait for a free slot (empty) BEFORE taking the mutex; then insert under the mutex; release the mutex; finally announce the new item with up(full). If the producer took the mutex first and the buffer were full, it would sleep on empty while holding the mutex, so the consumer could never enter to free a slot: deadlock.</p><p><i>VI: Chờ ô trống (empty) TRƯỚC khi lấy mutex; chèn trong mutex; nhả mutex; cuối cùng báo có mục mới bằng up(full). Nếu lấy mutex trước và bộ đệm đầy, nhà sản xuất ngủ trên empty khi đang giữ mutex nên người tiêu thụ không vào được để giải phóng ô: deadlock.</i></p>"
           }
@@ -280,10 +280,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Classical IPC 3 — Readers–writers and the philosophers (concepts) — answer key\n\n1. In the classic readers–writers solution (reader preference) which process can starve?Trong lời giải readers–writers kinh điển (ưu tiên người đọc), tiến trình nào có thể bị đói?\n   Answer: c) A writer, if readers keep arriving\n   As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.\n\n2. How many readers may read the same file at the same time?Có thể có bao nhiêu reader đọc cùng một tệp đồng thời?\n   Answer: d) Any number\n   Reading does not change data, so readers share; only a writer needs exclusive access.VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.\n\n3. Five philosophers each pick up the LEFT fork first, then the right fork. What can happen?Năm triết gia mỗi người cầm đũa TRÁI trước rồi mới đũa phải. Điều gì có thể xảy ra?\n   Answer: a) Deadlock: everybody holds the left fork and waits for the right one\n   If all five take the left fork at the same moment, a circular wait exists.VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.\n\n4. Which fix does NOT remove the deadlock of the naive philosophers?Cách sửa nào KHÔNG loại bỏ được deadlock của triết gia ngây thơ?\n   Answer: b) Add a 1-second sleep between taking the left and the right fork\n   A delay only changes timing; the circular wait can still form. The others break circular wait (b, c) or hold-and-wait (d).VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Các cách còn lại phá chờ vòng (b, c) hoặc giữ-và-chờ (d).\n\n5. A solution in which a philosopher puts the left fork down and retries when the right fork is busy risks …Giải pháp mà triết gia đặt đũa trái xuống và thử lại khi đũa phải bận có nguy cơ …\n   Answer: c) Livelock / starvation: everybody keeps retrying in lockstep\n   Processes are active but make no progress: livelock, a form of starvation.VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.\n"
+          "code": "# Classical IPC 3 — Readers–writers and the philosophers (concepts) — answer key\n\n1. In the classic readers–writers solution (reader preference) which process can starve?Trong lời giải readers–writers kinh điển (ưu tiên người đọc), tiến trình nào có thể bị đói?\n   Answer: b) A writer, if readers keep arriving\n   As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.\n\n2. How many readers may read the same file at the same time?Có thể có bao nhiêu reader đọc cùng một tệp đồng thời?\n   Answer: b) Any number\n   Reading does not change data, so readers share; only a writer needs exclusive access.VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.\n\n3. Five philosophers each pick up the LEFT fork first, then the right fork. What can happen?Năm triết gia mỗi người cầm đũa TRÁI trước rồi mới đũa phải. Điều gì có thể xảy ra?\n   Answer: a) Deadlock: everybody holds the left fork and waits for the right one\n   If all five take the left fork at the same moment, a circular wait exists.VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.\n\n4. Which fix does NOT remove the deadlock of the naive philosophers?Cách sửa nào KHÔNG loại bỏ được deadlock của triết gia ngây thơ?\n   Answer: d) Add a 1-second sleep between taking the left and the right fork\n   A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.\n\n5. A solution in which a philosopher puts the left fork down and retries when the right fork is busy risks …Giải pháp mà triết gia đặt đũa trái xuống và thử lại khi đũa phải bận có nguy cơ …\n   Answer: a) Livelock / starvation: everybody keeps retrying in lockstep\n   Processes are active but make no progress: livelock, a form of starvation.VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>c · d · a · b · c.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A writer, if readers keep arriving</p><p>As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.</p><p><i>VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.</i></p></li><li><p><b>b)</b> Any number</p><p>Reading does not change data, so readers share; only a writer needs exclusive access.</p><p><i>VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.</i></p></li><li><p><b>a)</b> Deadlock: everybody holds the left fork and waits for the right one</p><p>If all five take the left fork at the same moment, a circular wait exists.</p><p><i>VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.</i></p></li><li><p><b>d)</b> Add a 1-second sleep between taking the left and the right fork</p><p>A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.</p><p><i>VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.</i></p></li><li><p><b>a)</b> Livelock / starvation: everybody keeps retrying in lockstep</p><p>Processes are active but make no progress: livelock, a form of starvation.</p><p><i>VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -300,11 +300,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Neither; it is starvation-free"
+                "noiDung": "A writer, if readers keep arriving"
               },
               {
                 "ma": "c",
-                "noiDung": "A writer, if readers keep arriving"
+                "noiDung": "Neither; it is starvation-free"
               },
               {
                 "ma": "d",
@@ -312,7 +312,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.</p><p><i>VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.</i></p>"
           },
@@ -326,7 +326,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "At most two"
+                "noiDung": "Any number"
               },
               {
                 "ma": "c",
@@ -334,11 +334,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Any number"
+                "noiDung": "At most two"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Reading does not change data, so readers share; only a writer needs exclusive access.</p><p><i>VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.</i></p>"
           },
@@ -352,15 +352,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Nothing bad, it is correct"
+                "noiDung": "Only starvation: one philosopher eats again and again"
               },
               {
                 "ma": "c",
-                "noiDung": "Only starvation"
+                "noiDung": "Nothing bad: taking forks in one direction is the fix"
               },
               {
                 "ma": "d",
-                "noiDung": "A race condition on the table"
+                "noiDung": "A race condition: two philosophers hold the same fork"
               }
             ],
             "dapAn": [
@@ -374,25 +374,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Take both forks atomically under a mutex"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Add a 1-second sleep between taking the left and the right fork"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Allow at most 4 philosophers to sit down"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Number the forks and always take the lower number first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Take both forks atomically under a mutex"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Add a 1-second sleep between taking the left and the right fork"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
-            "giaiThich": "<p>A delay only changes timing; the circular wait can still form. The others break circular wait (b, c) or hold-and-wait (d).</p><p><i>VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Các cách còn lại phá chờ vòng (b, c) hoặc giữ-và-chờ (d).</i></p>"
+            "giaiThich": "<p>A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.</p><p><i>VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.</i></p>"
           },
           {
             "ma": "c5",
@@ -400,23 +400,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Buffer overflow"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Priority inversion"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Livelock / starvation: everybody keeps retrying in lockstep"
               },
               {
+                "ma": "b",
+                "noiDung": "Priority inversion: a low-priority philosopher blocks a high one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deadlock only: all of them block for ever holding one fork"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Deadlock only"
+                "noiDung": "Buffer overflow: the queue of waiting forks grows without limit"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Processes are active but make no progress: livelock, a form of starvation.</p><p><i>VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.</i></p>"
           }
@@ -484,7 +484,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Classical IPC 4 — Dining philosophers: which Coffman condition does each strategy break? — answer key\n\n1. Strategy → conditionChiến lược → điều kiện\n   - r0.c: None (deadlock possible)\n   - r1.c: Circular wait\n   - r2.c: Circular wait\n   - r3.c: Hold and wait\n   - r4.c: Circular wait\n   Naive: simulated — the plans [[0,1],[1,2],[2,3],[3,4],[4,0]] give deadlock=true. Alternating and ordering prevent a cycle in the wait-for graph (circular wait); the 4-seat rule leaves at least one philosopher able to get both forks (circular wait); the global mutex makes the acquisition of both forks one step (no hold-and-wait).VI: Ngây thơ: mô phỏng — kế hoạch [[0,1],[1,2],[2,3],[3,4],[4,0]] cho deadlock=true. Đổi chiều và đánh số đũa ngăn chu trình trong đồ thị chờ (chờ vòng); luật 4 chỗ ngồi để luôn có người lấy đủ hai đũa (chờ vòng); mutex toàn cục biến việc lấy hai đũa thành một bước (không giữ-và-chờ).\n"
+          "code": "# Classical IPC 4 — Dining philosophers: which Coffman condition does each strategy break? — answer key\n\n1. Strategy → conditionChiến lược → điều kiện\n   - r0.c: None (deadlock possible)\n   - r1.c: Circular wait\n   - r2.c: Circular wait\n   - r3.c: Hold and wait\n   - r4.c: Circular wait\n   Naive: simulated — the plans [[0,1],[1,2],[2,3],[3,4],[4,0]] give deadlock=true. Alternating and ordering prevent a cycle in the wait-for graph (circular wait); the 4-seat rule leaves at least one philosopher able to get both forks (circular wait); the global mutex makes the acquisition of both forks one step taken only when both are free (nobody holds one fork while waiting for the other: no hold-and-wait).VI: Ngây thơ: mô phỏng — kế hoạch [[0,1],[1,2],[2,3],[3,4],[4,0]] cho deadlock=true. Đổi chiều và đánh số đũa ngăn chu trình trong đồ thị chờ (chờ vòng); luật 4 chỗ ngồi để luôn có người lấy đủ hai đũa (chờ vòng); mutex toàn cục biến việc lấy hai đũa thành một bước, chỉ làm khi cả hai đũa rảnh (không ai giữ một đũa để chờ đũa kia: không giữ-và-chờ).\n"
         }
       ],
       "solutionExplanationHtml": "<p>None · Circular wait · Circular wait · Hold and wait · Circular wait.</p>",
@@ -535,7 +535,7 @@
               {
                 "ma": "r3",
                 "o": {
-                  "s": "A philosopher locks a global mutex, takes both forks, unlocks the mutex"
+                  "s": "A philosopher locks a global mutex, takes the two forks only if both are free (otherwise unlocks and retries later), unlocks the mutex"
                 }
               },
               {
@@ -552,7 +552,7 @@
               "r3.c": "Hold and wait",
               "r4.c": "Circular wait"
             },
-            "giaiThich": "<p>Naive: simulated — the plans [[0,1],[1,2],[2,3],[3,4],[4,0]] give deadlock=true. Alternating and ordering prevent a cycle in the wait-for graph (circular wait); the 4-seat rule leaves at least one philosopher able to get both forks (circular wait); the global mutex makes the acquisition of both forks one step (no hold-and-wait).</p><p><i>VI: Ngây thơ: mô phỏng — kế hoạch [[0,1],[1,2],[2,3],[3,4],[4,0]] cho deadlock=true. Đổi chiều và đánh số đũa ngăn chu trình trong đồ thị chờ (chờ vòng); luật 4 chỗ ngồi để luôn có người lấy đủ hai đũa (chờ vòng); mutex toàn cục biến việc lấy hai đũa thành một bước (không giữ-và-chờ).</i></p>"
+            "giaiThich": "<p>Naive: simulated — the plans [[0,1],[1,2],[2,3],[3,4],[4,0]] give deadlock=true. Alternating and ordering prevent a cycle in the wait-for graph (circular wait); the 4-seat rule leaves at least one philosopher able to get both forks (circular wait); the global mutex makes the acquisition of both forks one step taken only when both are free (nobody holds one fork while waiting for the other: no hold-and-wait).</p><p><i>VI: Ngây thơ: mô phỏng — kế hoạch [[0,1],[1,2],[2,3],[3,4],[4,0]] cho deadlock=true. Đổi chiều và đánh số đũa ngăn chu trình trong đồ thị chờ (chờ vòng); luật 4 chỗ ngồi để luôn có người lấy đủ hai đũa (chờ vòng); mutex toàn cục biến việc lấy hai đũa thành một bước, chỉ làm khi cả hai đũa rảnh (không ai giữ một đũa để chờ đũa kia: không giữ-và-chờ).</i></p>"
           }
         ]
       },

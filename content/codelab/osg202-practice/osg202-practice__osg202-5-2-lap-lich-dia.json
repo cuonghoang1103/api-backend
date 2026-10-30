@@ -276,7 +276,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Disk 3 — Order the requests as SSTF serves them — answer key\n\n1. SSTF service orderThứ tự phục vụ SSTF\n   Answer: c43) 43  →  c24) 24  →  c16) 16  →  c82) 82  →  c140) 140  →  c170) 170  →  c190) 190\n   50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (total 208). Notice how the head drifts to one side first: far requests such as 190 wait last (starvation risk).VI: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (tổng 208). Đầu đọc trôi về một phía trước: yêu cầu xa như 190 bị chờ lâu nhất (nguy cơ đói).\n"
+          "code": "# Disk 3 — Order the requests as SSTF serves them — answer key\n\n1. SSTF service orderThứ tự phục vụ SSTF\n   Answer: m5) 43  →  m7) 24  →  m4) 16  →  m2) 82  →  m3) 140  →  m6) 170  →  m1) 190\n   50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (total 208). Notice how the head drifts to one side first: far requests such as 190 wait last (starvation risk).VI: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (tổng 208). Đầu đọc trôi về một phía trước: yêu cầu xa như 190 bị chờ lâu nhất (nguy cơ đói).\n"
         }
       ],
       "solutionExplanationHtml": "<p>43 → 24 → 16 → 82 → 140 → 170 → 190</p>",
@@ -291,42 +291,42 @@
             "de": "<p>SSTF service order</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự phục vụ SSTF</i></p>",
             "muc": [
               {
-                "ma": "c82",
-                "noiDung": "82"
-              },
-              {
-                "ma": "c140",
-                "noiDung": "140"
-              },
-              {
-                "ma": "c170",
-                "noiDung": "170"
-              },
-              {
-                "ma": "c190",
+                "ma": "m1",
                 "noiDung": "190"
               },
               {
-                "ma": "c43",
+                "ma": "m2",
+                "noiDung": "82"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "140"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "16"
+              },
+              {
+                "ma": "m5",
                 "noiDung": "43"
               },
               {
-                "ma": "c24",
-                "noiDung": "24"
+                "ma": "m6",
+                "noiDung": "170"
               },
               {
-                "ma": "c16",
-                "noiDung": "16"
+                "ma": "m7",
+                "noiDung": "24"
               }
             ],
             "dapAn": [
-              "c43",
-              "c24",
-              "c16",
-              "c82",
-              "c140",
-              "c170",
-              "c190"
+              "m5",
+              "m7",
+              "m4",
+              "m2",
+              "m3",
+              "m6",
+              "m1"
             ],
             "giaiThich": "<p>50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (total 208). Notice how the head drifts to one side first: far requests such as 190 wait last (starvation risk).</p><p><i>VI: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (tổng 208). Đầu đọc trôi về một phía trước: yêu cầu xa như 190 bị chờ lâu nhất (nguy cơ đói).</i></p>"
           }
@@ -389,7 +389,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Disk 4 — Order the requests as SCAN serves them (moving down first) — answer key\n\n1. SCAN order (down first)Thứ tự SCAN (đi xuống trước)\n   Answer: c43) 43  →  c24) 24  →  c16) 16  →  c82) 82  →  c140) 140  →  c170) 170  →  c190) 190\n   Down: 43, 24, 16; the head goes to cylinder 0, reverses, then up: 82, 140, 170, 190. Total movement 240 cylinders.VI: Đi xuống: 43, 24, 16; đầu chạy tới cylinder 0, đảo chiều rồi đi lên: 82, 140, 170, 190. Tổng 240 cylinder.\n"
+          "code": "# Disk 4 — Order the requests as SCAN serves them (moving down first) — answer key\n\n1. SCAN order (down first)Thứ tự SCAN (đi xuống trước)\n   Answer: m3) 43  →  m6) 24  →  m1) 16  →  m4) 82  →  m5) 140  →  m7) 170  →  m2) 190\n   Down: 43, 24, 16; the head goes to cylinder 0, reverses, then up: 82, 140, 170, 190. Total movement 240 cylinders.VI: Đi xuống: 43, 24, 16; đầu chạy tới cylinder 0, đảo chiều rồi đi lên: 82, 140, 170, 190. Tổng 240 cylinder.\n"
         }
       ],
       "solutionExplanationHtml": "<p>43 → 24 → 16 → 82 → 140 → 170 → 190; total 240.</p>",
@@ -404,42 +404,42 @@
             "de": "<p>SCAN order (down first)</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự SCAN (đi xuống trước)</i></p>",
             "muc": [
               {
-                "ma": "c16",
+                "ma": "m1",
                 "noiDung": "16"
               },
               {
-                "ma": "c82",
-                "noiDung": "82"
-              },
-              {
-                "ma": "c140",
-                "noiDung": "140"
-              },
-              {
-                "ma": "c170",
-                "noiDung": "170"
-              },
-              {
-                "ma": "c190",
+                "ma": "m2",
                 "noiDung": "190"
               },
               {
-                "ma": "c43",
+                "ma": "m3",
                 "noiDung": "43"
               },
               {
-                "ma": "c24",
+                "ma": "m4",
+                "noiDung": "82"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "140"
+              },
+              {
+                "ma": "m6",
                 "noiDung": "24"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "170"
               }
             ],
             "dapAn": [
-              "c43",
-              "c24",
-              "c16",
-              "c82",
-              "c140",
-              "c170",
-              "c190"
+              "m3",
+              "m6",
+              "m1",
+              "m4",
+              "m5",
+              "m7",
+              "m2"
             ],
             "giaiThich": "<p>Down: 43, 24, 16; the head goes to cylinder 0, reverses, then up: 82, 140, 170, 190. Total movement 240 cylinders.</p><p><i>VI: Đi xuống: 43, 24, 16; đầu chạy tới cylinder 0, đảo chiều rồi đi lên: 82, 140, 170, 190. Tổng 240 cylinder.</i></p>"
           }
@@ -502,10 +502,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Disk 5 — Which algorithm for which workload? — answer key\n\n1. Which algorithm can starve requests far from the head?Thuật toán nào có thể làm đói các yêu cầu ở xa đầu đọc?\n   Answer: d) SSTF\n   If new requests keep arriving near the head, SSTF never goes to the far ones.VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.\n\n2. Which algorithm gives the most uniform waiting time?Thuật toán nào cho thời gian chờ đồng đều nhất?\n   Answer: a) C-SCAN\n   C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.\n\n3. Under a very heavy load, which choice is usually best?Khi tải rất nặng, lựa chọn nào thường tốt nhất?\n   Answer: b) SCAN or C-SCAN (or their LOOK variants)\n   Sweep-based algorithms bound the waiting time and keep the head moving efficiently.VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.\n\n4. Why does disk scheduling matter much less for an SSD?Vì sao lập lịch đĩa ít quan trọng hơn nhiều với SSD?\n   Answer: c) There is no mechanical seek or rotation\n   Seek and rotational delay are what these algorithms reduce.VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.\n\n5. When the queue holds a single request, all disk-scheduling algorithms …Khi hàng đợi chỉ có một yêu cầu, mọi thuật toán lập lịch đĩa …\n   Answer: d) behave the same (no choice to make)\n   Scheduling only helps when several requests are pending.VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.\n"
+          "code": "# Disk 5 — Which algorithm for which workload? — answer key\n\n1. Which algorithm can starve requests far from the head?Thuật toán nào có thể làm đói các yêu cầu ở xa đầu đọc?\n   Answer: c) SSTF\n   If new requests keep arriving near the head, SSTF never goes to the far ones.VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.\n\n2. Which algorithm gives the most uniform waiting time?Thuật toán nào cho thời gian chờ đồng đều nhất?\n   Answer: b) C-SCAN\n   C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.\n\n3. Under a very heavy load, which choice is usually best?Khi tải rất nặng, lựa chọn nào thường tốt nhất?\n   Answer: d) SCAN or C-SCAN (or their LOOK variants)\n   Sweep-based algorithms bound the waiting time and keep the head moving efficiently.VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.\n\n4. Why does disk scheduling matter much less for an SSD?Vì sao lập lịch đĩa ít quan trọng hơn nhiều với SSD?\n   Answer: b) There is no mechanical seek or rotation\n   Seek and rotational delay are what these algorithms reduce.VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.\n\n5. When the queue holds a single request, all disk-scheduling algorithms …Khi hàng đợi chỉ có một yêu cầu, mọi thuật toán lập lịch đĩa …\n   Answer: a) behave the same (no choice to make)\n   Scheduling only helps when several requests are pending.VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> SSTF</p><p>If new requests keep arriving near the head, SSTF never goes to the far ones.</p><p><i>VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.</i></p></li><li><p><b>b)</b> C-SCAN</p><p>C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.</p><p><i>VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.</i></p></li><li><p><b>d)</b> SCAN or C-SCAN (or their LOOK variants)</p><p>Sweep-based algorithms bound the waiting time and keep the head moving efficiently.</p><p><i>VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.</i></p></li><li><p><b>b)</b> There is no mechanical seek or rotation</p><p>Seek and rotational delay are what these algorithms reduce.</p><p><i>VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.</i></p></li><li><p><b>a)</b> behave the same (no choice to make)</p><p>Scheduling only helps when several requests are pending.</p><p><i>VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -518,23 +518,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SCAN"
-              },
-              {
-                "ma": "b",
                 "noiDung": "C-SCAN"
               },
               {
+                "ma": "b",
+                "noiDung": "SCAN"
+              },
+              {
                 "ma": "c",
-                "noiDung": "FCFS"
+                "noiDung": "SSTF"
               },
               {
                 "ma": "d",
-                "noiDung": "SSTF"
+                "noiDung": "FCFS"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>If new requests keep arriving near the head, SSTF never goes to the far ones.</p><p><i>VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.</i></p>"
           },
@@ -544,15 +544,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "C-SCAN"
+                "noiDung": "SCAN"
               },
               {
                 "ma": "b",
-                "noiDung": "SSTF"
+                "noiDung": "C-SCAN"
               },
               {
                 "ma": "c",
-                "noiDung": "SCAN"
+                "noiDung": "SSTF"
               },
               {
                 "ma": "d",
@@ -560,7 +560,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.</p><p><i>VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.</i></p>"
           },
@@ -570,11 +570,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Always the shortest request"
+                "noiDung": "Random order"
               },
               {
                 "ma": "b",
-                "noiDung": "SCAN or C-SCAN (or their LOOK variants)"
+                "noiDung": "Always the shortest request"
               },
               {
                 "ma": "c",
@@ -582,11 +582,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Random order"
+                "noiDung": "SCAN or C-SCAN (or their LOOK variants)"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Sweep-based algorithms bound the waiting time and keep the head moving efficiently.</p><p><i>VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.</i></p>"
           },
@@ -596,23 +596,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SSDs are slower"
-              },
-              {
-                "ma": "b",
                 "noiDung": "The OS cannot see SSDs"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "There is no mechanical seek or rotation"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "SSDs have no requests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SSDs are slower"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Seek and rotational delay are what these algorithms reduce.</p><p><i>VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.</i></p>"
           },
@@ -622,7 +622,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "differ greatly"
+                "noiDung": "behave the same (no choice to make)"
               },
               {
                 "ma": "b",
@@ -634,11 +634,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "behave the same (no choice to make)"
+                "noiDung": "differ greatly"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Scheduling only helps when several requests are pending.</p><p><i>VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.</i></p>"
           }

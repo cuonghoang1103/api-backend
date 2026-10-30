@@ -136,7 +136,7 @@
       "glossaryJson": [
         {
           "en": "turnaround time",
-          "vi": "thời gian hoàn thành: từ lúc đến tới lúc xong"
+          "vi": "thời gian quay vòng: từ lúc đến tới lúc xong"
         },
         {
           "en": "waiting time",
@@ -190,10 +190,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Scheduling 2 — Which algorithm? (convoy effect, starvation, quantum) — answer key\n\n1. One CPU-bound process holds the CPU for a long time while many short I/O-bound processes queue behind it. This is called the …Một tiến trình nặng CPU giữ CPU rất lâu trong khi nhiều tiến trình I/O ngắn xếp hàng sau nó. Hiện tượng này gọi là …\n   Answer: d) Convoy effect\n   The convoy effect appears with FCFS: short jobs wait behind one long job.VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.\n\n2. Which non-preemptive algorithm gives the MINIMUM average waiting time when all burst times are known and all processes arrive together?Thuật toán không ngắt nào cho thời gian chờ trung bình NHỎ NHẤT khi biết trước burst và mọi tiến trình đến cùng lúc?\n   Answer: b) SJF\n   SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).\n\n3. A low-priority process may never get the CPU while higher-priority processes keep arriving. The usual cure is …Tiến trình ưu tiên thấp có thể không bao giờ được CPU khi tiến trình ưu tiên cao liên tục đến. Cách chữa thường dùng là …\n   Answer: b) Aging — gradually raise the priority of waiting processes\n   Starvation is cured by aging: priority grows with waiting time.VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.\n\n4. Round Robin with a very LARGE quantum behaves like …Round Robin với quantum RẤT LỚN hoạt động giống …\n   Answer: c) FCFS\n   If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.\n\n5. Which statement about preemptive SJF (SRTF) is TRUE?Phát biểu nào về SJF có ngắt (SRTF) là ĐÚNG?\n   Answer: d) A newly arrived process with a shorter remaining time takes the CPU at once\n   SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.\n"
+          "code": "# Scheduling 2 — Which algorithm? (convoy effect, starvation, quantum) — answer key\n\n1. One CPU-bound process holds the CPU for a long time while many short I/O-bound processes queue behind it. This is called the …Một tiến trình nặng CPU giữ CPU rất lâu trong khi nhiều tiến trình I/O ngắn xếp hàng sau nó. Hiện tượng này gọi là …\n   Answer: c) Convoy effect\n   The convoy effect appears with FCFS: short jobs wait behind one long job.VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.\n\n2. Which non-preemptive algorithm gives the MINIMUM average waiting time when all burst times are known and all processes arrive together?Thuật toán không ngắt nào cho thời gian chờ trung bình NHỎ NHẤT khi biết trước burst và mọi tiến trình đến cùng lúc?\n   Answer: c) SJF\n   SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).\n\n3. A low-priority process may never get the CPU while higher-priority processes keep arriving. The usual cure is …Tiến trình ưu tiên thấp có thể không bao giờ được CPU khi tiến trình ưu tiên cao liên tục đến. Cách chữa thường dùng là …\n   Answer: d) Aging — gradually raise the priority of waiting processes\n   Starvation is cured by aging: priority grows with waiting time.VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.\n\n4. Round Robin with a very LARGE quantum behaves like …Round Robin với quantum RẤT LỚN hoạt động giống …\n   Answer: d) FCFS\n   If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.\n\n5. Which statement about preemptive SJF (SRTF) is TRUE?Phát biểu nào về SJF có ngắt (SRTF) là ĐÚNG?\n   Answer: d) A newly arrived process with a shorter remaining time takes the CPU at once\n   SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>d · b · b · c · d.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Convoy effect</p><p>The convoy effect appears with FCFS: short jobs wait behind one long job.</p><p><i>VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.</i></p></li><li><p><b>c)</b> SJF</p><p>SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).</p><p><i>VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).</i></p></li><li><p><b>d)</b> Aging — gradually raise the priority of waiting processes</p><p>Starvation is cured by aging: priority grows with waiting time.</p><p><i>VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.</i></p></li><li><p><b>d)</b> FCFS</p><p>If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.</p><p><i>VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.</i></p></li><li><p><b>d)</b> A newly arrived process with a shorter remaining time takes the CPU at once</p><p>SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.</p><p><i>VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -214,15 +214,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Priority inversion"
+                "noiDung": "Convoy effect"
               },
               {
                 "ma": "d",
-                "noiDung": "Convoy effect"
+                "noiDung": "Priority inversion"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>The convoy effect appears with FCFS: short jobs wait behind one long job.</p><p><i>VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.</i></p>"
           },
@@ -236,19 +236,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "SJF"
+                "noiDung": "Priority"
               },
               {
                 "ma": "c",
-                "noiDung": "Round Robin"
+                "noiDung": "SJF"
               },
               {
                 "ma": "d",
-                "noiDung": "Priority"
+                "noiDung": "Round Robin"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).</p><p><i>VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).</i></p>"
           },
@@ -258,11 +258,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Disabling interrupts"
+                "noiDung": "Switching to FCFS in the same queue"
               },
               {
                 "ma": "b",
-                "noiDung": "Aging — gradually raise the priority of waiting processes"
+                "noiDung": "Disabling interrupts"
               },
               {
                 "ma": "c",
@@ -270,11 +270,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Switching to FCFS in the same queue"
+                "noiDung": "Aging — gradually raise the priority of waiting processes"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Starvation is cured by aging: priority grows with waiting time.</p><p><i>VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.</i></p>"
           },
@@ -292,15 +292,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "FCFS"
+                "noiDung": "SJF"
               },
               {
                 "ma": "d",
-                "noiDung": "SJF"
+                "noiDung": "FCFS"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.</p><p><i>VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.</i></p>"
           },
@@ -606,7 +606,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Scheduling 4 — Round Robin (q = 3): the order of the time slices — answer key\n\n1. First eight slices of the RR (q = 3) Gantt chartTám lát đầu của biểu đồ Gantt RR (q = 3)\n   Answer: s1) P1@0  →  s2) P2@3  →  s3) P3@6  →  s4) P4@9  →  s5) P1@12  →  s6) P2@15  →  s7) P3@16  →  s8) P4@19\n   Full Gantt: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. Queue after t=0: P1 runs 0–3, meanwhile P2 (t=1), P3 (t=2) arrive; P4 arrives at t=3 exactly when P1 is preempted, so P4 is queued BEFORE P1.VI: Gantt đầy đủ: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. P1 chạy 0–3; P2 (t=1), P3 (t=2) đến trong lúc đó; P4 đến đúng t=3 lúc P1 bị cắt nên P4 xếp trước P1.\n\n2. Order in which the four processes COMPLETE (first to last)Thứ tự bốn tiến trình HOÀN THÀNH (sớm nhất đến muộn nhất)\n   Answer: P2) P2  →  P4) P4  →  P1) P1  →  P3) P3\n   Completion times: P1=23, P2=16, P3=26, P4=21 (average waiting 13.5).VI: Thời điểm xong: P1=23, P2=16, P3=26, P4=21 (waiting TB 13.5).\n"
+          "code": "# Scheduling 4 — Round Robin (q = 3): the order of the time slices — answer key\n\n1. First eight slices of the RR (q = 3) Gantt chartTám lát đầu của biểu đồ Gantt RR (q = 3)\n   Answer: m8) P1@0  →  m4) P2@3  →  m3) P3@6  →  m5) P4@9  →  m1) P1@12  →  m6) P2@15  →  m2) P3@16  →  m7) P4@19\n   Full Gantt: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. Queue after t=0: P1 runs 0–3, meanwhile P2 (t=1), P3 (t=2) arrive; P4 arrives at t=3 exactly when P1 is preempted, so P4 is queued BEFORE P1.VI: Gantt đầy đủ: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. P1 chạy 0–3; P2 (t=1), P3 (t=2) đến trong lúc đó; P4 đến đúng t=3 lúc P1 bị cắt nên P4 xếp trước P1.\n\n2. Order in which the four processes COMPLETE (first to last)Thứ tự bốn tiến trình HOÀN THÀNH (sớm nhất đến muộn nhất)\n   Answer: m3) P2  →  m4) P4  →  m2) P1  →  m1) P3\n   Completion times: P1=23, P2=16, P3=26, P4=21 (average waiting 13.5).VI: Thời điểm xong: P1=23, P2=16, P3=26, P4=21 (waiting TB 13.5).\n"
         }
       ],
       "solutionExplanationHtml": "<p>P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26].</p>",
@@ -621,47 +621,47 @@
             "de": "<p>First eight slices of the RR (q = 3) Gantt chart</p><p style=\"opacity:.75;font-size:.92em\"><i>Tám lát đầu của biểu đồ Gantt RR (q = 3)</i></p>",
             "muc": [
               {
-                "ma": "s6",
-                "noiDung": "P2@15"
+                "ma": "m1",
+                "noiDung": "P1@12"
               },
               {
-                "ma": "s3",
-                "noiDung": "P3@6"
-              },
-              {
-                "ma": "s8",
-                "noiDung": "P4@19"
-              },
-              {
-                "ma": "s1",
-                "noiDung": "P1@0"
-              },
-              {
-                "ma": "s4",
-                "noiDung": "P4@9"
-              },
-              {
-                "ma": "s7",
+                "ma": "m2",
                 "noiDung": "P3@16"
               },
               {
-                "ma": "s2",
+                "ma": "m3",
+                "noiDung": "P3@6"
+              },
+              {
+                "ma": "m4",
                 "noiDung": "P2@3"
               },
               {
-                "ma": "s5",
-                "noiDung": "P1@12"
+                "ma": "m5",
+                "noiDung": "P4@9"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "P2@15"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "P4@19"
+              },
+              {
+                "ma": "m8",
+                "noiDung": "P1@0"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6",
-              "s7",
-              "s8"
+              "m8",
+              "m4",
+              "m3",
+              "m5",
+              "m1",
+              "m6",
+              "m2",
+              "m7"
             ],
             "giaiThich": "<p>Full Gantt: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. Queue after t=0: P1 runs 0–3, meanwhile P2 (t=1), P3 (t=2) arrive; P4 arrives at t=3 exactly when P1 is preempted, so P4 is queued BEFORE P1.</p><p><i>VI: Gantt đầy đủ: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. P1 chạy 0–3; P2 (t=1), P3 (t=2) đến trong lúc đó; P4 đến đúng t=3 lúc P1 bị cắt nên P4 xếp trước P1.</i></p>"
           },
@@ -670,27 +670,27 @@
             "de": "<p>Order in which the four processes COMPLETE (first to last)</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự bốn tiến trình HOÀN THÀNH (sớm nhất đến muộn nhất)</i></p>",
             "muc": [
               {
-                "ma": "P3",
+                "ma": "m1",
                 "noiDung": "P3"
               },
               {
-                "ma": "P1",
+                "ma": "m2",
                 "noiDung": "P1"
               },
               {
-                "ma": "P4",
-                "noiDung": "P4"
+                "ma": "m3",
+                "noiDung": "P2"
               },
               {
-                "ma": "P2",
-                "noiDung": "P2"
+                "ma": "m4",
+                "noiDung": "P4"
               }
             ],
             "dapAn": [
-              "P2",
-              "P4",
-              "P1",
-              "P3"
+              "m3",
+              "m4",
+              "m2",
+              "m1"
             ],
             "giaiThich": "<p>Completion times: P1=23, P2=16, P3=26, P4=21 (average waiting 13.5).</p><p><i>VI: Thời điểm xong: P1=23, P2=16, P3=26, P4=21 (waiting TB 13.5).</i></p>"
           }

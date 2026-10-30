@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Synchronization 1 — Critical sections and the four conditions — answer key\n\n1. Which situation is a race condition?Tình huống nào là race condition?\n   Answer: c) The result depends on the exact interleaving of two processes that share data\n   A race condition = the outcome depends on who runs when. Waiting forever is deadlock; never scheduled is starvation.VI: Race condition = kết quả phụ thuộc thứ tự xen kẽ. Chờ nhau mãi là deadlock; không bao giờ được lập lịch là starvation.\n\n2. Which of these is NOT one of the four conditions for a good solution to the critical-section problem?Điều kiện nào KHÔNG thuộc bốn điều kiện của một lời giải tốt cho bài toán miền găng?\n   Answer: d) Processes must run at the same speed\n   Tanenbaum’s four conditions: mutual exclusion, no assumptions about speeds/CPUs, no blocking from outside the CR, no starvation. Requiring the same speed is the opposite of “no assumptions”.VI: Bốn điều kiện của Tanenbaum: loại trừ tương hỗ, không giả định tốc độ/số CPU, tiến trình ngoài miền găng không được chặn ai, không chờ vô hạn.\n\n3. Why is “disable interrupts” unsuitable as a mutual-exclusion tool for user programs?Vì sao “tắt ngắt” không phù hợp làm công cụ loại trừ tương hỗ cho chương trình người dùng?\n   Answer: a) A user could never turn them back on, and it does not work on multiprocessors\n   It is fine inside the kernel on one CPU, but a buggy user process could hang the machine, and other CPUs keep running anyway.VI: Dùng trong kernel trên một CPU thì được, nhưng tiến trình người dùng lỗi có thể treo máy và các CPU khác vẫn chạy.\n\n4. What is “busy waiting” (a spin lock)?“Busy waiting” (spin lock) là gì?\n   Answer: b) Repeatedly testing a variable in a loop until it changes, wasting CPU time\n   A spin lock burns CPU cycles; it pays off only when the wait is shorter than a context switch.VI: Spin lock đốt chu kỳ CPU; chỉ có lợi khi chờ ngắn hơn một lần chuyển ngữ cảnh.\n\n5. TSL (Test and Set Lock) works because …TSL (Test and Set Lock) hoạt động được vì …\n   Answer: c) reading and writing the lock word is one indivisible hardware instruction\n   TSL locks the memory bus so no other CPU can touch the word between the read and the write.VI: TSL khoá bus bộ nhớ nên CPU khác không chạm vào từ đó giữa lúc đọc và ghi.\n"
+          "code": "# Synchronization 1 — Critical sections and the four conditions — answer key\n\n1. Which situation is a race condition?Tình huống nào là race condition?\n   Answer: c) The result depends on the exact interleaving of two processes that share data\n   A race condition = the outcome depends on who runs when. Waiting forever is deadlock; never scheduled is starvation.VI: Race condition = kết quả phụ thuộc thứ tự xen kẽ. Chờ nhau mãi là deadlock; không bao giờ được lập lịch là starvation.\n\n2. Which of these is NOT one of the four conditions for a good solution to the critical-section problem?Điều kiện nào KHÔNG thuộc bốn điều kiện của một lời giải tốt cho bài toán miền găng?\n   Answer: c) Processes must run at the same speed\n   Tanenbaum’s four conditions: mutual exclusion, no assumptions about speeds/CPUs, no blocking from outside the CR, no starvation. Requiring the same speed is the opposite of “no assumptions”.VI: Bốn điều kiện của Tanenbaum: loại trừ tương hỗ, không giả định tốc độ/số CPU, tiến trình ngoài miền găng không được chặn ai, không chờ vô hạn.\n\n3. Why is “disable interrupts” unsuitable as a mutual-exclusion tool for user programs?Vì sao “tắt ngắt” không phù hợp làm công cụ loại trừ tương hỗ cho chương trình người dùng?\n   Answer: a) A user could never turn them back on, and it does not work on multiprocessors\n   It is fine inside the kernel on one CPU, but a buggy user process could hang the machine, and other CPUs keep running anyway.VI: Dùng trong kernel trên một CPU thì được, nhưng tiến trình người dùng lỗi có thể treo máy và các CPU khác vẫn chạy.\n\n4. What is “busy waiting” (a spin lock)?“Busy waiting” (spin lock) là gì?\n   Answer: d) Repeatedly testing a variable in a loop until it changes, wasting CPU time\n   A spin lock burns CPU cycles; it pays off only when the wait is shorter than a context switch.VI: Spin lock đốt chu kỳ CPU; chỉ có lợi khi chờ ngắn hơn một lần chuyển ngữ cảnh.\n\n5. TSL (Test and Set Lock) works because …TSL (Test and Set Lock) hoạt động được vì …\n   Answer: c) reading and writing the lock word is one indivisible hardware instruction\n   TSL locks the memory bus so no other CPU can touch the word between the read and the write.VI: TSL khoá bus bộ nhớ nên CPU khác không chạm vào từ đó giữa lúc đọc và ghi.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>c · d · a · b · c.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The result depends on the exact interleaving of two processes that share data</p><p>A race condition = the outcome depends on who runs when. Waiting forever is deadlock; never scheduled is starvation.</p><p><i>VI: Race condition = kết quả phụ thuộc thứ tự xen kẽ. Chờ nhau mãi là deadlock; không bao giờ được lập lịch là starvation.</i></p></li><li><p><b>c)</b> Processes must run at the same speed</p><p>Tanenbaum’s four conditions: mutual exclusion, no assumptions about speeds/CPUs, no blocking from outside the CR, no starvation. Requiring the same speed is the opposite of “no assumptions”.</p><p><i>VI: Bốn điều kiện của Tanenbaum: loại trừ tương hỗ, không giả định tốc độ/số CPU, tiến trình ngoài miền găng không được chặn ai, không chờ vô hạn.</i></p></li><li><p><b>a)</b> A user could never turn them back on, and it does not work on multiprocessors</p><p>It is fine inside the kernel on one CPU, but a buggy user process could hang the machine, and other CPUs keep running anyway.</p><p><i>VI: Dùng trong kernel trên một CPU thì được, nhưng tiến trình người dùng lỗi có thể treo máy và các CPU khác vẫn chạy.</i></p></li><li><p><b>d)</b> Repeatedly testing a variable in a loop until it changes, wasting CPU time</p><p>A spin lock burns CPU cycles; it pays off only when the wait is shorter than a context switch.</p><p><i>VI: Spin lock đốt chu kỳ CPU; chỉ có lợi khi chờ ngắn hơn một lần chuyển ngữ cảnh.</i></p></li><li><p><b>c)</b> reading and writing the lock word is one indivisible hardware instruction</p><p>TSL locks the memory bus so no other CPU can touch the word between the read and the write.</p><p><i>VI: TSL khoá bus bộ nhớ nên CPU khác không chạm vào từ đó giữa lúc đọc và ghi.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,11 +64,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A process runs out of memory"
+                "noiDung": "A process runs out of memory because two allocations overlap"
               },
               {
                 "ma": "b",
-                "noiDung": "A process is never scheduled"
+                "noiDung": "A process is never scheduled while others keep running"
               },
               {
                 "ma": "c",
@@ -76,7 +76,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Two processes wait for each other forever"
+                "noiDung": "Two processes wait for each other forever and nothing can run"
               }
             ],
             "dapAn": [
@@ -94,19 +94,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "No process outside the critical section may block another"
-              },
-              {
-                "ma": "c",
                 "noiDung": "No process waits forever to enter"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "Processes must run at the same speed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No process outside the critical section may block another"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Tanenbaum’s four conditions: mutual exclusion, no assumptions about speeds/CPUs, no blocking from outside the CR, no starvation. Requiring the same speed is the opposite of “no assumptions”.</p><p><i>VI: Bốn điều kiện của Tanenbaum: loại trừ tương hỗ, không giả định tốc độ/số CPU, tiến trình ngoài miền găng không được chặn ai, không chờ vô hạn.</i></p>"
           },
@@ -120,15 +120,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "It is too slow"
+                "noiDung": "It works only for threads of one process, not for separate processes"
               },
               {
                 "ma": "c",
-                "noiDung": "It needs a semaphore"
+                "noiDung": "It needs a semaphore first, and semaphores exist only inside the kernel"
               },
               {
                 "ma": "d",
-                "noiDung": "It only works for threads"
+                "noiDung": "It is too slow, because each disable instruction takes a full disk access"
               }
             ],
             "dapAn": [
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A scheduling policy"
+                "noiDung": "Waiting in the blocked state until an I/O interrupt arrives from the device"
               },
               {
                 "ma": "b",
-                "noiDung": "Repeatedly testing a variable in a loop until it changes, wasting CPU time"
+                "noiDung": "Sleeping in a queue until the kernel wakes you, without using any CPU time"
               },
               {
                 "ma": "c",
-                "noiDung": "Sleeping until the kernel wakes you"
+                "noiDung": "A scheduling policy that gives the longest job the whole CPU until it ends"
               },
               {
                 "ma": "d",
-                "noiDung": "Waiting for an I/O interrupt"
+                "noiDung": "Repeatedly testing a variable in a loop until it changes, wasting CPU time"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>A spin lock burns CPU cycles; it pays off only when the wait is shorter than a context switch.</p><p><i>VI: Spin lock đốt chu kỳ CPU; chỉ có lợi khi chờ ngắn hơn một lần chuyển ngữ cảnh.</i></p>"
           },
@@ -168,11 +168,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "it uses two variables"
+                "noiDung": "it runs only in kernel mode, so no user process can interfere"
               },
               {
                 "ma": "b",
-                "noiDung": "it only runs in kernel mode"
+                "noiDung": "it disables the scheduler for as long as the lock is held"
               },
               {
                 "ma": "c",
@@ -180,7 +180,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "it disables the scheduler"
+                "noiDung": "it uses two shared variables, one flag and one turn indicator"
               }
             ],
             "dapAn": [
@@ -557,10 +557,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Synchronization 4 — Semaphores that enforce an order — answer key\n\n1. Statement S1 of process A must run BEFORE statement S2 of process B. Which initialisation and code works?Lệnh S1 của tiến trình A phải chạy TRƯỚC lệnh S2 của B. Khởi tạo và mã nào đúng?\n   Answer: d) sem = 0; A: S1; up(sem) B: down(sem); S2\n   With sem=0, B’s down blocks until A has run S1 and called up. With sem=1 B would run S2 immediately.VI: Với sem=0, down của B chặn tới khi A chạy xong S1 và up. Với sem=1 B sẽ chạy S2 ngay.\n\n2. A resource has 3 identical units. Which semaphore initial value limits concurrent users to 3?Một tài nguyên có 3 đơn vị như nhau. Giá trị khởi tạo nào giới hạn tối đa 3 người dùng cùng lúc?\n   Answer: a) 3\n   A counting semaphore initialised to N admits N holders; the (N+1)th down blocks.VI: Semaphore đếm khởi tạo N cho N người giữ; down thứ N+1 bị chặn.\n\n3. Three processes must run in the order P1, P2, P3 each exactly once. What is the minimum number of semaphores (initial value 0) required?Ba tiến trình phải chạy theo thứ tự P1, P2, P3, mỗi cái một lần. Cần tối thiểu bao nhiêu semaphore (khởi tạo 0)?\n   Answer: b) 2\n   s12 (P1 ups, P2 downs) and s23 (P2 ups, P3 downs).VI: s12 (P1 up, P2 down) và s23 (P2 up, P3 down).\n\n4. What is wrong with this “mutex”: mutex = 1; down(mutex); … critical …; down(mutex);?Đoạn “mutex” này sai ở đâu: mutex = 1; down(mutex); … miền găng …; down(mutex);?\n   Answer: c) The second call must be up(mutex); otherwise the next process blocks forever\n   Release needs up(); with two downs the semaphore ends at -1 and every other process blocks.VI: Giải phóng cần up(); với hai down semaphore tụt xuống -1 và mọi tiến trình khác bị chặn mãi.\n\n5. A binary semaphore differs from a mutex mainly in that …Semaphore nhị phân khác mutex chủ yếu ở chỗ …\n   Answer: d) a mutex has an owner: only the thread that locked it should unlock it\n   Ownership is the conceptual difference: semaphores are signalling tools, mutexes are locks.VI: Khác biệt khái niệm là quyền sở hữu: semaphore để báo hiệu, mutex để khoá.\n"
+          "code": "# Synchronization 4 — Semaphores that enforce an order — answer key\n\n1. Statement S1 of process A must run BEFORE statement S2 of process B. Which initialisation and code works?Lệnh S1 của tiến trình A phải chạy TRƯỚC lệnh S2 của B. Khởi tạo và mã nào đúng?\n   Answer: a) sem = 0; A: S1; up(sem) B: down(sem); S2\n   With sem=0, B’s down blocks until A has run S1 and called up. With sem=1 B would run S2 immediately.VI: Với sem=0, down của B chặn tới khi A chạy xong S1 và up. Với sem=1 B sẽ chạy S2 ngay.\n\n2. A resource has 3 identical units. Which semaphore initial value limits concurrent users to 3?Một tài nguyên có 3 đơn vị như nhau. Giá trị khởi tạo nào giới hạn tối đa 3 người dùng cùng lúc?\n   Answer: d) 3\n   A counting semaphore initialised to N admits N holders; the (N+1)th down blocks.VI: Semaphore đếm khởi tạo N cho N người giữ; down thứ N+1 bị chặn.\n\n3. Three processes must run in the order P1, P2, P3 each exactly once. What is the minimum number of semaphores (initial value 0) required?Ba tiến trình phải chạy theo thứ tự P1, P2, P3, mỗi cái một lần. Cần tối thiểu bao nhiêu semaphore (khởi tạo 0)?\n   Answer: d) 2\n   s12 (P1 ups, P2 downs) and s23 (P2 ups, P3 downs).VI: s12 (P1 up, P2 down) và s23 (P2 up, P3 down).\n\n4. What is wrong with this “mutex”: mutex = 1; down(mutex); … critical …; down(mutex);?Đoạn “mutex” này sai ở đâu: mutex = 1; down(mutex); … miền găng …; down(mutex);?\n   Answer: b) The second call must be up(mutex); otherwise this process and every later one block forever\n   Release needs up(). After the first down S = 0, so the second down blocks the caller itself: S stays 0 (never below 0), nobody ever calls up, and every other process blocks too.VI: Giải phóng cần up(). Sau down đầu S = 0 nên down thứ hai chặn chính tiến trình đó: S vẫn là 0 (không xuống dưới 0), không còn ai gọi up, và mọi tiến trình khác cũng bị chặn mãi.\n\n5. A binary semaphore differs from a mutex mainly in that …Semaphore nhị phân khác mutex chủ yếu ở chỗ …\n   Answer: c) a mutex has an owner: only the thread that locked it should unlock it\n   Ownership is the conceptual difference: semaphores are signalling tools, mutexes are locks.VI: Khác biệt khái niệm là quyền sở hữu: semaphore để báo hiệu, mutex để khoá.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> sem = 0;  A: S1; up(sem)   B: down(sem); S2</p><p>With sem=0, B’s down blocks until A has run S1 and called up. With sem=1 B would run S2 immediately.</p><p><i>VI: Với sem=0, down của B chặn tới khi A chạy xong S1 và up. Với sem=1 B sẽ chạy S2 ngay.</i></p></li><li><p><b>d)</b> 3</p><p>A counting semaphore initialised to N admits N holders; the (N+1)th down blocks.</p><p><i>VI: Semaphore đếm khởi tạo N cho N người giữ; down thứ N+1 bị chặn.</i></p></li><li><p><b>d)</b> 2</p><p>s12 (P1 ups, P2 downs) and s23 (P2 ups, P3 downs).</p><p><i>VI: s12 (P1 up, P2 down) và s23 (P2 up, P3 down).</i></p></li><li><p><b>b)</b> The second call must be up(mutex); otherwise this process and every later one block forever</p><p>Release needs up(). After the first down S = 0, so the second down blocks the caller itself: S stays 0 (never below 0), nobody ever calls up, and every other process blocks too.</p><p><i>VI: Giải phóng cần up(). Sau down đầu S = 0 nên down thứ hai chặn chính tiến trình đó: S vẫn là 0 (không xuống dưới 0), không còn ai gọi up, và mọi tiến trình khác cũng bị chặn mãi.</i></p></li><li><p><b>c)</b> a mutex has an owner: only the thread that locked it should unlock it</p><p>Ownership is the conceptual difference: semaphores are signalling tools, mutexes are locks.</p><p><i>VI: Khác biệt khái niệm là quyền sở hữu: semaphore để báo hiệu, mutex để khoá.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -573,7 +573,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "sem = 1;  A: S1; up(sem)   B: down(sem); S2"
+                "noiDung": "sem = 0;  A: S1; up(sem)   B: down(sem); S2"
               },
               {
                 "ma": "b",
@@ -585,11 +585,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "sem = 0;  A: S1; up(sem)   B: down(sem); S2"
+                "noiDung": "sem = 1;  A: S1; up(sem)   B: down(sem); S2"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>With sem=0, B’s down blocks until A has run S1 and called up. With sem=1 B would run S2 immediately.</p><p><i>VI: Với sem=0, down của B chặn tới khi A chạy xong S1 và up. Với sem=1 B sẽ chạy S2 ngay.</i></p>"
           },
@@ -599,23 +599,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "3"
-              },
-              {
-                "ma": "b",
-                "noiDung": "1"
-              },
-              {
-                "ma": "c",
                 "noiDung": "0"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>A counting semaphore initialised to N admits N holders; the (N+1)th down blocks.</p><p><i>VI: Semaphore đếm khởi tạo N cho N người giữ; down thứ N+1 bị chặn.</i></p>"
           },
@@ -625,23 +625,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4"
+                "noiDung": "3"
               },
               {
                 "ma": "b",
-                "noiDung": "2"
-              },
-              {
-                "ma": "c",
                 "noiDung": "1"
               },
               {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
                 "ma": "d",
-                "noiDung": "3"
+                "noiDung": "2"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>s12 (P1 ups, P2 downs) and s23 (P2 ups, P3 downs).</p><p><i>VI: s12 (P1 up, P2 down) và s23 (P2 up, P3 down).</i></p>"
           },
@@ -651,25 +651,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Nothing, it is correct"
+                "noiDung": "down cannot be used twice in a program; the compiler rejects the second call"
               },
               {
                 "ma": "b",
-                "noiDung": "down cannot be used twice"
+                "noiDung": "The second call must be up(mutex); otherwise this process and every later one block forever"
               },
               {
                 "ma": "c",
-                "noiDung": "The second call must be up(mutex); otherwise the next process blocks forever"
+                "noiDung": "mutex must start at 0; otherwise two processes can enter the critical region together"
               },
               {
                 "ma": "d",
-                "noiDung": "mutex must start at 0"
+                "noiDung": "Nothing: two calls to down are the normal way to lock and then unlock"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
-            "giaiThich": "<p>Release needs up(); with two downs the semaphore ends at -1 and every other process blocks.</p><p><i>VI: Giải phóng cần up(); với hai down semaphore tụt xuống -1 và mọi tiến trình khác bị chặn mãi.</i></p>"
+            "giaiThich": "<p>Release needs up(). After the first down S = 0, so the second down blocks the caller itself: S stays 0 (never below 0), nobody ever calls up, and every other process blocks too.</p><p><i>VI: Giải phóng cần up(). Sau down đầu S = 0 nên down thứ hai chặn chính tiến trình đó: S vẫn là 0 (không xuống dưới 0), không còn ai gọi up, và mọi tiến trình khác cũng bị chặn mãi.</i></p>"
           },
           {
             "ma": "c5",
@@ -685,15 +685,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "a binary semaphore works only inside the kernel"
+                "noiDung": "a mutex has an owner: only the thread that locked it should unlock it"
               },
               {
                 "ma": "d",
-                "noiDung": "a mutex has an owner: only the thread that locked it should unlock it"
+                "noiDung": "a binary semaphore works only inside the kernel"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Ownership is the conceptual difference: semaphores are signalling tools, mutexes are locks.</p><p><i>VI: Khác biệt khái niệm là quyền sở hữu: semaphore để báo hiệu, mutex để khoá.</i></p>"
           }

@@ -191,10 +191,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Process states 2 — fork(), exec(), zombie and orphan — answer key\n\n1. What does fork() return in the CHILD process?fork() trả về gì trong tiến trình CON?\n   Answer: d) 0\n   fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.\n\n2. A child has exited but its parent has not yet called wait(). The child is a …Tiến trình con đã thoát nhưng cha chưa gọi wait(). Con đó là …\n   Answer: a) Zombie\n   A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().\n\n3. The parent exits while the child is still running. What happens to the child?Cha thoát khi con còn chạy. Chuyện gì xảy ra với con?\n   Answer: b) It is adopted by init/systemd (PID 1)\n   Orphans are re-parented to PID 1, which calls wait() on them when they finish.VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.\n\n4. What does a successful exec() do?exec() thành công làm gì?\n   Answer: c) Replaces the program image of the calling process; the PID stays the same\n   exec replaces code, data and stack of the same process; on success it never returns.VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.\n\n5. Why does a shell call fork() BEFORE exec() when you type a command?Vì sao shell gọi fork() TRƯỚC exec() khi bạn gõ lệnh?\n   Answer: d) So the shell itself keeps running after the command finishes\n   exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.\n"
+          "code": "# Process states 2 — fork(), exec(), zombie and orphan — answer key\n\n1. What does fork() return in the CHILD process?fork() trả về gì trong tiến trình CON?\n   Answer: c) 0\n   fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.\n\n2. A child has exited but its parent has not yet called wait(). The child is a …Tiến trình con đã thoát nhưng cha chưa gọi wait(). Con đó là …\n   Answer: b) Zombie\n   A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().\n\n3. The parent exits while the child is still running. What happens to the child?Cha thoát khi con còn chạy. Chuyện gì xảy ra với con?\n   Answer: c) It is adopted by init/systemd (PID 1)\n   Orphans are re-parented to PID 1, which calls wait() on them when they finish.VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.\n\n4. What does a successful exec() do?exec() thành công làm gì?\n   Answer: c) Replaces the program image of the calling process; the PID stays the same\n   exec replaces code, data and stack of the same process; on success it never returns.VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.\n\n5. Why does a shell call fork() BEFORE exec() when you type a command?Vì sao shell gọi fork() TRƯỚC exec() khi bạn gõ lệnh?\n   Answer: c) So the shell itself keeps running after the command finishes\n   exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 0</p><p>fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.</p><p><i>VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.</i></p></li><li><p><b>b)</b> Zombie</p><p>A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().</p><p><i>VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().</i></p></li><li><p><b>c)</b> It is adopted by init/systemd (PID 1)</p><p>Orphans are re-parented to PID 1, which calls wait() on them when they finish.</p><p><i>VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.</i></p></li><li><p><b>c)</b> Replaces the program image of the calling process; the PID stays the same</p><p>exec replaces code, data and stack of the same process; on success it never returns.</p><p><i>VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.</i></p></li><li><p><b>c)</b> So the shell itself keeps running after the command finishes</p><p>exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.</p><p><i>VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -211,19 +211,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "-1"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The parent’s PID"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "-1"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.</p><p><i>VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.</i></p>"
           },
@@ -233,11 +233,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Zombie"
+                "noiDung": "Orphan"
               },
               {
                 "ma": "b",
-                "noiDung": "Orphan"
+                "noiDung": "Zombie"
               },
               {
                 "ma": "c",
@@ -249,7 +249,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().</p><p><i>VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().</i></p>"
           },
@@ -259,23 +259,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It keeps the dead parent as its parent forever"
+                "noiDung": "It becomes a zombie at once"
               },
               {
                 "ma": "b",
-                "noiDung": "It is adopted by init/systemd (PID 1)"
+                "noiDung": "It keeps the dead parent as its parent forever"
               },
               {
                 "ma": "c",
-                "noiDung": "It is killed immediately by the kernel"
+                "noiDung": "It is adopted by init/systemd (PID 1)"
               },
               {
                 "ma": "d",
-                "noiDung": "It becomes a zombie at once"
+                "noiDung": "It is killed immediately by the kernel"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Orphans are re-parented to PID 1, which calls wait() on them when they finish.</p><p><i>VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.</i></p>"
           },
@@ -285,11 +285,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Returns the PID of the new program"
+                "noiDung": "Creates a new process running the new program"
               },
               {
                 "ma": "b",
-                "noiDung": "Copies the calling process"
+                "noiDung": "Returns the PID of the new program"
               },
               {
                 "ma": "c",
@@ -297,7 +297,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Creates a new process running the new program"
+                "noiDung": "Copies the calling process"
               }
             ],
             "dapAn": [
@@ -311,23 +311,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Because exec() cannot run without fork()"
-              },
-              {
-                "ma": "b",
-                "noiDung": "To double the memory available"
-              },
-              {
-                "ma": "c",
                 "noiDung": "To make the command run as root"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "Because exec() cannot run without fork()"
+              },
+              {
+                "ma": "c",
                 "noiDung": "So the shell itself keeps running after the command finishes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To double the memory available"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.</p><p><i>VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.</i></p>"
           }
@@ -533,10 +533,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# fork 4 — Output buffering and wait(): what really gets printed? — answer key\n\n1. How many times does the character x appear in the output when stdout is a pipe?Ký tự x xuất hiện mấy lần khi stdout là pipe?\n   Answer: b) 2\n   \"x\" sits in the stdio buffer when fork() copies the address space, so both processes flush it: \"xy\" appears twice (verified by running it with | wc).VI: \"x\" còn nằm trong bộ đệm stdio lúc fork() sao chép không gian địa chỉ, nên cả hai tiến trình đều đẩy nó ra: “xy” xuất hiện hai lần (đã chạy thật với | wc).\n\n2. How many times does x appear when stdout is a terminal (line-buffered)?Khi stdout là terminal (đệm theo dòng) x xuất hiện mấy lần?\n   Answer: c) 2\n   Careful: \"x\" has no newline, so it is STILL in the buffer at fork time even on a terminal; both copies flush at the \"\\n\" → \"xy\" twice. Only fflush(stdout) before fork gives one x.VI: Cẩn thận: “x” không có xuống dòng nên VẪN nằm trong bộ đệm lúc fork kể cả trên terminal; cả hai bản cùng đẩy ra ở “\\n” → “xy” hai lần. Chỉ fflush(stdout) trước fork mới ra một x.\n\n3. Which change guarantees exactly ONE x?Thay đổi nào đảm bảo CHỈ MỘT x?\n   Answer: c) Call fflush(stdout) right after printf(\"x\")\n   Flushing empties the buffer BEFORE it is duplicated by fork().VI: Đẩy bộ đệm ra TRƯỚC khi fork() nhân đôi nó.\n\n4. What does wait(NULL) in the parent do?wait(NULL) trong tiến trình cha làm gì?\n   Answer: d) Blocks until one child terminates and reaps it\n   wait suspends the caller until a child exits and then frees the child’s PCB (no zombie).VI: wait treo tiến trình gọi tới khi một con thoát rồi giải phóng PCB của con (không còn zombie).\n"
+          "code": "# fork 4 — Output buffering and wait(): what really gets printed? — answer key\n\n1. How many times does the character x appear in the output when stdout is a pipe?Ký tự x xuất hiện mấy lần khi stdout là pipe?\n   Answer: d) 2\n   \"x\" sits in the stdio buffer when fork() copies the address space, so both processes flush it: \"xy\" appears twice (verified by running it with | wc).VI: \"x\" còn nằm trong bộ đệm stdio lúc fork() sao chép không gian địa chỉ, nên cả hai tiến trình đều đẩy nó ra: “xy” xuất hiện hai lần (đã chạy thật với | wc).\n\n2. How many times does x appear when stdout is a terminal (line-buffered)?Khi stdout là terminal (đệm theo dòng) x xuất hiện mấy lần?\n   Answer: d) 2\n   Careful: \"x\" has no newline, so it is STILL in the buffer at fork time even on a terminal; both copies flush at the \"\\n\" → \"xy\" twice. Only fflush(stdout) before fork gives one x.VI: Cẩn thận: “x” không có xuống dòng nên VẪN nằm trong bộ đệm lúc fork kể cả trên terminal; cả hai bản cùng đẩy ra ở “\\n” → “xy” hai lần. Chỉ fflush(stdout) trước fork mới ra một x.\n\n3. Which change guarantees exactly ONE x?Thay đổi nào đảm bảo CHỈ MỘT x?\n   Answer: b) Call fflush(stdout) right after printf(\"x\")\n   Flushing empties the buffer BEFORE it is duplicated by fork().VI: Đẩy bộ đệm ra TRƯỚC khi fork() nhân đôi nó.\n\n4. What does wait(NULL) in the parent do?wait(NULL) trong tiến trình cha làm gì?\n   Answer: c) Blocks until one child terminates and reaps it\n   wait suspends the caller until a child exits and then frees the child’s PCB (no zombie).VI: wait treo tiến trình gọi tới khi một con thoát rồi giải phóng PCB của con (không còn zombie).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>b · c · c · d. A classic exam trap: the duplicated stdio buffer.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 2</p><p>\"x\" sits in the stdio buffer when fork() copies the address space, so both processes flush it: \"xy\" appears twice (verified by running it with | wc).</p><p><i>VI: \"x\" còn nằm trong bộ đệm stdio lúc fork() sao chép không gian địa chỉ, nên cả hai tiến trình đều đẩy nó ra: “xy” xuất hiện hai lần (đã chạy thật với | wc).</i></p></li><li><p><b>d)</b> 2</p><p>Careful: \"x\" has no newline, so it is STILL in the buffer at fork time even on a terminal; both copies flush at the \"\\n\" → \"xy\" twice. Only fflush(stdout) before fork gives one x.</p><p><i>VI: Cẩn thận: “x” không có xuống dòng nên VẪN nằm trong bộ đệm lúc fork kể cả trên terminal; cả hai bản cùng đẩy ra ở “\\n” → “xy” hai lần. Chỉ fflush(stdout) trước fork mới ra một x.</i></p></li><li><p><b>b)</b> Call fflush(stdout) right after printf(\"x\")</p><p>Flushing empties the buffer BEFORE it is duplicated by fork().</p><p><i>VI: Đẩy bộ đệm ra TRƯỚC khi fork() nhân đôi nó.</i></p></li><li><p><b>c)</b> Blocks until one child terminates and reaps it</p><p>wait suspends the caller until a child exits and then frees the child’s PCB (no zombie).</p><p><i>VI: wait treo tiến trình gọi tới khi một con thoát rồi giải phóng PCB của con (không còn zombie).</i></p></li></ol><p>A classic exam trap: the duplicated stdio buffer.</p>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -549,11 +549,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1"
+                "noiDung": "3"
               },
               {
                 "ma": "b",
-                "noiDung": "2"
+                "noiDung": "1"
               },
               {
                 "ma": "c",
@@ -561,11 +561,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "3"
+                "noiDung": "2"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>\"x\" sits in the stdio buffer when fork() copies the address space, so both processes flush it: \"xy\" appears twice (verified by running it with | wc).</p><p><i>VI: \"x\" còn nằm trong bộ đệm stdio lúc fork() sao chép không gian địa chỉ, nên cả hai tiến trình đều đẩy nó ra: “xy” xuất hiện hai lần (đã chạy thật với | wc).</i></p>"
           },
@@ -575,23 +575,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Undefined"
+                "noiDung": "0"
               },
               {
                 "ma": "b",
-                "noiDung": "1"
+                "noiDung": "Undefined"
               },
               {
                 "ma": "c",
-                "noiDung": "2"
+                "noiDung": "1"
               },
               {
                 "ma": "d",
-                "noiDung": "0"
+                "noiDung": "2"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Careful: \"x\" has no newline, so it is STILL in the buffer at fork time even on a terminal; both copies flush at the \"\\n\" → \"xy\" twice. Only fflush(stdout) before fork gives one x.</p><p><i>VI: Cẩn thận: “x” không có xuống dòng nên VẪN nằm trong bộ đệm lúc fork kể cả trên terminal; cả hai bản cùng đẩy ra ở “\\n” → “xy” hai lần. Chỉ fflush(stdout) trước fork mới ra một x.</i></p>"
           },
@@ -605,11 +605,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Call sleep(1) after fork()"
+                "noiDung": "Call fflush(stdout) right after printf(\"x\")"
               },
               {
                 "ma": "c",
-                "noiDung": "Call fflush(stdout) right after printf(\"x\")"
+                "noiDung": "Call sleep(1) after fork()"
               },
               {
                 "ma": "d",
@@ -617,7 +617,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Flushing empties the buffer BEFORE it is duplicated by fork().</p><p><i>VI: Đẩy bộ đệm ra TRƯỚC khi fork() nhân đôi nó.</i></p>"
           },
@@ -627,23 +627,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Kills all children"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Waits until the parent is the only process"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Returns immediately with the exit status"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "Kills all children"
+              },
+              {
+                "ma": "c",
                 "noiDung": "Blocks until one child terminates and reaps it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Waits until the parent is the only process"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>wait suspends the caller until a child exits and then frees the child’s PCB (no zombie).</p><p><i>VI: wait treo tiến trình gọi tới khi một con thoát rồi giải phóng PCB của con (không còn zombie).</i></p>"
           }
@@ -711,7 +711,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# fork 5 — Order the life of the command “ls -l” — answer key\n\n1. Life of a foreground commandVòng đời một lệnh chạy ở foreground\n   Answer: s1) Shell reads the line \"ls -l\"  →  s2) Shell calls fork(): a child process is created  →  s3) Child calls exec(\"ls\", …): its image is replaced  →  s4) Parent shell calls wait() and blocks  →  s5) ls runs, prints the listing and calls exit(0)  →  s6) Kernel marks the child terminated and wakes the parent  →  s7) wait() returns the exit status; the shell prints the prompt\n   fork → exec (child) and wait (parent) → exit (child) → wake the parent → prompt. exec happens in the child, wait in the parent; the parent’s wait can start before or after the child’s exec, but both happen before the child exits.VI: fork → exec (con) và wait (cha) → exit (con) → đánh thức cha → dấu nhắc. exec ở tiến trình con, wait ở cha.\n"
+          "code": "# fork 5 — Order the life of the command “ls -l” — answer key\n\n1. Life of a foreground commandVòng đời một lệnh chạy ở foreground\n   Answer: m7) Shell reads the line \"ls -l\"  →  m3) Shell calls fork(): a child process is created  →  m6) Child calls exec(\"ls\", …): its image is replaced  →  m5) Parent shell calls wait() and blocks  →  m4) ls runs, prints the listing and calls exit(0)  →  m1) Kernel marks the child terminated and wakes the parent  →  m2) wait() returns the exit status; the shell prints the prompt\n   fork → exec (child) and wait (parent) → exit (child) → wake the parent → prompt. exec happens in the child, wait in the parent; the parent’s wait can start before or after the child’s exec, but both happen before the child exits.VI: fork → exec (con) và wait (cha) → exit (con) → đánh thức cha → dấu nhắc. exec ở tiến trình con, wait ở cha.\n"
         }
       ],
       "solutionExplanationHtml": "<p>read → fork → exec → wait → run+exit → mark terminated → prompt.</p>",
@@ -726,42 +726,42 @@
             "de": "<p>Life of a foreground command</p><p style=\"opacity:.75;font-size:.92em\"><i>Vòng đời một lệnh chạy ở foreground</i></p>",
             "muc": [
               {
-                "ma": "s4",
-                "noiDung": "Parent shell calls wait() and blocks"
-              },
-              {
-                "ma": "s5",
-                "noiDung": "ls runs, prints the listing and calls exit(0)"
-              },
-              {
-                "ma": "s6",
+                "ma": "m1",
                 "noiDung": "Kernel marks the child terminated and wakes the parent"
               },
               {
-                "ma": "s7",
+                "ma": "m2",
                 "noiDung": "wait() returns the exit status; the shell prints the prompt"
               },
               {
-                "ma": "s1",
-                "noiDung": "Shell reads the line \"ls -l\""
-              },
-              {
-                "ma": "s2",
+                "ma": "m3",
                 "noiDung": "Shell calls fork(): a child process is created"
               },
               {
-                "ma": "s3",
+                "ma": "m4",
+                "noiDung": "ls runs, prints the listing and calls exit(0)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Parent shell calls wait() and blocks"
+              },
+              {
+                "ma": "m6",
                 "noiDung": "Child calls exec(\"ls\", …): its image is replaced"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Shell reads the line \"ls -l\""
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5",
-              "s6",
-              "s7"
+              "m7",
+              "m3",
+              "m6",
+              "m5",
+              "m4",
+              "m1",
+              "m2"
             ],
             "giaiThich": "<p>fork → exec (child) and wait (parent) → exit (child) → wake the parent → prompt. exec happens in the child, wait in the parent; the parent’s wait can start before or after the child’s exec, but both happen before the child exits.</p><p><i>VI: fork → exec (con) và wait (cha) → exit (con) → đánh thức cha → dấu nhắc. exec ở tiến trình con, wait ở cha.</i></p>"
           }

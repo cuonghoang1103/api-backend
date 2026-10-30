@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Multiprocessors 1 — UMA, NUMA, spin locks and scheduling (concepts) — answer key\n\n1. What is the difference between a multiprocessor and a multicomputer?Multiprocessor khác multicomputer ở chỗ nào?\n   Answer: a) A multiprocessor shares one memory; a multicomputer has private memories and communicates by messages\n   Shared-memory (multiprocessor) versus message passing (multicomputer, cluster).VI: Bộ nhớ chung (multiprocessor) so với truyền thông điệp (multicomputer, cluster).\n\n2. Why is a plain test-and-set spin lock bad on a multiprocessor?Vì sao spin lock test-and-set thuần tuý kém trên multiprocessor?\n   Answer: b) Every spin writes the shared word, so the cache line bounces between cores and floods the bus\n   Test-and-test-and-set spins on a cached read and writes only when the lock looks free.VI: Test-and-test-and-set quay trên bản đọc đã cache và chỉ ghi khi khoá có vẻ rảnh.\n\n3. Gang scheduling means …Gang scheduling nghĩa là …\n   Answer: c) all threads of a related group are scheduled to run at the same time on different CPUs\n   Communicating threads then do not wait for a thread that is descheduled.VI: Các luồng giao tiếp với nhau không phải chờ một luồng đang bị tạm dừng.\n\n4. “CPU affinity” (processor affinity) lets the scheduler …“CPU affinity” cho phép bộ lập lịch …\n   Answer: d) keep a thread on the same core to reuse its warm cache\n   Moving a thread loses its cache contents (cold start).VI: Chuyển luồng sang lõi khác làm mất nội dung cache (khởi động nguội).\n\n5. In a symmetric multiprocessing (SMP) OS …Trong hệ điều hành đa xử lý đối xứng (SMP) …\n   Answer: a) every CPU can run kernel and user code and all share one copy of the OS\n   Master–slave designs make CPU 0 a bottleneck; SMP needs fine-grained locking in the kernel.VI: Thiết kế master–slave làm CPU 0 thành nút cổ chai; SMP cần khoá hạt mịn trong kernel.\n"
+          "code": "# Multiprocessors 1 — UMA, NUMA, spin locks and scheduling (concepts) — answer key\n\n1. What is the difference between a multiprocessor and a multicomputer?Multiprocessor khác multicomputer ở chỗ nào?\n   Answer: d) A multiprocessor shares one memory; a multicomputer has private memories and communicates by messages\n   Shared-memory (multiprocessor) versus message passing (multicomputer, cluster).VI: Bộ nhớ chung (multiprocessor) so với truyền thông điệp (multicomputer, cluster).\n\n2. Why is a plain test-and-set spin lock bad on a multiprocessor?Vì sao spin lock test-and-set thuần tuý kém trên multiprocessor?\n   Answer: c) Every spin writes the shared word, so the cache line bounces between cores and floods the bus\n   Test-and-test-and-set spins on a cached read and writes only when the lock looks free.VI: Test-and-test-and-set quay trên bản đọc đã cache và chỉ ghi khi khoá có vẻ rảnh.\n\n3. Gang scheduling means …Gang scheduling nghĩa là …\n   Answer: d) all threads of a related group are scheduled to run at the same time on different CPUs\n   Communicating threads then do not wait for a thread that is descheduled.VI: Các luồng giao tiếp với nhau không phải chờ một luồng đang bị tạm dừng.\n\n4. “CPU affinity” (processor affinity) lets the scheduler …“CPU affinity” cho phép bộ lập lịch …\n   Answer: d) keep a thread on the same core to reuse its warm cache\n   Moving a thread loses its cache contents (cold start).VI: Chuyển luồng sang lõi khác làm mất nội dung cache (khởi động nguội).\n\n5. In a symmetric multiprocessing (SMP) OS …Trong hệ điều hành đa xử lý đối xứng (SMP) …\n   Answer: d) every CPU can run kernel and user code and all share one copy of the OS\n   Master–slave designs make CPU 0 a bottleneck; SMP needs fine-grained locking in the kernel.VI: Thiết kế master–slave làm CPU 0 thành nút cổ chai; SMP cần khoá hạt mịn trong kernel.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> A multiprocessor shares one memory; a multicomputer has private memories and communicates by messages</p><p>Shared-memory (multiprocessor) versus message passing (multicomputer, cluster).</p><p><i>VI: Bộ nhớ chung (multiprocessor) so với truyền thông điệp (multicomputer, cluster).</i></p></li><li><p><b>c)</b> Every spin writes the shared word, so the cache line bounces between cores and floods the bus</p><p>Test-and-test-and-set spins on a cached read and writes only when the lock looks free.</p><p><i>VI: Test-and-test-and-set quay trên bản đọc đã cache và chỉ ghi khi khoá có vẻ rảnh.</i></p></li><li><p><b>d)</b> all threads of a related group are scheduled to run at the same time on different CPUs</p><p>Communicating threads then do not wait for a thread that is descheduled.</p><p><i>VI: Các luồng giao tiếp với nhau không phải chờ một luồng đang bị tạm dừng.</i></p></li><li><p><b>d)</b> keep a thread on the same core to reuse its warm cache</p><p>Moving a thread loses its cache contents (cold start).</p><p><i>VI: Chuyển luồng sang lõi khác làm mất nội dung cache (khởi động nguội).</i></p></li><li><p><b>d)</b> every CPU can run kernel and user code and all share one copy of the OS</p><p>Master–slave designs make CPU 0 a bottleneck; SMP needs fine-grained locking in the kernel.</p><p><i>VI: Thiết kế master–slave làm CPU 0 thành nút cổ chai; SMP cần khoá hạt mịn trong kernel.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A multiprocessor shares one memory; a multicomputer has private memories and communicates by messages"
+                "noiDung": "A multiprocessor has no caches at all; a multicomputer shares one cache between its nodes"
               },
               {
                 "ma": "b",
-                "noiDung": "A multicomputer has one CPU"
+                "noiDung": "There is no difference; both share one memory and communicate by messages"
               },
               {
                 "ma": "c",
-                "noiDung": "A multiprocessor has no cache"
+                "noiDung": "A multicomputer has one CPU per memory bank; a multiprocessor has one CPU in total"
               },
               {
                 "ma": "d",
-                "noiDung": "There is no difference"
+                "noiDung": "A multiprocessor shares one memory; a multicomputer has private memories and communicates by messages"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Shared-memory (multiprocessor) versus message passing (multicomputer, cluster).</p><p><i>VI: Bộ nhớ chung (multiprocessor) so với truyền thông điệp (multicomputer, cluster).</i></p>"
           },
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It only works with two threads"
+                "noiDung": "It needs the lock word on disk, so every spin waits for the disk to answer"
               },
               {
                 "ma": "b",
-                "noiDung": "Every spin writes the shared word, so the cache line bounces between cores and floods the bus"
+                "noiDung": "It works only with two threads, so a third one enters the critical region"
               },
               {
                 "ma": "c",
-                "noiDung": "It cannot lock anything"
+                "noiDung": "Every spin writes the shared word, so the cache line bounces between cores and floods the bus"
               },
               {
                 "ma": "d",
-                "noiDung": "It needs a disk"
+                "noiDung": "It cannot lock anything, because the instruction is not atomic across several cores"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Test-and-test-and-set spins on a cached read and writes only when the lock looks free.</p><p><i>VI: Test-and-test-and-set quay trên bản đọc đã cache và chỉ ghi khi khoá có vẻ rảnh.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "threads are scheduled in random order"
+                "noiDung": "the OS ignores groups and runs each thread on its own schedule"
               },
               {
                 "ma": "b",
-                "noiDung": "the OS ignores thread groups"
+                "noiDung": "threads of a group are scheduled in random order on one CPU"
               },
               {
                 "ma": "c",
-                "noiDung": "all threads of a related group are scheduled to run at the same time on different CPUs"
+                "noiDung": "one thread of a group gets all the CPUs in turn"
               },
               {
                 "ma": "d",
-                "noiDung": "one thread gets all CPUs"
+                "noiDung": "all threads of a related group are scheduled to run at the same time on different CPUs"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Communicating threads then do not wait for a thread that is descheduled.</p><p><i>VI: Các luồng giao tiếp với nhau không phải chờ một luồng đang bị tạm dừng.</i></p>"
           },
@@ -142,15 +142,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "run a thread on every core"
+                "noiDung": "disable the TLB of a thread that moves between cores"
               },
               {
                 "ma": "b",
-                "noiDung": "change the page size"
+                "noiDung": "change the page size of a thread to fit the cache of its core"
               },
               {
                 "ma": "c",
-                "noiDung": "disable the TLB"
+                "noiDung": "run copies of one thread on every core at the same time"
               },
               {
                 "ma": "d",
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "every CPU can run kernel and user code and all share one copy of the OS"
+                "noiDung": "only CPU 0 runs the kernel and the other CPUs run only user code"
               },
               {
                 "ma": "b",
-                "noiDung": "only CPU 0 runs the kernel"
+                "noiDung": "one special CPU runs all the user code and the others only the kernel"
               },
               {
                 "ma": "c",
-                "noiDung": "each CPU has its own OS and memory"
+                "noiDung": "each CPU has its own copy of the OS and its own private memory"
               },
               {
                 "ma": "d",
-                "noiDung": "user code runs on a special CPU"
+                "noiDung": "every CPU can run kernel and user code and all share one copy of the OS"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Master–slave designs make CPU 0 a bottleneck; SMP needs fine-grained locking in the kernel.</p><p><i>VI: Thiết kế master–slave làm CPU 0 thành nút cổ chai; SMP cần khoá hạt mịn trong kernel.</i></p>"
           }

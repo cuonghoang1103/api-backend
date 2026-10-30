@@ -17,7 +17,6 @@ const E1 = tinh({
   ],
   goiY: ['Pipes connect processes; redirections connect a process to a file.', 'find looks at names, grep at contents.'],
   loiHayGap: ['Overwriting a log with > instead of appending with >>.', 'Using grep to look for file names.'],
-  giaiThich: '<p>a · a · a · a · a.</p>',
   thuatNgu: [tn('pipe', 'đường ống: stdout của lệnh này thành stdin của lệnh kia'), tn('redirection', 'chuyển hướng I/O chuẩn')],
   khaiNiem: ['redirection', 'pipes', 'find'],
 });
@@ -73,15 +72,14 @@ const E4 = tinh({
   moTa: bi('<p>Five questions on redirection, background jobs and signals.</p>', '<p>Năm câu về chuyển hướng, tiến trình nền và tín hiệu.</p>'),
   loai: 'choice',
   cauHoi: [
-    mc('c1', ['What does a trailing <code>&amp;</code> do, as in <code>sleep 100 &amp;</code>?', 'Dấu <code>&amp;</code> ở cuối, như <code>sleep 100 &amp;</code>, làm gì?'], [['a', 'Runs the command in the background; the shell returns the prompt at once'], ['b', 'Runs it twice'], ['c', 'Makes it run as root'], ['d', 'Pipes it to the next command']], 'a', ['The shell forks the child but does not wait for it.', 'Shell fork tiến trình con nhưng không chờ nó.']),
+    mc('c1', ['What does a trailing <code>&amp;</code> do, as in <code>sleep 100 &amp;</code>?', 'Dấu <code>&amp;</code> ở cuối, như <code>sleep 100 &amp;</code>, làm gì?'], [['a', 'Runs the command in the background; the shell returns the prompt at once'], ['b', 'Runs the command twice, once now and once when the shell exits'], ['c', 'Runs the command as root and returns to the normal user afterwards'], ['d', 'Pipes the output of the command to the next command on the line']], 'a', ['The shell forks the child but does not wait for it.', 'Shell fork tiến trình con nhưng không chờ nó.']),
     mc('c2', ['Ctrl-C in a terminal sends which signal to the foreground job?', 'Ctrl-C trong terminal gửi tín hiệu nào cho tiến trình foreground?'], [['a', 'SIGINT'], ['b', 'SIGKILL'], ['c', 'SIGSTOP'], ['d', 'SIGHUP']], 'a', ['SIGINT can be caught; SIGKILL and SIGSTOP cannot.', 'SIGINT bắt được; SIGKILL và SIGSTOP thì không.']),
     mc('c3', ['Which signal can a process NOT catch or ignore?', 'Tín hiệu nào tiến trình KHÔNG thể bắt hay bỏ qua?'], [['a', 'SIGKILL (9)'], ['b', 'SIGTERM (15)'], ['c', 'SIGINT (2)'], ['d', 'SIGHUP (1)']], 'a', ['SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.', 'SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.']),
     mc('c4', ['Ctrl-Z followed by <code>bg</code> …', 'Ctrl-Z rồi <code>bg</code> …'], [['a', 'suspends the job, then resumes it in the background'], ['b', 'kills the job'], ['c', 'moves it to another terminal'], ['d', 'restarts it from the beginning']], 'a', ['Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.', 'Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.']),
-    mc('c5', ['<code>cat missing.txt 2&gt;&amp;1 &gt; out.txt</code> (file missing.txt does not exist) puts the error message …', '<code>cat missing.txt 2&gt;&amp;1 &gt; out.txt</code> (tệp missing.txt không tồn tại) đưa thông báo lỗi …'], [['a', 'on the terminal, because stderr was duplicated onto the terminal BEFORE stdout moved to the file'], ['b', 'into out.txt'], ['c', 'nowhere'], ['d', 'into missing.txt']], 'a', ['Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.', 'Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.']),
+    mc('c5', ['<code>cat missing.txt 2&gt;&amp;1 &gt; out.txt</code> (file missing.txt does not exist) puts the error message …', '<code>cat missing.txt 2&gt;&amp;1 &gt; out.txt</code> (tệp missing.txt không tồn tại) đưa thông báo lỗi …'], [['a', 'on the terminal, because stderr was duplicated onto the terminal BEFORE stdout moved to the file'], ['b', 'into out.txt, because stderr follows stdout wherever stdout ends up afterwards'], ['c', 'nowhere, because 2>&1 discards the error stream when the output goes to a file'], ['d', 'into missing.txt, because the shell creates that file before running cat']], 'a', ['Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.', 'Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.']),
   ],
   goiY: ['Think of redirections as assignments evaluated left to right.', 'Catchable signals allow a clean shutdown.'],
   loiHayGap: ['Believing kill -9 is a good first choice.', 'Writing 2>&1 first and expecting the error in the file.'],
-  giaiThich: '<p>a · a · a · a · a.</p>',
   thuatNgu: [tn('SIGTERM / SIGKILL', 'yêu cầu dừng / buộc dừng'), tn('background job', 'công việc chạy nền')],
   khaiNiem: ['job control', 'signals', 'redirection order'],
 });

@@ -47,7 +47,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Address translation 1 — The path of one memory access (TLB miss, page present) — answer key\n\n1. TLB miss, valid PTETLB trượt, PTE hợp lệ\n   Answer: s1) CPU issues a virtual address  →  s2) MMU looks the page number up in the TLB  →  s3) TLB miss: the MMU walks the page table in memory  →  s4) The PTE is valid: the frame number is read and the TLB entry is added  →  s5) Physical address = frame × page size + offset; the memory access is made\n   TLB first (hit = no page-table walk); on a miss the page table in RAM is consulted (extra memory access); the entry is cached in the TLB; finally the real access happens. A hit skips steps 3–4; an invalid PTE would raise a page fault instead of step 4.VI: Tra TLB trước (hit = khỏi duyệt bảng trang); trượt thì tra bảng trang trong RAM (thêm một lần truy cập bộ nhớ); nạp mục vào TLB; cuối cùng mới truy cập thật. Hit bỏ qua bước 3–4; PTE không hợp lệ thì gây lỗi trang thay vì bước 4.\n"
+          "code": "# Address translation 1 — The path of one memory access (TLB miss, page present) — answer key\n\n1. TLB miss, valid PTETLB trượt, PTE hợp lệ\n   Answer: m5) CPU issues a virtual address  →  m3) MMU looks the page number up in the TLB  →  m2) TLB miss: the MMU walks the page table in memory  →  m1) The PTE is valid: the frame number is read and the TLB entry is added  →  m4) Physical address = frame × page size + offset; the memory access is made\n   TLB first (hit = no page-table walk); on a miss the page table in RAM is consulted (extra memory access); the entry is cached in the TLB; finally the real access happens. A hit skips steps 3–4; an invalid PTE would raise a page fault instead of step 4.VI: Tra TLB trước (hit = khỏi duyệt bảng trang); trượt thì tra bảng trang trong RAM (thêm một lần truy cập bộ nhớ); nạp mục vào TLB; cuối cùng mới truy cập thật. Hit bỏ qua bước 3–4; PTE không hợp lệ thì gây lỗi trang thay vì bước 4.\n"
         }
       ],
       "solutionExplanationHtml": "<p>issue → TLB → walk → PTE valid + TLB fill → physical access.</p>",
@@ -62,32 +62,32 @@
             "de": "<p>TLB miss, valid PTE</p><p style=\"opacity:.75;font-size:.92em\"><i>TLB trượt, PTE hợp lệ</i></p>",
             "muc": [
               {
-                "ma": "s3",
-                "noiDung": "TLB miss: the MMU walks the page table in memory"
-              },
-              {
-                "ma": "s4",
+                "ma": "m1",
                 "noiDung": "The PTE is valid: the frame number is read and the TLB entry is added"
               },
               {
-                "ma": "s5",
+                "ma": "m2",
+                "noiDung": "TLB miss: the MMU walks the page table in memory"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "MMU looks the page number up in the TLB"
+              },
+              {
+                "ma": "m4",
                 "noiDung": "Physical address = frame × page size + offset; the memory access is made"
               },
               {
-                "ma": "s1",
+                "ma": "m5",
                 "noiDung": "CPU issues a virtual address"
-              },
-              {
-                "ma": "s2",
-                "noiDung": "MMU looks the page number up in the TLB"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m5",
+              "m3",
+              "m2",
+              "m1",
+              "m4"
             ],
             "giaiThich": "<p>TLB first (hit = no page-table walk); on a miss the page table in RAM is consulted (extra memory access); the entry is cached in the TLB; finally the real access happens. A hit skips steps 3–4; an invalid PTE would raise a page fault instead of step 4.</p><p><i>VI: Tra TLB trước (hit = khỏi duyệt bảng trang); trượt thì tra bảng trang trong RAM (thêm một lần truy cập bộ nhớ); nạp mục vào TLB; cuối cùng mới truy cập thật. Hit bỏ qua bước 3–4; PTE không hợp lệ thì gây lỗi trang thay vì bước 4.</i></p>"
           }
@@ -436,10 +436,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Address translation 4 — TLB flushes, ASIDs, inverted page tables — answer key\n\n1. Why must a TLB without address-space identifiers (ASIDs) be flushed on a context switch between processes?Vì sao TLB không có định danh không gian địa chỉ (ASID) phải được xoá khi chuyển ngữ cảnh giữa các tiến trình?\n   Answer: d) The same virtual page number maps to different frames in different processes\n   Stale entries would let process B use process A’s translations. ASIDs tag entries so no flush is needed.VI: Mục cũ sẽ cho tiến trình B dùng bản dịch của A. ASID gắn nhãn mục để khỏi phải xoá.\n\n2. An inverted page table has one entry per …Bảng trang đảo có một mục cho mỗi …\n   Answer: a) physical frame\n   Its size depends on physical memory, not on the virtual address space; lookups use a hash.VI: Kích thước phụ thuộc bộ nhớ vật lý chứ không phải không gian địa chỉ ảo; tra cứu dùng băm.\n\n3. The main advantage of a multi-level page table over a flat one is …Ưu điểm chính của bảng trang nhiều cấp so với bảng phẳng là …\n   Answer: b) unused parts of the address space need no second-level tables, saving memory\n   Only the second-level tables that are actually used exist; the price is extra memory accesses per walk, hidden by the TLB.VI: Chỉ các bảng cấp 2 thực sự dùng mới tồn tại; cái giá là thêm lần truy cập bộ nhớ khi duyệt, được TLB che đi.\n\n4. A TLB miss and a page fault are …TLB miss và lỗi trang là …\n   Answer: c) different: a miss can be resolved from the page table; a fault means the page is not in RAM\n   TLB miss: translation not cached (cheap). Page fault: valid bit 0 → the OS must load the page (expensive, ms).VI: TLB miss: bản dịch chưa được cache (rẻ). Lỗi trang: bit hợp lệ = 0 → OS phải nạp trang (đắt, ms).\n\n5. Software-managed TLBs (MIPS, SPARC) mean that …TLB do phần mềm quản lý (MIPS, SPARC) nghĩa là …\n   Answer: d) a TLB miss traps to the OS, which loads the entry\n   The OS handler walks its own page-table format, which gives freedom of data structure.VI: Trình xử lý của OS tự duyệt cấu trúc bảng trang riêng, nên tự do về cấu trúc dữ liệu.\n"
+          "code": "# Address translation 4 — TLB flushes, ASIDs, inverted page tables — answer key\n\n1. Why must a TLB without address-space identifiers (ASIDs) be flushed on a context switch between processes?Vì sao TLB không có định danh không gian địa chỉ (ASID) phải được xoá khi chuyển ngữ cảnh giữa các tiến trình?\n   Answer: c) The same virtual page number maps to different frames in different processes\n   Stale entries would let process B use process A’s translations. ASIDs tag entries so no flush is needed.VI: Mục cũ sẽ cho tiến trình B dùng bản dịch của A. ASID gắn nhãn mục để khỏi phải xoá.\n\n2. An inverted page table has one entry per …Bảng trang đảo có một mục cho mỗi …\n   Answer: a) physical frame\n   Its size depends on physical memory, not on the virtual address space; lookups use a hash.VI: Kích thước phụ thuộc bộ nhớ vật lý chứ không phải không gian địa chỉ ảo; tra cứu dùng băm.\n\n3. The main advantage of a multi-level page table over a flat one is …Ưu điểm chính của bảng trang nhiều cấp so với bảng phẳng là …\n   Answer: a) unused parts of the address space need no second-level tables, saving memory\n   Only the second-level tables that are actually used exist; the price is extra memory accesses per walk, hidden by the TLB.VI: Chỉ các bảng cấp 2 thực sự dùng mới tồn tại; cái giá là thêm lần truy cập bộ nhớ khi duyệt, được TLB che đi.\n\n4. A TLB miss and a page fault are …TLB miss và lỗi trang là …\n   Answer: d) different: a miss can be resolved from the page table; a fault means the page is not in RAM\n   TLB miss: translation not cached (cheap). Page fault: valid bit 0 → the OS must load the page (expensive, ms).VI: TLB miss: bản dịch chưa được cache (rẻ). Lỗi trang: bit hợp lệ = 0 → OS phải nạp trang (đắt, ms).\n\n5. Software-managed TLBs (MIPS, SPARC) mean that …TLB do phần mềm quản lý (MIPS, SPARC) nghĩa là …\n   Answer: a) a TLB miss traps to the OS, which loads the entry\n   The OS handler walks its own page-table format, which gives freedom of data structure.VI: Trình xử lý của OS tự duyệt cấu trúc bảng trang riêng, nên tự do về cấu trúc dữ liệu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> The same virtual page number maps to different frames in different processes</p><p>Stale entries would let process B use process A’s translations. ASIDs tag entries so no flush is needed.</p><p><i>VI: Mục cũ sẽ cho tiến trình B dùng bản dịch của A. ASID gắn nhãn mục để khỏi phải xoá.</i></p></li><li><p><b>a)</b> physical frame</p><p>Its size depends on physical memory, not on the virtual address space; lookups use a hash.</p><p><i>VI: Kích thước phụ thuộc bộ nhớ vật lý chứ không phải không gian địa chỉ ảo; tra cứu dùng băm.</i></p></li><li><p><b>a)</b> unused parts of the address space need no second-level tables, saving memory</p><p>Only the second-level tables that are actually used exist; the price is extra memory accesses per walk, hidden by the TLB.</p><p><i>VI: Chỉ các bảng cấp 2 thực sự dùng mới tồn tại; cái giá là thêm lần truy cập bộ nhớ khi duyệt, được TLB che đi.</i></p></li><li><p><b>d)</b> different: a miss can be resolved from the page table; a fault means the page is not in RAM</p><p>TLB miss: translation not cached (cheap). Page fault: valid bit 0 → the OS must load the page (expensive, ms).</p><p><i>VI: TLB miss: bản dịch chưa được cache (rẻ). Lỗi trang: bit hợp lệ = 0 → OS phải nạp trang (đắt, ms).</i></p></li><li><p><b>a)</b> a TLB miss traps to the OS, which loads the entry</p><p>The OS handler walks its own page-table format, which gives freedom of data structure.</p><p><i>VI: Trình xử lý của OS tự duyệt cấu trúc bảng trang riêng, nên tự do về cấu trúc dữ liệu.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -452,23 +452,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The TLB is too small"
+                "noiDung": "The TLB is too small to hold the entries of two processes"
               },
               {
                 "ma": "b",
-                "noiDung": "Processes share all pages"
+                "noiDung": "The kernel needs an empty TLB while it runs the scheduler"
               },
               {
                 "ma": "c",
-                "noiDung": "The kernel needs the TLB empty"
+                "noiDung": "The same virtual page number maps to different frames in different processes"
               },
               {
                 "ma": "d",
-                "noiDung": "The same virtual page number maps to different frames in different processes"
+                "noiDung": "All processes share every page, so the entries are wrong"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Stale entries would let process B use process A’s translations. ASIDs tag entries so no flush is needed.</p><p><i>VI: Mục cũ sẽ cho tiến trình B dùng bản dịch của A. ASID gắn nhãn mục để khỏi phải xoá.</i></p>"
           },
@@ -504,23 +504,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "it avoids page faults"
-              },
-              {
-                "ma": "b",
                 "noiDung": "unused parts of the address space need no second-level tables, saving memory"
               },
               {
+                "ma": "b",
+                "noiDung": "it removes the need for a TLB, because the tables fit in registers"
+              },
+              {
                 "ma": "c",
-                "noiDung": "translation is faster"
+                "noiDung": "each translation is faster, because fewer memory reads are needed"
               },
               {
                 "ma": "d",
-                "noiDung": "it removes the need for a TLB"
+                "noiDung": "it avoids page faults, because every page stays in memory"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Only the second-level tables that are actually used exist; the price is extra memory accesses per walk, hidden by the TLB.</p><p><i>VI: Chỉ các bảng cấp 2 thực sự dùng mới tồn tại; cái giá là thêm lần truy cập bộ nhớ khi duyệt, được TLB che đi.</i></p>"
           },
@@ -530,23 +530,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "both handled only by hardware"
+                "noiDung": "the same event: both mean the page must be read from the disk"
               },
               {
                 "ma": "b",
-                "noiDung": "both resolved by the disk"
+                "noiDung": "both handled only by hardware, so the OS never knows about them"
               },
               {
                 "ma": "c",
-                "noiDung": "different: a miss can be resolved from the page table; a fault means the page is not in RAM"
+                "noiDung": "different: a fault is resolved from the page table; a miss means the page is not in RAM"
               },
               {
                 "ma": "d",
-                "noiDung": "the same event"
+                "noiDung": "different: a miss can be resolved from the page table; a fault means the page is not in RAM"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>TLB miss: translation not cached (cheap). Page fault: valid bit 0 → the OS must load the page (expensive, ms).</p><p><i>VI: TLB miss: bản dịch chưa được cache (rẻ). Lỗi trang: bit hợp lệ = 0 → OS phải nạp trang (đắt, ms).</i></p>"
           },
@@ -556,23 +556,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "there is no TLB"
+                "noiDung": "a TLB miss traps to the OS, which loads the entry"
               },
               {
                 "ma": "b",
-                "noiDung": "the TLB is in RAM"
+                "noiDung": "the TLB lives in RAM and the OS reads it"
               },
               {
                 "ma": "c",
-                "noiDung": "page faults are impossible"
+                "noiDung": "page faults cannot happen on these machines"
               },
               {
                 "ma": "d",
-                "noiDung": "a TLB miss traps to the OS, which loads the entry"
+                "noiDung": "there is no TLB, only a page-table walker"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>The OS handler walks its own page-table format, which gives freedom of data structure.</p><p><i>VI: Trình xử lý của OS tự duyệt cấu trúc bảng trang riêng, nên tự do về cấu trúc dữ liệu.</i></p>"
           }

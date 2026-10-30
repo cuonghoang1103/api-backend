@@ -470,10 +470,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Paging 4 — Internal fragmentation, protection and the bits of a PTE — answer key\n\n1. A process needs 72 766 bytes and the page size is 2048 bytes. How many bytes are wasted by internal fragmentation?Một tiến trình cần 72 766 byte, kích thước trang 2048 byte. Bao nhiêu byte bị phí do phân mảnh trong?\n   Answer: a) 962\n   ⌈72766 / 2048⌉ = 36 pages = 73728 bytes, so 962 bytes are wasted in the last page (72766 mod 2048 = 1086 is what is USED there).VI: ⌈72766 / 2048⌉ = 36 trang = 73728 byte, nên phí 962 byte ở trang cuối (72766 mod 2048 = 1086 là phần ĐÃ dùng).\n\n2. Paging suffers from which kind of fragmentation?Phân trang gặp loại phân mảnh nào?\n   Answer: b) Internal fragmentation only (no external)\n   Frames are all the same size so any free frame fits; only the last page of a process is partly empty.VI: Mọi khung bằng nhau nên khung trống nào cũng dùng được; chỉ trang cuối của tiến trình bị trống một phần.\n\n3. Which PTE bit lets the OS decide whether a victim page must be written back to disk?Bit nào trong PTE cho OS biết trang nạn nhân có phải ghi lại ra đĩa?\n   Answer: c) Dirty (modified) bit\n   If the page was not modified since it was loaded, the disk copy is still good and no write is needed.VI: Nếu trang chưa bị sửa kể từ khi nạp thì bản trên đĩa còn nguyên, không cần ghi.\n\n4. A process stores to a page whose PTE says read-only. What happens?Tiến trình ghi vào trang mà PTE đánh dấu chỉ-đọc. Điều gì xảy ra?\n   Answer: d) The MMU raises a protection fault and the OS typically terminates the process (SIGSEGV)\n   Protection bits are checked on every access by hardware.VI: Phần cứng kiểm bit bảo vệ ở mọi lần truy cập.\n\n5. Increasing the page size generally …Tăng kích thước trang nói chung …\n   Answer: a) shrinks the page table but increases internal fragmentation\n   Fewer pages → smaller table; larger last-page waste. Tanenbaum’s optimum p = √(2·s·e).VI: Ít trang hơn → bảng nhỏ hơn; phí ở trang cuối lớn hơn. Tối ưu của Tanenbaum p = √(2·s·e).\n"
+          "code": "# Paging 4 — Internal fragmentation, protection and the bits of a PTE — answer key\n\n1. A process needs 72 766 bytes and the page size is 2048 bytes. How many bytes are wasted by internal fragmentation?Một tiến trình cần 72 766 byte, kích thước trang 2048 byte. Bao nhiêu byte bị phí do phân mảnh trong?\n   Answer: d) 962\n   ⌈72766 / 2048⌉ = 36 pages = 73728 bytes, so 962 bytes are wasted in the last page (72766 mod 2048 = 1086 is what is USED there).VI: ⌈72766 / 2048⌉ = 36 trang = 73728 byte, nên phí 962 byte ở trang cuối (72766 mod 2048 = 1086 là phần ĐÃ dùng).\n\n2. Paging suffers from which kind of fragmentation?Phân trang gặp loại phân mảnh nào?\n   Answer: c) Internal fragmentation only (no external)\n   Frames are all the same size so any free frame fits; only the last page of a process is partly empty.VI: Mọi khung bằng nhau nên khung trống nào cũng dùng được; chỉ trang cuối của tiến trình bị trống một phần.\n\n3. Which PTE bit lets the OS decide whether a victim page must be written back to disk?Bit nào trong PTE cho OS biết trang nạn nhân có phải ghi lại ra đĩa?\n   Answer: d) Dirty (modified) bit\n   If the page was not modified since it was loaded, the disk copy is still good and no write is needed.VI: Nếu trang chưa bị sửa kể từ khi nạp thì bản trên đĩa còn nguyên, không cần ghi.\n\n4. A process stores to a page whose PTE says read-only. What happens?Tiến trình ghi vào trang mà PTE đánh dấu chỉ-đọc. Điều gì xảy ra?\n   Answer: d) The MMU raises a protection fault and the OS typically terminates the process (SIGSEGV)\n   Protection bits are checked on every access by hardware.VI: Phần cứng kiểm bit bảo vệ ở mọi lần truy cập.\n\n5. Increasing the page size generally …Tăng kích thước trang nói chung …\n   Answer: a) shrinks the page table but increases internal fragmentation\n   Fewer pages → smaller table; larger last-page waste. Tanenbaum’s optimum p = √(2·s·e).VI: Ít trang hơn → bảng nhỏ hơn; phí ở trang cuối lớn hơn. Tối ưu của Tanenbaum p = √(2·s·e).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 962</p><p>⌈72766 / 2048⌉ = 36 pages = 73728 bytes, so 962 bytes are wasted in the last page (72766 mod 2048 = 1086 is what is USED there).</p><p><i>VI: ⌈72766 / 2048⌉ = 36 trang = 73728 byte, nên phí 962 byte ở trang cuối (72766 mod 2048 = 1086 là phần ĐÃ dùng).</i></p></li><li><p><b>c)</b> Internal fragmentation only (no external)</p><p>Frames are all the same size so any free frame fits; only the last page of a process is partly empty.</p><p><i>VI: Mọi khung bằng nhau nên khung trống nào cũng dùng được; chỉ trang cuối của tiến trình bị trống một phần.</i></p></li><li><p><b>d)</b> Dirty (modified) bit</p><p>If the page was not modified since it was loaded, the disk copy is still good and no write is needed.</p><p><i>VI: Nếu trang chưa bị sửa kể từ khi nạp thì bản trên đĩa còn nguyên, không cần ghi.</i></p></li><li><p><b>d)</b> The MMU raises a protection fault and the OS typically terminates the process (SIGSEGV)</p><p>Protection bits are checked on every access by hardware.</p><p><i>VI: Phần cứng kiểm bit bảo vệ ở mọi lần truy cập.</i></p></li><li><p><b>a)</b> shrinks the page table but increases internal fragmentation</p><p>Fewer pages → smaller table; larger last-page waste. Tanenbaum’s optimum p = √(2·s·e).</p><p><i>VI: Ít trang hơn → bảng nhỏ hơn; phí ở trang cuối lớn hơn. Tối ưu của Tanenbaum p = √(2·s·e).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -486,23 +486,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "962"
+                "noiDung": "1086"
               },
               {
                 "ma": "b",
-                "noiDung": "2048"
-              },
-              {
-                "ma": "c",
                 "noiDung": "0"
               },
               {
+                "ma": "c",
+                "noiDung": "2048"
+              },
+              {
                 "ma": "d",
-                "noiDung": "1086"
+                "noiDung": "962"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>⌈72766 / 2048⌉ = 36 pages = 73728 bytes, so 962 bytes are wasted in the last page (72766 mod 2048 = 1086 is what is USED there).</p><p><i>VI: ⌈72766 / 2048⌉ = 36 trang = 73728 byte, nên phí 962 byte ở trang cuối (72766 mod 2048 = 1086 là phần ĐÃ dùng).</i></p>"
           },
@@ -512,23 +512,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Neither"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Internal fragmentation only (no external)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "External fragmentation only"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Both equally"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Internal fragmentation only (no external)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Frames are all the same size so any free frame fits; only the last page of a process is partly empty.</p><p><i>VI: Mọi khung bằng nhau nên khung trống nào cũng dùng được; chỉ trang cuối của tiến trình bị trống một phần.</i></p>"
           },
@@ -538,7 +538,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Referenced bit"
+                "noiDung": "Valid bit"
               },
               {
                 "ma": "b",
@@ -546,15 +546,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Dirty (modified) bit"
+                "noiDung": "Referenced bit"
               },
               {
                 "ma": "d",
-                "noiDung": "Valid bit"
+                "noiDung": "Dirty (modified) bit"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>If the page was not modified since it was loaded, the disk copy is still good and no write is needed.</p><p><i>VI: Nếu trang chưa bị sửa kể từ khi nạp thì bản trên đĩa còn nguyên, không cần ghi.</i></p>"
           },
@@ -564,15 +564,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The write silently succeeds"
+                "noiDung": "The page is swapped out and a writable copy is loaded from the disk"
               },
               {
                 "ma": "b",
-                "noiDung": "The page is swapped out"
+                "noiDung": "The TLB is flushed and the write is retried until the page becomes writable"
               },
               {
                 "ma": "c",
-                "noiDung": "The TLB is flushed"
+                "noiDung": "The write silently succeeds, because the read-only bit is only a hint for the OS"
               },
               {
                 "ma": "d",

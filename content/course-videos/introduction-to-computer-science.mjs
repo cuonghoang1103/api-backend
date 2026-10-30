@@ -33,5 +33,6 @@ export default {
     "csi104-12-2-ma-hoa": { yt: "tiha8ZkphjU", credit: "FortMesa — What is Asymmetric vs. Symmetric Encryption?" },
     "csi104-n1-1-cong-logic": { yt: "1I5ZMmrOfnA", credit: "CrashCourse — How Computers Calculate - the ALU: Crash Course Computer Science #5" },
     "csi104-n2-1-big-o": { yt: "g2o22C3CRfU", credit: "Fireship — Big-O Notation in 100 Seconds" },
+    'csi104-0-5-bat-dau-tu-so-0': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/introduction-to-computer-science/00-gioi-thieu-huong-dan-hoc/00-05-hanh-trinh-3d-vao-may-tinh-acb9795a.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

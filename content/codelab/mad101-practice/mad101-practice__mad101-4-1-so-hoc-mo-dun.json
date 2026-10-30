@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Number theory 1 — Divisibility and modular vocabulary — answer key\n\n1. a | b means …a | b nghĩa là …\n   Answer: c) b = a·k for some integer k\n   a divides b when b is an integer multiple of a (a ≠ 0).VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).\n\n2. a ≡ b (mod m) means …a ≡ b (mod m) nghĩa là …\n   Answer: d) m divides a − b\n   Equivalent: a and b leave the same remainder when divided by m.VI: Tương đương: a và b có cùng số dư khi chia cho m.\n\n3. −7 mod 3 equals …−7 mod 3 bằng …\n   Answer: a) 2\n   −7 = 3·(−3) + 2, and a remainder is never negative.VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.\n\n4. Integers a and b are relatively prime when …Hai số nguyên a, b nguyên tố cùng nhau khi …\n   Answer: b) gcd(a, b) = 1\n   They share no prime factor — even if neither number is prime (e.g. 8 and 15).VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).\n\n5. For positive a, b: gcd(a, b)·lcm(a, b) equals …Với a, b dương: gcd(a, b)·lcm(a, b) bằng …\n   Answer: c) a·b\n   This identity gives lcm quickly once gcd is known.VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.\n\n6. The Fundamental Theorem of Arithmetic says every integer n > 1 …Định lý cơ bản của số học nói mọi số nguyên n > 1 …\n   Answer: d) is a product of primes, uniquely up to order\n   Existence and uniqueness of prime factorization.VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.\n"
+          "code": "# Number theory 1 — Divisibility and modular vocabulary — answer key\n\n1. a | b means …a | b nghĩa là …\n   Answer: c) b = a·k for some integer k\n   a divides b when b is an integer multiple of a (a ≠ 0).VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).\n\n2. a ≡ b (mod m) means …a ≡ b (mod m) nghĩa là …\n   Answer: d) m divides a − b\n   Equivalent: a and b leave the same remainder when divided by m.VI: Tương đương: a và b có cùng số dư khi chia cho m.\n\n3. −7 mod 3 equals …−7 mod 3 bằng …\n   Answer: b) 2\n   −7 = 3·(−3) + 2, and a remainder is never negative.VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.\n\n4. Integers a and b are relatively prime when …Hai số nguyên a, b nguyên tố cùng nhau khi …\n   Answer: b) gcd(a, b) = 1\n   They share no prime factor — even if neither number is prime (e.g. 8 and 15).VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).\n\n5. For positive a, b: gcd(a, b)·lcm(a, b) equals …Với a, b dương: gcd(a, b)·lcm(a, b) bằng …\n   Answer: d) a·b\n   This identity gives lcm quickly once gcd is known.VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.\n\n6. The Fundamental Theorem of Arithmetic says every integer n > 1 …Định lý cơ bản của số học nói mọi số nguyên n > 1 …\n   Answer: b) is a product of primes, uniquely up to order\n   Existence and uniqueness of prime factorization.VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>a divides b when b is an integer multiple of a (a ≠ 0).</p><p><i>VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).</i></p><p>Equivalent: a and b leave the same remainder when divided by m.</p><p><i>VI: Tương đương: a và b có cùng số dư khi chia cho m.</i></p><p>−7 = 3·(−3) + 2, and a remainder is never negative.</p><p><i>VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.</i></p><p>They share no prime factor — even if neither number is prime (e.g. 8 and 15).</p><p><i>VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).</i></p><p>This identity gives lcm quickly once gcd is known.</p><p><i>VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.</i></p><p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> b = a·k for some integer k</p><p>a divides b when b is an integer multiple of a (a ≠ 0).</p><p><i>VI: a chia hết b khi b là bội nguyên của a (a ≠ 0).</i></p></li><li><p><b>d)</b> m divides a − b</p><p>Equivalent: a and b leave the same remainder when divided by m.</p><p><i>VI: Tương đương: a và b có cùng số dư khi chia cho m.</i></p></li><li><p><b>b)</b> 2</p><p>−7 = 3·(−3) + 2, and a remainder is never negative.</p><p><i>VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.</i></p></li><li><p><b>b)</b> gcd(a, b) = 1</p><p>They share no prime factor — even if neither number is prime (e.g. 8 and 15).</p><p><i>VI: Chúng không có thừa số nguyên tố chung — dù cả hai không nguyên tố (vd 8 và 15).</i></p></li><li><p><b>d)</b> a·b</p><p>This identity gives lcm quickly once gcd is known.</p><p><i>VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.</i></p></li><li><p><b>b)</b> is a product of primes, uniquely up to order</p><p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,11 +63,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a < b"
+                "noiDung": "a and b are coprime"
               },
               {
                 "ma": "b",
-                "noiDung": "a and b are coprime"
+                "noiDung": "a = b·k for some integer k"
               },
               {
                 "ma": "c",
@@ -75,7 +75,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "a = b·k for some integer k"
+                "noiDung": "a < b"
               }
             ],
             "dapAn": [
@@ -115,15 +115,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2"
+                "noiDung": "1"
               },
               {
                 "ma": "b",
-                "noiDung": "−1"
+                "noiDung": "2"
               },
               {
                 "ma": "c",
-                "noiDung": "1"
+                "noiDung": "−1"
               },
               {
                 "ma": "d",
@@ -131,7 +131,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>−7 = 3·(−3) + 2, and a remainder is never negative.</p><p><i>VI: −7 = 3·(−3) + 2, số dư không bao giờ âm.</i></p>"
           },
@@ -141,7 +141,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "lcm(a, b) = 1"
+                "noiDung": "both are prime"
               },
               {
                 "ma": "b",
@@ -149,7 +149,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "both are prime"
+                "noiDung": "lcm(a, b) = 1"
               },
               {
                 "ma": "d",
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "gcd(a, b)²"
+                "noiDung": "a + b"
               },
               {
                 "ma": "b",
-                "noiDung": "a/b"
+                "noiDung": "gcd(a, b)²"
               },
               {
                 "ma": "c",
-                "noiDung": "a·b"
+                "noiDung": "a/b"
               },
               {
                 "ma": "d",
-                "noiDung": "a + b"
+                "noiDung": "a·b"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>This identity gives lcm quickly once gcd is known.</p><p><i>VI: Đẳng thức này cho BCNN nhanh khi đã biết ƯCLN.</i></p>"
           },
@@ -193,11 +193,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "is prime"
+                "noiDung": "has exactly two divisors"
               },
               {
                 "ma": "b",
-                "noiDung": "has exactly two divisors"
+                "noiDung": "is a product of primes, uniquely up to order"
               },
               {
                 "ma": "c",
@@ -205,11 +205,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "is a product of primes, uniquely up to order"
+                "noiDung": "is prime"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Existence and uniqueness of prime factorization.</p><p><i>VI: Tồn tại và duy nhất phân tích thừa số nguyên tố.</i></p>"
           }
@@ -1154,10 +1154,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Number theory 7 — Fermat, modular powers, φ and base conversion — answer key\n\n1. 7²²² mod 11 = ?7²²² mod 11 = ?\n   Answer: a) 5\n   Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2, so 7²²² ≡ 7² = 49 ≡ 5 (mod 11).VI: Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2 nên 7²²² ≡ 49 ≡ 5.\n\n2. 3²⁰⁰ mod 13 = ?3²⁰⁰ mod 13 = ?\n   Answer: b) 9\n   3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.\n\n3. φ(36) (the number of integers 1…36 coprime to 36) = ?φ(36) (số số nguyên 1…36 nguyên tố cùng nhau với 36) = ?\n   Answer: c) 12\n   36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.\n\n4. How many positive divisors does 360 have?360 có bao nhiêu ước nguyên dương?\n   Answer: d) 24\n   360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.VI: 360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.\n\n5. (177)₁₀ written in binary has … ones.(177)₁₀ viết nhị phân có … chữ số 1.\n   Answer: a) 4\n   177 = 10110001₂ (128 + 32 + 16 + 1).VI: 177 = 10110001₂ (128 + 32 + 16 + 1).\n\n6. (2AE0B)₁₆ in decimal is …(2AE0B)₁₆ trong hệ thập phân là …\n   Answer: b) 175627\n   2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.\n"
+          "code": "# Number theory 7 — Fermat, modular powers, φ and base conversion — answer key\n\n1. 7²²² mod 11 = ?7²²² mod 11 = ?\n   Answer: a) 5\n   Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2, so 7²²² ≡ 7² = 49 ≡ 5 (mod 11).VI: Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2 nên 7²²² ≡ 49 ≡ 5.\n\n2. 3²⁰⁰ mod 13 = ?3²⁰⁰ mod 13 = ?\n   Answer: a) 9\n   3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.\n\n3. φ(36) (the number of integers 1…36 coprime to 36) = ?φ(36) (số số nguyên 1…36 nguyên tố cùng nhau với 36) = ?\n   Answer: a) 12\n   36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.\n\n4. How many positive divisors does 360 have?360 có bao nhiêu ước nguyên dương?\n   Answer: d) 24\n   360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.VI: 360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.\n\n5. (177)₁₀ written in binary has … ones.(177)₁₀ viết nhị phân có … chữ số 1.\n   Answer: c) 4\n   177 = 10110001₂ (128 + 32 + 16 + 1).VI: 177 = 10110001₂ (128 + 32 + 16 + 1).\n\n6. (2AE0B)₁₆ in decimal is …(2AE0B)₁₆ trong hệ thập phân là …\n   Answer: c) 175627\n   2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) a · 2) b · 3) c · 4) d · 5) a · 6) b.</p><p>Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2, so 7²²² ≡ 7² = 49 ≡ 5 (mod 11).</p><p><i>VI: Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2 nên 7²²² ≡ 49 ≡ 5.</i></p><p>3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.</p><p><i>VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.</i></p><p>36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</p><p><i>VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</i></p><p>360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</p><p><i>VI: 360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</i></p><p>177 = 10110001₂ (128 + 32 + 16 + 1).</p><p><i>VI: 177 = 10110001₂ (128 + 32 + 16 + 1).</i></p><p>2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</p><p><i>VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 5</p><p>Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2, so 7²²² ≡ 7² = 49 ≡ 5 (mod 11).</p><p><i>VI: Fermat: 7¹⁰ ≡ 1 (mod 11), 222 = 22·10 + 2 nên 7²²² ≡ 49 ≡ 5.</i></p></li><li><p><b>a)</b> 9</p><p>3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.</p><p><i>VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.</i></p></li><li><p><b>a)</b> 12</p><p>36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</p><p><i>VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</i></p></li><li><p><b>d)</b> 24</p><p>360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</p><p><i>VI: 360 = 2³·3²·5: (3 + 1)(2 + 1)(1 + 1) = 24.</i></p></li><li><p><b>c)</b> 4</p><p>177 = 10110001₂ (128 + 32 + 16 + 1).</p><p><i>VI: 177 = 10110001₂ (128 + 32 + 16 + 1).</i></p></li><li><p><b>c)</b> 175627</p><p>2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</p><p><i>VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -1174,15 +1174,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "1"
+                "noiDung": "3"
               },
               {
                 "ma": "c",
-                "noiDung": "7"
+                "noiDung": "1"
               },
               {
                 "ma": "d",
-                "noiDung": "3"
+                "noiDung": "7"
               }
             ],
             "dapAn": [
@@ -1196,15 +1196,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "12"
-              },
-              {
-                "ma": "b",
                 "noiDung": "9"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "12"
               },
               {
                 "ma": "d",
@@ -1212,7 +1212,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2, so 3²⁰⁰ ≡ 3² = 9.</p><p><i>VI: 3³ = 27 ≡ 1 (mod 13), 200 = 3·66 + 2 nên 3²⁰⁰ ≡ 9.</i></p>"
           },
@@ -1222,7 +1222,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "36"
+                "noiDung": "12"
               },
               {
                 "ma": "b",
@@ -1230,7 +1230,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "12"
+                "noiDung": "36"
               },
               {
                 "ma": "d",
@@ -1238,7 +1238,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</p><p><i>VI: 36 = 2²·3²: φ = 36·(1 − ½)(1 − ⅓) = 12.</i></p>"
           },
@@ -1274,23 +1274,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4"
-              },
-              {
-                "ma": "b",
-                "noiDung": "3"
-              },
-              {
-                "ma": "c",
                 "noiDung": "6"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>177 = 10110001₂ (128 + 32 + 16 + 1).</p><p><i>VI: 177 = 10110001₂ (128 + 32 + 16 + 1).</i></p>"
           },
@@ -1304,19 +1304,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "175627"
+                "noiDung": "171531"
               },
               {
                 "ma": "c",
-                "noiDung": "175643"
+                "noiDung": "175627"
               },
               {
                 "ma": "d",
-                "noiDung": "171531"
+                "noiDung": "175643"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</p><p><i>VI: 2·16⁴ + 10·16³ + 14·16² + 0·16 + 11 = 175627.</i></p>"
           }
@@ -1383,7 +1383,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Number theory 8 — Order the algorithm steps — answer key\n\n1. The sieve of Eratosthenes for primes ≤ n.Sàng Eratosthenes cho số nguyên tố ≤ n.\n   Answer: s1) List the integers 2, 3, …, n.  →  s2) Take the smallest unmarked number p; it is prime.  →  s3) Cross out p², p² + p, p² + 2p, … up to n.  →  s4) Repeat while p² ≤ n.  →  s5) The unmarked numbers left are the primes.\n   Only primes up to √n need to sieve: for n = 100 these are 2, 3, 5, 7.VI: Chỉ cần sàng bằng các số nguyên tố ≤ √n: với n = 100 là 2, 3, 5, 7.\n\n2. Fast modular exponentiation (square-and-multiply) for b^e mod m.Luỹ thừa mô-đun nhanh (bình phương–nhân) cho b^e mod m.\n   Answer: s1) Set result = 1 and reduce b mod m.  →  s2) While e > 0: if e is odd, result = result·b mod m.  →  s3) Square the base: b = b·b mod m.  →  s4) Halve the exponent: e = ⌊e/2⌋.  →  s5) When e = 0 return result.\n   It needs only ⌊log₂ e⌋ + 1 rounds, each with at most two modular multiplications.VI: Chỉ cần ⌊log₂ e⌋ + 1 vòng, mỗi vòng tối đa hai phép nhân mô-đun.\n\n3. Euclid’s algorithm for gcd(a, b).Thuật toán Euclid cho gcd(a, b).\n   Answer: s1) While b ≠ 0 do the following:  →  s2) Compute r = a mod b.  →  s3) Set a = b and b = r.  →  s4) When b = 0 the answer is a.\n   Each step shrinks the pair; the last non-zero remainder is the gcd.VI: Mỗi bước thu nhỏ cặp số; số dư khác 0 cuối cùng là ƯCLN.\n"
+          "code": "# Number theory 8 — Order the algorithm steps — answer key\n\n1. The sieve of Eratosthenes for primes ≤ n.Sàng Eratosthenes cho số nguyên tố ≤ n.\n   Answer: m3) List the integers 2, 3, …, n.  →  m1) Take the smallest unmarked number p; it is prime.  →  m2) Cross out p², p² + p, p² + 2p, … up to n.  →  m4) Repeat while p² ≤ n.  →  m5) The unmarked numbers left are the primes.\n   Only primes up to √n need to sieve: for n = 100 these are 2, 3, 5, 7.VI: Chỉ cần sàng bằng các số nguyên tố ≤ √n: với n = 100 là 2, 3, 5, 7.\n\n2. Fast modular exponentiation (square-and-multiply) for b^e mod m.Luỹ thừa mô-đun nhanh (bình phương–nhân) cho b^e mod m.\n   Answer: m5) Set result = 1 and reduce b mod m.  →  m1) While e > 0: if e is odd, result = result·b mod m.  →  m4) Square the base: b = b·b mod m.  →  m2) Halve the exponent: e = ⌊e/2⌋.  →  m3) When e = 0 return result.\n   It needs only ⌊log₂ e⌋ + 1 rounds, each with at most two modular multiplications.VI: Chỉ cần ⌊log₂ e⌋ + 1 vòng, mỗi vòng tối đa hai phép nhân mô-đun.\n\n3. Euclid’s algorithm for gcd(a, b).Thuật toán Euclid cho gcd(a, b).\n   Answer: m1) While b ≠ 0 do the following:  →  m4) Compute r = a mod b.  →  m3) Set a = b and b = r.  →  m2) When b = 0 the answer is a.\n   Each step shrinks the pair; the last non-zero remainder is the gcd.VI: Mỗi bước thu nhỏ cặp số; số dư khác 0 cuối cùng là ƯCLN.\n"
         }
       ],
       "solutionExplanationHtml": "<p>Only primes up to √n need to sieve: for n = 100 these are 2, 3, 5, 7.</p><p><i>VI: Chỉ cần sàng bằng các số nguyên tố ≤ √n: với n = 100 là 2, 3, 5, 7.</i></p><p>It needs only ⌊log₂ e⌋ + 1 rounds, each with at most two modular multiplications.</p><p><i>VI: Chỉ cần ⌊log₂ e⌋ + 1 vòng, mỗi vòng tối đa hai phép nhân mô-đun.</i></p><p>Each step shrinks the pair; the last non-zero remainder is the gcd.</p><p><i>VI: Mỗi bước thu nhỏ cặp số; số dư khác 0 cuối cùng là ƯCLN.</i></p>",
@@ -1398,32 +1398,32 @@
             "de": "<p>The sieve of Eratosthenes for primes ≤ n.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sàng Eratosthenes cho số nguyên tố ≤ n.</i></p>",
             "muc": [
               {
-                "ma": "s3",
+                "ma": "m1",
+                "noiDung": "Take the smallest unmarked number p; it is prime."
+              },
+              {
+                "ma": "m2",
                 "noiDung": "Cross out p², p² + p, p² + 2p, … up to n."
               },
               {
-                "ma": "s4",
-                "noiDung": "Repeat while p² ≤ n."
-              },
-              {
-                "ma": "s5",
-                "noiDung": "The unmarked numbers left are the primes."
-              },
-              {
-                "ma": "s1",
+                "ma": "m3",
                 "noiDung": "List the integers 2, 3, …, n."
               },
               {
-                "ma": "s2",
-                "noiDung": "Take the smallest unmarked number p; it is prime."
+                "ma": "m4",
+                "noiDung": "Repeat while p² ≤ n."
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The unmarked numbers left are the primes."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m3",
+              "m1",
+              "m2",
+              "m4",
+              "m5"
             ],
             "giaiThich": "<p>Only primes up to √n need to sieve: for n = 100 these are 2, 3, 5, 7.</p><p><i>VI: Chỉ cần sàng bằng các số nguyên tố ≤ √n: với n = 100 là 2, 3, 5, 7.</i></p>"
           },
@@ -1432,32 +1432,32 @@
             "de": "<p>Fast modular exponentiation (square-and-multiply) for b^e mod m.</p><p style=\"opacity:.75;font-size:.92em\"><i>Luỹ thừa mô-đun nhanh (bình phương–nhân) cho b^e mod m.</i></p>",
             "muc": [
               {
-                "ma": "s4",
-                "noiDung": "Halve the exponent: e = ⌊e/2⌋."
-              },
-              {
-                "ma": "s5",
-                "noiDung": "When e = 0 return result."
-              },
-              {
-                "ma": "s1",
-                "noiDung": "Set result = 1 and reduce b mod m."
-              },
-              {
-                "ma": "s2",
+                "ma": "m1",
                 "noiDung": "While e > 0: if e is odd, result = result·b mod m."
               },
               {
-                "ma": "s3",
+                "ma": "m2",
+                "noiDung": "Halve the exponent: e = ⌊e/2⌋."
+              },
+              {
+                "ma": "m3",
+                "noiDung": "When e = 0 return result."
+              },
+              {
+                "ma": "m4",
                 "noiDung": "Square the base: b = b·b mod m."
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Set result = 1 and reduce b mod m."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m5",
+              "m1",
+              "m4",
+              "m2",
+              "m3"
             ],
             "giaiThich": "<p>It needs only ⌊log₂ e⌋ + 1 rounds, each with at most two modular multiplications.</p><p><i>VI: Chỉ cần ⌊log₂ e⌋ + 1 vòng, mỗi vòng tối đa hai phép nhân mô-đun.</i></p>"
           },
@@ -1466,27 +1466,27 @@
             "de": "<p>Euclid’s algorithm for gcd(a, b).</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Euclid cho gcd(a, b).</i></p>",
             "muc": [
               {
-                "ma": "s2",
-                "noiDung": "Compute r = a mod b."
+                "ma": "m1",
+                "noiDung": "While b ≠ 0 do the following:"
               },
               {
-                "ma": "s3",
-                "noiDung": "Set a = b and b = r."
-              },
-              {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "When b = 0 the answer is a."
               },
               {
-                "ma": "s1",
-                "noiDung": "While b ≠ 0 do the following:"
+                "ma": "m3",
+                "noiDung": "Set a = b and b = r."
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Compute r = a mod b."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m1",
+              "m4",
+              "m3",
+              "m2"
             ],
             "giaiThich": "<p>Each step shrinks the pair; the last non-zero remainder is the gcd.</p><p><i>VI: Mỗi bước thu nhỏ cặp số; số dư khác 0 cuối cùng là ƯCLN.</i></p>"
           }

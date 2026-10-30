@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 1 — Propositions and connectives — answer key\n\n1. Which of the following is a proposition?Câu nào sau đây là một mệnh đề?\n   Answer: b) “17 is a prime number.”\n   A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.\n\n2. The negation of “7 > 3” is …Phủ định của “7 > 3” là …\n   Answer: c) 7 ≤ 3\n   ¬(a > b) means a ≤ b — “not greater” includes equality.VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.\n\n3. p → q is FALSE exactly when …p → q chỉ SAI khi …\n   Answer: d) p is true and q is false\n   A promise is broken only if the condition happens and the result does not.VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.\n\n4. The converse of p → q is …Mệnh đề đảo của p → q là …\n   Answer: a) q → p\n   Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.\n\n5. p ↔ q is TRUE exactly when …p ↔ q chỉ ĐÚNG khi …\n   Answer: b) p and q have the same truth value\n   p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.\n\n6. The exclusive or p ⊕ q is true when …Hoặc loại trừ p ⊕ q đúng khi …\n   Answer: c) exactly one of p, q is true\n   ⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.\n"
+          "code": "# Logic 1 — Propositions and connectives — answer key\n\n1. Which of the following is a proposition?Câu nào sau đây là một mệnh đề?\n   Answer: b) “17 is a prime number.”\n   A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.\n\n2. The negation of “7 > 3” is …Phủ định của “7 > 3” là …\n   Answer: b) 7 ≤ 3\n   ¬(a > b) means a ≤ b — “not greater” includes equality.VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.\n\n3. p → q is FALSE exactly when …p → q chỉ SAI khi …\n   Answer: a) p is true and q is false\n   A promise is broken only if the condition happens and the result does not.VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.\n\n4. The converse of p → q is …Mệnh đề đảo của p → q là …\n   Answer: d) q → p\n   Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.\n\n5. p ↔ q is TRUE exactly when …p ↔ q chỉ ĐÚNG khi …\n   Answer: d) p and q have the same truth value\n   p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.\n\n6. The exclusive or p ⊕ q is true when …Hoặc loại trừ p ⊕ q đúng khi …\n   Answer: d) exactly one of p, q is true\n   ⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) b · 2) c · 3) d · 4) a · 5) b · 6) c.</p><p>A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.</p><p><i>VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.</i></p><p>¬(a > b) means a ≤ b — “not greater” includes equality.</p><p><i>VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.</i></p><p>A promise is broken only if the condition happens and the result does not.</p><p><i>VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.</i></p><p>Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.</p><p><i>VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.</i></p><p>p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.</p><p><i>VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.</i></p><p>⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.</p><p><i>VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> “17 is a prime number.”</p><p>A proposition is a declarative sentence that is exactly true or false. “x + 3 = 5” depends on x, so it is a predicate, not a proposition.</p><p><i>VI: Mệnh đề là câu khẳng định đúng hoặc sai. “x + 3 = 5” phụ thuộc x nên là vị từ.</i></p></li><li><p><b>b)</b> 7 ≤ 3</p><p>¬(a > b) means a ≤ b — “not greater” includes equality.</p><p><i>VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.</i></p></li><li><p><b>a)</b> p is true and q is false</p><p>A promise is broken only if the condition happens and the result does not.</p><p><i>VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.</i></p></li><li><p><b>d)</b> q → p</p><p>Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.</p><p><i>VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.</i></p></li><li><p><b>d)</b> p and q have the same truth value</p><p>p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.</p><p><i>VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.</i></p></li><li><p><b>d)</b> exactly one of p, q is true</p><p>⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.</p><p><i>VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,7 +64,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "“What time is it?”"
+                "noiDung": "“Please close the door.”"
               },
               {
                 "ma": "b",
@@ -72,11 +72,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "“x + 3 = 5.”"
+                "noiDung": "“What time is it?”"
               },
               {
                 "ma": "d",
-                "noiDung": "“Please close the door.”"
+                "noiDung": "“x + 3 = 5.”"
               }
             ],
             "dapAn": [
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "3 > 7"
-              },
-              {
-                "ma": "b",
                 "noiDung": "7 = 3"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "7 ≤ 3"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "7 < 3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3 > 7"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>¬(a > b) means a ≤ b — “not greater” includes equality.</p><p><i>VI: ¬(a > b) nghĩa là a ≤ b — “không lớn hơn” gồm cả bằng.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p is false and q is true"
+                "noiDung": "p is true and q is false"
               },
               {
                 "ma": "b",
-                "noiDung": "p and q are both false"
+                "noiDung": "p is false and q is true"
               },
               {
                 "ma": "c",
-                "noiDung": "p and q are both true"
+                "noiDung": "p and q are both false"
               },
               {
                 "ma": "d",
-                "noiDung": "p is true and q is false"
+                "noiDung": "p and q are both true"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>A promise is broken only if the condition happens and the result does not.</p><p><i>VI: Lời hứa chỉ bị phá khi điều kiện xảy ra mà kết quả không xảy ra.</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "q → p"
+                "noiDung": "p → ¬q"
               },
               {
                 "ma": "b",
-                "noiDung": "¬q → ¬p"
-              },
-              {
-                "ma": "c",
                 "noiDung": "¬p → ¬q"
               },
               {
+                "ma": "c",
+                "noiDung": "¬q → ¬p"
+              },
+              {
                 "ma": "d",
-                "noiDung": "p → ¬q"
+                "noiDung": "q → p"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Converse swaps the two sides; contrapositive swaps and negates; inverse negates both.</p><p><i>VI: Đảo hoán đổi hai vế; phản đảo hoán đổi và phủ định; nghịch phủ định cả hai vế.</i></p>"
           },
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p → q is true"
-              },
-              {
-                "ma": "b",
-                "noiDung": "p and q have the same truth value"
-              },
-              {
-                "ma": "c",
                 "noiDung": "p and q are both true"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "exactly one of p, q is true"
+              },
+              {
+                "ma": "c",
+                "noiDung": "p → q is true"
+              },
+              {
+                "ma": "d",
+                "noiDung": "p and q have the same truth value"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>p ↔ q ≡ (p → q) ∧ (q → p): both directions hold, so the values agree.</p><p><i>VI: p ↔ q ≡ (p → q) ∧ (q → p): hai chiều đều đúng nên giá trị trùng nhau.</i></p>"
           },
@@ -194,23 +194,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "both are true"
-              },
-              {
-                "ma": "b",
                 "noiDung": "both are false"
               },
               {
+                "ma": "b",
+                "noiDung": "both are true"
+              },
+              {
                 "ma": "c",
-                "noiDung": "exactly one of p, q is true"
+                "noiDung": "at least one of p, q is true"
               },
               {
                 "ma": "d",
-                "noiDung": "at least one of p, q is true"
+                "noiDung": "exactly one of p, q is true"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>⊕ differs from ∨ only in the row where both are true: there ∨ is true and ⊕ is false.</p><p><i>VI: ⊕ khác ∨ chỉ ở dòng cả hai cùng đúng: ∨ đúng còn ⊕ sai.</i></p>"
           }
@@ -761,10 +761,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 4 — Translating English: only if, unless, necessary, sufficient — answer key\n\n1. “You pass the course only if you attend the exam.” (p = pass, q = attend)“Bạn qua môn chỉ nếu bạn dự thi.” (p = qua môn, q = dự thi)\n   Answer: c) p → q\n   “p only if q” means q is required for p: p → q.VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.\n\n2. “The server restarts unless the disk is full.” (p = restarts, q = disk full)“Máy chủ khởi động lại trừ khi đĩa đầy.” (p = khởi động lại, q = đĩa đầy)\n   Answer: d) ¬q → p, equivalent to p ∨ q\n   “p unless q” = if not q then p = ¬q → p ≡ q ∨ p.VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.\n\n3. Which statement is equivalent to “If n is even then n² is even”?Câu nào tương đương với “Nếu n chẵn thì n² chẵn”?\n   Answer: a) If n² is odd then n is odd.\n   Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.\n\n4. “Being a prime greater than 2 is sufficient for being odd.” (p = prime > 2, q = odd)“Là số nguyên tố lớn hơn 2 là đủ để là số lẻ.”\n   Answer: b) p → q\n   Sufficient: the hypothesis suffices for the conclusion, so p → q.VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.\n\n5. “A positive integer is even only if its square is even … and conversely.” translates to“Số nguyên dương chẵn khi và chỉ khi bình phương của nó chẵn” dịch là\n   Answer: c) p ↔ q\n   “if and only if” is the biconditional: both implications.VI: “khi và chỉ khi” là tương đương: cả hai chiều.\n\n6. Which of the following is NOT equivalent to p → q?Công thức nào KHÔNG tương đương với p → q?\n   Answer: d) q → p\n   q → p is the converse. The other three are equivalent forms of p → q.VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.\n"
+          "code": "# Logic 4 — Translating English: only if, unless, necessary, sufficient — answer key\n\n1. “You pass the course only if you attend the exam.” (p = pass, q = attend)“Bạn qua môn chỉ nếu bạn dự thi.” (p = qua môn, q = dự thi)\n   Answer: b) p → q\n   “p only if q” means q is required for p: p → q.VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.\n\n2. “The server restarts unless the disk is full.” (p = restarts, q = disk full)“Máy chủ khởi động lại trừ khi đĩa đầy.” (p = khởi động lại, q = đĩa đầy)\n   Answer: b) ¬q → p, equivalent to p ∨ q\n   “p unless q” = if not q then p = ¬q → p ≡ q ∨ p.VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.\n\n3. Which statement is equivalent to “If n is even then n² is even”?Câu nào tương đương với “Nếu n chẵn thì n² chẵn”?\n   Answer: a) If n² is odd then n is odd.\n   Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.\n\n4. “Being a prime greater than 2 is sufficient for being odd.” (p = prime > 2, q = odd)“Là số nguyên tố lớn hơn 2 là đủ để là số lẻ.”\n   Answer: d) p → q\n   Sufficient: the hypothesis suffices for the conclusion, so p → q.VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.\n\n5. “A positive integer is even only if its square is even … and conversely.” translates to“Số nguyên dương chẵn khi và chỉ khi bình phương của nó chẵn” dịch là\n   Answer: b) p ↔ q\n   “if and only if” is the biconditional: both implications.VI: “khi và chỉ khi” là tương đương: cả hai chiều.\n\n6. Which of the following is NOT equivalent to p → q?Công thức nào KHÔNG tương đương với p → q?\n   Answer: d) q → p\n   q → p is the converse. The other three are equivalent forms of p → q.VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>“p only if q” means q is required for p: p → q.</p><p><i>VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.</i></p><p>“p unless q” = if not q then p = ¬q → p ≡ q ∨ p.</p><p><i>VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.</i></p><p>Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.</p><p><i>VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.</i></p><p>Sufficient: the hypothesis suffices for the conclusion, so p → q.</p><p><i>VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.</i></p><p>“if and only if” is the biconditional: both implications.</p><p><i>VI: “khi và chỉ khi” là tương đương: cả hai chiều.</i></p><p>q → p is the converse. The other three are equivalent forms of p → q.</p><p><i>VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> p → q</p><p>“p only if q” means q is required for p: p → q.</p><p><i>VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.</i></p></li><li><p><b>b)</b> ¬q → p, equivalent to p ∨ q</p><p>“p unless q” = if not q then p = ¬q → p ≡ q ∨ p.</p><p><i>VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.</i></p></li><li><p><b>a)</b> If n² is odd then n is odd.</p><p>Only the contrapositive ¬q → ¬p is always equivalent. The converse and the inverse are not.</p><p><i>VI: Chỉ mệnh đề phản đảo ¬q → ¬p luôn tương đương; đảo và nghịch thì không.</i></p></li><li><p><b>d)</b> p → q</p><p>Sufficient: the hypothesis suffices for the conclusion, so p → q.</p><p><i>VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.</i></p></li><li><p><b>b)</b> p ↔ q</p><p>“if and only if” is the biconditional: both implications.</p><p><i>VI: “khi và chỉ khi” là tương đương: cả hai chiều.</i></p></li><li><p><b>d)</b> q → p</p><p>q → p is the converse. The other three are equivalent forms of p → q.</p><p><i>VI: q → p là mệnh đề đảo. Ba công thức còn lại là các dạng tương đương của p → q.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -781,11 +781,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "¬p → ¬q"
+                "noiDung": "p → q"
               },
               {
                 "ma": "c",
-                "noiDung": "p → q"
+                "noiDung": "¬p → ¬q"
               },
               {
                 "ma": "d",
@@ -793,7 +793,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>“p only if q” means q is required for p: p → q.</p><p><i>VI: “p chỉ nếu q” nghĩa là q là điều kiện cần của p: p → q.</i></p>"
           },
@@ -803,23 +803,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "q → p"
-              },
-              {
-                "ma": "b",
                 "noiDung": "p → ¬q only"
               },
               {
+                "ma": "b",
+                "noiDung": "¬q → p, equivalent to p ∨ q"
+              },
+              {
                 "ma": "c",
-                "noiDung": "p ∧ ¬q"
+                "noiDung": "q → p"
               },
               {
                 "ma": "d",
-                "noiDung": "¬q → p, equivalent to p ∨ q"
+                "noiDung": "p ∧ ¬q"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>“p unless q” = if not q then p = ¬q → p ≡ q ∨ p.</p><p><i>VI: “p trừ khi q” = nếu không q thì p = ¬q → p ≡ q ∨ p.</i></p>"
           },
@@ -833,15 +833,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "If n² is even then n is even."
-              },
-              {
-                "ma": "c",
                 "noiDung": "If n is odd then n² is odd."
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "n is even and n² is odd."
+              },
+              {
+                "ma": "d",
+                "noiDung": "If n² is even then n is even."
               }
             ],
             "dapAn": [
@@ -855,23 +855,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p ∧ q"
-              },
-              {
-                "ma": "b",
-                "noiDung": "p → q"
-              },
-              {
-                "ma": "c",
                 "noiDung": "q → p"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "p ∧ q"
+              },
+              {
+                "ma": "c",
                 "noiDung": "p ↔ q"
+              },
+              {
+                "ma": "d",
+                "noiDung": "p → q"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Sufficient: the hypothesis suffices for the conclusion, so p → q.</p><p><i>VI: Điều kiện đủ: giả thiết đủ để có kết luận, nên p → q.</i></p>"
           },
@@ -881,23 +881,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "p ∧ q"
+                "noiDung": "p → q only"
               },
               {
                 "ma": "b",
-                "noiDung": "p ⊕ q"
-              },
-              {
-                "ma": "c",
                 "noiDung": "p ↔ q"
               },
               {
+                "ma": "c",
+                "noiDung": "p ⊕ q"
+              },
+              {
                 "ma": "d",
-                "noiDung": "p → q only"
+                "noiDung": "p ∧ q"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>“if and only if” is the biconditional: both implications.</p><p><i>VI: “khi và chỉ khi” là tương đương: cả hai chiều.</i></p>"
           },
@@ -907,11 +907,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "¬q → ¬p"
+                "noiDung": "¬p ∨ q"
               },
               {
                 "ma": "b",
-                "noiDung": "¬p ∨ q"
+                "noiDung": "¬q → ¬p"
               },
               {
                 "ma": "c",
@@ -1001,7 +1001,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Logic 5 — Evaluate a formula in the right order — answer key\n\n1. Evaluate (p ∧ ¬q) → (r ∨ q) for p = T, q = F, r = F.Tính (p ∧ ¬q) → (r ∨ q) khi p = T, q = F, r = F.\n   Answer: s1) ¬q = T  →  s2) p ∧ ¬q = T  →  s3) r ∨ q = F  →  s4) T → F = F\n   Negation first, then the two bracketed parts, then the main →.VI: Phủ định trước, rồi hai vế trong ngoặc, cuối cùng là → chính.\n\n2. Evaluate ¬(p ∧ r) ∨ (q → r) for p = F, q = T, r = T.Tính ¬(p ∧ r) ∨ (q → r) khi p = F, q = T, r = T.\n   Answer: s1) p ∧ r = F  →  s2) ¬(p ∧ r) = T  →  s3) q → r = T  →  s4) T ∨ T = T\n   Innermost p ∧ r first, then its negation; q → r is independent; the main ∨ is last.VI: p ∧ r trong cùng trước, rồi phủ định; q → r độc lập; ∨ chính ở cuối.\n"
+          "code": "# Logic 5 — Evaluate a formula in the right order — answer key\n\n1. Evaluate (p ∧ ¬q) → (r ∨ q) for p = T, q = F, r = F.Tính (p ∧ ¬q) → (r ∨ q) khi p = T, q = F, r = F.\n   Answer: m3) ¬q = T  →  m2) p ∧ ¬q = T  →  m1) r ∨ q = F  →  m4) T → F = F\n   Negation first, then the two bracketed parts, then the main →.VI: Phủ định trước, rồi hai vế trong ngoặc, cuối cùng là → chính.\n\n2. Evaluate ¬(p ∧ r) ∨ (q → r) for p = F, q = T, r = T.Tính ¬(p ∧ r) ∨ (q → r) khi p = F, q = T, r = T.\n   Answer: m3) p ∧ r = F  →  m1) ¬(p ∧ r) = T  →  m4) q → r = T  →  m2) T ∨ T = T\n   Innermost p ∧ r first, then its negation; q → r is independent; the main ∨ is last.VI: p ∧ r trong cùng trước, rồi phủ định; q → r độc lập; ∨ chính ở cuối.\n"
         }
       ],
       "solutionExplanationHtml": "<p>Negation first, then the two bracketed parts, then the main →.</p><p><i>VI: Phủ định trước, rồi hai vế trong ngoặc, cuối cùng là → chính.</i></p><p>Innermost p ∧ r first, then its negation; q → r is independent; the main ∨ is last.</p><p><i>VI: p ∧ r trong cùng trước, rồi phủ định; q → r độc lập; ∨ chính ở cuối.</i></p>",
@@ -1016,27 +1016,27 @@
             "de": "<p>Evaluate (p ∧ ¬q) → (r ∨ q) for p = T, q = F, r = F.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính (p ∧ ¬q) → (r ∨ q) khi p = T, q = F, r = F.</i></p>",
             "muc": [
               {
-                "ma": "s2",
-                "noiDung": "p ∧ ¬q = T"
-              },
-              {
-                "ma": "s3",
+                "ma": "m1",
                 "noiDung": "r ∨ q = F"
               },
               {
-                "ma": "s4",
-                "noiDung": "T → F = F"
+                "ma": "m2",
+                "noiDung": "p ∧ ¬q = T"
               },
               {
-                "ma": "s1",
+                "ma": "m3",
                 "noiDung": "¬q = T"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "T → F = F"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m3",
+              "m2",
+              "m1",
+              "m4"
             ],
             "giaiThich": "<p>Negation first, then the two bracketed parts, then the main →.</p><p><i>VI: Phủ định trước, rồi hai vế trong ngoặc, cuối cùng là → chính.</i></p>"
           },
@@ -1045,27 +1045,27 @@
             "de": "<p>Evaluate ¬(p ∧ r) ∨ (q → r) for p = F, q = T, r = T.</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính ¬(p ∧ r) ∨ (q → r) khi p = F, q = T, r = T.</i></p>",
             "muc": [
               {
-                "ma": "s3",
-                "noiDung": "q → r = T"
+                "ma": "m1",
+                "noiDung": "¬(p ∧ r) = T"
               },
               {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "T ∨ T = T"
               },
               {
-                "ma": "s1",
+                "ma": "m3",
                 "noiDung": "p ∧ r = F"
               },
               {
-                "ma": "s2",
-                "noiDung": "¬(p ∧ r) = T"
+                "ma": "m4",
+                "noiDung": "q → r = T"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m3",
+              "m1",
+              "m4",
+              "m2"
             ],
             "giaiThich": "<p>Innermost p ∧ r first, then its negation; q → r is independent; the main ∨ is last.</p><p><i>VI: p ∧ r trong cùng trước, rồi phủ định; q → r độc lập; ∨ chính ở cuối.</i></p>"
           }

@@ -5925,10 +5925,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Recursion lab 6 — Recursion vs iteration: which statements are true? — answer key\n\n1. A recursive function with no base case …Hàm đệ quy không có trường hợp cơ sở …\n   Answer: d) never terminates (stack overflow)\n   Without the basis there is nothing to stop the chain of calls.VI: Không có cơ sở thì không gì dừng chuỗi lời gọi.\n\n2. Proving that a recursive function returns the right value is naturally done by …Chứng minh hàm đệ quy trả giá trị đúng tự nhiên bằng …\n   Answer: a) induction on the argument\n   The recursive call is the inductive hypothesis.VI: Lời gọi đệ quy chính là giả thiết quy nạp.\n\n3. f(n) = 3f(n−1) − 2, f(0) = 5. What is f(4)?f(n) = 3f(n−1) − 2, f(0) = 5. f(4) bằng?\n   Answer: b) 325\n   f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.VI: f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.\n\n4. The Ackermann function A(2, 3) (A(0,n) = n+1; A(m,0) = A(m−1,1); A(m,n) = A(m−1, A(m,n−1))) equals …Hàm Ackermann A(2, 3) (A(0,n) = n+1; A(m,0) = A(m−1,1); A(m,n) = A(m−1, A(m,n−1))) bằng …\n   Answer: c) 9\n   A(1, n) = n + 2 and A(2, n) = 2n + 3, so A(2, 3) = 9.VI: A(1, n) = n + 2 và A(2, n) = 2n + 3 nên A(2, 3) = 9.\n\n5. Which problems have a natural recursive structure?Bài toán nào có cấu trúc đệ quy tự nhiên?\n   Answer: d) Tree traversal, Hanoi, merge sort\n   Each can be reduced to smaller copies of itself.VI: Mỗi bài có thể quy về các bản nhỏ hơn của chính nó.\n\n6. Tail recursion can be replaced by …Đệ quy đuôi có thể thay bằng …\n   Answer: a) a loop\n   The call is the last action, so the frame can be reused.VI: Lời gọi là hành động cuối nên có thể tái dùng khung.\n"
+          "code": "# Recursion lab 6 — Recursion vs iteration: which statements are true? — answer key\n\n1. A recursive function with no base case …Hàm đệ quy không có trường hợp cơ sở …\n   Answer: a) never terminates (stack overflow)\n   Without the basis there is nothing to stop the chain of calls.VI: Không có cơ sở thì không gì dừng chuỗi lời gọi.\n\n2. Proving that a recursive function returns the right value is naturally done by …Chứng minh hàm đệ quy trả giá trị đúng tự nhiên bằng …\n   Answer: c) induction on the argument\n   The recursive call is the inductive hypothesis.VI: Lời gọi đệ quy chính là giả thiết quy nạp.\n\n3. f(n) = 3f(n−1) − 2, f(0) = 5. What is f(4)?f(n) = 3f(n−1) − 2, f(0) = 5. f(4) bằng?\n   Answer: b) 325\n   f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.VI: f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.\n\n4. The Ackermann function A(2, 3) (A(0,n) = n+1; A(m,0) = A(m−1,1); A(m,n) = A(m−1, A(m,n−1))) equals …Hàm Ackermann A(2, 3) (A(0,n) = n+1; A(m,0) = A(m−1,1); A(m,n) = A(m−1, A(m,n−1))) bằng …\n   Answer: c) 9\n   A(1, n) = n + 2 and A(2, n) = 2n + 3, so A(2, 3) = 9.VI: A(1, n) = n + 2 và A(2, n) = 2n + 3 nên A(2, 3) = 9.\n\n5. Which problems have a natural recursive structure?Bài toán nào có cấu trúc đệ quy tự nhiên?\n   Answer: b) Tree traversal, Hanoi, merge sort\n   Each can be reduced to smaller copies of itself.VI: Mỗi bài có thể quy về các bản nhỏ hơn của chính nó.\n\n6. Tail recursion can be replaced by …Đệ quy đuôi có thể thay bằng …\n   Answer: b) a loop\n   The call is the last action, so the frame can be reused.VI: Lời gọi là hành động cuối nên có thể tái dùng khung.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>Without the basis there is nothing to stop the chain of calls.</p><p><i>VI: Không có cơ sở thì không gì dừng chuỗi lời gọi.</i></p><p>The recursive call is the inductive hypothesis.</p><p><i>VI: Lời gọi đệ quy chính là giả thiết quy nạp.</i></p><p>f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.</p><p><i>VI: f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.</i></p><p>A(1, n) = n + 2 and A(2, n) = 2n + 3, so A(2, 3) = 9.</p><p><i>VI: A(1, n) = n + 2 và A(2, n) = 2n + 3 nên A(2, 3) = 9.</i></p><p>Each can be reduced to smaller copies of itself.</p><p><i>VI: Mỗi bài có thể quy về các bản nhỏ hơn của chính nó.</i></p><p>The call is the last action, so the frame can be reused.</p><p><i>VI: Lời gọi là hành động cuối nên có thể tái dùng khung.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> never terminates (stack overflow)</p><p>Without the basis there is nothing to stop the chain of calls.</p><p><i>VI: Không có cơ sở thì không gì dừng chuỗi lời gọi.</i></p></li><li><p><b>c)</b> induction on the argument</p><p>The recursive call is the inductive hypothesis.</p><p><i>VI: Lời gọi đệ quy chính là giả thiết quy nạp.</i></p></li><li><p><b>b)</b> 325</p><p>f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.</p><p><i>VI: f: 5, 13, 37, 109, 325 ⇒ f(4) = 325.</i></p></li><li><p><b>c)</b> 9</p><p>A(1, n) = n + 2 and A(2, n) = 2n + 3, so A(2, 3) = 9.</p><p><i>VI: A(1, n) = n + 2 và A(2, n) = 2n + 3 nên A(2, 3) = 9.</i></p></li><li><p><b>b)</b> Tree traversal, Hanoi, merge sort</p><p>Each can be reduced to smaller copies of itself.</p><p><i>VI: Mỗi bài có thể quy về các bản nhỏ hơn của chính nó.</i></p></li><li><p><b>b)</b> a loop</p><p>The call is the last action, so the frame can be reused.</p><p><i>VI: Lời gọi là hành động cuối nên có thể tái dùng khung.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -5941,11 +5941,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "runs in O(1)"
+                "noiDung": "never terminates (stack overflow)"
               },
               {
                 "ma": "b",
-                "noiDung": "terminates after n calls"
+                "noiDung": "runs in O(1)"
               },
               {
                 "ma": "c",
@@ -5953,11 +5953,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "never terminates (stack overflow)"
+                "noiDung": "terminates after n calls"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Without the basis there is nothing to stop the chain of calls.</p><p><i>VI: Không có cơ sở thì không gì dừng chuỗi lời gọi.</i></p>"
           },
@@ -5967,23 +5967,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "induction on the argument"
-              },
-              {
-                "ma": "b",
                 "noiDung": "contradiction on the output"
               },
               {
+                "ma": "b",
+                "noiDung": "Venn diagrams"
+              },
+              {
                 "ma": "c",
-                "noiDung": "truth tables"
+                "noiDung": "induction on the argument"
               },
               {
                 "ma": "d",
-                "noiDung": "Venn diagrams"
+                "noiDung": "truth tables"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>The recursive call is the inductive hypothesis.</p><p><i>VI: Lời gọi đệ quy chính là giả thiết quy nạp.</i></p>"
           },
@@ -5993,7 +5993,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "10"
+                "noiDung": "405"
               },
               {
                 "ma": "b",
@@ -6001,11 +6001,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "109"
+                "noiDung": "10"
               },
               {
                 "ma": "d",
-                "noiDung": "405"
+                "noiDung": "109"
               }
             ],
             "dapAn": [
@@ -6019,11 +6019,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "5"
+                "noiDung": "8"
               },
               {
                 "ma": "b",
-                "noiDung": "8"
+                "noiDung": "5"
               },
               {
                 "ma": "c",
@@ -6045,23 +6045,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Adding two numbers"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Printing a constant"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Reading one array element"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "Tree traversal, Hanoi, merge sort"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Printing a constant"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Adding two numbers"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Each can be reduced to smaller copies of itself.</p><p><i>VI: Mỗi bài có thể quy về các bản nhỏ hơn của chính nó.</i></p>"
           },
@@ -6071,23 +6071,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a loop"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a truth table"
               },
               {
+                "ma": "b",
+                "noiDung": "a loop"
+              },
+              {
                 "ma": "c",
-                "noiDung": "a set"
+                "noiDung": "induction"
               },
               {
                 "ma": "d",
-                "noiDung": "induction"
+                "noiDung": "a set"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>The call is the last action, so the frame can be reused.</p><p><i>VI: Lời gọi là hành động cuối nên có thể tái dùng khung.</i></p>"
           }

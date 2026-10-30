@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Trees 1 — Definitions and basic facts — answer key\n\n1. A tree with n vertices has exactly … edges.Cây có n đỉnh có đúng … cạnh.\n   Answer: c) n − 1\n   Adding any edge to a tree makes a cycle; removing any edge disconnects it.VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.\n\n2. Between any two vertices of a tree there is …Giữa hai đỉnh bất kỳ của cây có …\n   Answer: d) exactly one simple path\n   Uniqueness of the path is equivalent to having no cycle.VI: Đường đi duy nhất tương đương với không có chu trình.\n\n3. A full m-ary tree with i internal vertices has … vertices.Cây m-phân đầy đủ có i đỉnh trong có … đỉnh.\n   Answer: a) m·i + 1\n   Every vertex except the root is a child: n = m·i + 1.VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.\n\n4. A binary tree of height h has at most … leaves.Cây nhị phân chiều cao h có tối đa … lá.\n   Answer: b) 2ʰ\n   Each level at most doubles the number of nodes.VI: Mỗi mức tối đa gấp đôi số nút.\n\n5. In-order traversal of a binary SEARCH tree visits keys …Duyệt trung thứ tự (in-order) cây tìm kiếm nhị phân thăm các khoá …\n   Answer: c) in increasing order\n   Left subtree VI: Cây con trái\n\n6. A spanning tree of a connected graph G is …Cây khung của đồ thị liên thông G là …\n   Answer: d) a subgraph that is a tree containing every vertex of G\n   It spans (touches) all the vertices, uses |V| − 1 edges, and is acyclic.VI: Nó chứa mọi đỉnh, dùng |V| − 1 cạnh và không có chu trình.\n"
+          "code": "# Trees 1 — Definitions and basic facts — answer key\n\n1. A tree with n vertices has exactly … edges.Cây có n đỉnh có đúng … cạnh.\n   Answer: b) n − 1\n   Adding any edge to a tree makes a cycle; removing any edge disconnects it.VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.\n\n2. Between any two vertices of a tree there is …Giữa hai đỉnh bất kỳ của cây có …\n   Answer: b) exactly one simple path\n   Uniqueness of the path is equivalent to having no cycle.VI: Đường đi duy nhất tương đương với không có chu trình.\n\n3. A full m-ary tree with i internal vertices has … vertices.Cây m-phân đầy đủ có i đỉnh trong có … đỉnh.\n   Answer: c) m·i + 1\n   Every vertex except the root is a child: n = m·i + 1.VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.\n\n4. A binary tree of height h has at most … leaves.Cây nhị phân chiều cao h có tối đa … lá.\n   Answer: d) 2ʰ\n   Each level at most doubles the number of nodes.VI: Mỗi mức tối đa gấp đôi số nút.\n\n5. In-order traversal of a binary SEARCH tree visits keys …Duyệt trung thứ tự (in-order) cây tìm kiếm nhị phân thăm các khoá …\n   Answer: b) in increasing order\n   Left subtree < root < right subtree, recursively.VI: Cây con trái < gốc < cây con phải, đệ quy.\n\n6. A spanning tree of a connected graph G is …Cây khung của đồ thị liên thông G là …\n   Answer: d) a subgraph that is a tree containing every vertex of G\n   It spans (touches) all the vertices, uses |V| − 1 edges, and is acyclic.VI: Nó chứa mọi đỉnh, dùng |V| − 1 cạnh và không có chu trình.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>Adding any edge to a tree makes a cycle; removing any edge disconnects it.</p><p><i>VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.</i></p><p>Uniqueness of the path is equivalent to having no cycle.</p><p><i>VI: Đường đi duy nhất tương đương với không có chu trình.</i></p><p>Every vertex except the root is a child: n = m·i + 1.</p><p><i>VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.</i></p><p>Each level at most doubles the number of nodes.</p><p><i>VI: Mỗi mức tối đa gấp đôi số nút.</i></p><p>Left subtree < root < right subtree, recursively.</p><p><i>VI: Cây con trái < gốc < cây con phải, đệ quy.</i></p><p>It spans (touches) all the vertices, uses |V| − 1 edges, and is acyclic.</p><p><i>VI: Nó chứa mọi đỉnh, dùng |V| − 1 cạnh và không có chu trình.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> n − 1</p><p>Adding any edge to a tree makes a cycle; removing any edge disconnects it.</p><p><i>VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.</i></p></li><li><p><b>b)</b> exactly one simple path</p><p>Uniqueness of the path is equivalent to having no cycle.</p><p><i>VI: Đường đi duy nhất tương đương với không có chu trình.</i></p></li><li><p><b>c)</b> m·i + 1</p><p>Every vertex except the root is a child: n = m·i + 1.</p><p><i>VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.</i></p></li><li><p><b>d)</b> 2ʰ</p><p>Each level at most doubles the number of nodes.</p><p><i>VI: Mỗi mức tối đa gấp đôi số nút.</i></p></li><li><p><b>b)</b> in increasing order</p><p>Left subtree < root < right subtree, recursively.</p><p><i>VI: Cây con trái < gốc < cây con phải, đệ quy.</i></p></li><li><p><b>d)</b> a subgraph that is a tree containing every vertex of G</p><p>It spans (touches) all the vertices, uses |V| − 1 edges, and is acyclic.</p><p><i>VI: Nó chứa mọi đỉnh, dùng |V| − 1 cạnh và không có chu trình.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,11 +66,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "2n"
+                "noiDung": "n − 1"
               },
               {
                 "ma": "c",
-                "noiDung": "n − 1"
+                "noiDung": "2n"
               },
               {
                 "ma": "d",
@@ -78,7 +78,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Adding any edge to a tree makes a cycle; removing any edge disconnects it.</p><p><i>VI: Thêm cạnh nào vào cây cũng tạo chu trình; bỏ cạnh nào cũng làm mất liên thông.</i></p>"
           },
@@ -92,7 +92,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "no path"
+                "noiDung": "exactly one simple path"
               },
               {
                 "ma": "c",
@@ -100,11 +100,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "exactly one simple path"
+                "noiDung": "no path"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Uniqueness of the path is equivalent to having no cycle.</p><p><i>VI: Đường đi duy nhất tương đương với không có chu trình.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "m·i + 1"
+                "noiDung": "i²"
               },
               {
                 "ma": "b",
-                "noiDung": "m·i"
-              },
-              {
-                "ma": "c",
                 "noiDung": "i + m"
               },
               {
+                "ma": "c",
+                "noiDung": "m·i + 1"
+              },
+              {
                 "ma": "d",
-                "noiDung": "i²"
+                "noiDung": "m·i"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Every vertex except the root is a child: n = m·i + 1.</p><p><i>VI: Mọi đỉnh trừ gốc đều là con: n = m·i + 1.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "h"
+                "noiDung": "2h"
               },
               {
                 "ma": "b",
-                "noiDung": "2ʰ"
-              },
-              {
-                "ma": "c",
                 "noiDung": "h²"
               },
               {
+                "ma": "c",
+                "noiDung": "h"
+              },
+              {
                 "ma": "d",
-                "noiDung": "2h"
+                "noiDung": "2ʰ"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Each level at most doubles the number of nodes.</p><p><i>VI: Mỗi mức tối đa gấp đôi số nút.</i></p>"
           },
@@ -170,11 +170,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "in insertion order"
+                "noiDung": "in increasing order"
               },
               {
                 "ma": "c",
-                "noiDung": "in increasing order"
+                "noiDung": "in insertion order"
               },
               {
                 "ma": "d",
@@ -182,7 +182,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Left subtree < root < right subtree, recursively.</p><p><i>VI: Cây con trái < gốc < cây con phải, đệ quy.</i></p>"
           },
@@ -192,15 +192,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "any tree inside G"
+                "noiDung": "the set of leaves of the tree obtained by a DFS"
               },
               {
                 "ma": "b",
-                "noiDung": "a Hamilton path only"
+                "noiDung": "any tree inside G, even one that misses some vertices"
               },
               {
                 "ma": "c",
-                "noiDung": "the set of leaves"
+                "noiDung": "a Hamilton path, and nothing else can qualify"
               },
               {
                 "ma": "d",
@@ -1026,7 +1026,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Trees 6 — Order the algorithm steps — answer key\n\n1. Kruskal’s algorithm.Thuật toán Kruskal.\n   Answer: s1) Sort all edges by weight (ascending).  →  s2) Start with every vertex in its own component and T = ∅.  →  s3) Take the next edge; if its ends are in different components, add it to T and merge them.  →  s4) Otherwise skip the edge (it would create a cycle).  →  s5) Stop when T has n − 1 edges.\n   The disjoint-set structure makes the cycle test almost constant time.VI: Cấu trúc tập rời làm phép kiểm chu trình gần như hằng.\n\n2. Prim’s algorithm.Thuật toán Prim.\n   Answer: s1) Start the tree with an arbitrary vertex.  →  s2) Look at all edges with exactly one end in the tree.  →  s3) Add the cheapest of them together with its new vertex.  →  s4) Repeat until all vertices are in the tree.\n   Prim grows one tree; Kruskal merges a forest.VI: Prim lớn dần một cây; Kruskal gộp một rừng.\n\n3. Insert key 6 into a BST whose root is 8 (left child 3, right child 10).Chèn khoá 6 vào BST có gốc 8 (con trái 3, con phải 10).\n   Answer: s1) Compare 6 with the root 8: 6 < 8, go left.  →  s2) Compare 6 with 3: 6 ≥ 3, go right.  →  s3) The right child of 3 is empty.  →  s4) Create the new node 6 there.\n   A new key always ends as a leaf.VI: Khoá mới luôn kết thúc ở vị trí lá.\n"
+          "code": "# Trees 6 — Order the algorithm steps — answer key\n\n1. Kruskal’s algorithm.Thuật toán Kruskal.\n   Answer: m2) Sort all edges by weight (ascending).  →  m4) Start with every vertex in its own component and T = ∅.  →  m1) Take the next edge; if its ends are in different components, add it to T and merge them.  →  m5) Otherwise skip the edge (it would create a cycle).  →  m3) Stop when T has n − 1 edges.\n   The disjoint-set structure makes the cycle test almost constant time.VI: Cấu trúc tập rời làm phép kiểm chu trình gần như hằng.\n\n2. Prim’s algorithm.Thuật toán Prim.\n   Answer: m3) Start the tree with an arbitrary vertex.  →  m1) Look at all edges with exactly one end in the tree.  →  m4) Add the cheapest of them together with its new vertex.  →  m2) Repeat until all vertices are in the tree.\n   Prim grows one tree; Kruskal merges a forest.VI: Prim lớn dần một cây; Kruskal gộp một rừng.\n\n3. Insert key 6 into a BST whose root is 8 (left child 3, right child 10).Chèn khoá 6 vào BST có gốc 8 (con trái 3, con phải 10).\n   Answer: m2) Compare 6 with the root 8: 6 < 8, go left.  →  m4) Compare 6 with 3: 6 ≥ 3, go right.  →  m3) The right child of 3 is empty.  →  m1) Create the new node 6 there.\n   A new key always ends as a leaf.VI: Khoá mới luôn kết thúc ở vị trí lá.\n"
         }
       ],
       "solutionExplanationHtml": "<p>The disjoint-set structure makes the cycle test almost constant time.</p><p><i>VI: Cấu trúc tập rời làm phép kiểm chu trình gần như hằng.</i></p><p>Prim grows one tree; Kruskal merges a forest.</p><p><i>VI: Prim lớn dần một cây; Kruskal gộp một rừng.</i></p><p>A new key always ends as a leaf.</p><p><i>VI: Khoá mới luôn kết thúc ở vị trí lá.</i></p>",
@@ -1041,32 +1041,32 @@
             "de": "<p>Kruskal’s algorithm.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Kruskal.</i></p>",
             "muc": [
               {
-                "ma": "s3",
+                "ma": "m1",
                 "noiDung": "Take the next edge; if its ends are in different components, add it to T and merge them."
               },
               {
-                "ma": "s4",
-                "noiDung": "Otherwise skip the edge (it would create a cycle)."
-              },
-              {
-                "ma": "s5",
-                "noiDung": "Stop when T has n − 1 edges."
-              },
-              {
-                "ma": "s1",
+                "ma": "m2",
                 "noiDung": "Sort all edges by weight (ascending)."
               },
               {
-                "ma": "s2",
+                "ma": "m3",
+                "noiDung": "Stop when T has n − 1 edges."
+              },
+              {
+                "ma": "m4",
                 "noiDung": "Start with every vertex in its own component and T = ∅."
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Otherwise skip the edge (it would create a cycle)."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m2",
+              "m4",
+              "m1",
+              "m5",
+              "m3"
             ],
             "giaiThich": "<p>The disjoint-set structure makes the cycle test almost constant time.</p><p><i>VI: Cấu trúc tập rời làm phép kiểm chu trình gần như hằng.</i></p>"
           },
@@ -1075,27 +1075,27 @@
             "de": "<p>Prim’s algorithm.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Prim.</i></p>",
             "muc": [
               {
-                "ma": "s2",
+                "ma": "m1",
                 "noiDung": "Look at all edges with exactly one end in the tree."
               },
               {
-                "ma": "s3",
-                "noiDung": "Add the cheapest of them together with its new vertex."
-              },
-              {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "Repeat until all vertices are in the tree."
               },
               {
-                "ma": "s1",
+                "ma": "m3",
                 "noiDung": "Start the tree with an arbitrary vertex."
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Add the cheapest of them together with its new vertex."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m3",
+              "m1",
+              "m4",
+              "m2"
             ],
             "giaiThich": "<p>Prim grows one tree; Kruskal merges a forest.</p><p><i>VI: Prim lớn dần một cây; Kruskal gộp một rừng.</i></p>"
           },
@@ -1104,27 +1104,27 @@
             "de": "<p>Insert key 6 into a BST whose root is 8 (left child 3, right child 10).</p><p style=\"opacity:.75;font-size:.92em\"><i>Chèn khoá 6 vào BST có gốc 8 (con trái 3, con phải 10).</i></p>",
             "muc": [
               {
-                "ma": "s2",
-                "noiDung": "Compare 6 with 3: 6 ≥ 3, go right."
-              },
-              {
-                "ma": "s3",
-                "noiDung": "The right child of 3 is empty."
-              },
-              {
-                "ma": "s4",
+                "ma": "m1",
                 "noiDung": "Create the new node 6 there."
               },
               {
-                "ma": "s1",
+                "ma": "m2",
                 "noiDung": "Compare 6 with the root 8: 6 < 8, go left."
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The right child of 3 is empty."
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Compare 6 with 3: 6 ≥ 3, go right."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m2",
+              "m4",
+              "m3",
+              "m1"
             ],
             "giaiThich": "<p>A new key always ends as a leaf.</p><p><i>VI: Khoá mới luôn kết thúc ở vị trí lá.</i></p>"
           }

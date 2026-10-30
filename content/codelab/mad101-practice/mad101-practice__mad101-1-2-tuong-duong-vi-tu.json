@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Equivalence 1 — Name the law — answer key\n\n1. ¬(p ∧ q) ≡ ¬p ∨ ¬q is …¬(p ∧ q) ≡ ¬p ∨ ¬q là …\n   Answer: d) De Morgan’s law\n   De Morgan: a negation flips ∧ into ∨ and negates each part.VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.\n\n2. p ∨ (p ∧ q) ≡ p is …p ∨ (p ∧ q) ≡ p là …\n   Answer: a) the absorption law\n   The extra q is “absorbed”: if p is false, p ∧ q is false too.VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.\n\n3. p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …\n   Answer: b) the distributive law\n   ∧ distributes over ∨, exactly like × over + in arithmetic.VI: ∧ phân phối trên ∨ giống × trên + trong số học.\n\n4. ¬∀x P(x) is equivalent to …¬∀x P(x) tương đương với …\n   Answer: c) ∃x ¬P(x)\n   A universal claim fails exactly when a counter-example exists.VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.\n\n5. p → q ≡ ¬p ∨ q is called …p → q ≡ ¬p ∨ q được gọi là …\n   Answer: d) the implication-as-disjunction equivalence\n   It lets us rewrite → inside a proof by chains of equivalences.VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.\n\n6. ¬¬p ≡ p is …¬¬p ≡ p là …\n   Answer: a) the double-negation law\n   Two negations cancel.VI: Hai lần phủ định triệt tiêu nhau.\n"
+          "code": "# Equivalence 1 — Name the law — answer key\n\n1. ¬(p ∧ q) ≡ ¬p ∨ ¬q is …¬(p ∧ q) ≡ ¬p ∨ ¬q là …\n   Answer: c) De Morgan’s law\n   De Morgan: a negation flips ∧ into ∨ and negates each part.VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.\n\n2. p ∨ (p ∧ q) ≡ p is …p ∨ (p ∧ q) ≡ p là …\n   Answer: a) the absorption law\n   The extra q is “absorbed”: if p is false, p ∧ q is false too.VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.\n\n3. p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) is …p ∧ (q ∨ r) ≡ (p ∧ q) ∨ (p ∧ r) là …\n   Answer: a) the distributive law\n   ∧ distributes over ∨, exactly like × over + in arithmetic.VI: ∧ phân phối trên ∨ giống × trên + trong số học.\n\n4. ¬∀x P(x) is equivalent to …¬∀x P(x) tương đương với …\n   Answer: b) ∃x ¬P(x)\n   A universal claim fails exactly when a counter-example exists.VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.\n\n5. p → q ≡ ¬p ∨ q is called …p → q ≡ ¬p ∨ q được gọi là …\n   Answer: b) the implication-as-disjunction equivalence\n   It lets us rewrite → inside a proof by chains of equivalences.VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.\n\n6. ¬¬p ≡ p is …¬¬p ≡ p là …\n   Answer: d) the double-negation law\n   Two negations cancel.VI: Hai lần phủ định triệt tiêu nhau.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>De Morgan: a negation flips ∧ into ∨ and negates each part.</p><p><i>VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.</i></p><p>The extra q is “absorbed”: if p is false, p ∧ q is false too.</p><p><i>VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.</i></p><p>∧ distributes over ∨, exactly like × over + in arithmetic.</p><p><i>VI: ∧ phân phối trên ∨ giống × trên + trong số học.</i></p><p>A universal claim fails exactly when a counter-example exists.</p><p><i>VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.</i></p><p>It lets us rewrite → inside a proof by chains of equivalences.</p><p><i>VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.</i></p><p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> De Morgan’s law</p><p>De Morgan: a negation flips ∧ into ∨ and negates each part.</p><p><i>VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.</i></p></li><li><p><b>a)</b> the absorption law</p><p>The extra q is “absorbed”: if p is false, p ∧ q is false too.</p><p><i>VI: q thừa bị “hấp thụ”: nếu p sai thì p ∧ q cũng sai.</i></p></li><li><p><b>a)</b> the distributive law</p><p>∧ distributes over ∨, exactly like × over + in arithmetic.</p><p><i>VI: ∧ phân phối trên ∨ giống × trên + trong số học.</i></p></li><li><p><b>b)</b> ∃x ¬P(x)</p><p>A universal claim fails exactly when a counter-example exists.</p><p><i>VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.</i></p></li><li><p><b>b)</b> the implication-as-disjunction equivalence</p><p>It lets us rewrite → inside a proof by chains of equivalences.</p><p><i>VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.</i></p></li><li><p><b>d)</b> the double-negation law</p><p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,19 +66,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the absorption law"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the double-negation law"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "De Morgan’s law"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the absorption law"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>De Morgan: a negation flips ∧ into ∨ and negates each part.</p><p><i>VI: De Morgan: phủ định đổi ∧ thành ∨ và phủ định từng phần.</i></p>"
           },
@@ -92,15 +92,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "De Morgan’s law"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the idempotent law"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "the commutative law"
+              },
+              {
+                "ma": "d",
+                "noiDung": "De Morgan’s law"
               }
             ],
             "dapAn": [
@@ -114,11 +114,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "De Morgan’s law"
+                "noiDung": "the distributive law"
               },
               {
                 "ma": "b",
-                "noiDung": "the distributive law"
+                "noiDung": "De Morgan’s law"
               },
               {
                 "ma": "c",
@@ -130,7 +130,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>∧ distributes over ∨, exactly like × over + in arithmetic.</p><p><i>VI: ∧ phân phối trên ∨ giống × trên + trong số học.</i></p>"
           },
@@ -144,11 +144,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "¬∃x ¬P(x)"
+                "noiDung": "∃x ¬P(x)"
               },
               {
                 "ma": "c",
-                "noiDung": "∃x ¬P(x)"
+                "noiDung": "¬∃x ¬P(x)"
               },
               {
                 "ma": "d",
@@ -156,7 +156,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>A universal claim fails exactly when a counter-example exists.</p><p><i>VI: Khẳng định phổ quát sai khi và chỉ khi có phản ví dụ.</i></p>"
           },
@@ -166,23 +166,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the contrapositive law"
+                "noiDung": "the contrapositive of the implication"
               },
               {
                 "ma": "b",
-                "noiDung": "the converse law"
+                "noiDung": "the implication-as-disjunction equivalence"
               },
               {
                 "ma": "c",
-                "noiDung": "the idempotent law"
+                "noiDung": "the idempotent law for disjunction"
               },
               {
                 "ma": "d",
-                "noiDung": "the implication-as-disjunction equivalence"
+                "noiDung": "the converse of the implication"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>It lets us rewrite → inside a proof by chains of equivalences.</p><p><i>VI: Nó cho phép viết lại → trong chứng minh bằng chuỗi tương đương.</i></p>"
           },
@@ -192,7 +192,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the double-negation law"
+                "noiDung": "the negation law"
               },
               {
                 "ma": "b",
@@ -200,15 +200,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "the negation law"
+                "noiDung": "the domination law"
               },
               {
                 "ma": "d",
-                "noiDung": "the domination law"
+                "noiDung": "the double-negation law"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Two negations cancel.</p><p><i>VI: Hai lần phủ định triệt tiêu nhau.</i></p>"
           }
@@ -619,10 +619,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Equivalence 4 — Negations and nested quantifiers — answer key\n\n1. The negation of ∀x ∃y (x + y = 0) is …Phủ định của ∀x ∃y (x + y = 0) là …\n   Answer: d) ∃x ∀y (x + y ≠ 0)\n   Push ¬ inward: each quantifier flips and the predicate is negated.VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.\n\n2. Domain {−5,…,5}: ∀x ∃y (x + y = 0) is …Miền {−5,…,5}: ∀x ∃y (x + y = 0) là …\n   Answer: a) TRUE (take y = −x; checked: true)\n   Every x has its opposite −x in the symmetric domain.VI: Mỗi x có số đối −x trong miền đối xứng.\n\n3. Domain {0,…,5}: ∀x ∃y (x + y = 0) is …Miền {0,…,5}: ∀x ∃y (x + y = 0) là …\n   Answer: b) FALSE (checked: false); x = 1 has no partner\n   Negative numbers are not in the domain, so only x = 0 has a partner.VI: Số âm không thuộc miền nên chỉ x = 0 có cặp.\n\n4. Domain {−5,…,5}: ∃y ∀x (x + y = 0) is …Miền {−5,…,5}: ∃y ∀x (x + y = 0) là …\n   Answer: c) FALSE (checked: false)\n   A single y would have to equal −x for every x at once.VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc.\n\n5. Swapping ∀x ∃y into ∃y ∀x …Đổi ∀x ∃y thành ∃y ∀x …\n   Answer: d) can change the truth value\n   ∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.\n\n6. Domain {−5,…,5}: ∀x ∃y (x·y = 1) is …Miền {−5,…,5}: ∀x ∃y (x·y = 1) là …\n   Answer: a) FALSE (checked: false); x = 0 or x = 2 has no partner\n   1/x is not an integer for most x, and x = 0 never works.VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được.\n"
+          "code": "# Equivalence 4 — Negations and nested quantifiers — answer key\n\n1. The negation of ∀x ∃y (x + y = 0) is …Phủ định của ∀x ∃y (x + y = 0) là …\n   Answer: a) ∃x ∀y (x + y ≠ 0)\n   Push ¬ inward: each quantifier flips and the predicate is negated.VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.\n\n2. Domain {−5,…,5}: ∀x ∃y (x + y = 0) is …Miền {−5,…,5}: ∀x ∃y (x + y = 0) là …\n   Answer: c) TRUE\n   Every x has its opposite −x in the symmetric domain, so take y = −x (enumerating the domain gives true).VI: Mỗi x có số đối −x trong miền đối xứng nên lấy y = −x (duyệt hết miền cho true).\n\n3. Domain {0,…,5}: ∀x ∃y (x + y = 0) is …Miền {0,…,5}: ∀x ∃y (x + y = 0) là …\n   Answer: b) FALSE\n   Negative numbers are not in the domain, so only x = 0 has a partner; x = 1 has none (enumerating the domain gives false).VI: Số âm không thuộc miền nên chỉ x = 0 có cặp; x = 1 không có (duyệt hết miền cho false).\n\n4. Domain {−5,…,5}: ∃y ∀x (x + y = 0) is …Miền {−5,…,5}: ∃y ∀x (x + y = 0) là …\n   Answer: c) FALSE\n   A single y would have to equal −x for every x at once (enumerating the domain gives false).VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc (duyệt hết miền cho false).\n\n5. Swapping ∀x ∃y into ∃y ∀x …Đổi ∀x ∃y thành ∃y ∀x …\n   Answer: a) can change the truth value\n   ∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.\n\n6. Domain {−5,…,5}: ∀x ∃y (x·y = 1) is …Miền {−5,…,5}: ∀x ∃y (x·y = 1) là …\n   Answer: a) FALSE\n   1/x is not an integer for most x, and x = 0 never works: x = 0 and x = 2 have no partner (enumerating the domain gives false).VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được: x = 0 và x = 2 không có cặp (duyệt hết miền cho false).\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>Push ¬ inward: each quantifier flips and the predicate is negated.</p><p><i>VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.</i></p><p>Every x has its opposite −x in the symmetric domain.</p><p><i>VI: Mỗi x có số đối −x trong miền đối xứng.</i></p><p>Negative numbers are not in the domain, so only x = 0 has a partner.</p><p><i>VI: Số âm không thuộc miền nên chỉ x = 0 có cặp.</i></p><p>A single y would have to equal −x for every x at once.</p><p><i>VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc.</i></p><p>∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.</p><p><i>VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.</i></p><p>1/x is not an integer for most x, and x = 0 never works.</p><p><i>VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> ∃x ∀y (x + y ≠ 0)</p><p>Push ¬ inward: each quantifier flips and the predicate is negated.</p><p><i>VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.</i></p></li><li><p><b>c)</b> TRUE</p><p>Every x has its opposite −x in the symmetric domain, so take y = −x (enumerating the domain gives true).</p><p><i>VI: Mỗi x có số đối −x trong miền đối xứng nên lấy y = −x (duyệt hết miền cho true).</i></p></li><li><p><b>b)</b> FALSE</p><p>Negative numbers are not in the domain, so only x = 0 has a partner; x = 1 has none (enumerating the domain gives false).</p><p><i>VI: Số âm không thuộc miền nên chỉ x = 0 có cặp; x = 1 không có (duyệt hết miền cho false).</i></p></li><li><p><b>c)</b> FALSE</p><p>A single y would have to equal −x for every x at once (enumerating the domain gives false).</p><p><i>VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc (duyệt hết miền cho false).</i></p></li><li><p><b>a)</b> can change the truth value</p><p>∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.</p><p><i>VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.</i></p></li><li><p><b>a)</b> FALSE</p><p>1/x is not an integer for most x, and x = 0 never works: x = 0 and x = 2 have no partner (enumerating the domain gives false).</p><p><i>VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được: x = 0 và x = 2 không có cặp (duyệt hết miền cho false).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -635,7 +635,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "∀x ∃y (x + y ≠ 0)"
+                "noiDung": "∃x ∀y (x + y ≠ 0)"
               },
               {
                 "ma": "b",
@@ -647,11 +647,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "∃x ∀y (x + y ≠ 0)"
+                "noiDung": "∀x ∃y (x + y ≠ 0)"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Push ¬ inward: each quantifier flips and the predicate is negated.</p><p><i>VI: Đưa ¬ vào trong: mỗi lượng từ đổi dạng và vị từ bị phủ định.</i></p>"
           },
@@ -661,25 +661,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "TRUE (take y = −x; checked: true)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "FALSE"
               },
               {
+                "ma": "b",
+                "noiDung": "TRUE only for x = 0"
+              },
+              {
                 "ma": "c",
-                "noiDung": "undefined on a finite domain"
+                "noiDung": "TRUE"
               },
               {
                 "ma": "d",
-                "noiDung": "TRUE only for x = 0"
+                "noiDung": "undefined on a finite domain"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
-            "giaiThich": "<p>Every x has its opposite −x in the symmetric domain.</p><p><i>VI: Mỗi x có số đối −x trong miền đối xứng.</i></p>"
+            "giaiThich": "<p>Every x has its opposite −x in the symmetric domain, so take y = −x (enumerating the domain gives true).</p><p><i>VI: Mỗi x có số đối −x trong miền đối xứng nên lấy y = −x (duyệt hết miền cho true).</i></p>"
           },
           {
             "ma": "c3",
@@ -691,21 +691,21 @@
               },
               {
                 "ma": "b",
-                "noiDung": "FALSE (checked: false); x = 1 has no partner"
+                "noiDung": "FALSE"
               },
               {
                 "ma": "c",
-                "noiDung": "TRUE"
+                "noiDung": "TRUE with y = −x"
               },
               {
                 "ma": "d",
-                "noiDung": "TRUE with y = −x"
+                "noiDung": "TRUE"
               }
             ],
             "dapAn": [
               "b"
             ],
-            "giaiThich": "<p>Negative numbers are not in the domain, so only x = 0 has a partner.</p><p><i>VI: Số âm không thuộc miền nên chỉ x = 0 có cặp.</i></p>"
+            "giaiThich": "<p>Negative numbers are not in the domain, so only x = 0 has a partner; x = 1 has none (enumerating the domain gives false).</p><p><i>VI: Số âm không thuộc miền nên chỉ x = 0 có cặp; x = 1 không có (duyệt hết miền cho false).</i></p>"
           },
           {
             "ma": "c4",
@@ -721,7 +721,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "FALSE (checked: false)"
+                "noiDung": "FALSE"
               },
               {
                 "ma": "d",
@@ -731,7 +731,7 @@
             "dapAn": [
               "c"
             ],
-            "giaiThich": "<p>A single y would have to equal −x for every x at once.</p><p><i>VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc.</i></p>"
+            "giaiThich": "<p>A single y would have to equal −x for every x at once (enumerating the domain gives false).</p><p><i>VI: Một y duy nhất phải bằng −x cho mọi x cùng lúc (duyệt hết miền cho false).</i></p>"
           },
           {
             "ma": "c5",
@@ -739,7 +739,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "never changes the truth value"
+                "noiDung": "can change the truth value"
               },
               {
                 "ma": "b",
@@ -747,15 +747,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "is only allowed with ∨"
+                "noiDung": "never changes the truth value"
               },
               {
                 "ma": "d",
-                "noiDung": "can change the truth value"
+                "noiDung": "is only allowed with ∨"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>∀x∃y lets y depend on x; ∃y∀x demands one y that works for all x.</p><p><i>VI: ∀x∃y cho phép y phụ thuộc x; ∃y∀x đòi một y dùng cho mọi x.</i></p>"
           },
@@ -765,11 +765,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "FALSE (checked: false); x = 0 or x = 2 has no partner"
+                "noiDung": "FALSE"
               },
               {
                 "ma": "b",
-                "noiDung": "TRUE"
+                "noiDung": "TRUE only for x = 1"
               },
               {
                 "ma": "c",
@@ -777,13 +777,13 @@
               },
               {
                 "ma": "d",
-                "noiDung": "TRUE only for x = 1"
+                "noiDung": "TRUE"
               }
             ],
             "dapAn": [
               "a"
             ],
-            "giaiThich": "<p>1/x is not an integer for most x, and x = 0 never works.</p><p><i>VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được.</i></p>"
+            "giaiThich": "<p>1/x is not an integer for most x, and x = 0 never works: x = 0 and x = 2 have no partner (enumerating the domain gives false).</p><p><i>VI: 1/x không nguyên với đa số x, và x = 0 không bao giờ được: x = 0 và x = 2 không có cặp (duyệt hết miền cho false).</i></p>"
           }
         ]
       },
@@ -848,7 +848,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Equivalence 5 — Prove ¬(p → q) ≡ p ∧ ¬q by a chain of laws — answer key\n\n1. Order the proof of ¬(p → q) ≡ p ∧ ¬q.Sắp chứng minh ¬(p → q) ≡ p ∧ ¬q.\n   Answer: s1) ¬(p → q) — start  →  s2) ≡ ¬(¬p ∨ q) — implication as disjunction  →  s3) ≡ ¬¬p ∧ ¬q — De Morgan  →  s4) ≡ p ∧ ¬q — double negation\n   Each step uses exactly one law and the whole chain was verified with the truth-table checker.VI: Mỗi bước dùng đúng một luật và toàn chuỗi đã kiểm bằng bảng chân trị.\n\n2. Order the proof of (p ∧ q) → p being a tautology.Sắp chứng minh (p ∧ q) → p là hằng đúng.\n   Answer: s1) (p ∧ q) → p — start  →  s2) ≡ ¬(p ∧ q) ∨ p — implication as disjunction  →  s3) ≡ (¬p ∨ ¬q) ∨ p — De Morgan  →  s4) ≡ (¬p ∨ p) ∨ ¬q — commutative / associative  →  s5) ≡ T ∨ ¬q ≡ T — negation and domination\n   The disjunction contains p and ¬p, so it is always true.VI: Tuyển chứa cả p và ¬p nên luôn đúng.\n"
+          "code": "# Equivalence 5 — Prove ¬(p → q) ≡ p ∧ ¬q by a chain of laws — answer key\n\n1. Order the proof of ¬(p → q) ≡ p ∧ ¬q.Sắp chứng minh ¬(p → q) ≡ p ∧ ¬q.\n   Answer: m2) ¬(p → q) — start  →  m4) ≡ ¬(¬p ∨ q) — implication as disjunction  →  m1) ≡ ¬¬p ∧ ¬q — De Morgan  →  m3) ≡ p ∧ ¬q — double negation\n   Each step uses exactly one law and the whole chain was verified with the truth-table checker.VI: Mỗi bước dùng đúng một luật và toàn chuỗi đã kiểm bằng bảng chân trị.\n\n2. Order the proof of (p ∧ q) → p being a tautology.Sắp chứng minh (p ∧ q) → p là hằng đúng.\n   Answer: m2) (p ∧ q) → p — start  →  m1) ≡ ¬(p ∧ q) ∨ p — implication as disjunction  →  m3) ≡ (¬p ∨ ¬q) ∨ p — De Morgan  →  m4) ≡ (¬p ∨ p) ∨ ¬q — commutative / associative  →  m5) ≡ T ∨ ¬q ≡ T — negation and domination\n   The disjunction contains p and ¬p, so it is always true.VI: Tuyển chứa cả p và ¬p nên luôn đúng.\n"
         }
       ],
       "solutionExplanationHtml": "<p>Each step uses exactly one law and the whole chain was verified with the truth-table checker.</p><p><i>VI: Mỗi bước dùng đúng một luật và toàn chuỗi đã kiểm bằng bảng chân trị.</i></p><p>The disjunction contains p and ¬p, so it is always true.</p><p><i>VI: Tuyển chứa cả p và ¬p nên luôn đúng.</i></p>",
@@ -863,27 +863,27 @@
             "de": "<p>Order the proof of ¬(p → q) ≡ p ∧ ¬q.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp chứng minh ¬(p → q) ≡ p ∧ ¬q.</i></p>",
             "muc": [
               {
-                "ma": "s2",
-                "noiDung": "≡ ¬(¬p ∨ q)  — implication as disjunction"
-              },
-              {
-                "ma": "s3",
+                "ma": "m1",
                 "noiDung": "≡ ¬¬p ∧ ¬q  — De Morgan"
               },
               {
-                "ma": "s4",
+                "ma": "m2",
+                "noiDung": "¬(p → q)  — start"
+              },
+              {
+                "ma": "m3",
                 "noiDung": "≡ p ∧ ¬q  — double negation"
               },
               {
-                "ma": "s1",
-                "noiDung": "¬(p → q)  — start"
+                "ma": "m4",
+                "noiDung": "≡ ¬(¬p ∨ q)  — implication as disjunction"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m2",
+              "m4",
+              "m1",
+              "m3"
             ],
             "giaiThich": "<p>Each step uses exactly one law and the whole chain was verified with the truth-table checker.</p><p><i>VI: Mỗi bước dùng đúng một luật và toàn chuỗi đã kiểm bằng bảng chân trị.</i></p>"
           },
@@ -892,32 +892,32 @@
             "de": "<p>Order the proof of (p ∧ q) → p being a tautology.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp chứng minh (p ∧ q) → p là hằng đúng.</i></p>",
             "muc": [
               {
-                "ma": "s4",
-                "noiDung": "≡ (¬p ∨ p) ∨ ¬q  — commutative / associative"
-              },
-              {
-                "ma": "s5",
-                "noiDung": "≡ T ∨ ¬q ≡ T  — negation and domination"
-              },
-              {
-                "ma": "s1",
-                "noiDung": "(p ∧ q) → p  — start"
-              },
-              {
-                "ma": "s2",
+                "ma": "m1",
                 "noiDung": "≡ ¬(p ∧ q) ∨ p  — implication as disjunction"
               },
               {
-                "ma": "s3",
+                "ma": "m2",
+                "noiDung": "(p ∧ q) → p  — start"
+              },
+              {
+                "ma": "m3",
                 "noiDung": "≡ (¬p ∨ ¬q) ∨ p  — De Morgan"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "≡ (¬p ∨ p) ∨ ¬q  — commutative / associative"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "≡ T ∨ ¬q ≡ T  — negation and domination"
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m2",
+              "m1",
+              "m3",
+              "m4",
+              "m5"
             ],
             "giaiThich": "<p>The disjunction contains p and ¬p, so it is always true.</p><p><i>VI: Tuyển chứa cả p và ¬p nên luôn đúng.</i></p>"
           }

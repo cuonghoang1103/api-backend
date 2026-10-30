@@ -54,12 +54,12 @@ const DA = tinh({
 /* ───────── Đề B ───────── */
 const CB = [
   q('b1', T('Which pair is logically equivalent?', 'Cặp nào tương đương logic?'), ['p → q and ¬q → ¬p', 'p → q and q → p', 'p → q and ¬p → ¬q', 'p ∧ q and p ∨ q'], T('Contrapositive.', 'Phản đảo.')),
-  q('b2', T('From “p → q” and “¬q” we may conclude …', 'Từ “p → q” và “¬q” có thể kết luận …'), ['¬p (modus tollens)', 'p', 'q', 'nothing'], T('Modus tollens.', 'Modus tollens.')),
+  q('b2', T('From “p → q” and “¬q” we may conclude …', 'Từ “p → q” và “¬q” có thể kết luận …'), ['¬p', 'p', 'q', 'nothing'], T('Modus tollens.', 'Modus tollens.')),
   q('b3', T('A ⊕ B contains …', 'A ⊕ B chứa …'), ['elements in exactly one of A, B', 'elements in both A and B', 'all elements of A', 'elements of neither set'], T('Symmetric difference.', 'Hiệu đối xứng.')),
   q('b4', T('The composition (g∘f)(x) means …', 'Hàm hợp (g∘f)(x) nghĩa là …'), ['g(f(x))', 'f(g(x))', 'f(x)·g(x)', 'f(x) + g(x)'], T('Apply f first.', 'Áp f trước.')),
   q('b5', T('Which function grows fastest?', 'Hàm nào tăng nhanh nhất?'), ['2ⁿ', 'n¹⁰', 'n log n', '1000n'], T('Exponential beats polynomial.', 'Hàm mũ vượt đa thức.')),
   q('b6', T('If a ≡ b (mod m) then …', 'Nếu a ≡ b (mod m) thì …'), ['m | (a − b)', 'a = b', 'a | b', 'm | ab'], T('Definition of congruence.', 'Định nghĩa đồng dư.')),
-  q('b7', T('Strong induction is useful when …', 'Quy nạp mạnh hữu ích khi …'), ['the step needs several earlier cases', 'there is no basis', 'only n = 1 matters', 'the claim is false'], T('E.g. f(n) uses f(n−2) and f(n−3).', 'Vd f(n) dùng f(n−2) và f(n−3).')),
+  q('b7', T('Strong induction is useful when …', 'Quy nạp mạnh hữu ích khi …'), ['the step needs several earlier cases', 'the proof has no basis case', 'only the case n = 1 matters', 'the claim is false for large n'], T('E.g. f(n) uses f(n−2) and f(n−3).', 'Vd f(n) dùng f(n−2) và f(n−3).')),
   q('b8', T('The pigeonhole principle guarantees …', 'Nguyên lý chuồng bồ câu đảm bảo …'), ['some box holds at least ⌈n/k⌉ objects', 'every box holds the same number', 'no box is empty', 'a box with exactly one object'], T('n objects in k boxes.', 'n vật vào k hộp.')),
   q('b9', T('A graph has an Euler circuit if and only if it is connected and …', 'Đồ thị có chu trình Euler khi và chỉ khi liên thông và …'), ['every vertex has even degree', 'every vertex has odd degree', 'it is bipartite', 'it has a cycle'], T('Euler’s theorem.', 'Định lý Euler.')),
   q('b10', T('Kruskal’s algorithm builds a minimum spanning tree by …', 'Thuật toán Kruskal xây cây khung nhỏ nhất bằng cách …'), ['adding the cheapest edge that does not create a cycle', 'adding the cheapest edge leaving a vertex set', 'removing the heaviest edge', 'running BFS'], T('Sort edges, skip cycle-making ones.', 'Sắp cạnh, bỏ cạnh tạo chu trình.')),

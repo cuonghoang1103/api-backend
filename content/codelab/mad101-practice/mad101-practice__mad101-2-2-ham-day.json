@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Functions 1 — Domain, range and one-to-one / onto — answer key\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n   Answer: c) different inputs always give different outputs\n   f(a) = f(b) ⇒ a = b.VI: f(a) = f(b) ⇒ a = b.\n\n2. f is onto (surjective) if …f là toàn ánh nếu …\n   Answer: d) the range equals the codomain\n   Every element of the codomain is the image of at least one input.VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.\n\n3. Only a bijection has an …Chỉ song ánh mới có …\n   Answer: a) inverse function\n   A bijection is both one-to-one and onto, so reversing the arrows is again a function.VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.\n\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n   Answer: b) neither one-to-one nor onto\n   f(2) = f(−2) (not injective) and 3 is never a square (not surjective).VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).\n\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n   Answer: c) a bijection\n   Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.\n\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n   Answer: d) |A| = |B|\n   A bijection pairs the elements one for one.VI: Song ánh ghép các phần tử một-một.\n"
+          "code": "# Functions 1 — Domain, range and one-to-one / onto — answer key\n\n1. A function f: A → B is one-to-one (injective) if …Hàm f: A → B là đơn ánh nếu …\n   Answer: d) different inputs always give different outputs\n   f(a) = f(b) ⇒ a = b.VI: f(a) = f(b) ⇒ a = b.\n\n2. f is onto (surjective) if …f là toàn ánh nếu …\n   Answer: a) the range equals the codomain\n   Every element of the codomain is the image of at least one input.VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.\n\n3. Only a bijection has an …Chỉ song ánh mới có …\n   Answer: c) inverse function\n   A bijection is both one-to-one and onto, so reversing the arrows is again a function.VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.\n\n4. f(x) = x² from ℤ to ℤ is …f(x) = x² từ ℤ vào ℤ là …\n   Answer: d) neither one-to-one nor onto\n   f(2) = f(−2) (not injective) and 3 is never a square (not surjective).VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).\n\n5. f(x) = 2x + 1 from ℝ to ℝ is …f(x) = 2x + 1 từ ℝ vào ℝ là …\n   Answer: d) a bijection\n   Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.\n\n6. If f: A → B is a bijection between finite sets, then …Nếu f: A → B là song ánh giữa hai tập hữu hạn thì …\n   Answer: b) |A| = |B|\n   A bijection pairs the elements one for one.VI: Song ánh ghép các phần tử một-một.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>f(a) = f(b) ⇒ a = b.</p><p><i>VI: f(a) = f(b) ⇒ a = b.</i></p><p>Every element of the codomain is the image of at least one input.</p><p><i>VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.</i></p><p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p><p>f(2) = f(−2) (not injective) and 3 is never a square (not surjective).</p><p><i>VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).</i></p><p>Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.</p><p><i>VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.</i></p><p>A bijection pairs the elements one for one.</p><p><i>VI: Song ánh ghép các phần tử một-một.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> different inputs always give different outputs</p><p>f(a) = f(b) ⇒ a = b.</p><p><i>VI: f(a) = f(b) ⇒ a = b.</i></p></li><li><p><b>a)</b> the range equals the codomain</p><p>Every element of the codomain is the image of at least one input.</p><p><i>VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.</i></p></li><li><p><b>c)</b> inverse function</p><p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p></li><li><p><b>d)</b> neither one-to-one nor onto</p><p>f(2) = f(−2) (not injective) and 3 is never a square (not surjective).</p><p><i>VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).</i></p></li><li><p><b>d)</b> a bijection</p><p>Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.</p><p><i>VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.</i></p></li><li><p><b>b)</b> |A| = |B|</p><p>A bijection pairs the elements one for one.</p><p><i>VI: Song ánh ghép các phần tử một-một.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "every input has an output"
+                "noiDung": "each output is equal to its own input"
               },
               {
                 "ma": "b",
-                "noiDung": "f(x) = x for all x"
+                "noiDung": "every element of B is the output of some input"
               },
               {
                 "ma": "c",
-                "noiDung": "different inputs always give different outputs"
+                "noiDung": "every input has at least one output in B"
               },
               {
                 "ma": "d",
-                "noiDung": "every element of B is hit"
+                "noiDung": "different inputs always give different outputs"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>f(a) = f(b) ⇒ a = b.</p><p><i>VI: f(a) = f(b) ⇒ a = b.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "no two inputs share an output"
+                "noiDung": "the range equals the codomain"
               },
               {
                 "ma": "b",
-                "noiDung": "the domain equals the codomain"
+                "noiDung": "no two inputs share an output"
               },
               {
                 "ma": "c",
-                "noiDung": "f is increasing"
+                "noiDung": "the domain equals the codomain"
               },
               {
                 "ma": "d",
-                "noiDung": "the range equals the codomain"
+                "noiDung": "f is increasing"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Every element of the codomain is the image of at least one input.</p><p><i>VI: Mỗi phần tử của đích là ảnh của ít nhất một đầu vào.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "inverse function"
-              },
-              {
-                "ma": "b",
-                "noiDung": "image"
-              },
-              {
-                "ma": "c",
                 "noiDung": "composition"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "domain"
+              },
+              {
+                "ma": "c",
+                "noiDung": "inverse function"
+              },
+              {
+                "ma": "d",
+                "noiDung": "image"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A bijection is both one-to-one and onto, so reversing the arrows is again a function.</p><p><i>VI: Song ánh vừa đơn ánh vừa toàn ánh nên đảo mũi tên vẫn là hàm.</i></p>"
           },
@@ -144,7 +144,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "neither one-to-one nor onto"
+                "noiDung": "onto but not one-to-one"
               },
               {
                 "ma": "c",
@@ -152,11 +152,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "onto but not one-to-one"
+                "noiDung": "neither one-to-one nor onto"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>f(2) = f(−2) (not injective) and 3 is never a square (not surjective).</p><p><i>VI: f(2) = f(−2) (không đơn ánh) và 3 không là bình phương (không toàn ánh).</i></p>"
           },
@@ -166,7 +166,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "onto but not one-to-one"
+                "noiDung": "one-to-one but not onto"
               },
               {
                 "ma": "b",
@@ -174,15 +174,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "a bijection"
+                "noiDung": "onto but not one-to-one"
               },
               {
                 "ma": "d",
-                "noiDung": "one-to-one but not onto"
+                "noiDung": "a bijection"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Solve y = 2x + 1 for x = (y − 1)/2 — always exists and is unique.</p><p><i>VI: Giải y = 2x + 1 được x = (y − 1)/2 — luôn tồn tại và duy nhất.</i></p>"
           },
@@ -196,7 +196,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "|A| > |B|"
+                "noiDung": "|A| = |B|"
               },
               {
                 "ma": "c",
@@ -204,11 +204,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "|A| = |B|"
+                "noiDung": "|A| > |B|"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>A bijection pairs the elements one for one.</p><p><i>VI: Song ánh ghép các phần tử một-một.</i></p>"
           }
@@ -609,10 +609,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Functions 4 — How many functions of each kind? — answer key\n\n1. How many functions are there from a 4-element set to a 3-element set?Có bao nhiêu hàm từ tập 4 phần tử vào tập 3 phần tử?\n   Answer: b) 81\n   Each of the 4 inputs has 3 choices: 3⁴ = 81.VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.\n\n2. How many one-to-one functions are there from a 3-element set to a 6-element set?Có bao nhiêu đơn ánh từ tập 3 phần tử vào tập 6 phần tử?\n   Answer: c) 120\n   6·5·4 = 120: each input takes a still-unused output.VI: 6·5·4 = 120: mỗi đầu vào lấy một đầu ra chưa dùng.\n\n3. How many bijections are there from a 5-element set onto itself?Có bao nhiêu song ánh từ tập 5 phần tử lên chính nó?\n   Answer: d) 120\n   5! = 120.VI: 5! = 120.\n\n4. How many onto functions are there from a 5-element set to a 3-element set?Có bao nhiêu toàn ánh từ tập 5 phần tử lên tập 3 phần tử?\n   Answer: a) 150\n   3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.\n\n5. How many one-to-one functions exist from a 7-element set to a 5-element set?Có bao nhiêu đơn ánh từ tập 7 phần tử vào tập 5 phần tử?\n   Answer: b) 0\n   Pigeonhole: 7 inputs cannot fit 5 distinct outputs, so there are none.VI: Chuồng bồ câu: 7 đầu vào không thể có 5 đầu ra phân biệt nên không có đơn ánh.\n\n6. How many functions from {1,2,3} to {a,b} are NOT onto?Có bao nhiêu hàm từ {1,2,3} vào {a,b} KHÔNG toàn ánh?\n   Answer: c) 2\n   All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.\n"
+          "code": "# Functions 4 — How many functions of each kind? — answer key\n\n1. How many functions are there from a 4-element set to a 3-element set?Có bao nhiêu hàm từ tập 4 phần tử vào tập 3 phần tử?\n   Answer: d) 81\n   Each of the 4 inputs has 3 choices: 3⁴ = 81.VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.\n\n2. How many one-to-one functions are there from a 3-element set to a 6-element set?Có bao nhiêu đơn ánh từ tập 3 phần tử vào tập 6 phần tử?\n   Answer: c) 120\n   6·5·4 = 120: each input takes a still-unused output.VI: 6·5·4 = 120: mỗi đầu vào lấy một đầu ra chưa dùng.\n\n3. How many bijections are there from a 5-element set onto itself?Có bao nhiêu song ánh từ tập 5 phần tử lên chính nó?\n   Answer: a) 120\n   5! = 120.VI: 5! = 120.\n\n4. How many onto functions are there from a 5-element set to a 3-element set?Có bao nhiêu toàn ánh từ tập 5 phần tử lên tập 3 phần tử?\n   Answer: d) 150\n   3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.\n\n5. How many one-to-one functions exist from a 7-element set to a 5-element set?Có bao nhiêu đơn ánh từ tập 7 phần tử vào tập 5 phần tử?\n   Answer: b) 0\n   Pigeonhole: 7 inputs cannot fit 5 distinct outputs, so there are none.VI: Chuồng bồ câu: 7 đầu vào không thể có 5 đầu ra phân biệt nên không có đơn ánh.\n\n6. How many functions from {1,2,3} to {a,b} are NOT onto?Có bao nhiêu hàm từ {1,2,3} vào {a,b} KHÔNG toàn ánh?\n   Answer: b) 2\n   All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) b · 2) c · 3) d · 4) a · 5) b · 6) c.</p><p>Each of the 4 inputs has 3 choices: 3⁴ = 81.</p><p><i>VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.</i></p><p>6·5·4 = 120: each input takes a still-unused output.</p><p><i>VI: 6·5·4 = 120: mỗi đầu vào lấy một đầu ra chưa dùng.</i></p><p>5! = 120.</p><p><i>VI: 5! = 120.</i></p><p>3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.</p><p><i>VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.</i></p><p>Pigeonhole: 7 inputs cannot fit 5 distinct outputs, so there are none.</p><p><i>VI: Chuồng bồ câu: 7 đầu vào không thể có 5 đầu ra phân biệt nên không có đơn ánh.</i></p><p>All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.</p><p><i>VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 81</p><p>Each of the 4 inputs has 3 choices: 3⁴ = 81.</p><p><i>VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.</i></p></li><li><p><b>c)</b> 120</p><p>6·5·4 = 120: each input takes a still-unused output.</p><p><i>VI: 6·5·4 = 120: mỗi đầu vào lấy một đầu ra chưa dùng.</i></p></li><li><p><b>a)</b> 120</p><p>5! = 120.</p><p><i>VI: 5! = 120.</i></p></li><li><p><b>d)</b> 150</p><p>3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.</p><p><i>VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.</i></p></li><li><p><b>b)</b> 0</p><p>Pigeonhole: 7 inputs cannot fit 5 distinct outputs, so there are none.</p><p><i>VI: Chuồng bồ câu: 7 đầu vào không thể có 5 đầu ra phân biệt nên không có đơn ánh.</i></p></li><li><p><b>b)</b> 2</p><p>All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.</p><p><i>VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -625,11 +625,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "24"
+                "noiDung": "12"
               },
               {
                 "ma": "b",
-                "noiDung": "81"
+                "noiDung": "24"
               },
               {
                 "ma": "c",
@@ -637,11 +637,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "12"
+                "noiDung": "81"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Each of the 4 inputs has 3 choices: 3⁴ = 81.</p><p><i>VI: Mỗi trong 4 đầu vào có 3 lựa chọn: 3⁴ = 81.</i></p>"
           },
@@ -651,11 +651,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "729"
+                "noiDung": "18"
               },
               {
                 "ma": "b",
-                "noiDung": "18"
+                "noiDung": "216"
               },
               {
                 "ma": "c",
@@ -663,7 +663,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "216"
+                "noiDung": "729"
               }
             ],
             "dapAn": [
@@ -677,23 +677,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "25"
+                "noiDung": "120"
               },
               {
                 "ma": "b",
-                "noiDung": "20"
-              },
-              {
-                "ma": "c",
                 "noiDung": "3125"
               },
               {
+                "ma": "c",
+                "noiDung": "25"
+              },
+              {
                 "ma": "d",
-                "noiDung": "120"
+                "noiDung": "20"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>5! = 120.</p><p><i>VI: 5! = 120.</i></p>"
           },
@@ -703,7 +703,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "150"
+                "noiDung": "148"
               },
               {
                 "ma": "b",
@@ -715,11 +715,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "148"
+                "noiDung": "150"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>3⁵ − 3·2⁵ + 3·1⁵ = 243 − 96 + 3 = 150.</p><p><i>VI: 3⁵ − 3·2⁵ + 3·1⁵ = 150.</i></p>"
           },
@@ -729,7 +729,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "120"
+                "noiDung": "78125"
               },
               {
                 "ma": "b",
@@ -737,11 +737,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "78125"
+                "noiDung": "210"
               },
               {
                 "ma": "d",
-                "noiDung": "210"
+                "noiDung": "120"
               }
             ],
             "dapAn": [
@@ -755,23 +755,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "8"
+                "noiDung": "6"
               },
               {
                 "ma": "b",
-                "noiDung": "4"
-              },
-              {
-                "ma": "c",
                 "noiDung": "2"
               },
               {
+                "ma": "c",
+                "noiDung": "8"
+              },
+              {
                 "ma": "d",
-                "noiDung": "6"
+                "noiDung": "4"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>All 2³ = 8 functions minus the 6 onto ones = 2 constant functions.</p><p><i>VI: Tất cả 2³ = 8 hàm trừ 6 toàn ánh = 2 hàm hằng.</i></p>"
           }

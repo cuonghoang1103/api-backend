@@ -838,10 +838,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Tree lab 7 — Counting trees — answer key\n\n1. How many different labelled trees exist on 6 labelled vertices (Cayley: nⁿ⁻²)?Có bao nhiêu cây có nhãn khác nhau trên 6 đỉnh có nhãn (Cayley: nⁿ⁻²)?\n   Answer: a) 1296\n   6⁴ = 1296.VI: 6⁴ = 1296.\n\n2. How many different shapes of binary search trees can be built from 5 distinct keys (all insertion orders considered)?Có bao nhiêu hình dạng cây tìm kiếm nhị phân khác nhau từ 5 khoá phân biệt (xét mọi thứ tự chèn)?\n   Answer: b) 42\n   The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).\n\n3. A forest has 20 vertices and 4 trees. How many edges does it have?Một rừng có 20 đỉnh và 4 cây. Rừng có bao nhiêu cạnh?\n   Answer: c) 16\n   Each tree has (vertices − 1) edges: 20 − 4 = 16.VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.\n\n4. A full binary tree has 31 vertices. How many leaves does it have?Cây nhị phân đầy đủ có 31 đỉnh. Có bao nhiêu lá?\n   Answer: d) 16\n   n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.\n\n5. What is the maximum number of vertices of a binary tree of height 5?Số đỉnh tối đa của cây nhị phân chiều cao 5 là?\n   Answer: a) 63\n   1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.\n\n6. Every tree with at least two vertices has …Mọi cây có ít nhất hai đỉnh có …\n   Answer: b) at least two leaves\n   Take a longest path: both its ends have degree 1.VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.\n"
+          "code": "# Tree lab 7 — Counting trees — answer key\n\n1. How many different labelled trees exist on 6 labelled vertices (Cayley: nⁿ⁻²)?Có bao nhiêu cây có nhãn khác nhau trên 6 đỉnh có nhãn (Cayley: nⁿ⁻²)?\n   Answer: c) 1296\n   6⁴ = 1296.VI: 6⁴ = 1296.\n\n2. How many different shapes of binary search trees can be built from 5 distinct keys (all insertion orders considered)?Có bao nhiêu hình dạng cây tìm kiếm nhị phân khác nhau từ 5 khoá phân biệt (xét mọi thứ tự chèn)?\n   Answer: c) 42\n   The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).\n\n3. A forest has 20 vertices and 4 trees. How many edges does it have?Một rừng có 20 đỉnh và 4 cây. Rừng có bao nhiêu cạnh?\n   Answer: c) 16\n   Each tree has (vertices − 1) edges: 20 − 4 = 16.VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.\n\n4. A full binary tree has 31 vertices. How many leaves does it have?Cây nhị phân đầy đủ có 31 đỉnh. Có bao nhiêu lá?\n   Answer: d) 16\n   n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.\n\n5. What is the maximum number of vertices of a binary tree of height 5?Số đỉnh tối đa của cây nhị phân chiều cao 5 là?\n   Answer: b) 63\n   1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.\n\n6. Every tree with at least two vertices has …Mọi cây có ít nhất hai đỉnh có …\n   Answer: d) at least two leaves\n   Take a longest path: both its ends have degree 1.VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) a · 2) b · 3) c · 4) d · 5) a · 6) b.</p><p>6⁴ = 1296.</p><p><i>VI: 6⁴ = 1296.</i></p><p>The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).</p><p><i>VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).</i></p><p>Each tree has (vertices − 1) edges: 20 − 4 = 16.</p><p><i>VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.</i></p><p>n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.</p><p><i>VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.</i></p><p>1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.</p><p><i>VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.</i></p><p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 1296</p><p>6⁴ = 1296.</p><p><i>VI: 6⁴ = 1296.</i></p></li><li><p><b>c)</b> 42</p><p>The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).</p><p><i>VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).</i></p></li><li><p><b>c)</b> 16</p><p>Each tree has (vertices − 1) edges: 20 − 4 = 16.</p><p><i>VI: Mỗi cây có (số đỉnh − 1) cạnh: 20 − 4 = 16.</i></p></li><li><p><b>d)</b> 16</p><p>n = 2i + 1 ⇒ i = 15 internal, l = i + 1 = 16.</p><p><i>VI: n = 2i + 1 ⇒ i = 15 đỉnh trong, l = i + 1 = 16.</i></p></li><li><p><b>b)</b> 63</p><p>1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.</p><p><i>VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.</i></p></li><li><p><b>d)</b> at least two leaves</p><p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -854,7 +854,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1296"
+                "noiDung": "30"
               },
               {
                 "ma": "b",
@@ -862,7 +862,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "30"
+                "noiDung": "1296"
               },
               {
                 "ma": "d",
@@ -870,7 +870,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>6⁴ = 1296.</p><p><i>VI: 6⁴ = 1296.</i></p>"
           },
@@ -884,19 +884,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "42"
+                "noiDung": "32"
               },
               {
                 "ma": "c",
-                "noiDung": "120"
+                "noiDung": "42"
               },
               {
                 "ma": "d",
-                "noiDung": "32"
+                "noiDung": "120"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>The Catalan number C₅ = 42 (choose the root, then multiply the counts for the two subtrees).</p><p><i>VI: Số Catalan C₅ = 42 (chọn gốc rồi nhân số cách của hai cây con).</i></p>"
           },
@@ -906,11 +906,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "20"
+                "noiDung": "24"
               },
               {
                 "ma": "b",
-                "noiDung": "24"
+                "noiDung": "20"
               },
               {
                 "ma": "c",
@@ -936,11 +936,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "31"
+                "noiDung": "8"
               },
               {
                 "ma": "c",
-                "noiDung": "8"
+                "noiDung": "31"
               },
               {
                 "ma": "d",
@@ -958,23 +958,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "63"
+                "noiDung": "10"
               },
               {
                 "ma": "b",
-                "noiDung": "32"
+                "noiDung": "63"
               },
               {
                 "ma": "c",
-                "noiDung": "31"
+                "noiDung": "32"
               },
               {
                 "ma": "d",
-                "noiDung": "10"
+                "noiDung": "31"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>1 + 2 + 4 + 8 + 16 + 32 = 63 = 2⁶ − 1.</p><p><i>VI: 1 + 2 + 4 + 8 + 16 + 32 = 63.</i></p>"
           },
@@ -984,23 +984,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "no leaves"
+                "noiDung": "a cycle"
               },
               {
                 "ma": "b",
-                "noiDung": "at least two leaves"
-              },
-              {
-                "ma": "c",
                 "noiDung": "exactly one leaf"
               },
               {
+                "ma": "c",
+                "noiDung": "no leaves"
+              },
+              {
                 "ma": "d",
-                "noiDung": "a cycle"
+                "noiDung": "at least two leaves"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Take a longest path: both its ends have degree 1.</p><p><i>VI: Lấy đường đi dài nhất: hai đầu của nó có bậc 1.</i></p>"
           }

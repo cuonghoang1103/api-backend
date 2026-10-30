@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Sets 1 — Notation, subsets and power sets — answer key\n\n1. Which statement is TRUE?Khẳng định nào ĐÚNG?\n   Answer: c) ∅ ⊆ A for every set A\n   The empty set is a subset of every set; it is a member only of sets that contain it.VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.\n\n2. If A = {1, {2}, 3}, then …Nếu A = {1, {2}, 3} thì …\n   Answer: d) {2} ∈ A but 2 ∉ A\n   {2} is an element of A (a set inside a set); the number 2 is not.VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.\n\n3. A set with n elements has … subsets.Một tập có n phần tử có … tập con.\n   Answer: a) 2ⁿ\n   Each element is either in or out of a subset: 2 choices, n times.VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.\n\n4. |A × B| equals …|A × B| bằng …\n   Answer: b) |A|·|B|\n   Each element of A pairs with each element of B.VI: Mỗi phần tử của A ghép với mỗi phần tử của B.\n\n5. A ⊕ B (symmetric difference) contains …A ⊕ B (hiệu đối xứng) chứa …\n   Answer: c) elements in exactly one of A, B\n   A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).\n\n6. |{∅, {∅}}| equals …|{∅, {∅}}| bằng …\n   Answer: d) 2\n   The two elements are ∅ and {∅}.VI: Hai phần tử là ∅ và {∅}.\n"
+          "code": "# Sets 1 — Notation, subsets and power sets — answer key\n\n1. Which statement is TRUE?Khẳng định nào ĐÚNG?\n   Answer: d) ∅ ⊆ A for every set A\n   The empty set is a subset of every set; it is a member only of sets that contain it.VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.\n\n2. If A = {1, {2}, 3}, then …Nếu A = {1, {2}, 3} thì …\n   Answer: d) {2} ∈ A but 2 ∉ A\n   {2} is an element of A (a set inside a set); the number 2 is not.VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.\n\n3. A set with n elements has … subsets.Một tập có n phần tử có … tập con.\n   Answer: b) 2ⁿ\n   Each element is either in or out of a subset: 2 choices, n times.VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.\n\n4. |A × B| equals …|A × B| bằng …\n   Answer: b) |A|·|B|\n   Each element of A pairs with each element of B.VI: Mỗi phần tử của A ghép với mỗi phần tử của B.\n\n5. A ⊕ B (symmetric difference) contains …A ⊕ B (hiệu đối xứng) chứa …\n   Answer: b) elements in exactly one of A, B\n   A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).\n\n6. |{∅, {∅}}| equals …|{∅, {∅}}| bằng …\n   Answer: d) 2\n   The two elements are ∅ and {∅}.VI: Hai phần tử là ∅ và {∅}.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p><p>{2} is an element of A (a set inside a set); the number 2 is not.</p><p><i>VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.</i></p><p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p><p>Each element of A pairs with each element of B.</p><p><i>VI: Mỗi phần tử của A ghép với mỗi phần tử của B.</i></p><p>A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</p><p><i>VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</i></p><p>The two elements are ∅ and {∅}.</p><p><i>VI: Hai phần tử là ∅ và {∅}.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> ∅ ⊆ A for every set A</p><p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p></li><li><p><b>d)</b> {2} ∈ A but 2 ∉ A</p><p>{2} is an element of A (a set inside a set); the number 2 is not.</p><p><i>VI: {2} là một phần tử của A (tập nằm trong tập); số 2 thì không.</i></p></li><li><p><b>b)</b> 2ⁿ</p><p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p></li><li><p><b>b)</b> |A|·|B|</p><p>Each element of A pairs with each element of B.</p><p><i>VI: Mỗi phần tử của A ghép với mỗi phần tử của B.</i></p></li><li><p><b>b)</b> elements in exactly one of A, B</p><p>A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</p><p><i>VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</i></p></li><li><p><b>d)</b> 2</p><p>The two elements are ∅ and {∅}.</p><p><i>VI: Hai phần tử là ∅ và {∅}.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "A ⊂ A for every set A"
-              },
-              {
-                "ma": "b",
                 "noiDung": "{∅} = ∅"
               },
               {
+                "ma": "b",
+                "noiDung": "A ⊂ A for every set A"
+              },
+              {
                 "ma": "c",
-                "noiDung": "∅ ⊆ A for every set A"
+                "noiDung": "∅ ∈ A for every set A"
               },
               {
                 "ma": "d",
-                "noiDung": "∅ ∈ A for every set A"
+                "noiDung": "∅ ⊆ A for every set A"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>The empty set is a subset of every set; it is a member only of sets that contain it.</p><p><i>VI: Tập rỗng là tập con của mọi tập; nó chỉ là phần tử của tập nào chứa nó.</i></p>"
           },
@@ -89,11 +89,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2 ∈ A"
+                "noiDung": "{1, 3} ∈ A"
               },
               {
                 "ma": "b",
-                "noiDung": "{1, 3} ∈ A"
+                "noiDung": "2 ∈ A"
               },
               {
                 "ma": "c",
@@ -115,11 +115,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2ⁿ"
+                "noiDung": "n²"
               },
               {
                 "ma": "b",
-                "noiDung": "n²"
+                "noiDung": "2ⁿ"
               },
               {
                 "ma": "c",
@@ -131,7 +131,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Each element is either in or out of a subset: 2 choices, n times.</p><p><i>VI: Mỗi phần tử hoặc ở trong hoặc ở ngoài tập con: 2 lựa chọn, n lần.</i></p>"
           },
@@ -141,7 +141,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2^(|A|+|B|)"
+                "noiDung": "|A| + |B|"
               },
               {
                 "ma": "b",
@@ -149,11 +149,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "|A| + |B|"
+                "noiDung": "|A|^|B|"
               },
               {
                 "ma": "d",
-                "noiDung": "|A|^|B|"
+                "noiDung": "2^(|A|+|B|)"
               }
             ],
             "dapAn": [
@@ -171,11 +171,11 @@
               },
               {
                 "ma": "b",
-                "noiDung": "all elements of A ∪ B"
+                "noiDung": "elements in exactly one of A, B"
               },
               {
                 "ma": "c",
-                "noiDung": "elements in exactly one of A, B"
+                "noiDung": "all elements of A ∪ B"
               },
               {
                 "ma": "d",
@@ -183,7 +183,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</p><p><i>VI: A ⊕ B = (A − B) ∪ (B − A) = (A ∪ B) − (A ∩ B).</i></p>"
           },
@@ -193,7 +193,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1"
+                "noiDung": "3"
               },
               {
                 "ma": "b",
@@ -201,7 +201,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "3"
+                "noiDung": "1"
               },
               {
                 "ma": "d",
@@ -998,10 +998,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Sets 4 — Cardinality and inclusion–exclusion — answer key\n\n1. How many subsets does a 9-element set have?Tập 9 phần tử có bao nhiêu tập con?\n   Answer: d) 512\n   2⁹ = 512.VI: 2⁹ = 512.\n\n2. |A| = 7, |B| = 6: how many elements does A × B have?|A| = 7, |B| = 6: A × B có bao nhiêu phần tử?\n   Answer: a) 42\n   7 × 6 = 42.VI: 7 × 6 = 42.\n\n3. A has 8 elements. How many subsets contain two given elements?A có 8 phần tử. Có bao nhiêu tập con chứa hai phần tử cho trước?\n   Answer: b) 64\n   The two are forced in; the other 6 are free: 2⁶ = 64.VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.\n\n4. In a class of 100, 40 study A, 30 study B, 25 study C, 12 study A and B, 10 A and C, 8 B and C, 4 all three. How many study at least one?Lớp 100 người, 40 học A, 30 học B, 25 học C, 12 học A và B, 10 A và C, 8 B và C, 4 học cả ba. Bao nhiêu người học ít nhất một môn?\n   Answer: c) 69\n   |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.\n\n5. Same class (100 students): how many study none of A, B, C?Cùng lớp (100 học sinh): bao nhiêu người không học môn nào?\n   Answer: d) 31\n   100 − 69 = 31.VI: 100 − 69 = 31.\n\n6. How many integers in 1..200 are divisible by 4 or 6?Có bao nhiêu số nguyên trong 1..200 chia hết cho 4 hoặc 6?\n   Answer: a) 67\n   ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.\n"
+          "code": "# Sets 4 — Cardinality and inclusion–exclusion — answer key\n\n1. How many subsets does a 9-element set have?Tập 9 phần tử có bao nhiêu tập con?\n   Answer: c) 512\n   2⁹ = 512.VI: 2⁹ = 512.\n\n2. |A| = 7, |B| = 6: how many elements does A × B have?|A| = 7, |B| = 6: A × B có bao nhiêu phần tử?\n   Answer: d) 42\n   7 × 6 = 42.VI: 7 × 6 = 42.\n\n3. A has 8 elements. How many subsets contain two given elements?A có 8 phần tử. Có bao nhiêu tập con chứa hai phần tử cho trước?\n   Answer: c) 64\n   The two are forced in; the other 6 are free: 2⁶ = 64.VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.\n\n4. In a class of 100, 40 study A, 30 study B, 25 study C, 12 study A and B, 10 A and C, 8 B and C, 4 all three. How many study at least one?Lớp 100 người, 40 học A, 30 học B, 25 học C, 12 học A và B, 10 A và C, 8 B và C, 4 học cả ba. Bao nhiêu người học ít nhất một môn?\n   Answer: a) 69\n   |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.\n\n5. Same class (100 students): how many study none of A, B, C?Cùng lớp (100 học sinh): bao nhiêu người không học môn nào?\n   Answer: c) 31\n   100 − 69 = 31.VI: 100 − 69 = 31.\n\n6. How many integers in 1..200 are divisible by 4 or 6?Có bao nhiêu số nguyên trong 1..200 chia hết cho 4 hoặc 6?\n   Answer: c) 67\n   ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p><p>7 × 6 = 42.</p><p><i>VI: 7 × 6 = 42.</i></p><p>The two are forced in; the other 6 are free: 2⁶ = 64.</p><p><i>VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.</i></p><p>|A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</p><p><i>VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</i></p><p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p><p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 512</p><p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p></li><li><p><b>d)</b> 42</p><p>7 × 6 = 42.</p><p><i>VI: 7 × 6 = 42.</i></p></li><li><p><b>c)</b> 64</p><p>The two are forced in; the other 6 are free: 2⁶ = 64.</p><p><i>VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.</i></p></li><li><p><b>a)</b> 69</p><p>|A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</p><p><i>VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</i></p></li><li><p><b>c)</b> 31</p><p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p></li><li><p><b>c)</b> 67</p><p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -1014,23 +1014,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "81"
-              },
-              {
-                "ma": "b",
-                "noiDung": "18"
-              },
-              {
-                "ma": "c",
                 "noiDung": "256"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "81"
+              },
+              {
+                "ma": "c",
                 "noiDung": "512"
+              },
+              {
+                "ma": "d",
+                "noiDung": "18"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>2⁹ = 512.</p><p><i>VI: 2⁹ = 512.</i></p>"
           },
@@ -1040,7 +1040,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "42"
+                "noiDung": "8192"
               },
               {
                 "ma": "b",
@@ -1052,11 +1052,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "8192"
+                "noiDung": "42"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>7 × 6 = 42.</p><p><i>VI: 7 × 6 = 42.</i></p>"
           },
@@ -1066,15 +1066,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "36"
+                "noiDung": "254"
               },
               {
                 "ma": "b",
-                "noiDung": "64"
+                "noiDung": "36"
               },
               {
                 "ma": "c",
-                "noiDung": "254"
+                "noiDung": "64"
               },
               {
                 "ma": "d",
@@ -1082,7 +1082,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>The two are forced in; the other 6 are free: 2⁶ = 64.</p><p><i>VI: Hai phần tử bắt buộc có mặt; 6 phần tử còn lại tự do: 2⁶ = 64.</i></p>"
           },
@@ -1092,7 +1092,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "73"
+                "noiDung": "69"
               },
               {
                 "ma": "b",
@@ -1100,7 +1100,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "69"
+                "noiDung": "73"
               },
               {
                 "ma": "d",
@@ -1108,7 +1108,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>|A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</p><p><i>VI: |A∪B∪C| = 40+30+25 − 12 − 10 − 8 + 4 = 69.</i></p>"
           },
@@ -1118,23 +1118,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "69"
-              },
-              {
-                "ma": "b",
                 "noiDung": "27"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "5"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "31"
+              },
+              {
+                "ma": "d",
+                "noiDung": "69"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>100 − 69 = 31.</p><p><i>VI: 100 − 69 = 31.</i></p>"
           },
@@ -1144,7 +1144,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "67"
+                "noiDung": "99"
               },
               {
                 "ma": "b",
@@ -1152,7 +1152,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "99"
+                "noiDung": "67"
               },
               {
                 "ma": "d",
@@ -1160,7 +1160,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 50 + 33 − 16 = 67. Note lcm(4,6) = 12.</p><p><i>VI: ⌊200/4⌋ + ⌊200/6⌋ − ⌊200/12⌋ = 67. Lưu ý bội chung nhỏ nhất của 4 và 6 là 12.</i></p>"
           }
@@ -1227,7 +1227,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Sets 5 — Prove A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) element-wise — answer key\n\n1. Prove A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).Chứng minh A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).\n   Answer: s1) Let x ∈ A ∩ (B ∪ C) be arbitrary.  →  s2) Then x ∈ A and x ∈ B ∪ C.  →  s3) So x ∈ A and (x ∈ B or x ∈ C).  →  s4) Case x ∈ B: then x ∈ A ∩ B; case x ∈ C: then x ∈ A ∩ C.  →  s5) In both cases x ∈ (A ∩ B) ∪ (A ∩ C). Hence the inclusion.\n   Always start from an arbitrary element, unfold the definition of ∩, split on the “or”, and fold back.VI: Luôn bắt đầu từ phần tử bất kỳ, khai triển định nghĩa ∩, chia trường hợp theo “hoặc”, rồi gộp lại.\n\n2. Order the algorithm that counts |A ∪ B ∪ C|.Sắp thuật toán đếm |A ∪ B ∪ C|.\n   Answer: s1) Add |A| + |B| + |C|.  →  s2) Subtract |A ∩ B|, |A ∩ C| and |B ∩ C|.  →  s3) Add back |A ∩ B ∩ C|.  →  s4) Report the final value.\n   The triple intersection was subtracted three times and added three times, so it needs one add-back.VI: Giao ba tập bị trừ ba lần và cộng ba lần nên cần cộng lại một lần.\n"
+          "code": "# Sets 5 — Prove A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C) element-wise — answer key\n\n1. Prove A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).Chứng minh A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).\n   Answer: m5) Let x ∈ A ∩ (B ∪ C) be arbitrary.  →  m4) Then x ∈ A and x ∈ B ∪ C.  →  m1) So x ∈ A and (x ∈ B or x ∈ C).  →  m2) Case x ∈ B: then x ∈ A ∩ B; case x ∈ C: then x ∈ A ∩ C.  →  m3) In both cases x ∈ (A ∩ B) ∪ (A ∩ C). Hence the inclusion.\n   Always start from an arbitrary element, unfold the definition of ∩, split on the “or”, and fold back.VI: Luôn bắt đầu từ phần tử bất kỳ, khai triển định nghĩa ∩, chia trường hợp theo “hoặc”, rồi gộp lại.\n\n2. Order the algorithm that counts |A ∪ B ∪ C|.Sắp thuật toán đếm |A ∪ B ∪ C|.\n   Answer: m1) Add |A| + |B| + |C|.  →  m4) Subtract |A ∩ B|, |A ∩ C| and |B ∩ C|.  →  m3) Add back |A ∩ B ∩ C|.  →  m2) Report the final value.\n   The triple intersection was subtracted three times and added three times, so it needs one add-back.VI: Giao ba tập bị trừ ba lần và cộng ba lần nên cần cộng lại một lần.\n"
         }
       ],
       "solutionExplanationHtml": "<p>Always start from an arbitrary element, unfold the definition of ∩, split on the “or”, and fold back.</p><p><i>VI: Luôn bắt đầu từ phần tử bất kỳ, khai triển định nghĩa ∩, chia trường hợp theo “hoặc”, rồi gộp lại.</i></p><p>The triple intersection was subtracted three times and added three times, so it needs one add-back.</p><p><i>VI: Giao ba tập bị trừ ba lần và cộng ba lần nên cần cộng lại một lần.</i></p>",
@@ -1242,32 +1242,32 @@
             "de": "<p>Prove A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).</p><p style=\"opacity:.75;font-size:.92em\"><i>Chứng minh A ∩ (B ∪ C) ⊆ (A ∩ B) ∪ (A ∩ C).</i></p>",
             "muc": [
               {
-                "ma": "s3",
+                "ma": "m1",
                 "noiDung": "So x ∈ A and (x ∈ B or x ∈ C)."
               },
               {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "Case x ∈ B: then x ∈ A ∩ B; case x ∈ C: then x ∈ A ∩ C."
               },
               {
-                "ma": "s5",
+                "ma": "m3",
                 "noiDung": "In both cases x ∈ (A ∩ B) ∪ (A ∩ C). Hence the inclusion."
               },
               {
-                "ma": "s1",
-                "noiDung": "Let x ∈ A ∩ (B ∪ C) be arbitrary."
+                "ma": "m4",
+                "noiDung": "Then x ∈ A and x ∈ B ∪ C."
               },
               {
-                "ma": "s2",
-                "noiDung": "Then x ∈ A and x ∈ B ∪ C."
+                "ma": "m5",
+                "noiDung": "Let x ∈ A ∩ (B ∪ C) be arbitrary."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4",
-              "s5"
+              "m5",
+              "m4",
+              "m1",
+              "m2",
+              "m3"
             ],
             "giaiThich": "<p>Always start from an arbitrary element, unfold the definition of ∩, split on the “or”, and fold back.</p><p><i>VI: Luôn bắt đầu từ phần tử bất kỳ, khai triển định nghĩa ∩, chia trường hợp theo “hoặc”, rồi gộp lại.</i></p>"
           },
@@ -1276,27 +1276,27 @@
             "de": "<p>Order the algorithm that counts |A ∪ B ∪ C|.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp thuật toán đếm |A ∪ B ∪ C|.</i></p>",
             "muc": [
               {
-                "ma": "s2",
-                "noiDung": "Subtract |A ∩ B|, |A ∩ C| and |B ∩ C|."
+                "ma": "m1",
+                "noiDung": "Add |A| + |B| + |C|."
               },
               {
-                "ma": "s3",
-                "noiDung": "Add back |A ∩ B ∩ C|."
-              },
-              {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "Report the final value."
               },
               {
-                "ma": "s1",
-                "noiDung": "Add |A| + |B| + |C|."
+                "ma": "m3",
+                "noiDung": "Add back |A ∩ B ∩ C|."
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Subtract |A ∩ B|, |A ∩ C| and |B ∩ C|."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m1",
+              "m4",
+              "m3",
+              "m2"
             ],
             "giaiThich": "<p>The triple intersection was subtracted three times and added three times, so it needs one add-back.</p><p><i>VI: Giao ba tập bị trừ ba lần và cộng ba lần nên cần cộng lại một lần.</i></p>"
           }

@@ -18951,10 +18951,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Toolkit 7 — Applications: Caesar, check digits, hashing, pseudo-random numbers — answer key\n\n1. The Caesar cipher f(p) = (p + 3) mod 26 encrypts HELLO as …Mã Caesar f(p) = (p + 3) mod 26 mã hoá HELLO thành …\n   Answer: b) KHOOR\n   Shift every letter 3 places, wrapping Z to C.VI: Dịch mỗi chữ cái 3 vị trí, quay vòng Z sang C.\n\n2. Decrypting the Caesar text FYYFHP (shift 5) gives …Giải mã bản mã Caesar FYYFHP (dịch 5) được …\n   Answer: c) ATTACK\n   Shift back by 5: p = (c − 5) mod 26.VI: Dịch ngược 5: p = (c − 5) mod 26.\n\n3. The ISBN-10 starting 0-07-288008 has the check digit …ISBN-10 bắt đầu 0-07-288008 có chữ số kiểm tra …\n   Answer: d) 2\n   The weighted sum Σ (10 − i)·d_i + check must be ≡ 0 (mod 11).VI: Tổng có trọng số Σ (10 − i)·d_i + chữ số kiểm tra phải ≡ 0 (mod 11).\n\n4. A hash table of 11 slots uses h(k) = k mod 11. Keys 15 and 26 …Bảng băm 11 ô dùng h(k) = k mod 11. Khoá 15 và 26 …\n   Answer: a) collide in slot 4\n   15 mod 11 = 4 and 26 mod 11 = 4: a collision.VI: 15 mod 11 = 4 và 26 mod 11 = 4: đụng độ.\n\n5. LCG x(n+1) = (7·x(n) + 3) mod 20 with x(0) = 4: the 3rd generated value x(3) is …LCG x(n+1) = (7·x(n) + 3) mod 20 với x(0) = 4: giá trị thứ 3 x(3) là …\n   Answer: b) 3\n   Sequence: 11, 0, 3, 4, 11, 0.VI: Dãy: 11, 0, 3, 4, 11, 0.\n\n6. Same LCG: after how many steps does the sequence return to x(0) = 4? (period)Cùng LCG: sau bao nhiêu bước dãy quay về x(0) = 4? (chu kỳ)\n   Answer: c) 4\n   Iterate until the seed reappears; a generator with a short period is useless for randomness.VI: Lặp đến khi hạt giống xuất hiện lại; bộ sinh chu kỳ ngắn vô dụng cho ngẫu nhiên.\n"
+          "code": "# Toolkit 7 — Applications: Caesar, check digits, hashing, pseudo-random numbers — answer key\n\n1. The Caesar cipher f(p) = (p + 3) mod 26 encrypts HELLO as …Mã Caesar f(p) = (p + 3) mod 26 mã hoá HELLO thành …\n   Answer: d) KHOOR\n   Shift every letter 3 places, wrapping Z to C.VI: Dịch mỗi chữ cái 3 vị trí, quay vòng Z sang C.\n\n2. Decrypting the Caesar text FYYFHP (shift 5) gives …Giải mã bản mã Caesar FYYFHP (dịch 5) được …\n   Answer: a) ATTACK\n   Shift back by 5: p = (c − 5) mod 26.VI: Dịch ngược 5: p = (c − 5) mod 26.\n\n3. The ISBN-10 starting 0-07-288008 has the check digit …ISBN-10 bắt đầu 0-07-288008 có chữ số kiểm tra …\n   Answer: d) 2\n   The weighted sum Σ (10 − i)·d_i + check must be ≡ 0 (mod 11).VI: Tổng có trọng số Σ (10 − i)·d_i + chữ số kiểm tra phải ≡ 0 (mod 11).\n\n4. A hash table of 11 slots uses h(k) = k mod 11. Keys 15 and 26 …Bảng băm 11 ô dùng h(k) = k mod 11. Khoá 15 và 26 …\n   Answer: d) collide in slot 4\n   15 mod 11 = 4 and 26 mod 11 = 4: a collision.VI: 15 mod 11 = 4 và 26 mod 11 = 4: đụng độ.\n\n5. LCG x(n+1) = (7·x(n) + 3) mod 20 with x(0) = 4: the 3rd generated value x(3) is …LCG x(n+1) = (7·x(n) + 3) mod 20 với x(0) = 4: giá trị thứ 3 x(3) là …\n   Answer: a) 3\n   Sequence: 11, 0, 3, 4, 11, 0.VI: Dãy: 11, 0, 3, 4, 11, 0.\n\n6. Same LCG: after how many steps does the sequence return to x(0) = 4? (period)Cùng LCG: sau bao nhiêu bước dãy quay về x(0) = 4? (chu kỳ)\n   Answer: a) 4\n   Iterate until the seed reappears; a generator with a short period is useless for randomness.VI: Lặp đến khi hạt giống xuất hiện lại; bộ sinh chu kỳ ngắn vô dụng cho ngẫu nhiên.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) b · 2) c · 3) d · 4) a · 5) b · 6) c.</p><p>Shift every letter 3 places, wrapping Z to C.</p><p><i>VI: Dịch mỗi chữ cái 3 vị trí, quay vòng Z sang C.</i></p><p>Shift back by 5: p = (c − 5) mod 26.</p><p><i>VI: Dịch ngược 5: p = (c − 5) mod 26.</i></p><p>The weighted sum Σ (10 − i)·d_i + check must be ≡ 0 (mod 11).</p><p><i>VI: Tổng có trọng số Σ (10 − i)·d_i + chữ số kiểm tra phải ≡ 0 (mod 11).</i></p><p>15 mod 11 = 4 and 26 mod 11 = 4: a collision.</p><p><i>VI: 15 mod 11 = 4 và 26 mod 11 = 4: đụng độ.</i></p><p>Sequence: 11, 0, 3, 4, 11, 0.</p><p><i>VI: Dãy: 11, 0, 3, 4, 11, 0.</i></p><p>Iterate until the seed reappears; a generator with a short period is useless for randomness.</p><p><i>VI: Lặp đến khi hạt giống xuất hiện lại; bộ sinh chu kỳ ngắn vô dụng cho ngẫu nhiên.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> KHOOR</p><p>Shift every letter 3 places, wrapping Z to C.</p><p><i>VI: Dịch mỗi chữ cái 3 vị trí, quay vòng Z sang C.</i></p></li><li><p><b>a)</b> ATTACK</p><p>Shift back by 5: p = (c − 5) mod 26.</p><p><i>VI: Dịch ngược 5: p = (c − 5) mod 26.</i></p></li><li><p><b>d)</b> 2</p><p>The weighted sum Σ (10 − i)·d_i + check must be ≡ 0 (mod 11).</p><p><i>VI: Tổng có trọng số Σ (10 − i)·d_i + chữ số kiểm tra phải ≡ 0 (mod 11).</i></p></li><li><p><b>d)</b> collide in slot 4</p><p>15 mod 11 = 4 and 26 mod 11 = 4: a collision.</p><p><i>VI: 15 mod 11 = 4 và 26 mod 11 = 4: đụng độ.</i></p></li><li><p><b>a)</b> 3</p><p>Sequence: 11, 0, 3, 4, 11, 0.</p><p><i>VI: Dãy: 11, 0, 3, 4, 11, 0.</i></p></li><li><p><b>a)</b> 4</p><p>Iterate until the seed reappears; a generator with a short period is useless for randomness.</p><p><i>VI: Lặp đến khi hạt giống xuất hiện lại; bộ sinh chu kỳ ngắn vô dụng cho ngẫu nhiên.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -18967,23 +18967,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "KHOOS"
+                "noiDung": "EBIIL"
               },
               {
                 "ma": "b",
-                "noiDung": "KHOOR"
-              },
-              {
-                "ma": "c",
                 "noiDung": "URYYB"
               },
               {
+                "ma": "c",
+                "noiDung": "KHOOS"
+              },
+              {
                 "ma": "d",
-                "noiDung": "EBIIL"
+                "noiDung": "KHOOR"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Shift every letter 3 places, wrapping Z to C.</p><p><i>VI: Dịch mỗi chữ cái 3 vị trí, quay vòng Z sang C.</i></p>"
           },
@@ -18993,23 +18993,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "QJJQSA"
-              },
-              {
-                "ma": "b",
-                "noiDung": "DEFEND"
-              },
-              {
-                "ma": "c",
                 "noiDung": "ATTACK"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "KDDKMU"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DEFEND"
+              },
+              {
+                "ma": "d",
+                "noiDung": "QJJQSA"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Shift back by 5: p = (c − 5) mod 26.</p><p><i>VI: Dịch ngược 5: p = (c − 5) mod 26.</i></p>"
           },
@@ -19019,11 +19019,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "0"
+                "noiDung": "9"
               },
               {
                 "ma": "b",
-                "noiDung": "9"
+                "noiDung": "0"
               },
               {
                 "ma": "c",
@@ -19045,23 +19045,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "collide in slot 4"
-              },
-              {
-                "ma": "b",
                 "noiDung": "go to slots 5 and 4"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "go to slot 15 and 26"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "do not collide"
+              },
+              {
+                "ma": "d",
+                "noiDung": "collide in slot 4"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>15 mod 11 = 4 and 26 mod 11 = 4: a collision.</p><p><i>VI: 15 mod 11 = 4 và 26 mod 11 = 4: đụng độ.</i></p>"
           },
@@ -19071,11 +19071,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4"
+                "noiDung": "3"
               },
               {
                 "ma": "b",
-                "noiDung": "3"
+                "noiDung": "4"
               },
               {
                 "ma": "c",
@@ -19087,7 +19087,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Sequence: 11, 0, 3, 4, 11, 0.</p><p><i>VI: Dãy: 11, 0, 3, 4, 11, 0.</i></p>"
           },
@@ -19097,23 +19097,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "10"
-              },
-              {
-                "ma": "b",
-                "noiDung": "2"
-              },
-              {
-                "ma": "c",
                 "noiDung": "4"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "10"
+              },
+              {
+                "ma": "c",
                 "noiDung": "20"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Iterate until the seed reappears; a generator with a short period is useless for randomness.</p><p><i>VI: Lặp đến khi hạt giống xuất hiện lại; bộ sinh chu kỳ ngắn vô dụng cho ngẫu nhiên.</i></p>"
           }

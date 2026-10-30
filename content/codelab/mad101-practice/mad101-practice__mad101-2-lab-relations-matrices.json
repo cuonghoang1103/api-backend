@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Relations 1 — Properties of relations (concepts) — answer key\n\n1. R is reflexive on A if …R phản xạ trên A nếu …\n   Answer: d) (a, a) ∈ R for every a ∈ A\n   Every element is related to itself.VI: Mỗi phần tử có quan hệ với chính nó.\n\n2. R is symmetric if …R đối xứng nếu …\n   Answer: a) (a, b) ∈ R ⇒ (b, a) ∈ R\n   Every arrow has a return arrow.VI: Mỗi mũi tên đều có mũi tên quay lại.\n\n3. R is antisymmetric if …R phản đối xứng nếu …\n   Answer: b) (a, b) and (b, a) in R imply a = b\n   Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.\n\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n   Answer: c) reflexive, symmetric and transitive\n   Reflexive + antisymmetric + transitive is a partial order instead.VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.\n\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n   Answer: d) partition A into disjoint non-empty blocks\n   Every element lies in exactly one class.VI: Mỗi phần tử thuộc đúng một lớp.\n\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n   Answer: a) a partial order\n   Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.VI: Phản xạ, phản đối xứng, bắc cầu.\n"
+          "code": "# Relations 1 — Properties of relations (concepts) — answer key\n\n1. R is reflexive on A if …R phản xạ trên A nếu …\n   Answer: a) (a, a) ∈ R for every a ∈ A\n   Every element is related to itself.VI: Mỗi phần tử có quan hệ với chính nó.\n\n2. R is symmetric if …R đối xứng nếu …\n   Answer: d) (a, b) ∈ R ⇒ (b, a) ∈ R\n   Every arrow has a return arrow.VI: Mỗi mũi tên đều có mũi tên quay lại.\n\n3. R is antisymmetric if …R phản đối xứng nếu …\n   Answer: c) (a, b) and (b, a) in R imply a = b\n   Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.\n\n4. An equivalence relation is …Quan hệ tương đương là quan hệ …\n   Answer: a) reflexive, symmetric and transitive\n   Reflexive + antisymmetric + transitive is a partial order instead.VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.\n\n5. The equivalence classes of an equivalence relation on A …Các lớp tương đương của một quan hệ tương đương trên A …\n   Answer: d) partition A into disjoint non-empty blocks\n   Every element lies in exactly one class.VI: Mỗi phần tử thuộc đúng một lớp.\n\n6. “x divides y” on the positive integers is …“x chia hết y” trên các số nguyên dương là …\n   Answer: d) a partial order\n   Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.VI: Phản xạ, phản đối xứng, bắc cầu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p><p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p><p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p><p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p><p>Every element lies in exactly one class.</p><p><i>VI: Mỗi phần tử thuộc đúng một lớp.</i></p><p>Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.</p><p><i>VI: Phản xạ, phản đối xứng, bắc cầu.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> (a, a) ∈ R for every a ∈ A</p><p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p></li><li><p><b>d)</b> (a, b) ∈ R ⇒ (b, a) ∈ R</p><p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p></li><li><p><b>c)</b> (a, b) and (b, a) in R imply a = b</p><p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p></li><li><p><b>a)</b> reflexive, symmetric and transitive</p><p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p></li><li><p><b>d)</b> partition A into disjoint non-empty blocks</p><p>Every element lies in exactly one class.</p><p><i>VI: Mỗi phần tử thuộc đúng một lớp.</i></p></li><li><p><b>d)</b> a partial order</p><p>Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.</p><p><i>VI: Phản xạ, phản đối xứng, bắc cầu.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,11 +62,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+                "noiDung": "(a, a) ∈ R for every a ∈ A"
               },
               {
                 "ma": "b",
-                "noiDung": "(a, a) ∉ R for every a"
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
               },
               {
                 "ma": "c",
@@ -74,11 +74,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "(a, a) ∈ R for every a ∈ A"
+                "noiDung": "(a, a) ∉ R for every a"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Every element is related to itself.</p><p><i>VI: Mỗi phần tử có quan hệ với chính nó.</i></p>"
           },
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
-              },
-              {
-                "ma": "b",
-                "noiDung": "(a, b), (b, a) ∈ R ⇒ a = b"
-              },
-              {
-                "ma": "c",
                 "noiDung": "(a, b), (b, c) ∈ R ⇒ (a, c) ∈ R"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "(a, a) ∈ R for all a"
+              },
+              {
+                "ma": "c",
+                "noiDung": "(a, b), (b, a) ∈ R ⇒ a = b"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Every arrow has a return arrow.</p><p><i>VI: Mỗi mũi tên đều có mũi tên quay lại.</i></p>"
           },
@@ -114,15 +114,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "R contains no loops"
+                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
               },
               {
                 "ma": "b",
-                "noiDung": "(a, b) and (b, a) in R imply a = b"
+                "noiDung": "R contains no loops"
               },
               {
                 "ma": "c",
-                "noiDung": "(a, b) ∈ R ⇒ (b, a) ∈ R"
+                "noiDung": "(a, b) and (b, a) in R imply a = b"
               },
               {
                 "ma": "d",
@@ -130,7 +130,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Two different elements are never related both ways. Antisymmetric is NOT the opposite of symmetric.</p><p><i>VI: Hai phần tử khác nhau không bao giờ liên hệ cả hai chiều. Phản đối xứng KHÔNG phải là “không đối xứng”.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "symmetric and antisymmetric"
-              },
-              {
-                "ma": "b",
-                "noiDung": "transitive only"
-              },
-              {
-                "ma": "c",
                 "noiDung": "reflexive, symmetric and transitive"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "reflexive, antisymmetric and transitive"
+              },
+              {
+                "ma": "c",
+                "noiDung": "symmetric and antisymmetric"
+              },
+              {
+                "ma": "d",
+                "noiDung": "transitive only"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Reflexive + antisymmetric + transitive is a partial order instead.</p><p><i>VI: Phản xạ + phản đối xứng + bắc cầu là thứ tự bộ phận.</i></p>"
           },
@@ -166,15 +166,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "overlap in general"
+                "noiDung": "overlap in general, so one element can be in two"
               },
               {
                 "ma": "b",
-                "noiDung": "are always singletons"
+                "noiDung": "always contain exactly one element of A each"
               },
               {
                 "ma": "c",
-                "noiDung": "need not cover A"
+                "noiDung": "cover only part of A, leaving some elements out"
               },
               {
                 "ma": "d",
@@ -192,23 +192,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a partial order"
-              },
-              {
-                "ma": "b",
                 "noiDung": "an equivalence relation"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "symmetric"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "not transitive"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a partial order"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>Reflexive (x | x), antisymmetric (x | y and y | x ⇒ x = y), transitive.</p><p><i>VI: Phản xạ, phản đối xứng, bắc cầu.</i></p>"
           }
@@ -940,10 +940,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Relations 5 — Equivalence classes and partitions — answer key\n\n1. x ~ y iff x ≡ y (mod 5) on {0,…,22}. How many equivalence classes are there?x ~ y khi x ≡ y (mod 5) trên {0,…,22}. Có bao nhiêu lớp tương đương?\n   Answer: d) 5\n   One class per residue 0,1,2,3,4.VI: Mỗi số dư 0,1,2,3,4 là một lớp.\n\n2. Same relation: how many elements does the class of 3 have?Cùng quan hệ: lớp của 3 có bao nhiêu phần tử?\n   Answer: a) 4\n   Elements 3, 8, 13, 18: 4 (residues 0, 1, 2 have five elements, residues 3, 4 have four).VI: Các phần tử 3, 8, 13, 18: 4 (số dư 0, 1, 2 có năm phần tử, số dư 3, 4 có bốn).\n\n3. How many equivalence relations exist on a 4-element set (Bell number B₄)?Có bao nhiêu quan hệ tương đương trên tập 4 phần tử (số Bell B₄)?\n   Answer: b) 15\n   Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.\n\n4. How many relations (any kind) exist on a 3-element set?Có bao nhiêu quan hệ (bất kỳ) trên tập 3 phần tử?\n   Answer: c) 512\n   Each of the 9 possible pairs is in or out: 2⁹ = 512.VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.\n\n5. How many reflexive relations exist on a 4-element set?Có bao nhiêu quan hệ phản xạ trên tập 4 phần tử?\n   Answer: d) 4096\n   The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.\n\n6. How many symmetric relations exist on a 4-element set?Có bao nhiêu quan hệ đối xứng trên tập 4 phần tử?\n   Answer: a) 1024\n   4 diagonal pairs + 6 unordered off-diagonal pairs = 10 independent choices: 2¹⁰ = 1024.VI: 4 cặp chéo + 6 cặp không thứ tự = 10 lựa chọn độc lập: 2¹⁰ = 1024.\n"
+          "code": "# Relations 5 — Equivalence classes and partitions — answer key\n\n1. x ~ y iff x ≡ y (mod 5) on {0,…,22}. How many equivalence classes are there?x ~ y khi x ≡ y (mod 5) trên {0,…,22}. Có bao nhiêu lớp tương đương?\n   Answer: d) 5\n   One class per residue 0,1,2,3,4.VI: Mỗi số dư 0,1,2,3,4 là một lớp.\n\n2. Same relation: how many elements does the class of 3 have?Cùng quan hệ: lớp của 3 có bao nhiêu phần tử?\n   Answer: a) 4\n   Elements 3, 8, 13, 18: 4 (residues 0, 1, 2 have five elements, residues 3, 4 have four).VI: Các phần tử 3, 8, 13, 18: 4 (số dư 0, 1, 2 có năm phần tử, số dư 3, 4 có bốn).\n\n3. How many equivalence relations exist on a 4-element set (Bell number B₄)?Có bao nhiêu quan hệ tương đương trên tập 4 phần tử (số Bell B₄)?\n   Answer: a) 15\n   Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.\n\n4. How many relations (any kind) exist on a 3-element set?Có bao nhiêu quan hệ (bất kỳ) trên tập 3 phần tử?\n   Answer: b) 512\n   Each of the 9 possible pairs is in or out: 2⁹ = 512.VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.\n\n5. How many reflexive relations exist on a 4-element set?Có bao nhiêu quan hệ phản xạ trên tập 4 phần tử?\n   Answer: a) 4096\n   The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.\n\n6. How many symmetric relations exist on a 4-element set?Có bao nhiêu quan hệ đối xứng trên tập 4 phần tử?\n   Answer: a) 1024\n   4 diagonal pairs + 6 unordered off-diagonal pairs = 10 independent choices: 2¹⁰ = 1024.VI: 4 cặp chéo + 6 cặp không thứ tự = 10 lựa chọn độc lập: 2¹⁰ = 1024.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) d · 2) a · 3) b · 4) c · 5) d · 6) a.</p><p>One class per residue 0,1,2,3,4.</p><p><i>VI: Mỗi số dư 0,1,2,3,4 là một lớp.</i></p><p>Elements 3, 8, 13, 18: 4 (residues 0, 1, 2 have five elements, residues 3, 4 have four).</p><p><i>VI: Các phần tử 3, 8, 13, 18: 4 (số dư 0, 1, 2 có năm phần tử, số dư 3, 4 có bốn).</i></p><p>Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.</p><p><i>VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.</i></p><p>Each of the 9 possible pairs is in or out: 2⁹ = 512.</p><p><i>VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.</i></p><p>The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.</p><p><i>VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.</i></p><p>4 diagonal pairs + 6 unordered off-diagonal pairs = 10 independent choices: 2¹⁰ = 1024.</p><p><i>VI: 4 cặp chéo + 6 cặp không thứ tự = 10 lựa chọn độc lập: 2¹⁰ = 1024.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 5</p><p>One class per residue 0,1,2,3,4.</p><p><i>VI: Mỗi số dư 0,1,2,3,4 là một lớp.</i></p></li><li><p><b>a)</b> 4</p><p>Elements 3, 8, 13, 18: 4 (residues 0, 1, 2 have five elements, residues 3, 4 have four).</p><p><i>VI: Các phần tử 3, 8, 13, 18: 4 (số dư 0, 1, 2 có năm phần tử, số dư 3, 4 có bốn).</i></p></li><li><p><b>a)</b> 15</p><p>Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.</p><p><i>VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.</i></p></li><li><p><b>b)</b> 512</p><p>Each of the 9 possible pairs is in or out: 2⁹ = 512.</p><p><i>VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.</i></p></li><li><p><b>a)</b> 4096</p><p>The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.</p><p><i>VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.</i></p></li><li><p><b>a)</b> 1024</p><p>4 diagonal pairs + 6 unordered off-diagonal pairs = 10 independent choices: 2¹⁰ = 1024.</p><p><i>VI: 4 cặp chéo + 6 cặp không thứ tự = 10 lựa chọn độc lập: 2¹⁰ = 1024.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -990,11 +990,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "4.6"
+                "noiDung": "3"
               },
               {
                 "ma": "d",
-                "noiDung": "3"
+                "noiDung": "4.6"
               }
             ],
             "dapAn": [
@@ -1008,15 +1008,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "8"
-              },
-              {
-                "ma": "b",
                 "noiDung": "15"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "16"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8"
               },
               {
                 "ma": "d",
@@ -1024,7 +1024,7 @@
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Equivalence relations correspond to partitions: B₄ = 1+7+6+1 = 15.</p><p><i>VI: Quan hệ tương đương tương ứng với phân hoạch: B₄ = 15.</i></p>"
           },
@@ -1034,23 +1034,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "27"
+                "noiDung": "18"
               },
               {
                 "ma": "b",
-                "noiDung": "9"
-              },
-              {
-                "ma": "c",
                 "noiDung": "512"
               },
               {
+                "ma": "c",
+                "noiDung": "27"
+              },
+              {
                 "ma": "d",
-                "noiDung": "18"
+                "noiDung": "9"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Each of the 9 possible pairs is in or out: 2⁹ = 512.</p><p><i>VI: Mỗi trong 9 cặp có thể thuộc hoặc không: 2⁹ = 512.</i></p>"
           },
@@ -1060,23 +1060,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "65536"
+                "noiDung": "4096"
               },
               {
                 "ma": "b",
-                "noiDung": "16"
+                "noiDung": "65536"
               },
               {
                 "ma": "c",
-                "noiDung": "1024"
+                "noiDung": "16"
               },
               {
                 "ma": "d",
-                "noiDung": "4096"
+                "noiDung": "1024"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>The 4 diagonal pairs are forced; each of the other 16 − 4 = 12 pairs is free: 2¹² = 4096.</p><p><i>VI: 4 cặp đường chéo bắt buộc; 12 cặp còn lại tuỳ ý: 2¹² = 4096.</i></p>"
           },
@@ -1090,7 +1090,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "65536"
+                "noiDung": "64"
               },
               {
                 "ma": "c",
@@ -1098,7 +1098,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "64"
+                "noiDung": "65536"
               }
             ],
             "dapAn": [
@@ -1169,7 +1169,7 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Relations 6 — Compute the transitive closure with Warshall — answer key\n\n1. Warshall’s algorithm.Thuật toán Warshall.\n   Answer: s1) Set W₀ = M_R.  →  s2) For k = 1 to n (the allowed intermediate vertex):  →  s3) For every i and j: W[i][j] ← W[i][j] ∨ (W[i][k] ∧ W[k][j]).  →  s4) After the last k, W is the matrix of the transitive closure R*.\n   The outer loop over k is the key: after round k, W records paths whose intermediate vertices are among 1…k.VI: Vòng ngoài theo k là mấu chốt: sau vòng k, W ghi các đường đi chỉ qua trung gian trong 1…k.\n"
+          "code": "# Relations 6 — Compute the transitive closure with Warshall — answer key\n\n1. Warshall’s algorithm.Thuật toán Warshall.\n   Answer: m4) Set W₀ = M_R.  →  m3) For k = 1 to n (the allowed intermediate vertex):  →  m1) For every i and j: W[i][j] ← W[i][j] ∨ (W[i][k] ∧ W[k][j]).  →  m2) After the last k, W is the matrix of the transitive closure R*.\n   The outer loop over k is the key: after round k, W records paths whose intermediate vertices are among 1…k.VI: Vòng ngoài theo k là mấu chốt: sau vòng k, W ghi các đường đi chỉ qua trung gian trong 1…k.\n"
         }
       ],
       "solutionExplanationHtml": "<p>The outer loop over k is the key: after round k, W records paths whose intermediate vertices are among 1…k.</p><p><i>VI: Vòng ngoài theo k là mấu chốt: sau vòng k, W ghi các đường đi chỉ qua trung gian trong 1…k.</i></p>",
@@ -1184,27 +1184,27 @@
             "de": "<p>Warshall’s algorithm.</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán Warshall.</i></p>",
             "muc": [
               {
-                "ma": "s2",
-                "noiDung": "For k = 1 to n (the allowed intermediate vertex):"
-              },
-              {
-                "ma": "s3",
+                "ma": "m1",
                 "noiDung": "For every i and j: W[i][j] ← W[i][j] ∨ (W[i][k] ∧ W[k][j])."
               },
               {
-                "ma": "s4",
+                "ma": "m2",
                 "noiDung": "After the last k, W is the matrix of the transitive closure R*."
               },
               {
-                "ma": "s1",
+                "ma": "m3",
+                "noiDung": "For k = 1 to n (the allowed intermediate vertex):"
+              },
+              {
+                "ma": "m4",
                 "noiDung": "Set W₀ = M_R."
               }
             ],
             "dapAn": [
-              "s1",
-              "s2",
-              "s3",
-              "s4"
+              "m4",
+              "m3",
+              "m1",
+              "m2"
             ],
             "giaiThich": "<p>The outer loop over k is the key: after round k, W records paths whose intermediate vertices are among 1…k.</p><p><i>VI: Vòng ngoài theo k là mấu chốt: sau vòng k, W ghi các đường đi chỉ qua trung gian trong 1…k.</i></p>"
           }

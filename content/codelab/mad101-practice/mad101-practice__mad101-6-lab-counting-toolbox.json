@@ -196,10 +196,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Counting lab 2 — Probability as a ratio of counts — answer key\n\n1. Two fair dice: P(sum = 8)?Hai xúc xắc đều: P(tổng = 8)?\n   Answer: c) 5/36\n   Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.\n\n2. Two fair dice: P(at least one six)?Hai xúc xắc đều: P(ít nhất một mặt 6)?\n   Answer: d) 11/36\n   1 − (5/6)² = 11/36.VI: 1 − (5/6)² = 11/36.\n\n3. 4 coin flips: P(exactly 2 heads)?Tung 4 đồng xu: P(đúng 2 mặt ngửa)?\n   Answer: a) 3/8\n   C(4,2)/2⁴ = 6/16 = 3/8.VI: C(4,2)/2⁴ = 6/16 = 3/8.\n\n4. Draw 3 cards from a 52-card deck: P(all red)?Rút 3 lá từ bộ bài 52: P(cả ba đỏ)?\n   Answer: b) 2/17\n   C(26,3)/C(52,3) = 2600/22100 = 2/17.VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.\n\n5. Draw 2 cards: P(they form a pair (same rank))?Rút 2 lá: P(tạo thành một đôi cùng giá trị)?\n   Answer: c) 1/17\n   13·C(4,2)/C(52,2) = 78/1326 = 1/17.VI: 13·C(4,2)/C(52,2) = 78/1326 = 1/17.\n\n6. 5-card hand: P(all five cards of the same suit — a flush, straights included)?Bộ 5 lá: P(cả năm lá cùng chất — thùng, tính cả sảnh)?\n   Answer: d) 33/16660\n   4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.\n"
+          "code": "# Counting lab 2 — Probability as a ratio of counts — answer key\n\n1. Two fair dice: P(sum = 8)?Hai xúc xắc đều: P(tổng = 8)?\n   Answer: b) 5/36\n   Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.\n\n2. Two fair dice: P(at least one six)?Hai xúc xắc đều: P(ít nhất một mặt 6)?\n   Answer: d) 11/36\n   1 − (5/6)² = 11/36.VI: 1 − (5/6)² = 11/36.\n\n3. 4 coin flips: P(exactly 2 heads)?Tung 4 đồng xu: P(đúng 2 mặt ngửa)?\n   Answer: d) 3/8\n   C(4,2)/2⁴ = 6/16 = 3/8.VI: C(4,2)/2⁴ = 6/16 = 3/8.\n\n4. Draw 3 cards from a 52-card deck: P(all red)?Rút 3 lá từ bộ bài 52: P(cả ba đỏ)?\n   Answer: d) 2/17\n   C(26,3)/C(52,3) = 2600/22100 = 2/17.VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.\n\n5. Draw 2 cards: P(they form a pair (same rank))?Rút 2 lá: P(tạo thành một đôi cùng giá trị)?\n   Answer: c) 1/17\n   13·C(4,2)/C(52,2) = 78/1326 = 1/17.VI: 13·C(4,2)/C(52,2) = 78/1326 = 1/17.\n\n6. 5-card hand: P(all five cards of the same suit — a flush, straights included)?Bộ 5 lá: P(cả năm lá cùng chất — thùng, tính cả sảnh)?\n   Answer: a) 33/16660\n   4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.\n"
         }
       ],
-      "solutionExplanationHtml": "<p>Answers: 1) c · 2) d · 3) a · 4) b · 5) c · 6) d.</p><p>Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.</p><p><i>VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.</i></p><p>1 − (5/6)² = 11/36.</p><p><i>VI: 1 − (5/6)² = 11/36.</i></p><p>C(4,2)/2⁴ = 6/16 = 3/8.</p><p><i>VI: C(4,2)/2⁴ = 6/16 = 3/8.</i></p><p>C(26,3)/C(52,3) = 2600/22100 = 2/17.</p><p><i>VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.</i></p><p>13·C(4,2)/C(52,2) = 78/1326 = 1/17.</p><p><i>VI: 13·C(4,2)/C(52,2) = 78/1326 = 1/17.</i></p><p>4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</p><p><i>VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</i></p>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 5/36</p><p>Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.</p><p><i>VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.</i></p></li><li><p><b>d)</b> 11/36</p><p>1 − (5/6)² = 11/36.</p><p><i>VI: 1 − (5/6)² = 11/36.</i></p></li><li><p><b>d)</b> 3/8</p><p>C(4,2)/2⁴ = 6/16 = 3/8.</p><p><i>VI: C(4,2)/2⁴ = 6/16 = 3/8.</i></p></li><li><p><b>d)</b> 2/17</p><p>C(26,3)/C(52,3) = 2600/22100 = 2/17.</p><p><i>VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.</i></p></li><li><p><b>c)</b> 1/17</p><p>13·C(4,2)/C(52,2) = 78/1326 = 1/17.</p><p><i>VI: 13·C(4,2)/C(52,2) = 78/1326 = 1/17.</i></p></li><li><p><b>a)</b> 33/16660</p><p>4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</p><p><i>VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -212,15 +212,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "7/36"
-              },
-              {
-                "ma": "b",
                 "noiDung": "1/9"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "5/36"
+              },
+              {
+                "ma": "c",
+                "noiDung": "7/36"
               },
               {
                 "ma": "d",
@@ -228,7 +228,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Outcomes (2,6),(3,5),(4,4),(5,3),(6,2): 5 of 36.</p><p><i>VI: Các kết quả (2,6),(3,5),(4,4),(5,3),(6,2): 5/36.</i></p>"
           },
@@ -238,15 +238,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "5/18"
-              },
-              {
-                "ma": "b",
                 "noiDung": "1/3"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "25/36"
+              },
+              {
+                "ma": "c",
+                "noiDung": "5/18"
               },
               {
                 "ma": "d",
@@ -264,7 +264,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "3/8"
+                "noiDung": "1/16"
               },
               {
                 "ma": "b",
@@ -276,11 +276,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "1/16"
+                "noiDung": "3/8"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>C(4,2)/2⁴ = 6/16 = 3/8.</p><p><i>VI: C(4,2)/2⁴ = 6/16 = 3/8.</i></p>"
           },
@@ -294,19 +294,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "2/17"
-              },
-              {
-                "ma": "c",
                 "noiDung": "1/8"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "3/17"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2/17"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>C(26,3)/C(52,3) = 2600/22100 = 2/17.</p><p><i>VI: C(26,3)/C(52,3) = 2600/22100 = 2/17.</i></p>"
           },
@@ -316,7 +316,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "2/13"
+                "noiDung": "1/13"
               },
               {
                 "ma": "b",
@@ -328,7 +328,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "1/13"
+                "noiDung": "2/13"
               }
             ],
             "dapAn": [
@@ -342,23 +342,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1/4"
+                "noiDung": "33/16660"
               },
               {
                 "ma": "b",
-                "noiDung": "1/13"
-              },
-              {
-                "ma": "c",
                 "noiDung": "33/66640"
               },
               {
+                "ma": "c",
+                "noiDung": "1/4"
+              },
+              {
                 "ma": "d",
-                "noiDung": "33/16660"
+                "noiDung": "1/13"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</p><p><i>VI: 4·C(13,5)/C(52,5) = 5148/2598960 = 33/16660.</i></p>"
           }

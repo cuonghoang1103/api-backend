@@ -1,0 +1,12 @@
+{
+  "groupSlug": "fptu",
+  "slug": "osg202-practice",
+  "name": "OSG202 — Luyện tập",
+  "language": "javascript",
+  "color": "#0ea5e9",
+  "docsUrl": "https://www.pearson.com/en-us/subject-catalog/p/modern-operating-systems/P200000003295",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện môn OSG202 (Operating Systems) bám giáo trình Tanenbaum và đề FE của trường — mỗi bài học một bộ đề từ dễ đến khó, con số trong đề do bộ mô phỏng tính (lập lịch CPU, thay trang, Banker, lập lịch đĩa, cấp phát bộ nhớ, dịch địa chỉ, i-node/FAT, semaphore, race condition); bài khó là viết hàm mô phỏng chạy thật trong trình duyệt; mỗi chương một Lab và đề FE thi thử cuối môn.",
+  "modules": []
+}

@@ -1,0 +1,1256 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-2-4-lap-lich-tinh-toan",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-2-4-lap-lich-tinh-toan"
+  },
+  "exercises": [
+    {
+      "title": "Scheduling 1 — FCFS: completion, turnaround and waiting time",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "FCFS",
+        "turnaround time",
+        "waiting time"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Four processes arrive at a single CPU. Schedule them with <b>First-Come First-Served</b> (non-preemptive) and fill in the table. Turnaround = completion − arrival; waiting = turnaround − burst.</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>5</td></tr><tr><td>P2</td><td>1</td><td>3</td></tr><tr><td>P3</td><td>2</td><td>8</td></tr><tr><td>P4</td><td>3</td><td>2</td></tr></tbody></table><p>Ties: earlier arrival first, then the order listed. Context-switch time is 0. In Round Robin a process that arrives at the exact instant a quantum ends is queued <b>before</b> the preempted process.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn tiến trình đến một CPU. Lập lịch <b>First-Come First-Served</b> (không ngắt) rồi điền bảng. Turnaround = hoàn thành − đến; waiting = turnaround − burst.</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>5</td></tr><tr><td>P2</td><td>1</td><td>3</td></tr><tr><td>P3</td><td>2</td><td>8</td></tr><tr><td>P4</td><td>3</td><td>2</td></tr></tbody></table><p>Hoà: đến trước chạy trước, rồi theo thứ tự liệt kê. Thời gian chuyển ngữ cảnh = 0. Với Round Robin, tiến trình đến đúng lúc hết lượt được xếp vào hàng <b>trước</b> tiến trình bị cắt.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Draw the Gantt chart first: the order is just the arrival order.",
+        "Waiting time = start time − arrival time for a non-preemptive algorithm (a process only waits before it first runs)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 1 — FCFS: completion, turnaround and waiting time\n\nAnswer in the answer panel (no code needed).\n\n1. FCFS resultsKết quả FCFS\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 1 — FCFS: completion, turnaround and waiting time — answer key\n\n1. FCFS resultsKết quả FCFS\n   - P1.ct: 5\n   - P1.tat: 5\n   - P1.wt: 0\n   - P2.ct: 8\n   - P2.tat: 7\n   - P2.wt: 4\n   - P3.ct: 16\n   - P3.tat: 14\n   - P3.wt: 6\n   - P4.ct: 18\n   - P4.tat: 15\n   - P4.wt: 13\n   Gantt: P1[0–5] P2[5–8] P3[8–16] P4[16–18]. The CPU never idles because each process has already arrived when its turn comes. Sum of waiting times = 23, average 5.75.VI: Gantt: P1[0–5] P2[5–8] P3[8–16] P4[16–18]. CPU không rảnh vì khi tới lượt, tiến trình nào cũng đã đến. Tổng waiting = 23, trung bình 5.75.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>P1[0–5] P2[5–8] P3[8–16] P4[16–18]. Waiting: P1=0, P2=4, P3=6, P4=13.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>FCFS results</p><p style=\"opacity:.75;font-size:.92em\"><i>Kết quả FCFS</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Process"
+              },
+              {
+                "ma": "ct",
+                "ten": "Completion"
+              },
+              {
+                "ma": "tat",
+                "ten": "Turnaround"
+              },
+              {
+                "ma": "wt",
+                "ten": "Waiting"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "P1",
+                "o": {
+                  "p": "P1"
+                }
+              },
+              {
+                "ma": "P2",
+                "o": {
+                  "p": "P2"
+                }
+              },
+              {
+                "ma": "P3",
+                "o": {
+                  "p": "P3"
+                }
+              },
+              {
+                "ma": "P4",
+                "o": {
+                  "p": "P4"
+                }
+              }
+            ],
+            "dapAn": {
+              "P1.ct": "5",
+              "P1.tat": "5",
+              "P1.wt": "0",
+              "P2.ct": "8",
+              "P2.tat": "7",
+              "P2.wt": "4",
+              "P3.ct": "16",
+              "P3.tat": "14",
+              "P3.wt": "6",
+              "P4.ct": "18",
+              "P4.tat": "15",
+              "P4.wt": "13"
+            },
+            "giaiThich": "<p>Gantt: P1[0–5] P2[5–8] P3[8–16] P4[16–18]. The CPU never idles because each process has already arrived when its turn comes. Sum of waiting times = 23, average 5.75.</p><p><i>VI: Gantt: P1[0–5] P2[5–8] P3[8–16] P4[16–18]. CPU không rảnh vì khi tới lượt, tiến trình nào cũng đã đến. Tổng waiting = 23, trung bình 5.75.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Computing waiting time as completion − burst (forgetting to subtract the arrival time)."
+        },
+        {
+          "loi": "Starting P2 at time 0 instead of when P1 finishes."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "turnaround time",
+          "vi": "thời gian hoàn thành: từ lúc đến tới lúc xong"
+        },
+        {
+          "en": "waiting time",
+          "vi": "thời gian chờ trong hàng đợi sẵn sàng"
+        },
+        {
+          "en": "FCFS",
+          "vi": "đến trước phục vụ trước"
+        }
+      ]
+    },
+    {
+      "title": "Scheduling 2 — Which algorithm? (convoy effect, starvation, quantum)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "convoy effect",
+        "starvation",
+        "aging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five short questions on the properties of the classic CPU-scheduling algorithms.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu ngắn về tính chất của các thuật toán lập lịch CPU kinh điển.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the key words: “long job blocks short jobs”, “optimal”, “never gets the CPU”.",
+        "Think about the extreme quantum values for Round Robin: 1 unit vs infinity."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 2 — Which algorithm? (convoy effect, starvation, quantum)\n\nAnswer in the answer panel (no code needed).\n\n1. One CPU-bound process holds the CPU for a long time while many short I/O-bound processes queue behind it. This is called the …Một tiến trình nặng CPU giữ CPU rất lâu trong khi nhiều tiến trình I/O ngắn xếp hàng sau nó. Hiện tượng này gọi là …\n2. Which non-preemptive algorithm gives the MINIMUM average waiting time when all burst times are known and all processes arrive together?Thuật toán không ngắt nào cho thời gian chờ trung bình NHỎ NHẤT khi biết trước burst và mọi tiến trình đến cùng lúc?\n3. A low-priority process may never get the CPU while higher-priority processes keep arriving. The usual cure is …Tiến trình ưu tiên thấp có thể không bao giờ được CPU khi tiến trình ưu tiên cao liên tục đến. Cách chữa thường dùng là …\n4. Round Robin with a very LARGE quantum behaves like …Round Robin với quantum RẤT LỚN hoạt động giống …\n5. Which statement about preemptive SJF (SRTF) is TRUE?Phát biểu nào về SJF có ngắt (SRTF) là ĐÚNG?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 2 — Which algorithm? (convoy effect, starvation, quantum) — answer key\n\n1. One CPU-bound process holds the CPU for a long time while many short I/O-bound processes queue behind it. This is called the …Một tiến trình nặng CPU giữ CPU rất lâu trong khi nhiều tiến trình I/O ngắn xếp hàng sau nó. Hiện tượng này gọi là …\n   Answer: d) Convoy effect\n   The convoy effect appears with FCFS: short jobs wait behind one long job.VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.\n\n2. Which non-preemptive algorithm gives the MINIMUM average waiting time when all burst times are known and all processes arrive together?Thuật toán không ngắt nào cho thời gian chờ trung bình NHỎ NHẤT khi biết trước burst và mọi tiến trình đến cùng lúc?\n   Answer: b) SJF\n   SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).\n\n3. A low-priority process may never get the CPU while higher-priority processes keep arriving. The usual cure is …Tiến trình ưu tiên thấp có thể không bao giờ được CPU khi tiến trình ưu tiên cao liên tục đến. Cách chữa thường dùng là …\n   Answer: b) Aging — gradually raise the priority of waiting processes\n   Starvation is cured by aging: priority grows with waiting time.VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.\n\n4. Round Robin with a very LARGE quantum behaves like …Round Robin với quantum RẤT LỚN hoạt động giống …\n   Answer: c) FCFS\n   If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.\n\n5. Which statement about preemptive SJF (SRTF) is TRUE?Phát biểu nào về SJF có ngắt (SRTF) là ĐÚNG?\n   Answer: d) A newly arrived process with a shorter remaining time takes the CPU at once\n   SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · b · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>One CPU-bound process holds the CPU for a long time while many short I/O-bound processes queue behind it. This is called the …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tiến trình nặng CPU giữ CPU rất lâu trong khi nhiều tiến trình I/O ngắn xếp hàng sau nó. Hiện tượng này gọi là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Thrashing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Belady anomaly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Priority inversion"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Convoy effect"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The convoy effect appears with FCFS: short jobs wait behind one long job.</p><p><i>VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which non-preemptive algorithm gives the MINIMUM average waiting time when all burst times are known and all processes arrive together?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán không ngắt nào cho thời gian chờ trung bình NHỎ NHẤT khi biết trước burst và mọi tiến trình đến cùng lúc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "FCFS"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SJF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Round Robin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Priority"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).</p><p><i>VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A low-priority process may never get the CPU while higher-priority processes keep arriving. The usual cure is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiến trình ưu tiên thấp có thể không bao giờ được CPU khi tiến trình ưu tiên cao liên tục đến. Cách chữa thường dùng là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Disabling interrupts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Aging — gradually raise the priority of waiting processes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A bigger quantum"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Switching to FCFS in the same queue"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Starvation is cured by aging: priority grows with waiting time.</p><p><i>VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Round Robin with a very LARGE quantum behaves like …</p><p style=\"opacity:.75;font-size:.92em\"><i>Round Robin với quantum RẤT LỚN hoạt động giống …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SRTF"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Priority scheduling"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FCFS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SJF"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.</p><p><i>VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which statement about preemptive SJF (SRTF) is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về SJF có ngắt (SRTF) là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It can never starve a long process"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It needs no knowledge of burst times"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It has fewer context switches than non-preemptive SJF"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A newly arrived process with a shorter remaining time takes the CPU at once"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.</p><p><i>VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing starvation (priority scheduling, SRTF) with deadlock (circular wait)."
+        },
+        {
+          "loi": "Believing that Round Robin is “better than FCFS” for every metric — it usually has a larger average turnaround for equal bursts."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "convoy effect",
+          "vi": "hiệu ứng đoàn xe: việc ngắn kẹt sau việc dài"
+        },
+        {
+          "en": "starvation",
+          "vi": "đói: tiến trình chờ vô hạn"
+        },
+        {
+          "en": "aging",
+          "vi": "lão hoá: tăng ưu tiên theo thời gian chờ"
+        }
+      ]
+    },
+    {
+      "title": "Scheduling 3 — SJF (non-preemptive) versus SRTF (preemptive)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "SJF",
+        "SRTF",
+        "preemption"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Schedule the same four processes with non-preemptive <b>SJF</b> and with preemptive <b>SJF = SRTF</b>. Fill in completion and waiting times and the average waiting time (2 decimals).</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>7</td></tr><tr><td>P2</td><td>2</td><td>4</td></tr><tr><td>P3</td><td>4</td><td>1</td></tr><tr><td>P4</td><td>5</td><td>4</td></tr></tbody></table><p>Ties: earlier arrival first, then the order listed. Context-switch time is 0. In Round Robin a process that arrives at the exact instant a quantum ends is queued <b>before</b> the preempted process.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lập lịch cùng bốn tiến trình bằng <b>SJF</b> không ngắt và <b>SJF có ngắt = SRTF</b>. Điền thời gian hoàn thành, waiting và waiting trung bình (2 chữ số thập phân).</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>7</td></tr><tr><td>P2</td><td>2</td><td>4</td></tr><tr><td>P3</td><td>4</td><td>1</td></tr><tr><td>P4</td><td>5</td><td>4</td></tr></tbody></table><p>Hoà: đến trước chạy trước, rồi theo thứ tự liệt kê. Thời gian chuyển ngữ cảnh = 0. Với Round Robin, tiến trình đến đúng lúc hết lượt được xếp vào hàng <b>trước</b> tiến trình bị cắt.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For SRTF re-decide at every arrival: compare the new burst with the REMAINING time of the running process.",
+        "Average waiting = (sum of waiting) / 4. SRTF is never worse than SJF for this metric."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 3 — SJF (non-preemptive) versus SRTF (preemptive)\n\nAnswer in the answer panel (no code needed).\n\n1. Non-preemptive SJFSJF không ngắt\n2. Preemptive SJF (SRTF)SJF có ngắt (SRTF)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 3 — SJF (non-preemptive) versus SRTF (preemptive) — answer key\n\n1. Non-preemptive SJFSJF không ngắt\n   - P1.ct: 7\n   - P1.wt: 0\n   - P2.ct: 12\n   - P2.wt: 6\n   - P3.ct: 8\n   - P3.wt: 3\n   - P4.ct: 16\n   - P4.wt: 7\n   - avg.wt: 4.00 / 4\n   Gantt: P1[0–7] P3[7–8] P2[8–12] P4[12–16]. P1 starts at 0 (the only process) and cannot be preempted, so P2/P3/P4 are chosen by shortest burst when it ends at 7.VI: Gantt: P1[0–7] P3[7–8] P2[8–12] P4[12–16]. P1 chạy từ 0 (lúc đó chỉ có nó) và không bị ngắt; khi P1 xong ở 7 mới chọn theo burst ngắn nhất.\n\n2. Preemptive SJF (SRTF)SJF có ngắt (SRTF)\n   - P1.ct: 16\n   - P1.wt: 9\n   - P2.ct: 7\n   - P2.wt: 1\n   - P3.ct: 5\n   - P3.wt: 0\n   - P4.ct: 11\n   - P4.wt: 2\n   - avg.wt: 3.00 / 3\n   Gantt: P1[0–2] P2[2–4] P3[4–5] P2[5–7] P4[7–11] P1[11–16]. Every time unit the process with the shortest REMAINING time runs; P1 is preempted at t=2 (remaining 5 > 4).VI: Gantt: P1[0–2] P2[2–4] P3[4–5] P2[5–7] P4[7–11] P1[11–16]. Mỗi đơn vị thời gian chạy tiến trình có thời gian CÒN LẠI ngắn nhất; P1 bị ngắt ở t=2 (còn 5 > 4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SJF: P1[0–7] P3[7–8] P2[8–12] P4[12–16] avg wait 4. SRTF: P1[0–2] P2[2–4] P3[4–5] P2[5–7] P4[7–11] P1[11–16] avg wait 3.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "sjf",
+            "de": "<p>Non-preemptive SJF</p><p style=\"opacity:.75;font-size:.92em\"><i>SJF không ngắt</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Process"
+              },
+              {
+                "ma": "ct",
+                "ten": "Completion"
+              },
+              {
+                "ma": "wt",
+                "ten": "Waiting"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "P1",
+                "o": {
+                  "p": "P1"
+                }
+              },
+              {
+                "ma": "P2",
+                "o": {
+                  "p": "P2"
+                }
+              },
+              {
+                "ma": "P3",
+                "o": {
+                  "p": "P3"
+                }
+              },
+              {
+                "ma": "P4",
+                "o": {
+                  "p": "P4"
+                }
+              },
+              {
+                "ma": "avg",
+                "o": {
+                  "p": "Average waiting",
+                  "ct": "—"
+                }
+              }
+            ],
+            "dapAn": {
+              "P1.ct": "7",
+              "P1.wt": "0",
+              "P2.ct": "12",
+              "P2.wt": "6",
+              "P3.ct": "8",
+              "P3.wt": "3",
+              "P4.ct": "16",
+              "P4.wt": "7",
+              "avg.wt": [
+                "4.00",
+                "4"
+              ]
+            },
+            "giaiThich": "<p>Gantt: P1[0–7] P3[7–8] P2[8–12] P4[12–16]. P1 starts at 0 (the only process) and cannot be preempted, so P2/P3/P4 are chosen by shortest burst when it ends at 7.</p><p><i>VI: Gantt: P1[0–7] P3[7–8] P2[8–12] P4[12–16]. P1 chạy từ 0 (lúc đó chỉ có nó) và không bị ngắt; khi P1 xong ở 7 mới chọn theo burst ngắn nhất.</i></p>"
+          },
+          {
+            "ma": "srt",
+            "de": "<p>Preemptive SJF (SRTF)</p><p style=\"opacity:.75;font-size:.92em\"><i>SJF có ngắt (SRTF)</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Process"
+              },
+              {
+                "ma": "ct",
+                "ten": "Completion"
+              },
+              {
+                "ma": "wt",
+                "ten": "Waiting"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "P1",
+                "o": {
+                  "p": "P1"
+                }
+              },
+              {
+                "ma": "P2",
+                "o": {
+                  "p": "P2"
+                }
+              },
+              {
+                "ma": "P3",
+                "o": {
+                  "p": "P3"
+                }
+              },
+              {
+                "ma": "P4",
+                "o": {
+                  "p": "P4"
+                }
+              },
+              {
+                "ma": "avg",
+                "o": {
+                  "p": "Average waiting",
+                  "ct": "—"
+                }
+              }
+            ],
+            "dapAn": {
+              "P1.ct": "16",
+              "P1.wt": "9",
+              "P2.ct": "7",
+              "P2.wt": "1",
+              "P3.ct": "5",
+              "P3.wt": "0",
+              "P4.ct": "11",
+              "P4.wt": "2",
+              "avg.wt": [
+                "3.00",
+                "3"
+              ]
+            },
+            "giaiThich": "<p>Gantt: P1[0–2] P2[2–4] P3[4–5] P2[5–7] P4[7–11] P1[11–16]. Every time unit the process with the shortest REMAINING time runs; P1 is preempted at t=2 (remaining 5 > 4).</p><p><i>VI: Gantt: P1[0–2] P2[2–4] P3[4–5] P2[5–7] P4[7–11] P1[11–16]. Mỗi đơn vị thời gian chạy tiến trình có thời gian CÒN LẠI ngắn nhất; P1 bị ngắt ở t=2 (còn 5 > 4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "In SRTF comparing the new process’s burst with the running process’s ORIGINAL burst instead of its remaining time."
+        },
+        {
+          "loi": "In non-preemptive SJF switching to P3 the moment it arrives at t=4 although P1 is still running."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SRTF",
+          "vi": "shortest remaining time first — SJF có ngắt"
+        },
+        {
+          "en": "preemption",
+          "vi": "ngắt/chiếm quyền CPU"
+        }
+      ]
+    },
+    {
+      "title": "Scheduling 4 — Round Robin (q = 3): the order of the time slices",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Round Robin",
+        "time quantum",
+        "ready queue"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Round Robin with quantum <b>q = 3</b>. Put the first <b>eight time slices</b> of the Gantt chart in order (each item is “process@start time”), then answer the questions below.</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>8</td></tr><tr><td>P2</td><td>1</td><td>4</td></tr><tr><td>P3</td><td>2</td><td>9</td></tr><tr><td>P4</td><td>3</td><td>5</td></tr></tbody></table><p>Ties: earlier arrival first, then the order listed. Context-switch time is 0. In Round Robin a process that arrives at the exact instant a quantum ends is queued <b>before</b> the preempted process.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Round Robin với quantum <b>q = 3</b>. Xếp <b>tám lát thời gian đầu tiên</b> của biểu đồ Gantt theo thứ tự (mỗi mục là “tiến trình@thời điểm bắt đầu”), rồi trả lời các câu sau.</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>8</td></tr><tr><td>P2</td><td>1</td><td>4</td></tr><tr><td>P3</td><td>2</td><td>9</td></tr><tr><td>P4</td><td>3</td><td>5</td></tr></tbody></table><p>Hoà: đến trước chạy trước, rồi theo thứ tự liệt kê. Thời gian chuyển ngữ cảnh = 0. Với Round Robin, tiến trình đến đúng lúc hết lượt được xếp vào hàng <b>trước</b> tiến trình bị cắt.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep a queue on paper. At the end of each slice first add the processes that have arrived by then, THEN put the preempted process at the back.",
+        "A process with remaining time < q uses only what it needs; the next one starts immediately."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 4 — Round Robin (q = 3): the order of the time slices\n\nAnswer in the answer panel (no code needed).\n\n1. First eight slices of the RR (q = 3) Gantt chartTám lát đầu của biểu đồ Gantt RR (q = 3)\n2. Order in which the four processes COMPLETE (first to last)Thứ tự bốn tiến trình HOÀN THÀNH (sớm nhất đến muộn nhất)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 4 — Round Robin (q = 3): the order of the time slices — answer key\n\n1. First eight slices of the RR (q = 3) Gantt chartTám lát đầu của biểu đồ Gantt RR (q = 3)\n   Answer: s1) P1@0  →  s2) P2@3  →  s3) P3@6  →  s4) P4@9  →  s5) P1@12  →  s6) P2@15  →  s7) P3@16  →  s8) P4@19\n   Full Gantt: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. Queue after t=0: P1 runs 0–3, meanwhile P2 (t=1), P3 (t=2) arrive; P4 arrives at t=3 exactly when P1 is preempted, so P4 is queued BEFORE P1.VI: Gantt đầy đủ: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. P1 chạy 0–3; P2 (t=1), P3 (t=2) đến trong lúc đó; P4 đến đúng t=3 lúc P1 bị cắt nên P4 xếp trước P1.\n\n2. Order in which the four processes COMPLETE (first to last)Thứ tự bốn tiến trình HOÀN THÀNH (sớm nhất đến muộn nhất)\n   Answer: P2) P2  →  P4) P4  →  P1) P1  →  P3) P3\n   Completion times: P1=23, P2=16, P3=26, P4=21 (average waiting 13.5).VI: Thời điểm xong: P1=23, P2=16, P3=26, P4=21 (waiting TB 13.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26].</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>First eight slices of the RR (q = 3) Gantt chart</p><p style=\"opacity:.75;font-size:.92em\"><i>Tám lát đầu của biểu đồ Gantt RR (q = 3)</i></p>",
+            "muc": [
+              {
+                "ma": "s6",
+                "noiDung": "P2@15"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "P3@6"
+              },
+              {
+                "ma": "s8",
+                "noiDung": "P4@19"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "P1@0"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "P4@9"
+              },
+              {
+                "ma": "s7",
+                "noiDung": "P3@16"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "P2@3"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "P1@12"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6",
+              "s7",
+              "s8"
+            ],
+            "giaiThich": "<p>Full Gantt: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. Queue after t=0: P1 runs 0–3, meanwhile P2 (t=1), P3 (t=2) arrive; P4 arrives at t=3 exactly when P1 is preempted, so P4 is queued BEFORE P1.</p><p><i>VI: Gantt đầy đủ: P1[0–3] P2[3–6] P3[6–9] P4[9–12] P1[12–15] P2[15–16] P3[16–19] P4[19–21] P1[21–23] P3[23–26]. P1 chạy 0–3; P2 (t=1), P3 (t=2) đến trong lúc đó; P4 đến đúng t=3 lúc P1 bị cắt nên P4 xếp trước P1.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Order in which the four processes COMPLETE (first to last)</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự bốn tiến trình HOÀN THÀNH (sớm nhất đến muộn nhất)</i></p>",
+            "muc": [
+              {
+                "ma": "P3",
+                "noiDung": "P3"
+              },
+              {
+                "ma": "P1",
+                "noiDung": "P1"
+              },
+              {
+                "ma": "P4",
+                "noiDung": "P4"
+              },
+              {
+                "ma": "P2",
+                "noiDung": "P2"
+              }
+            ],
+            "dapAn": [
+              "P2",
+              "P4",
+              "P1",
+              "P3"
+            ],
+            "giaiThich": "<p>Completion times: P1=23, P2=16, P3=26, P4=21 (average waiting 13.5).</p><p><i>VI: Thời điểm xong: P1=23, P2=16, P3=26, P4=21 (waiting TB 13.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the preempted process back before the process that arrived at the same instant."
+        },
+        {
+          "loi": "Giving a process a full quantum when it only needs 1 more unit (the slice is shorter)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quantum (time slice)",
+          "vi": "lượng tử thời gian mỗi lượt"
+        },
+        {
+          "en": "ready queue",
+          "vi": "hàng đợi sẵn sàng"
+        }
+      ]
+    },
+    {
+      "title": "Scheduling 5 — How the quantum changes Round Robin",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Round Robin",
+        "quantum",
+        "context switch overhead"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Four processes arrive together at t = 0 (bursts A=6, B=3, C=1, D=7). For each quantum, compute the average waiting time (2 decimals) and the number of <b>context switches</b> between different processes (count each boundary between two consecutive Gantt slices of <i>different</i> processes).</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>A</td><td>0</td><td>6</td></tr><tr><td>B</td><td>0</td><td>3</td></tr><tr><td>C</td><td>0</td><td>1</td></tr><tr><td>D</td><td>0</td><td>7</td></tr></tbody></table><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn tiến trình cùng đến t = 0 (burst A=6, B=3, C=1, D=7). Với mỗi quantum hãy tính waiting trung bình (2 chữ số thập phân) và số lần <b>chuyển ngữ cảnh</b> giữa các tiến trình khác nhau (đếm mỗi ranh giới giữa hai lát Gantt liên tiếp của tiến trình <i>khác nhau</i>).</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th></tr></thead><tbody><tr><td>A</td><td>0</td><td>6</td></tr><tr><td>B</td><td>0</td><td>3</td></tr><tr><td>C</td><td>0</td><td>1</td></tr><tr><td>D</td><td>0</td><td>7</td></tr></tbody></table><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "With q = 1 every slice is one unit: the Gantt chart is a rotation A B C D A B D A B D A D A D D.",
+        "The switches are (number of Gantt slices − 1) once adjacent slices of the same process are merged."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 5 — How the quantum changes Round Robin\n\nAnswer in the answer panel (no code needed).\n\n1. Effect of qẢnh hưởng của q\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 5 — How the quantum changes Round Robin — answer key\n\n1. Effect of qẢnh hưởng của q\n   - q1.w: 6.75\n   - q1.cs: 15\n   - q2.w: 7.25\n   - q2.cs: 8\n   - q4.w: 7.25\n   - q4.cs: 5\n   - q8.w: 6.25\n   - q8.cs: 3\n   q=1: avg wait 6.75, 15 switches; q=2: avg wait 7.25, 8 switches; q=4: avg wait 7.25, 5 switches; q=8: avg wait 6.25, 3 switches. A larger quantum means fewer switches; at q ≥ 7 it equals FCFS.VI: q=1: waiting TB 6.75, 15 lần chuyển; q=2: waiting TB 7.25, 8 lần chuyển; q=4: waiting TB 7.25, 5 lần chuyển; q=8: waiting TB 6.25, 3 lần chuyển. Quantum lớn ⇒ ít chuyển hơn; từ q ≥ 7 giống FCFS.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>q=1: 6.75 / 15 · q=2: 7.25 / 8 · q=4: 7.25 / 5 · q=8: 6.25 / 3</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Effect of q</p><p style=\"opacity:.75;font-size:.92em\"><i>Ảnh hưởng của q</i></p>",
+            "cot": [
+              {
+                "ma": "q",
+                "ten": "Quantum"
+              },
+              {
+                "ma": "w",
+                "ten": "Average waiting"
+              },
+              {
+                "ma": "cs",
+                "ten": "Context switches"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "q1",
+                "o": {
+                  "q": "1"
+                }
+              },
+              {
+                "ma": "q2",
+                "o": {
+                  "q": "2"
+                }
+              },
+              {
+                "ma": "q4",
+                "o": {
+                  "q": "4"
+                }
+              },
+              {
+                "ma": "q8",
+                "o": {
+                  "q": "8"
+                }
+              }
+            ],
+            "dapAn": {
+              "q1.w": [
+                "6.75"
+              ],
+              "q1.cs": "15",
+              "q2.w": [
+                "7.25"
+              ],
+              "q2.cs": "8",
+              "q4.w": [
+                "7.25"
+              ],
+              "q4.cs": "5",
+              "q8.w": [
+                "6.25"
+              ],
+              "q8.cs": "3"
+            },
+            "giaiThich": "<p>q=1: avg wait 6.75, 15 switches; q=2: avg wait 7.25, 8 switches; q=4: avg wait 7.25, 5 switches; q=8: avg wait 6.25, 3 switches. A larger quantum means fewer switches; at q ≥ 7 it equals FCFS.</p><p><i>VI: q=1: waiting TB 6.75, 15 lần chuyển; q=2: waiting TB 7.25, 8 lần chuyển; q=4: waiting TB 7.25, 5 lần chuyển; q=8: waiting TB 6.25, 3 lần chuyển. Quantum lớn ⇒ ít chuyển hơn; từ q ≥ 7 giống FCFS.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting a “switch” when the same process simply continues into a new quantum (it is not a switch if the ready queue is empty)."
+        },
+        {
+          "loi": "Averaging completion times instead of waiting times."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "context switch",
+          "vi": "chuyển ngữ cảnh: lưu/nạp trạng thái tiến trình"
+        }
+      ]
+    },
+    {
+      "title": "Scheduling 6 — Priority scheduling: non-preemptive and preemptive",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "priority scheduling",
+        "preemption"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A smaller number means a higher priority. Compute the completion time of each process under non-preemptive and preemptive priority scheduling.</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th><th>Priority (1 = highest)</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>6</td><td>3</td></tr><tr><td>P2</td><td>1</td><td>4</td><td>1</td></tr><tr><td>P3</td><td>2</td><td>3</td><td>4</td></tr><tr><td>P4</td><td>3</td><td>5</td><td>2</td></tr></tbody></table><p>Ties: earlier arrival first, then the order listed. Context-switch time is 0. In Round Robin a process that arrives at the exact instant a quantum ends is queued <b>before</b> the preempted process.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Số nhỏ = ưu tiên cao. Tính thời điểm hoàn thành của từng tiến trình khi lập lịch ưu tiên không ngắt và có ngắt.</p><table><thead><tr><th>Process</th><th>Arrival</th><th>Burst</th><th>Priority (1 = highest)</th></tr></thead><tbody><tr><td>P1</td><td>0</td><td>6</td><td>3</td></tr><tr><td>P2</td><td>1</td><td>4</td><td>1</td></tr><tr><td>P3</td><td>2</td><td>3</td><td>4</td></tr><tr><td>P4</td><td>3</td><td>5</td><td>2</td></tr></tbody></table><p>Hoà: đến trước chạy trước, rồi theo thứ tự liệt kê. Thời gian chuyển ngữ cảnh = 0. Với Round Robin, tiến trình đến đúng lúc hết lượt được xếp vào hàng <b>trước</b> tiến trình bị cắt.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Non-preemptive: when the CPU becomes free pick the highest priority among those that have ALREADY ARRIVED.",
+        "Preemptive: whenever a process arrives with a better priority than the running one it takes over immediately."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 6 — Priority scheduling: non-preemptive and preemptive\n\nAnswer in the answer panel (no code needed).\n\n1. Completion timesThời điểm hoàn thành\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Scheduling 6 — Priority scheduling: non-preemptive and preemptive — answer key\n\n1. Completion timesThời điểm hoàn thành\n   - P1.np: 6\n   - P1.pp: 15\n   - P2.np: 10\n   - P2.pp: 5\n   - P3.np: 18\n   - P3.pp: 18\n   - P4.np: 15\n   - P4.pp: 10\n   Non-preemptive: P1[0–6] P2[6–10] P4[10–15] P3[15–18] (avg wait 6.25). Preemptive: P1[0–1] P2[1–5] P4[5–10] P1[10–15] P3[15–18] (avg wait 6). P2 (priority 1) preempts P1 at t=1 in the preemptive version.VI: Không ngắt: P1[0–6] P2[6–10] P4[10–15] P3[15–18] (waiting TB 6.25). Có ngắt: P1[0–1] P2[1–5] P4[5–10] P1[10–15] P3[15–18] (waiting TB 6). P2 (ưu tiên 1) chiếm CPU của P1 ở t=1 khi có ngắt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NP: P1=6, P2=10, P3=18, P4=15 · P: P1=15, P2=5, P3=18, P4=10.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Completion times</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời điểm hoàn thành</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Process"
+              },
+              {
+                "ma": "np",
+                "ten": "Non-preemptive"
+              },
+              {
+                "ma": "pp",
+                "ten": "Preemptive"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "P1",
+                "o": {
+                  "p": "P1"
+                }
+              },
+              {
+                "ma": "P2",
+                "o": {
+                  "p": "P2"
+                }
+              },
+              {
+                "ma": "P3",
+                "o": {
+                  "p": "P3"
+                }
+              },
+              {
+                "ma": "P4",
+                "o": {
+                  "p": "P4"
+                }
+              }
+            ],
+            "dapAn": {
+              "P1.np": "6",
+              "P1.pp": "15",
+              "P2.np": "10",
+              "P2.pp": "5",
+              "P3.np": "18",
+              "P3.pp": "18",
+              "P4.np": "15",
+              "P4.pp": "10"
+            },
+            "giaiThich": "<p>Non-preemptive: P1[0–6] P2[6–10] P4[10–15] P3[15–18] (avg wait 6.25). Preemptive: P1[0–1] P2[1–5] P4[5–10] P1[10–15] P3[15–18] (avg wait 6). P2 (priority 1) preempts P1 at t=1 in the preemptive version.</p><p><i>VI: Không ngắt: P1[0–6] P2[6–10] P4[10–15] P3[15–18] (waiting TB 6.25). Có ngắt: P1[0–1] P2[1–5] P4[5–10] P1[10–15] P3[15–18] (waiting TB 6). P2 (ưu tiên 1) chiếm CPU của P1 ở t=1 khi có ngắt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading “priority 4” as the highest priority (the convention here is 1 = highest)."
+        },
+        {
+          "loi": "Letting a process that has not arrived yet compete when the CPU becomes free."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "priority inversion",
+          "vi": "đảo ngược ưu tiên: việc ưu tiên cao chờ việc thấp giữ khoá"
+        }
+      ]
+    },
+    {
+      "title": "Scheduling 7 — Write a CPU-scheduler simulator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "CPU scheduling",
+        "simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>schedule(algo, procs, quantum)</code>. <code>procs</code> is an array of <code>{ id, at, bt, pr }</code> (<code>pr</code> may be missing: use 0). <code>algo</code> is one of <code>'FCFS'</code>, <code>'SJF'</code>, <code>'SRTF'</code>, <code>'PRIORITY'</code> (non-preemptive), <code>'PRIORITY_P'</code> (preemptive), <code>'RR'</code> (uses <code>quantum</code>).</p>\n<p>Return <code>{ ct, wt, avgWt }</code>: <code>ct[id]</code> completion time, <code>wt[id]</code> waiting time (turnaround − burst), <code>avgWt</code> the average waiting time rounded to 2 decimals (<code>Math.round(x*100)/100</code>). The CPU may be idle if nothing has arrived. Ties: earlier arrival first, then the order listed. Context-switch time is 0. In Round Robin a process that arrives at the exact instant a quantum ends is queued <b>before</b> the preempted process.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Implement all six algorithms in one function.</li>\n  <li>Return plain objects keyed by process id.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>schedule(algo, procs, quantum)</code>. <code>procs</code> là mảng <code>{ id, at, bt, pr }</code> (<code>pr</code> có thể thiếu: coi là 0). <code>algo</code> là một trong <code>'FCFS'</code>, <code>'SJF'</code>, <code>'SRTF'</code>, <code>'PRIORITY'</code> (không ngắt), <code>'PRIORITY_P'</code> (có ngắt), <code>'RR'</code> (dùng <code>quantum</code>).</p>\n<p>Trả về <code>{ ct, wt, avgWt }</code>: <code>ct[id]</code> thời điểm xong, <code>wt[id]</code> waiting (turnaround − burst), <code>avgWt</code> waiting trung bình làm tròn 2 chữ số. CPU có thể rảnh khi chưa ai đến. Hoà: đến trước chạy trước, rồi theo thứ tự liệt kê. Thời gian chuyển ngữ cảnh = 0. Với Round Robin, tiến trình đến đúng lúc hết lượt được xếp vào hàng <b>trước</b> tiến trình bị cắt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cài cả sáu thuật toán trong một hàm.</li>\n  <li>Trả đối tượng thường, khoá là id tiến trình.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "schedule('FCFS', [{id:'A',at:0,bt:5},{id:'B',at:1,bt:3},{id:'C',at:2,bt:1}])",
+          "output": "{\"ct\":{\"A\":5,\"B\":8,\"C\":9},\"wt\":{\"A\":0,\"B\":4,\"C\":6},\"avgWt\":3.33}",
+          "explanation": "A 0–5, B 5–8, C 8–9: waiting 0, 4, 6, average 3.33.|||A 0–5, B 5–8, C 8–9: waiting 0, 4, 6, trung bình 3,33."
+        }
+      ],
+      "hintsJson": [
+        "Build one loop over time: “which process is READY now?” (at ≤ t and remaining > 0), then each algorithm is just a different sort key.",
+        "SRTF and PRIORITY_P re-decide every time unit; RR keeps a queue and pushes newly arrived processes before the preempted one.",
+        "Waiting time = completion − arrival − burst. Do not forget the idle jump when nothing is ready."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Return { ct, wt, avgWt }. See the statement for the tie-break rules.\nfunction schedule(algo, procs, quantum) {\n  // TODO: simulate the CPU clock\n  return { ct: {}, wt: {}, avgWt: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution: a generic discrete-time simulator.\nfunction schedule(algo, procs, quantum) {\n  const n = procs.length;\n  const P = procs.map((p, i) => ({ id: p.id, at: p.at, bt: p.bt, pr: p.pr == null ? 0 : p.pr, i }));\n  const rem = {}; const first = {}; const ct = {};\n  P.forEach((p) => { rem[p.id] = p.bt; });\n  const gantt = [];\n  const push = (id, s, e) => {\n    if (e <= s) return;\n    const g = gantt[gantt.length - 1];\n    if (g && g[0] === id && g[2] === s) g[2] = e; else gantt.push([id, s, e]);\n  };\n  const khoiDong = (id, t) => { if (first[id] === undefined) first[id] = t; };\n  let t = 0; let xong = 0;\n  if (algo === 'RR') {\n    const q = quantum;\n    const sx = P.slice().sort((a, b) => a.at - b.at || a.i - b.i);\n    let k = 0; const hang = [];\n    while (xong < n) {\n      while (k < n && sx[k].at <= t) hang.push(sx[k++]);\n      if (!hang.length) { t = sx[k].at; continue; }\n      const p = hang.shift();\n      khoiDong(p.id, t);\n      const run = Math.min(q, rem[p.id]);\n      push(p.id, t, t + run); t += run; rem[p.id] -= run;\n      while (k < n && sx[k].at <= t) hang.push(sx[k++]);\n      if (rem[p.id] > 0) hang.push(p); else { ct[p.id] = t; xong++; }\n    }\n  } else if (algo === 'FCFS' || algo === 'SJF' || algo === 'PRIORITY') {\n    const daXong = {};\n    while (xong < n) {\n      let ds = P.filter((p) => !daXong[p.id] && p.at <= t);\n      if (!ds.length) { t = Math.min.apply(null, P.filter((p) => !daXong[p.id]).map((p) => p.at)); continue; }\n      const khoa = (p) => (algo === 'FCFS' ? [p.at, p.i] : algo === 'SJF' ? [p.bt, p.at, p.i] : [p.pr, p.at, p.i]);\n      ds.sort((a, b) => { const x = khoa(a), y = khoa(b); for (let j = 0; j < x.length; j++) if (x[j] !== y[j]) return x[j] - y[j]; return 0; });\n      const p = ds[0];\n      khoiDong(p.id, t); push(p.id, t, t + p.bt); t += p.bt; ct[p.id] = t; daXong[p.id] = true; xong++;\n    }\n  } else {\n    // SRTF / PRIORITY_P: quyết định lại sau MỖI đơn vị thời gian\n    while (xong < n) {\n      const ds = P.filter((p) => rem[p.id] > 0 && p.at <= t);\n      if (!ds.length) { t = Math.min.apply(null, P.filter((p) => rem[p.id] > 0).map((p) => p.at)); continue; }\n      const khoa = (p) => (algo === 'SRTF' ? [rem[p.id], p.at, p.i] : [p.pr, p.at, p.i]);\n      ds.sort((a, b) => { const x = khoa(a), y = khoa(b); for (let j = 0; j < x.length; j++) if (x[j] !== y[j]) return x[j] - y[j]; return 0; });\n      const p = ds[0];\n      khoiDong(p.id, t); push(p.id, t, t + 1); rem[p.id]--; t++;\n      if (rem[p.id] === 0) { ct[p.id] = t; xong++; }\n    }\n  }\n  const lam2 = (x) => Math.round(x * 100) / 100;\n  const tat = {}; const wt = {}; const rt = {};\n  let sw = 0; let st = 0; let sr = 0;\n  P.forEach((p) => {\n    tat[p.id] = ct[p.id] - p.at; wt[p.id] = tat[p.id] - p.bt; rt[p.id] = first[p.id] - p.at;\n    sw += wt[p.id]; st += tat[p.id]; sr += rt[p.id];\n  });\n  return { ct, wt, avgWt: lam2(sw / n) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One generic simulator: the ready set depends only on <code>at ≤ t</code> and remaining burst; the algorithms differ in the sort key and in whether the decision is re-made every unit (SRTF, PRIORITY_P) or only when the CPU is free (FCFS, SJF, PRIORITY). RR keeps its own queue.</p><p><i>VI: Một bộ mô phỏng chung: tập sẵn sàng chỉ phụ thuộc at ≤ t và burst còn lại; các thuật toán khác nhau ở khoá sắp xếp và việc quyết định lại mỗi đơn vị (SRTF, PRIORITY_P) hay chỉ khi CPU rảnh (FCFS, SJF, PRIORITY). RR có hàng đợi riêng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: schedule(\"FCFS\", [{\"id\":\"A\",\"at\":0,\"bt\":5},{\"id\":\"B\",\"at\":1,\"bt\":3},{\"id\":\"C\",\")",
+              "vi": "Ca 1"
+            },
+            "goi": "schedule(\"FCFS\", [{\"id\":\"A\",\"at\":0,\"bt\":5},{\"id\":\"B\",\"at\":1,\"bt\":3},{\"id\":\"C\",\"at\":2,\"bt\":1}])",
+            "mongDoi": {
+              "ct": {
+                "A": 5,
+                "B": 8,
+                "C": 9
+              },
+              "wt": {
+                "A": 0,
+                "B": 4,
+                "C": 6
+              },
+              "avgWt": 3.33
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: schedule(\"SJF\", [{\"id\":\"P1\",\"at\":0,\"bt\":7},{\"id\":\"P2\",\"at\":2,\"bt\":4},{\"id\":\"P3\")",
+              "vi": "Ca 2"
+            },
+            "goi": "schedule(\"SJF\", [{\"id\":\"P1\",\"at\":0,\"bt\":7},{\"id\":\"P2\",\"at\":2,\"bt\":4},{\"id\":\"P3\",\"at\":4,\"bt\":1},{\"id\":\"P4\",\"at\":5,\"bt\":4}])",
+            "mongDoi": {
+              "ct": {
+                "P1": 7,
+                "P3": 8,
+                "P2": 12,
+                "P4": 16
+              },
+              "wt": {
+                "P1": 0,
+                "P2": 6,
+                "P3": 3,
+                "P4": 7
+              },
+              "avgWt": 4
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: schedule(\"SRTF\", [{\"id\":\"P1\",\"at\":0,\"bt\":7},{\"id\":\"P2\",\"at\":2,\"bt\":4},{\"id\":\"P3)",
+              "vi": "Ca 3"
+            },
+            "goi": "schedule(\"SRTF\", [{\"id\":\"P1\",\"at\":0,\"bt\":7},{\"id\":\"P2\",\"at\":2,\"bt\":4},{\"id\":\"P3\",\"at\":4,\"bt\":1},{\"id\":\"P4\",\"at\":5,\"bt\":4}])",
+            "mongDoi": {
+              "ct": {
+                "P3": 5,
+                "P2": 7,
+                "P4": 11,
+                "P1": 16
+              },
+              "wt": {
+                "P1": 9,
+                "P2": 1,
+                "P3": 0,
+                "P4": 2
+              },
+              "avgWt": 3
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: schedule(\"RR\", [{\"id\":\"P1\",\"at\":0,\"bt\":7},{\"id\":\"P2\",\"at\":2,\"bt\":4},{\"id\":\"P3\",)",
+              "vi": "Ca 4"
+            },
+            "goi": "schedule(\"RR\", [{\"id\":\"P1\",\"at\":0,\"bt\":7},{\"id\":\"P2\",\"at\":2,\"bt\":4},{\"id\":\"P3\",\"at\":4,\"bt\":1},{\"id\":\"P4\",\"at\":5,\"bt\":4}], 3)",
+            "mongDoi": {
+              "ct": {
+                "P3": 10,
+                "P2": 14,
+                "P1": 15,
+                "P4": 16
+              },
+              "wt": {
+                "P1": 8,
+                "P2": 8,
+                "P3": 5,
+                "P4": 7
+              },
+              "avgWt": 7
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 5: schedule(\"PRIORITY\", [{\"id\":\"P1\",\"at\":0,\"bt\":6,\"pr\":3},{\"id\":\"P2\",\"at\":1,\"bt\":4)",
+              "vi": "Ca 5"
+            },
+            "goi": "schedule(\"PRIORITY\", [{\"id\":\"P1\",\"at\":0,\"bt\":6,\"pr\":3},{\"id\":\"P2\",\"at\":1,\"bt\":4,\"pr\":1},{\"id\":\"P3\",\"at\":2,\"bt\":3,\"pr\":4},{\"id\":\"P4\",\"at\":3,\"bt\":5,\"pr\":2}])",
+            "mongDoi": {
+              "ct": {
+                "P1": 6,
+                "P2": 10,
+                "P4": 15,
+                "P3": 18
+              },
+              "wt": {
+                "P1": 0,
+                "P2": 5,
+                "P3": 13,
+                "P4": 7
+              },
+              "avgWt": 6.25
+            }
+          },
+          {
+            "moTa": {
+              "en": "Preemptive priority with an idle gap (Z arrives at t = 20)",
+              "vi": "Ưu tiên có ngắt, có khoảng CPU rảnh (Z đến ở t = 20)"
+            },
+            "goi": "schedule(\"PRIORITY_P\", [{\"id\":\"X\",\"at\":0,\"bt\":4,\"pr\":2},{\"id\":\"Y\",\"at\":1,\"bt\":2,\"pr\":1},{\"id\":\"Z\",\"at\":20,\"bt\":3,\"pr\":1}])",
+            "mongDoi": {
+              "ct": {
+                "Y": 3,
+                "X": 6,
+                "Z": 23
+              },
+              "wt": {
+                "X": 2,
+                "Y": 0,
+                "Z": 0
+              },
+              "avgWt": 0.67
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "schedule(\"RR\", [{\"id\":\"A\",\"at\":0,\"bt\":5},{\"id\":\"B\",\"at\":1,\"bt\":3},{\"id\":\"C\",\"at\":2,\"bt\":1},{\"id\":\"D\",\"at\":3,\"bt\":2},{\"id\":\"E\",\"at\":9,\"bt\":2}], 2)",
+            "mongDoi": {
+              "ct": {
+                "C": 5,
+                "D": 9,
+                "B": 10,
+                "A": 11,
+                "E": 13
+              },
+              "wt": {
+                "A": 6,
+                "B": 6,
+                "C": 2,
+                "D": 4,
+                "E": 2
+              },
+              "avgWt": 4
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "schedule(\"SRTF\", [{\"id\":\"A\",\"at\":3,\"bt\":2},{\"id\":\"B\",\"at\":0,\"bt\":9},{\"id\":\"C\",\"at\":1,\"bt\":3},{\"id\":\"D\",\"at\":30,\"bt\":1}])",
+            "mongDoi": {
+              "ct": {
+                "C": 4,
+                "A": 6,
+                "B": 14,
+                "D": 31
+              },
+              "wt": {
+                "A": 1,
+                "B": 5,
+                "C": 0,
+                "D": 0
+              },
+              "avgWt": 1.5
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "schedule(\"SJF\", [{\"id\":\"A\",\"at\":5,\"bt\":2},{\"id\":\"B\",\"at\":5,\"bt\":2},{\"id\":\"C\",\"at\":0,\"bt\":3}])",
+            "mongDoi": {
+              "ct": {
+                "C": 3,
+                "A": 7,
+                "B": 9
+              },
+              "wt": {
+                "A": 0,
+                "B": 2,
+                "C": 0
+              },
+              "avgWt": 0.67
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting a process that has not arrived (at > t) run, or never advancing the clock when the ready set is empty (infinite loop)."
+        },
+        {
+          "loi": "In Round Robin re-queueing the preempted process before adding the processes that arrived during its slice."
+        },
+        {
+          "loi": "Rounding each waiting time instead of only the average."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ready set",
+          "vi": "tập tiến trình sẵn sàng: đã đến và còn burst"
+        }
+      ]
+    }
+  ]
+}

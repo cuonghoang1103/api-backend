@@ -1,0 +1,1183 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-3-2-thay-trang",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-3-2-thay-trang"
+  },
+  "exercises": [
+    {
+      "title": "Replacement 1 — Count the page faults of FIFO, LRU and OPT",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "FIFO",
+        "LRU",
+        "OPT",
+        "page faults"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Reference string: <code>1 2 3 4 2 1 5 6 2 1 2 3 7 6 3 2 1 2 3 6</code>. Memory has 3 frames, initially empty. How many page faults does each algorithm cause (the first loads of the empty frames count)?</p><p>Frames are filled in order while free; no pre-paging; the OPT tie (several pages never used again) is resolved by the lowest frame number.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuỗi tham chiếu: <code>1 2 3 4 2 1 5 6 2 1 2 3 7 6 3 2 1 2 3 6</code>. Bộ nhớ có 3 khung, ban đầu rỗng. Mỗi thuật toán gây bao nhiêu lỗi trang (các lần nạp đầu vào khung trống cũng tính)?</p><p>Khung được lấp theo thứ tự khi còn trống; không nạp trước; OPT hoà (nhiều trang không dùng lại) chọn khung số nhỏ nhất.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the frame contents after every reference; mark F for a fault and H for a hit.",
+        "OPT evicts the page whose next use is farthest in the future (or never)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 1 — Count the page faults of FIFO, LRU and OPT\n\nAnswer in the answer panel (no code needed).\n\n1. Page faults with 3 framesLỗi trang với 3 khung\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 1 — Count the page faults of FIFO, LRU and OPT — answer key\n\n1. Page faults with 3 framesLỗi trang với 3 khung\n   - FIFO.f: 16\n   - LRU.f: 15\n   - OPT.f: 11\n   FIFO: 16, LRU: 15, OPT: 11. OPT is the lower bound; LRU approximates it by looking at the past.VI: FIFO: 16, LRU: 15, OPT: 11. OPT là cận dưới; LRU xấp xỉ nó bằng cách nhìn về quá khứ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>FIFO = 16 · LRU = 15 · OPT = 11</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Page faults with 3 frames</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi trang với 3 khung</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Algorithm"
+              },
+              {
+                "ma": "f",
+                "ten": "Faults"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "FIFO",
+                "o": {
+                  "a": "FIFO"
+                }
+              },
+              {
+                "ma": "LRU",
+                "o": {
+                  "a": "LRU"
+                }
+              },
+              {
+                "ma": "OPT",
+                "o": {
+                  "a": "OPT"
+                }
+              }
+            ],
+            "dapAn": {
+              "FIFO.f": "16",
+              "LRU.f": "15",
+              "OPT.f": "11"
+            },
+            "giaiThich": "<p>FIFO: 16, LRU: 15, OPT: 11. OPT is the lower bound; LRU approximates it by looking at the past.</p><p><i>VI: FIFO: 16, LRU: 15, OPT: 11. OPT là cận dưới; LRU xấp xỉ nó bằng cách nhìn về quá khứ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Not counting the faults that fill the empty frames."
+        },
+        {
+          "loi": "Evicting by “least recently LOADED” (FIFO) when the question asks for LRU, or the other way round."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reference string",
+          "vi": "chuỗi tham chiếu trang"
+        },
+        {
+          "en": "victim page",
+          "vi": "trang nạn nhân bị đuổi"
+        },
+        {
+          "en": "OPT / Belady’s optimal",
+          "vi": "thuật toán tối ưu: cần biết tương lai"
+        }
+      ]
+    },
+    {
+      "title": "Replacement 2 — FIFO step by step: hit or fault?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "FIFO"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>FIFO with 3 frames on <code>3 2 1 3 4 1 6 2 4 3 4 2 1 4 5 2 1 3 4</code>. For every reference say whether it is a <b>Hit</b> or a <b>Fault</b>; finally give the total number of faults.</p><p>Frames are filled in order while free; no pre-paging; the OPT tie (several pages never used again) is resolved by the lowest frame number.</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>FIFO với 3 khung trên <code>3 2 1 3 4 1 6 2 4 3 4 2 1 4 5 2 1 3 4</code>. Với mỗi tham chiếu cho biết <b>Hit</b> hay <b>Fault</b>; cuối cùng cho tổng số lỗi trang.</p><p>Khung được lấp theo thứ tự khi còn trống; không nạp trước; OPT hoà (nhiều trang không dùng lại) chọn khung số nhỏ nhất.</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep the queue in arrival order: the oldest page is at the front and is evicted first, even if it was used a moment ago.",
+        "A hit does NOT change the FIFO order."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 2 — FIFO step by step: hit or fault?\n\nAnswer in the answer panel (no code needed).\n\n1. Hit / Fault per referenceHit / Fault từng tham chiếu\n2. TotalTổng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 2 — FIFO step by step: hit or fault? — answer key\n\n1. Hit / Fault per referenceHit / Fault từng tham chiếu\n   - s1.x: Fault\n   - s2.x: Fault\n   - s3.x: Fault\n   - s4.x: Hit\n   - s5.x: Fault\n   - s6.x: Hit\n   - s7.x: Fault\n   - s8.x: Fault\n   - s9.x: Hit\n   - s10.x: Fault\n   - s11.x: Fault\n   - s12.x: Hit\n   - s13.x: Fault\n   - s14.x: Hit\n   - s15.x: Fault\n   - s16.x: Fault\n   - s17.x: Hit\n   - s18.x: Fault\n   - s19.x: Fault\n   Frames after each step: #1 F [3]; #2 F [3,2]; #3 F [3,2,1]; #4 H [3,2,1]; #5 F [4,2,1]; #6 H [4,2,1]; #7 F [4,6,1]; #8 F [4,6,2]; #9 H [4,6,2]; #10 F [3,6,2]; #11 F [3,4,2]; #12 H [3,4,2]; #13 F [3,4,1]; #14 H [3,4,1]; #15 F [5,4,1]; #16 F [5,2,1]; #17 H [5,2,1]; #18 F [5,2,3]; #19 F [4,2,3]. Total = 13.VI: Khung sau mỗi bước: #1 F [3]; #2 F [3,2]; #3 F [3,2,1]; #4 H [3,2,1]; #5 F [4,2,1]; #6 H [4,2,1]; #7 F [4,6,1]; #8 F [4,6,2]; #9 H [4,6,2]; #10 F [3,6,2]; #11 F [3,4,2]; #12 H [3,4,2]; #13 F [3,4,1]; #14 H [3,4,1]; #15 F [5,4,1]; #16 F [5,2,1]; #17 H [5,2,1]; #18 F [5,2,3]; #19 F [4,2,3]. Tổng = 13.\n\n2. TotalTổng\n   - tot.v: 13\n   Total = 13 faults out of 19 references.VI: Tổng = 13 lỗi trên 19 tham chiếu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>FFFHFHFFHFFHFHFFHFF — 13 faults.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Hit / Fault per reference</p><p style=\"opacity:.75;font-size:.92em\"><i>Hit / Fault từng tham chiếu</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Reference"
+              },
+              {
+                "ma": "x",
+                "ten": "Result",
+                "luaChon": [
+                  "Hit",
+                  "Fault"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "s1",
+                "o": {
+                  "r": "#1: page 3"
+                }
+              },
+              {
+                "ma": "s2",
+                "o": {
+                  "r": "#2: page 2"
+                }
+              },
+              {
+                "ma": "s3",
+                "o": {
+                  "r": "#3: page 1"
+                }
+              },
+              {
+                "ma": "s4",
+                "o": {
+                  "r": "#4: page 3"
+                }
+              },
+              {
+                "ma": "s5",
+                "o": {
+                  "r": "#5: page 4"
+                }
+              },
+              {
+                "ma": "s6",
+                "o": {
+                  "r": "#6: page 1"
+                }
+              },
+              {
+                "ma": "s7",
+                "o": {
+                  "r": "#7: page 6"
+                }
+              },
+              {
+                "ma": "s8",
+                "o": {
+                  "r": "#8: page 2"
+                }
+              },
+              {
+                "ma": "s9",
+                "o": {
+                  "r": "#9: page 4"
+                }
+              },
+              {
+                "ma": "s10",
+                "o": {
+                  "r": "#10: page 3"
+                }
+              },
+              {
+                "ma": "s11",
+                "o": {
+                  "r": "#11: page 4"
+                }
+              },
+              {
+                "ma": "s12",
+                "o": {
+                  "r": "#12: page 2"
+                }
+              },
+              {
+                "ma": "s13",
+                "o": {
+                  "r": "#13: page 1"
+                }
+              },
+              {
+                "ma": "s14",
+                "o": {
+                  "r": "#14: page 4"
+                }
+              },
+              {
+                "ma": "s15",
+                "o": {
+                  "r": "#15: page 5"
+                }
+              },
+              {
+                "ma": "s16",
+                "o": {
+                  "r": "#16: page 2"
+                }
+              },
+              {
+                "ma": "s17",
+                "o": {
+                  "r": "#17: page 1"
+                }
+              },
+              {
+                "ma": "s18",
+                "o": {
+                  "r": "#18: page 3"
+                }
+              },
+              {
+                "ma": "s19",
+                "o": {
+                  "r": "#19: page 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "s1.x": "Fault",
+              "s2.x": "Fault",
+              "s3.x": "Fault",
+              "s4.x": "Hit",
+              "s5.x": "Fault",
+              "s6.x": "Hit",
+              "s7.x": "Fault",
+              "s8.x": "Fault",
+              "s9.x": "Hit",
+              "s10.x": "Fault",
+              "s11.x": "Fault",
+              "s12.x": "Hit",
+              "s13.x": "Fault",
+              "s14.x": "Hit",
+              "s15.x": "Fault",
+              "s16.x": "Fault",
+              "s17.x": "Hit",
+              "s18.x": "Fault",
+              "s19.x": "Fault"
+            },
+            "giaiThich": "<p>Frames after each step: #1 F [3]; #2 F [3,2]; #3 F [3,2,1]; #4 H [3,2,1]; #5 F [4,2,1]; #6 H [4,2,1]; #7 F [4,6,1]; #8 F [4,6,2]; #9 H [4,6,2]; #10 F [3,6,2]; #11 F [3,4,2]; #12 H [3,4,2]; #13 F [3,4,1]; #14 H [3,4,1]; #15 F [5,4,1]; #16 F [5,2,1]; #17 H [5,2,1]; #18 F [5,2,3]; #19 F [4,2,3]. Total = 13.</p><p><i>VI: Khung sau mỗi bước: #1 F [3]; #2 F [3,2]; #3 F [3,2,1]; #4 H [3,2,1]; #5 F [4,2,1]; #6 H [4,2,1]; #7 F [4,6,1]; #8 F [4,6,2]; #9 H [4,6,2]; #10 F [3,6,2]; #11 F [3,4,2]; #12 H [3,4,2]; #13 F [3,4,1]; #14 H [3,4,1]; #15 F [5,4,1]; #16 F [5,2,1]; #17 H [5,2,1]; #18 F [5,2,3]; #19 F [4,2,3]. Tổng = 13.</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Total</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "tot",
+                "o": {
+                  "k": "Total page faults"
+                }
+              }
+            ],
+            "dapAn": {
+              "tot.v": "13"
+            },
+            "giaiThich": "<p>Total = 13 faults out of 19 references.</p><p><i>VI: Tổng = 13 lỗi trên 19 tham chiếu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Moving a page to the back of the queue on a hit (that is LRU)."
+        },
+        {
+          "loi": "Forgetting that the first three distinct pages always fault."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FIFO",
+          "vi": "đuổi trang nạp sớm nhất"
+        }
+      ]
+    },
+    {
+      "title": "Replacement 3 — LRU: which page is evicted at each fault?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "LRU"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>LRU with 3 frames on <code>2 3 2 1 5 2 4 5 3 2 5 2 6 1 4</code>. For each page fault give the page that is evicted (write <code>none</code> when a free frame is used).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LRU với 3 khung trên <code>2 3 2 1 5 2 4 5 3 2 5 2 6 1 4</code>. Với mỗi lỗi trang cho trang bị đuổi (viết <code>none</code> nếu dùng khung trống).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For every page in memory remember WHEN it was last used (not when it was loaded).",
+        "The victim is the page with the oldest last-use time."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 3 — LRU: which page is evicted at each fault?\n\nAnswer in the answer panel (no code needed).\n\n1. Evicted pageTrang bị đuổi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 3 — LRU: which page is evicted at each fault? — answer key\n\n1. Evicted pageTrang bị đuổi\n   - f1.e: none\n   - f2.e: none\n   - f4.e: none\n   - f5.e: 3\n   - f7.e: 1\n   - f9.e: 2\n   - f10.e: 4\n   - f13.e: 3\n   - f14.e: 5\n   - f15.e: 2\n   #1: free frame → [2]; #2: free frame → [2,3]; #4: free frame → [2,3,1]; #5: evict 3 → [2,5,1]; #7: evict 1 → [2,5,4]; #9: evict 2 → [3,5,4]; #10: evict 4 → [3,5,2]; #13: evict 3 → [6,5,2]; #14: evict 5 → [6,1,2]; #15: evict 2 → [6,1,4]. 10 faults in total.VI: #1: khung trống; #2: khung trống; #4: khung trống; #5: đuổi 3; #7: đuổi 1; #9: đuổi 2; #10: đuổi 4; #13: đuổi 3; #14: đuổi 5; #15: đuổi 2. Tổng 10 lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>#1→none · #2→none · #4→none · #5→3 · #7→1 · #9→2 · #10→4 · #13→3 · #14→5 · #15→2</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Evicted page</p><p style=\"opacity:.75;font-size:.92em\"><i>Trang bị đuổi</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Fault at reference"
+              },
+              {
+                "ma": "e",
+                "ten": "Evicted page"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "f1",
+                "o": {
+                  "f": "#1 (page 2)"
+                }
+              },
+              {
+                "ma": "f2",
+                "o": {
+                  "f": "#2 (page 3)"
+                }
+              },
+              {
+                "ma": "f4",
+                "o": {
+                  "f": "#4 (page 1)"
+                }
+              },
+              {
+                "ma": "f5",
+                "o": {
+                  "f": "#5 (page 5)"
+                }
+              },
+              {
+                "ma": "f7",
+                "o": {
+                  "f": "#7 (page 4)"
+                }
+              },
+              {
+                "ma": "f9",
+                "o": {
+                  "f": "#9 (page 3)"
+                }
+              },
+              {
+                "ma": "f10",
+                "o": {
+                  "f": "#10 (page 2)"
+                }
+              },
+              {
+                "ma": "f13",
+                "o": {
+                  "f": "#13 (page 6)"
+                }
+              },
+              {
+                "ma": "f14",
+                "o": {
+                  "f": "#14 (page 1)"
+                }
+              },
+              {
+                "ma": "f15",
+                "o": {
+                  "f": "#15 (page 4)"
+                }
+              }
+            ],
+            "dapAn": {
+              "f1.e": "none",
+              "f2.e": "none",
+              "f4.e": "none",
+              "f5.e": "3",
+              "f7.e": "1",
+              "f9.e": "2",
+              "f10.e": "4",
+              "f13.e": "3",
+              "f14.e": "5",
+              "f15.e": "2"
+            },
+            "giaiThich": "<p>#1: free frame → [2]; #2: free frame → [2,3]; #4: free frame → [2,3,1]; #5: evict 3 → [2,5,1]; #7: evict 1 → [2,5,4]; #9: evict 2 → [3,5,4]; #10: evict 4 → [3,5,2]; #13: evict 3 → [6,5,2]; #14: evict 5 → [6,1,2]; #15: evict 2 → [6,1,4]. 10 faults in total.</p><p><i>VI: #1: khung trống; #2: khung trống; #4: khung trống; #5: đuổi 3; #7: đuổi 1; #9: đuổi 2; #10: đuổi 4; #13: đuổi 3; #14: đuổi 5; #15: đuổi 2. Tổng 10 lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the load time (that is FIFO)."
+        },
+        {
+          "loi": "Not updating the last-use time on a hit."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "LRU",
+          "vi": "đuổi trang lâu không dùng nhất"
+        }
+      ]
+    },
+    {
+      "title": "Replacement 4 — Belady’s anomaly: more frames, more faults?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Belady anomaly",
+        "stack algorithms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Reference string <code>1 2 3 4 1 2 5 1 2 3 4 5</code>. Count the faults with 3 and with 4 frames.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuỗi tham chiếu <code>1 2 3 4 1 2 5 1 2 3 4 5</code>. Đếm lỗi trang với 3 và với 4 khung.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Run FIFO twice (3 and 4 frames); write the queue after each reference.",
+        "Stack algorithms (LRU, OPT) never show the anomaly."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 4 — Belady’s anomaly: more frames, more faults?\n\nAnswer in the answer panel (no code needed).\n\n1. FaultsSố lỗi trang\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 4 — Belady’s anomaly: more frames, more faults? — answer key\n\n1. FaultsSố lỗi trang\n   - FIFO.f3: 9\n   - FIFO.f4: 10\n   - FIFO.an: Yes\n   - LRU.f3: 10\n   - LRU.f4: 8\n   - LRU.an: No\n   - OPT.f3: 7\n   - OPT.f4: 6\n   - OPT.an: No\n   FIFO: 9 → 10, LRU: 10 → 8, OPT: 7 → 6. Only FIFO shows the anomaly. LRU and OPT are stack algorithms: the set of pages in n frames is always a subset of the set in n+1 frames, so adding a frame can never add a fault.VI: FIFO: 9 → 10, LRU: 10 → 8, OPT: 7 → 6. Chỉ FIFO bị nghịch lý. LRU và OPT là thuật toán dạng ngăn xếp: tập trang trong n khung luôn là tập con của n+1 khung nên thêm khung không thể thêm lỗi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>FIFO 9→10 · LRU 10→8 · OPT 7→6</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Faults</p><p style=\"opacity:.75;font-size:.92em\"><i>Số lỗi trang</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Algorithm"
+              },
+              {
+                "ma": "f3",
+                "ten": "3 frames"
+              },
+              {
+                "ma": "f4",
+                "ten": "4 frames"
+              },
+              {
+                "ma": "an",
+                "ten": "More frames ⇒ more faults?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "FIFO",
+                "o": {
+                  "a": "FIFO"
+                }
+              },
+              {
+                "ma": "LRU",
+                "o": {
+                  "a": "LRU"
+                }
+              },
+              {
+                "ma": "OPT",
+                "o": {
+                  "a": "OPT"
+                }
+              }
+            ],
+            "dapAn": {
+              "FIFO.f3": "9",
+              "FIFO.f4": "10",
+              "FIFO.an": "Yes",
+              "LRU.f3": "10",
+              "LRU.f4": "8",
+              "LRU.an": "No",
+              "OPT.f3": "7",
+              "OPT.f4": "6",
+              "OPT.an": "No"
+            },
+            "giaiThich": "<p>FIFO: 9 → 10, LRU: 10 → 8, OPT: 7 → 6. Only FIFO shows the anomaly. LRU and OPT are stack algorithms: the set of pages in n frames is always a subset of the set in n+1 frames, so adding a frame can never add a fault.</p><p><i>VI: FIFO: 9 → 10, LRU: 10 → 8, OPT: 7 → 6. Chỉ FIFO bị nghịch lý. LRU và OPT là thuật toán dạng ngăn xếp: tập trang trong n khung luôn là tập con của n+1 khung nên thêm khung không thể thêm lỗi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming more frames can never hurt (true for LRU/OPT, false for FIFO)."
+        },
+        {
+          "loi": "Counting the final state instead of every fault."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Belady’s anomaly",
+          "vi": "nghịch lý Belady: thêm khung lại tăng lỗi"
+        },
+        {
+          "en": "stack algorithm",
+          "vi": "thuật toán ngăn xếp"
+        }
+      ]
+    },
+    {
+      "title": "Replacement 5 — Second chance (Clock) versus FIFO",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Clock",
+        "second chance"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Clock (second chance) with 3 frames on <code>2 3 2 1 5 2 4 5 3 2 5 2</code>. A newly loaded page gets reference bit 1; a hit sets the bit to 1; on a fault the hand skips pages with bit 1 (clearing it) until it finds a page with bit 0, replaces it, and moves to the next frame. The hand starts at frame 0; free frames are filled first (frame 0, 1, 2). Give the number of faults for Clock and for FIFO, and the pages in frames 0, 1, 2 at the end for Clock.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Clock (cơ hội thứ hai) với 3 khung trên <code>2 3 2 1 5 2 4 5 3 2 5 2</code>. Trang mới nạp có bit tham chiếu 1; một lần hit đặt bit về 1; khi lỗi, kim quét bỏ qua các trang có bit 1 (xoá bit) tới khi gặp trang có bit 0, thay nó, rồi chuyển sang khung kế. Kim bắt đầu ở khung 0; khung trống được lấp trước (khung 0, 1, 2). Cho số lỗi của Clock và của FIFO, và các trang ở khung 0, 1, 2 lúc cuối của Clock.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep (page, R bit) for the 3 frames plus the hand position.",
+        "After replacing at position h, the hand moves to h+1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 5 — Second chance (Clock) versus FIFO\n\nAnswer in the answer panel (no code needed).\n\n1. ResultsKết quả\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 5 — Second chance (Clock) versus FIFO — answer key\n\n1. ResultsKết quả\n   - cf.v: 8\n   - ff.v: 9\n   - f0.v: 3\n   - f1.v: 2\n   - f2.v: 5\n   Clock trace: #1 F [2]; #2 F [2,3]; #3 H [2,3]; #4 F [2,3,1]; #5 F [5,3,1]; #6 F [5,2,1]; #7 F [5,2,4]; #8 H [5,2,4]; #9 F [3,2,4]; #10 H [3,2,4]; #11 F [3,2,5]; #12 H [3,2,5]. Clock = 8 faults, FIFO = 9. Clock protects recently used pages, like a cheap LRU.VI: Vết Clock: #1 F [2]; #2 F [2,3]; #3 H [2,3]; #4 F [2,3,1]; #5 F [5,3,1]; #6 F [5,2,1]; #7 F [5,2,4]; #8 H [5,2,4]; #9 F [3,2,4]; #10 H [3,2,4]; #11 F [3,2,5]; #12 H [3,2,5]. Clock = 8 lỗi, FIFO = 9. Clock bảo vệ trang vừa dùng, như LRU rẻ tiền.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Clock 8 faults, FIFO 9; final frames [3, 2, 5].</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Results</p><p style=\"opacity:.75;font-size:.92em\"><i>Kết quả</i></p>",
+            "cot": [
+              {
+                "ma": "k",
+                "ten": "Quantity"
+              },
+              {
+                "ma": "v",
+                "ten": "Value"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "cf",
+                "o": {
+                  "k": "Clock faults"
+                }
+              },
+              {
+                "ma": "ff",
+                "o": {
+                  "k": "FIFO faults"
+                }
+              },
+              {
+                "ma": "f0",
+                "o": {
+                  "k": "Clock: page in frame 0"
+                }
+              },
+              {
+                "ma": "f1",
+                "o": {
+                  "k": "Clock: page in frame 1"
+                }
+              },
+              {
+                "ma": "f2",
+                "o": {
+                  "k": "Clock: page in frame 2"
+                }
+              }
+            ],
+            "dapAn": {
+              "cf.v": "8",
+              "ff.v": "9",
+              "f0.v": "3",
+              "f1.v": "2",
+              "f2.v": "5"
+            },
+            "giaiThich": "<p>Clock trace: #1 F [2]; #2 F [2,3]; #3 H [2,3]; #4 F [2,3,1]; #5 F [5,3,1]; #6 F [5,2,1]; #7 F [5,2,4]; #8 H [5,2,4]; #9 F [3,2,4]; #10 H [3,2,4]; #11 F [3,2,5]; #12 H [3,2,5]. Clock = 8 faults, FIFO = 9. Clock protects recently used pages, like a cheap LRU.</p><p><i>VI: Vết Clock: #1 F [2]; #2 F [2,3]; #3 H [2,3]; #4 F [2,3,1]; #5 F [5,3,1]; #6 F [5,2,1]; #7 F [5,2,4]; #8 H [5,2,4]; #9 F [3,2,4]; #10 H [3,2,4]; #11 F [3,2,5]; #12 H [3,2,5]. Clock = 8 lỗi, FIFO = 9. Clock bảo vệ trang vừa dùng, như LRU rẻ tiền.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Setting the reference bit of a newly loaded page to 0."
+        },
+        {
+          "loi": "Not clearing bits while the hand passes over them."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "second chance / Clock",
+          "vi": "thuật toán cơ hội thứ hai (kim đồng hồ)"
+        },
+        {
+          "en": "reference bit",
+          "vi": "bit tham chiếu"
+        }
+      ]
+    },
+    {
+      "title": "Replacement 6 — NRU, aging, working set: which is which?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "LRU",
+        "OPT",
+        "NRU",
+        "demand paging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five conceptual questions about page-replacement algorithms and demand paging.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu khái niệm về các thuật toán thay trang và phân trang theo yêu cầu.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "OPT = needs the future. LRU = needs per-reference bookkeeping.",
+        "Evicting a clean page costs one fewer disk write."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 6 — NRU, aging, working set: which is which?\n\nAnswer in the answer panel (no code needed).\n\n1. Why is true LRU rarely implemented exactly?Vì sao LRU chính xác hiếm khi được cài đặt?\n2. Why can OPT not be implemented in a real OS?Vì sao OS thật không cài được OPT?\n3. NRU puts pages in four classes by (R, M). Which class is evicted first?NRU chia trang thành bốn lớp theo (R, M). Lớp nào bị đuổi trước?\n4. Demand paging means …Phân trang theo yêu cầu (demand paging) nghĩa là …\n5. Local replacement (per-process) versus global replacement: which is TRUE?Thay trang cục bộ (theo tiến trình) so với toàn cục: phát biểu nào ĐÚNG?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Replacement 6 — NRU, aging, working set: which is which? — answer key\n\n1. Why is true LRU rarely implemented exactly?Vì sao LRU chính xác hiếm khi được cài đặt?\n   Answer: d) It needs a list/timestamp updated on EVERY memory reference\n   Hardware support at every access is too expensive, so OSes approximate LRU (Clock, aging, NRU).VI: Hỗ trợ phần cứng ở mọi lần truy cập quá đắt nên OS dùng xấp xỉ LRU (Clock, aging, NRU).\n\n2. Why can OPT not be implemented in a real OS?Vì sao OS thật không cài được OPT?\n   Answer: a) It requires knowing future references\n   OPT is the benchmark that other algorithms are compared with.VI: OPT là chuẩn để so sánh các thuật toán khác.\n\n3. NRU puts pages in four classes by (R, M). Which class is evicted first?NRU chia trang thành bốn lớp theo (R, M). Lớp nào bị đuổi trước?\n   Answer: b) R = 0, M = 0 (not referenced, not modified)\n   The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 2 (R=0, M=1) is better to evict than class 1 (R=1, M=0).VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).\n\n4. Demand paging means …Phân trang theo yêu cầu (demand paging) nghĩa là …\n   Answer: c) a page is brought into memory only when it is referenced\n   Pages are loaded lazily on the first access (page fault).VI: Trang được nạp muộn ở lần truy cập đầu (lỗi trang).\n\n5. Local replacement (per-process) versus global replacement: which is TRUE?Thay trang cục bộ (theo tiến trình) so với toàn cục: phát biểu nào ĐÚNG?\n   Answer: d) Local isolates a process: it cannot steal frames from others, but it may leave frames idle\n   Global replacement adapts better to changing needs, but a faulting process can steal frames and spread thrashing.VI: Thay toàn cục thích nghi tốt hơn nhưng một tiến trình lỗi nhiều có thể “cướp” khung và lan thrashing.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is true LRU rarely implemented exactly?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LRU chính xác hiếm khi được cài đặt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It needs knowledge of the future"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It causes Belady’s anomaly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It cannot handle dirty pages"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It needs a list/timestamp updated on EVERY memory reference"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Hardware support at every access is too expensive, so OSes approximate LRU (Clock, aging, NRU).</p><p><i>VI: Hỗ trợ phần cứng ở mọi lần truy cập quá đắt nên OS dùng xấp xỉ LRU (Clock, aging, NRU).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why can OPT not be implemented in a real OS?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao OS thật không cài được OPT?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It requires knowing future references"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is too slow"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It suffers Belady’s anomaly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It needs a TLB"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>OPT is the benchmark that other algorithms are compared with.</p><p><i>VI: OPT là chuẩn để so sánh các thuật toán khác.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>NRU puts pages in four classes by (R, M). Which class is evicted first?</p><p style=\"opacity:.75;font-size:.92em\"><i>NRU chia trang thành bốn lớp theo (R, M). Lớp nào bị đuổi trước?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "R = 1, M = 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "R = 0, M = 0 (not referenced, not modified)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "R = 1, M = 1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "R = 0, M = 1"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 2 (R=0, M=1) is better to evict than class 1 (R=1, M=0).</p><p><i>VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Demand paging means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân trang theo yêu cầu (demand paging) nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "pages are never swapped out"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the page size grows on demand"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a page is brought into memory only when it is referenced"
+              },
+              {
+                "ma": "d",
+                "noiDung": "all pages of a process are loaded at start-up"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Pages are loaded lazily on the first access (page fault).</p><p><i>VI: Trang được nạp muộn ở lần truy cập đầu (lỗi trang).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Local replacement (per-process) versus global replacement: which is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay trang cục bộ (theo tiến trình) so với toàn cục: phát biểu nào ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Global can never cause thrashing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Local needs no page table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Global gives every process the same number of frames"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Local isolates a process: it cannot steal frames from others, but it may leave frames idle"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Global replacement adapts better to changing needs, but a faulting process can steal frames and spread thrashing.</p><p><i>VI: Thay toàn cục thích nghi tốt hơn nhưng một tiến trình lỗi nhiều có thể “cướp” khung và lan thrashing.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing LRU suffers Belady’s anomaly."
+        },
+        {
+          "loi": "Mixing up the classes of NRU (the order is 0, 1, 2, 3 = (R,M) = (0,0), (0,1), (1,0), (1,1))."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "demand paging",
+          "vi": "nạp trang khi cần"
+        },
+        {
+          "en": "NRU",
+          "vi": "không dùng gần đây"
+        },
+        {
+          "en": "global replacement",
+          "vi": "thay trang toàn cục"
+        }
+      ]
+    },
+    {
+      "title": "Replacement 7 — Write a page-replacement simulator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "page replacement",
+        "simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>simulate(algo, refs, frames)</code> for <code>algo</code> ∈ <code>'FIFO'</code>, <code>'LRU'</code>, <code>'OPT'</code>, <code>'CLOCK'</code>. Return <code>{ faults, trace }</code> where <code>trace</code> is a string with one letter per reference: <code>'F'</code> (page fault) or <code>'H'</code> (hit). Frames are filled in order while free; no pre-paging; the OPT tie (several pages never used again) is resolved by the lowest frame number. For CLOCK: a newly loaded page and every hit set the reference bit to 1; the hand starts at frame 0 and moves to the frame after the replaced one.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Frames hold page numbers; use an array of fixed length for CLOCK.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>simulate(algo, refs, frames)</code> với <code>algo</code> ∈ <code>'FIFO'</code>, <code>'LRU'</code>, <code>'OPT'</code>, <code>'CLOCK'</code>. Trả <code>{ faults, trace }</code>, trong đó <code>trace</code> là chuỗi, mỗi tham chiếu một chữ: <code>'F'</code> (lỗi trang) hoặc <code>'H'</code> (hit). Khung được lấp theo thứ tự khi còn trống; không nạp trước; OPT hoà (nhiều trang không dùng lại) chọn khung số nhỏ nhất. Với CLOCK: trang mới nạp và mỗi lần hit đặt bit tham chiếu về 1; kim bắt đầu ở khung 0 và chuyển sang khung sau khung bị thay.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khung chứa số trang; dùng mảng độ dài cố định cho CLOCK.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "simulate('FIFO', [1,2,3,4,1,2,5,1,2,3,4,5], 3)",
+          "output": "{\"faults\":9,\"trace\":\"FFFFFFFHHFFH\"}",
+          "explanation": "Belady’s string: 9 faults with 3 frames.|||Chuỗi Belady: 9 lỗi với 3 khung."
+        }
+      ],
+      "hintsJson": [
+        "One loop over the references; on a hit update the algorithm’s metadata (last use, R bit) and keep going.",
+        "OPT looks AHEAD: refs.indexOf(page, i + 1) is the next use (−1 = never)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function simulate(algo, refs, frames) {\n  return { faults: 0, trace: '' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution: replace() returns rows; we keep only faults and the F/H trace.\nfunction replace(algo, refs, nf) {\n  const frames = []; const R = []; const load = []; const last = []; const freq = {};\n  let hand = 0; let faults = 0; const rows = [];\n  for (let i = 0; i < refs.length; i++) {\n    const pg = refs[i];\n    freq[pg] = (freq[pg] || 0) + 1;\n    const at = frames.indexOf(pg);\n    let evicted = null; let loi = false;\n    if (at >= 0) { last[at] = i; R[at] = 1; } else {\n      loi = true; faults++;\n      if (frames.length < nf) { frames.push(pg); R.push(1); load.push(i); last.push(i); } else {\n        let v = 0;\n        if (algo === 'FIFO') { let m = Infinity; for (let j = 0; j < nf; j++) if (load[j] < m) { m = load[j]; v = j; } }\n        else if (algo === 'LRU') { let m = Infinity; for (let j = 0; j < nf; j++) if (last[j] < m) { m = last[j]; v = j; } }\n        else if (algo === 'LFU') {\n          let m = Infinity;\n          for (let j = 0; j < nf; j++) { const f = freq[frames[j]]; if (f < m || (f === m && load[j] < load[v])) { m = f; v = j; } }\n        } else if (algo === 'OPT') {\n          let m = -1;\n          for (let j = 0; j < nf; j++) {\n            let nx = refs.indexOf(frames[j], i + 1); if (nx < 0) nx = Infinity;\n            if (nx > m) { m = nx; v = j; }\n          }\n        } else if (algo === 'CLOCK') {\n          while (R[hand] === 1) { R[hand] = 0; hand = (hand + 1) % nf; }\n          v = hand; hand = (hand + 1) % nf;\n        }\n        evicted = frames[v]; frames[v] = pg; R[v] = 1; load[v] = i; last[v] = i;\n      }\n    }\n    rows.push({ page: pg, fault: loi, frames: frames.slice(), evicted });\n  }\n  return { faults, hits: refs.length - faults, rows };\n}\n\nfunction simulate(algo, refs, frames) {\n  var r = replace(algo, refs, frames);\n  return { faults: r.faults, trace: r.rows.map(function (x) { return x.fault ? 'F' : 'H'; }).join('') };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each algorithm differs only in the victim choice: oldest load (FIFO), oldest use (LRU), farthest next use (OPT), first page with R = 0 after the hand (CLOCK).</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: simulate(\"FIFO\", [1,2,3,4,1,2,5,1,2,3,4,5], 3)",
+              "vi": "Ca 1"
+            },
+            "goi": "simulate(\"FIFO\", [1,2,3,4,1,2,5,1,2,3,4,5], 3)",
+            "mongDoi": {
+              "faults": 9,
+              "trace": "FFFFFFFHHFFH"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: simulate(\"LRU\", [1,2,3,4,2,1,5,6,2,1,2,3,7,6,3,2,1,2,3,6], 3)",
+              "vi": "Ca 2"
+            },
+            "goi": "simulate(\"LRU\", [1,2,3,4,2,1,5,6,2,1,2,3,7,6,3,2,1,2,3,6], 3)",
+            "mongDoi": {
+              "faults": 15,
+              "trace": "FFFFHFFFFFHFFFHFFHHF"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: simulate(\"OPT\", [1,2,3,4,2,1,5,6,2,1,2,3,7,6,3,2,1,2,3,6], 3)",
+              "vi": "Ca 3"
+            },
+            "goi": "simulate(\"OPT\", [1,2,3,4,2,1,5,6,2,1,2,3,7,6,3,2,1,2,3,6], 3)",
+            "mongDoi": {
+              "faults": 11,
+              "trace": "FFFFHHFFHHHFFHHFFHHF"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: simulate(\"CLOCK\", [2,3,2,1,5,2,4,5,3,2,5,2], 3)",
+              "vi": "Ca 4"
+            },
+            "goi": "simulate(\"CLOCK\", [2,3,2,1,5,2,4,5,3,2,5,2], 3)",
+            "mongDoi": {
+              "faults": 8,
+              "trace": "FFHFFFFHFHFH"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "simulate(\"FIFO\", [1,2,3,4,1,2,5,1,2,3,4,5], 4)",
+            "mongDoi": {
+              "faults": 10,
+              "trace": "FFFFHHFFFFFF"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "simulate(\"LRU\", [7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1], 3)",
+            "mongDoi": {
+              "faults": 12,
+              "trace": "FFFFHFHFFFFHHFHFHFHH"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "simulate(\"OPT\", [7,0,1,2,0,3,0,4,2,3,0,3,2,1,2,0,1,7,0,1], 3)",
+            "mongDoi": {
+              "faults": 9,
+              "trace": "FFFFHFHFHHFHHFHHHFHH"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "simulate(\"CLOCK\", [1,2,3,4,1,2,5,1,2,3,4,5], 3)",
+            "mongDoi": {
+              "faults": 9,
+              "trace": "FFFFFFFHHFFH"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "simulate(\"LRU\", [1,1,1,1], 2)",
+            "mongDoi": {
+              "faults": 1,
+              "trace": "FHHH"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Updating the load time on a hit in FIFO."
+        },
+        {
+          "loi": "In OPT choosing the page used soonest instead of the one used farthest."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

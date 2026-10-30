@@ -1,0 +1,774 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-3-3-tlb-dia-chi",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-3-3-tlb-dia-chi"
+  },
+  "exercises": [
+    {
+      "title": "Address translation 1 — The path of one memory access (TLB miss, page present)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "TLB",
+        "address translation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Order the steps of a memory reference when the translation is NOT in the TLB but the page is in memory.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp các bước của một lần truy cập bộ nhớ khi bản dịch KHÔNG có trong TLB nhưng trang đã nằm trong bộ nhớ.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The TLB is a cache of recent translations: always the first stop.",
+        "The data access itself comes last."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 1 — The path of one memory access (TLB miss, page present)\n\nAnswer in the answer panel (no code needed).\n\n1. TLB miss, valid PTETLB trượt, PTE hợp lệ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 1 — The path of one memory access (TLB miss, page present) — answer key\n\n1. TLB miss, valid PTETLB trượt, PTE hợp lệ\n   Answer: s1) CPU issues a virtual address  →  s2) MMU looks the page number up in the TLB  →  s3) TLB miss: the MMU walks the page table in memory  →  s4) The PTE is valid: the frame number is read and the TLB entry is added  →  s5) Physical address = frame × page size + offset; the memory access is made\n   TLB first (hit = no page-table walk); on a miss the page table in RAM is consulted (extra memory access); the entry is cached in the TLB; finally the real access happens. A hit skips steps 3–4; an invalid PTE would raise a page fault instead of step 4.VI: Tra TLB trước (hit = khỏi duyệt bảng trang); trượt thì tra bảng trang trong RAM (thêm một lần truy cập bộ nhớ); nạp mục vào TLB; cuối cùng mới truy cập thật. Hit bỏ qua bước 3–4; PTE không hợp lệ thì gây lỗi trang thay vì bước 4.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>issue → TLB → walk → PTE valid + TLB fill → physical access.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>TLB miss, valid PTE</p><p style=\"opacity:.75;font-size:.92em\"><i>TLB trượt, PTE hợp lệ</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "TLB miss: the MMU walks the page table in memory"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "The PTE is valid: the frame number is read and the TLB entry is added"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "Physical address = frame × page size + offset; the memory access is made"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "CPU issues a virtual address"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "MMU looks the page number up in the TLB"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5"
+            ],
+            "giaiThich": "<p>TLB first (hit = no page-table walk); on a miss the page table in RAM is consulted (extra memory access); the entry is cached in the TLB; finally the real access happens. A hit skips steps 3–4; an invalid PTE would raise a page fault instead of step 4.</p><p><i>VI: Tra TLB trước (hit = khỏi duyệt bảng trang); trượt thì tra bảng trang trong RAM (thêm một lần truy cập bộ nhớ); nạp mục vào TLB; cuối cùng mới truy cập thật. Hit bỏ qua bước 3–4; PTE không hợp lệ thì gây lỗi trang thay vì bước 4.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the page table before looking at the TLB."
+        },
+        {
+          "loi": "Forgetting that a miss costs an extra memory access."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TLB",
+          "vi": "bộ đệm dịch địa chỉ (translation lookaside buffer)"
+        },
+        {
+          "en": "page-table walk",
+          "vi": "duyệt bảng trang"
+        }
+      ]
+    },
+    {
+      "title": "Address translation 2 — Effective access time with a TLB",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "EAT",
+        "TLB hit ratio"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A TLB lookup takes <b>t</b> ns, a memory access <b>m</b> ns. On a TLB hit the cost is t + m. On a miss the MMU walks an <b>L</b>-level page table (L memory accesses), then accesses the data (one more): t + L·m + m. Give the effective access time in ns for a hit ratio <b>h</b> (2 decimals).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tra TLB mất <b>t</b> ns, một lần truy cập bộ nhớ mất <b>m</b> ns. Khi TLB hit chi phí là t + m. Khi trượt, MMU duyệt bảng trang <b>L</b> cấp (L lần truy cập bộ nhớ) rồi truy cập dữ liệu (thêm một lần): t + L·m + m. Cho thời gian truy cập hiệu dụng theo ns với tỉ lệ hit <b>h</b> (2 chữ số thập phân).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "EAT = h × (hit cost) + (1 − h) × (miss cost).",
+        "A 2-level table costs two memory reads for the walk, plus one for the data."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 2 — Effective access time with a TLB\n\nAnswer in the answer panel (no code needed).\n\n1. EAT (ns)EAT (ns)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 2 — Effective access time with a TLB — answer key\n\n1. EAT (ns)EAT (ns)\n   - c0.e: 140.00 / 140\n   - c1.e: 130.00 / 130\n   - c2.e: 122.00 / 122\n   - c3.e: 130.00 / 130\n   - c4.e: 93.00 / 93\n   #1: 0.8×(20+100) + 0.2×(20+2×100) = 140.00; #2: 0.9×(20+100) + 0.1×(20+2×100) = 130.00; #3: 0.98×(20+100) + 0.02×(20+2×100) = 122.00; #4: 0.9×(10+100) + 0.1×(10+3×100) = 130.00; #5: 0.95×(5+80) + 0.05×(5+3×80) = 93.00.VI: #1: 140.00 ns; #2: 130.00 ns; #3: 122.00 ns; #4: 130.00 ns; #5: 93.00 ns.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>140.00 · 130.00 · 122.00 · 130.00 · 93.00 ns.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>EAT (ns)</p><p style=\"opacity:.75;font-size:.92em\"><i>EAT (ns)</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Parameters"
+              },
+              {
+                "ma": "e",
+                "ten": "EAT (ns)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c0",
+                "o": {
+                  "c": "h = 0.8, t = 20, m = 100, L = 1"
+                }
+              },
+              {
+                "ma": "c1",
+                "o": {
+                  "c": "h = 0.9, t = 20, m = 100, L = 1"
+                }
+              },
+              {
+                "ma": "c2",
+                "o": {
+                  "c": "h = 0.98, t = 20, m = 100, L = 1"
+                }
+              },
+              {
+                "ma": "c3",
+                "o": {
+                  "c": "h = 0.9, t = 10, m = 100, L = 2"
+                }
+              },
+              {
+                "ma": "c4",
+                "o": {
+                  "c": "h = 0.95, t = 5, m = 80, L = 2"
+                }
+              }
+            ],
+            "dapAn": {
+              "c0.e": [
+                "140.00",
+                "140"
+              ],
+              "c1.e": [
+                "130.00",
+                "130"
+              ],
+              "c2.e": [
+                "122.00",
+                "122"
+              ],
+              "c3.e": [
+                "130.00",
+                "130"
+              ],
+              "c4.e": [
+                "93.00",
+                "93"
+              ]
+            },
+            "giaiThich": "<p>#1: 0.8×(20+100) + 0.2×(20+2×100) = 140.00; #2: 0.9×(20+100) + 0.1×(20+2×100) = 130.00; #3: 0.98×(20+100) + 0.02×(20+2×100) = 122.00; #4: 0.9×(10+100) + 0.1×(10+3×100) = 130.00; #5: 0.95×(5+80) + 0.05×(5+3×80) = 93.00.</p><p><i>VI: #1: 140.00 ns; #2: 130.00 ns; #3: 122.00 ns; #4: 130.00 ns; #5: 93.00 ns.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Charging the TLB time only on a hit."
+        },
+        {
+          "loi": "Using L instead of L + 1 memory accesses on a miss (forgetting the data access)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "effective access time (EAT)",
+          "vi": "thời gian truy cập hiệu dụng"
+        },
+        {
+          "en": "hit ratio",
+          "vi": "tỉ lệ trúng"
+        }
+      ]
+    },
+    {
+      "title": "Address translation 3 — Split a 32-bit address for a two-level page table (10 | 10 | 12)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "multi-level paging",
+        "bit fields"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A 32-bit virtual address is split <b>10 | 10 | 12</b>: top-level index PT1, second-level index PT2 and a 12-bit offset. For each address (hexadecimal) give PT1, PT2 and the offset in DECIMAL.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Địa chỉ ảo 32 bit được tách <b>10 | 10 | 12</b>: chỉ số bảng cấp 1 (PT1), chỉ số cấp 2 (PT2) và offset 12 bit. Với mỗi địa chỉ (hexa) cho PT1, PT2 và offset dạng THẬP PHÂN.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Convert to binary: 8 hex digits = 32 bits. Take 10 bits, then 10 bits, then 12 bits (= 3 hex digits).",
+        "The last 3 hex digits are exactly the offset."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 3 — Split a 32-bit address for a two-level page table (10 | 10 | 12)\n\nAnswer in the answer panel (no code needed).\n\n1. FieldsCác trường\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 3 — Split a 32-bit address for a two-level page table (10 | 10 | 12) — answer key\n\n1. FieldsCác trường\n   - a4206596.p1: 1\n   - a4206596.p2: 3\n   - a4206596.o: 4\n   - a4096.p1: 0\n   - a4096.p2: 1\n   - a4096.o: 0\n   - a4294963491.p1: 1023\n   - a4294963491.p2: 1023\n   - a4294963491.o: 291\n   - a305419896.p1: 72\n   - a305419896.p2: 837\n   - a305419896.o: 1656\n   0x00403004: PT1=1, PT2=3, offset=4; 0x00001000: PT1=0, PT2=1, offset=0; 0xFFFFF123: PT1=1023, PT2=1023, offset=291; 0x12345678: PT1=72, PT2=837, offset=1656. Shift right 22 for PT1, (>>12) & 0x3FF for PT2, & 0xFFF for the offset.VI: 0x00403004: PT1=1, PT2=3, offset=4; 0x00001000: PT1=0, PT2=1, offset=0; 0xFFFFF123: PT1=1023, PT2=1023, offset=291; 0x12345678: PT1=72, PT2=837, offset=1656. Dịch phải 22 bit lấy PT1, (>>12) & 0x3FF lấy PT2, & 0xFFF lấy offset.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1/3/4 · 0/1/0 · 1023/1023/291 · 72/837/1656</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Fields</p><p style=\"opacity:.75;font-size:.92em\"><i>Các trường</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Virtual address"
+              },
+              {
+                "ma": "p1",
+                "ten": "PT1"
+              },
+              {
+                "ma": "p2",
+                "ten": "PT2"
+              },
+              {
+                "ma": "o",
+                "ten": "Offset"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "a4206596",
+                "o": {
+                  "a": "0x00403004"
+                }
+              },
+              {
+                "ma": "a4096",
+                "o": {
+                  "a": "0x00001000"
+                }
+              },
+              {
+                "ma": "a4294963491",
+                "o": {
+                  "a": "0xFFFFF123"
+                }
+              },
+              {
+                "ma": "a305419896",
+                "o": {
+                  "a": "0x12345678"
+                }
+              }
+            ],
+            "dapAn": {
+              "a4206596.p1": "1",
+              "a4206596.p2": "3",
+              "a4206596.o": "4",
+              "a4096.p1": "0",
+              "a4096.p2": "1",
+              "a4096.o": "0",
+              "a4294963491.p1": "1023",
+              "a4294963491.p2": "1023",
+              "a4294963491.o": "291",
+              "a305419896.p1": "72",
+              "a305419896.p2": "837",
+              "a305419896.o": "1656"
+            },
+            "giaiThich": "<p>0x00403004: PT1=1, PT2=3, offset=4; 0x00001000: PT1=0, PT2=1, offset=0; 0xFFFFF123: PT1=1023, PT2=1023, offset=291; 0x12345678: PT1=72, PT2=837, offset=1656. Shift right 22 for PT1, (>>12) & 0x3FF for PT2, & 0xFFF for the offset.</p><p><i>VI: 0x00403004: PT1=1, PT2=3, offset=4; 0x00001000: PT1=0, PT2=1, offset=0; 0xFFFFF123: PT1=1023, PT2=1023, offset=291; 0x12345678: PT1=72, PT2=837, offset=1656. Dịch phải 22 bit lấy PT1, (>>12) & 0x3FF lấy PT2, & 0xFFF lấy offset.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cutting the hex digits instead of the bits (10 bits are not a whole number of hex digits)."
+        },
+        {
+          "loi": "Giving the answers in hex when decimal is asked."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "two-level page table",
+          "vi": "bảng trang hai cấp"
+        },
+        {
+          "en": "top-level index",
+          "vi": "chỉ số bảng cấp 1"
+        }
+      ]
+    },
+    {
+      "title": "Address translation 4 — TLB flushes, ASIDs, inverted page tables",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "TLB flush",
+        "inverted page table",
+        "multi-level"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five conceptual questions about the TLB and page-table organisations.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu khái niệm về TLB và cách tổ chức bảng trang.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Same virtual address ≠ same physical page for different processes.",
+        "Inverted = indexed by physical frame."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 4 — TLB flushes, ASIDs, inverted page tables\n\nAnswer in the answer panel (no code needed).\n\n1. Why must a TLB without address-space identifiers (ASIDs) be flushed on a context switch between processes?Vì sao TLB không có định danh không gian địa chỉ (ASID) phải được xoá khi chuyển ngữ cảnh giữa các tiến trình?\n2. An inverted page table has one entry per …Bảng trang đảo có một mục cho mỗi …\n3. The main advantage of a multi-level page table over a flat one is …Ưu điểm chính của bảng trang nhiều cấp so với bảng phẳng là …\n4. A TLB miss and a page fault are …TLB miss và lỗi trang là …\n5. Software-managed TLBs (MIPS, SPARC) mean that …TLB do phần mềm quản lý (MIPS, SPARC) nghĩa là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Address translation 4 — TLB flushes, ASIDs, inverted page tables — answer key\n\n1. Why must a TLB without address-space identifiers (ASIDs) be flushed on a context switch between processes?Vì sao TLB không có định danh không gian địa chỉ (ASID) phải được xoá khi chuyển ngữ cảnh giữa các tiến trình?\n   Answer: d) The same virtual page number maps to different frames in different processes\n   Stale entries would let process B use process A’s translations. ASIDs tag entries so no flush is needed.VI: Mục cũ sẽ cho tiến trình B dùng bản dịch của A. ASID gắn nhãn mục để khỏi phải xoá.\n\n2. An inverted page table has one entry per …Bảng trang đảo có một mục cho mỗi …\n   Answer: a) physical frame\n   Its size depends on physical memory, not on the virtual address space; lookups use a hash.VI: Kích thước phụ thuộc bộ nhớ vật lý chứ không phải không gian địa chỉ ảo; tra cứu dùng băm.\n\n3. The main advantage of a multi-level page table over a flat one is …Ưu điểm chính của bảng trang nhiều cấp so với bảng phẳng là …\n   Answer: b) unused parts of the address space need no second-level tables, saving memory\n   Only the second-level tables that are actually used exist; the price is extra memory accesses per walk, hidden by the TLB.VI: Chỉ các bảng cấp 2 thực sự dùng mới tồn tại; cái giá là thêm lần truy cập bộ nhớ khi duyệt, được TLB che đi.\n\n4. A TLB miss and a page fault are …TLB miss và lỗi trang là …\n   Answer: c) different: a miss can be resolved from the page table; a fault means the page is not in RAM\n   TLB miss: translation not cached (cheap). Page fault: valid bit 0 → the OS must load the page (expensive, ms).VI: TLB miss: bản dịch chưa được cache (rẻ). Lỗi trang: bit hợp lệ = 0 → OS phải nạp trang (đắt, ms).\n\n5. Software-managed TLBs (MIPS, SPARC) mean that …TLB do phần mềm quản lý (MIPS, SPARC) nghĩa là …\n   Answer: d) a TLB miss traps to the OS, which loads the entry\n   The OS handler walks its own page-table format, which gives freedom of data structure.VI: Trình xử lý của OS tự duyệt cấu trúc bảng trang riêng, nên tự do về cấu trúc dữ liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why must a TLB without address-space identifiers (ASIDs) be flushed on a context switch between processes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao TLB không có định danh không gian địa chỉ (ASID) phải được xoá khi chuyển ngữ cảnh giữa các tiến trình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The TLB is too small"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Processes share all pages"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The kernel needs the TLB empty"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The same virtual page number maps to different frames in different processes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Stale entries would let process B use process A’s translations. ASIDs tag entries so no flush is needed.</p><p><i>VI: Mục cũ sẽ cho tiến trình B dùng bản dịch của A. ASID gắn nhãn mục để khỏi phải xoá.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>An inverted page table has one entry per …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng trang đảo có một mục cho mỗi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "physical frame"
+              },
+              {
+                "ma": "b",
+                "noiDung": "virtual page"
+              },
+              {
+                "ma": "c",
+                "noiDung": "process"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TLB entry"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Its size depends on physical memory, not on the virtual address space; lookups use a hash.</p><p><i>VI: Kích thước phụ thuộc bộ nhớ vật lý chứ không phải không gian địa chỉ ảo; tra cứu dùng băm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The main advantage of a multi-level page table over a flat one is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ưu điểm chính của bảng trang nhiều cấp so với bảng phẳng là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it avoids page faults"
+              },
+              {
+                "ma": "b",
+                "noiDung": "unused parts of the address space need no second-level tables, saving memory"
+              },
+              {
+                "ma": "c",
+                "noiDung": "translation is faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it removes the need for a TLB"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Only the second-level tables that are actually used exist; the price is extra memory accesses per walk, hidden by the TLB.</p><p><i>VI: Chỉ các bảng cấp 2 thực sự dùng mới tồn tại; cái giá là thêm lần truy cập bộ nhớ khi duyệt, được TLB che đi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A TLB miss and a page fault are …</p><p style=\"opacity:.75;font-size:.92em\"><i>TLB miss và lỗi trang là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "both handled only by hardware"
+              },
+              {
+                "ma": "b",
+                "noiDung": "both resolved by the disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "different: a miss can be resolved from the page table; a fault means the page is not in RAM"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the same event"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>TLB miss: translation not cached (cheap). Page fault: valid bit 0 → the OS must load the page (expensive, ms).</p><p><i>VI: TLB miss: bản dịch chưa được cache (rẻ). Lỗi trang: bit hợp lệ = 0 → OS phải nạp trang (đắt, ms).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Software-managed TLBs (MIPS, SPARC) mean that …</p><p style=\"opacity:.75;font-size:.92em\"><i>TLB do phần mềm quản lý (MIPS, SPARC) nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "there is no TLB"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the TLB is in RAM"
+              },
+              {
+                "ma": "c",
+                "noiDung": "page faults are impossible"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a TLB miss traps to the OS, which loads the entry"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The OS handler walks its own page-table format, which gives freedom of data structure.</p><p><i>VI: Trình xử lý của OS tự duyệt cấu trúc bảng trang riêng, nên tự do về cấu trúc dữ liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing a TLB miss with a page fault."
+        },
+        {
+          "loi": "Thinking the multi-level table speeds up translation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ASID",
+          "vi": "mã định danh không gian địa chỉ trong mục TLB"
+        },
+        {
+          "en": "inverted page table",
+          "vi": "bảng trang đảo"
+        }
+      ]
+    },
+    {
+      "title": "Address translation 5 — Split an address into n fields and count TLB hits",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "bit fields",
+        "TLB"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write two functions.</p><p><code>splitAddress(addr, bits)</code>: <code>bits</code> is an array of field widths from the most significant field to the least, e.g. <code>[10, 10, 12]</code> (page-table indices then the offset). Return the array of the field values (numbers). The addresses are non-negative and below 2⁵³.</p><p><code>tlbHits(entries, pages)</code>: a fully-associative TLB with <code>entries</code> slots and LRU replacement receives the page numbers in <code>pages</code>; return the number of hits (the TLB starts empty).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not use 32-bit bitwise operators for wide addresses; use division and modulo.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết hai hàm.</p><p><code>splitAddress(addr, bits)</code>: <code>bits</code> là mảng độ rộng các trường từ trường cao nhất đến thấp nhất, ví dụ <code>[10, 10, 12]</code> (chỉ số các cấp rồi offset). Trả mảng giá trị các trường (số). Địa chỉ không âm và nhỏ hơn 2⁵³.</p><p><code>tlbHits(entries, pages)</code>: TLB kết hợp đầy đủ với <code>entries</code> ô, thay theo LRU, nhận các số trang trong <code>pages</code>; trả số lần hit (TLB bắt đầu rỗng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đừng dùng toán tử bit 32 bit cho địa chỉ rộng; dùng chia và lấy dư.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "splitAddress(0x00403004, [10, 10, 12])",
+          "output": "[1,3,4]",
+          "explanation": "PT1 = 1, PT2 = 3, offset = 4.|||PT1 = 1, PT2 = 3, offset = 4."
+        }
+      ],
+      "hintsJson": [
+        "Walk from the LAST field to the first: value % 2^bits, then divide by 2^bits.",
+        "LRU TLB = an array ordered by recent use; a hit moves the page to the end."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function splitAddress(addr, bits) {\n  return [];\n}\nfunction tlbHits(entries, pages) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function splitAddress(addr, bits) {\n  var out = [];\n  for (var i = bits.length - 1; i >= 0; i--) {\n    var m = Math.pow(2, bits[i]);\n    out.unshift(addr % m);\n    addr = Math.floor(addr / m);\n  }\n  return out;\n}\nfunction tlbHits(entries, pages) {\n  var tlb = [], hits = 0;\n  for (var i = 0; i < pages.length; i++) {\n    var at = tlb.indexOf(pages[i]);\n    if (at >= 0) { hits++; tlb.splice(at, 1); }\n    else if (tlb.length === entries) tlb.shift();\n    tlb.push(pages[i]);\n  }\n  return hits;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Fields are peeled off the low end with <code>%</code> and <code>Math.floor(/)</code>, which stays exact up to 2⁵³. The TLB is the LRU simulator with hits = references − faults.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: splitAddress(4206596, [10,10,12])",
+              "vi": "Ca 1"
+            },
+            "goi": "splitAddress(4206596, [10,10,12])",
+            "mongDoi": [
+              1,
+              3,
+              4
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: splitAddress(4294963491, [10,10,12])",
+              "vi": "Ca 2"
+            },
+            "goi": "splitAddress(4294963491, [10,10,12])",
+            "mongDoi": [
+              1023,
+              1023,
+              291
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: splitAddress(305419896, [8,8,8,8])",
+              "vi": "Ca 3"
+            },
+            "goi": "splitAddress(305419896, [8,8,8,8])",
+            "mongDoi": [
+              18,
+              52,
+              86,
+              120
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "splitAddress(140737488355327, [9,9,9,9,12])",
+            "mongDoi": [
+              255,
+              511,
+              511,
+              511,
+              4095
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "splitAddress(4095, [12])",
+            "mongDoi": [
+              4095
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "splitAddress(0, [10,10,12])",
+            "mongDoi": [
+              0,
+              0,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "TLB with 2 entries",
+              "vi": "TLB 2 ô"
+            },
+            "goi": "tlbHits(2, [1, 2, 1, 3, 1, 2, 3, 3])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "TLB with 3 entries",
+              "vi": "TLB 3 ô"
+            },
+            "goi": "tlbHits(3, [5, 6, 7, 5, 6, 8, 5, 9, 6, 7])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Hidden: single-entry TLB",
+              "vi": "Ẩn: TLB một ô"
+            },
+            "goi": "tlbHits(1, [4, 4, 4, 5, 5, 4])",
+            "mongDoi": 3,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using >> and & on addresses ≥ 2³¹ (JavaScript converts to signed 32 bits)."
+        },
+        {
+          "loi": "Counting a TLB insertion as a hit."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

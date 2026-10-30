@@ -1,0 +1,823 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-2-2-luong-dong-bo",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-2-2-luong-dong-bo"
+  },
+  "exercises": [
+    {
+      "title": "Threads 1 — What do threads share and what is private?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "threads",
+        "shared address space",
+        "user vs kernel threads"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on the thread model.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về mô hình luồng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: is this piece of state part of “where the thread is executing” or part of “the program’s world”?",
+        "The kernel can only schedule entities it knows about."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 1 — What do threads share and what is private?\n\nAnswer in the answer panel (no code needed).\n\n1. Which of these is PRIVATE to each thread of a process?Thứ nào là RIÊNG của mỗi luồng trong một tiến trình?\n2. One thread of a multithreaded process calls exit() / segfaults on a NULL pointer. What happens?Một luồng của tiến trình đa luồng gọi exit() / lỗi segmentation fault. Điều gì xảy ra?\n3. Compared with creating a process, creating a thread is cheaper mainly because …So với tạo tiến trình, tạo luồng rẻ hơn chủ yếu vì …\n4. With pure USER-LEVEL threads (many-to-one) a thread calls a blocking read(). What happens to the other threads of the process?Với luồng CẤP NGƯỜI DÙNG thuần (nhiều–một), một luồng gọi read() chặn. Các luồng khác của tiến trình ra sao?\n5. Which model lets a multithreaded process use several CPU cores at the same time?Mô hình nào cho phép tiến trình đa luồng dùng nhiều lõi CPU cùng lúc?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 1 — What do threads share and what is private? — answer key\n\n1. Which of these is PRIVATE to each thread of a process?Thứ nào là RIÊNG của mỗi luồng trong một tiến trình?\n   Answer: b) Stack and registers (including the program counter)\n   Each thread needs its own execution state (PC, registers, stack); everything else lives in the shared address space of the process.VI: Mỗi luồng cần trạng thái thực thi riêng (PC, thanh ghi, stack); mọi thứ khác nằm trong không gian địa chỉ chung của tiến trình.\n\n2. One thread of a multithreaded process calls exit() / segfaults on a NULL pointer. What happens?Một luồng của tiến trình đa luồng gọi exit() / lỗi segmentation fault. Điều gì xảy ra?\n   Answer: c) The whole process (all its threads) terminates\n   Threads share the address space and the process; a fatal fault or exit() ends the entire process.VI: Các luồng chung không gian địa chỉ và tiến trình; lỗi nghiêm trọng hay exit() kết thúc cả tiến trình.\n\n3. Compared with creating a process, creating a thread is cheaper mainly because …So với tạo tiến trình, tạo luồng rẻ hơn chủ yếu vì …\n   Answer: d) no new address space or page table has to be built\n   A new thread reuses the address space, open files and heap; only a stack and a small control block are created.VI: Luồng mới dùng lại không gian địa chỉ, tệp mở và heap; chỉ cần tạo stack và một khối điều khiển nhỏ.\n\n4. With pure USER-LEVEL threads (many-to-one) a thread calls a blocking read(). What happens to the other threads of the process?Với luồng CẤP NGƯỜI DÙNG thuần (nhiều–một), một luồng gọi read() chặn. Các luồng khác của tiến trình ra sao?\n   Answer: a) They all block, because the kernel sees one schedulable entity\n   The kernel knows only the process; a blocking system call blocks the whole process, which is the main weakness of user-level threads.VI: Kernel chỉ biết tiến trình; lời gọi hệ thống chặn làm chặn cả tiến trình, đó là điểm yếu chính của luồng cấp người dùng.\n\n5. Which model lets a multithreaded process use several CPU cores at the same time?Mô hình nào cho phép tiến trình đa luồng dùng nhiều lõi CPU cùng lúc?\n   Answer: b) Kernel-level (one-to-one) threads\n   The kernel schedules kernel threads on any core. A many-to-one library has one kernel thread, hence one core. (Processes with fork() can also use several cores, but option a is the thread answer.)VI: Kernel lập lịch luồng kernel trên bất kỳ lõi nào. Thư viện nhiều–một chỉ có một luồng kernel nên chỉ một lõi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>b · c · d · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which of these is PRIVATE to each thread of a process?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ nào là RIÊNG của mỗi luồng trong một tiến trình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Open file descriptors"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Stack and registers (including the program counter)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Global variables"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The heap"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each thread needs its own execution state (PC, registers, stack); everything else lives in the shared address space of the process.</p><p><i>VI: Mỗi luồng cần trạng thái thực thi riêng (PC, thanh ghi, stack); mọi thứ khác nằm trong không gian địa chỉ chung của tiến trình.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>One thread of a multithreaded process calls exit() / segfaults on a NULL pointer. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một luồng của tiến trình đa luồng gọi exit() / lỗi segmentation fault. Điều gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The other threads keep running"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The parent thread restarts it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The whole process (all its threads) terminates"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only that thread ends"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Threads share the address space and the process; a fatal fault or exit() ends the entire process.</p><p><i>VI: Các luồng chung không gian địa chỉ và tiến trình; lỗi nghiêm trọng hay exit() kết thúc cả tiến trình.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Compared with creating a process, creating a thread is cheaper mainly because …</p><p style=\"opacity:.75;font-size:.92em\"><i>So với tạo tiến trình, tạo luồng rẻ hơn chủ yếu vì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "threads run on a separate CPU"
+              },
+              {
+                "ma": "b",
+                "noiDung": "threads need no stack"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the kernel is not involved at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "no new address space or page table has to be built"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A new thread reuses the address space, open files and heap; only a stack and a small control block are created.</p><p><i>VI: Luồng mới dùng lại không gian địa chỉ, tệp mở và heap; chỉ cần tạo stack và một khối điều khiển nhỏ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>With pure USER-LEVEL threads (many-to-one) a thread calls a blocking read(). What happens to the other threads of the process?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với luồng CẤP NGƯỜI DÙNG thuần (nhiều–một), một luồng gọi read() chặn. Các luồng khác của tiến trình ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They all block, because the kernel sees one schedulable entity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They continue normally"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are killed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They move to another process"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The kernel knows only the process; a blocking system call blocks the whole process, which is the main weakness of user-level threads.</p><p><i>VI: Kernel chỉ biết tiến trình; lời gọi hệ thống chặn làm chặn cả tiến trình, đó là điểm yếu chính của luồng cấp người dùng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which model lets a multithreaded process use several CPU cores at the same time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô hình nào cho phép tiến trình đa luồng dùng nhiều lõi CPU cùng lúc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None; a process uses one core"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Kernel-level (one-to-one) threads"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Pure user-level threads on a non-preemptive library"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only fork()-based processes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The kernel schedules kernel threads on any core. A many-to-one library has one kernel thread, hence one core. (Processes with fork() can also use several cores, but option a is the thread answer.)</p><p><i>VI: Kernel lập lịch luồng kernel trên bất kỳ lõi nào. Thư viện nhiều–một chỉ có một luồng kernel nên chỉ một lõi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying that each thread has its own heap (it shares the process heap)."
+        },
+        {
+          "loi": "Thinking a crash in one thread only kills that thread."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user-level thread",
+          "vi": "luồng do thư viện quản lý, kernel không biết"
+        },
+        {
+          "en": "kernel-level thread",
+          "vi": "luồng do kernel lập lịch"
+        }
+      ]
+    },
+    {
+      "title": "Threads 2 — CPU utilisation with multiprogramming: 1 − pⁿ",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "multiprogramming",
+        "CPU utilisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>With n processes in memory, each waiting for I/O a fraction <b>p</b> of the time (independently), the probability that the CPU is idle is pⁿ, so utilisation = 1 − pⁿ. Give the CPU utilisation as a percentage rounded to the nearest integer (type digits only, e.g. 59).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với n tiến trình trong bộ nhớ, mỗi tiến trình chờ I/O một tỉ lệ <b>p</b> thời gian (độc lập), xác suất CPU rảnh là pⁿ nên mức dùng CPU = 1 − pⁿ. Cho mức dùng CPU theo phần trăm làm tròn đến số nguyên (chỉ gõ chữ số, ví dụ 59).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "pⁿ is the probability that ALL n processes are waiting at once.",
+        "Use a calculator or code: 0.8⁴ = 0.4096 → 1 − 0.4096."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 2 — CPU utilisation with multiprogramming: 1 − pⁿ\n\nAnswer in the answer panel (no code needed).\n\n1. Utilisation (%)Mức dùng CPU (%)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 2 — CPU utilisation with multiprogramming: 1 − pⁿ — answer key\n\n1. Utilisation (%)Mức dùng CPU (%)\n   - c8_1.u: 20\n   - c8_2.u: 36\n   - c8_4.u: 59\n   - c5_3.u: 88\n   - c2_4.u: 100\n   p=0.8, n=1: 1 − 0.8^1 = 20.00%; p=0.8, n=2: 1 − 0.8^2 = 36.00%; p=0.8, n=4: 1 − 0.8^4 = 59.04%; p=0.5, n=3: 1 − 0.5^3 = 87.50%; p=0.2, n=4: 1 − 0.2^4 = 99.84%.VI: p=0.8, n=1: 20.00%; p=0.8, n=2: 36.00%; p=0.8, n=4: 59.04%; p=0.5, n=3: 87.50%; p=0.2, n=4: 99.84%.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>20.0% · 36.0% · 59.0% · 87.5% · 99.8%</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Utilisation (%)</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức dùng CPU (%)</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "I/O wait p, processes n"
+              },
+              {
+                "ma": "u",
+                "ten": "CPU utilisation %"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c8_1",
+                "o": {
+                  "c": "p = 0.8, n = 1"
+                }
+              },
+              {
+                "ma": "c8_2",
+                "o": {
+                  "c": "p = 0.8, n = 2"
+                }
+              },
+              {
+                "ma": "c8_4",
+                "o": {
+                  "c": "p = 0.8, n = 4"
+                }
+              },
+              {
+                "ma": "c5_3",
+                "o": {
+                  "c": "p = 0.5, n = 3"
+                }
+              },
+              {
+                "ma": "c2_4",
+                "o": {
+                  "c": "p = 0.2, n = 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "c8_1.u": "20",
+              "c8_2.u": "36",
+              "c8_4.u": "59",
+              "c5_3.u": "88",
+              "c2_4.u": "100"
+            },
+            "giaiThich": "<p>p=0.8, n=1: 1 − 0.8^1 = 20.00%; p=0.8, n=2: 1 − 0.8^2 = 36.00%; p=0.8, n=4: 1 − 0.8^4 = 59.04%; p=0.5, n=3: 1 − 0.5^3 = 87.50%; p=0.2, n=4: 1 − 0.2^4 = 99.84%.</p><p><i>VI: p=0.8, n=1: 20.00%; p=0.8, n=2: 36.00%; p=0.8, n=4: 59.04%; p=0.5, n=3: 87.50%; p=0.2, n=4: 99.84%.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Multiplying p by n instead of raising p to the power n."
+        },
+        {
+          "loi": "Reporting 4096 → forgetting to subtract from 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "degree of multiprogramming",
+          "vi": "mức độ đa chương: số tiến trình trong bộ nhớ"
+        },
+        {
+          "en": "CPU utilisation",
+          "vi": "mức dùng CPU"
+        }
+      ]
+    },
+    {
+      "title": "Threads 3 — Amdahl’s law: speed-up of a parallel program",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Amdahl",
+        "parallel speed-up"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A fraction <b>f</b> of a program can be parallelised perfectly over <b>n</b> cores; the rest is sequential. Speed-up = 1 / ((1 − f) + f / n). Give the speed-up rounded to 2 decimals.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một phần <b>f</b> của chương trình song song hoá hoàn hảo trên <b>n</b> lõi; phần còn lại tuần tự. Speed-up = 1 / ((1 − f) + f / n). Cho speed-up làm tròn 2 chữ số thập phân.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Plug into 1 / ((1 − f) + f / n); the sequential part (1 − f) is the bottleneck.",
+        "Check your result against the limit 1 / (1 − f)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 3 — Amdahl’s law: speed-up of a parallel program\n\nAnswer in the answer panel (no code needed).\n\n1. Speed-upSpeed-up\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 3 — Amdahl’s law: speed-up of a parallel program — answer key\n\n1. Speed-upSpeed-up\n   - a50_2.s: 1.33 / 1.33\n   - a50_8.s: 1.78 / 1.78\n   - a90_10.s: 5.26 / 5.26\n   - a95_20.s: 10.26 / 10.26\n   - a75_4.s: 2.29 / 2.29\n   f=0.5, n=2: 1.33; f=0.5, n=8: 1.78; f=0.9, n=10: 5.26; f=0.95, n=20: 10.26; f=0.75, n=4: 2.29. Even with infinite cores the speed-up of f = 0.9 can never exceed 10.VI: f=0.5, n=2: 1.33; f=0.5, n=8: 1.78; f=0.9, n=10: 5.26; f=0.95, n=20: 10.26; f=0.75, n=4: 2.29. Dù có vô hạn lõi, speed-up của f = 0,9 không bao giờ vượt 10.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1.33 · 1.78 · 5.26 · 10.26 · 2.29</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Speed-up</p><p style=\"opacity:.75;font-size:.92em\"><i>Speed-up</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Parallel fraction f, cores n"
+              },
+              {
+                "ma": "s",
+                "ten": "Speed-up"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "a50_2",
+                "o": {
+                  "c": "f = 0.5, n = 2"
+                }
+              },
+              {
+                "ma": "a50_8",
+                "o": {
+                  "c": "f = 0.5, n = 8"
+                }
+              },
+              {
+                "ma": "a90_10",
+                "o": {
+                  "c": "f = 0.9, n = 10"
+                }
+              },
+              {
+                "ma": "a95_20",
+                "o": {
+                  "c": "f = 0.95, n = 20"
+                }
+              },
+              {
+                "ma": "a75_4",
+                "o": {
+                  "c": "f = 0.75, n = 4"
+                }
+              }
+            ],
+            "dapAn": {
+              "a50_2.s": [
+                "1.33",
+                "1.33"
+              ],
+              "a50_8.s": [
+                "1.78",
+                "1.78"
+              ],
+              "a90_10.s": [
+                "5.26",
+                "5.26"
+              ],
+              "a95_20.s": [
+                "10.26",
+                "10.26"
+              ],
+              "a75_4.s": [
+                "2.29",
+                "2.29"
+              ]
+            },
+            "giaiThich": "<p>f=0.5, n=2: 1.33; f=0.5, n=8: 1.78; f=0.9, n=10: 5.26; f=0.95, n=20: 10.26; f=0.75, n=4: 2.29. Even with infinite cores the speed-up of f = 0.9 can never exceed 10.</p><p><i>VI: f=0.5, n=2: 1.33; f=0.5, n=8: 1.78; f=0.9, n=10: 5.26; f=0.95, n=20: 10.26; f=0.75, n=4: 2.29. Dù có vô hạn lõi, speed-up của f = 0,9 không bao giờ vượt 10.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering n (perfect scaling) — Amdahl exists to deny that."
+        },
+        {
+          "loi": "Dividing by n the sequential part instead of the parallel part."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Amdahl’s law",
+          "vi": "định luật Amdahl: phần tuần tự giới hạn tăng tốc"
+        },
+        {
+          "en": "speed-up",
+          "vi": "hệ số tăng tốc"
+        }
+      ]
+    },
+    {
+      "title": "Threads 4 — Pthreads: join, detach and thread-safe code",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "pthreads",
+        "thread safety"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on POSIX threads.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về POSIX threads.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "join ~ wait, for threads.",
+        "An operation is atomic only if it is a single indivisible step; compound statements are not."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 4 — Pthreads: join, detach and thread-safe code\n\nAnswer in the answer panel (no code needed).\n\n1. What does pthread_join(t, NULL) do?pthread_join(t, NULL) làm gì?\n2. main() creates a thread and returns without joining it. What is the usual result?main() tạo một luồng rồi return mà không join. Kết quả thường gặp?\n3. Two threads both execute x = x + 1 on a shared int x without synchronisation. This is …Hai luồng cùng chạy x = x + 1 trên biến int x chung mà không đồng bộ. Đây là …\n4. A function that uses a static local buffer and is called from two threads is …Hàm dùng bộ đệm static cục bộ và được gọi từ hai luồng là …\n5. A thread pool is mainly used to …Thread pool chủ yếu dùng để …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Threads 4 — Pthreads: join, detach and thread-safe code — answer key\n\n1. What does pthread_join(t, NULL) do?pthread_join(t, NULL) làm gì?\n   Answer: a) Blocks the caller until thread t terminates\n   join is the thread version of wait(): it waits for a thread to finish and releases its resources.VI: join là bản luồng của wait(): chờ luồng kết thúc và thu hồi tài nguyên.\n\n2. main() creates a thread and returns without joining it. What is the usual result?main() tạo một luồng rồi return mà không join. Kết quả thường gặp?\n   Answer: b) The process exits and the thread is cut off\n   Returning from main() calls exit(), which ends every thread; use pthread_join or pthread_exit(main).VI: return khỏi main() gọi exit() kết thúc mọi luồng; dùng pthread_join hoặc pthread_exit.\n\n3. Two threads both execute x = x + 1 on a shared int x without synchronisation. This is …Hai luồng cùng chạy x = x + 1 trên biến int x chung mà không đồng bộ. Đây là …\n   Answer: c) a data race: the result is unpredictable\n   x = x + 1 is load, add, store: not atomic.VI: x = x + 1 là load, add, store: không nguyên tử.\n\n4. A function that uses a static local buffer and is called from two threads is …Hàm dùng bộ đệm static cục bộ và được gọi từ hai luồng là …\n   Answer: d) not thread-safe (not reentrant)\n   The static buffer is shared by every caller. strtok() and ctime() are classic examples; strtok_r and ctime_r are the reentrant versions.VI: Bộ đệm static dùng chung cho mọi nơi gọi. strtok() và ctime() là ví dụ kinh điển; strtok_r và ctime_r là bản reentrant.\n\n5. A thread pool is mainly used to …Thread pool chủ yếu dùng để …\n   Answer: a) avoid the cost of creating a thread per request and to bound concurrency\n   Reusing a fixed set of threads removes creation cost and caps the number of concurrent threads.VI: Tái sử dụng một tập luồng cố định bỏ chi phí tạo luồng và giới hạn số luồng đồng thời.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does pthread_join(t, NULL) do?</p><p style=\"opacity:.75;font-size:.92em\"><i>pthread_join(t, NULL) làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Blocks the caller until thread t terminates"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Starts thread t"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Kills thread t"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Merges two threads into one"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>join is the thread version of wait(): it waits for a thread to finish and releases its resources.</p><p><i>VI: join là bản luồng của wait(): chờ luồng kết thúc và thu hồi tài nguyên.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>main() creates a thread and returns without joining it. What is the usual result?</p><p style=\"opacity:.75;font-size:.92em\"><i>main() tạo một luồng rồi return mà không join. Kết quả thường gặp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "main() waits automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The process exits and the thread is cut off"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The thread continues forever"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The compiler rejects the program"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Returning from main() calls exit(), which ends every thread; use pthread_join or pthread_exit(main).</p><p><i>VI: return khỏi main() gọi exit() kết thúc mọi luồng; dùng pthread_join hoặc pthread_exit.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Two threads both execute x = x + 1 on a shared int x without synchronisation. This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai luồng cùng chạy x = x + 1 trên biến int x chung mà không đồng bộ. Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a deadlock"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a memory leak"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a data race: the result is unpredictable"
+              },
+              {
+                "ma": "d",
+                "noiDung": "always safe, because + is atomic"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>x = x + 1 is load, add, store: not atomic.</p><p><i>VI: x = x + 1 là load, add, store: không nguyên tử.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A function that uses a static local buffer and is called from two threads is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hàm dùng bộ đệm static cục bộ và được gọi từ hai luồng là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "automatically thread-safe"
+              },
+              {
+                "ma": "b",
+                "noiDung": "faster than a normal function"
+              },
+              {
+                "ma": "c",
+                "noiDung": "illegal in C"
+              },
+              {
+                "ma": "d",
+                "noiDung": "not thread-safe (not reentrant)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The static buffer is shared by every caller. strtok() and ctime() are classic examples; strtok_r and ctime_r are the reentrant versions.</p><p><i>VI: Bộ đệm static dùng chung cho mọi nơi gọi. strtok() và ctime() là ví dụ kinh điển; strtok_r và ctime_r là bản reentrant.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A thread pool is mainly used to …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thread pool chủ yếu dùng để …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "avoid the cost of creating a thread per request and to bound concurrency"
+              },
+              {
+                "ma": "b",
+                "noiDung": "make threads share registers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "avoid using mutexes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "run threads at higher privilege"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Reusing a fixed set of threads removes creation cost and caps the number of concurrent threads.</p><p><i>VI: Tái sử dụng một tập luồng cố định bỏ chi phí tạo luồng và giới hạn số luồng đồng thời.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a C increment is atomic."
+        },
+        {
+          "loi": "Forgetting that main() returning ends all threads."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data race",
+          "vi": "tranh chấp dữ liệu"
+        },
+        {
+          "en": "reentrant",
+          "vi": "có thể gọi lại an toàn từ nhiều luồng"
+        },
+        {
+          "en": "thread pool",
+          "vi": "nhóm luồng dùng chung"
+        }
+      ]
+    },
+    {
+      "title": "Threads 5 — How many cores do you need? (Amdahl, solved in code)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "Amdahl",
+        "search"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>coresNeeded(f, target)</code>: the SMALLEST integer number of cores <code>n</code> such that the Amdahl speed-up <code>1 / ((1 − f) + f / n)</code> is at least <code>target</code>. Return <code>-1</code> if no number of cores can ever reach it. That happens when the limit <code>1 / (1 − f)</code> is not above the target. If <code>target ≤ 1</code> return <code>1</code>. For <code>f = 1</code> the speed-up equals n.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>A loop over n is fine; or solve the inequality for n.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>coresNeeded(f, target)</code>: số lõi nguyên <code>n</code> NHỎ NHẤT để speed-up Amdahl <code>1 / ((1 − f) + f / n)</code> đạt ít nhất <code>target</code>. Trả <code>-1</code> nếu dù bao nhiêu lõi cũng không đạt (giới hạn <code>1 / (1 − f)</code> không vượt quá target). Nếu <code>target ≤ 1</code> trả <code>1</code>. Với <code>f = 1</code>, speed-up bằng n.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng vòng lặp trên n là được; hoặc giải bất phương trình theo n.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "coresNeeded(0.9, 5)",
+          "output": "9",
+          "explanation": "1/(0.1 + 0.9/9) = 5 exactly; 8 cores give 4.7.|||1/(0,1 + 0,9/9) = 5; 8 lõi chỉ được 4,7."
+        }
+      ],
+      "hintsJson": [
+        "If the limit 1/(1−f) is ≤ target, no n works: return -1 at once.",
+        "Floating point: compare with a tiny epsilon only if you solve algebraically; a loop with the original formula is exact enough here."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function coresNeeded(f, target) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Linear search with an unreachable-target guard.\nfunction coresNeeded(f, target) {\n  const tran = f >= 1 ? Infinity : 1 / (1 - f);\n  if (target <= 1) return 1;\n  if (tran <= target) return -1;\n  for (let n = 1; n < 100000; n++) if (1 / ((1 - f) + f / n) >= target) return n;\n  return -1;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Speed-up grows monotonically with n and tends to 1/(1−f); if the target is not below that limit it is unreachable, otherwise a linear search finds the first n.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: coresNeeded(0.9, 5)",
+              "vi": "Ca 1"
+            },
+            "goi": "coresNeeded(0.9, 5)",
+            "mongDoi": 9
+          },
+          {
+            "moTa": {
+              "en": "Case 2: coresNeeded(0.9, 10)",
+              "vi": "Ca 2"
+            },
+            "goi": "coresNeeded(0.9, 10)",
+            "mongDoi": -1
+          },
+          {
+            "moTa": {
+              "en": "Case 3: coresNeeded(0.5, 1.5)",
+              "vi": "Ca 3"
+            },
+            "goi": "coresNeeded(0.5, 1.5)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Case 4: coresNeeded(0.95, 10)",
+              "vi": "Ca 4"
+            },
+            "goi": "coresNeeded(0.95, 10)",
+            "mongDoi": 20
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "coresNeeded(1, 16)",
+            "mongDoi": 16,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "coresNeeded(0.75, 4)",
+            "mongDoi": -1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "coresNeeded(0.6, 0.5)",
+            "mongDoi": 1,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looping forever when the target is above the limit."
+        },
+        {
+          "loi": "Returning the first n for which speed-up > target when the target is hit exactly (use ≥)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

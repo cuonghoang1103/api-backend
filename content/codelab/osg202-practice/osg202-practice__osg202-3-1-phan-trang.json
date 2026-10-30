@@ -1,0 +1,778 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-3-1-phan-trang",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-3-1-phan-trang"
+  },
+  "exercises": [
+    {
+      "title": "Paging 1 — Split a virtual address: offset bits, page-number bits, number of pages",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "paging",
+        "address split"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A virtual address of <b>b</b> bits is divided into a page number and an offset. For each configuration give the number of offset bits, the number of page-number bits and the number of virtual pages.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Địa chỉ ảo <b>b</b> bit được chia thành số trang và độ dời (offset). Với mỗi cấu hình hãy cho số bit offset, số bit số-trang và số trang ảo.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Offset bits = log2(page size).",
+        "Page-number bits = address bits − offset bits; pages = 2^(that)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 1 — Split a virtual address: offset bits, page-number bits, number of pages\n\nAnswer in the answer panel (no code needed).\n\n1. Address splitTách địa chỉ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 1 — Split a virtual address: offset bits, page-number bits, number of pages — answer key\n\n1. Address splitTách địa chỉ\n   - c16_1024.o: 10\n   - c16_1024.p: 6\n   - c16_1024.n: 64\n   - c32_4096.o: 12\n   - c32_4096.p: 20\n   - c32_4096.n: 1048576\n   - c32_16384.o: 14\n   - c32_16384.p: 18\n   - c32_16384.n: 262144\n   - c20_256.o: 8\n   - c20_256.p: 12\n   - c20_256.n: 4096\n   16-bit, 1024 B: offset = log2(1024) = 10, page bits = 6, pages = 2^6 = 64; 32-bit, 4096 B: offset = log2(4096) = 12, page bits = 20, pages = 2^20 = 1048576; 32-bit, 16384 B: offset = log2(16384) = 14, page bits = 18, pages = 2^18 = 262144; 20-bit, 256 B: offset = log2(256) = 8, page bits = 12, pages = 2^12 = 4096.VI: 16 bit, 1024 B: offset 10, số trang 64; 32 bit, 4096 B: offset 12, số trang 1048576; 32 bit, 16384 B: offset 14, số trang 262144; 20 bit, 256 B: offset 8, số trang 4096.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>10/6/64 · 12/20/1048576 · 14/18/262144 · 8/12/4096</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Address split</p><p style=\"opacity:.75;font-size:.92em\"><i>Tách địa chỉ</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Address bits, page size"
+              },
+              {
+                "ma": "o",
+                "ten": "Offset bits"
+              },
+              {
+                "ma": "p",
+                "ten": "Page-number bits"
+              },
+              {
+                "ma": "n",
+                "ten": "Number of pages"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c16_1024",
+                "o": {
+                  "c": "16-bit, 1 KB"
+                }
+              },
+              {
+                "ma": "c32_4096",
+                "o": {
+                  "c": "32-bit, 4 KB"
+                }
+              },
+              {
+                "ma": "c32_16384",
+                "o": {
+                  "c": "32-bit, 16 KB"
+                }
+              },
+              {
+                "ma": "c20_256",
+                "o": {
+                  "c": "20-bit, 256 B"
+                }
+              }
+            ],
+            "dapAn": {
+              "c16_1024.o": "10",
+              "c16_1024.p": "6",
+              "c16_1024.n": "64",
+              "c32_4096.o": "12",
+              "c32_4096.p": "20",
+              "c32_4096.n": "1048576",
+              "c32_16384.o": "14",
+              "c32_16384.p": "18",
+              "c32_16384.n": "262144",
+              "c20_256.o": "8",
+              "c20_256.p": "12",
+              "c20_256.n": "4096"
+            },
+            "giaiThich": "<p>16-bit, 1024 B: offset = log2(1024) = 10, page bits = 6, pages = 2^6 = 64; 32-bit, 4096 B: offset = log2(4096) = 12, page bits = 20, pages = 2^20 = 1048576; 32-bit, 16384 B: offset = log2(16384) = 14, page bits = 18, pages = 2^18 = 262144; 20-bit, 256 B: offset = log2(256) = 8, page bits = 12, pages = 2^12 = 4096.</p><p><i>VI: 16 bit, 1024 B: offset 10, số trang 64; 32 bit, 4096 B: offset 12, số trang 1048576; 32 bit, 16384 B: offset 14, số trang 262144; 20 bit, 256 B: offset 8, số trang 4096.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the page size in KB instead of bytes when taking the logarithm."
+        },
+        {
+          "loi": "Writing the number of pages as the number of bits."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "page",
+          "vi": "trang ảo"
+        },
+        {
+          "en": "frame",
+          "vi": "khung trang vật lý"
+        },
+        {
+          "en": "offset",
+          "vi": "độ dời trong trang"
+        }
+      ]
+    },
+    {
+      "title": "Paging 2 — Translate logical addresses with a page table",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "address translation",
+        "page fault"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Page size = 1024 bytes. The page table (index = page number, value = frame number, “—” = page not in memory) is below. Give the PHYSICAL address in decimal, or write <code>PAGE FAULT</code> (page not present) or <code>INVALID</code> (page number beyond the table).</p><table><thead><tr><th>Page</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td>Frame</td><td>5</td><td>2</td><td>—</td><td>7</td><td>0</td><td>—</td></tr></tbody></table><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kích thước trang = 1024 byte. Bảng trang (chỉ số = số trang, giá trị = số khung, “—” = trang không có trong bộ nhớ) ở dưới. Cho địa chỉ VẬT LÝ dạng thập phân, hoặc viết <code>PAGE FAULT</code> (trang không có mặt) hoặc <code>INVALID</code> (số trang vượt quá bảng).</p><table><thead><tr><th>Page</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead><tbody><tr><td>Frame</td><td>5</td><td>2</td><td>—</td><td>7</td><td>0</td><td>—</td></tr></tbody></table><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "page = ⌊address / pagesize⌋, offset = address mod pagesize; physical = frame × pagesize + offset.",
+        "A “—” entry means the valid bit is 0: the MMU raises a page fault."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 2 — Translate logical addresses with a page table\n\nAnswer in the answer panel (no code needed).\n\n1. Logical → physicalLogic → vật lý\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 2 — Translate logical addresses with a page table — answer key\n\n1. Logical → physicalLogic → vật lý\n   - a0.p: 5220\n   - a1.p: 2053\n   - a2.p: PAGE FAULT\n   - a3.p: 8191\n   - a4.p: 0\n   - a5.p: PAGE FAULT\n   - a6.p: INVALID\n   - a7.p: 5121\n   100: page 0, offset 100 → 5220; 1029: page 1, offset 5 → 2053; 2055: page 2, offset 7 → PAGE FAULT; 4095: page 3, offset 1023 → 8191; 4096: page 4, offset 0 → 0; 5123: page 5, offset 3 → PAGE FAULT; 6152: page 6, offset 8 → INVALID; 1: page 0, offset 1 → 5121.VI: 100: trang 0, offset 100 → 5220; 1029: trang 1, offset 5 → 2053; 2055: trang 2, offset 7 → PAGE FAULT; 4095: trang 3, offset 1023 → 8191; 4096: trang 4, offset 0 → 0; 5123: trang 5, offset 3 → PAGE FAULT; 6152: trang 6, offset 8 → INVALID; 1: trang 0, offset 1 → 5121.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>5220 · 2053 · PAGE FAULT · 8191 · 0 · PAGE FAULT · INVALID · 5121</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Logical → physical</p><p style=\"opacity:.75;font-size:.92em\"><i>Logic → vật lý</i></p>",
+            "cot": [
+              {
+                "ma": "l",
+                "ten": "Logical address"
+              },
+              {
+                "ma": "p",
+                "ten": "Physical address"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "a0",
+                "o": {
+                  "l": "100"
+                }
+              },
+              {
+                "ma": "a1",
+                "o": {
+                  "l": "1029"
+                }
+              },
+              {
+                "ma": "a2",
+                "o": {
+                  "l": "2055"
+                }
+              },
+              {
+                "ma": "a3",
+                "o": {
+                  "l": "4095"
+                }
+              },
+              {
+                "ma": "a4",
+                "o": {
+                  "l": "4096"
+                }
+              },
+              {
+                "ma": "a5",
+                "o": {
+                  "l": "5123"
+                }
+              },
+              {
+                "ma": "a6",
+                "o": {
+                  "l": "6152"
+                }
+              },
+              {
+                "ma": "a7",
+                "o": {
+                  "l": "1"
+                }
+              }
+            ],
+            "dapAn": {
+              "a0.p": "5220",
+              "a1.p": "2053",
+              "a2.p": "PAGE FAULT",
+              "a3.p": "8191",
+              "a4.p": "0",
+              "a5.p": "PAGE FAULT",
+              "a6.p": "INVALID",
+              "a7.p": "5121"
+            },
+            "giaiThich": "<p>100: page 0, offset 100 → 5220; 1029: page 1, offset 5 → 2053; 2055: page 2, offset 7 → PAGE FAULT; 4095: page 3, offset 1023 → 8191; 4096: page 4, offset 0 → 0; 5123: page 5, offset 3 → PAGE FAULT; 6152: page 6, offset 8 → INVALID; 1: page 0, offset 1 → 5121.</p><p><i>VI: 100: trang 0, offset 100 → 5220; 1029: trang 1, offset 5 → 2053; 2055: trang 2, offset 7 → PAGE FAULT; 4095: trang 3, offset 1023 → 8191; 4096: trang 4, offset 0 → 0; 5123: trang 5, offset 3 → PAGE FAULT; 6152: trang 6, offset 8 → INVALID; 1: trang 0, offset 1 → 5121.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to multiply the frame number by the page size."
+        },
+        {
+          "loi": "Reporting a physical address for a page whose valid bit is 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "valid bit",
+          "vi": "bit hợp lệ: trang có trong RAM"
+        },
+        {
+          "en": "page fault",
+          "vi": "lỗi trang: trang không có trong RAM"
+        }
+      ]
+    },
+    {
+      "title": "Paging 3 — How big is a single-level page table?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "page table size",
+        "multi-level paging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A single-level page table has one entry per virtual page. Compute its size for each system (write the number and unit, e.g. <code>4 MB</code>; units KB/MB/GB with 1 KB = 1024 B).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng trang một cấp có một mục cho mỗi trang ảo. Tính kích thước của nó cho từng hệ thống (viết số và đơn vị, ví dụ <code>4 MB</code>; KB/MB/GB với 1 KB = 1024 B).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Entries = 2^(address bits − offset bits).",
+        "Size = entries × bytes per entry; convert with powers of two."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 3 — How big is a single-level page table?\n\nAnswer in the answer panel (no code needed).\n\n1. Page-table sizeKích thước bảng trang\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 3 — How big is a single-level page table? — answer key\n\n1. Page-table sizeKích thước bảng trang\n   - c32_4096.t: 4 MB / 4MB\n   - c32_16384.t: 1 MB / 1MB\n   - c48_4096.t: 512 GB / 512GB\n   - c36_8192.t: 32 MB / 32MB\n   32-bit/4 KB: 2^20 entries × 4 B = 4 MB; 32-bit/16 KB: 2^18 entries × 4 B = 1 MB; 48-bit/4 KB: 2^36 entries × 8 B = 512 GB; 36-bit/8 KB: 2^23 entries × 4 B = 32 MB. The 48-bit case shows why a flat table is impossible on 64-bit machines: multi-level or inverted tables are needed.VI: 32 bit / 4 KB: 2^20 mục × 4 B = 4 MB; 32 bit / 16 KB: 2^18 mục × 4 B = 1 MB; 48 bit / 4 KB: 2^36 mục × 8 B = 512 GB; 36 bit / 8 KB: 2^23 mục × 4 B = 32 MB. Trường hợp 48 bit cho thấy vì sao không thể dùng bảng phẳng trên máy 64 bit: cần bảng nhiều cấp hoặc bảng đảo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>4 MB · 1 MB · 512 GB · 32 MB</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Page-table size</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước bảng trang</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Virtual address, page size, entry size"
+              },
+              {
+                "ma": "t",
+                "ten": "Table size"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c32_4096",
+                "o": {
+                  "c": "32-bit, 4 KB pages, 4-byte entries"
+                }
+              },
+              {
+                "ma": "c32_16384",
+                "o": {
+                  "c": "32-bit, 16 KB pages, 4-byte entries"
+                }
+              },
+              {
+                "ma": "c48_4096",
+                "o": {
+                  "c": "48-bit, 4 KB pages, 8-byte entries"
+                }
+              },
+              {
+                "ma": "c36_8192",
+                "o": {
+                  "c": "36-bit, 8 KB pages, 4-byte entries"
+                }
+              }
+            ],
+            "dapAn": {
+              "c32_4096.t": [
+                "4 MB",
+                "4MB"
+              ],
+              "c32_16384.t": [
+                "1 MB",
+                "1MB"
+              ],
+              "c48_4096.t": [
+                "512 GB",
+                "512GB"
+              ],
+              "c36_8192.t": [
+                "32 MB",
+                "32MB"
+              ]
+            },
+            "giaiThich": "<p>32-bit/4 KB: 2^20 entries × 4 B = 4 MB; 32-bit/16 KB: 2^18 entries × 4 B = 1 MB; 48-bit/4 KB: 2^36 entries × 8 B = 512 GB; 36-bit/8 KB: 2^23 entries × 4 B = 32 MB. The 48-bit case shows why a flat table is impossible on 64-bit machines: multi-level or inverted tables are needed.</p><p><i>VI: 32 bit / 4 KB: 2^20 mục × 4 B = 4 MB; 32 bit / 16 KB: 2^18 mục × 4 B = 1 MB; 48 bit / 4 KB: 2^36 mục × 8 B = 512 GB; 36 bit / 8 KB: 2^23 mục × 4 B = 32 MB. Trường hợp 48 bit cho thấy vì sao không thể dùng bảng phẳng trên máy 64 bit: cần bảng nhiều cấp hoặc bảng đảo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using 2^address bits entries (forgetting that pages, not bytes, are indexed)."
+        },
+        {
+          "loi": "Mixing decimal (1000) and binary (1024) units."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "page-table entry (PTE)",
+          "vi": "mục bảng trang"
+        },
+        {
+          "en": "multi-level page table",
+          "vi": "bảng trang nhiều cấp"
+        }
+      ]
+    },
+    {
+      "title": "Paging 4 — Internal fragmentation, protection and the bits of a PTE",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "internal fragmentation",
+        "PTE bits"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five conceptual questions about paging.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu khái niệm về phân trang.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Internal fragmentation = allocated − used inside the last allocated unit.",
+        "The dirty bit is about disk write-back; the valid bit is about presence in RAM."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 4 — Internal fragmentation, protection and the bits of a PTE\n\nAnswer in the answer panel (no code needed).\n\n1. A process needs 72 766 bytes and the page size is 2048 bytes. How many bytes are wasted by internal fragmentation?Một tiến trình cần 72 766 byte, kích thước trang 2048 byte. Bao nhiêu byte bị phí do phân mảnh trong?\n2. Paging suffers from which kind of fragmentation?Phân trang gặp loại phân mảnh nào?\n3. Which PTE bit lets the OS decide whether a victim page must be written back to disk?Bit nào trong PTE cho OS biết trang nạn nhân có phải ghi lại ra đĩa?\n4. A process stores to a page whose PTE says read-only. What happens?Tiến trình ghi vào trang mà PTE đánh dấu chỉ-đọc. Điều gì xảy ra?\n5. Increasing the page size generally …Tăng kích thước trang nói chung …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Paging 4 — Internal fragmentation, protection and the bits of a PTE — answer key\n\n1. A process needs 72 766 bytes and the page size is 2048 bytes. How many bytes are wasted by internal fragmentation?Một tiến trình cần 72 766 byte, kích thước trang 2048 byte. Bao nhiêu byte bị phí do phân mảnh trong?\n   Answer: a) 962\n   ⌈72766 / 2048⌉ = 36 pages = 73728 bytes, so 962 bytes are wasted in the last page (72766 mod 2048 = 1086 is what is USED there).VI: ⌈72766 / 2048⌉ = 36 trang = 73728 byte, nên phí 962 byte ở trang cuối (72766 mod 2048 = 1086 là phần ĐÃ dùng).\n\n2. Paging suffers from which kind of fragmentation?Phân trang gặp loại phân mảnh nào?\n   Answer: b) Internal fragmentation only (no external)\n   Frames are all the same size so any free frame fits; only the last page of a process is partly empty.VI: Mọi khung bằng nhau nên khung trống nào cũng dùng được; chỉ trang cuối của tiến trình bị trống một phần.\n\n3. Which PTE bit lets the OS decide whether a victim page must be written back to disk?Bit nào trong PTE cho OS biết trang nạn nhân có phải ghi lại ra đĩa?\n   Answer: c) Dirty (modified) bit\n   If the page was not modified since it was loaded, the disk copy is still good and no write is needed.VI: Nếu trang chưa bị sửa kể từ khi nạp thì bản trên đĩa còn nguyên, không cần ghi.\n\n4. A process stores to a page whose PTE says read-only. What happens?Tiến trình ghi vào trang mà PTE đánh dấu chỉ-đọc. Điều gì xảy ra?\n   Answer: d) The MMU raises a protection fault and the OS typically terminates the process (SIGSEGV)\n   Protection bits are checked on every access by hardware.VI: Phần cứng kiểm bit bảo vệ ở mọi lần truy cập.\n\n5. Increasing the page size generally …Tăng kích thước trang nói chung …\n   Answer: a) shrinks the page table but increases internal fragmentation\n   Fewer pages → smaller table; larger last-page waste. Tanenbaum’s optimum p = √(2·s·e).VI: Ít trang hơn → bảng nhỏ hơn; phí ở trang cuối lớn hơn. Tối ưu của Tanenbaum p = √(2·s·e).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A process needs 72 766 bytes and the page size is 2048 bytes. How many bytes are wasted by internal fragmentation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tiến trình cần 72 766 byte, kích thước trang 2048 byte. Bao nhiêu byte bị phí do phân mảnh trong?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "962"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2048"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1086"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>⌈72766 / 2048⌉ = 36 pages = 73728 bytes, so 962 bytes are wasted in the last page (72766 mod 2048 = 1086 is what is USED there).</p><p><i>VI: ⌈72766 / 2048⌉ = 36 trang = 73728 byte, nên phí 962 byte ở trang cuối (72766 mod 2048 = 1086 là phần ĐÃ dùng).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Paging suffers from which kind of fragmentation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân trang gặp loại phân mảnh nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Neither"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Internal fragmentation only (no external)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "External fragmentation only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Both equally"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Frames are all the same size so any free frame fits; only the last page of a process is partly empty.</p><p><i>VI: Mọi khung bằng nhau nên khung trống nào cũng dùng được; chỉ trang cuối của tiến trình bị trống một phần.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which PTE bit lets the OS decide whether a victim page must be written back to disk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bit nào trong PTE cho OS biết trang nạn nhân có phải ghi lại ra đĩa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Referenced bit"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Protection bit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Dirty (modified) bit"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Valid bit"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>If the page was not modified since it was loaded, the disk copy is still good and no write is needed.</p><p><i>VI: Nếu trang chưa bị sửa kể từ khi nạp thì bản trên đĩa còn nguyên, không cần ghi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A process stores to a page whose PTE says read-only. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiến trình ghi vào trang mà PTE đánh dấu chỉ-đọc. Điều gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The write silently succeeds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The page is swapped out"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The TLB is flushed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The MMU raises a protection fault and the OS typically terminates the process (SIGSEGV)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Protection bits are checked on every access by hardware.</p><p><i>VI: Phần cứng kiểm bit bảo vệ ở mọi lần truy cập.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Increasing the page size generally …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tăng kích thước trang nói chung …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "shrinks the page table but increases internal fragmentation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "enlarges the page table and removes fragmentation"
+              },
+              {
+                "ma": "c",
+                "noiDung": "has no effect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "removes the need for a TLB"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Fewer pages → smaller table; larger last-page waste. Tanenbaum’s optimum p = √(2·s·e).</p><p><i>VI: Ít trang hơn → bảng nhỏ hơn; phí ở trang cuối lớn hơn. Tối ưu của Tanenbaum p = √(2·s·e).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering with the remainder (72766 mod 2048) instead of page − remainder."
+        },
+        {
+          "loi": "Thinking paging has external fragmentation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "internal fragmentation",
+          "vi": "phân mảnh trong: phần phí trong đơn vị đã cấp"
+        },
+        {
+          "en": "dirty bit",
+          "vi": "bit bẩn: trang đã bị sửa"
+        }
+      ]
+    },
+    {
+      "title": "Paging 5 — Write an MMU: translate a batch of addresses",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "MMU",
+        "address translation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>translateAll(pageSize, table, addrs)</code>. <code>table[p]</code> is the frame number of page <code>p</code> or <code>null</code> if the page is not in memory. For every address return the physical address (a number), <code>'PAGE FAULT'</code> if the page exists in the table but is not present, or <code>'INVALID'</code> if the page number is beyond the table (or the address is negative).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return an array of the same length as <code>addrs</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>translateAll(pageSize, table, addrs)</code>. <code>table[p]</code> là số khung của trang <code>p</code> hoặc <code>null</code> nếu trang không có trong bộ nhớ. Với mỗi địa chỉ trả địa chỉ vật lý (số), <code>'PAGE FAULT'</code> nếu trang có trong bảng nhưng không hiện diện, hoặc <code>'INVALID'</code> nếu số trang vượt quá bảng (hoặc địa chỉ âm).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả mảng cùng độ dài với <code>addrs</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "translateAll(1024, [5, null], [100, 1030, 2048])",
+          "output": "[5220,\"PAGE FAULT\",\"INVALID\"]",
+          "explanation": "Page 0 → frame 5; page 1 absent; page 2 beyond the table.|||Trang 0 → khung 5; trang 1 vắng; trang 2 vượt bảng."
+        }
+      ],
+      "hintsJson": [
+        "Compute page = Math.floor(a / pageSize) and offset = a % pageSize.",
+        "Check the page range BEFORE reading table[page]; check null after."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function translateAll(pageSize, table, addrs) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// One translation per address.\nfunction translateAll(pageSize, table, addrs) {\n  return addrs.map(function (vaddr) {\n    if (vaddr < 0) return 'INVALID';\n    var page = Math.floor(vaddr / pageSize), off = vaddr % pageSize;\n    if (page >= table.length) return 'INVALID';\n    var f = table[page];\n    return f === null || f === undefined ? 'PAGE FAULT' : f * pageSize + off;\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three outcomes: out-of-range page (INVALID), null entry (PAGE FAULT) or frame × pageSize + offset.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: translateAll(1024, [5,2,null,7,0,null], [100,1029,2055,4095,4096,5123,6152,1])",
+              "vi": "Ca 1"
+            },
+            "goi": "translateAll(1024, [5,2,null,7,0,null], [100,1029,2055,4095,4096,5123,6152,1])",
+            "mongDoi": [
+              5220,
+              2053,
+              "PAGE FAULT",
+              8191,
+              0,
+              "PAGE FAULT",
+              "INVALID",
+              5121
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: translateAll(4096, [0,1,2], [0,4095,4096,12287,12288])",
+              "vi": "Ca 2"
+            },
+            "goi": "translateAll(4096, [0,1,2], [0,4095,4096,12287,12288])",
+            "mongDoi": [
+              0,
+              4095,
+              4096,
+              12287,
+              "INVALID"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: translateAll(256, [null,9], [10,300])",
+              "vi": "Ca 3"
+            },
+            "goi": "translateAll(256, [null,9], [10,300])",
+            "mongDoi": [
+              "PAGE FAULT",
+              2348
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "translateAll(512, [3,null,0], [-1,511,512,1024,1535])",
+            "mongDoi": [
+              "INVALID",
+              2047,
+              "PAGE FAULT",
+              0,
+              511
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "translateAll(1, [4,2,0], [0,1,2,3])",
+            "mongDoi": [
+              4,
+              2,
+              0,
+              "INVALID"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating frame 0 as “absent” because it is falsy (use === null)."
+        },
+        {
+          "loi": "Returning NaN for negative addresses."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

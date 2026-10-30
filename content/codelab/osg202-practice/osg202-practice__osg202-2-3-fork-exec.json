@@ -1,0 +1,933 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-2-3-fork-exec",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-2-3-fork-exec"
+  },
+  "exercises": [
+    {
+      "title": "Process states 1 — Which transition does the event cause?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "process states",
+        "state transitions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>The five-state process model has the states New/Ready/Running/Blocked/Terminated. For each event say which <b>transition</b> of the affected process it causes.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô hình tiến trình năm trạng thái gồm New/Ready/Running/Blocked/Terminated. Với mỗi sự kiện, hãy chọn <b>chuyển trạng thái</b> của tiến trình bị tác động.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A process can only leave Blocked to Ready — never straight to Running.",
+        "Ask: did the process give up the CPU voluntarily (Blocked) or was it taken away (Ready)?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Process states 1 — Which transition does the event cause?\n\nAnswer in the answer panel (no code needed).\n\n1. Event → transitionSự kiện → chuyển trạng thái\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Process states 1 — Which transition does the event cause? — answer key\n\n1. Event → transitionSự kiện → chuyển trạng thái\n   - r0.t: Running → Ready\n   - r1.t: Running → Blocked\n   - r2.t: Blocked → Ready\n   - r3.t: Ready → Running\n   - r4.t: Running → Terminated\n   - r5.t: Running → Blocked\n   Preemption sends Running → Ready; waiting for I/O or a timer sends Running → Blocked; the completion interrupt makes Blocked → Ready (not directly Running: the scheduler decides); dispatch is Ready → Running.VI: Bị cắt: Running → Ready; chờ I/O hoặc đồng hồ: Running → Blocked; ngắt hoàn tất I/O đưa Blocked → Ready (không vào thẳng Running: bộ lập lịch quyết định); cấp CPU là Ready → Running.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ready · Blocked · Ready · Running · Terminated · Blocked.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Event → transition</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự kiện → chuyển trạng thái</i></p>",
+            "cot": [
+              {
+                "ma": "e",
+                "ten": "Event"
+              },
+              {
+                "ma": "t",
+                "ten": "Transition",
+                "luaChon": [
+                  "Running → Ready",
+                  "Running → Blocked",
+                  "Blocked → Ready",
+                  "Ready → Running",
+                  "Running → Terminated"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "e": "The timer interrupt fires because the quantum of the running process expired"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "e": "The running process calls read() on a file that is not in the page cache"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "e": "The disk controller raises an interrupt: the requested block has arrived"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "e": "The scheduler picks the first process of the ready queue and loads its context"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "e": "The running process calls exit(0)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "e": "The running process calls sleep(5)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.t": "Running → Ready",
+              "r1.t": "Running → Blocked",
+              "r2.t": "Blocked → Ready",
+              "r3.t": "Ready → Running",
+              "r4.t": "Running → Terminated",
+              "r5.t": "Running → Blocked"
+            },
+            "giaiThich": "<p>Preemption sends Running → Ready; waiting for I/O or a timer sends Running → Blocked; the completion interrupt makes Blocked → Ready (not directly Running: the scheduler decides); dispatch is Ready → Running.</p><p><i>VI: Bị cắt: Running → Ready; chờ I/O hoặc đồng hồ: Running → Blocked; ngắt hoàn tất I/O đưa Blocked → Ready (không vào thẳng Running: bộ lập lịch quyết định); cấp CPU là Ready → Running.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending Blocked → Running when the I/O finishes (skipping the ready queue)."
+        },
+        {
+          "loi": "Putting a process that merely lost its quantum into Blocked."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PCB (process control block)",
+          "vi": "khối điều khiển tiến trình"
+        },
+        {
+          "en": "dispatcher",
+          "vi": "bộ điều phối: nạp ngữ cảnh tiến trình được chọn"
+        }
+      ]
+    },
+    {
+      "title": "Process states 2 — fork(), exec(), zombie and orphan",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "fork",
+        "exec",
+        "zombie",
+        "orphan"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five conceptual questions about process creation and termination on UNIX.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu khái niệm về tạo và kết thúc tiến trình trên UNIX.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think about who calls wait(): the PARENT. Zombie = child is dead and waiting for it.",
+        "exec never creates a process; fork never loads a new program."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Process states 2 — fork(), exec(), zombie and orphan\n\nAnswer in the answer panel (no code needed).\n\n1. What does fork() return in the CHILD process?fork() trả về gì trong tiến trình CON?\n2. A child has exited but its parent has not yet called wait(). The child is a …Tiến trình con đã thoát nhưng cha chưa gọi wait(). Con đó là …\n3. The parent exits while the child is still running. What happens to the child?Cha thoát khi con còn chạy. Chuyện gì xảy ra với con?\n4. What does a successful exec() do?exec() thành công làm gì?\n5. Why does a shell call fork() BEFORE exec() when you type a command?Vì sao shell gọi fork() TRƯỚC exec() khi bạn gõ lệnh?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Process states 2 — fork(), exec(), zombie and orphan — answer key\n\n1. What does fork() return in the CHILD process?fork() trả về gì trong tiến trình CON?\n   Answer: d) 0\n   fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.\n\n2. A child has exited but its parent has not yet called wait(). The child is a …Tiến trình con đã thoát nhưng cha chưa gọi wait(). Con đó là …\n   Answer: a) Zombie\n   A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().\n\n3. The parent exits while the child is still running. What happens to the child?Cha thoát khi con còn chạy. Chuyện gì xảy ra với con?\n   Answer: b) It is adopted by init/systemd (PID 1)\n   Orphans are re-parented to PID 1, which calls wait() on them when they finish.VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.\n\n4. What does a successful exec() do?exec() thành công làm gì?\n   Answer: c) Replaces the program image of the calling process; the PID stays the same\n   exec replaces code, data and stack of the same process; on success it never returns.VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.\n\n5. Why does a shell call fork() BEFORE exec() when you type a command?Vì sao shell gọi fork() TRƯỚC exec() khi bạn gõ lệnh?\n   Answer: d) So the shell itself keeps running after the command finishes\n   exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What does fork() return in the CHILD process?</p><p style=\"opacity:.75;font-size:.92em\"><i>fork() trả về gì trong tiến trình CON?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The child’s PID"
+              },
+              {
+                "ma": "b",
+                "noiDung": "-1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The parent’s PID"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.</p><p><i>VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A child has exited but its parent has not yet called wait(). The child is a …</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiến trình con đã thoát nhưng cha chưa gọi wait(). Con đó là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Zombie"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Orphan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Daemon"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Thread"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().</p><p><i>VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The parent exits while the child is still running. What happens to the child?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cha thoát khi con còn chạy. Chuyện gì xảy ra với con?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It keeps the dead parent as its parent forever"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is adopted by init/systemd (PID 1)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is killed immediately by the kernel"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It becomes a zombie at once"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Orphans are re-parented to PID 1, which calls wait() on them when they finish.</p><p><i>VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What does a successful exec() do?</p><p style=\"opacity:.75;font-size:.92em\"><i>exec() thành công làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Returns the PID of the new program"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Copies the calling process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Replaces the program image of the calling process; the PID stays the same"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Creates a new process running the new program"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>exec replaces code, data and stack of the same process; on success it never returns.</p><p><i>VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why does a shell call fork() BEFORE exec() when you type a command?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao shell gọi fork() TRƯỚC exec() khi bạn gõ lệnh?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because exec() cannot run without fork()"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To double the memory available"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To make the command run as root"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So the shell itself keeps running after the command finishes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.</p><p><i>VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing up zombie (child dead, parent alive) and orphan (parent dead, child alive)."
+        },
+        {
+          "loi": "Thinking exec() returns the new program’s exit status to the caller."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "zombie",
+          "vi": "tiến trình đã chết nhưng cha chưa wait()"
+        },
+        {
+          "en": "orphan",
+          "vi": "tiến trình mồ côi (cha đã chết)"
+        }
+      ]
+    },
+    {
+      "title": "fork 3 — How many processes and how many lines?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "fork",
+        "process tree"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Assume every <code>fork()</code> succeeds and that <code>printf</code> output always ends with a newline and is flushed (stdout is a terminal). For each fragment give the TOTAL number of processes that exist at the end (including the original) and the number of lines printed.</p>\n<pre>A:  fork(); fork(); fork(); printf(\"x\\n\");\nB:  if (fork() == 0) { fork(); }  printf(\"x\\n\");\nC:  int i; for (i = 0; i &lt; 3; i++) if (fork() == 0) break;  printf(\"x\\n\");\nD:  fork(); printf(\"x\\n\"); fork(); printf(\"x\\n\");\nE:  if (fork()) fork();  printf(\"x\\n\");</pre><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giả sử mọi <code>fork()</code> thành công và <code>printf</code> luôn kết thúc bằng xuống dòng và được đẩy ra ngay (stdout là terminal). Với mỗi đoạn, cho TỔNG số tiến trình tồn tại cuối cùng (kể cả tiến trình gốc) và số dòng in ra.</p>\n<pre>A:  fork(); fork(); fork(); printf(\"x\\n\");\nB:  if (fork() == 0) { fork(); }  printf(\"x\\n\");\nC:  int i; for (i = 0; i &lt; 3; i++) if (fork() == 0) break;  printf(\"x\\n\");\nD:  fork(); printf(\"x\\n\"); fork(); printf(\"x\\n\");\nE:  if (fork()) fork();  printf(\"x\\n\");</pre><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Draw the process tree. Every fork() splits ONE process into two that both continue after the call.",
+        "Count printf lines per process: a process that printed before a fork has already contributed its line."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# fork 3 — How many processes and how many lines?\n\nAnswer in the answer panel (no code needed).\n\n1. Count processes and linesĐếm tiến trình và dòng in\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# fork 3 — How many processes and how many lines? — answer key\n\n1. Count processes and linesĐếm tiến trình và dòng in\n   - A.p: 8\n   - A.l: 8\n   - B.p: 3\n   - B.l: 3\n   - C.p: 4\n   - C.l: 4\n   - D.p: 4\n   - D.l: 6\n   - E.p: 3\n   - E.l: 3\n   A: every fork doubles → 2³ = 8 / 8. B: only the child forks again → 3 / 3 (parent, child, grandchild). C: each iteration the child breaks out of the loop, so 1 + 3 = 4 processes (the loop runs once more for the parent each time). D: after the first fork there are 2 printing processes (2 lines), after the second fork 4 processes each print once more → 4 processes, 2 + 4 = 6 lines. E: the parent forks twice (child of the first fork does not) → 3 / 3.VI: A: mỗi fork nhân đôi → 2³ = 8 / 8. B: chỉ con fork tiếp → 3 / 3. C: mỗi vòng con thoát vòng for nên tổng 1 + 3 = 4. D: sau fork thứ nhất có 2 tiến trình in (2 dòng), sau fork thứ hai có 4 tiến trình in thêm mỗi cái 1 dòng → 4 tiến trình, 2 + 4 = 6 dòng. E: chỉ cha fork hai lần → 3 / 3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A 8/8 · B 3/3 · C 4/4 · D 4/6 · E 3/3. (Checked by compiling and running each fragment.)</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Count processes and lines</p><p style=\"opacity:.75;font-size:.92em\"><i>Đếm tiến trình và dòng in</i></p>",
+            "cot": [
+              {
+                "ma": "f",
+                "ten": "Fragment"
+              },
+              {
+                "ma": "p",
+                "ten": "Processes"
+              },
+              {
+                "ma": "l",
+                "ten": "Lines printed"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "A",
+                "o": {
+                  "f": "A"
+                }
+              },
+              {
+                "ma": "B",
+                "o": {
+                  "f": "B"
+                }
+              },
+              {
+                "ma": "C",
+                "o": {
+                  "f": "C"
+                }
+              },
+              {
+                "ma": "D",
+                "o": {
+                  "f": "D"
+                }
+              },
+              {
+                "ma": "E",
+                "o": {
+                  "f": "E"
+                }
+              }
+            ],
+            "dapAn": {
+              "A.p": "8",
+              "A.l": "8",
+              "B.p": "3",
+              "B.l": "3",
+              "C.p": "4",
+              "C.l": "4",
+              "D.p": "4",
+              "D.l": "6",
+              "E.p": "3",
+              "E.l": "3"
+            },
+            "giaiThich": "<p>A: every fork doubles → 2³ = 8 / 8. B: only the child forks again → 3 / 3 (parent, child, grandchild). C: each iteration the child breaks out of the loop, so 1 + 3 = 4 processes (the loop runs once more for the parent each time). D: after the first fork there are 2 printing processes (2 lines), after the second fork 4 processes each print once more → 4 processes, 2 + 4 = 6 lines. E: the parent forks twice (child of the first fork does not) → 3 / 3.</p><p><i>VI: A: mỗi fork nhân đôi → 2³ = 8 / 8. B: chỉ con fork tiếp → 3 / 3. C: mỗi vòng con thoát vòng for nên tổng 1 + 3 = 4. D: sau fork thứ nhất có 2 tiến trình in (2 dòng), sau fork thứ hai có 4 tiến trình in thêm mỗi cái 1 dòng → 4 tiến trình, 2 + 4 = 6 dòng. E: chỉ cha fork hai lần → 3 / 3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting 2ⁿ processes for the loop in C — the child leaves the loop with break."
+        },
+        {
+          "loi": "Forgetting that the original process also prints (counting only the new children)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "process tree",
+          "vi": "cây tiến trình"
+        },
+        {
+          "en": "fork bomb",
+          "vi": "nổ fork: fork vô hạn"
+        }
+      ]
+    },
+    {
+      "title": "fork 4 — Output buffering and wait(): what really gets printed?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "fork",
+        "stdio buffering",
+        "wait"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>This program runs with its output <b>redirected to a file or pipe</b> (stdout is then fully buffered, not line-buffered):</p><pre>int main() {\n  printf(\"x\");\n  fork();\n  printf(\"y\\n\");\n  return 0;\n}</pre><p>Answer the questions.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chương trình chạy với đầu ra <b>chuyển hướng ra tệp hoặc pipe</b> (stdout khi đó đệm hoàn toàn, không đệm theo dòng):</p><pre>int main() {\n  printf(\"x\");\n  fork();\n  printf(\"y\\n\");\n  return 0;\n}</pre><p>Trả lời các câu hỏi.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "stdio buffers live in user memory, so fork() copies them together with everything else.",
+        "Compile and run it twice: once to the terminal, once with | cat."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# fork 4 — Output buffering and wait(): what really gets printed?\n\nAnswer in the answer panel (no code needed).\n\n1. How many times does the character x appear in the output when stdout is a pipe?Ký tự x xuất hiện mấy lần khi stdout là pipe?\n2. How many times does x appear when stdout is a terminal (line-buffered)?Khi stdout là terminal (đệm theo dòng) x xuất hiện mấy lần?\n3. Which change guarantees exactly ONE x?Thay đổi nào đảm bảo CHỈ MỘT x?\n4. What does wait(NULL) in the parent do?wait(NULL) trong tiến trình cha làm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# fork 4 — Output buffering and wait(): what really gets printed? — answer key\n\n1. How many times does the character x appear in the output when stdout is a pipe?Ký tự x xuất hiện mấy lần khi stdout là pipe?\n   Answer: b) 2\n   \"x\" sits in the stdio buffer when fork() copies the address space, so both processes flush it: \"xy\" appears twice (verified by running it with | wc).VI: \"x\" còn nằm trong bộ đệm stdio lúc fork() sao chép không gian địa chỉ, nên cả hai tiến trình đều đẩy nó ra: “xy” xuất hiện hai lần (đã chạy thật với | wc).\n\n2. How many times does x appear when stdout is a terminal (line-buffered)?Khi stdout là terminal (đệm theo dòng) x xuất hiện mấy lần?\n   Answer: c) 2\n   Careful: \"x\" has no newline, so it is STILL in the buffer at fork time even on a terminal; both copies flush at the \"\\n\" → \"xy\" twice. Only fflush(stdout) before fork gives one x.VI: Cẩn thận: “x” không có xuống dòng nên VẪN nằm trong bộ đệm lúc fork kể cả trên terminal; cả hai bản cùng đẩy ra ở “\\n” → “xy” hai lần. Chỉ fflush(stdout) trước fork mới ra một x.\n\n3. Which change guarantees exactly ONE x?Thay đổi nào đảm bảo CHỈ MỘT x?\n   Answer: c) Call fflush(stdout) right after printf(\"x\")\n   Flushing empties the buffer BEFORE it is duplicated by fork().VI: Đẩy bộ đệm ra TRƯỚC khi fork() nhân đôi nó.\n\n4. What does wait(NULL) in the parent do?wait(NULL) trong tiến trình cha làm gì?\n   Answer: d) Blocks until one child terminates and reaps it\n   wait suspends the caller until a child exits and then frees the child’s PCB (no zombie).VI: wait treo tiến trình gọi tới khi một con thoát rồi giải phóng PCB của con (không còn zombie).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>b · c · c · d. A classic exam trap: the duplicated stdio buffer.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>How many times does the character x appear in the output when stdout is a pipe?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ký tự x xuất hiện mấy lần khi stdout là pipe?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>\"x\" sits in the stdio buffer when fork() copies the address space, so both processes flush it: \"xy\" appears twice (verified by running it with | wc).</p><p><i>VI: \"x\" còn nằm trong bộ đệm stdio lúc fork() sao chép không gian địa chỉ, nên cả hai tiến trình đều đẩy nó ra: “xy” xuất hiện hai lần (đã chạy thật với | wc).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How many times does x appear when stdout is a terminal (line-buffered)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi stdout là terminal (đệm theo dòng) x xuất hiện mấy lần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Undefined"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Careful: \"x\" has no newline, so it is STILL in the buffer at fork time even on a terminal; both copies flush at the \"\\n\" → \"xy\" twice. Only fflush(stdout) before fork gives one x.</p><p><i>VI: Cẩn thận: “x” không có xuống dòng nên VẪN nằm trong bộ đệm lúc fork kể cả trên terminal; cả hai bản cùng đẩy ra ở “\\n” → “xy” hai lần. Chỉ fflush(stdout) trước fork mới ra một x.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which change guarantees exactly ONE x?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi nào đảm bảo CHỈ MỘT x?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Use exit(0) instead of return 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Call sleep(1) after fork()"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Call fflush(stdout) right after printf(\"x\")"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Call wait(NULL) after fork()"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Flushing empties the buffer BEFORE it is duplicated by fork().</p><p><i>VI: Đẩy bộ đệm ra TRƯỚC khi fork() nhân đôi nó.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What does wait(NULL) in the parent do?</p><p style=\"opacity:.75;font-size:.92em\"><i>wait(NULL) trong tiến trình cha làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Kills all children"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Waits until the parent is the only process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Returns immediately with the exit status"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Blocks until one child terminates and reaps it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>wait suspends the caller until a child exits and then frees the child’s PCB (no zombie).</p><p><i>VI: wait treo tiến trình gọi tới khi một con thoát rồi giải phóng PCB của con (không còn zombie).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking fork() duplicates only the CPU registers and not the user-space buffer."
+        },
+        {
+          "loi": "Believing wait() changes what the child prints."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stdio buffer",
+          "vi": "bộ đệm thư viện C ở không gian người dùng"
+        },
+        {
+          "en": "fflush",
+          "vi": "đẩy bộ đệm ra thiết bị"
+        }
+      ]
+    },
+    {
+      "title": "fork 5 — Order the life of the command “ls -l”",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "fork-exec-wait",
+        "shell"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Arrange the steps from the moment the shell reads the command until the prompt returns.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp các bước từ lúc shell đọc lệnh tới khi dấu nhắc quay lại.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Who creates whom first? fork comes before exec.",
+        "The shell prints the prompt only after wait() returns."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# fork 5 — Order the life of the command “ls -l”\n\nAnswer in the answer panel (no code needed).\n\n1. Life of a foreground commandVòng đời một lệnh chạy ở foreground\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# fork 5 — Order the life of the command “ls -l” — answer key\n\n1. Life of a foreground commandVòng đời một lệnh chạy ở foreground\n   Answer: s1) Shell reads the line \"ls -l\"  →  s2) Shell calls fork(): a child process is created  →  s3) Child calls exec(\"ls\", …): its image is replaced  →  s4) Parent shell calls wait() and blocks  →  s5) ls runs, prints the listing and calls exit(0)  →  s6) Kernel marks the child terminated and wakes the parent  →  s7) wait() returns the exit status; the shell prints the prompt\n   fork → exec (child) and wait (parent) → exit (child) → wake the parent → prompt. exec happens in the child, wait in the parent; the parent’s wait can start before or after the child’s exec, but both happen before the child exits.VI: fork → exec (con) và wait (cha) → exit (con) → đánh thức cha → dấu nhắc. exec ở tiến trình con, wait ở cha.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>read → fork → exec → wait → run+exit → mark terminated → prompt.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Life of a foreground command</p><p style=\"opacity:.75;font-size:.92em\"><i>Vòng đời một lệnh chạy ở foreground</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "Parent shell calls wait() and blocks"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "ls runs, prints the listing and calls exit(0)"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "Kernel marks the child terminated and wakes the parent"
+              },
+              {
+                "ma": "s7",
+                "noiDung": "wait() returns the exit status; the shell prints the prompt"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "Shell reads the line \"ls -l\""
+              },
+              {
+                "ma": "s2",
+                "noiDung": "Shell calls fork(): a child process is created"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "Child calls exec(\"ls\", …): its image is replaced"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6",
+              "s7"
+            ],
+            "giaiThich": "<p>fork → exec (child) and wait (parent) → exit (child) → wake the parent → prompt. exec happens in the child, wait in the parent; the parent’s wait can start before or after the child’s exec, but both happen before the child exits.</p><p><i>VI: fork → exec (con) và wait (cha) → exit (con) → đánh thức cha → dấu nhắc. exec ở tiến trình con, wait ở cha.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting exec before fork (the shell would be overwritten)."
+        },
+        {
+          "loi": "Placing wait() after exit() — wait blocks the parent until the child exits."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "foreground job",
+          "vi": "tiến trình chạy trước: shell đợi nó xong"
+        }
+      ]
+    },
+    {
+      "title": "fork 6 — Write a fork-tree counter",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "process tree",
+        "recursion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A tiny program is an array of statements: <code>{ op: 'fork' }</code> (an unconditional <code>fork()</code>), <code>{ op: 'forkIf', who: 'child' | 'parent', then: [ …statements ] }</code> (<code>if (fork() == 0) { then }</code> for <code>'child'</code>, <code>if (fork() != 0) { then }</code> for <code>'parent'</code>) and <code>{ op: 'print' }</code>. Statements after an <code>if</code> are executed by BOTH resulting processes.</p>\n<p>Write <code>processCount(prog)</code> (total processes at the end, counting the original) and <code>printCount(prog)</code> (total number of <code>print</code> executions over all processes).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Both functions must handle nested <code>forkIf</code> blocks.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một chương trình nhỏ là mảng lệnh: <code>{ op: 'fork' }</code> (<code>fork()</code> không điều kiện), <code>{ op: 'forkIf', who: 'child' | 'parent', then: [ …lệnh ] }</code> (<code>if (fork() == 0) { then }</code> với <code>'child'</code>, <code>if (fork() != 0) { then }</code> với <code>'parent'</code>) và <code>{ op: 'print' }</code>. Các lệnh SAU một <code>if</code> được CẢ HAI tiến trình thực hiện.</p>\n<p>Viết <code>processCount(prog)</code> (tổng số tiến trình cuối cùng, kể cả tiến trình gốc) và <code>printCount(prog)</code> (tổng số lần <code>print</code> trên mọi tiến trình).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cả hai hàm phải xử lý <code>forkIf</code> lồng nhau.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "processCount([{op:'forkIf', who:'child', then:[{op:'fork'}]}, {op:'print'}])",
+          "output": "3",
+          "explanation": "Parent stays 1; the child forks once more: 3 processes.|||Cha vẫn là 1; con fork thêm một lần: 3 tiến trình."
+        }
+      ],
+      "hintsJson": [
+        "Think recursively: processes(prog) = processes seen by the parent branch + by the child branch, each continuing with the REST of the statements.",
+        "For forkIf: the matching side runs then + rest, the other side runs only rest."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Write processCount(prog) and printCount(prog)\nfunction processCount(prog) {\n  return 0;\n}\nfunction printCount(prog) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Recursive counting: a fork duplicates the REST of the program.\nfunction processCount(prog) {\n  function dem(ls) {\n    if (!ls.length) return 1;\n    const s = ls[0]; const rest = ls.slice(1);\n    if (s.op === 'fork') return 2 * dem(rest);\n    if (s.op === 'forkIf') return dem((s.who === 'parent' ? s.then : []).concat(rest)) + dem((s.who === 'child' ? s.then : []).concat(rest));\n    return dem(rest);\n  }\n  return dem(prog);\n}\n\nfunction printCount(prog) {\n  function dem(ls) {\n    if (!ls.length) return 0;\n    const s = ls[0]; const rest = ls.slice(1);\n    if (s.op === 'print') return 1 + dem(rest);\n    if (s.op === 'fork') return 2 * dem(rest);\n    if (s.op === 'forkIf') return dem((s.who === 'parent' ? s.then : []).concat(rest)) + dem((s.who === 'child' ? s.then : []).concat(rest));\n    return dem(rest);\n  }\n  return dem(prog);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A process executing statements <code>ls</code> yields count(ls). For <code>fork</code> both continue with the rest, so 2·count(rest). For <code>forkIf</code> one side executes then + rest and the other only rest. <code>print</code> adds 1 per executing process.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: processCount([{\"op\":\"fork\"},{\"op\":\"fork\"},{\"op\":\"fork\"},{\"op\":\"print\"}])",
+              "vi": "Ca 1"
+            },
+            "goi": "processCount([{\"op\":\"fork\"},{\"op\":\"fork\"},{\"op\":\"fork\"},{\"op\":\"print\"}])",
+            "mongDoi": 8
+          },
+          {
+            "moTa": {
+              "en": "Case 2: processCount([{\"op\":\"forkIf\",\"who\":\"child\",\"then\":[{\"op\":\"fork\"}]},{\"op\":\"print\"}])",
+              "vi": "Ca 2"
+            },
+            "goi": "processCount([{\"op\":\"forkIf\",\"who\":\"child\",\"then\":[{\"op\":\"fork\"}]},{\"op\":\"print\"}])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Case 3: processCount([{\"op\":\"forkIf\",\"who\":\"parent\",\"then\":[{\"op\":\"fork\"}]},{\"op\":\"print\"}])",
+              "vi": "Ca 3"
+            },
+            "goi": "processCount([{\"op\":\"forkIf\",\"who\":\"parent\",\"then\":[{\"op\":\"fork\"}]},{\"op\":\"print\"}])",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Case 4: processCount([{\"op\":\"print\"},{\"op\":\"fork\"},{\"op\":\"print\"},{\"op\":\"fork\"},{\"op\":\"prin)",
+              "vi": "Ca 4"
+            },
+            "goi": "processCount([{\"op\":\"print\"},{\"op\":\"fork\"},{\"op\":\"print\"},{\"op\":\"fork\"},{\"op\":\"print\"}])",
+            "mongDoi": 4
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "processCount([{\"op\":\"forkIf\",\"who\":\"child\",\"then\":[{\"op\":\"forkIf\",\"who\":\"child\",\"then\":[{\"op\":\"fork\"}]},{\"op\":\"print\"}]},{\"op\":\"fork\"}])",
+            "mongDoi": 8,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "processCount([])",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "printCount, program 1",
+              "vi": "printCount, chương trình 1"
+            },
+            "goi": "printCount([{\"op\":\"fork\"},{\"op\":\"print\"},{\"op\":\"fork\"},{\"op\":\"print\"}])",
+            "mongDoi": 6
+          },
+          {
+            "moTa": {
+              "en": "printCount, program 2",
+              "vi": "printCount, chương trình 2"
+            },
+            "goi": "printCount([{\"op\":\"forkIf\",\"who\":\"child\",\"then\":[{\"op\":\"fork\"},{\"op\":\"print\"}]},{\"op\":\"print\"}])",
+            "mongDoi": 5
+          },
+          {
+            "moTa": {
+              "en": "printCount, program 3",
+              "vi": "printCount, chương trình 3"
+            },
+            "goi": "printCount([{\"op\":\"print\"},{\"op\":\"forkIf\",\"who\":\"parent\",\"then\":[{\"op\":\"forkIf\",\"who\":\"parent\",\"then\":[{\"op\":\"fork\"}]}]},{\"op\":\"print\"}])",
+            "mongDoi": 5,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that the statements after an if are executed by both processes."
+        },
+        {
+          "loi": "Counting a nested then-block once even though the process that enters it may be duplicated later."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

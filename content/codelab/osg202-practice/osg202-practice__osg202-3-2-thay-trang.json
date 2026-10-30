@@ -838,10 +838,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Replacement 6 — NRU, aging, working set: which is which? — answer key\n\n1. Why is true LRU rarely implemented exactly?Vì sao LRU chính xác hiếm khi được cài đặt?\n   Answer: b) It needs a list/timestamp updated on EVERY memory reference\n   Hardware support at every access is too expensive, so OSes approximate LRU (Clock, aging, NRU).VI: Hỗ trợ phần cứng ở mọi lần truy cập quá đắt nên OS dùng xấp xỉ LRU (Clock, aging, NRU).\n\n2. Why can OPT not be implemented in a real OS?Vì sao OS thật không cài được OPT?\n   Answer: a) It requires knowing future references\n   OPT is the benchmark that other algorithms are compared with.VI: OPT là chuẩn để so sánh các thuật toán khác.\n\n3. NRU puts pages in four classes by (R, M). Which class is evicted first?NRU chia trang thành bốn lớp theo (R, M). Lớp nào bị đuổi trước?\n   Answer: b) R = 0, M = 0 (not referenced, not modified)\n   The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 2 (R=0, M=1) is better to evict than class 1 (R=1, M=0).VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).\n\n4. Demand paging means …Phân trang theo yêu cầu (demand paging) nghĩa là …\n   Answer: b) a page is brought into memory only when it is referenced\n   Pages are loaded lazily on the first access (page fault).VI: Trang được nạp muộn ở lần truy cập đầu (lỗi trang).\n\n5. Local replacement (per-process) versus global replacement: which is TRUE?Thay trang cục bộ (theo tiến trình) so với toàn cục: phát biểu nào ĐÚNG?\n   Answer: a) Local isolates a process: it cannot steal frames from others, but it may leave frames idle\n   Global replacement adapts better to changing needs, but a faulting process can steal frames and spread thrashing.VI: Thay toàn cục thích nghi tốt hơn nhưng một tiến trình lỗi nhiều có thể “cướp” khung và lan thrashing.\n"
+          "code": "# Replacement 6 — NRU, aging, working set: which is which? — answer key\n\n1. Why is true LRU rarely implemented exactly?Vì sao LRU chính xác hiếm khi được cài đặt?\n   Answer: b) It needs a list/timestamp updated on EVERY memory reference\n   Hardware support at every access is too expensive, so OSes approximate LRU (Clock, aging, NRU).VI: Hỗ trợ phần cứng ở mọi lần truy cập quá đắt nên OS dùng xấp xỉ LRU (Clock, aging, NRU).\n\n2. Why can OPT not be implemented in a real OS?Vì sao OS thật không cài được OPT?\n   Answer: d) It requires knowing future references\n   OPT is the benchmark that other algorithms are compared with.VI: OPT là chuẩn để so sánh các thuật toán khác.\n\n3. NRU puts pages in four classes by (R, M). Which class is evicted first?NRU chia trang thành bốn lớp theo (R, M). Lớp nào bị đuổi trước?\n   Answer: b) R = 0, M = 0 (not referenced, not modified)\n   The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 1 (R=0, M=1) is evicted before class 2 (R=1, M=0).VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).\n\n4. Demand paging means …Phân trang theo yêu cầu (demand paging) nghĩa là …\n   Answer: c) a page is loaded only when it is referenced\n   Pages are loaded lazily on the first access (page fault).VI: Trang được nạp muộn ở lần truy cập đầu (lỗi trang).\n\n5. Local replacement (per-process) versus global replacement: which is TRUE?Thay trang cục bộ (theo tiến trình) so với toàn cục: phát biểu nào ĐÚNG?\n   Answer: b) Local isolates a process: it cannot steal frames from others\n   Global replacement adapts better to changing needs, but a faulting process can steal frames and spread thrashing.VI: Thay toàn cục thích nghi tốt hơn nhưng một tiến trình lỗi nhiều có thể “cướp” khung và lan thrashing.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It needs a list/timestamp updated on EVERY memory reference</p><p>Hardware support at every access is too expensive, so OSes approximate LRU (Clock, aging, NRU).</p><p><i>VI: Hỗ trợ phần cứng ở mọi lần truy cập quá đắt nên OS dùng xấp xỉ LRU (Clock, aging, NRU).</i></p></li><li><p><b>a)</b> It requires knowing future references</p><p>OPT is the benchmark that other algorithms are compared with.</p><p><i>VI: OPT là chuẩn để so sánh các thuật toán khác.</i></p></li><li><p><b>b)</b> R = 0, M = 0 (not referenced, not modified)</p><p>The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 2 (R=0, M=1) is better to evict than class 1 (R=1, M=0).</p><p><i>VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).</i></p></li><li><p><b>b)</b> a page is brought into memory only when it is referenced</p><p>Pages are loaded lazily on the first access (page fault).</p><p><i>VI: Trang được nạp muộn ở lần truy cập đầu (lỗi trang).</i></p></li><li><p><b>a)</b> Local isolates a process: it cannot steal frames from others, but it may leave frames idle</p><p>Global replacement adapts better to changing needs, but a faulting process can steal frames and spread thrashing.</p><p><i>VI: Thay toàn cục thích nghi tốt hơn nhưng một tiến trình lỗi nhiều có thể “cướp” khung và lan thrashing.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It needs a list/timestamp updated on EVERY memory reference</p><p>Hardware support at every access is too expensive, so OSes approximate LRU (Clock, aging, NRU).</p><p><i>VI: Hỗ trợ phần cứng ở mọi lần truy cập quá đắt nên OS dùng xấp xỉ LRU (Clock, aging, NRU).</i></p></li><li><p><b>d)</b> It requires knowing future references</p><p>OPT is the benchmark that other algorithms are compared with.</p><p><i>VI: OPT là chuẩn để so sánh các thuật toán khác.</i></p></li><li><p><b>b)</b> R = 0, M = 0 (not referenced, not modified)</p><p>The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 1 (R=0, M=1) is evicted before class 2 (R=1, M=0).</p><p><i>VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).</i></p></li><li><p><b>c)</b> a page is loaded only when it is referenced</p><p>Pages are loaded lazily on the first access (page fault).</p><p><i>VI: Trang được nạp muộn ở lần truy cập đầu (lỗi trang).</i></p></li><li><p><b>b)</b> Local isolates a process: it cannot steal frames from others</p><p>Global replacement adapts better to changing needs, but a faulting process can steal frames and spread thrashing.</p><p><i>VI: Thay toàn cục thích nghi tốt hơn nhưng một tiến trình lỗi nhiều có thể “cướp” khung và lan thrashing.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -880,11 +880,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It requires knowing future references"
+                "noiDung": "It needs a TLB larger than physical memory"
               },
               {
                 "ma": "b",
-                "noiDung": "It is too slow"
+                "noiDung": "It is too slow to run on every fault"
               },
               {
                 "ma": "c",
@@ -892,11 +892,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "It needs a TLB"
+                "noiDung": "It requires knowing future references"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>OPT is the benchmark that other algorithms are compared with.</p><p><i>VI: OPT là chuẩn để so sánh các thuật toán khác.</i></p>"
           },
@@ -924,7 +924,7 @@
             "dapAn": [
               "b"
             ],
-            "giaiThich": "<p>The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 2 (R=0, M=1) is better to evict than class 1 (R=1, M=0).</p><p><i>VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).</i></p>"
+            "giaiThich": "<p>The ideal victim is unused and clean: no write-back needed and unlikely to be used soon. Class 1 (R=0, M=1) is evicted before class 2 (R=1, M=0).</p><p><i>VI: Nạn nhân lý tưởng là không dùng và sạch: không cần ghi lại và ít khả năng dùng sớm. Lớp (R=0, M=1) bị đuổi trước lớp (R=1, M=0).</i></p>"
           },
           {
             "ma": "c4",
@@ -932,23 +932,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "all pages of a process are loaded at start-up"
+                "noiDung": "pages are never swapped out once they are loaded"
               },
               {
                 "ma": "b",
-                "noiDung": "a page is brought into memory only when it is referenced"
+                "noiDung": "all pages of a process are loaded at start-up"
               },
               {
                 "ma": "c",
-                "noiDung": "pages are never swapped out"
+                "noiDung": "a page is loaded only when it is referenced"
               },
               {
                 "ma": "d",
-                "noiDung": "the page size grows on demand"
+                "noiDung": "the page size grows when a process needs more"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Pages are loaded lazily on the first access (page fault).</p><p><i>VI: Trang được nạp muộn ở lần truy cập đầu (lỗi trang).</i></p>"
           },
@@ -958,15 +958,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Local isolates a process: it cannot steal frames from others, but it may leave frames idle"
+                "noiDung": "Local needs no page table, because frames stay private"
               },
               {
                 "ma": "b",
-                "noiDung": "Global can never cause thrashing"
+                "noiDung": "Local isolates a process: it cannot steal frames from others"
               },
               {
                 "ma": "c",
-                "noiDung": "Local needs no page table"
+                "noiDung": "Global can never cause thrashing, even under heavy load"
               },
               {
                 "ma": "d",
@@ -974,7 +974,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Global replacement adapts better to changing needs, but a faulting process can steal frames and spread thrashing.</p><p><i>VI: Thay toàn cục thích nghi tốt hơn nhưng một tiến trình lỗi nhiều có thể “cướp” khung và lan thrashing.</i></p>"
           }

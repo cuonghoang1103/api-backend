@@ -280,10 +280,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Classical IPC 3 — Readers–writers and the philosophers (concepts) — answer key\n\n1. In the classic readers–writers solution (reader preference) which process can starve?Trong lời giải readers–writers kinh điển (ưu tiên người đọc), tiến trình nào có thể bị đói?\n   Answer: b) A writer, if readers keep arriving\n   As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.\n\n2. How many readers may read the same file at the same time?Có thể có bao nhiêu reader đọc cùng một tệp đồng thời?\n   Answer: b) Any number\n   Reading does not change data, so readers share; only a writer needs exclusive access.VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.\n\n3. Five philosophers each pick up the LEFT fork first, then the right fork. What can happen?Năm triết gia mỗi người cầm đũa TRÁI trước rồi mới đũa phải. Điều gì có thể xảy ra?\n   Answer: a) Deadlock: everybody holds the left fork and waits for the right one\n   If all five take the left fork at the same moment, a circular wait exists.VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.\n\n4. Which fix does NOT remove the deadlock of the naive philosophers?Cách sửa nào KHÔNG loại bỏ được deadlock của triết gia ngây thơ?\n   Answer: d) Add a 1-second sleep between taking the left and the right fork\n   A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.\n\n5. A solution in which a philosopher puts the left fork down and retries when the right fork is busy risks …Giải pháp mà triết gia đặt đũa trái xuống và thử lại khi đũa phải bận có nguy cơ …\n   Answer: a) Livelock / starvation: everybody keeps retrying in lockstep\n   Processes are active but make no progress: livelock, a form of starvation.VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.\n"
+          "code": "# Classical IPC 3 — Readers–writers and the philosophers (concepts) — answer key\n\n1. In the classic readers–writers solution (reader preference) which process can starve?Trong lời giải readers–writers kinh điển (ưu tiên người đọc), tiến trình nào có thể bị đói?\n   Answer: b) A writer, if readers keep arriving\n   As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.\n\n2. How many readers may read the same file at the same time?Có thể có bao nhiêu reader đọc cùng một tệp đồng thời?\n   Answer: b) Any number\n   Reading does not change data, so readers share; only a writer needs exclusive access.VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.\n\n3. Five philosophers each pick up the LEFT fork first, then the right fork. What can happen?Năm triết gia mỗi người cầm đũa TRÁI trước rồi mới đũa phải. Điều gì có thể xảy ra?\n   Answer: b) Deadlock: everybody holds one fork and waits for the other\n   If all five take the left fork at the same moment, a circular wait exists.VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.\n\n4. Which fix does NOT remove the deadlock of the naive philosophers?Cách sửa nào KHÔNG loại bỏ được deadlock của triết gia ngây thơ?\n   Answer: c) Add a 1-second sleep between the left and the right fork\n   A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.\n\n5. A solution in which a philosopher puts the left fork down and retries when the right fork is busy risks …Giải pháp mà triết gia đặt đũa trái xuống và thử lại khi đũa phải bận có nguy cơ …\n   Answer: a) Livelock / starvation: everybody keeps retrying in lockstep\n   Processes are active but make no progress: livelock, a form of starvation.VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A writer, if readers keep arriving</p><p>As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.</p><p><i>VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.</i></p></li><li><p><b>b)</b> Any number</p><p>Reading does not change data, so readers share; only a writer needs exclusive access.</p><p><i>VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.</i></p></li><li><p><b>a)</b> Deadlock: everybody holds the left fork and waits for the right one</p><p>If all five take the left fork at the same moment, a circular wait exists.</p><p><i>VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.</i></p></li><li><p><b>d)</b> Add a 1-second sleep between taking the left and the right fork</p><p>A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.</p><p><i>VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.</i></p></li><li><p><b>a)</b> Livelock / starvation: everybody keeps retrying in lockstep</p><p>Processes are active but make no progress: livelock, a form of starvation.</p><p><i>VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A writer, if readers keep arriving</p><p>As long as at least one reader is inside, the db lock is held by the reader group and the writer waits; a steady stream of readers keeps it out.</p><p><i>VI: Chừng nào còn ít nhất một reader bên trong, khoá db do nhóm reader giữ và writer phải chờ; reader đến liên tục sẽ chặn writer mãi.</i></p></li><li><p><b>b)</b> Any number</p><p>Reading does not change data, so readers share; only a writer needs exclusive access.</p><p><i>VI: Đọc không đổi dữ liệu nên reader dùng chung; chỉ writer cần độc quyền.</i></p></li><li><p><b>b)</b> Deadlock: everybody holds one fork and waits for the other</p><p>If all five take the left fork at the same moment, a circular wait exists.</p><p><i>VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.</i></p></li><li><p><b>c)</b> Add a 1-second sleep between the left and the right fork</p><p>A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.</p><p><i>VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.</i></p></li><li><p><b>a)</b> Livelock / starvation: everybody keeps retrying in lockstep</p><p>Processes are active but make no progress: livelock, a form of starvation.</p><p><i>VI: Các tiến trình vẫn chạy nhưng không tiến triển: livelock, một dạng đói.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -348,11 +348,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Deadlock: everybody holds the left fork and waits for the right one"
+                "noiDung": "A race condition: two philosophers hold the same fork"
               },
               {
                 "ma": "b",
-                "noiDung": "Only starvation: one philosopher eats again and again"
+                "noiDung": "Deadlock: everybody holds one fork and waits for the other"
               },
               {
                 "ma": "c",
@@ -360,11 +360,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "A race condition: two philosophers hold the same fork"
+                "noiDung": "Only starvation: one philosopher eats again and again"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>If all five take the left fork at the same moment, a circular wait exists.</p><p><i>VI: Nếu cả năm cùng cầm đũa trái, tồn tại chờ vòng tròn.</i></p>"
           },
@@ -378,19 +378,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Number the forks and always take the lower number first"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Take both forks atomically under a mutex"
               },
               {
+                "ma": "c",
+                "noiDung": "Add a 1-second sleep between the left and the right fork"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Add a 1-second sleep between taking the left and the right fork"
+                "noiDung": "Number the forks and always take the lower number first"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>A delay only changes timing; the circular wait can still form. The 4-seat limit and the fork numbering break circular wait; taking both forks atomically breaks hold-and-wait.</p><p><i>VI: Chờ thêm chỉ đổi thời điểm; chờ vòng vẫn có thể hình thành. Giới hạn 4 chỗ ngồi và đánh số đũa phá chờ vòng; lấy cả hai đũa nguyên tử phá giữ-và-chờ.</i></p>"
           },

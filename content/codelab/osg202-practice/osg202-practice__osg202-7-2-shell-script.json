@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Shell 1 — Variables, quoting and special parameters — answer key\n\n1. x=hello; echo '$x' \"$x\" prints …x=hello; echo '$x' \"$x\" in ra …\n   Answer: c) $x hello\n   Single quotes block all expansion; double quotes still expand variables.VI: Nháy đơn chặn mọi khai triển; nháy kép vẫn khai triển biến.\n\n2. What is $??$? là gì?\n   Answer: d) The exit status of the last command (0 = success)\n   $$ is the PID, $# the argument count, $@ the arguments.VI: $$ là PID, $# số đối số, $@ các đối số.\n\n3. Why write \"$@\" instead of $* when passing arguments on?Vì sao nên viết \"$@\" thay vì $* khi chuyển tiếp đối số?\n   Answer: b) \"$@\" keeps each argument as one word, even if it contains spaces\n   Unquoted $* is re-split on whitespace: “b c” becomes two words.VI: $* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.\n\n4. What does ${f%.*} do for f=report.tar.gz?${f%.*} làm gì với f=report.tar.gz?\n   Answer: a) Removes the shortest suffix matching .* → report.tar\n   % = shortest suffix, %% = longest suffix; # and ## do the same for prefixes.VI: % = hậu tố ngắn nhất, %% = dài nhất; # và ## làm vậy cho tiền tố.\n\n5. The first line #!/bin/bash of a script is called …Dòng đầu #!/bin/bash của script gọi là …\n   Answer: d) the shebang: it names the interpreter the kernel runs\n   exec of a file starting with #! makes the kernel start the named interpreter with the script path.VI: exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.\n"
+          "code": "# Shell 1 — Variables, quoting and special parameters — answer key\n\n1. x=hello; echo '$x' \"$x\" prints …x=hello; echo '$x' \"$x\" in ra …\n   Answer: c) $x hello\n   Single quotes block all expansion; double quotes still expand variables.VI: Nháy đơn chặn mọi khai triển; nháy kép vẫn khai triển biến.\n\n2. What is $??$? là gì?\n   Answer: d) The exit status of the last command (0 = success)\n   $$ is the PID, $# the argument count, $@ the arguments.VI: $$ là PID, $# số đối số, $@ các đối số.\n\n3. Why write \"$@\" instead of $* when passing arguments on?Vì sao nên viết \"$@\" thay vì $* khi chuyển tiếp đối số?\n   Answer: d) \"$@\" keeps each argument as one word, even with spaces\n   Unquoted $* is re-split on whitespace: “b c” becomes two words.VI: $* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.\n\n4. What does ${f%.*} do for f=report.tar.gz?${f%.*} làm gì với f=report.tar.gz?\n   Answer: a) Removes the shortest suffix matching .* → report.tar\n   % = shortest suffix, %% = longest suffix; # and ## do the same for prefixes.VI: % = hậu tố ngắn nhất, %% = dài nhất; # và ## làm vậy cho tiền tố.\n\n5. The first line #!/bin/bash of a script is called …Dòng đầu #!/bin/bash của script gọi là …\n   Answer: c) the shebang, which names the interpreter\n   exec of a file starting with #! makes the kernel start the named interpreter with the script path.VI: exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> $x hello</p><p>Single quotes block all expansion; double quotes still expand variables.</p><p><i>VI: Nháy đơn chặn mọi khai triển; nháy kép vẫn khai triển biến.</i></p></li><li><p><b>d)</b> The exit status of the last command (0 = success)</p><p>$$ is the PID, $# the argument count, $@ the arguments.</p><p><i>VI: $$ là PID, $# số đối số, $@ các đối số.</i></p></li><li><p><b>b)</b> \"$@\" keeps each argument as one word, even if it contains spaces</p><p>Unquoted $* is re-split on whitespace: “b c” becomes two words.</p><p><i>VI: $* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.</i></p></li><li><p><b>a)</b> Removes the shortest suffix matching .* → report.tar</p><p>% = shortest suffix, %% = longest suffix; # and ## do the same for prefixes.</p><p><i>VI: % = hậu tố ngắn nhất, %% = dài nhất; # và ## làm vậy cho tiền tố.</i></p></li><li><p><b>d)</b> the shebang: it names the interpreter the kernel runs</p><p>exec of a file starting with #! makes the kernel start the named interpreter with the script path.</p><p><i>VI: exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> $x hello</p><p>Single quotes block all expansion; double quotes still expand variables.</p><p><i>VI: Nháy đơn chặn mọi khai triển; nháy kép vẫn khai triển biến.</i></p></li><li><p><b>d)</b> The exit status of the last command (0 = success)</p><p>$$ is the PID, $# the argument count, $@ the arguments.</p><p><i>VI: $$ là PID, $# số đối số, $@ các đối số.</i></p></li><li><p><b>d)</b> \"$@\" keeps each argument as one word, even with spaces</p><p>Unquoted $* is re-split on whitespace: “b c” becomes two words.</p><p><i>VI: $* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.</i></p></li><li><p><b>a)</b> Removes the shortest suffix matching .* → report.tar</p><p>% = shortest suffix, %% = longest suffix; # and ## do the same for prefixes.</p><p><i>VI: % = hậu tố ngắn nhất, %% = dài nhất; # và ## làm vậy cho tiền tố.</i></p></li><li><p><b>c)</b> the shebang, which names the interpreter</p><p>exec of a file starting with #! makes the kernel start the named interpreter with the script path.</p><p><i>VI: exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "$* is not valid in bash, only in the old Bourne shell"
+                "noiDung": "\"$@\" sorts the arguments before passing them on"
               },
               {
                 "ma": "b",
-                "noiDung": "\"$@\" keeps each argument as one word, even if it contains spaces"
-              },
-              {
-                "ma": "c",
                 "noiDung": "$* is slower, because it starts one subshell per word"
               },
               {
+                "ma": "c",
+                "noiDung": "$* is not valid in bash, only in the old Bourne shell"
+              },
+              {
                 "ma": "d",
-                "noiDung": "\"$@\" sorts the arguments before passing them on"
+                "noiDung": "\"$@\" keeps each argument as one word, even with spaces"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Unquoted $* is re-split on whitespace: “b c” becomes two words.</p><p><i>VI: $* không nháy bị tách lại theo khoảng trắng: “b c” thành hai từ.</i></p>"
           },
@@ -146,15 +146,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Removes the longest suffix → report"
+                "noiDung": "Removes the longest suffix matching .* → report"
               },
               {
                 "ma": "c",
-                "noiDung": "Removes the prefix"
+                "noiDung": "Removes the shortest prefix matching *. → tar.gz"
               },
               {
                 "ma": "d",
-                "noiDung": "Returns gz"
+                "noiDung": "Keeps only the last extension → gz"
               }
             ],
             "dapAn": [
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the exit code"
+                "noiDung": "a variable assignment for bash"
               },
               {
                 "ma": "b",
-                "noiDung": "a variable assignment"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a comment that is ignored by everything"
               },
               {
+                "ma": "c",
+                "noiDung": "the shebang, which names the interpreter"
+              },
+              {
                 "ma": "d",
-                "noiDung": "the shebang: it names the interpreter the kernel runs"
+                "noiDung": "the exit code of the script"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>exec of a file starting with #! makes the kernel start the named interpreter with the script path.</p><p><i>VI: exec một tệp bắt đầu bằng #! làm kernel chạy trình thông dịch được nêu với đường dẫn script.</i></p>"
           }
@@ -720,10 +720,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Shell 5 — Subshells, pipelines, jobs and trap — answer key\n\n1. x=1; (x=2); echo $x prints …x=1; (x=2); echo $x in ra …\n   Answer: b) 1\n   Parentheses run a subshell (a forked child): its variables disappear when it exits.VI: Dấu ngoặc chạy subshell (tiến trình con): biến của nó mất khi nó thoát.\n\n2. cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt prints …cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt in ra …\n   Answer: a) 0 (in bash: the loop ran in a subshell)\n   Each stage of a pipeline is a separate process; the counter changed in the child only. Use process substitution or a here-string to keep it in the parent.VI: Mỗi tầng của pipeline là một tiến trình riêng; biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.\n\n3. What does $$ contain?$$ chứa gì?\n   Answer: d) The PID of the current shell\n   $! is the last background job.VI: $! là công việc nền cuối cùng.\n\n4. A script runs a long job in the background with cmd & and later needs its result. Which builtin waits for it?Script chạy công việc dài ở nền bằng cmd & và cần kết quả sau đó. Lệnh dựng sẵn nào chờ nó?\n   Answer: d) wait\n   wait blocks until the background children finish and returns their status.VI: wait chặn tới khi các tiến trình con nền xong và trả mã thoát của chúng.\n\n5. trap 'rm -f /tmp/lock' EXIT in a script …trap 'rm -f /tmp/lock' EXIT trong script …\n   Answer: c) runs the cleanup command whenever the script exits\n   trap installs a handler; EXIT fires on any exit (but not on SIGKILL, which cannot be caught).VI: trap cài trình xử lý; EXIT chạy ở mọi lần thoát (trừ SIGKILL không bắt được).\n"
+          "code": "# Shell 5 — Subshells, pipelines, jobs and trap — answer key\n\n1. x=1; (x=2); echo $x prints …x=1; (x=2); echo $x in ra …\n   Answer: b) 1\n   Parentheses run a subshell (a forked child): its variables disappear when it exits.VI: Dấu ngoặc chạy subshell (tiến trình con): biến của nó mất khi nó thoát.\n\n2. cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt prints …cnt=0; echo a | while read l; do cnt=$((cnt+1)); done; echo $cnt in ra …\n   Answer: b) 0\n   In bash each stage of a pipeline is a separate process, so the loop runs in a subshell and the counter changes in the child only. Use process substitution or a here-string to keep it in the parent.VI: Trong bash mỗi tầng của pipeline là một tiến trình riêng, nên vòng lặp chạy trong subshell và biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.\n\n3. What does $$ contain?$$ chứa gì?\n   Answer: d) The PID of the current shell\n   $! is the last background job.VI: $! là công việc nền cuối cùng.\n\n4. A script runs a long job in the background with cmd & and later needs its result. Which builtin waits for it?Script chạy công việc dài ở nền bằng cmd & và cần kết quả sau đó. Lệnh dựng sẵn nào chờ nó?\n   Answer: d) wait\n   wait blocks until the background children finish and returns their status.VI: wait chặn tới khi các tiến trình con nền xong và trả mã thoát của chúng.\n\n5. trap 'rm -f /tmp/lock' EXIT in a script …trap 'rm -f /tmp/lock' EXIT trong script …\n   Answer: d) runs the cleanup command whenever the script exits\n   trap installs a handler; EXIT fires on any exit (but not on SIGKILL, which cannot be caught).VI: trap cài trình xử lý; EXIT chạy ở mọi lần thoát (trừ SIGKILL không bắt được).\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 1</p><p>Parentheses run a subshell (a forked child): its variables disappear when it exits.</p><p><i>VI: Dấu ngoặc chạy subshell (tiến trình con): biến của nó mất khi nó thoát.</i></p></li><li><p><b>a)</b> 0 (in bash: the loop ran in a subshell)</p><p>Each stage of a pipeline is a separate process; the counter changed in the child only. Use process substitution or a here-string to keep it in the parent.</p><p><i>VI: Mỗi tầng của pipeline là một tiến trình riêng; biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.</i></p></li><li><p><b>d)</b> The PID of the current shell</p><p>$! is the last background job.</p><p><i>VI: $! là công việc nền cuối cùng.</i></p></li><li><p><b>d)</b> wait</p><p>wait blocks until the background children finish and returns their status.</p><p><i>VI: wait chặn tới khi các tiến trình con nền xong và trả mã thoát của chúng.</i></p></li><li><p><b>c)</b> runs the cleanup command whenever the script exits</p><p>trap installs a handler; EXIT fires on any exit (but not on SIGKILL, which cannot be caught).</p><p><i>VI: trap cài trình xử lý; EXIT chạy ở mọi lần thoát (trừ SIGKILL không bắt được).</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 1</p><p>Parentheses run a subshell (a forked child): its variables disappear when it exits.</p><p><i>VI: Dấu ngoặc chạy subshell (tiến trình con): biến của nó mất khi nó thoát.</i></p></li><li><p><b>b)</b> 0</p><p>In bash each stage of a pipeline is a separate process, so the loop runs in a subshell and the counter changes in the child only. Use process substitution or a here-string to keep it in the parent.</p><p><i>VI: Trong bash mỗi tầng của pipeline là một tiến trình riêng, nên vòng lặp chạy trong subshell và biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.</i></p></li><li><p><b>d)</b> The PID of the current shell</p><p>$! is the last background job.</p><p><i>VI: $! là công việc nền cuối cùng.</i></p></li><li><p><b>d)</b> wait</p><p>wait blocks until the background children finish and returns their status.</p><p><i>VI: wait chặn tới khi các tiến trình con nền xong và trả mã thoát của chúng.</i></p></li><li><p><b>d)</b> runs the cleanup command whenever the script exits</p><p>trap installs a handler; EXIT fires on any exit (but not on SIGKILL, which cannot be caught).</p><p><i>VI: trap cài trình xử lý; EXIT chạy ở mọi lần thoát (trừ SIGKILL không bắt được).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -762,25 +762,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "0 (in bash: the loop ran in a subshell)"
+                "noiDung": "a"
               },
               {
                 "ma": "b",
-                "noiDung": "2"
+                "noiDung": "0"
               },
               {
                 "ma": "c",
-                "noiDung": "1"
+                "noiDung": "2"
               },
               {
                 "ma": "d",
-                "noiDung": "a"
+                "noiDung": "1"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
-            "giaiThich": "<p>Each stage of a pipeline is a separate process; the counter changed in the child only. Use process substitution or a here-string to keep it in the parent.</p><p><i>VI: Mỗi tầng của pipeline là một tiến trình riêng; biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.</i></p>"
+            "giaiThich": "<p>In bash each stage of a pipeline is a separate process, so the loop runs in a subshell and the counter changes in the child only. Use process substitution or a here-string to keep it in the parent.</p><p><i>VI: Trong bash mỗi tầng của pipeline là một tiến trình riêng, nên vòng lặp chạy trong subshell và biến đếm chỉ đổi ở tiến trình con. Dùng process substitution hoặc here-string để giữ ở tiến trình cha.</i></p>"
           },
           {
             "ma": "c3",
@@ -840,23 +840,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "prevents the script from exiting"
+                "noiDung": "runs the cleanup command only on SIGKILL"
               },
               {
                 "ma": "b",
-                "noiDung": "kills the script"
+                "noiDung": "prevents the script from exiting until the lock is gone"
               },
               {
                 "ma": "c",
-                "noiDung": "runs the cleanup command whenever the script exits"
+                "noiDung": "kills the script as soon as the lock file is removed"
               },
               {
                 "ma": "d",
-                "noiDung": "runs it only on SIGKILL"
+                "noiDung": "runs the cleanup command whenever the script exits"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>trap installs a handler; EXIT fires on any exit (but not on SIGKILL, which cannot be caught).</p><p><i>VI: trap cài trình xử lý; EXIT chạy ở mọi lần thoát (trừ SIGKILL không bắt được).</i></p>"
           }

@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Kernel 1 — Kernel mode, user mode and the role of the OS — answer key\n\n1. Which description of the operating system is most accurate?Mô tả nào về hệ điều hành chính xác nhất?\n   Answer: c) It is both an extended machine (nice abstractions) and a resource manager (CPU, memory, devices)\n   Tanenbaum’s two views: top-down (abstraction) and bottom-up (resource management).VI: Hai góc nhìn của Tanenbaum: từ trên xuống (trừu tượng hoá) và từ dưới lên (quản lý tài nguyên).\n\n2. Why does the CPU have a user mode and a kernel mode?Vì sao CPU có chế độ người dùng và chế độ kernel?\n   Answer: b) So that only the OS can execute privileged instructions and a faulty program cannot take over the machine\n   Privileged instructions (I/O, interrupt masks, page-table registers) trap if executed in user mode.VI: Lệnh đặc quyền (I/O, mặt nạ ngắt, thanh ghi bảng trang) gây trap nếu chạy ở chế độ người dùng.\n\n3. A user program executes a privileged instruction in user mode. What happens?Chương trình người dùng chạy lệnh đặc quyền ở chế độ người dùng. Điều gì xảy ra?\n   Answer: a) The CPU raises an exception (trap) and the OS usually kills the process\n   The trap hands control to the kernel, which decides the consequence.VI: Trap chuyển quyền cho kernel, kernel quyết định hậu quả.\n\n4. Which component is NOT part of the kernel in a monolithic design like Linux?Thành phần nào KHÔNG thuộc kernel trong thiết kế nguyên khối như Linux?\n   Answer: a) The shell (command interpreter)\n   The shell is an ordinary user program that happens to start other programs.VI: Shell là chương trình người dùng bình thường dùng để khởi động chương trình khác.\n\n5. A microkernel differs from a monolithic kernel in that …Microkernel khác kernel nguyên khối ở chỗ …\n   Answer: c) only the minimum (IPC, scheduling, basic memory) runs in kernel mode; drivers and file systems run as user processes\n   Better isolation and reliability, at the cost of more message passing.VI: Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.\n"
+          "code": "# Kernel 1 — Kernel mode, user mode and the role of the OS — answer key\n\n1. Which description of the operating system is most accurate?Mô tả nào về hệ điều hành chính xác nhất?\n   Answer: a) It is both an extended machine and a resource manager for CPU, memory and devices\n   Tanenbaum’s two views: top-down (abstraction) and bottom-up (resource management).VI: Hai góc nhìn của Tanenbaum: từ trên xuống (trừu tượng hoá) và từ dưới lên (quản lý tài nguyên).\n\n2. Why does the CPU have a user mode and a kernel mode?Vì sao CPU có chế độ người dùng và chế độ kernel?\n   Answer: d) So that only the OS can execute privileged instructions, stopping a faulty program\n   Privileged instructions (I/O, interrupt masks, page-table registers) trap if executed in user mode.VI: Lệnh đặc quyền (I/O, mặt nạ ngắt, thanh ghi bảng trang) gây trap nếu chạy ở chế độ người dùng.\n\n3. A user program executes a privileged instruction in user mode. What happens?Chương trình người dùng chạy lệnh đặc quyền ở chế độ người dùng. Điều gì xảy ra?\n   Answer: d) The CPU raises a trap and the OS usually kills the process\n   The trap hands control to the kernel, which decides the consequence.VI: Trap chuyển quyền cho kernel, kernel quyết định hậu quả.\n\n4. Which component is NOT part of the kernel in a monolithic design like Linux?Thành phần nào KHÔNG thuộc kernel trong thiết kế nguyên khối như Linux?\n   Answer: a) The command shell\n   The shell is an ordinary user program that happens to start other programs.VI: Shell là chương trình người dùng bình thường dùng để khởi động chương trình khác.\n\n5. A microkernel differs from a monolithic kernel in that …Microkernel khác kernel nguyên khối ở chỗ …\n   Answer: b) only the minimum runs in kernel mode; drivers and file systems run as user processes\n   The kernel keeps only IPC, scheduling and basic memory management. Better isolation and reliability, at the cost of more message passing.VI: Kernel chỉ giữ IPC, lập lịch và quản lý bộ nhớ cơ bản. Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> It is both an extended machine (nice abstractions) and a resource manager (CPU, memory, devices)</p><p>Tanenbaum’s two views: top-down (abstraction) and bottom-up (resource management).</p><p><i>VI: Hai góc nhìn của Tanenbaum: từ trên xuống (trừu tượng hoá) và từ dưới lên (quản lý tài nguyên).</i></p></li><li><p><b>b)</b> So that only the OS can execute privileged instructions and a faulty program cannot take over the machine</p><p>Privileged instructions (I/O, interrupt masks, page-table registers) trap if executed in user mode.</p><p><i>VI: Lệnh đặc quyền (I/O, mặt nạ ngắt, thanh ghi bảng trang) gây trap nếu chạy ở chế độ người dùng.</i></p></li><li><p><b>a)</b> The CPU raises an exception (trap) and the OS usually kills the process</p><p>The trap hands control to the kernel, which decides the consequence.</p><p><i>VI: Trap chuyển quyền cho kernel, kernel quyết định hậu quả.</i></p></li><li><p><b>a)</b> The shell (command interpreter)</p><p>The shell is an ordinary user program that happens to start other programs.</p><p><i>VI: Shell là chương trình người dùng bình thường dùng để khởi động chương trình khác.</i></p></li><li><p><b>c)</b> only the minimum (IPC, scheduling, basic memory) runs in kernel mode; drivers and file systems run as user processes</p><p>Better isolation and reliability, at the cost of more message passing.</p><p><i>VI: Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> It is both an extended machine and a resource manager for CPU, memory and devices</p><p>Tanenbaum’s two views: top-down (abstraction) and bottom-up (resource management).</p><p><i>VI: Hai góc nhìn của Tanenbaum: từ trên xuống (trừu tượng hoá) và từ dưới lên (quản lý tài nguyên).</i></p></li><li><p><b>d)</b> So that only the OS can execute privileged instructions, stopping a faulty program</p><p>Privileged instructions (I/O, interrupt masks, page-table registers) trap if executed in user mode.</p><p><i>VI: Lệnh đặc quyền (I/O, mặt nạ ngắt, thanh ghi bảng trang) gây trap nếu chạy ở chế độ người dùng.</i></p></li><li><p><b>d)</b> The CPU raises a trap and the OS usually kills the process</p><p>The trap hands control to the kernel, which decides the consequence.</p><p><i>VI: Trap chuyển quyền cho kernel, kernel quyết định hậu quả.</i></p></li><li><p><b>a)</b> The command shell</p><p>The shell is an ordinary user program that happens to start other programs.</p><p><i>VI: Shell là chương trình người dùng bình thường dùng để khởi động chương trình khác.</i></p></li><li><p><b>b)</b> only the minimum runs in kernel mode; drivers and file systems run as user processes</p><p>The kernel keeps only IPC, scheduling and basic memory management. Better isolation and reliability, at the cost of more message passing.</p><p><i>VI: Kernel chỉ giữ IPC, lập lịch và quản lý bộ nhớ cơ bản. Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,7 +64,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It is the firmware (BIOS) that runs once at power-on and then gives up control"
+                "noiDung": "It is both an extended machine and a resource manager for CPU, memory and devices"
               },
               {
                 "ma": "b",
@@ -72,15 +72,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "It is both an extended machine (nice abstractions) and a resource manager (CPU, memory, devices)"
+                "noiDung": "It is a compiler that turns application source code into machine instructions"
               },
               {
                 "ma": "d",
-                "noiDung": "It is a compiler that turns application source code into machine instructions"
+                "noiDung": "It is the firmware (BIOS) that runs once at power-on and then gives up control"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Tanenbaum’s two views: top-down (abstraction) and bottom-up (resource management).</p><p><i>VI: Hai góc nhìn của Tanenbaum: từ trên xuống (trừu tượng hoá) và từ dưới lên (quản lý tài nguyên).</i></p>"
           },
@@ -94,19 +94,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "So that only the OS can execute privileged instructions and a faulty program cannot take over the machine"
-              },
-              {
-                "ma": "c",
                 "noiDung": "So that two programs can run at the same instant on a single core without any switching"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "So that the processor can lower its clock and save electricity while idle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So that only the OS can execute privileged instructions, stopping a faulty program"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Privileged instructions (I/O, interrupt masks, page-table registers) trap if executed in user mode.</p><p><i>VI: Lệnh đặc quyền (I/O, mặt nạ ngắt, thanh ghi bảng trang) gây trap nếu chạy ở chế độ người dùng.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The CPU raises an exception (trap) and the OS usually kills the process"
+                "noiDung": "The instruction runs normally, only a little slower"
               },
               {
                 "ma": "b",
-                "noiDung": "The CPU switches to kernel mode silently"
+                "noiDung": "The instruction is ignored and the program just continues"
               },
               {
                 "ma": "c",
-                "noiDung": "The instruction is ignored"
+                "noiDung": "The CPU switches to kernel mode silently and runs it"
               },
               {
                 "ma": "d",
-                "noiDung": "The instruction runs normally"
+                "noiDung": "The CPU raises a trap and the OS usually kills the process"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The trap hands control to the kernel, which decides the consequence.</p><p><i>VI: Trap chuyển quyền cho kernel, kernel quyết định hậu quả.</i></p>"
           },
@@ -142,7 +142,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The shell (command interpreter)"
+                "noiDung": "The command shell"
               },
               {
                 "ma": "b",
@@ -172,21 +172,21 @@
               },
               {
                 "ma": "b",
-                "noiDung": "it has no scheduler at all, because every process schedules itself in user mode"
+                "noiDung": "only the minimum runs in kernel mode; drivers and file systems run as user processes"
               },
               {
                 "ma": "c",
-                "noiDung": "only the minimum (IPC, scheduling, basic memory) runs in kernel mode; drivers and file systems run as user processes"
+                "noiDung": "it is always faster, because every service call stays inside one kernel address space"
               },
               {
                 "ma": "d",
-                "noiDung": "it is always faster, because every service call stays inside one kernel address space"
+                "noiDung": "it has no scheduler at all, because every process schedules itself in user mode"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
-            "giaiThich": "<p>Better isolation and reliability, at the cost of more message passing.</p><p><i>VI: Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.</i></p>"
+            "giaiThich": "<p>The kernel keeps only IPC, scheduling and basic memory management. Better isolation and reliability, at the cost of more message passing.</p><p><i>VI: Kernel chỉ giữ IPC, lập lịch và quản lý bộ nhớ cơ bản. Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.</i></p>"
           }
         ]
       },

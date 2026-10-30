@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# I/O 1 — Polling, interrupts, DMA and memory-mapped I/O — answer key\n\n1. In programmed I/O with polling the CPU …Với I/O lập trình theo kiểu thăm dò (polling) CPU …\n   Answer: a) repeatedly reads the device status register until the device is ready\n   Busy waiting wastes CPU time but is simple and fast for very quick devices.VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.\n\n2. What is the main advantage of interrupt-driven I/O over polling?Ưu điểm chính của I/O dùng ngắt so với polling?\n   Answer: a) The CPU can do other work while the device is busy\n   The device signals completion; the CPU runs other processes meanwhile.VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.\n\n3. A DMA controller is used to …Bộ điều khiển DMA dùng để …\n   Answer: b) transfer a block between a device and memory without CPU involvement per byte\n   The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.\n\n4. Memory-mapped I/O means …Memory-mapped I/O nghĩa là …\n   Answer: a) device registers are given addresses in the normal address space and accessed with ordinary load/store instructions\n   Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.\n\n5. What does a device driver do?Trình điều khiển thiết bị (driver) làm gì?\n   Answer: b) Hides the hardware details of one device behind a standard interface for the rest of the OS\n   Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.\n"
+          "code": "# I/O 1 — Polling, interrupts, DMA and memory-mapped I/O — answer key\n\n1. In programmed I/O with polling the CPU …Với I/O lập trình theo kiểu thăm dò (polling) CPU …\n   Answer: b) repeatedly reads the device status until the device is ready\n   Busy waiting wastes CPU time but is simple and fast for very quick devices.VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.\n\n2. What is the main advantage of interrupt-driven I/O over polling?Ưu điểm chính của I/O dùng ngắt so với polling?\n   Answer: d) The CPU can do other work while the device is busy\n   The device signals completion; the CPU runs other processes meanwhile.VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.\n\n3. A DMA controller is used to …Bộ điều khiển DMA dùng để …\n   Answer: b) transfer a block between a device and memory without the CPU copying it\n   The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.\n\n4. Memory-mapped I/O means …Memory-mapped I/O nghĩa là …\n   Answer: c) device registers get addresses in the normal address space and use ordinary load/store\n   Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.\n\n5. What does a device driver do?Trình điều khiển thiết bị (driver) làm gì?\n   Answer: d) Hides the hardware details of one device behind a standard interface\n   Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> repeatedly reads the device status register until the device is ready</p><p>Busy waiting wastes CPU time but is simple and fast for very quick devices.</p><p><i>VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.</i></p></li><li><p><b>a)</b> The CPU can do other work while the device is busy</p><p>The device signals completion; the CPU runs other processes meanwhile.</p><p><i>VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.</i></p></li><li><p><b>b)</b> transfer a block between a device and memory without CPU involvement per byte</p><p>The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.</p><p><i>VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.</i></p></li><li><p><b>a)</b> device registers are given addresses in the normal address space and accessed with ordinary load/store instructions</p><p>Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.</p><p><i>VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.</i></p></li><li><p><b>b)</b> Hides the hardware details of one device behind a standard interface for the rest of the OS</p><p>Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.</p><p><i>VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> repeatedly reads the device status until the device is ready</p><p>Busy waiting wastes CPU time but is simple and fast for very quick devices.</p><p><i>VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.</i></p></li><li><p><b>d)</b> The CPU can do other work while the device is busy</p><p>The device signals completion; the CPU runs other processes meanwhile.</p><p><i>VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.</i></p></li><li><p><b>b)</b> transfer a block between a device and memory without the CPU copying it</p><p>The CPU sets up the transfer (address, count, direction); the DMA controller interrupts once at the end.</p><p><i>VI: CPU thiết lập chuyển (địa chỉ, số lượng, chiều); DMA ngắt một lần ở cuối.</i></p></li><li><p><b>c)</b> device registers get addresses in the normal address space and use ordinary load/store</p><p>Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.</p><p><i>VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.</i></p></li><li><p><b>d)</b> Hides the hardware details of one device behind a standard interface</p><p>Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.</p><p><i>VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -65,23 +65,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "repeatedly reads the device status register until the device is ready"
+                "noiDung": "lets the DMA controller copy the data, then checks the count once"
               },
               {
                 "ma": "b",
-                "noiDung": "never touches the data, because the controller copies it to memory"
+                "noiDung": "repeatedly reads the device status until the device is ready"
               },
               {
                 "ma": "c",
-                "noiDung": "sleeps until the device raises an interrupt to say it is ready"
+                "noiDung": "never touches the data, because the controller copies it to memory"
               },
               {
                 "ma": "d",
-                "noiDung": "lets the DMA controller copy the data, then checks the count once"
+                "noiDung": "sleeps until the device raises an interrupt to say it is ready"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Busy waiting wastes CPU time but is simple and fast for very quick devices.</p><p><i>VI: Busy waiting phí CPU nhưng đơn giản và nhanh với thiết bị rất nhanh.</i></p>"
           },
@@ -91,23 +91,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The CPU can do other work while the device is busy"
+                "noiDung": "It removes the need for an OS during the transfer"
               },
               {
                 "ma": "b",
-                "noiDung": "It is always faster per byte"
+                "noiDung": "It needs no driver, so the kernel stays smaller"
               },
               {
                 "ma": "c",
-                "noiDung": "It needs no driver"
+                "noiDung": "It is always faster per byte, even for quick devices"
               },
               {
                 "ma": "d",
-                "noiDung": "It removes the need for an OS"
+                "noiDung": "The CPU can do other work while the device is busy"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The device signals completion; the CPU runs other processes meanwhile.</p><p><i>VI: Thiết bị báo hoàn tất; CPU chạy tiến trình khác trong lúc đó.</i></p>"
           },
@@ -121,7 +121,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "transfer a block between a device and memory without CPU involvement per byte"
+                "noiDung": "transfer a block between a device and memory without the CPU copying it"
               },
               {
                 "ma": "c",
@@ -143,7 +143,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "device registers are given addresses in the normal address space and accessed with ordinary load/store instructions"
+                "noiDung": "device registers have a separate address space that only special IN/OUT instructions can reach"
               },
               {
                 "ma": "b",
@@ -151,7 +151,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "device registers have a separate address space that only special IN/OUT instructions can reach"
+                "noiDung": "device registers get addresses in the normal address space and use ordinary load/store"
               },
               {
                 "ma": "d",
@@ -159,7 +159,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Alternative: port-mapped I/O with separate IN/OUT instructions and a separate I/O address space.</p><p><i>VI: Khác với port-mapped I/O có lệnh IN/OUT riêng và không gian địa chỉ I/O riêng.</i></p>"
           },
@@ -173,7 +173,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Hides the hardware details of one device behind a standard interface for the rest of the OS"
+                "noiDung": "Translates the system calls of user programs into source code"
               },
               {
                 "ma": "c",
@@ -181,11 +181,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Translates the system calls of user programs into source code"
+                "noiDung": "Hides the hardware details of one device behind a standard interface"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Drivers are device-specific, run in kernel mode (usually) and are a main source of OS crashes.</p><p><i>VI: Driver riêng cho từng thiết bị, thường chạy ở chế độ kernel và là nguồn gây sập OS chính.</i></p>"
           }

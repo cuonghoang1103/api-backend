@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Hardware 1 — Interrupts, traps and the memory hierarchy (concepts) — answer key\n\n1. What is the difference between an interrupt and a trap?Interrupt khác trap ở chỗ nào?\n   Answer: c) An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)\n   Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.\n\n2. Where does the CPU find the address of the interrupt handler?CPU tìm địa chỉ trình xử lý ngắt ở đâu?\n   Answer: c) In the interrupt vector table, indexed by the interrupt number\n   The vector holds one handler address per interrupt number.VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.\n\n3. Going down the memory hierarchy (registers → cache → RAM → disk), capacity …Đi xuống tầng bộ nhớ (thanh ghi → cache → RAM → đĩa), dung lượng …\n   Answer: b) increases while speed decreases and cost per byte falls\n   The classic trade-off: faster memory is smaller and costlier.VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.\n\n4. Why does caching work?Vì sao cache hoạt động hiệu quả?\n   Answer: b) Programs show locality of reference (temporal and spatial)\n   Recently used data and its neighbours are likely to be used again.VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.\n\n5. While an interrupt handler runs, the OS usually …Trong lúc trình xử lý ngắt chạy, OS thường …\n   Answer: c) masks (disables) interrupts of the same or lower priority for a short time\n   Handlers must be short and non-reentrant for the same line; the heavy part is deferred.VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.\n"
+          "code": "# Hardware 1 — Interrupts, traps and the memory hierarchy (concepts) — answer key\n\n1. What is the difference between an interrupt and a trap?Interrupt khác trap ở chỗ nào?\n   Answer: a) An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)\n   Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.\n\n2. Where does the CPU find the address of the interrupt handler?CPU tìm địa chỉ trình xử lý ngắt ở đâu?\n   Answer: c) In the interrupt vector table, indexed by the interrupt number\n   The vector holds one handler address per interrupt number.VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.\n\n3. Going down the memory hierarchy (registers → cache → RAM → disk), capacity …Đi xuống tầng bộ nhớ (thanh ghi → cache → RAM → đĩa), dung lượng …\n   Answer: b) increases while speed decreases and cost per byte falls\n   The classic trade-off: faster memory is smaller and costlier.VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.\n\n4. Why does caching work?Vì sao cache hoạt động hiệu quả?\n   Answer: b) Programs show locality of reference (temporal and spatial)\n   Recently used data and its neighbours are likely to be used again.VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.\n\n5. While an interrupt handler runs, the OS usually …Trong lúc trình xử lý ngắt chạy, OS thường …\n   Answer: c) masks (disables) interrupts of the same or lower priority for a short time\n   Handlers must be short and non-reentrant for the same line; the heavy part is deferred.VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)</p><p>Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.</p><p><i>VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.</i></p></li><li><p><b>c)</b> In the interrupt vector table, indexed by the interrupt number</p><p>The vector holds one handler address per interrupt number.</p><p><i>VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.</i></p></li><li><p><b>b)</b> increases while speed decreases and cost per byte falls</p><p>The classic trade-off: faster memory is smaller and costlier.</p><p><i>VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.</i></p></li><li><p><b>b)</b> Programs show locality of reference (temporal and spatial)</p><p>Recently used data and its neighbours are likely to be used again.</p><p><i>VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.</i></p></li><li><p><b>c)</b> masks (disables) interrupts of the same or lower priority for a short time</p><p>Handlers must be short and non-reentrant for the same line; the heavy part is deferred.</p><p><i>VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)</p><p>Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.</p><p><i>VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.</i></p></li><li><p><b>c)</b> In the interrupt vector table, indexed by the interrupt number</p><p>The vector holds one handler address per interrupt number.</p><p><i>VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.</i></p></li><li><p><b>b)</b> increases while speed decreases and cost per byte falls</p><p>The classic trade-off: faster memory is smaller and costlier.</p><p><i>VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.</i></p></li><li><p><b>b)</b> Programs show locality of reference (temporal and spatial)</p><p>Recently used data and its neighbours are likely to be used again.</p><p><i>VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.</i></p></li><li><p><b>c)</b> masks (disables) interrupts of the same or lower priority for a short time</p><p>Handlers must be short and non-reentrant for the same line; the heavy part is deferred.</p><p><i>VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,15 +64,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "They are identical: both are synchronous and both are raised by the running instruction"
+                "noiDung": "An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)"
               },
               {
                 "ma": "b",
-                "noiDung": "A trap is asynchronous (a device signals); an interrupt is synchronous (caused by the instruction)"
+                "noiDung": "A trap is asynchronous (a device signals); an interrupt is synchronous (caused by the running instruction)"
               },
               {
                 "ma": "c",
-                "noiDung": "An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)"
+                "noiDung": "They are identical: both are synchronous and both are raised by the running instruction"
               },
               {
                 "ma": "d",
@@ -80,7 +80,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.</p><p><i>VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.</i></p>"
           },

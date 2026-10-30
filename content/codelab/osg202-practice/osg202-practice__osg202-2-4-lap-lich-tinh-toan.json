@@ -190,10 +190,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Scheduling 2 — Which algorithm? (convoy effect, starvation, quantum) — answer key\n\n1. One CPU-bound process holds the CPU for a long time while many short I/O-bound processes queue behind it. This is called the …Một tiến trình nặng CPU giữ CPU rất lâu trong khi nhiều tiến trình I/O ngắn xếp hàng sau nó. Hiện tượng này gọi là …\n   Answer: c) Convoy effect\n   The convoy effect appears with FCFS: short jobs wait behind one long job.VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.\n\n2. Which non-preemptive algorithm gives the MINIMUM average waiting time when all burst times are known and all processes arrive together?Thuật toán không ngắt nào cho thời gian chờ trung bình NHỎ NHẤT khi biết trước burst và mọi tiến trình đến cùng lúc?\n   Answer: c) SJF\n   SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).\n\n3. A low-priority process may never get the CPU while higher-priority processes keep arriving. The usual cure is …Tiến trình ưu tiên thấp có thể không bao giờ được CPU khi tiến trình ưu tiên cao liên tục đến. Cách chữa thường dùng là …\n   Answer: d) Aging — gradually raise the priority of waiting processes\n   Starvation is cured by aging: priority grows with waiting time.VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.\n\n4. Round Robin with a very LARGE quantum behaves like …Round Robin với quantum RẤT LỚN hoạt động giống …\n   Answer: d) FCFS\n   If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.\n\n5. Which statement about preemptive SJF (SRTF) is TRUE?Phát biểu nào về SJF có ngắt (SRTF) là ĐÚNG?\n   Answer: d) A newly arrived process with a shorter remaining time takes the CPU at once\n   SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.\n"
+          "code": "# Scheduling 2 — Which algorithm? (convoy effect, starvation, quantum) — answer key\n\n1. One CPU-bound process holds the CPU for a long time while many short I/O-bound processes queue behind it. This is called the …Một tiến trình nặng CPU giữ CPU rất lâu trong khi nhiều tiến trình I/O ngắn xếp hàng sau nó. Hiện tượng này gọi là …\n   Answer: c) Convoy effect\n   The convoy effect appears with FCFS: short jobs wait behind one long job.VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.\n\n2. Which non-preemptive algorithm gives the MINIMUM average waiting time when all burst times are known and all processes arrive together?Thuật toán không ngắt nào cho thời gian chờ trung bình NHỎ NHẤT khi biết trước burst và mọi tiến trình đến cùng lúc?\n   Answer: b) SJF\n   SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).\n\n3. A low-priority process may never get the CPU while higher-priority processes keep arriving. The usual cure is …Tiến trình ưu tiên thấp có thể không bao giờ được CPU khi tiến trình ưu tiên cao liên tục đến. Cách chữa thường dùng là …\n   Answer: d) Aging: raise the priority of waiting processes\n   Starvation is cured by aging: priority grows with waiting time.VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.\n\n4. Round Robin with a very LARGE quantum behaves like …Round Robin với quantum RẤT LỚN hoạt động giống …\n   Answer: b) FCFS\n   If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.\n\n5. Which statement about preemptive SJF (SRTF) is TRUE?Phát biểu nào về SJF có ngắt (SRTF) là ĐÚNG?\n   Answer: c) A new process with a shorter remaining time takes the CPU at once\n   SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Convoy effect</p><p>The convoy effect appears with FCFS: short jobs wait behind one long job.</p><p><i>VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.</i></p></li><li><p><b>c)</b> SJF</p><p>SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).</p><p><i>VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).</i></p></li><li><p><b>d)</b> Aging — gradually raise the priority of waiting processes</p><p>Starvation is cured by aging: priority grows with waiting time.</p><p><i>VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.</i></p></li><li><p><b>d)</b> FCFS</p><p>If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.</p><p><i>VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.</i></p></li><li><p><b>d)</b> A newly arrived process with a shorter remaining time takes the CPU at once</p><p>SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.</p><p><i>VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Convoy effect</p><p>The convoy effect appears with FCFS: short jobs wait behind one long job.</p><p><i>VI: Convoy effect xảy ra với FCFS: việc ngắn chờ sau một việc dài.</i></p></li><li><p><b>b)</b> SJF</p><p>SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).</p><p><i>VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).</i></p></li><li><p><b>d)</b> Aging: raise the priority of waiting processes</p><p>Starvation is cured by aging: priority grows with waiting time.</p><p><i>VI: Đói tài nguyên (starvation) được chữa bằng aging: ưu tiên tăng theo thời gian chờ.</i></p></li><li><p><b>b)</b> FCFS</p><p>If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.</p><p><i>VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.</i></p></li><li><p><b>c)</b> A new process with a shorter remaining time takes the CPU at once</p><p>SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.</p><p><i>VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -206,11 +206,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Thrashing"
+                "noiDung": "Belady anomaly"
               },
               {
                 "ma": "b",
-                "noiDung": "Belady anomaly"
+                "noiDung": "Priority inversion"
               },
               {
                 "ma": "c",
@@ -218,7 +218,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Priority inversion"
+                "noiDung": "Thrashing"
               }
             ],
             "dapAn": [
@@ -232,15 +232,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "FCFS"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Priority"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "SJF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FCFS"
               },
               {
                 "ma": "d",
@@ -248,7 +248,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>SJF is provably optimal for average waiting time (running short jobs first lowers the waiting of every job behind them).</p><p><i>VI: SJF tối ưu về waiting trung bình (chạy việc ngắn trước làm giảm chờ của mọi việc phía sau).</i></p>"
           },
@@ -258,19 +258,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Switching to FCFS in the same queue"
+                "noiDung": "Disabling interrupts while the process is waiting"
               },
               {
                 "ma": "b",
-                "noiDung": "Disabling interrupts"
+                "noiDung": "Switching to FCFS in the same queue"
               },
               {
                 "ma": "c",
-                "noiDung": "A bigger quantum"
+                "noiDung": "A bigger quantum for every process"
               },
               {
                 "ma": "d",
-                "noiDung": "Aging — gradually raise the priority of waiting processes"
+                "noiDung": "Aging: raise the priority of waiting processes"
               }
             ],
             "dapAn": [
@@ -284,11 +284,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SRTF"
+                "noiDung": "Priority scheduling"
               },
               {
                 "ma": "b",
-                "noiDung": "Priority scheduling"
+                "noiDung": "FCFS"
               },
               {
                 "ma": "c",
@@ -296,11 +296,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "FCFS"
+                "noiDung": "SRTF"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>If the quantum exceeds every burst, each process finishes in its first turn, so the order is the arrival order: FCFS.</p><p><i>VI: Quantum lớn hơn mọi burst thì mỗi tiến trình xong ngay lượt đầu, thứ tự = thứ tự đến: FCFS.</i></p>"
           },
@@ -310,23 +310,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It can never starve a long process"
-              },
-              {
-                "ma": "b",
-                "noiDung": "It needs no knowledge of burst times"
-              },
-              {
-                "ma": "c",
                 "noiDung": "It has fewer context switches than non-preemptive SJF"
               },
               {
+                "ma": "b",
+                "noiDung": "It needs no knowledge or estimate of the burst times"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A new process with a shorter remaining time takes the CPU at once"
+              },
+              {
                 "ma": "d",
-                "noiDung": "A newly arrived process with a shorter remaining time takes the CPU at once"
+                "noiDung": "It can never starve a long process, because all of them age"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>SRTF compares the new arrival with the REMAINING time of the running process and preempts if shorter. It must know (estimate) burst times, can starve long processes, and switches more often than SJF.</p><p><i>VI: SRTF so burst của tiến trình mới với thời gian CÒN LẠI của tiến trình đang chạy và ngắt nếu ngắn hơn. Nó cần biết (ước lượng) burst, có thể làm đói việc dài, và chuyển ngữ cảnh nhiều hơn SJF.</i></p>"
           }

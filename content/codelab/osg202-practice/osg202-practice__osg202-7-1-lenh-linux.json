@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Linux 1 — Commands, redirection and pipes (concepts) — answer key\n\n1. What is the difference between > and >>?> khác >> ở chỗ nào?\n   Answer: d) > overwrites (truncates) the file, >> appends to it\n   Use >> for logs; a stray > destroys the old content.VI: Dùng >> cho log; một dấu > lỡ tay sẽ xoá nội dung cũ.\n\n2. What does ls | wc -l print?ls | wc -l in ra gì?\n   Answer: d) The number of entries listed by ls\n   The pipe connects ls’s standard output to wc’s standard input; -l counts lines.VI: Pipe nối stdout của ls vào stdin của wc; -l đếm số dòng.\n\n3. Which command shows permissions, owner, size and date in a long listing?Lệnh nào hiện quyền, chủ sở hữu, kích thước và ngày trong danh sách dài?\n   Answer: c) ls -l\n   -a shows hidden files; -l the long format.VI: -a hiện tệp ẩn; -l là dạng dài.\n\n4. cmd > out.txt 2>&1 sends …cmd > out.txt 2>&1 gửi …\n   Answer: c) both stdout and stderr to out.txt\n   Order matters: first stdout goes to the file, then stderr is duplicated onto stdout’s destination. 2>&1 > out.txt would leave stderr on the terminal.VI: Thứ tự quan trọng: stdout vào tệp rồi stderr nhân đôi theo đích của stdout. 2>&1 > out.txt sẽ để stderr ở terminal.\n\n5. Which command finds files named *.log under /var and below?Lệnh nào tìm tệp *.log trong /var và các thư mục con?\n   Answer: a) find /var -name \"*.log\"\n   find walks the tree; grep searches INSIDE files.VI: find duyệt cây thư mục; grep tìm BÊN TRONG tệp.\n"
+          "code": "# Linux 1 — Commands, redirection and pipes (concepts) — answer key\n\n1. What is the difference between > and >>?> khác >> ở chỗ nào?\n   Answer: c) > overwrites the file, >> appends to it\n   Use >> for logs; a stray > destroys the old content.VI: Dùng >> cho log; một dấu > lỡ tay sẽ xoá nội dung cũ.\n\n2. What does ls | wc -l print?ls | wc -l in ra gì?\n   Answer: d) The number of entries listed by ls\n   The pipe connects ls’s standard output to wc’s standard input; -l counts lines.VI: Pipe nối stdout của ls vào stdin của wc; -l đếm số dòng.\n\n3. Which command shows permissions, owner, size and date in a long listing?Lệnh nào hiện quyền, chủ sở hữu, kích thước và ngày trong danh sách dài?\n   Answer: c) ls -l\n   -a shows hidden files; -l the long format.VI: -a hiện tệp ẩn; -l là dạng dài.\n\n4. cmd > out.txt 2>&1 sends …cmd > out.txt 2>&1 gửi …\n   Answer: c) both stdout and stderr to out.txt\n   Order matters: first stdout goes to the file, then stderr is duplicated onto stdout’s destination. 2>&1 > out.txt would leave stderr on the terminal.VI: Thứ tự quan trọng: stdout vào tệp rồi stderr nhân đôi theo đích của stdout. 2>&1 > out.txt sẽ để stderr ở terminal.\n\n5. Which command finds files named *.log under /var and below?Lệnh nào tìm tệp *.log trong /var và các thư mục con?\n   Answer: a) find /var -name \"*.log\"\n   find walks the tree; grep searches INSIDE files.VI: find duyệt cây thư mục; grep tìm BÊN TRONG tệp.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> > overwrites (truncates) the file, >> appends to it</p><p>Use >> for logs; a stray > destroys the old content.</p><p><i>VI: Dùng >> cho log; một dấu > lỡ tay sẽ xoá nội dung cũ.</i></p></li><li><p><b>d)</b> The number of entries listed by ls</p><p>The pipe connects ls’s standard output to wc’s standard input; -l counts lines.</p><p><i>VI: Pipe nối stdout của ls vào stdin của wc; -l đếm số dòng.</i></p></li><li><p><b>c)</b> ls -l</p><p>-a shows hidden files; -l the long format.</p><p><i>VI: -a hiện tệp ẩn; -l là dạng dài.</i></p></li><li><p><b>c)</b> both stdout and stderr to out.txt</p><p>Order matters: first stdout goes to the file, then stderr is duplicated onto stdout’s destination. <code>2&gt;&amp;1 &gt; out.txt</code> would leave stderr on the terminal.</p><p><i>VI: Thứ tự quan trọng: stdout vào tệp rồi stderr nhân đôi theo đích của stdout. <code>2&gt;&amp;1 &gt; out.txt</code> sẽ để stderr ở terminal.</i></p></li><li><p><b>a)</b> find /var -name \"*.log\"</p><p>find walks the tree; grep searches INSIDE files.</p><p><i>VI: find duyệt cây thư mục; grep tìm BÊN TRONG tệp.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> > overwrites the file, >> appends to it</p><p>Use >> for logs; a stray > destroys the old content.</p><p><i>VI: Dùng >> cho log; một dấu > lỡ tay sẽ xoá nội dung cũ.</i></p></li><li><p><b>d)</b> The number of entries listed by ls</p><p>The pipe connects ls’s standard output to wc’s standard input; -l counts lines.</p><p><i>VI: Pipe nối stdout của ls vào stdin của wc; -l đếm số dòng.</i></p></li><li><p><b>c)</b> ls -l</p><p>-a shows hidden files; -l the long format.</p><p><i>VI: -a hiện tệp ẩn; -l là dạng dài.</i></p></li><li><p><b>c)</b> both stdout and stderr to out.txt</p><p>Order matters: first stdout goes to the file, then stderr is duplicated onto stdout’s destination. <code>2&gt;&amp;1 &gt; out.txt</code> would leave stderr on the terminal.</p><p><i>VI: Thứ tự quan trọng: stdout vào tệp rồi stderr nhân đôi theo đích của stdout. <code>2&gt;&amp;1 &gt; out.txt</code> sẽ để stderr ở terminal.</i></p></li><li><p><b>a)</b> find /var -name \"*.log\"</p><p>find walks the tree; grep searches INSIDE files.</p><p><i>VI: find duyệt cây thư mục; grep tìm BÊN TRONG tệp.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "> appends, >> overwrites"
+                "noiDung": "> is for input, >> is for output"
               },
               {
                 "ma": "b",
-                "noiDung": "They are identical"
+                "noiDung": "> appends to the file, >> overwrites it"
               },
               {
                 "ma": "c",
-                "noiDung": "> is for input, >> for output"
+                "noiDung": "> overwrites the file, >> appends to it"
               },
               {
                 "ma": "d",
-                "noiDung": "> overwrites (truncates) the file, >> appends to it"
+                "noiDung": "They are identical in every shell"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Use >> for logs; a stray > destroys the old content.</p><p><i>VI: Dùng >> cho log; một dấu > lỡ tay sẽ xoá nội dung cũ.</i></p>"
           },
@@ -547,10 +547,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Linux 4 — Redirection order, jobs and signals — answer key\n\n1. What does a trailing & do, as in sleep 100 &?Dấu & ở cuối, như sleep 100 &, làm gì?\n   Answer: b) Runs the command in the background; the shell returns the prompt at once\n   The shell forks the child but does not wait for it.VI: Shell fork tiến trình con nhưng không chờ nó.\n\n2. Ctrl-C in a terminal sends which signal to the foreground job?Ctrl-C trong terminal gửi tín hiệu nào cho tiến trình foreground?\n   Answer: c) SIGINT\n   SIGINT can be caught; SIGKILL and SIGSTOP cannot.VI: SIGINT bắt được; SIGKILL và SIGSTOP thì không.\n\n3. Which signal can a process NOT catch or ignore?Tín hiệu nào tiến trình KHÔNG thể bắt hay bỏ qua?\n   Answer: b) SIGKILL (9)\n   SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.VI: SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.\n\n4. Ctrl-Z followed by bg …Ctrl-Z rồi bg …\n   Answer: c) suspends the job, then resumes it in the background\n   Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.VI: Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.\n\n5. cat missing.txt 2>&1 > out.txt (file missing.txt does not exist) puts the error message …cat missing.txt 2>&1 > out.txt (tệp missing.txt không tồn tại) đưa thông báo lỗi …\n   Answer: b) on the terminal, because stderr was duplicated onto the terminal BEFORE stdout moved to the file\n   Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.VI: Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.\n"
+          "code": "# Linux 4 — Redirection order, jobs and signals — answer key\n\n1. What does a trailing & do, as in sleep 100 &?Dấu & ở cuối, như sleep 100 &, làm gì?\n   Answer: d) Runs the command in the background; the prompt returns at once\n   The shell forks the child but does not wait for it.VI: Shell fork tiến trình con nhưng không chờ nó.\n\n2. Ctrl-C in a terminal sends which signal to the foreground job?Ctrl-C trong terminal gửi tín hiệu nào cho tiến trình foreground?\n   Answer: d) SIGINT\n   SIGINT can be caught; SIGKILL and SIGSTOP cannot.VI: SIGINT bắt được; SIGKILL và SIGSTOP thì không.\n\n3. Which signal can a process NOT catch or ignore?Tín hiệu nào tiến trình KHÔNG thể bắt hay bỏ qua?\n   Answer: a) SIGKILL (9)\n   SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.VI: SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.\n\n4. Ctrl-Z followed by bg …Ctrl-Z rồi bg …\n   Answer: a) suspends the job, then resumes it in the background\n   Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.VI: Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.\n\n5. cat missing.txt 2>&1 > out.txt (file missing.txt does not exist) puts the error message …cat missing.txt 2>&1 > out.txt (tệp missing.txt không tồn tại) đưa thông báo lỗi …\n   Answer: a) on the terminal, because stderr was duplicated onto it BEFORE stdout moved\n   Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.VI: Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Runs the command in the background; the shell returns the prompt at once</p><p>The shell forks the child but does not wait for it.</p><p><i>VI: Shell fork tiến trình con nhưng không chờ nó.</i></p></li><li><p><b>c)</b> SIGINT</p><p>SIGINT can be caught; SIGKILL and SIGSTOP cannot.</p><p><i>VI: SIGINT bắt được; SIGKILL và SIGSTOP thì không.</i></p></li><li><p><b>b)</b> SIGKILL (9)</p><p>SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.</p><p><i>VI: SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.</i></p></li><li><p><b>c)</b> suspends the job, then resumes it in the background</p><p>Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.</p><p><i>VI: Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.</i></p></li><li><p><b>b)</b> on the terminal, because stderr was duplicated onto the terminal BEFORE stdout moved to the file</p><p>Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.</p><p><i>VI: Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Runs the command in the background; the prompt returns at once</p><p>The shell forks the child but does not wait for it.</p><p><i>VI: Shell fork tiến trình con nhưng không chờ nó.</i></p></li><li><p><b>d)</b> SIGINT</p><p>SIGINT can be caught; SIGKILL and SIGSTOP cannot.</p><p><i>VI: SIGINT bắt được; SIGKILL và SIGSTOP thì không.</i></p></li><li><p><b>a)</b> SIGKILL (9)</p><p>SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.</p><p><i>VI: SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.</i></p></li><li><p><b>a)</b> suspends the job, then resumes it in the background</p><p>Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.</p><p><i>VI: Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.</i></p></li><li><p><b>a)</b> on the terminal, because stderr was duplicated onto it BEFORE stdout moved</p><p>Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.</p><p><i>VI: Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -567,7 +567,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Runs the command in the background; the shell returns the prompt at once"
+                "noiDung": "Runs the command as root and returns to the normal user afterwards"
               },
               {
                 "ma": "c",
@@ -575,11 +575,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "Runs the command as root and returns to the normal user afterwards"
+                "noiDung": "Runs the command in the background; the prompt returns at once"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The shell forks the child but does not wait for it.</p><p><i>VI: Shell fork tiến trình con nhưng không chờ nó.</i></p>"
           },
@@ -589,23 +589,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SIGKILL"
+                "noiDung": "SIGSTOP"
               },
               {
                 "ma": "b",
-                "noiDung": "SIGHUP"
+                "noiDung": "SIGKILL"
               },
               {
                 "ma": "c",
-                "noiDung": "SIGINT"
+                "noiDung": "SIGHUP"
               },
               {
                 "ma": "d",
-                "noiDung": "SIGSTOP"
+                "noiDung": "SIGINT"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>SIGINT can be caught; SIGKILL and SIGSTOP cannot.</p><p><i>VI: SIGINT bắt được; SIGKILL và SIGSTOP thì không.</i></p>"
           },
@@ -615,23 +615,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SIGTERM (15)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "SIGKILL (9)"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "SIGHUP (1)"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "SIGINT (2)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SIGTERM (15)"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>SIGTERM is the polite request that lets a program clean up; kill -9 is the last resort.</p><p><i>VI: SIGTERM là lời yêu cầu lịch sự để chương trình dọn dẹp; kill -9 là cách cuối cùng.</i></p>"
           },
@@ -641,23 +641,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "kills the job"
-              },
-              {
-                "ma": "b",
-                "noiDung": "moves it to another terminal"
-              },
-              {
-                "ma": "c",
                 "noiDung": "suspends the job, then resumes it in the background"
               },
               {
+                "ma": "b",
+                "noiDung": "kills the job, then restarts it in the background"
+              },
+              {
+                "ma": "c",
+                "noiDung": "restarts the job from the beginning in the foreground"
+              },
+              {
                 "ma": "d",
-                "noiDung": "restarts it from the beginning"
+                "noiDung": "moves the job to another terminal and detaches it"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Ctrl-Z sends SIGTSTP; bg sends SIGCONT and keeps it in the background; fg brings it back.</p><p><i>VI: Ctrl-Z gửi SIGTSTP; bg gửi SIGCONT và để nó chạy nền; fg đưa lại foreground.</i></p>"
           },
@@ -667,23 +667,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "into out.txt, because stderr follows stdout wherever stdout ends up afterwards"
+                "noiDung": "on the terminal, because stderr was duplicated onto it BEFORE stdout moved"
               },
               {
                 "ma": "b",
-                "noiDung": "on the terminal, because stderr was duplicated onto the terminal BEFORE stdout moved to the file"
+                "noiDung": "into out.txt, because stderr follows stdout wherever stdout ends up afterwards"
               },
               {
                 "ma": "c",
-                "noiDung": "into missing.txt, because the shell creates that file before running cat"
+                "noiDung": "nowhere, because 2>&1 discards the error stream when the output goes to a file"
               },
               {
                 "ma": "d",
-                "noiDung": "nowhere, because 2>&1 discards the error stream when the output goes to a file"
+                "noiDung": "into missing.txt, because the shell creates that file before running cat"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Redirections are processed left to right: 2>&1 copies the current stdout (the terminal), then > moves stdout only.</p><p><i>VI: Chuyển hướng xử lý từ trái sang phải: 2>&1 sao chép stdout hiện tại (terminal), rồi > chỉ dời stdout.</i></p>"
           }

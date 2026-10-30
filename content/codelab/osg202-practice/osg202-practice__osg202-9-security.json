@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Security 1 — Principles, attacks and defences (concepts) — answer key\n\n1. The CIA triad of security goals stands for …Bộ ba mục tiêu bảo mật CIA là …\n   Answer: b) Confidentiality, Integrity, Availability\n   Keep data secret, unmodified and accessible.VI: Giữ dữ liệu bí mật, không bị sửa và truy cập được.\n\n2. A TOCTOU (time-of-check to time-of-use) bug is …Lỗi TOCTOU (time-of-check to time-of-use) là …\n   Answer: d) a race: the state checked is changed before the checked state is used\n   Example: access() says a file is OK, then an attacker swaps it with a symlink before open().VI: Ví dụ: access() báo tệp ổn, rồi kẻ tấn công đổi nó thành symlink trước open().\n\n3. SQL injection happens because …SQL injection xảy ra vì …\n   Answer: a) user input is concatenated into a query and interpreted as code\n   Defence: parameterised queries (data never becomes code).VI: Phòng thủ: truy vấn tham số hoá (dữ liệu không bao giờ thành mã).\n\n4. Which defence makes the addresses of stack, heap and libraries unpredictable?Biện pháp nào làm địa chỉ stack, heap và thư viện khó đoán?\n   Answer: b) ASLR (address space layout randomisation)\n   It makes return-to-libc and ROP attacks harder.VI: Nó làm các tấn công return-to-libc và ROP khó hơn.\n\n5. setuid root programs are dangerous because …Chương trình setuid root nguy hiểm vì …\n   Answer: d) a bug in them gives an attacker root rights\n   They run with the owner’s privileges regardless of who started them.VI: Chúng chạy với quyền của chủ sở hữu bất kể ai khởi động.\n"
+          "code": "# Security 1 — Principles, attacks and defences (concepts) — answer key\n\n1. The CIA triad of security goals stands for …Bộ ba mục tiêu bảo mật CIA là …\n   Answer: b) Confidentiality, Integrity, Availability\n   Keep data secret, unmodified and accessible.VI: Giữ dữ liệu bí mật, không bị sửa và truy cập được.\n\n2. A TOCTOU (time-of-check to time-of-use) bug is …Lỗi TOCTOU (time-of-check to time-of-use) là …\n   Answer: d) a race: the checked state changes before it is used\n   Example: access() says a file is OK, then an attacker swaps it with a symlink before open().VI: Ví dụ: access() báo tệp ổn, rồi kẻ tấn công đổi nó thành symlink trước open().\n\n3. SQL injection happens because …SQL injection xảy ra vì …\n   Answer: a) user input is concatenated into a query and interpreted as code\n   Defence: parameterised queries (data never becomes code).VI: Phòng thủ: truy vấn tham số hoá (dữ liệu không bao giờ thành mã).\n\n4. Which defence makes the addresses of stack, heap and libraries unpredictable?Biện pháp nào làm địa chỉ stack, heap và thư viện khó đoán?\n   Answer: a) ASLR (address space layout randomisation)\n   It makes return-to-libc and ROP attacks harder.VI: Nó làm các tấn công return-to-libc và ROP khó hơn.\n\n5. setuid root programs are dangerous because …Chương trình setuid root nguy hiểm vì …\n   Answer: d) a bug in them gives an attacker root rights\n   They run with the owner’s privileges regardless of who started them.VI: Chúng chạy với quyền của chủ sở hữu bất kể ai khởi động.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Confidentiality, Integrity, Availability</p><p>Keep data secret, unmodified and accessible.</p><p><i>VI: Giữ dữ liệu bí mật, không bị sửa và truy cập được.</i></p></li><li><p><b>d)</b> a race: the state checked is changed before the checked state is used</p><p>Example: access() says a file is OK, then an attacker swaps it with a symlink before open().</p><p><i>VI: Ví dụ: access() báo tệp ổn, rồi kẻ tấn công đổi nó thành symlink trước open().</i></p></li><li><p><b>a)</b> user input is concatenated into a query and interpreted as code</p><p>Defence: parameterised queries (data never becomes code).</p><p><i>VI: Phòng thủ: truy vấn tham số hoá (dữ liệu không bao giờ thành mã).</i></p></li><li><p><b>b)</b> ASLR (address space layout randomisation)</p><p>It makes return-to-libc and ROP attacks harder.</p><p><i>VI: Nó làm các tấn công return-to-libc và ROP khó hơn.</i></p></li><li><p><b>d)</b> a bug in them gives an attacker root rights</p><p>They run with the owner’s privileges regardless of who started them.</p><p><i>VI: Chúng chạy với quyền của chủ sở hữu bất kể ai khởi động.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Confidentiality, Integrity, Availability</p><p>Keep data secret, unmodified and accessible.</p><p><i>VI: Giữ dữ liệu bí mật, không bị sửa và truy cập được.</i></p></li><li><p><b>d)</b> a race: the checked state changes before it is used</p><p>Example: access() says a file is OK, then an attacker swaps it with a symlink before open().</p><p><i>VI: Ví dụ: access() báo tệp ổn, rồi kẻ tấn công đổi nó thành symlink trước open().</i></p></li><li><p><b>a)</b> user input is concatenated into a query and interpreted as code</p><p>Defence: parameterised queries (data never becomes code).</p><p><i>VI: Phòng thủ: truy vấn tham số hoá (dữ liệu không bao giờ thành mã).</i></p></li><li><p><b>a)</b> ASLR (address space layout randomisation)</p><p>It makes return-to-libc and ROP attacks harder.</p><p><i>VI: Nó làm các tấn công return-to-libc và ROP khó hơn.</i></p></li><li><p><b>d)</b> a bug in them gives an attacker root rights</p><p>They run with the owner’s privileges regardless of who started them.</p><p><i>VI: Chúng chạy với quyền của chủ sở hữu bất kể ai khởi động.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -91,19 +91,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a buffer overflow caused by a missing check on the length"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a disk error that shows up between a write and a read"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "a weak password that is checked once and reused later"
               },
               {
+                "ma": "c",
+                "noiDung": "a buffer overflow caused by a missing check on the length"
+              },
+              {
                 "ma": "d",
-                "noiDung": "a race: the state checked is changed before the checked state is used"
+                "noiDung": "a race: the checked state changes before it is used"
               }
             ],
             "dapAn": [
@@ -143,23 +143,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Stack canaries (guard values)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "ASLR (address space layout randomisation)"
               },
               {
+                "ma": "b",
+                "noiDung": "DEP (data execution prevention on pages)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "CFI (control-flow integrity)"
+                "noiDung": "Stack canaries (guard values on the stack)"
               },
               {
                 "ma": "d",
-                "noiDung": "DEP (data execution prevention)"
+                "noiDung": "CFI (control-flow integrity checks)"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>It makes return-to-libc and ROP attacks harder.</p><p><i>VI: Nó làm các tấn công return-to-libc và ROP khó hơn.</i></p>"
           },

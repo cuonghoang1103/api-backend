@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Server memory 1 — Resident memory, overcommit and the OOM killer — answer key\n\n1. What is the difference between VSZ and RSS in ps?VSZ và RSS trong ps khác nhau thế nào?\n   Answer: c) VSZ is the virtual address space size; RSS is the part currently resident in RAM\n   A process may reserve far more virtual memory than it touches.VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.\n\n2. Linux memory overcommit means that …Memory overcommit của Linux nghĩa là …\n   Answer: c) malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched\n   Allocation is lazy; real pages are assigned on first touch.VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.\n\n3. When RAM and swap are exhausted, the kernel’s OOM killer …Khi RAM và swap cạn, OOM killer của kernel …\n   Answer: a) kills a process chosen by badness score (oom_score) with SIGKILL\n   You can bias the choice with oom_score_adj (−1000 disables killing the process).VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).\n\n4. A container with a 512 MB memory limit grows past it. What happens?Container có giới hạn bộ nhớ 512 MB vượt quá giới hạn. Điều gì xảy ra?\n   Answer: a) The cgroup OOM killer kills a process of the container (exit code 137)\n   The cgroup limit is enforced inside the container’s control group.VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.\n\n5. Which setting protects the database process from the OOM killer first?Thiết lập nào bảo vệ tiến trình cơ sở dữ liệu khỏi OOM killer trước tiên?\n   Answer: c) A very low (negative) oom_score_adj for that process\n   oom_score_adj = −1000 exempts it; the killer picks other victims.VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.\n"
+          "code": "# Server memory 1 — Resident memory, overcommit and the OOM killer — answer key\n\n1. What is the difference between VSZ and RSS in ps?VSZ và RSS trong ps khác nhau thế nào?\n   Answer: d) VSZ is the virtual size; RSS is the part resident in RAM\n   A process may reserve far more virtual memory than it touches.VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.\n\n2. Linux memory overcommit means that …Memory overcommit của Linux nghĩa là …\n   Answer: d) malloc can succeed beyond RAM + swap; the trouble starts when pages are touched\n   Allocation is lazy; real pages are assigned on first touch.VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.\n\n3. When RAM and swap are exhausted, the kernel’s OOM killer …Khi RAM và swap cạn, OOM killer của kernel …\n   Answer: d) kills a process chosen by its oom_score\n   The victim gets SIGKILL. You can bias the choice with oom_score_adj (−1000 disables killing the process).VI: Nạn nhân nhận SIGKILL. Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).\n\n4. A container with a 512 MB memory limit grows past it. What happens?Container có giới hạn bộ nhớ 512 MB vượt quá giới hạn. Điều gì xảy ra?\n   Answer: b) The cgroup OOM killer kills a process in the container\n   The cgroup limit is enforced inside the container’s control group; the victim dies with exit code 137.VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container; tiến trình bị giết thoát với mã 137.\n\n5. Which setting protects the database process from the OOM killer first?Thiết lập nào bảo vệ tiến trình cơ sở dữ liệu khỏi OOM killer trước tiên?\n   Answer: c) A very low (negative) oom_score_adj for that process\n   oom_score_adj = −1000 exempts it; the killer picks other victims.VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> VSZ is the virtual address space size; RSS is the part currently resident in RAM</p><p>A process may reserve far more virtual memory than it touches.</p><p><i>VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.</i></p></li><li><p><b>c)</b> malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched</p><p>Allocation is lazy; real pages are assigned on first touch.</p><p><i>VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.</i></p></li><li><p><b>a)</b> kills a process chosen by badness score (oom_score) with SIGKILL</p><p>You can bias the choice with oom_score_adj (−1000 disables killing the process).</p><p><i>VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).</i></p></li><li><p><b>a)</b> The cgroup OOM killer kills a process of the container (exit code 137)</p><p>The cgroup limit is enforced inside the container’s control group.</p><p><i>VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.</i></p></li><li><p><b>c)</b> A very low (negative) oom_score_adj for that process</p><p>oom_score_adj = −1000 exempts it; the killer picks other victims.</p><p><i>VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> VSZ is the virtual size; RSS is the part resident in RAM</p><p>A process may reserve far more virtual memory than it touches.</p><p><i>VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.</i></p></li><li><p><b>d)</b> malloc can succeed beyond RAM + swap; the trouble starts when pages are touched</p><p>Allocation is lazy; real pages are assigned on first touch.</p><p><i>VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.</i></p></li><li><p><b>d)</b> kills a process chosen by its oom_score</p><p>The victim gets SIGKILL. You can bias the choice with oom_score_adj (−1000 disables killing the process).</p><p><i>VI: Nạn nhân nhận SIGKILL. Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).</i></p></li><li><p><b>b)</b> The cgroup OOM killer kills a process in the container</p><p>The cgroup limit is enforced inside the container’s control group; the victim dies with exit code 137.</p><p><i>VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container; tiến trình bị giết thoát với mã 137.</i></p></li><li><p><b>c)</b> A very low (negative) oom_score_adj for that process</p><p>oom_score_adj = −1000 exempts it; the killer picks other victims.</p><p><i>VI: oom_score_adj = −1000 miễn trừ; killer chọn nạn nhân khác.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "They are always equal"
+                "noiDung": "RSS includes swapped-out pages; VSZ does not"
               },
               {
                 "ma": "b",
-                "noiDung": "VSZ is swap; RSS is disk"
+                "noiDung": "VSZ is the swap in use; RSS is the disk space in use"
               },
               {
                 "ma": "c",
-                "noiDung": "VSZ is the virtual address space size; RSS is the part currently resident in RAM"
+                "noiDung": "They are always equal once the process has started"
               },
               {
                 "ma": "d",
-                "noiDung": "RSS counts shared libraries once per process only"
+                "noiDung": "VSZ is the virtual size; RSS is the part resident in RAM"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>A process may reserve far more virtual memory than it touches.</p><p><i>VI: Tiến trình có thể giữ chỗ bộ nhớ ảo nhiều hơn rất nhiều so với phần nó chạm tới.</i></p>"
           },
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the kernel never swaps, so all the memory promised must fit in physical RAM"
-              },
-              {
-                "ma": "b",
                 "noiDung": "malloc always fails as soon as RAM is full, even when swap is still free"
               },
               {
+                "ma": "b",
+                "noiDung": "the kernel never swaps, so all the memory promised must fit in physical RAM"
+              },
+              {
                 "ma": "c",
-                "noiDung": "malloc can succeed even if RAM + swap cannot back all the memory promised; the problem appears when pages are touched"
+                "noiDung": "pages are compressed in RAM so that every malloc is fully backed before it returns"
               },
               {
                 "ma": "d",
-                "noiDung": "pages are compressed in RAM so that every malloc is fully backed before it returns"
+                "noiDung": "malloc can succeed beyond RAM + swap; the trouble starts when pages are touched"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Allocation is lazy; real pages are assigned on first touch.</p><p><i>VI: Cấp phát là lười; trang thật được gán lúc chạm lần đầu.</i></p>"
           },
@@ -116,11 +116,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "kills a process chosen by badness score (oom_score) with SIGKILL"
+                "noiDung": "pauses all processes until memory is free"
               },
               {
                 "ma": "b",
-                "noiDung": "pauses all processes"
+                "noiDung": "reboots the machine to clear the memory"
               },
               {
                 "ma": "c",
@@ -128,13 +128,13 @@
               },
               {
                 "ma": "d",
-                "noiDung": "reboots the machine"
+                "noiDung": "kills a process chosen by its oom_score"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
-            "giaiThich": "<p>You can bias the choice with oom_score_adj (−1000 disables killing the process).</p><p><i>VI: Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).</i></p>"
+            "giaiThich": "<p>The victim gets SIGKILL. You can bias the choice with oom_score_adj (−1000 disables killing the process).</p><p><i>VI: Nạn nhân nhận SIGKILL. Có thể thiên lệch lựa chọn bằng oom_score_adj (−1000 là không bị giết).</i></p>"
           },
           {
             "ma": "c4",
@@ -142,25 +142,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The cgroup OOM killer kills a process of the container (exit code 137)"
+                "noiDung": "The kernel of the host panics and the whole host reboots"
               },
               {
                 "ma": "b",
-                "noiDung": "The limit is raised automatically by the container runtime"
+                "noiDung": "The cgroup OOM killer kills a process in the container"
               },
               {
                 "ma": "c",
-                "noiDung": "The limit is ignored as long as the host still has free RAM"
+                "noiDung": "The limit is raised automatically by the container runtime"
               },
               {
                 "ma": "d",
-                "noiDung": "The kernel of the host panics and the whole host reboots"
+                "noiDung": "The limit is ignored as long as the host still has free RAM"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
-            "giaiThich": "<p>The cgroup limit is enforced inside the container’s control group.</p><p><i>VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container.</i></p>"
+            "giaiThich": "<p>The cgroup limit is enforced inside the container’s control group; the victim dies with exit code 137.</p><p><i>VI: Giới hạn cgroup được áp ngay trong nhóm kiểm soát của container; tiến trình bị giết thoát với mã 137.</i></p>"
           },
           {
             "ma": "c5",

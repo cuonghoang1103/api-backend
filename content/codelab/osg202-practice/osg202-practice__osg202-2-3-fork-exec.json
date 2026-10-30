@@ -191,10 +191,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Process states 2 — fork(), exec(), zombie and orphan — answer key\n\n1. What does fork() return in the CHILD process?fork() trả về gì trong tiến trình CON?\n   Answer: c) 0\n   fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.\n\n2. A child has exited but its parent has not yet called wait(). The child is a …Tiến trình con đã thoát nhưng cha chưa gọi wait(). Con đó là …\n   Answer: b) Zombie\n   A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().\n\n3. The parent exits while the child is still running. What happens to the child?Cha thoát khi con còn chạy. Chuyện gì xảy ra với con?\n   Answer: c) It is adopted by init/systemd (PID 1)\n   Orphans are re-parented to PID 1, which calls wait() on them when they finish.VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.\n\n4. What does a successful exec() do?exec() thành công làm gì?\n   Answer: c) Replaces the program image of the calling process; the PID stays the same\n   exec replaces code, data and stack of the same process; on success it never returns.VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.\n\n5. Why does a shell call fork() BEFORE exec() when you type a command?Vì sao shell gọi fork() TRƯỚC exec() khi bạn gõ lệnh?\n   Answer: c) So the shell itself keeps running after the command finishes\n   exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.\n"
+          "code": "# Process states 2 — fork(), exec(), zombie and orphan — answer key\n\n1. What does fork() return in the CHILD process?fork() trả về gì trong tiến trình CON?\n   Answer: c) 0\n   fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.\n\n2. A child has exited but its parent has not yet called wait(). The child is a …Tiến trình con đã thoát nhưng cha chưa gọi wait(). Con đó là …\n   Answer: b) Zombie\n   A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().\n\n3. The parent exits while the child is still running. What happens to the child?Cha thoát khi con còn chạy. Chuyện gì xảy ra với con?\n   Answer: c) It is adopted by init/systemd (PID 1)\n   Orphans are re-parented to PID 1, which calls wait() on them when they finish.VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.\n\n4. What does a successful exec() do?exec() thành công làm gì?\n   Answer: c) Replaces the program image; the PID stays the same\n   exec replaces code, data and stack of the same process; on success it never returns.VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.\n\n5. Why does a shell call fork() BEFORE exec() when you type a command?Vì sao shell gọi fork() TRƯỚC exec() khi bạn gõ lệnh?\n   Answer: d) So the shell itself keeps running after the command finishes\n   exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 0</p><p>fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.</p><p><i>VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.</i></p></li><li><p><b>b)</b> Zombie</p><p>A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().</p><p><i>VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().</i></p></li><li><p><b>c)</b> It is adopted by init/systemd (PID 1)</p><p>Orphans are re-parented to PID 1, which calls wait() on them when they finish.</p><p><i>VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.</i></p></li><li><p><b>c)</b> Replaces the program image of the calling process; the PID stays the same</p><p>exec replaces code, data and stack of the same process; on success it never returns.</p><p><i>VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.</i></p></li><li><p><b>c)</b> So the shell itself keeps running after the command finishes</p><p>exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.</p><p><i>VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 0</p><p>fork() returns 0 in the child, the child’s PID in the parent and -1 on failure.</p><p><i>VI: fork() trả 0 ở tiến trình con, PID của con ở cha, và -1 khi lỗi.</i></p></li><li><p><b>b)</b> Zombie</p><p>A zombie keeps only its PCB entry (exit status) until the parent reaps it with wait().</p><p><i>VI: Zombie chỉ còn mục PCB (mã thoát) cho tới khi cha “thu dọn” bằng wait().</i></p></li><li><p><b>c)</b> It is adopted by init/systemd (PID 1)</p><p>Orphans are re-parented to PID 1, which calls wait() on them when they finish.</p><p><i>VI: Tiến trình mồ côi được gán cho PID 1; PID 1 gọi wait() khi chúng xong.</i></p></li><li><p><b>c)</b> Replaces the program image; the PID stays the same</p><p>exec replaces code, data and stack of the same process; on success it never returns.</p><p><i>VI: exec thay mã, dữ liệu, stack của chính tiến trình đó; thành công thì không bao giờ quay về.</i></p></li><li><p><b>d)</b> So the shell itself keeps running after the command finishes</p><p>exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.</p><p><i>VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -293,11 +293,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Replaces the program image of the calling process; the PID stays the same"
+                "noiDung": "Replaces the program image; the PID stays the same"
               },
               {
                 "ma": "d",
-                "noiDung": "Copies the calling process"
+                "noiDung": "Copies the calling process, then runs the copy"
               }
             ],
             "dapAn": [
@@ -311,23 +311,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "To make the command run as root"
+                "noiDung": "Because exec() cannot run unless fork() was called before it"
               },
               {
                 "ma": "b",
-                "noiDung": "Because exec() cannot run without fork()"
+                "noiDung": "To make the command run with root rights"
               },
               {
                 "ma": "c",
-                "noiDung": "So the shell itself keeps running after the command finishes"
+                "noiDung": "To double the memory available to the command"
               },
               {
                 "ma": "d",
-                "noiDung": "To double the memory available"
+                "noiDung": "So the shell itself keeps running after the command finishes"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>exec would overwrite the shell; the shell forks a child, the child execs the command, the parent waits.</p><p><i>VI: exec sẽ ghi đè shell; shell fork ra con, con exec lệnh, cha wait.</i></p>"
           }
@@ -609,11 +609,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Call sleep(1) after fork()"
+                "noiDung": "Call wait(NULL) after fork() in the parent"
               },
               {
                 "ma": "d",
-                "noiDung": "Call wait(NULL) after fork()"
+                "noiDung": "Call sleep(1) after fork() in both processes"
               }
             ],
             "dapAn": [

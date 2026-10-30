@@ -502,10 +502,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Disk 5 — Which algorithm for which workload? — answer key\n\n1. Which algorithm can starve requests far from the head?Thuật toán nào có thể làm đói các yêu cầu ở xa đầu đọc?\n   Answer: c) SSTF\n   If new requests keep arriving near the head, SSTF never goes to the far ones.VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.\n\n2. Which algorithm gives the most uniform waiting time?Thuật toán nào cho thời gian chờ đồng đều nhất?\n   Answer: b) C-SCAN\n   C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.\n\n3. Under a very heavy load, which choice is usually best?Khi tải rất nặng, lựa chọn nào thường tốt nhất?\n   Answer: d) SCAN or C-SCAN (or their LOOK variants)\n   Sweep-based algorithms bound the waiting time and keep the head moving efficiently.VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.\n\n4. Why does disk scheduling matter much less for an SSD?Vì sao lập lịch đĩa ít quan trọng hơn nhiều với SSD?\n   Answer: b) There is no mechanical seek or rotation\n   Seek and rotational delay are what these algorithms reduce.VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.\n\n5. When the queue holds a single request, all disk-scheduling algorithms …Khi hàng đợi chỉ có một yêu cầu, mọi thuật toán lập lịch đĩa …\n   Answer: a) behave the same (no choice to make)\n   Scheduling only helps when several requests are pending.VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.\n"
+          "code": "# Disk 5 — Which algorithm for which workload? — answer key\n\n1. Which algorithm can starve requests far from the head?Thuật toán nào có thể làm đói các yêu cầu ở xa đầu đọc?\n   Answer: c) SSTF\n   If new requests keep arriving near the head, SSTF never goes to the far ones.VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.\n\n2. Which algorithm gives the most uniform waiting time?Thuật toán nào cho thời gian chờ đồng đều nhất?\n   Answer: b) C-SCAN\n   C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.\n\n3. Under a very heavy load, which choice is usually best?Khi tải rất nặng, lựa chọn nào thường tốt nhất?\n   Answer: b) SCAN or C-SCAN\n   Sweep-based algorithms bound the waiting time and keep the head moving efficiently.VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.\n\n4. Why does disk scheduling matter much less for an SSD?Vì sao lập lịch đĩa ít quan trọng hơn nhiều với SSD?\n   Answer: c) There is no mechanical seek or rotation\n   Seek and rotational delay are what these algorithms reduce.VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.\n\n5. When the queue holds a single request, all disk-scheduling algorithms …Khi hàng đợi chỉ có một yêu cầu, mọi thuật toán lập lịch đĩa …\n   Answer: b) behave the same\n   Scheduling only helps when several requests are pending.VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> SSTF</p><p>If new requests keep arriving near the head, SSTF never goes to the far ones.</p><p><i>VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.</i></p></li><li><p><b>b)</b> C-SCAN</p><p>C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.</p><p><i>VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.</i></p></li><li><p><b>d)</b> SCAN or C-SCAN (or their LOOK variants)</p><p>Sweep-based algorithms bound the waiting time and keep the head moving efficiently.</p><p><i>VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.</i></p></li><li><p><b>b)</b> There is no mechanical seek or rotation</p><p>Seek and rotational delay are what these algorithms reduce.</p><p><i>VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.</i></p></li><li><p><b>a)</b> behave the same (no choice to make)</p><p>Scheduling only helps when several requests are pending.</p><p><i>VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> SSTF</p><p>If new requests keep arriving near the head, SSTF never goes to the far ones.</p><p><i>VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.</i></p></li><li><p><b>b)</b> C-SCAN</p><p>C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.</p><p><i>VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.</i></p></li><li><p><b>b)</b> SCAN or C-SCAN</p><p>Sweep-based algorithms bound the waiting time and keep the head moving efficiently.</p><p><i>VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.</i></p></li><li><p><b>c)</b> There is no mechanical seek or rotation</p><p>Seek and rotational delay are what these algorithms reduce.</p><p><i>VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.</i></p></li><li><p><b>b)</b> behave the same</p><p>Scheduling only helps when several requests are pending.</p><p><i>VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -570,23 +570,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Random order"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Always the shortest request"
-              },
-              {
-                "ma": "c",
                 "noiDung": "FCFS"
               },
               {
+                "ma": "b",
+                "noiDung": "SCAN or C-SCAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Random order"
+              },
+              {
                 "ma": "d",
-                "noiDung": "SCAN or C-SCAN (or their LOOK variants)"
+                "noiDung": "Always the shortest request"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Sweep-based algorithms bound the waiting time and keep the head moving efficiently.</p><p><i>VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.</i></p>"
           },
@@ -596,23 +596,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The OS cannot see SSDs"
+                "noiDung": "SSDs are slower than any scheduler"
               },
               {
                 "ma": "b",
-                "noiDung": "There is no mechanical seek or rotation"
+                "noiDung": "SSDs have no queue of pending requests"
               },
               {
                 "ma": "c",
-                "noiDung": "SSDs have no requests"
+                "noiDung": "There is no mechanical seek or rotation"
               },
               {
                 "ma": "d",
-                "noiDung": "SSDs are slower"
+                "noiDung": "The OS cannot see the queue of an SSD"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Seek and rotational delay are what these algorithms reduce.</p><p><i>VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.</i></p>"
           },
@@ -622,23 +622,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "behave the same (no choice to make)"
+                "noiDung": "differ greatly"
               },
               {
                 "ma": "b",
-                "noiDung": "cannot run"
+                "noiDung": "behave the same"
               },
               {
                 "ma": "c",
-                "noiDung": "need a reset"
+                "noiDung": "need a head reset"
               },
               {
                 "ma": "d",
-                "noiDung": "differ greatly"
+                "noiDung": "cannot run"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Scheduling only helps when several requests are pending.</p><p><i>VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.</i></p>"
           }

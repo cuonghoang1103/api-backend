@@ -469,10 +469,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# I-node 4 — Hard links, symbolic links and what an i-node stores — answer key\n\n1. Which of these is NOT stored in an i-node?Thứ nào KHÔNG được lưu trong i-node?\n   Answer: d) The file name\n   Names live in directory entries (name → i-node number), which is why one i-node can have several names (hard links).VI: Tên nằm ở mục thư mục (tên → số i-node), nên một i-node có thể có nhiều tên (hard link).\n\n2. After ln a b (hard link) and then rm a, what happens to the data?Sau ln a b (hard link) rồi rm a, dữ liệu ra sao?\n   Answer: a) It remains accessible through b; the link count drops from 2 to 1\n   The data is freed only when the link count reaches 0 (and no process has it open).VI: Dữ liệu chỉ được giải phóng khi số liên kết về 0 (và không tiến trình nào còn mở).\n\n3. After ln -s a s (symbolic link) and then rm a, accessing s …Sau ln -s a s (symbolic link) rồi rm a, truy cập s …\n   Answer: a) fails: s is a dangling link\n   A symlink stores a path name, not an i-node; the target is looked up each time.VI: Symlink lưu một đường dẫn chứ không phải i-node; mục tiêu được tra lại mỗi lần.\n\n4. Hard links cannot cross file systems because …Hard link không vượt qua ranh giới hệ tệp vì …\n   Answer: c) i-node numbers are only meaningful inside one file system\n   A directory entry holds an i-node number, valid only within its own partition. Symlinks can cross.VI: Mục thư mục chứa số i-node, chỉ có nghĩa trong cùng phân vùng. Symlink thì vượt được.\n\n5. A directory in UNIX is …Thư mục trong UNIX là …\n   Answer: d) a special file whose data is a list of (name, i-node number) entries\n   “Everything is a file”: reading a directory means reading its entries.VI: “Mọi thứ đều là tệp”: đọc thư mục là đọc các mục của nó.\n"
+          "code": "# I-node 4 — Hard links, symbolic links and what an i-node stores — answer key\n\n1. Which of these is NOT stored in an i-node?Thứ nào KHÔNG được lưu trong i-node?\n   Answer: d) The file name\n   Names live in directory entries (name → i-node number), which is why one i-node can have several names (hard links).VI: Tên nằm ở mục thư mục (tên → số i-node), nên một i-node có thể có nhiều tên (hard link).\n\n2. After ln a b (hard link) and then rm a, what happens to the data?Sau ln a b (hard link) rồi rm a, dữ liệu ra sao?\n   Answer: a) It remains accessible through b; the link count drops from 2 to 1\n   The data is freed only when the link count reaches 0 (and no process has it open).VI: Dữ liệu chỉ được giải phóng khi số liên kết về 0 (và không tiến trình nào còn mở).\n\n3. After ln -s a s (symbolic link) and then rm a, accessing s …Sau ln -s a s (symbolic link) rồi rm a, truy cập s …\n   Answer: a) fails: s is a dangling link\n   A symlink stores a path name, not an i-node; the target is looked up each time.VI: Symlink lưu một đường dẫn chứ không phải i-node; mục tiêu được tra lại mỗi lần.\n\n4. Hard links cannot cross file systems because …Hard link không vượt qua ranh giới hệ tệp vì …\n   Answer: c) i-node numbers are only meaningful inside one file system\n   A directory entry holds an i-node number, valid only within its own partition. Symlinks can cross.VI: Mục thư mục chứa số i-node, chỉ có nghĩa trong cùng phân vùng. Symlink thì vượt được.\n\n5. A directory in UNIX is …Thư mục trong UNIX là …\n   Answer: b) a special file listing (name, i-node number) entries\n   “Everything is a file”: reading a directory means reading its entries.VI: “Mọi thứ đều là tệp”: đọc thư mục là đọc các mục của nó.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The file name</p><p>Names live in directory entries (name → i-node number), which is why one i-node can have several names (hard links).</p><p><i>VI: Tên nằm ở mục thư mục (tên → số i-node), nên một i-node có thể có nhiều tên (hard link).</i></p></li><li><p><b>a)</b> It remains accessible through b; the link count drops from 2 to 1</p><p>The data is freed only when the link count reaches 0 (and no process has it open).</p><p><i>VI: Dữ liệu chỉ được giải phóng khi số liên kết về 0 (và không tiến trình nào còn mở).</i></p></li><li><p><b>a)</b> fails: s is a dangling link</p><p>A symlink stores a path name, not an i-node; the target is looked up each time.</p><p><i>VI: Symlink lưu một đường dẫn chứ không phải i-node; mục tiêu được tra lại mỗi lần.</i></p></li><li><p><b>c)</b> i-node numbers are only meaningful inside one file system</p><p>A directory entry holds an i-node number, valid only within its own partition. Symlinks can cross.</p><p><i>VI: Mục thư mục chứa số i-node, chỉ có nghĩa trong cùng phân vùng. Symlink thì vượt được.</i></p></li><li><p><b>d)</b> a special file whose data is a list of (name, i-node number) entries</p><p>“Everything is a file”: reading a directory means reading its entries.</p><p><i>VI: “Mọi thứ đều là tệp”: đọc thư mục là đọc các mục của nó.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The file name</p><p>Names live in directory entries (name → i-node number), which is why one i-node can have several names (hard links).</p><p><i>VI: Tên nằm ở mục thư mục (tên → số i-node), nên một i-node có thể có nhiều tên (hard link).</i></p></li><li><p><b>a)</b> It remains accessible through b; the link count drops from 2 to 1</p><p>The data is freed only when the link count reaches 0 (and no process has it open).</p><p><i>VI: Dữ liệu chỉ được giải phóng khi số liên kết về 0 (và không tiến trình nào còn mở).</i></p></li><li><p><b>a)</b> fails: s is a dangling link</p><p>A symlink stores a path name, not an i-node; the target is looked up each time.</p><p><i>VI: Symlink lưu một đường dẫn chứ không phải i-node; mục tiêu được tra lại mỗi lần.</i></p></li><li><p><b>c)</b> i-node numbers are only meaningful inside one file system</p><p>A directory entry holds an i-node number, valid only within its own partition. Symlinks can cross.</p><p><i>VI: Mục thư mục chứa số i-node, chỉ có nghĩa trong cùng phân vùng. Symlink thì vượt được.</i></p></li><li><p><b>b)</b> a special file listing (name, i-node number) entries</p><p>“Everything is a file”: reading a directory means reading its entries.</p><p><i>VI: “Mọi thứ đều là tệp”: đọc thư mục là đọc các mục của nó.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -589,23 +589,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a kind of device whose driver lists the names of the files"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a block group that holds the data of the files inside it"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a table in the superblock with one row per file name"
               },
               {
+                "ma": "b",
+                "noiDung": "a special file listing (name, i-node number) entries"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a kind of device whose driver lists the names of the files"
+              },
+              {
                 "ma": "d",
-                "noiDung": "a special file whose data is a list of (name, i-node number) entries"
+                "noiDung": "a block group that holds the data of the files inside it"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>“Everything is a file”: reading a directory means reading its entries.</p><p><i>VI: “Mọi thứ đều là tệp”: đọc thư mục là đọc các mục của nó.</i></p>"
           }

@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Files 1 — Files, directories and links (concepts) — answer key\n\n1. What is the difference between an absolute and a relative path?Đường dẫn tuyệt đối khác đường dẫn tương đối ở chỗ nào?\n   Answer: a) An absolute path starts at the root (/), a relative path starts at the current working directory\n   /home/ana/a.txt is absolute; docs/a.txt is resolved against the working directory.VI: /home/ana/a.txt là tuyệt đối; docs/a.txt được giải theo thư mục làm việc.\n\n2. In UNIX, which system call returns a file descriptor?Trong UNIX lời gọi hệ thống nào trả về mô tả tệp (file descriptor)?\n   Answer: d) open()\n   open returns the lowest unused non-negative integer; read/write/close take it as an argument.VI: open trả số nguyên không âm nhỏ nhất chưa dùng; read/write/close nhận nó làm tham số.\n\n3. Which directory structure allows the same file to appear under two names?Cấu trúc thư mục nào cho phép cùng một tệp xuất hiện dưới hai tên?\n   Answer: c) Acyclic-graph directories (links)\n   Hard and symbolic links turn the tree into a DAG.VI: Liên kết cứng và mềm biến cây thành DAG.\n\n4. What does a file’s “extension” (.txt, .c) mean to UNIX itself?Phần mở rộng (.txt, .c) của tệp có ý nghĩa gì với bản thân UNIX?\n   Answer: c) Nothing: it is only part of the name (conventions are for programs and users)\n   UNIX determines type by content/permissions; Windows associates programs with extensions.VI: UNIX xác định loại theo nội dung/quyền; Windows gắn chương trình theo phần mở rộng.\n\n5. A memory-mapped file (mmap) lets a program …Tệp ánh xạ bộ nhớ (mmap) cho phép chương trình …\n   Answer: d) access file contents as ordinary memory; pages are loaded on demand\n   Virtual memory and files meet: a page fault reads the file block.VI: Bộ nhớ ảo và tệp gặp nhau: lỗi trang sẽ đọc khối tệp.\n"
+          "code": "# Files 1 — Files, directories and links (concepts) — answer key\n\n1. What is the difference between an absolute and a relative path?Đường dẫn tuyệt đối khác đường dẫn tương đối ở chỗ nào?\n   Answer: b) An absolute path starts at the root (/), a relative one at the working directory\n   /home/ana/a.txt is absolute; docs/a.txt is resolved against the working directory.VI: /home/ana/a.txt là tuyệt đối; docs/a.txt được giải theo thư mục làm việc.\n\n2. In UNIX, which system call returns a file descriptor?Trong UNIX lời gọi hệ thống nào trả về mô tả tệp (file descriptor)?\n   Answer: d) open()\n   open returns the lowest unused non-negative integer; read/write/close take it as an argument.VI: open trả số nguyên không âm nhỏ nhất chưa dùng; read/write/close nhận nó làm tham số.\n\n3. Which directory structure allows the same file to appear under two names?Cấu trúc thư mục nào cho phép cùng một tệp xuất hiện dưới hai tên?\n   Answer: d) Acyclic-graph directories\n   Hard and symbolic links turn the tree into a DAG.VI: Liên kết cứng và mềm biến cây thành DAG.\n\n4. What does a file’s “extension” (.txt, .c) mean to UNIX itself?Phần mở rộng (.txt, .c) của tệp có ý nghĩa gì với bản thân UNIX?\n   Answer: a) Nothing: it is only part of the name, a convention for users\n   UNIX determines type by content/permissions; Windows associates programs with extensions.VI: UNIX xác định loại theo nội dung/quyền; Windows gắn chương trình theo phần mở rộng.\n\n5. A memory-mapped file (mmap) lets a program …Tệp ánh xạ bộ nhớ (mmap) cho phép chương trình …\n   Answer: d) access file contents as ordinary memory; pages are loaded on demand\n   Virtual memory and files meet: a page fault reads the file block.VI: Bộ nhớ ảo và tệp gặp nhau: lỗi trang sẽ đọc khối tệp.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> An absolute path starts at the root (/), a relative path starts at the current working directory</p><p>/home/ana/a.txt is absolute; docs/a.txt is resolved against the working directory.</p><p><i>VI: /home/ana/a.txt là tuyệt đối; docs/a.txt được giải theo thư mục làm việc.</i></p></li><li><p><b>d)</b> open()</p><p>open returns the lowest unused non-negative integer; read/write/close take it as an argument.</p><p><i>VI: open trả số nguyên không âm nhỏ nhất chưa dùng; read/write/close nhận nó làm tham số.</i></p></li><li><p><b>c)</b> Acyclic-graph directories (links)</p><p>Hard and symbolic links turn the tree into a DAG.</p><p><i>VI: Liên kết cứng và mềm biến cây thành DAG.</i></p></li><li><p><b>c)</b> Nothing: it is only part of the name (conventions are for programs and users)</p><p>UNIX determines type by content/permissions; Windows associates programs with extensions.</p><p><i>VI: UNIX xác định loại theo nội dung/quyền; Windows gắn chương trình theo phần mở rộng.</i></p></li><li><p><b>d)</b> access file contents as ordinary memory; pages are loaded on demand</p><p>Virtual memory and files meet: a page fault reads the file block.</p><p><i>VI: Bộ nhớ ảo và tệp gặp nhau: lỗi trang sẽ đọc khối tệp.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> An absolute path starts at the root (/), a relative one at the working directory</p><p>/home/ana/a.txt is absolute; docs/a.txt is resolved against the working directory.</p><p><i>VI: /home/ana/a.txt là tuyệt đối; docs/a.txt được giải theo thư mục làm việc.</i></p></li><li><p><b>d)</b> open()</p><p>open returns the lowest unused non-negative integer; read/write/close take it as an argument.</p><p><i>VI: open trả số nguyên không âm nhỏ nhất chưa dùng; read/write/close nhận nó làm tham số.</i></p></li><li><p><b>d)</b> Acyclic-graph directories</p><p>Hard and symbolic links turn the tree into a DAG.</p><p><i>VI: Liên kết cứng và mềm biến cây thành DAG.</i></p></li><li><p><b>a)</b> Nothing: it is only part of the name, a convention for users</p><p>UNIX determines type by content/permissions; Windows associates programs with extensions.</p><p><i>VI: UNIX xác định loại theo nội dung/quyền; Windows gắn chương trình theo phần mở rộng.</i></p></li><li><p><b>d)</b> access file contents as ordinary memory; pages are loaded on demand</p><p>Virtual memory and files meet: a page fault reads the file block.</p><p><i>VI: Bộ nhớ ảo và tệp gặp nhau: lỗi trang sẽ đọc khối tệp.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,15 +64,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "An absolute path starts at the root (/), a relative path starts at the current working directory"
+                "noiDung": "An absolute path is always shorter, because it leaves out the current directory"
               },
               {
                 "ma": "b",
-                "noiDung": "A relative path cannot contain directories; it is only the name of a file in /"
+                "noiDung": "An absolute path starts at the root (/), a relative one at the working directory"
               },
               {
                 "ma": "c",
-                "noiDung": "An absolute path is always shorter, because it leaves out the current directory"
+                "noiDung": "A relative path cannot contain directories; it is only the name of a file in /"
               },
               {
                 "ma": "d",
@@ -80,7 +80,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>/home/ana/a.txt is absolute; docs/a.txt is resolved against the working directory.</p><p><i>VI: /home/ana/a.txt là tuyệt đối; docs/a.txt được giải theo thư mục làm việc.</i></p>"
           },
@@ -116,7 +116,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Two-level directory"
+                "noiDung": "Pure tree"
               },
               {
                 "ma": "b",
@@ -124,15 +124,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Acyclic-graph directories (links)"
+                "noiDung": "Two-level directory"
               },
               {
                 "ma": "d",
-                "noiDung": "Pure tree"
+                "noiDung": "Acyclic-graph directories"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Hard and symbolic links turn the tree into a DAG.</p><p><i>VI: Liên kết cứng và mềm biến cây thành DAG.</i></p>"
           },
@@ -142,7 +142,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It tells the kernel which program must open the file"
+                "noiDung": "Nothing: it is only part of the name, a convention for users"
               },
               {
                 "ma": "b",
@@ -150,7 +150,7 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Nothing: it is only part of the name (conventions are for programs and users)"
+                "noiDung": "It tells the kernel which program must open the file"
               },
               {
                 "ma": "d",
@@ -158,7 +158,7 @@
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>UNIX determines type by content/permissions; Windows associates programs with extensions.</p><p><i>VI: UNIX xác định loại theo nội dung/quyền; Windows gắn chương trình theo phần mở rộng.</i></p>"
           },

@@ -548,10 +548,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Banker 5 — What the Banker’s algorithm needs, and its limits — answer key\n\n1. Which assumption makes the Banker’s algorithm hard to use in a general-purpose OS?Giả định nào khiến thuật toán nhà băng khó dùng trong OS đa dụng?\n   Answer: c) Every process must declare its maximum resource claim in advance\n   Real programs rarely know their maximum demand beforehand; the number of processes is also not fixed.VI: Chương trình thật hiếm khi biết trước nhu cầu tối đa; số tiến trình cũng không cố định.\n\n2. A state is safe if …Một trạng thái là an toàn nếu …\n   Answer: c) there exists an order in which every process can run to completion\n   One good order is enough; the algorithm searches for it.VI: Chỉ cần MỘT thứ tự tốt; thuật toán đi tìm nó.\n\n3. The safety algorithm takes O(m·n²) steps for n processes and m resource types because …Thuật toán an toàn có độ phức tạp O(m·n²) cho n tiến trình và m loại tài nguyên vì …\n   Answer: c) up to n rounds each scan n processes comparing m numbers\n   Each round finds one process (n scans of m comparisons), at most n rounds.VI: Mỗi vòng tìm được một tiến trình (n lần duyệt, mỗi lần m phép so), tối đa n vòng.\n\n4. After the OS pretends to grant a request and finds the new state UNSAFE, it …Sau khi OS giả vờ cấp một yêu cầu và thấy trạng thái mới KHÔNG an toàn, nó …\n   Answer: d) restores the old state and makes the process wait\n   The grant is only tentative; the request stays pending.VI: Việc cấp chỉ là tạm; yêu cầu vẫn chờ xử lý.\n\n5. Which pair is correct?Cặp nào đúng?\n   Answer: d) Banker’s algorithm = avoidance; cycle search in the allocation graph = detection\n   Avoidance decides at request time with extra information; detection looks at the state afterwards.VI: Tránh quyết định lúc yêu cầu bằng thông tin thêm; phát hiện xét trạng thái sau đó.\n"
+          "code": "# Banker 5 — What the Banker’s algorithm needs, and its limits — answer key\n\n1. Which assumption makes the Banker’s algorithm hard to use in a general-purpose OS?Giả định nào khiến thuật toán nhà băng khó dùng trong OS đa dụng?\n   Answer: d) Every process must declare its maximum claim in advance\n   Real programs rarely know their maximum demand beforehand; the number of processes is also not fixed.VI: Chương trình thật hiếm khi biết trước nhu cầu tối đa; số tiến trình cũng không cố định.\n\n2. A state is safe if …Một trạng thái là an toàn nếu …\n   Answer: a) there exists an order in which all can finish\n   One good order is enough; the algorithm searches for it.VI: Chỉ cần MỘT thứ tự tốt; thuật toán đi tìm nó.\n\n3. The safety algorithm takes O(m·n²) steps for n processes and m resource types because …Thuật toán an toàn có độ phức tạp O(m·n²) cho n tiến trình và m loại tài nguyên vì …\n   Answer: d) up to n rounds each scan n processes comparing m numbers\n   Each round finds one process (n scans of m comparisons), at most n rounds.VI: Mỗi vòng tìm được một tiến trình (n lần duyệt, mỗi lần m phép so), tối đa n vòng.\n\n4. After the OS pretends to grant a request and finds the new state UNSAFE, it …Sau khi OS giả vờ cấp một yêu cầu và thấy trạng thái mới KHÔNG an toàn, nó …\n   Answer: c) restores the old state and makes the process wait\n   The grant is only tentative; the request stays pending.VI: Việc cấp chỉ là tạm; yêu cầu vẫn chờ xử lý.\n\n5. Which pair is correct?Cặp nào đúng?\n   Answer: c) Banker’s algorithm = avoidance; cycle search = detection\n   Avoidance decides at request time with extra information; detection looks at the state afterwards.VI: Tránh quyết định lúc yêu cầu bằng thông tin thêm; phát hiện xét trạng thái sau đó.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Every process must declare its maximum resource claim in advance</p><p>Real programs rarely know their maximum demand beforehand; the number of processes is also not fixed.</p><p><i>VI: Chương trình thật hiếm khi biết trước nhu cầu tối đa; số tiến trình cũng không cố định.</i></p></li><li><p><b>c)</b> there exists an order in which every process can run to completion</p><p>One good order is enough; the algorithm searches for it.</p><p><i>VI: Chỉ cần MỘT thứ tự tốt; thuật toán đi tìm nó.</i></p></li><li><p><b>c)</b> up to n rounds each scan n processes comparing m numbers</p><p>Each round finds one process (n scans of m comparisons), at most n rounds.</p><p><i>VI: Mỗi vòng tìm được một tiến trình (n lần duyệt, mỗi lần m phép so), tối đa n vòng.</i></p></li><li><p><b>d)</b> restores the old state and makes the process wait</p><p>The grant is only tentative; the request stays pending.</p><p><i>VI: Việc cấp chỉ là tạm; yêu cầu vẫn chờ xử lý.</i></p></li><li><p><b>d)</b> Banker’s algorithm = avoidance; cycle search in the allocation graph = detection</p><p>Avoidance decides at request time with extra information; detection looks at the state afterwards.</p><p><i>VI: Tránh quyết định lúc yêu cầu bằng thông tin thêm; phát hiện xét trạng thái sau đó.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Every process must declare its maximum claim in advance</p><p>Real programs rarely know their maximum demand beforehand; the number of processes is also not fixed.</p><p><i>VI: Chương trình thật hiếm khi biết trước nhu cầu tối đa; số tiến trình cũng không cố định.</i></p></li><li><p><b>a)</b> there exists an order in which all can finish</p><p>One good order is enough; the algorithm searches for it.</p><p><i>VI: Chỉ cần MỘT thứ tự tốt; thuật toán đi tìm nó.</i></p></li><li><p><b>d)</b> up to n rounds each scan n processes comparing m numbers</p><p>Each round finds one process (n scans of m comparisons), at most n rounds.</p><p><i>VI: Mỗi vòng tìm được một tiến trình (n lần duyệt, mỗi lần m phép so), tối đa n vòng.</i></p></li><li><p><b>c)</b> restores the old state and makes the process wait</p><p>The grant is only tentative; the request stays pending.</p><p><i>VI: Việc cấp chỉ là tạm; yêu cầu vẫn chờ xử lý.</i></p></li><li><p><b>c)</b> Banker’s algorithm = avoidance; cycle search = detection</p><p>Avoidance decides at request time with extra information; detection looks at the state afterwards.</p><p><i>VI: Tránh quyết định lúc yêu cầu bằng thông tin thêm; phát hiện xét trạng thái sau đó.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -564,23 +564,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "All memory must be paged, so that frames can be counted"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Every resource must be a printer or another slow device"
               },
               {
+                "ma": "b",
+                "noiDung": "Exactly one process may run in the system at any time"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Every process must declare its maximum resource claim in advance"
+                "noiDung": "All memory must be paged, so that frames can be counted"
               },
               {
                 "ma": "d",
-                "noiDung": "Exactly one process may run in the system at any time"
+                "noiDung": "Every process must declare its maximum claim in advance"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Real programs rarely know their maximum demand beforehand; the number of processes is also not fixed.</p><p><i>VI: Chương trình thật hiếm khi biết trước nhu cầu tối đa; số tiến trình cũng không cố định.</i></p>"
           },
@@ -590,23 +590,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "all processes can finish in ANY order"
+                "noiDung": "there exists an order in which all can finish"
               },
               {
                 "ma": "b",
-                "noiDung": "no process is waiting"
+                "noiDung": "Available is positive for every resource type"
               },
               {
                 "ma": "c",
-                "noiDung": "there exists an order in which every process can run to completion"
+                "noiDung": "all processes can finish in ANY order they choose"
               },
               {
                 "ma": "d",
-                "noiDung": "Available is positive"
+                "noiDung": "no process is waiting for a resource right now"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>One good order is enough; the algorithm searches for it.</p><p><i>VI: Chỉ cần MỘT thứ tự tốt; thuật toán đi tìm nó.</i></p>"
           },
@@ -624,15 +624,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "up to n rounds each scan n processes comparing m numbers"
+                "noiDung": "it copies m tables of n rows to the disk before each round"
               },
               {
                 "ma": "d",
-                "noiDung": "it copies m tables of n rows to the disk before each round"
+                "noiDung": "up to n rounds each scan n processes comparing m numbers"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Each round finds one process (n scans of m comparisons), at most n rounds.</p><p><i>VI: Mỗi vòng tìm được một tiến trình (n lần duyệt, mỗi lần m phép so), tối đa n vòng.</i></p>"
           },
@@ -642,23 +642,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "kills the process and frees all it holds"
-              },
-              {
-                "ma": "b",
-                "noiDung": "keeps the new state and blocks all others"
-              },
-              {
-                "ma": "c",
                 "noiDung": "grants it anyway and marks the state safe"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "keeps the new state and blocks all the other processes"
+              },
+              {
+                "ma": "c",
                 "noiDung": "restores the old state and makes the process wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "kills the process and frees all it holds"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>The grant is only tentative; the request stays pending.</p><p><i>VI: Việc cấp chỉ là tạm; yêu cầu vẫn chờ xử lý.</i></p>"
           },
@@ -668,23 +668,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Ostrich = avoidance; detection = prevention"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Banker’s algorithm = detection; ordering resources = avoidance"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Spooling = avoidance; Banker = prevention"
               },
               {
+                "ma": "b",
+                "noiDung": "Ostrich = avoidance; detection = prevention"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Banker’s algorithm = avoidance; cycle search = detection"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Banker’s algorithm = avoidance; cycle search in the allocation graph = detection"
+                "noiDung": "Banker’s algorithm = detection; ordering resources = avoidance"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Avoidance decides at request time with extra information; detection looks at the state afterwards.</p><p><i>VI: Tránh quyết định lúc yêu cầu bằng thông tin thêm; phát hiện xét trạng thái sau đó.</i></p>"
           }

@@ -8,7 +8,7 @@ const E1 = cs({
     mcNum('c1', ['How many /64 subnets are in a /48?', 'Một /48 có bao nhiêu mạng /64?'], 65536, [256, 16, 4096], (x) => x.toLocaleString('en-US'), ['2^(64−48) = 65,536.', '2^(64−48) = 65.536.']),
     q('c2', ['A normal LAN in IPv6 gets a …', 'Một LAN bình thường trong IPv6 được cấp …'], ['/64', '/48', '/126', '/32'], ['SLAAC needs 64 bits of interface ID, so LANs are /64 even for 2 hosts.', 'SLAAC cần 64 bit interface ID nên LAN luôn /64 dù chỉ 2 host.']),
     q('c3', ['2001:db8:acad::/48 — the 4th hextet is the …', '2001:db8:acad::/48 — nhóm thứ 4 là …'], ['subnet ID', 'interface ID', 'global routing prefix', 'EtherType'], ['Global prefix 48 bits + 16-bit subnet ID + 64-bit interface ID.', 'Prefix toàn cục 48 bit + subnet ID 16 bit + interface ID 64 bit.']),
-    q('c4', ['Which is the 11th /64 (counting from subnet 0) of 2001:db8:acad::/48?', 'Mạng /64 thứ 11 (đếm từ subnet 0) của 2001:db8:acad::/48 là?'], [S.ipv6Subnet64('2001:db8:acad::', 11), S.ipv6Subnet64('2001:db8:acad::', 17), S.ipv6Subnet64('2001:db8:acad::', 10), S.ipv6Subnet64('2001:db8:acad::', 0)], ['Subnet 11 is written 0xb in hex.', 'Subnet 11 viết 0xb dạng hex.']),
+    q('c4', ['Subnets are numbered from 0. Which /64 is subnet number 11 of 2001:db8:acad::/48?', 'Các subnet đánh số từ 0. Mạng /64 mang số 11 của 2001:db8:acad::/48 là?'], [S.ipv6Subnet64('2001:db8:acad::', 11), S.ipv6Subnet64('2001:db8:acad::', 17), S.ipv6Subnet64('2001:db8:acad::', 10), S.ipv6Subnet64('2001:db8:acad::', 0)], ['Subnet 11 is written 0xb in hex.', 'Subnet 11 viết 0xb dạng hex.']),
   ],
   goiY: ['Subnet ID is hexadecimal.', 'Every LAN is /64.'],
   loi: ['Using /126 or /127 on user LANs.', 'Writing the subnet number in decimal.'],

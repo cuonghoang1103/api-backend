@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Addressing 1 — Structure and special addresses — answer key\n\n1. The host portion of 192.168.10.5/24 is …Phần host của 192.168.10.5/24 là …\n   Answer: b) the last 8 bits (5)\n   /24 = 24 network bits, 8 host bits.VI: /24 = 24 bit mạng, 8 bit host.\n\n2. Which block is reserved for loopback?Dải nào dành cho loopback?\n   Answer: a) 127.0.0.0/8\n   127.0.0.1 is the local host.VI: 127.0.0.1 là chính máy này.\n\n3. An address starting with 169.254 on a PC means …Địa chỉ bắt đầu bằng 169.254 trên PC nghĩa là …\n   Answer: d) DHCP failed and Windows self-assigned a link-local address (APIPA)\n   A symptom to look for when users say “no network”.VI: Dấu hiệu cần tìm khi người dùng báo “mất mạng”.\n\n4. The private IPv4 ranges (RFC 1918) are …Các dải IPv4 riêng (RFC 1918) là …\n   Answer: d) 10/8, 172.16/12, 192.168/16\n   Not routed on the public Internet; NAT is needed to reach it.VI: Không định tuyến trên Internet công cộng; cần NAT để ra ngoài.\n\n5. Class D addresses (224.0.0.0–239.255.255.255) are used for …Địa chỉ lớp D (224.0.0.0–239.255.255.255) dùng cho …\n   Answer: c) multicast\n   E.g. 224.0.0.5 for OSPF routers.VI: Vd 224.0.0.5 cho các router OSPF.\n"
+          "code": "# Addressing 1 — Structure and special addresses — answer key\n\n1. The host portion of 192.168.10.5/24 is …Phần host của 192.168.10.5/24 là …\n   Answer: c) the last 8 bits\n   /24 = 24 network bits, 8 host bits.VI: /24 = 24 bit mạng, 8 bit host.\n\n2. Which block is reserved for loopback?Dải nào dành cho loopback?\n   Answer: a) 127.0.0.0/8\n   127.0.0.1 is the local host.VI: 127.0.0.1 là chính máy này.\n\n3. An address starting with 169.254 on a PC means …Địa chỉ bắt đầu bằng 169.254 trên PC nghĩa là …\n   Answer: b) DHCP failed and the PC self-assigned a link-local address\n   A symptom to look for when users say “no network”.VI: Dấu hiệu cần tìm khi người dùng báo “mất mạng”.\n\n4. The private IPv4 ranges (RFC 1918) are …Các dải IPv4 riêng (RFC 1918) là …\n   Answer: d) 10/8, 172.16/12, 192.168/16\n   Not routed on the public Internet; NAT is needed to reach it.VI: Không định tuyến trên Internet công cộng; cần NAT để ra ngoài.\n\n5. Class D addresses (224.0.0.0–239.255.255.255) are used for …Địa chỉ lớp D (224.0.0.0–239.255.255.255) dùng cho …\n   Answer: c) multicast\n   E.g. 224.0.0.5 for OSPF routers.VI: Vd 224.0.0.5 cho các router OSPF.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> the last 8 bits (5)</p><p>/24 = 24 network bits, 8 host bits.</p><p><i>VI: /24 = 24 bit mạng, 8 bit host.</i></p></li><li><p><b>a)</b> 127.0.0.0/8</p><p>127.0.0.1 is the local host.</p><p><i>VI: 127.0.0.1 là chính máy này.</i></p></li><li><p><b>d)</b> DHCP failed and Windows self-assigned a link-local address (APIPA)</p><p>A symptom to look for when users say “no network”.</p><p><i>VI: Dấu hiệu cần tìm khi người dùng báo “mất mạng”.</i></p></li><li><p><b>d)</b> 10/8, 172.16/12, 192.168/16</p><p>Not routed on the public Internet; NAT is needed to reach it.</p><p><i>VI: Không định tuyến trên Internet công cộng; cần NAT để ra ngoài.</i></p></li><li><p><b>c)</b> multicast</p><p>E.g. 224.0.0.5 for OSPF routers.</p><p><i>VI: Vd 224.0.0.5 cho các router OSPF.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> the last 8 bits</p><p>/24 = 24 network bits, 8 host bits.</p><p><i>VI: /24 = 24 bit mạng, 8 bit host.</i></p></li><li><p><b>a)</b> 127.0.0.0/8</p><p>127.0.0.1 is the local host.</p><p><i>VI: 127.0.0.1 là chính máy này.</i></p></li><li><p><b>b)</b> DHCP failed and the PC self-assigned a link-local address</p><p>A symptom to look for when users say “no network”.</p><p><i>VI: Dấu hiệu cần tìm khi người dùng báo “mất mạng”.</i></p></li><li><p><b>d)</b> 10/8, 172.16/12, 192.168/16</p><p>Not routed on the public Internet; NAT is needed to reach it.</p><p><i>VI: Không định tuyến trên Internet công cộng; cần NAT để ra ngoài.</i></p></li><li><p><b>c)</b> multicast</p><p>E.g. 224.0.0.5 for OSPF routers.</p><p><i>VI: Vd 224.0.0.5 cho các router OSPF.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -66,19 +66,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the last 8 bits (5)"
+                "noiDung": "the first 24 bits"
               },
               {
                 "ma": "c",
-                "noiDung": "the last 16 bits"
+                "noiDung": "the last 8 bits"
               },
               {
                 "ma": "d",
-                "noiDung": "the first 24 bits"
+                "noiDung": "the last 16 bits"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>/24 = 24 network bits, 8 host bits.</p><p><i>VI: /24 = 24 bit mạng, 8 bit host.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the network has moved to IPv6 and maps old addresses here"
-              },
-              {
-                "ma": "b",
                 "noiDung": "the PC has become the DHCP server of its own subnet"
               },
               {
+                "ma": "b",
+                "noiDung": "DHCP failed and the PC self-assigned a link-local address"
+              },
+              {
                 "ma": "c",
-                "noiDung": "the PC has a public address leased by the ISP"
+                "noiDung": "the network has moved to IPv6 and maps old addresses here"
               },
               {
                 "ma": "d",
-                "noiDung": "DHCP failed and Windows self-assigned a link-local address (APIPA)"
+                "noiDung": "the PC has a public address leased by the ISP"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>A symptom to look for when users say “no network”.</p><p><i>VI: Dấu hiệu cần tìm khi người dùng báo “mất mạng”.</i></p>"
           },

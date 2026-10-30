@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Apps 1 — DNS, HTTP, DHCP concepts — answer key\n\n1. A DNS “A” record maps a name to …Bản ghi DNS “A” ánh xạ tên sang …\n   Answer: d) an IPv4 address\n   AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.\n\n2. DNS normally uses …DNS thường dùng …\n   Answer: c) UDP port 53 (TCP for big answers and zone transfers)\n   Short queries fit in one UDP datagram.VI: Truy vấn ngắn vừa trong một datagram UDP.\n\n3. HTTP status code 404 means …Mã trạng thái HTTP 404 nghĩa là …\n   Answer: a) the resource was not found\n   5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.\n\n4. The four DHCP messages are …Bốn thông điệp DHCP là …\n   Answer: d) Discover, Offer, Request, Acknowledge\n   “DORA”. Discover and Request are broadcasts.VI: “DORA”. Discover và Request là broadcast.\n\n5. A DHCP lease gives a client …Một lease DHCP cấp cho client …\n   Answer: c) IP address, mask, default gateway and DNS server for a limited time\n   The client renews at 50% of the lease time.VI: Client gia hạn ở 50% thời gian lease.\n"
+          "code": "# Apps 1 — DNS, HTTP, DHCP concepts — answer key\n\n1. A DNS “A” record maps a name to …Bản ghi DNS “A” ánh xạ tên sang …\n   Answer: d) an IPv4 address\n   AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.\n\n2. DNS normally uses …DNS thường dùng …\n   Answer: c) UDP port 53 (TCP for big answers)\n   Short queries fit in one UDP datagram.VI: Truy vấn ngắn vừa trong một datagram UDP.\n\n3. HTTP status code 404 means …Mã trạng thái HTTP 404 nghĩa là …\n   Answer: a) the resource was not found\n   5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.\n\n4. The four DHCP messages are …Bốn thông điệp DHCP là …\n   Answer: a) Discover, Offer, Request, Acknowledge\n   “DORA”. Discover and Request are broadcasts.VI: “DORA”. Discover và Request là broadcast.\n\n5. A DHCP lease gives a client …Một lease DHCP cấp cho client …\n   Answer: c) IP address, mask, gateway and DNS server for a limited time\n   The client renews at 50% of the lease time.VI: Client gia hạn ở 50% thời gian lease.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> an IPv4 address</p><p>AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.</p><p><i>VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.</i></p></li><li><p><b>c)</b> UDP port 53 (TCP for big answers and zone transfers)</p><p>Short queries fit in one UDP datagram.</p><p><i>VI: Truy vấn ngắn vừa trong một datagram UDP.</i></p></li><li><p><b>a)</b> the resource was not found</p><p>5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.</p><p><i>VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.</i></p></li><li><p><b>d)</b> Discover, Offer, Request, Acknowledge</p><p>“DORA”. Discover and Request are broadcasts.</p><p><i>VI: “DORA”. Discover và Request là broadcast.</i></p></li><li><p><b>c)</b> IP address, mask, default gateway and DNS server for a limited time</p><p>The client renews at 50% of the lease time.</p><p><i>VI: Client gia hạn ở 50% thời gian lease.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> an IPv4 address</p><p>AAAA = IPv6, MX = mail, CNAME = alias, NS = name server, PTR = reverse.</p><p><i>VI: AAAA = IPv6, MX = mail, CNAME = bí danh, NS = máy chủ tên, PTR = ngược.</i></p></li><li><p><b>c)</b> UDP port 53 (TCP for big answers)</p><p>Short queries fit in one UDP datagram.</p><p><i>VI: Truy vấn ngắn vừa trong một datagram UDP.</i></p></li><li><p><b>a)</b> the resource was not found</p><p>5xx = server errors, 4xx = client errors, 3xx = redirects, 2xx = success.</p><p><i>VI: 5xx = lỗi server, 4xx = lỗi client, 3xx = chuyển hướng, 2xx = thành công.</i></p></li><li><p><b>a)</b> Discover, Offer, Request, Acknowledge</p><p>“DORA”. Discover and Request are broadcasts.</p><p><i>VI: “DORA”. Discover và Request là broadcast.</i></p></li><li><p><b>c)</b> IP address, mask, gateway and DNS server for a limited time</p><p>The client renews at 50% of the lease time.</p><p><i>VI: Client gia hạn ở 50% thời gian lease.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -90,15 +90,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "UDP port 67 (TCP for big answers)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "TCP port 80 (UDP for small answers)"
               },
               {
+                "ma": "b",
+                "noiDung": "UDP port 67 (TCP for big answers)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "UDP port 53 (TCP for big answers and zone transfers)"
+                "noiDung": "UDP port 53 (TCP for big answers)"
               },
               {
                 "ma": "d",
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Request, Reply, Ack, Bye"
+                "noiDung": "Discover, Offer, Request, Acknowledge"
               },
               {
                 "ma": "b",
-                "noiDung": "Hello, Offer, Accept, Done"
-              },
-              {
-                "ma": "c",
                 "noiDung": "SYN, SYN-ACK, ACK, FIN"
               },
               {
+                "ma": "c",
+                "noiDung": "Request, Offer, Discover, Acknowledge"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Discover, Offer, Request, Acknowledge"
+                "noiDung": "Hello, Offer, Accept, Acknowledge"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>“DORA”. Discover and Request are broadcasts.</p><p><i>VI: “DORA”. Discover và Request là broadcast.</i></p>"
           },
@@ -168,19 +168,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "only an IP address, kept forever once it has been given"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a domain name, registered for as long as the client is on"
               },
               {
+                "ma": "b",
+                "noiDung": "a MAC address, a mask and a gateway for a limited time"
+              },
+              {
                 "ma": "c",
-                "noiDung": "IP address, mask, default gateway and DNS server for a limited time"
+                "noiDung": "IP address, mask, gateway and DNS server for a limited time"
               },
               {
                 "ma": "d",
-                "noiDung": "a MAC address, a mask and a gateway for a limited time"
+                "noiDung": "only an IP address, kept forever once it has been given"
               }
             ],
             "dapAn": [

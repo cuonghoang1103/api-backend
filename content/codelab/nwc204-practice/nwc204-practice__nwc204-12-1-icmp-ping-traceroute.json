@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ICMP 1 — Messages and what they mean — answer key\n\n1. ICMP echo request (type 8) and echo reply (type 0) are used by …ICMP echo request (type 8) và echo reply (type 0) được dùng bởi …\n   Answer: a) ping\n   Ping tests reachability and round-trip time.VI: Ping kiểm tra khả năng tới được và thời gian khứ hồi.\n\n2. A router discards a packet because its TTL reached 0. It sends …Router huỷ gói vì TTL về 0. Nó gửi …\n   Answer: d) ICMP Time Exceeded (type 11)\n   Traceroute exploits exactly this reply.VI: Traceroute khai thác đúng phản hồi này.\n\n3. “Destination host unreachable” from your own gateway usually means …“Destination host unreachable” từ chính gateway thường nghĩa là …\n   Answer: b) the router has no route or cannot ARP the host\n   Destination Unreachable (type 3) comes from the router that cannot deliver.VI: Destination Unreachable (type 3) do router không chuyển được gửi về.\n\n4. “Request timed out” in ping means …“Request timed out” trong ping nghĩa là …\n   Answer: d) no reply came within the timeout (down, filtered, or lost)\n   A firewall that drops ICMP looks the same as a dead host.VI: Firewall chặn ICMP trông giống host chết.\n\n5. Each traceroute probe uses a TTL that is …Mỗi gói dò của traceroute dùng TTL …\n   Answer: c) increased by one each time, starting at 1\n   TTL 1 reaches hop 1, TTL 2 hop 2 and so on.VI: TTL 1 tới chặng 1, TTL 2 tới chặng 2…\n"
+          "code": "# ICMP 1 — Messages and what they mean — answer key\n\n1. ICMP echo request (type 8) and echo reply (type 0) are used by …ICMP echo request (type 8) và echo reply (type 0) được dùng bởi …\n   Answer: a) ping\n   Ping tests reachability and round-trip time.VI: Ping kiểm tra khả năng tới được và thời gian khứ hồi.\n\n2. A router discards a packet because its TTL reached 0. It sends …Router huỷ gói vì TTL về 0. Nó gửi …\n   Answer: d) ICMP Time Exceeded\n   ICMP type 11. Traceroute exploits exactly this reply.VI: ICMP type 11. Traceroute khai thác đúng phản hồi này.\n\n3. “Destination host unreachable” from your own gateway usually means …“Destination host unreachable” từ chính gateway thường nghĩa là …\n   Answer: d) the router has no route or cannot ARP the host\n   Destination Unreachable (type 3) comes from the router that cannot deliver.VI: Destination Unreachable (type 3) do router không chuyển được gửi về.\n\n4. “Request timed out” in ping means …“Request timed out” trong ping nghĩa là …\n   Answer: b) no reply came within the timeout\n   A firewall that drops ICMP looks the same as a dead host.VI: Firewall chặn ICMP trông giống host chết.\n\n5. Each traceroute probe uses a TTL that is …Mỗi gói dò của traceroute dùng TTL …\n   Answer: c) increased by one each time, starting at 1\n   TTL 1 reaches hop 1, TTL 2 hop 2 and so on.VI: TTL 1 tới chặng 1, TTL 2 tới chặng 2…\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> ping</p><p>Ping tests reachability and round-trip time.</p><p><i>VI: Ping kiểm tra khả năng tới được và thời gian khứ hồi.</i></p></li><li><p><b>d)</b> ICMP Time Exceeded (type 11)</p><p>Traceroute exploits exactly this reply.</p><p><i>VI: Traceroute khai thác đúng phản hồi này.</i></p></li><li><p><b>b)</b> the router has no route or cannot ARP the host</p><p>Destination Unreachable (type 3) comes from the router that cannot deliver.</p><p><i>VI: Destination Unreachable (type 3) do router không chuyển được gửi về.</i></p></li><li><p><b>d)</b> no reply came within the timeout (down, filtered, or lost)</p><p>A firewall that drops ICMP looks the same as a dead host.</p><p><i>VI: Firewall chặn ICMP trông giống host chết.</i></p></li><li><p><b>c)</b> increased by one each time, starting at 1</p><p>TTL 1 reaches hop 1, TTL 2 hop 2 and so on.</p><p><i>VI: TTL 1 tới chặng 1, TTL 2 tới chặng 2…</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> ping</p><p>Ping tests reachability and round-trip time.</p><p><i>VI: Ping kiểm tra khả năng tới được và thời gian khứ hồi.</i></p></li><li><p><b>d)</b> ICMP Time Exceeded</p><p>ICMP type 11. Traceroute exploits exactly this reply.</p><p><i>VI: ICMP type 11. Traceroute khai thác đúng phản hồi này.</i></p></li><li><p><b>d)</b> the router has no route or cannot ARP the host</p><p>Destination Unreachable (type 3) comes from the router that cannot deliver.</p><p><i>VI: Destination Unreachable (type 3) do router không chuyển được gửi về.</i></p></li><li><p><b>b)</b> no reply came within the timeout</p><p>A firewall that drops ICMP looks the same as a dead host.</p><p><i>VI: Firewall chặn ICMP trông giống host chết.</i></p></li><li><p><b>c)</b> increased by one each time, starting at 1</p><p>TTL 1 reaches hop 1, TTL 2 hop 2 and so on.</p><p><i>VI: TTL 1 tới chặng 1, TTL 2 tới chặng 2…</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -92,21 +92,21 @@
               },
               {
                 "ma": "b",
-                "noiDung": "ICMP Echo Reply"
-              },
-              {
-                "ma": "c",
                 "noiDung": "TCP RST"
               },
               {
+                "ma": "c",
+                "noiDung": "ICMP Echo Reply"
+              },
+              {
                 "ma": "d",
-                "noiDung": "ICMP Time Exceeded (type 11)"
+                "noiDung": "ICMP Time Exceeded"
               }
             ],
             "dapAn": [
               "d"
             ],
-            "giaiThich": "<p>Traceroute exploits exactly this reply.</p><p><i>VI: Traceroute khai thác đúng phản hồi này.</i></p>"
+            "giaiThich": "<p>ICMP type 11. Traceroute exploits exactly this reply.</p><p><i>VI: ICMP type 11. Traceroute khai thác đúng phản hồi này.</i></p>"
           },
           {
             "ma": "c3",
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the web server is down"
+                "noiDung": "DNS failed to resolve the name of the host"
               },
               {
                 "ma": "b",
-                "noiDung": "the router has no route or cannot ARP the host"
+                "noiDung": "the web server process is down on the host"
               },
               {
                 "ma": "c",
-                "noiDung": "the TTL expired in transit"
+                "noiDung": "the TTL expired in transit on a far router"
               },
               {
                 "ma": "d",
-                "noiDung": "DNS failed"
+                "noiDung": "the router has no route or cannot ARP the host"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Destination Unreachable (type 3) comes from the router that cannot deliver.</p><p><i>VI: Destination Unreachable (type 3) do router không chuyển được gửi về.</i></p>"
           },
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the host replied with an ICMP error message"
-              },
-              {
-                "ma": "b",
                 "noiDung": "the name lookup took too long to finish"
               },
               {
+                "ma": "b",
+                "noiDung": "no reply came within the timeout"
+              },
+              {
                 "ma": "c",
-                "noiDung": "the TTL is too large for the path to the host"
+                "noiDung": "the host replied with an ICMP error message"
               },
               {
                 "ma": "d",
-                "noiDung": "no reply came within the timeout (down, filtered, or lost)"
+                "noiDung": "the TTL is too large for the path to the host"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>A firewall that drops ICMP looks the same as a dead host.</p><p><i>VI: Firewall chặn ICMP trông giống host chết.</i></p>"
           },

@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Models 1 — What does each layer do? — answer key\n\n1. Which OSI layer is responsible for logical (IP) addressing and choosing a path between networks?Tầng OSI nào lo địa chỉ logic (IP) và chọn đường giữa các mạng?\n   Answer: c) Network (3)\n   Routers work at layer 3: they read the IP address and consult the routing table.VI: Router làm việc ở tầng 3: đọc địa chỉ IP và tra bảng định tuyến.\n\n2. Which layer adds source and destination PORT numbers?Tầng nào thêm số CỔNG nguồn và đích?\n   Answer: a) Transport (4)\n   Ports identify the process (service) on a host; TCP and UDP live in layer 4.VI: Cổng xác định tiến trình (dịch vụ) trên máy; TCP và UDP ở tầng 4.\n\n3. The TCP/IP “Internet” layer corresponds to which OSI layer?Tầng “Internet” của TCP/IP tương ứng tầng OSI nào?\n   Answer: d) Network (3)\n   Internet = Network; the TCP/IP “Network access” layer merges OSI layers 1 and 2.VI: Internet = Network; tầng “Network access” của TCP/IP gộp tầng 1 và 2 của OSI.\n\n4. How many OSI layers does the single TCP/IP “Application” layer replace?Tầng “Application” duy nhất của TCP/IP thay cho bao nhiêu tầng OSI?\n   Answer: b) Three (5, 6, 7)\n   Application + Presentation + Session are one layer in TCP/IP.VI: Application + Presentation + Session gộp thành một tầng trong TCP/IP.\n\n5. A protocol suite is best described as …Bộ giao thức mô tả đúng nhất là …\n   Answer: b) a group of protocols that work together, one set of rules per layer\n   Each layer has its own protocols; the suite is the whole stack.VI: Mỗi tầng có giao thức riêng; bộ giao thức là cả chồng.\n\n6. A reference model like OSI is useful mainly because it …Mô hình tham chiếu như OSI hữu ích chủ yếu vì …\n   Answer: b) gives a common vocabulary and helps isolate problems layer by layer\n   OSI is a teaching/troubleshooting tool; the real Internet runs TCP/IP.VI: OSI là công cụ học/xử lý sự cố; Internet thật chạy TCP/IP.\n"
+          "code": "# Models 1 — What does each layer do? — answer key\n\n1. Which OSI layer is responsible for logical (IP) addressing and choosing a path between networks?Tầng OSI nào lo địa chỉ logic (IP) và chọn đường giữa các mạng?\n   Answer: c) Network (3)\n   Routers work at layer 3: they read the IP address and consult the routing table.VI: Router làm việc ở tầng 3: đọc địa chỉ IP và tra bảng định tuyến.\n\n2. Which layer adds source and destination PORT numbers?Tầng nào thêm số CỔNG nguồn và đích?\n   Answer: a) Transport (4)\n   Ports identify the process (service) on a host; TCP and UDP live in layer 4.VI: Cổng xác định tiến trình (dịch vụ) trên máy; TCP và UDP ở tầng 4.\n\n3. The TCP/IP “Internet” layer corresponds to which OSI layer?Tầng “Internet” của TCP/IP tương ứng tầng OSI nào?\n   Answer: d) Network (3)\n   Internet = Network; the TCP/IP “Network access” layer merges OSI layers 1 and 2.VI: Internet = Network; tầng “Network access” của TCP/IP gộp tầng 1 và 2 của OSI.\n\n4. How many OSI layers does the single TCP/IP “Application” layer replace?Tầng “Application” duy nhất của TCP/IP thay cho bao nhiêu tầng OSI?\n   Answer: b) Three (5, 6, 7)\n   Application + Presentation + Session are one layer in TCP/IP.VI: Application + Presentation + Session gộp thành một tầng trong TCP/IP.\n\n5. A protocol suite is best described as …Bộ giao thức mô tả đúng nhất là …\n   Answer: c) a group of protocols that work together across the layers\n   Each layer has its own protocols; the suite is the whole stack.VI: Mỗi tầng có giao thức riêng; bộ giao thức là cả chồng.\n\n6. A reference model like OSI is useful mainly because it …Mô hình tham chiếu như OSI hữu ích chủ yếu vì …\n   Answer: d) gives a common vocabulary for isolating problems by layer\n   OSI is a teaching/troubleshooting tool; the real Internet runs TCP/IP.VI: OSI là công cụ học/xử lý sự cố; Internet thật chạy TCP/IP.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Network (3)</p><p>Routers work at layer 3: they read the IP address and consult the routing table.</p><p><i>VI: Router làm việc ở tầng 3: đọc địa chỉ IP và tra bảng định tuyến.</i></p></li><li><p><b>a)</b> Transport (4)</p><p>Ports identify the process (service) on a host; TCP and UDP live in layer 4.</p><p><i>VI: Cổng xác định tiến trình (dịch vụ) trên máy; TCP và UDP ở tầng 4.</i></p></li><li><p><b>d)</b> Network (3)</p><p>Internet = Network; the TCP/IP “Network access” layer merges OSI layers 1 and 2.</p><p><i>VI: Internet = Network; tầng “Network access” của TCP/IP gộp tầng 1 và 2 của OSI.</i></p></li><li><p><b>b)</b> Three (5, 6, 7)</p><p>Application + Presentation + Session are one layer in TCP/IP.</p><p><i>VI: Application + Presentation + Session gộp thành một tầng trong TCP/IP.</i></p></li><li><p><b>b)</b> a group of protocols that work together, one set of rules per layer</p><p>Each layer has its own protocols; the suite is the whole stack.</p><p><i>VI: Mỗi tầng có giao thức riêng; bộ giao thức là cả chồng.</i></p></li><li><p><b>b)</b> gives a common vocabulary and helps isolate problems layer by layer</p><p>OSI is a teaching/troubleshooting tool; the real Internet runs TCP/IP.</p><p><i>VI: OSI là công cụ học/xử lý sự cố; Internet thật chạy TCP/IP.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Network (3)</p><p>Routers work at layer 3: they read the IP address and consult the routing table.</p><p><i>VI: Router làm việc ở tầng 3: đọc địa chỉ IP và tra bảng định tuyến.</i></p></li><li><p><b>a)</b> Transport (4)</p><p>Ports identify the process (service) on a host; TCP and UDP live in layer 4.</p><p><i>VI: Cổng xác định tiến trình (dịch vụ) trên máy; TCP và UDP ở tầng 4.</i></p></li><li><p><b>d)</b> Network (3)</p><p>Internet = Network; the TCP/IP “Network access” layer merges OSI layers 1 and 2.</p><p><i>VI: Internet = Network; tầng “Network access” của TCP/IP gộp tầng 1 và 2 của OSI.</i></p></li><li><p><b>b)</b> Three (5, 6, 7)</p><p>Application + Presentation + Session are one layer in TCP/IP.</p><p><i>VI: Application + Presentation + Session gộp thành một tầng trong TCP/IP.</i></p></li><li><p><b>c)</b> a group of protocols that work together across the layers</p><p>Each layer has its own protocols; the suite is the whole stack.</p><p><i>VI: Mỗi tầng có giao thức riêng; bộ giao thức là cả chồng.</i></p></li><li><p><b>d)</b> gives a common vocabulary for isolating problems by layer</p><p>OSI is a teaching/troubleshooting tool; the real Internet runs TCP/IP.</p><p><i>VI: OSI là công cụ học/xử lý sự cố; Internet thật chạy TCP/IP.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the operating system of a router"
-              },
-              {
-                "ma": "b",
-                "noiDung": "a group of protocols that work together, one set of rules per layer"
-              },
-              {
-                "ma": "c",
                 "noiDung": "one protocol that covers every function of a network"
               },
               {
+                "ma": "b",
+                "noiDung": "the physical cables and devices of a network"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a group of protocols that work together across the layers"
+              },
+              {
                 "ma": "d",
-                "noiDung": "the physical cables of a network"
+                "noiDung": "the operating system running on a router"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>Each layer has its own protocols; the suite is the whole stack.</p><p><i>VI: Mỗi tầng có giao thức riêng; bộ giao thức là cả chồng.</i></p>"
           },
@@ -193,23 +193,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "replaces the need for protocols"
+                "noiDung": "is faster than TCP/IP on most modern networks"
               },
               {
                 "ma": "b",
-                "noiDung": "gives a common vocabulary and helps isolate problems layer by layer"
+                "noiDung": "is what every network device implements exactly"
               },
               {
                 "ma": "c",
-                "noiDung": "is faster than TCP/IP"
+                "noiDung": "replaces the need for real protocols in a network"
               },
               {
                 "ma": "d",
-                "noiDung": "is what every device implements exactly"
+                "noiDung": "gives a common vocabulary for isolating problems by layer"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>OSI is a teaching/troubleshooting tool; the real Internet runs TCP/IP.</p><p><i>VI: OSI là công cụ học/xử lý sự cố; Internet thật chạy TCP/IP.</i></p>"
           }
@@ -730,17 +730,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Models 5 — Which layer is the fault?\n\nAnswer in the answer panel (no code needed).\n\n1. A PC shows “cable unplugged” and the link light is off.PC báo “cable unplugged” và đèn link tắt.\n2. The link is up, ping to the gateway works, but ping to 8.8.8.8 fails and the PC has a wrong default gateway.Link lên, ping gateway được, nhưng ping 8.8.8.8 lỗi và PC có default gateway sai.\n3. ping 93.184.216.34 works, but the browser cannot open “example.com”.ping 93.184.216.34 được nhưng trình duyệt không mở được “example.com”.\n4. The ping works and the web server is up, but “Connection refused” appears when connecting to port 8443.Ping được, web server chạy, nhưng gặp “Connection refused” khi nối cổng 8443.\n5. Two hosts on one switch have the same MAC address and traffic gets mixed up.Hai máy trên một switch trùng địa chỉ MAC khiến lưu lượng lẫn lộn.\n"
+          "code": "# Models 5 — Which layer is the fault?\n\nAnswer in the answer panel (no code needed).\n\n1. A PC shows “cable unplugged” and the link light is off.PC báo “cable unplugged” và đèn link tắt.\n2. The link is up, ping to another PC on the LAN works, but ping to 8.8.8.8 fails because the PC has a wrong default gateway.Link lên, ping máy khác trong LAN được, nhưng ping 8.8.8.8 lỗi vì PC có default gateway sai.\n3. ping 93.184.216.34 works, but the browser cannot open “example.com”.ping 93.184.216.34 được nhưng trình duyệt không mở được “example.com”.\n4. The ping works and the web server is up, but “Connection refused” appears when connecting to port 8443.Ping được, web server chạy, nhưng gặp “Connection refused” khi nối cổng 8443.\n5. Two hosts on one switch have the same MAC address and traffic gets mixed up.Hai máy trên một switch trùng địa chỉ MAC khiến lưu lượng lẫn lộn.\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Models 5 — Which layer is the fault? — answer key\n\n1. A PC shows “cable unplugged” and the link light is off.PC báo “cable unplugged” và đèn link tắt.\n   Answer: a) Layer 1 — physical\n   No signal means the medium or NIC: layer 1.VI: Không có tín hiệu là vấn đề đường truyền/NIC: tầng 1.\n\n2. The link is up, ping to the gateway works, but ping to 8.8.8.8 fails and the PC has a wrong default gateway.Link lên, ping gateway được, nhưng ping 8.8.8.8 lỗi và PC có default gateway sai.\n   Answer: c) Layer 3 — network\n   Routing/addressing configuration: layer 3.VI: Cấu hình định tuyến/địa chỉ: tầng 3.\n\n3. ping 93.184.216.34 works, but the browser cannot open “example.com”.ping 93.184.216.34 được nhưng trình duyệt không mở được “example.com”.\n   Answer: d) Layer 7 — DNS (application)\n   IP connectivity is fine; name resolution (DNS, an application protocol) is the suspect.VI: Kết nối IP ổn; nghi phân giải tên (DNS, giao thức ứng dụng).\n\n4. The ping works and the web server is up, but “Connection refused” appears when connecting to port 8443.Ping được, web server chạy, nhưng gặp “Connection refused” khi nối cổng 8443.\n   Answer: c) Layer 4 — no process listening on that port / firewall\n   Reaching the host (L3) but not the port is a transport-layer problem.VI: Tới được máy (L3) nhưng không tới được cổng là vấn đề tầng giao vận.\n\n5. Two hosts on one switch have the same MAC address and traffic gets mixed up.Hai máy trên một switch trùng địa chỉ MAC khiến lưu lượng lẫn lộn.\n   Answer: d) Layer 2 — data link\n   MAC addresses belong to layer 2.VI: Địa chỉ MAC thuộc tầng 2.\n"
+          "code": "# Models 5 — Which layer is the fault? — answer key\n\n1. A PC shows “cable unplugged” and the link light is off.PC báo “cable unplugged” và đèn link tắt.\n   Answer: b) Layer 1 — physical\n   No signal means the medium or NIC: layer 1.VI: Không có tín hiệu là vấn đề đường truyền/NIC: tầng 1.\n\n2. The link is up, ping to another PC on the LAN works, but ping to 8.8.8.8 fails because the PC has a wrong default gateway.Link lên, ping máy khác trong LAN được, nhưng ping 8.8.8.8 lỗi vì PC có default gateway sai.\n   Answer: a) Layer 3 — network\n   Routing/addressing configuration: layer 3.VI: Cấu hình định tuyến/địa chỉ: tầng 3.\n\n3. ping 93.184.216.34 works, but the browser cannot open “example.com”.ping 93.184.216.34 được nhưng trình duyệt không mở được “example.com”.\n   Answer: b) Layer 7 — application\n   IP connectivity is fine; name resolution (DNS, an application protocol) is the suspect.VI: Kết nối IP ổn; nghi phân giải tên (DNS, giao thức ứng dụng).\n\n4. The ping works and the web server is up, but “Connection refused” appears when connecting to port 8443.Ping được, web server chạy, nhưng gặp “Connection refused” khi nối cổng 8443.\n   Answer: d) Layer 4 — no process listening on that port / firewall\n   Reaching the host (L3) but not the port is a transport-layer problem.VI: Tới được máy (L3) nhưng không tới được cổng là vấn đề tầng giao vận.\n\n5. Two hosts on one switch have the same MAC address and traffic gets mixed up.Hai máy trên một switch trùng địa chỉ MAC khiến lưu lượng lẫn lộn.\n   Answer: c) Layer 2 — data link\n   MAC addresses belong to layer 2.VI: Địa chỉ MAC thuộc tầng 2.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Layer 1 — physical</p><p>No signal means the medium or NIC: layer 1.</p><p><i>VI: Không có tín hiệu là vấn đề đường truyền/NIC: tầng 1.</i></p></li><li><p><b>c)</b> Layer 3 — network</p><p>Routing/addressing configuration: layer 3.</p><p><i>VI: Cấu hình định tuyến/địa chỉ: tầng 3.</i></p></li><li><p><b>d)</b> Layer 7 — DNS (application)</p><p>IP connectivity is fine; name resolution (DNS, an application protocol) is the suspect.</p><p><i>VI: Kết nối IP ổn; nghi phân giải tên (DNS, giao thức ứng dụng).</i></p></li><li><p><b>c)</b> Layer 4 — no process listening on that port / firewall</p><p>Reaching the host (L3) but not the port is a transport-layer problem.</p><p><i>VI: Tới được máy (L3) nhưng không tới được cổng là vấn đề tầng giao vận.</i></p></li><li><p><b>d)</b> Layer 2 — data link</p><p>MAC addresses belong to layer 2.</p><p><i>VI: Địa chỉ MAC thuộc tầng 2.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Layer 1 — physical</p><p>No signal means the medium or NIC: layer 1.</p><p><i>VI: Không có tín hiệu là vấn đề đường truyền/NIC: tầng 1.</i></p></li><li><p><b>a)</b> Layer 3 — network</p><p>Routing/addressing configuration: layer 3.</p><p><i>VI: Cấu hình định tuyến/địa chỉ: tầng 3.</i></p></li><li><p><b>b)</b> Layer 7 — application</p><p>IP connectivity is fine; name resolution (DNS, an application protocol) is the suspect.</p><p><i>VI: Kết nối IP ổn; nghi phân giải tên (DNS, giao thức ứng dụng).</i></p></li><li><p><b>d)</b> Layer 4 — no process listening on that port / firewall</p><p>Reaching the host (L3) but not the port is a transport-layer problem.</p><p><i>VI: Tới được máy (L3) nhưng không tới được cổng là vấn đề tầng giao vận.</i></p></li><li><p><b>c)</b> Layer 2 — data link</p><p>MAC addresses belong to layer 2.</p><p><i>VI: Địa chỉ MAC thuộc tầng 2.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -753,33 +753,33 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Layer 1 — physical"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Layer 3 — network"
               },
               {
+                "ma": "b",
+                "noiDung": "Layer 1 — physical"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Layer 7 — application"
+                "noiDung": "Layer 2 — data link"
               },
               {
                 "ma": "d",
-                "noiDung": "Layer 2 — data link"
+                "noiDung": "Layer 7 — application"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>No signal means the medium or NIC: layer 1.</p><p><i>VI: Không có tín hiệu là vấn đề đường truyền/NIC: tầng 1.</i></p>"
           },
           {
             "ma": "c2",
-            "de": "<p>The link is up, ping to the gateway works, but ping to 8.8.8.8 fails and the PC has a wrong default gateway.</p><p style=\"opacity:.75;font-size:.92em\"><i>Link lên, ping gateway được, nhưng ping 8.8.8.8 lỗi và PC có default gateway sai.</i></p>",
+            "de": "<p>The link is up, ping to another PC on the LAN works, but ping to 8.8.8.8 fails because the PC has a wrong default gateway.</p><p style=\"opacity:.75;font-size:.92em\"><i>Link lên, ping máy khác trong LAN được, nhưng ping 8.8.8.8 lỗi vì PC có default gateway sai.</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Layer 4 — transport"
+                "noiDung": "Layer 3 — network"
               },
               {
                 "ma": "b",
@@ -787,15 +787,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Layer 3 — network"
+                "noiDung": "Layer 1 — physical"
               },
               {
                 "ma": "d",
-                "noiDung": "Layer 1 — physical"
+                "noiDung": "Layer 4 — transport"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Routing/addressing configuration: layer 3.</p><p><i>VI: Cấu hình định tuyến/địa chỉ: tầng 3.</i></p>"
           },
@@ -809,19 +809,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "Layer 2 — data link"
+                "noiDung": "Layer 7 — application"
               },
               {
                 "ma": "c",
-                "noiDung": "Layer 3 — network"
+                "noiDung": "Layer 2 — data link"
               },
               {
                 "ma": "d",
-                "noiDung": "Layer 7 — DNS (application)"
+                "noiDung": "Layer 3 — network"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>IP connectivity is fine; name resolution (DNS, an application protocol) is the suspect.</p><p><i>VI: Kết nối IP ổn; nghi phân giải tên (DNS, giao thức ứng dụng).</i></p>"
           },
@@ -839,15 +839,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Layer 4 — no process listening on that port / firewall"
+                "noiDung": "Layer 3 — wrong subnet mask on the client or the server"
               },
               {
                 "ma": "d",
-                "noiDung": "Layer 3 — wrong subnet mask on the client or the server"
+                "noiDung": "Layer 4 — no process listening on that port / firewall"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Reaching the host (L3) but not the port is a transport-layer problem.</p><p><i>VI: Tới được máy (L3) nhưng không tới được cổng là vấn đề tầng giao vận.</i></p>"
           },
@@ -865,15 +865,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "Layer 4 — transport"
+                "noiDung": "Layer 2 — data link"
               },
               {
                 "ma": "d",
-                "noiDung": "Layer 2 — data link"
+                "noiDung": "Layer 4 — transport"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>MAC addresses belong to layer 2.</p><p><i>VI: Địa chỉ MAC thuộc tầng 2.</i></p>"
           }

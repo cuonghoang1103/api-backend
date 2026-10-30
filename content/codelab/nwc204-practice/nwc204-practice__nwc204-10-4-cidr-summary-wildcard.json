@@ -480,10 +480,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# CIDR 4 — Aggregation reasoning — answer key\n\n1. How many /24 networks are inside a /16?Có bao nhiêu mạng /24 trong một /16?\n   Answer: c) 256\n   2^(24−16) = 256.VI: 2^(24−16) = 256.\n\n2. How many addresses in 10.8.0.0/13?10.8.0.0/13 có bao nhiêu địa chỉ?\n   Answer: d) 524,288\n   2^(32−13) = 524,288.VI: 2^(32−13) = 524.288.\n\n3. The last address of 10.8.0.0/13 is …Địa chỉ cuối của 10.8.0.0/13 là …\n   Answer: b) 10.15.255.255\n   A /13 spans 8 values of the second octet: 8–15.VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.\n\n4. CIDR (RFC 4632) replaced classful addressing mainly to …CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …\n   Answer: c) use address space efficiently and shrink routing tables via aggregation\n   Prefix length is independent of the first octet.VI: Độ dài prefix không còn phụ thuộc octet đầu.\n"
+          "code": "# CIDR 4 — Aggregation reasoning — answer key\n\n1. How many /24 networks are inside a /16?Có bao nhiêu mạng /24 trong một /16?\n   Answer: c) 256\n   2^(24−16) = 256.VI: 2^(24−16) = 256.\n\n2. How many addresses in 10.8.0.0/13?10.8.0.0/13 có bao nhiêu địa chỉ?\n   Answer: d) 524,288\n   2^(32−13) = 524,288.VI: 2^(32−13) = 524.288.\n\n3. The last address of 10.8.0.0/13 is …Địa chỉ cuối của 10.8.0.0/13 là …\n   Answer: b) 10.15.255.255\n   A /13 spans 8 values of the second octet: 8–15.VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.\n\n4. CIDR (RFC 4632) replaced classful addressing mainly to …CIDR (RFC 4632) thay địa chỉ theo lớp chủ yếu để …\n   Answer: a) use address space efficiently and shrink routing tables\n   Prefix length is independent of the first octet.VI: Độ dài prefix không còn phụ thuộc octet đầu.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 256</p><p>2^(24−16) = 256.</p><p><i>VI: 2^(24−16) = 256.</i></p></li><li><p><b>d)</b> 524,288</p><p>2^(32−13) = 524,288.</p><p><i>VI: 2^(32−13) = 524.288.</i></p></li><li><p><b>b)</b> 10.15.255.255</p><p>A /13 spans 8 values of the second octet: 8–15.</p><p><i>VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.</i></p></li><li><p><b>c)</b> use address space efficiently and shrink routing tables via aggregation</p><p>Prefix length is independent of the first octet.</p><p><i>VI: Độ dài prefix không còn phụ thuộc octet đầu.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 256</p><p>2^(24−16) = 256.</p><p><i>VI: 2^(24−16) = 256.</i></p></li><li><p><b>d)</b> 524,288</p><p>2^(32−13) = 524,288.</p><p><i>VI: 2^(32−13) = 524.288.</i></p></li><li><p><b>b)</b> 10.15.255.255</p><p>A /13 spans 8 values of the second octet: 8–15.</p><p><i>VI: Một /13 trải 8 giá trị của octet thứ hai: 8–15.</i></p></li><li><p><b>a)</b> use address space efficiently and shrink routing tables</p><p>Prefix length is independent of the first octet.</p><p><i>VI: Độ dài prefix không còn phụ thuộc octet đầu.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -574,23 +574,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "remove the need for masks, because the first bits show the class"
+                "noiDung": "use address space efficiently and shrink routing tables"
               },
               {
                 "ma": "b",
-                "noiDung": "make DHCP faster by sending shorter options in each lease"
+                "noiDung": "add more classes (F, G, …) to the existing A, B and C"
               },
               {
                 "ma": "c",
-                "noiDung": "use address space efficiently and shrink routing tables via aggregation"
+                "noiDung": "make DHCP faster by sending shorter options in each lease"
               },
               {
                 "ma": "d",
-                "noiDung": "add more classes (F, G, …) to the existing A, B and C"
+                "noiDung": "remove the need for masks, because the first bits show the class"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Prefix length is independent of the first octet.</p><p><i>VI: Độ dài prefix không còn phụ thuộc octet đầu.</i></p>"
           }

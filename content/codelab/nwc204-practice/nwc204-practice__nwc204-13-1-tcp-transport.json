@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Transport 1 — Ports, TCP and UDP — answer key\n\n1. Which protocol would you choose for a live voice call where late data is useless?Giao thức nào nên chọn cho cuộc gọi thoại trực tiếp, nơi dữ liệu đến muộn là vô dụng?\n   Answer: d) UDP\n   UDP has no retransmission delay and no handshake.VI: UDP không trễ do gửi lại và không bắt tay.\n\n2. The well-known port numbers are in the range …Cổng well-known nằm trong khoảng …\n   Answer: b) 0–1023\n   Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.\n\n3. A socket is identified by …Một socket được xác định bởi …\n   Answer: a) IP address + port (and protocol)\n   A TCP connection = two sockets (a 4-tuple).VI: Một kết nối TCP = hai socket (bộ bốn).\n\n4. What does TCP provide that UDP does not?TCP cung cấp gì mà UDP không có?\n   Answer: c) Reliable, ordered delivery with flow and congestion control\n   UDP also has ports and a checksum.VI: UDP cũng có cổng và checksum.\n\n5. HTTPS, SSH, DNS and SMTP use the default ports …HTTPS, SSH, DNS và SMTP dùng cổng mặc định …\n   Answer: b) 443, 22, 53, 25\n   Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).\n"
+          "code": "# Transport 1 — Ports, TCP and UDP — answer key\n\n1. Which protocol would you choose for a live voice call where late data is useless?Giao thức nào nên chọn cho cuộc gọi thoại trực tiếp, nơi dữ liệu đến muộn là vô dụng?\n   Answer: d) UDP\n   UDP has no retransmission delay and no handshake.VI: UDP không trễ do gửi lại và không bắt tay.\n\n2. The well-known port numbers are in the range …Cổng well-known nằm trong khoảng …\n   Answer: b) 0–1023\n   Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.\n\n3. A socket is identified by …Một socket được xác định bởi …\n   Answer: c) IP address, port and protocol\n   A TCP connection = two sockets (a 4-tuple).VI: Một kết nối TCP = hai socket (bộ bốn).\n\n4. What does TCP provide that UDP does not?TCP cung cấp gì mà UDP không có?\n   Answer: c) Reliable, ordered delivery with flow and congestion control\n   UDP also has ports and a checksum.VI: UDP cũng có cổng và checksum.\n\n5. HTTPS, SSH, DNS and SMTP use the default ports …HTTPS, SSH, DNS và SMTP dùng cổng mặc định …\n   Answer: b) 443, 22, 53, 25\n   Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> UDP</p><p>UDP has no retransmission delay and no handshake.</p><p><i>VI: UDP không trễ do gửi lại và không bắt tay.</i></p></li><li><p><b>b)</b> 0–1023</p><p>Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.</p><p><i>VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.</i></p></li><li><p><b>a)</b> IP address + port (and protocol)</p><p>A TCP connection = two sockets (a 4-tuple).</p><p><i>VI: Một kết nối TCP = hai socket (bộ bốn).</i></p></li><li><p><b>c)</b> Reliable, ordered delivery with flow and congestion control</p><p>UDP also has ports and a checksum.</p><p><i>VI: UDP cũng có cổng và checksum.</i></p></li><li><p><b>b)</b> 443, 22, 53, 25</p><p>Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</p><p><i>VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> UDP</p><p>UDP has no retransmission delay and no handshake.</p><p><i>VI: UDP không trễ do gửi lại và không bắt tay.</i></p></li><li><p><b>b)</b> 0–1023</p><p>Registered ports are 1024–49151; dynamic/ephemeral 49152–65535.</p><p><i>VI: Cổng đăng ký 1024–49151; cổng động 49152–65535.</i></p></li><li><p><b>c)</b> IP address, port and protocol</p><p>A TCP connection = two sockets (a 4-tuple).</p><p><i>VI: Một kết nối TCP = hai socket (bộ bốn).</i></p></li><li><p><b>c)</b> Reliable, ordered delivery with flow and congestion control</p><p>UDP also has ports and a checksum.</p><p><i>VI: UDP cũng có cổng và checksum.</i></p></li><li><p><b>b)</b> 443, 22, 53, 25</p><p>Memorise these four with 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</p><p><i>VI: Nhớ bốn cổng này cùng 80 (HTTP), 23 (Telnet), 21 (FTP), 67/68 (DHCP).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "IP address + port (and protocol)"
+                "noiDung": "MAC address and VLAN ID"
               },
               {
                 "ma": "b",
-                "noiDung": "MAC address only"
+                "noiDung": "IP address and subnet mask"
               },
               {
                 "ma": "c",
-                "noiDung": "IP address only"
+                "noiDung": "IP address, port and protocol"
               },
               {
                 "ma": "d",
-                "noiDung": "VLAN ID"
+                "noiDung": "Port number and VLAN ID"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A TCP connection = two sockets (a 4-tuple).</p><p><i>VI: Một kết nối TCP = hai socket (bộ bốn).</i></p>"
           },

@@ -6,11 +6,11 @@ const E1 = cs({
   en: 'What a VLAN is and what it changes.', vi: 'VLAN là gì và nó thay đổi điều gì.',
   cau: [
     q('c1', ['A VLAN creates a separate …', 'VLAN tạo ra một … riêng.'], ['broadcast domain', 'collision domain', 'physical cable', 'MAC address'], ['Broadcasts stay inside the VLAN.', 'Broadcast ở lại trong VLAN.']),
-    q('c2', ['Two PCs in different VLANs on the same switch need … to talk.', 'Hai PC ở VLAN khác nhau trên cùng switch cần … để nói chuyện.'], ['a router or Layer 3 switch (inter-VLAN routing)', 'a longer cable', 'a larger MAC table', 'nothing, VLANs are transparent'], ['Different VLAN = different IP subnet = routing is required.', 'VLAN khác = mạng IP khác = cần định tuyến.']),
-    q('c3', ['An access port belongs to …', 'Cổng access thuộc về …'], ['exactly one VLAN and sends untagged frames', 'all VLANs and sends tagged frames', 'no VLAN until a tag arrives', 'two VLANs and sends tagged frames'], ['End hosts use access ports and know nothing about VLAN tags.', 'Host đầu cuối dùng cổng access và không biết gì về tag VLAN.']),
+    q('c2', ['Two PCs in different VLANs on the same switch need … to talk.', 'Hai PC ở VLAN khác nhau trên cùng switch cần … để nói chuyện.'], ['a router or Layer 3 switch', 'a longer cable', 'a larger MAC table', 'nothing, VLANs are transparent'], ['Different VLAN = different IP subnet = routing is required.', 'VLAN khác = mạng IP khác = cần định tuyến.']),
+    q('c3', ['An access port belongs to …', 'Cổng access thuộc về …'], ['exactly one VLAN and sends untagged frames', 'all VLANs and sends tagged frames', 'no VLAN until the first tagged frame arrives', 'two VLANs and sends tagged frames'], ['End hosts use access ports and know nothing about VLAN tags.', 'Host đầu cuối dùng cổng access và không biết gì về tag VLAN.']),
     q('c4', ['A trunk port carries …', 'Cổng trunk mang …'], ['frames of several VLANs, tagged with 802.1Q', 'only frames of VLAN 1, tagged with 802.1Q', 'only management traffic between switches', 'only untagged frames of a single VLAN'], ['The 4-byte 802.1Q tag holds the 12-bit VLAN ID.', 'Tag 802.1Q 4 byte chứa VLAN ID 12 bit.']),
     q('c5', ['The native VLAN on a trunk is …', 'Native VLAN trên trunk là …'], ['the VLAN whose frames are sent untagged', 'the VLAN with the most hosts', 'always VLAN 100', 'the management VLAN of the router'], ['Both ends must agree on the native VLAN; mismatches are a common error.', 'Hai đầu phải thống nhất native VLAN; lệch nhau là lỗi thường gặp.']),
-    q('c6', ['How many usable normal-range VLAN IDs exist (IEEE 802.1Q)?', 'Có bao nhiêu VLAN ID dùng được (IEEE 802.1Q)?'], ['4094 (1–4094)', '1024', '4096', '255'], ['12 bits give 4096 values; 0 and 4095 are reserved.', '12 bit cho 4096 giá trị; 0 và 4095 bị dành riêng.']),
+    q('c6', ['How many usable normal-range VLAN IDs exist (IEEE 802.1Q)?', 'Có bao nhiêu VLAN ID dùng được (IEEE 802.1Q)?'], ['4094', '1024', '4096', '255'], ['12 bits give 4096 values; 0 and 4095 are reserved.', '12 bit cho 4096 giá trị; 0 và 4095 bị dành riêng.']),
   ],
   goiY: ['VLAN ⇒ separate broadcast domain ⇒ separate subnet.', 'Access = one VLAN untagged; trunk = many VLANs tagged (except the native).'],
   loi: ['Thinking VLANs separate collision domains.', 'Trying to ping across VLANs without a router.'],
@@ -23,7 +23,7 @@ const FR = [
   { src: 'S', dst: 'C', in: 5, vlan: 20 }, { src: 'T', dst: 'ff:ff:ff:ff:ff:ff', in: 5, vlan: 30 }, { src: 'A', dst: 'C', in: 1 },
 ];
 const V = S.vlanSwitch(PORTS, FR);
-const txt = (a) => (a.length ? 'ports ' + a.join(', ') : 'none (dropped / no output)');
+const txt = (a) => (a.length ? (a.length === 1 ? 'port ' : 'ports ') + a.join(', ') : 'none (dropped / no output)');
 const cfg = 'Ports 1–2 access VLAN 10, ports 3–4 access VLAN 20, port 5 trunk (allowed 10 and 20, native VLAN 1). Tables start empty.';
 const cfgVi = 'Cổng 1–2 access VLAN 10, cổng 3–4 access VLAN 20, cổng 5 trunk (cho phép 10 và 20, native VLAN 1). Bảng ban đầu rỗng.';
 const E2 = cs({
@@ -31,7 +31,7 @@ const E2 = cs({
   en: cfg + ' Frames arrive in order; for each, choose the output ports (a trunk output is tagged unless the VLAN is native).', vi: cfgVi + ' Frame đến theo thứ tự; với mỗi frame, chọn các cổng ra (cổng trunk gắn tag trừ khi là native VLAN).',
   cau: FR.map((f, i) => {
     const dung = txt(V.out[i]);
-    const alt = ['ports 1, 2, 3, 4, 5', 'ports 3, 4, 5(tag 20)', dung === 'none (dropped / no output)' ? 'ports 5(tag 10)' : 'none (dropped / no output)'];
+    const alt = ['ports 1, 2, 3, 4, 5', 'ports 3, 4, 5(tag 20)', dung === 'none (dropped / no output)' ? 'port 5(tag 10)' : 'none (dropped / no output)'];
     return q('c' + (i + 1), [`#${i + 1}: ${f.src} → ${f.dst === 'ff:ff:ff:ff:ff:ff' ? 'broadcast' : f.dst} arrives on port ${f.in}${f.vlan ? ' tagged VLAN ' + f.vlan : ''}`, `#${i + 1}: ${f.src} → ${f.dst === 'ff:ff:ff:ff:ff:ff' ? 'broadcast' : f.dst} tới cổng ${f.in}${f.vlan ? ' gắn tag VLAN ' + f.vlan : ''}`],
       [dung, ...alt.filter((x) => x !== dung).slice(0, 3)], ['Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.', 'Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.']);
   }),
@@ -98,10 +98,10 @@ const E6 = cs({
   ten: 'VLAN 6 — Troubleshoot', kho: 'HARD', phut: 12,
   en: 'Diagnose the VLAN fault.', vi: 'Chẩn đoán lỗi VLAN.',
   cau: [
-    q('c1', ['PCs in VLAN 10 on two different switches cannot reach each other; each switch’s VLAN 10 PCs reach each other fine. First check …', 'PC VLAN 10 trên hai switch khác nhau không nói chuyện được; PC cùng switch thì ổn. Kiểm tra đầu tiên …'], ['that the trunk allows VLAN 10 on both ends', 'the IP addresses of the PCs', 'the DNS server', 'the PCs’ cables'], ['show interfaces trunk reveals the allowed VLAN list.', 'show interfaces trunk cho thấy danh sách VLAN được phép.']),
+    q('c1', ['PCs in VLAN 10 on two different switches cannot reach each other; each switch’s VLAN 10 PCs reach each other fine. First check …', 'PC VLAN 10 trên hai switch khác nhau không nói chuyện được; PC cùng switch thì ổn. Kiểm tra đầu tiên …'], ['that the trunk allows VLAN 10 on both ends', 'the IP addresses of the PCs', 'the DNS server setting of each PC', 'the cables of the two PCs in VLAN 10'], ['show interfaces trunk reveals the allowed VLAN list.', 'show interfaces trunk cho thấy danh sách VLAN được phép.']),
     q('c2', ['“%CDP-4-NATIVE_VLAN_MISMATCH” appears. The cause is …', '“%CDP-4-NATIVE_VLAN_MISMATCH” xuất hiện. Nguyên nhân là …'], ['the two ends of a trunk use different native VLANs', 'a duplicate IP address on the management VLAN', 'a wrong DNS entry for the neighbouring switch', 'an STP loop between the two ends of a trunk'], ['Mismatched native VLANs leak traffic between VLANs.', 'Lệch native VLAN làm lọt lưu lượng giữa các VLAN.']),
-    q('c3', ['A PC plugged into a port still gets no IP from the DHCP server in its VLAN. The port was configured as a trunk. Fix?', 'PC cắm vào cổng không nhận IP từ DHCP của VLAN. Cổng đang cấu hình trunk. Cách sửa?'], ['Make the port an access port in the right VLAN', 'Change the PC’s MAC address', 'Add more VLANs to the trunk', 'Reboot the DHCP server'], ['End devices need access ports.', 'Thiết bị đầu cuối cần cổng access.']),
-    q('c4', ['You deleted VLAN 30 from the VLAN database but ports 20–24 still use it. The ports …', 'Bạn xoá VLAN 30 khỏi cơ sở dữ liệu VLAN nhưng cổng 20–24 vẫn gán nó. Các cổng …'], ['become inactive until the VLAN is recreated or the ports reassigned', 'move to VLAN 1 automatically and keep working', 'work as before, because the VLAN stays in the running ports', 'turn into trunks and carry the other VLANs'], ['Cisco keeps the assignment but the ports stop forwarding.', 'Cisco giữ gán nhưng cổng ngừng chuyển.']),
+    q('c3', ['A PC plugged into a port still gets no IP from the DHCP server in its VLAN. The port was configured as a trunk. Fix?', 'PC cắm vào cổng không nhận IP từ DHCP của VLAN. Cổng đang cấu hình trunk. Cách sửa?'], ['Make the port an access port in the right VLAN', 'Change the MAC address of the PC', 'Add more VLANs to the allowed list of the trunk', 'Reboot the DHCP server and renew the lease'], ['End devices need access ports.', 'Thiết bị đầu cuối cần cổng access.']),
+    q('c4', ['You deleted VLAN 30 from the VLAN database but ports 20–24 still use it. The ports …', 'Bạn xoá VLAN 30 khỏi cơ sở dữ liệu VLAN nhưng cổng 20–24 vẫn gán nó. Các cổng …'], ['become inactive until the VLAN is recreated or ports reassigned', 'move to VLAN 1 automatically and keep working', 'work as before, because the VLAN stays in the running ports', 'turn into trunks and carry the other VLANs'], ['Cisco keeps the assignment but the ports stop forwarding.', 'Cisco giữ gán nhưng cổng ngừng chuyển.']),
   ],
   goiY: ['Same switch OK, different switch broken ⇒ look at the trunk.', 'Think access vs trunk for every port.'],
   loi: ['Looking at IP addressing first when only cross-switch traffic fails.', 'Deleting a VLAN without moving its ports.'],

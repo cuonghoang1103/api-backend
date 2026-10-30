@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Ethernet 1 — Frame fields and sizes — answer key\n\n1. How long is an Ethernet MAC address?Địa chỉ MAC Ethernet dài bao nhiêu?\n   Answer: b) 48 bits (6 bytes)\n   Written as 12 hex digits.VI: Viết bằng 12 chữ số hex.\n\n2. The minimum and maximum size of an Ethernet frame (header+data+FCS) are …Kích thước tối thiểu và tối đa của frame Ethernet (header+dữ liệu+FCS) là …\n   Answer: b) 64 and 1518 bytes\n   Data field 46–1500 plus 14 header and 4 FCS bytes.VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.\n\n3. The Type/EtherType field 0x0800 means the payload is …Trường Type/EtherType 0x0800 nghĩa là dữ liệu là …\n   Answer: d) IPv4\n   0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.\n\n4. The first 24 bits of a MAC address identify …24 bit đầu của địa chỉ MAC xác định …\n   Answer: d) the manufacturer (OUI)\n   OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.\n\n5. The destination MAC ff:ff:ff:ff:ff:ff is …MAC đích ff:ff:ff:ff:ff:ff là …\n   Answer: c) the Ethernet broadcast address\n   Delivered to every device on the LAN.VI: Gửi tới mọi thiết bị trên LAN.\n"
+          "code": "# Ethernet 1 — Frame fields and sizes — answer key\n\n1. How long is an Ethernet MAC address?Địa chỉ MAC Ethernet dài bao nhiêu?\n   Answer: c) 48 bits\n   6 bytes, written as 12 hex digits.VI: 6 byte, viết bằng 12 chữ số hex.\n\n2. The minimum and maximum size of an Ethernet frame (header+data+FCS) are …Kích thước tối thiểu và tối đa của frame Ethernet (header+dữ liệu+FCS) là …\n   Answer: b) 64 and 1518 bytes\n   Data field 46–1500 plus 14 header and 4 FCS bytes.VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.\n\n3. The Type/EtherType field 0x0800 means the payload is …Trường Type/EtherType 0x0800 nghĩa là dữ liệu là …\n   Answer: d) IPv4\n   0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.\n\n4. The first 24 bits of a MAC address identify …24 bit đầu của địa chỉ MAC xác định …\n   Answer: a) the manufacturer\n   OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.\n\n5. The destination MAC ff:ff:ff:ff:ff:ff is …MAC đích ff:ff:ff:ff:ff:ff là …\n   Answer: c) the Ethernet broadcast address\n   Delivered to every device on the LAN.VI: Gửi tới mọi thiết bị trên LAN.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 48 bits (6 bytes)</p><p>Written as 12 hex digits.</p><p><i>VI: Viết bằng 12 chữ số hex.</i></p></li><li><p><b>b)</b> 64 and 1518 bytes</p><p>Data field 46–1500 plus 14 header and 4 FCS bytes.</p><p><i>VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.</i></p></li><li><p><b>d)</b> IPv4</p><p>0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</p><p><i>VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</i></p></li><li><p><b>d)</b> the manufacturer (OUI)</p><p>OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.</p><p><i>VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.</i></p></li><li><p><b>c)</b> the Ethernet broadcast address</p><p>Delivered to every device on the LAN.</p><p><i>VI: Gửi tới mọi thiết bị trên LAN.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 48 bits</p><p>6 bytes, written as 12 hex digits.</p><p><i>VI: 6 byte, viết bằng 12 chữ số hex.</i></p></li><li><p><b>b)</b> 64 and 1518 bytes</p><p>Data field 46–1500 plus 14 header and 4 FCS bytes.</p><p><i>VI: Trường dữ liệu 46–1500 cộng 14 byte header và 4 byte FCS.</i></p></li><li><p><b>d)</b> IPv4</p><p>0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</p><p><i>VI: 0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6, 0x8100 = 802.1Q.</i></p></li><li><p><b>a)</b> the manufacturer</p><p>OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.</p><p><i>VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.</i></p></li><li><p><b>c)</b> the Ethernet broadcast address</p><p>Delivered to every device on the LAN.</p><p><i>VI: Gửi tới mọi thiết bị trên LAN.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,25 +62,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "32 bits"
+                "noiDung": "64 bits"
               },
               {
                 "ma": "b",
-                "noiDung": "48 bits (6 bytes)"
+                "noiDung": "32 bits"
               },
               {
                 "ma": "c",
-                "noiDung": "128 bits"
+                "noiDung": "48 bits"
               },
               {
                 "ma": "d",
-                "noiDung": "64 bits"
+                "noiDung": "128 bits"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
-            "giaiThich": "<p>Written as 12 hex digits.</p><p><i>VI: Viết bằng 12 chữ số hex.</i></p>"
+            "giaiThich": "<p>6 bytes, written as 12 hex digits.</p><p><i>VI: 6 byte, viết bằng 12 chữ số hex.</i></p>"
           },
           {
             "ma": "c2",
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the switch port"
+                "noiDung": "the manufacturer"
               },
               {
                 "ma": "b",
-                "noiDung": "the VLAN"
+                "noiDung": "the switch port"
               },
               {
                 "ma": "c",
-                "noiDung": "the network"
+                "noiDung": "the VLAN"
               },
               {
                 "ma": "d",
-                "noiDung": "the manufacturer (OUI)"
+                "noiDung": "the network"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>OUI = Organizationally Unique Identifier; the other 24 bits are vendor-assigned.</p><p><i>VI: OUI = mã nhà sản xuất; 24 bit sau do hãng gán.</i></p>"
           },
@@ -166,7 +166,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an invalid address"
+                "noiDung": "an invalid address of the switch"
               },
               {
                 "ma": "b",
@@ -178,7 +178,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the gateway"
+                "noiDung": "the address of the gateway"
               }
             ],
             "dapAn": [

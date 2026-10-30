@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ARP 1 — Why two addresses and what ARP does — answer key\n\n1. ARP resolves …ARP phân giải …\n   Answer: c) an IPv4 address to a MAC address\n   IP says who; MAC says which NIC on this link.VI: IP nói là ai; MAC nói NIC nào trên liên kết này.\n\n2. An ARP request is sent to …Yêu cầu ARP được gửi tới …\n   Answer: a) the broadcast MAC address\n   “Who has 192.168.1.1? Tell 192.168.1.10” — everyone on the LAN hears it.VI: “Ai có 192.168.1.1? Báo cho 192.168.1.10” — mọi máy trên LAN đều nghe.\n\n3. An ARP reply is sent …Phản hồi ARP được gửi …\n   Answer: d) unicast to the requester\n   The target already knows the requester’s MAC from the request.VI: Máy đích đã biết MAC của người hỏi từ yêu cầu.\n\n4. To reach a host on another network, a PC ARPs for …Để tới host ở mạng khác, PC ARP cho …\n   Answer: d) the MAC address of its default gateway\n   The remote MAC is unreachable across routers; only the gateway’s MAC matters locally.VI: MAC của host xa không tới được qua router; chỉ MAC gateway có ý nghĩa cục bộ.\n\n5. The ARP cache entries are kept …Mục trong ARP cache được giữ …\n   Answer: b) for a limited time (minutes) and then aged out\n   Windows keeps dynamic entries for a few minutes; Cisco IOS for 4 hours by default.VI: Windows giữ vài phút; Cisco IOS mặc định 4 giờ.\n\n6. IPv6 replaces ARP with …IPv6 thay ARP bằng …\n   Answer: b) Neighbor Discovery (ICMPv6 NS/NA)\n   NS/NA use solicited-node multicast instead of broadcast.VI: NS/NA dùng multicast solicited-node thay cho broadcast.\n"
+          "code": "# ARP 1 — Why two addresses and what ARP does — answer key\n\n1. ARP resolves …ARP phân giải …\n   Answer: c) an IPv4 address to a MAC address\n   IP says who; MAC says which NIC on this link.VI: IP nói là ai; MAC nói NIC nào trên liên kết này.\n\n2. An ARP request is sent to …Yêu cầu ARP được gửi tới …\n   Answer: a) the broadcast MAC address\n   “Who has 192.168.1.1? Tell 192.168.1.10” — everyone on the LAN hears it.VI: “Ai có 192.168.1.1? Báo cho 192.168.1.10” — mọi máy trên LAN đều nghe.\n\n3. An ARP reply is sent …Phản hồi ARP được gửi …\n   Answer: d) unicast to the requester\n   The target already knows the requester’s MAC from the request.VI: Máy đích đã biết MAC của người hỏi từ yêu cầu.\n\n4. To reach a host on another network, a PC ARPs for …Để tới host ở mạng khác, PC ARP cho …\n   Answer: d) the MAC address of its default gateway\n   The remote MAC is unreachable across routers; only the gateway’s MAC matters locally.VI: MAC của host xa không tới được qua router; chỉ MAC gateway có ý nghĩa cục bộ.\n\n5. The ARP cache entries are kept …Mục trong ARP cache được giữ …\n   Answer: b) for a limited time (minutes) and then aged out\n   Windows keeps dynamic entries for a few minutes; Cisco IOS for 4 hours by default.VI: Windows giữ vài phút; Cisco IOS mặc định 4 giờ.\n\n6. IPv6 replaces ARP with …IPv6 thay ARP bằng …\n   Answer: c) Neighbor Discovery\n   NS/NA use solicited-node multicast instead of broadcast.VI: NS/NA dùng multicast solicited-node thay cho broadcast.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> an IPv4 address to a MAC address</p><p>IP says who; MAC says which NIC on this link.</p><p><i>VI: IP nói là ai; MAC nói NIC nào trên liên kết này.</i></p></li><li><p><b>a)</b> the broadcast MAC address</p><p>“Who has 192.168.1.1? Tell 192.168.1.10” — everyone on the LAN hears it.</p><p><i>VI: “Ai có 192.168.1.1? Báo cho 192.168.1.10” — mọi máy trên LAN đều nghe.</i></p></li><li><p><b>d)</b> unicast to the requester</p><p>The target already knows the requester’s MAC from the request.</p><p><i>VI: Máy đích đã biết MAC của người hỏi từ yêu cầu.</i></p></li><li><p><b>d)</b> the MAC address of its default gateway</p><p>The remote MAC is unreachable across routers; only the gateway’s MAC matters locally.</p><p><i>VI: MAC của host xa không tới được qua router; chỉ MAC gateway có ý nghĩa cục bộ.</i></p></li><li><p><b>b)</b> for a limited time (minutes) and then aged out</p><p>Windows keeps dynamic entries for a few minutes; Cisco IOS for 4 hours by default.</p><p><i>VI: Windows giữ vài phút; Cisco IOS mặc định 4 giờ.</i></p></li><li><p><b>b)</b> Neighbor Discovery (ICMPv6 NS/NA)</p><p>NS/NA use solicited-node multicast instead of broadcast.</p><p><i>VI: NS/NA dùng multicast solicited-node thay cho broadcast.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> an IPv4 address to a MAC address</p><p>IP says who; MAC says which NIC on this link.</p><p><i>VI: IP nói là ai; MAC nói NIC nào trên liên kết này.</i></p></li><li><p><b>a)</b> the broadcast MAC address</p><p>“Who has 192.168.1.1? Tell 192.168.1.10” — everyone on the LAN hears it.</p><p><i>VI: “Ai có 192.168.1.1? Báo cho 192.168.1.10” — mọi máy trên LAN đều nghe.</i></p></li><li><p><b>d)</b> unicast to the requester</p><p>The target already knows the requester’s MAC from the request.</p><p><i>VI: Máy đích đã biết MAC của người hỏi từ yêu cầu.</i></p></li><li><p><b>d)</b> the MAC address of its default gateway</p><p>The remote MAC is unreachable across routers; only the gateway’s MAC matters locally.</p><p><i>VI: MAC của host xa không tới được qua router; chỉ MAC gateway có ý nghĩa cục bộ.</i></p></li><li><p><b>b)</b> for a limited time (minutes) and then aged out</p><p>Windows keeps dynamic entries for a few minutes; Cisco IOS for 4 hours by default.</p><p><i>VI: Windows giữ vài phút; Cisco IOS mặc định 4 giờ.</i></p></li><li><p><b>c)</b> Neighbor Discovery</p><p>NS/NA use solicited-node multicast instead of broadcast.</p><p><i>VI: NS/NA dùng multicast solicited-node thay cho broadcast.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -192,23 +192,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "RARP"
+                "noiDung": "DNS AAAA records"
               },
               {
                 "ma": "b",
-                "noiDung": "Neighbor Discovery (ICMPv6 NS/NA)"
+                "noiDung": "DHCPv6 lease tables"
               },
               {
                 "ma": "c",
-                "noiDung": "DHCPv6"
+                "noiDung": "Neighbor Discovery"
               },
               {
                 "ma": "d",
-                "noiDung": "DNS"
+                "noiDung": "Reverse ARP (RARP)"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>NS/NA use solicited-node multicast instead of broadcast.</p><p><i>VI: NS/NA dùng multicast solicited-node thay cho broadcast.</i></p>"
           }
@@ -718,10 +718,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ARP 5 — Read the ARP table and symptoms — answer key\n\n1. The ARP table shows two different IPs with the SAME MAC address, 00:50:56:aa:bb:cc, and one is the gateway. Possible meaning?Bảng ARP có hai IP khác nhau cùng một MAC 00:50:56:aa:bb:cc, và một là gateway. Có thể là?\n   Answer: d) Proxy ARP or ARP spoofing; investigate\n   The gateway’s MAC being shared with a second IP is suspicious.VI: MAC của gateway dùng chung với một IP khác là đáng ngờ.\n\n2. “Incomplete” appears for 192.168.1.50 in show ip arp. It means …“Incomplete” xuất hiện cho 192.168.1.50 trong show ip arp. Nghĩa là …\n   Answer: b) the ARP request was sent but no reply came\n   The host is down, unplugged or on a different VLAN.VI: Host tắt, chưa cắm hoặc ở VLAN khác.\n\n3. A gratuitous ARP is …Gratuitous ARP là …\n   Answer: b) a host announcing its own IP-to-MAC mapping (also used to detect duplicate IPs)\n   It updates other hosts’ caches after a change.VI: Nó cập nhật cache của các máy khác sau thay đổi.\n\n4. Which attack poisons ARP caches so that the attacker sits in the middle?Tấn công nào làm nhiễm ARP cache để kẻ tấn công nằm giữa?\n   Answer: d) ARP spoofing / poisoning\n   Dynamic ARP Inspection on the switch defends against it.VI: Dynamic ARP Inspection trên switch chống lại nó.\n"
+          "code": "# ARP 5 — Read the ARP table and symptoms — answer key\n\n1. The ARP table shows two different IPs with the SAME MAC address, 00:50:56:aa:bb:cc, and one is the gateway. Possible meaning?Bảng ARP có hai IP khác nhau cùng một MAC 00:50:56:aa:bb:cc, và một là gateway. Có thể là?\n   Answer: d) Proxy ARP or ARP spoofing; investigate\n   The gateway’s MAC being shared with a second IP is suspicious.VI: MAC của gateway dùng chung với một IP khác là đáng ngờ.\n\n2. “Incomplete” appears for 192.168.1.50 in show ip arp. It means …“Incomplete” xuất hiện cho 192.168.1.50 trong show ip arp. Nghĩa là …\n   Answer: d) the ARP request was sent but no reply came\n   The host is down, unplugged or on a different VLAN.VI: Host tắt, chưa cắm hoặc ở VLAN khác.\n\n3. A gratuitous ARP is …Gratuitous ARP là …\n   Answer: a) a host announcing its own IP-to-MAC mapping\n   It updates other hosts’ caches after a change and also helps to detect duplicate IPs.VI: Nó cập nhật cache của các máy khác sau thay đổi, và còn giúp phát hiện IP trùng.\n\n4. Which attack poisons ARP caches so that the attacker sits in the middle?Tấn công nào làm nhiễm ARP cache để kẻ tấn công nằm giữa?\n   Answer: a) ARP spoofing\n   Dynamic ARP Inspection on the switch defends against it.VI: Dynamic ARP Inspection trên switch chống lại nó.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Proxy ARP or ARP spoofing; investigate</p><p>The gateway’s MAC being shared with a second IP is suspicious.</p><p><i>VI: MAC của gateway dùng chung với một IP khác là đáng ngờ.</i></p></li><li><p><b>b)</b> the ARP request was sent but no reply came</p><p>The host is down, unplugged or on a different VLAN.</p><p><i>VI: Host tắt, chưa cắm hoặc ở VLAN khác.</i></p></li><li><p><b>b)</b> a host announcing its own IP-to-MAC mapping (also used to detect duplicate IPs)</p><p>It updates other hosts’ caches after a change.</p><p><i>VI: Nó cập nhật cache của các máy khác sau thay đổi.</i></p></li><li><p><b>d)</b> ARP spoofing / poisoning</p><p>Dynamic ARP Inspection on the switch defends against it.</p><p><i>VI: Dynamic ARP Inspection trên switch chống lại nó.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Proxy ARP or ARP spoofing; investigate</p><p>The gateway’s MAC being shared with a second IP is suspicious.</p><p><i>VI: MAC của gateway dùng chung với một IP khác là đáng ngờ.</i></p></li><li><p><b>d)</b> the ARP request was sent but no reply came</p><p>The host is down, unplugged or on a different VLAN.</p><p><i>VI: Host tắt, chưa cắm hoặc ở VLAN khác.</i></p></li><li><p><b>a)</b> a host announcing its own IP-to-MAC mapping</p><p>It updates other hosts’ caches after a change and also helps to detect duplicate IPs.</p><p><i>VI: Nó cập nhật cache của các máy khác sau thay đổi, và còn giúp phát hiện IP trùng.</i></p></li><li><p><b>a)</b> ARP spoofing</p><p>Dynamic ARP Inspection on the switch defends against it.</p><p><i>VI: Dynamic ARP Inspection trên switch chống lại nó.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -760,23 +760,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the host is the router itself"
+                "noiDung": "the MAC is a multicast address"
               },
               {
                 "ma": "b",
-                "noiDung": "the ARP request was sent but no reply came"
+                "noiDung": "the entry is permanent and never ages"
               },
               {
                 "ma": "c",
-                "noiDung": "the entry is permanent"
+                "noiDung": "the host is the router itself"
               },
               {
                 "ma": "d",
-                "noiDung": "the MAC is multicast"
+                "noiDung": "the ARP request was sent but no reply came"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>The host is down, unplugged or on a different VLAN.</p><p><i>VI: Host tắt, chưa cắm hoặc ở VLAN khác.</i></p>"
           },
@@ -786,25 +786,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an ARP request for the MAC address of the default gateway"
+                "noiDung": "a host announcing its own IP-to-MAC mapping"
               },
               {
                 "ma": "b",
-                "noiDung": "a host announcing its own IP-to-MAC mapping (also used to detect duplicate IPs)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "a reply to the router that asked for the MAC of a neighbour"
               },
               {
-                "ma": "d",
+                "ma": "c",
                 "noiDung": "a request that makes all neighbours flush their DNS caches"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an ARP request for the MAC address of the default gateway"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
-            "giaiThich": "<p>It updates other hosts’ caches after a change.</p><p><i>VI: Nó cập nhật cache của các máy khác sau thay đổi.</i></p>"
+            "giaiThich": "<p>It updates other hosts’ caches after a change and also helps to detect duplicate IPs.</p><p><i>VI: Nó cập nhật cache của các máy khác sau thay đổi, và còn giúp phát hiện IP trùng.</i></p>"
           },
           {
             "ma": "c4",
@@ -812,23 +812,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SYN flood"
+                "noiDung": "ARP spoofing"
               },
               {
                 "ma": "b",
-                "noiDung": "DNS amplification"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Smurf"
               },
               {
+                "ma": "c",
+                "noiDung": "SYN flood"
+              },
+              {
                 "ma": "d",
-                "noiDung": "ARP spoofing / poisoning"
+                "noiDung": "DNS amplification"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>Dynamic ARP Inspection on the switch defends against it.</p><p><i>VI: Dynamic ARP Inspection trên switch chống lại nó.</i></p>"
           }

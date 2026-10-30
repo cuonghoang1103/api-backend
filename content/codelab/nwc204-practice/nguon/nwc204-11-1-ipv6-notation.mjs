@@ -5,10 +5,10 @@ const E1 = cs({
   ten: 'IPv6 1 — Address types and prefixes', kho: 'EASY', phut: 8,
   en: 'Recognise IPv6 address types by prefix.', vi: 'Nhận biết loại địa chỉ IPv6 theo prefix.',
   cau: [
-    q('c1', ['A global unicast address (GUA) starts with …', 'Địa chỉ global unicast (GUA) bắt đầu bằng …'], ['2000::/3 (in practice 2xxx or 3xxx)', 'fe80::/10', 'fc00::/7', 'ff00::/8'], ['GUAs are routable on the Internet.', 'GUA định tuyến được trên Internet.']),
+    q('c1', ['A global unicast address (GUA) starts with …', 'Địa chỉ global unicast (GUA) bắt đầu bằng …'], ['2000::/3', 'fe80::/10', 'fc00::/7', 'ff00::/8'], ['GUAs are routable on the Internet; in practice they begin with 2xxx or 3xxx.', 'GUA định tuyến được trên Internet; thực tế bắt đầu bằng 2xxx hoặc 3xxx.']),
     q('c2', ['A link-local address starts with …', 'Địa chỉ link-local bắt đầu bằng …'], ['fe80::/10', '2001::/16', 'fc00::/7', '::1'], ['Every IPv6 interface has one; it is never routed.', 'Mọi giao diện IPv6 có một địa chỉ này; không bao giờ được định tuyến.']),
-    q('c3', ['Unique local addresses (private IPv6) are in …', 'Địa chỉ unique local (IPv6 riêng) nằm trong …'], ['fc00::/7 (usually fd00::/8)', 'fe80::/10', '2000::/3', 'ff02::/16'], ['The IPv6 counterpart of RFC 1918.', 'Tương đương RFC 1918 của IPv6.']),
-    q('c4', ['IPv6 has no broadcast. Instead it uses …', 'IPv6 không có broadcast. Thay vào đó dùng …'], ['multicast, e.g. ff02::1 for all nodes', 'unicast only', 'anycast only', 'ARP'], ['ff02::1 = all nodes, ff02::2 = all routers.', 'ff02::1 = mọi node, ff02::2 = mọi router.']),
+    q('c3', ['Unique local addresses (private IPv6) are in …', 'Địa chỉ unique local (IPv6 riêng) nằm trong …'], ['fc00::/7', 'fe80::/10', '2000::/3', 'ff02::/16'], ['The IPv6 counterpart of RFC 1918.', 'Tương đương RFC 1918 của IPv6.']),
+    q('c4', ['IPv6 has no broadcast. Instead it uses …', 'IPv6 không có broadcast. Thay vào đó dùng …'], ['multicast', 'unicast only', 'anycast only', 'ARP'], ['ff02::1 = all nodes, ff02::2 = all routers.', 'ff02::1 = mọi node, ff02::2 = mọi router.']),
     q('c5', ['The IPv6 loopback address is …', 'Địa chỉ loopback IPv6 là …'], ['::1', '::', 'fe80::1', '127.0.0.1'], [':: (all zeros) means “unspecified”.', ':: (toàn 0) nghĩa là “chưa xác định”.']),
     mcNum('c6', ['How many bits is an IPv6 address?', 'Địa chỉ IPv6 dài bao nhiêu bit?'], 128, [64, 48, 256], null, ['Eight 16-bit groups = 128 bits.', 'Tám nhóm 16 bit = 128 bit.']),
   ],

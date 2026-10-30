@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Physical 1 — Bandwidth, throughput, latency, goodput — answer key\n\n1. The capacity of a medium to carry data, in bits per second, is its …Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …\n   Answer: c) bandwidth\n   Bandwidth is the theoretical capacity; throughput is what you really get.VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.\n\n2. Throughput is usually … the bandwidth.Thông lượng thường … băng thông.\n   Answer: c) lower than\n   Congestion, errors and overhead keep throughput under the nominal bandwidth.VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.\n\n3. Goodput is the …Goodput là …\n   Answer: b) rate of useful application data (headers and retransmissions excluded)\n   Goodput = throughput minus overhead.VI: Goodput = thông lượng trừ chi phí header.\n\n4. The maximum length of a UTP Ethernet segment is …Chiều dài tối đa một đoạn cáp UTP Ethernet là …\n   Answer: a) 100 m\n   UTP signals attenuate; 100 m is the standard limit.VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.\n\n5. Compared to copper, fibre-optic cable is …So với cáp đồng, cáp quang …\n   Answer: c) immune to EMI and reaches much longer distances\n   Light does not suffer electromagnetic interference.VI: Ánh sáng không bị nhiễu điện từ.\n"
+          "code": "# Physical 1 — Bandwidth, throughput, latency, goodput — answer key\n\n1. The capacity of a medium to carry data, in bits per second, is its …Khả năng chứa dữ liệu của môi trường, tính bằng bit/giây, là …\n   Answer: c) bandwidth\n   Bandwidth is the theoretical capacity; throughput is what you really get.VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.\n\n2. Throughput is usually … the bandwidth.Thông lượng thường … băng thông.\n   Answer: c) lower than\n   Congestion, errors and overhead keep throughput under the nominal bandwidth.VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.\n\n3. Goodput is the …Goodput là …\n   Answer: b) rate of useful application data (headers and retransmissions excluded)\n   Goodput = throughput minus overhead.VI: Goodput = thông lượng trừ chi phí header.\n\n4. The maximum length of a UTP Ethernet segment is …Chiều dài tối đa một đoạn cáp UTP Ethernet là …\n   Answer: a) 100 m\n   UTP signals attenuate; 100 m is the standard limit.VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.\n\n5. Compared to copper, fibre-optic cable is …So với cáp đồng, cáp quang …\n   Answer: b) immune to EMI and reaches much longer distances\n   Light does not suffer electromagnetic interference.VI: Ánh sáng không bị nhiễu điện từ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> bandwidth</p><p>Bandwidth is the theoretical capacity; throughput is what you really get.</p><p><i>VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.</i></p></li><li><p><b>c)</b> lower than</p><p>Congestion, errors and overhead keep throughput under the nominal bandwidth.</p><p><i>VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.</i></p></li><li><p><b>b)</b> rate of useful application data (headers and retransmissions excluded)</p><p>Goodput = throughput minus overhead.</p><p><i>VI: Goodput = thông lượng trừ chi phí header.</i></p></li><li><p><b>a)</b> 100 m</p><p>UTP signals attenuate; 100 m is the standard limit.</p><p><i>VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.</i></p></li><li><p><b>c)</b> immune to EMI and reaches much longer distances</p><p>Light does not suffer electromagnetic interference.</p><p><i>VI: Ánh sáng không bị nhiễu điện từ.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> bandwidth</p><p>Bandwidth is the theoretical capacity; throughput is what you really get.</p><p><i>VI: Băng thông là dung lượng lý thuyết; thông lượng là cái thực nhận.</i></p></li><li><p><b>c)</b> lower than</p><p>Congestion, errors and overhead keep throughput under the nominal bandwidth.</p><p><i>VI: Tắc nghẽn, lỗi và header khiến thông lượng thấp hơn băng thông danh định.</i></p></li><li><p><b>b)</b> rate of useful application data (headers and retransmissions excluded)</p><p>Goodput = throughput minus overhead.</p><p><i>VI: Goodput = thông lượng trừ chi phí header.</i></p></li><li><p><b>a)</b> 100 m</p><p>UTP signals attenuate; 100 m is the standard limit.</p><p><i>VI: Tín hiệu UTP suy hao; 100 m là giới hạn chuẩn.</i></p></li><li><p><b>b)</b> immune to EMI and reaches much longer distances</p><p>Light does not suffer electromagnetic interference.</p><p><i>VI: Ánh sáng không bị nhiễu điện từ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "cheaper and easier to terminate"
+                "noiDung": "cheaper and easier to terminate in the field"
               },
               {
                 "ma": "b",
-                "noiDung": "only usable indoors"
-              },
-              {
-                "ma": "c",
                 "noiDung": "immune to EMI and reaches much longer distances"
               },
               {
+                "ma": "c",
+                "noiDung": "limited to 100 m, the same as copper UTP"
+              },
+              {
                 "ma": "d",
-                "noiDung": "limited to 100 m"
+                "noiDung": "only usable indoors, away from sunlight"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Light does not suffer electromagnetic interference.</p><p><i>VI: Ánh sáng không bị nhiễu điện từ.</i></p>"
           }

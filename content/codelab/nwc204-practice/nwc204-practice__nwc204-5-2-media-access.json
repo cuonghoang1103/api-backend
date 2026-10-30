@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Access 1 — Topologies and duplex — answer key\n\n1. A modern switched Ethernet LAN is physically a … and logically behaves like …LAN Ethernet có switch hiện nay về vật lý là … và về logic hoạt động như …\n   Answer: b) star; a set of point-to-point links\n   Every device has its own cable to the switch.VI: Mỗi thiết bị có cáp riêng tới switch.\n\n2. In half-duplex a device …Ở chế độ bán song công, thiết bị …\n   Answer: d) can send or receive, but not both at once\n   Half-duplex needs collision handling (CSMA/CD).VI: Bán song công cần xử lý va chạm (CSMA/CD).\n\n3. Full-duplex links between a host and a switch …Liên kết song công giữa host và switch …\n   Answer: c) have no collisions, so CSMA/CD is turned off\n   Separate transmit and receive pairs remove the collision possibility.VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.\n\n4. A hub is a layer 1 device, so all its ports are in …Hub là thiết bị tầng 1 nên mọi cổng của nó nằm trong …\n   Answer: d) one collision domain\n   A hub repeats every signal to all ports.VI: Hub lặp mọi tín hiệu ra tất cả cổng.\n\n5. Which topology has a single point of failure at the centre?Topology nào có điểm hỏng duy nhất ở trung tâm?\n   Answer: d) Star\n   If the centre switch fails, every spoke is isolated.VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.\n"
+          "code": "# Access 1 — Topologies and duplex — answer key\n\n1. A modern switched Ethernet LAN is physically a … and logically behaves like …LAN Ethernet có switch hiện nay về vật lý là … và về logic hoạt động như …\n   Answer: a) star; a set of point-to-point links\n   Every device has its own cable to the switch.VI: Mỗi thiết bị có cáp riêng tới switch.\n\n2. In half-duplex a device …Ở chế độ bán song công, thiết bị …\n   Answer: d) can send or receive, but not both at once\n   Half-duplex needs collision handling (CSMA/CD).VI: Bán song công cần xử lý va chạm (CSMA/CD).\n\n3. Full-duplex links between a host and a switch …Liên kết song công giữa host và switch …\n   Answer: c) have no collisions, so CSMA/CD is turned off\n   Separate transmit and receive pairs remove the collision possibility.VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.\n\n4. A hub is a layer 1 device, so all its ports are in …Hub là thiết bị tầng 1 nên mọi cổng của nó nằm trong …\n   Answer: d) one collision domain\n   A hub repeats every signal to all ports.VI: Hub lặp mọi tín hiệu ra tất cả cổng.\n\n5. Which topology has a single point of failure at the centre?Topology nào có điểm hỏng duy nhất ở trung tâm?\n   Answer: d) Star\n   If the centre switch fails, every spoke is isolated.VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> star; a set of point-to-point links</p><p>Every device has its own cable to the switch.</p><p><i>VI: Mỗi thiết bị có cáp riêng tới switch.</i></p></li><li><p><b>d)</b> can send or receive, but not both at once</p><p>Half-duplex needs collision handling (CSMA/CD).</p><p><i>VI: Bán song công cần xử lý va chạm (CSMA/CD).</i></p></li><li><p><b>c)</b> have no collisions, so CSMA/CD is turned off</p><p>Separate transmit and receive pairs remove the collision possibility.</p><p><i>VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.</i></p></li><li><p><b>d)</b> one collision domain</p><p>A hub repeats every signal to all ports.</p><p><i>VI: Hub lặp mọi tín hiệu ra tất cả cổng.</i></p></li><li><p><b>d)</b> Star</p><p>If the centre switch fails, every spoke is isolated.</p><p><i>VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> star; a set of point-to-point links</p><p>Every device has its own cable to the switch.</p><p><i>VI: Mỗi thiết bị có cáp riêng tới switch.</i></p></li><li><p><b>d)</b> can send or receive, but not both at once</p><p>Half-duplex needs collision handling (CSMA/CD).</p><p><i>VI: Bán song công cần xử lý va chạm (CSMA/CD).</i></p></li><li><p><b>c)</b> have no collisions, so CSMA/CD is turned off</p><p>Separate transmit and receive pairs remove the collision possibility.</p><p><i>VI: Cặp truyền và nhận tách biệt loại bỏ va chạm.</i></p></li><li><p><b>d)</b> one collision domain</p><p>A hub repeats every signal to all ports.</p><p><i>VI: Hub lặp mọi tín hiệu ra tất cả cổng.</i></p></li><li><p><b>d)</b> Star</p><p>If the centre switch fails, every spoke is isolated.</p><p><i>VI: Switch trung tâm hỏng thì mọi nhánh bị cô lập.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ring; token passing"
-              },
-              {
-                "ma": "b",
                 "noiDung": "star; a set of point-to-point links"
               },
               {
+                "ma": "b",
+                "noiDung": "bus; one shared coaxial cable"
+              },
+              {
                 "ma": "c",
-                "noiDung": "mesh; full routing"
+                "noiDung": "ring; a token passed around the loop"
               },
               {
                 "ma": "d",
-                "noiDung": "bus; a shared cable"
+                "noiDung": "mesh; routing between all the ports"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Every device has its own cable to the switch.</p><p><i>VI: Mỗi thiết bị có cáp riêng tới switch.</i></p>"
           },

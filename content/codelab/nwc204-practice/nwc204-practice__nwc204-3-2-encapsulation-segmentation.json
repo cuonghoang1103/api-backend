@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Encapsulation 1 — What changes hop by hop? — answer key\n\n1. Which address stays the same from PC to server (no NAT)?Địa chỉ nào giữ nguyên từ PC tới server (không NAT)?\n   Answer: d) Source and destination IP\n   IP addresses are end-to-end; MAC addresses are valid on one link only.VI: IP là đầu-cuối; MAC chỉ có giá trị trên một liên kết.\n\n2. At every router the Ethernet header is …Ở mỗi router, header Ethernet được …\n   Answer: a) removed and rebuilt with new MAC addresses for the next link\n   A router de-encapsulates to the packet, then re-encapsulates in a new frame.VI: Router mở gói tới packet rồi đóng vào frame mới.\n\n3. The IPv4 TTL field is …Trường TTL của IPv4 được …\n   Answer: d) decreased by 1 at each router\n   A packet whose TTL reaches 0 is discarded (stops routing loops).VI: Gói có TTL về 0 bị huỷ (chống vòng lặp).\n\n4. A switch forwards a frame without changing …Switch chuyển frame mà không thay đổi …\n   Answer: d) the source and destination MAC and the IP packet\n   A layer 2 switch does not touch the packet, only decides the output port.VI: Switch tầng 2 không đụng tới packet, chỉ chọn cổng ra.\n\n5. The TCP segment is read and rebuilt only by …Segment TCP chỉ được đọc và dựng lại bởi …\n   Answer: b) the two end hosts\n   TCP is end-to-end; routers stop reading at layer 3.VI: TCP là đầu-cuối; router chỉ đọc tới tầng 3.\n"
+          "code": "# Encapsulation 1 — What changes hop by hop? — answer key\n\n1. Which address stays the same from PC to server (no NAT)?Địa chỉ nào giữ nguyên từ PC tới server (không NAT)?\n   Answer: d) Source and destination IP\n   IP addresses are end-to-end; MAC addresses are valid on one link only.VI: IP là đầu-cuối; MAC chỉ có giá trị trên một liên kết.\n\n2. At every router the Ethernet header is …Ở mỗi router, header Ethernet được …\n   Answer: a) removed and rebuilt with new MAC addresses for the next link\n   A router de-encapsulates to the packet, then re-encapsulates in a new frame.VI: Router mở gói tới packet rồi đóng vào frame mới.\n\n3. The IPv4 TTL field is …Trường TTL của IPv4 được …\n   Answer: d) decreased by 1 at each router\n   A packet whose TTL reaches 0 is discarded (stops routing loops).VI: Gói có TTL về 0 bị huỷ (chống vòng lặp).\n\n4. A switch forwards a frame without changing …Switch chuyển frame mà không thay đổi …\n   Answer: b) the MAC addresses and the IP packet\n   A layer 2 switch does not touch the packet, only decides the output port.VI: Switch tầng 2 không đụng tới packet, chỉ chọn cổng ra.\n\n5. The TCP segment is read and rebuilt only by …Segment TCP chỉ được đọc và dựng lại bởi …\n   Answer: b) the two end hosts\n   TCP is end-to-end; routers stop reading at layer 3.VI: TCP là đầu-cuối; router chỉ đọc tới tầng 3.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Source and destination IP</p><p>IP addresses are end-to-end; MAC addresses are valid on one link only.</p><p><i>VI: IP là đầu-cuối; MAC chỉ có giá trị trên một liên kết.</i></p></li><li><p><b>a)</b> removed and rebuilt with new MAC addresses for the next link</p><p>A router de-encapsulates to the packet, then re-encapsulates in a new frame.</p><p><i>VI: Router mở gói tới packet rồi đóng vào frame mới.</i></p></li><li><p><b>d)</b> decreased by 1 at each router</p><p>A packet whose TTL reaches 0 is discarded (stops routing loops).</p><p><i>VI: Gói có TTL về 0 bị huỷ (chống vòng lặp).</i></p></li><li><p><b>d)</b> the source and destination MAC and the IP packet</p><p>A layer 2 switch does not touch the packet, only decides the output port.</p><p><i>VI: Switch tầng 2 không đụng tới packet, chỉ chọn cổng ra.</i></p></li><li><p><b>b)</b> the two end hosts</p><p>TCP is end-to-end; routers stop reading at layer 3.</p><p><i>VI: TCP là đầu-cuối; router chỉ đọc tới tầng 3.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Source and destination IP</p><p>IP addresses are end-to-end; MAC addresses are valid on one link only.</p><p><i>VI: IP là đầu-cuối; MAC chỉ có giá trị trên một liên kết.</i></p></li><li><p><b>a)</b> removed and rebuilt with new MAC addresses for the next link</p><p>A router de-encapsulates to the packet, then re-encapsulates in a new frame.</p><p><i>VI: Router mở gói tới packet rồi đóng vào frame mới.</i></p></li><li><p><b>d)</b> decreased by 1 at each router</p><p>A packet whose TTL reaches 0 is discarded (stops routing loops).</p><p><i>VI: Gói có TTL về 0 bị huỷ (chống vòng lặp).</i></p></li><li><p><b>b)</b> the MAC addresses and the IP packet</p><p>A layer 2 switch does not touch the packet, only decides the output port.</p><p><i>VI: Switch tầng 2 không đụng tới packet, chỉ chọn cổng ra.</i></p></li><li><p><b>b)</b> the two end hosts</p><p>TCP is end-to-end; routers stop reading at layer 3.</p><p><i>VI: TCP là đầu-cuối; router chỉ đọc tới tầng 3.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -140,23 +140,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the destination IP and the source MAC"
-              },
-              {
-                "ma": "b",
-                "noiDung": "the TCP ports and the destination MAC"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the IP TTL and the header checksum"
               },
               {
+                "ma": "b",
+                "noiDung": "the MAC addresses and the IP packet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the destination IP and the source MAC"
+              },
+              {
                 "ma": "d",
-                "noiDung": "the source and destination MAC and the IP packet"
+                "noiDung": "the TCP ports and the destination MAC"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>A layer 2 switch does not touch the packet, only decides the output port.</p><p><i>VI: Switch tầng 2 không đụng tới packet, chỉ chọn cổng ra.</i></p>"
           },
@@ -543,10 +543,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Encapsulation 4 — Read the capture — answer key\n\n1. Which service is the client trying to reach?Client đang cố tới dịch vụ nào?\n   Answer: c) HTTPS (port 443)\n   Destination port 443 is the well-known HTTPS port.VI: Cổng đích 443 là cổng HTTPS quen thuộc.\n\n2. Whose MAC address is 00:11:22:33:44:55 most likely?Địa chỉ MAC 00:11:22:33:44:55 nhiều khả năng của ai?\n   Answer: a) The next hop (the default gateway)\n   The server is on another network, so the frame is addressed to the gateway.VI: Server ở mạng khác nên frame gửi tới gateway.\n\n3. Source port 51514 is …Cổng nguồn 51514 là …\n   Answer: d) an ephemeral (dynamic) port chosen by the client OS\n   Clients use ports from the dynamic range (49152–65535 per IANA).VI: Client dùng cổng động (49152–65535 theo IANA).\n\n4. The SYN flag shows this is …Cờ SYN cho thấy đây là …\n   Answer: a) the first step of the TCP three-way handshake\n   SYN opens the connection; SYN-ACK and ACK follow.VI: SYN mở kết nối; SYN-ACK và ACK theo sau.\n\n5. TTL 62 suggests the packet started at 64 and passed …TTL 62 gợi ý gói xuất phát 64 và đã qua …\n   Answer: c) 2 routers\n   64 − 62 = 2 decrements, one per router.VI: 64 − 62 = 2 lần giảm, mỗi router một lần.\n"
+          "code": "# Encapsulation 4 — Read the capture — answer key\n\n1. Which service is the client trying to reach?Client đang cố tới dịch vụ nào?\n   Answer: d) HTTPS (port 443)\n   Destination port 443 is the well-known HTTPS port.VI: Cổng đích 443 là cổng HTTPS quen thuộc.\n\n2. Whose MAC address is 00:11:22:33:44:55 most likely?Địa chỉ MAC 00:11:22:33:44:55 nhiều khả năng của ai?\n   Answer: a) The next hop (the default gateway)\n   The server is on another network, so the frame is addressed to the gateway.VI: Server ở mạng khác nên frame gửi tới gateway.\n\n3. Source port 51514 is …Cổng nguồn 51514 là …\n   Answer: d) an ephemeral port chosen by the client OS\n   Clients use ports from the dynamic range (49152–65535 per IANA).VI: Client dùng cổng động (49152–65535 theo IANA).\n\n4. The SYN flag shows this is …Cờ SYN cho thấy đây là …\n   Answer: d) the first step of the TCP three-way handshake\n   SYN opens the connection; SYN-ACK and ACK follow.VI: SYN mở kết nối; SYN-ACK và ACK theo sau.\n\n5. TTL 62 suggests the packet started at 64 and passed …TTL 62 gợi ý gói xuất phát 64 và đã qua …\n   Answer: a) 2 routers\n   64 − 62 = 2 decrements, one per router.VI: 64 − 62 = 2 lần giảm, mỗi router một lần.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> HTTPS (port 443)</p><p>Destination port 443 is the well-known HTTPS port.</p><p><i>VI: Cổng đích 443 là cổng HTTPS quen thuộc.</i></p></li><li><p><b>a)</b> The next hop (the default gateway)</p><p>The server is on another network, so the frame is addressed to the gateway.</p><p><i>VI: Server ở mạng khác nên frame gửi tới gateway.</i></p></li><li><p><b>d)</b> an ephemeral (dynamic) port chosen by the client OS</p><p>Clients use ports from the dynamic range (49152–65535 per IANA).</p><p><i>VI: Client dùng cổng động (49152–65535 theo IANA).</i></p></li><li><p><b>a)</b> the first step of the TCP three-way handshake</p><p>SYN opens the connection; SYN-ACK and ACK follow.</p><p><i>VI: SYN mở kết nối; SYN-ACK và ACK theo sau.</i></p></li><li><p><b>c)</b> 2 routers</p><p>64 − 62 = 2 decrements, one per router.</p><p><i>VI: 64 − 62 = 2 lần giảm, mỗi router một lần.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> HTTPS (port 443)</p><p>Destination port 443 is the well-known HTTPS port.</p><p><i>VI: Cổng đích 443 là cổng HTTPS quen thuộc.</i></p></li><li><p><b>a)</b> The next hop (the default gateway)</p><p>The server is on another network, so the frame is addressed to the gateway.</p><p><i>VI: Server ở mạng khác nên frame gửi tới gateway.</i></p></li><li><p><b>d)</b> an ephemeral port chosen by the client OS</p><p>Clients use ports from the dynamic range (49152–65535 per IANA).</p><p><i>VI: Client dùng cổng động (49152–65535 theo IANA).</i></p></li><li><p><b>d)</b> the first step of the TCP three-way handshake</p><p>SYN opens the connection; SYN-ACK and ACK follow.</p><p><i>VI: SYN mở kết nối; SYN-ACK và ACK theo sau.</i></p></li><li><p><b>a)</b> 2 routers</p><p>64 − 62 = 2 decrements, one per router.</p><p><i>VI: 64 − 62 = 2 lần giảm, mỗi router một lần.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -559,23 +559,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "SSH (port 22)"
+                "noiDung": "HTTP (port 80)"
               },
               {
                 "ma": "b",
-                "noiDung": "DNS (port 53)"
+                "noiDung": "SSH (port 22)"
               },
               {
                 "ma": "c",
-                "noiDung": "HTTPS (port 443)"
+                "noiDung": "DNS (port 53)"
               },
               {
                 "ma": "d",
-                "noiDung": "HTTP (port 80)"
+                "noiDung": "HTTPS (port 443)"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Destination port 443 is the well-known HTTPS port.</p><p><i>VI: Cổng đích 443 là cổng HTTPS quen thuộc.</i></p>"
           },
@@ -589,15 +589,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "The client itself"
+                "noiDung": "The DNS server of the client"
               },
               {
                 "ma": "c",
-                "noiDung": "The server 172.16.1.9"
+                "noiDung": "The client that sent this frame"
               },
               {
                 "ma": "d",
-                "noiDung": "The DNS server"
+                "noiDung": "The server 172.16.1.9 itself"
               }
             ],
             "dapAn": [
@@ -611,19 +611,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a well-known port"
+                "noiDung": "a value derived from the MAC address"
               },
               {
                 "ma": "b",
-                "noiDung": "a MAC-derived value"
+                "noiDung": "a well-known port of an Internet service"
               },
               {
                 "ma": "c",
-                "noiDung": "a reserved port of the server"
+                "noiDung": "a reserved port opened by the server"
               },
               {
                 "ma": "d",
-                "noiDung": "an ephemeral (dynamic) port chosen by the client OS"
+                "noiDung": "an ephemeral port chosen by the client OS"
               }
             ],
             "dapAn": [
@@ -637,23 +637,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the first step of the TCP three-way handshake"
+                "noiDung": "the last step of the TCP connection close"
               },
               {
                 "ma": "b",
-                "noiDung": "the last step of the connection"
+                "noiDung": "a DNS query sent over the same port"
               },
               {
                 "ma": "c",
-                "noiDung": "a DNS query"
+                "noiDung": "a UDP datagram with no handshake"
               },
               {
                 "ma": "d",
-                "noiDung": "a UDP datagram"
+                "noiDung": "the first step of the TCP three-way handshake"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>SYN opens the connection; SYN-ACK and ACK follow.</p><p><i>VI: SYN mở kết nối; SYN-ACK và ACK theo sau.</i></p>"
           },
@@ -663,7 +663,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "1 router"
+                "noiDung": "2 routers"
               },
               {
                 "ma": "b",
@@ -671,15 +671,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "2 routers"
+                "noiDung": "62 routers"
               },
               {
                 "ma": "d",
-                "noiDung": "62 routers"
+                "noiDung": "1 router"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>64 − 62 = 2 decrements, one per router.</p><p><i>VI: 64 − 62 = 2 lần giảm, mỗi router một lần.</i></p>"
           }

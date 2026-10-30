@@ -32,7 +32,7 @@ const E3 = cs({
   ten: 'AND 3 — Same network or not?', kho: 'MEDIUM', phut: 10,
   en: 'A host sends directly (ARP) when the destination is on its own network, otherwise it uses the default gateway. For each pair decide with the AND test.', vi: 'Host gửi trực tiếp (ARP) khi đích ở cùng mạng, ngược lại gửi tới default gateway. Với mỗi cặp, dùng phép AND để quyết định.',
   cau: PAIRS.map(([a, b, p], i) => q('c' + (i + 1), [`${a} and ${b} with /${p}: same network?`, `${a} và ${b} với /${p}: cùng mạng?`],
-    S.sameNetwork(a, b, p) ? ['Yes — both are in ' + S.ipInfo(a, p).network + '/' + p, 'No — different networks', 'Only if they share the gateway', 'Cannot tell without the MAC'] : ['No — ' + S.ipInfo(a, p).network + ' vs ' + S.ipInfo(b, p).network, 'Yes — same network', 'Only if they share the gateway', 'Cannot tell without the MAC'],
+    S.sameNetwork(a, b, p) ? ['Yes — both are in ' + S.ipInfo(a, p).network + '/' + p, 'No — they are in different networks', 'Only if they share the gateway', 'Cannot tell without the MAC addresses'] : ['No — ' + S.ipInfo(a, p).network + ' vs ' + S.ipInfo(b, p).network, 'Yes — they are in the same network', 'Only if they share the gateway', 'Cannot tell without the MAC addresses'],
     [`Network of the first: ${S.ipInfo(a, p).network}; of the second: ${S.ipInfo(b, p).network}.`, `Mạng của máy thứ nhất: ${S.ipInfo(a, p).network}; của máy thứ hai: ${S.ipInfo(b, p).network}.`])),
   goiY: ['Compute both network addresses and compare.', 'Only the octet where the mask is partial needs work.'],
   loi: ['Comparing the first three octets regardless of the prefix.', 'Believing /30 hosts .1 and .2 are in different networks.'],

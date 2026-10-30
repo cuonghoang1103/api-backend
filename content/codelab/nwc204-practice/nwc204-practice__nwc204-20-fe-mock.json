@@ -807,11 +807,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the MAC is unknown"
+                "noiDung": "the destination port is closed"
               },
               {
                 "ma": "b",
-                "noiDung": "the DNS is slow"
+                "noiDung": "the MAC of the next hop is unknown"
               },
               {
                 "ma": "c",
@@ -819,7 +819,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the port is closed"
+                "noiDung": "the DNS server is slow to answer"
               }
             ],
             "dapAn": [

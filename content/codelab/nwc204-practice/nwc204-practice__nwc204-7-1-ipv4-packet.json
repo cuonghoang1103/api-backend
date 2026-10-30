@@ -406,10 +406,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# IPv4 3 — TTL and fragments in practice — answer key\n\n1. A packet leaves a host with TTL 64 and crosses 9 routers. The TTL on arrival is …Gói rời host với TTL 64 và qua 9 router. TTL khi tới đích là …\n   Answer: d) 55\n   64 − 9 = 55.VI: 64 − 9 = 55.\n\n2. A 4000-byte datagram is fragmented. Which fragment has MF = 0?Datagram 4000 byte bị phân mảnh. Mảnh nào có MF = 0?\n   Answer: b) Only the last fragment\n   MF = “more fragments follow”; the last one has none.VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.\n\n3. Who reassembles the fragments?Ai ghép lại các mảnh?\n   Answer: b) The destination host\n   Routers never reassemble; only the final host does, using Identification + offset.VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.\n\n4. If one fragment is lost, then …Nếu mất một mảnh thì …\n   Answer: d) the whole datagram is discarded after the reassembly timer expires\n   IP has no retransmission; TCP or the app must resend all of it.VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.\n"
+          "code": "# IPv4 3 — TTL and fragments in practice — answer key\n\n1. A packet leaves a host with TTL 64 and crosses 9 routers. The TTL on arrival is …Gói rời host với TTL 64 và qua 9 router. TTL khi tới đích là …\n   Answer: d) 55\n   64 − 9 = 55.VI: 64 − 9 = 55.\n\n2. A 4000-byte datagram is fragmented. Which fragment has MF = 0?Datagram 4000 byte bị phân mảnh. Mảnh nào có MF = 0?\n   Answer: b) Only the last fragment\n   MF = “more fragments follow”; the last one has none.VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.\n\n3. Who reassembles the fragments?Ai ghép lại các mảnh?\n   Answer: b) The destination host\n   Routers never reassemble; only the final host does, using Identification + offset.VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.\n\n4. If one fragment is lost, then …Nếu mất một mảnh thì …\n   Answer: b) the whole datagram is discarded after a timeout\n   IP has no retransmission; TCP or the app must resend all of it.VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 55</p><p>64 − 9 = 55.</p><p><i>VI: 64 − 9 = 55.</i></p></li><li><p><b>b)</b> Only the last fragment</p><p>MF = “more fragments follow”; the last one has none.</p><p><i>VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.</i></p></li><li><p><b>b)</b> The destination host</p><p>Routers never reassemble; only the final host does, using Identification + offset.</p><p><i>VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.</i></p></li><li><p><b>d)</b> the whole datagram is discarded after the reassembly timer expires</p><p>IP has no retransmission; TCP or the app must resend all of it.</p><p><i>VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 55</p><p>64 − 9 = 55.</p><p><i>VI: 64 − 9 = 55.</i></p></li><li><p><b>b)</b> Only the last fragment</p><p>MF = “more fragments follow”; the last one has none.</p><p><i>VI: MF = “còn mảnh theo sau”; mảnh cuối thì không.</i></p></li><li><p><b>b)</b> The destination host</p><p>Routers never reassemble; only the final host does, using Identification + offset.</p><p><i>VI: Router không bao giờ ghép; chỉ host cuối ghép, dựa vào Identification + offset.</i></p></li><li><p><b>b)</b> the whole datagram is discarded after a timeout</p><p>IP has no retransmission; TCP or the app must resend all of it.</p><p><i>VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -500,23 +500,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "only that fragment is retransmitted by IP"
-              },
-              {
-                "ma": "b",
-                "noiDung": "the datagram is delivered with a hole"
-              },
-              {
-                "ma": "c",
                 "noiDung": "the receiver rebuilds the missing part"
               },
               {
+                "ma": "b",
+                "noiDung": "the whole datagram is discarded after a timeout"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the datagram is delivered with a hole"
+              },
+              {
                 "ma": "d",
-                "noiDung": "the whole datagram is discarded after the reassembly timer expires"
+                "noiDung": "only that fragment is retransmitted by IP"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>IP has no retransmission; TCP or the app must resend all of it.</p><p><i>VI: IP không gửi lại; TCP hoặc ứng dụng phải gửi lại toàn bộ.</i></p>"
           }

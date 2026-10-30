@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ACL 1 — How an ACL works — answer key\n\n1. A packet is checked against ACL lines …Gói được so với các dòng ACL …\n   Answer: b) from the top, stopping at the first match\n   Order matters: put specific lines before general ones.VI: Thứ tự quan trọng: dòng cụ thể trước dòng chung.\n\n2. If no line matches, the packet is …Nếu không dòng nào khớp, gói bị …\n   Answer: b) denied (implicit deny any at the end)\n   Add “permit ip any any” if the intention is to block only some traffic.VI: Thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.\n\n3. Standard ACLs (1–99) filter on …ACL chuẩn (1–99) lọc theo …\n   Answer: a) source IP address only\n   Extended ACLs (100–199) match protocol, source, destination and ports.VI: ACL mở rộng (100–199) khớp giao thức, nguồn, đích và cổng.\n\n4. Where should an extended ACL normally be placed?ACL mở rộng thường đặt ở đâu?\n   Answer: a) As close to the source as possible\n   Drop unwanted traffic early. Standard ACLs go near the destination.VI: Chặn sớm lưu lượng không mong muốn. ACL chuẩn đặt gần đích.\n\n5. In an ACL a wildcard mask bit 0 means …Trong ACL, bit 0 của wildcard mask nghĩa là …\n   Answer: c) the bit must match\n   0.0.0.255 matches a whole /24.VI: 0.0.0.255 khớp cả một /24.\n\n6. An ACL does nothing until it is …ACL không có tác dụng cho tới khi được …\n   Answer: b) applied to an interface in a direction (in or out)\n   “ip access-group 101 in” on the interface.VI: “ip access-group 101 in” trên giao diện.\n"
+          "code": "# ACL 1 — How an ACL works — answer key\n\n1. A packet is checked against ACL lines …Gói được so với các dòng ACL …\n   Answer: d) from the top, stopping at the first match\n   Order matters: put specific lines before general ones.VI: Thứ tự quan trọng: dòng cụ thể trước dòng chung.\n\n2. If no line matches, the packet is …Nếu không dòng nào khớp, gói bị …\n   Answer: c) denied\n   Every ACL ends with an implicit deny any; add “permit ip any any” if the intention is to block only some traffic.VI: Mọi ACL kết thúc bằng deny any ngầm định; thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.\n\n3. Standard ACLs (1–99) filter on …ACL chuẩn (1–99) lọc theo …\n   Answer: a) source IP address only\n   Extended ACLs (100–199) match protocol, source, destination and ports.VI: ACL mở rộng (100–199) khớp giao thức, nguồn, đích và cổng.\n\n4. Where should an extended ACL normally be placed?ACL mở rộng thường đặt ở đâu?\n   Answer: a) As close to the source as possible\n   Drop unwanted traffic early. Standard ACLs go near the destination.VI: Chặn sớm lưu lượng không mong muốn. ACL chuẩn đặt gần đích.\n\n5. In an ACL a wildcard mask bit 0 means …Trong ACL, bit 0 của wildcard mask nghĩa là …\n   Answer: c) the bit must match\n   0.0.0.255 matches a whole /24.VI: 0.0.0.255 khớp cả một /24.\n\n6. An ACL does nothing until it is …ACL không có tác dụng cho tới khi được …\n   Answer: b) applied to an interface in a direction\n   “ip access-group 101 in” on the interface.VI: “ip access-group 101 in” trên giao diện.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> from the top, stopping at the first match</p><p>Order matters: put specific lines before general ones.</p><p><i>VI: Thứ tự quan trọng: dòng cụ thể trước dòng chung.</i></p></li><li><p><b>b)</b> denied (implicit deny any at the end)</p><p>Add “permit ip any any” if the intention is to block only some traffic.</p><p><i>VI: Thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.</i></p></li><li><p><b>a)</b> source IP address only</p><p>Extended ACLs (100–199) match protocol, source, destination and ports.</p><p><i>VI: ACL mở rộng (100–199) khớp giao thức, nguồn, đích và cổng.</i></p></li><li><p><b>a)</b> As close to the source as possible</p><p>Drop unwanted traffic early. Standard ACLs go near the destination.</p><p><i>VI: Chặn sớm lưu lượng không mong muốn. ACL chuẩn đặt gần đích.</i></p></li><li><p><b>c)</b> the bit must match</p><p>0.0.0.255 matches a whole /24.</p><p><i>VI: 0.0.0.255 khớp cả một /24.</i></p></li><li><p><b>b)</b> applied to an interface in a direction (in or out)</p><p>“ip access-group 101 in” on the interface.</p><p><i>VI: “ip access-group 101 in” trên giao diện.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> from the top, stopping at the first match</p><p>Order matters: put specific lines before general ones.</p><p><i>VI: Thứ tự quan trọng: dòng cụ thể trước dòng chung.</i></p></li><li><p><b>c)</b> denied</p><p>Every ACL ends with an implicit deny any; add “permit ip any any” if the intention is to block only some traffic.</p><p><i>VI: Mọi ACL kết thúc bằng deny any ngầm định; thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.</i></p></li><li><p><b>a)</b> source IP address only</p><p>Extended ACLs (100–199) match protocol, source, destination and ports.</p><p><i>VI: ACL mở rộng (100–199) khớp giao thức, nguồn, đích và cổng.</i></p></li><li><p><b>a)</b> As close to the source as possible</p><p>Drop unwanted traffic early. Standard ACLs go near the destination.</p><p><i>VI: Chặn sớm lưu lượng không mong muốn. ACL chuẩn đặt gần đích.</i></p></li><li><p><b>c)</b> the bit must match</p><p>0.0.0.255 matches a whole /24.</p><p><i>VI: 0.0.0.255 khớp cả một /24.</i></p></li><li><p><b>b)</b> applied to an interface in a direction</p><p>“ip access-group 101 in” on the interface.</p><p><i>VI: “ip access-group 101 in” trên giao diện.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,23 +62,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "in random order"
+                "noiDung": "all lines, then majority vote"
               },
               {
                 "ma": "b",
-                "noiDung": "from the top, stopping at the first match"
+                "noiDung": "from the bottom, stopping at the first match"
               },
               {
                 "ma": "c",
-                "noiDung": "from the bottom"
+                "noiDung": "in a random order chosen by the router"
               },
               {
                 "ma": "d",
-                "noiDung": "all lines, then majority vote"
+                "noiDung": "from the top, stopping at the first match"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Order matters: put specific lines before general ones.</p><p><i>VI: Thứ tự quan trọng: dòng cụ thể trước dòng chung.</i></p>"
           },
@@ -88,25 +88,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "permitted"
-              },
-              {
-                "ma": "b",
-                "noiDung": "denied (implicit deny any at the end)"
-              },
-              {
-                "ma": "c",
                 "noiDung": "sent to the default route"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "logged only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "denied"
+              },
+              {
+                "ma": "d",
+                "noiDung": "permitted"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
-            "giaiThich": "<p>Add “permit ip any any” if the intention is to block only some traffic.</p><p><i>VI: Thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.</i></p>"
+            "giaiThich": "<p>Every ACL ends with an implicit deny any; add “permit ip any any” if the intention is to block only some traffic.</p><p><i>VI: Mọi ACL kết thúc bằng deny any ngầm định; thêm “permit ip any any” nếu chỉ muốn chặn một phần lưu lượng.</i></p>"
           },
           {
             "ma": "c3",
@@ -196,15 +196,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "applied to an interface in a direction (in or out)"
+                "noiDung": "applied to an interface in a direction"
               },
               {
                 "ma": "c",
-                "noiDung": "copied to every switch of the same VLAN"
+                "noiDung": "saved to flash with copy running-config"
               },
               {
                 "ma": "d",
-                "noiDung": "saved to flash with copy running-config"
+                "noiDung": "copied to every switch of the same VLAN"
               }
             ],
             "dapAn": [
@@ -850,10 +850,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# ACL 5 — Write the right line — answer key\n\n1. Block only web traffic (TCP 80) from 192.168.30.0/24 to the server 10.0.0.10. Which line?Chặn riêng lưu lượng web (TCP 80) từ 192.168.30.0/24 tới server 10.0.0.10. Dòng nào?\n   Answer: d) deny tcp 192.168.30.0 0.0.0.255 host 10.0.0.10 eq 80\n   Wildcard, not mask; protocol tcp with eq 80 on the destination.VI: Wildcard chứ không phải mask; giao thức tcp với eq 80 ở đích.\n\n2. After “deny tcp any any eq 23” the traffic of every other kind disappears. Why and how to fix?Sau “deny tcp any any eq 23” mọi lưu lượng khác biến mất. Vì sao và sửa thế nào?\n   Answer: d) The implicit deny; add “permit ip any any” at the end\n   An ACL with only denies blocks everything.VI: ACL chỉ có deny sẽ chặn tất cả.\n\n3. “permit ip any any” is line 1 and “deny tcp any any eq 23” is line 2. Telnet is …“permit ip any any” là dòng 1 và “deny tcp any any eq 23” là dòng 2. Telnet sẽ …\n   Answer: b) still permitted: line 2 is never reached\n   Order matters: reorder or insert lines with sequence numbers.VI: Thứ tự quan trọng: sắp xếp lại hoặc chèn dòng bằng số thứ tự.\n\n4. Which wildcard matches 172.16.4.0 – 172.16.7.255?Wildcard nào khớp 172.16.4.0 – 172.16.7.255?\n   Answer: b) 0.0.3.255 with base 172.16.4.0\n   4 consecutive /24 = a /22 → wildcard 0.0.3.255.VI: 4 mạng /24 liên tiếp = /22 → wildcard 0.0.3.255.\n"
+          "code": "# ACL 5 — Write the right line — answer key\n\n1. Block only web traffic (TCP 80) from 192.168.30.0/24 to the server 10.0.0.10. Which line?Chặn riêng lưu lượng web (TCP 80) từ 192.168.30.0/24 tới server 10.0.0.10. Dòng nào?\n   Answer: d) deny tcp 192.168.30.0 0.0.0.255 host 10.0.0.10 eq 80\n   Wildcard, not mask; protocol tcp with eq 80 on the destination.VI: Wildcard chứ không phải mask; giao thức tcp với eq 80 ở đích.\n\n2. After “deny tcp any any eq 23” the traffic of every other kind disappears. Why and how to fix?Sau “deny tcp any any eq 23” mọi lưu lượng khác biến mất. Vì sao và sửa thế nào?\n   Answer: c) The implicit deny; add “permit ip any any” at the end\n   An ACL with only denies blocks everything.VI: ACL chỉ có deny sẽ chặn tất cả.\n\n3. “permit ip any any” is line 1 and “deny tcp any any eq 23” is line 2. Telnet is …“permit ip any any” là dòng 1 và “deny tcp any any eq 23” là dòng 2. Telnet sẽ …\n   Answer: b) still permitted: line 2 is never reached\n   Order matters: reorder or insert lines with sequence numbers.VI: Thứ tự quan trọng: sắp xếp lại hoặc chèn dòng bằng số thứ tự.\n\n4. Which wildcard matches 172.16.4.0 – 172.16.7.255?Wildcard nào khớp 172.16.4.0 – 172.16.7.255?\n   Answer: b) 0.0.3.255 with base 172.16.4.0\n   4 consecutive /24 = a /22 → wildcard 0.0.3.255.VI: 4 mạng /24 liên tiếp = /22 → wildcard 0.0.3.255.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> deny tcp 192.168.30.0 0.0.0.255 host 10.0.0.10 eq 80</p><p>Wildcard, not mask; protocol tcp with eq 80 on the destination.</p><p><i>VI: Wildcard chứ không phải mask; giao thức tcp với eq 80 ở đích.</i></p></li><li><p><b>d)</b> The implicit deny; add “permit ip any any” at the end</p><p>An ACL with only denies blocks everything.</p><p><i>VI: ACL chỉ có deny sẽ chặn tất cả.</i></p></li><li><p><b>b)</b> still permitted: line 2 is never reached</p><p>Order matters: reorder or insert lines with sequence numbers.</p><p><i>VI: Thứ tự quan trọng: sắp xếp lại hoặc chèn dòng bằng số thứ tự.</i></p></li><li><p><b>b)</b> 0.0.3.255 with base 172.16.4.0</p><p>4 consecutive /24 = a /22 → wildcard 0.0.3.255.</p><p><i>VI: 4 mạng /24 liên tiếp = /22 → wildcard 0.0.3.255.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> deny tcp 192.168.30.0 0.0.0.255 host 10.0.0.10 eq 80</p><p>Wildcard, not mask; protocol tcp with eq 80 on the destination.</p><p><i>VI: Wildcard chứ không phải mask; giao thức tcp với eq 80 ở đích.</i></p></li><li><p><b>c)</b> The implicit deny; add “permit ip any any” at the end</p><p>An ACL with only denies blocks everything.</p><p><i>VI: ACL chỉ có deny sẽ chặn tất cả.</i></p></li><li><p><b>b)</b> still permitted: line 2 is never reached</p><p>Order matters: reorder or insert lines with sequence numbers.</p><p><i>VI: Thứ tự quan trọng: sắp xếp lại hoặc chèn dòng bằng số thứ tự.</i></p></li><li><p><b>b)</b> 0.0.3.255 with base 172.16.4.0</p><p>4 consecutive /24 = a /22 → wildcard 0.0.3.255.</p><p><i>VI: 4 mạng /24 liên tiếp = /22 → wildcard 0.0.3.255.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -892,23 +892,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Telnet uses UDP"
+                "noiDung": "The deny is too general; delete and retype it"
               },
               {
                 "ma": "b",
-                "noiDung": "The ACL must be inbound"
+                "noiDung": "The ACL must be inbound, not outbound"
               },
               {
                 "ma": "c",
-                "noiDung": "The deny is too general; delete it"
+                "noiDung": "The implicit deny; add “permit ip any any” at the end"
               },
               {
                 "ma": "d",
-                "noiDung": "The implicit deny; add “permit ip any any” at the end"
+                "noiDung": "Telnet uses UDP, so the line must say udp"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>An ACL with only denies blocks everything.</p><p><i>VI: ACL chỉ có deny sẽ chặn tất cả.</i></p>"
           },
@@ -918,7 +918,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "denied by the implicit deny"
+                "noiDung": "logged and then dropped by the router"
               },
               {
                 "ma": "b",
@@ -926,11 +926,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "denied by line 2"
+                "noiDung": "denied by line 2, which is more specific"
               },
               {
                 "ma": "d",
-                "noiDung": "logged"
+                "noiDung": "denied by the implicit deny at the end"
               }
             ],
             "dapAn": [

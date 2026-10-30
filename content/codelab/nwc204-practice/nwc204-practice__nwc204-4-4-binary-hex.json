@@ -328,10 +328,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Binary 3 — Why hex? Powers of two and ranges — answer key\n\n1. Why do MAC addresses and IPv6 use hexadecimal?Vì sao địa chỉ MAC và IPv6 dùng hệ thập lục phân?\n   Answer: b) One hex digit equals exactly 4 bits, so long binary strings become short and easy to read\n   4 bits per digit: a 48-bit MAC is 12 hex digits.VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.\n\n2. The largest value of one IPv4 octet is …Giá trị lớn nhất của một octet IPv4 là …\n   Answer: d) 255\n   2⁸ − 1 = 255.VI: 2⁸ − 1 = 255.\n\n3. How many different addresses can 12 host bits provide?12 bit host cho bao nhiêu địa chỉ khác nhau?\n   Answer: c) 4096\n   2¹² = 4096 (4094 usable hosts after removing network and broadcast).VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).\n\n4. The hexadecimal number 0xFF equals …Số hex 0xFF bằng …\n   Answer: a) 255\n   15 × 16 + 15 = 255.VI: 15 × 16 + 15 = 255.\n\n5. A MAC address has 48 bits. How many hex digits is that?MAC có 48 bit. Đó là bao nhiêu chữ số hex?\n   Answer: d) 12\n   48 ÷ 4 = 12 (shown as six pairs).VI: 48 ÷ 4 = 12 (viết thành sáu cặp).\n"
+          "code": "# Binary 3 — Why hex? Powers of two and ranges — answer key\n\n1. Why do MAC addresses and IPv6 use hexadecimal?Vì sao địa chỉ MAC và IPv6 dùng hệ thập lục phân?\n   Answer: c) One hex digit equals exactly 4 bits, so long binary strings become short\n   4 bits per digit: a 48-bit MAC is 12 hex digits.VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.\n\n2. The largest value of one IPv4 octet is …Giá trị lớn nhất của một octet IPv4 là …\n   Answer: d) 255\n   2⁸ − 1 = 255.VI: 2⁸ − 1 = 255.\n\n3. How many different addresses can 12 host bits provide?12 bit host cho bao nhiêu địa chỉ khác nhau?\n   Answer: c) 4096\n   2¹² = 4096 (4094 usable hosts after removing network and broadcast).VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).\n\n4. The hexadecimal number 0xFF equals …Số hex 0xFF bằng …\n   Answer: a) 255\n   15 × 16 + 15 = 255.VI: 15 × 16 + 15 = 255.\n\n5. A MAC address has 48 bits. How many hex digits is that?MAC có 48 bit. Đó là bao nhiêu chữ số hex?\n   Answer: d) 12\n   48 ÷ 4 = 12 (shown as six pairs).VI: 48 ÷ 4 = 12 (viết thành sáu cặp).\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> One hex digit equals exactly 4 bits, so long binary strings become short and easy to read</p><p>4 bits per digit: a 48-bit MAC is 12 hex digits.</p><p><i>VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.</i></p></li><li><p><b>d)</b> 255</p><p>2⁸ − 1 = 255.</p><p><i>VI: 2⁸ − 1 = 255.</i></p></li><li><p><b>c)</b> 4096</p><p>2¹² = 4096 (4094 usable hosts after removing network and broadcast).</p><p><i>VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).</i></p></li><li><p><b>a)</b> 255</p><p>15 × 16 + 15 = 255.</p><p><i>VI: 15 × 16 + 15 = 255.</i></p></li><li><p><b>d)</b> 12</p><p>48 ÷ 4 = 12 (shown as six pairs).</p><p><i>VI: 48 ÷ 4 = 12 (viết thành sáu cặp).</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> One hex digit equals exactly 4 bits, so long binary strings become short</p><p>4 bits per digit: a 48-bit MAC is 12 hex digits.</p><p><i>VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.</i></p></li><li><p><b>d)</b> 255</p><p>2⁸ − 1 = 255.</p><p><i>VI: 2⁸ − 1 = 255.</i></p></li><li><p><b>c)</b> 4096</p><p>2¹² = 4096 (4094 usable hosts after removing network and broadcast).</p><p><i>VI: 2¹² = 4096 (dùng được 4094 host sau khi bỏ địa chỉ mạng và broadcast).</i></p></li><li><p><b>a)</b> 255</p><p>15 × 16 + 15 = 255.</p><p><i>VI: 15 × 16 + 15 = 255.</i></p></li><li><p><b>d)</b> 12</p><p>48 ÷ 4 = 12 (shown as six pairs).</p><p><i>VI: 48 ÷ 4 = 12 (viết thành sáu cặp).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -344,23 +344,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Routers and switches understand only hex, so binary must be converted anyway"
+                "noiDung": "Hex digits carry a built-in check, so a mistyped address is noticed at once"
               },
               {
                 "ma": "b",
-                "noiDung": "One hex digit equals exactly 4 bits, so long binary strings become short and easy to read"
-              },
-              {
-                "ma": "c",
                 "noiDung": "The CPU computes faster in base 16, so routers forward these addresses faster"
               },
               {
+                "ma": "c",
+                "noiDung": "One hex digit equals exactly 4 bits, so long binary strings become short"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Hex digits carry a built-in check, so a mistyped address is noticed at once"
+                "noiDung": "Routers and switches understand only hex, so binary must be converted anyway"
               }
             ],
             "dapAn": [
-              "b"
+              "c"
             ],
             "giaiThich": "<p>4 bits per digit: a 48-bit MAC is 12 hex digits.</p><p><i>VI: 4 bit mỗi chữ số: MAC 48 bit là 12 chữ số hex.</i></p>"
           },

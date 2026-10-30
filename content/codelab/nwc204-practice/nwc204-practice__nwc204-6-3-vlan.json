@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# VLAN 1 — Concepts — answer key\n\n1. A VLAN creates a separate …VLAN tạo ra một … riêng.\n   Answer: b) broadcast domain\n   Broadcasts stay inside the VLAN.VI: Broadcast ở lại trong VLAN.\n\n2. Two PCs in different VLANs on the same switch need … to talk.Hai PC ở VLAN khác nhau trên cùng switch cần … để nói chuyện.\n   Answer: a) a router or Layer 3 switch (inter-VLAN routing)\n   Different VLAN = different IP subnet = routing is required.VI: VLAN khác = mạng IP khác = cần định tuyến.\n\n3. An access port belongs to …Cổng access thuộc về …\n   Answer: d) exactly one VLAN and sends untagged frames\n   End hosts use access ports and know nothing about VLAN tags.VI: Host đầu cuối dùng cổng access và không biết gì về tag VLAN.\n\n4. A trunk port carries …Cổng trunk mang …\n   Answer: b) frames of several VLANs, tagged with 802.1Q\n   The 4-byte 802.1Q tag holds the 12-bit VLAN ID.VI: Tag 802.1Q 4 byte chứa VLAN ID 12 bit.\n\n5. The native VLAN on a trunk is …Native VLAN trên trunk là …\n   Answer: b) the VLAN whose frames are sent untagged\n   Both ends must agree on the native VLAN; mismatches are a common error.VI: Hai đầu phải thống nhất native VLAN; lệch nhau là lỗi thường gặp.\n\n6. How many usable normal-range VLAN IDs exist (IEEE 802.1Q)?Có bao nhiêu VLAN ID dùng được (IEEE 802.1Q)?\n   Answer: a) 4094 (1–4094)\n   12 bits give 4096 values; 0 and 4095 are reserved.VI: 12 bit cho 4096 giá trị; 0 và 4095 bị dành riêng.\n"
+          "code": "# VLAN 1 — Concepts — answer key\n\n1. A VLAN creates a separate …VLAN tạo ra một … riêng.\n   Answer: b) broadcast domain\n   Broadcasts stay inside the VLAN.VI: Broadcast ở lại trong VLAN.\n\n2. Two PCs in different VLANs on the same switch need … to talk.Hai PC ở VLAN khác nhau trên cùng switch cần … để nói chuyện.\n   Answer: c) a router or Layer 3 switch\n   Different VLAN = different IP subnet = routing is required.VI: VLAN khác = mạng IP khác = cần định tuyến.\n\n3. An access port belongs to …Cổng access thuộc về …\n   Answer: c) exactly one VLAN and sends untagged frames\n   End hosts use access ports and know nothing about VLAN tags.VI: Host đầu cuối dùng cổng access và không biết gì về tag VLAN.\n\n4. A trunk port carries …Cổng trunk mang …\n   Answer: b) frames of several VLANs, tagged with 802.1Q\n   The 4-byte 802.1Q tag holds the 12-bit VLAN ID.VI: Tag 802.1Q 4 byte chứa VLAN ID 12 bit.\n\n5. The native VLAN on a trunk is …Native VLAN trên trunk là …\n   Answer: b) the VLAN whose frames are sent untagged\n   Both ends must agree on the native VLAN; mismatches are a common error.VI: Hai đầu phải thống nhất native VLAN; lệch nhau là lỗi thường gặp.\n\n6. How many usable normal-range VLAN IDs exist (IEEE 802.1Q)?Có bao nhiêu VLAN ID dùng được (IEEE 802.1Q)?\n   Answer: a) 4094\n   12 bits give 4096 values; 0 and 4095 are reserved.VI: 12 bit cho 4096 giá trị; 0 và 4095 bị dành riêng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> broadcast domain</p><p>Broadcasts stay inside the VLAN.</p><p><i>VI: Broadcast ở lại trong VLAN.</i></p></li><li><p><b>a)</b> a router or Layer 3 switch (inter-VLAN routing)</p><p>Different VLAN = different IP subnet = routing is required.</p><p><i>VI: VLAN khác = mạng IP khác = cần định tuyến.</i></p></li><li><p><b>d)</b> exactly one VLAN and sends untagged frames</p><p>End hosts use access ports and know nothing about VLAN tags.</p><p><i>VI: Host đầu cuối dùng cổng access và không biết gì về tag VLAN.</i></p></li><li><p><b>b)</b> frames of several VLANs, tagged with 802.1Q</p><p>The 4-byte 802.1Q tag holds the 12-bit VLAN ID.</p><p><i>VI: Tag 802.1Q 4 byte chứa VLAN ID 12 bit.</i></p></li><li><p><b>b)</b> the VLAN whose frames are sent untagged</p><p>Both ends must agree on the native VLAN; mismatches are a common error.</p><p><i>VI: Hai đầu phải thống nhất native VLAN; lệch nhau là lỗi thường gặp.</i></p></li><li><p><b>a)</b> 4094 (1–4094)</p><p>12 bits give 4096 values; 0 and 4095 are reserved.</p><p><i>VI: 12 bit cho 4096 giá trị; 0 và 4095 bị dành riêng.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> broadcast domain</p><p>Broadcasts stay inside the VLAN.</p><p><i>VI: Broadcast ở lại trong VLAN.</i></p></li><li><p><b>c)</b> a router or Layer 3 switch</p><p>Different VLAN = different IP subnet = routing is required.</p><p><i>VI: VLAN khác = mạng IP khác = cần định tuyến.</i></p></li><li><p><b>c)</b> exactly one VLAN and sends untagged frames</p><p>End hosts use access ports and know nothing about VLAN tags.</p><p><i>VI: Host đầu cuối dùng cổng access và không biết gì về tag VLAN.</i></p></li><li><p><b>b)</b> frames of several VLANs, tagged with 802.1Q</p><p>The 4-byte 802.1Q tag holds the 12-bit VLAN ID.</p><p><i>VI: Tag 802.1Q 4 byte chứa VLAN ID 12 bit.</i></p></li><li><p><b>b)</b> the VLAN whose frames are sent untagged</p><p>Both ends must agree on the native VLAN; mismatches are a common error.</p><p><i>VI: Hai đầu phải thống nhất native VLAN; lệch nhau là lỗi thường gặp.</i></p></li><li><p><b>a)</b> 4094</p><p>12 bits give 4096 values; 0 and 4095 are reserved.</p><p><i>VI: 12 bit cho 4096 giá trị; 0 và 4095 bị dành riêng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a router or Layer 3 switch (inter-VLAN routing)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "a longer cable"
               },
               {
+                "ma": "b",
+                "noiDung": "a larger MAC table"
+              },
+              {
                 "ma": "c",
-                "noiDung": "nothing, VLANs are transparent"
+                "noiDung": "a router or Layer 3 switch"
               },
               {
                 "ma": "d",
-                "noiDung": "a larger MAC table"
+                "noiDung": "nothing, VLANs are transparent"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Different VLAN = different IP subnet = routing is required.</p><p><i>VI: VLAN khác = mạng IP khác = cần định tuyến.</i></p>"
           },
@@ -118,19 +118,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "all VLANs and sends tagged frames"
+                "noiDung": "no VLAN until the first tagged frame arrives"
               },
               {
                 "ma": "c",
-                "noiDung": "no VLAN until a tag arrives"
+                "noiDung": "exactly one VLAN and sends untagged frames"
               },
               {
                 "ma": "d",
-                "noiDung": "exactly one VLAN and sends untagged frames"
+                "noiDung": "all VLANs and sends tagged frames"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>End hosts use access ports and know nothing about VLAN tags.</p><p><i>VI: Host đầu cuối dùng cổng access và không biết gì về tag VLAN.</i></p>"
           },
@@ -192,11 +192,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "4094 (1–4094)"
+                "noiDung": "4094"
               },
               {
                 "ma": "b",
-                "noiDung": "1024"
+                "noiDung": "4096"
               },
               {
                 "ma": "c",
@@ -204,7 +204,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "4096"
+                "noiDung": "1024"
               }
             ],
             "dapAn": [
@@ -275,10 +275,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# VLAN 2 — Where does the frame go? — answer key\n\n1. #1: A → broadcast arrives on port 1#1: A → broadcast tới cổng 1\n   Answer: c) ports 2, 5(tag 10)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n2. #2: C → broadcast arrives on port 3#2: C → broadcast tới cổng 3\n   Answer: a) ports 4, 5(tag 20)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n3. #3: B → A arrives on port 2#3: B → A tới cổng 2\n   Answer: d) ports 1\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n4. #4: S → C arrives on port 5 tagged VLAN 20#4: S → C tới cổng 5 gắn tag VLAN 20\n   Answer: d) ports 3\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n5. #5: T → broadcast arrives on port 5 tagged VLAN 30#5: T → broadcast tới cổng 5 gắn tag VLAN 30\n   Answer: c) none (dropped / no output)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n6. #6: A → C arrives on port 1#6: A → C tới cổng 1\n   Answer: c) ports 2, 5(tag 10)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n"
+          "code": "# VLAN 2 — Where does the frame go? — answer key\n\n1. #1: A → broadcast arrives on port 1#1: A → broadcast tới cổng 1\n   Answer: a) ports 2, 5(tag 10)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n2. #2: C → broadcast arrives on port 3#2: C → broadcast tới cổng 3\n   Answer: b) ports 4, 5(tag 20)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n3. #3: B → A arrives on port 2#3: B → A tới cổng 2\n   Answer: b) port 1\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n4. #4: S → C arrives on port 5 tagged VLAN 20#4: S → C tới cổng 5 gắn tag VLAN 20\n   Answer: c) port 3\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n5. #5: T → broadcast arrives on port 5 tagged VLAN 30#5: T → broadcast tới cổng 5 gắn tag VLAN 30\n   Answer: c) none (dropped / no output)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n\n6. #6: A → C arrives on port 1#6: A → C tới cổng 1\n   Answer: d) ports 2, 5(tag 10)\n   Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> ports 2, 5(tag 10)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>a)</b> ports 4, 5(tag 20)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>d)</b> ports 1</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>d)</b> ports 3</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>c)</b> none (dropped / no output)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>c)</b> ports 2, 5(tag 10)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> ports 2, 5(tag 10)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>b)</b> ports 4, 5(tag 20)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>b)</b> port 1</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>c)</b> port 3</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>c)</b> none (dropped / no output)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li><li><p><b>d)</b> ports 2, 5(tag 10)</p><p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -291,23 +291,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "none (dropped / no output)"
-              },
-              {
-                "ma": "b",
-                "noiDung": "ports 1, 2, 3, 4, 5"
-              },
-              {
-                "ma": "c",
                 "noiDung": "ports 2, 5(tag 10)"
               },
               {
-                "ma": "d",
+                "ma": "b",
+                "noiDung": "none (dropped / no output)"
+              },
+              {
+                "ma": "c",
                 "noiDung": "ports 3, 4, 5(tag 20)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ports 1, 2, 3, 4, 5"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p>"
           },
@@ -317,15 +317,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ports 4, 5(tag 20)"
+                "noiDung": "none (dropped / no output)"
               },
               {
                 "ma": "b",
-                "noiDung": "ports 3, 4, 5(tag 20)"
+                "noiDung": "ports 4, 5(tag 20)"
               },
               {
                 "ma": "c",
-                "noiDung": "none (dropped / no output)"
+                "noiDung": "ports 3, 4, 5(tag 20)"
               },
               {
                 "ma": "d",
@@ -333,7 +333,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p>"
           },
@@ -347,19 +347,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "none (dropped / no output)"
+                "noiDung": "port 1"
               },
               {
                 "ma": "c",
-                "noiDung": "ports 3, 4, 5(tag 20)"
+                "noiDung": "none (dropped / no output)"
               },
               {
                 "ma": "d",
-                "noiDung": "ports 1"
+                "noiDung": "ports 3, 4, 5(tag 20)"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p>"
           },
@@ -369,23 +369,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ports 3, 4, 5(tag 20)"
-              },
-              {
-                "ma": "b",
-                "noiDung": "ports 1, 2, 3, 4, 5"
-              },
-              {
-                "ma": "c",
                 "noiDung": "none (dropped / no output)"
               },
               {
+                "ma": "b",
+                "noiDung": "ports 3, 4, 5(tag 20)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "port 3"
+              },
+              {
                 "ma": "d",
-                "noiDung": "ports 3"
+                "noiDung": "ports 1, 2, 3, 4, 5"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p>"
           },
@@ -395,7 +395,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ports 5(tag 10)"
+                "noiDung": "port 5(tag 10)"
               },
               {
                 "ma": "b",
@@ -421,23 +421,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ports 3, 4, 5(tag 20)"
-              },
-              {
-                "ma": "b",
                 "noiDung": "ports 1, 2, 3, 4, 5"
               },
               {
+                "ma": "b",
+                "noiDung": "ports 3, 4, 5(tag 20)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "ports 2, 5(tag 10)"
+                "noiDung": "none (dropped / no output)"
               },
               {
                 "ma": "d",
-                "noiDung": "none (dropped / no output)"
+                "noiDung": "ports 2, 5(tag 10)"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Flooding and forwarding stay inside the frame’s VLAN; a trunk allows only listed VLANs.</p><p><i>VI: Tràn và chuyển tiếp chỉ trong VLAN của frame; trunk chỉ cho phép VLAN trong danh sách.</i></p>"
           }
@@ -954,10 +954,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# VLAN 6 — Troubleshoot — answer key\n\n1. PCs in VLAN 10 on two different switches cannot reach each other; each switch’s VLAN 10 PCs reach each other fine. First check …PC VLAN 10 trên hai switch khác nhau không nói chuyện được; PC cùng switch thì ổn. Kiểm tra đầu tiên …\n   Answer: a) that the trunk allows VLAN 10 on both ends\n   show interfaces trunk reveals the allowed VLAN list.VI: show interfaces trunk cho thấy danh sách VLAN được phép.\n\n2. “%CDP-4-NATIVE_VLAN_MISMATCH” appears. The cause is …“%CDP-4-NATIVE_VLAN_MISMATCH” xuất hiện. Nguyên nhân là …\n   Answer: b) the two ends of a trunk use different native VLANs\n   Mismatched native VLANs leak traffic between VLANs.VI: Lệch native VLAN làm lọt lưu lượng giữa các VLAN.\n\n3. A PC plugged into a port still gets no IP from the DHCP server in its VLAN. The port was configured as a trunk. Fix?PC cắm vào cổng không nhận IP từ DHCP của VLAN. Cổng đang cấu hình trunk. Cách sửa?\n   Answer: a) Make the port an access port in the right VLAN\n   End devices need access ports.VI: Thiết bị đầu cuối cần cổng access.\n\n4. You deleted VLAN 30 from the VLAN database but ports 20–24 still use it. The ports …Bạn xoá VLAN 30 khỏi cơ sở dữ liệu VLAN nhưng cổng 20–24 vẫn gán nó. Các cổng …\n   Answer: c) become inactive until the VLAN is recreated or the ports reassigned\n   Cisco keeps the assignment but the ports stop forwarding.VI: Cisco giữ gán nhưng cổng ngừng chuyển.\n"
+          "code": "# VLAN 6 — Troubleshoot — answer key\n\n1. PCs in VLAN 10 on two different switches cannot reach each other; each switch’s VLAN 10 PCs reach each other fine. First check …PC VLAN 10 trên hai switch khác nhau không nói chuyện được; PC cùng switch thì ổn. Kiểm tra đầu tiên …\n   Answer: a) that the trunk allows VLAN 10 on both ends\n   show interfaces trunk reveals the allowed VLAN list.VI: show interfaces trunk cho thấy danh sách VLAN được phép.\n\n2. “%CDP-4-NATIVE_VLAN_MISMATCH” appears. The cause is …“%CDP-4-NATIVE_VLAN_MISMATCH” xuất hiện. Nguyên nhân là …\n   Answer: b) the two ends of a trunk use different native VLANs\n   Mismatched native VLANs leak traffic between VLANs.VI: Lệch native VLAN làm lọt lưu lượng giữa các VLAN.\n\n3. A PC plugged into a port still gets no IP from the DHCP server in its VLAN. The port was configured as a trunk. Fix?PC cắm vào cổng không nhận IP từ DHCP của VLAN. Cổng đang cấu hình trunk. Cách sửa?\n   Answer: d) Make the port an access port in the right VLAN\n   End devices need access ports.VI: Thiết bị đầu cuối cần cổng access.\n\n4. You deleted VLAN 30 from the VLAN database but ports 20–24 still use it. The ports …Bạn xoá VLAN 30 khỏi cơ sở dữ liệu VLAN nhưng cổng 20–24 vẫn gán nó. Các cổng …\n   Answer: b) become inactive until the VLAN is recreated or ports reassigned\n   Cisco keeps the assignment but the ports stop forwarding.VI: Cisco giữ gán nhưng cổng ngừng chuyển.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> that the trunk allows VLAN 10 on both ends</p><p>show interfaces trunk reveals the allowed VLAN list.</p><p><i>VI: show interfaces trunk cho thấy danh sách VLAN được phép.</i></p></li><li><p><b>b)</b> the two ends of a trunk use different native VLANs</p><p>Mismatched native VLANs leak traffic between VLANs.</p><p><i>VI: Lệch native VLAN làm lọt lưu lượng giữa các VLAN.</i></p></li><li><p><b>a)</b> Make the port an access port in the right VLAN</p><p>End devices need access ports.</p><p><i>VI: Thiết bị đầu cuối cần cổng access.</i></p></li><li><p><b>c)</b> become inactive until the VLAN is recreated or the ports reassigned</p><p>Cisco keeps the assignment but the ports stop forwarding.</p><p><i>VI: Cisco giữ gán nhưng cổng ngừng chuyển.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> that the trunk allows VLAN 10 on both ends</p><p>show interfaces trunk reveals the allowed VLAN list.</p><p><i>VI: show interfaces trunk cho thấy danh sách VLAN được phép.</i></p></li><li><p><b>b)</b> the two ends of a trunk use different native VLANs</p><p>Mismatched native VLANs leak traffic between VLANs.</p><p><i>VI: Lệch native VLAN làm lọt lưu lượng giữa các VLAN.</i></p></li><li><p><b>d)</b> Make the port an access port in the right VLAN</p><p>End devices need access ports.</p><p><i>VI: Thiết bị đầu cuối cần cổng access.</i></p></li><li><p><b>b)</b> become inactive until the VLAN is recreated or ports reassigned</p><p>Cisco keeps the assignment but the ports stop forwarding.</p><p><i>VI: Cisco giữ gán nhưng cổng ngừng chuyển.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -974,7 +974,7 @@
               },
               {
                 "ma": "b",
-                "noiDung": "the DNS server"
+                "noiDung": "the DNS server setting of each PC"
               },
               {
                 "ma": "c",
@@ -982,7 +982,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "the PCs’ cables"
+                "noiDung": "the cables of the two PCs in VLAN 10"
               }
             ],
             "dapAn": [
@@ -1022,23 +1022,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Make the port an access port in the right VLAN"
+                "noiDung": "Reboot the DHCP server and renew the lease"
               },
               {
                 "ma": "b",
-                "noiDung": "Add more VLANs to the trunk"
+                "noiDung": "Add more VLANs to the allowed list of the trunk"
               },
               {
                 "ma": "c",
-                "noiDung": "Reboot the DHCP server"
+                "noiDung": "Change the MAC address of the PC"
               },
               {
                 "ma": "d",
-                "noiDung": "Change the PC’s MAC address"
+                "noiDung": "Make the port an access port in the right VLAN"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>End devices need access ports.</p><p><i>VI: Thiết bị đầu cuối cần cổng access.</i></p>"
           },
@@ -1048,23 +1048,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "turn into trunks and carry the other VLANs"
-              },
-              {
-                "ma": "b",
                 "noiDung": "move to VLAN 1 automatically and keep working"
               },
               {
+                "ma": "b",
+                "noiDung": "become inactive until the VLAN is recreated or ports reassigned"
+              },
+              {
                 "ma": "c",
-                "noiDung": "become inactive until the VLAN is recreated or the ports reassigned"
+                "noiDung": "work as before, because the VLAN stays in the running ports"
               },
               {
                 "ma": "d",
-                "noiDung": "work as before, because the VLAN stays in the running ports"
+                "noiDung": "turn into trunks and carry the other VLANs"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Cisco keeps the assignment but the ports stop forwarding.</p><p><i>VI: Cisco giữ gán nhưng cổng ngừng chuyển.</i></p>"
           }

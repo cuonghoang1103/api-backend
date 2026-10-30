@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Speculation 1 — Side channels from speculative execution: concepts — answer key\n\n1. A speculative instruction that turns out to be on the wrong path is discarded. What survives?Một lệnh suy đoán hoá ra nằm sai đường sẽ bị huỷ. Cái gì còn lại?\n   Answer: d) Micro-architectural state such as cache contents\n   Rollback restores the architectural state, not the cache; that residue is the side channel.VI: Rollback khôi phục trạng thái kiến trúc, không khôi phục cache; phần dư đó là kênh phụ.\n\n2. A cache timing side channel works because …Kênh phụ thời gian cache hoạt động vì …\n   Answer: d) an access to a cached line is measurably faster than a miss\n   An attacker infers which lines were touched by timing later accesses.VI: Kẻ tấn công suy ra dòng nào đã được chạm bằng cách đo thời gian các truy cập sau.\n\n3. Which is a software mitigation for bounds-check bypass?Biện pháp phần mềm nào chống bỏ qua kiểm tra biên?\n   Answer: d) Insert a speculation barrier or mask the index so out-of-bounds speculation reads nothing useful\n   Fences, index masking or retpolines limit what speculation can reach.VI: Rào chắn, che chỉ số hay retpoline giới hạn những gì suy đoán với tới.\n\n4. Meltdown-class attacks are mitigated in the OS mainly by …Các tấn công kiểu Meltdown được hệ điều hành giảm thiểu chủ yếu bằng …\n   Answer: a) separating kernel and user page tables (kernel page-table isolation)\n   Kernel memory is simply not mapped while user code runs.VI: Bộ nhớ nhân đơn giản là không được ánh xạ khi mã người dùng chạy.\n\n5. Why is the performance feature itself, not a bug in one program, the root cause?Vì sao chính tính năng tăng hiệu năng, chứ không phải lỗi của một chương trình, là gốc rễ?\n   Answer: a) Speculation changes shared micro-architectural state before the checks complete\n   Hardware must be fixed or restricted, software can only reduce exposure.VI: Phải sửa/giới hạn phần cứng, phần mềm chỉ giảm mức phơi bày.\n"
+          "code": "# Speculation 1 — Side channels from speculative execution: concepts — answer key\n\n1. A speculative instruction that turns out to be on the wrong path is discarded. What survives?Một lệnh suy đoán hoá ra nằm sai đường sẽ bị huỷ. Cái gì còn lại?\n   Answer: c) Micro-architectural state such as cache contents\n   Rollback restores the architectural state, not the cache; that residue is the side channel.VI: Rollback khôi phục trạng thái kiến trúc, không khôi phục cache; phần dư đó là kênh phụ.\n\n2. A cache timing side channel works because …Kênh phụ thời gian cache hoạt động vì …\n   Answer: a) an access to a cached line is measurably faster than a miss\n   An attacker infers which lines were touched by timing later accesses.VI: Kẻ tấn công suy ra dòng nào đã được chạm bằng cách đo thời gian các truy cập sau.\n\n3. Which is a software mitigation for bounds-check bypass?Biện pháp phần mềm nào chống bỏ qua kiểm tra biên?\n   Answer: b) Insert a speculation barrier or mask the index so speculation reads nothing useful\n   Fences, index masking or retpolines limit what speculation can reach.VI: Rào chắn, che chỉ số hay retpoline giới hạn những gì suy đoán với tới.\n\n4. Meltdown-class attacks are mitigated in the OS mainly by …Các tấn công kiểu Meltdown được hệ điều hành giảm thiểu chủ yếu bằng …\n   Answer: a) separating the kernel and user page tables (KPTI)\n   Kernel memory is simply not mapped while user code runs.VI: Bộ nhớ nhân đơn giản là không được ánh xạ khi mã người dùng chạy.\n\n5. Why is the performance feature itself, not a bug in one program, the root cause?Vì sao chính tính năng tăng hiệu năng, chứ không phải lỗi của một chương trình, là gốc rễ?\n   Answer: b) Speculation changes shared cache state before the checks complete\n   Hardware must be fixed or restricted, software can only reduce exposure.VI: Phải sửa/giới hạn phần cứng, phần mềm chỉ giảm mức phơi bày.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Micro-architectural state such as cache contents</p><p>Rollback restores the architectural state, not the cache; that residue is the side channel.</p><p><i>VI: Rollback khôi phục trạng thái kiến trúc, không khôi phục cache; phần dư đó là kênh phụ.</i></p></li><li><p><b>d)</b> an access to a cached line is measurably faster than a miss</p><p>An attacker infers which lines were touched by timing later accesses.</p><p><i>VI: Kẻ tấn công suy ra dòng nào đã được chạm bằng cách đo thời gian các truy cập sau.</i></p></li><li><p><b>d)</b> Insert a speculation barrier or mask the index so out-of-bounds speculation reads nothing useful</p><p>Fences, index masking or retpolines limit what speculation can reach.</p><p><i>VI: Rào chắn, che chỉ số hay retpoline giới hạn những gì suy đoán với tới.</i></p></li><li><p><b>a)</b> separating kernel and user page tables (kernel page-table isolation)</p><p>Kernel memory is simply not mapped while user code runs.</p><p><i>VI: Bộ nhớ nhân đơn giản là không được ánh xạ khi mã người dùng chạy.</i></p></li><li><p><b>a)</b> Speculation changes shared micro-architectural state before the checks complete</p><p>Hardware must be fixed or restricted, software can only reduce exposure.</p><p><i>VI: Phải sửa/giới hạn phần cứng, phần mềm chỉ giảm mức phơi bày.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Micro-architectural state such as cache contents</p><p>Rollback restores the architectural state, not the cache; that residue is the side channel.</p><p><i>VI: Rollback khôi phục trạng thái kiến trúc, không khôi phục cache; phần dư đó là kênh phụ.</i></p></li><li><p><b>a)</b> an access to a cached line is measurably faster than a miss</p><p>An attacker infers which lines were touched by timing later accesses.</p><p><i>VI: Kẻ tấn công suy ra dòng nào đã được chạm bằng cách đo thời gian các truy cập sau.</i></p></li><li><p><b>b)</b> Insert a speculation barrier or mask the index so speculation reads nothing useful</p><p>Fences, index masking or retpolines limit what speculation can reach.</p><p><i>VI: Rào chắn, che chỉ số hay retpoline giới hạn những gì suy đoán với tới.</i></p></li><li><p><b>a)</b> separating the kernel and user page tables (KPTI)</p><p>Kernel memory is simply not mapped while user code runs.</p><p><i>VI: Bộ nhớ nhân đơn giản là không được ánh xạ khi mã người dùng chạy.</i></p></li><li><p><b>b)</b> Speculation changes shared cache state before the checks complete</p><p>Hardware must be fixed or restricted, software can only reduce exposure.</p><p><i>VI: Phải sửa/giới hạn phần cứng, phần mềm chỉ giảm mức phơi bày.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -71,15 +71,15 @@
               },
               {
                 "ma": "c",
-                "noiDung": "The memory values written by the instruction"
+                "noiDung": "Micro-architectural state such as cache contents"
               },
               {
                 "ma": "d",
-                "noiDung": "Micro-architectural state such as cache contents"
+                "noiDung": "The memory values written by the instruction"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>Rollback restores the architectural state, not the cache; that residue is the side channel.</p><p><i>VI: Rollback khôi phục trạng thái kiến trúc, không khôi phục cache; phần dư đó là kênh phụ.</i></p>"
           },
@@ -89,23 +89,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "the clock changes with the data"
+                "noiDung": "an access to a cached line is measurably faster than a miss"
               },
               {
                 "ma": "b",
-                "noiDung": "the operating system reports addresses"
+                "noiDung": "the clock rate changes with the data held in the cache"
               },
               {
                 "ma": "c",
-                "noiDung": "the cache encrypts data"
+                "noiDung": "the cache encrypts its data with an address-dependent key"
               },
               {
                 "ma": "d",
-                "noiDung": "an access to a cached line is measurably faster than a miss"
+                "noiDung": "the operating system reports the address of every cache line"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>An attacker infers which lines were touched by timing later accesses.</p><p><i>VI: Kẻ tấn công suy ra dòng nào đã được chạm bằng cách đo thời gian các truy cập sau.</i></p>"
           },
@@ -115,23 +115,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Use a larger cache so that the secret line cannot be told apart from the other lines"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Increase the clock rate so that the bounds check resolves before any speculative load can run"
               },
               {
+                "ma": "b",
+                "noiDung": "Insert a speculation barrier or mask the index so speculation reads nothing useful"
+              },
+              {
                 "ma": "c",
-                "noiDung": "Encrypt the array in memory so that the speculative load reads only random-looking bytes"
+                "noiDung": "Use a larger cache so that the secret line cannot be told apart from the other lines"
               },
               {
                 "ma": "d",
-                "noiDung": "Insert a speculation barrier or mask the index so out-of-bounds speculation reads nothing useful"
+                "noiDung": "Encrypt the array in memory so that the speculative load reads only random-looking bytes"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Fences, index masking or retpolines limit what speculation can reach.</p><p><i>VI: Rào chắn, che chỉ số hay retpoline giới hạn những gì suy đoán với tới.</i></p>"
           },
@@ -141,7 +141,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "separating kernel and user page tables (kernel page-table isolation)"
+                "noiDung": "separating the kernel and user page tables (KPTI)"
               },
               {
                 "ma": "b",
@@ -149,11 +149,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "adding more RAM so that kernel data stay out of the cache"
+                "noiDung": "turning off the cache whenever a user process is running"
               },
               {
                 "ma": "d",
-                "noiDung": "turning off the cache whenever a user process is running"
+                "noiDung": "adding more RAM so that kernel data stay out of the cache"
               }
             ],
             "dapAn": [
@@ -167,23 +167,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Speculation changes shared micro-architectural state before the checks complete"
+                "noiDung": "Network packets can trigger speculation from outside the machine"
               },
               {
                 "ma": "b",
-                "noiDung": "Compilers generate unsafe code for every array access in the program"
+                "noiDung": "Speculation changes shared cache state before the checks complete"
               },
               {
                 "ma": "c",
-                "noiDung": "The OS scheduler lets two programs share one register file at once"
+                "noiDung": "Compilers generate unsafe code for every array access in the program"
               },
               {
                 "ma": "d",
-                "noiDung": "Network packets can trigger speculation from outside the machine"
+                "noiDung": "The OS scheduler lets two programs share one register file at once"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>Hardware must be fixed or restricted, software can only reduce exposure.</p><p><i>VI: Phải sửa/giới hạn phần cứng, phần mềm chỉ giảm mức phơi bày.</i></p>"
           }

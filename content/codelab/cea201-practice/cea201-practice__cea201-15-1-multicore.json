@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Multicore 1 — Parallel organizations and cache coherence: concepts — answer key\n\n1. Why did processor makers move to multicore?Vì sao các hãng chuyển sang đa lõi?\n   Answer: c) Power and heat limited single-core clock speed and ILP\n   The “power wall”: more performance needs more cores at modest clocks.VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.\n\n2. In an SMP system …Trong hệ SMP …\n   Answer: c) all processors share the main memory and are controlled by one OS\n   Symmetric multiprocessors: equal access to memory and I/O.VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.\n\n3. The cache coherence problem arises because …Bài toán nhất quán cache nảy sinh vì …\n   Answer: c) several caches may hold different copies of the same memory block\n   A write in one cache must become visible to the others.VI: Một lần ghi ở cache này phải hiện ra với các cache khác.\n\n4. In MESI, a line in the M (Modified) state …Trong MESI, dòng ở trạng thái M (Modified) …\n   Answer: d) is dirty and the only valid copy; memory is stale\n   It must be written back (or supplied to a requester) before others can use it.VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.\n\n5. SIMD (Flynn) means …SIMD (Flynn) nghĩa là …\n   Answer: d) one instruction stream applied to many data items\n   GPUs and vector units are SIMD-like.VI: GPU và khối vector giống SIMD.\n\n6. Hardware multithreading (SMT) lets a core …Đa luồng phần cứng (SMT) cho phép một lõi …\n   Answer: c) hold the state of several threads and fill idle issue slots with another thread\n   When one thread stalls, another uses the functional units.VI: Khi một luồng đình trệ, luồng khác dùng khối chức năng.\n"
+          "code": "# Multicore 1 — Parallel organizations and cache coherence: concepts — answer key\n\n1. Why did processor makers move to multicore?Vì sao các hãng chuyển sang đa lõi?\n   Answer: a) Power and heat limited single-core clock speed and ILP\n   The “power wall”: more performance needs more cores at modest clocks.VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.\n\n2. In an SMP system …Trong hệ SMP …\n   Answer: d) all processors share the main memory and are controlled by one OS\n   Symmetric multiprocessors: equal access to memory and I/O.VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.\n\n3. The cache coherence problem arises because …Bài toán nhất quán cache nảy sinh vì …\n   Answer: c) several caches may hold different copies of the same memory block\n   A write in one cache must become visible to the others.VI: Một lần ghi ở cache này phải hiện ra với các cache khác.\n\n4. In MESI, a line in the M (Modified) state …Trong MESI, dòng ở trạng thái M (Modified) …\n   Answer: d) is dirty and the only valid copy; memory is stale\n   It must be written back (or supplied to a requester) before others can use it.VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.\n\n5. SIMD (Flynn) means …SIMD (Flynn) nghĩa là …\n   Answer: c) one instruction stream on many data\n   GPUs and vector units are SIMD-like.VI: GPU và khối vector giống SIMD.\n\n6. Hardware multithreading (SMT) lets a core …Đa luồng phần cứng (SMT) cho phép một lõi …\n   Answer: c) hold the state of several threads and fill idle issue slots with another thread\n   When one thread stalls, another uses the functional units.VI: Khi một luồng đình trệ, luồng khác dùng khối chức năng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Power and heat limited single-core clock speed and ILP</p><p>The “power wall”: more performance needs more cores at modest clocks.</p><p><i>VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.</i></p></li><li><p><b>c)</b> all processors share the main memory and are controlled by one OS</p><p>Symmetric multiprocessors: equal access to memory and I/O.</p><p><i>VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.</i></p></li><li><p><b>c)</b> several caches may hold different copies of the same memory block</p><p>A write in one cache must become visible to the others.</p><p><i>VI: Một lần ghi ở cache này phải hiện ra với các cache khác.</i></p></li><li><p><b>d)</b> is dirty and the only valid copy; memory is stale</p><p>It must be written back (or supplied to a requester) before others can use it.</p><p><i>VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.</i></p></li><li><p><b>d)</b> one instruction stream applied to many data items</p><p>GPUs and vector units are SIMD-like.</p><p><i>VI: GPU và khối vector giống SIMD.</i></p></li><li><p><b>c)</b> hold the state of several threads and fill idle issue slots with another thread</p><p>When one thread stalls, another uses the functional units.</p><p><i>VI: Khi một luồng đình trệ, luồng khác dùng khối chức năng.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Power and heat limited single-core clock speed and ILP</p><p>The “power wall”: more performance needs more cores at modest clocks.</p><p><i>VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.</i></p></li><li><p><b>d)</b> all processors share the main memory and are controlled by one OS</p><p>Symmetric multiprocessors: equal access to memory and I/O.</p><p><i>VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.</i></p></li><li><p><b>c)</b> several caches may hold different copies of the same memory block</p><p>A write in one cache must become visible to the others.</p><p><i>VI: Một lần ghi ở cache này phải hiện ra với các cache khác.</i></p></li><li><p><b>d)</b> is dirty and the only valid copy; memory is stale</p><p>It must be written back (or supplied to a requester) before others can use it.</p><p><i>VI: Phải ghi trả (hoặc cung cấp cho bên yêu cầu) trước khi người khác dùng.</i></p></li><li><p><b>c)</b> one instruction stream on many data</p><p>GPUs and vector units are SIMD-like.</p><p><i>VI: GPU và khối vector giống SIMD.</i></p></li><li><p><b>c)</b> hold the state of several threads and fill idle issue slots with another thread</p><p>When one thread stalls, another uses the functional units.</p><p><i>VI: Khi một luồng đình trệ, luồng khác dùng khối chức năng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,23 +64,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Caches stopped working"
-              },
-              {
-                "ma": "b",
-                "noiDung": "Memory became infinitely fast"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Power and heat limited single-core clock speed and ILP"
               },
               {
+                "ma": "b",
+                "noiDung": "Memory became fast enough to feed many cores at once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Software became easier to write for many threads than for one"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Software became easier to write"
+                "noiDung": "Caches stopped working at clock rates above a few GHz"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The “power wall”: more performance needs more cores at modest clocks.</p><p><i>VI: “Bức tường công suất”: muốn hiệu năng thì thêm lõi ở xung nhịp vừa phải.</i></p>"
           },
@@ -94,19 +94,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "processors cannot have caches"
+                "noiDung": "processors share the memory but cannot have private caches"
               },
               {
                 "ma": "c",
-                "noiDung": "all processors share the main memory and are controlled by one OS"
+                "noiDung": "only one master processor can access main memory and I/O"
               },
               {
                 "ma": "d",
-                "noiDung": "only one processor can access memory"
+                "noiDung": "all processors share the main memory and are controlled by one OS"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Symmetric multiprocessors: equal access to memory and I/O.</p><p><i>VI: Đa xử lý đối xứng: truy cập bộ nhớ và I/O bình đẳng.</i></p>"
           },
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "many instruction streams on many data"
-              },
-              {
-                "ma": "b",
-                "noiDung": "one stream on one datum"
-              },
-              {
-                "ma": "c",
                 "noiDung": "many instruction streams on one datum"
               },
               {
+                "ma": "b",
+                "noiDung": "one instruction stream on one datum"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one instruction stream on many data"
+              },
+              {
                 "ma": "d",
-                "noiDung": "one instruction stream applied to many data items"
+                "noiDung": "many instruction streams on many data"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>GPUs and vector units are SIMD-like.</p><p><i>VI: GPU và khối vector giống SIMD.</i></p>"
           },

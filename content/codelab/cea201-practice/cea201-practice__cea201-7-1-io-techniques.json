@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# I/O 1 — Programmed I/O, interrupts, DMA and I/O addressing — answer key\n\n1. In programmed (polling) I/O the processor …Trong I/O lập trình (thăm dò) bộ xử lý …\n   Answer: c) repeatedly tests the device status until it is ready, wasting CPU time\n   Busy-waiting keeps the CPU occupied for the whole transfer.VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.\n\n2. With interrupt-driven I/O the processor …Với I/O điều khiển bằng ngắt, bộ xử lý …\n   Answer: d) can do other work while the device is busy, but still moves every word itself\n   The device interrupts when ready; the CPU still executes the transfer instructions.VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.\n\n3. DMA is best suited for …DMA phù hợp nhất với …\n   Answer: a) large block transfers such as disk and network traffic\n   The DMA controller moves blocks between device and memory and interrupts once at the end.VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.\n\n4. In memory-mapped I/O …Trong I/O ánh xạ bộ nhớ …\n   Answer: a) device registers share the memory address space and are accessed by ordinary load/store\n   It removes the need for special I/O instructions but uses up memory addresses.VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.\n\n5. “Cycle stealing” by a DMA controller means …“Cycle stealing” của bộ điều khiển DMA nghĩa là …\n   Answer: a) it takes over the bus for single memory cycles, delaying the CPU slightly\n   The CPU and DMA share the bus; DMA gets individual cycles.VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.\n"
+          "code": "# I/O 1 — Programmed I/O, interrupts, DMA and I/O addressing — answer key\n\n1. In programmed (polling) I/O the processor …Trong I/O lập trình (thăm dò) bộ xử lý …\n   Answer: c) repeatedly tests the device status until it is ready\n   Busy-waiting keeps the CPU occupied for the whole transfer.VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.\n\n2. With interrupt-driven I/O the processor …Với I/O điều khiển bằng ngắt, bộ xử lý …\n   Answer: b) can do other work while the device is busy, but still moves every word\n   The device interrupts when ready; the CPU still executes the transfer instructions.VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.\n\n3. DMA is best suited for …DMA phù hợp nhất với …\n   Answer: d) large block transfers such as disk traffic\n   The DMA controller moves blocks between device and memory and interrupts once at the end.VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.\n\n4. In memory-mapped I/O …Trong I/O ánh xạ bộ nhớ …\n   Answer: d) device registers share the memory address space and use ordinary load/store\n   It removes the need for special I/O instructions but uses up memory addresses.VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.\n\n5. “Cycle stealing” by a DMA controller means …“Cycle stealing” của bộ điều khiển DMA nghĩa là …\n   Answer: a) it takes over the bus for single memory cycles, delaying the CPU slightly\n   The CPU and DMA share the bus; DMA gets individual cycles.VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> repeatedly tests the device status until it is ready, wasting CPU time</p><p>Busy-waiting keeps the CPU occupied for the whole transfer.</p><p><i>VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.</i></p></li><li><p><b>d)</b> can do other work while the device is busy, but still moves every word itself</p><p>The device interrupts when ready; the CPU still executes the transfer instructions.</p><p><i>VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.</i></p></li><li><p><b>a)</b> large block transfers such as disk and network traffic</p><p>The DMA controller moves blocks between device and memory and interrupts once at the end.</p><p><i>VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.</i></p></li><li><p><b>a)</b> device registers share the memory address space and are accessed by ordinary load/store</p><p>It removes the need for special I/O instructions but uses up memory addresses.</p><p><i>VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.</i></p></li><li><p><b>a)</b> it takes over the bus for single memory cycles, delaying the CPU slightly</p><p>The CPU and DMA share the bus; DMA gets individual cycles.</p><p><i>VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> repeatedly tests the device status until it is ready</p><p>Busy-waiting keeps the CPU occupied for the whole transfer.</p><p><i>VI: Chờ bận khiến CPU bị chiếm suốt lần truyền.</i></p></li><li><p><b>b)</b> can do other work while the device is busy, but still moves every word</p><p>The device interrupts when ready; the CPU still executes the transfer instructions.</p><p><i>VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.</i></p></li><li><p><b>d)</b> large block transfers such as disk traffic</p><p>The DMA controller moves blocks between device and memory and interrupts once at the end.</p><p><i>VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.</i></p></li><li><p><b>d)</b> device registers share the memory address space and use ordinary load/store</p><p>It removes the need for special I/O instructions but uses up memory addresses.</p><p><i>VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.</i></p></li><li><p><b>a)</b> it takes over the bus for single memory cycles, delaying the CPU slightly</p><p>The CPU and DMA share the bus; DMA gets individual cycles.</p><p><i>VI: CPU và DMA dùng chung bus; DMA chiếm từng chu kỳ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -64,19 +64,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "transfers data without any CPU involvement"
+                "noiDung": "is told by the device through an interrupt when data are ready"
               },
               {
                 "ma": "b",
-                "noiDung": "never executes I/O instructions"
+                "noiDung": "never executes I/O instructions of its own"
               },
               {
                 "ma": "c",
-                "noiDung": "repeatedly tests the device status until it is ready, wasting CPU time"
+                "noiDung": "repeatedly tests the device status until it is ready"
               },
               {
                 "ma": "d",
-                "noiDung": "is told by the device through an interrupt"
+                "noiDung": "transfers data without any CPU involvement"
               }
             ],
             "dapAn": [
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "moves no data at all, because the device writes into memory itself"
-              },
-              {
-                "ma": "b",
-                "noiDung": "waits in a loop on the status register until the device is ready"
-              },
-              {
-                "ma": "c",
                 "noiDung": "needs a DMA controller to move each word, and only starts the block"
               },
               {
+                "ma": "b",
+                "noiDung": "can do other work while the device is busy, but still moves every word"
+              },
+              {
+                "ma": "c",
+                "noiDung": "waits in a loop on the status register until the device is ready"
+              },
+              {
                 "ma": "d",
-                "noiDung": "can do other work while the device is busy, but still moves every word itself"
+                "noiDung": "moves no data at all, because the device writes into memory itself"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>The device interrupts when ready; the CPU still executes the transfer instructions.</p><p><i>VI: Thiết bị ngắt khi sẵn sàng; CPU vẫn thực hiện lệnh chuyển dữ liệu.</i></p>"
           },
@@ -116,23 +116,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "large block transfers such as disk and network traffic"
+                "noiDung": "single bytes that arrive rarely from a sensor"
               },
               {
                 "ma": "b",
-                "noiDung": "slow devices such as a keyboard"
+                "noiDung": "slow devices such as a keyboard or a mouse"
               },
               {
                 "ma": "c",
-                "noiDung": "instruction fetch from the cache"
+                "noiDung": "instruction fetch from the level-1 cache"
               },
               {
                 "ma": "d",
-                "noiDung": "single bytes that arrive rarely"
+                "noiDung": "large block transfers such as disk traffic"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>The DMA controller moves blocks between device and memory and interrupts once at the end.</p><p><i>VI: Bộ điều khiển DMA chuyển khối giữa thiết bị và bộ nhớ và chỉ ngắt một lần ở cuối.</i></p>"
           },
@@ -142,23 +142,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "device registers share the memory address space and are accessed by ordinary load/store"
+                "noiDung": "I/O ports have a separate address space, selected by a special control line"
               },
               {
                 "ma": "b",
-                "noiDung": "devices cannot use interrupts, so the CPU polls their registers in a loop"
-              },
-              {
-                "ma": "c",
                 "noiDung": "device registers are reached only with special IN/OUT instructions"
               },
               {
+                "ma": "c",
+                "noiDung": "devices cannot use interrupts, so the CPU polls their registers in a loop"
+              },
+              {
                 "ma": "d",
-                "noiDung": "I/O ports have a separate address space, selected by a special control line"
+                "noiDung": "device registers share the memory address space and use ordinary load/store"
               }
             ],
             "dapAn": [
-              "a"
+              "d"
             ],
             "giaiThich": "<p>It removes the need for special I/O instructions but uses up memory addresses.</p><p><i>VI: Không cần lệnh I/O riêng nhưng tiêu tốn địa chỉ bộ nhớ.</i></p>"
           },

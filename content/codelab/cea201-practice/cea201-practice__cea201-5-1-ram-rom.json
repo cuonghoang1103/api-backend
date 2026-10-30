@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Memory 1 — SRAM, DRAM and the ROM family — answer key\n\n1. Why does DRAM need refreshing?Vì sao DRAM cần làm tươi (refresh)?\n   Answer: a) It stores bits as charge in capacitors that leak away\n   A leaking capacitor must be re-read and re-written periodically.VI: Tụ điện rò điện nên phải đọc và ghi lại định kỳ.\n\n2. Which is used for cache memory and why?Loại nào dùng cho cache và vì sao?\n   Answer: d) SRAM — faster, no refresh, but larger and more expensive per bit\n   Cache needs speed; SRAM cells (6 transistors) are fast but bulky.VI: Cache cần tốc độ; ô SRAM (6 transistor) nhanh nhưng to.\n\n3. Which statement about ROM is correct?Phát biểu nào về ROM đúng?\n   Answer: b) It keeps its contents without power (non-volatile)\n   ROM, PROM, EPROM, EEPROM and flash are non-volatile.VI: ROM, PROM, EPROM, EEPROM và flash không mất dữ liệu khi tắt nguồn.\n\n4. Flash memory differs from EEPROM mainly in that it …Flash khác EEPROM chủ yếu ở chỗ …\n   Answer: c) erases and writes in blocks, giving higher density and lower cost\n   Block erase makes flash dense and cheap, the basis of SSDs and USB sticks.VI: Xoá theo khối giúp flash dày và rẻ, nền tảng của SSD và USB.\n\n5. Row and column addresses are multiplexed on DRAM chips in order to …Địa chỉ hàng/cột được ghép kênh trên chip DRAM nhằm …\n   Answer: a) halve the number of address pins\n   The same pins carry the row address first and the column address next.VI: Cùng các chân mang địa chỉ hàng trước rồi địa chỉ cột sau.\n"
+          "code": "# Memory 1 — SRAM, DRAM and the ROM family — answer key\n\n1. Why does DRAM need refreshing?Vì sao DRAM cần làm tươi (refresh)?\n   Answer: c) It stores bits as charge in capacitors that leak away\n   A leaking capacitor must be re-read and re-written periodically.VI: Tụ điện rò điện nên phải đọc và ghi lại định kỳ.\n\n2. Which is used for cache memory and why?Loại nào dùng cho cache và vì sao?\n   Answer: d) SRAM — faster, no refresh, but larger and more expensive per bit\n   Cache needs speed; SRAM cells (6 transistors) are fast but bulky.VI: Cache cần tốc độ; ô SRAM (6 transistor) nhanh nhưng to.\n\n3. Which statement about ROM is correct?Phát biểu nào về ROM đúng?\n   Answer: b) It keeps its contents without power\n   ROM, PROM, EPROM, EEPROM and flash are non-volatile.VI: ROM, PROM, EPROM, EEPROM và flash không mất dữ liệu khi tắt nguồn.\n\n4. Flash memory differs from EEPROM mainly in that it …Flash khác EEPROM chủ yếu ở chỗ …\n   Answer: c) erases and writes in blocks, giving higher density and lower cost\n   Block erase makes flash dense and cheap, the basis of SSDs and USB sticks.VI: Xoá theo khối giúp flash dày và rẻ, nền tảng của SSD và USB.\n\n5. Row and column addresses are multiplexed on DRAM chips in order to …Địa chỉ hàng/cột được ghép kênh trên chip DRAM nhằm …\n   Answer: c) halve the number of address pins\n   The same pins carry the row address first and the column address next.VI: Cùng các chân mang địa chỉ hàng trước rồi địa chỉ cột sau.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> It stores bits as charge in capacitors that leak away</p><p>A leaking capacitor must be re-read and re-written periodically.</p><p><i>VI: Tụ điện rò điện nên phải đọc và ghi lại định kỳ.</i></p></li><li><p><b>d)</b> SRAM — faster, no refresh, but larger and more expensive per bit</p><p>Cache needs speed; SRAM cells (6 transistors) are fast but bulky.</p><p><i>VI: Cache cần tốc độ; ô SRAM (6 transistor) nhanh nhưng to.</i></p></li><li><p><b>b)</b> It keeps its contents without power (non-volatile)</p><p>ROM, PROM, EPROM, EEPROM and flash are non-volatile.</p><p><i>VI: ROM, PROM, EPROM, EEPROM và flash không mất dữ liệu khi tắt nguồn.</i></p></li><li><p><b>c)</b> erases and writes in blocks, giving higher density and lower cost</p><p>Block erase makes flash dense and cheap, the basis of SSDs and USB sticks.</p><p><i>VI: Xoá theo khối giúp flash dày và rẻ, nền tảng của SSD và USB.</i></p></li><li><p><b>a)</b> halve the number of address pins</p><p>The same pins carry the row address first and the column address next.</p><p><i>VI: Cùng các chân mang địa chỉ hàng trước rồi địa chỉ cột sau.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> It stores bits as charge in capacitors that leak away</p><p>A leaking capacitor must be re-read and re-written periodically.</p><p><i>VI: Tụ điện rò điện nên phải đọc và ghi lại định kỳ.</i></p></li><li><p><b>d)</b> SRAM — faster, no refresh, but larger and more expensive per bit</p><p>Cache needs speed; SRAM cells (6 transistors) are fast but bulky.</p><p><i>VI: Cache cần tốc độ; ô SRAM (6 transistor) nhanh nhưng to.</i></p></li><li><p><b>b)</b> It keeps its contents without power</p><p>ROM, PROM, EPROM, EEPROM and flash are non-volatile.</p><p><i>VI: ROM, PROM, EPROM, EEPROM và flash không mất dữ liệu khi tắt nguồn.</i></p></li><li><p><b>c)</b> erases and writes in blocks, giving higher density and lower cost</p><p>Block erase makes flash dense and cheap, the basis of SSDs and USB sticks.</p><p><i>VI: Xoá theo khối giúp flash dày và rẻ, nền tảng của SSD và USB.</i></p></li><li><p><b>c)</b> halve the number of address pins</p><p>The same pins carry the row address first and the column address next.</p><p><i>VI: Cùng các chân mang địa chỉ hàng trước rồi địa chỉ cột sau.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -65,23 +65,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It stores bits as charge in capacitors that leak away"
-              },
-              {
-                "ma": "b",
-                "noiDung": "It is non-volatile"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Its address lines are multiplexed"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "It uses flip-flops that lose state at random"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It stores bits as charge in capacitors that leak away"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is non-volatile and must be rewritten at power-on"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>A leaking capacitor must be re-read and re-written periodically.</p><p><i>VI: Tụ điện rò điện nên phải đọc và ghi lại định kỳ.</i></p>"
           },
@@ -117,15 +117,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It is faster than SRAM"
+                "noiDung": "It is faster than SRAM on every access"
               },
               {
                 "ma": "b",
-                "noiDung": "It keeps its contents without power (non-volatile)"
+                "noiDung": "It keeps its contents without power"
               },
               {
                 "ma": "c",
-                "noiDung": "It needs periodic refresh"
+                "noiDung": "It needs a periodic refresh like DRAM"
               },
               {
                 "ma": "d",
@@ -169,15 +169,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "halve the number of address pins"
-              },
-              {
-                "ma": "b",
                 "noiDung": "avoid the need for a clock"
               },
               {
+                "ma": "b",
+                "noiDung": "speed up every refresh cycle"
+              },
+              {
                 "ma": "c",
-                "noiDung": "speed up refresh"
+                "noiDung": "halve the number of address pins"
               },
               {
                 "ma": "d",
@@ -185,7 +185,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>The same pins carry the row address first and the column address next.</p><p><i>VI: Cùng các chân mang địa chỉ hàng trước rồi địa chỉ cột sau.</i></p>"
           }

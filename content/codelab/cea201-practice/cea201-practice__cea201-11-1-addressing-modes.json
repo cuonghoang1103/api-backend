@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Addressing 1 — Immediate, direct, indirect, register and displacement — answer key\n\n1. In immediate addressing the operand …Trong định địa chỉ tức thời toán hạng …\n   Answer: c) is part of the instruction itself\n   No memory access is needed for the operand, but its size is limited by the instruction field.VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.\n\n2. Indirect addressing needs (for the operand) … memory referencesĐịnh địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)\n   Answer: a) two (the pointer, then the data)\n   The address field names a location that contains the real address.VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.\n\n3. The main advantage of register addressing is …Ưu điểm chính của định địa chỉ thanh ghi là …\n   Answer: c) no memory access and a short address field\n   A few register bits name the operand; access is as fast as the register file.VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.\n\n4. Displacement addressing computes EA = …Định địa chỉ có độ dời tính EA = …\n   Answer: c) A + (R)\n   The instruction holds a constant A, a register holds a base or index.VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.\n\n5. Which mode is best for walking through an array element by element?Chế độ nào hợp để duyệt từng phần tử một mảng?\n   Answer: a) Indexed (base + scaled index) or register indirect with auto-increment\n   The index register changes while the base stays the same.VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.\n\n6. PC-relative addressing is mainly used for …Định địa chỉ tương đối PC chủ yếu dùng cho …\n   Answer: c) branches and position-independent code\n   The target is encoded as an offset from the (next) instruction, so code can be moved.VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.\n"
+          "code": "# Addressing 1 — Immediate, direct, indirect, register and displacement — answer key\n\n1. In immediate addressing the operand …Trong định địa chỉ tức thời toán hạng …\n   Answer: c) is part of the instruction itself\n   No memory access is needed for the operand, but its size is limited by the instruction field.VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.\n\n2. Indirect addressing needs (for the operand) … memory referencesĐịnh địa chỉ gián tiếp cần … lần tham chiếu bộ nhớ (cho toán hạng)\n   Answer: c) two\n   The address field names a location that contains the real address: read the pointer, then the data.VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật: đọc con trỏ, rồi đọc dữ liệu.\n\n3. The main advantage of register addressing is …Ưu điểm chính của định địa chỉ thanh ghi là …\n   Answer: d) no memory access and a short field\n   A few register bits name the operand; access is as fast as the register file.VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.\n\n4. Displacement addressing computes EA = …Định địa chỉ có độ dời tính EA = …\n   Answer: c) A + (R)\n   The instruction holds a constant A, a register holds a base or index.VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.\n\n5. Which mode is best for walking through an array element by element?Chế độ nào hợp để duyệt từng phần tử một mảng?\n   Answer: a) Indexed (base + scaled index) or register indirect with auto-increment\n   The index register changes while the base stays the same.VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.\n\n6. PC-relative addressing is mainly used for …Định địa chỉ tương đối PC chủ yếu dùng cho …\n   Answer: a) branches and position-independent code\n   The target is encoded as an offset from the (next) instruction, so code can be moved.VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> is part of the instruction itself</p><p>No memory access is needed for the operand, but its size is limited by the instruction field.</p><p><i>VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.</i></p></li><li><p><b>a)</b> two (the pointer, then the data)</p><p>The address field names a location that contains the real address.</p><p><i>VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.</i></p></li><li><p><b>c)</b> no memory access and a short address field</p><p>A few register bits name the operand; access is as fast as the register file.</p><p><i>VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.</i></p></li><li><p><b>c)</b> A + (R)</p><p>The instruction holds a constant A, a register holds a base or index.</p><p><i>VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.</i></p></li><li><p><b>a)</b> Indexed (base + scaled index) or register indirect with auto-increment</p><p>The index register changes while the base stays the same.</p><p><i>VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.</i></p></li><li><p><b>c)</b> branches and position-independent code</p><p>The target is encoded as an offset from the (next) instruction, so code can be moved.</p><p><i>VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> is part of the instruction itself</p><p>No memory access is needed for the operand, but its size is limited by the instruction field.</p><p><i>VI: Không cần truy cập bộ nhớ lấy toán hạng nhưng kích thước bị giới hạn bởi trường lệnh.</i></p></li><li><p><b>c)</b> two</p><p>The address field names a location that contains the real address: read the pointer, then the data.</p><p><i>VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật: đọc con trỏ, rồi đọc dữ liệu.</i></p></li><li><p><b>d)</b> no memory access and a short field</p><p>A few register bits name the operand; access is as fast as the register file.</p><p><i>VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.</i></p></li><li><p><b>c)</b> A + (R)</p><p>The instruction holds a constant A, a register holds a base or index.</p><p><i>VI: Lệnh chứa hằng A, thanh ghi chứa cơ sở hoặc chỉ số.</i></p></li><li><p><b>a)</b> Indexed (base + scaled index) or register indirect with auto-increment</p><p>The index register changes while the base stays the same.</p><p><i>VI: Thanh ghi chỉ số thay đổi còn cơ sở giữ nguyên.</i></p></li><li><p><b>a)</b> branches and position-independent code</p><p>The target is encoded as an offset from the (next) instruction, so code can be moved.</p><p><i>VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -88,25 +88,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "two (the pointer, then the data)"
-              },
-              {
-                "ma": "b",
-                "noiDung": "zero"
-              },
-              {
-                "ma": "c",
                 "noiDung": "one"
               },
               {
-                "ma": "d",
+                "ma": "b",
                 "noiDung": "three"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two"
+              },
+              {
+                "ma": "d",
+                "noiDung": "zero"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
-            "giaiThich": "<p>The address field names a location that contains the real address.</p><p><i>VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật.</i></p>"
+            "giaiThich": "<p>The address field names a location that contains the real address: read the pointer, then the data.</p><p><i>VI: Trường địa chỉ gọi tên ô nhớ chứa địa chỉ thật: đọc con trỏ, rồi đọc dữ liệu.</i></p>"
           },
           {
             "ma": "c3",
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a very large address space"
+                "noiDung": "support for self-modifying code"
               },
               {
                 "ma": "b",
-                "noiDung": "self-modifying code"
+                "noiDung": "automatic bounds checking of arrays"
               },
               {
                 "ma": "c",
-                "noiDung": "no memory access and a short address field"
+                "noiDung": "a very large address space for data"
               },
               {
                 "ma": "d",
-                "noiDung": "automatic bounds checking"
+                "noiDung": "no memory access and a short field"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>A few register bits name the operand; access is as fast as the register file.</p><p><i>VI: Vài bit thanh ghi gọi tên toán hạng; truy cập nhanh như tệp thanh ghi.</i></p>"
           },
@@ -192,23 +192,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "I/O ports"
-              },
-              {
-                "ma": "b",
-                "noiDung": "large constants"
-              },
-              {
-                "ma": "c",
                 "noiDung": "branches and position-independent code"
               },
               {
+                "ma": "b",
+                "noiDung": "reaching the I/O ports of a device"
+              },
+              {
+                "ma": "c",
+                "noiDung": "loading large constants into a register"
+              },
+              {
                 "ma": "d",
-                "noiDung": "stack operations only"
+                "noiDung": "stack push and pop operations only"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>The target is encoded as an offset from the (next) instruction, so code can be moved.</p><p><i>VI: Đích được mã hoá bằng độ lệch so với lệnh (kế tiếp) nên mã có thể dời chỗ.</i></p>"
           }

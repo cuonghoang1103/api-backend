@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Instruction 1 — Opcode, operands and instruction types — answer key\n\n1. The opcode field of an instruction specifies …Trường opcode của lệnh chỉ định …\n   Answer: c) the operation to be performed\n   Source/destination operand references and the next-instruction reference are separate elements.VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.\n\n2. Which category does ADD R1, R2, R3 belong to?ADD R1, R2, R3 thuộc loại nào?\n   Answer: b) Data processing (arithmetic)\n   Arithmetic and logic instructions are data processing.VI: Lệnh số học và logic là xử lý dữ liệu.\n\n3. A conditional jump instruction is mainly a …Lệnh nhảy có điều kiện chủ yếu là lệnh …\n   Answer: d) control (transfer of control) instruction\n   It may change the PC depending on a condition code.VI: Nó có thể đổi PC tuỳ mã điều kiện.\n\n4. Increasing the number of opcode bits lets the ISA …Tăng số bit opcode cho phép ISA …\n   Answer: c) define more distinct operations\n   n opcode bits give up to 2ⁿ operations.VI: n bit opcode cho tối đa 2ⁿ phép toán.\n\n5. A fixed-length instruction format (RISC) mainly helps …Khuôn dạng lệnh độ dài cố định (RISC) chủ yếu giúp …\n   Answer: b) simple, fast decoding and pipelining\n   Equal-sized instructions are fetched and decoded in a predictable way.VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.\n"
+          "code": "# Instruction 1 — Opcode, operands and instruction types — answer key\n\n1. The opcode field of an instruction specifies …Trường opcode của lệnh chỉ định …\n   Answer: c) the operation to be performed\n   Source/destination operand references and the next-instruction reference are separate elements.VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.\n\n2. Which category does ADD R1, R2, R3 belong to?ADD R1, R2, R3 thuộc loại nào?\n   Answer: b) Data processing (arithmetic)\n   Arithmetic and logic instructions are data processing.VI: Lệnh số học và logic là xử lý dữ liệu.\n\n3. A conditional jump instruction is mainly a …Lệnh nhảy có điều kiện chủ yếu là lệnh …\n   Answer: b) control instruction\n   It may change the PC depending on a condition code.VI: Nó có thể đổi PC tuỳ mã điều kiện.\n\n4. Increasing the number of opcode bits lets the ISA …Tăng số bit opcode cho phép ISA …\n   Answer: c) define more distinct operations\n   n opcode bits give up to 2ⁿ operations.VI: n bit opcode cho tối đa 2ⁿ phép toán.\n\n5. A fixed-length instruction format (RISC) mainly helps …Khuôn dạng lệnh độ dài cố định (RISC) chủ yếu giúp …\n   Answer: d) simple, fast decoding and pipelining\n   Equal-sized instructions are fetched and decoded in a predictable way.VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> the operation to be performed</p><p>Source/destination operand references and the next-instruction reference are separate elements.</p><p><i>VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.</i></p></li><li><p><b>b)</b> Data processing (arithmetic)</p><p>Arithmetic and logic instructions are data processing.</p><p><i>VI: Lệnh số học và logic là xử lý dữ liệu.</i></p></li><li><p><b>d)</b> control (transfer of control) instruction</p><p>It may change the PC depending on a condition code.</p><p><i>VI: Nó có thể đổi PC tuỳ mã điều kiện.</i></p></li><li><p><b>c)</b> define more distinct operations</p><p>n opcode bits give up to 2ⁿ operations.</p><p><i>VI: n bit opcode cho tối đa 2ⁿ phép toán.</i></p></li><li><p><b>b)</b> simple, fast decoding and pipelining</p><p>Equal-sized instructions are fetched and decoded in a predictable way.</p><p><i>VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> the operation to be performed</p><p>Source/destination operand references and the next-instruction reference are separate elements.</p><p><i>VI: Tham chiếu toán hạng nguồn/đích và lệnh kế tiếp là các thành phần riêng.</i></p></li><li><p><b>b)</b> Data processing (arithmetic)</p><p>Arithmetic and logic instructions are data processing.</p><p><i>VI: Lệnh số học và logic là xử lý dữ liệu.</i></p></li><li><p><b>b)</b> control instruction</p><p>It may change the PC depending on a condition code.</p><p><i>VI: Nó có thể đổi PC tuỳ mã điều kiện.</i></p></li><li><p><b>c)</b> define more distinct operations</p><p>n opcode bits give up to 2ⁿ operations.</p><p><i>VI: n bit opcode cho tối đa 2ⁿ phép toán.</i></p></li><li><p><b>d)</b> simple, fast decoding and pipelining</p><p>Equal-sized instructions are fetched and decoded in a predictable way.</p><p><i>VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "I/O instruction"
-              },
-              {
-                "ma": "b",
                 "noiDung": "data processing instruction"
               },
               {
+                "ma": "b",
+                "noiDung": "control instruction"
+              },
+              {
                 "ma": "c",
-                "noiDung": "storage instruction"
+                "noiDung": "I/O instruction"
               },
               {
                 "ma": "d",
-                "noiDung": "control (transfer of control) instruction"
+                "noiDung": "storage instruction"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>It may change the PC depending on a condition code.</p><p><i>VI: Nó có thể đổi PC tuỳ mã điều kiện.</i></p>"
           },
@@ -140,11 +140,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "run faster"
+                "noiDung": "address a larger main memory"
               },
               {
                 "ma": "b",
-                "noiDung": "use fewer registers"
+                "noiDung": "run every instruction faster"
               },
               {
                 "ma": "c",
@@ -152,7 +152,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "address more memory"
+                "noiDung": "use fewer general registers"
               }
             ],
             "dapAn": [
@@ -166,23 +166,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "more addressing modes"
+                "noiDung": "a richer set of addressing modes"
               },
               {
                 "ma": "b",
-                "noiDung": "simple, fast decoding and pipelining"
-              },
-              {
-                "ma": "c",
                 "noiDung": "smaller programs in all cases"
               },
               {
+                "ma": "c",
+                "noiDung": "larger immediate values in each word"
+              },
+              {
                 "ma": "d",
-                "noiDung": "larger immediate values"
+                "noiDung": "simple, fast decoding and pipelining"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Equal-sized instructions are fetched and decoded in a predictable way.</p><p><i>VI: Lệnh cùng kích thước được nạp và giải mã theo cách dự đoán được.</i></p>"
           }

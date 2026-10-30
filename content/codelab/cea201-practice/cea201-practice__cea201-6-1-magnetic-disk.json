@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Disk 1 — Platters, tracks, sectors and access time — answer key\n\n1. The access time of a disk is the sum of …Thời gian truy cập của đĩa là tổng của …\n   Answer: d) seek time, rotational latency and transfer time\n   Move the head, wait for the sector, read it.VI: Dời đầu từ, chờ sector, đọc nó.\n\n2. Average rotational latency of a 7200 rpm disk is about …Độ trễ quay trung bình của đĩa 7200 vòng/phút khoảng …\n   Answer: c) 4.17 ms (half a revolution)\n   One revolution takes 60000/7200 = 8.33 ms; on average we wait half of it.VI: Một vòng mất 60000/7200 = 8,33 ms; trung bình phải chờ nửa vòng.\n\n3. Why are sequential reads much faster than random reads on a hard disk?Vì sao đọc tuần tự nhanh hơn nhiều so với đọc ngẫu nhiên trên đĩa cứng?\n   Answer: b) They pay the seek and rotation once instead of per block\n   Mechanical positioning dominates; transfer is cheap once positioned.VI: Việc định vị cơ khí chiếm ưu thế; truyền thì rẻ khi đã vào đúng chỗ.\n\n4. Zoned bit recording stores …Ghi vùng (zoned bit recording) lưu …\n   Answer: b) more sectors on the longer outer tracks\n   The outer tracks are longer, so they hold more sectors at the same density.VI: Rãnh ngoài dài hơn nên chứa nhiều sector hơn ở cùng mật độ.\n\n5. A cylinder is …Cylinder là …\n   Answer: b) the set of tracks at the same arm position on all platter surfaces\n   Reading a cylinder needs no head movement, only head switching.VI: Đọc một cylinder không cần dời cần đọc, chỉ đổi đầu đọc.\n"
+          "code": "# Disk 1 — Platters, tracks, sectors and access time — answer key\n\n1. The access time of a disk is the sum of …Thời gian truy cập của đĩa là tổng của …\n   Answer: d) seek time, rotational latency and transfer time\n   Move the head, wait for the sector, read it.VI: Dời đầu từ, chờ sector, đọc nó.\n\n2. Average rotational latency of a 7200 rpm disk is about …Độ trễ quay trung bình của đĩa 7200 vòng/phút khoảng …\n   Answer: c) 4.17 ms (half a revolution)\n   One revolution takes 60000/7200 = 8.33 ms; on average we wait half of it.VI: Một vòng mất 60000/7200 = 8,33 ms; trung bình phải chờ nửa vòng.\n\n3. Why are sequential reads much faster than random reads on a hard disk?Vì sao đọc tuần tự nhanh hơn nhiều so với đọc ngẫu nhiên trên đĩa cứng?\n   Answer: d) They pay the seek and rotation once instead of per block\n   Mechanical positioning dominates; transfer is cheap once positioned.VI: Việc định vị cơ khí chiếm ưu thế; truyền thì rẻ khi đã vào đúng chỗ.\n\n4. Zoned bit recording stores …Ghi vùng (zoned bit recording) lưu …\n   Answer: b) more sectors on the longer outer tracks\n   The outer tracks are longer, so they hold more sectors at the same density.VI: Rãnh ngoài dài hơn nên chứa nhiều sector hơn ở cùng mật độ.\n\n5. A cylinder is …Cylinder là …\n   Answer: a) the set of tracks at one arm position on all surfaces\n   Reading a cylinder needs no head movement, only head switching.VI: Đọc một cylinder không cần dời cần đọc, chỉ đổi đầu đọc.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> seek time, rotational latency and transfer time</p><p>Move the head, wait for the sector, read it.</p><p><i>VI: Dời đầu từ, chờ sector, đọc nó.</i></p></li><li><p><b>c)</b> 4.17 ms (half a revolution)</p><p>One revolution takes 60000/7200 = 8.33 ms; on average we wait half of it.</p><p><i>VI: Một vòng mất 60000/7200 = 8,33 ms; trung bình phải chờ nửa vòng.</i></p></li><li><p><b>b)</b> They pay the seek and rotation once instead of per block</p><p>Mechanical positioning dominates; transfer is cheap once positioned.</p><p><i>VI: Việc định vị cơ khí chiếm ưu thế; truyền thì rẻ khi đã vào đúng chỗ.</i></p></li><li><p><b>b)</b> more sectors on the longer outer tracks</p><p>The outer tracks are longer, so they hold more sectors at the same density.</p><p><i>VI: Rãnh ngoài dài hơn nên chứa nhiều sector hơn ở cùng mật độ.</i></p></li><li><p><b>b)</b> the set of tracks at the same arm position on all platter surfaces</p><p>Reading a cylinder needs no head movement, only head switching.</p><p><i>VI: Đọc một cylinder không cần dời cần đọc, chỉ đổi đầu đọc.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> seek time, rotational latency and transfer time</p><p>Move the head, wait for the sector, read it.</p><p><i>VI: Dời đầu từ, chờ sector, đọc nó.</i></p></li><li><p><b>c)</b> 4.17 ms (half a revolution)</p><p>One revolution takes 60000/7200 = 8.33 ms; on average we wait half of it.</p><p><i>VI: Một vòng mất 60000/7200 = 8,33 ms; trung bình phải chờ nửa vòng.</i></p></li><li><p><b>d)</b> They pay the seek and rotation once instead of per block</p><p>Mechanical positioning dominates; transfer is cheap once positioned.</p><p><i>VI: Việc định vị cơ khí chiếm ưu thế; truyền thì rẻ khi đã vào đúng chỗ.</i></p></li><li><p><b>b)</b> more sectors on the longer outer tracks</p><p>The outer tracks are longer, so they hold more sectors at the same density.</p><p><i>VI: Rãnh ngoài dài hơn nên chứa nhiều sector hơn ở cùng mật độ.</i></p></li><li><p><b>a)</b> the set of tracks at one arm position on all surfaces</p><p>Reading a cylinder needs no head movement, only head switching.</p><p><i>VI: Đọc một cylinder không cần dời cần đọc, chỉ đổi đầu đọc.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,15 +62,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "seek time and cache time"
+                "noiDung": "seek time only, because rotation is negligible"
               },
               {
                 "ma": "b",
-                "noiDung": "seek time only"
+                "noiDung": "rotational latency, bus time and controller time"
               },
               {
                 "ma": "c",
-                "noiDung": "rotational latency and bus time"
+                "noiDung": "seek time, cache lookup time and bus arbitration time"
               },
               {
                 "ma": "d",
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Random reads need more CPU"
+                "noiDung": "The disk cache is bigger during sequential reads"
               },
               {
                 "ma": "b",
-                "noiDung": "They pay the seek and rotation once instead of per block"
+                "noiDung": "Random reads need more CPU time for each block"
               },
               {
                 "ma": "c",
-                "noiDung": "The disk reads faster when data are sequential"
+                "noiDung": "The platters spin faster when data are sequential"
               },
               {
                 "ma": "d",
-                "noiDung": "The cache is bigger"
+                "noiDung": "They pay the seek and rotation once instead of per block"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Mechanical positioning dominates; transfer is cheap once positioned.</p><p><i>VI: Việc định vị cơ khí chiếm ưu thế; truyền thì rẻ khi đã vào đúng chỗ.</i></p>"
           },
@@ -166,11 +166,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "one track of one surface, divided into sectors"
+                "noiDung": "the set of tracks at one arm position on all surfaces"
               },
               {
                 "ma": "b",
-                "noiDung": "the set of tracks at the same arm position on all platter surfaces"
+                "noiDung": "one platter with the two surfaces it carries"
               },
               {
                 "ma": "c",
@@ -178,11 +178,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "one platter with the two surfaces it carries"
+                "noiDung": "one track of one surface, divided into sectors"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>Reading a cylinder needs no head movement, only head switching.</p><p><i>VI: Đọc một cylinder không cần dời cần đọc, chỉ đổi đầu đọc.</i></p>"
           }

@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# RISC 1 — RISC versus CISC characteristics — answer key\n\n1. Which is a typical RISC characteristic?Đặc trưng nào là điển hình của RISC?\n   Answer: c) Fixed-length instructions and a load/store architecture\n   Simple, regular instructions are easy to decode and pipeline.VI: Lệnh đơn giản, đều đặn dễ giải mã và pipeline.\n\n2. A typical CISC trait is …Một đặc điểm điển hình của CISC là …\n   Answer: c) instructions that can reference memory operands directly and have variable length\n   It aims for compact code and a rich instruction set.VI: Nhắm tới mã gọn và tập lệnh phong phú.\n\n3. Why do RISC machines have large register files?Vì sao máy RISC có tệp thanh ghi lớn?\n   Answer: c) Most operands are kept in registers, avoiding slow memory accesses\n   Procedure calls and local variables benefit from registers (windows).VI: Gọi thủ tục và biến cục bộ hưởng lợi từ thanh ghi (cửa sổ).\n\n4. Compared with the CISC version of a program, the RISC version usually executes …So với bản CISC của một chương trình, bản RISC thường thực hiện …\n   Answer: a) more instructions, each simpler and faster\n   A larger IC is offset by a lower CPI and a faster clock.VI: IC lớn hơn được bù bằng CPI thấp hơn và clock nhanh hơn.\n\n5. Modern x86 processors …Các bộ xử lý x86 hiện đại …\n   Answer: b) translate CISC instructions into RISC-like micro-operations internally\n   The front end decodes x86 into µops executed by a RISC-style core.VI: Phần trước giải mã x86 thành µop chạy trên lõi kiểu RISC.\n"
+          "code": "# RISC 1 — RISC versus CISC characteristics — answer key\n\n1. Which is a typical RISC characteristic?Đặc trưng nào là điển hình của RISC?\n   Answer: b) Fixed-length instructions and a load/store architecture\n   Simple, regular instructions are easy to decode and pipeline.VI: Lệnh đơn giản, đều đặn dễ giải mã và pipeline.\n\n2. A typical CISC trait is …Một đặc điểm điển hình của CISC là …\n   Answer: d) variable-length instructions with direct memory operands\n   It aims for compact code and a rich instruction set.VI: Nhắm tới mã gọn và tập lệnh phong phú.\n\n3. Why do RISC machines have large register files?Vì sao máy RISC có tệp thanh ghi lớn?\n   Answer: c) Most operands are kept in registers, avoiding slow memory accesses\n   Procedure calls and local variables benefit from registers (windows).VI: Gọi thủ tục và biến cục bộ hưởng lợi từ thanh ghi (cửa sổ).\n\n4. Compared with the CISC version of a program, the RISC version usually executes …So với bản CISC của một chương trình, bản RISC thường thực hiện …\n   Answer: a) more instructions, each simpler and faster\n   A larger IC is offset by a lower CPI and a faster clock.VI: IC lớn hơn được bù bằng CPI thấp hơn và clock nhanh hơn.\n\n5. Modern x86 processors …Các bộ xử lý x86 hiện đại …\n   Answer: b) translate CISC instructions into RISC-like micro-operations internally\n   The front end decodes x86 into µops executed by a RISC-style core.VI: Phần trước giải mã x86 thành µop chạy trên lõi kiểu RISC.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Fixed-length instructions and a load/store architecture</p><p>Simple, regular instructions are easy to decode and pipeline.</p><p><i>VI: Lệnh đơn giản, đều đặn dễ giải mã và pipeline.</i></p></li><li><p><b>c)</b> instructions that can reference memory operands directly and have variable length</p><p>It aims for compact code and a rich instruction set.</p><p><i>VI: Nhắm tới mã gọn và tập lệnh phong phú.</i></p></li><li><p><b>c)</b> Most operands are kept in registers, avoiding slow memory accesses</p><p>Procedure calls and local variables benefit from registers (windows).</p><p><i>VI: Gọi thủ tục và biến cục bộ hưởng lợi từ thanh ghi (cửa sổ).</i></p></li><li><p><b>a)</b> more instructions, each simpler and faster</p><p>A larger IC is offset by a lower CPI and a faster clock.</p><p><i>VI: IC lớn hơn được bù bằng CPI thấp hơn và clock nhanh hơn.</i></p></li><li><p><b>b)</b> translate CISC instructions into RISC-like micro-operations internally</p><p>The front end decodes x86 into µops executed by a RISC-style core.</p><p><i>VI: Phần trước giải mã x86 thành µop chạy trên lõi kiểu RISC.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Fixed-length instructions and a load/store architecture</p><p>Simple, regular instructions are easy to decode and pipeline.</p><p><i>VI: Lệnh đơn giản, đều đặn dễ giải mã và pipeline.</i></p></li><li><p><b>d)</b> variable-length instructions with direct memory operands</p><p>It aims for compact code and a rich instruction set.</p><p><i>VI: Nhắm tới mã gọn và tập lệnh phong phú.</i></p></li><li><p><b>c)</b> Most operands are kept in registers, avoiding slow memory accesses</p><p>Procedure calls and local variables benefit from registers (windows).</p><p><i>VI: Gọi thủ tục và biến cục bộ hưởng lợi từ thanh ghi (cửa sổ).</i></p></li><li><p><b>a)</b> more instructions, each simpler and faster</p><p>A larger IC is offset by a lower CPI and a faster clock.</p><p><i>VI: IC lớn hơn được bù bằng CPI thấp hơn và clock nhanh hơn.</i></p></li><li><p><b>b)</b> translate CISC instructions into RISC-like micro-operations internally</p><p>The front end decodes x86 into µops executed by a RISC-style core.</p><p><i>VI: Phần trước giải mã x86 thành µop chạy trên lõi kiểu RISC.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -63,23 +63,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Variable-length instructions"
+                "noiDung": "Many complex addressing modes in each instruction"
               },
               {
                 "ma": "b",
-                "noiDung": "Many complex addressing modes"
-              },
-              {
-                "ma": "c",
                 "noiDung": "Fixed-length instructions and a load/store architecture"
               },
               {
+                "ma": "c",
+                "noiDung": "Microcoded complex instructions for common tasks"
+              },
+              {
                 "ma": "d",
-                "noiDung": "Microcoded complex instructions only"
+                "noiDung": "Variable-length instructions with a compact encoding"
               }
             ],
             "dapAn": [
-              "c"
+              "b"
             ],
             "giaiThich": "<p>Simple, regular instructions are easy to decode and pipeline.</p><p><i>VI: Lệnh đơn giản, đều đặn dễ giải mã và pipeline.</i></p>"
           },
@@ -93,19 +93,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "hardwired control only, with no microcode and a simple decoder"
+                "noiDung": "a large uniform register file, with memory reached by load and store only"
               },
               {
                 "ma": "c",
-                "noiDung": "instructions that can reference memory operands directly and have variable length"
+                "noiDung": "hardwired control only, with no microcode and a simple decoder"
               },
               {
                 "ma": "d",
-                "noiDung": "a large uniform register file, with memory reached by load and store only"
+                "noiDung": "variable-length instructions with direct memory operands"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>It aims for compact code and a rich instruction set.</p><p><i>VI: Nhắm tới mã gọn và tập lệnh phong phú.</i></p>"
           },

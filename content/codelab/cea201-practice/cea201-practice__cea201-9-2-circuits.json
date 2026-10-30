@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Circuits 1 — Decoders, multiplexers, adders and flip-flops: concepts — answer key\n\n1. A 3-to-8 decoder has …Bộ giải mã 3-sang-8 có …\n   Answer: d) 3 inputs and 8 outputs, exactly one of which is 1\n   It turns a binary number into a one-hot output.VI: Nó biến số nhị phân thành đầu ra one-hot.\n\n2. An 8-to-1 multiplexer needs how many select lines?Bộ chọn kênh 8-sang-1 cần bao nhiêu đường chọn?\n   Answer: c) 3\n   log₂ 8 = 3.VI: log₂ 8 = 3.\n\n3. A half adder computes …Bộ cộng nửa tính …\n   Answer: b) sum = A ⊕ B and carry = A·B\n   No carry-in, so it adds two bits only.VI: Không có nhớ vào nên chỉ cộng hai bit.\n\n4. The difference between a latch/flip-flop and a combinational circuit is that it …Khác biệt giữa chốt/flip-flop và mạch tổ hợp là nó …\n   Answer: b) stores state: the output depends on the past inputs\n   Sequential circuits have memory.VI: Mạch tuần tự có bộ nhớ.\n\n5. A T flip-flop with T = 1 …Flip-flop T với T = 1 …\n   Answer: c) toggles on every clock edge\n   T = 0 holds; T = 1 toggles — the basis of binary counters.VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.\n\n6. How many flip-flops are needed for a counter with 10 states?Cần bao nhiêu flip-flop cho bộ đếm 10 trạng thái?\n   Answer: a) 4\n   ⌈log₂ 10⌉ = 4.VI: ⌈log₂ 10⌉ = 4.\n"
+          "code": "# Circuits 1 — Decoders, multiplexers, adders and flip-flops: concepts — answer key\n\n1. A 3-to-8 decoder has …Bộ giải mã 3-sang-8 có …\n   Answer: d) 3 inputs and 8 outputs, exactly one of which is 1\n   It turns a binary number into a one-hot output.VI: Nó biến số nhị phân thành đầu ra one-hot.\n\n2. An 8-to-1 multiplexer needs how many select lines?Bộ chọn kênh 8-sang-1 cần bao nhiêu đường chọn?\n   Answer: c) 3\n   log₂ 8 = 3.VI: log₂ 8 = 3.\n\n3. A half adder computes …Bộ cộng nửa tính …\n   Answer: b) sum = A ⊕ B and carry = A·B\n   No carry-in, so it adds two bits only.VI: Không có nhớ vào nên chỉ cộng hai bit.\n\n4. The difference between a latch/flip-flop and a combinational circuit is that it …Khác biệt giữa chốt/flip-flop và mạch tổ hợp là nó …\n   Answer: b) stores state: the output depends on the past inputs\n   Sequential circuits have memory.VI: Mạch tuần tự có bộ nhớ.\n\n5. A T flip-flop with T = 1 …Flip-flop T với T = 1 …\n   Answer: a) toggles on every clock edge\n   T = 0 holds; T = 1 toggles — the basis of binary counters.VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.\n\n6. How many flip-flops are needed for a counter with 10 states?Cần bao nhiêu flip-flop cho bộ đếm 10 trạng thái?\n   Answer: a) 4\n   ⌈log₂ 10⌉ = 4.VI: ⌈log₂ 10⌉ = 4.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 3 inputs and 8 outputs, exactly one of which is 1</p><p>It turns a binary number into a one-hot output.</p><p><i>VI: Nó biến số nhị phân thành đầu ra one-hot.</i></p></li><li><p><b>c)</b> 3</p><p>log₂ 8 = 3.</p><p><i>VI: log₂ 8 = 3.</i></p></li><li><p><b>b)</b> sum = A ⊕ B and carry = A·B</p><p>No carry-in, so it adds two bits only.</p><p><i>VI: Không có nhớ vào nên chỉ cộng hai bit.</i></p></li><li><p><b>b)</b> stores state: the output depends on the past inputs</p><p>Sequential circuits have memory.</p><p><i>VI: Mạch tuần tự có bộ nhớ.</i></p></li><li><p><b>c)</b> toggles on every clock edge</p><p>T = 0 holds; T = 1 toggles — the basis of binary counters.</p><p><i>VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.</i></p></li><li><p><b>a)</b> 4</p><p>⌈log₂ 10⌉ = 4.</p><p><i>VI: ⌈log₂ 10⌉ = 4.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 3 inputs and 8 outputs, exactly one of which is 1</p><p>It turns a binary number into a one-hot output.</p><p><i>VI: Nó biến số nhị phân thành đầu ra one-hot.</i></p></li><li><p><b>c)</b> 3</p><p>log₂ 8 = 3.</p><p><i>VI: log₂ 8 = 3.</i></p></li><li><p><b>b)</b> sum = A ⊕ B and carry = A·B</p><p>No carry-in, so it adds two bits only.</p><p><i>VI: Không có nhớ vào nên chỉ cộng hai bit.</i></p></li><li><p><b>b)</b> stores state: the output depends on the past inputs</p><p>Sequential circuits have memory.</p><p><i>VI: Mạch tuần tự có bộ nhớ.</i></p></li><li><p><b>a)</b> toggles on every clock edge</p><p>T = 0 holds; T = 1 toggles — the basis of binary counters.</p><p><i>VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.</i></p></li><li><p><b>a)</b> 4</p><p>⌈log₂ 10⌉ = 4.</p><p><i>VI: ⌈log₂ 10⌉ = 4.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -169,23 +169,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "always resets"
-              },
-              {
-                "ma": "b",
-                "noiDung": "holds its value"
-              },
-              {
-                "ma": "c",
                 "noiDung": "toggles on every clock edge"
               },
               {
+                "ma": "b",
+                "noiDung": "resets on every clock edge"
+              },
+              {
+                "ma": "c",
+                "noiDung": "sets on every clock edge"
+              },
+              {
                 "ma": "d",
-                "noiDung": "always sets"
+                "noiDung": "holds its value on every clock edge"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>T = 0 holds; T = 1 toggles — the basis of binary counters.</p><p><i>VI: T = 0 giữ; T = 1 đảo — nền tảng của bộ đếm nhị phân.</i></p>"
           },

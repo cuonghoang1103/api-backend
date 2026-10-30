@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Pipeline 1 — Stages, hazards and forwarding: concepts — answer key\n\n1. Pipelining improves …Pipeline cải thiện …\n   Answer: a) throughput (instructions per second), not the latency of one instruction\n   Each instruction still goes through all the stages; more instructions are in flight at once.VI: Mỗi lệnh vẫn đi qua mọi tầng; nhiều lệnh được xử lý đồng thời hơn.\n\n2. A RAW (read after write) hazard means …Hazard RAW (đọc sau ghi) nghĩa là …\n   Answer: a) an instruction needs a result that an earlier instruction has not produced yet\n   It is a true data dependence.VI: Đây là phụ thuộc dữ liệu thật.\n\n3. Data forwarding (bypassing) …Chuyển tiếp dữ liệu (bypassing) …\n   Answer: c) sends a result from a later pipeline stage straight to the ALU input that needs it\n   It avoids waiting for the register-file write-back.VI: Tránh phải chờ ghi lại vào tệp thanh ghi.\n\n4. Even with forwarding, a load followed immediately by an instruction using the loaded value needs …Dù có chuyển tiếp, lệnh load theo sau là lệnh dùng giá trị vừa nạp cần …\n   Answer: b) one stall cycle (load-use hazard)\n   The data are available only at the end of the MEM stage.VI: Dữ liệu chỉ có ở cuối tầng MEM.\n\n5. A structural hazard occurs when …Hazard cấu trúc xảy ra khi …\n   Answer: d) two instructions need the same hardware resource in the same cycle\n   E.g. one memory port used for both instruction fetch and data access.VI: Vd một cổng nhớ dùng cho cả nạp lệnh và truy cập dữ liệu.\n\n6. A control hazard is caused by …Hazard điều khiển do …\n   Answer: d) branches and jumps that change the next instruction address\n   The pipeline does not yet know which instruction to fetch.VI: Pipeline chưa biết nạp lệnh nào.\n"
+          "code": "# Pipeline 1 — Stages, hazards and forwarding: concepts — answer key\n\n1. Pipelining improves …Pipeline cải thiện …\n   Answer: a) throughput (instructions per second), not the latency of one instruction\n   Each instruction still goes through all the stages; more instructions are in flight at once.VI: Mỗi lệnh vẫn đi qua mọi tầng; nhiều lệnh được xử lý đồng thời hơn.\n\n2. A RAW (read after write) hazard means …Hazard RAW (đọc sau ghi) nghĩa là …\n   Answer: b) an instruction needs a result that an earlier instruction has not produced yet\n   It is a true data dependence.VI: Đây là phụ thuộc dữ liệu thật.\n\n3. Data forwarding (bypassing) …Chuyển tiếp dữ liệu (bypassing) …\n   Answer: a) sends a result from a later stage straight to the ALU input that needs it\n   It avoids waiting for the register-file write-back.VI: Tránh phải chờ ghi lại vào tệp thanh ghi.\n\n4. Even with forwarding, a load followed immediately by an instruction using the loaded value needs …Dù có chuyển tiếp, lệnh load theo sau là lệnh dùng giá trị vừa nạp cần …\n   Answer: a) one stall cycle\n   Load-use hazard: the data are available only at the end of the MEM stage.VI: Xung đột load-use: dữ liệu chỉ có ở cuối tầng MEM.\n\n5. A structural hazard occurs when …Hazard cấu trúc xảy ra khi …\n   Answer: d) two instructions need the same hardware in the same cycle\n   E.g. one memory port used for both instruction fetch and data access.VI: Vd một cổng nhớ dùng cho cả nạp lệnh và truy cập dữ liệu.\n\n6. A control hazard is caused by …Hazard điều khiển do …\n   Answer: d) branches that change the next instruction address\n   The pipeline does not yet know which instruction to fetch.VI: Pipeline chưa biết nạp lệnh nào.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> throughput (instructions per second), not the latency of one instruction</p><p>Each instruction still goes through all the stages; more instructions are in flight at once.</p><p><i>VI: Mỗi lệnh vẫn đi qua mọi tầng; nhiều lệnh được xử lý đồng thời hơn.</i></p></li><li><p><b>a)</b> an instruction needs a result that an earlier instruction has not produced yet</p><p>It is a true data dependence.</p><p><i>VI: Đây là phụ thuộc dữ liệu thật.</i></p></li><li><p><b>c)</b> sends a result from a later pipeline stage straight to the ALU input that needs it</p><p>It avoids waiting for the register-file write-back.</p><p><i>VI: Tránh phải chờ ghi lại vào tệp thanh ghi.</i></p></li><li><p><b>b)</b> one stall cycle (load-use hazard)</p><p>The data are available only at the end of the MEM stage.</p><p><i>VI: Dữ liệu chỉ có ở cuối tầng MEM.</i></p></li><li><p><b>d)</b> two instructions need the same hardware resource in the same cycle</p><p>E.g. one memory port used for both instruction fetch and data access.</p><p><i>VI: Vd một cổng nhớ dùng cho cả nạp lệnh và truy cập dữ liệu.</i></p></li><li><p><b>d)</b> branches and jumps that change the next instruction address</p><p>The pipeline does not yet know which instruction to fetch.</p><p><i>VI: Pipeline chưa biết nạp lệnh nào.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> throughput (instructions per second), not the latency of one instruction</p><p>Each instruction still goes through all the stages; more instructions are in flight at once.</p><p><i>VI: Mỗi lệnh vẫn đi qua mọi tầng; nhiều lệnh được xử lý đồng thời hơn.</i></p></li><li><p><b>b)</b> an instruction needs a result that an earlier instruction has not produced yet</p><p>It is a true data dependence.</p><p><i>VI: Đây là phụ thuộc dữ liệu thật.</i></p></li><li><p><b>a)</b> sends a result from a later stage straight to the ALU input that needs it</p><p>It avoids waiting for the register-file write-back.</p><p><i>VI: Tránh phải chờ ghi lại vào tệp thanh ghi.</i></p></li><li><p><b>a)</b> one stall cycle</p><p>Load-use hazard: the data are available only at the end of the MEM stage.</p><p><i>VI: Xung đột load-use: dữ liệu chỉ có ở cuối tầng MEM.</i></p></li><li><p><b>d)</b> two instructions need the same hardware in the same cycle</p><p>E.g. one memory port used for both instruction fetch and data access.</p><p><i>VI: Vd một cổng nhớ dùng cho cả nạp lệnh và truy cập dữ liệu.</i></p></li><li><p><b>d)</b> branches that change the next instruction address</p><p>The pipeline does not yet know which instruction to fetch.</p><p><i>VI: Pipeline chưa biết nạp lệnh nào.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -88,23 +88,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "an instruction needs a result that an earlier instruction has not produced yet"
+                "noiDung": "a later instruction overwrites an operand that an earlier one still has to read"
               },
               {
                 "ma": "b",
-                "noiDung": "a later instruction overwrites an operand an earlier one still needs"
+                "noiDung": "an instruction needs a result that an earlier instruction has not produced yet"
               },
               {
                 "ma": "c",
-                "noiDung": "two instructions write the same register"
+                "noiDung": "two instructions write the same register, and the later one must finish last"
               },
               {
                 "ma": "d",
-                "noiDung": "the branch target is unknown"
+                "noiDung": "the branch target is unknown when the next fetch must start"
               }
             ],
             "dapAn": [
-              "a"
+              "b"
             ],
             "giaiThich": "<p>It is a true data dependence.</p><p><i>VI: Đây là phụ thuộc dữ liệu thật.</i></p>"
           },
@@ -114,23 +114,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "writes each result into the register file during the ID stage"
+                "noiDung": "sends a result from a later stage straight to the ALU input that needs it"
               },
               {
                 "ma": "b",
-                "noiDung": "copies a result to the instruction cache so that it can be fetched"
+                "noiDung": "writes each result into the register file during the ID stage"
               },
               {
                 "ma": "c",
-                "noiDung": "sends a result from a later pipeline stage straight to the ALU input that needs it"
+                "noiDung": "doubles the clock so that a result is ready one stage earlier"
               },
               {
                 "ma": "d",
-                "noiDung": "doubles the clock so that a result is ready one stage earlier"
+                "noiDung": "copies a result to the instruction cache so that it can be fetched"
               }
             ],
             "dapAn": [
-              "c"
+              "a"
             ],
             "giaiThich": "<p>It avoids waiting for the register-file write-back.</p><p><i>VI: Tránh phải chờ ghi lại vào tệp thanh ghi.</i></p>"
           },
@@ -140,25 +140,25 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "two stalls"
+                "noiDung": "one stall cycle"
               },
               {
                 "ma": "b",
-                "noiDung": "one stall cycle (load-use hazard)"
+                "noiDung": "no stall cycle"
               },
               {
                 "ma": "c",
-                "noiDung": "no stall"
+                "noiDung": "two stall cycles"
               },
               {
                 "ma": "d",
-                "noiDung": "three stalls"
+                "noiDung": "three stall cycles"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
-            "giaiThich": "<p>The data are available only at the end of the MEM stage.</p><p><i>VI: Dữ liệu chỉ có ở cuối tầng MEM.</i></p>"
+            "giaiThich": "<p>Load-use hazard: the data are available only at the end of the MEM stage.</p><p><i>VI: Xung đột load-use: dữ liệu chỉ có ở cuối tầng MEM.</i></p>"
           },
           {
             "ma": "c5",
@@ -166,11 +166,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "two instructions read and write the same register"
+                "noiDung": "a branch is mispredicted and the wrong path is flushed"
               },
               {
                 "ma": "b",
-                "noiDung": "a branch is mispredicted and the wrong path is flushed"
+                "noiDung": "two instructions read and write the same register"
               },
               {
                 "ma": "c",
@@ -178,7 +178,7 @@
               },
               {
                 "ma": "d",
-                "noiDung": "two instructions need the same hardware resource in the same cycle"
+                "noiDung": "two instructions need the same hardware in the same cycle"
               }
             ],
             "dapAn": [
@@ -192,19 +192,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "a register that is read before it is written"
-              },
-              {
-                "ma": "b",
-                "noiDung": "an ALU that is narrower than the operands"
-              },
-              {
-                "ma": "c",
                 "noiDung": "instructions that compete for one memory port"
               },
               {
+                "ma": "b",
+                "noiDung": "a register that is read before it is written"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an ALU that is narrower than the operands"
+              },
+              {
                 "ma": "d",
-                "noiDung": "branches and jumps that change the next instruction address"
+                "noiDung": "branches that change the next instruction address"
               }
             ],
             "dapAn": [

@@ -49,10 +49,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do? — answer key\n\n1. Which register tells the processor where the NEXT instruction is?Thanh ghi nào cho bộ xử lý biết lệnh SẮP nạp nằm ở đâu?\n   Answer: d) PC (program counter)\n   The PC points to the next instruction; the IR holds the instruction being executed.VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.\n\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n   Answer: b) MBR (memory buffer register)\n   MAR holds the address going out; MBR holds the data coming in or going out.VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.\n\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n   Answer: a) It is incremented to point to the next instruction\n   The control unit increments the PC after (or while) the instruction is fetched.VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.\n\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n   Answer: c) instructions and data in the same memory\n   The same memory holds both, so a program can be loaded, changed and treated as data.VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.\n\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n   Answer: b) processor–memory, processor–I/O, data processing, control\n   Stallings groups instruction effects into these four categories.VI: Stallings nhóm tác dụng lệnh thành bốn loại này.\n"
+          "code": "# Cycle 1 — PC, MAR, MBR, IR: what does each register do? — answer key\n\n1. Which register tells the processor where the NEXT instruction is?Thanh ghi nào cho bộ xử lý biết lệnh SẮP nạp nằm ở đâu?\n   Answer: d) PC (program counter)\n   The PC points to the next instruction; the IR holds the instruction being executed.VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.\n\n2. During a memory read, the word that comes back from memory is first placed in …Khi đọc bộ nhớ, từ đọc về trước hết được đặt vào …\n   Answer: b) MBR (memory buffer register)\n   MAR holds the address going out; MBR holds the data coming in or going out.VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.\n\n3. In the fetch phase, what happens to the PC (no jump)?Ở pha nạp lệnh, PC thay đổi thế nào (không có nhảy)?\n   Answer: c) It is incremented to point to the next instruction\n   The control unit increments the PC after (or while) the instruction is fetched.VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.\n\n4. A “stored-program” (von Neumann) computer keeps …Máy “chương trình lưu trong bộ nhớ” (von Neumann) lưu …\n   Answer: c) instructions and data in the same memory\n   The same memory holds both, so a program can be loaded, changed and treated as data.VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.\n\n5. The four basic actions of an instruction are …Bốn loại tác vụ cơ bản của một lệnh là …\n   Answer: b) processor–memory, processor–I/O, data processing, control\n   Stallings groups instruction effects into these four categories.VI: Stallings nhóm tác dụng lệnh thành bốn loại này.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> PC (program counter)</p><p>The PC points to the next instruction; the IR holds the instruction being executed.</p><p><i>VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.</i></p></li><li><p><b>b)</b> MBR (memory buffer register)</p><p>MAR holds the address going out; MBR holds the data coming in or going out.</p><p><i>VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.</i></p></li><li><p><b>a)</b> It is incremented to point to the next instruction</p><p>The control unit increments the PC after (or while) the instruction is fetched.</p><p><i>VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.</i></p></li><li><p><b>c)</b> instructions and data in the same memory</p><p>The same memory holds both, so a program can be loaded, changed and treated as data.</p><p><i>VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.</i></p></li><li><p><b>b)</b> processor–memory, processor–I/O, data processing, control</p><p>Stallings groups instruction effects into these four categories.</p><p><i>VI: Stallings nhóm tác dụng lệnh thành bốn loại này.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> PC (program counter)</p><p>The PC points to the next instruction; the IR holds the instruction being executed.</p><p><i>VI: PC trỏ tới lệnh kế tiếp; IR giữ lệnh đang thực hiện.</i></p></li><li><p><b>b)</b> MBR (memory buffer register)</p><p>MAR holds the address going out; MBR holds the data coming in or going out.</p><p><i>VI: MAR giữ địa chỉ gửi đi; MBR giữ dữ liệu vào/ra.</i></p></li><li><p><b>c)</b> It is incremented to point to the next instruction</p><p>The control unit increments the PC after (or while) the instruction is fetched.</p><p><i>VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.</i></p></li><li><p><b>c)</b> instructions and data in the same memory</p><p>The same memory holds both, so a program can be loaded, changed and treated as data.</p><p><i>VI: Cùng một bộ nhớ chứa cả hai nên chương trình có thể được nạp, sửa và xem như dữ liệu.</i></p></li><li><p><b>b)</b> processor–memory, processor–I/O, data processing, control</p><p>Stallings groups instruction effects into these four categories.</p><p><i>VI: Stallings nhóm tác dụng lệnh thành bốn loại này.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -117,23 +117,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "It is incremented to point to the next instruction"
-              },
-              {
-                "ma": "b",
                 "noiDung": "It is copied into the MBR and left unchanged forever"
               },
               {
+                "ma": "b",
+                "noiDung": "It is cleared to zero until the next fetch"
+              },
+              {
                 "ma": "c",
-                "noiDung": "It is loaded with the operand address"
+                "noiDung": "It is incremented to point to the next instruction"
               },
               {
                 "ma": "d",
-                "noiDung": "It is cleared"
+                "noiDung": "It is loaded with the operand address"
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>The control unit increments the PC after (or while) the instruction is fetched.</p><p><i>VI: Đơn vị điều khiển tăng PC khi/ sau khi nạp lệnh.</i></p>"
           },

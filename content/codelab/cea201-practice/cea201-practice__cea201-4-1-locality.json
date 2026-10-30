@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Locality 1 — Temporal and spatial locality — answer key\n\n1. A loop that keeps adding to the same variable sum shows mainly …Vòng lặp liên tục cộng vào biến sum cho thấy chủ yếu …\n   Answer: d) temporal locality\n   The same address is reused again and again — temporal locality.VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.\n\n2. Reading a[0], a[1], a[2], … of an array shows mainly …Đọc a[0], a[1], a[2], … của mảng cho thấy chủ yếu …\n   Answer: d) spatial locality\n   Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.\n\n3. Why is the cache block (line) larger than one word?Vì sao khối (dòng) cache lớn hơn một từ?\n   Answer: c) To exploit spatial locality\n   Fetching neighbours together turns later sequential accesses into hits.VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.\n\n4. Moving down the hierarchy (register → cache → RAM → disk) the access time …Đi xuống phân cấp (thanh ghi → cache → RAM → đĩa) thời gian truy cập …\n   Answer: c) increases while capacity increases and cost per bit decreases\n   Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.\n\n5. A program with a very low hit ratio most likely has …Một chương trình có tỉ lệ hit rất thấp nhiều khả năng có …\n   Answer: a) poor locality or a working set larger than the cache\n   Misses come from poor reuse (capacity/conflict) or first use (compulsory).VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).\n"
+          "code": "# Locality 1 — Temporal and spatial locality — answer key\n\n1. A loop that keeps adding to the same variable sum shows mainly …Vòng lặp liên tục cộng vào biến sum cho thấy chủ yếu …\n   Answer: d) temporal locality\n   The same address is reused again and again — temporal locality.VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.\n\n2. Reading a[0], a[1], a[2], … of an array shows mainly …Đọc a[0], a[1], a[2], … của mảng cho thấy chủ yếu …\n   Answer: d) spatial locality\n   Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.\n\n3. Why is the cache block (line) larger than one word?Vì sao khối (dòng) cache lớn hơn một từ?\n   Answer: c) To exploit spatial locality\n   Fetching neighbours together turns later sequential accesses into hits.VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.\n\n4. Moving down the hierarchy (register → cache → RAM → disk) the access time …Đi xuống phân cấp (thanh ghi → cache → RAM → đĩa) thời gian truy cập …\n   Answer: d) increases while capacity increases and cost per bit decreases\n   Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.\n\n5. A program with a very low hit ratio most likely has …Một chương trình có tỉ lệ hit rất thấp nhiều khả năng có …\n   Answer: a) poor locality or a working set larger than the cache\n   Misses come from poor reuse (capacity/conflict) or first use (compulsory).VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> temporal locality</p><p>The same address is reused again and again — temporal locality.</p><p><i>VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.</i></p></li><li><p><b>d)</b> spatial locality</p><p>Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.</p><p><i>VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.</i></p></li><li><p><b>c)</b> To exploit spatial locality</p><p>Fetching neighbours together turns later sequential accesses into hits.</p><p><i>VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.</i></p></li><li><p><b>c)</b> increases while capacity increases and cost per bit decreases</p><p>Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.</p><p><i>VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.</i></p></li><li><p><b>a)</b> poor locality or a working set larger than the cache</p><p>Misses come from poor reuse (capacity/conflict) or first use (compulsory).</p><p><i>VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> temporal locality</p><p>The same address is reused again and again — temporal locality.</p><p><i>VI: Cùng một địa chỉ được dùng lại nhiều lần — cục bộ thời gian.</i></p></li><li><p><b>d)</b> spatial locality</p><p>Neighbouring addresses are used one after the other, so a block fetch brings useful neighbours.</p><p><i>VI: Các địa chỉ lân cận được dùng liên tiếp nên nạp một khối mang theo các ô hữu ích.</i></p></li><li><p><b>c)</b> To exploit spatial locality</p><p>Fetching neighbours together turns later sequential accesses into hits.</p><p><i>VI: Nạp cùng các ô lân cận biến các truy cập tuần tự sau đó thành hit.</i></p></li><li><p><b>d)</b> increases while capacity increases and cost per bit decreases</p><p>Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.</p><p><i>VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.</i></p></li><li><p><b>a)</b> poor locality or a working set larger than the cache</p><p>Misses come from poor reuse (capacity/conflict) or first use (compulsory).</p><p><i>VI: Miss đến từ ít tái sử dụng (dung lượng/xung đột) hoặc lần đầu dùng (bắt buộc).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -145,19 +145,19 @@
               },
               {
                 "ma": "b",
-                "noiDung": "decreases"
+                "noiDung": "stays equal while capacity increases and cost per bit decreases"
               },
               {
                 "ma": "c",
-                "noiDung": "increases while capacity increases and cost per bit decreases"
+                "noiDung": "decreases while capacity and cost per bit both increase"
               },
               {
                 "ma": "d",
-                "noiDung": "stays equal"
+                "noiDung": "increases while capacity increases and cost per bit decreases"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>Fast memory is small and expensive; the hierarchy gives capacity of the bottom with speed of the top.</p><p><i>VI: Bộ nhớ nhanh thì nhỏ và đắt; phân cấp cho dung lượng của tầng dưới với tốc độ của tầng trên.</i></p>"
           },
@@ -171,15 +171,15 @@
               },
               {
                 "ma": "b",
-                "noiDung": "too many registers"
+                "noiDung": "a data bus that is too narrow for the cache lines"
               },
               {
                 "ma": "c",
-                "noiDung": "a clock rate that is too high"
+                "noiDung": "a clock rate that is too high for the memory bus"
               },
               {
                 "ma": "d",
-                "noiDung": "a data bus that is too narrow"
+                "noiDung": "too many general-purpose registers in the CPU"
               }
             ],
             "dapAn": [

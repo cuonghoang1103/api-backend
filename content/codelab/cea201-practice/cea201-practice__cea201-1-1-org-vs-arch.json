@@ -47,10 +47,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Basics 1 — Organization versus architecture: concepts — answer key\n\n1. Computer architecture refers to …Kiến trúc máy tính đề cập đến …\n   Answer: b) the attributes visible to the programmer that affect the logical execution of a program\n   Instruction set, data representation, addressing and I/O mechanisms are architectural.VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.\n\n2. Computer organization refers to …Tổ chức máy tính đề cập đến …\n   Answer: d) the operational units and their interconnections that realize the architecture\n   Control signals, interfaces and memory technology are organizational.VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.\n\n3. Why can a family of computers share an architecture but differ in organization?Vì sao một họ máy có thể chung kiến trúc nhưng khác tổ chức?\n   Answer: a) Different price/performance points are built by implementing the same instruction set with different hardware\n   Binary compatibility across generations (e.g. x86) relies on this separation.VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.\n\n4. Which of the following is a FUNCTION of a computer?Cái nào sau đây là CHỨC NĂNG của máy tính?\n   Answer: d) Data processing\n   The four functions are data processing, data storage, data movement and control; the others are structure.VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.\n\n5. The four main structural components of a computer are …Bốn thành phần cấu trúc chính của máy tính là …\n   Answer: d) CPU, main memory, I/O and system interconnection\n   Each top-level component can be decomposed again (CPU = ALU + registers + control unit).VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).\n"
+          "code": "# Basics 1 — Organization versus architecture: concepts — answer key\n\n1. Computer architecture refers to …Kiến trúc máy tính đề cập đến …\n   Answer: b) the attributes visible to the programmer that affect the logical execution of a program\n   Instruction set, data representation, addressing and I/O mechanisms are architectural.VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.\n\n2. Computer organization refers to …Tổ chức máy tính đề cập đến …\n   Answer: d) the operational units and their interconnections that realize the architecture\n   Control signals, interfaces and memory technology are organizational.VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.\n\n3. Why can a family of computers share an architecture but differ in organization?Vì sao một họ máy có thể chung kiến trúc nhưng khác tổ chức?\n   Answer: c) Price/performance points differ by implementing one instruction set with different hardware\n   Binary compatibility across generations (e.g. x86) relies on this separation.VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.\n\n4. Which of the following is a FUNCTION of a computer?Cái nào sau đây là CHỨC NĂNG của máy tính?\n   Answer: c) Data processing\n   The four functions are data processing, data storage, data movement and control; the others are structure.VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.\n\n5. The four main structural components of a computer are …Bốn thành phần cấu trúc chính của máy tính là …\n   Answer: b) CPU, main memory, I/O and system interconnection\n   Each top-level component can be decomposed again (CPU = ALU + registers + control unit).VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> the attributes visible to the programmer that affect the logical execution of a program</p><p>Instruction set, data representation, addressing and I/O mechanisms are architectural.</p><p><i>VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.</i></p></li><li><p><b>d)</b> the operational units and their interconnections that realize the architecture</p><p>Control signals, interfaces and memory technology are organizational.</p><p><i>VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.</i></p></li><li><p><b>a)</b> Different price/performance points are built by implementing the same instruction set with different hardware</p><p>Binary compatibility across generations (e.g. x86) relies on this separation.</p><p><i>VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.</i></p></li><li><p><b>d)</b> Data processing</p><p>The four functions are data processing, data storage, data movement and control; the others are structure.</p><p><i>VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.</i></p></li><li><p><b>d)</b> CPU, main memory, I/O and system interconnection</p><p>Each top-level component can be decomposed again (CPU = ALU + registers + control unit).</p><p><i>VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> the attributes visible to the programmer that affect the logical execution of a program</p><p>Instruction set, data representation, addressing and I/O mechanisms are architectural.</p><p><i>VI: Tập lệnh, biểu diễn dữ liệu, định địa chỉ và cơ chế I/O thuộc kiến trúc.</i></p></li><li><p><b>d)</b> the operational units and their interconnections that realize the architecture</p><p>Control signals, interfaces and memory technology are organizational.</p><p><i>VI: Tín hiệu điều khiển, giao diện và công nghệ bộ nhớ thuộc tổ chức.</i></p></li><li><p><b>c)</b> Price/performance points differ by implementing one instruction set with different hardware</p><p>Binary compatibility across generations (e.g. x86) relies on this separation.</p><p><i>VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.</i></p></li><li><p><b>c)</b> Data processing</p><p>The four functions are data processing, data storage, data movement and control; the others are structure.</p><p><i>VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.</i></p></li><li><p><b>b)</b> CPU, main memory, I/O and system interconnection</p><p>Each top-level component can be decomposed again (CPU = ALU + registers + control unit).</p><p><i>VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -115,15 +115,15 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Different price/performance points are built by implementing the same instruction set with different hardware"
-              },
-              {
-                "ma": "b",
                 "noiDung": "Organization is decided by each programmer, so different programs see different hardware"
               },
               {
-                "ma": "c",
+                "ma": "b",
                 "noiDung": "The instruction set must be redesigned for every model, while the hardware stays exactly the same"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Price/performance points differ by implementing one instruction set with different hardware"
               },
               {
                 "ma": "d",
@@ -131,7 +131,7 @@
               }
             ],
             "dapAn": [
-              "a"
+              "c"
             ],
             "giaiThich": "<p>Binary compatibility across generations (e.g. x86) relies on this separation.</p><p><i>VI: Tương thích nhị phân giữa các thế hệ (vd x86) dựa trên sự tách biệt này.</i></p>"
           },
@@ -141,23 +141,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "The ALU"
+                "noiDung": "The control unit"
               },
               {
                 "ma": "b",
-                "noiDung": "The CPU"
+                "noiDung": "The main memory"
               },
               {
                 "ma": "c",
-                "noiDung": "The bus"
+                "noiDung": "Data processing"
               },
               {
                 "ma": "d",
-                "noiDung": "Data processing"
+                "noiDung": "The system bus"
               }
             ],
             "dapAn": [
-              "d"
+              "c"
             ],
             "giaiThich": "<p>The four functions are data processing, data storage, data movement and control; the others are structure.</p><p><i>VI: Bốn chức năng là xử lý, lưu trữ, di chuyển dữ liệu và điều khiển; các mục còn lại là cấu trúc.</i></p>"
           },
@@ -167,11 +167,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "ALU, registers, control unit and cache"
+                "noiDung": "ALU, registers, control unit, cache and the internal bus"
               },
               {
                 "ma": "b",
-                "noiDung": "compiler, linker, loader and OS"
+                "noiDung": "CPU, main memory, I/O and system interconnection"
               },
               {
                 "ma": "c",
@@ -179,11 +179,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "CPU, main memory, I/O and system interconnection"
+                "noiDung": "compiler, linker, loader and OS"
               }
             ],
             "dapAn": [
-              "d"
+              "b"
             ],
             "giaiThich": "<p>Each top-level component can be decomposed again (CPU = ALU + registers + control unit).</p><p><i>VI: Mỗi thành phần cấp cao lại phân rã tiếp (CPU = ALU + thanh ghi + đơn vị điều khiển).</i></p>"
           }

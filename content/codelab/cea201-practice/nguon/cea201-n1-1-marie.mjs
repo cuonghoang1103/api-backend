@@ -12,7 +12,7 @@ const E1 = tinh({
     q('c3', ['What does Skipcond 400 test?', 'Skipcond 400 kiểm tra gì?'], ['AC = 0 (skip the next instruction if true)', 'AC < 0 (skip the next instruction if true)', 'AC > 0 (skip the next instruction if true)', 'PC = 0 (skip the next instruction if true)'], ['Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.', 'Skipcond 000: AC < 0; 400: AC = 0; 800: AC > 0.']),
     q('c4', ['JnS X (jump and store) is used to …', 'JnS X (nhảy và lưu) dùng để …'], ['call a subroutine: store the return address at X and continue at X + 1', 'loop back: jump to X only when the AC is not zero', 'store a value: copy the AC to X and continue with the next instruction', 'return from a subroutine: jump to the address stored at X'], ['The subroutine returns with JumpI X.', 'Chương trình con trả về bằng JumpI X.']),
     q('c5', ['The machine word 3106 (hex) is …', 'Từ máy 3106 (hex) là …'], ['Add 106', 'Load 106', 'Store 106', 'Subt 106'], ['Opcode 3 = Add; the lower three hex digits are the address.', 'Opcode 3 = Add; ba chữ số hex thấp là địa chỉ.']),
-    q('c6', ['AddI X means …', 'AddI X nghĩa là …'], ['AC ← AC + M[M[X]] (indirect)', 'AC ← AC + X (immediate)', 'AC ← AC + M[X]', 'M[X] ← AC + 1'], ['The word at X is the address of the operand.', 'Từ tại X là địa chỉ của toán hạng.']),
+    q('c6', ['AddI X means …', 'AddI X nghĩa là …'], ['AC ← AC + M[M[X]]', 'AC ← AC + X', 'AC ← AC + M[X]', 'M[X] ← AC + 1'], ['The word at X is the address of the operand.', 'Từ tại X là địa chỉ của toán hạng.']),
   ],
   goiY: ['First hex digit = opcode, last three = address.', 'Comparisons are always against zero.'],
   loiHayGap: ['Reading Skipcond 800 as “skip if AC is zero”.', 'Thinking AddI adds an immediate constant.'],
@@ -104,7 +104,7 @@ const E5 = tinh({
 
 // Chọn chương trình đúng — mỗi phương án được CHẠY để xác nhận
 const PD = [
-  { de: ['Which program prints TWICE its input?', 'Chương trình nào in GẤP ĐÔI số nhập vào?'], good: 'ORG 100\nInput\nStore X\nAdd X\nOutput\nHalt\nX, Dec 0', bad: ['ORG 100\nInput\nAdd X\nOutput\nHalt\nX, Dec 0', 'ORG 100\nInput\nStore X\nLoad X\nOutput\nHalt\nX, Dec 0', 'ORG 100\nInput\nOutput\nOutput\nHalt'], f: (x) => [2 * x] },
+  { de: ['Which program prints DOUBLE the value of its input?', 'Chương trình nào in GẤP ĐÔI số nhập vào?'], good: 'ORG 100\nInput\nStore X\nAdd X\nOutput\nHalt\nX, Dec 0', bad: ['ORG 100\nInput\nAdd X\nOutput\nHalt\nX, Dec 0', 'ORG 100\nInput\nStore X\nLoad X\nOutput\nHalt\nX, Dec 0', 'ORG 100\nInput\nOutput\nOutput\nHalt'], f: (x) => [2 * x] },
   { de: ['Which program prints its input MINUS 7?', 'Chương trình nào in số nhập vào TRỪ 7?'], good: 'ORG 100\nInput\nSubt Seven\nOutput\nHalt\nSeven, Dec 7', bad: ['ORG 100\nInput\nStore X\nLoad Seven\nSubt X\nOutput\nHalt\nX, Dec 0\nSeven, Dec 7', 'ORG 100\nInput\nAdd Seven\nOutput\nHalt\nSeven, Dec 7', 'ORG 100\nLoad Seven\nOutput\nHalt\nSeven, Dec 7'], f: (x) => [x - 7] },
 ];
 const inpts = [1, 4, 9, 20];

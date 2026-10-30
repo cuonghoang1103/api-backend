@@ -46,10 +46,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Prediction 1 — Why predict branches, and how — answer key\n\n1. Why does a deep pipeline need branch prediction?Vì sao pipeline sâu cần dự đoán rẽ nhánh?\n   Answer: c) Without it the front end stalls for many cycles until the branch is resolved\n   The penalty grows with the number of stages between fetch and branch resolution.VI: Phạt tăng theo số tầng giữa nạp lệnh và lúc nhánh được xác định.\n\n2. A 2-bit saturating counter predicts “taken” when its value is …Bộ đếm bão hoà 2 bit dự đoán “nhảy” khi giá trị là …\n   Answer: d) 2 or 3\n   00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken.VI: 00 chắc chắn không nhảy, 01 yếu không nhảy, 10 yếu nhảy, 11 chắc chắn nhảy.\n\n3. Why is a 2-bit predictor better than a 1-bit one for loops?Vì sao bộ dự đoán 2 bit tốt hơn 1 bit cho vòng lặp?\n   Answer: d) A single exception (loop exit) does not flip the prediction\n   A 1-bit predictor mispredicts twice per loop execution (exit and re-entry); 2-bit only once.VI: Dự đoán 1 bit sai hai lần mỗi lần chạy vòng lặp (thoát và vào lại); 2 bit chỉ sai một lần.\n\n4. A branch target buffer (BTB) stores …Bộ đệm đích rẽ nhánh (BTB) lưu …\n   Answer: d) the predicted target addresses of recently executed branches\n   Knowing the target early lets the fetch stage redirect immediately.VI: Biết đích sớm cho phép tầng nạp chuyển hướng ngay.\n\n5. “Always predict backward branches taken” is an example of …“Luôn dự đoán nhánh lùi là nhảy” là ví dụ của …\n   Answer: a) static prediction\n   Backward branches are usually loops.VI: Nhánh lùi thường là vòng lặp.\n"
+          "code": "# Prediction 1 — Why predict branches, and how — answer key\n\n1. Why does a deep pipeline need branch prediction?Vì sao pipeline sâu cần dự đoán rẽ nhánh?\n   Answer: c) Without it the front end stalls until the branch is resolved\n   The penalty grows with the number of stages between fetch and branch resolution.VI: Phạt tăng theo số tầng giữa nạp lệnh và lúc nhánh được xác định.\n\n2. A 2-bit saturating counter predicts “taken” when its value is …Bộ đếm bão hoà 2 bit dự đoán “nhảy” khi giá trị là …\n   Answer: d) 2 or 3\n   00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken.VI: 00 chắc chắn không nhảy, 01 yếu không nhảy, 10 yếu nhảy, 11 chắc chắn nhảy.\n\n3. Why is a 2-bit predictor better than a 1-bit one for loops?Vì sao bộ dự đoán 2 bit tốt hơn 1 bit cho vòng lặp?\n   Answer: d) A single exception (loop exit) does not flip the prediction\n   A 1-bit predictor mispredicts twice per loop execution (exit and re-entry); 2-bit only once.VI: Dự đoán 1 bit sai hai lần mỗi lần chạy vòng lặp (thoát và vào lại); 2 bit chỉ sai một lần.\n\n4. A branch target buffer (BTB) stores …Bộ đệm đích rẽ nhánh (BTB) lưu …\n   Answer: d) the predicted target addresses of recently executed branches\n   Knowing the target early lets the fetch stage redirect immediately.VI: Biết đích sớm cho phép tầng nạp chuyển hướng ngay.\n\n5. “Always predict backward branches taken” is an example of …“Luôn dự đoán nhánh lùi là nhảy” là ví dụ của …\n   Answer: a) static prediction\n   Backward branches are usually loops.VI: Nhánh lùi thường là vòng lặp.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Without it the front end stalls for many cycles until the branch is resolved</p><p>The penalty grows with the number of stages between fetch and branch resolution.</p><p><i>VI: Phạt tăng theo số tầng giữa nạp lệnh và lúc nhánh được xác định.</i></p></li><li><p><b>d)</b> 2 or 3</p><p>00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken.</p><p><i>VI: 00 chắc chắn không nhảy, 01 yếu không nhảy, 10 yếu nhảy, 11 chắc chắn nhảy.</i></p></li><li><p><b>d)</b> A single exception (loop exit) does not flip the prediction</p><p>A 1-bit predictor mispredicts twice per loop execution (exit and re-entry); 2-bit only once.</p><p><i>VI: Dự đoán 1 bit sai hai lần mỗi lần chạy vòng lặp (thoát và vào lại); 2 bit chỉ sai một lần.</i></p></li><li><p><b>d)</b> the predicted target addresses of recently executed branches</p><p>Knowing the target early lets the fetch stage redirect immediately.</p><p><i>VI: Biết đích sớm cho phép tầng nạp chuyển hướng ngay.</i></p></li><li><p><b>a)</b> static prediction</p><p>Backward branches are usually loops.</p><p><i>VI: Nhánh lùi thường là vòng lặp.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Without it the front end stalls until the branch is resolved</p><p>The penalty grows with the number of stages between fetch and branch resolution.</p><p><i>VI: Phạt tăng theo số tầng giữa nạp lệnh và lúc nhánh được xác định.</i></p></li><li><p><b>d)</b> 2 or 3</p><p>00 strongly not taken, 01 weakly not taken, 10 weakly taken, 11 strongly taken.</p><p><i>VI: 00 chắc chắn không nhảy, 01 yếu không nhảy, 10 yếu nhảy, 11 chắc chắn nhảy.</i></p></li><li><p><b>d)</b> A single exception (loop exit) does not flip the prediction</p><p>A 1-bit predictor mispredicts twice per loop execution (exit and re-entry); 2-bit only once.</p><p><i>VI: Dự đoán 1 bit sai hai lần mỗi lần chạy vòng lặp (thoát và vào lại); 2 bit chỉ sai một lần.</i></p></li><li><p><b>d)</b> the predicted target addresses of recently executed branches</p><p>Knowing the target early lets the fetch stage redirect immediately.</p><p><i>VI: Biết đích sớm cho phép tầng nạp chuyển hướng ngay.</i></p></li><li><p><b>a)</b> static prediction</p><p>Backward branches are usually loops.</p><p><i>VI: Nhánh lùi thường là vòng lặp.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -62,19 +62,19 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Branches use more cache lines than other instructions of the same size"
+                "noiDung": "Branches lower the clock rate of the whole pipeline for many cycles"
               },
               {
                 "ma": "b",
-                "noiDung": "Branches write their results into registers only at the last stage"
+                "noiDung": "Branches use more cache lines than other instructions of the same size"
               },
               {
                 "ma": "c",
-                "noiDung": "Without it the front end stalls for many cycles until the branch is resolved"
+                "noiDung": "Without it the front end stalls until the branch is resolved"
               },
               {
                 "ma": "d",
-                "noiDung": "Branches lower the clock rate of the whole pipeline for many cycles"
+                "noiDung": "Branches write their results into registers only at the last stage"
               }
             ],
             "dapAn": [

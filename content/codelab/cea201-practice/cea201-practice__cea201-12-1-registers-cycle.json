@@ -40,17 +40,17 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Processor 1 — Registers, ALU, control unit and the PSW\n\nAnswer in the answer panel (no code needed).\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n3. The control unit …Đơn vị điều khiển …\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n5. An instruction cycle with indirect addressing consists of …Chu trình lệnh có định địa chỉ gián tiếp gồm …\n"
+          "code": "# Processor 1 — Registers, ALU, control unit and the PSW\n\nAnswer in the answer panel (no code needed).\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n3. The control unit …Đơn vị điều khiển …\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n5. An instruction cycle with indirect addressing runs through which sequence of subcycles?Chu trình lệnh có định địa chỉ gián tiếp đi qua chuỗi chu kỳ con nào?\n"
         }
       ],
       "solutionCodeJson": [
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Processor 1 — Registers, ALU, control unit and the PSW — answer key\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n   Answer: c) User-visible registers (general purpose, data, address, condition codes)\n   MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.\n\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n   Answer: a) condition codes, interrupt enable and mode bits\n   Flags such as zero, sign, carry, overflow and the supervisor/user mode.VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.\n\n3. The control unit …Đơn vị điều khiển …\n   Answer: b) generates the control signals that sequence the micro-operations\n   It decodes the opcode and activates the right data paths.VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.\n\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n   Answer: d) registers only; only load and store touch memory\n   This keeps instructions simple and pipeline-friendly.VI: Giữ lệnh đơn giản và hợp với pipeline.\n\n5. An instruction cycle with indirect addressing consists of …Chu trình lệnh có định địa chỉ gián tiếp gồm …\n   Answer: b) fetch, indirect, execute (and interrupt)\n   The indirect cycle reads the pointer before the operand.VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.\n"
+          "code": "# Processor 1 — Registers, ALU, control unit and the PSW — answer key\n\n1. Which registers can the programmer name directly in instructions?Thanh ghi nào lập trình viên gọi tên trực tiếp được trong lệnh?\n   Answer: c) User-visible registers (general purpose, data, address, condition codes)\n   MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.\n\n2. The program status word (PSW) typically holds …Từ trạng thái chương trình (PSW) thường chứa …\n   Answer: a) condition codes, interrupt enable and mode bits\n   Flags such as zero, sign, carry, overflow and the supervisor/user mode.VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.\n\n3. The control unit …Đơn vị điều khiển …\n   Answer: b) generates the control signals that sequence the micro-operations\n   It decodes the opcode and activates the right data paths.VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.\n\n4. In a load/store (RISC-style) machine, arithmetic instructions operate on …Trong máy load/store (kiểu RISC), lệnh số học thao tác trên …\n   Answer: d) registers only; only load and store touch memory\n   This keeps instructions simple and pipeline-friendly.VI: Giữ lệnh đơn giản và hợp với pipeline.\n\n5. An instruction cycle with indirect addressing runs through which sequence of subcycles?Chu trình lệnh có định địa chỉ gián tiếp đi qua chuỗi chu kỳ con nào?\n   Answer: a) fetch, indirect, execute (and interrupt)\n   The indirect cycle reads the pointer before the operand.VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> User-visible registers (general purpose, data, address, condition codes)</p><p>MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).</p><p><i>VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.</i></p></li><li><p><b>a)</b> condition codes, interrupt enable and mode bits</p><p>Flags such as zero, sign, carry, overflow and the supervisor/user mode.</p><p><i>VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.</i></p></li><li><p><b>b)</b> generates the control signals that sequence the micro-operations</p><p>It decodes the opcode and activates the right data paths.</p><p><i>VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.</i></p></li><li><p><b>d)</b> registers only; only load and store touch memory</p><p>This keeps instructions simple and pipeline-friendly.</p><p><i>VI: Giữ lệnh đơn giản và hợp với pipeline.</i></p></li><li><p><b>b)</b> fetch, indirect, execute (and interrupt)</p><p>The indirect cycle reads the pointer before the operand.</p><p><i>VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> User-visible registers (general purpose, data, address, condition codes)</p><p>MAR, MBR, IR and PC-update logic are control/status registers hidden from the programmer (the PC is visible indirectly).</p><p><i>VI: MAR, MBR, IR là thanh ghi điều khiển ẩn với lập trình viên.</i></p></li><li><p><b>a)</b> condition codes, interrupt enable and mode bits</p><p>Flags such as zero, sign, carry, overflow and the supervisor/user mode.</p><p><i>VI: Các cờ như zero, dấu, nhớ, tràn và chế độ giám sát/người dùng.</i></p></li><li><p><b>b)</b> generates the control signals that sequence the micro-operations</p><p>It decodes the opcode and activates the right data paths.</p><p><i>VI: Nó giải mã opcode và kích hoạt đường dữ liệu phù hợp.</i></p></li><li><p><b>d)</b> registers only; only load and store touch memory</p><p>This keeps instructions simple and pipeline-friendly.</p><p><i>VI: Giữ lệnh đơn giản và hợp với pipeline.</i></p></li><li><p><b>a)</b> fetch, indirect, execute (and interrupt)</p><p>The indirect cycle reads the pointer before the operand.</p><p><i>VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -163,27 +163,27 @@
           },
           {
             "ma": "c5",
-            "de": "<p>An instruction cycle with indirect addressing consists of …</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu trình lệnh có định địa chỉ gián tiếp gồm …</i></p>",
+            "de": "<p>An instruction cycle with indirect addressing runs through which sequence of subcycles?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chu trình lệnh có định địa chỉ gián tiếp đi qua chuỗi chu kỳ con nào?</i></p>",
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "indirect only"
-              },
-              {
-                "ma": "b",
                 "noiDung": "fetch, indirect, execute (and interrupt)"
               },
               {
+                "ma": "b",
+                "noiDung": "fetch, execute, indirect (and interrupt)"
+              },
+              {
                 "ma": "c",
-                "noiDung": "only fetch and interrupt"
+                "noiDung": "indirect, fetch, execute (and interrupt)"
               },
               {
                 "ma": "d",
-                "noiDung": "only execute"
+                "noiDung": "fetch, interrupt, indirect (and execute)"
               }
             ],
             "dapAn": [
-              "b"
+              "a"
             ],
             "giaiThich": "<p>The indirect cycle reads the pointer before the operand.</p><p><i>VI: Chu kỳ gián tiếp đọc con trỏ trước khi đọc toán hạng.</i></p>"
           }

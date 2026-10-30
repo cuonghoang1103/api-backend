@@ -48,10 +48,10 @@
         {
           "name": "answers.md",
           "language": "text",
-          "code": "# Performance 1 — Clock, CPI, instruction count: who controls what? — answer key\n\n1. Which factor of T = IC × CPI / f is mainly decided by the compiler and the ISA?Thừa số nào của T = IC × CPI / f chủ yếu do trình biên dịch và ISA quyết định?\n   Answer: d) IC (instruction count)\n   IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.\n\n2. A faster clock always makes a program run proportionally faster.Clock nhanh hơn luôn làm chương trình chạy nhanh tỉ lệ thuận.\n   Answer: d) False: CPI and memory stalls may grow, and IC does not change\n   T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.\n\n3. Why can MIPS be a misleading way to compare two different ISAs?Vì sao MIPS có thể gây hiểu lầm khi so sánh hai ISA khác nhau?\n   Answer: b) Instructions of different ISAs do different amounts of work\n   One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.\n\n4. The best way to compare the performance of two computers for your workload is …Cách tốt nhất để so sánh hiệu năng hai máy cho khối lượng công việc của bạn là …\n   Answer: b) to run your real programs (or a benchmark suite that represents them) and compare execution time\n   Execution time of representative programs is the only consistent measure.VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.\n\n5. Which change lowers CPI without changing the ISA?Thay đổi nào làm giảm CPI mà không đổi ISA?\n   Answer: c) A deeper pipeline with better branch prediction and a larger cache\n   CPI is an organization property: caches, pipelining and prediction reduce stall cycles.VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.\n"
+          "code": "# Performance 1 — Clock, CPI, instruction count: who controls what? — answer key\n\n1. Which factor of T = IC × CPI / f is mainly decided by the compiler and the ISA?Thừa số nào của T = IC × CPI / f chủ yếu do trình biên dịch và ISA quyết định?\n   Answer: d) IC (instruction count)\n   IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.\n\n2. A faster clock always makes a program run proportionally faster.Clock nhanh hơn luôn làm chương trình chạy nhanh tỉ lệ thuận.\n   Answer: a) False: CPI and memory stalls may grow, and IC does not change\n   T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.\n\n3. Why can MIPS be a misleading way to compare two different ISAs?Vì sao MIPS có thể gây hiểu lầm khi so sánh hai ISA khác nhau?\n   Answer: b) Instructions of different ISAs do different amounts of work\n   One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.\n\n4. The best way to compare the performance of two computers for your workload is …Cách tốt nhất để so sánh hiệu năng hai máy cho khối lượng công việc của bạn là …\n   Answer: d) to run your real programs (or a representative benchmark) and compare execution time\n   Execution time of representative programs is the only consistent measure.VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.\n\n5. Which change lowers CPI without changing the ISA?Thay đổi nào làm giảm CPI mà không đổi ISA?\n   Answer: d) Better branch prediction and a larger cache\n   CPI is an organization property: caches, pipelining and prediction reduce stall cycles.VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.\n"
         }
       ],
-      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> IC (instruction count)</p><p>IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.</p><p><i>VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.</i></p></li><li><p><b>d)</b> False: CPI and memory stalls may grow, and IC does not change</p><p>T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.</p><p><i>VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.</i></p></li><li><p><b>b)</b> Instructions of different ISAs do different amounts of work</p><p>One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.</p><p><i>VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.</i></p></li><li><p><b>b)</b> to run your real programs (or a benchmark suite that represents them) and compare execution time</p><p>Execution time of representative programs is the only consistent measure.</p><p><i>VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.</i></p></li><li><p><b>c)</b> A deeper pipeline with better branch prediction and a larger cache</p><p>CPI is an organization property: caches, pipelining and prediction reduce stall cycles.</p><p><i>VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.</i></p></li></ol>",
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> IC (instruction count)</p><p>IC depends on the ISA and on how well the compiler uses it; f depends on the technology; CPI on the organization.</p><p><i>VI: IC phụ thuộc ISA và chất lượng trình biên dịch; f phụ thuộc công nghệ; CPI phụ thuộc tổ chức CPU.</i></p></li><li><p><b>a)</b> False: CPI and memory stalls may grow, and IC does not change</p><p>T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.</p><p><i>VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.</i></p></li><li><p><b>b)</b> Instructions of different ISAs do different amounts of work</p><p>One CISC instruction may do the work of several RISC instructions, so a higher MIPS rating need not mean a shorter run time.</p><p><i>VI: Một lệnh CISC có thể làm việc của vài lệnh RISC, nên MIPS cao chưa chắc chạy ngắn hơn.</i></p></li><li><p><b>d)</b> to run your real programs (or a representative benchmark) and compare execution time</p><p>Execution time of representative programs is the only consistent measure.</p><p><i>VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.</i></p></li><li><p><b>d)</b> Better branch prediction and a larger cache</p><p>CPI is an organization property: caches, pipelining and prediction reduce stall cycles.</p><p><i>VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.</i></p></li></ol>",
       "solutionExplanationHtmlVi": null,
       "diagramMermaid": null,
       "referenceUrl": null,
@@ -90,23 +90,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "True, but only for integer programs"
+                "noiDung": "False: CPI and memory stalls may grow, and IC does not change"
               },
               {
                 "ma": "b",
-                "noiDung": "True: T is inversely proportional to f in every case"
+                "noiDung": "True, but only for integer programs"
               },
               {
                 "ma": "c",
-                "noiDung": "False: clock rate has no influence on T"
+                "noiDung": "True: T is inversely proportional to f, in every program and machine"
               },
               {
                 "ma": "d",
-                "noiDung": "False: CPI and memory stalls may grow, and IC does not change"
+                "noiDung": "False: clock rate has no influence on T"
               }
             ],
             "dapAn": [
-              "d"
+              "a"
             ],
             "giaiThich": "<p>T ∝ 1/f only if IC and CPI stay fixed; memory does not speed up with the clock.</p><p><i>VI: T ∝ 1/f chỉ khi IC và CPI giữ nguyên; bộ nhớ không nhanh lên theo clock.</i></p>"
           },
@@ -116,7 +116,7 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "MIPS counts only floating-point operations"
+                "noiDung": "MIPS is always larger for CISC machines, whatever the program"
               },
               {
                 "ma": "b",
@@ -124,11 +124,11 @@
               },
               {
                 "ma": "c",
-                "noiDung": "MIPS is always larger for CISC"
+                "noiDung": "MIPS ignores the clock rate of the processor"
               },
               {
                 "ma": "d",
-                "noiDung": "MIPS ignores the clock rate"
+                "noiDung": "MIPS counts only floating-point operations"
               }
             ],
             "dapAn": [
@@ -142,11 +142,11 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "to compare the clock rates, because execution time is inversely proportional to f"
+                "noiDung": "to compare the MIPS ratings published by each manufacturer for the two machines"
               },
               {
                 "ma": "b",
-                "noiDung": "to run your real programs (or a benchmark suite that represents them) and compare execution time"
+                "noiDung": "to compare the clock rates, because execution time is inversely proportional to f"
               },
               {
                 "ma": "c",
@@ -154,11 +154,11 @@
               },
               {
                 "ma": "d",
-                "noiDung": "to compare the MIPS ratings published by each manufacturer for the two machines"
+                "noiDung": "to run your real programs (or a representative benchmark) and compare execution time"
               }
             ],
             "dapAn": [
-              "b"
+              "d"
             ],
             "giaiThich": "<p>Execution time of representative programs is the only consistent measure.</p><p><i>VI: Thời gian chạy của các chương trình đại diện là thước đo nhất quán duy nhất.</i></p>"
           },
@@ -168,23 +168,23 @@
             "luaChon": [
               {
                 "ma": "a",
-                "noiDung": "Using a bigger hard disk and a wider system bus"
+                "noiDung": "Raising the clock rate while the memory stays the same"
               },
               {
                 "ma": "b",
-                "noiDung": "Lowering the clock rate and compiling with more loops"
+                "noiDung": "Adding more complex instructions to the instruction set"
               },
               {
                 "ma": "c",
-                "noiDung": "A deeper pipeline with better branch prediction and a larger cache"
+                "noiDung": "Using a bigger hard disk and a faster network card"
               },
               {
                 "ma": "d",
-                "noiDung": "Adding more complex instructions to the instruction set"
+                "noiDung": "Better branch prediction and a larger cache"
               }
             ],
             "dapAn": [
-              "c"
+              "d"
             ],
             "giaiThich": "<p>CPI is an organization property: caches, pipelining and prediction reduce stall cycles.</p><p><i>VI: CPI là thuộc tính tổ chức: cache, pipeline và dự đoán rẽ nhánh giảm chu kỳ chờ.</i></p>"
           }

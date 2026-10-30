@@ -670,6 +670,12 @@
       "description": "Đề luyện PE 85 phút dạng SP25 Shopping System: giỏ vé toàn cục Context + useReducer + localStorage, giới hạn vé, thanh toán POST/PATCH, lịch sử đơn tổng tính từ dòng."
     },
     {
+      "slug": "fer202-13-pe-4-thi-thu-cinema",
+      "name": "PE thi thử 30/10 — Cinema Booking (đề của cô)",
+      "level": "ADVANCED",
+      "description": "Đề thi thử PE cô cho trên lớp 30/10/2026, chép nguyên văn 100% (EN + 4 ảnh mẫu) kèm bản dịch VI: Router v6 + redirect *, ?status / ?movie_id, thể loại bằng Set, tìm \"bắt đầu bằng\" + lọc thể loại, Promise.all, radio suất chiếu, sơ đồ ghế màu + tổng VIP ×1.2, POST /tickets từng ghế. Thang 10, chấm tự động."
+    },
+    {
       "slug": "fer202-a1-1-performance",
       "name": "14.1 Performance (advanced)",
       "level": "ADVANCED",

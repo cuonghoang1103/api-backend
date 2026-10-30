@@ -1,0 +1,451 @@
+{
+  "movies": [
+    {
+      "id": "65fa00000000000000000001",
+      "title": "Avengers",
+      "duration": 180,
+      "status": "NOW_SHOWING",
+      "genre": [
+        "action",
+        "sci-fi"
+      ],
+      "description": "Superheroes assemble to save the world."
+    },
+    {
+      "id": "65fa00000000000000000002",
+      "title": "Avatar",
+      "duration": 185,
+      "status": "NOW_SHOWING",
+      "genre": [
+        "adventure",
+        "fantasy"
+      ],
+      "description": "A marine on an alien planet."
+    },
+    {
+      "id": "65fa00000000000000000003",
+      "title": "Inception",
+      "duration": 160,
+      "status": "NOW_SHOWING",
+      "genre": [
+        "thriller",
+        "sci-fi"
+      ],
+      "description": "Dream within a dream."
+    },
+    {
+      "id": "65fa00000000000000000004",
+      "title": "Titanic",
+      "duration": 195,
+      "status": "STOPPED",
+      "genre": [
+        "romance",
+        "drama"
+      ],
+      "description": "A tragic love story on a sinking ship."
+    },
+    {
+      "id": "65fa00000000000000000005",
+      "title": "Spider-Man",
+      "duration": 150,
+      "status": "NOW_SHOWING",
+      "genre": [
+        "action",
+        "adventure"
+      ],
+      "description": "Teenager with spider powers."
+    },
+    {
+      "id": "65fa00000000000000000006",
+      "title": "Old Movie",
+      "duration": 120,
+      "status": "STOPPED",
+      "genre": [
+        "drama"
+      ],
+      "description": "An old stopped movie for edge case."
+    }
+  ],
+  "rooms": [
+    {
+      "id": "65fb00000000000000000001",
+      "roomName": "Room A",
+      "capacity": 5,
+      "seats": [
+        {
+          "id": "A1",
+          "type": "VIP"
+        },
+        {
+          "id": "A2",
+          "type": "VIP"
+        },
+        {
+          "id": "A3",
+          "type": "VIP"
+        },
+        {
+          "id": "B1",
+          "type": "NORMAL"
+        },
+        {
+          "id": "B2",
+          "type": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "65fb00000000000000000002",
+      "roomName": "Room B",
+      "capacity": 4,
+      "seats": [
+        {
+          "id": "A1",
+          "type": "VIP"
+        },
+        {
+          "id": "A2",
+          "type": "NORMAL"
+        },
+        {
+          "id": "B1",
+          "type": "NORMAL"
+        },
+        {
+          "id": "B2",
+          "type": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "65fb00000000000000000003",
+      "roomName": "Room C",
+      "capacity": 3,
+      "seats": [
+        {
+          "id": "A1",
+          "type": "VIP"
+        },
+        {
+          "id": "A2",
+          "type": "VIP"
+        },
+        {
+          "id": "B1",
+          "type": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "65fb00000000000000000004",
+      "roomName": "Room D",
+      "capacity": 2,
+      "seats": [
+        {
+          "id": "A1",
+          "type": "NORMAL"
+        },
+        {
+          "id": "A2",
+          "type": "NORMAL"
+        }
+      ]
+    },
+    {
+      "id": "65fb00000000000000000005",
+      "roomName": "Room E",
+      "capacity": 6,
+      "seats": [
+        {
+          "id": "A1",
+          "type": "VIP"
+        },
+        {
+          "id": "A2",
+          "type": "VIP"
+        },
+        {
+          "id": "A3",
+          "type": "VIP"
+        },
+        {
+          "id": "B1",
+          "type": "NORMAL"
+        },
+        {
+          "id": "B2",
+          "type": "NORMAL"
+        },
+        {
+          "id": "B3",
+          "type": "NORMAL"
+        }
+      ]
+    }
+  ],
+  "showtimes": [
+    {
+      "id": "65fc00000000000000000001",
+      "movieId": "65fa00000000000000000001",
+      "roomId": "65fb00000000000000000001",
+      "startTime": "2026-03-10T18:30",
+      "endTime": "2026-03-10T21:30",
+      "price": 90000
+    },
+    {
+      "id": "65fc00000000000000000002",
+      "movieId": "65fa00000000000000000001",
+      "roomId": "65fb00000000000000000002",
+      "startTime": "2026-03-11T18:00",
+      "endTime": "2026-03-11T21:00",
+      "price": 85000
+    },
+    {
+      "id": "65fc00000000000000000003",
+      "movieId": "65fa00000000000000000002",
+      "roomId": "65fb00000000000000000003",
+      "startTime": "2026-04-01T14:00",
+      "endTime": "2026-04-01T17:05",
+      "price": 100000
+    },
+    {
+      "id": "65fc00000000000000000004",
+      "movieId": "65fa00000000000000000003",
+      "roomId": "65fb00000000000000000001",
+      "startTime": "2026-03-12T20:00",
+      "endTime": "2026-03-12T22:40",
+      "price": 95000
+    },
+    {
+      "id": "65fc00000000000000000005",
+      "movieId": "65fa00000000000000000005",
+      "roomId": "65fb00000000000000000004",
+      "startTime": "2026-03-15T19:00",
+      "endTime": "2026-03-15T21:30",
+      "price": 80000
+    },
+    {
+      "id": "65fc00000000000000000006",
+      "movieId": "65fa00000000000000000005",
+      "roomId": "65fb00000000000000000005",
+      "startTime": "2026-03-16T19:00",
+      "endTime": "2026-03-16T21:30",
+      "price": 80000
+    },
+    {
+      "id": "65fc00000000000000000007",
+      "movieId": "65fa00000000000000000002",
+      "roomId": "65fb00000000000000000001",
+      "startTime": "2026-04-02T18:30",
+      "endTime": "2026-04-02T21:35",
+      "price": 100000
+    },
+    {
+      "id": "65fc00000000000000000008",
+      "movieId": "65fa00000000000000000001",
+      "roomId": "65fb00000000000000000001",
+      "startTime": "2026-03-10T20:00",
+      "endTime": "2026-03-10T23:00",
+      "price": 90000
+    }
+  ],
+  "tickets": [
+    {
+      "id": "65fe00000000000000000001",
+      "showTimeId": "65fc00000000000000000001",
+      "seatId": "A1",
+      "userId": "65fd00000000000000000001",
+      "price": 90000,
+      "status": "paid",
+      "bookedAt": "2026-03-01T10:00",
+      "paymentMethod": "credit_card"
+    },
+    {
+      "id": "65fe00000000000000000002",
+      "showTimeId": "65fc00000000000000000001",
+      "seatId": "A2",
+      "userId": "65fd00000000000000000002",
+      "price": 90000,
+      "status": "booked",
+      "bookedAt": "2026-03-02T11:00",
+      "paymentMethod": null
+    },
+    {
+      "id": "65fe00000000000000000003",
+      "showTimeId": "65fc00000000000000000003",
+      "seatId": "A1",
+      "userId": "65fd00000000000000000001",
+      "price": 100000,
+      "status": "paid",
+      "bookedAt": "2026-03-20T12:00",
+      "paymentMethod": "cash"
+    },
+    {
+      "id": "65fe00000000000000000004",
+      "showTimeId": "65fc00000000000000000003",
+      "seatId": "A2",
+      "userId": "65fd00000000000000000003",
+      "price": 100000,
+      "status": "canceled",
+      "bookedAt": "2026-03-21T13:00",
+      "paymentMethod": null
+    },
+    {
+      "id": "65fe00000000000000000005",
+      "showTimeId": "65fc00000000000000000004",
+      "seatId": "B1",
+      "userId": "65fd00000000000000000002",
+      "price": 95000,
+      "status": "paid",
+      "bookedAt": "2026-03-05T14:00",
+      "paymentMethod": "credit_card"
+    },
+    {
+      "id": "65fe00000000000000000006",
+      "showTimeId": "65fc00000000000000000001",
+      "seatId": "A3",
+      "userId": "65fd00000000000000000003",
+      "price": 90000,
+      "status": "paid",
+      "bookedAt": "2026-03-03T15:00",
+      "paymentMethod": "cash"
+    },
+    {
+      "id": "65fe00000000000000000007",
+      "showTimeId": "65fc00000000000000000007",
+      "seatId": "B1",
+      "userId": "65fd00000000000000000001",
+      "price": 100000,
+      "status": "booked",
+      "bookedAt": "2026-03-25T16:00",
+      "paymentMethod": null
+    },
+    {
+      "id": "65fe00000000000000000008",
+      "showTimeId": "65fc00000000000000000001",
+      "seatId": "B1",
+      "userId": "65fd00000000000000000003",
+      "price": 90000,
+      "status": "paid",
+      "bookedAt": "2026-03-04T16:00",
+      "paymentMethod": "cash"
+    },
+    {
+      "showTimeId": "65fc00000000000000000008",
+      "seatId": "A2",
+      "userId": "65fd00000000000000000001",
+      "price": 108000,
+      "status": "booked",
+      "bookedAt": "2026-03-21T09:36:23.008Z",
+      "paymentMethod": "cash",
+      "id": "0seziAc"
+    },
+    {
+      "showTimeId": "65fc00000000000000000008",
+      "seatId": "B1",
+      "userId": "65fd00000000000000000001",
+      "price": 90000,
+      "status": "booked",
+      "bookedAt": "2026-03-21T09:36:23.037Z",
+      "paymentMethod": "cash",
+      "id": "kxkjq1I"
+    },
+    {
+      "showTimeId": "65fc00000000000000000008",
+      "seatId": "A1",
+      "userId": "65fd00000000000000000001",
+      "price": 108000,
+      "status": "booked",
+      "bookedAt": "2026-03-21T09:59:39.399Z",
+      "paymentMethod": "cash",
+      "id": "8oyjhOB"
+    },
+    {
+      "showTimeId": "65fc00000000000000000008",
+      "seatId": "A3",
+      "userId": "65fd00000000000000000001",
+      "price": 108000,
+      "status": "booked",
+      "bookedAt": "2026-03-21T09:59:39.432Z",
+      "paymentMethod": "cash",
+      "id": "WZmEqzq"
+    },
+    {
+      "id": "c395",
+      "showTimeId": "65fc00000000000000000002",
+      "seatId": "A1",
+      "userId": "65fd00000000000000000003",
+      "price": 102000,
+      "status": "booked",
+      "bookedAt": "2026-03-21T10:20:38.700Z",
+      "paymentMethod": "cash"
+    },
+    {
+      "id": "ec16",
+      "showTimeId": "65fc00000000000000000002",
+      "seatId": "A2",
+      "userId": "65fd00000000000000000003",
+      "price": 85000,
+      "status": "booked",
+      "bookedAt": "2026-03-21T10:20:44.894Z",
+      "paymentMethod": "cash"
+    }
+  ],
+  "users": [
+    {
+      "id": "65fd00000000000000000001",
+      "name": "Nguyen Van A",
+      "role": "customer",
+      "email": "a@example.com",
+      "password": "pass123",
+      "phone": "0123456789",
+      "access_key": "cust_key_a"
+    },
+    {
+      "id": "65fd00000000000000000002",
+      "name": "Tran Thi B",
+      "role": "customer",
+      "email": "b@example.com",
+      "password": "pass456",
+      "phone": "0987654321",
+      "access_key": "cust_key_b"
+    },
+    {
+      "id": "65fd00000000000000000003",
+      "name": "Le Van C",
+      "role": "customer",
+      "email": "c@example.com",
+      "password": "pass789",
+      "phone": "0112233445",
+      "access_key": "cust_key_c"
+    },
+    {
+      "id": "65fd00000000000000000004",
+      "name": "Admin One",
+      "role": "admin",
+      "email": "admin1@example.com",
+      "password": "adminpass1",
+      "phone": "0998877665",
+      "access_key": "admin_key_1"
+    },
+    {
+      "id": "65fd00000000000000000005",
+      "name": "Admin Two",
+      "role": "admin",
+      "email": "admin2@example.com",
+      "password": "adminpass2",
+      "phone": "0887766554",
+      "access_key": "admin_key_2"
+    },
+    {
+      "id": "65fd00000000000000000006",
+      "name": "Staff One",
+      "role": "staff",
+      "email": "staff@example.com",
+      "password": "staffpass",
+      "phone": "0776655443",
+      "access_key": "staff_key"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

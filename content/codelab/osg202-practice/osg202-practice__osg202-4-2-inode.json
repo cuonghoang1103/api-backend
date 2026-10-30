@@ -1,0 +1,935 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-4-2-inode",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-4-2-inode"
+  },
+  "exercises": [
+    {
+      "title": "I-node 1 — Maximum file size of a UNIX i-node",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "i-node",
+        "indirect blocks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>An i-node has <b>d</b> direct pointers, then (up to the given level) a single-, double- and triple-indirect pointer. A pointer takes <b>P</b> bytes and a block is <b>B</b> bytes. Give the maximum number of DATA blocks a file can have and the maximum file size in KB (1 KB = 1024 B).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một i-node có <b>d</b> con trỏ trực tiếp, rồi (tới mức cho trước) con trỏ gián tiếp đơn, đôi, ba. Mỗi con trỏ <b>P</b> byte, mỗi khối <b>B</b> byte. Cho số khối DỮ LIỆU tối đa của một tệp và kích thước tệp tối đa theo KB (1 KB = 1024 B).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "k = B / P pointers fit in one indirect block.",
+        "Blocks = d + k + k² + k³ (only up to the allowed level)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 1 — Maximum file size of a UNIX i-node\n\nAnswer in the answer panel (no code needed).\n\n1. LimitsGiới hạn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 1 — Maximum file size of a UNIX i-node — answer key\n\n1. LimitsGiới hạn\n   - c0.n: 268\n   - c0.k: 268\n   - c1.n: 65804\n   - c1.k: 65804\n   - c2.n: 16843020\n   - c2.k: 16843020\n   - c3.n: 1049612\n   - c3.k: 4198448\n   - c4.n: 262666\n   - c4.k: 1050664\n   B=1K,P=4,d=12,single: 268 blocks = 268 KB; B=1K,P=4,d=12,double: 65804 blocks = 65804 KB; B=1K,P=4,d=12,triple: 16843020 blocks = 16843020 KB; B=4K,P=4,d=12,double: 1049612 blocks = 4198448 KB; B=4K,P=8,d=10,double: 262666 blocks = 1050664 KB. A block holds k = B/P pointers; single indirect adds k blocks, double k², triple k³.VI: B=1K,P=4,d=12,single: 268 khối = 268 KB; B=1K,P=4,d=12,double: 65804 khối = 65804 KB; B=1K,P=4,d=12,triple: 16843020 khối = 16843020 KB; B=4K,P=4,d=12,double: 1049612 khối = 4198448 KB; B=4K,P=8,d=10,double: 262666 khối = 1050664 KB. Một khối chứa k = B/P con trỏ; gián tiếp đơn thêm k khối, đôi k², ba k³.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>268 · 65804 · 16843020 · 1049612 · 262666 blocks.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Limits</p><p style=\"opacity:.75;font-size:.92em\"><i>Giới hạn</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Configuration"
+              },
+              {
+                "ma": "n",
+                "ten": "Max data blocks"
+              },
+              {
+                "ma": "k",
+                "ten": "Max size (KB)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c0",
+                "o": {
+                  "c": "B = 1 KB, P = 4 B, 12 direct, up to single indirect"
+                }
+              },
+              {
+                "ma": "c1",
+                "o": {
+                  "c": "B = 1 KB, P = 4 B, 12 direct, up to double indirect"
+                }
+              },
+              {
+                "ma": "c2",
+                "o": {
+                  "c": "B = 1 KB, P = 4 B, 12 direct, up to triple indirect"
+                }
+              },
+              {
+                "ma": "c3",
+                "o": {
+                  "c": "B = 4 KB, P = 4 B, 12 direct, up to double indirect"
+                }
+              },
+              {
+                "ma": "c4",
+                "o": {
+                  "c": "B = 4 KB, P = 8 B, 10 direct, up to double indirect"
+                }
+              }
+            ],
+            "dapAn": {
+              "c0.n": "268",
+              "c0.k": "268",
+              "c1.n": "65804",
+              "c1.k": "65804",
+              "c2.n": "16843020",
+              "c2.k": "16843020",
+              "c3.n": "1049612",
+              "c3.k": "4198448",
+              "c4.n": "262666",
+              "c4.k": "1050664"
+            },
+            "giaiThich": "<p>B=1K,P=4,d=12,single: 268 blocks = 268 KB; B=1K,P=4,d=12,double: 65804 blocks = 65804 KB; B=1K,P=4,d=12,triple: 16843020 blocks = 16843020 KB; B=4K,P=4,d=12,double: 1049612 blocks = 4198448 KB; B=4K,P=8,d=10,double: 262666 blocks = 1050664 KB. A block holds k = B/P pointers; single indirect adds k blocks, double k², triple k³.</p><p><i>VI: B=1K,P=4,d=12,single: 268 khối = 268 KB; B=1K,P=4,d=12,double: 65804 khối = 65804 KB; B=1K,P=4,d=12,triple: 16843020 khối = 16843020 KB; B=4K,P=4,d=12,double: 1049612 khối = 4198448 KB; B=4K,P=8,d=10,double: 262666 khối = 1050664 KB. Một khối chứa k = B/P con trỏ; gián tiếp đơn thêm k khối, đôi k², ba k³.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the direct blocks."
+        },
+        {
+          "loi": "Using B instead of B/P as the fan-out."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "indirect block",
+          "vi": "khối gián tiếp: chứa con trỏ tới khối khác"
+        },
+        {
+          "en": "fan-out",
+          "vi": "số con trỏ trong một khối"
+        }
+      ]
+    },
+    {
+      "title": "I-node 2 — How many disk reads for one byte?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "i-node",
+        "indirect access cost"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>B = 1 KB, P = 4 bytes, 12 direct pointers, then single, double and triple indirect. The i-node of the open file is already in RAM and nothing else is cached. For the byte at the given offset give the level of indirection used (0 = direct … 3 = triple) and the number of DISK reads needed to fetch that byte (indirect blocks plus the data block).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>B = 1 KB, P = 4 byte, 12 con trỏ trực tiếp, rồi gián tiếp đơn, đôi, ba. I-node của tệp đang mở đã ở RAM và không có gì khác trong cache. Với byte ở vị trí cho trước, cho mức gián tiếp dùng (0 = trực tiếp … 3 = ba) và số lần đọc ĐĨA cần để lấy byte đó (khối gián tiếp cộng khối dữ liệu).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Block number = ⌊offset / B⌋.",
+        "Reads = indirection level + 1 (each level adds one pointer block to read)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 2 — How many disk reads for one byte?\n\nAnswer in the answer panel (no code needed).\n\n1. Indirection and readsMức gián tiếp và số lần đọc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 2 — How many disk reads for one byte? — answer key\n\n1. Indirection and readsMức gián tiếp và số lần đọc\n   - o5000.l: 0\n   - o5000.r: 1\n   - o20000.l: 1\n   - o20000.r: 2\n   - o300000.l: 2\n   - o300000.r: 3\n   - o100000000.l: 3\n   - o100000000.r: 4\n   - o11264.l: 0\n   - o11264.r: 1\n   - o12288.l: 1\n   - o12288.r: 2\n   5000: block 4 → level 0, 1 reads; 20000: block 19 → level 1, 2 reads; 300000: block 292 → level 2, 3 reads; 100000000: block 97656 → level 3, 4 reads; 11264: block 11 → level 0, 1 reads; 12288: block 12 → level 1, 2 reads. Blocks 0–11 are direct, 12–267 single indirect, 268–65803 double, then triple.VI: 5000: khối 4 → mức 0, 1 lần đọc; 20000: khối 19 → mức 1, 2 lần đọc; 300000: khối 292 → mức 2, 3 lần đọc; 100000000: khối 97656 → mức 3, 4 lần đọc; 11264: khối 11 → mức 0, 1 lần đọc; 12288: khối 12 → mức 1, 2 lần đọc. Khối 0–11 trực tiếp, 12–267 gián tiếp đơn, 268–65803 đôi, sau đó ba.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>0/1 · 1/2 · 2/3 · 3/4 · 0/1 · 1/2</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Indirection and reads</p><p style=\"opacity:.75;font-size:.92em\"><i>Mức gián tiếp và số lần đọc</i></p>",
+            "cot": [
+              {
+                "ma": "o",
+                "ten": "Byte offset"
+              },
+              {
+                "ma": "l",
+                "ten": "Indirection level"
+              },
+              {
+                "ma": "r",
+                "ten": "Disk reads"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "o5000",
+                "o": {
+                  "o": "5000"
+                }
+              },
+              {
+                "ma": "o20000",
+                "o": {
+                  "o": "20000"
+                }
+              },
+              {
+                "ma": "o300000",
+                "o": {
+                  "o": "300000"
+                }
+              },
+              {
+                "ma": "o100000000",
+                "o": {
+                  "o": "100000000"
+                }
+              },
+              {
+                "ma": "o11264",
+                "o": {
+                  "o": "11264"
+                }
+              },
+              {
+                "ma": "o12288",
+                "o": {
+                  "o": "12288"
+                }
+              }
+            ],
+            "dapAn": {
+              "o5000.l": "0",
+              "o5000.r": "1",
+              "o20000.l": "1",
+              "o20000.r": "2",
+              "o300000.l": "2",
+              "o300000.r": "3",
+              "o100000000.l": "3",
+              "o100000000.r": "4",
+              "o11264.l": "0",
+              "o11264.r": "1",
+              "o12288.l": "1",
+              "o12288.r": "2"
+            },
+            "giaiThich": "<p>5000: block 4 → level 0, 1 reads; 20000: block 19 → level 1, 2 reads; 300000: block 292 → level 2, 3 reads; 100000000: block 97656 → level 3, 4 reads; 11264: block 11 → level 0, 1 reads; 12288: block 12 → level 1, 2 reads. Blocks 0–11 are direct, 12–267 single indirect, 268–65803 double, then triple.</p><p><i>VI: 5000: khối 4 → mức 0, 1 lần đọc; 20000: khối 19 → mức 1, 2 lần đọc; 300000: khối 292 → mức 2, 3 lần đọc; 100000000: khối 97656 → mức 3, 4 lần đọc; 11264: khối 11 → mức 0, 1 lần đọc; 12288: khối 12 → mức 1, 2 lần đọc. Khối 0–11 trực tiếp, 12–267 gián tiếp đơn, 268–65803 đôi, sau đó ba.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the i-node read (it is already in RAM)."
+        },
+        {
+          "loi": "Using the offset instead of the block number to pick the level."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "direct block",
+          "vi": "khối trực tiếp"
+        }
+      ]
+    },
+    {
+      "title": "I-node 3 — Permissions in octal, symbolic form and umask",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "permissions",
+        "umask",
+        "octal modes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Convert between the symbolic form (<code>rwxr-x---</code>, 9 characters) and the octal mode, and compute the permissions of newly created files with a given <code>umask</code> (a new file starts from 666, a new directory from 777; the umask bits are removed).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đổi giữa dạng ký hiệu (<code>rwxr-x---</code>, 9 ký tự) và dạng bát phân, và tính quyền của tệp mới tạo với <code>umask</code> cho trước (tệp mới bắt đầu từ 666, thư mục mới từ 777; các bit của umask bị bỏ).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the three digits as binary rwx triples.",
+        "umask is a MASK of bits to clear: result = default AND NOT umask."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 3 — Permissions in octal, symbolic form and umask\n\nAnswer in the answer panel (no code needed).\n\n1. ConversionsChuyển đổi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 3 — Permissions in octal, symbolic form and umask — answer key\n\n1. ConversionsChuyển đổi\n   - s1.a: 755\n   - s2.a: 640\n   - s3.a: rwx------\n   - s4.a: rwxr-xr--\n   - s5.a: 644\n   - s6.a: 750\n   - s7.a: 600\n   Each digit is r=4 + w=2 + x=1 for owner, group, others. 755, 640, rwx------, rwxr-xr--; umask removes bits: 666 & ~022 = 644, 777 & ~027 = 750, 666 & ~077 = 600.VI: Mỗi chữ số là r=4 + w=2 + x=1 cho chủ, nhóm, người khác. 755, 640, rwx------, rwxr-xr--; umask bỏ bit: 666 & ~022 = 644, 777 & ~027 = 750, 666 & ~077 = 600.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>755 · 640 · rwx------ · rwxr-xr-- · 644 · 750 · 600.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Conversions</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuyển đổi</i></p>",
+            "cot": [
+              {
+                "ma": "q",
+                "ten": "Given"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "s1",
+                "o": {
+                  "q": "rwxr-xr-x → octal"
+                }
+              },
+              {
+                "ma": "s2",
+                "o": {
+                  "q": "rw-r----- → octal"
+                }
+              },
+              {
+                "ma": "s3",
+                "o": {
+                  "q": "700 → symbolic"
+                }
+              },
+              {
+                "ma": "s4",
+                "o": {
+                  "q": "754 → symbolic"
+                }
+              },
+              {
+                "ma": "s5",
+                "o": {
+                  "q": "New FILE with umask 022 → octal"
+                }
+              },
+              {
+                "ma": "s6",
+                "o": {
+                  "q": "New DIRECTORY with umask 027 → octal"
+                }
+              },
+              {
+                "ma": "s7",
+                "o": {
+                  "q": "New FILE with umask 077 → octal"
+                }
+              }
+            ],
+            "dapAn": {
+              "s1.a": "755",
+              "s2.a": "640",
+              "s3.a": "rwx------",
+              "s4.a": "rwxr-xr--",
+              "s5.a": "644",
+              "s6.a": "750",
+              "s7.a": "600"
+            },
+            "giaiThich": "<p>Each digit is r=4 + w=2 + x=1 for owner, group, others. 755, 640, rwx------, rwxr-xr--; umask removes bits: 666 & ~022 = 644, 777 & ~027 = 750, 666 & ~077 = 600.</p><p><i>VI: Mỗi chữ số là r=4 + w=2 + x=1 cho chủ, nhóm, người khác. 755, 640, rwx------, rwxr-xr--; umask bỏ bit: 666 & ~022 = 644, 777 & ~027 = 750, 666 & ~077 = 600.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Subtracting the umask arithmetically (666 − 027 would be wrong in general; use bit masking)."
+        },
+        {
+          "loi": "Starting a new file from 777 (files do not get execute permission by default)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "umask",
+          "vi": "mặt nạ quyền mặc định"
+        },
+        {
+          "en": "chmod",
+          "vi": "đổi quyền tệp"
+        }
+      ]
+    },
+    {
+      "title": "I-node 4 — Hard links, symbolic links and what an i-node stores",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "hard link",
+        "symlink",
+        "i-node"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions about links and i-nodes on a UNIX file system.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về liên kết và i-node trên hệ tệp UNIX.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The file name is a property of the directory, not of the file.",
+        "Link count = number of directory entries pointing to the i-node."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 4 — Hard links, symbolic links and what an i-node stores\n\nAnswer in the answer panel (no code needed).\n\n1. Which of these is NOT stored in an i-node?Thứ nào KHÔNG được lưu trong i-node?\n2. After ln a b (hard link) and then rm a, what happens to the data?Sau ln a b (hard link) rồi rm a, dữ liệu ra sao?\n3. After ln -s a s (symbolic link) and then rm a, accessing s …Sau ln -s a s (symbolic link) rồi rm a, truy cập s …\n4. Hard links cannot cross file systems because …Hard link không vượt qua ranh giới hệ tệp vì …\n5. A directory in UNIX is …Thư mục trong UNIX là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 4 — Hard links, symbolic links and what an i-node stores — answer key\n\n1. Which of these is NOT stored in an i-node?Thứ nào KHÔNG được lưu trong i-node?\n   Answer: a) The file name\n   Names live in directory entries (name → i-node number), which is why one i-node can have several names (hard links).VI: Tên nằm ở mục thư mục (tên → số i-node), nên một i-node có thể có nhiều tên (hard link).\n\n2. After ln a b (hard link) and then rm a, what happens to the data?Sau ln a b (hard link) rồi rm a, dữ liệu ra sao?\n   Answer: b) It remains accessible through b; the link count drops from 2 to 1\n   The data is freed only when the link count reaches 0 (and no process has it open).VI: Dữ liệu chỉ được giải phóng khi số liên kết về 0 (và không tiến trình nào còn mở).\n\n3. After ln -s a s (symbolic link) and then rm a, accessing s …Sau ln -s a s (symbolic link) rồi rm a, truy cập s …\n   Answer: c) fails: s is a dangling link\n   A symlink stores a path name, not an i-node; the target is looked up each time.VI: Symlink lưu một đường dẫn chứ không phải i-node; mục tiêu được tra lại mỗi lần.\n\n4. Hard links cannot cross file systems because …Hard link không vượt qua ranh giới hệ tệp vì …\n   Answer: d) i-node numbers are only meaningful inside one file system\n   A directory entry holds an i-node number, valid only within its own partition. Symlinks can cross.VI: Mục thư mục chứa số i-node, chỉ có nghĩa trong cùng phân vùng. Symlink thì vượt được.\n\n5. A directory in UNIX is …Thư mục trong UNIX là …\n   Answer: a) a special file whose data is a list of (name, i-node number) entries\n   “Everything is a file”: reading a directory means reading its entries.VI: “Mọi thứ đều là tệp”: đọc thư mục là đọc các mục của nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which of these is NOT stored in an i-node?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ nào KHÔNG được lưu trong i-node?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The file name"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The owner and permissions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The size and timestamps"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The pointers to the data blocks"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Names live in directory entries (name → i-node number), which is why one i-node can have several names (hard links).</p><p><i>VI: Tên nằm ở mục thư mục (tên → số i-node), nên một i-node có thể có nhiều tên (hard link).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>After <code>ln a b</code> (hard link) and then <code>rm a</code>, what happens to the data?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau <code>ln a b</code> (hard link) rồi <code>rm a</code>, dữ liệu ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The i-node is duplicated"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It remains accessible through b; the link count drops from 2 to 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is deleted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "b becomes a dangling link"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The data is freed only when the link count reaches 0 (and no process has it open).</p><p><i>VI: Dữ liệu chỉ được giải phóng khi số liên kết về 0 (và không tiến trình nào còn mở).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After <code>ln -s a s</code> (symbolic link) and then <code>rm a</code>, accessing s …</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau <code>ln -s a s</code> (symbolic link) rồi <code>rm a</code>, truy cập s …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "deletes s automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "creates a new a"
+              },
+              {
+                "ma": "c",
+                "noiDung": "fails: s is a dangling link"
+              },
+              {
+                "ma": "d",
+                "noiDung": "still reads the data"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A symlink stores a path name, not an i-node; the target is looked up each time.</p><p><i>VI: Symlink lưu một đường dẫn chứ không phải i-node; mục tiêu được tra lại mỗi lần.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Hard links cannot cross file systems because …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hard link không vượt qua ranh giới hệ tệp vì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "permissions differ"
+              },
+              {
+                "ma": "b",
+                "noiDung": "they need root"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the kernel forbids short names"
+              },
+              {
+                "ma": "d",
+                "noiDung": "i-node numbers are only meaningful inside one file system"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A directory entry holds an i-node number, valid only within its own partition. Symlinks can cross.</p><p><i>VI: Mục thư mục chứa số i-node, chỉ có nghĩa trong cùng phân vùng. Symlink thì vượt được.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A directory in UNIX is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thư mục trong UNIX là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a special file whose data is a list of (name, i-node number) entries"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a table in the superblock"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a block group"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a kind of device"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>“Everything is a file”: reading a directory means reading its entries.</p><p><i>VI: “Mọi thứ đều là tệp”: đọc thư mục là đọc các mục của nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing that rm deletes the data regardless of other hard links."
+        },
+        {
+          "loi": "Believing a symlink has its own copy of the data."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hard link",
+          "vi": "liên kết cứng: thêm tên cho cùng i-node"
+        },
+        {
+          "en": "symbolic link",
+          "vi": "liên kết mềm: tệp chứa đường dẫn"
+        },
+        {
+          "en": "dangling link",
+          "vi": "liên kết treo"
+        }
+      ]
+    },
+    {
+      "title": "I-node 5 — Size of the free-space bitmap",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "free-space management",
+        "bitmap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A bitmap uses one bit per disk block (1 = free). Give the size of the bitmap for each disk and block size (write number and unit, e.g. <code>32 KB</code>; 1 KB = 1024 B).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bitmap dùng một bit cho mỗi khối đĩa (1 = trống). Cho kích thước bitmap ứng với từng đĩa và cỡ khối (viết số và đơn vị, ví dụ <code>32 KB</code>; 1 KB = 1024 B).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Number of blocks = disk size / block size; one bit each; divide by 8 for bytes.",
+        "Use powers of two to keep the arithmetic exact."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 5 — Size of the free-space bitmap\n\nAnswer in the answer panel (no code needed).\n\n1. Bitmap sizeKích thước bitmap\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# I-node 5 — Size of the free-space bitmap — answer key\n\n1. Bitmap sizeKích thước bitmap\n   - c0.s: 128 KB / 128KB\n   - c1.s: 32 KB / 32KB\n   - c2.s: 32 MB / 32MB\n   - c3.s: 512 MB / 512MB\n   1 GB / 1 KB = 1048576 blocks = 1048576 bits = 128 KB; 1 GB / 4 KB = 262144 blocks = 262144 bits = 32 KB; 1 TB / 4 KB = 268435456 blocks = 268435456 bits = 32 MB; 16 TB / 4 KB = 4294967296 blocks = 4294967296 bits = 512 MB. Larger blocks shrink the bitmap but waste more space inside files.VI: 1 GB / 1 KB = 1048576 khối = 128 KB; 1 GB / 4 KB = 262144 khối = 32 KB; 1 TB / 4 KB = 268435456 khối = 32 MB; 16 TB / 4 KB = 4294967296 khối = 512 MB. Khối lớn làm bitmap nhỏ đi nhưng phí nhiều hơn bên trong tệp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>128 KB · 32 KB · 32 MB · 512 MB</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Bitmap size</p><p style=\"opacity:.75;font-size:.92em\"><i>Kích thước bitmap</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Disk, block size"
+              },
+              {
+                "ma": "s",
+                "ten": "Bitmap size"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "c0",
+                "o": {
+                  "c": "1 GB disk, 1 KB blocks"
+                }
+              },
+              {
+                "ma": "c1",
+                "o": {
+                  "c": "1 GB disk, 4 KB blocks"
+                }
+              },
+              {
+                "ma": "c2",
+                "o": {
+                  "c": "1 TB disk, 4 KB blocks"
+                }
+              },
+              {
+                "ma": "c3",
+                "o": {
+                  "c": "16 TB disk, 4 KB blocks"
+                }
+              }
+            ],
+            "dapAn": {
+              "c0.s": [
+                "128 KB",
+                "128KB"
+              ],
+              "c1.s": [
+                "32 KB",
+                "32KB"
+              ],
+              "c2.s": [
+                "32 MB",
+                "32MB"
+              ],
+              "c3.s": [
+                "512 MB",
+                "512MB"
+              ]
+            },
+            "giaiThich": "<p>1 GB / 1 KB = 1048576 blocks = 1048576 bits = 128 KB; 1 GB / 4 KB = 262144 blocks = 262144 bits = 32 KB; 1 TB / 4 KB = 268435456 blocks = 268435456 bits = 32 MB; 16 TB / 4 KB = 4294967296 blocks = 4294967296 bits = 512 MB. Larger blocks shrink the bitmap but waste more space inside files.</p><p><i>VI: 1 GB / 1 KB = 1048576 khối = 128 KB; 1 GB / 4 KB = 262144 khối = 32 KB; 1 TB / 4 KB = 268435456 khối = 32 MB; 16 TB / 4 KB = 4294967296 khối = 512 MB. Khối lớn làm bitmap nhỏ đi nhưng phí nhiều hơn bên trong tệp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to divide the bit count by 8."
+        },
+        {
+          "loi": "Dividing the disk by the bit count instead of the block size."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bitmap",
+          "vi": "bản đồ bit khối trống"
+        },
+        {
+          "en": "free list",
+          "vi": "danh sách khối trống"
+        }
+      ]
+    },
+    {
+      "title": "I-node 6 — Locate a byte through the indirect blocks",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "i-node",
+        "indirect blocks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>locate(offset, B, P, nd)</code> for a UNIX i-node with <code>nd</code> direct pointers followed by one single-, one double- and one triple-indirect pointer; blocks are <code>B</code> bytes and pointers <code>P</code> bytes. Return <code>{ level, reads }</code>: <code>level</code> = 0 for a direct block, 1, 2 or 3 for the indirection level that reaches the block; <code>reads</code> = number of disk reads to fetch the byte (indirect blocks on the path plus the data block; the i-node is in RAM). If the offset is beyond the largest possible file return <code>{ level: -1, reads: 0 }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Work with the block number, not the byte offset.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>locate(offset, B, P, nd)</code> cho i-node UNIX có <code>nd</code> con trỏ trực tiếp, rồi một con trỏ gián tiếp đơn, một đôi, một ba; khối <code>B</code> byte, con trỏ <code>P</code> byte. Trả <code>{ level, reads }</code>: <code>level</code> = 0 với khối trực tiếp, 1, 2 hoặc 3 theo mức gián tiếp tới được khối; <code>reads</code> = số lần đọc đĩa để lấy byte (các khối gián tiếp trên đường đi cộng khối dữ liệu; i-node đã ở RAM). Nếu offset vượt tệp lớn nhất có thể trả <code>{ level: -1, reads: 0 }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Làm việc với số khối chứ không phải offset byte.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "locate(12288, 1024, 4, 12)",
+          "output": "{\"level\":1,\"reads\":2}",
+          "explanation": "Block 12 is the first block behind the single-indirect pointer.|||Khối 12 là khối đầu tiên sau con trỏ gián tiếp đơn."
+        }
+      ],
+      "hintsJson": [
+        "k = B / P. Direct: block < nd. Single: block < nd + k. Double: block < nd + k + k². Triple: … + k³.",
+        "reads = level + 1 for a valid block."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function locate(offset, B, P, nd) {\n  return { level: -1, reads: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Cumulative capacity thresholds.\nfunction locate(offset, B, P, nd) {\n  const k = B / P; const blk = Math.floor(offset / B);\n  if (blk < nd) return { level: 0, reads: 1 };\n  if (blk < nd + k) return { level: 1, reads: 2 };\n  if (blk < nd + k + k * k) return { level: 2, reads: 3 };\n  if (blk < nd + k + k * k + k * k * k) return { level: 3, reads: 4 };\n  return { level: -1, reads: 0 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The thresholds are cumulative sums of the capacity of each pointer type.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: locate(5000, 1024, 4, 12)",
+              "vi": "Ca 1"
+            },
+            "goi": "locate(5000, 1024, 4, 12)",
+            "mongDoi": {
+              "level": 0,
+              "reads": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: locate(12288, 1024, 4, 12)",
+              "vi": "Ca 2"
+            },
+            "goi": "locate(12288, 1024, 4, 12)",
+            "mongDoi": {
+              "level": 1,
+              "reads": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: locate(300000, 1024, 4, 12)",
+              "vi": "Ca 3"
+            },
+            "goi": "locate(300000, 1024, 4, 12)",
+            "mongDoi": {
+              "level": 2,
+              "reads": 3
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: locate(100000000, 1024, 4, 12)",
+              "vi": "Ca 4"
+            },
+            "goi": "locate(100000000, 1024, 4, 12)",
+            "mongDoi": {
+              "level": 3,
+              "reads": 4
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "locate(0, 4096, 4, 10)",
+            "mongDoi": {
+              "level": 0,
+              "reads": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "locate(4231168, 4096, 4, 10)",
+            "mongDoi": {
+              "level": 1,
+              "reads": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "locate(4299202560, 4096, 4, 10)",
+            "mongDoi": {
+              "level": 3,
+              "reads": 4
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "locate(1000000000000000, 1024, 4, 12)",
+            "mongDoi": {
+              "level": -1,
+              "reads": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using ≤ at the boundaries (off by one)."
+        },
+        {
+          "loi": "Adding the i-node as a disk read."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

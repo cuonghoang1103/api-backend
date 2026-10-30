@@ -1,0 +1,942 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-5-2-lap-lich-dia",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-5-2-lap-lich-dia"
+  },
+  "exercises": [
+    {
+      "title": "Disk 1 — FCFS and SSTF: service order and total head movement",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "FCFS",
+        "SSTF",
+        "disk scheduling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Head at cylinder <b>50</b>. Pending requests (arrival order): <code>82 170 43 140 24 16 190</code>. Give the total head movement in cylinders for FCFS and for SSTF (shortest seek time first; ties: the earlier request).</p><p>The disk has cylinders 0 … 199. SCAN and C-SCAN go all the way to the edge of the disk; LOOK and C-LOOK turn at the last request. The return jump of C-SCAN / C-LOOK counts as head movement. The head only moves toward requests: if no request lies behind the head, SCAN / C-SCAN do not travel to the edge.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đầu đọc ở cylinder <b>50</b>. Yêu cầu chờ (theo thứ tự đến): <code>82 170 43 140 24 16 190</code>. Cho tổng quãng di chuyển đầu đọc (cylinder) của FCFS và SSTF (ưu tiên seek ngắn nhất; hoà: yêu cầu đến trước).</p><p>Đĩa có cylinder 0 … 199. SCAN và C-SCAN chạy tới mép đĩa; LOOK và C-LOOK quay đầu ở yêu cầu cuối. Bước nhảy về của C-SCAN / C-LOOK tính vào quãng di chuyển. Đầu đọc chỉ di chuyển về phía yêu cầu: nếu phía sau đầu đọc không còn yêu cầu thì SCAN / C-SCAN không chạy tới mép.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Sum the absolute differences between consecutive cylinders, starting at the head position.",
+        "SSTF always picks the nearest remaining request."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 1 — FCFS and SSTF: service order and total head movement\n\nAnswer in the answer panel (no code needed).\n\n1. Total movementTổng quãng đường\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 1 — FCFS and SSTF: service order and total head movement — answer key\n\n1. Total movementTổng quãng đường\n   - FCFS.t: 642\n   - SSTF.t: 208\n   FCFS: 50 → 82 → 170 → 43 → 140 → 24 → 16 → 190 = 642; SSTF: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 = 208.VI: FCFS: 50 → 82 → 170 → 43 → 140 → 24 → 16 → 190 = 642; SSTF: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 = 208.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>FCFS = 642 · SSTF = 208</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Total movement</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng quãng đường</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Algorithm"
+              },
+              {
+                "ma": "t",
+                "ten": "Total cylinders"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "FCFS",
+                "o": {
+                  "a": "FCFS"
+                }
+              },
+              {
+                "ma": "SSTF",
+                "o": {
+                  "a": "SSTF"
+                }
+              }
+            ],
+            "dapAn": {
+              "FCFS.t": "642",
+              "SSTF.t": "208"
+            },
+            "giaiThich": "<p>FCFS: 50 → 82 → 170 → 43 → 140 → 24 → 16 → 190 = 642; SSTF: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 = 208.</p><p><i>VI: FCFS: 50 → 82 → 170 → 43 → 140 → 24 → 16 → 190 = 642; SSTF: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 = 208.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the first move from the initial head position."
+        },
+        {
+          "loi": "In SSTF recomputing distances from the wrong position."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "head movement",
+          "vi": "quãng di chuyển đầu đọc"
+        },
+        {
+          "en": "SSTF",
+          "vi": "seek ngắn nhất trước"
+        }
+      ]
+    },
+    {
+      "title": "Disk 2 — SCAN, C-SCAN, LOOK, C-LOOK: total head movement",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "SCAN",
+        "C-SCAN",
+        "LOOK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Same queue: head at <b>50</b>, requests <code>82 170 43 140 24 16 190</code>. The head is first moving toward <b>higher</b> cylinders. Compute the total head movement.</p><p>The disk has cylinders 0 … 199. SCAN and C-SCAN go all the way to the edge of the disk; LOOK and C-LOOK turn at the last request. The return jump of C-SCAN / C-LOOK counts as head movement. The head only moves toward requests: if no request lies behind the head, SCAN / C-SCAN do not travel to the edge.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cùng hàng đợi: đầu ở <b>50</b>, yêu cầu <code>82 170 43 140 24 16 190</code>. Đầu đọc đang di chuyển về phía cylinder <b>cao hơn</b>. Tính tổng quãng di chuyển.</p><p>Đĩa có cylinder 0 … 199. SCAN và C-SCAN chạy tới mép đĩa; LOOK và C-LOOK quay đầu ở yêu cầu cuối. Bước nhảy về của C-SCAN / C-LOOK tính vào quãng di chuyển. Đầu đọc chỉ di chuyển về phía yêu cầu: nếu phía sau đầu đọc không còn yêu cầu thì SCAN / C-SCAN không chạy tới mép.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SCAN up: 50 → highest request → edge 199 → then down to the lowest request.",
+        "C-SCAN: after the edge jump to 0 and continue upward."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 2 — SCAN, C-SCAN, LOOK, C-LOOK: total head movement\n\nAnswer in the answer panel (no code needed).\n\n1. Total movement (moving up first)Tổng quãng (đi lên trước)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 2 — SCAN, C-SCAN, LOOK, C-LOOK: total head movement — answer key\n\n1. Total movement (moving up first)Tổng quãng (đi lên trước)\n   - SCAN.t: 332\n   - CSCAN.t: 391\n   - LOOK.t: 314\n   - CLOOK.t: 341\n   SCAN: 332; C-SCAN: 391; LOOK: 314; C-LOOK: 341. The “look” variants save the trip to the edge; the circular variants pay for the return jump but give uniform waiting times.VI: SCAN: 332; C-SCAN: 391; LOOK: 314; C-LOOK: 341. Biến thể “look” khỏi phải chạy tới mép; biến thể vòng trả giá cho bước nhảy về nhưng thời gian chờ đều hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SCAN = 332 · C-SCAN = 391 · LOOK = 314 · C-LOOK = 341</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Total movement (moving up first)</p><p style=\"opacity:.75;font-size:.92em\"><i>Tổng quãng (đi lên trước)</i></p>",
+            "cot": [
+              {
+                "ma": "a",
+                "ten": "Algorithm"
+              },
+              {
+                "ma": "t",
+                "ten": "Total cylinders"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "SCAN",
+                "o": {
+                  "a": "SCAN"
+                }
+              },
+              {
+                "ma": "CSCAN",
+                "o": {
+                  "a": "C-SCAN"
+                }
+              },
+              {
+                "ma": "LOOK",
+                "o": {
+                  "a": "LOOK"
+                }
+              },
+              {
+                "ma": "CLOOK",
+                "o": {
+                  "a": "C-LOOK"
+                }
+              }
+            ],
+            "dapAn": {
+              "SCAN.t": "332",
+              "CSCAN.t": "391",
+              "LOOK.t": "314",
+              "CLOOK.t": "341"
+            },
+            "giaiThich": "<p>SCAN: 332; C-SCAN: 391; LOOK: 314; C-LOOK: 341. The “look” variants save the trip to the edge; the circular variants pay for the return jump but give uniform waiting times.</p><p><i>VI: SCAN: 332; C-SCAN: 391; LOOK: 314; C-LOOK: 341. Biến thể “look” khỏi phải chạy tới mép; biến thể vòng trả giá cho bước nhảy về nhưng thời gian chờ đều hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to go to the disk edge in SCAN / C-SCAN."
+        },
+        {
+          "loi": "Not counting the return jump in the circular algorithms (the statement says to count it)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elevator algorithm",
+          "vi": "thuật toán thang máy = SCAN"
+        },
+        {
+          "en": "C-SCAN",
+          "vi": "SCAN vòng: chỉ phục vụ một chiều"
+        }
+      ]
+    },
+    {
+      "title": "Disk 3 — Order the requests as SSTF serves them",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "SSTF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Head at 50; requests <code>82 170 43 140 24 16 190</code>. Put them in the order in which SSTF serves them.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đầu ở 50; yêu cầu <code>82 170 43 140 24 16 190</code>. Xếp chúng theo thứ tự SSTF phục vụ.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "From the current head position always take the closest unserved cylinder.",
+        "After each step the head position changes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 3 — Order the requests as SSTF serves them\n\nAnswer in the answer panel (no code needed).\n\n1. SSTF service orderThứ tự phục vụ SSTF\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 3 — Order the requests as SSTF serves them — answer key\n\n1. SSTF service orderThứ tự phục vụ SSTF\n   Answer: c43) 43  →  c24) 24  →  c16) 16  →  c82) 82  →  c140) 140  →  c170) 170  →  c190) 190\n   50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (total 208). Notice how the head drifts to one side first: far requests such as 190 wait last (starvation risk).VI: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (tổng 208). Đầu đọc trôi về một phía trước: yêu cầu xa như 190 bị chờ lâu nhất (nguy cơ đói).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>43 → 24 → 16 → 82 → 140 → 170 → 190</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>SSTF service order</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự phục vụ SSTF</i></p>",
+            "muc": [
+              {
+                "ma": "c82",
+                "noiDung": "82"
+              },
+              {
+                "ma": "c140",
+                "noiDung": "140"
+              },
+              {
+                "ma": "c170",
+                "noiDung": "170"
+              },
+              {
+                "ma": "c190",
+                "noiDung": "190"
+              },
+              {
+                "ma": "c43",
+                "noiDung": "43"
+              },
+              {
+                "ma": "c24",
+                "noiDung": "24"
+              },
+              {
+                "ma": "c16",
+                "noiDung": "16"
+              }
+            ],
+            "dapAn": [
+              "c43",
+              "c24",
+              "c16",
+              "c82",
+              "c140",
+              "c170",
+              "c190"
+            ],
+            "giaiThich": "<p>50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (total 208). Notice how the head drifts to one side first: far requests such as 190 wait last (starvation risk).</p><p><i>VI: 50 → 43 → 24 → 16 → 82 → 140 → 170 → 190 (tổng 208). Đầu đọc trôi về một phía trước: yêu cầu xa như 190 bị chờ lâu nhất (nguy cơ đói).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Measuring all distances from the ORIGINAL head position."
+        },
+        {
+          "loi": "Sorting the requests numerically (that is not SSTF)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "starvation",
+          "vi": "đói: yêu cầu xa chờ mãi"
+        }
+      ]
+    },
+    {
+      "title": "Disk 4 — Order the requests as SCAN serves them (moving down first)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "SCAN"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Head at 50, currently moving toward cylinder 0. Requests <code>82 170 43 140 24 16 190</code>. Put them in SCAN service order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đầu ở 50, đang chạy về phía cylinder 0. Yêu cầu <code>82 170 43 140 24 16 190</code>. Xếp theo thứ tự SCAN phục vụ.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "All requests below the head are served in decreasing order, then the direction reverses.",
+        "SCAN only reverses at the edge of the disk."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 4 — Order the requests as SCAN serves them (moving down first)\n\nAnswer in the answer panel (no code needed).\n\n1. SCAN order (down first)Thứ tự SCAN (đi xuống trước)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 4 — Order the requests as SCAN serves them (moving down first) — answer key\n\n1. SCAN order (down first)Thứ tự SCAN (đi xuống trước)\n   Answer: c43) 43  →  c24) 24  →  c16) 16  →  c82) 82  →  c140) 140  →  c170) 170  →  c190) 190\n   Down: 43, 24, 16; the head goes to cylinder 0, reverses, then up: 82, 140, 170, 190. Total movement 240 cylinders.VI: Đi xuống: 43, 24, 16; đầu chạy tới cylinder 0, đảo chiều rồi đi lên: 82, 140, 170, 190. Tổng 240 cylinder.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>43 → 24 → 16 → 82 → 140 → 170 → 190; total 240.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>SCAN order (down first)</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự SCAN (đi xuống trước)</i></p>",
+            "muc": [
+              {
+                "ma": "c16",
+                "noiDung": "16"
+              },
+              {
+                "ma": "c82",
+                "noiDung": "82"
+              },
+              {
+                "ma": "c140",
+                "noiDung": "140"
+              },
+              {
+                "ma": "c170",
+                "noiDung": "170"
+              },
+              {
+                "ma": "c190",
+                "noiDung": "190"
+              },
+              {
+                "ma": "c43",
+                "noiDung": "43"
+              },
+              {
+                "ma": "c24",
+                "noiDung": "24"
+              }
+            ],
+            "dapAn": [
+              "c43",
+              "c24",
+              "c16",
+              "c82",
+              "c140",
+              "c170",
+              "c190"
+            ],
+            "giaiThich": "<p>Down: 43, 24, 16; the head goes to cylinder 0, reverses, then up: 82, 140, 170, 190. Total movement 240 cylinders.</p><p><i>VI: Đi xuống: 43, 24, 16; đầu chạy tới cylinder 0, đảo chiều rồi đi lên: 82, 140, 170, 190. Tổng 240 cylinder.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Serving the lower requests in increasing order."
+        },
+        {
+          "loi": "Reversing at the lowest request (that is LOOK)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "direction of travel",
+          "vi": "chiều di chuyển hiện tại của đầu đọc"
+        }
+      ]
+    },
+    {
+      "title": "Disk 5 — Which algorithm for which workload?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "disk scheduling properties"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on the properties of disk-scheduling algorithms.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về tính chất của các thuật toán lập lịch đĩa.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think about who can be forgotten: far requests under SSTF.",
+        "A circular list gives every cylinder the same maximum wait."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 5 — Which algorithm for which workload?\n\nAnswer in the answer panel (no code needed).\n\n1. Which algorithm can starve requests far from the head?Thuật toán nào có thể làm đói các yêu cầu ở xa đầu đọc?\n2. Which algorithm gives the most uniform waiting time?Thuật toán nào cho thời gian chờ đồng đều nhất?\n3. Under a very heavy load, which choice is usually best?Khi tải rất nặng, lựa chọn nào thường tốt nhất?\n4. Why does disk scheduling matter much less for an SSD?Vì sao lập lịch đĩa ít quan trọng hơn nhiều với SSD?\n5. When the queue holds a single request, all disk-scheduling algorithms …Khi hàng đợi chỉ có một yêu cầu, mọi thuật toán lập lịch đĩa …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Disk 5 — Which algorithm for which workload? — answer key\n\n1. Which algorithm can starve requests far from the head?Thuật toán nào có thể làm đói các yêu cầu ở xa đầu đọc?\n   Answer: d) SSTF\n   If new requests keep arriving near the head, SSTF never goes to the far ones.VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.\n\n2. Which algorithm gives the most uniform waiting time?Thuật toán nào cho thời gian chờ đồng đều nhất?\n   Answer: a) C-SCAN\n   C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.\n\n3. Under a very heavy load, which choice is usually best?Khi tải rất nặng, lựa chọn nào thường tốt nhất?\n   Answer: b) SCAN or C-SCAN (or their LOOK variants)\n   Sweep-based algorithms bound the waiting time and keep the head moving efficiently.VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.\n\n4. Why does disk scheduling matter much less for an SSD?Vì sao lập lịch đĩa ít quan trọng hơn nhiều với SSD?\n   Answer: c) There is no mechanical seek or rotation\n   Seek and rotational delay are what these algorithms reduce.VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.\n\n5. When the queue holds a single request, all disk-scheduling algorithms …Khi hàng đợi chỉ có một yêu cầu, mọi thuật toán lập lịch đĩa …\n   Answer: d) behave the same (no choice to make)\n   Scheduling only helps when several requests are pending.VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which algorithm can starve requests far from the head?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán nào có thể làm đói các yêu cầu ở xa đầu đọc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SCAN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "C-SCAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FCFS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SSTF"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>If new requests keep arriving near the head, SSTF never goes to the far ones.</p><p><i>VI: Nếu yêu cầu mới liên tục đến gần đầu đọc, SSTF không bao giờ tới những yêu cầu xa.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which algorithm gives the most uniform waiting time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán nào cho thời gian chờ đồng đều nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "C-SCAN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SSTF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SCAN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "LOOK"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>C-SCAN treats cylinders as a circular list: every request waits for at most one sweep.</p><p><i>VI: C-SCAN coi cylinder như danh sách vòng: mọi yêu cầu chờ tối đa một lượt quét.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Under a very heavy load, which choice is usually best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi tải rất nặng, lựa chọn nào thường tốt nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Always the shortest request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SCAN or C-SCAN (or their LOOK variants)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FCFS"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Random order"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Sweep-based algorithms bound the waiting time and keep the head moving efficiently.</p><p><i>VI: Thuật toán quét giới hạn thời gian chờ và giữ đầu đọc di chuyển hiệu quả.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does disk scheduling matter much less for an SSD?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao lập lịch đĩa ít quan trọng hơn nhiều với SSD?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SSDs are slower"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The OS cannot see SSDs"
+              },
+              {
+                "ma": "c",
+                "noiDung": "There is no mechanical seek or rotation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SSDs have no requests"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Seek and rotational delay are what these algorithms reduce.</p><p><i>VI: Seek và độ trễ quay chính là thứ các thuật toán này giảm.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>When the queue holds a single request, all disk-scheduling algorithms …</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi hàng đợi chỉ có một yêu cầu, mọi thuật toán lập lịch đĩa …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "differ greatly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "cannot run"
+              },
+              {
+                "ma": "c",
+                "noiDung": "need a reset"
+              },
+              {
+                "ma": "d",
+                "noiDung": "behave the same (no choice to make)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Scheduling only helps when several requests are pending.</p><p><i>VI: Lập lịch chỉ có lợi khi có nhiều yêu cầu chờ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking FCFS can starve requests (it is fair, just slow)."
+        },
+        {
+          "loi": "Thinking SCAN serves the middle cylinders twice as often by accident (it is true that they are visited more often than the edges)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "elevator",
+          "vi": "thang máy: SCAN"
+        }
+      ]
+    },
+    {
+      "title": "Disk 6 — Write a disk-scheduling simulator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "disk scheduling",
+        "simulation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>schedule(algo, head, requests, dir, maxCyl)</code> for <code>algo</code> ∈ <code>'FCFS'</code>, <code>'SSTF'</code>, <code>'SCAN'</code>, <code>'CSCAN'</code>, <code>'LOOK'</code>, <code>'CLOOK'</code>. <code>dir</code> is <code>'up'</code> or <code>'down'</code> (the initial direction), cylinders are <code>0 … maxCyl</code>. Return <code>{ order, total }</code>: <code>order</code> = the requests in the order they are served (the edge of the disk is not a request), <code>total</code> = total head movement. The disk has cylinders 0 … 199. SCAN and C-SCAN go all the way to the edge of the disk; LOOK and C-LOOK turn at the last request. The return jump of C-SCAN / C-LOOK counts as head movement. The head only moves toward requests: if no request lies behind the head, SCAN / C-SCAN do not travel to the edge. For C-SCAN / C-LOOK going <code>down</code>: serve downward, then jump (edge-to-edge for C-SCAN: first to 0, then to <code>maxCyl</code>; for C-LOOK straight to the highest request) and continue downward from the top. SSTF ties: the earlier request in the list.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify the <code>requests</code> array.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>schedule(algo, head, requests, dir, maxCyl)</code> với <code>algo</code> ∈ <code>'FCFS'</code>, <code>'SSTF'</code>, <code>'SCAN'</code>, <code>'CSCAN'</code>, <code>'LOOK'</code>, <code>'CLOOK'</code>. <code>dir</code> là <code>'up'</code> hoặc <code>'down'</code> (chiều ban đầu), cylinder từ <code>0 … maxCyl</code>. Trả <code>{ order, total }</code>: <code>order</code> = các yêu cầu theo thứ tự được phục vụ (mép đĩa không phải yêu cầu), <code>total</code> = tổng quãng di chuyển. Đĩa có cylinder 0 … 199. SCAN và C-SCAN chạy tới mép đĩa; LOOK và C-LOOK quay đầu ở yêu cầu cuối. Bước nhảy về của C-SCAN / C-LOOK tính vào quãng di chuyển. Đầu đọc chỉ di chuyển về phía yêu cầu: nếu phía sau đầu đọc không còn yêu cầu thì SCAN / C-SCAN không chạy tới mép. Với C-SCAN / C-LOOK đi <code>down</code>: phục vụ đi xuống rồi nhảy (C-SCAN: về 0 rồi tới <code>maxCyl</code>; C-LOOK: thẳng tới yêu cầu cao nhất) và tiếp tục đi xuống từ trên cao. SSTF hoà: yêu cầu đứng trước trong danh sách.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa mảng <code>requests</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "schedule('LOOK', 53, [98,183,37,122,14,124,65,67], 'down', 199)",
+          "output": "{\"order\":[37,14,65,67,98,122,124,183],\"total\":208}",
+          "explanation": "Silberschatz example: 208 cylinders.|||Ví dụ Silberschatz: 208 cylinder."
+        }
+      ],
+      "hintsJson": [
+        "Split the requests into those ≥ head and those < head, sort both.",
+        "Write a tiny helper move(to) that adds |to − pos| to the total and sets pos."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function schedule(algo, head, requests, dir, maxCyl) {\n  return { order: [], total: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// move(to) accumulates the head travel; each algorithm decides the visiting order.\nfunction schedule(algo, head, reqs, dir, maxCyl) {\n  const order = []; let pos = head; let total = 0;\n  const di = (to) => { total += Math.abs(to - pos); pos = to; };\n  const cho = reqs.slice();\n  if (algo === 'FCFS') { cho.forEach((r) => { order.push(r); di(r); }); return { order, total }; }\n  if (algo === 'SSTF') {\n    while (cho.length) {\n      let b = 0;\n      for (let i = 1; i < cho.length; i++) if (Math.abs(cho[i] - pos) < Math.abs(cho[b] - pos)) b = i;\n      const r = cho.splice(b, 1)[0]; order.push(r); di(r);\n    }\n    return { order, total };\n  }\n  const tang = cho.slice().sort((a, b) => a - b);\n  const tren = tang.filter((r) => r >= head); const duoi = tang.filter((r) => r < head).reverse();\n  const duoiTang = tang.filter((r) => r < head);\n  if (algo === 'SCAN') {\n    if (dir === 'up') { tren.forEach((r) => { order.push(r); di(r); }); if (duoi.length) { di(maxCyl); duoi.forEach((r) => { order.push(r); di(r); }); } }\n    else { duoi.forEach((r) => { order.push(r); di(r); }); if (tren.length) { di(0); tren.forEach((r) => { order.push(r); di(r); }); } }\n  } else if (algo === 'LOOK') {\n    if (dir === 'up') { tren.forEach((r) => { order.push(r); di(r); }); duoi.forEach((r) => { order.push(r); di(r); }); }\n    else { duoi.forEach((r) => { order.push(r); di(r); }); tren.forEach((r) => { order.push(r); di(r); }); }\n  } else if (algo === 'CSCAN') {\n    if (dir === 'up') { tren.forEach((r) => { order.push(r); di(r); }); if (duoiTang.length) { di(maxCyl); di(0); duoiTang.forEach((r) => { order.push(r); di(r); }); } }\n    else { duoi.forEach((r) => { order.push(r); di(r); }); const tr2 = tren.slice().reverse(); if (tr2.length) { di(0); di(maxCyl); tr2.forEach((r) => { order.push(r); di(r); }); } }\n  } else if (algo === 'CLOOK') {\n    if (dir === 'up') { tren.forEach((r) => { order.push(r); di(r); }); duoiTang.forEach((r) => { order.push(r); di(r); }); }\n    else { duoi.forEach((r) => { order.push(r); di(r); }); tren.slice().reverse().forEach((r) => { order.push(r); di(r); }); }\n  }\n  return { order, total };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All six algorithms are variations of “sort, split at the head, sweep, optionally touch the edge and jump”.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: schedule(\"FCFS\", 53, [98,183,37,122,14,124,65,67], \"up\", 199)",
+              "vi": "Ca 1"
+            },
+            "goi": "schedule(\"FCFS\", 53, [98,183,37,122,14,124,65,67], \"up\", 199)",
+            "mongDoi": {
+              "order": [
+                98,
+                183,
+                37,
+                122,
+                14,
+                124,
+                65,
+                67
+              ],
+              "total": 640
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: schedule(\"SSTF\", 53, [98,183,37,122,14,124,65,67], \"up\", 199)",
+              "vi": "Ca 2"
+            },
+            "goi": "schedule(\"SSTF\", 53, [98,183,37,122,14,124,65,67], \"up\", 199)",
+            "mongDoi": {
+              "order": [
+                65,
+                67,
+                37,
+                14,
+                98,
+                122,
+                124,
+                183
+              ],
+              "total": 236
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: schedule(\"SCAN\", 53, [98,183,37,122,14,124,65,67], \"down\", 199)",
+              "vi": "Ca 3"
+            },
+            "goi": "schedule(\"SCAN\", 53, [98,183,37,122,14,124,65,67], \"down\", 199)",
+            "mongDoi": {
+              "order": [
+                37,
+                14,
+                65,
+                67,
+                98,
+                122,
+                124,
+                183
+              ],
+              "total": 236
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: schedule(\"LOOK\", 53, [98,183,37,122,14,124,65,67], \"down\", 199)",
+              "vi": "Ca 4"
+            },
+            "goi": "schedule(\"LOOK\", 53, [98,183,37,122,14,124,65,67], \"down\", 199)",
+            "mongDoi": {
+              "order": [
+                37,
+                14,
+                65,
+                67,
+                98,
+                122,
+                124,
+                183
+              ],
+              "total": 208
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 5: schedule(\"CSCAN\", 53, [98,183,37,122,14,124,65,67], \"up\", 199)",
+              "vi": "Ca 5"
+            },
+            "goi": "schedule(\"CSCAN\", 53, [98,183,37,122,14,124,65,67], \"up\", 199)",
+            "mongDoi": {
+              "order": [
+                65,
+                67,
+                98,
+                122,
+                124,
+                183,
+                14,
+                37
+              ],
+              "total": 382
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 6: schedule(\"CLOOK\", 50, [82,170,43,140,24,16,190], \"up\", 199)",
+              "vi": "Ca 6"
+            },
+            "goi": "schedule(\"CLOOK\", 50, [82,170,43,140,24,16,190], \"up\", 199)",
+            "mongDoi": {
+              "order": [
+                82,
+                140,
+                170,
+                190,
+                16,
+                24,
+                43
+              ],
+              "total": 341
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "schedule(\"SCAN\", 50, [82,170,43,140,24,16,190], \"up\", 199)",
+            "mongDoi": {
+              "order": [
+                82,
+                140,
+                170,
+                190,
+                43,
+                24,
+                16
+              ],
+              "total": 332
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "schedule(\"CSCAN\", 50, [82,170,43,140,24,16,190], \"down\", 199)",
+            "mongDoi": {
+              "order": [
+                43,
+                24,
+                16,
+                190,
+                170,
+                140,
+                82
+              ],
+              "total": 366
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "schedule(\"CLOOK\", 50, [82,170,43,140,24,16,190], \"down\", 199)",
+            "mongDoi": {
+              "order": [
+                43,
+                24,
+                16,
+                190,
+                170,
+                140,
+                82
+              ],
+              "total": 316
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "schedule(\"LOOK\", 100, [100,120,80], \"up\", 199)",
+            "mongDoi": {
+              "order": [
+                100,
+                120,
+                80
+              ],
+              "total": 60
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "schedule(\"SSTF\", 10, [], \"up\", 99)",
+            "mongDoi": {
+              "order": [],
+              "total": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting requests equal to the head position twice or skipping them."
+        },
+        {
+          "loi": "Forgetting the edge in SCAN and C-SCAN."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

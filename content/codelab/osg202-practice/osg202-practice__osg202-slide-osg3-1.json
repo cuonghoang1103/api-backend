@@ -1,0 +1,885 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-slide-osg3-1",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-slide-osg3-1"
+  },
+  "exercises": [
+    {
+      "title": "Allocation 1 — Where does each request go? First, best, worst, next fit",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "contiguous allocation",
+        "first fit",
+        "best fit",
+        "worst fit"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Free holes in memory, in address order (KB): H1=100, H2=500, H3=200, H4=300, H5=600. Processes request 212, 417, 112, 426 KB in this order and keep their memory. A hole is split (the remainder stays in place). For each strategy give the hole that serves each request (<code>H1…H5</code>) or <code>wait</code> if no hole is large enough. Next fit starts searching at the hole used last (the first search starts at H1).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các lỗ trống theo thứ tự địa chỉ (KB): H1=100, H2=500, H3=200, H4=300, H5=600. Các tiến trình yêu cầu 212, 417, 112, 426 KB theo thứ tự này và giữ bộ nhớ. Lỗ được chia nhỏ (phần dư ở lại tại chỗ). Với mỗi chiến lược cho lỗ phục vụ từng yêu cầu (<code>H1…H5</code>) hoặc <code>wait</code> nếu không lỗ nào đủ lớn. Next fit tìm tiếp từ lỗ vừa dùng (lần đầu bắt đầu từ H1).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "After each placement update the remaining size of the hole before handling the next request.",
+        "First fit: first big-enough hole by address. Best: smallest big-enough hole. Worst: largest hole."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 1 — Where does each request go? First, best, worst, next fit\n\nAnswer in the answer panel (no code needed).\n\n1. Hole usedLỗ được dùng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 1 — Where does each request go? First, best, worst, next fit — answer key\n\n1. Hole usedLỗ được dùng\n   - r0.first: H2\n   - r0.best: H4\n   - r0.worst: H5\n   - r0.next: H2\n   - r1.first: H5\n   - r1.best: H2\n   - r1.worst: H2\n   - r1.next: H5\n   - r2.first: H2\n   - r2.best: H3\n   - r2.worst: H5\n   - r2.next: H5\n   - r3.first: wait\n   - r3.best: H5\n   - r3.worst: wait\n   - r3.next: wait\n   First fit: H2, H5, H2, wait (holes left 100/176/200/300/183); Best fit: H4, H2, H3, H5 (holes left 100/83/88/88/174); Worst fit: H5, H2, H5, wait (holes left 100/83/200/300/276); Next fit: H2, H5, H5, wait (holes left 100/288/200/300/71). Best fit is the only strategy that places all four requests: it keeps the big holes whole for the big requests.VI: First fit: H2, H5, H2, wait (còn 100/176/200/300/183); Best fit: H4, H2, H3, H5 (còn 100/83/88/88/174); Worst fit: H5, H2, H5, wait (còn 100/83/200/300/276); Next fit: H2, H5, H5, wait (còn 100/288/200/300/71). Chỉ best fit xếp được cả bốn yêu cầu: nó giữ nguyên các lỗ lớn cho yêu cầu lớn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>First fit: H2 H5 H2 wait · Best fit: H4 H2 H3 H5 · Worst fit: H5 H2 H5 wait · Next fit: H2 H5 H5 wait</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Hole used</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗ được dùng</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Request"
+              },
+              {
+                "ma": "first",
+                "ten": "First fit"
+              },
+              {
+                "ma": "best",
+                "ten": "Best fit"
+              },
+              {
+                "ma": "worst",
+                "ten": "Worst fit"
+              },
+              {
+                "ma": "next",
+                "ten": "Next fit"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "r": "212 KB"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "417 KB"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "112 KB"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "426 KB"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.first": "H2",
+              "r0.best": "H4",
+              "r0.worst": "H5",
+              "r0.next": "H2",
+              "r1.first": "H5",
+              "r1.best": "H2",
+              "r1.worst": "H2",
+              "r1.next": "H5",
+              "r2.first": "H2",
+              "r2.best": "H3",
+              "r2.worst": "H5",
+              "r2.next": "H5",
+              "r3.first": "wait",
+              "r3.best": "H5",
+              "r3.worst": "wait",
+              "r3.next": "wait"
+            },
+            "giaiThich": "<p>First fit: H2, H5, H2, wait (holes left 100/176/200/300/183); Best fit: H4, H2, H3, H5 (holes left 100/83/88/88/174); Worst fit: H5, H2, H5, wait (holes left 100/83/200/300/276); Next fit: H2, H5, H5, wait (holes left 100/288/200/300/71). Best fit is the only strategy that places all four requests: it keeps the big holes whole for the big requests.</p><p><i>VI: First fit: H2, H5, H2, wait (còn 100/176/200/300/183); Best fit: H4, H2, H3, H5 (còn 100/83/88/88/174); Worst fit: H5, H2, H5, wait (còn 100/83/200/300/276); Next fit: H2, H5, H5, wait (còn 100/288/200/300/71). Chỉ best fit xếp được cả bốn yêu cầu: nó giữ nguyên các lỗ lớn cho yêu cầu lớn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting that a hole shrinks after being used."
+        },
+        {
+          "loi": "Choosing the best-fit hole by LEAST leftover but among all holes (including too small ones)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hole",
+          "vi": "lỗ trống: vùng nhớ rảnh liên tục"
+        },
+        {
+          "en": "best fit",
+          "vi": "lỗ nhỏ nhất đủ lớn"
+        },
+        {
+          "en": "worst fit",
+          "vi": "lỗ lớn nhất"
+        }
+      ]
+    },
+    {
+      "title": "Allocation 2 — Internal fragmentation of paged processes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "internal fragmentation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Page size = 2048 bytes. For each process give the number of pages it occupies and the bytes lost to internal fragmentation.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Kích thước trang = 2048 byte. Với mỗi tiến trình cho số trang nó chiếm và số byte phí do phân mảnh trong.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "pages = ⌈size / page size⌉.",
+        "waste = pages × page size − size."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 2 — Internal fragmentation of paged processes\n\nAnswer in the answer panel (no code needed).\n\n1. Pages and wasteSố trang và phần phí\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 2 — Internal fragmentation of paged processes — answer key\n\n1. Pages and wasteSố trang và phần phí\n   - p72766.n: 36\n   - p72766.w: 962\n   - p5000.n: 3\n   - p5000.w: 1144\n   - p2048.n: 1\n   - p2048.w: 0\n   - p1.n: 1\n   - p1.w: 2047\n   - p10000.n: 5\n   - p10000.w: 240\n   72766: 36 pages, waste 962; 5000: 3 pages, waste 1144; 2048: 1 pages, waste 0; 1: 1 pages, waste 2047; 10000: 5 pages, waste 240. A size that is an exact multiple of the page wastes nothing; 1 byte wastes 2047.VI: 72766: 36 trang, phí 962; 5000: 3 trang, phí 1144; 2048: 1 trang, phí 0; 1: 1 trang, phí 2047; 10000: 5 trang, phí 240. Kích thước là bội số đúng của trang thì không phí; 1 byte phí 2047.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>36/962 · 3/1144 · 1/0 · 1/2047 · 5/240</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Pages and waste</p><p style=\"opacity:.75;font-size:.92em\"><i>Số trang và phần phí</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Process size (bytes)"
+              },
+              {
+                "ma": "n",
+                "ten": "Pages"
+              },
+              {
+                "ma": "w",
+                "ten": "Wasted bytes"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "p72766",
+                "o": {
+                  "p": "72766"
+                }
+              },
+              {
+                "ma": "p5000",
+                "o": {
+                  "p": "5000"
+                }
+              },
+              {
+                "ma": "p2048",
+                "o": {
+                  "p": "2048"
+                }
+              },
+              {
+                "ma": "p1",
+                "o": {
+                  "p": "1"
+                }
+              },
+              {
+                "ma": "p10000",
+                "o": {
+                  "p": "10000"
+                }
+              }
+            ],
+            "dapAn": {
+              "p72766.n": "36",
+              "p72766.w": "962",
+              "p5000.n": "3",
+              "p5000.w": "1144",
+              "p2048.n": "1",
+              "p2048.w": "0",
+              "p1.n": "1",
+              "p1.w": "2047",
+              "p10000.n": "5",
+              "p10000.w": "240"
+            },
+            "giaiThich": "<p>72766: 36 pages, waste 962; 5000: 3 pages, waste 1144; 2048: 1 pages, waste 0; 1: 1 pages, waste 2047; 10000: 5 pages, waste 240. A size that is an exact multiple of the page wastes nothing; 1 byte wastes 2047.</p><p><i>VI: 72766: 36 trang, phí 962; 5000: 3 trang, phí 1144; 2048: 1 trang, phí 0; 1: 1 trang, phí 2047; 10000: 5 trang, phí 240. Kích thước là bội số đúng của trang thì không phí; 1 byte phí 2047.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rounding down instead of up."
+        },
+        {
+          "loi": "Giving size mod page size as the waste (that is the used part of the last page)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "internal fragmentation",
+          "vi": "phân mảnh trong"
+        }
+      ]
+    },
+    {
+      "title": "Allocation 3 — The buddy system: block sizes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "buddy system"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A buddy allocator manages 1024 KB and only hands out blocks whose size is a power of two (minimum 8 KB). Each request is rounded UP to the next power of two. For every request give the block size allocated and the internal waste in KB.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ cấp phát buddy quản lý 1024 KB và chỉ cấp khối có kích thước luỹ thừa của hai (tối thiểu 8 KB). Mỗi yêu cầu được làm tròn LÊN luỹ thừa hai kế tiếp. Với mỗi yêu cầu cho kích thước khối được cấp và phần phí trong theo KB.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Next power of two ≥ request: 64, 128, 256, 512…",
+        "A request of exactly 256 gets 256 — no waste."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 3 — The buddy system: block sizes\n\nAnswer in the answer panel (no code needed).\n\n1. Buddy blocksKhối buddy\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 3 — The buddy system: block sizes — answer key\n\n1. Buddy blocksKhối buddy\n   - r70.b: 128\n   - r70.w: 58\n   - r35.b: 64\n   - r35.w: 29\n   - r80.b: 128\n   - r80.w: 48\n   - r130.b: 256\n   - r130.w: 126\n   - r8.b: 8\n   - r8.w: 0\n   - r256.b: 256\n   - r256.w: 0\n   70 → 128 (waste 58); 35 → 64 (waste 29); 80 → 128 (waste 48); 130 → 256 (waste 126); 8 → 8 (waste 0); 256 → 256 (waste 0). Buddies make merging free blocks easy (flip one address bit) at the cost of up to 50% internal waste.VI: 70 → 128 (phí 58); 35 → 64 (phí 29); 80 → 128 (phí 48); 130 → 256 (phí 126); 8 → 8 (phí 0); 256 → 256 (phí 0). Buddy giúp gộp khối rảnh dễ (đổi một bit địa chỉ) nhưng phí trong tới gần 50%.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>128 · 64 · 128 · 256 · 8 · 256</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Buddy blocks</p><p style=\"opacity:.75;font-size:.92em\"><i>Khối buddy</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Request (KB)"
+              },
+              {
+                "ma": "b",
+                "ten": "Block (KB)"
+              },
+              {
+                "ma": "w",
+                "ten": "Waste (KB)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r70",
+                "o": {
+                  "r": "70"
+                }
+              },
+              {
+                "ma": "r35",
+                "o": {
+                  "r": "35"
+                }
+              },
+              {
+                "ma": "r80",
+                "o": {
+                  "r": "80"
+                }
+              },
+              {
+                "ma": "r130",
+                "o": {
+                  "r": "130"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "r": "8"
+                }
+              },
+              {
+                "ma": "r256",
+                "o": {
+                  "r": "256"
+                }
+              }
+            ],
+            "dapAn": {
+              "r70.b": "128",
+              "r70.w": "58",
+              "r35.b": "64",
+              "r35.w": "29",
+              "r80.b": "128",
+              "r80.w": "48",
+              "r130.b": "256",
+              "r130.w": "126",
+              "r8.b": "8",
+              "r8.w": "0",
+              "r256.b": "256",
+              "r256.w": "0"
+            },
+            "giaiThich": "<p>70 → 128 (waste 58); 35 → 64 (waste 29); 80 → 128 (waste 48); 130 → 256 (waste 126); 8 → 8 (waste 0); 256 → 256 (waste 0). Buddies make merging free blocks easy (flip one address bit) at the cost of up to 50% internal waste.</p><p><i>VI: 70 → 128 (phí 58); 35 → 64 (phí 29); 80 → 128 (phí 48); 130 → 256 (phí 126); 8 → 8 (phí 0); 256 → 256 (phí 0). Buddy giúp gộp khối rảnh dễ (đổi một bit địa chỉ) nhưng phí trong tới gần 50%.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rounding to the nearest power of two (it must be rounded UP)."
+        },
+        {
+          "loi": "Computing waste against the block above."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "buddy system",
+          "vi": "hệ thống bạn bè: chia đôi/gộp đôi khối theo luỹ thừa 2"
+        }
+      ]
+    },
+    {
+      "title": "Allocation 4 — Swapping, base/limit, compaction",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "base and limit",
+        "external fragmentation",
+        "compaction",
+        "swapping"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on contiguous memory management.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về quản lý bộ nhớ liên tục.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Valid logical range: 0 … limit − 1.",
+        "Fragmentation “outside” blocks is external."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 4 — Swapping, base/limit, compaction\n\nAnswer in the answer panel (no code needed).\n\n1. With a base register = 40000 and a limit register = 12000, a process issues logical address 11999. Where does it go?Thanh ghi nền = 40000, thanh ghi giới hạn = 12000, tiến trình phát địa chỉ logic 11999. Điều gì xảy ra?\n2. The same process now issues logical address 12000. What happens?Cũng tiến trình đó phát địa chỉ logic 12000. Điều gì xảy ra?\n3. External fragmentation means …Phân mảnh ngoài nghĩa là …\n4. Compaction requires that processes are …Compaction đòi hỏi tiến trình phải …\n5. Swapping lets the OS …Swapping cho phép OS …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Allocation 4 — Swapping, base/limit, compaction — answer key\n\n1. With a base register = 40000 and a limit register = 12000, a process issues logical address 11999. Where does it go?Thanh ghi nền = 40000, thanh ghi giới hạn = 12000, tiến trình phát địa chỉ logic 11999. Điều gì xảy ra?\n   Answer: a) Physical address 51999\n   11999 VI: 11999\n\n2. The same process now issues logical address 12000. What happens?Cũng tiến trình đó phát địa chỉ logic 12000. Điều gì xảy ra?\n   Answer: b) Protection fault: 12000 is not below the limit\n   Valid logical addresses are 0 … limit−1.VI: Địa chỉ logic hợp lệ là 0 … limit−1.\n\n3. External fragmentation means …Phân mảnh ngoài nghĩa là …\n   Answer: c) enough total free memory exists but not in one contiguous block\n   Typical for variable partitions (first/best fit); cured by compaction or by paging.VI: Điển hình của phân vùng biến đổi; chữa bằng nén bộ nhớ (compaction) hoặc phân trang.\n\n4. Compaction requires that processes are …Compaction đòi hỏi tiến trình phải …\n   Answer: d) relocatable at run time (dynamic relocation)\n   Moving a process changes its physical address; this only works if addresses are bound at execution time through base registers.VI: Di chuyển tiến trình đổi địa chỉ vật lý; chỉ được khi địa chỉ gắn lúc thực thi qua thanh ghi nền.\n\n5. Swapping lets the OS …Swapping cho phép OS …\n   Answer: a) move a whole process between RAM and disk so more processes than RAM can hold are managed\n   Swapping works with whole processes; paging with fixed-size pages.VI: Swapping làm việc với cả tiến trình; phân trang với trang kích thước cố định.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>a · b · c · d · a.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>With a base register = 40000 and a limit register = 12000, a process issues logical address 11999. Where does it go?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thanh ghi nền = 40000, thanh ghi giới hạn = 12000, tiến trình phát địa chỉ logic 11999. Điều gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Physical address 51999"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Protection fault (beyond the limit)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Physical address 11999"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Physical address 52000"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>11999 < 12000 passes the limit check; physical = 40000 + 11999 = 51999.</p><p><i>VI: 11999 < 12000 qua kiểm tra giới hạn; vật lý = 40000 + 11999 = 51999.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The same process now issues logical address 12000. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cũng tiến trình đó phát địa chỉ logic 12000. Điều gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It wraps to 0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Protection fault: 12000 is not below the limit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Physical address 52000"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The base is increased"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Valid logical addresses are 0 … limit−1.</p><p><i>VI: Địa chỉ logic hợp lệ là 0 … limit−1.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>External fragmentation means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân mảnh ngoài nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "memory is full"
+              },
+              {
+                "ma": "b",
+                "noiDung": "pages are scattered on disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "enough total free memory exists but not in one contiguous block"
+              },
+              {
+                "ma": "d",
+                "noiDung": "wasted space inside an allocated block"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Typical for variable partitions (first/best fit); cured by compaction or by paging.</p><p><i>VI: Điển hình của phân vùng biến đổi; chữa bằng nén bộ nhớ (compaction) hoặc phân trang.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Compaction requires that processes are …</p><p style=\"opacity:.75;font-size:.92em\"><i>Compaction đòi hỏi tiến trình phải …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "smaller than the page size"
+              },
+              {
+                "ma": "b",
+                "noiDung": "single-threaded"
+              },
+              {
+                "ma": "c",
+                "noiDung": "statically linked"
+              },
+              {
+                "ma": "d",
+                "noiDung": "relocatable at run time (dynamic relocation)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Moving a process changes its physical address; this only works if addresses are bound at execution time through base registers.</p><p><i>VI: Di chuyển tiến trình đổi địa chỉ vật lý; chỉ được khi địa chỉ gắn lúc thực thi qua thanh ghi nền.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Swapping lets the OS …</p><p style=\"opacity:.75;font-size:.92em\"><i>Swapping cho phép OS …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "move a whole process between RAM and disk so more processes than RAM can hold are managed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "swap two pages of a process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "replace the TLB"
+              },
+              {
+                "ma": "d",
+                "noiDung": "avoid page tables"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Swapping works with whole processes; paging with fixed-size pages.</p><p><i>VI: Swapping làm việc với cả tiến trình; phân trang với trang kích thước cố định.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating address = limit as valid (off by one)."
+        },
+        {
+          "loi": "Mixing internal and external fragmentation."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "base register",
+          "vi": "thanh ghi nền"
+        },
+        {
+          "en": "limit register",
+          "vi": "thanh ghi giới hạn"
+        },
+        {
+          "en": "compaction",
+          "vi": "nén bộ nhớ: dồn các lỗ lại"
+        }
+      ]
+    },
+    {
+      "title": "Allocation 5 — Write a hole allocator",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "first fit",
+        "best fit",
+        "worst fit",
+        "next fit"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>allocate(strategy, holes, requests)</code>. <code>holes</code> is the array of free-hole sizes in address order; <code>strategy</code> is <code>'first'</code>, <code>'best'</code>, <code>'worst'</code> or <code>'next'</code> (next fit continues from the hole used by the previous request; the first search starts at index 0). Requests are served in order; the chosen hole shrinks by the request size. Return <code>{ place, holes }</code>: <code>place[i]</code> is the 0-based index of the hole used by request i, or <code>-1</code> when no hole is large enough; <code>holes</code> is the array of remaining sizes. Best fit breaks ties by lowest index; worst fit too.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Do not modify the input array.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>allocate(strategy, holes, requests)</code>. <code>holes</code> là mảng kích thước lỗ trống theo thứ tự địa chỉ; <code>strategy</code> là <code>'first'</code>, <code>'best'</code>, <code>'worst'</code> hoặc <code>'next'</code> (next fit tìm tiếp từ lỗ mà yêu cầu trước đã dùng; lần tìm đầu bắt đầu ở chỉ số 0). Yêu cầu được phục vụ lần lượt; lỗ được chọn nhỏ đi đúng bằng kích thước yêu cầu. Trả <code>{ place, holes }</code>: <code>place[i]</code> là chỉ số (từ 0) của lỗ dùng cho yêu cầu i, hoặc <code>-1</code> nếu không lỗ nào đủ lớn; <code>holes</code> là mảng kích thước còn lại. Best fit và worst fit hoà thì chọn chỉ số nhỏ nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa mảng đầu vào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "allocate('first', [100,500,200,300,600], [212,417,112,426])",
+          "output": "{\"place\":[1,4,1,-1],\"holes\":[100,176,200,300,183]}",
+          "explanation": "Textbook example: the 426 KB request must wait under first fit.|||Ví dụ giáo trình: yêu cầu 426 KB phải chờ ở first fit."
+        }
+      ],
+      "hintsJson": [
+        "Write one helper that returns the index of the chosen hole, differing only in the comparison.",
+        "For next fit remember the index of the last used hole and scan circularly."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function allocate(strategy, holes, requests) {\n  return { place: [], holes: holes.slice() };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// The strategy only changes how the candidate hole is chosen.\nfunction allocate(strategy, holes, reqs) {\n  const h = holes.slice(); const place = []; let last = 0;\n  for (const r of reqs) {\n    let c = -1;\n    if (strategy === 'first') { for (let i = 0; i < h.length; i++) if (h[i] >= r) { c = i; break; } }\n    else if (strategy === 'next') { for (let k = 0; k < h.length; k++) { const i = (last + k) % h.length; if (h[i] >= r) { c = i; break; } } }\n    else if (strategy === 'best') { for (let i = 0; i < h.length; i++) if (h[i] >= r && (c < 0 || h[i] < h[c])) c = i; }\n    else { for (let i = 0; i < h.length; i++) if (h[i] >= r && (c < 0 || h[i] > h[c])) c = i; }\n    place.push(c);\n    if (c >= 0) { h[c] -= r; last = c; }\n  }\n  return { place, holes: h };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One loop over the requests; the strategies differ only in which candidate hole is picked.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: allocate(\"first\", [100,500,200,300,600], [212,417,112,426])",
+              "vi": "Ca 1"
+            },
+            "goi": "allocate(\"first\", [100,500,200,300,600], [212,417,112,426])",
+            "mongDoi": {
+              "place": [
+                1,
+                4,
+                1,
+                -1
+              ],
+              "holes": [
+                100,
+                176,
+                200,
+                300,
+                183
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: allocate(\"best\", [100,500,200,300,600], [212,417,112,426])",
+              "vi": "Ca 2"
+            },
+            "goi": "allocate(\"best\", [100,500,200,300,600], [212,417,112,426])",
+            "mongDoi": {
+              "place": [
+                3,
+                1,
+                2,
+                4
+              ],
+              "holes": [
+                100,
+                83,
+                88,
+                88,
+                174
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: allocate(\"worst\", [100,500,200,300,600], [212,417,112,426])",
+              "vi": "Ca 3"
+            },
+            "goi": "allocate(\"worst\", [100,500,200,300,600], [212,417,112,426])",
+            "mongDoi": {
+              "place": [
+                4,
+                1,
+                4,
+                -1
+              ],
+              "holes": [
+                100,
+                83,
+                200,
+                300,
+                276
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: allocate(\"next\", [100,500,200,300,600], [212,417,112,426])",
+              "vi": "Ca 4"
+            },
+            "goi": "allocate(\"next\", [100,500,200,300,600], [212,417,112,426])",
+            "mongDoi": {
+              "place": [
+                1,
+                4,
+                4,
+                -1
+              ],
+              "holes": [
+                100,
+                288,
+                200,
+                300,
+                71
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "allocate(\"next\", [50,50,50], [20,20,20,20,20,20])",
+            "mongDoi": {
+              "place": [
+                0,
+                0,
+                1,
+                1,
+                2,
+                2
+              ],
+              "holes": [
+                10,
+                10,
+                10
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "allocate(\"best\", [30,10,10,30], [10,10,10])",
+            "mongDoi": {
+              "place": [
+                1,
+                2,
+                0
+              ],
+              "holes": [
+                20,
+                0,
+                0,
+                30
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "allocate(\"worst\", [30,10,10,30], [10,10,10])",
+            "mongDoi": {
+              "place": [
+                0,
+                3,
+                0
+              ],
+              "holes": [
+                10,
+                10,
+                10,
+                20
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "allocate(\"first\", [5], [6,5])",
+            "mongDoi": {
+              "place": [
+                -1,
+                0
+              ],
+              "holes": [
+                0
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Updating the original holes array (mutating the input)."
+        },
+        {
+          "loi": "Starting next fit at hole 0 for every request."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

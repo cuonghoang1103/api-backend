@@ -1,0 +1,901 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-6-2-banker",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-6-2-banker"
+  },
+  "exercises": [
+    {
+      "title": "Banker 1 — Compute the Need matrix",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "banker algorithm",
+        "Need matrix"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Need = Max − Allocation. Fill in the Need matrix of the state below.</p><p>Available = (3, 3, 2).</p><div style=\"display:flex;gap:24px;flex-wrap:wrap\"><div><b>Allocation</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P2</td><td>3</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>1</td><td>1</td></tr><tr><td>P4</td><td>0</td><td>0</td><td>2</td></tr></tbody></table></div><div><b>Max</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>7</td><td>5</td><td>3</td></tr><tr><td>P1</td><td>3</td><td>2</td><td>2</td></tr><tr><td>P2</td><td>9</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>2</td><td>2</td></tr><tr><td>P4</td><td>4</td><td>3</td><td>3</td></tr></tbody></table></div></div><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Need = Max − Allocation. Điền ma trận Need của trạng thái dưới đây.</p><p>Available = (3, 3, 2).</p><div style=\"display:flex;gap:24px;flex-wrap:wrap\"><div><b>Allocation</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P2</td><td>3</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>1</td><td>1</td></tr><tr><td>P4</td><td>0</td><td>0</td><td>2</td></tr></tbody></table></div><div><b>Max</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>7</td><td>5</td><td>3</td></tr><tr><td>P1</td><td>3</td><td>2</td><td>2</td></tr><tr><td>P2</td><td>9</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>2</td><td>2</td></tr><tr><td>P4</td><td>4</td><td>3</td><td>3</td></tr></tbody></table></div></div><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Subtract element by element: P0 = (7,5,3) − (0,1,0).",
+        "Check: Allocation + Need = Max for every cell."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 1 — Compute the Need matrix\n\nAnswer in the answer panel (no code needed).\n\n1. NeedNeed\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 1 — Compute the Need matrix — answer key\n\n1. NeedNeed\n   - P0.a: 7\n   - P0.b: 4\n   - P0.c: 3\n   - P1.a: 1\n   - P1.b: 2\n   - P1.c: 2\n   - P2.a: 6\n   - P2.b: 0\n   - P2.c: 0\n   - P3.a: 0\n   - P3.b: 1\n   - P3.c: 1\n   - P4.a: 4\n   - P4.b: 3\n   - P4.c: 1\n   Need = P0(7,4,3) P1(1,2,2) P2(6,0,0) P3(0,1,1) P4(4,3,1). Need tells how much more each process may still ask for.VI: Need = P0(7,4,3) P1(1,2,2) P2(6,0,0) P3(0,1,1) P4(4,3,1). Need cho biết mỗi tiến trình còn có thể xin thêm bao nhiêu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(7,4,3) (1,2,2) (6,0,0) (0,1,1) (4,3,1)</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Need</p><p style=\"opacity:.75;font-size:.92em\"><i>Need</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "Process"
+              },
+              {
+                "ma": "a",
+                "ten": "A"
+              },
+              {
+                "ma": "b",
+                "ten": "B"
+              },
+              {
+                "ma": "c",
+                "ten": "C"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "P0",
+                "o": {
+                  "p": "P0"
+                }
+              },
+              {
+                "ma": "P1",
+                "o": {
+                  "p": "P1"
+                }
+              },
+              {
+                "ma": "P2",
+                "o": {
+                  "p": "P2"
+                }
+              },
+              {
+                "ma": "P3",
+                "o": {
+                  "p": "P3"
+                }
+              },
+              {
+                "ma": "P4",
+                "o": {
+                  "p": "P4"
+                }
+              }
+            ],
+            "dapAn": {
+              "P0.a": "7",
+              "P0.b": "4",
+              "P0.c": "3",
+              "P1.a": "1",
+              "P1.b": "2",
+              "P1.c": "2",
+              "P2.a": "6",
+              "P2.b": "0",
+              "P2.c": "0",
+              "P3.a": "0",
+              "P3.b": "1",
+              "P3.c": "1",
+              "P4.a": "4",
+              "P4.b": "3",
+              "P4.c": "1"
+            },
+            "giaiThich": "<p>Need = P0(7,4,3) P1(1,2,2) P2(6,0,0) P3(0,1,1) P4(4,3,1). Need tells how much more each process may still ask for.</p><p><i>VI: Need = P0(7,4,3) P1(1,2,2) P2(6,0,0) P3(0,1,1) P4(4,3,1). Need cho biết mỗi tiến trình còn có thể xin thêm bao nhiêu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Subtracting Max from Allocation (negative numbers)."
+        },
+        {
+          "loi": "Mixing up rows and columns."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Need",
+          "vi": "nhu cầu còn lại = Max − Allocation"
+        },
+        {
+          "en": "Available",
+          "vi": "số tài nguyên rảnh"
+        }
+      ]
+    },
+    {
+      "title": "Banker 2 — Find the safe sequence",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "safety algorithm",
+        "safe state"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Is the state below safe? Put the processes in the order in which the safety algorithm finishes them. At every step choose the LOWEST-numbered unfinished process whose Need ≤ Work. After a process finishes, its Allocation is added to Work (Work starts as Available).</p><p>Available = (3, 3, 2).</p><div style=\"display:flex;gap:24px;flex-wrap:wrap\"><div><b>Allocation</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P2</td><td>3</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>1</td><td>1</td></tr><tr><td>P4</td><td>0</td><td>0</td><td>2</td></tr></tbody></table></div><div><b>Max</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>7</td><td>5</td><td>3</td></tr><tr><td>P1</td><td>3</td><td>2</td><td>2</td></tr><tr><td>P2</td><td>9</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>2</td><td>2</td></tr><tr><td>P4</td><td>4</td><td>3</td><td>3</td></tr></tbody></table></div></div><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trạng thái dưới đây có an toàn không? Xếp các tiến trình theo thứ tự thuật toán an toàn cho chúng hoàn thành. Ở mỗi bước chọn tiến trình CHƯA XONG có số nhỏ nhất mà Need ≤ Work. Khi một tiến trình xong, Allocation của nó được cộng vào Work (Work ban đầu là Available).</p><p>Available = (3, 3, 2).</p><div style=\"display:flex;gap:24px;flex-wrap:wrap\"><div><b>Allocation</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P2</td><td>3</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>1</td><td>1</td></tr><tr><td>P4</td><td>0</td><td>0</td><td>2</td></tr></tbody></table></div><div><b>Max</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>7</td><td>5</td><td>3</td></tr><tr><td>P1</td><td>3</td><td>2</td><td>2</td></tr><tr><td>P2</td><td>9</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>2</td><td>2</td></tr><tr><td>P4</td><td>4</td><td>3</td><td>3</td></tr></tbody></table></div></div><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compute Need first (previous exercise). Then loop: find a process with Need ≤ Work, “run” it, add its Allocation back.",
+        "After P1 finishes Work becomes (5,3,2), so P3 can run, and so on."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 2 — Find the safe sequence\n\nAnswer in the answer panel (no code needed).\n\n1. Safe sequence (lowest index first)Dãy an toàn (số nhỏ trước)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 2 — Find the safe sequence — answer key\n\n1. Safe sequence (lowest index first)Dãy an toàn (số nhỏ trước)\n   Answer: P1) P1  →  P3) P3  →  P0) P0  →  P2) P2  →  P4) P4\n   The state is SAFE. Trace: Work=(3,3,2) → P1 (Work → 5,3,2), P3 (Work → 7,4,3), P0 (Work → 7,5,3), P2 (Work → 10,5,5), P4 (Work → 10,5,7). Other safe sequences exist (e.g. P1, P3, P4, P0, P2); the rule makes the answer unique.VI: Trạng thái AN TOÀN. Vết: Work=(3,3,2) → P1 (Work → 5,3,2), P3 (Work → 7,4,3), P0 (Work → 7,5,3), P2 (Work → 10,5,5), P4 (Work → 10,5,7). Còn các dãy an toàn khác (vd P1, P3, P4, P0, P2); quy tắc trên làm đáp án duy nhất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>P1 → P3 → P0 → P2 → P4</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Safe sequence (lowest index first)</p><p style=\"opacity:.75;font-size:.92em\"><i>Dãy an toàn (số nhỏ trước)</i></p>",
+            "muc": [
+              {
+                "ma": "P0",
+                "noiDung": "P0"
+              },
+              {
+                "ma": "P2",
+                "noiDung": "P2"
+              },
+              {
+                "ma": "P4",
+                "noiDung": "P4"
+              },
+              {
+                "ma": "P1",
+                "noiDung": "P1"
+              },
+              {
+                "ma": "P3",
+                "noiDung": "P3"
+              }
+            ],
+            "dapAn": [
+              "P1",
+              "P3",
+              "P0",
+              "P2",
+              "P4"
+            ],
+            "giaiThich": "<p>The state is SAFE. Trace: Work=(3,3,2) → P1 (Work → 5,3,2), P3 (Work → 7,4,3), P0 (Work → 7,5,3), P2 (Work → 10,5,5), P4 (Work → 10,5,7). Other safe sequences exist (e.g. P1, P3, P4, P0, P2); the rule makes the answer unique.</p><p><i>VI: Trạng thái AN TOÀN. Vết: Work=(3,3,2) → P1 (Work → 5,3,2), P3 (Work → 7,4,3), P0 (Work → 7,5,3), P2 (Work → 10,5,5), P4 (Work → 10,5,7). Còn các dãy an toàn khác (vd P1, P3, P4, P0, P2); quy tắc trên làm đáp án duy nhất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding Max instead of Allocation to Work when a process finishes."
+        },
+        {
+          "loi": "Comparing Need with Available forever instead of with the growing Work."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "safe sequence",
+          "vi": "dãy an toàn"
+        },
+        {
+          "en": "Work",
+          "vi": "vector làm việc của thuật toán an toàn"
+        }
+      ]
+    },
+    {
+      "title": "Banker 3 — Resource-request decisions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "banker algorithm",
+        "resource request"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>For each INDEPENDENT request (always starting from the state below) decide: <b>DENY</b> (the request exceeds the process’s Need: error), <b>WAIT</b> (exceeds Available: the process must wait), <b>UNSAFE</b> (resources are available but granting leads to an unsafe state, so the request is refused for now) or <b>GRANT</b> (safe).</p><p>Available = (3, 3, 2).</p><div style=\"display:flex;gap:24px;flex-wrap:wrap\"><div><b>Allocation</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P2</td><td>3</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>1</td><td>1</td></tr><tr><td>P4</td><td>0</td><td>0</td><td>2</td></tr></tbody></table></div><div><b>Max</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>7</td><td>5</td><td>3</td></tr><tr><td>P1</td><td>3</td><td>2</td><td>2</td></tr><tr><td>P2</td><td>9</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>2</td><td>2</td></tr><tr><td>P4</td><td>4</td><td>3</td><td>3</td></tr></tbody></table></div></div><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi yêu cầu ĐỘC LẬP (luôn xuất phát từ trạng thái dưới đây) hãy quyết định: <b>DENY</b> (yêu cầu vượt Need: lỗi), <b>WAIT</b> (vượt Available: tiến trình phải chờ), <b>UNSAFE</b> (có đủ tài nguyên nhưng cấp xong dẫn tới trạng thái không an toàn nên tạm từ chối) hoặc <b>GRANT</b> (an toàn).</p><p>Available = (3, 3, 2).</p><div style=\"display:flex;gap:24px;flex-wrap:wrap\"><div><b>Allocation</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>1</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P2</td><td>3</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>1</td><td>1</td></tr><tr><td>P4</td><td>0</td><td>0</td><td>2</td></tr></tbody></table></div><div><b>Max</b><table><thead><tr><th></th><th>A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>7</td><td>5</td><td>3</td></tr><tr><td>P1</td><td>3</td><td>2</td><td>2</td></tr><tr><td>P2</td><td>9</td><td>0</td><td>2</td></tr><tr><td>P3</td><td>2</td><td>2</td><td>2</td></tr><tr><td>P4</td><td>4</td><td>3</td><td>3</td></tr></tbody></table></div></div><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Apply the three tests in order; stop at the first that fails.",
+        "For the third test copy the state, subtract from Available, add to Allocation, and rerun the safety algorithm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 3 — Resource-request decisions\n\nAnswer in the answer panel (no code needed).\n\n1. DecisionsQuyết định\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 3 — Resource-request decisions — answer key\n\n1. DecisionsQuyết định\n   - r0.d: GRANT\n   - r1.d: UNSAFE\n   - r2.d: GRANT\n   - r3.d: WAIT\n   - r4.d: DENY\n   - r5.d: GRANT\n   P1 (1,0,2): GRANT; P4 (3,3,0): UNSAFE; P0 (0,2,0): GRANT; P2 (6,0,0): WAIT; P3 (3,0,0): DENY; P4 (0,0,1): GRANT. Order of tests: (1) request ≤ Need else error, (2) request ≤ Available else wait, (3) pretend to grant and run the safety algorithm.VI: P1 (1,0,2): GRANT; P4 (3,3,0): UNSAFE; P0 (0,2,0): GRANT; P2 (6,0,0): WAIT; P3 (3,0,0): DENY; P4 (0,0,1): GRANT. Thứ tự kiểm: (1) yêu cầu ≤ Need nếu không là lỗi, (2) yêu cầu ≤ Available nếu không phải chờ, (3) giả vờ cấp và chạy thuật toán an toàn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>GRANT · UNSAFE · GRANT · WAIT · DENY · GRANT</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Decisions</p><p style=\"opacity:.75;font-size:.92em\"><i>Quyết định</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Request"
+              },
+              {
+                "ma": "d",
+                "ten": "Decision",
+                "luaChon": [
+                  "GRANT",
+                  "WAIT",
+                  "DENY",
+                  "UNSAFE"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "r": "P1 requests (1, 0, 2)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "P4 requests (3, 3, 0)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "P0 requests (0, 2, 0)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "P2 requests (6, 0, 0)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "P3 requests (3, 0, 0)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "r": "P4 requests (0, 0, 1)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.d": "GRANT",
+              "r1.d": "UNSAFE",
+              "r2.d": "GRANT",
+              "r3.d": "WAIT",
+              "r4.d": "DENY",
+              "r5.d": "GRANT"
+            },
+            "giaiThich": "<p>P1 (1,0,2): GRANT; P4 (3,3,0): UNSAFE; P0 (0,2,0): GRANT; P2 (6,0,0): WAIT; P3 (3,0,0): DENY; P4 (0,0,1): GRANT. Order of tests: (1) request ≤ Need else error, (2) request ≤ Available else wait, (3) pretend to grant and run the safety algorithm.</p><p><i>VI: P1 (1,0,2): GRANT; P4 (3,3,0): UNSAFE; P0 (0,2,0): GRANT; P2 (6,0,0): WAIT; P3 (3,0,0): DENY; P4 (0,0,1): GRANT. Thứ tự kiểm: (1) yêu cầu ≤ Need nếu không là lỗi, (2) yêu cầu ≤ Available nếu không phải chờ, (3) giả vờ cấp và chạy thuật toán an toàn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skipping the Need check and answering WAIT for an over-claim."
+        },
+        {
+          "loi": "Granting because Available is big enough without checking safety."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "resource-request algorithm",
+          "vi": "thuật toán xét yêu cầu tài nguyên"
+        }
+      ]
+    },
+    {
+      "title": "Banker 4 — Deadlock detection with several instances per resource",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "deadlock detection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Four processes, three resource types. Allocation (current) and Request (what each process is waiting for) are given. A process whose Allocation is all zero holds nothing. The detection algorithm marks a process FINISHED if its Request ≤ Work and returns its Allocation to Work (Work starts as Available); processes that can never be marked are deadlocked. For each Available vector list the deadlocked processes (e.g. <code>P1,P3</code>; <code>none</code> if no deadlock).</p><table><thead><tr><th></th><th>Alloc A</th><th>B</th><th>C</th><th>Request A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr><tr><td>P2</td><td>0</td><td>1</td><td>2</td><td>0</td><td>3</td><td>0</td></tr><tr><td>P3</td><td>1</td><td>0</td><td>0</td><td>4</td><td>2</td><td>1</td></tr></tbody></table><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn tiến trình, ba loại tài nguyên. Cho Allocation (hiện giữ) và Request (đang chờ). Tiến trình có Allocation toàn 0 là không giữ gì. Thuật toán phát hiện đánh dấu một tiến trình XONG nếu Request ≤ Work rồi trả Allocation vào Work (Work ban đầu là Available); tiến trình không bao giờ được đánh dấu là bị deadlock. Với mỗi vector Available liệt kê các tiến trình bị deadlock (vd <code>P1,P3</code>; <code>none</code> nếu không có).</p><table><thead><tr><th></th><th>Alloc A</th><th>B</th><th>C</th><th>Request A</th><th>B</th><th>C</th></tr></thead><tbody><tr><td>P0</td><td>0</td><td>0</td><td>1</td><td>2</td><td>0</td><td>0</td></tr><tr><td>P1</td><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td></tr><tr><td>P2</td><td>0</td><td>1</td><td>2</td><td>0</td><td>3</td><td>0</td></tr><tr><td>P3</td><td>1</td><td>0</td><td>0</td><td>4</td><td>2</td><td>1</td></tr></tbody></table><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Unlike the Banker, detection uses Request, not Need: it asks “can the CURRENT requests be satisfied?”.",
+        "A process that finishes returns its Allocation, which may unblock others."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 4 — Deadlock detection with several instances per resource\n\nAnswer in the answer panel (no code needed).\n\n1. Deadlocked processesTiến trình bị deadlock\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 4 — Deadlock detection with several instances per resource — answer key\n\n1. Deadlocked processesTiến trình bị deadlock\n   - s0.d: P0,P1,P2,P3\n   - s1.d: P2,P3\n   - s2.d: P2\n   Available = (0, 0, 0): P0,P1,P2,P3; Available = (2, 0, 0): P2,P3; Available = (3, 2, 1): P2.VI: Available = (0, 0, 0): P0,P1,P2,P3; Available = (2, 0, 0): P2,P3; Available = (3, 2, 1): P2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>P0,P1,P2,P3 · P2,P3 · P2</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Deadlocked processes</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiến trình bị deadlock</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Scenario"
+              },
+              {
+                "ma": "d",
+                "ten": "Deadlocked"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "s0",
+                "o": {
+                  "s": "Available = (0, 0, 0)"
+                }
+              },
+              {
+                "ma": "s1",
+                "o": {
+                  "s": "Available = (2, 0, 0)"
+                }
+              },
+              {
+                "ma": "s2",
+                "o": {
+                  "s": "Available = (3, 2, 1)"
+                }
+              }
+            ],
+            "dapAn": {
+              "s0.d": "P0,P1,P2,P3",
+              "s1.d": "P2,P3",
+              "s2.d": "P2"
+            },
+            "giaiThich": "<p>Available = (0, 0, 0): P0,P1,P2,P3; Available = (2, 0, 0): P2,P3; Available = (3, 2, 1): P2.</p><p><i>VI: Available = (0, 0, 0): P0,P1,P2,P3; Available = (2, 0, 0): P2,P3; Available = (3, 2, 1): P2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using Max − Allocation (Need) instead of Request."
+        },
+        {
+          "loi": "Forgetting to add the Allocation of a finished process back to Work."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deadlock detection",
+          "vi": "phát hiện bế tắc"
+        }
+      ]
+    },
+    {
+      "title": "Banker 5 — What the Banker’s algorithm needs, and its limits",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "avoidance",
+        "safe state",
+        "complexity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on the assumptions and costs of deadlock avoidance.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về giả định và chi phí của việc tránh deadlock.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "“Safe” asks for the EXISTENCE of one good order.",
+        "Avoidance needs maximum claims; detection only needs current requests."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 5 — What the Banker’s algorithm needs, and its limits\n\nAnswer in the answer panel (no code needed).\n\n1. Which assumption makes the Banker’s algorithm hard to use in a general-purpose OS?Giả định nào khiến thuật toán nhà băng khó dùng trong OS đa dụng?\n2. A state is safe if …Một trạng thái là an toàn nếu …\n3. The safety algorithm takes O(m·n²) steps for n processes and m resource types because …Thuật toán an toàn có độ phức tạp O(m·n²) cho n tiến trình và m loại tài nguyên vì …\n4. After the OS pretends to grant a request and finds the new state UNSAFE, it …Sau khi OS giả vờ cấp một yêu cầu và thấy trạng thái mới KHÔNG an toàn, nó …\n5. Which pair is correct?Cặp nào đúng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Banker 5 — What the Banker’s algorithm needs, and its limits — answer key\n\n1. Which assumption makes the Banker’s algorithm hard to use in a general-purpose OS?Giả định nào khiến thuật toán nhà băng khó dùng trong OS đa dụng?\n   Answer: d) Every process must declare its maximum resource claim in advance\n   Real programs rarely know their maximum demand beforehand; the number of processes is also not fixed.VI: Chương trình thật hiếm khi biết trước nhu cầu tối đa; số tiến trình cũng không cố định.\n\n2. A state is safe if …Một trạng thái là an toàn nếu …\n   Answer: a) there exists an order in which every process can run to completion\n   One good order is enough; the algorithm searches for it.VI: Chỉ cần MỘT thứ tự tốt; thuật toán đi tìm nó.\n\n3. The safety algorithm takes O(m·n²) steps for n processes and m resource types because …Thuật toán an toàn có độ phức tạp O(m·n²) cho n tiến trình và m loại tài nguyên vì …\n   Answer: b) up to n rounds each scan n processes comparing m numbers\n   Each round finds one process (n scans of m comparisons), at most n rounds.VI: Mỗi vòng tìm được một tiến trình (n lần duyệt, mỗi lần m phép so), tối đa n vòng.\n\n4. After the OS pretends to grant a request and finds the new state UNSAFE, it …Sau khi OS giả vờ cấp một yêu cầu và thấy trạng thái mới KHÔNG an toàn, nó …\n   Answer: c) restores the old state and makes the process wait\n   The grant is only tentative; the request stays pending.VI: Việc cấp chỉ là tạm; yêu cầu vẫn chờ xử lý.\n\n5. Which pair is correct?Cặp nào đúng?\n   Answer: d) Banker’s algorithm = avoidance; cycle search in the allocation graph = detection\n   Avoidance decides at request time with extra information; detection looks at the state afterwards.VI: Tránh quyết định lúc yêu cầu bằng thông tin thêm; phát hiện xét trạng thái sau đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which assumption makes the Banker’s algorithm hard to use in a general-purpose OS?</p><p style=\"opacity:.75;font-size:.92em\"><i>Giả định nào khiến thuật toán nhà băng khó dùng trong OS đa dụng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Resources must be printers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "There must be exactly one process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Memory must be paged"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every process must declare its maximum resource claim in advance"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Real programs rarely know their maximum demand beforehand; the number of processes is also not fixed.</p><p><i>VI: Chương trình thật hiếm khi biết trước nhu cầu tối đa; số tiến trình cũng không cố định.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A state is safe if …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một trạng thái là an toàn nếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "there exists an order in which every process can run to completion"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no process is waiting"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Available is positive"
+              },
+              {
+                "ma": "d",
+                "noiDung": "all processes can finish in ANY order"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One good order is enough; the algorithm searches for it.</p><p><i>VI: Chỉ cần MỘT thứ tự tốt; thuật toán đi tìm nó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The safety algorithm takes O(m·n²) steps for n processes and m resource types because …</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán an toàn có độ phức tạp O(m·n²) cho n tiến trình và m loại tài nguyên vì …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it simulates every interleaving"
+              },
+              {
+                "ma": "b",
+                "noiDung": "up to n rounds each scan n processes comparing m numbers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it sorts the processes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it copies the disk"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each round finds one process (n scans of m comparisons), at most n rounds.</p><p><i>VI: Mỗi vòng tìm được một tiến trình (n lần duyệt, mỗi lần m phép so), tối đa n vòng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>After the OS pretends to grant a request and finds the new state UNSAFE, it …</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi OS giả vờ cấp một yêu cầu và thấy trạng thái mới KHÔNG an toàn, nó …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "grants it anyway"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reboots"
+              },
+              {
+                "ma": "c",
+                "noiDung": "restores the old state and makes the process wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "kills the process"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The grant is only tentative; the request stays pending.</p><p><i>VI: Việc cấp chỉ là tạm; yêu cầu vẫn chờ xử lý.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which pair is correct?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cặp nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Banker’s algorithm = detection; ordering resources = avoidance"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Spooling = avoidance; Banker = prevention"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ostrich = avoidance; detection = prevention"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Banker’s algorithm = avoidance; cycle search in the allocation graph = detection"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Avoidance decides at request time with extra information; detection looks at the state afterwards.</p><p><i>VI: Tránh quyết định lúc yêu cầu bằng thông tin thêm; phát hiện xét trạng thái sau đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing every unsafe state is already a deadlock."
+        },
+        {
+          "loi": "Believing safe means all orders work."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "maximum claim",
+          "vi": "nhu cầu tối đa khai báo trước"
+        }
+      ]
+    },
+    {
+      "title": "Banker 6 — Implement the safety and request algorithms",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "banker algorithm",
+        "safety algorithm"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>banker(avail, alloc, max)</code> returning <code>{ safe, seq }</code>: <code>seq</code> lists the process indices in the order they finish (At every step choose the LOWEST-numbered unfinished process whose Need ≤ Work. Stop when none can finish; <code>safe</code> is true iff all processes finished). Then write <code>request(avail, alloc, max, p, req)</code> returning one of <code>'DENY'</code> (req &gt; Need of p), <code>'WAIT'</code> (req &gt; avail), <code>'UNSAFE'</code> (the pretended grant leaves an unsafe state) or <code>'GRANT'</code>. Do not mutate the arguments.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Both functions work for any number of resource types.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>banker(avail, alloc, max)</code> trả <code>{ safe, seq }</code>: <code>seq</code> là chỉ số tiến trình theo thứ tự hoàn thành (Ở mỗi bước chọn tiến trình CHƯA XONG có số nhỏ nhất mà Need ≤ Work. Dừng khi không ai xong được; <code>safe</code> là true khi tất cả đã xong). Rồi viết <code>request(avail, alloc, max, p, req)</code> trả <code>'DENY'</code> (req &gt; Need của p), <code>'WAIT'</code> (req &gt; avail), <code>'UNSAFE'</code> (cấp giả định dẫn tới trạng thái không an toàn) hoặc <code>'GRANT'</code>. Không sửa các đối số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cả hai hàm chạy với số loại tài nguyên bất kỳ.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "banker([3,3,2], allocation, max)",
+          "output": "{\"safe\":true,\"seq\":[1,3,0,2,4]}",
+          "explanation": "The textbook state: safe, P1 finishes first.|||Trạng thái trong giáo trình: an toàn, P1 xong đầu tiên."
+        }
+      ],
+      "hintsJson": [
+        "Need[i][j] = max[i][j] − alloc[i][j]; Work starts as a copy of avail.",
+        "request() = two comparisons, then banker() on a COPY of the tentative state."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function banker(avail, alloc, max) {\n  return { safe: false, seq: [] };\n}\nfunction request(avail, alloc, max, p, req) {\n  return 'DENY';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Safety algorithm + request algorithm.\nfunction banker(avail, alloc, max) {\n  const n = alloc.length; const m = avail.length;\n  const need = max.map((r, i) => r.map((v, j) => v - alloc[i][j]));\n  const work = avail.slice(); const xong = new Array(n).fill(false); const seq = [];\n  let tiep = true;\n  while (tiep) {\n    tiep = false;\n    for (let i = 0; i < n; i++) {\n      if (xong[i]) continue;\n      let ok = true;\n      for (let j = 0; j < m; j++) if (need[i][j] > work[j]) { ok = false; break; }\n      if (ok) { for (let j = 0; j < m; j++) work[j] += alloc[i][j]; xong[i] = true; seq.push(i); tiep = true; break; }\n    }\n  }\n  return { safe: seq.length === n, seq: seq };\n}\n\nfunction request(avail, alloc, max, p, req) {\n  const m = avail.length;\n  for (let j = 0; j < m; j++) if (req[j] > max[p][j] - alloc[p][j]) return 'DENY';\n  for (let j = 0; j < m; j++) if (req[j] > avail[j]) return 'WAIT';\n  const a2 = avail.map((v, j) => v - req[j]);\n  const al2 = alloc.map((r, i) => (i === p ? r.map((v, j) => v + req[j]) : r.slice()));\n  return banker(a2, al2, max).safe ? 'GRANT' : 'UNSAFE';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>request() reduces to one safety check after two cheap comparisons; the safety check is a fixpoint iteration on Work.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: banker([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[)",
+              "vi": "Ca 1"
+            },
+            "goi": "banker([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]])",
+            "mongDoi": {
+              "safe": true,
+              "seq": [
+                1,
+                3,
+                0,
+                2,
+                4
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: banker([2,2,2], [[1,0,1],[1,1,0],[1,0,0]], [[3,2,2],[1,2,2],[1,0,2]])",
+              "vi": "Ca 2"
+            },
+            "goi": "banker([2,2,2], [[1,0,1],[1,1,0],[1,0,0]], [[3,2,2],[1,2,2],[1,0,2]])",
+            "mongDoi": {
+              "safe": true,
+              "seq": [
+                0,
+                1,
+                2
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: banker([0,0,0], [[0,1,0],[2,0,0],[3,0,3]], [[7,5,3],[3,2,2],[9,0,5]])",
+              "vi": "Ca 3"
+            },
+            "goi": "banker([0,0,0], [[0,1,0],[2,0,0],[3,0,3]], [[7,5,3],[3,2,2],[9,0,5]])",
+            "mongDoi": {
+              "safe": false,
+              "seq": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "banker([0,1,0], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]])",
+            "mongDoi": {
+              "safe": false,
+              "seq": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "banker([10,5,7], [[0,0,0]], [[7,5,3]])",
+            "mongDoi": {
+              "safe": true,
+              "seq": [
+                0
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "request #1",
+              "vi": "yêu cầu #1"
+            },
+            "goi": "request([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]], 1, [1,0,2])",
+            "mongDoi": "GRANT"
+          },
+          {
+            "moTa": {
+              "en": "request #2",
+              "vi": "yêu cầu #2"
+            },
+            "goi": "request([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]], 4, [3,3,0])",
+            "mongDoi": "UNSAFE"
+          },
+          {
+            "moTa": {
+              "en": "request #3",
+              "vi": "yêu cầu #3"
+            },
+            "goi": "request([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]], 0, [0,2,0])",
+            "mongDoi": "GRANT"
+          },
+          {
+            "moTa": {
+              "en": "request #4",
+              "vi": "yêu cầu #4"
+            },
+            "goi": "request([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]], 2, [6,0,0])",
+            "mongDoi": "WAIT",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "request #5",
+              "vi": "yêu cầu #5"
+            },
+            "goi": "request([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]], 3, [3,0,0])",
+            "mongDoi": "DENY",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "request #6",
+              "vi": "yêu cầu #6"
+            },
+            "goi": "request([3,3,2], [[0,1,0],[2,0,0],[3,0,2],[2,1,1],[0,0,2]], [[7,5,3],[3,2,2],[9,0,2],[2,2,2],[4,3,3]], 4, [0,0,1])",
+            "mongDoi": "GRANT",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mutating avail or alloc while testing a request."
+        },
+        {
+          "loi": "Picking the process with the smallest Need instead of the lowest index (the rule is stated!)."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,774 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-1-1-kernel-syscall",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-1-1-kernel-syscall"
+  },
+  "exercises": [
+    {
+      "title": "Kernel 1 — Kernel mode, user mode and the role of the OS",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "OS role",
+        "dual mode",
+        "kernel structure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five basic questions on what an operating system is and does.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu cơ bản về hệ điều hành là gì và làm gì.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Kernel mode = full hardware access; user mode = restricted.",
+        "The shell is just a program."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 1 — Kernel mode, user mode and the role of the OS\n\nAnswer in the answer panel (no code needed).\n\n1. Which description of the operating system is most accurate?Mô tả nào về hệ điều hành chính xác nhất?\n2. Why does the CPU have a user mode and a kernel mode?Vì sao CPU có chế độ người dùng và chế độ kernel?\n3. A user program executes a privileged instruction in user mode. What happens?Chương trình người dùng chạy lệnh đặc quyền ở chế độ người dùng. Điều gì xảy ra?\n4. Which component is NOT part of the kernel in a monolithic design like Linux?Thành phần nào KHÔNG thuộc kernel trong thiết kế nguyên khối như Linux?\n5. A microkernel differs from a monolithic kernel in that …Microkernel khác kernel nguyên khối ở chỗ …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 1 — Kernel mode, user mode and the role of the OS — answer key\n\n1. Which description of the operating system is most accurate?Mô tả nào về hệ điều hành chính xác nhất?\n   Answer: d) It is both an extended machine (nice abstractions) and a resource manager (CPU, memory, devices)\n   Tanenbaum’s two views: top-down (abstraction) and bottom-up (resource management).VI: Hai góc nhìn của Tanenbaum: từ trên xuống (trừu tượng hoá) và từ dưới lên (quản lý tài nguyên).\n\n2. Why does the CPU have a user mode and a kernel mode?Vì sao CPU có chế độ người dùng và chế độ kernel?\n   Answer: a) So that only the OS can execute privileged instructions and a faulty program cannot take over the machine\n   Privileged instructions (I/O, interrupt masks, page-table registers) trap if executed in user mode.VI: Lệnh đặc quyền (I/O, mặt nạ ngắt, thanh ghi bảng trang) gây trap nếu chạy ở chế độ người dùng.\n\n3. A user program executes a privileged instruction in user mode. What happens?Chương trình người dùng chạy lệnh đặc quyền ở chế độ người dùng. Điều gì xảy ra?\n   Answer: b) The CPU raises an exception (trap) and the OS usually kills the process\n   The trap hands control to the kernel, which decides the consequence.VI: Trap chuyển quyền cho kernel, kernel quyết định hậu quả.\n\n4. Which component is NOT part of the kernel in a monolithic design like Linux?Thành phần nào KHÔNG thuộc kernel trong thiết kế nguyên khối như Linux?\n   Answer: c) The shell (command interpreter)\n   The shell is an ordinary user program that happens to start other programs.VI: Shell là chương trình người dùng bình thường dùng để khởi động chương trình khác.\n\n5. A microkernel differs from a monolithic kernel in that …Microkernel khác kernel nguyên khối ở chỗ …\n   Answer: d) only the minimum (IPC, scheduling, basic memory) runs in kernel mode; drivers and file systems run as user processes\n   Better isolation and reliability, at the cost of more message passing.VI: Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which description of the operating system is most accurate?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô tả nào về hệ điều hành chính xác nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is only a graphical interface"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is the same as the BIOS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is a compiler"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is both an extended machine (nice abstractions) and a resource manager (CPU, memory, devices)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Tanenbaum’s two views: top-down (abstraction) and bottom-up (resource management).</p><p><i>VI: Hai góc nhìn của Tanenbaum: từ trên xuống (trừu tượng hoá) và từ dưới lên (quản lý tài nguyên).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why does the CPU have a user mode and a kernel mode?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao CPU có chế độ người dùng và chế độ kernel?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So that only the OS can execute privileged instructions and a faulty program cannot take over the machine"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To run two programs at once"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To save electricity"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To make the cache bigger"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Privileged instructions (I/O, interrupt masks, page-table registers) trap if executed in user mode.</p><p><i>VI: Lệnh đặc quyền (I/O, mặt nạ ngắt, thanh ghi bảng trang) gây trap nếu chạy ở chế độ người dùng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A user program executes a privileged instruction in user mode. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chương trình người dùng chạy lệnh đặc quyền ở chế độ người dùng. Điều gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The instruction is ignored"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The CPU raises an exception (trap) and the OS usually kills the process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The instruction runs normally"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The CPU switches to kernel mode silently"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The trap hands control to the kernel, which decides the consequence.</p><p><i>VI: Trap chuyển quyền cho kernel, kernel quyết định hậu quả.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which component is NOT part of the kernel in a monolithic design like Linux?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thành phần nào KHÔNG thuộc kernel trong thiết kế nguyên khối như Linux?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The virtual-memory manager"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Most device drivers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The shell (command interpreter)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The process scheduler"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The shell is an ordinary user program that happens to start other programs.</p><p><i>VI: Shell là chương trình người dùng bình thường dùng để khởi động chương trình khác.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A microkernel differs from a monolithic kernel in that …</p><p style=\"opacity:.75;font-size:.92em\"><i>Microkernel khác kernel nguyên khối ở chỗ …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it has no scheduler"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it cannot run on real hardware"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it is always faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only the minimum (IPC, scheduling, basic memory) runs in kernel mode; drivers and file systems run as user processes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Better isolation and reliability, at the cost of more message passing.</p><p><i>VI: Cách ly và độ tin cậy tốt hơn, đổi lại nhiều truyền thông điệp hơn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating the shell or the GUI as part of the kernel."
+        },
+        {
+          "loi": "Thinking a microkernel is always faster."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "kernel mode",
+          "vi": "chế độ kernel: toàn quyền phần cứng"
+        },
+        {
+          "en": "privileged instruction",
+          "vi": "lệnh đặc quyền"
+        },
+        {
+          "en": "monolithic kernel",
+          "vi": "kernel nguyên khối"
+        }
+      ]
+    },
+    {
+      "title": "Kernel 2 — Which operations need kernel mode?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "privileged instructions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>For each operation say whether the CPU must be in kernel mode to execute it directly.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi thao tác cho biết CPU có phải ở chế độ kernel mới thực hiện trực tiếp được không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: could a buggy program break OTHER programs by doing this?",
+        "Arithmetic and own-memory accesses are always allowed."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 2 — Which operations need kernel mode?\n\nAnswer in the answer panel (no code needed).\n\n1. Operation → modeThao tác → chế độ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 2 — Which operations need kernel mode? — answer key\n\n1. Operation → modeThao tác → chế độ\n   - r0.m: Kernel mode only\n   - r1.m: User mode is enough\n   - r2.m: Kernel mode only\n   - r3.m: User mode is enough\n   - r4.m: Kernel mode only\n   - r5.m: Kernel mode only\n   Anything that touches shared hardware state — interrupts, I/O ports, MMU registers, the timer — is privileged. Ordinary arithmetic and memory access inside your own address space is not.VI: Mọi thứ chạm vào trạng thái phần cứng dùng chung — ngắt, cổng I/O, thanh ghi MMU, bộ định thời — là đặc quyền. Tính toán thường và truy cập bộ nhớ trong không gian địa chỉ của mình thì không.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>K U K U K K</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Operation → mode</p><p style=\"opacity:.75;font-size:.92em\"><i>Thao tác → chế độ</i></p>",
+            "cot": [
+              {
+                "ma": "o",
+                "ten": "Operation"
+              },
+              {
+                "ma": "m",
+                "ten": "Mode",
+                "luaChon": [
+                  "Kernel mode only",
+                  "User mode is enough"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "o": "Disable interrupts (cli)"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "o": "Add two registers (ADD r1, r2)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "o": "Execute the IN / OUT port instruction"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "o": "Load a value from the process’s own stack"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "o": "Write the page-table base register"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "o": "Set the timer chip to fire in 10 ms"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.m": "Kernel mode only",
+              "r1.m": "User mode is enough",
+              "r2.m": "Kernel mode only",
+              "r3.m": "User mode is enough",
+              "r4.m": "Kernel mode only",
+              "r5.m": "Kernel mode only"
+            },
+            "giaiThich": "<p>Anything that touches shared hardware state — interrupts, I/O ports, MMU registers, the timer — is privileged. Ordinary arithmetic and memory access inside your own address space is not.</p><p><i>VI: Mọi thứ chạm vào trạng thái phần cứng dùng chung — ngắt, cổng I/O, thanh ghi MMU, bộ định thời — là đặc quyền. Tính toán thường và truy cập bộ nhớ trong không gian địa chỉ của mình thì không.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking reading memory needs kernel mode."
+        },
+        {
+          "loi": "Forgetting that the timer is privileged — otherwise a program could stop the scheduler."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trap",
+          "vi": "ngắt mềm / ngoại lệ chuyển vào kernel"
+        }
+      ]
+    },
+    {
+      "title": "Kernel 3 — Order the steps of a system call",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "system call",
+        "trap"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Arrange the steps of the system call read() from the user program to the return value.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp các bước của lời gọi hệ thống read() từ chương trình người dùng đến giá trị trả về.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The user program never executes the kernel code directly: it asks through a TRAP.",
+        "Mode changes: user → kernel at the trap, kernel → user at the return."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 3 — Order the steps of a system call\n\nAnswer in the answer panel (no code needed).\n\n1. Steps of read()Các bước của read()\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 3 — Order the steps of a system call — answer key\n\n1. Steps of read()Các bước của read()\n   Answer: s1) The program calls the library wrapper read(fd, buf, n)  →  s2) The wrapper puts the system-call number and arguments in registers and executes a TRAP instruction  →  s3) The CPU switches to kernel mode and jumps to the system-call handler  →  s4) The kernel looks the number up in the system-call table and runs sys_read  →  s5) The kernel copies the data into the user buffer and returns, switching back to user mode  →  s6) The wrapper returns the byte count to the calling program\n   The library wrapper hides the TRAP; the mode switch happens in hardware; the kernel dispatches through a table; the return path restores user mode (a “return from trap”).VI: Hàm bao trong thư viện che đi lệnh TRAP; việc đổi chế độ do phần cứng làm; kernel điều phối qua bảng; đường về khôi phục chế độ người dùng (return from trap).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>call → TRAP → kernel mode → table dispatch → copy + return → result.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Steps of read()</p><p style=\"opacity:.75;font-size:.92em\"><i>Các bước của read()</i></p>",
+            "muc": [
+              {
+                "ma": "s4",
+                "noiDung": "The kernel looks the number up in the system-call table and runs sys_read"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The kernel copies the data into the user buffer and returns, switching back to user mode"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "The wrapper returns the byte count to the calling program"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "The program calls the library wrapper read(fd, buf, n)"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "The wrapper puts the system-call number and arguments in registers and executes a TRAP instruction"
+              },
+              {
+                "ma": "s3",
+                "noiDung": "The CPU switches to kernel mode and jumps to the system-call handler"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6"
+            ],
+            "giaiThich": "<p>The library wrapper hides the TRAP; the mode switch happens in hardware; the kernel dispatches through a table; the return path restores user mode (a “return from trap”).</p><p><i>VI: Hàm bao trong thư viện che đi lệnh TRAP; việc đổi chế độ do phần cứng làm; kernel điều phối qua bảng; đường về khôi phục chế độ người dùng (return from trap).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Placing the mode switch before the arguments are prepared."
+        },
+        {
+          "loi": "Forgetting that the library wrapper prepares the registers."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "system call table",
+          "vi": "bảng lời gọi hệ thống"
+        },
+        {
+          "en": "wrapper",
+          "vi": "hàm bao của thư viện C"
+        }
+      ]
+    },
+    {
+      "title": "Kernel 4 — Match the UNIX system call to its purpose",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "POSIX system calls"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Pick the purpose of each POSIX system call.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn mục đích của từng lời gọi hệ thống POSIX.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Call names are abbreviations: pipe → pipe, dup2 → duplicate.",
+        "kill is a historical name: it sends ANY signal."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 4 — Match the UNIX system call to its purpose\n\nAnswer in the answer panel (no code needed).\n\n1. Call → purposeLời gọi → mục đích\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Kernel 4 — Match the UNIX system call to its purpose — answer key\n\n1. Call → purposeLời gọi → mục đích\n   - r0.p: Create a child process\n   - r1.p: Replace the program image of the caller\n   - r2.p: Wait for a child to terminate\n   - r3.p: Obtain a file descriptor for a file\n   - r4.p: Create a one-way communication channel\n   - r5.p: Duplicate a file descriptor onto a chosen number\n   - r6.p: Send a signal to a process\n   - r7.p: Change the permissions of a file\n   fork creates, execve replaces, waitpid synchronises with a child; open/pipe/dup2 deal with file descriptors; kill sends signals (not only SIGKILL); chmod edits the mode bits in the i-node.VI: fork tạo, execve thay thế, waitpid đồng bộ với tiến trình con; open/pipe/dup2 làm việc với file descriptor; kill gửi tín hiệu (không chỉ SIGKILL); chmod sửa bit quyền trong i-node.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>fork() → Create a child process; execve() → Replace the program image of the caller; waitpid() → Wait for a child to terminate; open() → Obtain a file descriptor for a file; pipe() → Create a one-way communication channel; dup2() → Duplicate a file descriptor onto a chosen number; kill() → Send a signal to a process; chmod() → Change the permissions of a file.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Call → purpose</p><p style=\"opacity:.75;font-size:.92em\"><i>Lời gọi → mục đích</i></p>",
+            "cot": [
+              {
+                "ma": "c",
+                "ten": "Call"
+              },
+              {
+                "ma": "p",
+                "ten": "Purpose",
+                "luaChon": [
+                  "Create a child process",
+                  "Replace the program image of the caller",
+                  "Wait for a child to terminate",
+                  "Obtain a file descriptor for a file",
+                  "Create a one-way communication channel",
+                  "Duplicate a file descriptor onto a chosen number",
+                  "Send a signal to a process",
+                  "Change the permissions of a file"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "c": "fork()"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "c": "execve()"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "c": "waitpid()"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "c": "open()"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "c": "pipe()"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "c": "dup2()"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "c": "kill()"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "c": "chmod()"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.p": "Create a child process",
+              "r1.p": "Replace the program image of the caller",
+              "r2.p": "Wait for a child to terminate",
+              "r3.p": "Obtain a file descriptor for a file",
+              "r4.p": "Create a one-way communication channel",
+              "r5.p": "Duplicate a file descriptor onto a chosen number",
+              "r6.p": "Send a signal to a process",
+              "r7.p": "Change the permissions of a file"
+            },
+            "giaiThich": "<p>fork creates, execve replaces, waitpid synchronises with a child; open/pipe/dup2 deal with file descriptors; kill sends signals (not only SIGKILL); chmod edits the mode bits in the i-node.</p><p><i>VI: fork tạo, execve thay thế, waitpid đồng bộ với tiến trình con; open/pipe/dup2 làm việc với file descriptor; kill gửi tín hiệu (không chỉ SIGKILL); chmod sửa bit quyền trong i-node.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing kill() always terminates the target."
+        },
+        {
+          "loi": "Mixing up fork (create) and exec (replace)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "POSIX",
+          "vi": "chuẩn giao diện UNIX"
+        }
+      ]
+    },
+    {
+      "title": "Kernel 5 — Summarise a strace log and find leaked descriptors",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "system calls",
+        "file descriptors",
+        "strace"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>strace prints every system call as <code>name(arguments) = result</code>. Write <code>summarize(lines)</code> returning <code>{ counts, errors, leaked }</code>: <code>counts</code> maps each call name to how many times it appears; <code>errors</code> is the number of calls whose result is negative (e.g. <code>= -1</code>); <code>leaked</code> is the sorted array of file descriptors returned by successful <code>open</code>/<code>openat</code> calls that were never closed afterwards (<code>close(fd)</code> closes <code>fd</code>; a descriptor number may be reused after a close). Lines that do not look like a system call are ignored.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Failed calls (negative result) never open a descriptor.</li>\n</ul>",
+      "problemHtmlVi": "<p>strace in mỗi lời gọi hệ thống dạng <code>tên(đối số) = kết quả</code>. Viết <code>summarize(lines)</code> trả <code>{ counts, errors, leaked }</code>: <code>counts</code> ánh xạ tên lời gọi sang số lần xuất hiện; <code>errors</code> là số lời gọi có kết quả âm (vd <code>= -1</code>); <code>leaked</code> là mảng đã sắp xếp các file descriptor do <code>open</code>/<code>openat</code> thành công trả về mà sau đó không được đóng (<code>close(fd)</code> đóng <code>fd</code>; số descriptor được dùng lại sau khi đóng). Dòng không giống lời gọi hệ thống thì bỏ qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lời gọi lỗi (kết quả âm) không mở descriptor nào.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "summarize(['open(\"/a\", O_RDONLY) = 3', 'close(3) = 0'])",
+          "output": "{\"counts\":{\"open\":1,\"close\":1},\"errors\":0,\"leaked\":[]}",
+          "explanation": "One open and one close: nothing leaked.|||Một open và một close: không rò gì."
+        }
+      ],
+      "hintsJson": [
+        "Parse with a regular expression: ^name\\(args\\) = number.",
+        "Track the set of open descriptors: add on successful open, remove on close."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function summarize(lines) {\n  return { counts: {}, errors: 0, leaked: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Parse each line and keep a set of open descriptors.\nfunction summarize(lines) {\n  const counts = {}; const open = {}; let errors = 0;\n  for (const raw of lines) {\n    const m = /^([a-z_0-9]+)\\((.*)\\)\\s*=\\s*(-?\\d+)/.exec(raw.trim());\n    if (!m) continue;\n    const name = m[1]; const ret = parseInt(m[3], 10);\n    counts[name] = (counts[name] || 0) + 1;\n    if (ret < 0) { errors++; continue; }\n    if (name === 'open' || name === 'openat') open[ret] = true;\n    else if (name === 'close') { const fd = parseInt(m[2], 10); delete open[fd]; }\n  }\n  return { counts, errors, leaked: Object.keys(open).map(Number).sort((a, b) => a - b) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is exactly the first step of diagnosing an fd leak (EMFILE) with strace.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: summarize([\"openat(AT_FDCWD, \\\"/etc/hosts\\\", O_RDONLY) = 3\",\"read(3, \\\"127.0.0.1)",
+              "vi": "Ca 1"
+            },
+            "goi": "summarize([\"openat(AT_FDCWD, \\\"/etc/hosts\\\", O_RDONLY) = 3\",\"read(3, \\\"127.0.0.1 localhost\\\", 4096) = 22\",\"close(3) = 0\",\"write(1, \\\"done\\\", 4) = 4\"])",
+            "mongDoi": {
+              "counts": {
+                "openat": 1,
+                "read": 1,
+                "close": 1,
+                "write": 1
+              },
+              "errors": 0,
+              "leaked": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: summarize([\"open(\\\"/tmp/a\\\", O_RDONLY) = 3\",\"open(\\\"/tmp/b\\\", O_RDONLY) = 4\",\"re)",
+              "vi": "Ca 2"
+            },
+            "goi": "summarize([\"open(\\\"/tmp/a\\\", O_RDONLY) = 3\",\"open(\\\"/tmp/b\\\", O_RDONLY) = 4\",\"read(4, \\\"\\\", 100) = 0\",\"open(\\\"/nope\\\", O_RDONLY) = -1\",\"close(4) = 0\",\"open(\\\"/tmp/c\\\", O_RDONLY) = 4\"])",
+            "mongDoi": {
+              "counts": {
+                "open": 4,
+                "read": 1,
+                "close": 1
+              },
+              "errors": 1,
+              "leaked": [
+                3,
+                4
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "summarize([\"ioctl(1, TCGETS, 0x7ffe) = -1\",\"garbage line\",\"mmap(NULL, 4096) = 140234\"])",
+            "mongDoi": {
+              "counts": {
+                "ioctl": 1,
+                "mmap": 1
+              },
+              "errors": 1,
+              "leaked": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "summarize([])",
+            "mongDoi": {
+              "counts": {},
+              "errors": 0,
+              "leaked": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "summarize([\"openat(AT_FDCWD, \\\"/x\\\", O_RDONLY) = 5\",\"openat(AT_FDCWD, \\\"/y\\\", O_RDONLY) = 6\",\"close(5) = 0\",\"close(5) = -1\"])",
+            "mongDoi": {
+              "counts": {
+                "openat": 2,
+                "close": 2
+              },
+              "errors": 1,
+              "leaked": [
+                6
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the failed open (= -1) as a leaked descriptor."
+        },
+        {
+          "loi": "Forgetting that fd 4 can be opened again after being closed."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

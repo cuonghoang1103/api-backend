@@ -355,3 +355,56 @@ export function threadsNeeded(f, target) {
   for (let n = 1; n < 100000; n++) if (1 / ((1 - f) + f / n) >= target) return n;
   return -1;
 }
+
+/**
+ * Đồ thị cấp phát tài nguyên, mỗi loại MỘT bản. edges: ['P1>R1' (P1 yêu cầu R1), 'R1>P2' (R1 đang cấp cho P2), …].
+ * Có chu trình ⇒ bế tắc. Trả {deadlock, cycle: [node…] (chu trình đầu tiên tìm được, rỗng nếu không có)}.
+ */
+export function rag(edges) {
+  const g = {};
+  edges.forEach((e) => { const [a, b] = e.split('>'); (g[a] = g[a] || []).push(b); if (!g[b]) g[b] = []; });
+  const nodes = Object.keys(g).sort();
+  const state = {}; const stack = [];
+  let found = [];
+  const dfs = (u) => {
+    state[u] = 1; stack.push(u);
+    for (const v of g[u].slice().sort()) {
+      if (found.length) return;
+      if (state[v] === 1) { found = stack.slice(stack.indexOf(v)); return; }
+      if (!state[v]) dfs(v);
+    }
+    stack.pop(); state[u] = 2;
+  };
+  for (const u of nodes) if (!state[u] && !found.length) dfs(u);
+  return { deadlock: found.length > 0, cycle: found };
+}
+
+/** Theo chuỗi khối FAT. fat[i] = khối kế tiếp, -1 = hết tệp, -2 = khối hỏng/không hợp lệ. Trả {chain, ok}; ok=false khi có vòng hoặc con trỏ ngoài bảng. */
+export function fatChain(fat, start) {
+  const chain = []; const thay = {};
+  let b = start;
+  while (b !== -1) {
+    if (b < 0 || b >= fat.length || thay[b]) return { chain, ok: false };
+    thay[b] = true; chain.push(b); b = fat[b];
+  }
+  return { chain, ok: true };
+}
+
+/** Vị trí byte `offset` trong tệp i-node kiểu Unix: trả {level: 0 (trực tiếp)…3, reads: số khối đĩa phải đọc kể cả khối dữ liệu (i-node đã ở RAM)}. */
+export function locate(offset, B, P, nd) {
+  const k = B / P; const blk = Math.floor(offset / B);
+  if (blk < nd) return { level: 0, reads: 1 };
+  if (blk < nd + k) return { level: 1, reads: 2 };
+  if (blk < nd + k + k * k) return { level: 2, reads: 3 };
+  if (blk < nd + k + k * k + k * k * k) return { level: 3, reads: 4 };
+  return { level: -1, reads: 0 };
+}
+
+/** RAID: dung lượng dùng được và số ổ hỏng ĐẢM BẢO chịu được. level: 0|1|5|6|10. */
+export function raid(level, n, size) {
+  if (level === 0) return { usable: n * size, tolerate: 0 };
+  if (level === 1) return { usable: (n * size) / n, tolerate: n - 1 };
+  if (level === 5) return { usable: (n - 1) * size, tolerate: 1 };
+  if (level === 6) return { usable: (n - 2) * size, tolerate: 2 };
+  return { usable: (n * size) / 2, tolerate: 1 };
+}

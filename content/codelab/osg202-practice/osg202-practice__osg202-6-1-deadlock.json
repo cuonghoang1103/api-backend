@@ -1,0 +1,856 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-6-1-deadlock",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-6-1-deadlock"
+  },
+  "exercises": [
+    {
+      "title": "Deadlock 1 — The four conditions and the ostrich",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "deadlock",
+        "Coffman conditions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on the theory of deadlock.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về lý thuyết deadlock.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "All four conditions are necessary, none alone is sufficient.",
+        "Match each prevention rule to the condition it attacks."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 1 — The four conditions and the ostrich\n\nAnswer in the answer panel (no code needed).\n\n1. Which set lists the four necessary conditions for deadlock?Tập nào liệt kê bốn điều kiện cần của deadlock?\n2. The “ostrich algorithm” for deadlock means …“Thuật toán đà điểu” với deadlock nghĩa là …\n3. Which condition is broken by the rule “a process must request ALL its resources at once before it starts”?Điều kiện nào bị phá bởi quy tắc “tiến trình phải xin TẤT CẢ tài nguyên một lần trước khi bắt đầu”?\n4. “Number all resource types and require processes to request them in increasing order” breaks …“Đánh số mọi loại tài nguyên và buộc tiến trình xin theo thứ tự tăng dần” phá …\n5. Deadlock versus starvation: which statement is correct?Deadlock so với starvation: phát biểu nào đúng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 1 — The four conditions and the ostrich — answer key\n\n1. Which set lists the four necessary conditions for deadlock?Tập nào liệt kê bốn điều kiện cần của deadlock?\n   Answer: d) Mutual exclusion, hold and wait, no preemption, circular wait\n   All four must hold simultaneously (Coffman 1971). Break any one and deadlock is impossible.VI: Cả bốn phải đồng thời xảy ra (Coffman 1971). Phá một điều kiện là hết deadlock.\n\n2. The “ostrich algorithm” for deadlock means …“Thuật toán đà điểu” với deadlock nghĩa là …\n   Answer: a) ignore the problem and let the user reboot if it happens\n   Used by UNIX and Windows for most resources: deadlock is rare and prevention is costly.VI: UNIX và Windows dùng cho hầu hết tài nguyên: deadlock hiếm, ngăn chặn thì đắt.\n\n3. Which condition is broken by the rule “a process must request ALL its resources at once before it starts”?Điều kiện nào bị phá bởi quy tắc “tiến trình phải xin TẤT CẢ tài nguyên một lần trước khi bắt đầu”?\n   Answer: b) Hold and wait\n   A process never holds one resource while waiting for another.VI: Tiến trình không bao giờ giữ một tài nguyên trong khi chờ tài nguyên khác.\n\n4. “Number all resource types and require processes to request them in increasing order” breaks …“Đánh số mọi loại tài nguyên và buộc tiến trình xin theo thứ tự tăng dần” phá …\n   Answer: c) Circular wait\n   A cycle would need some process to wait for a lower-numbered resource while holding a higher one, which the rule forbids.VI: Chu trình cần một tiến trình chờ tài nguyên số thấp khi đang giữ số cao, điều quy tắc cấm.\n\n5. Deadlock versus starvation: which statement is correct?Deadlock so với starvation: phát biểu nào đúng?\n   Answer: d) In deadlock a set of processes is blocked forever waiting for each other; in starvation a process waits indefinitely while others progress\n   Starvation can be cured by aging; deadlock needs prevention, avoidance or recovery.VI: Starvation chữa bằng aging; deadlock cần ngăn chặn, tránh hoặc phục hồi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>d · a · b · c · d.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which set lists the four necessary conditions for deadlock?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tập nào liệt kê bốn điều kiện cần của deadlock?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Mutual exclusion, starvation, paging, circular wait"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hold and wait, aging, no preemption, spooling"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Race, hold and wait, preemption, circular wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Mutual exclusion, hold and wait, no preemption, circular wait"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>All four must hold simultaneously (Coffman 1971). Break any one and deadlock is impossible.</p><p><i>VI: Cả bốn phải đồng thời xảy ra (Coffman 1971). Phá một điều kiện là hết deadlock.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The “ostrich algorithm” for deadlock means …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Thuật toán đà điểu” với deadlock nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ignore the problem and let the user reboot if it happens"
+              },
+              {
+                "ma": "b",
+                "noiDung": "detect and kill a process"
+              },
+              {
+                "ma": "c",
+                "noiDung": "never grant resources"
+              },
+              {
+                "ma": "d",
+                "noiDung": "preempt every resource"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Used by UNIX and Windows for most resources: deadlock is rare and prevention is costly.</p><p><i>VI: UNIX và Windows dùng cho hầu hết tài nguyên: deadlock hiếm, ngăn chặn thì đắt.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which condition is broken by the rule “a process must request ALL its resources at once before it starts”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều kiện nào bị phá bởi quy tắc “tiến trình phải xin TẤT CẢ tài nguyên một lần trước khi bắt đầu”?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Circular wait"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hold and wait"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mutual exclusion"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No preemption"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A process never holds one resource while waiting for another.</p><p><i>VI: Tiến trình không bao giờ giữ một tài nguyên trong khi chờ tài nguyên khác.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>“Number all resource types and require processes to request them in increasing order” breaks …</p><p style=\"opacity:.75;font-size:.92em\"><i>“Đánh số mọi loại tài nguyên và buộc tiến trình xin theo thứ tự tăng dần” phá …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Mutual exclusion"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No preemption"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Circular wait"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hold and wait"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A cycle would need some process to wait for a lower-numbered resource while holding a higher one, which the rule forbids.</p><p><i>VI: Chu trình cần một tiến trình chờ tài nguyên số thấp khi đang giữ số cao, điều quy tắc cấm.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Deadlock versus starvation: which statement is correct?</p><p style=\"opacity:.75;font-size:.92em\"><i>Deadlock so với starvation: phát biểu nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are the same"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Starvation needs a cycle"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deadlock only happens with CPU scheduling"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In deadlock a set of processes is blocked forever waiting for each other; in starvation a process waits indefinitely while others progress"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Starvation can be cured by aging; deadlock needs prevention, avoidance or recovery.</p><p><i>VI: Starvation chữa bằng aging; deadlock cần ngăn chặn, tránh hoặc phục hồi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Listing starvation as a Coffman condition."
+        },
+        {
+          "loi": "Believing that breaking mutual exclusion is always possible (printers cannot be shared)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deadlock",
+          "vi": "bế tắc"
+        },
+        {
+          "en": "ostrich algorithm",
+          "vi": "thuật toán đà điểu: lờ đi"
+        },
+        {
+          "en": "no preemption",
+          "vi": "tài nguyên không thể bị thu hồi cưỡng bức"
+        }
+      ]
+    },
+    {
+      "title": "Deadlock 2 — Read a resource-allocation graph (one instance per resource)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "resource allocation graph",
+        "cycle"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Each resource has ONE instance. <code>P&gt;R</code> means process P is waiting for (requests) resource R; <code>R&gt;P</code> means R is allocated to P. Is there a deadlock? Give the number of nodes on the cycle (0 if none).</p><ul><li><b>Graph A</b>: P1 → R1, R1 → P2, P2 → R2, R2 → P1</li><li><b>Graph B</b>: P1 → R1, R1 → P2, P2 → R2, R2 → P3</li><li><b>Graph C</b>: P1 → R1, R1 → P2, P2 → R2, R2 → P3, P3 → R3, R3 → P1, P4 → R2</li><li><b>Graph D</b>: R1 → P1, R2 → P2, P1 → R2, P2 → R3, R3 → P3</li></ul><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi tài nguyên chỉ có MỘT bản. <code>P&gt;R</code> nghĩa là tiến trình P đang chờ (yêu cầu) tài nguyên R; <code>R&gt;P</code> nghĩa là R đã cấp cho P. Có deadlock không? Cho số nút trên chu trình (0 nếu không có).</p><ul><li><b>Graph A</b>: P1 → R1, R1 → P2, P2 → R2, R2 → P1</li><li><b>Graph B</b>: P1 → R1, R1 → P2, P2 → R2, R2 → P3</li><li><b>Graph C</b>: P1 → R1, R1 → P2, P2 → R2, R2 → P3, P3 → R3, R3 → P1, P4 → R2</li><li><b>Graph D</b>: R1 → P1, R2 → P2, P1 → R2, P2 → R3, R3 → P3</li></ul><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Follow the arrows: process → resource (waiting), resource → process (held).",
+        "Count the nodes of the closed loop, processes AND resources."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 2 — Read a resource-allocation graph (one instance per resource)\n\nAnswer in the answer panel (no code needed).\n\n1. Deadlock?Có deadlock không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 2 — Read a resource-allocation graph (one instance per resource) — answer key\n\n1. Deadlock?Có deadlock không?\n   - A.d: Yes\n   - A.n: 4\n   - B.d: No\n   - B.n: 0\n   - C.d: Yes\n   - C.n: 6\n   - D.d: No\n   - D.n: 0\n   Graph A: cycle P1 → R1 → P2 → R2; Graph B: no cycle; Graph C: cycle P1 → R1 → P2 → R2 → P3 → R3; Graph D: no cycle. With single-instance resources a cycle is both necessary and sufficient. In Graph C, P4 is blocked too (waiting for R2) but is not on the cycle.VI: Graph A: chu trình P1 → R1 → P2 → R2; Graph B: không chu trình; Graph C: chu trình P1 → R1 → P2 → R2 → P3 → R3; Graph D: không chu trình. Với tài nguyên một bản, chu trình vừa cần vừa đủ. Ở đồ thị C, P4 cũng bị kẹt (chờ R2) nhưng không nằm trên chu trình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A: Yes/4 · B: No/0 · C: Yes/6 · D: No/0</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Deadlock?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có deadlock không?</i></p>",
+            "cot": [
+              {
+                "ma": "g",
+                "ten": "Graph"
+              },
+              {
+                "ma": "d",
+                "ten": "Deadlock?",
+                "luaChon": [
+                  "Yes",
+                  "No"
+                ]
+              },
+              {
+                "ma": "n",
+                "ten": "Nodes on the cycle"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "A",
+                "o": {
+                  "g": "Graph A"
+                }
+              },
+              {
+                "ma": "B",
+                "o": {
+                  "g": "Graph B"
+                }
+              },
+              {
+                "ma": "C",
+                "o": {
+                  "g": "Graph C"
+                }
+              },
+              {
+                "ma": "D",
+                "o": {
+                  "g": "Graph D"
+                }
+              }
+            ],
+            "dapAn": {
+              "A.d": "Yes",
+              "A.n": "4",
+              "B.d": "No",
+              "B.n": "0",
+              "C.d": "Yes",
+              "C.n": "6",
+              "D.d": "No",
+              "D.n": "0"
+            },
+            "giaiThich": "<p>Graph A: cycle P1 → R1 → P2 → R2; Graph B: no cycle; Graph C: cycle P1 → R1 → P2 → R2 → P3 → R3; Graph D: no cycle. With single-instance resources a cycle is both necessary and sufficient. In Graph C, P4 is blocked too (waiting for R2) but is not on the cycle.</p><p><i>VI: Graph A: chu trình P1 → R1 → P2 → R2; Graph B: không chu trình; Graph C: chu trình P1 → R1 → P2 → R2 → P3 → R3; Graph D: không chu trình. Với tài nguyên một bản, chu trình vừa cần vừa đủ. Ở đồ thị C, P4 cũng bị kẹt (chờ R2) nhưng không nằm trên chu trình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting only the processes on the cycle."
+        },
+        {
+          "loi": "Calling a chain without a loop a deadlock (Graph B ends at P3, which is not waiting)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "resource-allocation graph",
+          "vi": "đồ thị cấp phát tài nguyên"
+        },
+        {
+          "en": "wait-for graph",
+          "vi": "đồ thị chờ"
+        }
+      ]
+    },
+    {
+      "title": "Deadlock 3 — Which condition does each prevention technique attack?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "deadlock prevention"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Match each technique with the necessary condition it eliminates.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi kỹ thuật với điều kiện cần mà nó loại bỏ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: what is the process no longer allowed to do — hold while waiting, wait in a cycle, keep a resource against the OS’s will, or hold it exclusively?",
+        "Two of the techniques attack the same condition."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 3 — Which condition does each prevention technique attack?\n\nAnswer in the answer panel (no code needed).\n\n1. Technique → conditionKỹ thuật → điều kiện\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 3 — Which condition does each prevention technique attack? — answer key\n\n1. Technique → conditionKỹ thuật → điều kiện\n   - r0.c: Mutual exclusion\n   - r1.c: Hold and wait\n   - r2.c: No preemption\n   - r3.c: Circular wait\n   - r4.c: Hold and wait\n   Spooling avoids mutual exclusion on the device (only the daemon holds it); “release first” and “all at once” both attack hold-and-wait; preemption attacks no-preemption; ordering attacks circular wait.VI: Spooling tránh loại trừ tương hỗ trên thiết bị (chỉ daemon giữ nó); “nhả trước” và “xin hết một lần” cùng phá giữ-và-chờ; thu hồi cưỡng bức phá điều kiện không-thu-hồi; đánh thứ tự phá chờ vòng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mutual exclusion · Hold and wait · No preemption · Circular wait · Hold and wait.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Technique → condition</p><p style=\"opacity:.75;font-size:.92em\"><i>Kỹ thuật → điều kiện</i></p>",
+            "cot": [
+              {
+                "ma": "t",
+                "ten": "Technique"
+              },
+              {
+                "ma": "c",
+                "ten": "Condition",
+                "luaChon": [
+                  "Mutual exclusion",
+                  "Hold and wait",
+                  "No preemption",
+                  "Circular wait"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "t": "Spooling: only the printer daemon touches the printer; users write files"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "t": "A process asking for a resource that is busy must first release everything it holds"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "t": "The OS may take a resource away from a waiting process and give it to another"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "t": "Resources are numbered and must be requested in increasing order"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "t": "A process must obtain every resource it will need before it starts running"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.c": "Mutual exclusion",
+              "r1.c": "Hold and wait",
+              "r2.c": "No preemption",
+              "r3.c": "Circular wait",
+              "r4.c": "Hold and wait"
+            },
+            "giaiThich": "<p>Spooling avoids mutual exclusion on the device (only the daemon holds it); “release first” and “all at once” both attack hold-and-wait; preemption attacks no-preemption; ordering attacks circular wait.</p><p><i>VI: Spooling tránh loại trừ tương hỗ trên thiết bị (chỉ daemon giữ nó); “nhả trước” và “xin hết một lần” cùng phá giữ-và-chờ; thu hồi cưỡng bức phá điều kiện không-thu-hồi; đánh thứ tự phá chờ vòng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assigning spooling to hold-and-wait."
+        },
+        {
+          "loi": "Thinking ordering removes mutual exclusion."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "spooling",
+          "vi": "ghi đệm ra hàng đợi để một daemon độc quyền thiết bị"
+        }
+      ]
+    },
+    {
+      "title": "Deadlock 4 — Prevention, avoidance, detection or recovery?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "deadlock avoidance",
+        "detection",
+        "recovery"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five scenario questions on handling deadlock.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu tình huống về xử lý deadlock.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Prevention breaks a condition by design; avoidance steers around unsafe states; detection waits and cleans up.",
+        "Safe ⊂ not-deadlocked; unsafe ⊃ deadlocked."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 4 — Prevention, avoidance, detection or recovery?\n\nAnswer in the answer panel (no code needed).\n\n1. The OS lets deadlock happen, periodically runs a cycle search and then kills one process of the cycle. This is …OS để deadlock xảy ra, định kỳ tìm chu trình rồi giết một tiến trình trong chu trình. Đây là …\n2. The OS refuses a request because granting it would lead to an unsafe state. This is …OS từ chối yêu cầu vì cấp phát sẽ dẫn tới trạng thái không an toàn. Đây là …\n3. Which statement about safe states is TRUE?Phát biểu nào về trạng thái an toàn là ĐÚNG?\n4. Recovery by rollback to a checkpoint is possible only if …Phục hồi bằng quay về điểm kiểm tra (checkpoint) chỉ làm được nếu …\n5. Why do general-purpose OSes mostly use the ostrich algorithm?Vì sao hệ điều hành đa dụng chủ yếu dùng thuật toán đà điểu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deadlock 4 — Prevention, avoidance, detection or recovery? — answer key\n\n1. The OS lets deadlock happen, periodically runs a cycle search and then kills one process of the cycle. This is …OS để deadlock xảy ra, định kỳ tìm chu trình rồi giết một tiến trình trong chu trình. Đây là …\n   Answer: b) Detection and recovery\n   Detection needs the allocation state and a recovery action (kill, rollback, preempt).VI: Phát hiện cần trạng thái cấp phát và một hành động phục hồi (giết, quay lui, thu hồi).\n\n2. The OS refuses a request because granting it would lead to an unsafe state. This is …OS từ chối yêu cầu vì cấp phát sẽ dẫn tới trạng thái không an toàn. Đây là …\n   Answer: c) Deadlock avoidance (Banker’s algorithm)\n   Avoidance needs advance knowledge of each process’s maximum demand.VI: Tránh cần biết trước nhu cầu tối đa của mỗi tiến trình.\n\n3. Which statement about safe states is TRUE?Phát biểu nào về trạng thái an toàn là ĐÚNG?\n   Answer: d) Every deadlocked state is unsafe, but an unsafe state is not necessarily deadlocked yet\n   Unsafe means there is no guaranteed order of completion; deadlock may or may not follow depending on future requests.VI: Không an toàn nghĩa là không có thứ tự hoàn thành được đảm bảo; deadlock có xảy ra hay không còn tuỳ yêu cầu sau này.\n\n4. Recovery by rollback to a checkpoint is possible only if …Phục hồi bằng quay về điểm kiểm tra (checkpoint) chỉ làm được nếu …\n   Answer: a) processes save their state periodically\n   Without saved state, the work of the victim process is lost.VI: Không lưu trạng thái thì công việc của tiến trình nạn nhân bị mất.\n\n5. Why do general-purpose OSes mostly use the ostrich algorithm?Vì sao hệ điều hành đa dụng chủ yếu dùng thuật toán đà điểu?\n   Answer: b) Deadlock is rare and prevention/avoidance would restrict users and cost performance\n   The engineering trade-off: pay a small probability of a reboot rather than constant overhead.VI: Đánh đổi kỹ thuật: chấp nhận xác suất nhỏ phải khởi động lại thay vì chịu chi phí liên tục.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>b · c · d · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The OS lets deadlock happen, periodically runs a cycle search and then kills one process of the cycle. This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>OS để deadlock xảy ra, định kỳ tìm chu trình rồi giết một tiến trình trong chu trình. Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ostrich algorithm"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Detection and recovery"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Prevention"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Avoidance"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Detection needs the allocation state and a recovery action (kill, rollback, preempt).</p><p><i>VI: Phát hiện cần trạng thái cấp phát và một hành động phục hồi (giết, quay lui, thu hồi).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The OS refuses a request because granting it would lead to an unsafe state. This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>OS từ chối yêu cầu vì cấp phát sẽ dẫn tới trạng thái không an toàn. Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ostrich"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Recovery"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deadlock avoidance (Banker’s algorithm)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Detection"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Avoidance needs advance knowledge of each process’s maximum demand.</p><p><i>VI: Tránh cần biết trước nhu cầu tối đa của mỗi tiến trình.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which statement about safe states is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về trạng thái an toàn là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A safe state can contain a deadlock"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Unsafe = deadlocked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Safe states do not exist with multiple resource types"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every deadlocked state is unsafe, but an unsafe state is not necessarily deadlocked yet"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Unsafe means there is no guaranteed order of completion; deadlock may or may not follow depending on future requests.</p><p><i>VI: Không an toàn nghĩa là không có thứ tự hoàn thành được đảm bảo; deadlock có xảy ra hay không còn tuỳ yêu cầu sau này.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Recovery by rollback to a checkpoint is possible only if …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phục hồi bằng quay về điểm kiểm tra (checkpoint) chỉ làm được nếu …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "processes save their state periodically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "resources are infinite"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the process is a zombie"
+              },
+              {
+                "ma": "d",
+                "noiDung": "there is a single CPU"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without saved state, the work of the victim process is lost.</p><p><i>VI: Không lưu trạng thái thì công việc của tiến trình nạn nhân bị mất.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why do general-purpose OSes mostly use the ostrich algorithm?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao hệ điều hành đa dụng chủ yếu dùng thuật toán đà điểu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They detect it in hardware"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Deadlock is rare and prevention/avoidance would restrict users and cost performance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deadlocks are impossible in UNIX"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The Banker’s algorithm is O(1)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The engineering trade-off: pay a small probability of a reboot rather than constant overhead.</p><p><i>VI: Đánh đổi kỹ thuật: chấp nhận xác suất nhỏ phải khởi động lại thay vì chịu chi phí liên tục.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Confusing avoidance (before granting) with detection (after the fact)."
+        },
+        {
+          "loi": "Treating unsafe as already deadlocked."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "safe state",
+          "vi": "trạng thái an toàn: có thứ tự hoàn thành đảm bảo"
+        },
+        {
+          "en": "rollback",
+          "vi": "quay lui về checkpoint"
+        }
+      ]
+    },
+    {
+      "title": "Deadlock 5 — Detect a cycle in a resource-allocation graph",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "cycle detection",
+        "resource allocation graph"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Write <code>findDeadlock(edges)</code>. <code>edges</code> is an array of strings <code>'P1&gt;R1'</code> (process P1 requests R1) and <code>'R1&gt;P2'</code> (R1 is held by P2); every resource has ONE instance. Return <code>{ deadlock, cycle }</code> where <code>cycle</code> is the first cycle found by a depth-first search that starts from the alphabetically smallest unvisited node and visits successors in alphabetical order; list the nodes in the order they are visited along the cycle starting with the first node of the cycle that DFS entered (empty array when there is no cycle).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Colour nodes white/grey/black; a grey neighbour closes a cycle.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>findDeadlock(edges)</code>. <code>edges</code> là mảng chuỗi <code>'P1&gt;R1'</code> (tiến trình P1 yêu cầu R1) và <code>'R1&gt;P2'</code> (R1 do P2 giữ); mỗi tài nguyên có MỘT bản. Trả <code>{ deadlock, cycle }</code> với <code>cycle</code> là chu trình đầu tiên tìm được bằng DFS bắt đầu từ nút chưa thăm nhỏ nhất theo bảng chữ cái và thăm các nút kề theo thứ tự chữ cái; liệt kê nút theo thứ tự thăm dọc chu trình, bắt đầu từ nút của chu trình mà DFS vào trước (mảng rỗng nếu không có chu trình).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tô màu nút trắng/xám/đen; gặp nút xám kề là đóng chu trình.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "findDeadlock(['P1>R1','R1>P2','P2>R2','R2>P1'])",
+          "output": "{\"deadlock\":true,\"cycle\":[\"P1\",\"R1\",\"P2\",\"R2\"]}",
+          "explanation": "P1 → R1 → P2 → R2 → P1.|||P1 → R1 → P2 → R2 → P1."
+        }
+      ],
+      "hintsJson": [
+        "Build an adjacency map first; sort the neighbours.",
+        "Keep the current DFS path in a stack; when you reach a node already on the stack, slice the stack from that node."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function findDeadlock(edges) {\n  return { deadlock: false, cycle: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// DFS with white/grey/black colouring.\nfunction findDeadlock(edges) {\n  const g = {};\n  edges.forEach((e) => { const [a, b] = e.split('>'); (g[a] = g[a] || []).push(b); if (!g[b]) g[b] = []; });\n  const nodes = Object.keys(g).sort();\n  const state = {}; const stack = [];\n  let found = [];\n  const dfs = (u) => {\n    state[u] = 1; stack.push(u);\n    for (const v of g[u].slice().sort()) {\n      if (found.length) return;\n      if (state[v] === 1) { found = stack.slice(stack.indexOf(v)); return; }\n      if (!state[v]) dfs(v);\n    }\n    stack.pop(); state[u] = 2;\n  };\n  for (const u of nodes) if (!state[u] && !found.length) dfs(u);\n  return { deadlock: found.length > 0, cycle: found };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>With single-instance resources the allocation graph is the wait-for graph in disguise; deadlock ⇔ cycle.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: findDeadlock([\"P1>R1\",\"R1>P2\",\"P2>R2\",\"R2>P1\"])",
+              "vi": "Ca 1"
+            },
+            "goi": "findDeadlock([\"P1>R1\",\"R1>P2\",\"P2>R2\",\"R2>P1\"])",
+            "mongDoi": {
+              "deadlock": true,
+              "cycle": [
+                "P1",
+                "R1",
+                "P2",
+                "R2"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: findDeadlock([\"P1>R1\",\"R1>P2\",\"P2>R2\",\"R2>P3\"])",
+              "vi": "Ca 2"
+            },
+            "goi": "findDeadlock([\"P1>R1\",\"R1>P2\",\"P2>R2\",\"R2>P3\"])",
+            "mongDoi": {
+              "deadlock": false,
+              "cycle": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: findDeadlock([\"P1>R1\",\"R1>P2\",\"P2>R2\",\"R2>P3\",\"P3>R3\",\"R3>P1\",\"P4>R2\"])",
+              "vi": "Ca 3"
+            },
+            "goi": "findDeadlock([\"P1>R1\",\"R1>P2\",\"P2>R2\",\"R2>P3\",\"P3>R3\",\"R3>P1\",\"P4>R2\"])",
+            "mongDoi": {
+              "deadlock": true,
+              "cycle": [
+                "P1",
+                "R1",
+                "P2",
+                "R2",
+                "P3",
+                "R3"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: findDeadlock([\"R1>P1\",\"R2>P2\",\"P1>R2\",\"P2>R3\",\"R3>P3\"])",
+              "vi": "Ca 4"
+            },
+            "goi": "findDeadlock([\"R1>P1\",\"R2>P2\",\"P1>R2\",\"P2>R3\",\"R3>P3\"])",
+            "mongDoi": {
+              "deadlock": false,
+              "cycle": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "findDeadlock([])",
+            "mongDoi": {
+              "deadlock": false,
+              "cycle": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "findDeadlock([\"B>A\",\"A>C\",\"C>B\",\"D>A\"])",
+            "mongDoi": {
+              "deadlock": true,
+              "cycle": [
+                "A",
+                "C",
+                "B"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "findDeadlock([\"P1>R1\",\"R1>P2\",\"P2>R2\",\"R2>P3\",\"P3>R1\"])",
+            "mongDoi": {
+              "deadlock": true,
+              "cycle": [
+                "R1",
+                "P2",
+                "R2",
+                "P3"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting a cycle for a node reached twice by DIFFERENT paths (a black node is not a cycle)."
+        },
+        {
+          "loi": "Ignoring isolated edges whose target never appears as a source."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

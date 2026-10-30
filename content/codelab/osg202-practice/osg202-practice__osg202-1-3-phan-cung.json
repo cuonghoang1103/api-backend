@@ -1,0 +1,593 @@
+{
+  "trackSlug": "osg202-practice",
+  "moduleSlug": "osg202-1-3-phan-cung",
+  "lesson": {
+    "course": "operating-systems",
+    "slug": "osg202-1-3-phan-cung"
+  },
+  "exercises": [
+    {
+      "title": "Hardware 1 — Interrupts, traps and the memory hierarchy (concepts)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "interrupts",
+        "memory hierarchy",
+        "locality"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Five questions on the hardware the OS depends on.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về phần cứng mà OS dựa vào.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Synchronous = caused by the current instruction; asynchronous = comes from outside.",
+        "Locality: temporal (same address again) and spatial (neighbouring addresses)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 1 — Interrupts, traps and the memory hierarchy (concepts)\n\nAnswer in the answer panel (no code needed).\n\n1. What is the difference between an interrupt and a trap?Interrupt khác trap ở chỗ nào?\n2. Where does the CPU find the address of the interrupt handler?CPU tìm địa chỉ trình xử lý ngắt ở đâu?\n3. Going down the memory hierarchy (registers → cache → RAM → disk), capacity …Đi xuống tầng bộ nhớ (thanh ghi → cache → RAM → đĩa), dung lượng …\n4. Why does caching work?Vì sao cache hoạt động hiệu quả?\n5. While an interrupt handler runs, the OS usually …Trong lúc trình xử lý ngắt chạy, OS thường …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 1 — Interrupts, traps and the memory hierarchy (concepts) — answer key\n\n1. What is the difference between an interrupt and a trap?Interrupt khác trap ở chỗ nào?\n   Answer: b) An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)\n   Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.\n\n2. Where does the CPU find the address of the interrupt handler?CPU tìm địa chỉ trình xử lý ngắt ở đâu?\n   Answer: c) In the interrupt vector table, indexed by the interrupt number\n   The vector holds one handler address per interrupt number.VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.\n\n3. Going down the memory hierarchy (registers → cache → RAM → disk), capacity …Đi xuống tầng bộ nhớ (thanh ghi → cache → RAM → đĩa), dung lượng …\n   Answer: d) increases while speed decreases and cost per byte falls\n   The classic trade-off: faster memory is smaller and costlier.VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.\n\n4. Why does caching work?Vì sao cache hoạt động hiệu quả?\n   Answer: a) Programs show locality of reference (temporal and spatial)\n   Recently used data and its neighbours are likely to be used again.VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.\n\n5. While an interrupt handler runs, the OS usually …Trong lúc trình xử lý ngắt chạy, OS thường …\n   Answer: b) masks (disables) interrupts of the same or lower priority for a short time\n   Handlers must be short and non-reentrant for the same line; the heavy part is deferred.VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>b · c · d · a · b.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What is the difference between an interrupt and a trap?</p><p style=\"opacity:.75;font-size:.92em\"><i>Interrupt khác trap ở chỗ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Interrupts only happen in user mode"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An interrupt is asynchronous (a device signals); a trap is synchronous (caused by the running instruction)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are identical"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Traps come from devices"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Hardware interrupts arrive at any time; a trap (system call, divide by zero, page fault) is a result of the current instruction.</p><p><i>VI: Ngắt phần cứng đến bất kỳ lúc nào; trap (lời gọi hệ thống, chia cho 0, lỗi trang) là kết quả của lệnh đang chạy.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Where does the CPU find the address of the interrupt handler?</p><p style=\"opacity:.75;font-size:.92em\"><i>CPU tìm địa chỉ trình xử lý ngắt ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the register file"
+              },
+              {
+                "ma": "b",
+                "noiDung": "On the disk"
+              },
+              {
+                "ma": "c",
+                "noiDung": "In the interrupt vector table, indexed by the interrupt number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In the TLB"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The vector holds one handler address per interrupt number.</p><p><i>VI: Bảng vector chứa một địa chỉ trình xử lý cho mỗi số ngắt.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Going down the memory hierarchy (registers → cache → RAM → disk), capacity …</p><p style=\"opacity:.75;font-size:.92em\"><i>Đi xuống tầng bộ nhớ (thanh ghi → cache → RAM → đĩa), dung lượng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "decreases and speed increases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "stays the same"
+              },
+              {
+                "ma": "c",
+                "noiDung": "increases together with speed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "increases while speed decreases and cost per byte falls"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The classic trade-off: faster memory is smaller and costlier.</p><p><i>VI: Đánh đổi kinh điển: bộ nhớ nhanh hơn thì nhỏ hơn và đắt hơn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does caching work?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cache hoạt động hiệu quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Programs show locality of reference (temporal and spatial)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The cache is bigger than RAM"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Memory is always idle"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The OS prefetches everything"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Recently used data and its neighbours are likely to be used again.</p><p><i>VI: Dữ liệu vừa dùng và lân cận có khả năng được dùng lại.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>While an interrupt handler runs, the OS usually …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong lúc trình xử lý ngắt chạy, OS thường …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "reboots the device"
+              },
+              {
+                "ma": "b",
+                "noiDung": "masks (disables) interrupts of the same or lower priority for a short time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "keeps all interrupts enabled"
+              },
+              {
+                "ma": "d",
+                "noiDung": "switches to a user process"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Handlers must be short and non-reentrant for the same line; the heavy part is deferred.</p><p><i>VI: Trình xử lý phải ngắn; phần nặng được hoãn lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a page fault an interrupt (it is a trap/exception)."
+        },
+        {
+          "loi": "Believing a larger cache always means a faster cache."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interrupt vector",
+          "vi": "bảng vector ngắt"
+        },
+        {
+          "en": "locality of reference",
+          "vi": "tính cục bộ của tham chiếu"
+        }
+      ]
+    },
+    {
+      "title": "Hardware 2 — Average memory access time with a cache",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "caching",
+        "average access time"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>A cache hit costs <b>c</b> ns, a miss goes to main memory and costs <b>m</b> ns in total. Compute the average access time (ns, 2 decimals) for hit ratio <b>h</b>: h × c + (1 − h) × m.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cache hit tốn <b>c</b> ns, miss phải xuống bộ nhớ chính và tốn tổng cộng <b>m</b> ns. Tính thời gian truy cập trung bình (ns, 2 chữ số thập phân) với tỉ lệ hit <b>h</b>: h × c + (1 − h) × m.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Weight each cost by its probability.",
+        "(1 − h) is the miss ratio."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 2 — Average memory access time with a cache\n\nAnswer in the answer panel (no code needed).\n\n1. Average access timeThời gian truy cập trung bình\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 2 — Average memory access time with a cache — answer key\n\n1. Average access timeThời gian truy cập trung bình\n   - r0.t: 11.80 / 11.8\n   - r1.t: 6.90 / 6.9\n   - r2.t: 2.19 / 2.19\n   - r3.t: 44.00 / 44\n   0.9×2 + 0.1×100 = 11.80; 0.95×2 + 0.05×100 = 6.90; 0.99×1 + 0.01×120 = 2.19; 0.8×5 + 0.2×200 = 44.00. A 1% change of the hit ratio changes the average noticeably when m ≫ c.VI: 11.80 ns; 6.90 ns; 2.19 ns; 44.00 ns. Tỉ lệ hit đổi 1% làm trung bình đổi đáng kể khi m ≫ c.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>11.80 · 6.90 · 2.19 · 44.00 ns.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Average access time</p><p style=\"opacity:.75;font-size:.92em\"><i>Thời gian truy cập trung bình</i></p>",
+            "cot": [
+              {
+                "ma": "p",
+                "ten": "h, c, m"
+              },
+              {
+                "ma": "t",
+                "ten": "Average (ns)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r0",
+                "o": {
+                  "p": "h = 0.9, c = 2 ns, m = 100 ns"
+                }
+              },
+              {
+                "ma": "r1",
+                "o": {
+                  "p": "h = 0.95, c = 2 ns, m = 100 ns"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "p": "h = 0.99, c = 1 ns, m = 120 ns"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "p": "h = 0.8, c = 5 ns, m = 200 ns"
+                }
+              }
+            ],
+            "dapAn": {
+              "r0.t": [
+                "11.80",
+                "11.8"
+              ],
+              "r1.t": [
+                "6.90",
+                "6.9"
+              ],
+              "r2.t": [
+                "2.19",
+                "2.19"
+              ],
+              "r3.t": [
+                "44.00",
+                "44"
+              ]
+            },
+            "giaiThich": "<p>0.9×2 + 0.1×100 = 11.80; 0.95×2 + 0.05×100 = 6.90; 0.99×1 + 0.01×120 = 2.19; 0.8×5 + 0.2×200 = 44.00. A 1% change of the hit ratio changes the average noticeably when m ≫ c.</p><p><i>VI: 11.80 ns; 6.90 ns; 2.19 ns; 44.00 ns. Tỉ lệ hit đổi 1% làm trung bình đổi đáng kể khi m ≫ c.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding c and m without weights."
+        },
+        {
+          "loi": "Using h as the miss ratio."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hit ratio",
+          "vi": "tỉ lệ trúng cache"
+        },
+        {
+          "en": "miss penalty",
+          "vi": "phạt khi trượt"
+        }
+      ]
+    },
+    {
+      "title": "Hardware 3 — Order the steps of interrupt handling",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "interrupt handling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>Arrange the steps from the device’s request to the resumption of the interrupted program.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp xếp các bước từ yêu cầu của thiết bị đến lúc chương trình bị ngắt tiếp tục chạy.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Instructions are atomic with respect to interrupts.",
+        "The hardware saves PC and status; software saves the other registers."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 3 — Order the steps of interrupt handling\n\nAnswer in the answer panel (no code needed).\n\n1. Interrupt handlingXử lý ngắt\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 3 — Order the steps of interrupt handling — answer key\n\n1. Interrupt handlingXử lý ngắt\n   Answer: s1) The device raises an interrupt request on its line  →  s2) The CPU finishes the current instruction  →  s3) The CPU pushes the program counter and status word on the stack and switches to kernel mode  →  s4) The CPU loads the handler address from the interrupt vector  →  s5) The handler saves the registers it will use, services the device and restores the registers  →  s6) The return-from-interrupt instruction restores PC and status; the interrupted program continues\n   The CPU is never interrupted in the middle of an instruction; it saves just enough state in hardware, jumps through the vector, and the handler restores everything before the return.VI: CPU không bao giờ bị ngắt giữa chừng một lệnh; phần cứng lưu đủ trạng thái tối thiểu, nhảy qua vector, và trình xử lý khôi phục mọi thứ trước khi quay lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>request → finish instruction → push PC/PSW + kernel mode → vector → handler → return.</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Interrupt handling</p><p style=\"opacity:.75;font-size:.92em\"><i>Xử lý ngắt</i></p>",
+            "muc": [
+              {
+                "ma": "s3",
+                "noiDung": "The CPU pushes the program counter and status word on the stack and switches to kernel mode"
+              },
+              {
+                "ma": "s4",
+                "noiDung": "The CPU loads the handler address from the interrupt vector"
+              },
+              {
+                "ma": "s5",
+                "noiDung": "The handler saves the registers it will use, services the device and restores the registers"
+              },
+              {
+                "ma": "s6",
+                "noiDung": "The return-from-interrupt instruction restores PC and status; the interrupted program continues"
+              },
+              {
+                "ma": "s1",
+                "noiDung": "The device raises an interrupt request on its line"
+              },
+              {
+                "ma": "s2",
+                "noiDung": "The CPU finishes the current instruction"
+              }
+            ],
+            "dapAn": [
+              "s1",
+              "s2",
+              "s3",
+              "s4",
+              "s5",
+              "s6"
+            ],
+            "giaiThich": "<p>The CPU is never interrupted in the middle of an instruction; it saves just enough state in hardware, jumps through the vector, and the handler restores everything before the return.</p><p><i>VI: CPU không bao giờ bị ngắt giữa chừng một lệnh; phần cứng lưu đủ trạng thái tối thiểu, nhảy qua vector, và trình xử lý khôi phục mọi thứ trước khi quay lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting the interrupt cut an instruction in half."
+        },
+        {
+          "loi": "Forgetting to restore the registers before returning."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "program status word",
+          "vi": "từ trạng thái chương trình (PSW)"
+        }
+      ]
+    },
+    {
+      "title": "Hardware 4 — How much CPU do interrupts cost?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "interrupt overhead",
+        "DMA batching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "osg202"
+      ],
+      "problemHtml": "<p>CPU time spent in interrupt handling (% of one CPU) = interrupts per second × cost per interrupt. Compute the percentage, rounded to 1 decimal (e.g. <code>41.7</code>).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. The questions follow the style of the OSG202 final exam, so work them out on paper first, exactly as you would in the exam hall.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanations appear after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thời gian CPU dùng cho xử lý ngắt (% của một CPU) = số ngắt mỗi giây × chi phí mỗi ngắt. Tính phần trăm, làm tròn 1 chữ số thập phân (vd <code>41.7</code>).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Câu hỏi theo phong cách đề FE của môn OSG202, nên hãy giải ra giấy trước như khi ngồi phòng thi.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Rate = bytes per second / bytes per interrupt.",
+        "Convert µs to seconds: × 10⁻⁶."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 4 — How much CPU do interrupts cost?\n\nAnswer in the answer panel (no code needed).\n\n1. Interrupt overheadChi phí ngắt\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Hardware 4 — How much CPU do interrupts cost? — answer key\n\n1. Interrupt overheadChi phí ngắt\n   - s0.r: 83333\n   - s0.p: 41.7 / 41.7\n   - s1.r: 97656\n   - s1.p: 97.7 / 97.7\n   - s2.r: 6104\n   - s2.p: 6.1 / 6.1\n   - s3.r: 10\n   - s3.p: 0.0 / 0\n   1 Gbit/s network card: 83333/s × 5 µs = 41.7%; SSD: 97656/s × 10 µs = 97.7%; Same SSD with DMA batching: one interrupt per 64 KB: 6104/s × 10 µs = 6.1%; Keyboard: 10/s × 20 µs = 0.0%. Batching (DMA of larger blocks, interrupt coalescing) is how real systems keep this overhead small.VI: 83333/s × 5 µs = 41.7%; 97656/s × 10 µs = 97.7%; 6104/s × 10 µs = 6.1%; 10/s × 20 µs = 0.0%. Gom lô (DMA khối lớn, gộp ngắt) là cách hệ thống thật giữ chi phí này nhỏ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>41.7% · 97.7% · 6.1% · 0.0%</p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Interrupt overhead</p><p style=\"opacity:.75;font-size:.92em\"><i>Chi phí ngắt</i></p>",
+            "cot": [
+              {
+                "ma": "s",
+                "ten": "Scenario"
+              },
+              {
+                "ma": "r",
+                "ten": "Interrupts / s (rounded)"
+              },
+              {
+                "ma": "p",
+                "ten": "CPU used (%)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "s0",
+                "o": {
+                  "s": "1 Gbit/s network card, 1500-byte packets, interrupt per packet, 5 µs per interrupt"
+                }
+              },
+              {
+                "ma": "s1",
+                "o": {
+                  "s": "SSD, 4 KB blocks at 400 MB/s, interrupt per block, 10 µs each"
+                }
+              },
+              {
+                "ma": "s2",
+                "o": {
+                  "s": "Same SSD with DMA batching: one interrupt per 64 KB, 10 µs each"
+                }
+              },
+              {
+                "ma": "s3",
+                "o": {
+                  "s": "Keyboard, 10 key presses per second, 20 µs each"
+                }
+              }
+            ],
+            "dapAn": {
+              "s0.r": "83333",
+              "s0.p": [
+                "41.7",
+                "41.7"
+              ],
+              "s1.r": "97656",
+              "s1.p": [
+                "97.7",
+                "97.7"
+              ],
+              "s2.r": "6104",
+              "s2.p": [
+                "6.1",
+                "6.1"
+              ],
+              "s3.r": "10",
+              "s3.p": [
+                "0.0",
+                "0"
+              ]
+            },
+            "giaiThich": "<p>1 Gbit/s network card: 83333/s × 5 µs = 41.7%; SSD: 97656/s × 10 µs = 97.7%; Same SSD with DMA batching: one interrupt per 64 KB: 6104/s × 10 µs = 6.1%; Keyboard: 10/s × 20 µs = 0.0%. Batching (DMA of larger blocks, interrupt coalescing) is how real systems keep this overhead small.</p><p><i>VI: 83333/s × 5 µs = 41.7%; 97656/s × 10 µs = 97.7%; 6104/s × 10 µs = 6.1%; 10/s × 20 µs = 0.0%. Gom lô (DMA khối lớn, gộp ngắt) là cách hệ thống thật giữ chi phí này nhỏ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting to convert microseconds to seconds."
+        },
+        {
+          "loi": "Using the packet rate for the DMA case instead of one interrupt per 64 KB."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "interrupt coalescing",
+          "vi": "gộp nhiều sự kiện vào một ngắt"
+        }
+      ]
+    }
+  ]
+}

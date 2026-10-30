@@ -63,4 +63,11 @@ assert.deepEqual(S.dining([[0, 1], [1, 2], [2, 3], [3, 4], [4, 0]]).deadlock, tr
 assert.equal(S.dining([[0, 1], [1, 2], [2, 3], [3, 4], [0, 4]]).deadlock, false);
 assert.equal(S.firstBlock(2, 'PPP'), 2); assert.equal(S.firstBlock(2, 'PCPC'), -1); assert.equal(S.firstBlock(1, 'C'), 0);
 assert.equal(S.threadsNeeded(0.9, 5), 9); assert.equal(S.threadsNeeded(0.9, 10), -1);
+assert.equal(S.rag(['P1>R1', 'R1>P2', 'P2>R2', 'R2>P1']).deadlock, true);
+assert.equal(S.rag(['P1>R1', 'R1>P2', 'P2>R2']).deadlock, false);
+assert.deepEqual(S.fatChain([2, -1, 4, 0, 1], 3), { chain: [3, 0, 2, 4, 1], ok: true });
+assert.equal(S.fatChain([1, 0], 0).ok, false);
+assert.deepEqual(S.locate(11 * 1024, 1024, 4, 12), { level: 0, reads: 1 }); assert.deepEqual(S.locate(12 * 1024, 1024, 4, 12), { level: 1, reads: 2 });
+assert.deepEqual(S.locate((12 + 256) * 1024, 1024, 4, 12), { level: 2, reads: 3 });
+assert.deepEqual(S.raid(5, 4, 2), { usable: 6, tolerate: 1 });
 console.log('✓ _sim.mjs khớp ví dụ sách giáo khoa');

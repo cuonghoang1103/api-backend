@@ -1,0 +1,856 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-2-2-validation",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-2-2-validation"
+  },
+  "exercises": [
+    {
+      "title": "Validation 1 — Which layer, which code?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "validation layers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Each row is a request sent to LabFlow after lesson 2.2. Choose the layer that refuses it and the status it gets.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng là một request gửi tới LabFlow sau bài 2.2. Chọn tầng chặn nó và mã trạng thái nó nhận.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does the check need the database?|||Hỏi: phép kiểm có cần tới cơ sở dữ liệu không?",
+        "30 February needs no data to be wrong.|||30/2 sai mà không cần dữ liệu nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 1 — Which layer, which code?\n\nAnswer in the answer panel (no code needed).\n\n1. Request → layer → statusRequest → tầng → mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 1 — Which layer, which code? — answer key\n\n1. Request → layer → statusRequest → tầng → mã\n   - r1.t: door\n   - r1.c: 415\n   - r2.t: door\n   - r2.c: 413\n   - r3.t: shape (schema)\n   - r3.c: 400\n   - r4.t: shape (schema)\n   - r4.c: 400\n   - r5.t: business rule\n   - r5.c: 422\n   - r6.t: business rule\n   - r6.c: 409\n   The door checks media type and size without reading the body; the schema checks shape without touching data (30 February is a shape error — the date does not exist); rules that need data — a retired lab, a serial already used — come last.VI: Cửa kiểm kiểu nội dung và kích thước mà không đọc body; schema kiểm hình dạng mà không cần dữ liệu (30/2 là lỗi hình dạng — ngày đó không tồn tại); luật cần tra dữ liệu — phòng đã ngừng dùng, serial đã có — đi sau cùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The door checks media type and size without reading the body; the schema checks shape without touching data (30 February is a shape error — the date does not exist); rules that need data — a retired lab, a serial already used — come last.</p><p><i>VI: Cửa kiểm kiểu nội dung và kích thước mà không đọc body; schema kiểm hình dạng mà không cần dữ liệu (30/2 là lỗi hình dạng — ngày đó không tồn tại); luật cần tra dữ liệu — phòng đã ngừng dùng, serial đã có — đi sau cùng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → layer → status</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → tầng → mã</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "t",
+                "ten": "Layer",
+                "luaChon": [
+                  "door",
+                  "shape (schema)",
+                  "business rule"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "Status",
+                "luaChon": [
+                  "400",
+                  "409",
+                  "413",
+                  "415",
+                  "422"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "POST /bookings with Content-Type: text/plain"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "POST /bookings with a 200 KB body (limit 10 KB)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "PATCH /devices/dev_1 {\"name\": 123, \"isAdmin\": true}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "POST /bookings with startAt \"2026-02-30T08:00:00+07:00\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "POST /bookings for lab_4 (retired)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "PATCH /devices/dev_1 {\"serialNo\": \"FOC1932X0K7\"} (dev_2 has it)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "door",
+              "r1.c": "415",
+              "r2.t": "door",
+              "r2.c": "413",
+              "r3.t": "shape (schema)",
+              "r3.c": "400",
+              "r4.t": "shape (schema)",
+              "r4.c": "400",
+              "r5.t": "business rule",
+              "r5.c": "422",
+              "r6.t": "business rule",
+              "r6.c": "409"
+            },
+            "giaiThich": "<p>The door checks media type and size without reading the body; the schema checks shape without touching data (30 February is a shape error — the date does not exist); rules that need data — a retired lab, a serial already used — come last.</p><p><i>VI: Cửa kiểm kiểu nội dung và kích thước mà không đọc body; schema kiểm hình dạng mà không cần dữ liệu (30/2 là lỗi hình dạng — ngày đó không tồn tại); luật cần tra dữ liệu — phòng đã ngừng dùng, serial đã có — đi sau cùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling an unknown lab a shape error: the id is well-formed, the lab is the problem.|||Gọi phòng không tồn tại là lỗi hình dạng: id đúng dạng, chính phòng mới là vấn đề."
+        },
+        {
+          "loi": "Answering 400 for a text/plain body — 415 tells the client exactly what to change.|||Trả 400 cho body text/plain — 415 cho client biết chính xác phải đổi gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "media type",
+          "vi": "kiểu nội dung"
+        },
+        {
+          "en": "business rule",
+          "vi": "luật nghiệp vụ"
+        }
+      ]
+    },
+    {
+      "title": "Validation 2 — Strict objects, coercion and Express 5",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Zod",
+        "Express 5"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts measured in lesson 2.2 with Zod 4.6.7 and Express 5.3.0.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều đã đo trong bài 2.2 với Zod 4.6.7 và Express 5.3.0.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each answer was measured in the lesson; re-run it if unsure.|||Mỗi đáp án đã được đo trong bài; chạy lại nếu chưa chắc.",
+        "Strip, strict, loose: removed, refused, kept.|||Strip, strict, loose: gỡ, từ chối, giữ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 2 — Strict objects, coercion and Express 5\n\nAnswer in the answer panel (no code needed).\n\n1. A booking body contains \"status\": \"APPROVED\". With z.object() (the default) Zod …Body đặt phòng có \"status\": \"APPROVED\". Với z.object() (mặc định) Zod …\n2. ?onlyAvailable=false is validated with z.coerce.boolean(). The handler receives …?onlyAvailable=false được kiểm bằng z.coerce.boolean(). Handler nhận …\n3. validate() stores the cleaned query in req.valid.query instead of req.query. Why?validate() cất query đã làm sạch vào req.valid.query thay vì req.query. Vì sao?\n4. Zod refuses \"2026-11-02T10:00+07:00\" (no seconds) that Chapter 1 accepted. After release this is …Zod từ chối \"2026-11-02T10:00+07:00\" (không có giây) mà Chương 1 từng nhận. Sau khi phát hành, đây là …\n5. req.is([\"application/json\"]) returns null. That means …req.is([\"application/json\"]) trả về null. Nghĩa là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Validation 2 — Strict objects, coercion and Express 5 — answer key\n\n1. A booking body contains \"status\": \"APPROVED\". With z.object() (the default) Zod …Body đặt phòng có \"status\": \"APPROVED\". Với z.object() (mặc định) Zod …\n   Answer: c) silently removes status from the result\n   Default objects strip unknown keys; strictObject refuses them; looseObject keeps them. LabFlow uses strictObject for writes so typos and smuggled fields become visible.VI: object mặc định gỡ khoá lạ; strictObject từ chối; looseObject giữ nguyên. LabFlow dùng strictObject cho thao tác ghi để lỗi gõ và trường lén nhét lộ ra.\n\n2. ?onlyAvailable=false is validated with z.coerce.boolean(). The handler receives …?onlyAvailable=false được kiểm bằng z.coerce.boolean(). Handler nhận …\n   Answer: b) true\n   Coercion uses Boolean(): every non-empty string is truthy. Use z.stringbool() for query booleans.VI: Ép kiểu dùng Boolean(): chuỗi không rỗng nào cũng truthy. Dùng z.stringbool() cho boolean trong query.\n\n3. validate() stores the cleaned query in req.valid.query instead of req.query. Why?validate() cất query đã làm sạch vào req.valid.query thay vì req.query. Vì sao?\n   Answer: d) In Express 5 req.query is a getter; assigning it throws\n   Measured: \"Cannot set property query of #<IncomingMessage> which has only a getter\".VI: Đã đo: \"Cannot set property query of #<IncomingMessage> which has only a getter\".\n\n4. Zod refuses \"2026-11-02T10:00+07:00\" (no seconds) that Chapter 1 accepted. After release this is …Zod từ chối \"2026-11-02T10:00+07:00\" (không có giây) mà Chương 1 từng nhận. Sau khi phát hành, đây là …\n   Answer: a) a breaking change — clients that sent it start failing\n   Refusing something you used to accept breaks someone. Before any client exists it is free; LabFlow decides now and writes it down.VI: Từ chối thứ từng nhận sẽ làm vỡ ai đó. Khi chưa có client thì miễn phí; LabFlow quyết ngay và ghi ra.\n\n5. req.is([\"application/json\"]) returns null. That means …req.is([\"application/json\"]) trả về null. Nghĩa là …\n   Answer: c) the request has no body at all\n   null = no body (e.g. POST …/cancel); false = a body of another type ⇒ 415; the type = a matching body.VI: null = không có body (ví dụ POST …/cancel); false = body kiểu khác ⇒ 415; trả về kiểu = body khớp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> silently removes status from the result</p><p>Default objects strip unknown keys; strictObject refuses them; looseObject keeps them. LabFlow uses strictObject for writes so typos and smuggled fields become visible.</p><p><i>VI: object mặc định gỡ khoá lạ; strictObject từ chối; looseObject giữ nguyên. LabFlow dùng strictObject cho thao tác ghi để lỗi gõ và trường lén nhét lộ ra.</i></p></li><li><p><b>b)</b> true</p><p>Coercion uses Boolean(): every non-empty string is truthy. Use z.stringbool() for query booleans.</p><p><i>VI: Ép kiểu dùng Boolean(): chuỗi không rỗng nào cũng truthy. Dùng z.stringbool() cho boolean trong query.</i></p></li><li><p><b>d)</b> In Express 5 req.query is a getter; assigning it throws</p><p>Measured: \"Cannot set property query of #&lt;IncomingMessage&gt; which has only a getter\".</p><p><i>VI: Đã đo: \"Cannot set property query of #&lt;IncomingMessage&gt; which has only a getter\".</i></p></li><li><p><b>a)</b> a breaking change — clients that sent it start failing</p><p>Refusing something you used to accept breaks someone. Before any client exists it is free; LabFlow decides now and writes it down.</p><p><i>VI: Từ chối thứ từng nhận sẽ làm vỡ ai đó. Khi chưa có client thì miễn phí; LabFlow quyết ngay và ghi ra.</i></p></li><li><p><b>c)</b> the request has no body at all</p><p>null = no body (e.g. POST …/cancel); false = a body of another type ⇒ 415; the type = a matching body.</p><p><i>VI: null = không có body (ví dụ POST …/cancel); false = body kiểu khác ⇒ 415; trả về kiểu = body khớp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A booking body contains \"status\": \"APPROVED\". With z.object() (the default) Zod …</p><p style=\"opacity:.75;font-size:.92em\"><i>Body đặt phòng có \"status\": \"APPROVED\". Với z.object() (mặc định) Zod …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "throws an exception that crashes the server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "refuses the body with \"unrecognized key\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "silently removes status from the result"
+              },
+              {
+                "ma": "d",
+                "noiDung": "keeps status in the result"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Default objects strip unknown keys; strictObject refuses them; looseObject keeps them. LabFlow uses strictObject for writes so typos and smuggled fields become visible.</p><p><i>VI: object mặc định gỡ khoá lạ; strictObject từ chối; looseObject giữ nguyên. LabFlow dùng strictObject cho thao tác ghi để lỗi gõ và trường lén nhét lộ ra.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>?onlyAvailable=false is validated with z.coerce.boolean(). The handler receives …</p><p style=\"opacity:.75;font-size:.92em\"><i>?onlyAvailable=false được kiểm bằng z.coerce.boolean(). Handler nhận …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the string \"false\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "true"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a 400 error"
+              },
+              {
+                "ma": "d",
+                "noiDung": "false"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Coercion uses Boolean(): every non-empty string is truthy. Use z.stringbool() for query booleans.</p><p><i>VI: Ép kiểu dùng Boolean(): chuỗi không rỗng nào cũng truthy. Dùng z.stringbool() cho boolean trong query.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>validate() stores the cleaned query in req.valid.query instead of req.query. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>validate() cất query đã làm sạch vào req.valid.query thay vì req.query. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "req.query is shared between all requests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Zod cannot return an object for the query"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express 5 deletes req.query after the first middleware"
+              },
+              {
+                "ma": "d",
+                "noiDung": "In Express 5 req.query is a getter; assigning it throws"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measured: \"Cannot set property query of #&lt;IncomingMessage&gt; which has only a getter\".</p><p><i>VI: Đã đo: \"Cannot set property query of #&lt;IncomingMessage&gt; which has only a getter\".</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Zod refuses \"2026-11-02T10:00+07:00\" (no seconds) that Chapter 1 accepted. After release this is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Zod từ chối \"2026-11-02T10:00+07:00\" (không có giây) mà Chương 1 từng nhận. Sau khi phát hành, đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a breaking change — clients that sent it start failing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "harmless, because times without seconds are invalid ISO 8601"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a bug fix that no client can notice"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only a documentation change"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Refusing something you used to accept breaks someone. Before any client exists it is free; LabFlow decides now and writes it down.</p><p><i>VI: Từ chối thứ từng nhận sẽ làm vỡ ai đó. Khi chưa có client thì miễn phí; LabFlow quyết ngay và ghi ra.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>req.is([\"application/json\"]) returns null. That means …</p><p style=\"opacity:.75;font-size:.92em\"><i>req.is([\"application/json\"]) trả về null. Nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the body is JSON"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the Content-Type header is malformed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the request has no body at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the body has another type"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>null = no body (e.g. POST …/cancel); false = a body of another type ⇒ 415; the type = a matching body.</p><p><i>VI: null = không có body (ví dụ POST …/cancel); false = body kiểu khác ⇒ 415; trả về kiểu = body khớp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting coercion for booleans.|||Tin ép kiểu cho boolean."
+        },
+        {
+          "loi": "Assuming tightening validation is always safe.|||Cho rằng siết kiểm dữ liệu lúc nào cũng an toàn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "coercion",
+          "vi": "ép kiểu"
+        },
+        {
+          "en": "strict object",
+          "vi": "object nghiêm ngặt"
+        }
+      ]
+    },
+    {
+      "title": "Validation 3 — Write validateDevicePatch(body) without a library",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "validation",
+        "mass assignment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>To see what Zod does for you, write LabFlow’s <code>DevicePatch</code> schema by hand. Every member is optional; check the members <b>in the order they appear in the body</b> and collect every error as <code>{ pointer: '#/' + key, detail }</code>:</p><ul>\n<li><code>labId</code>: string matching <code>^lab_\\d+$</code>, else <code>'must look like lab_1'</code></li>\n<li><code>name</code>: not a string ⇒ <code>'expected string'</code>; trimmed length outside 1–100 ⇒ <code>'length 1-100'</code>; the value kept is <b>trimmed</b></li>\n<li><code>type</code>: one of ROUTER, SWITCH, BOARD, PC, OTHER; <code>status</code>: one of AVAILABLE, IN_USE, MAINTENANCE — else <code>'invalid option'</code></li>\n<li><code>serialNo</code>: string matching <code>^[A-Z0-9-]{6,20}$</code>, else <code>'invalid serial'</code></li>\n<li><code>note</code>: <code>null</code> is allowed (remove); otherwise a string, else <code>'expected string or null'</code>; trimmed length &gt; 500 ⇒ <code>'length 0-500'</code>; kept trimmed</li>\n<li>any other key ⇒ <code>'unknown field'</code>. A body that is not a plain object ⇒ <code>{ ok: false, errors: [{ pointer: '#', detail: 'expected object' }] }</code>.</li></ul>\n<p>Return <code>{ ok: true, value }</code> (only the valid, cleaned members) or <code>{ ok: false, errors }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Để thấy Zod làm giúp bạn những gì, hãy tự viết tay schema <code>DevicePatch</code> của LabFlow. Mọi trường đều tuỳ chọn; kiểm các trường <b>theo thứ tự xuất hiện trong body</b> và gom mọi lỗi dạng <code>{ pointer: '#/' + khoá, detail }</code>:</p><ul>\n<li><code>labId</code>: chuỗi khớp <code>^lab_\\d+$</code>, ngược lại <code>'must look like lab_1'</code></li>\n<li><code>name</code>: không phải chuỗi ⇒ <code>'expected string'</code>; độ dài sau khi trim ngoài 1–100 ⇒ <code>'length 1-100'</code>; giá trị giữ lại là bản <b>đã trim</b></li>\n<li><code>type</code>: một trong ROUTER, SWITCH, BOARD, PC, OTHER; <code>status</code>: một trong AVAILABLE, IN_USE, MAINTENANCE — ngược lại <code>'invalid option'</code></li>\n<li><code>serialNo</code>: chuỗi khớp <code>^[A-Z0-9-]{6,20}$</code>, ngược lại <code>'invalid serial'</code></li>\n<li><code>note</code>: được phép <code>null</code> (xoá); còn lại phải là chuỗi, ngược lại <code>'expected string or null'</code>; độ dài sau trim &gt; 500 ⇒ <code>'length 0-500'</code>; giữ bản đã trim</li>\n<li>khoá khác ⇒ <code>'unknown field'</code>. Body không phải object thường ⇒ <code>{ ok: false, errors: [{ pointer: '#', detail: 'expected object' }] }</code>.</li></ul>\n<p>Trả <code>{ ok: true, value }</code> (chỉ các trường hợp lệ, đã làm sạch) hoặc <code>{ ok: false, errors }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "body — any JSON value (the parsed request body).|||body — giá trị JSON bất kỳ (body đã phân tích).",
+      "outputSpec": "{ ok: true, value } or { ok: false, errors: [{ pointer, detail }] }|||{ ok: true, value } hoặc { ok: false, errors: [{ pointer, detail }] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "validateDevicePatch({\"name\":123,\"isAdmin\":true})",
+          "output": "{\"ok\":false,\"errors\":[{\"pointer\":\"#/name\",\"detail\":\"expected string\"},{\"pointer\":\"#/isAdmin\",\"detail\":\"unknown field\"}]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Object.keys(body).forEach — one branch per known key, a final else for unknown keys.|||Object.keys(body).forEach — mỗi khoá đã biết một nhánh, nhánh else cuối cho khoá lạ.",
+        "Check typeof before calling .trim() — 123.trim() throws.|||Kiểm typeof trước khi gọi .trim() — 123.trim() ném lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** body ⇒ { ok: true, value } | { ok: false, errors: [{ pointer, detail }] } */\nfunction validateDevicePatch(body) {\n  // Write your solution here\n  if (body.name !== undefined && typeof body.name !== 'string')\n    return { ok: false, errors: [{ pointer: '#/name', detail: 'expected string' }] };\n  return { ok: true, value: body };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction validateDevicePatch(body) {\n  if (body === null || typeof body !== 'object' || Array.isArray(body)) return { ok: false, errors: [{ pointer: '#', detail: 'expected object' }] };\n  var errors = [], value = {};\n  var TYPES = ['ROUTER', 'SWITCH', 'BOARD', 'PC', 'OTHER'], STATUSES = ['AVAILABLE', 'IN_USE', 'MAINTENANCE'];\n  var err = function (k, d) { errors.push({ pointer: '#/' + k, detail: d }); };\n  Object.keys(body).forEach(function (k) {\n    var v = body[k];\n    if (k === 'labId') { if (typeof v === 'string' && /^lab_\\d+$/.test(v)) value[k] = v; else err(k, 'must look like lab_1'); }\n    else if (k === 'name') {\n      if (typeof v !== 'string') err(k, 'expected string');\n      else if (v.trim().length < 1 || v.trim().length > 100) err(k, 'length 1-100');\n      else value[k] = v.trim();\n    }\n    else if (k === 'type') { if (TYPES.indexOf(v) >= 0) value[k] = v; else err(k, 'invalid option'); }\n    else if (k === 'serialNo') { if (typeof v === 'string' && /^[A-Z0-9-]{6,20}$/.test(v)) value[k] = v; else err(k, 'invalid serial'); }\n    else if (k === 'status') { if (STATUSES.indexOf(v) >= 0) value[k] = v; else err(k, 'invalid option'); }\n    else if (k === 'note') {\n      if (v === null) value[k] = null;\n      else if (typeof v !== 'string') err(k, 'expected string or null');\n      else if (v.trim().length > 500) err(k, 'length 0-500');\n      else value[k] = v.trim();\n    }\n    else err(k, 'unknown field');\n  });\n  return errors.length ? { ok: false, errors: errors } : { ok: true, value: value };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Forty lines for one small schema, and every resource needs one: this is the wall of ifs a schema library replaces. The behaviour is exactly what LabFlow’s strict partial Zod schema gives — all errors at once, unknown keys refused, values cleaned.</p>",
+      "solutionExplanationHtmlVi": "<p>Bốn mươi dòng cho một schema nhỏ, và tài nguyên nào cũng cần một cái: đây chính là bức tường if mà thư viện schema thay thế. Hành vi giống hệt schema Zod strict partial của LabFlow — mọi lỗi một lần, khoá lạ bị từ chối, giá trị được làm sạch.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Hole 1 of lesson 2.2",
+              "vi": "Lỗ hổng 1 của bài 2.2"
+            },
+            "goi": "validateDevicePatch({\"name\":123,\"isAdmin\":true})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#/name",
+                  "detail": "expected string"
+                },
+                {
+                  "pointer": "#/isAdmin",
+                  "detail": "unknown field"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: validateDevicePatch({\"status\":\"MAINTENANCE\",\"note\":null})",
+              "vi": "Ca 2"
+            },
+            "goi": "validateDevicePatch({\"status\":\"MAINTENANCE\",\"note\":null})",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "status": "MAINTENANCE",
+                "note": null
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: validateDevicePatch({\"name\":\"  Cisco Router 2901  \",\"status\":\"BROKEN\"})",
+              "vi": "Ca 3"
+            },
+            "goi": "validateDevicePatch({\"name\":\"  Cisco Router 2901  \",\"status\":\"BROKEN\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#/status",
+                  "detail": "invalid option"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "validateDevicePatch({\"labId\":5})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#/labId",
+                  "detail": "must look like lab_1"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "validateDevicePatch({\"serialNo\":\"foc1932x0k7\",\"type\":\"ROUTER\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#/serialNo",
+                  "detail": "invalid serial"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "validateDevicePatch({\"name\":\"   \"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#/name",
+                  "detail": "length 1-100"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "validateDevicePatch([{\"name\":\"x\"}])",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#",
+                  "detail": "expected object"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "validateDevicePatch(null)",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#",
+                  "detail": "expected object"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "validateDevicePatch({\"note\":42,\"id\":\"dev_9\",\"labId\":\"lab_2\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "pointer": "#/note",
+                  "detail": "expected string or null"
+                },
+                {
+                  "pointer": "#/id",
+                  "detail": "unknown field"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "validateDevicePatch({})",
+            "mongDoi": {
+              "ok": true,
+              "value": {}
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "validateDevicePatch({\"note\":\"  Thiếu thẻ nhớ  \",\"serialNo\":\"RPI5-00421\"})",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "note": "Thiếu thẻ nhớ",
+                "serialNo": "RPI5-00421"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping at the first error.|||Dừng ở lỗi đầu tiên."
+        },
+        {
+          "loi": "Copying unknown keys into value — that is the mass-assignment hole of Chapter 1.|||Chép khoá lạ vào value — đó chính là lỗ mass assignment của Chương 1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "partial",
+          "vi": "mọi trường tuỳ chọn"
+        },
+        {
+          "en": "trim",
+          "vi": "cắt khoảng trắng hai đầu"
+        }
+      ]
+    },
+    {
+      "title": "Validation 4 — Write coerceQuery(query, spec): strings in, types out",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "query parsing",
+        "coercion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Express hands you <code>req.query</code> with <b>strings</b> (and arrays when a key repeats). Write <code>coerceQuery(query, spec)</code> where <code>spec</code> maps each allowed parameter to <code>'string'</code>, <code>'int'</code> or <code>'bool'</code>. For each key of <code>query</code>, in order:</p><ul>\n<li>not in <code>spec</code> ⇒ error <code>'unknown parameter'</code>; not a string (an array) ⇒ <code>'expected a single value'</code></li>\n<li><code>string</code>: trimmed, non-empty, else <code>'must not be empty'</code></li>\n<li><code>int</code>: only digits and ≥ 1 ⇒ a number, else <code>'expected an integer >= 1'</code> (<code>\"2.5\"</code>, <code>\"\"</code>, <code>\"0\"</code>, <code>\"25abc\"</code> are refused)</li>\n<li><code>bool</code>: exactly <code>\"true\"</code> ⇒ <code>true</code>, <code>\"false\"</code> ⇒ <code>false</code>, else <code>'expected true or false'</code> — the <code>z.coerce.boolean()</code> trap avoided</li></ul>\n<p>Errors are <code>{ parameter, detail }</code>. Return <code>{ ok: true, value }</code> or <code>{ ok: false, errors }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Express đưa bạn <code>req.query</code> toàn <b>chuỗi</b> (và mảng khi một khoá lặp lại). Viết <code>coerceQuery(query, spec)</code> với <code>spec</code> ánh xạ mỗi tham số được phép sang <code>'string'</code>, <code>'int'</code> hoặc <code>'bool'</code>. Với mỗi khoá của <code>query</code>, theo thứ tự:</p><ul>\n<li>không có trong <code>spec</code> ⇒ lỗi <code>'unknown parameter'</code>; không phải chuỗi (là mảng) ⇒ <code>'expected a single value'</code></li>\n<li><code>string</code>: đã trim, không rỗng, ngược lại <code>'must not be empty'</code></li>\n<li><code>int</code>: chỉ gồm chữ số và ≥ 1 ⇒ thành số, ngược lại <code>'expected an integer >= 1'</code> (<code>\"2.5\"</code>, <code>\"\"</code>, <code>\"0\"</code>, <code>\"25abc\"</code> đều bị từ chối)</li>\n<li><code>bool</code>: đúng <code>\"true\"</code> ⇒ <code>true</code>, <code>\"false\"</code> ⇒ <code>false</code>, ngược lại <code>'expected true or false'</code> — tránh cái bẫy <code>z.coerce.boolean()</code></li></ul>\n<p>Lỗi có dạng <code>{ parameter, detail }</code>. Trả <code>{ ok: true, value }</code> hoặc <code>{ ok: false, errors }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "query — { key: string | string[] }; spec — { key: \"string\" | \"int\" | \"bool\" }.|||query — { khoá: chuỗi | mảng chuỗi }; spec — { khoá: \"string\" | \"int\" | \"bool\" }.",
+      "outputSpec": "{ ok: true, value } or { ok: false, errors: [{ parameter, detail }] }|||{ ok: true, value } hoặc { ok: false, errors: [{ parameter, detail }] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "coerceQuery({\"minCapacity\":\"25\"}, {\"building\":\"string\",\"minCapacity\":\"int\",\"onlyAvailable\":\"bool\"})",
+          "output": "{\"ok\":true,\"value\":{\"minCapacity\":25}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "/^\\d+$/ rejects \"\", \"2.5\" and \"25abc\" at once.|||/^\\d+$/ loại cả \"\", \"2.5\" và \"25abc\".",
+        "Compare bool strings exactly — do not use Boolean(v).|||So chuỗi boolean chính xác — đừng dùng Boolean(v)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** query (strings) + spec ⇒ { ok, value | errors } */\nfunction coerceQuery(query, spec) {\n  // Write your solution here\n  var value = {};\n  Object.keys(query).forEach(function (k) {\n    value[k] = spec[k] === 'int' ? Number(query[k]) : spec[k] === 'bool' ? Boolean(query[k]) : query[k];\n  });\n  return { ok: true, value: value };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction coerceQuery(query, spec) {\n  var value = {}, errors = [];\n  Object.keys(query).forEach(function (k) {\n    var v = query[k], t = spec[k];\n    if (!t) { errors.push({ parameter: k, detail: 'unknown parameter' }); return; }\n    if (typeof v !== 'string') { errors.push({ parameter: k, detail: 'expected a single value' }); return; }\n    if (t === 'string') { if (v.trim()) value[k] = v.trim(); else errors.push({ parameter: k, detail: 'must not be empty' }); }\n    else if (t === 'int') {\n      if (/^\\d+$/.test(v) && Number(v) >= 1) value[k] = Number(v);\n      else errors.push({ parameter: k, detail: 'expected an integer >= 1' });\n    } else if (t === 'bool') {\n      if (v === 'true') value[k] = true;\n      else if (v === 'false') value[k] = false;\n      else errors.push({ parameter: k, detail: 'expected true or false' });\n    }\n  });\n  return errors.length ? { ok: false, errors: errors } : { ok: true, value: value };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Query strings have no types; the API decides them. Refusing arrays, empty strings and fuzzy booleans keeps every filter honest — the same contract LabsQuery enforces with Zod in LabFlow.</p>",
+      "solutionExplanationHtmlVi": "<p>Query string không có kiểu; API quyết kiểu. Từ chối mảng, chuỗi rỗng và boolean mập mờ giữ cho mọi bộ lọc trung thực — đúng hợp đồng mà LabsQuery ép bằng Zod trong LabFlow.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: coerceQuery({\"minCapacity\":\"25\"}, {\"building\":\"string\",\"minCapacity\":\"int\",\"onlyAvailab...",
+              "vi": "Ca 1"
+            },
+            "goi": "coerceQuery({\"minCapacity\":\"25\"}, {\"building\":\"string\",\"minCapacity\":\"int\",\"onlyAvailable\":\"bool\"})",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "minCapacity": 25
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "The real 400 of lesson 2.2",
+              "vi": "400 thật của bài 2.2"
+            },
+            "goi": "coerceQuery({\"minCapacity\":\"abc\",\"Building\":\"Beta\"}, {\"building\":\"string\",\"minCapacity\":\"int\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "parameter": "minCapacity",
+                  "detail": "expected an integer >= 1"
+                },
+                {
+                  "parameter": "Building",
+                  "detail": "unknown parameter"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: coerceQuery({\"onlyAvailable\":\"false\"}, {\"onlyAvailable\":\"bool\"})",
+              "vi": "Ca 3"
+            },
+            "goi": "coerceQuery({\"onlyAvailable\":\"false\"}, {\"onlyAvailable\":\"bool\"})",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "onlyAvailable": false
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "coerceQuery({\"minCapacity\":[\"10\",\"20\"]}, {\"minCapacity\":\"int\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "parameter": "minCapacity",
+                  "detail": "expected a single value"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "coerceQuery({\"minCapacity\":\"2.5\"}, {\"minCapacity\":\"int\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "parameter": "minCapacity",
+                  "detail": "expected an integer >= 1"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "coerceQuery({\"minCapacity\":\"\"}, {\"minCapacity\":\"int\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "parameter": "minCapacity",
+                  "detail": "expected an integer >= 1"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "coerceQuery({\"building\":\"  Alpha \",\"onlyAvailable\":\"true\"}, {\"building\":\"string\",\"onlyAvailable\":\"bool\"})",
+            "mongDoi": {
+              "ok": true,
+              "value": {
+                "building": "Alpha",
+                "onlyAvailable": true
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "coerceQuery({\"onlyAvailable\":\"yes\",\"building\":\"   \"}, {\"building\":\"string\",\"onlyAvailable\":\"bool\"})",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                {
+                  "parameter": "onlyAvailable",
+                  "detail": "expected true or false"
+                },
+                {
+                  "parameter": "building",
+                  "detail": "must not be empty"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "coerceQuery({}, {\"building\":\"string\"})",
+            "mongDoi": {
+              "ok": true,
+              "value": {}
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Number(\"\") is 0 and Number(\"25abc\") is NaN — Number() alone is not a validator.|||Number(\"\") là 0, Number(\"25abc\") là NaN — chỉ Number() không phải là bộ kiểm."
+        },
+        {
+          "loi": "Ignoring unknown keys: a misspelled filter silently returns wrong data (lesson 1.4).|||Bỏ qua khoá lạ: bộ lọc gõ sai lặng lẽ trả dữ liệu sai (bài 1.4)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "query parameter",
+          "vi": "tham số truy vấn"
+        },
+        {
+          "en": "coercion",
+          "vi": "ép kiểu"
+        }
+      ]
+    }
+  ]
+}

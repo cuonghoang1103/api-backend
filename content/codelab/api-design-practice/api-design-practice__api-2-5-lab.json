@@ -1,0 +1,664 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-2-5-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-2-5-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 2.1 — Part A: layer and code for each input",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "API design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Part A of Lab 2, answered from the real transcript. For each input choose the layer that refuses it and the status + code.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phần A của Lab 2, trả lời theo transcript thật. Với mỗi đầu vào, chọn tầng chặn nó và mã trạng thái + code.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Recall the order 401 → 404 → 400.|||Nhớ thứ tự 401 → 404 → 400.",
+        "Enum values are exact: OPEN, not open.|||Giá trị enum phải chính xác: OPEN, không phải open."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 2.1 — Part A: layer and code for each input\n\nAnswer in the answer panel (no code needed).\n\n1. Input → layer → answerĐầu vào → tầng → câu trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 2.1 — Part A: layer and code for each input — answer key\n\n1. Input → layer → answerĐầu vào → tầng → câu trả lời\n   - r1.t: shape\n   - r1.c: 400 VALIDATION_FAILED\n   - r2.t: rule\n   - r2.c: 404 DEVICE_NOT_FOUND\n   - r3.t: rule\n   - r3.c: 409 DUPLICATE_ISSUE\n   - r4.t: door\n   - r4.c: 415 UNSUPPORTED_MEDIA_TYPE\n   - r5.t: shape\n   - r5.c: 400 INVALID_QUERY\n   The device is loaded before the body is validated, so dev_9 answers 404 even with a bad body (Lab 1’s order). The duplicate is a rule that needs data; lower-case “open” is a shape error of the query.VI: Thiết bị được nạp trước khi kiểm body, nên dev_9 trả 404 kể cả khi body sai (thứ tự của Lab 1). Trùng tiêu đề là luật cần tra dữ liệu; \"open\" chữ thường là lỗi hình dạng của query.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The device is loaded before the body is validated, so dev_9 answers 404 even with a bad body (Lab 1’s order). The duplicate is a rule that needs data; lower-case “open” is a shape error of the query.</p><p><i>VI: Thiết bị được nạp trước khi kiểm body, nên dev_9 trả 404 kể cả khi body sai (thứ tự của Lab 1). Trùng tiêu đề là luật cần tra dữ liệu; \"open\" chữ thường là lỗi hình dạng của query.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Input → layer → answer</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu vào → tầng → câu trả lời</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Input"
+              },
+              {
+                "ma": "t",
+                "ten": "Layer",
+                "luaChon": [
+                  "door",
+                  "shape",
+                  "rule"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "Answer",
+                "luaChon": [
+                  "400 VALIDATION_FAILED",
+                  "400 INVALID_QUERY",
+                  "404 DEVICE_NOT_FOUND",
+                  "409 DUPLICATE_ISSUE",
+                  "415 UNSUPPORTED_MEDIA_TYPE"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "{\"title\":\"x\",\"severity\":\"URGENT\",\"reporter\":\"usr_2\"} on dev_1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "empty body on dev_9"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "\"cong CONSOLE khong len den\" while iss_1 is OPEN on dev_1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Content-Type: text/plain"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "GET /issues?status=open"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "shape",
+              "r1.c": "400 VALIDATION_FAILED",
+              "r2.t": "rule",
+              "r2.c": "404 DEVICE_NOT_FOUND",
+              "r3.t": "rule",
+              "r3.c": "409 DUPLICATE_ISSUE",
+              "r4.t": "door",
+              "r4.c": "415 UNSUPPORTED_MEDIA_TYPE",
+              "r5.t": "shape",
+              "r5.c": "400 INVALID_QUERY"
+            },
+            "giaiThich": "<p>The device is loaded before the body is validated, so dev_9 answers 404 even with a bad body (Lab 1’s order). The duplicate is a rule that needs data; lower-case “open” is a shape error of the query.</p><p><i>VI: Thiết bị được nạp trước khi kiểm body, nên dev_9 trả 404 kể cả khi body sai (thứ tự của Lab 1). Trùng tiêu đề là luật cần tra dữ liệu; \"open\" chữ thường là lỗi hình dạng của query.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 400 for dev_9 with a bad body.|||Trả 400 cho dev_9 có body sai."
+        },
+        {
+          "loi": "Calling the duplicate a shape error.|||Gọi lỗi trùng là lỗi hình dạng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rubric",
+          "vi": "thang chấm"
+        },
+        {
+          "en": "transcript",
+          "vi": "bản ghi lệnh và output"
+        }
+      ]
+    },
+    {
+      "title": "Lab 2.2 — Write reportIssueV2(db, req): the whole POST in one function",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "validation order",
+        "Unicode folding",
+        "views"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Re-create Lab 2’s <code>POST /devices/{id}/issues</code> as a pure function. <code>req = { userId, deviceId, body, now }</code>. Checks in this order; the first failing step answers:</p><ol>\n<li>no <code>userId</code> ⇒ <code>{ status: 401, body: { code: 'UNAUTHENTICATED' } }</code>; no such device ⇒ <code>{ status: 404, body: { code: 'DEVICE_NOT_FOUND' } }</code></li>\n<li><b>Shape</b> — go through the body keys in order; strings are trimmed and NFC-normalised first. <code>title</code> 3–120 chars else <code>'length 3-120'</code>; <code>severity</code> LOW/MEDIUM/HIGH else <code>'one of LOW, MEDIUM, HIGH'</code>; <code>description</code> 1–1000 chars else <code>'length 1-1000'</code>; other keys <code>'unknown field'</code>. After the loop: missing <code>title</code> ⇒ <code>'required'</code>, then missing <code>severity</code> ⇒ <code>'required'</code>. Any error ⇒ <code>{ status: 400, body: { code: 'VALIDATION_FAILED', errors: [{ pointer: '#/key', detail }] } }</code>.</li>\n<li><b>Rule</b> — an <code>OPEN</code> issue of the same device whose title is equal after folding (NFD, no marks, đ→d, Đ→D, lower case) ⇒ <code>{ status: 409, body: { code: 'DUPLICATE_ISSUE', existing: id } }</code></li>\n<li>Otherwise <code>{ status: 201, location: '/issues/iss_N', body, deviceStatus }</code>: N = existing issues + 1; <code>body</code> has the ten members <code>id, deviceId, reportedBy, title, severity, description (null if absent), status 'OPEN', createdAt = now, resolvedAt null, resolution null</code>; <code>deviceStatus</code> = <code>'MAINTENANCE'</code> for HIGH, else the device’s status.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại <code>POST /devices/{id}/issues</code> của Lab 2 thành một hàm thuần. <code>req = { userId, deviceId, body, now }</code>. Kiểm theo thứ tự này; bước đầu tiên trượt sẽ trả lời:</p><ol>\n<li>không có <code>userId</code> ⇒ <code>{ status: 401, body: { code: 'UNAUTHENTICATED' } }</code>; không có thiết bị ⇒ <code>{ status: 404, body: { code: 'DEVICE_NOT_FOUND' } }</code></li>\n<li><b>Hình dạng</b> — duyệt các khoá của body theo thứ tự; chuỗi được trim và chuẩn hoá NFC trước. <code>title</code> 3–120 ký tự, ngược lại <code>'length 3-120'</code>; <code>severity</code> LOW/MEDIUM/HIGH, ngược lại <code>'one of LOW, MEDIUM, HIGH'</code>; <code>description</code> 1–1000 ký tự, ngược lại <code>'length 1-1000'</code>; khoá khác <code>'unknown field'</code>. Sau vòng lặp: thiếu <code>title</code> ⇒ <code>'required'</code>, rồi thiếu <code>severity</code> ⇒ <code>'required'</code>. Có lỗi ⇒ <code>{ status: 400, body: { code: 'VALIDATION_FAILED', errors: [{ pointer: '#/khoá', detail }] } }</code>.</li>\n<li><b>Luật</b> — một báo hỏng <code>OPEN</code> cùng thiết bị có tiêu đề bằng nhau sau khi gấp (NFD, bỏ dấu, đ→d, Đ→D, viết thường) ⇒ <code>{ status: 409, body: { code: 'DUPLICATE_ISSUE', existing: id } }</code></li>\n<li>Còn lại <code>{ status: 201, location: '/issues/iss_N', body, deviceStatus }</code>: N = số báo hỏng hiện có + 1; <code>body</code> có mười trường <code>id, deviceId, reportedBy, title, severity, description (null nếu thiếu), status 'OPEN', createdAt = now, resolvedAt null, resolution null</code>; <code>deviceStatus</code> = <code>'MAINTENANCE'</code> với HIGH, ngược lại là status của thiết bị.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "db — { devices, issues }; req — { userId, deviceId, body, now }.",
+      "outputSpec": "{ status, body, location?, deviceStatus? }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+          "output": "{\"status\":201,\"location\":\"/issues/iss_1\",\"body\":{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"description\":null,\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"resolvedAt\":null,\"resolution\":null},\"deviceStatus\":\"MAINTENANCE\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write it as a sequence of early returns, one per layer.|||Viết thành chuỗi return sớm, mỗi tầng một bước.",
+        "Fold both titles before comparing; normalise input to NFC before checking its length.|||Gấp cả hai tiêu đề trước khi so; chuẩn hoá chữ vào về NFC trước khi đếm độ dài."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** db, req ⇒ { status, body, location?, deviceStatus? } — Lab 2 */\nfunction reportIssueV2(db, req) {\n  // Write your solution here\n  var b = req.body || {};\n  if (!b.title || !b.severity) return { status: 400, body: { code: 'VALIDATION_FAILED' } };\n  return { status: 201, body: { id: 'iss_1', title: b.title, severity: b.severity, status: 'OPEN' } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction reportIssueV2(db, req) {\n  var fold = function (s) { return s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase(); };\n  var text = function (v) { return typeof v === 'string' ? v.trim().normalize('NFC') : v; };\n  if (!req.userId) return { status: 401, body: { code: 'UNAUTHENTICATED' } };\n  var device = db.devices.find(function (d) { return d.id === req.deviceId; });\n  if (!device) return { status: 404, body: { code: 'DEVICE_NOT_FOUND' } };\n  var b = req.body || {};\n  var errors = [], v = {};\n  Object.keys(b).forEach(function (k) {\n    var x = text(b[k]);\n    if (k === 'title') { if (typeof x === 'string' && x.length >= 3 && x.length <= 120) v.title = x; else errors.push({ pointer: '#/title', detail: 'length 3-120' }); }\n    else if (k === 'severity') { if (['LOW', 'MEDIUM', 'HIGH'].indexOf(x) >= 0) v.severity = x; else errors.push({ pointer: '#/severity', detail: 'one of LOW, MEDIUM, HIGH' }); }\n    else if (k === 'description') { if (typeof x === 'string' && x.length >= 1 && x.length <= 1000) v.description = x; else errors.push({ pointer: '#/description', detail: 'length 1-1000' }); }\n    else errors.push({ pointer: '#/' + k, detail: 'unknown field' });\n  });\n  if (!('title' in b)) errors.push({ pointer: '#/title', detail: 'required' });\n  if (!('severity' in b)) errors.push({ pointer: '#/severity', detail: 'required' });\n  if (errors.length) return { status: 400, body: { code: 'VALIDATION_FAILED', errors: errors } };\n  var same = db.issues.find(function (i) { return i.deviceId === device.id && i.status === 'OPEN' && fold(i.title) === fold(v.title); });\n  if (same) return { status: 409, body: { code: 'DUPLICATE_ISSUE', existing: same.id } };\n  var issue = {\n    id: 'iss_' + (db.issues.length + 1), deviceId: device.id, reportedBy: req.userId, title: v.title, severity: v.severity,\n    description: v.description === undefined ? null : v.description, status: 'OPEN', createdAt: req.now, resolvedAt: null, resolution: null,\n  };\n  return { status: 201, location: '/issues/' + issue.id, body: issue, deviceStatus: v.severity === 'HIGH' ? 'MAINTENANCE' : device.status };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every idea of Chapter 2 in one handler: the door is handled by the framework, the shape is checked in one pass with every error collected, the rule compares text the way a reader would, and the success body is a view with a fixed shape.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi ý của Chương 2 trong một handler: cửa do framework lo, hình dạng được kiểm một lượt và gom đủ mọi lỗi, luật so chữ theo cách người đọc so, và body thành công là một view có hình dạng cố định.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Transcript step 1",
+              "vi": "Bước 1 của transcript"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 201,
+              "location": "/issues/iss_1",
+              "body": {
+                "id": "iss_1",
+                "deviceId": "dev_1",
+                "reportedBy": "usr_1",
+                "title": "Cổng console không lên đèn",
+                "severity": "HIGH",
+                "description": null,
+                "status": "OPEN",
+                "createdAt": "2026-10-31T17:46:03.341Z",
+                "resolvedAt": null,
+                "resolution": null
+              },
+              "deviceStatus": "MAINTENANCE"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Transcript step 3",
+              "vi": "Bước 3 của transcript"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"title\":\"Cổng console không lên đèn\",\"status\":\"OPEN\"}]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"x\",\"severity\":\"URGENT\",\"reporter\":\"usr_2\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 400,
+              "body": {
+                "code": "VALIDATION_FAILED",
+                "errors": [
+                  {
+                    "pointer": "#/title",
+                    "detail": "length 3-120"
+                  },
+                  {
+                    "pointer": "#/severity",
+                    "detail": "one of LOW, MEDIUM, HIGH"
+                  },
+                  {
+                    "pointer": "#/reporter",
+                    "detail": "unknown field"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Transcript step 5",
+              "vi": "Bước 5 của transcript"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"title\":\"Cổng console không lên đèn\",\"status\":\"OPEN\"}]}, {\"userId\":\"usr_2\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"cong CONSOLE khong len den\",\"severity\":\"LOW\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 409,
+              "body": {
+                "code": "DUPLICATE_ISSUE",
+                "existing": "iss_1"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_9\",\"body\":{},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "code": "DEVICE_NOT_FOUND"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":null,\"deviceId\":\"dev_9\",\"body\":{},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "code": "UNAUTHENTICATED"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_2\",\"body\":{},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 400,
+              "body": {
+                "code": "VALIDATION_FAILED",
+                "errors": [
+                  {
+                    "pointer": "#/title",
+                    "detail": "required"
+                  },
+                  {
+                    "pointer": "#/severity",
+                    "detail": "required"
+                  }
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "NFD duplicate",
+              "vi": "Trùng ở dạng NFD"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"title\":\"Cổng console không lên đèn\",\"status\":\"OPEN\"}]}, {\"userId\":\"usr_2\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"Cổng console không lên đèn\",\"severity\":\"MEDIUM\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 409,
+              "body": {
+                "code": "DUPLICATE_ISSUE",
+                "existing": "iss_1"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"title\":\"Cổng console không lên đèn\",\"status\":\"OPEN\"}]}, {\"userId\":\"usr_2\",\"deviceId\":\"dev_2\",\"body\":{\"title\":\"  Cổng 24 chập chờn  \",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 201,
+              "location": "/issues/iss_2",
+              "body": {
+                "id": "iss_2",
+                "deviceId": "dev_2",
+                "reportedBy": "usr_2",
+                "title": "Cổng 24 chập chờn",
+                "severity": "LOW",
+                "description": "Đèn cổng 24 lúc sáng lúc tắt",
+                "status": "OPEN",
+                "createdAt": "2026-10-31T17:46:03.341Z",
+                "resolvedAt": null,
+                "resolution": null
+              },
+              "deviceStatus": "AVAILABLE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Resolved issues do not block",
+              "vi": "Báo hỏng đã xử lý không chặn"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"title\":\"Cổng console không lên đèn\",\"status\":\"RESOLVED\"}]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 201,
+              "location": "/issues/iss_2",
+              "body": {
+                "id": "iss_2",
+                "deviceId": "dev_1",
+                "reportedBy": "usr_1",
+                "title": "Cổng console không lên đèn",
+                "severity": "HIGH",
+                "description": null,
+                "status": "OPEN",
+                "createdAt": "2026-10-31T17:46:03.341Z",
+                "resolvedAt": null,
+                "resolution": null
+              },
+              "deviceStatus": "MAINTENANCE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "reportIssueV2({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"severity\":\"LOW\",\"description\":\"\"},\"now\":\"2026-10-31T17:46:03.341Z\"})",
+            "mongDoi": {
+              "status": 400,
+              "body": {
+                "code": "VALIDATION_FAILED",
+                "errors": [
+                  {
+                    "pointer": "#/description",
+                    "detail": "length 1-1000"
+                  },
+                  {
+                    "pointer": "#/title",
+                    "detail": "required"
+                  }
+                ]
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Validating the body before loading the device — breaks the 401 → 404 → 400 order.|||Kiểm body trước khi nạp thiết bị — làm hỏng thứ tự 401 → 404 → 400."
+        },
+        {
+          "loi": "Comparing titles with === — misses accents, case and NFD.|||So tiêu đề bằng === — bỏ sót dấu, hoa thường và NFD."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fold",
+          "vi": "gấp chữ",
+          "giaiThich": "Bỏ dấu, bỏ hoa thường để so như người đọc."
+        },
+        {
+          "en": "early return",
+          "vi": "trả về sớm"
+        }
+      ]
+    },
+    {
+      "title": "Lab 2.3 — Write resolveIssueV2(db, req): action + optional body + view",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "action endpoints",
+        "views"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p><code>POST /issues/{id}/resolve</code> in Lab 2. <code>req = { user, issueId, body, now }</code>. Order (the real middleware chain: auth → role → validate → handler):</p><ol>\n<li>no user ⇒ 401 <code>UNAUTHENTICATED</code>; role not <code>LAB_MANAGER</code> ⇒ 403 <code>FORBIDDEN</code></li>\n<li>body (may be missing ⇒ <code>{}</code>): the only allowed key is <code>resolution</code>, a string of 1–500 chars after trim, else <code>'length 1-500'</code>; other keys <code>'unknown field'</code> ⇒ 400 <code>VALIDATION_FAILED</code> with <code>errors</code></li>\n<li>no such issue ⇒ 404 <code>ISSUE_NOT_FOUND</code>; already <code>RESOLVED</code> ⇒ 409 <code>ALREADY_RESOLVED</code></li>\n<li>otherwise 200 with the issue’s <b>view</b> (the ten members of <code>toIssue</code>, in order <code>id, deviceId, reportedBy, title, severity, description, status, createdAt, resolvedAt, resolution</code>): status <code>'RESOLVED'</code>, <code>resolvedAt = now</code>, <code>resolution</code> trimmed or <code>null</code>, <code>description</code> or <code>null</code>. Internal fields never leave. Do not modify <code>db</code>.</li></ol>\n<p>Errors are <code>{ status, body: { code, errors? } }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>POST /issues/{id}/resolve</code> trong Lab 2. <code>req = { user, issueId, body, now }</code>. Thứ tự (đúng chuỗi middleware thật: xác thực → vai trò → validate → handler):</p><ol>\n<li>không có user ⇒ 401 <code>UNAUTHENTICATED</code>; vai trò không phải <code>LAB_MANAGER</code> ⇒ 403 <code>FORBIDDEN</code></li>\n<li>body (có thể thiếu ⇒ <code>{}</code>): khoá duy nhất được phép là <code>resolution</code>, chuỗi 1–500 ký tự sau trim, ngược lại <code>'length 1-500'</code>; khoá khác <code>'unknown field'</code> ⇒ 400 <code>VALIDATION_FAILED</code> kèm <code>errors</code></li>\n<li>không có báo hỏng ⇒ 404 <code>ISSUE_NOT_FOUND</code>; đã <code>RESOLVED</code> ⇒ 409 <code>ALREADY_RESOLVED</code></li>\n<li>còn lại 200 với <b>view</b> của báo hỏng (mười trường của <code>toIssue</code>, theo thứ tự <code>id, deviceId, reportedBy, title, severity, description, status, createdAt, resolvedAt, resolution</code>): status <code>'RESOLVED'</code>, <code>resolvedAt = now</code>, <code>resolution</code> đã trim hoặc <code>null</code>, <code>description</code> hoặc <code>null</code>. Trường nội bộ không bao giờ đi ra. Không sửa <code>db</code>.</li></ol>\n<p>Lỗi có dạng <code>{ status, body: { code, errors? } }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "db — { issues }; req — { user, issueId, body, now }.",
+      "outputSpec": "{ status, body }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_1\",\"body\":{\"resolution\":\"Thay cáp console mới\"},\"now\":\"2026-10-31T17:46:03.473Z\"})",
+          "output": "{\"status\":200,\"body\":{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"description\":null,\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"resolvedAt\":\"2026-10-31T17:46:03.473Z\",\"resolution\":\"Thay cáp console mới\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Same guard-clause structure as Lab 1’s resolveIssue, plus a validation step and a view.|||Cùng khuôn chốt chặn như resolveIssue ở Lab 1, thêm bước kiểm dữ liệu và view.",
+        "Build the response object member by member — do not spread the issue.|||Dựng object trả về từng trường — đừng trải issue ra."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** db, req ⇒ { status, body } */\nfunction resolveIssueV2(db, req) {\n  // Write your solution here\n  var issue = db.issues.find(function (i) { return i.id === req.issueId; });\n  return { status: 200, body: Object.assign({}, issue, { status: 'RESOLVED', resolvedAt: req.now }) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction resolveIssueV2(db, req) {\n  if (!req.user) return { status: 401, body: { code: 'UNAUTHENTICATED' } };\n  if (req.user.role !== 'LAB_MANAGER') return { status: 403, body: { code: 'FORBIDDEN' } };\n  var b = req.body || {};\n  var errors = [];\n  Object.keys(b).forEach(function (k) {\n    if (k !== 'resolution') errors.push({ pointer: '#/' + k, detail: 'unknown field' });\n    else if (typeof b[k] !== 'string' || b[k].trim().length < 1 || b[k].trim().length > 500) errors.push({ pointer: '#/resolution', detail: 'length 1-500' });\n  });\n  if (errors.length) return { status: 400, body: { code: 'VALIDATION_FAILED', errors: errors } };\n  var issue = db.issues.find(function (i) { return i.id === req.issueId; });\n  if (!issue) return { status: 404, body: { code: 'ISSUE_NOT_FOUND' } };\n  if (issue.status === 'RESOLVED') return { status: 409, body: { code: 'ALREADY_RESOLVED' } };\n  return {\n    status: 200,\n    body: {\n      id: issue.id, deviceId: issue.deviceId, reportedBy: issue.reportedBy, title: issue.title, severity: issue.severity,\n      description: issue.description === undefined ? null : issue.description, status: 'RESOLVED', createdAt: issue.createdAt,\n      resolvedAt: req.now, resolution: b.resolution === undefined ? null : b.resolution.trim(),\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order follows the middleware chain of the reference solution: requireAuth, requireRole, validate(IssueResolve), then the handler. The 200 body is a view, so it has the same ten members as every other issue response.</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ tự đi theo chuỗi middleware của lời giải mẫu: requireAuth, requireRole, validate(IssueResolve), rồi handler. Body 200 là một view, nên có đúng mười trường như mọi response báo hỏng khác.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Transcript step 8 (Lan)",
+              "vi": "Bước 8 của transcript (Lan)"
+            },
+            "goi": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_1\",\"body\":{\"resolution\":\"Thay cáp console mới\"},\"now\":\"2026-10-31T17:46:03.473Z\"})",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "id": "iss_1",
+                "deviceId": "dev_1",
+                "reportedBy": "usr_1",
+                "title": "Cổng console không lên đèn",
+                "severity": "HIGH",
+                "description": null,
+                "status": "RESOLVED",
+                "createdAt": "2026-10-31T17:46:03.341Z",
+                "resolvedAt": "2026-10-31T17:46:03.473Z",
+                "resolution": "Thay cáp console mới"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\"...",
+              "vi": "Ca 2"
+            },
+            "goi": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":{\"id\":\"usr_1\",\"role\":\"STUDENT\"},\"issueId\":\"iss_1\",\"now\":\"T\"})",
+            "mongDoi": {
+              "status": 403,
+              "body": {
+                "code": "FORBIDDEN"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\"...",
+              "vi": "Ca 3"
+            },
+            "goi": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_2\",\"body\":{},\"now\":\"T\"})",
+            "mongDoi": {
+              "status": 409,
+              "body": {
+                "code": "ALREADY_RESOLVED"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":null,\"issueId\":\"iss_1\",\"now\":\"T\"})",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "code": "UNAUTHENTICATED"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_9\",\"body\":{\"resolution\":\"x\"},\"now\":\"T\"})",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "code": "ISSUE_NOT_FOUND"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_1\",\"body\":{\"resolution\":\"   \",\"fixedBy\":\"usr_3\"},\"now\":\"T\"})",
+            "mongDoi": {
+              "status": 400,
+              "body": {
+                "code": "VALIDATION_FAILED",
+                "errors": [
+                  {
+                    "pointer": "#/resolution",
+                    "detail": "length 1-500"
+                  },
+                  {
+                    "pointer": "#/fixedBy",
+                    "detail": "unknown field"
+                  }
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "resolveIssueV2({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T17:46:03.341Z\",\"internalNote\":\"kiểm lại cáp\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"description\":\"Đèn cổng 24 lúc sáng lúc tắt\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T17:46:03.341Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_1\",\"now\":\"2026-11-01T00:00:00.000Z\"})",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "id": "iss_1",
+                "deviceId": "dev_1",
+                "reportedBy": "usr_1",
+                "title": "Cổng console không lên đèn",
+                "severity": "HIGH",
+                "description": null,
+                "status": "RESOLVED",
+                "createdAt": "2026-10-31T17:46:03.341Z",
+                "resolvedAt": "2026-11-01T00:00:00.000Z",
+                "resolution": null
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "db is not modified",
+              "vi": "Không sửa db"
+            },
+            "goi": "(function () { var db = { issues: [{ id: 'iss_5', status: 'OPEN', title: 'x' }] }; resolveIssueV2(db, { user: { id: 'usr_3', role: 'LAB_MANAGER' }, issueId: 'iss_5', now: 'T' }); return db; })()",
+            "mongDoi": {
+              "issues": [
+                {
+                  "id": "iss_5",
+                  "status": "OPEN",
+                  "title": "x"
+                }
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Spreading the issue: internalNote leaks.|||Trải issue ra: internalNote bị lộ."
+        },
+        {
+          "loi": "Checking the issue before validating the body — the chain validates first.|||Kiểm báo hỏng trước khi kiểm body — chuỗi middleware kiểm body trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "guard clause",
+          "vi": "chốt chặn đầu hàm"
+        },
+        {
+          "en": "view",
+          "vi": "bản biểu diễn công khai"
+        }
+      ]
+    }
+  ]
+}

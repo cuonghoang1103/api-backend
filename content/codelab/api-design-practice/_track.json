@@ -68,6 +68,36 @@
       "name": "Lab 1 — Device issue reports",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 1.1 — The issue-report contract · Lab 1.2 — Write reportIssue(db, req): POST /devices/{id}/issues · Lab 1.3 — Write resolveIssue(db, req): POST /issues/{id}/resolve"
+    },
+    {
+      "slug": "api-2-1-problem-details",
+      "name": "2.1 Problem Details (RFC 9457)",
+      "level": "BEGINNER",
+      "description": "Luyện: Problems 1 — Read a real problem document · Problems 2 — Situations from the LabFlow log · Problems 3 — Write toProblem(err, instance, titles) · Problems 4 — Write parsePointer(ptr): from \"#/a/b\" to a path"
+    },
+    {
+      "slug": "api-2-2-validation",
+      "name": "2.2 Validating input at the edge",
+      "level": "BEGINNER",
+      "description": "Luyện: Validation 1 — Which layer, which code? · Validation 2 — Strict objects, coercion and Express 5 · Validation 3 — Write validateDevicePatch(body) without a library · Validation 4 — Write coerceQuery(query, spec): strings in, types out"
+    },
+    {
+      "slug": "api-2-3-envelope",
+      "name": "2.3 Response shapes and envelopes",
+      "level": "BEGINNER",
+      "description": "Luyện: Responses 1 — What goes out, and how · Responses 2 — Write toBookingView(b): an allow-list with a stable shape · Responses 3 — Write shapeDiff(a, b): catch shape changes in a test · Responses 4 — Status and body must agree"
+    },
+    {
+      "slug": "api-2-4-i18n",
+      "name": "2.4 Errors for bilingual apps",
+      "level": "BEGINNER",
+      "description": "Luyện: Bilingual 1 — What is translated, and what never is · Bilingual 2 — Write pickLanguage(header, supported, fallback) · Bilingual 3 — Write fold(s): compare Vietnamese like a reader · Bilingual 4 — Write localize(code, params, lang, catalog)"
+    },
+    {
+      "slug": "api-2-5-lab",
+      "name": "Lab 2 — Issue reports, version 2",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 2.1 — Part A: layer and code for each input · Lab 2.2 — Write reportIssueV2(db, req): the whole POST in one function · Lab 2.3 — Write resolveIssueV2(db, req): action + optional body + view"
     }
   ]
 }

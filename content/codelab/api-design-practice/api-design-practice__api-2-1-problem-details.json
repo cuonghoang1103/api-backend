@@ -1,0 +1,730 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-2-1-problem-details",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-2-1-problem-details"
+  },
+  "exercises": [
+    {
+      "title": "Problems 1 — Read a real problem document",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "RFC 9457"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A real LabFlow answer after lesson 2.1 (An holds 8–10h, Bình asks for 9–11h):<pre>HTTP/1.1 409 Conflict\nContent-Type: application/problem+json; charset=utf-8\n\n{\n  \"type\": \"https://labflow.example/problems/booking-conflict\",\n  \"title\": \"Trùng lịch phòng\",\n  \"status\": 409,\n  \"detail\": \"Phòng đã có lượt bk_1 trong khung giờ này\",\n  \"instance\": \"/bookings\",\n  \"code\": \"BOOKING_CONFLICT\",\n  \"conflictWith\": \"bk_1\"\n}</pre>Match each member to its role in RFC 9457.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một câu trả lời thật của LabFlow sau bài 2.1 (An giữ 8–10h, Bình xin 9–11h):<pre>HTTP/1.1 409 Conflict\nContent-Type: application/problem+json; charset=utf-8\n\n{\n  \"type\": \"https://labflow.example/problems/booking-conflict\",\n  \"title\": \"Trùng lịch phòng\",\n  \"status\": 409,\n  \"detail\": \"Phòng đã có lượt bk_1 trong khung giờ này\",\n  \"instance\": \"/bookings\",\n  \"code\": \"BOOKING_CONFLICT\",\n  \"conflictWith\": \"bk_1\"\n}</pre>Ghép mỗi trường với vai trò của nó trong RFC 9457.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask which value would be the same for every booking conflict.|||Hỏi giá trị nào sẽ giống nhau ở mọi lần trùng lịch.",
+        "Five members are standard; the rest are extensions.|||Năm trường là chuẩn; phần còn lại là mở rộng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Problems 1 — Read a real problem document\n\nAnswer in the answer panel (no code needed).\n\n1. Member → roleTrường → vai trò\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Problems 1 — Read a real problem document — answer key\n\n1. Member → roleTrường → vai trò\n   - r1.r: what kind of problem — clients branch on it\n   - r2.r: short summary, the same every time\n   - r3.r: the HTTP code repeated (advisory)\n   - r4.r: what went wrong this time\n   - r5.r: this occurrence (LabFlow: the path)\n   - r6.r: an extension member\n   type is the identifier (default about:blank); title SHOULD NOT change between occurrences except for localisation; status is advisory and must match the status line; detail helps the client correct the problem; instance identifies the occurrence. Anything else — code, conflictWith, errors — is an extension, and clients MUST ignore extensions they do not know.VI: type là định danh (mặc định about:blank); title KHÔNG NÊN đổi giữa các lần trừ khi dịch; status chỉ để tham khảo và phải khớp dòng trạng thái; detail giúp client sửa request; instance định danh lần xảy ra. Mọi thứ khác — code, conflictWith, errors — là trường mở rộng, và client PHẢI bỏ qua trường mở rộng mình không biết.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>type is the identifier (default about:blank); title SHOULD NOT change between occurrences except for localisation; status is advisory and must match the status line; detail helps the client correct the problem; instance identifies the occurrence. Anything else — code, conflictWith, errors — is an extension, and clients MUST ignore extensions they do not know.</p><p><i>VI: type là định danh (mặc định about:blank); title KHÔNG NÊN đổi giữa các lần trừ khi dịch; status chỉ để tham khảo và phải khớp dòng trạng thái; detail giúp client sửa request; instance định danh lần xảy ra. Mọi thứ khác — code, conflictWith, errors — là trường mở rộng, và client PHẢI bỏ qua trường mở rộng mình không biết.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Member → role</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường → vai trò</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Member"
+              },
+              {
+                "ma": "r",
+                "ten": "Role",
+                "luaChon": [
+                  "what kind of problem — clients branch on it",
+                  "short summary, the same every time",
+                  "the HTTP code repeated (advisory)",
+                  "what went wrong this time",
+                  "this occurrence (LabFlow: the path)",
+                  "an extension member"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "type"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "title"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "status"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "detail"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "instance"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "conflictWith"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "what kind of problem — clients branch on it",
+              "r2.r": "short summary, the same every time",
+              "r3.r": "the HTTP code repeated (advisory)",
+              "r4.r": "what went wrong this time",
+              "r5.r": "this occurrence (LabFlow: the path)",
+              "r6.r": "an extension member"
+            },
+            "giaiThich": "<p>type is the identifier (default about:blank); title SHOULD NOT change between occurrences except for localisation; status is advisory and must match the status line; detail helps the client correct the problem; instance identifies the occurrence. Anything else — code, conflictWith, errors — is an extension, and clients MUST ignore extensions they do not know.</p><p><i>VI: type là định danh (mặc định about:blank); title KHÔNG NÊN đổi giữa các lần trừ khi dịch; status chỉ để tham khảo và phải khớp dòng trạng thái; detail giúp client sửa request; instance định danh lần xảy ra. Mọi thứ khác — code, conflictWith, errors — là trường mở rộng, và client PHẢI bỏ qua trường mở rộng mình không biết.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking detail is fixed and title varies — it is the other way round.|||Nghĩ detail cố định còn title thay đổi — ngược lại mới đúng."
+        },
+        {
+          "loi": "Treating status in the body as the real status.|||Coi status trong body là mã trạng thái thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "problem details",
+          "vi": "chi tiết vấn đề",
+          "giaiThich": "RFC 9457, media type application/problem+json."
+        },
+        {
+          "en": "extension member",
+          "vi": "trường mở rộng"
+        }
+      ]
+    },
+    {
+      "title": "Problems 2 — Situations from the LabFlow log",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "RFC 9457 rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Situations met while moving LabFlow to RFC 9457 (lesson 2.1). Choose the answer the RFC and the lesson support.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những tình huống gặp khi chuyển LabFlow sang RFC 9457 (bài 2.1). Chọn đáp án được RFC và bài học ủng hộ.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate what is fixed (type, title) from what changes (detail, instance).|||Tách thứ cố định (type, title) khỏi thứ thay đổi (detail, instance).",
+        "The RFC text quoted in the lesson answers each one.|||Đoạn RFC trích trong bài trả lời từng câu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Problems 2 — Situations from the LabFlow log\n\nAnswer in the answer panel (no code needed).\n\n1. Chapter 1 code: a 200 KB body comes back as 500 INTERNAL. The server log shows type \"entity.too.large\", limit 102400. The right fix?Code Chương 1: body 200 KB trả về 500 INTERNAL. Log server có type \"entity.too.large\", limit 102400. Cách sửa đúng?\n2. A 2025 mobile app receives a problem with a member \"existing\": \"iss_1\" it has never heard of. Per RFC 9457 it must …Một app mobile năm 2025 nhận problem có trường \"existing\": \"iss_1\" chưa từng biết. Theo RFC 9457 nó phải …\n3. A teammate writes \"title\": \"Lab lab_9 not found\". What breaks?Một bạn viết \"title\": \"Lab lab_9 not found\". Cái gì hỏng?\n4. Which detail follows RFC 9457’s guidance?detail nào theo đúng hướng dẫn của RFC 9457?\n5. The RFC’s own validation example answers 422, LabFlow answers 400 for a wrong shape. Which statement is right?Ví dụ kiểm dữ liệu của chính RFC trả 422, LabFlow trả 400 khi sai hình dạng. Câu nào đúng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Problems 2 — Situations from the LabFlow log — answer key\n\n1. Chapter 1 code: a 200 KB body comes back as 500 INTERNAL. The server log shows type \"entity.too.large\", limit 102400. The right fix?Code Chương 1: body 200 KB trả về 500 INTERNAL. Log server có type \"entity.too.large\", limit 102400. Cách sửa đúng?\n   Answer: b) Map entity.too.large to 413 with the limit in detail — in the one error handler\n   Express already decided 413; the hand-made handler threw that away. One handler change fixes every endpoint; raising the limit only moves the problem.VI: Express đã quyết là 413; bộ xử lý tự chế vứt mất điều đó. Sửa một bộ xử lý là sửa mọi endpoint; nâng giới hạn chỉ dời vấn đề đi chỗ khác.\n\n2. A 2025 mobile app receives a problem with a member \"existing\": \"iss_1\" it has never heard of. Per RFC 9457 it must …Một app mobile năm 2025 nhận problem có trường \"existing\": \"iss_1\" chưa từng biết. Theo RFC 9457 nó phải …\n   Answer: b) ignore the unknown extension and keep working\n   Clients MUST ignore unrecognised extensions — that is what makes adding members safe. Clients SHOULD NOT dereference the type URI automatically.VI: Client PHẢI bỏ qua trường mở rộng không nhận ra — chính điều đó làm việc thêm trường an toàn. Client KHÔNG NÊN tự động mở URI của type.\n\n3. A teammate writes \"title\": \"Lab lab_9 not found\". What breaks?Một bạn viết \"title\": \"Lab lab_9 not found\". Cái gì hỏng?\n   Answer: d) Dashboards that group by title see one group per id instead of one problem type\n   title SHOULD NOT change between occurrences except for localisation. Ids belong in detail or an extension.VI: title KHÔNG NÊN đổi giữa các lần trừ khi dịch. Id thuộc về detail hoặc trường mở rộng.\n\n4. Which detail follows RFC 9457’s guidance?detail nào theo đúng hướng dẫn của RFC 9457?\n   Answer: d) \"Phòng đã có lượt bk_1 trong khung giờ này\"\n   detail should help the client correct the request. Stack traces, paths and SQL leak internals and belong in the server log.VI: detail nên giúp client sửa request. Stack trace, đường dẫn và SQL làm lộ nội bộ và thuộc về log server.\n\n5. The RFC’s own validation example answers 422, LabFlow answers 400 for a wrong shape. Which statement is right?Ví dụ kiểm dữ liệu của chính RFC trả 422, LabFlow trả 400 khi sai hình dạng. Câu nào đúng?\n   Answer: a) The RFC example is an illustration; what matters is one documented, consistent choice\n   RFC 9457 defines the error body, not which 4xx to pick. status in the body must match the real status line.VI: RFC 9457 định nghĩa body lỗi, không quy định chọn mã 4xx nào. status trong body phải khớp dòng trạng thái thật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Map entity.too.large to 413 with the limit in detail — in the one error handler</p><p>Express already decided 413; the hand-made handler threw that away. One handler change fixes every endpoint; raising the limit only moves the problem.</p><p><i>VI: Express đã quyết là 413; bộ xử lý tự chế vứt mất điều đó. Sửa một bộ xử lý là sửa mọi endpoint; nâng giới hạn chỉ dời vấn đề đi chỗ khác.</i></p></li><li><p><b>b)</b> ignore the unknown extension and keep working</p><p>Clients MUST ignore unrecognised extensions — that is what makes adding members safe. Clients SHOULD NOT dereference the type URI automatically.</p><p><i>VI: Client PHẢI bỏ qua trường mở rộng không nhận ra — chính điều đó làm việc thêm trường an toàn. Client KHÔNG NÊN tự động mở URI của type.</i></p></li><li><p><b>d)</b> Dashboards that group by title see one group per id instead of one problem type</p><p>title SHOULD NOT change between occurrences except for localisation. Ids belong in detail or an extension.</p><p><i>VI: title KHÔNG NÊN đổi giữa các lần trừ khi dịch. Id thuộc về detail hoặc trường mở rộng.</i></p></li><li><p><b>d)</b> \"Phòng đã có lượt bk_1 trong khung giờ này\"</p><p>detail should help the client correct the request. Stack traces, paths and SQL leak internals and belong in the server log.</p><p><i>VI: detail nên giúp client sửa request. Stack trace, đường dẫn và SQL làm lộ nội bộ và thuộc về log server.</i></p></li><li><p><b>a)</b> The RFC example is an illustration; what matters is one documented, consistent choice</p><p>RFC 9457 defines the error body, not which 4xx to pick. status in the body must match the real status line.</p><p><i>VI: RFC 9457 định nghĩa body lỗi, không quy định chọn mã 4xx nào. status trong body phải khớp dòng trạng thái thật.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Chapter 1 code: a 200 KB body comes back as 500 INTERNAL. The server log shows type \"entity.too.large\", limit 102400. The right fix?</p><p style=\"opacity:.75;font-size:.92em\"><i>Code Chương 1: body 200 KB trả về 500 INTERNAL. Log server có type \"entity.too.large\", limit 102400. Cách sửa đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Raise the limit to 1 MB so the error never happens"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Map entity.too.large to 413 with the limit in detail — in the one error handler"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Keep 500 — the server could not process the request"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Catch the error inside every route that reads the body"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Express already decided 413; the hand-made handler threw that away. One handler change fixes every endpoint; raising the limit only moves the problem.</p><p><i>VI: Express đã quyết là 413; bộ xử lý tự chế vứt mất điều đó. Sửa một bộ xử lý là sửa mọi endpoint; nâng giới hạn chỉ dời vấn đề đi chỗ khác.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 2025 mobile app receives a problem with a member \"existing\": \"iss_1\" it has never heard of. Per RFC 9457 it must …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một app mobile năm 2025 nhận problem có trường \"existing\": \"iss_1\" chưa từng biết. Theo RFC 9457 nó phải …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "fetch the type URI to learn what \"existing\" means"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ignore the unknown extension and keep working"
+              },
+              {
+                "ma": "c",
+                "noiDung": "show \"existing\" to the user as an error message"
+              },
+              {
+                "ma": "d",
+                "noiDung": "treat the whole response as invalid"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Clients MUST ignore unrecognised extensions — that is what makes adding members safe. Clients SHOULD NOT dereference the type URI automatically.</p><p><i>VI: Client PHẢI bỏ qua trường mở rộng không nhận ra — chính điều đó làm việc thêm trường an toàn. Client KHÔNG NÊN tự động mở URI của type.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A teammate writes \"title\": \"Lab lab_9 not found\". What breaks?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bạn viết \"title\": \"Lab lab_9 not found\". Cái gì hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The status code, which becomes 400"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JSON parsing, because titles may not contain ids"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing — title is free text for humans"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Dashboards that group by title see one group per id instead of one problem type"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>title SHOULD NOT change between occurrences except for localisation. Ids belong in detail or an extension.</p><p><i>VI: title KHÔNG NÊN đổi giữa các lần trừ khi dịch. Id thuộc về detail hoặc trường mở rộng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which detail follows RFC 9457’s guidance?</p><p style=\"opacity:.75;font-size:.92em\"><i>detail nào theo đúng hướng dẫn của RFC 9457?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "\"TypeError at /srv/labflow/src/app.js:20\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "\"SELECT * FROM bookings WHERE lab_id = 1 failed\""
+              },
+              {
+                "ma": "c",
+                "noiDung": "\"Error: see server log line 4512 for the stack\""
+              },
+              {
+                "ma": "d",
+                "noiDung": "\"Phòng đã có lượt bk_1 trong khung giờ này\""
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>detail should help the client correct the request. Stack traces, paths and SQL leak internals and belong in the server log.</p><p><i>VI: detail nên giúp client sửa request. Stack trace, đường dẫn và SQL làm lộ nội bộ và thuộc về log server.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The RFC’s own validation example answers 422, LabFlow answers 400 for a wrong shape. Which statement is right?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ví dụ kiểm dữ liệu của chính RFC trả 422, LabFlow trả 400 khi sai hình dạng. Câu nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The RFC example is an illustration; what matters is one documented, consistent choice"
+              },
+              {
+                "ma": "b",
+                "noiDung": "LabFlow violates RFC 9457 and must switch to 422"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both must be sent: 400 in the status line, 422 in the body"
+              },
+              {
+                "ma": "d",
+                "noiDung": "RFC 9457 forbids 400 for validation errors"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>RFC 9457 defines the error body, not which 4xx to pick. status in the body must match the real status line.</p><p><i>VI: RFC 9457 định nghĩa body lỗi, không quy định chọn mã 4xx nào. status trong body phải khớp dòng trạng thái thật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting debugging information into detail.|||Nhét thông tin gỡ lỗi vào detail."
+        },
+        {
+          "loi": "Believing the RFC dictates 422 for validation.|||Tin rằng RFC bắt buộc 422 cho lỗi kiểm dữ liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "about:blank",
+          "vi": "loại lỗi trống",
+          "giaiThich": "Không có ý nghĩa gì ngoài mã trạng thái."
+        },
+        {
+          "en": "dereference",
+          "vi": "mở / tải một URI"
+        }
+      ]
+    },
+    {
+      "title": "Problems 3 — Write toProblem(err, instance, titles)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "RFC 9457",
+        "single error handler"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Re-create LabFlow’s <code>sendProblem</code> body as a pure function. <code>err = { status, code?, message?, details? }</code> (an <code>HttpError</code>), <code>instance</code> = the request path, <code>titles</code> = the TITLES table. Build the object in this member order:</p><ol>\n<li><code>type</code>: <code>'https://labflow.example/problems/' + code</code> in lower case with <code>_</code> → <code>-</code>; no code ⇒ <code>'about:blank'</code>.</li>\n<li><code>title</code>: <code>titles[code]</code>; if there is no code or no title, the standard phrase of the status: 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 405 Method Not Allowed, 409 Conflict, 410 Gone, 413 Content Too Large, 415 Unsupported Media Type, 422 Unprocessable Content, 500 Internal Server Error.</li>\n<li><code>status</code>; <code>detail</code> = <code>message</code> only if it is defined; <code>instance</code>; <code>code</code> only if defined.</li>\n<li><code>details</code> an <b>array</b> of <code>{ field, issue }</code> ⇒ <code>errors: [{ pointer: '#/' + field, detail: issue }]</code>; <code>details</code> an <b>object</b> ⇒ copy its members onto the problem (extensions such as <code>conflictWith</code>).</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại body của <code>sendProblem</code> trong LabFlow thành hàm thuần. <code>err = { status, code?, message?, details? }</code> (một <code>HttpError</code>), <code>instance</code> = đường dẫn request, <code>titles</code> = bảng TITLES. Dựng object theo thứ tự trường:</p><ol>\n<li><code>type</code>: <code>'https://labflow.example/problems/' + code</code> viết thường, <code>_</code> → <code>-</code>; không có code ⇒ <code>'about:blank'</code>.</li>\n<li><code>title</code>: <code>titles[code]</code>; không có code hoặc không có title thì dùng cụm chuẩn của mã: 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found, 405 Method Not Allowed, 409 Conflict, 410 Gone, 413 Content Too Large, 415 Unsupported Media Type, 422 Unprocessable Content, 500 Internal Server Error.</li>\n<li><code>status</code>; <code>detail</code> = <code>message</code> chỉ khi có; <code>instance</code>; <code>code</code> chỉ khi có.</li>\n<li><code>details</code> là <b>mảng</b> <code>{ field, issue }</code> ⇒ <code>errors: [{ pointer: '#/' + field, detail: issue }]</code>; <code>details</code> là <b>object</b> ⇒ chép các trường của nó vào problem (trường mở rộng như <code>conflictWith</code>).</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "err, instance (string), titles ({ CODE: title }).|||err, instance (chuỗi), titles ({ MÃ: tiêu đề }).",
+      "outputSpec": "A problem object.|||Một object problem.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toProblem({\"status\":409,\"code\":\"BOOKING_CONFLICT\",\"message\":\"Phòng đã có lượt bk_1 trong khung giờ này\",\"details\":{\"conflictWith\":\"bk_1\"}}, \"/bookings\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+          "output": "{\"type\":\"https://labflow.example/problems/booking-conflict\",\"title\":\"Trùng lịch phòng\",\"status\":409,\"detail\":\"Phòng đã có lượt bk_1 trong khung giờ này\",\"instance\":\"/bookings\",\"code\":\"BOOKING_CONFLICT\",\"conflictWith\":\"bk_1\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "code.toLowerCase().split(\"_\").join(\"-\") turns BOOKING_CONFLICT into booking-conflict.|||code.toLowerCase().split(\"_\").join(\"-\") biến BOOKING_CONFLICT thành booking-conflict.",
+        "Array.isArray before checking for an object — arrays are objects too.|||Kiểm Array.isArray trước khi kiểm object — mảng cũng là object."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** err = { status, code?, message?, details? } ⇒ RFC 9457 problem object */\nfunction toProblem(err, instance, titles) {\n  // Write your solution here\n  return { type: err.code, title: titles[err.code], status: err.status, detail: err.message, instance: instance };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction toProblem(err, instance, titles) {\n  var PHRASES = { 400: 'Bad Request', 401: 'Unauthorized', 403: 'Forbidden', 404: 'Not Found', 405: 'Method Not Allowed',\n    409: 'Conflict', 410: 'Gone', 413: 'Content Too Large', 415: 'Unsupported Media Type', 422: 'Unprocessable Content', 500: 'Internal Server Error' };\n  var p = {};\n  p.type = err.code ? 'https://labflow.example/problems/' + err.code.toLowerCase().split('_').join('-') : 'about:blank';\n  p.title = (err.code && titles[err.code]) || PHRASES[err.status];\n  p.status = err.status;\n  if (err.message !== undefined) p.detail = err.message;\n  p.instance = instance;\n  if (err.code) p.code = err.code;\n  if (Array.isArray(err.details)) {\n    p.errors = err.details.map(function (d) { return { pointer: '#/' + d.field, detail: d.issue }; });\n  } else if (err.details) {\n    Object.keys(err.details).forEach(function (k) { p[k] = err.details[k]; });\n  }\n  return p;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the whole of LabFlow’s error format in one function: type and code derive from the same value, titles live in one table, and both shapes of details are handled once — which is why changing the format in lesson 2.1 needed no route changes.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là toàn bộ định dạng lỗi của LabFlow trong một hàm: type và code sinh từ cùng một giá trị, title nằm trong một bảng, và cả hai dạng details được xử lý một lần — vì thế đổi định dạng ở bài 2.1 không phải sửa route nào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real 409 of lesson 2.1",
+              "vi": "409 thật của bài 2.1"
+            },
+            "goi": "toProblem({\"status\":409,\"code\":\"BOOKING_CONFLICT\",\"message\":\"Phòng đã có lượt bk_1 trong khung giờ này\",\"details\":{\"conflictWith\":\"bk_1\"}}, \"/bookings\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+            "mongDoi": {
+              "type": "https://labflow.example/problems/booking-conflict",
+              "title": "Trùng lịch phòng",
+              "status": 409,
+              "detail": "Phòng đã có lượt bk_1 trong khung giờ này",
+              "instance": "/bookings",
+              "code": "BOOKING_CONFLICT",
+              "conflictWith": "bk_1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: toProblem({\"status\":400,\"code\":\"VALIDATION_FAILED\",\"message\":\"Dữ liệu gửi lên chưa đúng...",
+              "vi": "Ca 2"
+            },
+            "goi": "toProblem({\"status\":400,\"code\":\"VALIDATION_FAILED\",\"message\":\"Dữ liệu gửi lên chưa đúng định dạng\",\"details\":[{\"field\":\"startAt\",\"issue\":\"must be ISO 8601 with timezone\"},{\"field\":\"endAt\",\"issue\":\"must be ISO 8601 with timezone\"}]}, \"/bookings\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+            "mongDoi": {
+              "type": "https://labflow.example/problems/validation-failed",
+              "title": "Dữ liệu gửi lên không hợp lệ",
+              "status": 400,
+              "detail": "Dữ liệu gửi lên chưa đúng định dạng",
+              "instance": "/bookings",
+              "code": "VALIDATION_FAILED",
+              "errors": [
+                {
+                  "pointer": "#/startAt",
+                  "detail": "must be ISO 8601 with timezone"
+                },
+                {
+                  "pointer": "#/endAt",
+                  "detail": "must be ISO 8601 with timezone"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "toProblem({\"status\":413,\"code\":\"PAYLOAD_TOO_LARGE\",\"message\":\"Body tối đa 102400 byte, nhận 200104 byte\"}, \"/bookings\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+            "mongDoi": {
+              "type": "https://labflow.example/problems/payload-too-large",
+              "title": "Body quá lớn",
+              "status": 413,
+              "detail": "Body tối đa 102400 byte, nhận 200104 byte",
+              "instance": "/bookings",
+              "code": "PAYLOAD_TOO_LARGE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No code ⇒ about:blank",
+              "vi": "Không có code ⇒ about:blank"
+            },
+            "goi": "toProblem({\"status\":404}, \"/rooms\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+            "mongDoi": {
+              "type": "about:blank",
+              "title": "Not Found",
+              "status": 404,
+              "instance": "/rooms"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Code without a title",
+              "vi": "Có code mà không có title"
+            },
+            "goi": "toProblem({\"status\":410,\"code\":\"LAB_RETIRED\",\"message\":\"Phòng lab lab_4 đã ngừng sử dụng\"}, \"/labs/lab_4\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+            "mongDoi": {
+              "type": "https://labflow.example/problems/lab-retired",
+              "title": "Gone",
+              "status": 410,
+              "detail": "Phòng lab lab_4 đã ngừng sử dụng",
+              "instance": "/labs/lab_4",
+              "code": "LAB_RETIRED"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "toProblem({\"status\":500,\"code\":\"INTERNAL\"}, \"/report\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+            "mongDoi": {
+              "type": "https://labflow.example/problems/internal",
+              "title": "Internal Server Error",
+              "status": 500,
+              "instance": "/report",
+              "code": "INTERNAL"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "toProblem({\"status\":422,\"code\":\"UNKNOWN_LAB\",\"message\":\"labId lab_4 không tồn tại\",\"details\":[]}, \"/bookings\", {\"BOOKING_CONFLICT\":\"Trùng lịch phòng\",\"LAB_NOT_FOUND\":\"Không tìm thấy phòng lab\",\"VALIDATION_FAILED\":\"Dữ liệu gửi lên không hợp lệ\",\"PAYLOAD_TOO_LARGE\":\"Body quá lớn\"})",
+            "mongDoi": {
+              "type": "https://labflow.example/problems/unknown-lab",
+              "title": "Unprocessable Content",
+              "status": 422,
+              "detail": "labId lab_4 không tồn tại",
+              "instance": "/bookings",
+              "code": "UNKNOWN_LAB",
+              "errors": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Setting detail: undefined — the checker compares objects, an undefined member is not the same as no member after JSON.|||Đặt detail: undefined — sau JSON, trường undefined khác với không có trường."
+        },
+        {
+          "loi": "Using about:blank together with a custom title: about:blank means the standard phrase.|||Dùng about:blank kèm title tự chế: about:blank nghĩa là cụm chuẩn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reason phrase",
+          "vi": "cụm lý do chuẩn"
+        },
+        {
+          "en": "extension member",
+          "vi": "trường mở rộng"
+        }
+      ]
+    },
+    {
+      "title": "Problems 4 — Write parsePointer(ptr): from \"#/a/b\" to a path",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "JSON Pointer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A front-end receives <code>errors[].pointer</code> and must find the form field. Write <code>parsePointer(ptr)</code> that turns a JSON Pointer (RFC 6901), in plain form <code>/startAt</code> or URI-fragment form <code>#/startAt</code>, into an array of member names:</p><ul>\n<li><code>'#'</code> or <code>''</code> (the whole document) ⇒ <code>[]</code>. Anything not starting with <code>/</code> (after an optional <code>#</code>) ⇒ <code>null</code>.</li>\n<li>Split on <code>/</code>. In the fragment form, first undo percent-encoding (<code>decodeURIComponent</code>; do it for both forms, it is harmless).</li>\n<li>Unescape each token: <code>~1</code> ⇒ <code>/</code> <b>first</b>, then <code>~0</code> ⇒ <code>~</code>. (The order matters: <code>~01</code> must become <code>~1</code>, not <code>/</code>.)</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Front-end nhận <code>errors[].pointer</code> và phải tìm ra ô nhập. Viết <code>parsePointer(ptr)</code> đổi một JSON Pointer (RFC 6901), dạng thường <code>/startAt</code> hoặc dạng đuôi URI <code>#/startAt</code>, thành mảng tên trường:</p><ul>\n<li><code>'#'</code> hoặc <code>''</code> (cả tài liệu) ⇒ <code>[]</code>. Không bắt đầu bằng <code>/</code> (sau dấu <code>#</code> tuỳ chọn) ⇒ <code>null</code>.</li>\n<li>Tách theo <code>/</code>. Dạng đuôi URI thì gỡ mã hoá phần trăm trước (<code>decodeURIComponent</code>; làm cho cả hai dạng cũng vô hại).</li>\n<li>Gỡ thoát từng đoạn: <code>~1</code> ⇒ <code>/</code> <b>trước</b>, rồi <code>~0</code> ⇒ <code>~</code>. (Thứ tự quan trọng: <code>~01</code> phải thành <code>~1</code>, không phải <code>/</code>.)</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "ptr — a string.|||ptr — một chuỗi.",
+      "outputSpec": "An array of strings, or null.|||Mảng chuỗi, hoặc null.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parsePointer(\"#/startAt\")",
+          "output": "[\"startAt\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Strip one leading \"#\", then require a leading \"/\".|||Bỏ một dấu \"#\" ở đầu, rồi bắt buộc có \"/\" ở đầu.",
+        "split(\"~1\").join(\"/\") then split(\"~0\").join(\"~\").|||split(\"~1\").join(\"/\") rồi split(\"~0\").join(\"~\")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"#/profile/color\" ⇒ ['profile', 'color'] (RFC 6901) */\nfunction parsePointer(ptr) {\n  // Write your solution here\n  return ptr.replace('#/', '').split('/');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parsePointer(ptr) {\n  if (ptr === '#' || ptr === '') return [];\n  if (ptr.charAt(0) === '#') ptr = ptr.slice(1);\n  if (ptr.charAt(0) !== '/') return null;\n  return ptr.slice(1).split('/').map(function (t) {\n    return decodeURIComponent(t).split('~1').join('/').split('~0').join('~');   // ~1 first, then ~0\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 6901 escapes \"~\" as \"~0\" and \"/\" as \"~1\" so a member name can contain them. Decoding in the opposite order of encoding (~1 first) is what makes \"~01\" round-trip correctly. LabFlow’s toPointer in validate.js is the encoder; this is the decoder a client needs.</p>",
+      "solutionExplanationHtmlVi": "<p>RFC 6901 thoát \"~\" thành \"~0\" và \"/\" thành \"~1\" để tên trường chứa được chúng. Giải mã theo thứ tự ngược với lúc mã hoá (~1 trước) giúp \"~01\" quay về đúng. toPointer trong validate.js của LabFlow là bộ mã hoá; đây là bộ giải mã client cần.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: parsePointer(\"#/startAt\")",
+              "vi": "Ca 1"
+            },
+            "goi": "parsePointer(\"#/startAt\")",
+            "mongDoi": [
+              "startAt"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parsePointer(\"#/profile/color\")",
+              "vi": "Ca 2"
+            },
+            "goi": "parsePointer(\"#/profile/color\")",
+            "mongDoi": [
+              "profile",
+              "color"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The whole document",
+              "vi": "Cả tài liệu"
+            },
+            "goi": "parsePointer(\"#\")",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parsePointer(\"/a~1b/c~0d\")",
+            "mongDoi": [
+              "a/b",
+              "c~d"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parsePointer(\"#/~01\")",
+            "mongDoi": [
+              "~1"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parsePointer(\"startAt\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parsePointer(\"#/devices/0/serialNo\")",
+            "mongDoi": [
+              "devices",
+              "0",
+              "serialNo"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "parsePointer(\"#/Ph%C3%B2ng\")",
+            "mongDoi": [
+              "Phòng"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "parsePointer(\"#/\")",
+            "mongDoi": [
+              ""
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Replacing ~0 before ~1: \"~01\" becomes \"/\" instead of \"~1\".|||Thay ~0 trước ~1: \"~01\" thành \"/\" thay vì \"~1\"."
+        },
+        {
+          "loi": "Returning [] or null for \"#/\": it points to a member with an empty name, so RFC 6901 gives [\"\"].|||Trả [] hoặc null cho \"#/\": nó trỏ tới một trường tên rỗng, nên theo RFC 6901 kết quả là [\"\"]."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "JSON Pointer",
+          "vi": "con trỏ JSON",
+          "giaiThich": "RFC 6901: đường dẫn vào tài liệu JSON."
+        },
+        {
+          "en": "escape",
+          "vi": "thoát ký tự"
+        }
+      ]
+    }
+  ]
+}

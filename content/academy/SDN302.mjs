@@ -759,6 +759,11 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
   <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 5.4: Centralised error handling</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: an error handler is a four-argument middleware. Different: Courses shows three ways an error reaches the handler and which one Express 4 misses. It also adds: a throw inside async code (Express 5 catches it, Express 4 does not, with proof), an error class carrying an HTTP code, JSON 404s, two kinds of error that still kill the process.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-2-1-problem-details" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 2.1: Problem Details (RFC 9457)</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: one error-handling middleware with four parameters, after all routes. Different: Courses makes that handler produce the web standard error format instead of a home-made JSON. It also adds: the application/problem+json media type, type/title/detail/instance, field errors with JSON Pointers, and a real 413 that a hand-made handler turns into a 500.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -804,6 +809,11 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-4-xu-ly-loi" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 5.4: Xử lý lỗi tập trung</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: error handler là middleware nhận bốn tham số. Khác: Courses chỉ ra ba đường để lỗi tới handler và đường nào làm Express 4 bỏ sót. Ở đó có thêm: lỗi throw trong code async (Express 5 bắt được, Express 4 thì không, kèm bằng chứng), lớp lỗi mang mã HTTP, 404 dạng JSON, hai loại lỗi vẫn giết được tiến trình.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-2-1-problem-details" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 2.1: Problem Details (RFC 9457)</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: một middleware xử lý lỗi bốn tham số, đặt sau mọi route. Khác: Courses cho bộ xử lý đó sinh ra định dạng lỗi chuẩn của web thay vì JSON tự chế. Ở đó có thêm: media type application/problem+json, type/title/detail/instance, lỗi từng trường kèm JSON Pointer, và một lỗi 413 thật mà bộ xử lý tự chế biến thành 500.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,
@@ -1869,6 +1879,11 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
   <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 12.4: Rate limiting and distributed locks done right</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: limiting requests to stop abuse. Different: Academy uses express-rate-limit per IP; Courses builds the limiter on Redis. It also adds: three algorithms (fixed window and its boundary hole, sliding window, token bucket), the INCR-then-EXPIRE bug, distributed locks.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-2-2-validation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 2.2: Validating input at the edge</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: strong validation with Zod or Joi, at the edge, before the service layer. Different: Courses first attacks a real API and measures six bad requests that slip through. It also adds: strict objects against mass assignment, field errors as RFC 9457 JSON Pointers, 415 and 413 at the door, coercion traps, and why tightening rules after release is a breaking change.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2 · ★ Ngoài giáo trình</span>
@@ -1894,6 +1909,11 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 12.4: Giới hạn tần suất và khoá phân tán cho đúng</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: giới hạn số request để chặn lạm dụng. Khác: Academy dùng express-rate-limit đếm theo IP; Courses tự dựng bộ giới hạn trên Redis. Ở đó có thêm: ba thuật toán (cửa sổ cố định và lỗ ở ranh giới, cửa sổ trượt, token bucket), con bug INCR rồi EXPIRE, khoá phân tán.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-2-2-validation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 2.2: Kiểm dữ liệu vào ngay cửa</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: kiểm dữ liệu chặt bằng Zod hoặc Joi, ở cửa, trước tầng service. Khác: Courses tấn công một API thật trước và đo sáu request sai lọt qua. Ở đó có thêm: object strict chặn mass assignment, lỗi từng trường dạng JSON Pointer của RFC 9457, 415 và 413 ở cửa, bẫy ép kiểu, và vì sao siết luật sau khi phát hành là thay đổi phá vỡ.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

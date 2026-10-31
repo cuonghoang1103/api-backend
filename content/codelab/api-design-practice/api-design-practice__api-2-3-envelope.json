@@ -1,0 +1,677 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-2-3-envelope",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-2-3-envelope"
+  },
+  "exercises": [
+    {
+      "title": "Responses 1 — What goes out, and how",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "response shape"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 2.3 (real LabFlow runs).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 2.3 (chạy thật trên LabFlow).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what a client written today will see in a year.|||Hỏi một client viết hôm nay sẽ thấy gì sau một năm.",
+        "Every answer was measured in lesson 2.3.|||Mọi đáp án đã được đo trong bài 2.3."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responses 1 — What goes out, and how\n\nAnswer in the answer panel (no code needed).\n\n1. GET /me first returned res.json(req.user) and sent passwordHash. The robust fix is …GET /me ban đầu trả res.json(req.user) và gửi cả passwordHash. Cách sửa bền vững là …\n2. A booking had 8 members when created and 9 after cancelling. LabFlow’s rule fixes it by …Một lượt đặt có 8 trường lúc tạo và 9 trường sau khi huỷ. Luật của LabFlow sửa bằng cách …\n3. Why does LabFlow answer lists as {\"data\": [...]} instead of a bare array?Vì sao LabFlow trả danh sách dạng {\"data\": [...]} thay vì mảng trần?\n4. The always-200 envelope answered lab_9 with {\"success\":false,\"code\":404,…}. fetch reported …Envelope luôn-200 trả lab_9 bằng {\"success\":false,\"code\":404,…}. fetch báo …\n5. DELETE /devices/dev_2 succeeded. What does LabFlow send?DELETE /devices/dev_2 thành công. LabFlow gửi gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responses 1 — What goes out, and how — answer key\n\n1. GET /me first returned res.json(req.user) and sent passwordHash. The robust fix is …GET /me ban đầu trả res.json(req.user) và gửi cả passwordHash. Cách sửa bền vững là …\n   Answer: a) a view that names the four public members (allow-list)\n   A deny-list fails open: the next internal field (resetToken) leaks on the day it is added. An allow-list fails closed.VI: Danh sách cấm hỏng theo kiểu mở cửa: trường nội bộ tiếp theo (resetToken) lộ ngay ngày được thêm. Danh sách cho phép hỏng theo kiểu đóng cửa.\n\n2. A booking had 8 members when created and 9 after cancelling. LabFlow’s rule fixes it by …Một lượt đặt có 8 trường lúc tạo và 9 trường sau khi huỷ. Luật của LabFlow sửa bằng cách …\n   Answer: c) always sending cancelledAt, null until it is set\n   Documented optional members are always present, null when empty — one shape for the whole life of a resource.VI: Trường tuỳ chọn có tài liệu luôn có mặt, rỗng thì null — một hình dạng cho cả đời tài nguyên.\n\n3. Why does LabFlow answer lists as {\"data\": [...]} instead of a bare array?Vì sao LabFlow trả danh sách dạng {\"data\": [...]} thay vì mảng trần?\n   Answer: b) Paging metadata can be added next to data without breaking clients\n   Adding a member is additive; turning an array into an object breaks every client. (Express sends arrays fine.)VI: Thêm một trường là thay đổi thêm vào; biến mảng thành object làm vỡ mọi client. (Express gửi mảng bình thường.)\n\n4. The always-200 envelope answered lab_9 with {\"success\":false,\"code\":404,…}. fetch reported …Envelope luôn-200 trả lab_9 bằng {\"success\":false,\"code\":404,…}. fetch báo …\n   Answer: a) res.ok = true, so the app showed “Thành công!”\n   Measured with client200.mjs. Generic tools read the status line only.VI: Đo bằng client200.mjs. Công cụ chung chỉ đọc dòng trạng thái.\n\n5. DELETE /devices/dev_2 succeeded. What does LabFlow send?DELETE /devices/dev_2 thành công. LabFlow gửi gì?\n   Answer: a) 204 with no body and no Content-Type\n   Nothing to say ⇒ 204, no body. A message such as {\"ok\": true} adds a shape clients must parse for no information.VI: Không có gì để nói ⇒ 204, không body. Một câu như {\"ok\": true} thêm một hình dạng client phải đọc mà chẳng có thông tin gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> a view that names the four public members (allow-list)</p><p>A deny-list fails open: the next internal field (resetToken) leaks on the day it is added. An allow-list fails closed.</p><p><i>VI: Danh sách cấm hỏng theo kiểu mở cửa: trường nội bộ tiếp theo (resetToken) lộ ngay ngày được thêm. Danh sách cho phép hỏng theo kiểu đóng cửa.</i></p></li><li><p><b>c)</b> always sending cancelledAt, null until it is set</p><p>Documented optional members are always present, null when empty — one shape for the whole life of a resource.</p><p><i>VI: Trường tuỳ chọn có tài liệu luôn có mặt, rỗng thì null — một hình dạng cho cả đời tài nguyên.</i></p></li><li><p><b>b)</b> Paging metadata can be added next to data without breaking clients</p><p>Adding a member is additive; turning an array into an object breaks every client. (Express sends arrays fine.)</p><p><i>VI: Thêm một trường là thay đổi thêm vào; biến mảng thành object làm vỡ mọi client. (Express gửi mảng bình thường.)</i></p></li><li><p><b>a)</b> res.ok = true, so the app showed “Thành công!”</p><p>Measured with client200.mjs. Generic tools read the status line only.</p><p><i>VI: Đo bằng client200.mjs. Công cụ chung chỉ đọc dòng trạng thái.</i></p></li><li><p><b>a)</b> 204 with no body and no Content-Type</p><p>Nothing to say ⇒ 204, no body. A message such as {\"ok\": true} adds a shape clients must parse for no information.</p><p><i>VI: Không có gì để nói ⇒ 204, không body. Một câu như {\"ok\": true} thêm một hình dạng client phải đọc mà chẳng có thông tin gì.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>GET /me first returned res.json(req.user) and sent passwordHash. The robust fix is …</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /me ban đầu trả res.json(req.user) và gửi cả passwordHash. Cách sửa bền vững là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a view that names the four public members (allow-list)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "renaming passwordHash to _passwordHash"
+              },
+              {
+                "ma": "c",
+                "noiDung": "encrypting passwordHash before sending it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "delete passwordHash before res.json (deny-list)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A deny-list fails open: the next internal field (resetToken) leaks on the day it is added. An allow-list fails closed.</p><p><i>VI: Danh sách cấm hỏng theo kiểu mở cửa: trường nội bộ tiếp theo (resetToken) lộ ngay ngày được thêm. Danh sách cho phép hỏng theo kiểu đóng cửa.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A booking had 8 members when created and 9 after cancelling. LabFlow’s rule fixes it by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lượt đặt có 8 trường lúc tạo và 9 trường sau khi huỷ. Luật của LabFlow sửa bằng cách …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "returning a different resource after cancelling"
+              },
+              {
+                "ma": "b",
+                "noiDung": "sending cancelledAt only to managers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "always sending cancelledAt, null until it is set"
+              },
+              {
+                "ma": "d",
+                "noiDung": "removing cancelledAt from the API"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Documented optional members are always present, null when empty — one shape for the whole life of a resource.</p><p><i>VI: Trường tuỳ chọn có tài liệu luôn có mặt, rỗng thì null — một hình dạng cho cả đời tài nguyên.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does LabFlow answer lists as {\"data\": [...]} instead of a bare array?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow trả danh sách dạng {\"data\": [...]} thay vì mảng trần?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Browsers block JSON responses that start with ["
+              },
+              {
+                "ma": "b",
+                "noiDung": "Paging metadata can be added next to data without breaking clients"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express cannot send arrays with res.json"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Bare arrays are not valid JSON"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Adding a member is additive; turning an array into an object breaks every client. (Express sends arrays fine.)</p><p><i>VI: Thêm một trường là thay đổi thêm vào; biến mảng thành object làm vỡ mọi client. (Express gửi mảng bình thường.)</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The always-200 envelope answered lab_9 with {\"success\":false,\"code\":404,…}. fetch reported …</p><p style=\"opacity:.75;font-size:.92em\"><i>Envelope luôn-200 trả lab_9 bằng {\"success\":false,\"code\":404,…}. fetch báo …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "res.ok = true, so the app showed “Thành công!”"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a network error"
+              },
+              {
+                "ma": "c",
+                "noiDung": "res.status = 404"
+              },
+              {
+                "ma": "d",
+                "noiDung": "res.ok = false, because fetch reads the code member"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Measured with client200.mjs. Generic tools read the status line only.</p><p><i>VI: Đo bằng client200.mjs. Công cụ chung chỉ đọc dòng trạng thái.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>DELETE /devices/dev_2 succeeded. What does LabFlow send?</p><p style=\"opacity:.75;font-size:.92em\"><i>DELETE /devices/dev_2 thành công. LabFlow gửi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "204 with no body and no Content-Type"
+              },
+              {
+                "ma": "b",
+                "noiDung": "202 with a message"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 with the deleted device"
+              },
+              {
+                "ma": "d",
+                "noiDung": "200 with {\"ok\": true}"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Nothing to say ⇒ 204, no body. A message such as {\"ok\": true} adds a shape clients must parse for no information.</p><p><i>VI: Không có gì để nói ⇒ 204, không body. Một câu như {\"ok\": true} thêm một hình dạng client phải đọc mà chẳng có thông tin gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deny-lists for sensitive fields.|||Danh sách cấm cho trường nhạy cảm."
+        },
+        {
+          "loi": "Putting the real status inside a 200 body.|||Đặt mã trạng thái thật vào trong body của 200."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DTO / view",
+          "vi": "đối tượng chuyển dữ liệu / view"
+        },
+        {
+          "en": "envelope",
+          "vi": "phong bì bọc dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "Responses 2 — Write toBookingView(b): an allow-list with a stable shape",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "DTO",
+        "allow-list"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Write LabFlow’s view for a booking. Return a NEW object with exactly these <b>nine</b> members, in this order: <code>id, labId, userId, startAt, endAt, purpose, status, createdAt, cancelledAt</code> — and nothing else. <code>purpose</code> and <code>cancelledAt</code> are optional: when missing (<code>undefined</code>) send <code>null</code>; when present (even <code>null</code> or <code>\"\"</code>) send them as they are. Nothing else from the record may leave — internal fields such as <code>staffNote</code> or <code>version</code> must be dropped.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết view của LabFlow cho một lượt đặt. Trả object MỚI có đúng các trường sau, theo thứ tự: <code>id, labId, userId, startAt, endAt, purpose, status, createdAt, cancelledAt</code> — đúng <b>chín</b> trường, không thêm gì khác. <code>purpose</code> và <code>cancelledAt</code> là tuỳ chọn: thiếu (<code>undefined</code>) thì gửi <code>null</code>; có (kể cả <code>null</code> hay <code>\"\"</code>) thì gửi đúng như vậy. Không gì khác trong bản ghi được đi ra — trường nội bộ như <code>staffNote</code> hay <code>version</code> phải bị bỏ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "b — an internal booking record.|||b — bản ghi lượt đặt nội bộ.",
+      "outputSpec": "The public representation (nine members).|||Bản biểu diễn công khai (chín trường).",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toBookingView({\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\",\"createdAt\":\"2026-10-31T17:54:15.507Z\"})",
+          "output": "{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"purpose\":null,\"status\":\"PENDING\",\"createdAt\":\"2026-10-31T17:54:15.507Z\",\"cancelledAt\":null}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build a literal object naming every member — do not spread b.|||Dựng object bằng cách gọi tên từng trường — đừng trải b ra.",
+        "b.x === undefined ? null : b.x keeps \"\" and null as they are; ?? would too, but think about why.|||b.x === undefined ? null : b.x giữ nguyên \"\" và null; ?? cũng vậy, nhưng hãy nghĩ vì sao."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** internal booking ⇒ public view (nine members, optional ones null) */\nfunction toBookingView(b) {\n  // Write your solution here\n  return { ...b, purpose: b.purpose || null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction toBookingView(b) {\n  return {\n    id: b.id, labId: b.labId, userId: b.userId, startAt: b.startAt, endAt: b.endAt,\n    purpose: b.purpose === undefined ? null : b.purpose,\n    status: b.status, createdAt: b.createdAt,\n    cancelledAt: b.cancelledAt === undefined ? null : b.cancelledAt,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Naming the members makes the view an allow-list (new internal fields stay hidden) and fixes the shape (the same nine members whatever the state). It is LabFlow’s toBooking in views.js.</p>",
+      "solutionExplanationHtmlVi": "<p>Gọi tên từng trường biến view thành danh sách cho phép (trường nội bộ mới vẫn bị giấu) và cố định hình dạng (cùng chín trường ở mọi trạng thái). Đó là toBooking trong views.js của LabFlow.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A new booking without purpose",
+              "vi": "Lượt đặt mới không có mục đích"
+            },
+            "goi": "toBookingView({\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\",\"createdAt\":\"2026-10-31T17:54:15.507Z\"})",
+            "mongDoi": {
+              "id": "bk_1",
+              "labId": "lab_1",
+              "userId": "usr_1",
+              "startAt": "2026-11-02T01:00:00.000Z",
+              "endAt": "2026-11-02T03:00:00.000Z",
+              "purpose": null,
+              "status": "PENDING",
+              "createdAt": "2026-10-31T17:54:15.507Z",
+              "cancelledAt": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: toBookingView({\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00...",
+              "vi": "Ca 2"
+            },
+            "goi": "toBookingView({\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"CANCELLED\",\"createdAt\":\"2026-10-31T17:54:15.507Z\",\"purpose\":\"SWT301 Lab 3\",\"cancelledAt\":\"2026-10-31T17:54:15.526Z\"})",
+            "mongDoi": {
+              "id": "bk_1",
+              "labId": "lab_1",
+              "userId": "usr_1",
+              "startAt": "2026-11-02T01:00:00.000Z",
+              "endAt": "2026-11-02T03:00:00.000Z",
+              "purpose": "SWT301 Lab 3",
+              "status": "CANCELLED",
+              "createdAt": "2026-10-31T17:54:15.507Z",
+              "cancelledAt": "2026-10-31T17:54:15.526Z"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "toBookingView({\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\",\"createdAt\":\"2026-10-31T17:54:15.507Z\",\"purpose\":\"\",\"staffNote\":\"Hay đặt rồi không đến\",\"version\":3})",
+            "mongDoi": {
+              "id": "bk_1",
+              "labId": "lab_1",
+              "userId": "usr_1",
+              "startAt": "2026-11-02T01:00:00.000Z",
+              "endAt": "2026-11-02T03:00:00.000Z",
+              "purpose": "",
+              "status": "PENDING",
+              "createdAt": "2026-10-31T17:54:15.507Z",
+              "cancelledAt": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "toBookingView({\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\",\"createdAt\":\"2026-10-31T17:54:15.507Z\",\"purpose\":null,\"cancelledAt\":null,\"userEmail\":\"an@student.labflow.example\"})",
+            "mongDoi": {
+              "id": "bk_1",
+              "labId": "lab_1",
+              "userId": "usr_1",
+              "startAt": "2026-11-02T01:00:00.000Z",
+              "endAt": "2026-11-02T03:00:00.000Z",
+              "purpose": null,
+              "status": "PENDING",
+              "createdAt": "2026-10-31T17:54:15.507Z",
+              "cancelledAt": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The record is not modified",
+              "vi": "Bản ghi không bị sửa"
+            },
+            "goi": "(function () { var b = {\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\",\"createdAt\":\"2026-10-31T17:54:15.507Z\"}; toBookingView(b).purpose = 'x'; return b; })()",
+            "mongDoi": {
+              "id": "bk_1",
+              "labId": "lab_1",
+              "userId": "usr_1",
+              "startAt": "2026-11-02T01:00:00.000Z",
+              "endAt": "2026-11-02T03:00:00.000Z",
+              "status": "PENDING",
+              "createdAt": "2026-10-31T17:54:15.507Z"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "{ ...b, purpose: b.purpose ?? null } — the spread leaks every internal field.|||{ ...b, purpose: b.purpose ?? null } — toán tử spread làm lộ mọi trường nội bộ."
+        },
+        {
+          "loi": "b.purpose || null — turns an empty string into null.|||b.purpose || null — biến chuỗi rỗng thành null."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "allow-list",
+          "vi": "danh sách cho phép"
+        },
+        {
+          "en": "representation",
+          "vi": "bản biểu diễn"
+        }
+      ]
+    },
+    {
+      "title": "Responses 3 — Write shapeDiff(a, b): catch shape changes in a test",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "contract testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A contract test compares two responses of the same resource — say, a booking before and after cancelling — and fails if the <b>shape</b> changed. Write <code>shapeDiff(a, b)</code> for two plain objects (top level only):</p><ul>\n<li><code>missing</code>: keys of <code>a</code> not in <code>b</code>; <code>extra</code>: keys of <code>b</code> not in <code>a</code></li>\n<li><code>typeChanged</code>: keys in both whose type differs — types are <code>'array'</code> for arrays, otherwise <code>typeof</code>. A <code>null</code> on either side never counts as a change (null is a legal value of any optional member).</li>\n<li>Each list sorted alphabetically. Return <code>{ missing, extra, typeChanged }</code>.</li></ul>\n<p>Real data from lesson 2.3: before the views, the cancelled booking had an <i>extra</i> <code>cancelledAt</code>; after, nothing differs.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một bài test hợp đồng so hai response của cùng một tài nguyên — chẳng hạn lượt đặt trước và sau khi huỷ — và báo hỏng nếu <b>hình dạng</b> thay đổi. Viết <code>shapeDiff(a, b)</code> cho hai object thường (chỉ tầng ngoài cùng):</p><ul>\n<li><code>missing</code>: khoá của <code>a</code> không có trong <code>b</code>; <code>extra</code>: khoá của <code>b</code> không có trong <code>a</code></li>\n<li><code>typeChanged</code>: khoá có ở cả hai mà kiểu khác nhau — kiểu là <code>'array'</code> với mảng, còn lại là <code>typeof</code>. <code>null</code> ở bất kỳ bên nào không bao giờ tính là thay đổi (null là giá trị hợp lệ của mọi trường tuỳ chọn).</li>\n<li>Mỗi danh sách sắp theo bảng chữ cái. Trả <code>{ missing, extra, typeChanged }</code>.</li></ul>\n<p>Dữ liệu thật từ bài 2.3: trước khi có view, lượt đặt đã huỷ có <i>thêm</i> <code>cancelledAt</code>; sau khi có view, không còn khác biệt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "a, b — two plain objects.|||a, b — hai object thường.",
+      "outputSpec": "{ missing: string[], extra: string[], typeChanged: string[] }|||{ missing: mảng chuỗi, extra: mảng chuỗi, typeChanged: mảng chuỗi }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "shapeDiff({\"id\":\"bk_1\",\"purpose\":null,\"status\":\"PENDING\"}, {\"id\":\"bk_1\",\"purpose\":null,\"status\":\"CANCELLED\",\"cancelledAt\":\"2026-10-31T17:42:07.598Z\"})",
+          "output": "{\"missing\":[],\"extra\":[\"cancelledAt\"],\"typeChanged\":[]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Object.keys + filter + indexOf, then .sort().|||Object.keys + filter + indexOf, rồi .sort().",
+        "typeof [] is \"object\" — handle arrays first.|||typeof [] là \"object\" — xử lý mảng trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** two responses ⇒ { missing, extra, typeChanged } (sorted) */\nfunction shapeDiff(a, b) {\n  // Write your solution here\n  return { missing: [], extra: Object.keys(b).filter(function (k) { return !(k in a); }), typeChanged: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction shapeDiff(a, b) {\n  var ka = Object.keys(a), kb = Object.keys(b);\n  return {\n    missing: ka.filter(function (k) { return kb.indexOf(k) < 0; }).sort(),\n    extra: kb.filter(function (k) { return ka.indexOf(k) < 0; }).sort(),\n    typeChanged: ka.filter(function (k) {\n      if (kb.indexOf(k) < 0 || a[k] === null || b[k] === null) return false;   // null is allowed for any member\n      var t = function (v) { return Array.isArray(v) ? 'array' : typeof v; };\n      return t(a[k]) !== t(b[k]);\n    }).sort(),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the check that would have caught problems 2 and 3 of lesson 2.3 automatically. Run it in your tests over pairs of real responses (created vs cancelled, list item vs single item) and a shape change can no longer ship by accident.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là phép kiểm lẽ ra đã tự động bắt được vấn đề 2 và 3 của bài 2.3. Chạy nó trong test trên các cặp response thật (vừa tạo và đã huỷ, phần tử trong danh sách và phần tử đơn) thì một thay đổi hình dạng không thể vô tình lên production nữa.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Before the views (lesson 2.3)",
+              "vi": "Trước khi có view (bài 2.3)"
+            },
+            "goi": "shapeDiff({\"id\":\"bk_1\",\"purpose\":null,\"status\":\"PENDING\"}, {\"id\":\"bk_1\",\"purpose\":null,\"status\":\"CANCELLED\",\"cancelledAt\":\"2026-10-31T17:42:07.598Z\"})",
+            "mongDoi": {
+              "missing": [],
+              "extra": [
+                "cancelledAt"
+              ],
+              "typeChanged": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: shapeDiff({\"id\":\"dev_1\",\"note\":null}, {\"id\":\"dev_3\",\"note\":\"Thiếu thẻ nhớ\"})",
+              "vi": "Ca 2"
+            },
+            "goi": "shapeDiff({\"id\":\"dev_1\",\"note\":null}, {\"id\":\"dev_3\",\"note\":\"Thiếu thẻ nhớ\"})",
+            "mongDoi": {
+              "missing": [],
+              "extra": [],
+              "typeChanged": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "shapeDiff({\"capacity\":30,\"tags\":[]}, {\"capacity\":\"30\",\"tags\":{}})",
+            "mongDoi": {
+              "missing": [],
+              "extra": [],
+              "typeChanged": [
+                "capacity",
+                "tags"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "shapeDiff({\"b\":1,\"a\":2,\"c\":3}, {\"d\":1,\"e\":2})",
+            "mongDoi": {
+              "missing": [
+                "a",
+                "b",
+                "c"
+              ],
+              "extra": [
+                "d",
+                "e"
+              ],
+              "typeChanged": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "shapeDiff({\"data\":[]}, {\"data\":[{\"id\":\"lab_1\"}],\"page\":{\"next\":null}})",
+            "mongDoi": {
+              "missing": [],
+              "extra": [
+                "page"
+              ],
+              "typeChanged": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "shapeDiff({\"x\":true,\"y\":\"a\"}, {\"x\":false,\"y\":null})",
+            "mongDoi": {
+              "missing": [],
+              "extra": [],
+              "typeChanged": []
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting \"note\": null vs \"note\": \"Thiếu thẻ nhớ\" as a type change.|||Tính \"note\": null so với \"note\": \"Thiếu thẻ nhớ\" là đổi kiểu."
+        },
+        {
+          "loi": "Forgetting to sort — order of keys is not part of the shape.|||Quên sắp xếp — thứ tự khoá không thuộc về hình dạng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "contract test",
+          "vi": "kiểm thử hợp đồng"
+        },
+        {
+          "en": "shape",
+          "vi": "hình dạng (tập trường và kiểu)"
+        }
+      ]
+    },
+    {
+      "title": "Responses 4 — Status and body must agree",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "status codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Match each LabFlow answer to the body it carries after lesson 2.3.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi câu trả lời của LabFlow với body nó mang sau bài 2.3.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "204 literally means “no content”.|||204 nghĩa đen là \"không có nội dung\".",
+        "Errors have one shape since lesson 2.1.|||Lỗi chỉ có một hình dạng từ bài 2.1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responses 4 — Status and body must agree\n\nAnswer in the answer panel (no code needed).\n\n1. Status → bodyMã → body\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Responses 4 — Status and body must agree — answer key\n\n1. Status → bodyMã → body\n   - r1.b: the resource or the list (through its view)\n   - r2.b: the created resource + Location header\n   - r3.b: nothing at all\n   - r4.b: a problem document\n   A success body is always a view; 204 sends nothing (not even Content-Type); every 4xx/5xx is an RFC 9457 problem.VI: Body của thành công luôn là view; 204 không gửi gì (kể cả Content-Type); mọi 4xx/5xx là một problem theo RFC 9457.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A success body is always a view; 204 sends nothing (not even Content-Type); every 4xx/5xx is an RFC 9457 problem.</p><p><i>VI: Body của thành công luôn là view; 204 không gửi gì (kể cả Content-Type); mọi 4xx/5xx là một problem theo RFC 9457.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Status → body</p><p style=\"opacity:.75;font-size:.92em\"><i>Mã → body</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Answer"
+              },
+              {
+                "ma": "b",
+                "ten": "Body",
+                "luaChon": [
+                  "the resource or the list (through its view)",
+                  "the created resource + Location header",
+                  "nothing at all",
+                  "a problem document"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "200 OK — GET /labs, POST /bookings/bk_1/cancel"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "201 Created — POST /bookings"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "204 No Content — DELETE /devices/dev_2"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "409 Conflict — overlapping booking"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": "the resource or the list (through its view)",
+              "r2.b": "the created resource + Location header",
+              "r3.b": "nothing at all",
+              "r4.b": "a problem document"
+            },
+            "giaiThich": "<p>A success body is always a view; 204 sends nothing (not even Content-Type); every 4xx/5xx is an RFC 9457 problem.</p><p><i>VI: Body của thành công luôn là view; 204 không gửi gì (kể cả Content-Type); mọi 4xx/5xx là một problem theo RFC 9457.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning {\"ok\": true} with 200 for a delete.|||Trả {\"ok\": true} kèm 200 cho thao tác xoá."
+        },
+        {
+          "loi": "Forgetting Location on 201.|||Quên Location khi trả 201."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "204 No Content",
+          "vi": "không có nội dung"
+        },
+        {
+          "en": "Location",
+          "vi": "header chỉ địa chỉ tài nguyên mới"
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Hợp đồng soạn khoá "API & System Design" (/courses/api-design)
 
-> Đọc HẾT tệp này trước khi sửa một dòng. Đợt mẫu (Mục 0 + Chương 1) đã được điều phối duyệt 01/11/2026 — commit `dd95fa51e`.
+> Đọc HẾT tệp này trước khi sửa một dòng. Đợt mẫu (Mục 0 + Chương 1) đã được điều phối duyệt 01/11/2026 — commit `dd95fa51e`. Chương 2 soạn 01/11/2026 (`s02-loi-phan-hoi.mjs`).
 > Chỗ nào tệp này không nói: bắt chước đúng `s01-tai-nguyen.mjs` + deck `scripts/slides-src/api-01-*.mjs`.
 
 ## 1. Người học và giọng văn
@@ -20,6 +20,7 @@ content/courses/api-design/
 ├── giang/api-NN-M.mjs                  # giảng EN/VI dưới từng slide: walkApi(deck, tenEn, tenVi, [[n, title, en, vi]…])
 ├── s00-intro.mjs                       # Mục 0
 ├── s01-tai-nguyen.mjs                  # Chương 1
+├── s02-loi-phan-hoi.mjs                # Chương 2
 └── sNN-<ten>.mjs                       # chương mới: thay phần tử khung tương ứng trong manifest
 scripts/slides-src/_api-chung.mjs       # khuôn slide (KHÔNG đổi mặc định; chỉ thêm tuỳ chọn)
 scripts/slides-src/api-NN-M.mjs         # deck mỗi bài (NN đệm 2 chữ số: api-02-1); lab: api-lab-N
@@ -61,17 +62,18 @@ KHÔNG `<svg>`/script/style/details trong nội dung bài — hình đi qua slid
 - Một deck mỗi bài, 14–17 slide: bìa → mục tiêu → ví dụ đời thường → khái niệm + lệnh/output thật → hình/so sánh → bẫy (`vsd`) → phỏng vấn/bảng tra → tóm tắt + "Next". Lab: 8 slide (yêu cầu, Part A/B/C, rubric, nộp bài).
 - Slide ít chữ: `{ to: true }` (28px) và/hoặc `{ giua: true }`. Mã ≤ ~14 dòng; dòng dài thì tách bằng `\\` hoặc `wrap`.
 - **Output trên slide = output thật** (được cắt bớt bằng `…`, không sửa chữ).
-- **Phép kiểm TỰ ĐỘNG bắt buộc** (yêu cầu điều phối 31/10): mọi slide — phần tử pre/table/code/.term có `scrollWidth > clientWidth` ⇒ TRÀN; vùng nội dung < 70% chiều cao khung ⇒ TRỐNG. Bộ đo: `node scripts/_api-kiem-slide.mjs scripts/slides-src/<deck>.mjs` — đo trong Playwright `.pg .nd` (`scrollHeight`, bounding box con cuối, `scrollWidth` của PRE/TABLE/TD/CODE/.vs/.term). Phải 0 slide cần xem rồi mới upload; ghi số slide đã sửa vào báo cáo.
+- **Phép kiểm TỰ ĐỘNG bắt buộc** (yêu cầu điều phối 31/10): mọi slide — phần tử pre/table/code/.term có `scrollWidth > clientWidth` ⇒ TRÀN; vùng nội dung < 70% chiều cao khung ⇒ TRỐNG. Bộ đo: `node scripts/_api-kiem-slide.mjs scripts/slides-src/<deck>.mjs` — đo trong Playwright `.pg .nd` (`scrollHeight`, bounding box con cuối, `scrollWidth` của PRE/TABLE/TD/CODE/.vs/.term). Phải 0 slide cần xem rồi mới upload; ghi số slide đã sửa vào báo cáo. ⚠ Bộ đo KHÔNG thấy tràn dọc bị cắt bên trong `.apireq` (req()) — đợt Ch2 một slide req() 12 dòng bị cắt mất nửa mà vẫn "0 slide cần xem" ⇒ luôn XEM ẢNH, và tránh req() quá 8 dòng (dùng http() + bảng chú thích).
 - ⚠ Tự động chèn cờ `giua/to` bằng regex `\n  \{ ` từng chèn nhầm vào dòng mã `{ id: 'lab_1'…` trong template ⇒ sau mỗi lần sửa tự động: `grep -n "{ giua: true, \|{ to: true, " scripts/slides-src/api-*.mjs | grep -v "t: '\|cover\|nhan"` phải rỗng.
 - Render + XEM ẢNH: `node scripts/_render-slides.mjs --deck scripts/slides-src/api-NN-M.mjs --out <dir>`; ghép 4 ảnh `node scripts/_api-ghep-slide.mjs <dir>/<deck> 1 2 3 4` rồi Read từng tấm.
-- Upload: `node --env-file=.env scripts/upload-academy-slides.mjs --dir <dir> --prefix API/v1 --decks api-NN-M` ⇒ `images/academy/API/v1/<deck>/<NNN>.webp`. **KHÔNG GET URL media.cuongthai.com trước khi upload** (Cloudflare cache 404). Dựng lại deck đã upload ⇒ prefix mới `API/v2` + ghi vào `VER` trong `_slides.mjs` (hiện: `{ 'api-01-3': 'v2' }`). Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+- Upload: `node --env-file=.env scripts/upload-academy-slides.mjs --dir <dir> --prefix API/v1 --decks api-NN-M` ⇒ `images/academy/API/v1/<deck>/<NNN>.webp`. **KHÔNG GET URL media.cuongthai.com trước khi upload** (Cloudflare cache 404). Dựng lại deck đã upload ⇒ prefix mới `API/v2` + ghi vào `VER` trong `_slides.mjs` (hiện: `{ 'api-01-3': 'v2', 'api-02-3': 'v2' }`). Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 - Giảng `giang/api-NN-M.mjs`: phủ ĐỦ mọi slide đúng thứ tự (walkApi tự kiểm); EN dịch sát ý VI; VI giải nghĩa thuật ngữ. Kiểm số slide = số dòng giảng.
 
 ## 5. Dự án xuyên khoá: LabFlow API
 
 - Node **22** (máy có `~/.nvm/versions/node/v22.23.3/bin`; node mặc định là 26 — luôn `export PATH=$HOME/.nvm/versions/node/v22.23.3/bin:$PATH`), Express **5.3.0**, curl 8.7.1, HTTPie 3.2.4, macOS. Cổng 4000 (LabFlow), 4001 (echo.mjs), 4002–4006 thí nghiệm phụ.
 - Mã cuối Chương 1 (tham chiếu): `src/{server,app,db,http,auth}.js`, `src/routes/{labs,devices,bookings}.js` — toàn văn trong bài 1.1–1.4 (+ lời giải lab `routes/issues.js` ở bài 1.5). Đợt mẫu dựng ở scratchpad `apid/labflow-api` (KHÔNG trong repo). Agent sau: dựng lại từ các khối mã trong bài (đã kiểm: ghép khối mã bài 1.1 chạy đúng output) rồi thêm phần chương mình.
-- Dữ liệu mẫu cố định: labs `lab_1..lab_4` (lab_4 `retiredAt`), devices `dev_1..dev_3`, users `usr_1` An (STUDENT) · `usr_2` Bình (STUDENT) · `usr_3` Cô Lan (LAB_MANAGER); token GIẢ `tok_an`, `tok_bin`, `tok_lan` (KHÔNG dùng tên token entropy cao — gitleaks rule `curl-auth-header` chặn commit, vd `tok_binh` từng bị chặn). Id chuỗi có tiền tố (`lab_`, `dev_`, `bk_`, `iss_`), giờ UTC `Z`, lỗi `{ error, message, details? }` qua `HttpError` (Ch2 nâng lên RFC 9457).
+- Dữ liệu mẫu cố định: labs `lab_1..lab_4` (lab_4 `retiredAt`), devices `dev_1..dev_3`, users `usr_1` An (STUDENT) · `usr_2` Bình (STUDENT) · `usr_3` Cô Lan (LAB_MANAGER); token GIẢ `tok_an`, `tok_bin`, `tok_lan` (KHÔNG dùng tên token entropy cao — gitleaks rule `curl-auth-header` chặn commit, vd `tok_binh` từng bị chặn). Id chuỗi có tiền tố (`lab_`, `dev_`, `bk_`, `iss_`), giờ UTC `Z`.
+- **Từ Chương 2** (mã cuối chương = lời giải Lab 2, bài 2.5): lỗi RFC 9457 `application/problem+json` (`type` = `https://labflow.example/problems/<code-kebab>`, `title`, `status`, `detail`, `instance` = path, mở rộng `code`, `errors[{pointer|parameter, detail}]`, `conflictWith`/`existing`…) do `src/problems.js › sendProblem` sinh; `new HttpError(status, CODE, params, more)` — câu chữ vi/en ở `src/messages.js`, chọn theo `Accept-Language` (`src/i18n.js`, mặc định vi, kèm `Content-Language` + `Vary`). Kiểm dữ liệu: Zod 4 `src/schemas.js` (strictObject, `text()` = trim + NFC) + `src/validate.js` (`req.valid.body/query`; Express 5 `req.query` chỉ đọc). Cửa: 415 nếu body không phải JSON, `express.json` limit 10kb ⇒ 413. Response qua `src/views.js` (allow-list, trường tuỳ chọn luôn có, rỗng = null; danh sách `{ data: [...] }`). `GET /me`. JSON thụt lề trừ `NODE_ENV=production`. Chương sau dùng đúng các tệp này, không tạo hình dạng lỗi/response thứ hai.
 - Mỗi lần chạy: khởi động lại server (dữ liệu RAM về đầu) để id/ETag tái lập được; chép output nguyên văn (Date/ETag là của lần chạy).
 - Lộ trình mã: Ch2 lỗi RFC 9457 + validate (Zod hoặc tự viết) · Ch3 phân trang/lọc · Ch4 version · Ch5 idempotency/rate limit · Ch6 auth thật · Ch7 OpenAPI · Ch12 PostgreSQL.
 

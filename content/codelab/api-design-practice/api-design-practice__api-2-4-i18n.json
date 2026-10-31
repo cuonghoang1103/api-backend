@@ -1,0 +1,613 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-2-4-i18n",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-2-4-i18n"
+  },
+  "exercises": [
+    {
+      "title": "Bilingual 1 — What is translated, and what never is",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "i18n"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>LabFlow answers in Vietnamese or English (lesson 2.4). For each part of a response, choose what happens to it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow trả lời bằng tiếng Việt hoặc tiếng Anh (bài 2.4). Với mỗi phần của response, chọn điều xảy ra với nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Would a program break if this changed?|||Chương trình có hỏng nếu cái này đổi không?",
+        "A lab name is data someone typed, not an error message.|||Tên phòng là dữ liệu người dùng gõ, không phải câu báo lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bilingual 1 — What is translated, and what never is\n\nAnswer in the answer panel (no code needed).\n\n1. Part → treatmentPhần → cách xử lý\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bilingual 1 — What is translated, and what never is — answer key\n\n1. Part → treatmentPhần → cách xử lý\n   - r1.t: never translated\n   - r2.t: never translated\n   - r3.t: never translated\n   - r4.t: translated\n   - r5.t: sent as a value, formatted by the client\n   - r6.t: returned as stored (data)\n   Identifiers (codes, types, pointers, enum values) are contract and never change with the language; text for humans is translated; values such as instants and amounts are sent unambiguous and formatted by the client; user data is returned as stored.VI: Định danh (mã, type, pointer, giá trị enum) là hợp đồng, không đổi theo ngôn ngữ; chữ cho người đọc được dịch; giá trị như thời điểm, số tiền được gửi rõ ràng và client tự định dạng; dữ liệu người dùng trả đúng như đã lưu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Identifiers (codes, types, pointers, enum values) are contract and never change with the language; text for humans is translated; values such as instants and amounts are sent unambiguous and formatted by the client; user data is returned as stored.</p><p><i>VI: Định danh (mã, type, pointer, giá trị enum) là hợp đồng, không đổi theo ngôn ngữ; chữ cho người đọc được dịch; giá trị như thời điểm, số tiền được gửi rõ ràng và client tự định dạng; dữ liệu người dùng trả đúng như đã lưu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Part → treatment</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần → cách xử lý</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Part of the response"
+              },
+              {
+                "ma": "t",
+                "ten": "Treatment",
+                "luaChon": [
+                  "never translated",
+                  "translated",
+                  "sent as a value, formatted by the client",
+                  "returned as stored (data)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "\"code\": \"BOOKING_CONFLICT\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "\"pointer\": \"#/startAt\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "\"status\": \"MAINTENANCE\" (an enum value)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "\"title\": \"Trùng lịch phòng\" / \"Booking conflict\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "\"startAt\": \"2026-11-02T01:00:00.000Z\""
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "\"name\": \"Phòng Lab IoT\" (a lab)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "never translated",
+              "r2.t": "never translated",
+              "r3.t": "never translated",
+              "r4.t": "translated",
+              "r5.t": "sent as a value, formatted by the client",
+              "r6.t": "returned as stored (data)"
+            },
+            "giaiThich": "<p>Identifiers (codes, types, pointers, enum values) are contract and never change with the language; text for humans is translated; values such as instants and amounts are sent unambiguous and formatted by the client; user data is returned as stored.</p><p><i>VI: Định danh (mã, type, pointer, giá trị enum) là hợp đồng, không đổi theo ngôn ngữ; chữ cho người đọc được dịch; giá trị như thời điểm, số tiền được gửi rõ ràng và client tự định dạng; dữ liệu người dùng trả đúng như đã lưu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Translating enum values for Vietnamese users.|||Dịch giá trị enum cho người dùng Việt."
+        },
+        {
+          "loi": "Formatting dates on the server for one locale.|||Định dạng ngày ở server cho một locale."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "localisation",
+          "vi": "bản địa hoá"
+        },
+        {
+          "en": "locale",
+          "vi": "thiết lập vùng (ngôn ngữ, định dạng)"
+        }
+      ]
+    },
+    {
+      "title": "Bilingual 2 — Write pickLanguage(header, supported, fallback)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "content negotiation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Re-implement the language choice Express made for LabFlow. <code>header</code> is the raw <code>Accept-Language</code> value (may be empty or undefined), <code>supported</code> e.g. <code>['vi', 'en']</code>, <code>fallback</code> e.g. <code>'vi'</code>.</p><ul>\n<li>Split on <code>,</code>; each item is a tag plus optional <code>;q=</code> weight (default 1). Tags are case-insensitive. Items with <code>q=0</code> mean “not acceptable” — drop them.</li>\n<li>Try items by <b>higher q first</b>; equal q keep header order.</li>\n<li>An item matches a supported language if equal, or if its primary subtag (before <code>-</code>) equals it: <code>en-US</code> matches <code>en</code>. <code>*</code> matches the first supported language. Return the supported spelling.</li>\n<li>No header, or nothing matches ⇒ <code>fallback</code> (LabFlow answers instead of 406).</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cài lại việc chọn ngôn ngữ mà Express làm cho LabFlow. <code>header</code> là giá trị thô của <code>Accept-Language</code> (có thể rỗng hoặc undefined), <code>supported</code> ví dụ <code>['vi', 'en']</code>, <code>fallback</code> ví dụ <code>'vi'</code>.</p><ul>\n<li>Tách theo <code>,</code>; mỗi mục là một thẻ ngôn ngữ kèm trọng số <code>;q=</code> tuỳ chọn (mặc định 1). Thẻ không phân biệt hoa thường. Mục có <code>q=0</code> nghĩa là \"không chấp nhận\" — bỏ đi.</li>\n<li>Thử các mục theo <b>q cao trước</b>; q bằng nhau thì giữ thứ tự trong header.</li>\n<li>Một mục khớp ngôn ngữ được hỗ trợ nếu bằng nhau, hoặc nếu thẻ chính (trước <code>-</code>) bằng nó: <code>en-US</code> khớp <code>en</code>. <code>*</code> khớp ngôn ngữ đầu tiên được hỗ trợ. Trả về cách viết trong <code>supported</code>.</li>\n<li>Không có header, hoặc không khớp gì ⇒ <code>fallback</code> (LabFlow trả lời thay vì 406).</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "header — string | undefined; supported — string[]; fallback — string.|||header — chuỗi | undefined; supported — mảng chuỗi; fallback — chuỗi.",
+      "outputSpec": "One of supported, or fallback.|||Một phần tử của supported, hoặc fallback.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pickLanguage(\"en-US,en;q=0.9,vi;q=0.8\", [\"vi\",\"en\"], \"vi\")",
+          "output": "\"en\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Parse into [{ tag, q, index }], drop q = 0, sort by q desc then index.|||Phân tích thành [{ tag, q, index }], bỏ q = 0, sắp theo q giảm rồi index.",
+        "tag.split(\"-\")[0] gives the primary subtag.|||tag.split(\"-\")[0] cho ra thẻ chính."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** Accept-Language ⇒ one of supported, or fallback */\nfunction pickLanguage(header, supported, fallback) {\n  // Write your solution here\n  if (!header) return fallback;\n  var first = header.split(',')[0].split(';')[0].trim();\n  return supported.indexOf(first) >= 0 ? first : fallback;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pickLanguage(header, supported, fallback) {\n  if (!header || !header.trim()) return fallback;\n  var items = header.split(',').map(function (part, i) {\n    var bits = part.trim().split(';');\n    var tag = bits[0].trim().toLowerCase();\n    var qv = 1;\n    bits.slice(1).forEach(function (b) { var m = /^\\s*q=([0-9.]+)\\s*$/.exec(b); if (m) qv = Number(m[1]); });\n    return { tag: tag, q: qv, i: i };\n  }).filter(function (x) { return x.tag && x.q > 0; });\n  items.sort(function (a, b) { return b.q - a.q || a.i - b.i; });   // higher q first, then header order\n  for (var k = 0; k < items.length; k++) {\n    var t = items[k].tag;\n    if (t === '*') return supported[0];\n    for (var s = 0; s < supported.length; s++) {\n      var sup = supported[s].toLowerCase();\n      if (t === sup || t.split('-')[0] === sup) return supported[s];\n    }\n  }\n  return fallback;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 9110 §12.5.4 defines Accept-Language as a weighted list. Sorting by weight (stable for ties), prefix matching of regional tags and a default when nothing matches reproduce the real outputs of lesson 2.4: en-US → en, “vi;q=0.4, en;q=0.6” → en, fr → vi.</p>",
+      "solutionExplanationHtmlVi": "<p>RFC 9110 §12.5.4 định nghĩa Accept-Language là danh sách có trọng số. Sắp theo trọng số (giữ thứ tự khi bằng), khớp tiền tố cho thẻ có vùng và có mặc định khi không khớp sẽ tái hiện đúng output thật của bài 2.4: en-US → en, \"vi;q=0.4, en;q=0.6\" → en, fr → vi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A real browser header (lesson 2.4)",
+              "vi": "Header trình duyệt thật (bài 2.4)"
+            },
+            "goi": "pickLanguage(\"en-US,en;q=0.9,vi;q=0.8\", [\"vi\",\"en\"], \"vi\")",
+            "mongDoi": "en"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: pickLanguage(\"vi;q=0.4, en;q=0.6\", [\"vi\",\"en\"], \"vi\")",
+              "vi": "Ca 2"
+            },
+            "goi": "pickLanguage(\"vi;q=0.4, en;q=0.6\", [\"vi\",\"en\"], \"vi\")",
+            "mongDoi": "en"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: pickLanguage(\"fr\", [\"vi\",\"en\"], \"vi\")",
+              "vi": "Ca 3"
+            },
+            "goi": "pickLanguage(\"fr\", [\"vi\",\"en\"], \"vi\")",
+            "mongDoi": "vi"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pickLanguage(undefined, [\"vi\",\"en\"], \"vi\")",
+            "mongDoi": "vi",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pickLanguage(\"EN-gb;q=0.7, fr;q=0.9\", [\"vi\",\"en\"], \"vi\")",
+            "mongDoi": "en",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "pickLanguage(\"en;q=0, vi\", [\"vi\",\"en\"], \"en\")",
+            "mongDoi": "vi",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "pickLanguage(\"ja, *;q=0.1\", [\"vi\",\"en\"], \"en\")",
+            "mongDoi": "vi",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "pickLanguage(\"de;q=0.5, en;q=0.5, vi;q=0.5\", [\"vi\",\"en\"], \"vi\")",
+            "mongDoi": "en",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "pickLanguage(\"   \", [\"vi\",\"en\"], \"vi\")",
+            "mongDoi": "vi",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the first tag in the header and ignoring q.|||Lấy thẻ đầu tiên trong header và bỏ qua q."
+        },
+        {
+          "loi": "Matching \"en\" against \"en-US\" in the wrong direction — the client’s regional tag must match our language.|||Khớp \"en\" với \"en-US\" sai chiều — thẻ có vùng của client phải khớp ngôn ngữ của ta."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "quality value (q)",
+          "vi": "trọng số ưu tiên"
+        },
+        {
+          "en": "language tag",
+          "vi": "thẻ ngôn ngữ",
+          "giaiThich": "vi, en, en-US…"
+        }
+      ]
+    },
+    {
+      "title": "Bilingual 3 — Write fold(s): compare Vietnamese like a reader",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Unicode normalisation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>LabFlow’s search and Lab 2’s duplicate rule compare titles “like a reader”: no accents, no case, no NFC/NFD difference. Write <code>fold(s)</code>: decompose to NFD, remove every combining mark (Unicode category M), replace <code>đ</code> → <code>d</code> and <code>Đ</code> → <code>D</code> (they have <b>no</b> decomposition — measured in lesson 2.4), then lower-case.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tìm kiếm của LabFlow và luật chống trùng của Lab 2 so tiêu đề \"như người đọc\": không dấu, không phân biệt hoa thường, không phân biệt NFC/NFD. Viết <code>fold(s)</code>: tách về NFD, bỏ mọi dấu kết hợp (nhóm Unicode M), thay <code>đ</code> → <code>d</code> và <code>Đ</code> → <code>D</code> (chúng <b>không</b> tách được — đã đo ở bài 2.4), rồi viết thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "s — a string.|||s — một chuỗi.",
+      "outputSpec": "The folded string.|||Chuỗi đã gấp.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "fold(\"Phòng Lab Mạng máy tính\")",
+          "output": "\"phong lab mang may tinh\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "s.normalize(\"NFD\") then .replace(/\\p{M}/gu, \"\").|||s.normalize(\"NFD\") rồi .replace(/\\p{M}/gu, \"\").",
+        "Handle đ/Đ by hand after removing the marks.|||Xử lý đ/Đ bằng tay sau khi bỏ dấu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"Phòng Lab IoT\" ⇒ \"phong lab iot\" */\nfunction fold(s) {\n  // Write your solution here\n  return s.toLowerCase();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction fold(s) {\n  return s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NFD splits every accented letter into a base letter plus combining marks, so one regular expression removes all of them — and it works whatever form the input arrived in. Đ/đ are separate letters in Unicode, which is the one trap Vietnamese adds.</p>",
+      "solutionExplanationHtmlVi": "<p>NFD tách mọi chữ có dấu thành chữ gốc cộng các dấu kết hợp, nên một biểu thức chính quy bỏ được tất cả — và chạy đúng dù chữ vào ở dạng nào. Đ/đ là chữ cái riêng trong Unicode, chính là cái bẫy tiếng Việt thêm vào.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: fold(\"Phòng Lab Mạng máy tính\")",
+              "vi": "Ca 1"
+            },
+            "goi": "fold(\"Phòng Lab Mạng máy tính\")",
+            "mongDoi": "phong lab mang may tinh"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: fold(\"Cổng console không lên đèn\")",
+              "vi": "Ca 2"
+            },
+            "goi": "fold(\"Cổng console không lên đèn\")",
+            "mongDoi": "cong console khong len den"
+          },
+          {
+            "moTa": {
+              "en": "NFD input",
+              "vi": "Chữ dạng NFD"
+            },
+            "goi": "fold(\"Phòng Lab IoT\")",
+            "mongDoi": "phong lab iot",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "fold(\"Phòng Điện tử\")",
+            "mongDoi": "phong dien tu",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "fold(\"ĐƯỜNG ĐI\")",
+            "mongDoi": "duong di",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "fold(\"cong CONSOLE khong len den\")",
+            "mongDoi": "cong console khong len den",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "fold(\"\")",
+            "mongDoi": "",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting đ: \"Điện tử\" folds to \"đien tu\" and never matches \"dien tu\".|||Quên chữ đ: \"Điện tử\" gấp ra thành \"đien tu\" và không bao giờ khớp \"dien tu\"."
+        },
+        {
+          "loi": "Removing only a few accents by hand with a lookup table — misses NFD input.|||Tự bỏ vài dấu bằng bảng tra — bỏ sót chữ nhập ở dạng NFD."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NFC / NFD",
+          "vi": "dạng dựng sẵn / dạng tách rời"
+        },
+        {
+          "en": "combining mark",
+          "vi": "dấu kết hợp"
+        }
+      ]
+    },
+    {
+      "title": "Bilingual 4 — Write localize(code, params, lang, catalog)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "message catalogue",
+        "fallback"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>LabFlow builds sentences at the edge from a catalogue. Here templates use <code>{name}</code> placeholders: <code>catalog[lang][code] = [title, detailTemplate]</code>. Write <code>localize(code, params, lang, catalog)</code> ⇒ <code>{ title, detail, contentLanguage }</code>:</p><ul>\n<li>A language missing from the catalogue ⇒ use <code>'vi'</code>.</li>\n<li>A code missing in that language but present in <code>vi</code> ⇒ use the <code>vi</code> entry, and <code>contentLanguage</code> is <code>'vi'</code> (say honestly what you sent).</li>\n<li>A code missing everywhere ⇒ the <code>INTERNAL</code> entry of the chosen language (or of <code>vi</code> if that language has none).</li>\n<li>Replace every <code>{name}</code> with <code>params[name]</code>; a placeholder without a value stays as it is.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow dựng câu ở cửa ra từ một danh mục. Ở đây mẫu câu dùng chỗ giữ <code>{tên}</code>: <code>catalog[lang][code] = [title, mẫuDetail]</code>. Viết <code>localize(code, params, lang, catalog)</code> ⇒ <code>{ title, detail, contentLanguage }</code>:</p><ul>\n<li>Ngôn ngữ không có trong danh mục ⇒ dùng <code>'vi'</code>.</li>\n<li>Mã không có ở ngôn ngữ đó nhưng có ở <code>vi</code> ⇒ dùng mục của <code>vi</code>, và <code>contentLanguage</code> là <code>'vi'</code> (nói thật thứ mình đã gửi).</li>\n<li>Mã không có ở đâu cả ⇒ mục <code>INTERNAL</code> của ngôn ngữ đã chọn (hoặc của <code>vi</code> nếu ngôn ngữ đó không có).</li>\n<li>Thay mọi <code>{tên}</code> bằng <code>params[tên]</code>; chỗ giữ không có giá trị thì để nguyên.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "code, params (object), lang, catalog.",
+      "outputSpec": "{ title, detail, contentLanguage }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "localize(\"LAB_NOT_FOUND\", {\"id\":\"lab_9\"}, \"en\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+          "output": "{\"title\":\"Lab not found\",\"detail\":\"There is no lab lab_9\",\"contentLanguage\":\"en\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Decide the language and the entry first, then fill the template.|||Quyết ngôn ngữ và mục trước, rồi mới điền mẫu câu.",
+        "String.replace with /\\{(\\w+)\\}/g and a function.|||String.replace với /\\{(\\w+)\\}/g và một hàm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** code + params + lang ⇒ { title, detail, contentLanguage } */\nfunction localize(code, params, lang, catalog) {\n  // Write your solution here\n  var e = catalog[lang][code];\n  return { title: e[0], detail: e[1], contentLanguage: lang };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction localize(code, params, lang, catalog) {\n  var useLang = catalog[lang] ? lang : 'vi';\n  var entry = catalog[useLang][code] || catalog.vi[code];\n  if (!entry) { useLang = catalog[useLang].INTERNAL ? useLang : 'vi'; entry = catalog[useLang].INTERNAL; }\n  else if (!catalog[useLang][code]) useLang = 'vi';\n  var fill = function (t) { return t.replace(/\\{(\\w+)\\}/g, function (m, k) { return params && params[k] !== undefined ? String(params[k]) : m; }); };\n  return { title: entry[0], detail: fill(entry[1]), contentLanguage: useLang };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The fallback rules decide what happens when the catalogue is incomplete — which it will be the day someone adds a code in one language only. Reporting the language actually used keeps Content-Language truthful for caches and clients.</p>",
+      "solutionExplanationHtmlVi": "<p>Các luật dự phòng quyết điều xảy ra khi danh mục chưa đủ — chắc chắn sẽ có ngày ai đó thêm mã ở một ngôn ngữ. Báo đúng ngôn ngữ thật sự đã dùng giữ Content-Language trung thực cho cache và client.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: localize(\"LAB_NOT_FOUND\", {\"id\":\"lab_9\"}, \"en\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy...",
+              "vi": "Ca 1"
+            },
+            "goi": "localize(\"LAB_NOT_FOUND\", {\"id\":\"lab_9\"}, \"en\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+            "mongDoi": {
+              "title": "Lab not found",
+              "detail": "There is no lab lab_9",
+              "contentLanguage": "en"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: localize(\"LAB_NOT_FOUND\", {\"id\":\"lab_9\"}, \"vi\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy...",
+              "vi": "Ca 2"
+            },
+            "goi": "localize(\"LAB_NOT_FOUND\", {\"id\":\"lab_9\"}, \"vi\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+            "mongDoi": {
+              "title": "Không tìm thấy phòng lab",
+              "detail": "Không có phòng lab lab_9",
+              "contentLanguage": "vi"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Missing in en ⇒ vi",
+              "vi": "Thiếu ở en ⇒ vi"
+            },
+            "goi": "localize(\"BOOKING_CONFLICT\", {\"other\":\"bk_1\"}, \"en\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+            "mongDoi": {
+              "title": "Trùng lịch phòng",
+              "detail": "Phòng đã có lượt bk_1 trong khung giờ này",
+              "contentLanguage": "vi"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "localize(\"LAB_NOT_FOUND\", {\"id\":\"lab_9\"}, \"fr\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+            "mongDoi": {
+              "title": "Không tìm thấy phòng lab",
+              "detail": "Không có phòng lab lab_9",
+              "contentLanguage": "vi"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "localize(\"NO_SUCH_CODE\", {}, \"en\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+            "mongDoi": {
+              "title": "Internal server error",
+              "detail": "Something went wrong on our side, try again later",
+              "contentLanguage": "en"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "localize(\"BOOKING_CONFLICT\", {}, \"vi\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+            "mongDoi": {
+              "title": "Trùng lịch phòng",
+              "detail": "Phòng đã có lượt {other} trong khung giờ này",
+              "contentLanguage": "vi"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "localize(\"NO_SUCH_CODE\", {}, \"ja\", {\"vi\":{\"LAB_NOT_FOUND\":[\"Không tìm thấy phòng lab\",\"Không có phòng lab {id}\"],\"BOOKING_CONFLICT\":[\"Trùng lịch phòng\",\"Phòng đã có lượt {other} trong khung giờ này\"],\"INTERNAL\":[\"Lỗi máy chủ\",\"Máy chủ gặp lỗi, thử lại sau\"]},\"en\":{\"LAB_NOT_FOUND\":[\"Lab not found\",\"There is no lab {id}\"],\"INTERNAL\":[\"Internal server error\",\"Something went wrong on our side, try again later\"]}})",
+            "mongDoi": {
+              "title": "Lỗi máy chủ",
+              "detail": "Máy chủ gặp lỗi, thử lại sau",
+              "contentLanguage": "vi"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying Content-Language: en while sending a Vietnamese fallback sentence.|||Ghi Content-Language: en trong khi gửi câu dự phòng tiếng Việt."
+        },
+        {
+          "loi": "Replacing a missing parameter with \"undefined\".|||Thay tham số thiếu bằng chữ \"undefined\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "message catalogue",
+          "vi": "danh mục câu chữ"
+        },
+        {
+          "en": "fallback",
+          "vi": "phương án dự phòng"
+        }
+      ]
+    }
+  ]
+}

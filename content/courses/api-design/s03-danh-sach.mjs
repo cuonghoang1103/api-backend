@@ -29,6 +29,17 @@ export default {
 <h2>Offset pagination and its problems</h2>
 <p class="lead">Until now <code>GET /bookings</code> returned everything. With 200 bookings that is 31 KB in one answer; with a year of data it would be megabytes, and every app screen would wait for all of it. Pagination — returning a list one <strong>page</strong> at a time — is the first thing a real list endpoint needs. This lesson builds the classic version, <code>limit</code> + <code>offset</code>, on LabFlow, then measures its three problems: duplicates while data changes, slow deep pages, and the cost of the total count.</p>
 
+<div class="callout ok">
+<p><strong>After Chapter 3 you can:</strong></p>
+<ul>
+  <li>explain, with measurements, why offset paging breaks on big and changing lists;</li>
+  <li>build cursor (keyset) pagination that stays fast at any depth;</li>
+  <li>design filters and sorting that are safe to promise forever;</li>
+  <li>return related data without the N+1 problem.</li>
+</ul>
+<p><strong>Why it matters:</strong> Every real list grows: what is instant with 50 rows times out with a million — this chapter measures it on PostgreSQL.</p>
+</div>
+
 <h3>Data to page through</h3>
 <p>Paging three bookings is not convincing. <code>src/seed.js</code> generates a fixed set of bookings — same ids, times and order every run, so your output will match the lesson:</p>
 <pre><code class="language-javascript">// seed.js — dữ liệu mẫu CỐ ĐỊNH để học phân trang: SEED_BOOKINGS=200 npm run dev
@@ -171,6 +182,12 @@ Keep-Alive: timeout=5
 <div class="out">{"ids":["bk_200","bk_198"],"page":{"limit":2,"offset":0,"total":100}}</div>
 
 <h3>Problem 1 — the list moves under your feet</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">page 1</span><span class="lz-t">offset 0, limit 20</span><span class="lz-d">rows 1–20 of “newest first”</span></div>
+  <div class="lz-step"><span class="lz-k">meanwhile</span><span class="lz-t">a new booking arrives</span><span class="lz-d">every row moves down by one</span></div>
+  <div class="lz-step"><span class="lz-k">page 2</span><span class="lz-t">offset 20</span><span class="lz-d">old row 20 is now row 21 — shown again</span></div>
+  <div class="lz-step"><span class="lz-k">result</span><span class="lz-t">duplicate or gap</span><span class="lz-d">offset counts rows, not positions in time</span></div>
+</div>
 <p>An offset is a position, and positions shift when the data changes. Lan opens page 1; meanwhile An makes a booking; Lan opens page 2:</p>
 <pre><code class="language-bash">curl -s 'http://localhost:4000/bookings?limit=5' \\
   -H 'Authorization: Bearer tok_lan' | jq -c '[.data[].id]'</code></pre>
@@ -217,6 +234,12 @@ EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY create
 <p><strong>“How do you paginate?”</strong> Mention both: offset/limit (simple, page numbers, but duplicates/skips while data changes and slow deep pages because the database walks the skipped rows) and cursor/keyset (stable and fast at any depth, but no jumping to page N). Choose by use case; always a stable order with a tie-breaker and a maximum page size.</p>
 <p><strong>“Why not return the total?”</strong> It costs a full count on every call. Return it only where the UI really needs it.</p>
 
+<a class="link-card" href="https://www.postgresql.org/docs/current/queries-limit.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: PostgreSQL 18 docs — LIMIT and OFFSET — read 1 Nov 2026</span><span class="lc-sub">“The rows skipped by an OFFSET clause still have to be computed inside the server” — and LIMIT needs an ORDER BY with a unique order.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add the seed and the offset version; reproduce the outputs above with <code>SEED_BOOKINGS=200</code>.</li>
@@ -257,6 +280,17 @@ EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY create
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
 <h2>Phân trang offset và những vấn đề của nó</h2>
 <p class="lead">Tới giờ <code>GET /bookings</code> trả về tất cả. Với 200 lượt đặt, đó là 31 KB trong một câu trả lời; với dữ liệu cả năm sẽ là hàng megabyte, và màn hình nào của app cũng phải chờ trọn đống đó. Pagination (phân trang) — trả danh sách theo từng <strong>trang</strong> — là thứ đầu tiên một endpoint danh sách thật sự cần. Bài này dựng phiên bản kinh điển, <code>limit</code> + <code>offset</code>, trên LabFlow, rồi đo ba vấn đề của nó: trùng lặp khi dữ liệu thay đổi, trang sâu chậm dần, và cái giá của tổng số dòng.</p>
+
+<div class="callout ok">
+<p><strong>Học xong Chương 3 bạn làm được:</strong></p>
+<ul>
+  <li>giải thích bằng số đo vì sao phân trang offset hỏng với danh sách lớn và hay thay đổi;</li>
+  <li>dựng phân trang con trỏ (keyset) nhanh ở mọi độ sâu;</li>
+  <li>thiết kế bộ lọc và sắp xếp an toàn để hứa mãi mãi;</li>
+  <li>trả dữ liệu liên quan mà không dính N+1.</li>
+</ul>
+<p><strong>Vì sao đáng học:</strong> Danh sách thật nào cũng lớn dần: thứ tức thì với 50 dòng sẽ quá giờ với một triệu dòng — chương này đo điều đó trên PostgreSQL.</p>
+</div>
 
 <h3>Dữ liệu để phân trang</h3>
 <p>Phân trang ba lượt đặt thì chẳng thuyết phục ai. <code>src/seed.js</code> sinh ra một bộ lượt đặt cố định — cùng id, cùng giờ, cùng thứ tự ở mọi lần chạy, nên output của bạn sẽ khớp với bài:</p>
@@ -400,6 +434,12 @@ Keep-Alive: timeout=5
 <div class="out">{"ids":["bk_200","bk_198"],"page":{"limit":2,"offset":0,"total":100}}</div>
 
 <h3>Vấn đề 1 — danh sách xê dịch dưới chân bạn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">trang 1</span><span class="lz-t">offset 0, limit 20</span><span class="lz-d">dòng 1–20 theo “mới nhất trước”</span></div>
+  <div class="lz-step"><span class="lz-k">trong lúc đó</span><span class="lz-t">có lượt đặt mới</span><span class="lz-d">mọi dòng tụt xuống một bậc</span></div>
+  <div class="lz-step"><span class="lz-k">trang 2</span><span class="lz-t">offset 20</span><span class="lz-d">dòng 20 cũ giờ là dòng 21 — hiện lại</span></div>
+  <div class="lz-step"><span class="lz-k">kết quả</span><span class="lz-t">trùng hoặc sót</span><span class="lz-d">offset đếm dòng, không đếm vị trí theo thời gian</span></div>
+</div>
 <p>Offset là một vị trí, mà vị trí thì xê dịch khi dữ liệu thay đổi. Cô Lan mở trang 1; trong lúc đó An đặt thêm một lượt; cô Lan mở trang 2:</p>
 <pre><code class="language-bash">curl -s 'http://localhost:4000/bookings?limit=5' \\
   -H 'Authorization: Bearer tok_lan' | jq -c '[.data[].id]'</code></pre>
@@ -445,6 +485,12 @@ EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY create
 <h3>Phỏng vấn và đi làm</h3>
 <p><strong>"Em phân trang thế nào?"</strong> Nói cả hai: offset/limit (đơn giản, có số trang, nhưng trùng/sót khi dữ liệu đổi và trang sâu chậm vì cơ sở dữ liệu phải đi qua các dòng bị bỏ qua) và cursor/keyset (ổn định và nhanh ở mọi độ sâu, nhưng không nhảy thẳng tới trang N). Chọn theo trường hợp dùng; luôn có thứ tự ổn định kèm khoá phụ và kích thước trang tối đa.</p>
 <p><strong>"Sao không trả tổng số?"</strong> Nó tốn một lần đếm toàn bộ ở mọi lời gọi. Chỉ trả khi giao diện thật sự cần.</p>
+
+<a class="link-card" href="https://www.postgresql.org/docs/current/queries-limit.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Tài liệu PostgreSQL 18 — LIMIT và OFFSET — đọc ngày 1/11/2026</span><span class="lc-sub">“Các dòng bị OFFSET bỏ qua vẫn phải được tính bên trong server” — và LIMIT cần ORDER BY có thứ tự duy nhất.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
@@ -497,6 +543,12 @@ EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY create
 <p class="lead">Offset says “skip 40 rows”. A cursor says “continue after <em>this</em> row”. That one change removes both problems we measured in lesson 3.1: rows no longer repeat or vanish when data changes, and a deep page costs the same as the first. In this lesson LabFlow’s bookings switch to an opaque cursor, and PostgreSQL shows the same 20 rows at depth 900 000 in 0.064 ms instead of 78 ms.</p>
 
 <h3>The idea: a bookmark, not a page number</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">page 1</span><span class="lz-t">ORDER BY created_at DESC, id DESC</span><span class="lz-d">LIMIT 20</span></div>
+  <div class="lz-step"><span class="lz-k">cursor</span><span class="lz-t">last row’s (sort value, id) + query fingerprint</span><span class="lz-d">base64url — opaque to the client</span></div>
+  <div class="lz-step"><span class="lz-k">page 2</span><span class="lz-t">WHERE (created_at, id) < cursor</span><span class="lz-d">an index seek, any depth</span></div>
+  <div class="lz-step"><span class="lz-k">end</span><span class="lz-t">next = null</span><span class="lz-d">the only end-of-list signal</span></div>
+</div>
 <p>When you close a book you keep a bookmark at the last page you read — not “page 212”, because a new edition with an extra chapter would move page 212. A cursor is that bookmark: the <strong>position of the last item</strong> you received, in the sort order. The next request asks for “items that come after this position”. Items added before the bookmark do not push anything; items removed do not pull anything.</p>
 <p>The position must identify exactly one place in the order, so it contains every sort key including the tie-breaker: for “newest first” that is <code>(createdAt, id)</code> of the last item.</p>
 
@@ -649,6 +701,12 @@ LIMIT 20;</code></pre>
 <p><strong>“Why are cursors faster?”</strong> The database seeks directly to the position through an index matching the sort order instead of walking and discarding every skipped row.</p>
 <p><strong>“What goes into a cursor?”</strong> The values of every sort key of the last item, including a unique tie-breaker, encoded as an opaque string — plus anything needed to reject it when used with a different query (lesson 3.3).</p>
 
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Google AIP-158 — Pagination — read 1 Nov 2026</span><span class="lc-sub">Page tokens must be opaque and URL-safe, never user-parseable; an empty next_page_token is the only end-of-collection signal; too large a page size is capped, not rejected.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Switch your bookings to cursors and reproduce the outputs; confirm that inserting a booking between pages causes no duplicate.</li>
@@ -685,6 +743,12 @@ LIMIT 20;</code></pre>
 <p class="lead">Offset nói "bỏ qua 40 dòng". Con trỏ (cursor) nói "tiếp tục sau <em>dòng này</em>". Chỉ một thay đổi đó xoá được cả hai vấn đề ta đã đo ở bài 3.1: dòng không còn lặp lại hay biến mất khi dữ liệu thay đổi, và một trang sâu tốn y như trang đầu. Trong bài này, danh sách lượt đặt của LabFlow chuyển sang con trỏ mờ, và PostgreSQL trả cùng 20 dòng ở độ sâu 900 000 trong 0,064 ms thay vì 78 ms.</p>
 
 <h3>Ý tưởng: một cái bookmark, không phải số trang</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">trang 1</span><span class="lz-t">ORDER BY created_at DESC, id DESC</span><span class="lz-d">LIMIT 20</span></div>
+  <div class="lz-step"><span class="lz-k">con trỏ</span><span class="lz-t">(giá trị sắp xếp, id) của dòng cuối + dấu vân tay truy vấn</span><span class="lz-d">base64url — client không đọc được</span></div>
+  <div class="lz-step"><span class="lz-k">trang 2</span><span class="lz-t">WHERE (created_at, id) < con trỏ</span><span class="lz-d">tìm theo index, sâu bao nhiêu cũng vậy</span></div>
+  <div class="lz-step"><span class="lz-k">hết</span><span class="lz-t">next = null</span><span class="lz-d">tín hiệu hết danh sách duy nhất</span></div>
+</div>
 <p>Khi gấp sách lại, bạn kẹp bookmark ở trang cuối đã đọc — chứ không ghi "trang 212", vì bản in mới thêm một chương sẽ đẩy trang 212 đi chỗ khác. Con trỏ chính là cái bookmark đó: <strong>vị trí của phần tử cuối cùng</strong> bạn đã nhận, tính theo thứ tự sắp xếp. Request tiếp theo xin "những phần tử đứng sau vị trí này". Phần tử thêm vào trước bookmark không đẩy gì; phần tử bị xoá không kéo gì.</p>
 <p>Vị trí phải chỉ đúng một chỗ trong thứ tự, nên nó chứa mọi khoá sắp xếp, kể cả khoá phụ: với "mới nhất trước" đó là <code>(createdAt, id)</code> của phần tử cuối.</p>
 
@@ -837,6 +901,12 @@ LIMIT 20;</code></pre>
 <p><strong>"Vì sao con trỏ nhanh hơn?"</strong> Cơ sở dữ liệu nhảy thẳng tới vị trí nhờ một index khớp thứ tự sắp xếp, thay vì đi qua rồi vứt đi mọi dòng bị bỏ qua.</p>
 <p><strong>"Trong con trỏ có gì?"</strong> Giá trị của mọi khoá sắp xếp của phần tử cuối, kể cả khoá phụ duy nhất, mã hoá thành chuỗi mờ — cộng thứ cần để từ chối nó khi bị dùng với một truy vấn khác (bài 3.3).</p>
 
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Google AIP-158 — Pagination — đọc ngày 1/11/2026</span><span class="lc-sub">Token trang phải mờ và an toàn cho URL, người dùng không đọc được; next_page_token rỗng là tín hiệu hết duy nhất; page size quá lớn bị hạ xuống, không bị từ chối.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Chuyển danh sách lượt đặt sang con trỏ và tái hiện các output; xác nhận chèn một lượt đặt giữa hai trang không gây trùng.</li>
@@ -882,6 +952,13 @@ LIMIT 20;</code></pre>
 <p class="lead">Lan does not want all 200 bookings; she wants “lab 2, cancelled ones” or “who is in the labs on Tuesday morning”. Filters are the most-used part of any list endpoint and the easiest place to create slow queries and silent bugs. This lesson adds four filters to <code>GET /bookings</code>, validates them like any input, ties cursors to the filters they were made for, and measures how one index turns a 36 ms filter into 0.24 ms.</p>
 
 <h3>Design rules for filters</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">One named parameter per question</span><span class="lz-lnote">labId, status — several combine with AND</span></div>
+  <div class="lz-layer"><span class="lz-lname">One type per parameter</span><span class="lz-lnote">validated like a body; lists are comma-separated</span></div>
+  <div class="lz-layer"><span class="lz-lname">Ranges say what they mean</span><span class="lz-lnote">from/to = bookings that overlap [from, to)</span></div>
+  <div class="lz-layer"><span class="lz-lname">Search is its own parameter</span><span class="lz-lnote">q, minimum length, accent-insensitive</span></div>
+  <div class="lz-layer"><span class="lz-lname">Only what you can serve fast</span><span class="lz-lnote">every filter is a promise — and a cursor belongs to its query</span></div>
+</div>
 <ol>
   <li><strong>One named parameter per question</strong>, named after the field it filters: <code>labId</code>, <code>status</code>. Several parameters combine with <strong>AND</strong>.</li>
   <li><strong>One type per parameter</strong>, validated like a body (Chapter 2). A list of values is comma-separated: <code>status=PENDING,CANCELLED</code> means “either”.</li>
@@ -1025,6 +1102,12 @@ ORDER BY created_at DESC, id DESC LIMIT 20;</code></pre>
 <p><strong>“How do you design filters?”</strong> Named, typed, validated parameters combined with AND; lists comma-separated; explicit range semantics; search separate with a minimum length; an index for every published filter; no free-form query language on a public API.</p>
 <p><strong>“What happens if the client changes filters while paging?”</strong> The cursor no longer describes a position in that list; bind cursors to the query (a fingerprint) and answer 400 so the client restarts from page 1.</p>
 
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Google AIP-158 — Pagination — read 1 Nov 2026</span><span class="lc-sub">Between pages the other request arguments should stay the same, or the API returns INVALID_ARGUMENT — the rule behind “a cursor belongs to its query”.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add the four filters and the fingerprint; reproduce the outputs.</li>
@@ -1061,6 +1144,13 @@ ORDER BY created_at DESC, id DESC LIMIT 20;</code></pre>
 <p class="lead">Cô Lan không cần cả 200 lượt đặt; cô cần "phòng lab 2, những lượt đã huỷ" hay "ai đang ở phòng lab sáng thứ Ba". Bộ lọc (filter) là phần được dùng nhiều nhất của mọi endpoint danh sách, và cũng là chỗ dễ đẻ ra truy vấn chậm và bug lặng lẽ nhất. Bài này thêm bốn bộ lọc cho <code>GET /bookings</code>, kiểm chúng như mọi dữ liệu vào, gắn con trỏ với đúng bộ lọc đã sinh ra nó, và đo xem một index biến bộ lọc 36 ms thành 0,24 ms thế nào.</p>
 
 <h3>Luật thiết kế bộ lọc</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Mỗi câu hỏi một tham số có tên</span><span class="lz-lnote">labId, status — nhiều tham số ghép bằng AND</span></div>
+  <div class="lz-layer"><span class="lz-lname">Mỗi tham số một kiểu</span><span class="lz-lnote">kiểm như body; danh sách cách nhau dấu phẩy</span></div>
+  <div class="lz-layer"><span class="lz-lname">Khoảng nói đúng nghĩa</span><span class="lz-lnote">from/to = lượt đặt chồng lên [from, to)</span></div>
+  <div class="lz-layer"><span class="lz-lname">Tìm kiếm là tham số riêng</span><span class="lz-lnote">q, có độ dài tối thiểu, không phân biệt dấu</span></div>
+  <div class="lz-layer"><span class="lz-lname">Chỉ thứ phục vụ nhanh được</span><span class="lz-lnote">mỗi bộ lọc là một lời hứa — và con trỏ gắn với truy vấn của nó</span></div>
+</div>
 <ol>
   <li><strong>Mỗi câu hỏi một tham số có tên</strong>, đặt theo trường nó lọc: <code>labId</code>, <code>status</code>. Nhiều tham số kết hợp bằng <strong>AND</strong>.</li>
   <li><strong>Mỗi tham số một kiểu</strong>, kiểm như body (Chương 2). Danh sách giá trị cách nhau bằng dấu phẩy: <code>status=PENDING,CANCELLED</code> nghĩa là "một trong hai".</li>
@@ -1203,6 +1293,12 @@ ORDER BY created_at DESC, id DESC LIMIT 20;</code></pre>
 <h3>Phỏng vấn và đi làm</h3>
 <p><strong>"Em thiết kế bộ lọc thế nào?"</strong> Tham số có tên, có kiểu, được kiểm, kết hợp bằng AND; danh sách cách nhau bằng dấu phẩy; nghĩa của khoảng thời gian rõ ràng; tìm kiếm tách riêng và có độ dài tối thiểu; mỗi bộ lọc công bố có một index; không có ngôn ngữ truy vấn tự do trên API công khai.</p>
 <p><strong>"Client đổi bộ lọc giữa lúc lật trang thì sao?"</strong> Con trỏ không còn mô tả một vị trí trong danh sách đó; gắn con trỏ với truy vấn (dấu vân tay) và trả 400 để client bắt đầu lại từ trang 1.</p>
+
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Google AIP-158 — Pagination — đọc ngày 1/11/2026</span><span class="lc-sub">Giữa các trang, các tham số khác nên giữ nguyên, nếu không API trả INVALID_ARGUMENT — chính là luật “con trỏ gắn với truy vấn của nó”.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
@@ -1361,6 +1457,12 @@ Keep-Alive: timeout=5
 <p>31 026 → 10 778 bytes, about two thirds less, for a list screen that shows only time and status. On a slow mobile network that is the difference you feel.</p>
 
 <h3>include: related data without N+1</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">naive</span><span class="lz-t">1 query for 20 bookings</span><span class="lz-d">+ 20 queries, one lab each = 21</span></div>
+  <div class="lz-step"><span class="lz-k">include=lab</span><span class="lz-t">1 query for bookings</span><span class="lz-d">collect the 3 distinct labIds</span></div>
+  <div class="lz-step"><span class="lz-k">batch</span><span class="lz-t">1 query labs WHERE id IN (…)</span><span class="lz-d">2 queries in total</span></div>
+  <div class="lz-step"><span class="lz-k">join in memory</span><span class="lz-t">attach lab to each booking</span><span class="lz-d">same response, any page size</span></div>
+</div>
 <p>A booking has a <code>labId</code>. To show the lab name, a client could call <code>GET /labs/{id}</code> for every booking — 20 bookings, 20 extra requests. With <code>include=lab</code> the API embeds the lab’s view:</p>
 <pre><code class="language-bash">curl -s 'http://localhost:4000/bookings?include=lab&amp;fields=startAt&amp;limit=2' \\
   -H 'Authorization: Bearer tok_lan'</code></pre>
@@ -1421,6 +1523,12 @@ Time: 0.250 ms</div>
 <h3>In interviews and at work</h3>
 <p><strong>“What is the N+1 problem?”</strong> Fetching a list with one query and then each related item with its own query: N+1 round trips. Fix with a JOIN or a batched <code>IN</code> / <code>ANY</code> query, eager loading in the ORM, or a DataLoader in GraphQL.</p>
 <p><strong>“How do sort and cursors work together?”</strong> The cursor stores the values of the current sort keys plus the tie-breaker, and the query fingerprint includes the sort, so a cursor cannot be replayed under another order.</p>
+
+<a class="link-card" href="https://www.postgresql.org/docs/current/queries-limit.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: PostgreSQL 18 docs — LIMIT and OFFSET — read 1 Nov 2026</span><span class="lc-sub">The same page of the PostgreSQL docs: without an ORDER BY that gives a unique order you get “an unpredictable subset” — why every sort ends with the id tie-breaker.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
@@ -1570,6 +1678,12 @@ Keep-Alive: timeout=5
 <p>31 026 → 10 778 byte, ít hơn khoảng hai phần ba, cho một màn hình danh sách chỉ hiện giờ và trạng thái. Trên mạng di động chậm, đó là khác biệt bạn cảm nhận được.</p>
 
 <h3>include: dữ liệu liên quan mà không N+1</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">ngây thơ</span><span class="lz-t">1 truy vấn cho 20 lượt đặt</span><span class="lz-d">+ 20 truy vấn, mỗi phòng một = 21</span></div>
+  <div class="lz-step"><span class="lz-k">include=lab</span><span class="lz-t">1 truy vấn lượt đặt</span><span class="lz-d">gom 3 labId khác nhau</span></div>
+  <div class="lz-step"><span class="lz-k">theo lô</span><span class="lz-t">1 truy vấn labs WHERE id IN (…)</span><span class="lz-d">tổng cộng 2 truy vấn</span></div>
+  <div class="lz-step"><span class="lz-k">ghép trong bộ nhớ</span><span class="lz-t">gắn phòng vào từng lượt đặt</span><span class="lz-d">cùng câu trả lời, trang lớn mấy cũng vậy</span></div>
+</div>
 <p>Một lượt đặt có <code>labId</code>. Để hiện tên phòng, client có thể gọi <code>GET /labs/{id}</code> cho từng lượt đặt — 20 lượt, 20 request thêm. Với <code>include=lab</code>, API nhúng sẵn view của phòng:</p>
 <pre><code class="language-bash">curl -s 'http://localhost:4000/bookings?include=lab&amp;fields=startAt&amp;limit=2' \\
   -H 'Authorization: Bearer tok_lan'</code></pre>
@@ -1631,6 +1745,12 @@ Time: 0.250 ms</div>
 <p><strong>"Vấn đề N+1 là gì?"</strong> Lấy danh sách bằng một truy vấn rồi lấy từng thứ liên quan bằng truy vấn riêng: N+1 lượt đi-về. Chữa bằng JOIN hoặc một truy vấn gộp <code>IN</code> / <code>ANY</code>, nạp sẵn (eager loading) trong ORM, hoặc DataLoader trong GraphQL.</p>
 <p><strong>"sort và con trỏ phối hợp thế nào?"</strong> Con trỏ lưu giá trị các khoá sắp hiện tại cộng khoá phụ, và dấu vân tay truy vấn có tính cả sort, nên không đem con trỏ dùng lại với thứ tự khác được.</p>
 
+<a class="link-card" href="https://www.postgresql.org/docs/current/queries-limit.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Tài liệu PostgreSQL 18 — LIMIT và OFFSET — đọc ngày 1/11/2026</span><span class="lc-sub">Cùng trang tài liệu PostgreSQL: thiếu ORDER BY cho thứ tự duy nhất thì nhận “một tập con không đoán trước được” — lý do mọi phép sắp kết thúc bằng id phá thế hoà.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm <code>sort</code>, <code>fields</code>, <code>include</code>; tái hiện các output, rồi đi hết lượt đặt với <code>sort=startAt&amp;limit=30</code> và kiểm không trùng.</li>
@@ -1676,6 +1796,18 @@ Time: 0.250 ms</div>
 <p class="lead">Every Monday the lab managers meet to go through broken devices. Today they scroll a spreadsheet; they want <code>GET /issues</code> to give them the list instead — most severe first, filterable, a page at a time, and correct even while students keep reporting. You build it on your own with everything from Chapter 3; a rubric and a real transcript are at the end.</p>
 
 <h3>The request</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">design</span><span class="lz-d">cursor, filters, sort, include for issues</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">build</span><span class="lz-d">one strict query schema, keyset paging</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">prove</span><span class="lz-d">transcript: pages, filters, wrong cursor</span></div>
+  <div class="lz-step"><span class="lz-k">score</span><span class="lz-t">rubric</span><span class="lz-d">10 points, pass at 7</span></div>
+</div>
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Google AIP-158 — Pagination — read 1 Nov 2026</span><span class="lc-sub">The pagination contract this lab implements.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <ul>
   <li>“Show issues <strong>25 at a time</strong> (we never want more than 100 in one go).”</li>
   <li>“Filter by <strong>status</strong>, <strong>severity</strong> and <strong>device</strong>.”</li>
@@ -1931,6 +2063,18 @@ Keep-Alive: timeout=5
 <p class="lead">Thứ Hai nào các quản lý phòng lab cũng họp để rà thiết bị hỏng. Hiện họ cuộn một bảng tính; họ muốn <code>GET /issues</code> làm thay — nặng nhất lên trước, lọc được, từng trang một, và vẫn đúng trong lúc sinh viên tiếp tục báo hỏng. Bạn tự dựng nó bằng mọi thứ của Chương 3; thang chấm và transcript chạy thật ở cuối bài.</p>
 
 <h3>Yêu cầu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">thiết kế</span><span class="lz-d">con trỏ, bộ lọc, sắp xếp, include cho báo hỏng</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">xây</span><span class="lz-d">một schema query chặt, phân trang keyset</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">chứng minh</span><span class="lz-d">transcript: các trang, bộ lọc, con trỏ sai</span></div>
+  <div class="lz-step"><span class="lz-k">chấm</span><span class="lz-t">thang điểm</span><span class="lz-d">10 điểm, đạt từ 7</span></div>
+</div>
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Google AIP-158 — Pagination — đọc ngày 1/11/2026</span><span class="lc-sub">Hợp đồng phân trang mà lab này cài đặt.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <ul>
   <li>"Hiện báo hỏng <strong>mỗi lần 25 cái</strong> (một lượt không bao giờ quá 100)."</li>
   <li>"Lọc theo <strong>trạng thái</strong>, <strong>mức độ</strong> và <strong>thiết bị</strong>."</li>

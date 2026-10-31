@@ -29,6 +29,17 @@ export default {
 <h2>Problem Details (RFC 9457): one error format for the whole API</h2>
 <p class="lead">A client spends more code on errors than on success: it must show the right message, highlight the right field, retry or give up. That is only possible if every error of every endpoint has the same shape. In Chapter 1 LabFlow invented its own shape and it mostly worked — until a request it did not expect turned a client mistake into a 500. In this lesson you find that bug, then move the whole API to the standard error format of the web, RFC 9457, by changing one file.</p>
 
+<div class="callout ok">
+<p><strong>After Chapter 2 you can:</strong></p>
+<ul>
+  <li>return every error in one standard shape (RFC 9457) with a machine-readable code;</li>
+  <li>validate input at the edge and report every field error at once;</li>
+  <li>decide exactly which fields leave the server;</li>
+  <li>serve error messages in the caller’s language without breaking clients.</li>
+</ul>
+<p><strong>Why it matters:</strong> Clients spend most of their code on errors; a predictable error format is what makes an API pleasant — and it closes the holes attackers try first.</p>
+</div>
+
 <h3>Why a standard, if our own shape works?</h3>
 <p>Think of medical records. Every hospital could write diagnoses in its own words, but then a doctor in another city cannot read your file quickly. Shared codes let any doctor act on any record. Errors are the same: if each API invents <code>{"error": …}</code>, <code>{"msg": …}</code>, <code>{"success": false, "code": 17}</code>, every client needs a new parser and every log tool a new rule.</p>
 <p>The IETF published a shared shape for HTTP API errors in March 2016 as RFC 7807, and replaced it in July 2023 with <strong>RFC 9457 “Problem Details for HTTP APIs”</strong> (RFC 9457 says it obsoletes RFC 7807; the shape is the same, the text is clearer). It defines a JSON object, a media type — <code>application/problem+json</code> — and a few rules. Spring Framework 6 supports it natively, many API gateways produce it, and interviewers ask about it.</p>
@@ -89,6 +100,12 @@ Keep-Alive: timeout=5
 <div class="callout warn"><p><strong>Only one problem per response.</strong> RFC 9457 recommends describing the most relevant or urgent problem rather than a “batch” of different ones. A list of field errors is fine — they are all the same type, “the body is invalid”. A 401 and a 404 at the same time is not: answer the first one in your order of checks.</p></div>
 
 <h3>Build it: one file decides every error</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">route</span><span class="lz-t">throws HttpError</span><span class="lz-d">status + code + params</span></div>
+  <div class="lz-step"><span class="lz-k">error middleware</span><span class="lz-t">one place</span><span class="lz-d">also turns parse errors into 400, big bodies into 413</span></div>
+  <div class="lz-step"><span class="lz-k">sendProblem</span><span class="lz-t">builds the body</span><span class="lz-d">type · title · status · detail · instance · code</span></div>
+  <div class="lz-step"><span class="lz-k">client</span><span class="lz-t">reads code</span><span class="lz-d">never parses the human text</span></div>
+</div>
 <p>Create <code>src/problems.js</code>. The <code>TITLES</code> table is the only place where error titles live; <code>typeOf</code> derives the URI from the code; <code>sendProblem</code> writes the response:</p>
 <pre><code class="language-javascript">// problems.js — RFC 9457 Problem Details: MỘT chỗ quyết định một lỗi trông thế nào
 import { STATUS_CODES } from 'node:http';
@@ -383,6 +400,17 @@ console.log(await book('tok_bin', { ...slot, labId: 'lab_4' }));</code></pre>
 <p><strong>“What is the difference between <code>title</code> and <code>detail</code>?”</strong> <code>title</code> describes the kind of problem and is the same every time; <code>detail</code> describes this occurrence. Logs and dashboards group by the first; users and developers read the second.</p>
 <p><strong>“Why not always return 200 with <code>success: false</code>?”</strong> Because every generic tool — <code>fetch</code>’s <code>res.ok</code>, retries, caches, monitoring, load balancers — reads the status line, not your body. Lesson 2.3 measures what breaks.</p>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9457.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9457 — Problem Details for HTTP APIs (Jul 2023) — read 1 Nov 2026</span><span class="lc-sub">The five standard members (type, title, status, detail, instance); type defaults to about:blank. It obsoletes RFC 7807.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc6901.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 6901 — JSON Pointer (Apr 2013) — read 1 Nov 2026</span><span class="lc-sub">The pointer in each field error: "~" is written as ~0 and "/" as ~1 inside a token.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Apply the changes, restart, and reproduce the eight responses above (ignore <code>Date</code>, <code>ETag</code> and <code>createdAt</code>).</li>
@@ -424,6 +452,17 @@ console.log(await book('tok_bin', { ...slot, labId: 'lab_4' }));</code></pre>
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
 <h2>Problem Details (RFC 9457): một định dạng lỗi cho cả API</h2>
 <p class="lead">Một client tốn nhiều code cho lỗi hơn cho thành công: phải hiện đúng thông báo, tô đỏ đúng ô nhập, quyết định thử lại hay bỏ cuộc. Điều đó chỉ làm được khi mọi lỗi của mọi endpoint có <em>cùng một hình dạng</em>. Ở Chương 1, LabFlow tự nghĩ ra một hình dạng lỗi và nó chạy khá ổn — cho tới khi một request không lường trước biến lỗi của client thành lỗi 500. Trong bài này bạn tìm ra bug đó, rồi chuyển cả API sang định dạng lỗi chuẩn của web, RFC 9457, chỉ bằng cách sửa một tệp.</p>
+
+<div class="callout ok">
+<p><strong>Học xong Chương 2 bạn làm được:</strong></p>
+<ul>
+  <li>trả mọi lỗi theo một dạng chuẩn (RFC 9457) kèm mã máy đọc được;</li>
+  <li>kiểm dữ liệu ngay ở cửa và báo mọi lỗi trường một lần;</li>
+  <li>quyết định chính xác trường nào được rời server;</li>
+  <li>trả câu báo lỗi theo ngôn ngữ người gọi mà không làm gãy client.</li>
+</ul>
+<p><strong>Vì sao đáng học:</strong> Phần lớn code của client là xử lý lỗi; một định dạng lỗi đoán trước được làm API dễ dùng — và đóng những lỗ mà kẻ tấn công thử đầu tiên.</p>
+</div>
 
 <h3>Vì sao cần chuẩn, khi hình dạng tự chế vẫn chạy?</h3>
 <p>Hãy nghĩ tới bệnh án. Bệnh viện nào cũng có thể ghi chẩn đoán bằng lời riêng của mình, nhưng khi đó bác sĩ ở thành phố khác không đọc nhanh được hồ sơ của bạn. Bộ mã bệnh dùng chung giúp bác sĩ nào cũng xử lý được hồ sơ nào. Lỗi của API cũng vậy: nếu mỗi API tự chế <code>{"error": …}</code>, <code>{"msg": …}</code>, <code>{"success": false, "code": 17}</code>, thì mỗi client cần một bộ đọc mới và mỗi công cụ log cần một luật mới.</p>
@@ -485,6 +524,12 @@ Keep-Alive: timeout=5
 <div class="callout warn"><p><strong>Mỗi response chỉ một problem.</strong> RFC 9457 khuyên mô tả vấn đề quan trọng hoặc gấp nhất, không gom "một mớ" lỗi khác loại. Một danh sách lỗi từng trường thì được — chúng cùng một loại, "body không hợp lệ". Một lỗi 401 và một lỗi 404 cùng lúc thì không: hãy trả cái đứng trước trong thứ tự kiểm của bạn.</p></div>
 
 <h3>Dựng: một tệp quyết định mọi lỗi</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">route</span><span class="lz-t">ném HttpError</span><span class="lz-d">mã trạng thái + code + tham số</span></div>
+  <div class="lz-step"><span class="lz-k">middleware lỗi</span><span class="lz-t">một chỗ duy nhất</span><span class="lz-d">cũng biến lỗi parse thành 400, body quá lớn thành 413</span></div>
+  <div class="lz-step"><span class="lz-k">sendProblem</span><span class="lz-t">dựng body</span><span class="lz-d">type · title · status · detail · instance · code</span></div>
+  <div class="lz-step"><span class="lz-k">client</span><span class="lz-t">đọc code</span><span class="lz-d">không bao giờ phân tích câu chữ cho người</span></div>
+</div>
 <p>Tạo <code>src/problems.js</code>. Bảng <code>TITLES</code> là nơi duy nhất chứa tiêu đề lỗi; <code>typeOf</code> sinh URI từ mã; <code>sendProblem</code> viết response:</p>
 <pre><code class="language-javascript">// problems.js — RFC 9457 Problem Details: MỘT chỗ quyết định một lỗi trông thế nào
 import { STATUS_CODES } from 'node:http';
@@ -779,6 +824,17 @@ console.log(await book('tok_bin', { ...slot, labId: 'lab_4' }));</code></pre>
 <p><strong>"<code>title</code> khác <code>detail</code> thế nào?"</strong> <code>title</code> mô tả loại lỗi, lần nào cũng giống; <code>detail</code> mô tả lần xảy ra này. Log và dashboard gom theo cái trước; người dùng và lập trình viên đọc cái sau.</p>
 <p><strong>"Sao không luôn trả 200 kèm <code>success: false</code>?"</strong> Vì mọi công cụ dùng chung — <code>res.ok</code> của <code>fetch</code>, cơ chế thử lại, cache, giám sát, load balancer — đọc dòng trạng thái, không đọc body của bạn. Bài 2.3 đo xem cái gì hỏng.</p>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9457.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9457 — Problem Details for HTTP APIs (7/2023) — đọc ngày 1/11/2026</span><span class="lc-sub">Năm thành viên chuẩn (type, title, status, detail, instance); type mặc định là about:blank. Nó thay thế RFC 7807.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc6901.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 6901 — JSON Pointer (4/2013) — đọc ngày 1/11/2026</span><span class="lc-sub">Con trỏ trong mỗi lỗi trường: "~" viết thành ~0 và "/" thành ~1 trong một token.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Áp các thay đổi, khởi động lại, và tái hiện tám response ở trên (bỏ qua <code>Date</code>, <code>ETag</code> và <code>createdAt</code>).</li>
@@ -930,6 +986,12 @@ console.log(await book('tok_bin', { ...slot, labId: 'lab_4' }));</code></pre>
 <p>None of this needs a genius attacker. It is what happens when validation is a scattering of <code>if</code>s written by different people on different days.</p>
 
 <h3>Where each check belongs</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">0 · the door</span><span class="lz-lnote">JSON and not too big? ⇒ 415 / 413 — no data needed</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 · shape (schema)</span><span class="lz-lnote">fields, types, formats, lengths, no extras ⇒ 400 + every field error</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 · business rules</span><span class="lz-lnote">makes sense now? ⇒ 422 / 409 — needs data</span></div>
+  <div class="lz-layer"><span class="lz-lname">3 · database constraints</span><span class="lz-lnote">last line of defence (Chapter 12)</span></div>
+</div>
 <table>
   <thead><tr><th>Layer</th><th>Question</th><th>Needs data?</th><th>Answer</th><th>LabFlow example</th></tr></thead>
   <tbody>
@@ -1385,6 +1447,12 @@ Keep-Alive: timeout=5
 <p><strong>“What is mass assignment?”</strong> Copying client-sent fields into a record without an allow-list, so a client can set fields it should not — role, owner, price. Fix: strict schemas for input, explicit mapping into the record, and server-owned fields (id, owner, status, timestamps) never taken from the body.</p>
 <p><strong>“The front-end already validates, why again?”</strong> Because the API is public to anything that speaks HTTP. Client checks are for user experience; server checks are for correctness and security.</p>
 
+<a class="link-card" href="https://zod.dev/api" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Zod — API reference (objects, strings) — read 1 Nov 2026</span><span class="lc-sub">z.object() strips unknown keys, z.strictObject() rejects them, z.looseObject() keeps them; z.string().trim() is a transform.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Install Zod, add <code>schemas.js</code> and <code>validate.js</code>, wire them in, and replay the six attacks: each must now be refused with the code shown above.</li>
@@ -1527,6 +1595,12 @@ Keep-Alive: timeout=5
 <p>Không vụ nào cần hacker thiên tài. Đó là chuyện xảy ra khi việc kiểm dữ liệu là những <code>if</code> rải rác, do nhiều người viết vào nhiều ngày khác nhau.</p>
 
 <h3>Mỗi phép kiểm thuộc về đâu</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">0 · cửa vào</span><span class="lz-lnote">có phải JSON, không quá lớn? ⇒ 415 / 413 — chưa cần dữ liệu</span></div>
+  <div class="lz-layer"><span class="lz-lname">1 · hình dạng (schema)</span><span class="lz-lnote">trường, kiểu, định dạng, độ dài, không trường lạ ⇒ 400 + mọi lỗi trường</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 · luật nghiệp vụ</span><span class="lz-lnote">lúc này có hợp lý? ⇒ 422 / 409 — cần dữ liệu</span></div>
+  <div class="lz-layer"><span class="lz-lname">3 · ràng buộc CSDL</span><span class="lz-lnote">tuyến phòng thủ cuối (Chương 12)</span></div>
+</div>
 <table>
   <thead><tr><th>Tầng</th><th>Câu hỏi</th><th>Cần tra dữ liệu?</th><th>Trả lời</th><th>Ví dụ LabFlow</th></tr></thead>
   <tbody>
@@ -1982,6 +2056,12 @@ Keep-Alive: timeout=5
 <p><strong>"Mass assignment là gì?"</strong> Chép các trường client gửi vào bản ghi mà không có danh sách cho phép, nên client đặt được thứ không được đặt — vai trò, chủ sở hữu, giá. Cách chữa: schema strict cho dữ liệu vào, ánh xạ tường minh vào bản ghi, và các trường do server sở hữu (id, chủ, status, mốc thời gian) không bao giờ lấy từ body.</p>
 <p><strong>"Front-end kiểm rồi, sao còn kiểm nữa?"</strong> Vì API mở cho bất cứ thứ gì nói được HTTP. Kiểm ở client là cho trải nghiệm; kiểm ở server là cho tính đúng và an toàn.</p>
 
+<a class="link-card" href="https://zod.dev/api" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Zod — tài liệu API (object, string) — đọc ngày 1/11/2026</span><span class="lc-sub">z.object() lặng lẽ bỏ khoá lạ, z.strictObject() từ chối, z.looseObject() giữ lại; z.string().trim() là một phép biến đổi.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Cài Zod, thêm <code>schemas.js</code> và <code>validate.js</code>, lắp vào, rồi chạy lại sáu đòn tấn công: cái nào cũng phải bị từ chối với đúng mã như trên.</li>
@@ -2110,6 +2190,12 @@ Keep-Alive: timeout=5
 <p>All three have the same cause: the response is whatever the internal object happens to be. The fix is to make the response a <em>deliberate</em> shape.</p>
 
 <h3>Rule 1: an allow-list at the exit</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">internal record</span><span class="lz-t">everything</span><span class="lz-d">passwordHash, failedLogins, staffNote…</span></div>
+  <div class="lz-step"><span class="lz-k">view</span><span class="lz-t">allow-list</span><span class="lz-d">only named fields leave the server</span></div>
+  <div class="lz-step"><span class="lz-k">shape</span><span class="lz-t">never changes</span><span class="lz-d">optional fields present, null when empty</span></div>
+  <div class="lz-step"><span class="lz-k">JSON</span><span class="lz-t">collections wrapped</span><span class="lz-d">{ data: [...] } — items are not</span></div>
+</div>
 <p>Create <code>src/views.js</code>: one function per resource that builds the public representation by naming every member. Engineers call this a <strong>DTO</strong> (data transfer object), a serializer, a presenter or a view; the idea is the same — the database shape and the API shape are different things, with a translation between them.</p>
 <pre><code class="language-javascript">// views.js — "cửa ra" của dữ liệu. Chỉ trường có tên ở đây mới rời khỏi server (danh sách CHO PHÉP).
 // Luật LabFlow: trường tuỳ chọn LUÔN có mặt, không có giá trị thì là null — hình dạng không đổi theo thời gian.
@@ -2316,6 +2402,12 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
 <p><strong>“Should we wrap responses?”</strong> Wrap lists so that paging can be added without breaking clients; keep the HTTP status truthful; one documented error shape. An always-200 envelope breaks caches, retries and monitoring.</p>
 <p><strong><code>null</code> or omit?</strong> Either, consistently. LabFlow sends documented optional members always, with <code>null</code> when empty, so the shape never changes over a resource’s life.</p>
 
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Google AIP-158 — Pagination — read 1 Nov 2026</span><span class="lc-sub">Why a list is an object, not a bare array: the response carries the items plus next_page_token — room for paging metadata later.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add <code>views.js</code>, use it in every route of labs, devices, bookings and <code>/me</code>, restart, and reproduce the outputs above.</li>
@@ -2429,6 +2521,12 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
 <p>Cả ba có chung một nguyên nhân: response là bất cứ hình dạng gì object nội bộ tình cờ đang có. Cách chữa là biến response thành một hình dạng <em>có chủ đích</em>.</p>
 
 <h3>Luật 1: danh sách cho phép ở cửa ra</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">bản ghi nội bộ</span><span class="lz-t">mọi thứ</span><span class="lz-d">passwordHash, failedLogins, staffNote…</span></div>
+  <div class="lz-step"><span class="lz-k">view</span><span class="lz-t">danh sách cho phép</span><span class="lz-d">chỉ trường có tên mới rời server</span></div>
+  <div class="lz-step"><span class="lz-k">hình dạng</span><span class="lz-t">không đổi</span><span class="lz-d">trường tuỳ chọn vẫn có, rỗng thì null</span></div>
+  <div class="lz-step"><span class="lz-k">JSON</span><span class="lz-t">danh sách được bọc</span><span class="lz-d">{ data: [...] } — phần tử thì không</span></div>
+</div>
 <p>Tạo <code>src/views.js</code>: mỗi tài nguyên một hàm, dựng bản biểu diễn công khai bằng cách gọi tên từng trường. Kỹ sư gọi thứ này là <strong>DTO</strong> (data transfer object — đối tượng chuyển dữ liệu), serializer, presenter hay view; ý tưởng là một — hình dạng trong cơ sở dữ liệu và hình dạng của API là hai thứ khác nhau, có một bước dịch ở giữa.</p>
 <pre><code class="language-javascript">// views.js — "cửa ra" của dữ liệu. Chỉ trường có tên ở đây mới rời khỏi server (danh sách CHO PHÉP).
 // Luật LabFlow: trường tuỳ chọn LUÔN có mặt, không có giá trị thì là null — hình dạng không đổi theo thời gian.
@@ -2635,6 +2733,12 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
 <p><strong>"Có nên bọc response không?"</strong> Bọc danh sách để thêm được phân trang mà không làm vỡ client; giữ mã HTTP trung thực; một hình dạng lỗi có tài liệu. Envelope luôn trả 200 làm hỏng cache, cơ chế thử lại và giám sát.</p>
 <p><strong><code>null</code> hay bỏ hẳn?</strong> Cái nào cũng được, miễn nhất quán. LabFlow luôn gửi các trường tuỳ chọn có trong tài liệu, rỗng thì <code>null</code>, nên hình dạng không bao giờ đổi trong đời một tài nguyên.</p>
 
+<a class="link-card" href="https://google.aip.dev/158" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Google AIP-158 — Pagination — đọc ngày 1/11/2026</span><span class="lc-sub">Vì sao danh sách là một object, không phải mảng trần: câu trả lời mang các phần tử cộng next_page_token — chỗ trống cho thông tin phân trang sau này.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm <code>views.js</code>, dùng nó ở mọi route của labs, devices, bookings và <code>/me</code>, khởi động lại, và tái hiện các output ở trên.</li>
@@ -2695,6 +2799,11 @@ app.set('json spaces', process.env.NODE_ENV === 'production' ? 0 : 2);</code></p
 <p>This split is why lesson 2.1 kept <code>code</code> and <code>type</code> stable and why the client in 2.1 never read <code>title</code> except as a fallback.</p>
 
 <h3>Two places to translate — LabFlow uses both</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Never translated</span><span class="lz-lnote">code, type, field names, enum values, ids — machines read these</span></div>
+  <div class="lz-layer"><span class="lz-lname">Translated by the server</span><span class="lz-lnote">title and detail of a problem, by Accept-Language ⇒ Content-Language</span></div>
+  <div class="lz-layer"><span class="lz-lname">Translated by the client</span><span class="lz-lnote">its own UI, keyed by code — the server’s text is a fallback</span></div>
+</div>
 <p><strong>In the client, from the code.</strong> A mobile or web app keeps its own text for every error code it knows (<code>BOOKING_CONFLICT</code> → “Phòng đã có người đặt”). The app’s wording matches the rest of its screens, works offline, and changes without a server release. This is the main path for LabFlow’s own apps.</p>
 <p><strong>On the server, from <code>Accept-Language</code>.</strong> For everything that has no translation table — a third-party developer’s script, a command-line tool, a log line, an error code the app is too old to know — the server sends <code>title</code> and <code>detail</code> in the requested language. That is what we build now.</p>
 
@@ -3099,6 +3208,17 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
 <p><strong>“A search for a Vietnamese name sometimes finds nothing. Why?”</strong> Unicode normalisation: the stored text and the query are in different forms (NFC vs NFD). Normalise to NFC on input; for accent-insensitive search, fold both sides — and handle đ/Đ separately.</p>
 <p><strong>“Should the API format dates for the user?”</strong> No: send ISO 8601 in UTC and let the client format with the user’s locale and time zone (<code>Intl.DateTimeFormat</code>).</p>
 
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept-Language" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: MDN — Accept-Language — read 1 Nov 2026</span><span class="lc-sub">Quality values (q, default 1) rank the languages; the header is only a hint — never override an explicit user choice, report the chosen language in Content-Language.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://www.unicode.org/reports/tr15/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Unicode UAX #15 — Normalization Forms (rev. 58, Aug 2026) — read 1 Nov 2026</span><span class="lc-sub">NFC = canonical decomposition followed by canonical composition: two spellings of the same letter become one sequence — why LabFlow normalises Vietnamese text.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Refactor your <code>throw</code>s to code + parameters, add <code>messages.js</code> and <code>i18n.js</code>, and reproduce the outputs above.</li>
@@ -3150,6 +3270,11 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
 <p>Chính sự tách bạch này là lý do bài 2.1 giữ <code>code</code> và <code>type</code> ổn định, và client ở bài 2.1 không bao giờ đọc <code>title</code> trừ khi để dự phòng.</p>
 
 <h3>Hai nơi để dịch — LabFlow dùng cả hai</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Không bao giờ dịch</span><span class="lz-lnote">code, type, tên trường, giá trị enum, id — máy đọc những thứ này</span></div>
+  <div class="lz-layer"><span class="lz-lname">Server dịch</span><span class="lz-lnote">title và detail của lỗi, theo Accept-Language ⇒ Content-Language</span></div>
+  <div class="lz-layer"><span class="lz-lname">Client dịch</span><span class="lz-lnote">giao diện của nó, theo code — câu của server chỉ là dự phòng</span></div>
+</div>
 <p><strong>Ở client, dựa vào mã.</strong> App di động hay web giữ câu chữ riêng cho từng mã lỗi nó biết (<code>BOOKING_CONFLICT</code> → "Phòng đã có người đặt"). Câu chữ của app khớp với các màn hình khác, chạy được khi mất mạng, và đổi được mà không cần phát hành server. Đây là đường chính cho các app của chính LabFlow.</p>
 <p><strong>Ở server, dựa vào <code>Accept-Language</code>.</strong> Với mọi thứ không có bảng dịch — script của lập trình viên bên thứ ba, công cụ dòng lệnh, một dòng log, một mã lỗi mà app quá cũ chưa biết — server gửi <code>title</code> và <code>detail</code> bằng ngôn ngữ được yêu cầu. Đó là thứ ta dựng bây giờ.</p>
 
@@ -3554,6 +3679,17 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
 <p><strong>"Tìm một tên tiếng Việt thỉnh thoảng không ra. Vì sao?"</strong> Chuẩn hoá Unicode: chữ đã lưu và chữ tìm ở hai dạng khác nhau (NFC và NFD). Chuẩn hoá về NFC khi nhận vào; để tìm không phân biệt dấu thì gấp cả hai phía — và xử lý riêng đ/Đ.</p>
 <p><strong>"API có nên định dạng ngày giờ cho người dùng không?"</strong> Không: gửi ISO 8601 theo UTC và để client định dạng theo locale và múi giờ của người dùng (<code>Intl.DateTimeFormat</code>).</p>
 
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Accept-Language" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: MDN — Accept-Language — đọc ngày 1/11/2026</span><span class="lc-sub">Trọng số q (mặc định 1) xếp hạng ngôn ngữ; header chỉ là gợi ý — không bao giờ đè lựa chọn rõ ràng của người dùng, báo ngôn ngữ đã chọn ở Content-Language.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://www.unicode.org/reports/tr15/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Unicode UAX #15 — Normalization Forms (bản 58, 8/2026) — đọc ngày 1/11/2026</span><span class="lc-sub">NFC = tách chính tắc rồi ghép chính tắc: hai cách viết của cùng một chữ thành một chuỗi — lý do LabFlow chuẩn hoá chữ tiếng Việt.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Đổi các <code>throw</code> sang mã + tham số, thêm <code>messages.js</code> và <code>i18n.js</code>, rồi tái hiện các output ở trên.</li>
@@ -3600,6 +3736,18 @@ const fold = (s) =&gt; s.normalize('NFD').replace(/\\p{M}/gu, '').replace(/đ/g,
 <p class="lead">The issue reports you built in Lab 1 are now the oldest code in LabFlow: hand-written checks, raw records in responses, half-Vietnamese errors. In this lab you bring them up to the standard of Chapter 2 on your own — schemas at the edge, problem details in two languages, views with a stable shape — and add one new rule that needs everything you learned. A rubric tells you how it will be marked; the reference solution and a real transcript are at the end.</p>
 
 <h3>The request</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">design</span><span class="lz-d">every error the issue endpoints can return, with codes</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">build</span><span class="lz-d">strict schema, problem+json, 404 before 400</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">prove</span><span class="lz-d">real transcript of each error</span></div>
+  <div class="lz-step"><span class="lz-k">score</span><span class="lz-t">rubric</span><span class="lz-d">10 points, pass at 7</span></div>
+</div>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9457.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9457 — Problem Details for HTTP APIs (Jul 2023) — read 1 Nov 2026</span><span class="lc-sub">The format every error of this lab must follow.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <ul>
   <li>“A report must have a <strong>title</strong> of 3 to 120 characters, a <strong>severity</strong> (<code>LOW</code>, <code>MEDIUM</code>, <code>HIGH</code>) and may have a <strong>description</strong> of up to 1000 characters. Anything else in the body is a mistake and must be refused.”</li>
   <li>“When a manager resolves a report, they may write a short <strong>resolution</strong> (up to 500 characters).”</li>
@@ -3963,6 +4111,18 @@ Keep-Alive: timeout=5</div>
 <p class="lead">Phần báo hỏng bạn dựng ở Lab 1 giờ là đoạn code cũ nhất của LabFlow: kiểm tra viết tay, response trả bản ghi thô, lỗi nửa tiếng Việt. Trong lab này bạn tự nâng nó lên chuẩn của Chương 2 — schema ở cửa, problem details hai thứ tiếng, view với hình dạng ổn định — và thêm một luật mới cần tới mọi thứ đã học. Thang chấm nói rõ cách chấm; lời giải mẫu và transcript chạy thật ở cuối bài.</p>
 
 <h3>Yêu cầu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">thiết kế</span><span class="lz-d">mọi lỗi các endpoint báo hỏng có thể trả, kèm code</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">xây</span><span class="lz-d">schema chặt, problem+json, 404 trước 400</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">chứng minh</span><span class="lz-d">transcript thật của từng lỗi</span></div>
+  <div class="lz-step"><span class="lz-k">chấm</span><span class="lz-t">thang điểm</span><span class="lz-d">10 điểm, đạt từ 7</span></div>
+</div>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9457.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9457 — Problem Details for HTTP APIs (7/2023) — đọc ngày 1/11/2026</span><span class="lc-sub">Định dạng mà mọi lỗi của lab này phải theo.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <ul>
   <li>"Báo hỏng phải có <strong>tiêu đề</strong> (title) 3 tới 120 ký tự, một <strong>mức độ</strong> (severity: <code>LOW</code>, <code>MEDIUM</code>, <code>HIGH</code>) và có thể có <strong>mô tả</strong> (description) tối đa 1000 ký tự. Thứ gì khác trong body là nhầm lẫn và phải bị từ chối."</li>
   <li>"Khi quản lý xử lý xong một báo hỏng, họ có thể ghi một dòng <strong>cách xử lý</strong> (resolution) ngắn, tối đa 500 ký tự."</li>

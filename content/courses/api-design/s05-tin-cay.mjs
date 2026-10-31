@@ -30,6 +30,17 @@ export default {
 <h2>Idempotency keys for POST</h2>
 <p class="lead">An taps “Book” in the lab basement where the Wi-Fi is weak. The spinner turns, the app says “network error”, An taps again. Did the first tap book the room? The app cannot know: the request may have died on the way <em>in</em> — or on the way <em>out</em>, after the server had already done the work. This lesson reproduces exactly that on LabFlow and fixes it with an <code>Idempotency-Key</code>.</p>
 
+<div class="callout ok">
+<p><strong>After Chapter 5 you can:</strong></p>
+<ul>
+  <li>make a POST safe to retry with an Idempotency-Key;</li>
+  <li>write a client that retries correctly: timeout, backoff, jitter, Retry-After;</li>
+  <li>protect the API with a token-bucket rate limit and standard headers;</li>
+  <li>stop lost updates with ETags and If-Match.</li>
+</ul>
+<p><strong>Why it matters:</strong> Networks drop responses and users double-click: reliability is designed into the contract, not hoped for — and it is a favourite interview topic.</p>
+</div>
+
 <h3>Why only POST needs this</h3>
 <p>Lesson 1.2: GET, PUT and DELETE are <strong>idempotent</strong> — sending them twice leaves the server in the same state as sending them once, so a client may simply repeat them. POST creates something new each time; repeating it blindly can book twice, charge twice, report twice. An <strong>idempotency key</strong> makes a POST repeatable: the client invents a unique key for one intention (“book lab 3 on 4 January, 08:00”) and sends it with every attempt; the server does the work once and answers every retry with the same result.</p>
 <p>The header is being standardised: <code>draft-ietf-httpapi-idempotency-key-header-08</code> (22 October 2026, an active Internet-Draft, not yet an RFC) defines <code>Idempotency-Key: "8e03978e-40d5-43e8-bc93-6894a57f9324"</code> — a quoted string — and recommends <strong>400</strong> when a required key is missing, <strong>422</strong> when a key is reused with a different payload, and <strong>409</strong> while the first request with that key is still running. Stripe has used the same header for years; its docs keep keys for at least 24 hours.</p>
@@ -67,6 +78,14 @@ curl exit=52</div>
 <p>The first attempt ended in <code>curl: (52) Empty reply from server</code> — and yet <code>bk_9</code> exists. The retry got <strong>409 BOOKING_CONFLICT with bk_9</strong>: An is told the room is taken — by her own booking. Here a business rule happened to catch the duplicate with a misleading message; an endpoint without such a rule (a payment, a message, a report with a new title) would simply do the work twice.</p>
 
 <h3>Build it: one middleware</h3>
+<div class="lz-map">
+  <div class="lz-stage">POST /bookings with Idempotency-Key: k-1</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">First request</div><div class="lz-nsub">key unknown ⇒ mark “running”, run the handler</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Same key while running</div><div class="lz-nsub">409 + Retry-After — do not run twice</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Response written</div><div class="lz-nsub">on connection close: store status + body (2xx only)</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Retry with the same key and body</div><div class="lz-nsub">replay the stored 201 + Idempotent-Replayed: true</div></div></div>
+  <div class="lz-node"><span class="lz-badge">5</span><div class="lz-nbody"><div class="lz-ntitle">Same key, different body</div><div class="lz-nsub">422 — a key means one intention</div></div></div>
+</div>
 <pre><code class="language-javascript">// idempotency.js — bài 5.1: POST lặp lại an toàn bằng header Idempotency-Key
 // (draft-ietf-httpapi-idempotency-key-header-08, 22/10/2026: 400 thiếu khoá · 422 khoá dùng lại với body khác · 409 đang xử lý)
 import { createHash } from 'node:crypto';
@@ -163,6 +182,17 @@ Retry-After: 1
 <h3>In interviews and at work</h3>
 <p><strong>“How do you prevent double charges when clients retry?”</strong> Idempotency keys: client-generated per intention, stored per caller with a request fingerprint and the result, replayed on retry, 422 on mismatch, 409 while in progress, expired after a day.</p>
 
+<a class="link-card" href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: IETF draft — The Idempotency-Key HTTP Header Field (-08, 22 Oct 2026) — read 1 Nov 2026</span><span class="lc-sub">Active working-group draft: reusing a key with a different payload SHOULD get 422; a retry while the first request is still processing SHOULD get 409.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://docs.stripe.com/api/idempotent_requests" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Stripe API reference — Idempotent requests — read 1 Nov 2026</span><span class="lc-sub">Stripe API v1: keys up to 255 characters, pruned after at least 24 hours, parameters compared with the original request; every POST accepts a key, GET and DELETE do not need one.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add <code>chaos.js</code> and <code>idempotent()</code>; reproduce the four runs.</li>
@@ -194,6 +224,17 @@ Retry-After: 1
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
 <h2>Idempotency key cho POST</h2>
 <p class="lead">An bấm “Đặt phòng” dưới tầng hầm phòng lab, nơi Wi-Fi yếu. Vòng xoay quay, app báo “lỗi mạng”, An bấm lại. Lần bấm đầu đã đặt được chưa? App không thể biết: request có thể chết trên đường <em>đi</em> — hoặc trên đường <em>về</em>, sau khi server đã làm xong việc. Bài này tái hiện đúng tình huống đó trên LabFlow và sửa bằng <code>Idempotency-Key</code>.</p>
+
+<div class="callout ok">
+<p><strong>Học xong Chương 5 bạn làm được:</strong></p>
+<ul>
+  <li>làm một POST gửi lại an toàn bằng Idempotency-Key;</li>
+  <li>viết client thử lại đúng cách: timeout, lùi dần, jitter, Retry-After;</li>
+  <li>bảo vệ API bằng giới hạn tần suất xô token và header chuẩn;</li>
+  <li>chặn mất cập nhật bằng ETag và If-Match.</li>
+</ul>
+<p><strong>Vì sao đáng học:</strong> Mạng làm rơi câu trả lời và người dùng bấm hai lần: độ tin cậy được thiết kế vào hợp đồng, không phải trông chờ — và là chủ đề phỏng vấn rất hay gặp.</p>
+</div>
 
 <h3>Vì sao chỉ POST cần thứ này</h3>
 <p>Bài 1.2: GET, PUT và DELETE là <strong>idempotent</strong> (gửi hai lần thì server ở cùng trạng thái như gửi một lần), nên client cứ gửi lại. POST mỗi lần tạo ra cái mới; gửi lại mù quáng có thể đặt hai lần, trừ tiền hai lần, báo hỏng hai lần. <strong>Idempotency key</strong> (khoá lặp-an-toàn) làm POST gửi lại được: client tự tạo một khoá duy nhất cho một ý định (“đặt phòng 3 ngày 4/1, 08:00”) và gửi kèm mọi lần thử; server làm việc một lần và trả cùng một kết quả cho mọi lần thử lại.</p>
@@ -232,6 +273,14 @@ curl exit=52</div>
 <p>Lần đầu kết thúc bằng <code>curl: (52) Empty reply from server</code> — vậy mà <code>bk_9</code> đã tồn tại. Lần thử lại nhận <strong>409 BOOKING_CONFLICT với bk_9</strong>: An được báo phòng đã có người đặt — chính là lượt của cô. Ở đây một luật nghiệp vụ tình cờ bắt được bản trùng, với thông báo gây hiểu nhầm; endpoint không có luật như vậy (thanh toán, tin nhắn, báo hỏng với tiêu đề mới) sẽ đơn giản là làm hai lần.</p>
 
 <h3>Dựng: một middleware</h3>
+<div class="lz-map">
+  <div class="lz-stage">POST /bookings với Idempotency-Key: k-1</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Request đầu tiên</div><div class="lz-nsub">khoá chưa biết ⇒ đánh dấu “đang chạy”, chạy handler</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Cùng khoá khi đang chạy</div><div class="lz-nsub">409 + Retry-After — không chạy hai lần</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Đã trả lời</div><div class="lz-nsub">khi kết nối đóng: lưu mã + body (chỉ 2xx)</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Gửi lại cùng khoá, cùng body</div><div class="lz-nsub">phát lại 201 đã lưu + Idempotent-Replayed: true</div></div></div>
+  <div class="lz-node"><span class="lz-badge">5</span><div class="lz-nbody"><div class="lz-ntitle">Cùng khoá, khác body</div><div class="lz-nsub">422 — một khoá là một ý định</div></div></div>
+</div>
 <pre><code class="language-javascript">// idempotency.js — bài 5.1: POST lặp lại an toàn bằng header Idempotency-Key
 // (draft-ietf-httpapi-idempotency-key-header-08, 22/10/2026: 400 thiếu khoá · 422 khoá dùng lại với body khác · 409 đang xử lý)
 import { createHash } from 'node:crypto';
@@ -328,6 +377,17 @@ Retry-After: 1
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“Chống trừ tiền hai lần khi client thử lại thế nào?”</strong> Idempotency key: client tạo theo từng ý định, server lưu theo người gọi kèm dấu vân tay request và kết quả, phát lại khi thử lại, 422 khi lệch, 409 khi đang chạy, hết hạn sau một ngày.</p>
 
+<a class="link-card" href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Bản nháp IETF — The Idempotency-Key HTTP Header Field (-08, 22/10/2026) — đọc ngày 1/11/2026</span><span class="lc-sub">Bản nháp đang hoạt động của nhóm làm việc: dùng lại khoá với payload khác NÊN nhận 422; gửi lại khi request đầu còn đang xử lý NÊN nhận 409.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://docs.stripe.com/api/idempotent_requests" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Stripe API reference — Idempotent requests — đọc ngày 1/11/2026</span><span class="lc-sub">Stripe API v1: khoá tối đa 255 ký tự, xoá sau ít nhất 24 giờ, tham số được so với request gốc; mọi POST nhận khoá, GET và DELETE không cần.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm <code>chaos.js</code> và <code>idempotent()</code>; chạy lại bốn lần thử.</li>
@@ -370,6 +430,12 @@ Retry-After: 1
 <p class="lead">5.1 made retrying a POST safe. This lesson decides <em>when</em> and <em>how often</em> to retry. Retrying badly is not harmless: fifty apps that all retry every half second after an outage can keep a recovering server down. We write one client function — timeout, exponential backoff, jitter, <code>Retry-After</code> — and measure three retry policies against a LabFlow that has just come back from an outage.</p>
 
 <h3>Three rules before any code</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">try</span><span class="lz-t">with a timeout</span><span class="lz-d">never wait forever</span></div>
+  <div class="lz-step"><span class="lz-k">fail?</span><span class="lz-t">network, 5xx, 429</span><span class="lz-d">not 400/401/403/404/409/422</span></div>
+  <div class="lz-step"><span class="lz-k">wait</span><span class="lz-t">Retry-After, else backoff × jitter</span><span class="lz-d">spread the herd out</span></div>
+  <div class="lz-step"><span class="lz-k">retry</span><span class="lz-t">the same Idempotency-Key</span><span class="lz-d">stop after N attempts</span></div>
+</div>
 <ol>
   <li><strong>Every call has a timeout.</strong> Without one, a hung connection hangs your app; <code>fetch</code> has no default timeout, so pass <code>AbortSignal.timeout(ms)</code>.</li>
   <li><strong>Retry only what can succeed later and is safe to repeat.</strong> Network errors, timeouts, 408, 429, 500, 502, 503, 504 — yes. 400, 401, 403, 404, 409, 422 — no: the same request will fail the same way. And a POST only with an <code>Idempotency-Key</code>.</li>
@@ -483,6 +549,12 @@ mỗi 100 ms: 75 34 18 13 14 10 9 8 8 8 7 6 4 3 2 1 4 7 2 5 1 1 0 1 2 0 0 0 1 0 
 <h3>In interviews and at work</h3>
 <p><strong>“How do you retry calls to another service?”</strong> Timeout on every call; retry only transient errors and only idempotent operations (or POST with an idempotency key); exponential backoff with a cap and jitter; honour Retry-After; limit the number of attempts; retry in one layer.</p>
 
+<a class="link-card" href="https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Amazon Builders’ Library — Timeouts, retries, and backoff with jitter (Marc Brooker, Dec 2019) — read 1 Nov 2026</span><span class="lc-sub">Retries at every layer multiply load on a struggling service; “jitter adds some amount of randomness to the backoff to spread the retries around in time.”</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Reproduce the three herd runs; add a fourth policy “equal jitter” (half fixed, half random) and compare.</li>
@@ -517,6 +589,12 @@ mỗi 100 ms: 75 34 18 13 14 10 9 8 8 8 7 6 4 3 2 1 4 7 2 5 1 1 0 1 2 0 0 0 1 0 
 <p class="lead">Bài 5.1 làm cho việc gửi lại POST trở nên an toàn. Bài này quyết định <em>khi nào</em> và <em>bao lâu một lần</em> thì thử lại. Thử lại tệ không vô hại: năm mươi app cùng thử lại mỗi nửa giây sau một sự cố có thể đè chết server vừa gượng dậy. Ta viết một hàm client — timeout, lùi dần theo cấp số nhân, jitter, <code>Retry-After</code> — và đo ba chính sách thử lại trên một LabFlow vừa qua sự cố.</p>
 
 <h3>Ba luật trước khi viết code</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">thử</span><span class="lz-t">có giới hạn thời gian</span><span class="lz-d">không bao giờ chờ mãi</span></div>
+  <div class="lz-step"><span class="lz-k">hỏng?</span><span class="lz-t">mạng, 5xx, 429</span><span class="lz-d">không phải 400/401/403/404/409/422</span></div>
+  <div class="lz-step"><span class="lz-k">chờ</span><span class="lz-t">Retry-After, nếu không thì lùi dần × jitter</span><span class="lz-d">rải đám đông ra</span></div>
+  <div class="lz-step"><span class="lz-k">thử lại</span><span class="lz-t">cùng Idempotency-Key</span><span class="lz-d">dừng sau N lần</span></div>
+</div>
 <ol>
   <li><strong>Lời gọi nào cũng có timeout</strong> (thời gian chờ tối đa). Không có thì một kết nối treo làm treo cả app; <code>fetch</code> không có timeout mặc định, nên phải truyền <code>AbortSignal.timeout(ms)</code>.</li>
   <li><strong>Chỉ thử lại thứ có thể thành công về sau và an toàn khi lặp lại.</strong> Lỗi mạng, hết giờ, 408, 429, 500, 502, 503, 504 — có. 400, 401, 403, 404, 409, 422 — không: gửi lại y hệt thì hỏng y hệt. Còn POST thì chỉ khi có <code>Idempotency-Key</code>.</li>
@@ -630,6 +708,12 @@ mỗi 100 ms: 75 34 18 13 14 10 9 8 8 8 7 6 4 3 2 1 4 7 2 5 1 1 0 1 2 0 0 0 1 0 
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“Thử lại lời gọi sang dịch vụ khác thế nào?”</strong> Timeout cho mọi lời gọi; chỉ thử lại lỗi tạm thời và thao tác idempotent (hoặc POST có idempotency key); lùi dần theo cấp số nhân có trần và jitter; tôn trọng Retry-After; giới hạn số lần; chỉ thử lại ở một tầng.</p>
 
+<a class="link-card" href="https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Amazon Builders’ Library — Timeouts, retries, and backoff with jitter (Marc Brooker, 12/2019) — đọc ngày 1/11/2026</span><span class="lc-sub">Mỗi tầng tự thử lại làm tải nhân lên ở dịch vụ đang gặp khó; “jitter thêm một chút ngẫu nhiên vào thời gian lùi để rải các lần thử lại theo thời gian.”</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Chạy lại ba lần đo; thêm chính sách thứ tư “equal jitter” (nửa cố định, nửa ngẫu nhiên) rồi so sánh.</li>
@@ -673,6 +757,12 @@ mỗi 100 ms: 75 34 18 13 14 10 9 8 8 8 7 6 4 3 2 1 4 7 2 5 1 1 0 1 2 0 0 0 1 0 
 <p class="lead">5.2 taught clients to back off politely. Not every client is polite: a buggy script books in a loop, a scraper reads every lab every second, someone guesses passwords. A <strong>rate limit</strong> is the server deciding how much each caller may do per unit of time, and saying so in headers. This lesson builds a token bucket, adds the standard-track <code>RateLimit</code> headers and 429, and then finds the bug that breaks most rate limiters in production: running behind a reverse proxy.</p>
 
 <h3>The token bucket</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">bucket</span><span class="lz-t">capacity 5</span><span class="lz-d">one per user (bookingLimit)</span></div>
+  <div class="lz-step"><span class="lz-k">refill</span><span class="lz-t">5 tokens per 60 s</span><span class="lz-d">one token every 12 s</span></div>
+  <div class="lz-step"><span class="lz-k">request</span><span class="lz-t">takes one token</span><span class="lz-d">RateLimit: r = remaining, t = seconds</span></div>
+  <div class="lz-step"><span class="lz-k">empty</span><span class="lz-t">429 + Retry-After</span><span class="lz-d">until one token is back</span></div>
+</div>
 <p>Picture a bucket that holds <em>capacity</em> tokens and is refilled at a steady rate. Each request takes one token; an empty bucket means “wait”. LabFlow: 5 bookings per user per 60 seconds — a refill of one token every 12 seconds, with bursts of up to 5 allowed. Compared with a fixed window (“5 per calendar minute”), a bucket has no edge where 10 requests fit into two seconds across a minute boundary.</p>
 <pre><code class="language-javascript">// rateLimit.js — bài 5.3: giới hạn tần suất bằng "xô token" (token bucket)
 // Header theo draft-ietf-httpapi-ratelimit-headers-11 (23/05/2026): RateLimit-Policy (q, w) + RateLimit (r, t); hết lượt ⇒ 429 + Retry-After
@@ -802,6 +892,12 @@ for (const [port, clientIp] of [[8081, '203.0.113.10'], [8082, '198.51.100.7']])
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc6585.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 6585 — Additional HTTP Status Codes (Apr 2012) — read 1 Nov 2026</span><span class="lc-sub">429 Too Many Requests: “the user has sent too many requests in a given amount of time”; the response MAY include Retry-After.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add both limiters; reproduce the outputs, including the three proxy settings.</li>
@@ -836,6 +932,12 @@ for (const [port, clientIp] of [[8081, '203.0.113.10'], [8082, '198.51.100.7']])
 <p class="lead">Bài 5.2 dạy client lùi lại cho lịch sự. Không phải client nào cũng lịch sự: một script lỗi đặt phòng liên tục, một con bot đọc mọi phòng mỗi giây, ai đó dò mật khẩu. <strong>Rate limit</strong> (giới hạn tần suất) là server quyết định mỗi người gọi được làm bao nhiêu trong một khoảng thời gian, và nói rõ bằng header. Bài này dựng một xô token, thêm header <code>RateLimit</code> đang được chuẩn hoá và mã 429, rồi tìm ra lỗi làm hỏng phần lớn bộ giới hạn ở production: chạy sau reverse proxy.</p>
 
 <h3>Xô token</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">xô</span><span class="lz-t">sức chứa 5</span><span class="lz-d">mỗi người dùng một xô (bookingLimit)</span></div>
+  <div class="lz-step"><span class="lz-k">rót</span><span class="lz-t">5 token mỗi 60 giây</span><span class="lz-d">cứ 12 giây một token</span></div>
+  <div class="lz-step"><span class="lz-k">request</span><span class="lz-t">lấy một token</span><span class="lz-d">RateLimit: r = còn lại, t = số giây</span></div>
+  <div class="lz-step"><span class="lz-k">cạn</span><span class="lz-t">429 + Retry-After</span><span class="lz-d">tới khi có lại một token</span></div>
+</div>
 <p>Hình dung một cái xô chứa tối đa <em>capacity</em> token và được rót lại đều đặn. Mỗi request lấy một token; xô rỗng nghĩa là “chờ”. LabFlow: mỗi người 5 lượt đặt trong 60 giây — cứ 12 giây rót lại một token, cho phép dồn tối đa 5 lần liền. So với cửa sổ cố định (“5 lần mỗi phút lịch”), xô không có cái mép nơi 10 request lọt qua trong hai giây quanh ranh giới phút.</p>
 <pre><code class="language-javascript">// rateLimit.js — bài 5.3: giới hạn tần suất bằng "xô token" (token bucket)
 // Header theo draft-ietf-httpapi-ratelimit-headers-11 (23/05/2026): RateLimit-Policy (q, w) + RateLimit (r, t); hết lượt ⇒ 429 + Retry-After
@@ -965,6 +1067,12 @@ for (const [port, clientIp] of [[8081, '203.0.113.10'], [8082, '198.51.100.7']])
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc6585.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 6585 — Additional HTTP Status Codes (4/2012) — đọc ngày 1/11/2026</span><span class="lc-sub">429 Too Many Requests: “người dùng đã gửi quá nhiều request trong một khoảng thời gian”; câu trả lời CÓ THỂ kèm Retry-After.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm cả hai bộ giới hạn; chạy lại các output, gồm cả ba thiết lập proxy.</li>
@@ -1026,6 +1134,13 @@ ETag: "dev_3-v1"</div>
 <p>Both PATCHes answered 200. The final record has the phone’s note; “memory card replaced” is gone, and nobody was told. Every API where two people can edit the same resource has this bug until it is designed away.</p>
 
 <h3>Optimistic locking with ETags</h3>
+<div class="lz-map">
+  <div class="lz-stage">two windows edit dev_3</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Laptop and phone both GET dev_3</div><div class="lz-nsub">ETag: "dev_3-v1"</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Laptop PATCH with If-Match: "dev_3-v1"</div><div class="lz-nsub">200, version bumped ⇒ ETag "dev_3-v2"</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Phone PATCH with If-Match: "dev_3-v1"</div><div class="lz-nsub">412 Precondition Failed + currentETag</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Phone re-reads, merges, retries</div><div class="lz-nsub">If-Match: "dev_3-v2" ⇒ 200 — nothing lost</div></div></div>
+</div>
 <p>Instead of locking a record while someone edits it (pessimistic), we let everyone edit and check at save time that nobody changed it in between (<strong>optimistic</strong>). The tool is a version tag: each device record gets a <code>version</code>, and the server sends it as a <strong>strong ETag</strong> (RFC 9110 §8.8.3). A client that wants to save sends the tag it based its edit on in <code>If-Match</code>; if the record has moved on, the server answers <strong>412</strong> and changes nothing.</p>
 <pre><code class="language-javascript">// concurrency.js — bài 5.4: khoá lạc quan bằng ETag + If-Match (RFC 9110 §8.8.3, §13.1.1)
 import { HttpError } from './http.js';
@@ -1121,6 +1236,17 @@ ETag: "dev_3-v3"</div>
 <h3>In interviews and at work</h3>
 <p><strong>“Two users edit the same record. What happens?”</strong> Without protection the last write wins silently. Optimistic locking: a version per record, exposed as an ETag, sent back in If-Match, 412 on mismatch, update guarded by <code>WHERE version = …</code>.</p>
 
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Conditional_requests" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: MDN — HTTP conditional requests — read 1 Nov 2026</span><span class="lc-sub">Optimistic locking with If-Match: an obsolete ETag ⇒ 412 Precondition Failed, then the client starts again or shows a diff; If-None-Match ⇒ 304 Not Modified for caches.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9110 — HTTP Semantics (June 2022) — read 1 Nov 2026</span><span class="lc-sub">§13 Conditional Requests — the standard behind If-Match, If-None-Match, 412 and 304.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add ETags to devices; reproduce both experiments.</li>
@@ -1173,6 +1299,13 @@ ETag: "dev_3-v1"</div>
 <p>Cả hai PATCH đều trả 200. Bản ghi cuối mang ghi chú của điện thoại; “đã thay thẻ nhớ” biến mất, và không ai được báo. API nào cho hai người sửa cùng một tài nguyên cũng mang lỗi này cho tới khi được thiết kế để loại bỏ nó.</p>
 
 <h3>Khoá lạc quan bằng ETag</h3>
+<div class="lz-map">
+  <div class="lz-stage">hai cửa sổ cùng sửa dev_3</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Laptop và điện thoại cùng GET dev_3</div><div class="lz-nsub">ETag: "dev_3-v1"</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Laptop PATCH với If-Match: "dev_3-v1"</div><div class="lz-nsub">200, tăng version ⇒ ETag "dev_3-v2"</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Điện thoại PATCH với If-Match: "dev_3-v1"</div><div class="lz-nsub">412 Precondition Failed + currentETag</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Điện thoại đọc lại, gộp, gửi lại</div><div class="lz-nsub">If-Match: "dev_3-v2" ⇒ 200 — không mất gì</div></div></div>
+</div>
 <p>Thay vì khoá bản ghi trong lúc có người sửa (khoá bi quan), ta cho mọi người sửa và kiểm lúc lưu xem có ai đổi nó trong lúc đó không (khoá <strong>lạc quan</strong>). Công cụ là một nhãn phiên bản: mỗi bản ghi thiết bị có <code>version</code>, và server gửi nó dưới dạng <strong>ETag mạnh</strong> (RFC 9110 §8.8.3). Client muốn lưu thì gửi lại nhãn mà nó dựa vào trong <code>If-Match</code>; nếu bản ghi đã đổi, server trả <strong>412</strong> và không đổi gì.</p>
 <pre><code class="language-javascript">// concurrency.js — bài 5.4: khoá lạc quan bằng ETag + If-Match (RFC 9110 §8.8.3, §13.1.1)
 import { HttpError } from './http.js';
@@ -1268,6 +1401,17 @@ ETag: "dev_3-v3"</div>
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“Hai người cùng sửa một bản ghi thì sao?”</strong> Không bảo vệ thì người ghi sau thắng một cách lặng lẽ. Khoá lạc quan: mỗi bản ghi một version, lộ ra thành ETag, gửi lại qua If-Match, lệch thì 412, câu cập nhật có điều kiện <code>WHERE version = …</code>.</p>
 
+<a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Conditional_requests" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: MDN — HTTP conditional requests — đọc ngày 1/11/2026</span><span class="lc-sub">Khoá lạc quan với If-Match: ETag cũ ⇒ 412 Precondition Failed, rồi client làm lại hoặc cho xem khác biệt; If-None-Match ⇒ 304 Not Modified cho cache.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9110 — HTTP Semantics (6/2022) — đọc ngày 1/11/2026</span><span class="lc-sub">§13 Conditional Requests — chuẩn đằng sau If-Match, If-None-Match, 412 và 304.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm ETag cho thiết bị; chạy lại cả hai thí nghiệm.</li>
@@ -1311,6 +1455,18 @@ ETag: "dev_3-v3"</div>
 <p class="lead">The lab basement has the worst Wi-Fi in the building — and the most broken devices. Students report from there, managers resolve from two screens at once. Make issue reporting reliable with everything from Chapter 5, and prove it with a transcript.</p>
 
 <h3>The request</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">design</span><span class="lz-d">which requests may be retried, and how</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">build</span><span class="lz-d">idempotent() before reportLimit, ETag on resolve</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">prove</span><span class="lz-d">a lost response, a 429, a 412, a 304</span></div>
+  <div class="lz-step"><span class="lz-k">score</span><span class="lz-t">rubric</span><span class="lz-d">10 points, pass at 7</span></div>
+</div>
+<a class="link-card" href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: IETF draft — The Idempotency-Key HTTP Header Field (-08, 22 Oct 2026) — read 1 Nov 2026</span><span class="lc-sub">The 400/422/409 rules this lab’s idempotency middleware follows.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <ul>
   <li>“A student who taps ‘Report’ on a bad connection must create <strong>exactly one</strong> issue, however often the app retries.”</li>
   <li>“A student may send at most <strong>3 reports per minute</strong>; tell the app how many are left.”</li>
@@ -1441,6 +1597,18 @@ ETag: "iss_1-v2"</div>
 <p class="lead">Tầng hầm phòng lab có Wi-Fi tệ nhất toà nhà — và nhiều thiết bị hỏng nhất. Sinh viên báo hỏng từ đó, quản lý xử lý từ hai màn hình cùng lúc. Hãy làm việc báo hỏng trở nên tin cậy bằng mọi thứ của Chương 5, và chứng minh bằng transcript.</p>
 
 <h3>Yêu cầu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">thiết kế</span><span class="lz-d">request nào được gửi lại, gửi thế nào</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">xây</span><span class="lz-d">idempotent() trước reportLimit, ETag khi xử lý</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">chứng minh</span><span class="lz-d">mất câu trả lời, một 429, một 412, một 304</span></div>
+  <div class="lz-step"><span class="lz-k">chấm</span><span class="lz-t">thang điểm</span><span class="lz-d">10 điểm, đạt từ 7</span></div>
+</div>
+<a class="link-card" href="https://datatracker.ietf.org/doc/draft-ietf-httpapi-idempotency-key-header/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Bản nháp IETF — The Idempotency-Key HTTP Header Field (-08, 22/10/2026) — đọc ngày 1/11/2026</span><span class="lc-sub">Các luật 400/422/409 mà middleware idempotency của lab này theo.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <ul>
   <li>“Sinh viên bấm ‘Báo hỏng’ trên kết nối kém phải tạo <strong>đúng một</strong> báo hỏng, dù app thử lại bao nhiêu lần.”</li>
   <li>“Mỗi sinh viên gửi tối đa <strong>3 báo hỏng mỗi phút</strong>; cho app biết còn bao nhiêu lượt.”</li>

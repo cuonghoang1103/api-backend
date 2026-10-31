@@ -30,6 +30,17 @@ export default {
 <h2>Authentication options: sessions, JWT, API keys, OAuth</h2>
 <p class="lead">Since Chapter 1 LabFlow has trusted a fake header — <code>Bearer tok_an</code> — and anybody who knew the string was An. This lesson replaces it with real authentication: passwords stored as scrypt hashes, a login that issues a signed JWT for 15 minutes, API keys for scripts, and a clear answer to the interview question “sessions or JWT?”. Then we attack our own tokens.</p>
 
+<div class="callout ok">
+<p><strong>After Chapter 6 you can:</strong></p>
+<ul>
+  <li>add real authentication: hashed passwords, short-lived JWTs, API keys;</li>
+  <li>find and fix object-level authorisation bugs (BOLA) and prove the fix;</li>
+  <li>check an API against the OWASP API Security Top 10 automatically;</li>
+  <li>configure CORS correctly and explain CSRF.</li>
+</ul>
+<p><strong>Why it matters:</strong> Most API breaches are design mistakes, not clever hacks — this chapter attacks LabFlow first, then closes every hole it finds.</p>
+</div>
+
 <h3>Four ways to say who you are</h3>
 <table>
   <thead><tr><th>Option</th><th>What the client holds</th><th>Server state</th><th>Good for</th><th>Watch out</th></tr></thead>
@@ -60,6 +71,12 @@ export function verifyPassword(password, stored) {
 <p><code>scrypt</code> is built into Node, deliberately slow and memory-hungry, and salted — two users with the same password get different hashes. <code>timingSafeEqual</code> compares in constant time. (bcrypt and Argon2 are equally good choices; plain SHA-256 is not — it is fast, which is what a password guesser wants.)</p>
 
 <h3>Login and the JWT</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">POST /auth/login</span><span class="lz-t">email + password</span><span class="lz-d">limit 5 per 900 s per (IP, email)</span></div>
+  <div class="lz-step"><span class="lz-k">verify</span><span class="lz-t">scrypt + timingSafeEqual</span><span class="lz-d">one error for every failure</span></div>
+  <div class="lz-step"><span class="lz-k">sign</span><span class="lz-t">HS256 JWT, 15 min</span><span class="lz-d">iss · sub · role · iat · exp</span></div>
+  <div class="lz-step"><span class="lz-k">every request</span><span class="lz-t">Authorization: Bearer …</span><span class="lz-d">verify alg, signature, iss, exp ⇒ else 401</span></div>
+</div>
 <pre><code class="language-javascript">// auth.js (rút gọn) — HS256 = HMAC-SHA256 với một bí mật CHỈ server biết
 export function signJwt(user) {
   const iat = Math.floor(now() / 1000);
@@ -179,6 +196,17 @@ Retry-After: 180</div>
 <h3>In interviews and at work</h3>
 <p><strong>“Sessions or JWT?”</strong> Sessions: server-side state, instant revocation, cookies — great for one web app. JWT: stateless verification, good for APIs and many services, but short expiry and no instant logout. API keys for machines; OAuth/OIDC when another system owns the identity.</p>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc7519.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 7519 — JSON Web Token (May 2015) — read 1 Nov 2026</span><span class="lc-sub">§4.1.4 exp: “the expiration time on or after which the JWT MUST NOT be accepted for processing”.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc8725.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 8725 — JWT Best Current Practices (Feb 2020) — read 1 Nov 2026</span><span class="lc-sub">§3.1: libraries must use only the algorithms the caller allows; §3.2: “none” only when the JWT is protected by other means.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add login, JWT and API keys; reproduce the outputs, including both forged tokens.</li>
@@ -212,6 +240,17 @@ Retry-After: 180</div>
 <h2>Các cách xác thực: session, JWT, API key, OAuth</h2>
 <p class="lead">Từ Chương 1, LabFlow tin một header giả — <code>Bearer tok_an</code> — và ai biết chuỗi đó thì là An. Bài này thay nó bằng xác thực thật: mật khẩu lưu dạng băm scrypt, đăng nhập cấp một JWT có chữ ký sống 15 phút, API key cho script, và một câu trả lời rõ ràng cho câu phỏng vấn “session hay JWT?”. Rồi ta tự tấn công chính token của mình.</p>
 
+<div class="callout ok">
+<p><strong>Học xong Chương 6 bạn làm được:</strong></p>
+<ul>
+  <li>thêm xác thực thật: mật khẩu băm, JWT sống ngắn, API key;</li>
+  <li>tìm và vá lỗi phân quyền theo đối tượng (BOLA) và chứng minh bản vá;</li>
+  <li>kiểm một API theo OWASP API Security Top 10 một cách tự động;</li>
+  <li>cấu hình CORS đúng và giải thích CSRF.</li>
+</ul>
+<p><strong>Vì sao đáng học:</strong> Phần lớn vụ lộ dữ liệu qua API là lỗi thiết kế, không phải tấn công tinh vi — chương này tấn công LabFlow trước, rồi đóng mọi lỗ nó tìm ra.</p>
+</div>
+
 <h3>Bốn cách nói “tôi là ai”</h3>
 <table>
   <thead><tr><th>Cách</th><th>Client giữ gì</th><th>Trạng thái ở server</th><th>Hợp với</th><th>Cẩn thận</th></tr></thead>
@@ -242,6 +281,12 @@ export function verifyPassword(password, stored) {
 <p><code>scrypt</code> có sẵn trong Node, chậm và tốn bộ nhớ có chủ đích, và có salt — hai người cùng mật khẩu nhận hai bản băm khác nhau. <code>timingSafeEqual</code> so sánh trong thời gian không đổi. (bcrypt và Argon2 cũng tốt như vậy; SHA-256 trần thì không — nó nhanh, đúng thứ kẻ dò mật khẩu muốn.)</p>
 
 <h3>Đăng nhập và JWT</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">POST /auth/login</span><span class="lz-t">email + mật khẩu</span><span class="lz-d">giới hạn 5 lần / 900 giây theo (IP, email)</span></div>
+  <div class="lz-step"><span class="lz-k">kiểm</span><span class="lz-t">scrypt + timingSafeEqual</span><span class="lz-d">một lỗi chung cho mọi trường hợp sai</span></div>
+  <div class="lz-step"><span class="lz-k">ký</span><span class="lz-t">JWT HS256, 15 phút</span><span class="lz-d">iss · sub · role · iat · exp</span></div>
+  <div class="lz-step"><span class="lz-k">mỗi request</span><span class="lz-t">Authorization: Bearer …</span><span class="lz-d">kiểm alg, chữ ký, iss, exp ⇒ sai thì 401</span></div>
+</div>
 <pre><code class="language-javascript">// auth.js (rút gọn) — HS256 = HMAC-SHA256 với một bí mật CHỈ server biết
 export function signJwt(user) {
   const iat = Math.floor(now() / 1000);
@@ -361,6 +406,17 @@ Retry-After: 180</div>
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“Session hay JWT?”</strong> Session: trạng thái ở server, thu hồi tức thì, dùng cookie — rất hợp với một web app. JWT: kiểm không cần trạng thái, hợp với API và nhiều dịch vụ, nhưng phải hết hạn ngắn và không đăng xuất tức thì được. API key cho máy; OAuth/OIDC khi danh tính thuộc về một hệ thống khác.</p>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc7519.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 7519 — JSON Web Token (5/2015) — đọc ngày 1/11/2026</span><span class="lc-sub">§4.1.4 exp: “thời điểm hết hạn mà từ đó trở đi JWT KHÔNG ĐƯỢC chấp nhận để xử lý”.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc8725.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 8725 — JWT Best Current Practices (2/2020) — đọc ngày 1/11/2026</span><span class="lc-sub">§3.1: thư viện chỉ được dùng thuật toán bên gọi cho phép; §3.2: “none” chỉ khi JWT được bảo vệ bằng cách khác.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm đăng nhập, JWT và API key; chạy lại các output, gồm cả hai token giả.</li>
@@ -436,6 +492,12 @@ Retry-After: 180</div>
 <p>Bin, logged in correctly, reads An’s receipt — her name and email included — by changing one number in the URL. LabFlow ids are sequential (<code>bk_1</code>, <code>bk_2</code>…), so a loop reads everyone’s. Random ids would make guessing harder but fix nothing: ids leak through links, logs and screenshots. The only fix is a check on every object access.</p>
 
 <h3>The fix: one policy, asked everywhere</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">requireAuth</span><span class="lz-t">who is calling?</span><span class="lz-d">no token ⇒ 401</span></div>
+  <div class="lz-step"><span class="lz-k">load the record</span><span class="lz-t">by id from the URL</span><span class="lz-d">missing ⇒ 404</span></div>
+  <div class="lz-step"><span class="lz-k">authorize()</span><span class="lz-t">POLICIES[action](user, record)</span><span class="lz-d">no rule ⇒ deny</span></div>
+  <div class="lz-step"><span class="lz-k">not allowed</span><span class="lz-t">404, like a missing record</span><span class="lz-d">the id reveals nothing</span></div>
+</div>
 <pre><code class="language-javascript">// policy.js — bài 6.2: MỘT chỗ trả lời "người này có được làm việc này với BẢN GHI này không?"
 import { HttpError } from './http.js';
 import { VULN } from './vuln.js';
@@ -527,6 +589,12 @@ usr_3 LAB_MANAGER 1:200 2:200 3:200 4:200 5:200 6:200 7:200 8:200
 <p><strong>“What is BOLA and how do you prevent it?”</strong> An authenticated user accesses another user’s object by changing its id. Prevent it with an object-level check on every access, centralised in a policy function, deny-by-default, 404 for objects the caller may not see, and tests that try every role against every object.</p>
 
 
+<a class="link-card" href="https://api-security.owasp.org/editions/2023/en/0xa1-broken-object-level-authorization" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: OWASP API Security Top 10 (2023) — API1 Broken Object Level Authorization — read 1 Nov 2026</span><span class="lc-sub">Attackers change an object’s id in the request; prevent it with a policy-based check in every function that uses client input to reach a record, plus tests for the authorisation mechanism.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add the receipt endpoint the quick way, exploit it, then fix it with <code>authorize()</code>; reproduce both matrices.</li>
@@ -593,6 +661,12 @@ usr_3 LAB_MANAGER 1:200 2:200 3:200 4:200 5:200 6:200 7:200 8:200
 <p>Bin, đăng nhập đàng hoàng, đọc được biên nhận của An — kèm tên và email — chỉ bằng cách đổi một con số trên URL. Id của LabFlow là số tăng dần (<code>bk_1</code>, <code>bk_2</code>…), nên một vòng lặp là đọc được của mọi người. Id ngẫu nhiên làm việc đoán khó hơn nhưng không sửa được gì: id rò ra qua link, log và ảnh chụp màn hình. Cách sửa duy nhất là kiểm ở mọi lần truy cập đối tượng.</p>
 
 <h3>Sửa: một chính sách, hỏi ở mọi nơi</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">requireAuth</span><span class="lz-t">ai đang gọi?</span><span class="lz-d">không có token ⇒ 401</span></div>
+  <div class="lz-step"><span class="lz-k">tải bản ghi</span><span class="lz-t">theo id trong URL</span><span class="lz-d">không có ⇒ 404</span></div>
+  <div class="lz-step"><span class="lz-k">authorize()</span><span class="lz-t">POLICIES[action](user, record)</span><span class="lz-d">không có luật ⇒ từ chối</span></div>
+  <div class="lz-step"><span class="lz-k">không được phép</span><span class="lz-t">404, như bản ghi không tồn tại</span><span class="lz-d">id không để lộ gì</span></div>
+</div>
 <pre><code class="language-javascript">// policy.js — bài 6.2: MỘT chỗ trả lời "người này có được làm việc này với BẢN GHI này không?"
 import { HttpError } from './http.js';
 import { VULN } from './vuln.js';
@@ -684,6 +758,12 @@ usr_3 LAB_MANAGER 1:200 2:200 3:200 4:200 5:200 6:200 7:200 8:200
 <p><strong>“BOLA là gì và chống thế nào?”</strong> Người dùng đã xác thực truy cập đối tượng của người khác bằng cách đổi id. Chống bằng phép kiểm theo đối tượng ở mọi lần truy cập, tập trung trong một hàm chính sách, mặc định từ chối, 404 cho đối tượng người gọi không được thấy, và test thử mọi vai trò với mọi đối tượng.</p>
 
 
+<a class="link-card" href="https://api-security.owasp.org/editions/2023/en/0xa1-broken-object-level-authorization" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: OWASP API Security Top 10 (2023) — API1 Broken Object Level Authorization — đọc ngày 1/11/2026</span><span class="lc-sub">Kẻ tấn công đổi id đối tượng trong request; chặn bằng kiểm theo chính sách ở mọi hàm dùng đầu vào của client để tới một bản ghi, cộng test cho cơ chế phân quyền.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm endpoint biên nhận kiểu nhanh, khai thác nó, rồi sửa bằng <code>authorize()</code>; chạy lại cả hai ma trận.</li>
@@ -754,6 +834,12 @@ export const MAX_ACTIVE = 3;
     }</code></pre>
 
 <h3>API7: SSRF</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">URL from the client</span><span class="lz-t">https://…</span><span class="lz-d">other schemes ⇒ 422</span></div>
+  <div class="lz-step"><span class="lz-k">resolve DNS</span><span class="lz-t">every address</span><span class="lz-d">names, 127.1, [::1], decimal IPs</span></div>
+  <div class="lz-step"><span class="lz-k">private?</span><span class="lz-t">loopback, 10/8, 169.254/16…</span><span class="lz-d">any one ⇒ 422 URL_NOT_ALLOWED</span></div>
+  <div class="lz-step"><span class="lz-k">fetch</span><span class="lz-t">redirect: error, 3 s timeout</span><span class="lz-d">never follow a redirect inside</span></div>
+</div>
 <p>Managers can attach a device manual by URL, and the server fetches it once to check it. That makes the <em>server</em> a client that goes wherever the URL says — including <code>http://127.0.0.1</code>, the internal network, or <code>169.254.169.254</code>, where cloud providers serve instance credentials. With the guard switched off:</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
@@ -868,6 +954,12 @@ PASS  API9 Inventory         old unversioned path announces its end
 <h3>In interviews and at work</h3>
 <p><strong>“Name the OWASP API Top 10 and give examples.”</strong> BOLA, broken authentication, broken object property level authorization, unrestricted resource consumption, BFLA, sensitive business flows, SSRF, misconfiguration, inventory management, unsafe consumption — each with one example from an API you built, and its fix.</p>
 
+<a class="link-card" href="https://api-security.owasp.org/editions/2023/en/0x11-t10" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: OWASP API Security Top 10 — 2023 edition — read 1 Nov 2026</span><span class="lc-sub">The ten risks of the 2023 edition — the list this lesson maps onto LabFlow and turns into audit.mjs.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add the business-flow limit and <code>safeFetch</code>; run <code>audit.mjs</code> against both modes.</li>
@@ -929,6 +1021,12 @@ export const MAX_ACTIVE = 3;
     }</code></pre>
 
 <h3>API7: SSRF</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">URL từ client</span><span class="lz-t">https://…</span><span class="lz-d">scheme khác ⇒ 422</span></div>
+  <div class="lz-step"><span class="lz-k">phân giải DNS</span><span class="lz-t">mọi địa chỉ</span><span class="lz-d">tên miền, 127.1, [::1], IP dạng thập phân</span></div>
+  <div class="lz-step"><span class="lz-k">nội bộ?</span><span class="lz-t">loopback, 10/8, 169.254/16…</span><span class="lz-d">chỉ cần một ⇒ 422 URL_NOT_ALLOWED</span></div>
+  <div class="lz-step"><span class="lz-k">tải</span><span class="lz-t">redirect: error, giới hạn 3 giây</span><span class="lz-d">không đi theo chuyển hướng vào trong</span></div>
+</div>
 <p>Quản lý có thể đính kèm link sách hướng dẫn của thiết bị, và server tải thử một lần để kiểm. Việc đó biến <em>server</em> thành một client đi tới bất cứ đâu URL chỉ — kể cả <code>http://127.0.0.1</code>, mạng nội bộ, hay <code>169.254.169.254</code>, nơi các nhà cung cấp cloud trả thông tin đăng nhập của máy ảo. Khi tắt chốt:</p>
 <pre><code class="language-bash">curl -s -X POST http://localhost:4000/v2/auth/login \\
   --json '{"email":"lan@labflow.example","password":"lan-lab-2026"}' | jq -r .accessToken &gt; lan.jwt</code></pre>
@@ -1043,6 +1141,12 @@ PASS  API9 Inventory         old unversioned path announces its end
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“Kể tên OWASP API Top 10 và cho ví dụ.”</strong> BOLA, xác thực hỏng, phân quyền thuộc tính hỏng, tiêu thụ tài nguyên không giới hạn, BFLA, luồng nghiệp vụ nhạy cảm, SSRF, cấu hình sai, quản lý danh mục API, dùng API bên ngoài không an toàn — mỗi mục kèm một ví dụ từ API bạn đã làm, và cách sửa.</p>
 
+<a class="link-card" href="https://api-security.owasp.org/editions/2023/en/0x11-t10" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: OWASP API Security Top 10 — bản 2023 — đọc ngày 1/11/2026</span><span class="lc-sub">Mười rủi ro của bản 2023 — danh sách bài này đặt lên LabFlow và biến thành audit.mjs.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm giới hạn luồng nghiệp vụ và <code>safeFetch</code>; chạy <code>audit.mjs</code> ở cả hai chế độ.</li>
@@ -1086,6 +1190,13 @@ PASS  API9 Inventory         old unversioned path announces its end
 <p class="lead">LabFlow’s web app will live at one address and call the API at another. Browsers block that by default, and every web developer meets the red “blocked by CORS policy” line in the console. This lesson explains what CORS really is — a rule of the <strong>browser</strong> that the server opts into, not a wall around the server — proves it with a real Chromium, and then looks at its cousin CSRF, which LabFlow avoids by design.</p>
 
 <h3>Origins and the same-origin policy</h3>
+<div class="lz-map">
+  <div class="lz-stage">a page on another origin calls POST /v2/auth/login with JSON</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Browser sees a non-simple request</div><div class="lz-nsub">application/json is not a safelisted Content-Type</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Preflight: OPTIONS + Access-Control-Request-Method</div><div class="lz-nsub">the real request waits</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Server checks its allow-list</div><div class="lz-nsub">allowed ⇒ Allow-Origin, Allow-Methods, Allow-Headers, Max-Age</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Browser sends the real request — or not at all</div><div class="lz-nsub">no permission ⇒ “blocked by CORS policy”, nothing sent</div></div></div>
+</div>
 <p>An <strong>origin</strong> is scheme + host + port: <code>http://localhost:5173</code> and <code>http://localhost:5174</code> are different origins, and so is the API at <code>http://localhost:4000</code>. A page’s JavaScript may <em>send</em> requests anywhere, but by default it may not <em>read</em> the response from another origin. CORS (Cross-Origin Resource Sharing, defined in the WHATWG Fetch standard) is how a server tells the browser: “this origin may read my responses”.</p>
 <ul>
   <li><strong>Simple requests</strong> (GET, or a POST of a form-like type, without custom headers) are <em>sent</em>; the browser only decides afterwards whether the page may read the answer.</li>
@@ -1199,6 +1310,12 @@ Access-Control-Allow-Credentials: true</div>
 <h3>In interviews and at work</h3>
 <p><strong>“What does CORS protect against?”</strong> It lets a server relax the browser’s same-origin policy for chosen origins; it protects users’ data from being read by other sites’ scripts, not the server from requests. <strong>“CORS vs CSRF?”</strong> CSRF abuses automatically attached credentials (cookies); bearer tokens in headers, SameSite cookies and anti-CSRF tokens prevent it.</p>
 
+<a class="link-card" href="https://fetch.spec.whatwg.org/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: WHATWG Fetch Standard (updated 19 Oct 2026) — read 1 Nov 2026</span><span class="lc-sub">Only GET, HEAD and POST are CORS-safelisted methods; Content-Type is safelisted only for form-urlencoded, multipart/form-data and text/plain — so a JSON POST needs a preflight.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add <code>cors.js</code>; reproduce the curl and browser runs.</li>
@@ -1233,6 +1350,13 @@ Access-Control-Allow-Credentials: true</div>
 <p class="lead">Web app của LabFlow sẽ nằm ở một địa chỉ và gọi API ở một địa chỉ khác. Trình duyệt mặc định chặn việc đó, và lập trình viên web nào cũng từng gặp dòng đỏ “blocked by CORS policy” trong console. Bài này giải thích CORS thật ra là gì — một luật của <strong>trình duyệt</strong> mà server chọn tham gia, không phải bức tường quanh server — chứng minh bằng Chromium thật, rồi xem người anh em CSRF, thứ LabFlow tránh được nhờ thiết kế.</p>
 
 <h3>Origin và chính sách cùng nguồn</h3>
+<div class="lz-map">
+  <div class="lz-stage">một trang ở origin khác gọi POST /v2/auth/login bằng JSON</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Trình duyệt thấy request không đơn giản</div><div class="lz-nsub">application/json không nằm trong danh sách Content-Type an toàn</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Preflight: OPTIONS + Access-Control-Request-Method</div><div class="lz-nsub">request thật phải chờ</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Server kiểm danh sách cho phép</div><div class="lz-nsub">được ⇒ Allow-Origin, Allow-Methods, Allow-Headers, Max-Age</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Trình duyệt gửi request thật — hoặc không gửi</div><div class="lz-nsub">không có quyền ⇒ “blocked by CORS policy”, không gửi gì</div></div></div>
+</div>
 <p><strong>Origin</strong> (nguồn) là scheme + host + port: <code>http://localhost:5173</code> và <code>http://localhost:5174</code> là hai origin khác nhau, API ở <code>http://localhost:4000</code> cũng vậy. JavaScript của một trang được <em>gửi</em> request đi bất cứ đâu, nhưng mặc định không được <em>đọc</em> response từ origin khác. CORS (Cross-Origin Resource Sharing, định nghĩa trong chuẩn Fetch của WHATWG) là cách server nói với trình duyệt: “origin này được đọc response của tôi”.</p>
 <ul>
   <li><strong>Simple request</strong> (GET, hoặc POST kiểu form, không có header riêng) thì vẫn được <em>gửi đi</em>; trình duyệt chỉ quyết định sau đó trang có được đọc câu trả lời không.</li>
@@ -1346,6 +1470,12 @@ Access-Control-Allow-Credentials: true</div>
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“CORS chống lại cái gì?”</strong> Nó cho server nới chính sách cùng nguồn của trình duyệt với những origin được chọn; nó bảo vệ dữ liệu người dùng khỏi bị script của site khác đọc, không bảo vệ server khỏi request. <strong>“CORS khác CSRF thế nào?”</strong> CSRF lợi dụng thông tin đăng nhập được gửi tự động (cookie); bearer token trong header, cookie SameSite và token chống CSRF ngăn được nó.</p>
 
+<a class="link-card" href="https://fetch.spec.whatwg.org/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: WHATWG Fetch Standard (cập nhật 19/10/2026) — đọc ngày 1/11/2026</span><span class="lc-sub">Chỉ GET, HEAD và POST là phương thức an toàn cho CORS; Content-Type chỉ an toàn với form-urlencoded, multipart/form-data và text/plain — nên POST JSON cần preflight.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm <code>cors.js</code>; chạy lại các lần thử bằng curl và trình duyệt.</li>
@@ -1389,6 +1519,18 @@ Access-Control-Allow-Credentials: true</div>
 <p class="lead">The faculty asks for a security review of LabFlow before the new semester. You get the build with the lab switch <code>LABFLOW_VULN=1</code>, which re-opens the holes this chapter closed. Your job is the job of a real reviewer: find each hole with the audit, prove it with an exploit, close it, and leave a test behind so it stays closed.</p>
 
 <h3>What is switched on</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">find and exploit</span><span class="lz-d">audit.mjs + one curl per FAIL</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">fix</span><span class="lz-d">policy, tokens, schema, safeFetch, CORS</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">prove</span><span class="lz-d">tests green fixed, red with LABFLOW_VULN=1</span></div>
+  <div class="lz-step"><span class="lz-k">score</span><span class="lz-t">rubric</span><span class="lz-d">10 points, pass at 7</span></div>
+</div>
+<a class="link-card" href="https://api-security.owasp.org/editions/2023/en/0x11-t10" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: OWASP API Security Top 10 — 2023 edition — read 1 Nov 2026</span><span class="lc-sub">The risks this security review checks, in the 2023 edition.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <ul>
   <li>The receipt endpoint skips the object-level check (API1).</li>
   <li>The JWT verifier accepts <code>"alg": "none"</code> and ignores expiry (API2); the login has no rate limit (API2).</li>
@@ -1604,6 +1746,18 @@ PASS  API9 Inventory         old unversioned path announces its end
 <p class="lead">Khoa yêu cầu soát bảo mật LabFlow trước học kỳ mới. Bạn nhận bản dựng có công tắc của lab <code>LABFLOW_VULN=1</code>, công tắc mở lại những lỗ hổng mà chương này đã vá. Việc của bạn là việc của một người soát thật: tìm từng lỗ bằng bộ kiểm, chứng minh bằng một lần khai thác, vá lại, và để lại một test để nó mãi đóng.</p>
 
 <h3>Những gì đang bị bật</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">tìm và khai thác</span><span class="lz-d">audit.mjs + mỗi FAIL một lệnh curl</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">vá</span><span class="lz-d">chính sách, token, schema, safeFetch, CORS</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">chứng minh</span><span class="lz-d">test xanh khi vá, đỏ với LABFLOW_VULN=1</span></div>
+  <div class="lz-step"><span class="lz-k">chấm</span><span class="lz-t">thang điểm</span><span class="lz-d">10 điểm, đạt từ 7</span></div>
+</div>
+<a class="link-card" href="https://api-security.owasp.org/editions/2023/en/0x11-t10" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: OWASP API Security Top 10 — bản 2023 — đọc ngày 1/11/2026</span><span class="lc-sub">Các rủi ro mà buổi review bảo mật này kiểm, theo bản 2023.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <ul>
   <li>Endpoint biên nhận bỏ qua phép kiểm theo đối tượng (API1).</li>
   <li>Bộ kiểm JWT nhận <code>"alg": "none"</code> và bỏ qua hạn dùng (API2); đăng nhập không bị giới hạn (API2).</li>

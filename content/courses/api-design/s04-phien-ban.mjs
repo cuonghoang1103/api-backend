@@ -29,6 +29,17 @@ export default {
 <h2>Breaking vs non-breaking changes</h2>
 <p class="lead">LabFlow now has clients you do not control: a mobile app on hundreds of phones, a script a lab manager wrote last year, a student’s project. From the day the first one ships, every change to the API is a question: <em>will something that works today stop working tomorrow?</em> This lesson answers it with an experiment, not a rule list: one old client, five changes to the server, and what really happened.</p>
 
+<div class="callout ok">
+<p><strong>After Chapter 4 you can:</strong></p>
+<ul>
+  <li>tell breaking from non-breaking changes, measured on a client that never updates;</li>
+  <li>version an API with one set of routes and several representations;</li>
+  <li>retire an old version with Deprecation, Sunset and 410;</li>
+  <li>keep mobile apps that cannot update working.</li>
+</ul>
+<p><strong>Why it matters:</strong> APIs live longer than the code behind them; changing one without breaking its clients is what separates a hobby project from a product.</p>
+</div>
+
 <h3>Everyday example: the timetable on the wall</h3>
 <p>The faculty prints the room timetable and sticks it on every door. Adding a new column “projector: yes/no” does not hurt anyone who reads the old columns. Renaming “Room” to “Venue”, writing times as “2 pm” instead of “14:00”, or adding a new kind of slot nobody has a colour for — every reader who learnt the old format now misreads it, and nobody tells you. An API is that printed timetable: <strong>a contract that other people’s code reads without asking you</strong>.</p>
 
@@ -134,6 +145,11 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
 <p>So “adding is non-breaking” is only true if your contract <strong>says so</strong>. LabFlow’s documentation now states it explicitly: <em>clients must ignore members they do not know; new members may appear at any time</em> — the <strong>tolerant reader</strong> rule. Strict validation belongs on the server’s <em>input</em> (Chapter 2), not on a client’s view of the server’s <em>output</em>.</p>
 
 <h3>The classification</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Safe</span><span class="lz-lnote">new optional request field · new response field · new endpoint</span></div>
+  <div class="lz-layer"><span class="lz-lname">Careful</span><span class="lz-lnote">new enum value in a response — breaks clients that crash on unknown values</span></div>
+  <div class="lz-layer"><span class="lz-lname">Breaking</span><span class="lz-lnote">remove or rename a field · change a type or format · new required field · change a status code</span></div>
+</div>
 <table>
   <thead><tr><th>Change</th><th>Usually</th><th>Why</th></tr></thead>
   <tbody>
@@ -160,6 +176,17 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
 <h3>In interviews and at work</h3>
 <p><strong>“Is adding a field a breaking change?”</strong> Not if the contract requires tolerant readers — say so in the docs. Adding a value to a response enum, or a required request field, is breaking.</p>
 <p><strong>“How do you change an API safely?”</strong> Prefer additive changes; when something must break, publish a new version (4.2), keep the old one running, announce the end with headers and dates (4.3), and test the old contract automatically (Lab 4).</p>
+
+<a class="link-card" href="https://google.aip.dev/180" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Google AIP-180 — Backwards compatibility — read 1 Nov 2026</span><span class="lc-sub">Google’s rules within one major version: additions are allowed, removing or renaming (“remove and add”) and changing types are not, new required request fields are not; new enum values in responses need caution.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://www.hyrumslaw.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Hyrum’s Law — read 1 Nov 2026</span><span class="lc-sub">“With a sufficient number of users of an API, it does not matter what you promise in the contract: all observable behaviors of your system will be depended on by somebody.”</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
@@ -193,6 +220,17 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
 <h2>Thay đổi phá vỡ và không phá vỡ</h2>
 <p class="lead">LabFlow giờ đã có những client bạn không kiểm soát: một app di động trên hàng trăm điện thoại, một script cô quản lý lab viết năm ngoái, đồ án của một bạn sinh viên. Từ ngày client đầu tiên phát hành, mỗi thay đổi của API là một câu hỏi: <em>thứ đang chạy hôm nay có ngừng chạy vào ngày mai không?</em> Bài này trả lời bằng một thí nghiệm chứ không bằng danh sách luật: một client cũ, năm thay đổi ở server, và chuyện gì đã thật sự xảy ra.</p>
+
+<div class="callout ok">
+<p><strong>Học xong Chương 4 bạn làm được:</strong></p>
+<ul>
+  <li>phân biệt thay đổi phá vỡ và không phá vỡ, đo trên một client không bao giờ cập nhật;</li>
+  <li>đánh phiên bản API với một bộ route và nhiều cách biểu diễn;</li>
+  <li>khai tử phiên bản cũ bằng Deprecation, Sunset và 410;</li>
+  <li>giữ cho app di động không cập nhật được vẫn chạy.</li>
+</ul>
+<p><strong>Vì sao đáng học:</strong> API sống lâu hơn code đằng sau nó; đổi nó mà không làm gãy client là thứ phân biệt đồ án cá nhân với một sản phẩm.</p>
+</div>
 
 <h3>Ví dụ đời thường: thời khoá biểu dán trên cửa</h3>
 <p>Khoa in thời khoá biểu phòng học và dán lên mọi cửa. Thêm cột mới “máy chiếu: có/không” không làm ai đọc cột cũ bị ảnh hưởng. Còn đổi “Phòng” thành “Địa điểm”, viết giờ “2 pm” thay vì “14:00”, hay thêm một loại ca chưa ai có màu để tô — mọi người đã quen định dạng cũ giờ đọc sai, và không ai báo cho bạn. API chính là tờ thời khoá biểu đó: <strong>một hợp đồng mà code của người khác đọc mà không hỏi bạn</strong>.</p>
@@ -299,6 +337,11 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
 <p>Vậy “thêm thì không phá” chỉ đúng khi hợp đồng của bạn <strong>nói rõ như thế</strong>. Tài liệu LabFlow từ nay ghi thẳng: <em>client phải bỏ qua trường mình không biết; trường mới có thể xuất hiện bất cứ lúc nào</em> — luật <strong>tolerant reader</strong> (người đọc khoan dung). Kiểm chặt là việc của server với dữ liệu <em>vào</em> (Chương 2), không phải việc client làm với dữ liệu <em>ra</em> của server.</p>
 
 <h3>Bảng phân loại</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">An toàn</span><span class="lz-lnote">trường request tuỳ chọn mới · trường response mới · endpoint mới</span></div>
+  <div class="lz-layer"><span class="lz-lname">Cẩn thận</span><span class="lz-lnote">giá trị enum mới trong response — làm gãy client sập khi gặp giá trị lạ</span></div>
+  <div class="lz-layer"><span class="lz-lname">Phá vỡ</span><span class="lz-lnote">bỏ hoặc đổi tên trường · đổi kiểu hay định dạng · trường bắt buộc mới · đổi mã trạng thái</span></div>
+</div>
 <table>
   <thead><tr><th>Thay đổi</th><th>Thường là</th><th>Vì sao</th></tr></thead>
   <tbody>
@@ -325,6 +368,17 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“Thêm một trường có phải thay đổi phá vỡ không?”</strong> Không, nếu hợp đồng yêu cầu client đọc khoan dung — và tài liệu phải nói rõ điều đó. Thêm giá trị vào enum của response, hay thêm trường bắt buộc ở request, là phá vỡ.</p>
 <p><strong>“Đổi API thế nào cho an toàn?”</strong> Ưu tiên thay đổi chỉ-thêm; khi buộc phải phá thì ra phiên bản mới (4.2), giữ bản cũ chạy, báo ngày kết thúc bằng header và mốc thời gian (4.3), và kiểm hợp đồng cũ tự động (Lab 4).</p>
+
+<a class="link-card" href="https://google.aip.dev/180" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Google AIP-180 — Backwards compatibility — đọc ngày 1/11/2026</span><span class="lc-sub">Luật của Google trong một phiên bản lớn: được thêm; không được xoá, đổi tên (“xoá rồi thêm”), đổi kiểu, hay thêm trường request bắt buộc; giá trị enum mới trong response cần thận trọng.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://www.hyrumslaw.com/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Định luật Hyrum — đọc ngày 1/11/2026</span><span class="lc-sub">“Đủ nhiều người dùng một API thì bạn hứa gì trong hợp đồng cũng không quan trọng: mọi hành vi quan sát được của hệ thống đều sẽ có người dựa vào.”</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
@@ -392,6 +446,12 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
 <p><strong>LabFlow’s choice:</strong> a <strong>major version in the URL</strong> (<code>/v1</code>, <code>/v2</code>), changed rarely, only for breaking changes; everything additive goes into the current version without a new number. The reasons are practical for this team: students and mobile developers read curl lines and logs, and a version they can see is a version they will not forget.</p>
 
 <h3>One set of routes, two representations</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">request</span><span class="lz-t">/v2/bookings</span><span class="lz-d">or LabFlow-Version: 2 on old paths</span></div>
+  <div class="lz-step"><span class="lz-k">inVersion</span><span class="lz-t">req.apiVersion = 2</span><span class="lz-d">one middleware per prefix</span></div>
+  <div class="lz-step"><span class="lz-k">shared handler</span><span class="lz-t">one set of routes</span><span class="lz-d">the same business rules for every version</span></div>
+  <div class="lz-step"><span class="lz-k">view + schema</span><span class="lz-t">VIEWS[2], BookingCreateV2</span><span class="lz-d">only the representation differs</span></div>
+</div>
 <p>The tempting way is to copy <code>routes/</code> to <code>routes/v2/</code>. Two months later a bug fix lands in one copy only. LabFlow keeps <strong>one</strong> router and decides only two things by version: which <strong>view</strong> leaves the server and which <strong>schema</strong> checks the input. The records in the database never change shape.</p>
 <pre><code class="language-javascript">// versioning.js — Chương 4: MỘT bộ route, nhiều phiên bản biểu diễn
 import { HttpError } from './http.js';
@@ -590,6 +650,12 @@ KHÔNG đặt được: 409 BOOKING_CONFLICT</div>
 <p><strong>LabFlow chọn:</strong> <strong>số phiên bản lớn trong URL</strong> (<code>/v1</code>, <code>/v2</code>), đổi hiếm, chỉ cho thay đổi phá vỡ; mọi thay đổi chỉ-thêm vào phiên bản hiện tại mà không tăng số. Lý do thực tế với nhóm này: sinh viên và lập trình viên di động đọc dòng curl và log, và một phiên bản nhìn thấy được là phiên bản họ không quên.</p>
 
 <h3>Một bộ route, hai cách biểu diễn</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">request</span><span class="lz-t">/v2/bookings</span><span class="lz-d">hoặc LabFlow-Version: 2 ở đường cũ</span></div>
+  <div class="lz-step"><span class="lz-k">inVersion</span><span class="lz-t">req.apiVersion = 2</span><span class="lz-d">mỗi tiền tố một middleware</span></div>
+  <div class="lz-step"><span class="lz-k">handler dùng chung</span><span class="lz-t">một bộ route</span><span class="lz-d">cùng luật nghiệp vụ cho mọi phiên bản</span></div>
+  <div class="lz-step"><span class="lz-k">view + schema</span><span class="lz-t">VIEWS[2], BookingCreateV2</span><span class="lz-d">chỉ cách biểu diễn khác nhau</span></div>
+</div>
 <p>Cách hấp dẫn là chép <code>routes/</code> sang <code>routes/v2/</code>. Hai tháng sau, một bản sửa lỗi chỉ vào một bản sao. LabFlow giữ <strong>một</strong> router và chỉ để phiên bản quyết định hai việc: <strong>view</strong> nào rời khỏi server và <strong>lược đồ</strong> nào kiểm dữ liệu vào. Bản ghi trong cơ sở dữ liệu không bao giờ đổi hình dạng.</p>
 <pre><code class="language-javascript">// versioning.js — Chương 4: MỘT bộ route, nhiều phiên bản biểu diễn
 import { HttpError } from './http.js';
@@ -915,6 +981,13 @@ Node.js v22.23.3</div>
 <p><code>410 Gone</code> — “this existed and is gone on purpose” — with a problem document that names the successor. <code>/v1</code> still answers 200. The unchanged old client now crashes, because it never checked <code>res.ok</code>: no header can save a client that does not read responses. That is why the six months before the date, and the usage report, matter more than the 410.</p>
 
 <h3>A retirement plan that works</h3>
+<div class="lz-map">
+  <div class="lz-stage">retiring an old path</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Ship the successor and the migration guide</div><div class="lz-nsub">/v1 exists before anything is announced</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Deprecation + Link now, Sunset one release cycle away</div><div class="lz-nsub">LabFlow: one semester</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Announce, then watch the usage report shrink</div><div class="lz-nsub">optional short brownouts wake forgotten clients</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">On the date: 410 with the successor</div><div class="lz-nsub">keep the 410 for a while before removing the route</div></div></div>
+</div>
 <ol>
   <li>Ship the successor (<code>/v1</code>) and the migration guide first.</li>
   <li>Send <code>Deprecation</code> + <code>Link</code> immediately; set a <code>Sunset</code> at least one full client release cycle away (LabFlow: one semester).</li>
@@ -930,6 +1003,12 @@ Node.js v22.23.3</div>
 <h3>In interviews and at work</h3>
 <p><strong>“How do you retire an API version?”</strong> Ship the replacement, mark the old one with Deprecation/Sunset headers and a successor link, communicate, measure usage per client, brown out, then answer 410 with guidance — on a date announced months ahead.</p>
 <p><strong>“What is the difference between deprecated and sunset?”</strong> Deprecated: still works, please stop using it. Sunset: the moment it stops working.</p>
+
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9745.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9745 — The Deprecation HTTP Response Header Field (Mar 2025) — read 1 Nov 2026</span><span class="lc-sub">Deprecation is a structured date (@ + Unix time, e.g. @1688169599); §4 pairs it with Sunset (RFC 8594), which must not be earlier than Deprecation.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
@@ -1106,6 +1185,13 @@ Node.js v22.23.3</div>
 <p><code>410 Gone</code> — “từng có, và đã bị gỡ có chủ đích” — kèm problem document nêu tên đường thay thế. <code>/v1</code> vẫn trả 200. Client cũ không sửa gì giờ sập, vì nó chưa bao giờ kiểm <code>res.ok</code>: không header nào cứu được một client không đọc response. Vì vậy sáu tháng trước ngày đó, và báo cáo ai còn dùng, quan trọng hơn cái mã 410.</p>
 
 <h3>Kế hoạch khai tử chạy được</h3>
+<div class="lz-map">
+  <div class="lz-stage">khai tử một đường cũ</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Có sẵn đường thay thế và hướng dẫn chuyển</div><div class="lz-nsub">/v1 có trước khi thông báo bất cứ gì</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Gửi Deprecation + Link ngay, Sunset cách một vòng phát hành</div><div class="lz-nsub">LabFlow: một học kỳ</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Thông báo, rồi nhìn báo cáo sử dụng giảm dần</div><div class="lz-nsub">tắt thử ngắn (brownout) đánh thức client bị quên</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Đến ngày: 410 kèm đường thay thế</div><div class="lz-nsub">giữ 410 một thời gian rồi mới gỡ route</div></div></div>
+</div>
 <ol>
   <li>Phát hành đường thay thế (<code>/v1</code>) và hướng dẫn chuyển đổi trước.</li>
   <li>Gửi <code>Deprecation</code> + <code>Link</code> ngay; đặt <code>Sunset</code> cách ít nhất một vòng phát hành của client (LabFlow: một học kỳ).</li>
@@ -1121,6 +1207,12 @@ Node.js v22.23.3</div>
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p><strong>“Khai tử một phiên bản API thế nào?”</strong> Phát hành bản thay thế, gắn header Deprecation/Sunset và link thay thế cho bản cũ, thông báo, đo mức dùng theo từng client, brownout, rồi trả 410 kèm hướng dẫn — vào một ngày đã báo trước nhiều tháng.</p>
 <p><strong>“Deprecated khác sunset thế nào?”</strong> Deprecated: vẫn chạy, xin đừng dùng nữa. Sunset: thời điểm nó ngừng chạy.</p>
+
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9745.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9745 — The Deprecation HTTP Response Header Field (3/2025) — đọc ngày 1/11/2026</span><span class="lc-sub">Deprecation là một ngày dạng structured field (@ + giờ Unix, vd. @1688169599); §4 ghép nó với Sunset (RFC 8594), và Sunset không được sớm hơn Deprecation.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
@@ -1267,6 +1359,12 @@ bookingsRouter.route('/:id/check-in')
 <p>For a v1 client the booking is still “pending” — the nearest meaning it knows — and check-in does not exist. The v1 status filter uses the same mapping, so <code>?status=PENDING</code> on v1 still finds bk_8: a client must never see a list that disagrees with the items in it.</p>
 
 <h3>Three apps, one server</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">1 · LabFlow-Client header</span><span class="lz-lnote">every request says app and version — the usage report counts them</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 · GET /app-config</span><span class="lz-lnote">read at start-up: minimum version, flags, messages</span></div>
+  <div class="lz-layer"><span class="lz-lname">3 · version guard</span><span class="lz-lnote">400 APP_VERSION_UNSUPPORTED + updateUrl — only below minVersion</span></div>
+  <div class="lz-layer"><span class="lz-lname">4 · old clients never see new values</span><span class="lz-lnote">CHECKED_IN is shown to v1 as PENDING</span></div>
+</div>
 <p><code>app.mjs</code> simulates the Android app at any version. It reads the config first, then calls <code>/v2/bookings</code>. Version 1.4.0 was written <em>before</em> check-in existed, but as a <strong>tolerant reader</strong> (4.1): an unknown status gets a generic label instead of a crash.</p>
 <pre><code class="language-javascript">// app.mjs — giả lập app Android của LabFlow: VERSION=1.2.0 node app.mjs
 const BASE = 'http://localhost:4000';
@@ -1319,6 +1417,12 @@ tổng số chỗ của 3 phòng: 94
 <h3>In interviews and at work</h3>
 <p><strong>“How do you evolve an API used by mobile apps?”</strong> Assume many versions live at once: identify the client version in a header, serve a remote config with minimum/latest versions and feature switches, keep changes additive, hide new enum values from old versions, and force upgrades only for broken builds.</p>
 <p><strong>“Which status for a too-old app?”</strong> A specific problem code (LabFlow: 400 <code>APP_VERSION_UNSUPPORTED</code> with <code>minVersion</code> and <code>updateUrl</code>); explain why 426 does not fit.</p>
+
+<a class="link-card" href="https://google.aip.dev/180" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Google AIP-180 — Backwards compatibility — read 1 Nov 2026</span><span class="lc-sub">New enum values may be added to responses but “appropriate caution should be used” — user code may not handle them; LabFlow hides them from v1.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
@@ -1456,6 +1560,12 @@ bookingsRouter.route('/:id/check-in')
 <p>Với client v1, lượt đặt vẫn “đang chờ” — nghĩa gần nhất mà nó biết — và check-in không tồn tại. Bộ lọc trạng thái của v1 dùng cùng phép ánh xạ, nên <code>?status=PENDING</code> ở v1 vẫn tìm ra bk_8: client không bao giờ được thấy một danh sách mâu thuẫn với chính các phần tử trong nó.</p>
 
 <h3>Ba app, một server</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">1 · header LabFlow-Client</span><span class="lz-lnote">request nào cũng nói app và phiên bản — báo cáo sử dụng đếm chúng</span></div>
+  <div class="lz-layer"><span class="lz-lname">2 · GET /app-config</span><span class="lz-lnote">đọc lúc khởi động: phiên bản tối thiểu, cờ, thông báo</span></div>
+  <div class="lz-layer"><span class="lz-lname">3 · chốt phiên bản</span><span class="lz-lnote">400 APP_VERSION_UNSUPPORTED + updateUrl — chỉ dưới minVersion</span></div>
+  <div class="lz-layer"><span class="lz-lname">4 · client cũ không thấy giá trị mới</span><span class="lz-lnote">CHECKED_IN hiện với v1 thành PENDING</span></div>
+</div>
 <p><code>app.mjs</code> giả lập app Android ở phiên bản bất kỳ. Nó đọc cấu hình trước rồi gọi <code>/v2/bookings</code>. Bản 1.4.0 được viết <em>trước</em> khi có check-in, nhưng theo kiểu <strong>người đọc khoan dung</strong> (4.1): trạng thái lạ nhận nhãn chung thay vì làm sập.</p>
 <pre><code class="language-javascript">// app.mjs — giả lập app Android của LabFlow: VERSION=1.2.0 node app.mjs
 const BASE = 'http://localhost:4000';
@@ -1509,6 +1619,12 @@ tổng số chỗ của 3 phòng: 94
 <p><strong>“Phát triển API mà app di động đang dùng thế nào?”</strong> Mặc định có nhiều phiên bản cùng sống: nhận diện phiên bản client bằng header, phục vụ cấu hình từ xa có phiên bản tối thiểu/mới nhất và công tắc tính năng, giữ thay đổi chỉ-thêm, giấu giá trị enum mới khỏi bản cũ, và chỉ ép cập nhật với bản hỏng.</p>
 <p><strong>“App quá cũ thì trả mã gì?”</strong> Một mã problem riêng (LabFlow: 400 <code>APP_VERSION_UNSUPPORTED</code> kèm <code>minVersion</code> và <code>updateUrl</code>); giải thích vì sao 426 không hợp.</p>
 
+<a class="link-card" href="https://google.aip.dev/180" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Google AIP-180 — Backwards compatibility — đọc ngày 1/11/2026</span><span class="lc-sub">Được thêm giá trị enum vào response nhưng “cần thận trọng thích đáng” — code người dùng có thể không xử lý được; LabFlow giấu chúng khỏi v1.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm <code>appVersionGuard</code>, <code>/app-config</code> và check-in; chạy lại các output.</li>
@@ -1552,6 +1668,18 @@ tổng số chỗ của 3 phòng: 94
 <p class="lead">The inventory team wants the field <code>serialNo</code> renamed to <code>serialNumber</code> — the name the new barcode scanner app and the school’s asset system use. Lesson 4.1 proved a rename breaks old clients silently. Your job: ship it in <code>/v2</code>, keep <code>/v1</code> working exactly as before, announce the end of <code>/v1/devices</code> properly, and write a test that turns red the day somebody breaks the v1 contract by accident.</p>
 
 <h3>The request</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">design</span><span class="lz-d">what changes in v2, what v1 keeps</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">build</span><span class="lz-d">one router, two views, Deprecation + Sunset</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">prove</span><span class="lz-d">contract tests for v1 still green</span></div>
+  <div class="lz-step"><span class="lz-k">score</span><span class="lz-t">rubric</span><span class="lz-d">10 points, pass at 7</span></div>
+</div>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9745.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9745 — The Deprecation HTTP Response Header Field (Mar 2025) — read 1 Nov 2026</span><span class="lc-sub">The header this lab sends on /v1/devices, together with Sunset.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <ul>
   <li>“In v2, devices have <code>serialNumber</code>, in responses <strong>and</strong> in POST/PUT/PATCH bodies. <code>serialNo</code> in a v2 body is an error.”</li>
   <li>“v1 must not change at all — the lab managers’ script reads <code>serialNo</code>.”</li>
@@ -1803,6 +1931,18 @@ test at test/contract-v1.test.mjs:23:1
 <p class="lead">Nhóm kiểm kê muốn đổi tên trường <code>serialNo</code> thành <code>serialNumber</code> — cái tên mà app quét mã vạch mới và hệ thống tài sản của trường đang dùng. Bài 4.1 đã chứng minh đổi tên làm client cũ vỡ lặng lẽ. Việc của bạn: phát hành nó ở <code>/v2</code>, giữ <code>/v1</code> chạy y hệt như trước, thông báo đúng chuẩn ngày kết thúc của <code>/v1/devices</code>, và viết một test chuyển đỏ vào đúng ngày ai đó vô tình làm vỡ hợp đồng v1.</p>
 
 <h3>Yêu cầu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">thiết kế</span><span class="lz-d">v2 đổi gì, v1 giữ gì</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">xây</span><span class="lz-d">một router, hai view, Deprecation + Sunset</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">chứng minh</span><span class="lz-d">test hợp đồng v1 vẫn xanh</span></div>
+  <div class="lz-step"><span class="lz-k">chấm</span><span class="lz-t">thang điểm</span><span class="lz-d">10 điểm, đạt từ 7</span></div>
+</div>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9745.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9745 — The Deprecation HTTP Response Header Field (3/2025) — đọc ngày 1/11/2026</span><span class="lc-sub">Header mà lab này gửi trên /v1/devices, cùng với Sunset.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <ul>
   <li>“Ở v2, thiết bị có <code>serialNumber</code>, trong response <strong>và</strong> trong body POST/PUT/PATCH. <code>serialNo</code> trong body v2 là lỗi.”</li>
   <li>“v1 không được đổi gì — script của các quản lý lab đọc <code>serialNo</code>.”</li>

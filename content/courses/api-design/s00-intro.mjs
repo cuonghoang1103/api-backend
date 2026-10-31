@@ -705,6 +705,12 @@ node -v      <span class="tok-comment"># needs v22 or newer — lesson 0.3 shows
 <p>If <code>node -v</code> prints nothing or a version below 22, jump to “Step 1” of lesson 0.3, install Node, and come back. Everything else here needs only Node itself and <code>curl</code>, which ships with macOS, Linux and Windows 10/11 (on Windows PowerShell type <code>curl.exe</code> — lesson 0.2 explains why).</p>
 
 <h3>The mirror server: see what really arrives</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1 · client</span><span class="lz-t">request line + headers</span><span class="lz-d">POST /bookings HTTP/1.1 · Content-Type · Authorization</span></div>
+  <div class="lz-step"><span class="lz-k">2 · body</span><span class="lz-t">optional</span><span class="lz-d">JSON — only if Content-Type says so</span></div>
+  <div class="lz-step"><span class="lz-k">3 · server</span><span class="lz-t">reads and routes</span><span class="lz-d">Express matches method + path</span></div>
+  <div class="lz-step"><span class="lz-k">4 · response</span><span class="lz-t">status + headers + body</span><span class="lz-d">201 · Location · Content-Type · JSON</span></div>
+</div>
 <p>Frameworks hide the raw request from you. To learn HTTP we want the opposite: a server that shows everything. Save this as <code>echo.mjs</code> in <code>~/thu-api</code>:</p>
 <pre><code class="language-javascript"><span class="tok-comment">// echo.mjs — máy chủ "tấm gương": in ra request nó nhận được, rồi trả lại dạng JSON</span>
 <span class="tok-keyword">import</span> { createServer } <span class="tok-keyword">from</span> <span class="tok-string">'node:http'</span>;
@@ -998,6 +1004,12 @@ node -v      <span class="tok-comment"># cần v22 trở lên — bài 0.3 hư�
 <p>Nếu <code>node -v</code> không in gì hoặc in phiên bản dưới 22, hãy nhảy tới "Bước 1" của bài 0.3, cài Node rồi quay lại. Phần còn lại của bài chỉ cần Node và <code>curl</code> — curl có sẵn trên macOS, Linux và Windows 10/11 (trên Windows PowerShell hãy gõ <code>curl.exe</code> — bài 0.2 giải thích vì sao).</p>
 
 <h3>Máy chủ tấm gương: thấy cái gì thật sự tới nơi</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">1 · client</span><span class="lz-t">dòng request + header</span><span class="lz-d">POST /bookings HTTP/1.1 · Content-Type · Authorization</span></div>
+  <div class="lz-step"><span class="lz-k">2 · body</span><span class="lz-t">tuỳ chọn</span><span class="lz-d">JSON — chỉ khi Content-Type nói vậy</span></div>
+  <div class="lz-step"><span class="lz-k">3 · server</span><span class="lz-t">đọc và định tuyến</span><span class="lz-d">Express khớp phương thức + đường dẫn</span></div>
+  <div class="lz-step"><span class="lz-k">4 · response</span><span class="lz-t">mã trạng thái + header + body</span><span class="lz-d">201 · Location · Content-Type · JSON</span></div>
+</div>
 <p>Framework giấu request "trần" khỏi mắt bạn. Để học HTTP ta cần điều ngược lại: một server phơi ra tất cả. Lưu tệp sau thành <code>echo.mjs</code> trong <code>~/thu-api</code>:</p>
 <pre><code class="language-javascript"><span class="tok-comment">// echo.mjs — máy chủ "tấm gương": in ra request nó nhận được, rồi trả lại dạng JSON</span>
 <span class="tok-keyword">import</span> { createServer } <span class="tok-keyword">from</span> <span class="tok-string">'node:http'</span>;
@@ -1440,6 +1452,12 @@ Keep-Alive: timeout=5
 <p>In a team project this is a quiet superpower: when the back-end changes an endpoint, the matching request changes in the same pull request, and the front-end developer pulls a working example instead of reading a chat message.</p>
 
 <h3>Which tool when?</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">curl</span><span class="lz-lnote">exact bytes, scripts, CI, every lesson of this course</span></div>
+  <div class="lz-layer"><span class="lz-lname">HTTPie</span><span class="lz-lnote">readable output for people; re-sorts what it shows</span></div>
+  <div class="lz-layer"><span class="lz-lname">Postman</span><span class="lz-lnote">GUI, collections shared in a team account</span></div>
+  <div class="lz-layer"><span class="lz-lname">Bruno</span><span class="lz-lnote">requests as plain files in the repo — reviewed like code</span></div>
+</div>
 <table>
   <thead><tr><th>Tool</th><th>Best for</th><th>Shared how</th><th>Cost</th></tr></thead>
   <tbody>
@@ -1450,6 +1468,12 @@ Keep-Alive: timeout=5
   </tbody>
 </table>
 <p>The rule for this course: learn with <strong>curl</strong> (you see everything), choose <strong>one</strong> GUI for your team and commit its collection, and never paste real secrets into any of them.</p>
+
+<a class="link-card" href="https://everything.curl.dev/http/post/json.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Everything curl — JSON (--json) — read 1 Nov 2026</span><span class="lc-sub">curl 7.82.0 added --json: it sends the data with POST and sets both Content-Type and Accept to application/json — curl does not check that the data is valid JSON.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
@@ -1635,6 +1659,12 @@ Keep-Alive: timeout=5
 <p>Trong đồ án nhóm đây là một siêu năng lực âm thầm: khi back-end đổi một endpoint, request tương ứng cũng đổi trong cùng pull request, và bạn front-end pull về được một ví dụ chạy được thay vì đọc tin nhắn trong nhóm chat.</p>
 
 <h3>Khi nào dùng công cụ nào</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">curl</span><span class="lz-lnote">đúng từng byte, script, CI, mọi bài của khoá này</span></div>
+  <div class="lz-layer"><span class="lz-lname">HTTPie</span><span class="lz-lnote">output dễ đọc cho người; tự sắp xếp lại thứ nó hiện</span></div>
+  <div class="lz-layer"><span class="lz-lname">Postman</span><span class="lz-lnote">giao diện, collection chia sẻ qua tài khoản đội</span></div>
+  <div class="lz-layer"><span class="lz-lname">Bruno</span><span class="lz-lnote">request là tệp thường trong repo — review như code</span></div>
+</div>
 <table>
   <thead><tr><th>Công cụ</th><th>Hợp nhất cho</th><th>Chia sẻ bằng</th><th>Chi phí</th></tr></thead>
   <tbody>
@@ -1645,6 +1675,12 @@ Keep-Alive: timeout=5
   </tbody>
 </table>
 <p>Luật của khoá: học bằng <strong>curl</strong> (thấy được mọi thứ), chọn <strong>một</strong> công cụ đồ hoạ cho cả nhóm và commit collection của nó, và không bao giờ dán bí mật thật vào bất kỳ công cụ nào.</p>
+
+<a class="link-card" href="https://everything.curl.dev/http/post/json.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Everything curl — JSON (--json) — đọc ngày 1/11/2026</span><span class="lc-sub">curl 7.82.0 thêm --json: gửi dữ liệu bằng POST và đặt cả Content-Type lẫn Accept là application/json — curl không kiểm dữ liệu có đúng JSON không.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
@@ -1757,6 +1793,11 @@ labflow-api@1.0.0 …/labflow-api
 </table>
 
 <h3>Step 4: three files, three jobs</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">server.js</span><span class="lz-t">start</span><span class="lz-d">listen on PORT — nothing else</span></div>
+  <div class="lz-step"><span class="lz-k">app.js</span><span class="lz-t">the API</span><span class="lz-d">middleware + routes + error handler</span></div>
+  <div class="lz-step"><span class="lz-k">db.js</span><span class="lz-t">the data</span><span class="lz-d">arrays in RAM until Chapter 12 (PostgreSQL)</span></div>
+</div>
 <pre><code class="language-plaintext">labflow-api/
 ├── package.json
 └── src/
@@ -1980,6 +2021,12 @@ To eliminate this warning, add "type": "module" to /…/package.json.
 
 <div class="pitfall"><p><strong>Trap — forgetting <code>return</code> before an early response.</strong> Write <code>if (!lab) res.status(404).json(…)</code> without <code>return</code> and the handler keeps going to <code>res.json(lab)</code>. We tried it: in this exact handler the mistake is <em>silent</em>, because <code>lab</code> is <code>undefined</code> and Express 5.3 sends nothing more. Change that last line to anything with a real body, such as <code>res.json({ found: lab })</code>, and the server terminal shows <code>Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client</code>. A bug that only shows up sometimes is the worst kind — one request, one response, always <code>return</code>.</p></div>
 
+<a class="link-card" href="https://expressjs.com/en/guide/migrating-5.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Express — Migrating to Express 5 — read 1 Nov 2026</span><span class="lc-sub">What changed from Express 4: rejected promises reach the error handler, new path syntax (/*splat), req.query is a read-only getter, req.body is undefined when not parsed.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Build the skeleton exactly as above and run the four curl commands. Your output should match except for <code>Date</code> and possibly <code>ETag</code>.</li>
@@ -2083,6 +2130,11 @@ labflow-api@1.0.0 …/labflow-api
 </table>
 
 <h3>Bước 4: ba tệp, ba nhiệm vụ</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">server.js</span><span class="lz-t">khởi động</span><span class="lz-d">nghe ở PORT — không làm gì khác</span></div>
+  <div class="lz-step"><span class="lz-k">app.js</span><span class="lz-t">API</span><span class="lz-d">middleware + route + bộ xử lý lỗi</span></div>
+  <div class="lz-step"><span class="lz-k">db.js</span><span class="lz-t">dữ liệu</span><span class="lz-d">mảng trong RAM tới Chương 12 (PostgreSQL)</span></div>
+</div>
 <pre><code class="language-plaintext">labflow-api/
 ├── package.json
 └── src/
@@ -2305,6 +2357,12 @@ To eliminate this warning, add "type": "module" to /…/package.json.
 <p>Node 22 đoán đúng và vẫn chạy tệp, nhưng nói rõ bạn cần thêm gì. Các bản cũ hơn từ chối luôn với <code>SyntaxError: Cannot use import statement outside a module</code>.</p>
 
 <div class="pitfall"><p><strong>Bẫy — quên <code>return</code> trước một response sớm.</strong> Viết <code>if (!lab) res.status(404).json(…)</code> mà thiếu <code>return</code> thì handler chạy tiếp tới <code>res.json(lab)</code>. Chúng tôi đã thử: với đúng handler này, lỗi <em>im lặng</em>, vì <code>lab</code> là <code>undefined</code> và Express 5.3 không gửi thêm gì. Đổi dòng cuối thành thứ có body thật, như <code>res.json({ found: lab })</code>, là terminal của server hiện ngay <code>Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client</code>. Lỗi lúc có lúc không là loại lỗi tệ nhất — một request, một response, luôn <code>return</code>.</p></div>
+
+<a class="link-card" href="https://expressjs.com/en/guide/migrating-5.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Express — Migrating to Express 5 — đọc ngày 1/11/2026</span><span class="lc-sub">Khác Express 4: promise bị từ chối tự tới bộ xử lý lỗi, cú pháp đường dẫn mới (/*splat), req.query chỉ đọc, req.body là undefined khi chưa parse.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>

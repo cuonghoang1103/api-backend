@@ -28,6 +28,17 @@ export default {
 <h2>Modelling resources, not actions</h2>
 <p class="lead">Before methods, status codes or JSON fields, an API needs a <em>shape</em>: which things it exposes and what their addresses are. Get this right and most later decisions become obvious; get it wrong and every new feature invents a new URL. In this lesson you turn LabFlow’s requirements into resources and URLs, extend the skeleton from lesson 0.3 with devices and a nested collection, and design the one action that does not fit — cancelling a booking.</p>
 
+<div class="callout ok">
+<p><strong>After Chapter 1 you can:</strong></p>
+<ul>
+  <li>model a domain as resources and URLs instead of verbs;</li>
+  <li>pick the right method and know which ones are safe to repeat;</li>
+  <li>choose the exact status code for every outcome, in a fixed order;</li>
+  <li>name fields, dates, money and ids so no client has to guess.</li>
+</ul>
+<p><strong>Why it matters:</strong> This is the vocabulary of every API review and every “design an API for…” interview question; LabFlow’s first resources are built here.</p>
+</div>
+
 <h3>What is a resource?</h3>
 <p>A <strong>resource</strong> is anything the API lets clients name and work with: a lab, a device, a booking, a user. It has three properties:</p>
 <ul>
@@ -48,6 +59,12 @@ export default {
 <p>Two URLs per resource, a handful of methods — that is the whole vocabulary a client needs to learn. Compare with an RPC-style API where every operation has its own name.</p>
 
 <h3>From user stories to resources</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">user story</span><span class="lz-t">“As a student I book a lab”</span><span class="lz-d">what people do</span></div>
+  <div class="lz-step"><span class="lz-k">nouns</span><span class="lz-t">lab, booking, device</span><span class="lz-d">the things they act on</span></div>
+  <div class="lz-step"><span class="lz-k">resources</span><span class="lz-t">collection + item</span><span class="lz-d">/bookings · /bookings/{id}</span></div>
+  <div class="lz-step"><span class="lz-k">methods</span><span class="lz-t">a few standard verbs</span><span class="lz-d">GET · POST · PUT · PATCH · DELETE</span></div>
+</div>
 <table>
   <thead><tr><th>LabFlow user story</th><th>Nouns</th><th>Becomes</th></tr></thead>
   <tbody>
@@ -305,6 +322,12 @@ Keep-Alive: timeout=5
 <h3>In interviews and at work</h3>
 <p>“Design the URLs for X” is a common opener. A calm answer: (1) list the nouns, usually 3–6; (2) give each a collection URL and an item URL; (3) choose the parent–child pairs that deserve one level of nesting; (4) name the special actions and say why they are not a PATCH; (5) say what you left out and how you would add it later without breaking clients. In code reviews, the same checklist catches most URL problems before they are frozen.</p>
 
+<a class="link-card" href="https://google.aip.dev/121" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Google AIP-121 — Resource-oriented design — read 1 Nov 2026</span><span class="lc-sub">Google’s design guide in one line: an API is built from named resources (nouns) and a small number of standard methods (verbs) — custom methods only where those do not fit.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Add the code above to your project and run the five curl commands; compare with the outputs (ignore <code>Date</code> and <code>ETag</code>).</li>
@@ -347,6 +370,17 @@ Keep-Alive: timeout=5
 <h2>Mô hình hoá tài nguyên, không phải hành động</h2>
 <p class="lead">Trước khi nói tới phương thức, mã trạng thái hay trường JSON, một API cần có <em>hình dạng</em>: nó phơi ra những sự vật nào, và địa chỉ của chúng là gì. Làm đúng bước này thì phần lớn quyết định về sau trở nên hiển nhiên; làm sai thì mỗi tính năng mới lại đẻ ra một URL mới. Trong bài này bạn biến yêu cầu của LabFlow thành tài nguyên và URL, mở rộng khung ở bài 0.3 với thiết bị và một bộ sưu tập lồng, và thiết kế hành động duy nhất không vừa khuôn — huỷ lượt đặt.</p>
 
+<div class="callout ok">
+<p><strong>Học xong Chương 1 bạn làm được:</strong></p>
+<ul>
+  <li>mô hình hoá một miền nghiệp vụ thành tài nguyên và URL thay vì động từ;</li>
+  <li>chọn đúng phương thức và biết cái nào gửi lại an toàn;</li>
+  <li>chọn đúng mã trạng thái cho mọi kết quả, theo một thứ tự cố định;</li>
+  <li>đặt tên trường, ngày giờ, tiền và id để không client nào phải đoán.</li>
+</ul>
+<p><strong>Vì sao đáng học:</strong> Đây là từ vựng của mọi buổi review API và mọi câu phỏng vấn “thiết kế API cho…”; các tài nguyên đầu tiên của LabFlow được dựng ở đây.</p>
+</div>
+
 <h3>Tài nguyên là gì?</h3>
 <p>Một <strong>tài nguyên</strong> (resource) là bất cứ thứ gì API cho phép client gọi tên và làm việc cùng: một phòng lab, một thiết bị, một lượt đặt, một người dùng. Nó có ba đặc điểm:</p>
 <ul>
@@ -367,6 +401,12 @@ Keep-Alive: timeout=5
 <p>Hai URL cho mỗi tài nguyên, cộng một nhúm phương thức — đó là toàn bộ bộ từ vựng client cần học. Hãy so với một API kiểu RPC, nơi mỗi thao tác lại có một cái tên riêng.</p>
 
 <h3>Từ user story tới tài nguyên</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">user story</span><span class="lz-t">“Là sinh viên, tôi đặt phòng lab”</span><span class="lz-d">việc người dùng làm</span></div>
+  <div class="lz-step"><span class="lz-k">danh từ</span><span class="lz-t">phòng, lượt đặt, thiết bị</span><span class="lz-d">thứ họ tác động lên</span></div>
+  <div class="lz-step"><span class="lz-k">tài nguyên</span><span class="lz-t">bộ sưu tập + phần tử</span><span class="lz-d">/bookings · /bookings/{id}</span></div>
+  <div class="lz-step"><span class="lz-k">phương thức</span><span class="lz-t">vài động từ chuẩn</span><span class="lz-d">GET · POST · PUT · PATCH · DELETE</span></div>
+</div>
 <table>
   <thead><tr><th>User story của LabFlow</th><th>Danh từ</th><th>Trở thành</th></tr></thead>
   <tbody>
@@ -624,6 +664,12 @@ Keep-Alive: timeout=5
 <h3>Khi phỏng vấn và khi đi làm</h3>
 <p>"Hãy thiết kế URL cho X" là câu mở đầu quen thuộc. Một câu trả lời điềm tĩnh: (1) liệt kê danh từ, thường 3–6 cái; (2) mỗi cái một URL bộ sưu tập và một URL phần tử; (3) chọn những cặp cha–con đáng lồng một tầng; (4) gọi tên các hành động đặc biệt và nói vì sao chúng không phải PATCH; (5) nói ra những gì bạn bỏ qua và cách thêm vào sau mà không làm vỡ client. Khi review code, chính danh sách này bắt được phần lớn lỗi URL trước khi chúng bị "đóng băng".</p>
 
+<a class="link-card" href="https://google.aip.dev/121" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Google AIP-121 — Resource-oriented design — đọc ngày 1/11/2026</span><span class="lc-sub">Hướng dẫn thiết kế của Google trong một dòng: API dựng từ tài nguyên có tên (danh từ) và vài phương thức chuẩn (động từ) — phương thức tuỳ biến chỉ khi chúng không vừa.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Thêm code ở trên vào dự án và chạy năm lệnh curl; so với output trong bài (bỏ qua <code>Date</code> và <code>ETag</code>).</li>
@@ -676,6 +722,12 @@ Keep-Alive: timeout=5
 <p class="lead">Choosing between POST, PUT, PATCH and DELETE is not a matter of taste. Each method carries promises defined by the HTTP standard, and clients, proxies and browsers act on those promises — most importantly when deciding whether a failed request may be sent again. In this lesson you add device writes to LabFlow and watch each method’s promise hold (or not) on real requests.</p>
 
 <h3>Two promises: safe and idempotent</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">GET · HEAD · OPTIONS</span><span class="lz-lnote">safe (read-only) and idempotent — retry freely</span></div>
+  <div class="lz-layer"><span class="lz-lname">PUT · DELETE</span><span class="lz-lnote">idempotent — the second identical request changes nothing more</span></div>
+  <div class="lz-layer"><span class="lz-lname">PATCH</span><span class="lz-lnote">idempotent only if the patch says “set”, not “add 1”</span></div>
+  <div class="lz-layer"><span class="lz-lname">POST</span><span class="lz-lnote">neither — a retry may create a second record (Chapter 5 fixes this)</span></div>
+</div>
 <p>RFC 9110 (“HTTP Semantics”, §9.2) defines two properties:</p>
 <ul>
   <li><strong>Safe</strong> — the client does not ask for any change on the server. GET, HEAD and OPTIONS are safe. The server may still write a log line or a counter; what matters is that the client did not <em>request</em> a change, so browsers may prefetch these requests and crawlers may follow them.</li>
@@ -1061,6 +1113,17 @@ Keep-Alive: timeout=5
   <li>“DELETE twice returns 404 — is it still idempotent?” — yes; idempotency is about state, not responses.</li>
 </ul>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9110 — HTTP Semantics (June 2022) — read 1 Nov 2026</span><span class="lc-sub">§9.2.1 Safe Methods (“essentially read-only”) and §9.2.2 Idempotent Methods: PUT, DELETE and the safe methods.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc7396.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 7396 — JSON Merge Patch (Oct 2014) — read 1 Nov 2026</span><span class="lc-sub">The format behind LabFlow’s PATCH: members in the patch replace members in the target, and null means “remove this member”.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Restart the server (data resets) and reproduce: POST the Arduino twice, list <code>/devices?labId=lab_2</code>, and count the boards.</li>
@@ -1104,6 +1167,12 @@ Keep-Alive: timeout=5
 <p class="lead">Chọn giữa POST, PUT, PATCH và DELETE không phải chuyện sở thích. Mỗi phương thức mang những lời hứa do chuẩn HTTP định nghĩa, và client, proxy, trình duyệt hành động dựa trên các lời hứa đó — quan trọng nhất là khi quyết định một request bị lỗi có được gửi lại hay không. Trong bài này bạn thêm các thao tác ghi thiết bị vào LabFlow và nhìn lời hứa của từng phương thức đứng vững (hoặc không) trên request thật.</p>
 
 <h3>Hai lời hứa: safe và idempotent</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">GET · HEAD · OPTIONS</span><span class="lz-lnote">an toàn (chỉ đọc) và idempotent — gửi lại thoải mái</span></div>
+  <div class="lz-layer"><span class="lz-lname">PUT · DELETE</span><span class="lz-lnote">idempotent — request y hệt lần hai không đổi thêm gì</span></div>
+  <div class="lz-layer"><span class="lz-lname">PATCH</span><span class="lz-lnote">idempotent chỉ khi bản vá là “đặt bằng”, không phải “cộng 1”</span></div>
+  <div class="lz-layer"><span class="lz-lname">POST</span><span class="lz-lnote">không phải cả hai — gửi lại có thể tạo bản ghi thứ hai (Chương 5 chữa)</span></div>
+</div>
 <p>RFC 9110 ("HTTP Semantics", §9.2) định nghĩa hai tính chất:</p>
 <ul>
   <li><strong>Safe</strong> (an toàn) — client không yêu cầu server thay đổi gì. GET, HEAD và OPTIONS là safe. Server vẫn có thể ghi một dòng log hay tăng một bộ đếm; điều quan trọng là client không <em>yêu cầu</em> thay đổi, nên trình duyệt được tải trước các request này và crawler được đi theo chúng.</li>
@@ -1489,6 +1558,17 @@ Keep-Alive: timeout=5
   <li>"DELETE hai lần trả 404 — vẫn idempotent chứ?" — vẫn; idempotency nói về trạng thái, không về response.</li>
 </ul>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9110 — HTTP Semantics (6/2022) — đọc ngày 1/11/2026</span><span class="lc-sub">§9.2.1 Safe Methods (“về bản chất chỉ đọc”) và §9.2.2 Idempotent Methods: PUT, DELETE và các phương thức an toàn.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc7396.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 7396 — JSON Merge Patch (10/2014) — đọc ngày 1/11/2026</span><span class="lc-sub">Định dạng của PATCH trong LabFlow: thành viên trong bản vá thay thành viên ở đích, và null nghĩa là “xoá thành viên này”.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Khởi động lại server (dữ liệu về ban đầu) và tái hiện: POST cái Arduino hai lần, liệt kê <code>/devices?labId=lab_2</code>, và đếm số bo mạch.</li>
@@ -1617,6 +1697,16 @@ app.use('/bookings', bookingsRouter);
   }</code></pre>
 
 <h3>Choosing a 4xx: ask in this order</h3>
+<div class="lz-map">
+  <div class="lz-stage">ask in this order — the first “no” is the answer</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Could you read the request?</div><div class="lz-nsub">no ⇒ 400 (415 for an unsupported body format)</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Do we know who is calling?</div><div class="lz-nsub">no ⇒ 401</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Is this caller allowed?</div><div class="lz-nsub">no ⇒ 403</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">Does the URL point to something?</div><div class="lz-nsub">no ⇒ 404 (410 if removed for good)</div></div></div>
+  <div class="lz-node"><span class="lz-badge">5</span><div class="lz-nbody"><div class="lz-ntitle">Is the method allowed here?</div><div class="lz-nsub">no ⇒ 405 + Allow</div></div></div>
+  <div class="lz-node"><span class="lz-badge">6</span><div class="lz-nbody"><div class="lz-ntitle">Does the content make business sense?</div><div class="lz-nsub">no ⇒ 422</div></div></div>
+  <div class="lz-node"><span class="lz-badge">7</span><div class="lz-nbody"><div class="lz-ntitle">Does it clash with the current state?</div><div class="lz-nsub">yes ⇒ 409 · otherwise 200 / 201 / 204</div></div></div>
+</div>
 <table>
   <thead><tr><th>#</th><th>Question</th><th>If “no”</th><th>LabFlow example</th></tr></thead>
   <tbody>
@@ -1939,6 +2029,12 @@ Keep-Alive: timeout=5
   <li>Review red flag: any endpoint that returns 200 with <code>"success": false</code>, or a 500 for invalid user input.</li>
 </ul>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9110 — HTTP Semantics (June 2022) — read 1 Nov 2026</span><span class="lc-sub">§15 Status Codes: §15.5.10 409 Conflict, §15.5.16 415 Unsupported Media Type, §15.5.21 422 Unprocessable Content.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
   <li>Restart the server and walk the decision table from row 1 to row 7: produce one response for each of 400, 401, 403, 404, 405, 422 and 409, using only <code>curl</code>. Write the command next to each code.</li>
@@ -2058,6 +2154,16 @@ app.use('/bookings', bookingsRouter);
   }</code></pre>
 
 <h3>Chọn một mã 4xx: hỏi theo thứ tự này</h3>
+<div class="lz-map">
+  <div class="lz-stage">hỏi theo thứ tự này — câu “không” đầu tiên là đáp án</div>
+  <div class="lz-node"><span class="lz-badge">1</span><div class="lz-nbody"><div class="lz-ntitle">Có đọc được request không?</div><div class="lz-nsub">không ⇒ 400 (415 nếu định dạng body không hỗ trợ)</div></div></div>
+  <div class="lz-node"><span class="lz-badge">2</span><div class="lz-nbody"><div class="lz-ntitle">Có biết ai đang gọi không?</div><div class="lz-nsub">không ⇒ 401</div></div></div>
+  <div class="lz-node"><span class="lz-badge">3</span><div class="lz-nbody"><div class="lz-ntitle">Người gọi có được phép không?</div><div class="lz-nsub">không ⇒ 403</div></div></div>
+  <div class="lz-node"><span class="lz-badge">4</span><div class="lz-nbody"><div class="lz-ntitle">URL có trỏ tới thứ gì không?</div><div class="lz-nsub">không ⇒ 404 (410 nếu đã gỡ hẳn)</div></div></div>
+  <div class="lz-node"><span class="lz-badge">5</span><div class="lz-nbody"><div class="lz-ntitle">Phương thức có được phép ở đây không?</div><div class="lz-nsub">không ⇒ 405 + Allow</div></div></div>
+  <div class="lz-node"><span class="lz-badge">6</span><div class="lz-nbody"><div class="lz-ntitle">Nội dung có hợp lý về nghiệp vụ không?</div><div class="lz-nsub">không ⇒ 422</div></div></div>
+  <div class="lz-node"><span class="lz-badge">7</span><div class="lz-nbody"><div class="lz-ntitle">Có xung đột với trạng thái hiện tại không?</div><div class="lz-nsub">có ⇒ 409 · còn lại 200 / 201 / 204</div></div></div>
+</div>
 <table>
   <thead><tr><th>#</th><th>Câu hỏi</th><th>Nếu "không"</th><th>Ví dụ LabFlow</th></tr></thead>
   <tbody>
@@ -2380,6 +2486,12 @@ Keep-Alive: timeout=5
   <li>Dấu hiệu đỏ khi review: endpoint nào trả 200 với <code>"success": false</code>, hoặc trả 500 cho đầu vào sai của người dùng.</li>
 </ul>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9110 — HTTP Semantics (6/2022) — đọc ngày 1/11/2026</span><span class="lc-sub">§15 Status Codes: §15.5.10 409 Conflict, §15.5.16 415 Unsupported Media Type, §15.5.21 422 Unprocessable Content.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Khởi động lại server và đi hết bảng quyết định từ dòng 1 tới dòng 7: tạo ra một response cho mỗi mã 400, 401, 403, 404, 405, 422 và 409, chỉ bằng <code>curl</code>. Ghi lệnh cạnh từng mã.</li>
@@ -2554,6 +2666,12 @@ Keep-Alive: timeout=5
 <p>The general rule (often called the robustness principle): be strict in what you <em>send</em> — LabFlow’s own docs always write <code>Bearer</code> — and accept what the standard <em>allows</em>. When in doubt, read the RFC section; it is usually a page or two.</p>
 
 <h3>Dates: a time without a zone is a guess</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">client sends</span><span class="lz-t">2027-03-02T08:00:00+07:00</span><span class="lz-d">offset required — no offset ⇒ 400</span></div>
+  <div class="lz-step"><span class="lz-k">server parses</span><span class="lz-t">an instant</span><span class="lz-d">the offset turns local time into one moment</span></div>
+  <div class="lz-step"><span class="lz-k">stores</span><span class="lz-t">UTC</span><span class="lz-d">2027-03-02T01:00:00.000Z</span></div>
+  <div class="lz-step"><span class="lz-k">returns</span><span class="lz-t">Z</span><span class="lz-d">the client formats it for the user</span></div>
+</div>
 <p>Save this script as <code>naming.mjs</code> next to your project and run it with two different time zones:</p>
 <pre><code class="language-javascript">// naming.mjs — ba cái bẫy dữ liệu trong JSON (chạy: node naming.mjs)
 const show = (label, value) =&gt; console.log(label.padEnd(44), value);
@@ -2663,6 +2781,17 @@ new Date('2026-11-02')                       2026-11-02T00:00:00.000Z</div>
   </tbody>
 </table>
 <p>Put a table like this in your project’s README on day one. In a team it ends arguments before they begin, and in a code review it turns opinions into a checklist.</p>
+
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc3339.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 3339 — Date and Time on the Internet: Timestamps (Jul 2002) — read 1 Nov 2026</span><span class="lc-sub">§5.6: date-time = full-date "T" full-time, with time-offset = "Z" / ("+" / "-") hh:mm — the format LabFlow accepts.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://github.com/microsoft/api-guidelines/blob/vNext/azure/Guidelines.md" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Microsoft Azure REST API Guidelines — read 1 Nov 2026</span><span class="lc-sub">Two rules LabFlow shares with Microsoft’s guidelines: camelCase for every JSON field name, and RFC 3339 for date-times.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 
 <h3>🧪 Practice (15–20 min)</h3>
 <div class="callout ok"><ol>
@@ -2824,6 +2953,12 @@ Keep-Alive: timeout=5
 <p>Luật chung (hay gọi là nguyên tắc bền vững — robustness principle): nghiêm ngặt với thứ mình <em>gửi</em> — tài liệu của LabFlow luôn viết <code>Bearer</code> — và chấp nhận những gì chuẩn <em>cho phép</em>. Khi phân vân, hãy đọc đúng mục đó trong RFC; thường chỉ một hai trang.</p>
 
 <h3>Ngày giờ: giờ không kèm múi giờ là một phỏng đoán</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">client gửi</span><span class="lz-t">2027-03-02T08:00:00+07:00</span><span class="lz-d">bắt buộc có múi giờ — thiếu ⇒ 400</span></div>
+  <div class="lz-step"><span class="lz-k">server đọc</span><span class="lz-t">một thời điểm</span><span class="lz-d">múi giờ biến giờ địa phương thành một thời điểm</span></div>
+  <div class="lz-step"><span class="lz-k">lưu</span><span class="lz-t">UTC</span><span class="lz-d">2027-03-02T01:00:00.000Z</span></div>
+  <div class="lz-step"><span class="lz-k">trả về</span><span class="lz-t">Z</span><span class="lz-d">client tự định dạng cho người dùng</span></div>
+</div>
 <p>Lưu đoạn script này thành <code>naming.mjs</code> cạnh dự án và chạy với hai múi giờ khác nhau:</p>
 <pre><code class="language-javascript">// naming.mjs — ba cái bẫy dữ liệu trong JSON (chạy: node naming.mjs)
 const show = (label, value) =&gt; console.log(label.padEnd(44), value);
@@ -2934,6 +3069,17 @@ new Date('2026-11-02')                       2026-11-02T00:00:00.000Z</div>
 </table>
 <p>Hãy đặt một bảng như thế này vào README của dự án ngay ngày đầu. Trong nhóm, nó dập tắt tranh cãi trước khi tranh cãi bắt đầu; khi review code, nó biến ý kiến cá nhân thành một danh sách kiểm tra.</p>
 
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc3339.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 3339 — Date and Time on the Internet: Timestamps (7/2002) — đọc ngày 1/11/2026</span><span class="lc-sub">§5.6: date-time = full-date "T" full-time, với time-offset = "Z" / ("+" / "-") hh:mm — đúng định dạng LabFlow nhận.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://github.com/microsoft/api-guidelines/blob/vNext/azure/Guidelines.md" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Microsoft Azure REST API Guidelines — đọc ngày 1/11/2026</span><span class="lc-sub">Hai luật LabFlow trùng với hướng dẫn của Microsoft: camelCase cho mọi tên trường JSON, và RFC 3339 cho ngày giờ.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <h3>🧪 Thực hành (15–20 phút)</h3>
 <div class="callout ok"><ol>
   <li>Áp cả hai bản sửa (khoá query lạ và <code>bearer</code> viết thường) rồi chạy lại hai lệnh đang lỗi cho tới khi chúng cư xử đúng như trong bài.</li>
@@ -2981,6 +3127,18 @@ new Date('2026-11-02')                       2026-11-02T00:00:00.000Z</div>
 <p class="lead">Time to use every idea of Chapter 1 without a step-by-step guide. You receive a short request from the lab managers, design the new resource on paper, build it into your LabFlow API, and prove each promise with curl. A rubric tells you exactly how it will be marked. The reference solution and a real transcript are at the end — try first, then compare.</p>
 
 <h3>The request</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">design</span><span class="lz-d">DESIGN.md: resources, URLs, methods, codes</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">build</span><span class="lz-d">routes that follow the rules</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">prove</span><span class="lz-d">TRANSCRIPT.md with real curl -i output</span></div>
+  <div class="lz-step"><span class="lz-k">score</span><span class="lz-t">rubric</span><span class="lz-d">10 points, pass at 7</span></div>
+</div>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: RFC 9110 — HTTP Semantics (June 2022) — read 1 Nov 2026</span><span class="lc-sub">The reference for every status code and method rule the rubric checks.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+
 <ul>
   <li>“As a <strong>student</strong> (any logged-in user), I report that a device is broken: a short <strong>title</strong> and a <strong>severity</strong> — <code>LOW</code>, <code>MEDIUM</code> or <code>HIGH</code>.”</li>
   <li>“As anyone, I see all reports of one device, and I can open a single report.”</li>
@@ -3262,6 +3420,18 @@ Keep-Alive: timeout=5
 <p class="lead">Đã tới lúc dùng mọi ý của Chương 1 mà không có hướng dẫn từng bước. Bạn nhận một yêu cầu ngắn từ quản lý lab, thiết kế tài nguyên mới trên giấy, dựng nó vào LabFlow API của mình, và chứng minh từng lời hứa bằng curl. Thang chấm cho biết chính xác bạn được chấm thế nào. Lời giải mẫu và một bản ghi chạy thật nằm ở cuối — hãy tự làm trước, rồi mới so.</p>
 
 <h3>Yêu cầu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><span class="lz-k">A</span><span class="lz-t">thiết kế</span><span class="lz-d">DESIGN.md: tài nguyên, URL, phương thức, mã</span></div>
+  <div class="lz-step"><span class="lz-k">B</span><span class="lz-t">xây</span><span class="lz-d">route theo đúng luật</span></div>
+  <div class="lz-step"><span class="lz-k">C</span><span class="lz-t">chứng minh</span><span class="lz-d">TRANSCRIPT.md với output curl -i thật</span></div>
+  <div class="lz-step"><span class="lz-k">chấm</span><span class="lz-t">thang điểm</span><span class="lz-d">10 điểm, đạt từ 7</span></div>
+</div>
+<a class="link-card" href="https://www.rfc-editor.org/rfc/rfc9110.html" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: RFC 9110 — HTTP Semantics (6/2022) — đọc ngày 1/11/2026</span><span class="lc-sub">Tài liệu gốc cho mọi luật mã trạng thái và phương thức mà thang chấm kiểm.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+
 <ul>
   <li>"Là <strong>sinh viên</strong> (bất kỳ ai đã đăng nhập), tôi báo một thiết bị bị hỏng: một <strong>tiêu đề</strong> ngắn và <strong>mức độ</strong> — <code>LOW</code>, <code>MEDIUM</code> hoặc <code>HIGH</code>."</li>
   <li>"Là bất kỳ ai, tôi xem được mọi phiếu báo của một thiết bị, và mở được từng phiếu."</li>

@@ -180,7 +180,7 @@ for (const f of tepNguon) {
   // Node — scripts/codelab-sql-node.mjs) + ví dụ trong đề lấy từ bảng mong đợi của kiểm mẫu đầu tiên.
   const loiSql = new Map();
   for (const ex of payload.exercises) {
-    if (ex.testsJson?.loai !== 'sql') continue;
+    if (ex.testsJson?.loai !== 'sql' && ex.testsJson?.loai !== 'sql-pg') continue;
     const sqlNode = await import('./codelab-sql-node.mjs');
     const saiMau = ex.__saiMau;
     delete ex.__saiMau;

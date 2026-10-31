@@ -40,6 +40,9 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   'discrete-mathematics': 'mad101-practice',
   // NWC204 (30/10/2026): subnet/VLSM, CIDR, IPv6, bảng định tuyến, MAC/VLAN, TCP, ACL, NAT… — content/codelab/nwc204-practice (máy chấm choice/order/table/js).
   'nwc204-computer-networking': 'nwc204-practice',
+  // Courses (01/11/2026): networking-for-developers (mô phỏng /net-lab, js/choice) · api-design (LabFlow API, js/module/choice).
+  'networking-for-developers': 'networking-practice',
+  'api-design': 'api-design-practice',
 });
 
 /**
@@ -71,6 +74,8 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'academy', ma: 'NWC204', ten: 'Computer Networking', courseSlug: 'nwc204-computer-networking', trackSlug: 'nwc204-practice' },
   { loai: 'academy', ma: 'MAD101', ten: 'Discrete Mathematics', courseSlug: 'discrete-mathematics', trackSlug: 'mad101-practice' },
   { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
+  { loai: 'course', ten: 'Networking for Developers', courseSlug: 'networking-for-developers', trackSlug: 'networking-practice' },
+  { loai: 'course', ten: 'API & System Design', courseSlug: 'api-design', trackSlug: 'api-design-practice' },
 ] as MucDanhMuc[]);
 
 /** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */

@@ -104,6 +104,8 @@ const THU_VIEN_DEMO = {
 };
 /** CSS gói: style-src của web không cho jsdelivr ⇒ demo tải bằng fetch (connect-src cho) rồi nhét <style>. */
 const CSS_DEMO = { bootstrap: 'bootstrap@5.3.3/dist/css/bootstrap.min.css' };
+/** Làm đẹp nhẹ cho app mẫu dùng Bootstrap, chỉ áp ở Live demo. Selector có `html body` để thắng CSS Bootstrap nạp sau. */
+const BOOT_DEMO = 'html body .card{border:0;border-radius:14px;overflow:hidden;box-shadow:0 1px 2px rgba(15,23,42,.06),0 10px 26px -18px rgba(15,23,42,.45)}html body .btn{border-radius:10px;font-weight:600}html body .form-control,html body .form-select{border-radius:10px}';
 
 /**
  * RUNTIME của demo (ES5, chạy trong iframe sandbox gốc mờ). Bản sao các phần tương ứng của tác tử chấm
@@ -162,7 +164,8 @@ function dd(tu,s){var p=tu.split('/').slice(0,-1);s.split('/').forEach(function(
 function tim(p){var d=['','.js','.jsx','.ts','.tsx','.json','/index.js','/index.jsx'];for(var i=0;i<d.length;i++){if(M[p+d[i]]!=null||CSS[p+d[i]]!=null)return p+d[i]}return null}
 function req(tu,s){if(s==='axios')return axiosGia();if(s==='react-router-dom'||s==='react-router')return routerGia();if(LIB[s])return LIB[s];if(/\.css$/.test(s)&&!/^\./.test(s))return{};var p=tim(dd(tu,s));if(!p)throw new Error('Cannot find module '+s);return nap(p)}
 function nap(p){if(C[p])return C[p].exports;if(CSS[p]!=null){var st=document.createElement('style');st.textContent=CSS[p];document.head.appendChild(st);C[p]={exports:{}};return{}}var m={exports:{}};C[p]=m;if(/\.json$/.test(p)){m.exports=JSON.parse(M[p]);return m.exports}new Function('require','module','exports',M[p])(function(s){return req(p,s)},m,m.exports);return m.exports}
-if(THANH){var bar=document.createElement('form');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:6px;align-items:center;padding:6px 10px;background:#e2e8f0;border-bottom:1px solid #cbd5e1;font:12px system-ui';bar.innerHTML='<span style="color:#475569">URL</span><input id="cl-demo-url" style="flex:1;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:12px ui-monospace,monospace" aria-label="Address bar"><button style="padding:3px 10px;border-radius:6px;border:1px solid #94a3b8;background:#fff;cursor:pointer">Go</button>';
+if(THANH){var bar=document.createElement('form');bar.setAttribute('aria-label','Address bar');bar.style.cssText='position:sticky;top:0;z-index:99998;display:flex;gap:4px;align-items:center;padding:8px 12px;background:#f1f3f7;border-bottom:1px solid #dde1e8;font:13px system-ui,-apple-system,Segoe UI,sans-serif';var nutCss='width:30px;height:30px;display:grid;place-items:center;padding:0;border:0;border-radius:8px;background:transparent;color:#475569;font-size:16px;line-height:1;cursor:pointer';bar.innerHTML='<button type="button" id="cl-demo-lui" aria-label="Back" title="Back" style="'+nutCss+'">&#8592;</button><button type="button" id="cl-demo-toi" aria-label="Forward" title="Forward" style="'+nutCss+'">&#8594;</button><button type="button" id="cl-demo-tai" aria-label="Reload" title="Reload" style="'+nutCss+'">&#8635;</button><input id="cl-demo-url" spellcheck="false" aria-label="URL" style="flex:1;min-width:0;height:32px;margin-left:6px;padding:0 14px;border:1px solid #dde1e8;border-radius:16px;background:#fff;color:#334155;outline:none;font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace">';
+['cl-demo-lui','cl-demo-toi','cl-demo-tai'].forEach(function(id,i){var b=bar.querySelector('#'+id);b.addEventListener('mouseenter',function(){b.style.background='#e2e6ee'});b.addEventListener('mouseleave',function(){b.style.background='transparent'});b.addEventListener('click',function(){if(i===2)location.reload();else if(dieuHuong)dieuHuong(i===0?-1:1)})});
 bar.addEventListener('submit',function(e){e.preventDefault();var v=document.getElementById('cl-demo-url').value.replace(/^https?:\/\/[^/]+/,'')||'/';if(dieuHuong)dieuHuong(v)});document.body.insertBefore(bar,document.body.firstChild);datThanh(URL0||'/')}
 nap(__CHINH__);
 })();`;
@@ -174,7 +177,7 @@ nap(__CHINH__);
  * `jsonServer: { base, db }` ⇒ json-server GIẢ có trạng thái (thêm/sửa/xoá thấy ngay); app có React Router ⇒
  * thanh địa chỉ nhỏ trên cùng (URL hiện tại, gõ được). `url` = URL mở đầu.
  */
-export function dungDemoReact(files, { tepChinh = 'src/index.js', thuVien = [], tieuDe = 'Live demo', htmlThan = '<div id="root"></div>', jsonServer = null, url = null } = {}) {
+export function dungDemoReact(files, { tepChinh = 'src/index.js', thuVien = [], tieuDe = 'Live demo', htmlThan = '<div id="root"></div>', jsonServer = null, url = null, cssThem = '' } = {}) {
   // sucrase: repo gốc không cài; frontend/desktop có (gián tiếp qua tailwind) — tìm lần lượt
   let transform;
   for (const goc of ['../../../package.json', '../../../frontend/package.json', '../../../desktop/package.json']) {
@@ -203,6 +206,7 @@ export function dungDemoReact(files, { tepChinh = 'src/index.js', thuVien = [], 
     .replace('__URL__', () => J(url)).replace('__THANH__', () => J(ds.includes('react-router-dom')))
     .replace('__CHINH__', () => J(tepChinh));
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(tieuDe)}</title>
+<meta name="color-scheme" content="light only"><style>:root{color-scheme:only light}html,body{background:#fff;color:#212529}body{margin:0;-webkit-font-smoothing:antialiased}${ds.includes('bootstrap') ? BOOT_DEMO : ''}${cssThem}</style>
 ${lib}
 ${cssGoi}
 </head><body>${htmlThan}<script>${goi.replace(/<\/script/gi, '<\\/script')}</script></body></html>`;

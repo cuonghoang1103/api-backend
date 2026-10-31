@@ -104,7 +104,7 @@ function xuat(de, m) {
   if (de.demo && tests?.loai === 'react') {
     // de.demo.thay: [[chữ cũ, chữ mới]] — chỉ áp cho Live demo (vd đổi ảnh trong public/ thành data: URI, vì demo chỉ có mã).
     const tepDemo = Object.fromEntries(Object.entries(files).map(([ten, ma]) => [ten, (de.demo.thay || []).reduce((s, [cu, moi]) => s.split(cu).join(moi), ma)]));
-    demoHtml = dungDemoReact(tepDemo, { tepChinh: de.demo.tepChinh || tests.tepChinh || 'src/index.js', thuVien: tests.thuVien || [], tieuDe: `${hai(de.tieuDe)[0]} — Live demo`, jsonServer: de.demo.jsonServer ?? tests.jsonServer ?? null, url: de.demo.url ?? tests.url ?? null });
+    demoHtml = dungDemoReact(tepDemo, { cssThem: de.demo.css, tepChinh: de.demo.tepChinh || tests.tepChinh || 'src/index.js', thuVien: tests.thuVien || [], tieuDe: `${hai(de.tieuDe)[0]} — Live demo`, jsonServer: de.demo.jsonServer ?? tests.jsonServer ?? null, url: de.demo.url ?? tests.url ?? null });
   }
   return {
     title: hai(de.tieuDe)[0],

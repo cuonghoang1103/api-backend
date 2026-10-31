@@ -10,7 +10,7 @@
  * HTML đề do bộ xuất nội dung dựng (content/codelab/README.md mục "Đề lớn") với các lớp `.bi-*`.
  */
 import { useEffect, useRef, useState } from 'react';
-import { Download, FileDown, Loader2, MonitorPlay, Printer, X, Clock, Trophy } from 'lucide-react';
+import { Download, FileDown, Loader2, Maximize2, Minimize2, MonitorPlay, Printer, RotateCw, X, Clock, Trophy } from 'lucide-react';
 import { sanitizeHtml } from '@/lib/sanitizeHtml';
 import { codeLabApi } from '@/lib/code-lab-api';
 import type { CodeExercise } from '@/types/code-lab';
@@ -52,6 +52,8 @@ html,body{margin:0;background:#fff;color:#111827;font:12pt/1.5 "Times New Roman"
 export function BanIn({ ex, lang, onPickLang }: { ex: CodeExercise; lang: 'en' | 'vi'; onPickLang?: (l: 'en' | 'vi') => void }) {
   const [demo, setDemo] = useState<'dong' | 'tai' | 'mo' | 'loi'>('dong');
   const [demoHtml, setDemoHtml] = useState<string | null>(null);
+  const [demoLan, setDemoLan] = useState(0); // đổi key để nạp lại app mẫu từ đầu
+  const [demoToan, setDemoToan] = useState(false);
   const body = (lang === 'vi' && ex.problemHtmlVi) || ex.problemHtml || '';
   const giayRef = useRef<HTMLDivElement>(null);
   const tj = ex.testsJson;
@@ -139,14 +141,20 @@ export function BanIn({ ex, lang, onPickLang }: { ex: CodeExercise; lang: 'en' |
       <div ref={giayRef} className="cl-banin-giay bi-giay" dangerouslySetInnerHTML={{ __html: sanitizeHtml(body) }} />
 
       {demo === 'mo' && demoHtml && (
-        <div className="cl-demo" role="dialog" aria-modal="true" aria-label="Live demo" onClick={(e) => { if (e.target === e.currentTarget) setDemo('dong'); }}>
+        <div className={`cl-demo${demoToan ? ' is-toan' : ''}`} role="dialog" aria-modal="true" aria-label="Live demo" onClick={(e) => { if (e.target === e.currentTarget) setDemo('dong'); }}>
           <div className="cl-demo-khung">
             <div className="cl-demo-head">
-              <MonitorPlay size={15} /> <b>Live demo</b>
-              <span className="cl-demo-ghi">App mẫu đúng yêu cầu đề — bấm thử từng chức năng. Mã nguồn không hiển thị.</span>
-              <button type="button" onClick={() => setDemo('dong')} aria-label="Đóng demo" className="ml-auto"><X size={16} /></button>
+              <span className="cl-demo-nhan"><i aria-hidden="true" /> Live demo</span>
+              <span className="cl-demo-ghi">App mẫu đúng yêu cầu đề, bấm thử từng chức năng. Mã nguồn không hiển thị.</span>
+              <span className="cl-demo-nut">
+                <button type="button" onClick={() => setDemoLan((n) => n + 1)} aria-label="Chạy lại từ đầu" title="Chạy lại từ đầu"><RotateCw size={15} /></button>
+                <button type="button" onClick={() => setDemoToan((v) => !v)} aria-label={demoToan ? 'Thu nhỏ' : 'Toàn màn hình'} title={demoToan ? 'Thu nhỏ' : 'Toàn màn hình'}>
+                  {demoToan ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
+                </button>
+                <button type="button" onClick={() => setDemo('dong')} aria-label="Đóng demo" title="Đóng (Esc)"><X size={16} /></button>
+              </span>
             </div>
-            <KhungAnToan html={demoHtml} title="Live demo" className="cl-demo-if" />
+            <KhungAnToan key={demoLan} html={demoHtml} title="Live demo" className="cl-demo-if" />
           </div>
         </div>
       )}

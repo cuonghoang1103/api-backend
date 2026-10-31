@@ -791,7 +791,7 @@ export default doiDau({
       tests: { loai: 'react', phienBan: 1, tepChinh: 'src/index.js', thuVien: ['react-router-dom', 'react-bootstrap', 'bootstrap'], url: '/movies', jsonServer: { base: B, db: DB }, thangDiem: THANG_DIEM, kiem: KIEM, loiGiaiSauKhiDat: true },
       khoiDau: KHOI_DAU,
       loiGiai: LOI_GIAI,
-      demo: { tepChinh: 'src/index.js', url: '/movies', thay: [['/movie_thumbnail.png', `data:image/png;base64,${fs.readFileSync(new URL('movie_thumbnail.png', TN_MUC)).toString('base64')}`]] },
+      demo: { tepChinh: 'src/index.js', url: '/movies', css: 'html body{background:#f4f6fb}html body h2{font-size:1.25rem;font-weight:700}html body .card{transition:transform .15s,box-shadow .15s}html body .card:hover{transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(15,23,42,.55)}html body .card-img-top{height:170px;object-fit:contain;padding:18px;background:linear-gradient(135deg,#e8ecf8,#f8fafc)}html body .card>.btn{margin:4px 14px 14px;width:calc(100% - 28px)}', thay: [['/movie_thumbnail.png', `data:image/svg+xml;base64,${fs.readFileSync(new URL('thumbnail-demo.svg', TN_MUC)).toString('base64')}`]] },
       thamKhao: 'https://reactrouter.com/en/6.26.2/hooks/use-search-params',
     },
   ],

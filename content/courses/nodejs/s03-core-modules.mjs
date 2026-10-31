@@ -737,7 +737,7 @@ Content-Type: application/json; charset=utf-8
   <span class="tok-keyword">await</span> <span class="tok-function">pipeline</span>(<span class="tok-function">createReadStream</span>(<span class="tok-string">'big.zip'</span>), res);   <span class="tok-comment">// res IS a writable stream</span>
 }</code></pre>
 <p><code>res</code> is a writable stream and <code>req</code> is a readable one. Once that clicks, uploads, downloads and proxies all become the same idea.</p>
-<div class="pitfall">Every response must end <strong>exactly once</strong>. Forget <code>res.end()</code> and the client hangs until it times out; call it twice and you get <code>ERR_STREAM_WRITE_AFTER_END</code>. The classic cause is forgetting <code>return</code> after sending a response — execution continues and sends a second one.</div>
+<div class="pitfall">Every response must end <strong>exactly once</strong>. Forget <code>res.end()</code> and the client hangs until it times out; call it twice and you get <code>ERR_STREAM_WRITE_AFTER_END</code>. The classic cause is forgetting <code>return</code> after sending a response — execution continues and sends a second one; if that second one sets the status again (<code>res.writeHead</code>), Node 22 throws <code>ERR_HTTP_HEADERS_SENT</code> instead. Measured: with no handler around them, both errors bring the whole process down.</div>
 <div class="note-ct">Express is a thin layer over exactly this API. That is why you can always drop down to <code>req</code>/<code>res</code> inside an Express handler when you need something the framework does not wrap — as this site does for streaming media with HTTP Range support.</div>
 <h3>What the raw http module makes you do by hand</h3>
 <div class="lz-flow">
@@ -824,7 +824,7 @@ Content-Type: application/json; charset=utf-8
   <span class="tok-keyword">await</span> <span class="tok-function">pipeline</span>(<span class="tok-function">createReadStream</span>(<span class="tok-string">'big.zip'</span>), res);   <span class="tok-comment">// res CHÍNH LÀ stream ghi</span>
 }</code></pre>
 <p><code>res</code> là một stream ghi còn <code>req</code> là một stream đọc. Khi điều đó vỡ ra trong đầu, thì upload, download và proxy đều trở thành cùng một ý tưởng.</p>
-<div class="pitfall">Mỗi phản hồi phải kết thúc <strong>đúng một lần</strong>. Quên <code>res.end()</code> thì client treo cho tới lúc hết giờ chờ; gọi hai lần thì nhận <code>ERR_STREAM_WRITE_AFTER_END</code>. Nguyên nhân kinh điển là quên <code>return</code> sau khi đã gửi phản hồi — code chạy tiếp và gửi thêm cái thứ hai.</div>
+<div class="pitfall">Mỗi phản hồi phải kết thúc <strong>đúng một lần</strong>. Quên <code>res.end()</code> thì client treo cho tới lúc hết giờ chờ; gọi hai lần thì nhận <code>ERR_STREAM_WRITE_AFTER_END</code>. Nguyên nhân kinh điển là quên <code>return</code> sau khi đã gửi phản hồi — code chạy tiếp và gửi thêm cái thứ hai; nếu cái thứ hai đặt lại mã trạng thái (<code>res.writeHead</code>) thì Node 22 ném <code>ERR_HTTP_HEADERS_SENT</code>. Đo thật: không có gì bắt thì cả hai lỗi đều làm sập cả tiến trình.</div>
 <div class="note-ct">Express là một lớp mỏng phủ lên đúng cái API này. Đó là lý do bạn luôn có thể tụt xuống dùng thẳng <code>req</code>/<code>res</code> bên trong một handler Express khi cần thứ mà framework không bọc sẵn — như website này vẫn làm khi truyền media có hỗ trợ HTTP Range.</div>
 <h3>Module http trần bắt bạn tự làm những gì</h3>
 <div class="lz-flow">

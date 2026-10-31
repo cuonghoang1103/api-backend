@@ -99,6 +99,11 @@ src/utils         5 file      336 dòng
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 4.1: A full REST API with Express, Mongoose &amp; MVC</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: layering route – controller/service – data so a growing API stays maintainable. Different: Courses measures whether the layer boundaries actually hold on a real backend. In this lesson we add: what each layer may and may not know, and why a service that does not know it was called over HTTP can be reused by workers and tests. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-mvc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 6.1: Model, View, Controller working together</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: separating responsibilities: what each layer may know (the Model knows nothing about the web) (the code there is Node.js, not Java — the ideas carry over). Different: Academy teaches MVC with Servlet/JSP; Courses uses route – service – data layers and measures whether the boundaries hold. In this lesson we add: what each layer may and may not know, and why a service that does not know it was called over HTTP can be reused by workers and tests. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN PRJ301 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -182,6 +187,11 @@ src/utils         5 file      336 dòng
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 4.1: REST API đầy đủ với Express, Mongoose &amp; MVC</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: phân lớp route – controller/service – dữ liệu để API lớn dần vẫn dễ sửa. Khác: Courses đo xem ranh giới giữa các tầng có thật sự đứng vững trên một backend thật. Ở bài này mình học thêm: mỗi tầng được phép biết gì (và không được biết gì), vì sao service không biết mình được gọi qua HTTP thì dùng lại được cho worker và test. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-mvc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 6.1: Model, View, Controller phối hợp</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: tách trách nhiệm: tầng nào được biết gì (Model không biết gì về web) (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dạy MVC với Servlet/JSP; Courses dùng ba tầng route – service – data và đo xem ranh giới có đứng vững không. Ở bài này mình học thêm: mỗi tầng được phép biết gì và không được biết gì, vì sao service không biết mình được gọi qua HTTP thì dùng lại được cho worker và test. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
 </div>
 `,

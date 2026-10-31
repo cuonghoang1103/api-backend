@@ -581,6 +581,11 @@ curl exit=28   ← Operation timed out</div>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 2.2: Middleware: the heart of Express</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: middleware, writing your own logger, and declaration order deciding run order. Different: Courses writes a real timing logger and goes into scoped middleware. In this lesson we add: the chain in its exact run order, the built-in middleware you will actually use, scoped middleware — the shape of every guard. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-filter" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 8.1: Filter: code that runs before every request</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: a chain of links in front of the handler; calling chain.doFilter() / next() lets the request continue, otherwise it stops (the code there is Node.js, not Java — the ideas carry over). Different: A Servlet Filter and Express middleware are the same idea on two platforms. In this lesson we add: the chain in its exact run order, writing a real timing logger, scoped middleware — the shape of every guard. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN PRJ301 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -709,6 +714,11 @@ curl exit=28   ← Operation timed out</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 2.2: Middleware: trái tim của Express</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: middleware, tự viết một logger và thứ tự khai báo quyết định thứ tự chạy. Khác: Courses viết logger đo thời gian thật và đi vào middleware theo phạm vi. Ở bài này mình học thêm: dây chuyền theo đúng thứ tự chạy, những middleware có sẵn dùng thật, middleware theo phạm vi — hình dạng của mọi chốt chặn. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-filter" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 8.1: Filter: code chạy trước mọi request</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: một chuỗi mắt xích đứng trước handler, gọi chain.doFilter() / next() thì request đi tiếp, không gọi thì dừng (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Filter của Servlet và middleware của Express là cùng một ý tưởng ở hai nền tảng. Ở bài này mình học thêm: dây chuyền theo đúng thứ tự chạy, tự viết logger đo thời gian thật, middleware theo phạm vi — hình dạng của mọi chốt chặn. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
 </div>
 `,

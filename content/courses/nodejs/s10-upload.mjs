@@ -125,6 +125,11 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.2: JWT, HTTPS, CORS &amp; file upload/download</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: receiving uploads with Multer. Different: Courses measures the memory of each way of receiving files. In this lesson we add: what multipart really looks like, base64 is not free, memoryStorage vs diskStorage measured by RSS, size limits; later lessons cover object storage, signed URLs and checking real file types. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-upload" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 9.1: File upload with @MultipartConfig</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: an upload form must be multipart and the server must parse a multipart body (the code there is Node.js, not Java — the ideas carry over). Different: Academy uses the Servlet @MultipartConfig; Courses uses Multer and measures memory. In this lesson we add: what multipart really looks like, base64 is not free, memoryStorage vs diskStorage measured by RSS, size limits. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN PRJ301 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -225,6 +230,11 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.2: JWT, HTTPS, CORS &amp; upload/download file</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: nhận file upload bằng Multer. Khác: Courses đo bộ nhớ của từng cách nhận file. Ở bài này mình học thêm: multipart thật ra trông thế nào, base64 không miễn phí, so memoryStorage với diskStorage bằng RSS, giới hạn kích cỡ; các bài sau còn object storage và URL ký sẵn, kiểm file thật. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-upload" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 9.1: Tải file lên với @MultipartConfig</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: form upload phải dùng multipart và server phải đọc phần thân dạng multipart (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dùng @MultipartConfig của Servlet; Courses dùng Multer và đo bộ nhớ. Ở bài này mình học thêm: multipart thật ra trông thế nào, base64 không miễn phí, so memoryStorage với diskStorage bằng RSS, giới hạn kích cỡ. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
 </div>
 `,
@@ -384,6 +394,11 @@ sau 7 giây    → HTTP 403
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 966 — Cloudflare R2 Specifics</span><span class="lc-sub">10 bài tập: R2 khác S3 chỗ nào, custom domain, và chi phí egress.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-upload" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 9.1: File upload with @MultipartConfig</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: the question "where do uploads live so they survive a redeploy". Different: Academy stops at a folder outside the project; Courses moves files to object storage. In this lesson we add: object storage is not a file system, key layout is a design decision, anatomy of a signed URL, the file bypasses your server, Content-Type and size are not bound by default. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN PRJ301 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.2</span>
@@ -525,6 +540,11 @@ sau 7 giây    → HTTP 403
 <a class="link-card codelab" href="/code-lab/object-storage-s3${REF}#module-966" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 966 — Cloudflare R2 Specifics</span><span class="lc-sub">10 bài tập: R2 khác S3 chỗ nào, custom domain, và chi phí egress.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-upload" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 9.1: Tải file lên với @MultipartConfig</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: câu hỏi "lưu file ở đâu cho khỏi mất khi deploy lại". Khác: Academy dừng ở một thư mục ngoài dự án; Courses chuyển file sang object storage. Ở bài này mình học thêm: object storage không phải hệ thống file, bố trí key là quyết định thiết kế, giải phẫu URL ký sẵn, file đi thẳng lên mà không qua máy chủ, Content-Type và kích thước không bị ràng buộc theo mặc định. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
 </div>
 `,

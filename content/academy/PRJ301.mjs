@@ -1601,6 +1601,11 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 <div class="pitfall"><b>Trap:</b> checking login with <span class="badge">req.getSession()</span>. That call <em>creates</em> a session if none exists, so the check "is there a session?" is always true. To test whether a user is logged in, use <span class="badge">getSession(false)</span> and then check the attribute: <span class="badge">HttpSession s = req.getSession(false); if (s == null || s.getAttribute("user") == null) → redirect to login</span>.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Session fixation, and the one line that prevents it.</b> An attacker who can set a victim's JSESSIONID <em>before</em> they log in ends up sharing the authenticated session afterwards — they never needed the password. The defence is to issue a fresh session id at the moment of login: invalidate the old session, create a new one, and copy across only what you need (Servlet 3.1 offers <span class="badge">req.changeSessionId()</span>). Every serious login implementation does this, and knowing why is a genuinely strong answer in a security question.</div>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 3.2: Each cookie attribute and what it really blocks</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Authentication course on Courses. Same as this lesson: the session lives on the server, the cookie only carries its id (the code there is Node.js, not Java — the ideas carry over). Different: Academy teaches cookies/sessions through Tomcat's JSESSIONID; Courses dissects each attribute of the session cookie. It also adds: HttpOnly stops a token being read but not used, and which attacks each other attribute blocks; the chapter also covers the sessions table, session regeneration and CSRF.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -1680,6 +1685,11 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
 <div class="pitfall"><b>Bẫy:</b> kiểm đăng nhập bằng <span class="badge">req.getSession()</span>. Lời gọi đó <em>tạo mới</em> một session nếu chưa có, nên phép kiểm "có session không?" luôn đúng. Muốn kiểm người dùng đã đăng nhập chưa, hãy dùng <span class="badge">getSession(false)</span> rồi kiểm thuộc tính: <span class="badge">HttpSession s = req.getSession(false); if (s == null || s.getAttribute("user") == null) → chuyển về trang đăng nhập</span>.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Session fixation, và một dòng code ngăn được nó.</b> Kẻ tấn công đặt được JSESSIONID cho nạn nhân <em>trước khi</em> họ đăng nhập thì sau đó dùng chung luôn phiên đã xác thực — chẳng cần biết mật khẩu. Cách phòng vệ là cấp một session id mới ngay tại thời điểm đăng nhập: huỷ session cũ, tạo cái mới, và chỉ chép sang những gì cần (Servlet 3.1 có sẵn <span class="badge">req.changeSessionId()</span>). Mọi phần đăng nhập nghiêm túc đều làm điều này, và biết vì sao là một câu trả lời thực sự mạnh cho câu hỏi về bảo mật.</div>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 3.2: Từng thuộc tính cookie và nó thật sự chặn được gì</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Authentication ở Courses. Giống bài này: session sống ở server, cookie chỉ mang id của nó (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dạy cookie/session qua JSESSIONID của Tomcat; Courses mổ từng thuộc tính của cookie phiên. Ở đó có thêm: HttpOnly chặn việc token bị đọc nhưng không chặn việc nó bị dùng, và các thuộc tính khác chặn cú tấn công nào; cả chương có thêm bảng phiên, tái sinh phiên, CSRF.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -2258,6 +2268,16 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 <div class="pitfall"><b>Trap:</b> forgetting <span class="badge">setAutoCommit(true)</span> before returning a pooled connection. The next request borrows a connection that is silently inside a transaction, and its writes never commit — producing the maddening bug "the data saves on my machine but not on the server". Restore the flag in <span class="badge">finally</span>, always.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Isolation levels — the setting behind "phantom" bugs.</b> <span class="badge">con.setTransactionIsolation(...)</span> chooses how much other transactions can see. READ_UNCOMMITTED allows dirty reads (you see data that may be rolled back); READ_COMMITTED (the usual default) prevents that; REPEATABLE_READ stops a row changing under you mid-transaction; SERIALIZABLE prevents even new rows appearing, at a real cost in concurrency. Two classic symptoms map straight onto this: a report whose totals disagree with its own rows, and two users both buying "the last item". Knowing that a knob exists — and that stricter is slower — is the point.</div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 11.1: Transactions: all of it, or none of it</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: commit/rollback so a group of statements never half-happens. Different: Academy does it through JDBC (setAutoCommit); Courses does it directly in SQL on PostgreSQL. It also adds: ROLLBACK undoing cleanly, the confusing aborted state, SAVEPOINT, DDL being transactional too; later lessons cover MVCC, isolation levels, row locks and deadlocks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-2-pool-pgbouncer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 14.2: Pools: inside the app, and in front of it</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: the connection pool: keep connections open and lend them out. Different: Academy configures the pool in Tomcat; Courses looks at pools from the database side. It also adds: a pool inside the app vs a pool in front of it (PgBouncer), what one connection costs (lesson 14.1).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.4</span>
@@ -2320,6 +2340,16 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 <div class="pitfall"><b>Bẫy:</b> quên <span class="badge">setAutoCommit(true)</span> trước khi trả một kết nối về pool. Request kế tiếp mượn phải một kết nối đang âm thầm nằm trong một giao dịch, và các lệnh ghi của nó chẳng bao giờ được commit — sinh ra cái lỗi phát điên "dữ liệu lưu được trên máy em mà lên server thì không". Hãy khôi phục cờ đó trong khối <span class="badge">finally</span>, luôn luôn.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mức cô lập — cái núm vặn đứng sau các lỗi "bóng ma".</b> <span class="badge">con.setTransactionIsolation(...)</span> chọn mức độ mà các giao dịch khác nhìn thấy được. READ_UNCOMMITTED cho phép đọc bẩn (bạn thấy dữ liệu có thể sẽ bị rollback); READ_COMMITTED (mặc định thường gặp) chặn điều đó; REPEATABLE_READ ngăn một dòng bị đổi ngay dưới chân bạn giữa giao dịch; SERIALIZABLE ngăn cả việc xuất hiện dòng mới, đổi lại là cái giá thật về khả năng chạy song song. Hai triệu chứng kinh điển ánh xạ thẳng vào đây: một báo cáo có tổng không khớp với chính các dòng của nó, và hai người dùng cùng mua được "món cuối cùng". Điểm mấu chốt là biết rằng có một cái núm như vậy — và càng chặt thì càng chậm.</div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-1-giao-dich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 11.1: Giao dịch: được tất cả, hoặc không gì cả</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: commit/rollback để nhóm câu lệnh không xảy ra nửa vời. Khác: Academy làm qua JDBC (setAutoCommit); Courses làm thẳng trong SQL trên PostgreSQL. Ở đó có thêm: ROLLBACK hoàn tác sạch, trạng thái aborted gây bối rối, SAVEPOINT, DDL cũng nằm trong giao dịch; các bài sau có MVCC, mức cô lập, khoá dòng và deadlock.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-14-2-pool-pgbouncer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 14.2: Pool: trong app, và đứng trước app</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: connection pool: giữ sẵn kết nối và cho mượn. Khác: Academy cấu hình pool ở Tomcat; Courses nhìn pool từ phía cơ sở dữ liệu. Ở đó có thêm: pool nằm trong app và pool đứng trước app (PgBouncer), một kết nối tốn những gì (bài 14.1).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -2373,6 +2403,11 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 <div class="note-ct">Notice: the Servlet never writes HTML, and the JSP never queries the database. Each layer does its one job — that separation IS the pattern.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The Front Controller — one Servlet to rule them all.</b> Instead of one Servlet per action (LoginServlet, LogoutServlet, ProductServlet…), large apps route <em>every</em> request through a single <b>Front Controller</b> Servlet that reads an "action" parameter and dispatches to the right handler. This is exactly how Spring MVC's DispatcherServlet works under the hood — so understanding it here is your bridge to the framework used across the industry (and hinted at in this course's tools).</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-18-1-tang-va-trach-nhiem" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 18.1: Layers and responsibilities</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: separating responsibilities: what each layer may know (the Model knows nothing about the web) (the code there is Node.js, not Java — the ideas carry over). Different: Academy teaches MVC with Servlet/JSP; Courses uses route – service – data layers and measures whether the boundaries hold. It also adds: what each layer may and may not know, and why a service that does not know it was called over HTTP can be reused by workers and tests.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -2404,6 +2439,11 @@ Gọi executeQuery cho một câu UPDATE sẽ ném ngoại lệ, và ngược l�
 <div class="note-ct">Để ý: Servlet không bao giờ viết HTML, và JSP không bao giờ truy vấn CSDL. Mỗi tầng làm đúng một việc — sự tách bạch đó CHÍNH LÀ mẫu MVC.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Front Controller — một Servlet cai quản tất cả.</b> Thay vì một Servlet cho mỗi hành động (LoginServlet, LogoutServlet, ProductServlet…), app lớn định tuyến <em>mọi</em> request qua một Servlet <b>Front Controller</b> duy nhất, đọc tham số "action" và điều phối tới handler đúng. Đây đúng là cách DispatcherServlet của Spring MVC hoạt động bên dưới — nên hiểu nó ở đây là cầu nối của bạn tới framework dùng khắp ngành (và được gợi ý trong công cụ của môn).</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-18-1-tang-va-trach-nhiem" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 18.1: Các tầng và trách nhiệm</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: tách trách nhiệm: tầng nào được biết gì (Model không biết gì về web) (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dạy MVC với Servlet/JSP; Courses dùng ba tầng route – service – data và đo xem ranh giới có đứng vững không. Ở đó có thêm: mỗi tầng được phép biết gì và không được biết gì, vì sao service không biết mình được gọi qua HTTP thì dùng lại được cho worker và test.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -3113,6 +3153,11 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
 <div class="pitfall"><b>Two traps, both producing an unusable site.</b> (1) Forgetting <span class="badge">chain.doFilter()</span> on the success path: every request returns a blank page, because nothing downstream ever ran. (2) Mapping the auth filter to <span class="badge">/*</span> and then redirecting to <span class="badge">/login</span> — which is itself filtered, so it redirects again, forever ("too many redirects"). Always exempt the login page, the logout action and your CSS/JS from the auth filter.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>You have just built middleware.</b> Express calls it <span class="badge">app.use((req, res, next) =&gt; …)</span>, ASP.NET Core calls it the request pipeline, Spring calls them interceptors — all the same shape: a chain of components that each see the request, may act, and either pass it along or stop it. The pattern has a name, <em>Chain of Responsibility</em>, and recognising it means you already understand the request pipeline of any web framework you meet next.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-3-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 5.3: Middleware: the chain every request passes through</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: a chain of links in front of the handler; calling chain.doFilter() / next() lets the request continue, otherwise it stops (the code there is Node.js, not Java — the ideas carry over). Different: A Servlet Filter and Express middleware are the same idea on two platforms. It also adds: the chain in its exact run order, writing a real timing logger, scoped middleware — the shape of every guard.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
@@ -3192,6 +3237,11 @@ em.<span class="tok-function">createQuery</span>(<span class="tok-string">"SELEC
 <div class="pitfall"><b>Hai cái bẫy, cả hai đều làm site không dùng được.</b> (1) Quên <span class="badge">chain.doFilter()</span> ở nhánh thành công: mọi request trả về trang trắng, vì chẳng có gì phía sau được chạy. (2) Ánh xạ filter xác thực vào <span class="badge">/*</span> rồi chuyển hướng về <span class="badge">/login</span> — mà trang login cũng bị chính filter đó lọc, nên nó lại chuyển hướng, mãi mãi ("too many redirects"). Luôn miễn trừ trang đăng nhập, hành động đăng xuất và các file CSS/JS khỏi filter xác thực.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bạn vừa dựng một tầng middleware.</b> Express gọi nó là <span class="badge">app.use((req, res, next) =&gt; …)</span>, ASP.NET Core gọi là request pipeline, Spring gọi là interceptor — tất cả cùng một hình dạng: một chuỗi thành phần mà mỗi cái đều nhìn thấy request, có thể hành động, rồi hoặc chuyển tiếp hoặc chặn lại. Mẫu này có tên hẳn hoi, <em>Chain of Responsibility</em>, và nhận ra nó nghĩa là bạn đã hiểu sẵn đường ống xử lý request của bất kỳ framework web nào bạn gặp sau này.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-3-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 5.3: Middleware: sợi dây chuyền mọi request đi qua</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: một chuỗi mắt xích đứng trước handler, gọi chain.doFilter() / next() thì request đi tiếp, không gọi thì dừng (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Filter của Servlet và middleware của Express là cùng một ý tưởng ở hai nền tảng. Ở đó có thêm: dây chuyền theo đúng thứ tự chạy, tự viết logger đo thời gian thật, middleware theo phạm vi — hình dạng của mọi chốt chặn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -3454,6 +3504,16 @@ Dang online: \${applicationScope.onlineUsers}</code></pre>
 <div class="pitfall"><b>Three traps in one feature.</b> (1) Without <span class="badge">@MultipartConfig</span>, <span class="badge">req.getPart()</span> throws and <span class="badge">getParameter</span> returns null for everything — the form appears completely empty. (2) Internet Explorer-era browsers submit a full path (<span class="badge">C:\\Users\\…\\a.jpg</span>); always take only the file name. (3) Trusting the extension is not real validation — a renamed .exe is still an .exe. Check the actual content type, and above all never store uploads where the server would execute them.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Path traversal: the attack this code is defending against.</b> If you concatenate the submitted filename straight into a path, an attacker submits <span class="badge">../../../../webapps/ROOT/shell.jsp</span> and writes a file wherever the server user can reach — including a JSP that the server will happily execute. That is a complete server compromise from an "upload avatar" form. The defences are exactly the numbered steps above: strip to the bare filename, generate your own name, whitelist the extension, and store outside the web root. Every real upload endpoint on the internet has been probed for this.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 10.1: Receiving files: multipart, base64 and the RAM cost</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: an upload form must be multipart and the server must parse a multipart body (the code there is Node.js, not Java — the ideas carry over). Different: Academy uses the Servlet @MultipartConfig; Courses uses Multer and measures memory. It also adds: what multipart really looks like, base64 is not free, memoryStorage vs diskStorage measured by RSS, size limits.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 10.2: Object storage and signed URLs</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: the question "where do uploads live so they survive a redeploy". Different: Academy stops at a folder outside the project; Courses moves files to object storage. It also adds: object storage is not a file system, key layout is a design decision, anatomy of a signed URL, the file bypasses your server, Content-Type and size are not bound by default.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.1</span>
@@ -3525,6 +3585,16 @@ Dang online: \${applicationScope.onlineUsers}</code></pre>
 <div class="pitfall"><b>Ba cái bẫy trong một tính năng.</b> (1) Không có <span class="badge">@MultipartConfig</span> thì <span class="badge">req.getPart()</span> ném ngoại lệ và <span class="badge">getParameter</span> trả null cho mọi thứ — form trông như trống rỗng hoàn toàn. (2) Trình duyệt thời Internet Explorer gửi lên cả đường dẫn đầy đủ (<span class="badge">C:\\Users\\…\\a.jpg</span>); luôn chỉ lấy phần tên file. (3) Tin vào phần mở rộng không phải là kiểm tra thật — một file .exe đổi tên vẫn là .exe. Hãy kiểm content type thật, và trên hết đừng bao giờ lưu file tải lên vào nơi mà server sẽ đem ra thực thi.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Path traversal: chính là đòn tấn công mà đoạn code trên đang phòng vệ.</b> Nếu bạn nối thẳng tên file gửi lên vào một đường dẫn, kẻ tấn công gửi <span class="badge">../../../../webapps/ROOT/shell.jsp</span> và ghi được file vào bất cứ chỗ nào tài khoản chạy server chạm tới — bao gồm một file JSP mà server sẽ vui vẻ đem ra thực thi. Đó là chiếm trọn máy chủ, khởi đầu từ một cái form "tải ảnh đại diện". Các biện pháp phòng vệ chính là các bước đánh số ở trên: cắt về đúng tên file trần, tự sinh tên, lọc phần mở rộng theo danh sách trắng, và lưu ra ngoài thư mục web. Mọi điểm cuối cho tải file trên internet đều đã bị dò tìm lỗ hổng này.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 10.1: Nhận file: multipart, base64 và cái giá bằng RAM</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: form upload phải dùng multipart và server phải đọc phần thân dạng multipart (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Academy dùng @MultipartConfig của Servlet; Courses dùng Multer và đo bộ nhớ. Ở đó có thêm: multipart thật ra trông thế nào, base64 không miễn phí, so memoryStorage với diskStorage bằng RSS, giới hạn kích cỡ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-2-object-storage-presigned" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 10.2: Object storage và URL ký sẵn</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: câu hỏi "lưu file ở đâu cho khỏi mất khi deploy lại". Khác: Academy dừng ở một thư mục ngoài dự án; Courses chuyển file sang object storage. Ở đó có thêm: object storage không phải hệ thống file, bố trí key là quyết định thiết kế, giải phẫu URL ký sẵn, file đi thẳng lên mà không qua máy chủ, Content-Type và kích thước không bị ràng buộc theo mặc định.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },

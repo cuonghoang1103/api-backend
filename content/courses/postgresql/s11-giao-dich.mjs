@@ -137,6 +137,11 @@ LINE 1: SELECT count(*) FROM thu_ddl;
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: drive a transaction into the aborted state, then rescue one with a savepoint</span><span class="lc-sub">The Code Lab track reproduces both outputs above line by line.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-transaction-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 5.4: Transactions &amp; connection pool</span><span class="lc-sub">If you took PRJ301 on Academy, this part will feel familiar. Same: commit/rollback so a group of statements never half-happens. Different: Academy does it through JDBC (setAutoCommit); Courses does it directly in SQL on PostgreSQL. In this lesson we add: ROLLBACK undoing cleanly, the confusing aborted state, SAVEPOINT, DDL being transactional too; later lessons cover MVCC, isolation levels, row locks and deadlocks. If you have not taken PRJ301, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN PRJ301 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -248,6 +253,11 @@ LINE 1: SELECT count(*) FROM thu_ddl;
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: đẩy một giao dịch vào trạng thái aborted, rồi cứu một cái bằng savepoint</span><span class="lc-sub">Nhánh Code Lab tái hiện cả hai output ở trên, từng dòng một.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/java-web-application-development/learn?lessonSlug=prj301-transaction-pool" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở PRJ301 — bài 5.4: Giao dịch &amp; connection pool</span><span class="lc-sub">Nếu bạn đã học môn PRJ301 ở Academy thì phần này không còn lạ. Giống: commit/rollback để nhóm câu lệnh không xảy ra nửa vời. Khác: Academy làm qua JDBC (setAutoCommit); Courses làm thẳng trong SQL trên PostgreSQL. Ở bài này mình học thêm: ROLLBACK hoàn tác sạch, trạng thái aborted gây bối rối, SAVEPOINT, DDL cũng nằm trong giao dịch; các bài sau có MVCC, mức cô lập, khoá dòng và deadlock. Chưa học PRJ301 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI PRJ301 →</span>
 </a>
 </div>
 `,

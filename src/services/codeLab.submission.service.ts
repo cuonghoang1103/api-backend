@@ -2,7 +2,7 @@
  * Code Lab — lượt NỘP + bộ kiểm đủ + demo đề lớn (đợt Academy 28/10/2026).
  *
  * Máy chấm chạy trong TRÌNH DUYỆT; máy chủ chỉ: (1) đưa bộ kiểm đủ lúc Nộp, (2) nhận kết quả,
- * kiểm hình dạng, tính điểm, lưu `code_submissions`, (3) đánh dấu SOLVED khi đạt 100%.
+ * kiểm hình dạng, tính điểm, lưu `code_submissions`, (3) đánh dấu SOLVED khi đạt 100% (mutation: đạt ngưỡng diệt).
  * Loại tĩnh (choice/order/table) thì máy chủ CHẤM LẠI từ câu trả lời — không tin client.
  * Ghi chú toàn vẹn + lý do: xem đầu tệp codeLab.cham.ts.
  */
@@ -13,6 +13,7 @@ import {
   STATIC_GRADE_KINDS,
   BROWSER_GRADE_KINDS,
   chamTinh,
+  chapNhan,
   chuanHoaKetQuaClient,
   gradeKindOf,
   testsDayDu,
@@ -97,7 +98,8 @@ export async function createSubmission(userId: number, exerciseId: number, input
   const passed = ketQua.filter((k) => k.dat).length;
   const total = ketQua.length;
   const diem = tinhDiem(ex.testsJson, ketQua);
-  const accepted = total > 0 && passed === total;
+  // đạt 100% kiểm — riêng 'mutation': bộ test xanh + diệt ≥ ngưỡng đột biến của đề (chapNhan)
+  const accepted = total > 0 && chapNhan(ex.testsJson, ketQua);
   const ms = typeof input.ms === 'number' && Number.isFinite(input.ms) ? Math.max(0, Math.min(3_600_000, Math.round(input.ms))) : null;
 
   const sub = await prisma.codeSubmission.create({

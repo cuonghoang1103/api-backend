@@ -43,6 +43,8 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   // Courses (01/11/2026): networking-for-developers (mô phỏng /net-lab, js/choice) · api-design (LabFlow API, js/module/choice).
   'networking-for-developers': 'networking-practice',
   'api-design': 'api-design-practice',
+  // Courses (01/11/2026): testing — người học viết TEST, máy chấm 'mutation' (content/codelab/testing-practice).
+  testing: 'testing-practice',
 });
 
 /**
@@ -76,6 +78,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
   { loai: 'course', ten: 'Networking for Developers', courseSlug: 'networking-for-developers', trackSlug: 'networking-practice' },
   { loai: 'course', ten: 'API & System Design', courseSlug: 'api-design', trackSlug: 'api-design-practice' },
+  { loai: 'course', ten: 'Testing', courseSlug: 'testing', trackSlug: 'testing-practice' },
 ] as MucDanhMuc[]);
 
 /** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */

@@ -174,6 +174,13 @@ for (const d of de) {
   const loi = [];
   if (truotGiai.length) loi.push(`lời giải TRƯỢT ${truotGiai.length}/${g.tong}`);
   if (truotDau === 0) loi.push('code khởi đầu ĐẠT hết — bộ kiểm không phân biệt được');
+  // mutation (01/11/2026): bộ test khởi đầu phải YẾU nhưng ĐÚNG (xanh với code đúng) và chưa đạt ngưỡng diệt
+  if (loai === 'mutation') {
+    const m = await page.evaluate(({ tj, kq }) => ({ dat: window.ClCham.chapNhan(tj, kq), dem: window.ClCham.demDotBien(tj, kq) }), { tj: d.tj, kq: s.ketQua.map((k) => ({ ...k, nhom: d.tj.kiem[k.i]?.nhom })) });
+    if (!m.dem.xanh) loi.push(`code khởi đầu KHÔNG xanh với code đúng: ${s.ketQua[0]?.thay}`);
+    if (m.dat) loi.push(`code khởi đầu đã đạt ngưỡng (diệt ${m.dem.diet}/${m.dem.tong})`);
+    if (CHI_TIET) console.log(`      mutation: khởi đầu diệt ${m.dem.diet}/${m.dem.tong} (ngưỡng ${m.dem.nguong})`);
+  }
   if (loi.length) {
     hong++; theoLoai[loai].hong++;
     console.log(`  ✗ [${d.module}] ${loai} "${d.title}" — ${loi.join(' · ')}`);
@@ -202,6 +209,29 @@ for (const loai of coLoaiSql) {
   const ok = r.a.length === 2 && r.a.every((k) => !k.dat && /Quá 3 giây/.test(k.thay ?? '')) && r.msA < 3000 + 2500 && r.b[0]?.dat === true;
   console.log(`${ok ? '  ✓' : '  ✗'} [tự kiểm ${loai}] truy vấn vô hạn bị dừng sau ~${r.a[0]?.ms ?? '?'} ms (cả 2 kiểm: ${r.msA} ms) · máy dựng lại chấm tiếp: ${r.b[0]?.dat ? 'đạt' : `TRƯỢT — ${r.b[0]?.thay}`}`);
   if (!ok) { hong++; console.log(`      ${JSON.stringify(r).slice(0, 400)}`); }
+}
+
+// ─── MUTATION (01/11/2026): tự kiểm đường QUÁ GIỜ — vòng lặp vô hạn trong test (code đúng) ⇒ trượt, worker bị huỷ;
+//     đột biến gây vòng lặp vô hạn ⇒ tính là DIỆT; lượt sau vẫn chấm bình thường ───
+if (de.some((d) => d.tj.loai === 'mutation')) {
+  const impl = { 'src/a.js': 'export function f(n) { if (n < 0) throw new RangeError("n"); return n > 30; }\n' };
+  const tj = { loai: 'mutation', impl, toiThieuTest: 1, timeoutMs: 1500, kiem: [
+    { i: 0, kiem: 'xanh', nhom: 'xanh', moTa: 'xanh' },
+    { i: 1, kiem: 'diet', nhom: 'dot-bien', moTa: 'vòng lặp', ma: { 'src/a.js': 'export function f(n) { while (true) {} }\n' } },
+    { i: 2, kiem: 'diet', nhom: 'dot-bien', moTa: '>=', ma: { 'src/a.js': impl['src/a.js'].replace('n > 30', 'n >= 30') } },
+  ] };
+  const test = (than) => ({ 'src/a.test.js': `import { it, expect } from 'vitest';\nimport { f } from './a.js';\n${than}` });
+  const r = await page.evaluate(async ({ tj, a, b }) => {
+    const t0 = performance.now();
+    const x = await window.ClCham.chamBai({ exerciseId: 0, tj, files: a });
+    const t1 = performance.now();
+    const y = await window.ClCham.chamBai({ exerciseId: 0, tj, files: b });
+    return { x: x.ketQua.map((k) => ({ dat: k.dat, thay: k.thay })), msX: Math.round(t1 - t0), y: y.ketQua.map((k) => ({ dat: k.dat, thay: k.thay })) };
+  }, { tj, a: test("it('treo', () => { while (true) {} });"), b: test("it('30', () => { expect(f(30)).toBe(false); });\nit('31', () => { expect(f(31)).toBe(true); });") });
+  const ok = !r.x[0].dat && /Quá 1.5s/.test(r.x[0].thay) && r.msX < 1500 + 2500
+    && r.y.every((k) => k.dat) && /quá giờ/.test(r.y[1].thay);
+  console.log(`${ok ? '  ✓' : '  ✗'} [tự kiểm mutation] test treo bị dừng (${r.msX} ms) · đột biến vòng lặp vô hạn = diệt · lượt sau chấm tiếp: ${r.y.map((k) => (k.dat ? '✓' : '✗')).join('')}`);
+  if (!ok) { hong++; console.log(`      ${JSON.stringify(r).slice(0, 500)}`); }
 }
 
 // ─── --do-sql: đo PGlite (tải nén + khởi động lần đầu / lần sau) cho từng chế độ ───

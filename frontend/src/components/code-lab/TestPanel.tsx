@@ -11,6 +11,7 @@
 import { useEffect, useState } from 'react';
 import { CheckCircle2, XCircle, Loader2, Lock, MinusCircle, ChevronRight, Trophy, Timer, FlaskConical, ListChecks } from 'lucide-react';
 import type { Diem, Kiem, KetQuaKiem, TestsJson } from './cham/kieu';
+import { chapNhan, demDotBien } from './cham/diem';
 import { BangSqlNho, BangSqlSo } from './BangSqlSo';
 
 export type CheDoCham = 'chay' | 'nop';
@@ -51,7 +52,10 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
   // Vừa bấm Chạy/Nộp ⇒ sang tab Kết quả
   useEffect(() => { if (st.dang || st.loi) setTab('kq'); }, [st.dang, st.loi]);
 
-  const tatCaDat = !!st.ketQua && st.tong > 0 && st.dat === st.tong;
+  // mutation (01/11/2026): "đạt" = bộ test xanh với code đúng + diệt ≥ ngưỡng đột biến; loại khác: mọi kiểm đạt
+  const laMut = tj?.loai === 'mutation';
+  const mut = laMut && st.ketQua ? demDotBien(tj, st.ketQua) : null;
+  const tatCaDat = !!st.ketQua && st.tong > 0 && (laMut ? chapNhan(tj, st.ketQua) : st.dat === st.tong);
   const rubric = st.diem && st.diem.nhom.length > 0 ? st.diem : null;
 
   return (
@@ -92,6 +96,9 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
               );
             })}
           </ol>
+          {laMut && (
+            <p className="cl-tp-note">🧬 Máy chấm chạy bộ test của bạn với <b>code đúng</b> (phải xanh hết{typeof tj?.toiThieuTest === 'number' ? `, ≥ ${tj.toiThieuTest} test` : ''}) rồi với <b>từng đột biến</b> — mỗi bản cài sẵn một lỗi. Test đỏ ⇒ đột biến bị diệt.{typeof tj?.nguong === 'number' ? ` Đạt khi diệt ≥ ${tj.nguong}.` : ' Đạt khi diệt hết.'}</p>
+          )}
           {soAn > 0 && (
             <p className="cl-tp-note"><Lock size={12} /> Thêm {soAn} kiểm ẩn chỉ chạy khi <b>Nộp</b> — để chắc bạn giải đúng ý đề, không chỉ khớp ví dụ.</p>
           )}
@@ -109,7 +116,10 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
               {tatCaDat ? <CheckCircle2 size={20} /> : <XCircle size={20} />}
               <div className="min-w-0">
                 <div className="cl-tp-verdict-t">
-                  {tatCaDat
+                  {mut ? (
+                    !mut.xanh ? 'Bộ test chưa xanh với code đúng — chưa chấm đột biến'
+                      : `Diệt ${mut.diet}/${mut.tong} đột biến${st.cheDo === 'nop' ? (tatCaDat ? ' — Accepted' : ` — cần ≥ ${mut.nguong}`) : ''}`
+                  ) : tatCaDat
                     ? (st.cheDo === 'nop' ? 'Accepted — đạt mọi kiểm' : 'Đạt mọi kiểm mẫu')
                     : (st.cheDo === 'nop' ? 'Chưa đạt — Wrong Answer' : 'Còn kiểm mẫu trượt')}
                 </div>
@@ -156,12 +166,16 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
                     <button type="button" className="cl-tp-row" onClick={() => setMo((m) => ({ ...m, [idx]: !mo1 }))} disabled={an || (!r.thay && !r.mong)}>
                       {r.boQua ? <MinusCircle size={15} className="cl-tp-ic skip" /> : r.dat ? <CheckCircle2 size={15} className="cl-tp-ic ok" /> : <XCircle size={15} className="cl-tp-ic bad" />}
                       <span className="min-w-0 flex-1 text-left">
-                        {an ? <><Lock size={11} className="mr-1 inline" />Kiểm ẩn #{r.i + 1}</> : r.moTa}
+                        {an ? <><Lock size={11} className="mr-1 inline" />{laMut ? 'Đột biến ẩn' : 'Kiểm ẩn'} #{r.i + 1}</> : r.moTa}
+                        {laMut && r.nhom === 'dot-bien' && !r.boQua && <b className="ml-2 text-xs">{r.dat ? '· đã diệt' : mut && !mut.xanh ? '· chưa chấm' : '· CÒN SỐNG'}</b>}
                       </span>
                       {typeof r.ms === 'number' && <span className="cl-tp-ms">{r.ms} ms</span>}
                       {!an && (r.thay || r.mong) && <ChevronRight size={14} className={`cl-tp-car ${mo1 ? 'is-open' : ''}`} />}
                     </button>
-                    {an && !r.dat && (
+                    {an && !r.dat && laMut && mut?.xanh && (
+                      <p className="cl-tp-hint">Đột biến ẩn còn sống — xem lại biên (=, ±1), nhánh chưa test (vai trò, giá trị không hợp lệ) và loại lỗi được ném.</p>
+                    )}
+                    {an && !r.dat && !laMut && (
                       <p className="cl-tp-hint">Kiểm ẩn trượt — xem lại các trường hợp chưa có trong kiểm mẫu: giá trị rỗng/biên, thứ tự, yêu cầu “lưu/nhớ” và các mục trong Requirements.</p>
                     )}
                     {r.boQua && <p className="cl-tp-hint">{r.boQua}</p>}

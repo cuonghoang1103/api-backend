@@ -742,6 +742,11 @@ ORDER BY id LIMIT 3;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Next: how to choose</span><span class="lc-sub">Lesson 17.4 — a decision method, real situations, and two case studies.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 3.1: NoSQL, MongoDB &amp; CRUD</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: the document model compared with the relational table model. Different: Academy teaches MongoDB for CRUD; Courses puts the same data side by side as tables, documents and JSONB. In this lesson we add: the same 2,000 orders built three ways, two queries on all three, indexes on both sides, what copies cost and changing shared data, when documents win and when tables win. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -920,6 +925,11 @@ ORDER BY id LIMIT 3;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Tiếp: chọn thế nào</span><span class="lc-sub">Bài 17.4 — một phương pháp ra quyết định, tình huống thật, và hai ca thực tế.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-3-1-mongodb-crud" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 3.1: NoSQL, MongoDB &amp; CRUD</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: mô hình tài liệu (document) và so với mô hình bảng quan hệ. Khác: Academy dạy MongoDB để làm CRUD; Courses đặt cùng một dữ liệu dưới dạng bảng, document và JSONB để so sánh. Ở bài này mình học thêm: cùng 2.000 đơn dựng ba kiểu, hai câu hỏi truy vấn trên cả ba, chỉ mục hai phía, giá của các bản sao và việc đổi dữ liệu dùng chung, khi nào document thắng, khi nào bảng thắng. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,

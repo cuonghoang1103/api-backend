@@ -853,6 +853,11 @@ db.products.<span class="tok-function">updateOne</span>({ name: <span class="tok
 db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok-string">'Book'</span> });</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Embed vs reference is the key modelling decision.</b> Embed data you always read together and that does not grow unbounded (a product's few tags). Reference data that is shared or grows without limit (a user's thousands of orders). The rule: "data that is read together, stored together". Getting this right avoids both huge documents and needless populate calls — a modelling judgement the syllabus leaves you to learn by pain.</div>
 <div class="pitfall">MongoDB will happily insert a document with a typo'd field or wrong type — there is no database-level schema. That flexibility is a trap; without Mongoose validation, your collection silently fills with inconsistent data.</div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 17.3: MongoDB documents vs PostgreSQL JSONB</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: the document model compared with the relational table model. Different: Academy teaches MongoDB for CRUD; Courses puts the same data side by side as tables, documents and JSONB. It also adds: the same 2,000 orders built three ways, two queries on all three, indexes on both sides, what copies cost and changing shared data, when documents win and when tables win.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -888,6 +893,11 @@ db.products.<span class="tok-function">updateOne</span>({ name: <span class="tok
 db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok-string">'Book'</span> });</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Nhúng vs tham chiếu là quyết định mô hình then chốt.</b> Nhúng dữ liệu luôn đọc cùng nhau và không phình vô hạn (vài tag của một sản phẩm). Tham chiếu dữ liệu dùng chung hoặc phình không giới hạn (hàng nghìn order của một user). Quy tắc: "dữ liệu đọc cùng nhau, lưu cùng nhau". Làm đúng điều này tránh cả document khổng lồ lẫn populate thừa — một phán đoán mô hình mà giáo trình để bạn học bằng đau thương.</div>
 <div class="pitfall">MongoDB sẵn lòng chèn một document có field gõ sai hay sai kiểu — không có schema ở mức database. Sự linh hoạt đó là cái bẫy; không có Mongoose validation, collection của bạn âm thầm đầy dữ liệu không nhất quán.</div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 17.3: Document MongoDB và JSONB của PostgreSQL</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: mô hình tài liệu (document) và so với mô hình bảng quan hệ. Khác: Academy dạy MongoDB để làm CRUD; Courses đặt cùng một dữ liệu dưới dạng bảng, document và JSONB để so sánh. Ở đó có thêm: cùng 2.000 đơn dựng ba kiểu, hai câu hỏi truy vấn trên cả ba, chỉ mục hai phía, giá của các bản sao và việc đổi dữ liệu dùng chung, khi nào document thắng, khi nào bảng thắng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {

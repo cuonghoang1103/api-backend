@@ -1,0 +1,1856 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-2-3-nat",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-2-3-nat"
+  },
+  "exercises": [
+    {
+      "title": "NAT 1 — Private ranges and the home router's rewrite",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "NAT",
+        "private addresses"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output from the \"Internet in a box\" (lab/out/c23-vao, c23-laptop, c23-homegw):<pre># on LabFlow's server, trying to reach the laptop directly\n$ nc -vz -w 3 192.168.50.10 8080\nnc: connect to 192.168.50.10 port 8080 (tcp) failed: Network is unreachable\n$ traceroute -n -q 1 -m 3 192.168.50.10\ntraceroute to 192.168.50.10 (192.168.50.10), 3 hops max, 60 byte packets\n 1  203.0.113.1  0.066 ms !N\n\n# on the laptop 192.168.50.10\n$ curl -s http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 41122\n\n# on the home router\n$ iptables -t nat -S POSTROUTING\n-P POSTROUTING ACCEPT\n-A POSTROUTING -d 127.0.0.11/32 -j DOCKER_POSTROUTING\n-A POSTROUTING -o wan0 -j MASQUERADE\n$ tcpdump … lan.pcap (inside)\nIP 192.168.50.10.41122 &gt; 203.0.113.10.80: tcp 0\nIP 192.168.50.10.41000 &gt; 203.0.113.10.80: tcp 0\nIP 192.168.50.11.41000 &gt; 203.0.113.10.80: tcp 0\n$ tcpdump … wan.pcap (outside)\nIP 198.51.100.2.41122 &gt; 203.0.113.10.80: tcp 0\nIP 198.51.100.2.41000 &gt; 203.0.113.10.80: tcp 0\nIP 198.51.100.2.4734 &gt; 203.0.113.10.80: tcp 0</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật từ \"Internet trong một hộp\" (lab/out/c23-vao, c23-laptop, c23-homegw):<pre># trên máy chủ LabFlow, thử gọi thẳng vào laptop\n$ nc -vz -w 3 192.168.50.10 8080\nnc: connect to 192.168.50.10 port 8080 (tcp) failed: Network is unreachable\n$ traceroute -n -q 1 -m 3 192.168.50.10\ntraceroute to 192.168.50.10 (192.168.50.10), 3 hops max, 60 byte packets\n 1  203.0.113.1  0.066 ms !N\n\n# trên laptop 192.168.50.10\n$ curl -s http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 41122\n\n# trên router nhà\n$ iptables -t nat -S POSTROUTING\n-P POSTROUTING ACCEPT\n-A POSTROUTING -d 127.0.0.11/32 -j DOCKER_POSTROUTING\n-A POSTROUTING -o wan0 -j MASQUERADE\n$ tcpdump … lan.pcap (phía trong)\nIP 192.168.50.10.41122 &gt; 203.0.113.10.80: tcp 0\nIP 192.168.50.10.41000 &gt; 203.0.113.10.80: tcp 0\nIP 192.168.50.11.41000 &gt; 203.0.113.10.80: tcp 0\n$ tcpdump … wan.pcap (phía ngoài)\nIP 198.51.100.2.41122 &gt; 203.0.113.10.80: tcp 0\nIP 198.51.100.2.41000 &gt; 203.0.113.10.80: tcp 0\nIP 198.51.100.2.4734 &gt; 203.0.113.10.80: tcp 0</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Private: 10/8, 172.16/12, 192.168/16 — routers on the Internet carry no route for them.|||Riêng: 10/8, 172.16/12, 192.168/16 — router trên Internet không mang tuyến nào cho chúng.",
+        "SNAT = rewrite the Source of outgoing packets; the replies are translated back.|||SNAT = viết lại Nguồn của gói đi ra; câu trả lời được dịch ngược lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 1 — Private ranges and the home router's rewrite\n\nAnswer in the answer panel (no code needed).\n\n1. From the server, 192.168.50.10 is \"Network is unreachable\" and the DC router answers !N. Why?Từ máy chủ, 192.168.50.10 là \"Network is unreachable\" và router dc trả lời !N. Vì sao?\n2. The server says \"you came from 198.51.100.2\". Whose address is that?Máy chủ nói \"you came from 198.51.100.2\". Đó là địa chỉ của ai?\n3. What does \"-A POSTROUTING -o wan0 -j MASQUERADE\" do?\"-A POSTROUTING -o wan0 -j MASQUERADE\" làm gì?\n4. Compare the inside and outside captures line by line. What changed?So bản bắt phía trong và phía ngoài từng dòng. Cái gì đổi?\n5. Which field does a NAT router rewrite that a plain router (lesson 1.4) never touches?Trường nào router NAT viết lại mà router thường (bài 1.4) không bao giờ đụng tới?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 1 — Private ranges and the home router's rewrite — answer key\n\n1. From the server, 192.168.50.10 is \"Network is unreachable\" and the DC router answers !N. Why?Từ máy chủ, 192.168.50.10 là \"Network is unreachable\" và router dc trả lời !N. Vì sao?\n   Answer: c) 192.168.0.0/16 is private (RFC 1918): Internet routers have no route for it\n   Millions of homes reuse 192.168.x.x, so it cannot mean one place on the Internet. The DC router (203.0.113.1) has no line for it and says so with !N.VI: Hàng triệu nhà dùng lại 192.168.x.x, nên nó không thể chỉ một nơi trên Internet. Router dc (203.0.113.1) không có dòng nào cho nó và báo bằng !N.\n\n2. The server says \"you came from 198.51.100.2\". Whose address is that?Máy chủ nói \"you came from 198.51.100.2\". Đó là địa chỉ của ai?\n   Answer: c) The home router's public (WAN) address, given by the ISP\n   The home router replaced the laptop's source address with its own wan0 address. Every device in the house arrives from 198.51.100.2.VI: Router nhà thay địa chỉ nguồn của laptop bằng địa chỉ wan0 của chính nó. Mọi thiết bị trong nhà đều tới từ 198.51.100.2.\n\n3. What does \"-A POSTROUTING -o wan0 -j MASQUERADE\" do?\"-A POSTROUTING -o wan0 -j MASQUERADE\" làm gì?\n   Answer: d) Packets leaving through wan0 get wan0's current address as their source\n   MASQUERADE is source NAT (SNAT) that follows the interface address — handy when the ISP changes it. The 127.0.0.11 line is Docker's internal DNS, not ours.VI: MASQUERADE là NAT nguồn (SNAT) đi theo địa chỉ của card — tiện khi nhà mạng đổi địa chỉ. Dòng 127.0.0.11 là DNS nội bộ của Docker, không phải của ta.\n\n4. Compare the inside and outside captures line by line. What changed?So bản bắt phía trong và phía ngoài từng dòng. Cái gì đổi?\n   Answer: b) The source address everywhere, and on the third line also the source port\n   Destination and destination port stay 203.0.113.10:80. Sources become 198.51.100.2 — and the phone's port 41000 became 4734 (exercise 3 explains why).VI: Đích và cổng đích giữ nguyên 203.0.113.10:80. Nguồn thành 198.51.100.2 — và cổng 41000 của điện thoại thành 4734 (bài 3 giải thích vì sao).\n\n5. Which field does a NAT router rewrite that a plain router (lesson 1.4) never touches?Trường nào router NAT viết lại mà router thường (bài 1.4) không bao giờ đụng tới?\n   Answer: a) The source IP address of outgoing packets\n   Every router writes new MACs, lowers the TTL and so recomputes the checksum. Only a NAT router also rewrites IP addresses and ports — the constructed NAT pair of the Chapter 1 lab.VI: Router nào cũng ghi MAC mới, giảm TTL và vì thế tính lại checksum. Chỉ router NAT mới viết lại cả địa chỉ IP và cổng — cặp NAT dựng trong lab Chương 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 192.168.0.0/16 is private (RFC 1918): Internet routers have no route for it</p><p>Millions of homes reuse 192.168.x.x, so it cannot mean one place on the Internet. The DC router (203.0.113.1) has no line for it and says so with !N.</p><p><i>VI: Hàng triệu nhà dùng lại 192.168.x.x, nên nó không thể chỉ một nơi trên Internet. Router dc (203.0.113.1) không có dòng nào cho nó và báo bằng !N.</i></p></li><li><p><b>c)</b> The home router's public (WAN) address, given by the ISP</p><p>The home router replaced the laptop's source address with its own wan0 address. Every device in the house arrives from 198.51.100.2.</p><p><i>VI: Router nhà thay địa chỉ nguồn của laptop bằng địa chỉ wan0 của chính nó. Mọi thiết bị trong nhà đều tới từ 198.51.100.2.</i></p></li><li><p><b>d)</b> Packets leaving through wan0 get wan0's current address as their source</p><p>MASQUERADE is source NAT (SNAT) that follows the interface address — handy when the ISP changes it. The 127.0.0.11 line is Docker's internal DNS, not ours.</p><p><i>VI: MASQUERADE là NAT nguồn (SNAT) đi theo địa chỉ của card — tiện khi nhà mạng đổi địa chỉ. Dòng 127.0.0.11 là DNS nội bộ của Docker, không phải của ta.</i></p></li><li><p><b>b)</b> The source address everywhere, and on the third line also the source port</p><p>Destination and destination port stay 203.0.113.10:80. Sources become 198.51.100.2 — and the phone's port 41000 became 4734 (exercise 3 explains why).</p><p><i>VI: Đích và cổng đích giữ nguyên 203.0.113.10:80. Nguồn thành 198.51.100.2 — và cổng 41000 của điện thoại thành 4734 (bài 3 giải thích vì sao).</i></p></li><li><p><b>a)</b> The source IP address of outgoing packets</p><p>Every router writes new MACs, lowers the TTL and so recomputes the checksum. Only a NAT router also rewrites IP addresses and ports — the constructed NAT pair of the Chapter 1 lab.</p><p><i>VI: Router nào cũng ghi MAC mới, giảm TTL và vì thế tính lại checksum. Chỉ router NAT mới viết lại cả địa chỉ IP và cổng — cặp NAT dựng trong lab Chương 1.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>From the server, 192.168.50.10 is \"Network is unreachable\" and the DC router answers !N. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ máy chủ, 192.168.50.10 là \"Network is unreachable\" và router dc trả lời !N. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The laptop is switched off, so its address is not announced"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The laptop's firewall drops every packet that comes from outside"
+              },
+              {
+                "ma": "c",
+                "noiDung": "192.168.0.0/16 is private (RFC 1918): Internet routers have no route for it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Port 8080 is closed on the laptop, so the network refuses it"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Millions of homes reuse 192.168.x.x, so it cannot mean one place on the Internet. The DC router (203.0.113.1) has no line for it and says so with !N.</p><p><i>VI: Hàng triệu nhà dùng lại 192.168.x.x, nên nó không thể chỉ một nơi trên Internet. Router dc (203.0.113.1) không có dòng nào cho nó và báo bằng !N.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The server says \"you came from 198.51.100.2\". Whose address is that?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy chủ nói \"you came from 198.51.100.2\". Đó là địa chỉ của ai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ISP's router, the next hop of the home router"
+              },
+              {
+                "ma": "b",
+                "noiDung": "LabFlow's load balancer in front of the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The home router's public (WAN) address, given by the ISP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The laptop's second address, used only for the Internet"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The home router replaced the laptop's source address with its own wan0 address. Every device in the house arrives from 198.51.100.2.</p><p><i>VI: Router nhà thay địa chỉ nguồn của laptop bằng địa chỉ wan0 của chính nó. Mọi thiết bị trong nhà đều tới từ 198.51.100.2.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What does \"-A POSTROUTING -o wan0 -j MASQUERADE\" do?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"-A POSTROUTING -o wan0 -j MASQUERADE\" làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Packets to wan0 are forwarded to the first machine of the LAN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every packet is encrypted before it leaves the house"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Packets arriving on wan0 are hidden from the laptop's firewall"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Packets leaving through wan0 get wan0's current address as their source"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>MASQUERADE is source NAT (SNAT) that follows the interface address — handy when the ISP changes it. The 127.0.0.11 line is Docker's internal DNS, not ours.</p><p><i>VI: MASQUERADE là NAT nguồn (SNAT) đi theo địa chỉ của card — tiện khi nhà mạng đổi địa chỉ. Dòng 127.0.0.11 là DNS nội bộ của Docker, không phải của ta.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Compare the inside and outside captures line by line. What changed?</p><p style=\"opacity:.75;font-size:.92em\"><i>So bản bắt phía trong và phía ngoài từng dòng. Cái gì đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing: the router only changes the MAC addresses of a packet"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The source address everywhere, and on the third line also the source port"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The destination address, which became the router's address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The destination port, which became 4734 for every connection"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Destination and destination port stay 203.0.113.10:80. Sources become 198.51.100.2 — and the phone's port 41000 became 4734 (exercise 3 explains why).</p><p><i>VI: Đích và cổng đích giữ nguyên 203.0.113.10:80. Nguồn thành 198.51.100.2 — và cổng 41000 của điện thoại thành 4734 (bài 3 giải thích vì sao).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which field does a NAT router rewrite that a plain router (lesson 1.4) never touches?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường nào router NAT viết lại mà router thường (bài 1.4) không bao giờ đụng tới?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The source IP address of outgoing packets"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The MAC addresses of every frame"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The IP header checksum of the packet"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The TTL of every packet it forwards"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Every router writes new MACs, lowers the TTL and so recomputes the checksum. Only a NAT router also rewrites IP addresses and ports — the constructed NAT pair of the Chapter 1 lab.</p><p><i>VI: Router nào cũng ghi MAC mới, giảm TTL và vì thế tính lại checksum. Chỉ router NAT mới viết lại cả địa chỉ IP và cổng — cặp NAT dựng trong lab Chương 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Logging the IP the server sees as \"the user's IP\": it is the house, café or company.|||Ghi IP máy chủ thấy là \"IP người dùng\": nó là cả ngôi nhà, quán cà phê hay công ty."
+        },
+        {
+          "loi": "Thinking 192.168.x.x can be reached from the Internet if the firewall allows it.|||Nghĩ 192.168.x.x có thể được gọi từ Internet nếu tường lửa cho phép."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NAT",
+          "vi": "dịch địa chỉ mạng"
+        },
+        {
+          "en": "SNAT / masquerade",
+          "vi": "NAT nguồn",
+          "giaiThich": "Thay địa chỉ nguồn của gói đi ra bằng địa chỉ công cộng."
+        },
+        {
+          "en": "public address",
+          "vi": "địa chỉ công cộng",
+          "giaiThich": "Địa chỉ có tuyến trên Internet."
+        }
+      ]
+    },
+    {
+      "title": "NAT 2 — Read the real conntrack table",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "conntrack"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Each conntrack line has two halves: the connection as the device sent it (<b>original</b>), then what the router expects to come back (<b>reply</b>). The difference between them is the translation. Real tables (lab/out/c23-homegw, c23-isp):<pre># home router\n$ conntrack -L -p tcp --dport 80\nconntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1\n\n# ISP router\n$ conntrack -L -s 100.64.0.10 -p tcp\nconntrack v1.4.9 (conntrack-tools): 1 flow entries have been shown.\ntcp      6 119 TIME_WAIT src=100.64.0.10 dst=203.0.113.10 sport=47852 dport=80 src=203.0.113.10 dst=198.51.100.200 sport=80 dport=47852 [ASSURED] mark=0 use=1</pre>Fill one row per connection, in the order of the lines.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng conntrack có hai nửa: kết nối như thiết bị đã gửi (<b>chiều gốc — original</b>), rồi thứ router chờ quay về (<b>chiều trả lời — reply</b>). Chênh lệch giữa chúng chính là phép dịch. Bảng thật (lab/out/c23-homegw, c23-isp):<pre># router nhà\n$ conntrack -L -p tcp --dport 80\nconntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1\n\n# router isp\n$ conntrack -L -s 100.64.0.10 -p tcp\nconntrack v1.4.9 (conntrack-tools): 1 flow entries have been shown.\ntcp      6 119 TIME_WAIT src=100.64.0.10 dst=203.0.113.10 sport=47852 dport=80 src=203.0.113.10 dst=198.51.100.200 sport=80 dport=47852 [ASSURED] mark=0 use=1</pre>Điền mỗi kết nối một hàng, theo thứ tự các dòng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The first src/sport pair is the device; the second dst/dport pair is what the outside world sees.|||Cặp src/sport đầu là thiết bị; cặp dst/dport thứ hai là thứ thế giới bên ngoài thấy.",
+        "If the two ports differ, the router rewrote the port too.|||Nếu hai cổng khác nhau, router đã viết lại cả cổng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 2 — Read the real conntrack table\n\nAnswer in the answer panel (no code needed).\n\n1. Original vs replyChiều gốc với chiều trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 2 — Read the real conntrack table — answer key\n\n1. Original vs replyChiều gốc với chiều trả lời\n   - r1.d: laptop 192.168.50.10\n   - r1.p: 41122\n   - r1.i: 198.51.100.2\n   - r1.q: 41122\n   - r1.b: home router (MASQUERADE)\n   - r2.d: phone 192.168.50.11\n   - r2.p: 41000\n   - r2.i: 198.51.100.2\n   - r2.q: 4734\n   - r2.b: home router (MASQUERADE)\n   - r3.d: laptop 192.168.50.10\n   - r3.p: 41000\n   - r3.i: 198.51.100.2\n   - r3.q: 41000\n   - r3.b: home router (MASQUERADE)\n   - r4.d: 4G phone 100.64.0.10\n   - r4.p: 47852\n   - r4.i: 198.51.100.200\n   - r4.q: 47852\n   - r4.b: ISP (CGNAT, SNAT)\n   Read the reply half backwards: \"src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734\" means the server will answer TO 198.51.100.2:4734 — so that is what it saw. The curl outputs confirm it: the laptop saw \"port 41122\" and \"port 41000\", the phone \"port 4734\", the 4G phone \"198.51.100.200 port 47852\". The fourth line is the ISP's rule \"-s 100.64.0.0/24 -o ix0 -j SNAT --to-source 198.51.100.200\": a second NAT, in the ISP, that you cannot configure. (conntrack lists lines in its own hash order, not in the order they were made.)VI: Đọc nửa trả lời theo chiều ngược: \"src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734\" nghĩa là máy chủ sẽ trả lời TỚI 198.51.100.2:4734 — vậy đó là thứ nó đã thấy. Output curl xác nhận: laptop thấy \"port 41122\" và \"port 41000\", điện thoại \"port 4734\", điện thoại 4G \"198.51.100.200 port 47852\". Dòng thứ tư là luật của isp \"-s 100.64.0.0/24 -o ix0 -j SNAT --to-source 198.51.100.200\": một NAT thứ hai, ở nhà mạng, mà bạn không cấu hình được. (conntrack liệt kê theo thứ tự băm của nó, không theo thứ tự tạo.)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Read the reply half backwards: \"src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734\" means the server will answer TO 198.51.100.2:4734 — so that is what it saw. The curl outputs confirm it: the laptop saw \"port 41122\" and \"port 41000\", the phone \"port 4734\", the 4G phone \"198.51.100.200 port 47852\". The fourth line is the ISP's rule \"-s 100.64.0.0/24 -o ix0 -j SNAT --to-source 198.51.100.200\": a second NAT, in the ISP, that you cannot configure. (conntrack lists lines in its own hash order, not in the order they were made.)</p><p><i>VI: Đọc nửa trả lời theo chiều ngược: \"src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734\" nghĩa là máy chủ sẽ trả lời TỚI 198.51.100.2:4734 — vậy đó là thứ nó đã thấy. Output curl xác nhận: laptop thấy \"port 41122\" và \"port 41000\", điện thoại \"port 4734\", điện thoại 4G \"198.51.100.200 port 47852\". Dòng thứ tư là luật của isp \"-s 100.64.0.0/24 -o ix0 -j SNAT --to-source 198.51.100.200\": một NAT thứ hai, ở nhà mạng, mà bạn không cấu hình được. (conntrack liệt kê theo thứ tự băm của nó, không theo thứ tự tạo.)</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Original vs reply</p><p style=\"opacity:.75;font-size:.92em\"><i>Chiều gốc với chiều trả lời</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Line"
+              },
+              {
+                "ma": "d",
+                "ten": "Device",
+                "luaChon": [
+                  "laptop 192.168.50.10",
+                  "phone 192.168.50.11",
+                  "4G phone 100.64.0.10"
+                ]
+              },
+              {
+                "ma": "p",
+                "ten": "Port the device used"
+              },
+              {
+                "ma": "i",
+                "ten": "Address the server sees"
+              },
+              {
+                "ma": "q",
+                "ten": "Port the server sees"
+              },
+              {
+                "ma": "b",
+                "ten": "Translated by",
+                "luaChon": [
+                  "home router (MASQUERADE)",
+                  "ISP (CGNAT, SNAT)",
+                  "no NAT"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "home 1 (sport=41122)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "home 2 (src=192.168.50.11)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "home 3 (src=192.168.50.10 sport=41000)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "isp 1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": "laptop 192.168.50.10",
+              "r1.p": [
+                "41122"
+              ],
+              "r1.i": [
+                "198.51.100.2"
+              ],
+              "r1.q": [
+                "41122"
+              ],
+              "r1.b": "home router (MASQUERADE)",
+              "r2.d": "phone 192.168.50.11",
+              "r2.p": [
+                "41000"
+              ],
+              "r2.i": [
+                "198.51.100.2"
+              ],
+              "r2.q": [
+                "4734"
+              ],
+              "r2.b": "home router (MASQUERADE)",
+              "r3.d": "laptop 192.168.50.10",
+              "r3.p": [
+                "41000"
+              ],
+              "r3.i": [
+                "198.51.100.2"
+              ],
+              "r3.q": [
+                "41000"
+              ],
+              "r3.b": "home router (MASQUERADE)",
+              "r4.d": "4G phone 100.64.0.10",
+              "r4.p": [
+                "47852"
+              ],
+              "r4.i": [
+                "198.51.100.200"
+              ],
+              "r4.q": [
+                "47852"
+              ],
+              "r4.b": "ISP (CGNAT, SNAT)"
+            },
+            "giaiThich": "<p>Read the reply half backwards: \"src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734\" means the server will answer TO 198.51.100.2:4734 — so that is what it saw. The curl outputs confirm it: the laptop saw \"port 41122\" and \"port 41000\", the phone \"port 4734\", the 4G phone \"198.51.100.200 port 47852\". The fourth line is the ISP's rule \"-s 100.64.0.0/24 -o ix0 -j SNAT --to-source 198.51.100.200\": a second NAT, in the ISP, that you cannot configure. (conntrack lists lines in its own hash order, not in the order they were made.)</p><p><i>VI: Đọc nửa trả lời theo chiều ngược: \"src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734\" nghĩa là máy chủ sẽ trả lời TỚI 198.51.100.2:4734 — vậy đó là thứ nó đã thấy. Output curl xác nhận: laptop thấy \"port 41122\" và \"port 41000\", điện thoại \"port 4734\", điện thoại 4G \"198.51.100.200 port 47852\". Dòng thứ tư là luật của isp \"-s 100.64.0.0/24 -o ix0 -j SNAT --to-source 198.51.100.200\": một NAT thứ hai, ở nhà mạng, mà bạn không cấu hình được. (conntrack liệt kê theo thứ tự băm của nó, không theo thứ tự tạo.)</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the reply half's src (the server) as the address the server sees.|||Đọc src của nửa trả lời (chính máy chủ) thành địa chỉ máy chủ thấy."
+        },
+        {
+          "loi": "Assuming the public port is always the device's port.|||Mặc định cổng công cộng luôn là cổng của thiết bị."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "conntrack",
+          "vi": "bảng theo dõi kết nối"
+        },
+        {
+          "en": "original / reply direction",
+          "vi": "chiều gốc / chiều trả lời"
+        },
+        {
+          "en": "TIME_WAIT",
+          "vi": "trạng thái chờ sau khi đóng",
+          "giaiThich": "Kết nối TCP đã đóng, còn được nhớ một lúc."
+        }
+      ]
+    },
+    {
+      "title": "NAT 3 — One public address, many devices: ports and timeouts",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "port collision",
+        "NAT timeouts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The laptop and the phone both connected from source port 41000 on purpose (lab/out/c23-laptop, c23-phone), then we read the router's timers (c23-timeout):<pre># laptop\n$ curl -s --local-port 41000 http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 41000\n# phone\n$ curl -s --local-port 41000 http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 4734\n\n# home router\nnet.netfilter.nf_conntrack_tcp_timeout_established = 432000\nnet.netfilter.nf_conntrack_tcp_timeout_time_wait = 120\nnet.netfilter.nf_conntrack_udp_timeout = 30\nnet.netfilter.nf_conntrack_udp_timeout_stream = 120</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Laptop và điện thoại cố ý cùng kết nối từ cổng nguồn 41000 (lab/out/c23-laptop, c23-phone), rồi ta đọc các bộ đếm giờ của router (c23-timeout):<pre># laptop\n$ curl -s --local-port 41000 http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 41000\n# điện thoại\n$ curl -s --local-port 41000 http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 4734\n\n# router nhà\nnet.netfilter.nf_conntrack_tcp_timeout_established = 432000\nnet.netfilter.nf_conntrack_tcp_timeout_time_wait = 120\nnet.netfilter.nf_conntrack_udp_timeout = 30\nnet.netfilter.nf_conntrack_udp_timeout_stream = 120</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A connection outside is identified by (public IP, public port, server IP, server port) — two connections may not share all four.|||Kết nối ở bên ngoài được nhận diện bằng (IP công cộng, cổng công cộng, IP máy chủ, cổng máy chủ) — hai kết nối không được trùng cả bốn.",
+        "A NAT entry lives as long as traffic keeps it alive, plus its timeout.|||Một mục NAT sống chừng nào còn lưu lượng giữ nó, cộng thời gian chờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 3 — One public address, many devices: ports and timeouts\n\nAnswer in the answer panel (no code needed).\n\n1. Why did the phone's port become 4734?Vì sao cổng của điện thoại thành 4734?\n2. LabFlow bans an IP after 100 failed logins in a minute. A university complains that all its students are blocked. What happened?LabFlow chặn một IP sau 100 lần đăng nhập sai trong một phút. Một trường đại học phản ánh mọi sinh viên bị chặn. Chuyện gì xảy ra?\n3. An idle established TCP entry lives 432 000 s on this router. How long is that?Một mục TCP đã thiết lập mà không có lưu lượng sống 432 000 s trên router này. Là bao lâu?\n4. A UDP \"connection\" without traffic keeps its entry 30 s here. What does that mean for an app?Một \"kết nối\" UDP không có lưu lượng giữ mục 30 s ở đây. Điều đó nghĩa gì với một ứng dụng?\n5. A database connection through AWS NAT Gateway dies after 6 idle minutes, \"with a reset\". Lesson 2.3 explains …Một kết nối cơ sở dữ liệu đi qua AWS NAT Gateway chết sau 6 phút im lặng, \"bị reset\". Bài 2.3 giải thích …\n6. How many connections can one public IPv4 address of an AWS NAT Gateway carry at the same time, according to AWS?Theo AWS, một địa chỉ IPv4 công cộng của AWS NAT Gateway chở được bao nhiêu kết nối cùng lúc?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 3 — One public address, many devices: ports and timeouts — answer key\n\n1. Why did the phone's port become 4734?Vì sao cổng của điện thoại thành 4734?\n   Answer: d) 198.51.100.2:41000 → 203.0.113.10:80 was already taken by the laptop\n   Outside, both connections would have the same four values; the replies could not be told apart. The router picks another free port — this is PAT/NAPT (port address translation).VI: Ở bên ngoài, hai kết nối sẽ có cùng bốn giá trị; câu trả lời không phân biệt được. Router chọn một cổng trống khác — đó là PAT/NAPT (dịch cả cổng).\n\n2. LabFlow bans an IP after 100 failed logins in a minute. A university complains that all its students are blocked. What happened?LabFlow chặn một IP sau 100 lần đăng nhập sai trong một phút. Một trường đại học phản ánh mọi sinh viên bị chặn. Chuyện gì xảy ra?\n   Answer: b) The whole university reaches LabFlow from one NAT address\n   Behind NAT, hundreds of people are one IP. Rate-limit per account or session, and treat an IP limit only as a coarse guard.VI: Sau NAT, hàng trăm người là một IP. Giới hạn theo tài khoản hay phiên, và chỉ coi giới hạn theo IP là lớp chắn thô.\n\n3. An idle established TCP entry lives 432 000 s on this router. How long is that?Một mục TCP đã thiết lập mà không có lưu lượng sống 432 000 s trên router này. Là bao lâu?\n   Answer: b) 5 days\n   432 000 ÷ 86 400 s per day = 5. Linux is generous; many home routers and cloud NATs are much stricter.VI: 432 000 ÷ 86 400 s mỗi ngày = 5. Linux khá rộng rãi; nhiều router nhà và NAT trên cloud khắt khe hơn nhiều.\n\n4. A UDP \"connection\" without traffic keeps its entry 30 s here. What does that mean for an app?Một \"kết nối\" UDP không có lưu lượng giữ mục 30 s ở đây. Điều đó nghĩa gì với một ứng dụng?\n   Answer: b) A UDP flow silent for more than 30 s loses its mapping: replies get dropped\n   After the entry expires, an answer from outside finds no line and is dropped. VoIP, games and QUIC send keep-alives for this reason.VI: Sau khi mục hết hạn, câu trả lời từ ngoài không tìm thấy dòng nào và bị vứt. VoIP, game và QUIC gửi keep-alive vì lý do này.\n\n5. A database connection through AWS NAT Gateway dies after 6 idle minutes, \"with a reset\". Lesson 2.3 explains …Một kết nối cơ sở dữ liệu đi qua AWS NAT Gateway chết sau 6 phút im lặng, \"bị reset\". Bài 2.3 giải thích …\n   Answer: a) The NAT drops connections idle for 350 s; keep-alives keep them alive\n   AWS documents that its NAT Gateway drops a flow after 350 seconds idle and resets the next packet. TCP keep-alive (or the driver's option) every minute or two fixes it — Chapter 4.VI: AWS ghi rõ NAT Gateway của họ bỏ một luồng sau 350 giây im lặng và reset gói kế tiếp. TCP keep-alive (hoặc tuỳ chọn của driver) mỗi một hai phút sửa được — Chương 4.\n\n6. How many connections can one public IPv4 address of an AWS NAT Gateway carry at the same time, according to AWS?Theo AWS, một địa chỉ IPv4 công cộng của AWS NAT Gateway chở được bao nhiêu kết nối cùng lúc?\n   Answer: d) Up to 55 000 to one destination\n   A port number is 16 bits, so about 64 000 per destination at most; AWS documents 55 000 simultaneous connections per IP. Busy services that call one API heavily can run out.VI: Số cổng là 16 bit, nên tối đa khoảng 64 000 cho mỗi đích; AWS ghi 55 000 kết nối đồng thời cho mỗi IP. Dịch vụ bận gọi dồn một API có thể cạn cổng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 198.51.100.2:41000 → 203.0.113.10:80 was already taken by the laptop</p><p>Outside, both connections would have the same four values; the replies could not be told apart. The router picks another free port — this is PAT/NAPT (port address translation).</p><p><i>VI: Ở bên ngoài, hai kết nối sẽ có cùng bốn giá trị; câu trả lời không phân biệt được. Router chọn một cổng trống khác — đó là PAT/NAPT (dịch cả cổng).</i></p></li><li><p><b>b)</b> The whole university reaches LabFlow from one NAT address</p><p>Behind NAT, hundreds of people are one IP. Rate-limit per account or session, and treat an IP limit only as a coarse guard.</p><p><i>VI: Sau NAT, hàng trăm người là một IP. Giới hạn theo tài khoản hay phiên, và chỉ coi giới hạn theo IP là lớp chắn thô.</i></p></li><li><p><b>b)</b> 5 days</p><p>432 000 ÷ 86 400 s per day = 5. Linux is generous; many home routers and cloud NATs are much stricter.</p><p><i>VI: 432 000 ÷ 86 400 s mỗi ngày = 5. Linux khá rộng rãi; nhiều router nhà và NAT trên cloud khắt khe hơn nhiều.</i></p></li><li><p><b>b)</b> A UDP flow silent for more than 30 s loses its mapping: replies get dropped</p><p>After the entry expires, an answer from outside finds no line and is dropped. VoIP, games and QUIC send keep-alives for this reason.</p><p><i>VI: Sau khi mục hết hạn, câu trả lời từ ngoài không tìm thấy dòng nào và bị vứt. VoIP, game và QUIC gửi keep-alive vì lý do này.</i></p></li><li><p><b>a)</b> The NAT drops connections idle for 350 s; keep-alives keep them alive</p><p>AWS documents that its NAT Gateway drops a flow after 350 seconds idle and resets the next packet. TCP keep-alive (or the driver's option) every minute or two fixes it — Chapter 4.</p><p><i>VI: AWS ghi rõ NAT Gateway của họ bỏ một luồng sau 350 giây im lặng và reset gói kế tiếp. TCP keep-alive (hoặc tuỳ chọn của driver) mỗi một hai phút sửa được — Chương 4.</i></p></li><li><p><b>d)</b> Up to 55 000 to one destination</p><p>A port number is 16 bits, so about 64 000 per destination at most; AWS documents 55 000 simultaneous connections per IP. Busy services that call one API heavily can run out.</p><p><i>VI: Số cổng là 16 bit, nên tối đa khoảng 64 000 cho mỗi đích; AWS ghi 55 000 kết nối đồng thời cho mỗi IP. Dịch vụ bận gọi dồn một API có thể cạn cổng.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why did the phone's port become 4734?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cổng của điện thoại thành 4734?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server asked the phone to reconnect from another port"
+              },
+              {
+                "ma": "b",
+                "noiDung": "41000 is a reserved port that home routers never use outside"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The phone's operating system chose a new port before sending"
+              },
+              {
+                "ma": "d",
+                "noiDung": "198.51.100.2:41000 → 203.0.113.10:80 was already taken by the laptop"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Outside, both connections would have the same four values; the replies could not be told apart. The router picks another free port — this is PAT/NAPT (port address translation).</p><p><i>VI: Ở bên ngoài, hai kết nối sẽ có cùng bốn giá trị; câu trả lời không phân biệt được. Router chọn một cổng trống khác — đó là PAT/NAPT (dịch cả cổng).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>LabFlow bans an IP after 100 failed logins in a minute. A university complains that all its students are blocked. What happened?</p><p style=\"opacity:.75;font-size:.92em\"><i>LabFlow chặn một IP sau 100 lần đăng nhập sai trong một phút. Một trường đại học phản ánh mọi sinh viên bị chặn. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ban list was copied to every server of the university"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The whole university reaches LabFlow from one NAT address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Students share one account, so LabFlow sees one user"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The university's firewall resends every request a hundred times"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Behind NAT, hundreds of people are one IP. Rate-limit per account or session, and treat an IP limit only as a coarse guard.</p><p><i>VI: Sau NAT, hàng trăm người là một IP. Giới hạn theo tài khoản hay phiên, và chỉ coi giới hạn theo IP là lớp chắn thô.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An idle established TCP entry lives 432 000 s on this router. How long is that?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một mục TCP đã thiết lập mà không có lưu lượng sống 432 000 s trên router này. Là bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "12 hours"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5 days"
+              },
+              {
+                "ma": "c",
+                "noiDung": "432 minutes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "50 days"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>432 000 ÷ 86 400 s per day = 5. Linux is generous; many home routers and cloud NATs are much stricter.</p><p><i>VI: 432 000 ÷ 86 400 s mỗi ngày = 5. Linux khá rộng rãi; nhiều router nhà và NAT trên cloud khắt khe hơn nhiều.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A UDP \"connection\" without traffic keeps its entry 30 s here. What does that mean for an app?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một \"kết nối\" UDP không có lưu lượng giữ mục 30 s ở đây. Điều đó nghĩa gì với một ứng dụng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An app may send only one UDP packet every 30 s"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A UDP flow silent for more than 30 s loses its mapping: replies get dropped"
+              },
+              {
+                "ma": "c",
+                "noiDung": "UDP packets are delayed by 30 s when they cross the router"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The router closes the app's socket after 30 s of silence"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>After the entry expires, an answer from outside finds no line and is dropped. VoIP, games and QUIC send keep-alives for this reason.</p><p><i>VI: Sau khi mục hết hạn, câu trả lời từ ngoài không tìm thấy dòng nào và bị vứt. VoIP, game và QUIC gửi keep-alive vì lý do này.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A database connection through AWS NAT Gateway dies after 6 idle minutes, \"with a reset\". Lesson 2.3 explains …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một kết nối cơ sở dữ liệu đi qua AWS NAT Gateway chết sau 6 phút im lặng, \"bị reset\". Bài 2.3 giải thích …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The NAT drops connections idle for 350 s; keep-alives keep them alive"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AWS limits each NAT address to one connection per 6 minutes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The database closes every connection that is older than 6 minutes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "TCP itself closes connections after 6 minutes without data"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>AWS documents that its NAT Gateway drops a flow after 350 seconds idle and resets the next packet. TCP keep-alive (or the driver's option) every minute or two fixes it — Chapter 4.</p><p><i>VI: AWS ghi rõ NAT Gateway của họ bỏ một luồng sau 350 giây im lặng và reset gói kế tiếp. TCP keep-alive (hoặc tuỳ chọn của driver) mỗi một hai phút sửa được — Chương 4.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>How many connections can one public IPv4 address of an AWS NAT Gateway carry at the same time, according to AWS?</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo AWS, một địa chỉ IPv4 công cộng của AWS NAT Gateway chở được bao nhiêu kết nối cùng lúc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "About 1 000, like a home router"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Exactly 65 536, one per port"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Unlimited, because ports are reused"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Up to 55 000 to one destination"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A port number is 16 bits, so about 64 000 per destination at most; AWS documents 55 000 simultaneous connections per IP. Busy services that call one API heavily can run out.</p><p><i>VI: Số cổng là 16 bit, nên tối đa khoảng 64 000 cho mỗi đích; AWS ghi 55 000 kết nối đồng thời cho mỗi IP. Dịch vụ bận gọi dồn một API có thể cạn cổng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Banning by IP alone and blocking a whole school.|||Chặn chỉ theo IP và chặn cả một trường học."
+        },
+        {
+          "loi": "Blaming the database for connections that the NAT dropped while idle.|||Đổ lỗi cho cơ sở dữ liệu vì kết nối bị NAT bỏ khi im lặng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PAT / NAPT",
+          "vi": "NAT có dịch cổng"
+        },
+        {
+          "en": "timeout",
+          "vi": "thời gian chờ"
+        },
+        {
+          "en": "keep-alive",
+          "vi": "gói giữ kết nối",
+          "giaiThich": "Gói nhỏ gửi định kỳ để mục NAT không hết hạn."
+        },
+        {
+          "en": "rate limiting",
+          "vi": "giới hạn tần suất"
+        }
+      ]
+    },
+    {
+      "title": "NAT 4 — Calling in: port forwarding, CGNAT and docker -p",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "DNAT",
+        "CGNAT",
+        "Docker networking"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output (lab/out/c23-vao, c23-dnat, c23-vao2, c23-vao3, c23-docker):<pre># from the server: the router's public address, port 8080\n$ nc -vz -w 3 198.51.100.2 8080\nnc: connect to 198.51.100.2 port 8080 (tcp) failed: Connection refused\n# on the home router\n-P PREROUTING ACCEPT\n-A PREROUTING -i wan0 -p tcp -m tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\n# from the server again\n$ curl -s -m 3 http://198.51.100.2:8080/\nhello from the laptop dev server (192.168.50.10:8080)\n# the 4G phone's public address\n$ nc -vz -w 3 198.51.100.200 8080\nnc: connect to 198.51.100.200 port 8080 (tcp) failed: Connection refused\n\n# on your own machine: docker run -p 18080:80 nginx …\n-A DOCKER -p tcp -m tcp --dport 18080 -j DNAT --to-destination 172.17.0.5:80\n-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE\n# nginx access log after curl http://127.0.0.1:18080/\n192.168.65.1 - - [01/Nov/2026:05:13:25 +0700] \"GET / HTTP/1.1\" 200 615 \"-\" \"curl/8.7.1\"</pre></p><p><i>This set has 7 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật (lab/out/c23-vao, c23-dnat, c23-vao2, c23-vao3, c23-docker):<pre># từ máy chủ: địa chỉ công cộng của router, cổng 8080\n$ nc -vz -w 3 198.51.100.2 8080\nnc: connect to 198.51.100.2 port 8080 (tcp) failed: Connection refused\n# trên router nhà\n-P PREROUTING ACCEPT\n-A PREROUTING -i wan0 -p tcp -m tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\n# lại từ máy chủ\n$ curl -s -m 3 http://198.51.100.2:8080/\nhello from the laptop dev server (192.168.50.10:8080)\n# địa chỉ công cộng của điện thoại 4G\n$ nc -vz -w 3 198.51.100.200 8080\nnc: connect to 198.51.100.200 port 8080 (tcp) failed: Connection refused\n\n# trên chính máy bạn: docker run -p 18080:80 nginx …\n-A DOCKER -p tcp -m tcp --dport 18080 -j DNAT --to-destination 172.17.0.5:80\n-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE\n# log truy cập của nginx sau curl http://127.0.0.1:18080/\n192.168.65.1 - - [01/Nov/2026:05:13:25 +0700] \"GET / HTTP/1.1\" 200 615 \"-\" \"curl/8.7.1\"</pre></p><p><i>Bộ này có 7 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Inbound needs either a conntrack line (a reply) or a DNAT rule; otherwise the packet is for the router itself.|||Gói đi vào cần hoặc một dòng conntrack (là câu trả lời) hoặc một luật DNAT; không thì gói đó là cho chính router.",
+        "Check where the translation happens: your router (you can forward) or the ISP's (you cannot).|||Xem phép dịch xảy ra ở đâu: router của bạn (mở cổng được) hay của nhà mạng (không được)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 4 — Calling in: port forwarding, CGNAT and docker -p\n\nAnswer in the answer panel (no code needed).\n\n1. Before the DNAT rule, 198.51.100.2:8080 gave \"Connection refused\". Who refused?Trước luật DNAT, 198.51.100.2:8080 báo \"Connection refused\". Ai từ chối?\n2. \"-A PREROUTING -i wan0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\" is …\"-A PREROUTING -i wan0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\" là …\n3. After the demo, a teammate says: \"it's fine to leave it, NAT is our firewall\". You answer …Sau buổi demo, một bạn nói: \"cứ để vậy, NAT là tường lửa của mình mà\". Bạn trả lời …\n4. The 4G phone's public address 198.51.100.200 refuses too. Can its owner fix it with port forwarding?Địa chỉ công cộng 198.51.100.200 của điện thoại 4G cũng từ chối. Chủ máy có sửa được bằng mở cổng không?\n5. Which statement about the Docker rules is right?Câu nào đúng về các luật của Docker?\n6. nginx logged the client as 192.168.65.1, not 127.0.0.1. Why, and why does it matter?nginx ghi khách là 192.168.65.1, không phải 127.0.0.1. Vì sao, và vì sao quan trọng?\n7. On a Linux server with ufw blocking everything, you run docker run -p 5432:5432 postgres. Result?Trên máy chủ Linux có ufw chặn mọi thứ, bạn chạy docker run -p 5432:5432 postgres. Kết quả?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# NAT 4 — Calling in: port forwarding, CGNAT and docker -p — answer key\n\n1. Before the DNAT rule, 198.51.100.2:8080 gave \"Connection refused\". Who refused?Trước luật DNAT, 198.51.100.2:8080 báo \"Connection refused\". Ai từ chối?\n   Answer: a) The home router itself: nothing listens on its 8080 and no rule says \"this is the laptop's\"\n   The SYN reached the router's own address. With no conntrack line and no forwarding rule it is a packet for the router, which has no service on 8080 ⇒ reset.VI: Gói SYN tới chính địa chỉ của router. Không có dòng conntrack và không có luật chuyển tiếp thì đó là gói cho router, mà router không có dịch vụ ở 8080 ⇒ reset.\n\n2. \"-A PREROUTING -i wan0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\" is …\"-A PREROUTING -i wan0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\" là …\n   Answer: b) port forwarding: incoming packets to 8080 get the laptop as their destination\n   DNAT rewrites the Destination before routing (PREROUTING). Home router menus call it \"port forwarding\" or \"virtual server\".VI: DNAT viết lại Đích trước khi định tuyến (PREROUTING). Menu router nhà gọi là \"port forwarding\" hay \"virtual server\".\n\n3. After the demo, a teammate says: \"it's fine to leave it, NAT is our firewall\". You answer …Sau buổi demo, một bạn nói: \"cứ để vậy, NAT là tường lửa của mình mà\". Bạn trả lời …\n   Answer: b) NAT only blocked inbound by accident; with the rule, the dev server is open to anyone scanning\n   NAT blocks incoming connections only because it does not know where to send them. A forwarded port is reachable by the whole Internet — remove it, or use an outbound tunnel.VI: NAT chỉ chặn kết nối vào vì nó không biết gửi chúng đi đâu. Một cổng đã mở thì cả Internet tới được — gỡ nó, hoặc dùng đường hầm đi ra.\n\n4. The 4G phone's public address 198.51.100.200 refuses too. Can its owner fix it with port forwarding?Địa chỉ công cộng 198.51.100.200 của điện thoại 4G cũng từ chối. Chủ máy có sửa được bằng mở cổng không?\n   Answer: d) No: that address belongs to the ISP's CGNAT, shared with other customers\n   The phone has 100.64.0.10; the translation happens on the ISP's box, which you cannot configure. Outbound tunnels (Cloudflare Tunnel, ngrok, ssh -R) or IPv6 are the way out.VI: Điện thoại có 100.64.0.10; phép dịch xảy ra trên thiết bị của nhà mạng, bạn không cấu hình được. Đường hầm đi ra (Cloudflare Tunnel, ngrok, ssh -R) hoặc IPv6 là lối thoát.\n\n5. Which statement about the Docker rules is right?Câu nào đúng về các luật của Docker?\n   Answer: c) -p 18080:80 is a DNAT rule to 172.17.0.5:80; containers go out through MASQUERADE\n   Exactly the two home-router rules, inside your own machine: DNAT in, masquerade out of 172.17.0.0/16.VI: Đúng hai luật của router nhà, ngay trong máy bạn: DNAT chiều vào, masquerade chiều ra cho 172.17.0.0/16.\n\n6. nginx logged the client as 192.168.65.1, not 127.0.0.1. Why, and why does it matter?nginx ghi khách là 192.168.65.1, không phải 127.0.0.1. Vì sao, và vì sao quan trọng?\n   Answer: c) Docker Desktop's own address after NAT: the app often does not see the real client IP\n   Behind NAT and proxies the source address is the last translator. Chapter 7 shows how proxies pass the real one (X-Forwarded-For) and how to trust it safely.VI: Sau NAT và proxy, địa chỉ nguồn là bộ dịch cuối cùng. Chương 7 cho thấy proxy chuyển địa chỉ thật thế nào (X-Forwarded-For) và tin nó sao cho an toàn.\n\n7. On a Linux server with ufw blocking everything, you run docker run -p 5432:5432 postgres. Result?Trên máy chủ Linux có ufw chặn mọi thứ, bạn chạy docker run -p 5432:5432 postgres. Kết quả?\n   Answer: a) Port 5432 is reachable from the Internet: published ports are NATed before ufw\n   Docker's documentation: published ports skip the host firewall and bind all addresses by default. Use -p 127.0.0.1:5432:5432 for anything not meant to be public.VI: Tài liệu Docker: cổng công bố bỏ qua tường lửa của máy và mặc định nghe mọi địa chỉ. Dùng -p 127.0.0.1:5432:5432 cho thứ không cần công khai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The home router itself: nothing listens on its 8080 and no rule says \"this is the laptop's\"</p><p>The SYN reached the router's own address. With no conntrack line and no forwarding rule it is a packet for the router, which has no service on 8080 ⇒ reset.</p><p><i>VI: Gói SYN tới chính địa chỉ của router. Không có dòng conntrack và không có luật chuyển tiếp thì đó là gói cho router, mà router không có dịch vụ ở 8080 ⇒ reset.</i></p></li><li><p><b>b)</b> port forwarding: incoming packets to 8080 get the laptop as their destination</p><p>DNAT rewrites the Destination before routing (PREROUTING). Home router menus call it \"port forwarding\" or \"virtual server\".</p><p><i>VI: DNAT viết lại Đích trước khi định tuyến (PREROUTING). Menu router nhà gọi là \"port forwarding\" hay \"virtual server\".</i></p></li><li><p><b>b)</b> NAT only blocked inbound by accident; with the rule, the dev server is open to anyone scanning</p><p>NAT blocks incoming connections only because it does not know where to send them. A forwarded port is reachable by the whole Internet — remove it, or use an outbound tunnel.</p><p><i>VI: NAT chỉ chặn kết nối vào vì nó không biết gửi chúng đi đâu. Một cổng đã mở thì cả Internet tới được — gỡ nó, hoặc dùng đường hầm đi ra.</i></p></li><li><p><b>d)</b> No: that address belongs to the ISP's CGNAT, shared with other customers</p><p>The phone has 100.64.0.10; the translation happens on the ISP's box, which you cannot configure. Outbound tunnels (Cloudflare Tunnel, ngrok, ssh -R) or IPv6 are the way out.</p><p><i>VI: Điện thoại có 100.64.0.10; phép dịch xảy ra trên thiết bị của nhà mạng, bạn không cấu hình được. Đường hầm đi ra (Cloudflare Tunnel, ngrok, ssh -R) hoặc IPv6 là lối thoát.</i></p></li><li><p><b>c)</b> -p 18080:80 is a DNAT rule to 172.17.0.5:80; containers go out through MASQUERADE</p><p>Exactly the two home-router rules, inside your own machine: DNAT in, masquerade out of 172.17.0.0/16.</p><p><i>VI: Đúng hai luật của router nhà, ngay trong máy bạn: DNAT chiều vào, masquerade chiều ra cho 172.17.0.0/16.</i></p></li><li><p><b>c)</b> Docker Desktop's own address after NAT: the app often does not see the real client IP</p><p>Behind NAT and proxies the source address is the last translator. Chapter 7 shows how proxies pass the real one (X-Forwarded-For) and how to trust it safely.</p><p><i>VI: Sau NAT và proxy, địa chỉ nguồn là bộ dịch cuối cùng. Chương 7 cho thấy proxy chuyển địa chỉ thật thế nào (X-Forwarded-For) và tin nó sao cho an toàn.</i></p></li><li><p><b>a)</b> Port 5432 is reachable from the Internet: published ports are NATed before ufw</p><p>Docker's documentation: published ports skip the host firewall and bind all addresses by default. Use -p 127.0.0.1:5432:5432 for anything not meant to be public.</p><p><i>VI: Tài liệu Docker: cổng công bố bỏ qua tường lửa của máy và mặc định nghe mọi địa chỉ. Dùng -p 127.0.0.1:5432:5432 cho thứ không cần công khai.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Before the DNAT rule, 198.51.100.2:8080 gave \"Connection refused\". Who refused?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước luật DNAT, 198.51.100.2:8080 báo \"Connection refused\". Ai từ chối?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The home router itself: nothing listens on its 8080 and no rule says \"this is the laptop's\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "The DC router, which has no route back to the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The laptop's dev server, which only accepts local connections"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The ISP, which blocks incoming connections to home customers"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The SYN reached the router's own address. With no conntrack line and no forwarding rule it is a packet for the router, which has no service on 8080 ⇒ reset.</p><p><i>VI: Gói SYN tới chính địa chỉ của router. Không có dòng conntrack và không có luật chuyển tiếp thì đó là gói cho router, mà router không có dịch vụ ở 8080 ⇒ reset.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>\"-A PREROUTING -i wan0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\" is …</p><p style=\"opacity:.75;font-size:.92em\"><i>\"-A PREROUTING -i wan0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080\" là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a route that sends 192.168.50.10 to the ISP through wan0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "port forwarding: incoming packets to 8080 get the laptop as their destination"
+              },
+              {
+                "ma": "c",
+                "noiDung": "source NAT: outgoing packets from the laptop get the router's address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a firewall rule that blocks port 8080 for everyone on the Internet"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>DNAT rewrites the Destination before routing (PREROUTING). Home router menus call it \"port forwarding\" or \"virtual server\".</p><p><i>VI: DNAT viết lại Đích trước khi định tuyến (PREROUTING). Menu router nhà gọi là \"port forwarding\" hay \"virtual server\".</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After the demo, a teammate says: \"it's fine to leave it, NAT is our firewall\". You answer …</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau buổi demo, một bạn nói: \"cứ để vậy, NAT là tường lửa của mình mà\". Bạn trả lời …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "NAT encrypts the traffic, so leaving the rule is safe enough"
+              },
+              {
+                "ma": "b",
+                "noiDung": "NAT only blocked inbound by accident; with the rule, the dev server is open to anyone scanning"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The ISP will block scanners, so the rule does not matter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The rule expires by itself when the conntrack entry times out"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>NAT blocks incoming connections only because it does not know where to send them. A forwarded port is reachable by the whole Internet — remove it, or use an outbound tunnel.</p><p><i>VI: NAT chỉ chặn kết nối vào vì nó không biết gửi chúng đi đâu. Một cổng đã mở thì cả Internet tới được — gỡ nó, hoặc dùng đường hầm đi ra.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The 4G phone's public address 198.51.100.200 refuses too. Can its owner fix it with port forwarding?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ công cộng 198.51.100.200 của điện thoại 4G cũng từ chối. Chủ máy có sửa được bằng mở cổng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes: by asking the server to connect from port 80 instead"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No: 4G networks cannot carry TCP connections at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes: in the phone's settings, like on a home router"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No: that address belongs to the ISP's CGNAT, shared with other customers"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The phone has 100.64.0.10; the translation happens on the ISP's box, which you cannot configure. Outbound tunnels (Cloudflare Tunnel, ngrok, ssh -R) or IPv6 are the way out.</p><p><i>VI: Điện thoại có 100.64.0.10; phép dịch xảy ra trên thiết bị của nhà mạng, bạn không cấu hình được. Đường hầm đi ra (Cloudflare Tunnel, ngrok, ssh -R) hoặc IPv6 là lối thoát.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which statement about the Docker rules is right?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu nào đúng về các luật của Docker?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "-p 18080:80 opens port 80 on the host and closes 18080"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The container gets a public address, so no NAT is needed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "-p 18080:80 is a DNAT rule to 172.17.0.5:80; containers go out through MASQUERADE"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Docker uses its own kernel, so iptables does not see the rules"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Exactly the two home-router rules, inside your own machine: DNAT in, masquerade out of 172.17.0.0/16.</p><p><i>VI: Đúng hai luật của router nhà, ngay trong máy bạn: DNAT chiều vào, masquerade chiều ra cho 172.17.0.0/16.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>nginx logged the client as 192.168.65.1, not 127.0.0.1. Why, and why does it matter?</p><p style=\"opacity:.75;font-size:.92em\"><i>nginx ghi khách là 192.168.65.1, không phải 127.0.0.1. Vì sao, và vì sao quan trọng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The container rewrote its own logs to hide the user's address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nginx resolved localhost to the first address of the Docker VM"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Docker Desktop's own address after NAT: the app often does not see the real client IP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "curl sent the request through a proxy that was configured on the Mac"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Behind NAT and proxies the source address is the last translator. Chapter 7 shows how proxies pass the real one (X-Forwarded-For) and how to trust it safely.</p><p><i>VI: Sau NAT và proxy, địa chỉ nguồn là bộ dịch cuối cùng. Chương 7 cho thấy proxy chuyển địa chỉ thật thế nào (X-Forwarded-For) và tin nó sao cho an toàn.</i></p>"
+          },
+          {
+            "ma": "c7",
+            "de": "<p>On a Linux server with ufw blocking everything, you run docker run -p 5432:5432 postgres. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên máy chủ Linux có ufw chặn mọi thứ, bạn chạy docker run -p 5432:5432 postgres. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Port 5432 is reachable from the Internet: published ports are NATed before ufw"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Docker refuses to start because ufw already owns port 5432"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The port is open only to other containers on the same bridge"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ufw blocks 5432, so only the host itself can reach the database"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Docker's documentation: published ports skip the host firewall and bind all addresses by default. Use -p 127.0.0.1:5432:5432 for anything not meant to be public.</p><p><i>VI: Tài liệu Docker: cổng công bố bỏ qua tường lửa của máy và mặc định nghe mọi địa chỉ. Dùng -p 127.0.0.1:5432:5432 cho thứ không cần công khai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling NAT a firewall and leaving a forwarded dev server online.|||Gọi NAT là tường lửa và để server phát triển đã mở cổng trên mạng."
+        },
+        {
+          "loi": "Publishing a database with -p 5432:5432 on a server and trusting ufw.|||Công bố cơ sở dữ liệu bằng -p 5432:5432 trên máy chủ rồi tin vào ufw."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DNAT / port forwarding",
+          "vi": "NAT đích / mở cổng"
+        },
+        {
+          "en": "CGNAT",
+          "vi": "NAT của nhà mạng",
+          "giaiThich": "Khách hàng nhận 100.64.0.0/10."
+        },
+        {
+          "en": "published port",
+          "vi": "cổng công bố",
+          "giaiThich": "docker run -p: một luật DNAT trên máy chủ."
+        },
+        {
+          "en": "ufw",
+          "vi": "tường lửa đơn giản của Ubuntu"
+        }
+      ]
+    },
+    {
+      "title": "NAT 5 — Write parseConntrack(text)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 25,
+      "points": 20,
+      "concepts": [
+        "conntrack",
+        "parsing tool output"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Write <code>parseConntrack(text)</code> for the output of <code>conntrack -L</code>. Real example (lab/out/c23-homegw):</p><pre>conntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1</pre><p>Return one object per <code>tcp</code> or <code>udp</code> line (skip every other line):</p>\n<pre>{ proto, timeout, state, orig: { src, dst, sport, dport }, reply: { src, dst, sport, dport }, flags, snat, dnat }</pre>\n<ul>\n<li><code>timeout</code> — the third word, a number. <code>state</code> — the TCP state word (<code>TIME_WAIT</code>, <code>ESTABLISHED</code>…) or <code>null</code> (UDP has none).</li>\n<li>The <b>first</b> <code>src= dst= sport= dport=</code> group is <code>orig</code>, the <b>second</b> is <code>reply</code>; ports are numbers. <code>flags</code> — the words in brackets without the brackets (<code>[\"ASSURED\"]</code>). Ignore <code>mark=</code>, <code>use=</code>.</li>\n<li><code>snat</code> — if reply.dst or reply.dport differs from orig.src / orig.sport: <code>{ ip: reply.dst, port: reply.dport }</code> (what the outside world saw), else <code>null</code>.</li>\n<li><code>dnat</code> — if reply.src or reply.sport differs from orig.dst / orig.dport: <code>{ ip: reply.src, port: reply.sport }</code> (where the packet really went), else <code>null</code>.</li>\n</ul><p>Hidden cases: the real CGNAT line of the ISP, the real Lab 2 table, and two <b>constructed</b> lines — a port-forwarded connection (DNAT) and a UDP DNS query with <code>[UNREPLIED]</code> between the two halves.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>parseConntrack(text)</code> cho output của <code>conntrack -L</code>. Ví dụ thật (lab/out/c23-homegw):</p><pre>conntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1</pre><p>Trả về một object cho mỗi dòng <code>tcp</code> hoặc <code>udp</code> (bỏ qua mọi dòng khác):</p>\n<pre>{ proto, timeout, state, orig: { src, dst, sport, dport }, reply: { src, dst, sport, dport }, flags, snat, dnat }</pre>\n<ul>\n<li><code>timeout</code> — chữ thứ ba, là số. <code>state</code> — chữ trạng thái TCP (<code>TIME_WAIT</code>, <code>ESTABLISHED</code>…) hoặc <code>null</code> (UDP không có).</li>\n<li>Nhóm <code>src= dst= sport= dport=</code> <b>đầu tiên</b> là <code>orig</code>, nhóm <b>thứ hai</b> là <code>reply</code>; cổng là số. <code>flags</code> — các chữ trong ngoặc vuông, bỏ ngoặc (<code>[\"ASSURED\"]</code>). Bỏ qua <code>mark=</code>, <code>use=</code>.</li>\n<li><code>snat</code> — nếu reply.dst hoặc reply.dport khác orig.src / orig.sport: <code>{ ip: reply.dst, port: reply.dport }</code> (thứ thế giới bên ngoài thấy), ngược lại <code>null</code>.</li>\n<li><code>dnat</code> — nếu reply.src hoặc reply.sport khác orig.dst / orig.dport: <code>{ ip: reply.src, port: reply.sport }</code> (nơi gói thật sự tới), ngược lại <code>null</code>.</li>\n</ul><p>Ca ẩn: dòng CGNAT thật của isp, bảng thật của Lab 2, và hai dòng <b>dựng</b> — một kết nối qua cổng đã mở (DNAT) và một truy vấn DNS UDP có <code>[UNREPLIED]</code> nằm giữa hai nửa.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — the output of conntrack -L (any number of lines).|||text — output của conntrack -L (bao nhiêu dòng cũng được).",
+      "outputSpec": "An array of { proto, timeout, state, orig, reply, flags, snat, dnat }.|||Mảng { proto, timeout, state, orig, reply, flags, snat, dnat }.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseConntrack(\"conntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1\")",
+          "output": "[{\"proto\":\"tcp\",\"timeout\":117,\"state\":\"TIME_WAIT\",\"orig\":{\"src\":\"192.168.50.10\",\"dst\":\"203.0.113.10\",\"sport\":41122,\"dport\":80},\"reply\":{\"src\":\"203.0.113.10\",\"dst\":\"198.51.100.2\",\"sport\":80,\"dport\":41122},\"flags\":[\"ASSURED\"],\"snat\":{\"ip\":\"198.51.100.2\",\"port\":41122},\"dnat\":null},{\"proto\":\"tcp\",\"timeout\":117,\"state\":\"TIME_WAIT\",\"orig\":{\"src\":\"192.168.50.11\",\"dst\":\"203.0.113.10\",\"sport\":41000,\"dport\":80},\"reply\":{\"src\":\"203.0.113.10\",\"dst\":\"198.51.100.2\",\"sport\":80,\"dport\":4734},\"flags\":[\"ASSURED\"],\"snat\":{\"ip\":\"198.51.100.2\",\"port\":4734},\"dnat\":null},{\"proto\":\"tcp\",\"timeout\":117,\"state\":\"TIME_WAIT\",\"orig\":{\"src\":\"192.168.50.10\",\"dst\":\"203.0.113.10\",\"sport\":41000,\"dport\":80},\"reply\":{\"src\":\"203.0.113.10\",\"dst\":\"198.51.100.2\",\"sport\":80,\"dport\":41000},\"flags\":[\"ASSURED\"],\"snat\":{\"ip\":\"198.51.100.2\",\"port\":41000},\"dnat\":null}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split a line into words; key=value words split again at \"=\". The second \"src=\" you meet starts the reply half.|||Tách dòng thành từ; từ dạng khoá=giá trị tách tiếp ở \"=\". Chữ \"src=\" thứ hai bạn gặp là bắt đầu nửa trả lời.",
+        "Compare after parsing: snat looks at the source side (orig.src vs reply.dst), dnat at the destination side (orig.dst vs reply.src).|||So sau khi phân tích: snat nhìn phía nguồn (orig.src với reply.dst), dnat nhìn phía đích (orig.dst với reply.src)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** conntrack -L text ⇒ [{ proto, timeout, state, orig, reply, flags, snat, dnat }] */\nfunction parseConntrack(text) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseConntrack(text) {\n  var out = [];\n  String(text).split('\\n').forEach(function (line) {\n    var w = line.trim().split(/\\s+/);\n    if (w[0] !== 'tcp' && w[0] !== 'udp') return;               // the \"conntrack v1.4.9 …\" banner and other protocols\n    var e = { proto: w[0], timeout: Number(w[2]), state: null, orig: {}, reply: {}, flags: [] };\n    var half = e.orig;\n    w.slice(3).forEach(function (x) {\n      if (/^\\[[A-Z_]+\\]$/.test(x)) { e.flags.push(x.slice(1, -1)); return; }     // [ASSURED] [UNREPLIED]\n      var kv = /^(src|dst|sport|dport)=(.*)$/.exec(x);\n      if (kv) {\n        if (kv[1] === 'src' && half.src !== undefined) half = e.reply;            // the second src= starts the reply half\n        half[kv[1]] = kv[1].indexOf('port') >= 0 ? Number(kv[2]) : kv[2];\n        return;\n      }\n      if (/^[A-Z_]+$/.test(x) && e.state === null && half === e.orig && e.orig.src === undefined) e.state = x;   // TIME_WAIT, ESTABLISHED… (tcp only)\n    });\n    var o = e.orig, r = e.reply;\n    e.snat = (r.dst !== o.src || r.dport !== o.sport) ? { ip: r.dst, port: r.dport } : null;   // the source the outside world sees\n    e.dnat = (r.src !== o.dst || r.sport !== o.dport) ? { ip: r.src, port: r.sport } : null;   // the real destination inside\n    out.push(e);\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>conntrack stores each connection as two tuples: the one the first packet had, and the one replies will have. NAT is nothing more than the difference between them, which is why the translation can be read from the table: the reply goes to the public address and port (SNAT), and comes from the real inside server (DNAT). Parsing by key instead of by position survives the variations of real output — no state for UDP, flags between the halves.</p>",
+      "solutionExplanationHtmlVi": "<p>conntrack lưu mỗi kết nối thành hai bộ giá trị: bộ của gói đầu tiên, và bộ mà câu trả lời sẽ có. NAT không gì hơn là chênh lệch giữa hai bộ đó, nên phép dịch đọc được từ bảng: câu trả lời đi tới địa chỉ và cổng công cộng (SNAT), và đến từ máy chủ thật ở bên trong (DNAT). Phân tích theo khoá thay vì theo vị trí chịu được các biến thể của output thật — UDP không có trạng thái, cờ nằm giữa hai nửa.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real home-router table (c23-homegw)",
+              "vi": "Bảng thật của router nhà (c23-homegw)"
+            },
+            "goi": "parseConntrack(\"conntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1\")",
+            "mongDoi": [
+              {
+                "proto": "tcp",
+                "timeout": 117,
+                "state": "TIME_WAIT",
+                "orig": {
+                  "src": "192.168.50.10",
+                  "dst": "203.0.113.10",
+                  "sport": 41122,
+                  "dport": 80
+                },
+                "reply": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.2",
+                  "sport": 80,
+                  "dport": 41122
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.2",
+                  "port": 41122
+                },
+                "dnat": null
+              },
+              {
+                "proto": "tcp",
+                "timeout": 117,
+                "state": "TIME_WAIT",
+                "orig": {
+                  "src": "192.168.50.11",
+                  "dst": "203.0.113.10",
+                  "sport": 41000,
+                  "dport": 80
+                },
+                "reply": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.2",
+                  "sport": 80,
+                  "dport": 4734
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.2",
+                  "port": 4734
+                },
+                "dnat": null
+              },
+              {
+                "proto": "tcp",
+                "timeout": 117,
+                "state": "TIME_WAIT",
+                "orig": {
+                  "src": "192.168.50.10",
+                  "dst": "203.0.113.10",
+                  "sport": 41000,
+                  "dport": 80
+                },
+                "reply": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.2",
+                  "sport": 80,
+                  "dport": 41000
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.2",
+                  "port": 41000
+                },
+                "dnat": null
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "One real line: the phone, 41000 → 4734",
+              "vi": "Một dòng thật: điện thoại, 41000 → 4734"
+            },
+            "goi": "parseConntrack(\"tcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\")",
+            "mongDoi": [
+              {
+                "proto": "tcp",
+                "timeout": 117,
+                "state": "TIME_WAIT",
+                "orig": {
+                  "src": "192.168.50.11",
+                  "dst": "203.0.113.10",
+                  "sport": 41000,
+                  "dport": 80
+                },
+                "reply": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.2",
+                  "sport": 80,
+                  "dport": 4734
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.2",
+                  "port": 4734
+                },
+                "dnat": null
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseConntrack(\"conntrack v1.4.9 (conntrack-tools): 1 flow entries have been shown.\\ntcp      6 119 TIME_WAIT src=100.64.0.10 dst=203.0.113.10 sport=47852 dport=80 src=203.0.113.10 dst=198.51.100.200 sport=80 dport=47852 [ASSURED] mark=0 use=1\")",
+            "mongDoi": [
+              {
+                "proto": "tcp",
+                "timeout": 119,
+                "state": "TIME_WAIT",
+                "orig": {
+                  "src": "100.64.0.10",
+                  "dst": "203.0.113.10",
+                  "sport": 47852,
+                  "dport": 80
+                },
+                "reply": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.200",
+                  "sport": 80,
+                  "dport": 47852
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.200",
+                  "port": 47852
+                },
+                "dnat": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseConntrack(\"conntrack v1.4.9 (conntrack-tools): 2 flow entries have been shown.\\ntcp      6 119 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=57986 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=57986 [ASSURED] mark=0 use=1\\ntcp      6 119 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41112 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41112 [ASSURED] mark=0 use=1\")",
+            "mongDoi": [
+              {
+                "proto": "tcp",
+                "timeout": 119,
+                "state": "TIME_WAIT",
+                "orig": {
+                  "src": "192.168.50.11",
+                  "dst": "203.0.113.10",
+                  "sport": 57986,
+                  "dport": 80
+                },
+                "reply": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.2",
+                  "sport": 80,
+                  "dport": 57986
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.2",
+                  "port": 57986
+                },
+                "dnat": null
+              },
+              {
+                "proto": "tcp",
+                "timeout": 119,
+                "state": "TIME_WAIT",
+                "orig": {
+                  "src": "192.168.50.10",
+                  "dst": "203.0.113.10",
+                  "sport": 41112,
+                  "dport": 80
+                },
+                "reply": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.2",
+                  "sport": 80,
+                  "dport": 41112
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.2",
+                  "port": 41112
+                },
+                "dnat": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: a port-forwarded connection (constructed)",
+              "vi": "Ẩn: kết nối qua cổng đã mở (dựng)"
+            },
+            "goi": "parseConntrack(\"tcp      6 431997 ESTABLISHED src=203.0.113.10 dst=198.51.100.2 sport=51234 dport=8443 src=192.168.50.10 dst=203.0.113.10 sport=8080 dport=51234 [ASSURED] mark=0 use=1\")",
+            "mongDoi": [
+              {
+                "proto": "tcp",
+                "timeout": 431997,
+                "state": "ESTABLISHED",
+                "orig": {
+                  "src": "203.0.113.10",
+                  "dst": "198.51.100.2",
+                  "sport": 51234,
+                  "dport": 8443
+                },
+                "reply": {
+                  "src": "192.168.50.10",
+                  "dst": "203.0.113.10",
+                  "sport": 8080,
+                  "dport": 51234
+                },
+                "flags": [
+                  "ASSURED"
+                ],
+                "snat": null,
+                "dnat": {
+                  "ip": "192.168.50.10",
+                  "port": 8080
+                }
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: UDP with [UNREPLIED] (constructed)",
+              "vi": "Ẩn: UDP có [UNREPLIED] (dựng)"
+            },
+            "goi": "parseConntrack(\"udp      17 28 src=192.168.50.10 dst=198.51.100.1 sport=53011 dport=53 [UNREPLIED] src=198.51.100.1 dst=198.51.100.2 sport=53 dport=53011 mark=0 use=1\")",
+            "mongDoi": [
+              {
+                "proto": "udp",
+                "timeout": 28,
+                "state": null,
+                "orig": {
+                  "src": "192.168.50.10",
+                  "dst": "198.51.100.1",
+                  "sport": 53011,
+                  "dport": 53
+                },
+                "reply": {
+                  "src": "198.51.100.1",
+                  "dst": "198.51.100.2",
+                  "sport": 53,
+                  "dport": 53011
+                },
+                "flags": [
+                  "UNREPLIED"
+                ],
+                "snat": {
+                  "ip": "198.51.100.2",
+                  "port": 53011
+                },
+                "dnat": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseConntrack(\"conntrack v1.4.9 (conntrack-tools): 0 flow entries have been shown.\")",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting by position (word 4 = src…): the UDP line has no state word and has [UNREPLIED] in the middle.|||Tách theo vị trí (chữ thứ 4 = src…): dòng UDP không có chữ trạng thái và có [UNREPLIED] ở giữa."
+        },
+        {
+          "loi": "Leaving ports as strings: \"4734\" !== 4734 when you compare later.|||Để cổng là chuỗi: \"4734\" !== 4734 khi so về sau."
+        },
+        {
+          "loi": "Reading reply.src (the server) as the device's public address.|||Đọc reply.src (máy chủ) thành địa chỉ công cộng của thiết bị."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tuple",
+          "vi": "bộ giá trị",
+          "giaiThich": "Ở đây: src, dst, sport, dport."
+        },
+        {
+          "en": "[ASSURED]",
+          "vi": "đã thấy lưu lượng cả hai chiều"
+        },
+        {
+          "en": "[UNREPLIED]",
+          "vi": "chưa có câu trả lời"
+        }
+      ]
+    },
+    {
+      "title": "NAT 6 — Write a NAT router: natOut() and natIn()",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 45,
+      "points": 30,
+      "concepts": [
+        "NAT",
+        "conntrack",
+        "port forwarding"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Build the home router's translator. A <code>table</code> is <code>{ publicIp, portPool, dnat, conns }</code>: <code>portPool</code> = the ports to try, in order, when a source port is already taken; <code>dnat</code> = forwarding rules <code>[{ port, to, toPort }]</code>; <code>conns</code> = the conntrack table, an array you fill with <code>{ orig, reply }</code> (each <code>{ src, dst, sport, dport }</code>, like exercise 5). Packets are <code>{ src, sport, dst, dport }</code> (TCP only).</p>\n<p><b>natOut(table, p)</b> — a packet leaving the house:</p>\n<ol>\n<li>If a conn has <code>orig</code> equal to <code>p</code> ⇒ translate with that conn: source = its reply.dst : reply.dport.</li>\n<li>If a conn has <code>reply</code> equal to <code>p</code> (the inside server answering a forwarded connection) ⇒ return <code>{ src: orig.dst, sport: orig.dport, dst: orig.src, dport: orig.sport }</code>.</li>\n<li>Otherwise it is new. The outside tuple would be <code>{ src: p.dst, dst: publicIp, sport: p.dport, dport: port }</code> with <code>port = p.sport</code>. If any conn already has that tuple (as orig or reply), try the ports of <code>portPool</code> in order; none free ⇒ return <code>null</code> (dropped).</li>\n<li>Add <code>{ orig: p, reply: that outside tuple }</code> to <code>conns</code> and return <code>{ src: publicIp, sport: port, dst: p.dst, dport: p.dport }</code>.</li>\n</ol>\n<p><b>natIn(table, p)</b> — a packet arriving from the Internet:</p>\n<ol>\n<li>If a conn has <code>reply</code> equal to <code>p</code> ⇒ it is an answer: return it with <code>dst: orig.src, dport: orig.sport</code>.</li>\n<li>If a conn has <code>orig</code> equal to <code>p</code> ⇒ a later packet of a forwarded connection: <code>dst: reply.src, dport: reply.sport</code>.</li>\n<li>Otherwise, if <code>p.dst</code> is <code>publicIp</code> and a <code>dnat</code> rule has <code>port === p.dport</code> ⇒ add <code>{ orig: p, reply: { src: to, dst: p.src, sport: toPort, dport: p.sport } }</code> and return <code>p</code> with <code>dst: to, dport: toPort</code>.</li>\n<li>Otherwise ⇒ <code>null</code>: unsolicited traffic is dropped.</li>\n</ol>\n<p>The first visible case replays the real lab: the laptop from 41122, the laptop from 41000, then the phone from 41000 — with <code>portPool: [4734]</code> your router must hand out <b>4734</b> and end with the same three conntrack entries as the real router (lab/out/c23-homegw; conntrack lists them in another order):</p><pre>conntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1</pre><p>Hidden cases: replies, the 8443 → laptop:8080 forwarding of Lab 2 with the laptop's answer, the ISP's CGNAT, a pool that runs out, a taken pool port, the same port towards another destination, and packets nobody asked for.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng bộ dịch của router nhà. Một <code>table</code> là <code>{ publicIp, portPool, dnat, conns }</code>: <code>portPool</code> = các cổng thử lần lượt khi cổng nguồn đã bị dùng; <code>dnat</code> = các luật mở cổng <code>[{ port, to, toPort }]</code>; <code>conns</code> = bảng conntrack, một mảng bạn điền <code>{ orig, reply }</code> (mỗi cái <code>{ src, dst, sport, dport }</code>, như bài 5). Gói là <code>{ src, sport, dst, dport }</code> (chỉ TCP).</p>\n<p><b>natOut(table, p)</b> — một gói rời khỏi nhà:</p>\n<ol>\n<li>Nếu có conn với <code>orig</code> bằng <code>p</code> ⇒ dịch theo conn đó: nguồn = reply.dst : reply.dport của nó.</li>\n<li>Nếu có conn với <code>reply</code> bằng <code>p</code> (máy chủ bên trong trả lời một kết nối đã mở cổng) ⇒ trả <code>{ src: orig.dst, sport: orig.dport, dst: orig.src, dport: orig.sport }</code>.</li>\n<li>Ngược lại là kết nối mới. Bộ giá trị bên ngoài sẽ là <code>{ src: p.dst, dst: publicIp, sport: p.dport, dport: port }</code> với <code>port = p.sport</code>. Nếu có conn đã mang bộ đó (ở orig hay reply), thử lần lượt các cổng trong <code>portPool</code>; không còn cổng trống ⇒ trả <code>null</code> (bị vứt).</li>\n<li>Thêm <code>{ orig: p, reply: bộ bên ngoài đó }</code> vào <code>conns</code> và trả <code>{ src: publicIp, sport: port, dst: p.dst, dport: p.dport }</code>.</li>\n</ol>\n<p><b>natIn(table, p)</b> — một gói tới từ Internet:</p>\n<ol>\n<li>Nếu có conn với <code>reply</code> bằng <code>p</code> ⇒ đó là câu trả lời: trả về với <code>dst: orig.src, dport: orig.sport</code>.</li>\n<li>Nếu có conn với <code>orig</code> bằng <code>p</code> ⇒ gói sau của một kết nối đã mở cổng: <code>dst: reply.src, dport: reply.sport</code>.</li>\n<li>Ngược lại, nếu <code>p.dst</code> là <code>publicIp</code> và có luật <code>dnat</code> với <code>port === p.dport</code> ⇒ thêm <code>{ orig: p, reply: { src: to, dst: p.src, sport: toPort, dport: p.sport } }</code> và trả <code>p</code> với <code>dst: to, dport: toPort</code>.</li>\n<li>Còn lại ⇒ <code>null</code>: lưu lượng không ai mời bị vứt.</li>\n</ol>\n<p>Ca hiện đầu tiên phát lại lab thật: laptop từ 41122, laptop từ 41000, rồi điện thoại từ 41000 — với <code>portPool: [4734]</code> router của bạn phải cấp <b>4734</b> và kết thúc với đúng ba mục conntrack như router thật (lab/out/c23-homegw; conntrack liệt kê theo thứ tự khác):</p><pre>conntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1\ntcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1</pre><p>Ca ẩn: câu trả lời, mở cổng 8443 → laptop:8080 của Lab 2 kèm câu trả lời của laptop, CGNAT của isp, kho cổng cạn, cổng trong kho đã bị dùng, cùng cổng tới một đích khác, và gói không ai mời.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "table — { publicIp, portPool?, dnat?, conns }; p — { src, sport, dst, dport }.",
+      "outputSpec": "The translated packet { src, sport, dst, dport }, or null. Both functions update table.conns.|||Gói đã dịch { src, sport, dst, dport }, hoặc null. Cả hai hàm cập nhật table.conns.",
+      "constraints": "Mutate table.conns (push); do not replace the array. Treat missing portPool / dnat as empty.|||Sửa table.conns (push); không thay mảng khác. portPool / dnat thiếu thì coi như rỗng.",
+      "examplesJson": [
+        {
+          "input": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[4734],\"dnat\":[],\"conns\":[]}; var out = [natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41122,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.11\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80})]; return { out: out, conns: t.conns }; })()",
+          "output": "{\"out\":[{\"src\":\"198.51.100.2\",\"sport\":41122,\"dst\":\"203.0.113.10\",\"dport\":80},{\"src\":\"198.51.100.2\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80},{\"src\":\"198.51.100.2\",\"sport\":4734,\"dst\":\"203.0.113.10\",\"dport\":80}],\"conns\":[{\"orig\":{\"src\":\"192.168.50.10\",\"dst\":\"203.0.113.10\",\"sport\":41122,\"dport\":80},\"reply\":{\"src\":\"203.0.113.10\",\"dst\":\"198.51.100.2\",\"sport\":80,\"dport\":41122}},{\"orig\":{\"src\":\"192.168.50.10\",\"dst\":\"203.0.113.10\",\"sport\":41000,\"dport\":80},\"reply\":{\"src\":\"203.0.113.10\",\"dst\":\"198.51.100.2\",\"sport\":80,\"dport\":41000}},{\"orig\":{\"src\":\"192.168.50.11\",\"dst\":\"203.0.113.10\",\"sport\":41000,\"dport\":80},\"reply\":{\"src\":\"203.0.113.10\",\"dst\":\"198.51.100.2\",\"sport\":80,\"dport\":4734}}]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write same(a, b) that compares src, dst, sport, dport — every rule is \"find a conn whose orig or reply is the same as …\".|||Viết same(a, b) so src, dst, sport, dport — luật nào cũng là \"tìm conn có orig hoặc reply giống …\".",
+        "A collision depends on the destination: the laptop's 41000 to another server is not taken. Build the outside tuple first, then search for it.|||Đụng cổng phụ thuộc đích: 41000 của laptop tới máy chủ khác không bị chiếm. Dựng bộ bên ngoài trước, rồi tìm nó.",
+        "Check existing conns before the DNAT rules in natIn, and before allocating in natOut.|||Kiểm các conn sẵn có trước luật DNAT trong natIn, và trước khi cấp cổng trong natOut."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * table = { publicIp, portPool: [..], dnat: [{ port, to, toPort }], conns: [] }\n * p     = { src, sport, dst, dport }\n * Both return the translated packet, or null. Both may push { orig, reply } into table.conns.\n */\nfunction natOut(table, p) {\n  // Write your solution here\n  return null;\n}\n\nfunction natIn(table, p) {\n  // Write your solution here\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction natOut(table, p) {\n  function same(a, b) { return a.src === b.src && a.dst === b.dst && a.sport === b.sport && a.dport === b.dport; }\n  var conns = table.conns;\n  for (var i = 0; i < conns.length; i++) {\n    var c = conns[i];\n    if (same(c.orig, p)) return { src: c.reply.dst, sport: c.reply.dport, dst: p.dst, dport: p.dport };   // a known connection: same mapping\n    if (same(c.reply, p)) return { src: c.orig.dst, sport: c.orig.dport, dst: c.orig.src, dport: c.orig.sport };   // the inside server answers a forwarded connection\n  }\n  // a new connection: keep the source port unless that outside tuple is already used by another connection\n  function taken(port) {\n    var t = { src: p.dst, dst: table.publicIp, sport: p.dport, dport: port };\n    return conns.some(function (c) { return same(c.reply, t) || same(c.orig, t); });\n  }\n  var port = p.sport;\n  if (taken(port)) {\n    port = null;\n    var pool = table.portPool || [];\n    for (var k = 0; k < pool.length; k++) if (!taken(pool[k])) { port = pool[k]; break; }\n    if (port === null) return null;                     // no free port: the packet is dropped\n  }\n  conns.push({ orig: { src: p.src, dst: p.dst, sport: p.sport, dport: p.dport }, reply: { src: p.dst, dst: table.publicIp, sport: p.dport, dport: port } });\n  return { src: table.publicIp, sport: port, dst: p.dst, dport: p.dport };\n}\n\nfunction natIn(table, p) {\n  function same(a, b) { return a.src === b.src && a.dst === b.dst && a.sport === b.sport && a.dport === b.dport; }\n  var conns = table.conns;\n  for (var i = 0; i < conns.length; i++) {\n    var c = conns[i];\n    if (same(c.reply, p)) return { src: p.src, sport: p.sport, dst: c.orig.src, dport: c.orig.sport };     // a reply: back to the inside device\n    if (same(c.orig, p)) return { src: p.src, sport: p.sport, dst: c.reply.src, dport: c.reply.sport };   // more packets of a forwarded connection\n  }\n  if (p.dst !== table.publicIp) return null;\n  var rule = (table.dnat || []).filter(function (r) { return r.port === p.dport; })[0];\n  if (!rule) return null;                               // unsolicited and no forwarding rule: dropped\n  conns.push({ orig: { src: p.src, dst: p.dst, sport: p.sport, dport: p.dport }, reply: { src: rule.to, dst: p.src, sport: rule.toPort, dport: p.sport } });\n  return { src: p.src, sport: p.sport, dst: rule.to, dport: rule.toPort };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A NAT router is a lookup table with two keys per entry. Outgoing, the first packet of a connection creates an entry whose reply tuple is the one the outside world will use; the source port is kept unless that exact outside tuple is already taken, which is how the real router kept 41000 for the laptop and gave the phone 4734 — while 41000 towards another server stays free. Incoming, a packet is only accepted if it matches an entry (a reply, or a forwarded connection) or creates one through an explicit DNAT rule; everything else has nowhere to go, which is the \"NAT blocks inbound\" effect — a side effect, not a firewall. The same two tables explain CGNAT: the ISP's router runs exactly this code with publicIp 198.51.100.200, and only the ISP can add DNAT rules there.</p>",
+      "solutionExplanationHtmlVi": "<p>Router NAT là một bảng tra với hai khoá cho mỗi mục. Chiều ra, gói đầu tiên của kết nối tạo một mục có bộ reply là bộ mà thế giới bên ngoài sẽ dùng; cổng nguồn giữ nguyên trừ khi đúng bộ bên ngoài đó đã bị dùng — đó là cách router thật giữ 41000 cho laptop và cấp 4734 cho điện thoại, trong khi 41000 tới máy chủ khác vẫn trống. Chiều vào, gói chỉ được nhận nếu khớp một mục (câu trả lời, hoặc kết nối đã mở cổng) hoặc tạo được mục qua luật DNAT rõ ràng; mọi thứ khác không có chỗ để đi — đó là hiệu ứng \"NAT chặn chiều vào\", một tác dụng phụ chứ không phải tường lửa. Hai bảng ấy giải thích luôn CGNAT: router của nhà mạng chạy đúng đoạn code này với publicIp 198.51.100.200, và chỉ nhà mạng mới thêm được luật DNAT ở đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real lab: laptop 41122, laptop 41000, phone 41000 ⇒ 4734",
+              "vi": "Lab thật: laptop 41122, laptop 41000, điện thoại 41000 ⇒ 4734"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[4734],\"dnat\":[],\"conns\":[]}; var out = [natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41122,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.11\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41122,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41000,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 4734,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                }
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 41122,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 41122
+                  }
+                },
+                {
+                  "orig": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 41000
+                  }
+                },
+                {
+                  "orig": {
+                    "src": "192.168.50.11",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 4734
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "The server answers both: 4734 goes to the phone, 41000 to the laptop",
+              "vi": "Máy chủ trả lời cả hai: 4734 về điện thoại, 41000 về laptop"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[4734],\"dnat\":[],\"conns\":[]}; var out = [natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.11\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":80,\"dst\":\"198.51.100.2\",\"dport\":4734}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":80,\"dst\":\"198.51.100.2\",\"dport\":41000})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41000,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 4734,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "203.0.113.10",
+                  "sport": 80,
+                  "dst": "192.168.50.11",
+                  "dport": 41000
+                },
+                {
+                  "src": "203.0.113.10",
+                  "sport": 80,
+                  "dst": "192.168.50.10",
+                  "dport": 41000
+                }
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 41000
+                  }
+                },
+                {
+                  "orig": {
+                    "src": "192.168.50.11",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 4734
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Unsolicited: the server calls 198.51.100.2:8080 with no rule",
+              "vi": "Không ai mời: máy chủ gọi 198.51.100.2:8080 khi chưa có luật"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[4734],\"dnat\":[],\"conns\":[]}; var out = [natIn(t, {\"src\":\"203.0.113.10\",\"sport\":51234,\"dst\":\"198.51.100.2\",\"dport\":8080})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                null
+              ],
+              "conns": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden: Lab 2 forwarding 8443 → laptop:8080, the laptop answers",
+              "vi": "Ẩn: mở cổng 8443 → laptop:8080 của Lab 2, laptop trả lời"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"dnat\":[{\"port\":8443,\"to\":\"192.168.50.10\",\"toPort\":8080}],\"conns\":[]}; var out = [natIn(t, {\"src\":\"203.0.113.10\",\"sport\":51234,\"dst\":\"198.51.100.2\",\"dport\":8443}), natOut(t, {\"src\":\"192.168.50.10\",\"sport\":8080,\"dst\":\"203.0.113.10\",\"dport\":51234}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":51234,\"dst\":\"198.51.100.2\",\"dport\":8443}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":51235,\"dst\":\"198.51.100.2\",\"dport\":8080})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "203.0.113.10",
+                  "sport": 51234,
+                  "dst": "192.168.50.10",
+                  "dport": 8080
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 8443,
+                  "dst": "203.0.113.10",
+                  "dport": 51234
+                },
+                {
+                  "src": "203.0.113.10",
+                  "sport": 51234,
+                  "dst": "192.168.50.10",
+                  "dport": 8080
+                },
+                null
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 51234,
+                    "dport": 8443
+                  },
+                  "reply": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 8080,
+                    "dport": 51234
+                  }
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the ISP's CGNAT (real addresses and port of c23-isp)",
+              "vi": "Ẩn: CGNAT của isp (địa chỉ và cổng thật của c23-isp)"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.200\",\"portPool\":[],\"conns\":[]}; var out = [natOut(t, {\"src\":\"100.64.0.10\",\"sport\":47852,\"dst\":\"203.0.113.10\",\"dport\":80}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":80,\"dst\":\"198.51.100.200\",\"dport\":47852}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":51234,\"dst\":\"198.51.100.200\",\"dport\":8443})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "198.51.100.200",
+                  "sport": 47852,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "203.0.113.10",
+                  "sport": 80,
+                  "dst": "100.64.0.10",
+                  "dport": 47852
+                },
+                null
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "100.64.0.10",
+                    "dst": "203.0.113.10",
+                    "sport": 47852,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.200",
+                    "sport": 80,
+                    "dport": 47852
+                  }
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[],\"conns\":[]}; var out = [natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.11\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41000,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                null
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 41000
+                  }
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[41000,4734,5000],\"conns\":[]}; var out = [natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.11\",\"sport\":4734,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.12\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41000,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 4734,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 5000,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                }
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 41000
+                  }
+                },
+                {
+                  "orig": {
+                    "src": "192.168.50.11",
+                    "dst": "203.0.113.10",
+                    "sport": 4734,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 4734
+                  }
+                },
+                {
+                  "orig": {
+                    "src": "192.168.50.12",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 5000
+                  }
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[4734],\"dnat\":[],\"conns\":[]}; var out = [natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.11\",\"sport\":41000,\"dst\":\"203.0.113.53\",\"dport\":53}), natOut(t, {\"src\":\"192.168.50.11\",\"sport\":41000,\"dst\":\"203.0.113.10\",\"dport\":443})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41000,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41000,
+                  "dst": "203.0.113.53",
+                  "dport": 53
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41000,
+                  "dst": "203.0.113.10",
+                  "dport": 443
+                }
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 41000
+                  }
+                },
+                {
+                  "orig": {
+                    "src": "192.168.50.11",
+                    "dst": "203.0.113.53",
+                    "sport": 41000,
+                    "dport": 53
+                  },
+                  "reply": {
+                    "src": "203.0.113.53",
+                    "dst": "198.51.100.2",
+                    "sport": 53,
+                    "dport": 41000
+                  }
+                },
+                {
+                  "orig": {
+                    "src": "192.168.50.11",
+                    "dst": "203.0.113.10",
+                    "sport": 41000,
+                    "dport": 443
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 443,
+                    "dport": 41000
+                  }
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "(function () { var t = {\"publicIp\":\"198.51.100.2\",\"portPool\":[4734],\"dnat\":[],\"conns\":[]}; var out = [natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41122,\"dst\":\"203.0.113.10\",\"dport\":80}), natOut(t, {\"src\":\"192.168.50.10\",\"sport\":41122,\"dst\":\"203.0.113.10\",\"dport\":80}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":80,\"dst\":\"198.51.100.2\",\"dport\":41122}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":80,\"dst\":\"198.51.100.2\",\"dport\":41123}), natIn(t, {\"src\":\"203.0.113.10\",\"sport\":80,\"dst\":\"198.51.100.9\",\"dport\":41122})]; return { out: out, conns: t.conns }; })()",
+            "mongDoi": {
+              "out": [
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41122,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "198.51.100.2",
+                  "sport": 41122,
+                  "dst": "203.0.113.10",
+                  "dport": 80
+                },
+                {
+                  "src": "203.0.113.10",
+                  "sport": 80,
+                  "dst": "192.168.50.10",
+                  "dport": 41122
+                },
+                null,
+                null
+              ],
+              "conns": [
+                {
+                  "orig": {
+                    "src": "192.168.50.10",
+                    "dst": "203.0.113.10",
+                    "sport": 41122,
+                    "dport": 80
+                  },
+                  "reply": {
+                    "src": "203.0.113.10",
+                    "dst": "198.51.100.2",
+                    "sport": 80,
+                    "dport": 41122
+                  }
+                }
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a port as taken whenever any connection uses it — the router only needs the full outside tuple to be unique.|||Coi một cổng là bị chiếm hễ có kết nối nào dùng nó — router chỉ cần bộ giá trị bên ngoài đầy đủ là duy nhất."
+        },
+        {
+          "loi": "Creating a second conn for every packet of the same connection.|||Tạo conn thứ hai cho mỗi gói của cùng một kết nối."
+        },
+        {
+          "loi": "Letting unsolicited packets through to the first machine of the LAN — or forgetting the laptop's answers on a forwarded port.|||Cho gói không ai mời đi tới máy đầu tiên của LAN — hoặc quên câu trả lời của laptop trên cổng đã mở."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "port pool",
+          "vi": "kho cổng",
+          "giaiThich": "Các cổng router được phép cấp khi đụng cổng."
+        },
+        {
+          "en": "unsolicited",
+          "vi": "không ai mời",
+          "giaiThich": "Gói đi vào không thuộc kết nối nào."
+        },
+        {
+          "en": "mutate",
+          "vi": "sửa tại chỗ"
+        }
+      ]
+    }
+  ]
+}

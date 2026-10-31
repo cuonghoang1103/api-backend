@@ -29,6 +29,7 @@
  * ⚠️ File này CHỈ chứa chương 10. Đừng sửa NWC204.mjs ở đây.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch10', {
   code: 'NWC204',
@@ -438,6 +439,7 @@ const L1 = {
 <li>Vì sao một subnet mất đúng hai địa chỉ, và kể tên tiền tố duy nhất mà nó không mất cái nào.</li>
 </ul></div>`,
     ),
+    sauHon({ bai: 'netdev-2-1-ipv4-cidr', so: '2.1', ten: ['IPv4, CIDR and subnetting by hand', 'IPv4, CIDR và chia subnet bằng tay'], them: ['the mask measured as a kernel decision with ip route get, the wrong-mask (/16 vs /24) bug captured live, /31 and /32, the special ranges a developer meets, and Docker’s address pools', 'mặt nạ đo như một quyết định của nhân bằng ip route get, lỗi gõ sai mặt nạ (/16 thay vì /24) bắt gói trực tiếp, /31 và /32, các dải đặc biệt lập trình viên hay gặp, và kho địa chỉ của Docker'] }),
   ].join('\n'),
 };
 
@@ -884,6 +886,7 @@ D  10.5.0.112/30  host .113-.115  bcast .115</code></pre>
 <li>Vì sao VLSM buộc phải cấp phát yêu cầu lớn nhất trước? Hãy dựng một ví dụ cụ thể mà cấp phát nhỏ trước làm phí trọn một khối.</li>
 </ul></div>`,
     ),
+    sauHon({ bai: 'netdev-2-1-ipv4-cidr', so: '2.1', ten: ['IPv4, CIDR and subnetting by hand', 'IPv4, CIDR và chia subnet bằng tay'], them: ['a VLSM plan for the LabFlow office checked by a script, the alignment gap of the wrong order made visible, and a plan that does not fit', 'kế hoạch VLSM cho văn phòng LabFlow có script kiểm, lỗ hổng căn lề khi xếp sai thứ tự, và một kế hoạch không vừa'] }),
   ].join('\n'),
 };
 

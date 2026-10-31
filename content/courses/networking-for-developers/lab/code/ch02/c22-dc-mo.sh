@@ -1,0 +1,3 @@
+# Ch2 · 2.2 — gỡ luật chặn ICMP trên dc
+iptables -D OUTPUT -p icmp --icmp-type time-exceeded -j DROP
+iptables -S OUTPUT

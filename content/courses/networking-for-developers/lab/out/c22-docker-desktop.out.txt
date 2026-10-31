@@ -1,0 +1,12 @@
+# Ch2 · 2.2 — traceroute từ BÊN TRONG một container Docker Desktop ra Internet thật (1.1.1.1)
+$ ip route
+default via 172.17.0.1 dev eth0 
+172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.5 
+$ traceroute -n -q 1 -w 1 -m 6 1.1.1.1
+traceroute to 1.1.1.1 (1.1.1.1), 6 hops max, 60 byte packets
+ 1  172.17.0.1  0.058 ms
+ 2  *
+ 3  *
+ 4  *
+ 5  *
+ 6  *

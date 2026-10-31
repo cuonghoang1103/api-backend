@@ -1,0 +1,8 @@
+# Ch2 · 2.2 — lúc bảo trì, ai đó thêm tay một tuyến thử trên router dc rồi quên gỡ: 203.0.113.10/32 "qua" isp
+$ ip route add 203.0.113.10/32 via 192.0.2.1
+$ ip route | grep 203.0.113
+203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1 
+203.0.113.10 via 192.0.2.1 dev ix0 
+$ ip route get 203.0.113.10
+203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0 
+    cache 

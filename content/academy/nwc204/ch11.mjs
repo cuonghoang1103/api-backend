@@ -28,6 +28,7 @@
  *    lesson.content là ARRAY, và academy-ra-soat.mjs đổ ở dòng 52.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch11', {
   code: 'NWC204',
@@ -395,6 +396,7 @@ br-e4e65abd25c3  UP        fe80::7c59:f1ff:feb2:6437/64</code></pre>
 <li>Vì sao <code>::</code> chỉ được xuất hiện một lần trong một địa chỉ? Hãy dựng một ví dụ cụ thể mà cho phép nó xuất hiện hai lần sẽ gây nhập nhằng, và nói ví dụ của bạn có thể mang mấy nghĩa khác nhau.</li>
 </ul></div>`,
     ),
+    sauHon({ bai: 'netdev-2-4-ipv6', so: '2.4', ten: ['IPv6 for developers', 'IPv6 cho lập trình viên'], them: ['the compression trap checked by a library, Neighbor Discovery captured live, and the developer side: no NAT, dual-stack, Happy Eyeballs timings measured', 'cái bẫy viết gọn được thư viện kiểm, Neighbor Discovery bắt gói trực tiếp, và phía lập trình viên: không NAT, dual-stack, thời gian Happy Eyeballs đo thật'] }),
   ].join('\n'),
 };
 
@@ -899,6 +901,7 @@ curl -6 localhost:3000     # connection refused</code></pre>
 </ul>
 <p class="ghi-chu">Nhìn trước một chút: ba câu mà bảng gán cho Chương 12 — CQ13.1 "What happens do we use IPv4 in nowadays?" (buổi 37), CQ13.2 "Compare types of IPv6 network addresses" (38) và CQ13.3 "How to configure IPv6 address on Cisco devices?" (39) — đều hỏi về nội dung dạy ở <em>chính</em> chương này: lần lượt là các mục 11.2, 11.4 và 11.5. Trích ra đây để bạn thấy quy luật; chúng sẽ được trả lời đúng chỗ khi Chương 12 tới nơi.</p></div>`,
     ),
+    sauHon({ bai: 'netdev-2-4-ipv6', so: '2.4', ten: ['IPv6 for developers', 'IPv6 cho lập trình viên'], them: ['a dual-stack lab end to end, and the three IPv6 bugs developers meet: a slow first request, localhost = ::1 refused, ::ffff: in logs', 'một lab dual-stack từ đầu tới cuối, và ba lỗi IPv6 lập trình viên hay gặp: request đầu chậm, localhost = ::1 bị từ chối, ::ffff: trong log'] }),
   ].join('\n'),
 };
 

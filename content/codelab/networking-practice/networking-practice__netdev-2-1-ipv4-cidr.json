@@ -1,0 +1,2015 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-2-1-ipv4-cidr",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-2-1-ipv4-cidr"
+  },
+  "exercises": [
+    {
+      "title": "CIDR 1 — Masks, prefixes and sizes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "subnet mask",
+        "CIDR"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>A /p prefix means \"the first p bits are the network\". The mask is p ones followed by 32 − p zeros, written as four bytes. The network then has 2<sup>32−p</sup> addresses; the first (network) and the last (broadcast) are not given to machines — except /31 (a point-to-point link, RFC 3021: both usable) and /32 (exactly one machine). Fill the first table without a calculator, then write three real addresses of the course in binary (8 digits per byte, dots between bytes — exactly as <code>cidr.py</code> prints them).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Prefix /p nghĩa là \"p bit đầu là phần mạng\". Mặt nạ là p số 1 rồi 32 − p số 0, viết thành bốn byte. Mạng khi đó có 2<sup>32−p</sup> địa chỉ; địa chỉ đầu (mạng) và cuối (broadcast) không cấp cho máy — trừ /31 (đường điểm-điểm, RFC 3021: dùng được cả hai) và /32 (đúng một máy). Điền bảng đầu không dùng máy tính, rồi viết ba địa chỉ thật của khoá dưới dạng nhị phân (8 chữ số mỗi byte, chấm giữa các byte — đúng như <code>cidr.py</code> in ra).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The mask byte that is only partly ones is one of 128, 192, 224, 240, 248, 252, 254 (1 to 7 ones).|||Byte mặt nạ chỉ có một phần là số 1 luôn là một trong 128, 192, 224, 240, 248, 252, 254 (1 tới 7 số 1).",
+        "2^10 = 1024 is worth remembering: every 10 host bits multiply the size by about a thousand.|||Nên nhớ 2^10 = 1024: cứ 10 bit host là cỡ mạng nhân khoảng một nghìn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 1 — Masks, prefixes and sizes\n\nAnswer in the answer panel (no code needed).\n\n1. Prefix → mask → number of addressesPrefix → mặt nạ → số địa chỉ\n2. Dotted decimal → 32 bitsThập phân có chấm → 32 bit\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 1 — Masks, prefixes and sizes — answer key\n\n1. Prefix → mask → number of addressesPrefix → mặt nạ → số địa chỉ\n   - r1.m: 255.255.0.0\n   - r1.n: 65536 / 65 536 / 65,536 / 65.536\n   - r1.u: 65534 / 65 534 / 65,534 / 65.534\n   - r2.m: 255.255.252.0\n   - r2.n: 1024 / 1 024 / 1,024 / 1.024\n   - r2.u: 1022 / 1 022 / 1,022 / 1.022\n   - r3.m: 255.255.255.0\n   - r3.n: 256\n   - r3.u: 254\n   - r4.m: 255.255.255.192\n   - r4.n: 64\n   - r4.u: 62\n   - r5.m: 255.255.255.240\n   - r5.n: 16\n   - r5.u: 14\n   - r6.m: 255.255.255.252\n   - r6.n: 4\n   - r6.u: 2\n   - r7.m: 255.255.255.254\n   - r7.n: 2\n   - r7.u: 2\n   - r8.m: 255.255.255.255\n   - r8.n: 1\n   - r8.u: 1\n   Count the ones byte by byte: /22 = 8 + 8 + 6 ⇒ the third byte is 1111 1100 = 252, so 255.255.252.0; /26 ⇒ the fourth byte is 1100 0000 = 192; /28 ⇒ 1111 0000 = 240. Addresses = 2^(32 − p): /22 ⇒ 2^10 = 1024, /26 ⇒ 64, /28 ⇒ 16. Usable = addresses − 2, except /31 (2: no broadcast is needed on a link with only two ends) and /32 (1). The table in lesson 2.1 lists the same values; /22 is the size of the LabFlow office block 10.20.0.0/22 (1 024 addresses).VI: Đếm số 1 theo từng byte: /22 = 8 + 8 + 6 ⇒ byte thứ ba là 1111 1100 = 252, nên 255.255.252.0; /26 ⇒ byte thứ tư là 1100 0000 = 192; /28 ⇒ 1111 0000 = 240. Số địa chỉ = 2^(32 − p): /22 ⇒ 2^10 = 1024, /26 ⇒ 64, /28 ⇒ 16. Dùng được = số địa chỉ − 2, trừ /31 (2: đường chỉ có hai đầu thì không cần broadcast) và /32 (1). Bảng trong bài 2.1 có đúng các giá trị này; /22 là cỡ khối văn phòng LabFlow 10.20.0.0/22 (1 024 địa chỉ).\n\n2. Dotted decimal → 32 bitsThập phân có chấm → 32 bit\n   - r1.b: 00001010.00001010.00000001.00001010 / 00001010 00001010 00000001 00001010 / 00001010000010100000000100001010\n   - r2.b: 11000000.10101000.00110010.01001101 / 11000000 10101000 00110010 01001101 / 11000000101010000011001001001101\n   - r3.b: 00001010.00011110.00000000.11001000 / 00001010 00011110 00000000 11001000 / 00001010000111100000000011001000\n   Each byte separately, with the weights 128 64 32 16 8 4 2 1, always 8 digits: 10 = 0000 1010; 1 = 0000 0001 (not \"1\"); 168 = 128 + 32 + 8 = 1010 1000; 77 = 64 + 8 + 4 + 1 = 0100 1101; 30 = 16 + 8 + 4 + 2 = 0001 1110; 200 = 128 + 64 + 8 = 1100 1000. These are the first lines cidr.py printed in the lab.VI: Từng byte riêng, với trọng số 128 64 32 16 8 4 2 1, luôn đủ 8 chữ số: 10 = 0000 1010; 1 = 0000 0001 (không phải \"1\"); 168 = 128 + 32 + 8 = 1010 1000; 77 = 64 + 8 + 4 + 1 = 0100 1101; 30 = 16 + 8 + 4 + 2 = 0001 1110; 200 = 128 + 64 + 8 = 1100 1000. Đây là các dòng đầu cidr.py đã in trong lab.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Count the ones byte by byte: /22 = 8 + 8 + 6 ⇒ the third byte is 1111 1100 = 252, so 255.255.252.0; /26 ⇒ the fourth byte is 1100 0000 = 192; /28 ⇒ 1111 0000 = 240. Addresses = 2^(32 − p): /22 ⇒ 2^10 = 1024, /26 ⇒ 64, /28 ⇒ 16. Usable = addresses − 2, except /31 (2: no broadcast is needed on a link with only two ends) and /32 (1). The table in lesson 2.1 lists the same values; /22 is the size of the LabFlow office block 10.20.0.0/22 (1 024 addresses).</p><p><i>VI: Đếm số 1 theo từng byte: /22 = 8 + 8 + 6 ⇒ byte thứ ba là 1111 1100 = 252, nên 255.255.252.0; /26 ⇒ byte thứ tư là 1100 0000 = 192; /28 ⇒ 1111 0000 = 240. Số địa chỉ = 2^(32 − p): /22 ⇒ 2^10 = 1024, /26 ⇒ 64, /28 ⇒ 16. Dùng được = số địa chỉ − 2, trừ /31 (2: đường chỉ có hai đầu thì không cần broadcast) và /32 (1). Bảng trong bài 2.1 có đúng các giá trị này; /22 là cỡ khối văn phòng LabFlow 10.20.0.0/22 (1 024 địa chỉ).</i></p><p>Each byte separately, with the weights 128 64 32 16 8 4 2 1, always 8 digits: 10 = 0000 1010; 1 = 0000 0001 (not \"1\"); 168 = 128 + 32 + 8 = 1010 1000; 77 = 64 + 8 + 4 + 1 = 0100 1101; 30 = 16 + 8 + 4 + 2 = 0001 1110; 200 = 128 + 64 + 8 = 1100 1000. These are the first lines cidr.py printed in the lab.</p><p><i>VI: Từng byte riêng, với trọng số 128 64 32 16 8 4 2 1, luôn đủ 8 chữ số: 10 = 0000 1010; 1 = 0000 0001 (không phải \"1\"); 168 = 128 + 32 + 8 = 1010 1000; 77 = 64 + 8 + 4 + 1 = 0100 1101; 30 = 16 + 8 + 4 + 2 = 0001 1110; 200 = 128 + 64 + 8 = 1100 1000. Đây là các dòng đầu cidr.py đã in trong lab.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Prefix → mask → number of addresses</p><p style=\"opacity:.75;font-size:.92em\"><i>Prefix → mặt nạ → số địa chỉ</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Prefix"
+              },
+              {
+                "ma": "m",
+                "ten": "Mask (dotted)"
+              },
+              {
+                "ma": "n",
+                "ten": "Addresses"
+              },
+              {
+                "ma": "u",
+                "ten": "Usable hosts"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "/16"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "/22"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "/24"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "/26"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "/28"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "/30"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "/31"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "/32"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "255.255.0.0",
+              "r1.n": [
+                "65536",
+                "65 536",
+                "65,536",
+                "65.536"
+              ],
+              "r1.u": [
+                "65534",
+                "65 534",
+                "65,534",
+                "65.534"
+              ],
+              "r2.m": "255.255.252.0",
+              "r2.n": [
+                "1024",
+                "1 024",
+                "1,024",
+                "1.024"
+              ],
+              "r2.u": [
+                "1022",
+                "1 022",
+                "1,022",
+                "1.022"
+              ],
+              "r3.m": "255.255.255.0",
+              "r3.n": [
+                "256"
+              ],
+              "r3.u": [
+                "254"
+              ],
+              "r4.m": "255.255.255.192",
+              "r4.n": [
+                "64"
+              ],
+              "r4.u": [
+                "62"
+              ],
+              "r5.m": "255.255.255.240",
+              "r5.n": [
+                "16"
+              ],
+              "r5.u": [
+                "14"
+              ],
+              "r6.m": "255.255.255.252",
+              "r6.n": [
+                "4"
+              ],
+              "r6.u": [
+                "2"
+              ],
+              "r7.m": "255.255.255.254",
+              "r7.n": [
+                "2"
+              ],
+              "r7.u": [
+                "2"
+              ],
+              "r8.m": "255.255.255.255",
+              "r8.n": [
+                "1"
+              ],
+              "r8.u": [
+                "1"
+              ]
+            },
+            "giaiThich": "<p>Count the ones byte by byte: /22 = 8 + 8 + 6 ⇒ the third byte is 1111 1100 = 252, so 255.255.252.0; /26 ⇒ the fourth byte is 1100 0000 = 192; /28 ⇒ 1111 0000 = 240. Addresses = 2^(32 − p): /22 ⇒ 2^10 = 1024, /26 ⇒ 64, /28 ⇒ 16. Usable = addresses − 2, except /31 (2: no broadcast is needed on a link with only two ends) and /32 (1). The table in lesson 2.1 lists the same values; /22 is the size of the LabFlow office block 10.20.0.0/22 (1 024 addresses).</p><p><i>VI: Đếm số 1 theo từng byte: /22 = 8 + 8 + 6 ⇒ byte thứ ba là 1111 1100 = 252, nên 255.255.252.0; /26 ⇒ byte thứ tư là 1100 0000 = 192; /28 ⇒ 1111 0000 = 240. Số địa chỉ = 2^(32 − p): /22 ⇒ 2^10 = 1024, /26 ⇒ 64, /28 ⇒ 16. Dùng được = số địa chỉ − 2, trừ /31 (2: đường chỉ có hai đầu thì không cần broadcast) và /32 (1). Bảng trong bài 2.1 có đúng các giá trị này; /22 là cỡ khối văn phòng LabFlow 10.20.0.0/22 (1 024 địa chỉ).</i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>Dotted decimal → 32 bits</p><p style=\"opacity:.75;font-size:.92em\"><i>Thập phân có chấm → 32 bit</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Address"
+              },
+              {
+                "ma": "b",
+                "ten": "32 bits (8 per byte, dots between)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "10.10.1.10 — the lab client (c21-dia-chi)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "192.168.50.77 — the /26 example (c21-dia-chi)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "10.30.0.200 — a server address of Lab 2 (lab2-r1)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": [
+                "00001010.00001010.00000001.00001010",
+                "00001010 00001010 00000001 00001010",
+                "00001010000010100000000100001010"
+              ],
+              "r2.b": [
+                "11000000.10101000.00110010.01001101",
+                "11000000 10101000 00110010 01001101",
+                "11000000101010000011001001001101"
+              ],
+              "r3.b": [
+                "00001010.00011110.00000000.11001000",
+                "00001010 00011110 00000000 11001000",
+                "00001010000111100000000011001000"
+              ]
+            },
+            "giaiThich": "<p>Each byte separately, with the weights 128 64 32 16 8 4 2 1, always 8 digits: 10 = 0000 1010; 1 = 0000 0001 (not \"1\"); 168 = 128 + 32 + 8 = 1010 1000; 77 = 64 + 8 + 4 + 1 = 0100 1101; 30 = 16 + 8 + 4 + 2 = 0001 1110; 200 = 128 + 64 + 8 = 1100 1000. These are the first lines cidr.py printed in the lab.</p><p><i>VI: Từng byte riêng, với trọng số 128 64 32 16 8 4 2 1, luôn đủ 8 chữ số: 10 = 0000 1010; 1 = 0000 0001 (không phải \"1\"); 168 = 128 + 32 + 8 = 1010 1000; 77 = 64 + 8 + 4 + 1 = 0100 1101; 30 = 16 + 8 + 4 + 2 = 0001 1110; 200 = 128 + 64 + 8 = 1100 1000. Đây là các dòng đầu cidr.py đã in trong lab.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing 0 usable hosts for a /31 by the \"− 2\" rule: RFC 3021 makes both addresses usable.|||Ghi /31 có 0 host dùng được theo luật \"− 2\": RFC 3021 cho dùng cả hai địa chỉ."
+        },
+        {
+          "loi": "Dropping the leading zeros of a byte (1 instead of 00000001): the network/host split is then in the wrong place.|||Bỏ số 0 đầu của một byte (1 thay vì 00000001): ranh giới mạng/host khi đó lệch chỗ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "subnet mask",
+          "vi": "mặt nạ mạng",
+          "giaiThich": "p số 1 rồi các số 0, vd 255.255.255.0 = /24."
+        },
+        {
+          "en": "prefix length",
+          "vi": "độ dài tiền tố",
+          "giaiThich": "Số bit phần mạng, chữ số sau dấu /."
+        },
+        {
+          "en": "usable hosts",
+          "vi": "số máy dùng được",
+          "giaiThich": "Số địa chỉ trừ địa chỉ mạng và broadcast."
+        },
+        {
+          "en": "point-to-point link",
+          "vi": "đường điểm-điểm",
+          "giaiThich": "Đường nối đúng hai thiết bị, vd hai router."
+        }
+      ]
+    },
+    {
+      "title": "CIDR 2 — Special ranges and where they bite",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "special-purpose addresses"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Some ranges have a fixed meaning (IANA's special-purpose registry). Recognising them saves hours: \"169.254\" means DHCP failed, \"100.64\" means your ISP shares your address, documentation ranges are safe to use in examples. Real output from the lab, for question 7:<pre>$ docker network inspect bridge -f '…'\nbridge: 172.17.0.0/16 gateway 172.17.0.1</pre></p><p><i>This set has 7 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một số dải có nghĩa cố định (sổ đăng ký mục đích đặc biệt của IANA). Nhận ra chúng tiết kiệm hàng giờ: \"169.254\" nghĩa là DHCP hỏng, \"100.64\" nghĩa là nhà mạng dùng chung địa chỉ của bạn, các dải cho tài liệu dùng làm ví dụ an toàn. Output thật trong lab, cho câu 7:<pre>$ docker network inspect bridge -f '…'\nbridge: 172.17.0.0/16 gateway 172.17.0.1</pre></p><p><i>Bộ này có 7 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Write the ranges as start – end: 172.16/12 is 172.16 – 172.31; 100.64/10 is 100.64 – 100.127.|||Viết các dải thành đầu – cuối: 172.16/12 là 172.16 – 172.31; 100.64/10 là 100.64 – 100.127.",
+        "Two networks overlap when one prefix is inside the other: compare the first bits of the shorter one.|||Hai mạng chồng nhau khi một prefix nằm trong prefix kia: so các bit đầu của prefix ngắn hơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 2 — Special ranges and where they bite\n\nAnswer in the answer panel (no code needed).\n\n1. A classmate's laptop shows the address 169.254.23.7 and nothing works. What happened?Laptop của bạn cùng lớp hiện địa chỉ 169.254.23.7 và không gì chạy. Chuyện gì đã xảy ra?\n2. Your home router shows its WAN address as 100.72.14.9. What does that tell you?Router nhà bạn hiện địa chỉ WAN là 100.72.14.9. Điều đó cho biết gì?\n3. Which of these addresses is NOT a private (RFC 1918) address?Địa chỉ nào dưới đây KHÔNG phải địa chỉ riêng (RFC 1918)?\n4. The course's \"Internet in a box\" uses 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24 as public addresses. Why those?\"Internet trong một hộp\" của khoá dùng 192.0.2.0/24, 198.51.100.0/24 và 203.0.113.0/24 làm địa chỉ công cộng. Vì sao chọn chúng?\n5. A cloud firewall rule says \"source CIDR 0.0.0.0/0, port 5432\". Who may connect?Một luật tường lửa trên cloud ghi \"source CIDR 0.0.0.0/0, cổng 5432\". Ai được kết nối?\n6. Before CIDR (1993), a company with 300 machines had to take …Trước CIDR (1993), một công ty có 300 máy phải lấy …\n7. Since a student installed Docker, the school servers in 172.17.5.0/24 cannot be reached, while the Internet works. The most likely cause?Từ khi một bạn cài Docker, máy chủ của trường ở 172.17.5.0/24 không tới được, trong khi Internet vẫn chạy. Nguyên nhân khả dĩ nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 2 — Special ranges and where they bite — answer key\n\n1. A classmate's laptop shows the address 169.254.23.7 and nothing works. What happened?Laptop của bạn cùng lớp hiện địa chỉ 169.254.23.7 và không gì chạy. Chuyện gì đã xảy ra?\n   Answer: a) DHCP gave no answer, so the machine picked a link-local address itself\n   169.254.0.0/16 is link-local: the operating system gives itself one when DHCP fails. Fix DHCP (or the Wi-Fi join), not the app.VI: 169.254.0.0/16 là link-local: hệ điều hành tự đặt khi DHCP không trả lời. Sửa DHCP (hoặc việc vào Wi-Fi), không phải sửa ứng dụng.\n\n2. Your home router shows its WAN address as 100.72.14.9. What does that tell you?Router nhà bạn hiện địa chỉ WAN là 100.72.14.9. Điều đó cho biết gì?\n   Answer: b) It is inside 100.64.0.0/10: the ISP does NAT again (CGNAT)\n   100.64.0.0/10 covers 100.64.0.0 – 100.127.255.255 (RFC 6598, shared address space). Your router is itself behind the ISP's NAT — lesson 2.3 explains why you then cannot forward a port.VI: 100.64.0.0/10 phủ 100.64.0.0 – 100.127.255.255 (RFC 6598, không gian dùng chung). Router của bạn tự nó đứng sau NAT của nhà mạng — bài 2.3 giải thích vì sao khi đó không mở cổng được.\n\n3. Which of these addresses is NOT a private (RFC 1918) address?Địa chỉ nào dưới đây KHÔNG phải địa chỉ riêng (RFC 1918)?\n   Answer: b) 172.32.0.5\n   172.16.0.0/12 means the first 12 bits are fixed: 172.16.0.0 up to 172.31.255.255. 172.32.x.x is just outside — a public address. 10/8 and 192.168/16 are the other two private ranges.VI: 172.16.0.0/12 nghĩa là 12 bit đầu cố định: từ 172.16.0.0 tới 172.31.255.255. 172.32.x.x nằm ngay bên ngoài — là địa chỉ công cộng. 10/8 và 192.168/16 là hai dải riêng còn lại.\n\n4. The course's \"Internet in a box\" uses 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24 as public addresses. Why those?\"Internet trong một hộp\" của khoá dùng 192.0.2.0/24, 198.51.100.0/24 và 203.0.113.0/24 làm địa chỉ công cộng. Vì sao chọn chúng?\n   Answer: c) They are reserved for documentation (RFC 5737), so they belong to nobody\n   RFC 5737 reserves these three /24s for examples, so a lab or a slide can never point at somebody's real server.VI: RFC 5737 dành riêng ba khối /24 này cho ví dụ, nên lab hay slide không bao giờ trỏ tới máy chủ thật của ai.\n\n5. A cloud firewall rule says \"source CIDR 0.0.0.0/0, port 5432\". Who may connect?Một luật tường lửa trên cloud ghi \"source CIDR 0.0.0.0/0, cổng 5432\". Ai được kết nối?\n   Answer: b) Every IPv4 address on the Internet\n   /0 means zero network bits: every address matches. For a database you want your app's address with /32, or the VPC range.VI: /0 nghĩa là không có bit mạng nào: mọi địa chỉ đều khớp. Với cơ sở dữ liệu, bạn cần địa chỉ ứng dụng của mình với /32, hoặc dải của VPC.\n\n6. Before CIDR (1993), a company with 300 machines had to take …Trước CIDR (1993), một công ty có 300 máy phải lấy …\n   Answer: a) a class B network of 65 534 addresses, wasting most of it\n   Classes were fixed at /8, /16 and /24. 300 does not fit in a class C (254), so the next size was a class B. CIDR allowed any prefix — a /23 (510 hosts) today.VI: Các lớp cố định ở /8, /16 và /24. 300 không vừa lớp C (254), nên cỡ kế tiếp là lớp B. CIDR cho mọi prefix — ngày nay là một /23 (510 host).\n\n7. Since a student installed Docker, the school servers in 172.17.5.0/24 cannot be reached, while the Internet works. The most likely cause?Từ khi một bạn cài Docker, máy chủ của trường ở 172.17.5.0/24 không tới được, trong khi Internet vẫn chạy. Nguyên nhân khả dĩ nhất?\n   Answer: c) Docker's bridge 172.17.0.0/16 overlaps it, so packets go into the container network\n   The real output shows the default bridge is 172.17.0.0/16 — it contains 172.17.5.0/24, so the laptop believes those addresses are on docker0. Move Docker with \"default-address-pools\" in /etc/docker/daemon.json.VI: Output thật cho thấy bridge mặc định là 172.17.0.0/16 — nó chứa 172.17.5.0/24, nên laptop tin các địa chỉ đó ở trên docker0. Dời Docker bằng \"default-address-pools\" trong /etc/docker/daemon.json.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> DHCP gave no answer, so the machine picked a link-local address itself</p><p>169.254.0.0/16 is link-local: the operating system gives itself one when DHCP fails. Fix DHCP (or the Wi-Fi join), not the app.</p><p><i>VI: 169.254.0.0/16 là link-local: hệ điều hành tự đặt khi DHCP không trả lời. Sửa DHCP (hoặc việc vào Wi-Fi), không phải sửa ứng dụng.</i></p></li><li><p><b>b)</b> It is inside 100.64.0.0/10: the ISP does NAT again (CGNAT)</p><p>100.64.0.0/10 covers 100.64.0.0 – 100.127.255.255 (RFC 6598, shared address space). Your router is itself behind the ISP's NAT — lesson 2.3 explains why you then cannot forward a port.</p><p><i>VI: 100.64.0.0/10 phủ 100.64.0.0 – 100.127.255.255 (RFC 6598, không gian dùng chung). Router của bạn tự nó đứng sau NAT của nhà mạng — bài 2.3 giải thích vì sao khi đó không mở cổng được.</i></p></li><li><p><b>b)</b> 172.32.0.5</p><p>172.16.0.0/12 means the first 12 bits are fixed: 172.16.0.0 up to 172.31.255.255. 172.32.x.x is just outside — a public address. 10/8 and 192.168/16 are the other two private ranges.</p><p><i>VI: 172.16.0.0/12 nghĩa là 12 bit đầu cố định: từ 172.16.0.0 tới 172.31.255.255. 172.32.x.x nằm ngay bên ngoài — là địa chỉ công cộng. 10/8 và 192.168/16 là hai dải riêng còn lại.</i></p></li><li><p><b>c)</b> They are reserved for documentation (RFC 5737), so they belong to nobody</p><p>RFC 5737 reserves these three /24s for examples, so a lab or a slide can never point at somebody's real server.</p><p><i>VI: RFC 5737 dành riêng ba khối /24 này cho ví dụ, nên lab hay slide không bao giờ trỏ tới máy chủ thật của ai.</i></p></li><li><p><b>b)</b> Every IPv4 address on the Internet</p><p>/0 means zero network bits: every address matches. For a database you want your app's address with /32, or the VPC range.</p><p><i>VI: /0 nghĩa là không có bit mạng nào: mọi địa chỉ đều khớp. Với cơ sở dữ liệu, bạn cần địa chỉ ứng dụng của mình với /32, hoặc dải của VPC.</i></p></li><li><p><b>a)</b> a class B network of 65 534 addresses, wasting most of it</p><p>Classes were fixed at /8, /16 and /24. 300 does not fit in a class C (254), so the next size was a class B. CIDR allowed any prefix — a /23 (510 hosts) today.</p><p><i>VI: Các lớp cố định ở /8, /16 và /24. 300 không vừa lớp C (254), nên cỡ kế tiếp là lớp B. CIDR cho mọi prefix — ngày nay là một /23 (510 host).</i></p></li><li><p><b>c)</b> Docker's bridge 172.17.0.0/16 overlaps it, so packets go into the container network</p><p>The real output shows the default bridge is 172.17.0.0/16 — it contains 172.17.5.0/24, so the laptop believes those addresses are on docker0. Move Docker with \"default-address-pools\" in /etc/docker/daemon.json.</p><p><i>VI: Output thật cho thấy bridge mặc định là 172.17.0.0/16 — nó chứa 172.17.5.0/24, nên laptop tin các địa chỉ đó ở trên docker0. Dời Docker bằng \"default-address-pools\" trong /etc/docker/daemon.json.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A classmate's laptop shows the address 169.254.23.7 and nothing works. What happened?</p><p style=\"opacity:.75;font-size:.92em\"><i>Laptop của bạn cùng lớp hiện địa chỉ 169.254.23.7 và không gì chạy. Chuyện gì đã xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DHCP gave no answer, so the machine picked a link-local address itself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Docker created a bridge network and took the main network card"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The ISP moved the laptop behind its carrier-grade NAT range"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The school gave it a public address that the firewall then blocked"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>169.254.0.0/16 is link-local: the operating system gives itself one when DHCP fails. Fix DHCP (or the Wi-Fi join), not the app.</p><p><i>VI: 169.254.0.0/16 là link-local: hệ điều hành tự đặt khi DHCP không trả lời. Sửa DHCP (hoặc việc vào Wi-Fi), không phải sửa ứng dụng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Your home router shows its WAN address as 100.72.14.9. What does that tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Router nhà bạn hiện địa chỉ WAN là 100.72.14.9. Điều đó cho biết gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is a normal public address that anyone can connect to"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is inside 100.64.0.0/10: the ISP does NAT again (CGNAT)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is a private RFC 1918 address used only inside the home"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is a documentation address that the ISP gave by mistake"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>100.64.0.0/10 covers 100.64.0.0 – 100.127.255.255 (RFC 6598, shared address space). Your router is itself behind the ISP's NAT — lesson 2.3 explains why you then cannot forward a port.</p><p><i>VI: 100.64.0.0/10 phủ 100.64.0.0 – 100.127.255.255 (RFC 6598, không gian dùng chung). Router của bạn tự nó đứng sau NAT của nhà mạng — bài 2.3 giải thích vì sao khi đó không mở cổng được.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which of these addresses is NOT a private (RFC 1918) address?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ nào dưới đây KHÔNG phải địa chỉ riêng (RFC 1918)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "192.168.0.254"
+              },
+              {
+                "ma": "b",
+                "noiDung": "172.32.0.5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "172.31.200.1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "10.255.0.1"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>172.16.0.0/12 means the first 12 bits are fixed: 172.16.0.0 up to 172.31.255.255. 172.32.x.x is just outside — a public address. 10/8 and 192.168/16 are the other two private ranges.</p><p><i>VI: 172.16.0.0/12 nghĩa là 12 bit đầu cố định: từ 172.16.0.0 tới 172.31.255.255. 172.32.x.x nằm ngay bên ngoài — là địa chỉ công cộng. 10/8 và 192.168/16 là hai dải riêng còn lại.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The course's \"Internet in a box\" uses 192.0.2.0/24, 198.51.100.0/24 and 203.0.113.0/24 as public addresses. Why those?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Internet trong một hộp\" của khoá dùng 192.0.2.0/24, 198.51.100.0/24 và 203.0.113.0/24 làm địa chỉ công cộng. Vì sao chọn chúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are the cheapest ranges to rent from the regional registry"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are private ranges that every home router already uses"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are reserved for documentation (RFC 5737), so they belong to nobody"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are the ranges that Docker always picks for new networks"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>RFC 5737 reserves these three /24s for examples, so a lab or a slide can never point at somebody's real server.</p><p><i>VI: RFC 5737 dành riêng ba khối /24 này cho ví dụ, nên lab hay slide không bao giờ trỏ tới máy chủ thật của ai.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A cloud firewall rule says \"source CIDR 0.0.0.0/0, port 5432\". Who may connect?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một luật tường lửa trên cloud ghi \"source CIDR 0.0.0.0/0, cổng 5432\". Ai được kết nối?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nobody, because the prefix length is zero"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every IPv4 address on the Internet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only machines inside the same VPC"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the machine with address 0.0.0.0"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>/0 means zero network bits: every address matches. For a database you want your app's address with /32, or the VPC range.</p><p><i>VI: /0 nghĩa là không có bit mạng nào: mọi địa chỉ đều khớp. Với cơ sở dữ liệu, bạn cần địa chỉ ứng dụng của mình với /32, hoặc dải của VPC.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Before CIDR (1993), a company with 300 machines had to take …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước CIDR (1993), một công ty có 300 máy phải lấy …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a class B network of 65 534 addresses, wasting most of it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a class A network of 16 million addresses for future growth"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two class C networks joined into one /23, exactly as today"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a class C network of 254 addresses and leave 46 machines out"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Classes were fixed at /8, /16 and /24. 300 does not fit in a class C (254), so the next size was a class B. CIDR allowed any prefix — a /23 (510 hosts) today.</p><p><i>VI: Các lớp cố định ở /8, /16 và /24. 300 không vừa lớp C (254), nên cỡ kế tiếp là lớp B. CIDR cho mọi prefix — ngày nay là một /23 (510 host).</i></p>"
+          },
+          {
+            "ma": "c7",
+            "de": "<p>Since a student installed Docker, the school servers in 172.17.5.0/24 cannot be reached, while the Internet works. The most likely cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ khi một bạn cài Docker, máy chủ của trường ở 172.17.5.0/24 không tới được, trong khi Internet vẫn chạy. Nguyên nhân khả dĩ nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The school servers ban every machine that has Docker installed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Docker changed the laptop's mask to /16, like the client2 bug"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Docker's bridge 172.17.0.0/16 overlaps it, so packets go into the container network"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Docker installed a firewall that blocks every school address by default"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The real output shows the default bridge is 172.17.0.0/16 — it contains 172.17.5.0/24, so the laptop believes those addresses are on docker0. Move Docker with \"default-address-pools\" in /etc/docker/daemon.json.</p><p><i>VI: Output thật cho thấy bridge mặc định là 172.17.0.0/16 — nó chứa 172.17.5.0/24, nên laptop tin các địa chỉ đó ở trên docker0. Dời Docker bằng \"default-address-pools\" trong /etc/docker/daemon.json.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating every 172.x.x.x address as private.|||Coi mọi địa chỉ 172.x.x.x là địa chỉ riêng."
+        },
+        {
+          "loi": "Opening 0.0.0.0/0 \"just for a test\" on a database port.|||Mở 0.0.0.0/0 \"để thử thôi\" cho cổng cơ sở dữ liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "private range (RFC 1918)",
+          "vi": "dải riêng",
+          "giaiThich": "10/8, 172.16/12, 192.168/16."
+        },
+        {
+          "en": "link-local",
+          "vi": "địa chỉ nội liên kết",
+          "giaiThich": "169.254/16 — máy tự đặt khi DHCP hỏng."
+        },
+        {
+          "en": "CGNAT range",
+          "vi": "dải NAT của nhà mạng",
+          "giaiThich": "100.64.0.0/10."
+        },
+        {
+          "en": "documentation range",
+          "vi": "dải dành cho tài liệu",
+          "giaiThich": "RFC 5737: 192.0.2/24, 198.51.100/24, 203.0.113/24."
+        }
+      ]
+    },
+    {
+      "title": "CIDR 3 — Network, broadcast, first and last host by hand",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "subnetting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Network = address AND mask (keep the network bits, set the host bits to 0). Broadcast = network with all host bits 1. Hosts = everything between them. Shortcut for a prefix that ends inside a byte: the block size of that byte is 256 − mask byte, networks start at multiples of it. Every row below was run through <code>cidr.py</code> in the lab (file in brackets) — do it on paper first, then compare. Write \"none\" for the broadcast of /31 and /32. Real output for the first row:<pre>address    10.10.1.10       00001010.00001010.00000001.00001010\nmask /24   255.255.255.0    11111111.11111111.11111111.00000000\nnetwork    10.10.1.0        00001010.00001010.00000001.00000000   (address AND mask)\nbroadcast  10.10.1.255      00001010.00001010.00000001.11111111   (host bits all 1)\nhosts      10.10.1.1 - 10.10.1.254   usable 254 of 256 addresses\ncheck      ipaddress: 10.10.1.0/24, 254 usable, 10.10.1.1 - 10.10.1.254  -&gt; same</pre></p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mạng = địa chỉ AND mặt nạ (giữ bit mạng, bit host thành 0). Broadcast = mạng với mọi bit host là 1. Host = mọi địa chỉ ở giữa. Mẹo khi prefix kết thúc giữa một byte: cỡ khối của byte đó là 256 − byte mặt nạ, các mạng bắt đầu ở bội số của nó. Mọi dòng dưới đây đã chạy qua <code>cidr.py</code> trong lab (tệp trong ngoặc) — làm ra giấy trước rồi so. Ghi \"none\" cho broadcast của /31 và /32. Output thật của dòng đầu:<pre>address    10.10.1.10       00001010.00001010.00000001.00001010\nmask /24   255.255.255.0    11111111.11111111.11111111.00000000\nnetwork    10.10.1.0        00001010.00001010.00000001.00000000   (address AND mask)\nbroadcast  10.10.1.255      00001010.00001010.00000001.11111111   (host bits all 1)\nhosts      10.10.1.1 - 10.10.1.254   usable 254 of 256 addresses\ncheck      ipaddress: 10.10.1.0/24, 254 usable, 10.10.1.1 - 10.10.1.254  -&gt; same</pre></p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Find the \"interesting\" byte (where the prefix ends), compute its block size, and find the multiple of the block size just below the address byte.|||Tìm byte \"đáng xét\" (nơi prefix kết thúc), tính cỡ khối của nó, rồi tìm bội số của cỡ khối ngay dưới byte của địa chỉ.",
+        "Broadcast = next network − 1. First host = network + 1, last host = broadcast − 1 (except /31 and /32).|||Broadcast = mạng kế tiếp − 1. Host đầu = mạng + 1, host cuối = broadcast − 1 (trừ /31 và /32)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 3 — Network, broadcast, first and last host by hand\n\nAnswer in the answer panel (no code needed).\n\n1. Six real addressesSáu địa chỉ thật\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 3 — Network, broadcast, first and last host by hand — answer key\n\n1. Six real addressesSáu địa chỉ thật\n   - r1.n: 10.10.1.0\n   - r1.b: 10.10.1.255\n   - r1.f: 10.10.1.1\n   - r1.l: 10.10.1.254\n   - r1.u: 254\n   - r2.n: 10.10.0.0\n   - r2.b: 10.10.255.255\n   - r2.f: 10.10.0.1\n   - r2.l: 10.10.255.254\n   - r2.u: 65534 / 65 534 / 65,534 / 65.534\n   - r3.n: 192.168.50.64\n   - r3.b: 192.168.50.127\n   - r3.f: 192.168.50.65\n   - r3.l: 192.168.50.126\n   - r3.u: 62\n   - r4.n: 10.30.0.192\n   - r4.b: 10.30.0.255\n   - r4.f: 10.30.0.193\n   - r4.l: 10.30.0.254\n   - r4.u: 62\n   - r5.n: 203.0.113.10\n   - r5.b: none / - / no broadcast / n/a / không có\n   - r5.f: 203.0.113.10\n   - r5.l: 203.0.113.10\n   - r5.u: 1\n   - r6.n: 192.0.2.0\n   - r6.b: none / - / no broadcast / n/a / không có\n   - r6.f: 192.0.2.0\n   - r6.l: 192.0.2.1\n   - r6.u: 2\n   /24 and /16 end on a byte boundary: zero the host bytes, then set them to 255. /26: block size 256 − 192 = 64, so networks start at 0, 64, 128, 192 — 77 is in 64–127 and 200 is in 192–255 (that is the \"servers\" subnet of Lab 2). The same address 10.10.1.10 with /16 is in a network 256 times bigger: 10.10.0.0 – 10.10.255.255. /32 is one machine (network = first = last = the address), /31 has exactly two addresses and no broadcast — cidr.py prints \"broadcast none\" for both.VI: /24 và /16 kết thúc đúng ranh giới byte: byte host thành 0, rồi thành 255. /26: cỡ khối 256 − 192 = 64, nên các mạng bắt đầu ở 0, 64, 128, 192 — 77 nằm trong 64–127 và 200 nằm trong 192–255 (đó là subnet \"servers\" của Lab 2). Cùng địa chỉ 10.10.1.10 mà /16 thì nằm trong mạng lớn gấp 256 lần: 10.10.0.0 – 10.10.255.255. /32 là một máy (mạng = đầu = cuối = chính địa chỉ đó), /31 có đúng hai địa chỉ và không có broadcast — cidr.py in \"broadcast none\" cho cả hai.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>/24 and /16 end on a byte boundary: zero the host bytes, then set them to 255. /26: block size 256 − 192 = 64, so networks start at 0, 64, 128, 192 — 77 is in 64–127 and 200 is in 192–255 (that is the \"servers\" subnet of Lab 2). The same address 10.10.1.10 with /16 is in a network 256 times bigger: 10.10.0.0 – 10.10.255.255. /32 is one machine (network = first = last = the address), /31 has exactly two addresses and no broadcast — cidr.py prints \"broadcast none\" for both.</p><p><i>VI: /24 và /16 kết thúc đúng ranh giới byte: byte host thành 0, rồi thành 255. /26: cỡ khối 256 − 192 = 64, nên các mạng bắt đầu ở 0, 64, 128, 192 — 77 nằm trong 64–127 và 200 nằm trong 192–255 (đó là subnet \"servers\" của Lab 2). Cùng địa chỉ 10.10.1.10 mà /16 thì nằm trong mạng lớn gấp 256 lần: 10.10.0.0 – 10.10.255.255. /32 là một máy (mạng = đầu = cuối = chính địa chỉ đó), /31 có đúng hai địa chỉ và không có broadcast — cidr.py in \"broadcast none\" cho cả hai.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Six real addresses</p><p style=\"opacity:.75;font-size:.92em\"><i>Sáu địa chỉ thật</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Address/prefix"
+              },
+              {
+                "ma": "n",
+                "ten": "Network"
+              },
+              {
+                "ma": "b",
+                "ten": "Broadcast"
+              },
+              {
+                "ma": "f",
+                "ten": "First host"
+              },
+              {
+                "ma": "l",
+                "ten": "Last host"
+              },
+              {
+                "ma": "u",
+                "ten": "Usable"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "10.10.1.10/24 (c21-dia-chi)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "10.10.1.10/16 (c21-dia-chi)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "192.168.50.77/26 (c21-dia-chi)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "10.30.0.200/26 (lab2-r1)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "203.0.113.10/32 (c21-dia-chi)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "192.0.2.0/31 (c21-dia-chi)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "10.10.1.0",
+              "r1.b": "10.10.1.255",
+              "r1.f": "10.10.1.1",
+              "r1.l": "10.10.1.254",
+              "r1.u": [
+                "254"
+              ],
+              "r2.n": "10.10.0.0",
+              "r2.b": "10.10.255.255",
+              "r2.f": "10.10.0.1",
+              "r2.l": "10.10.255.254",
+              "r2.u": [
+                "65534",
+                "65 534",
+                "65,534",
+                "65.534"
+              ],
+              "r3.n": "192.168.50.64",
+              "r3.b": "192.168.50.127",
+              "r3.f": "192.168.50.65",
+              "r3.l": "192.168.50.126",
+              "r3.u": [
+                "62"
+              ],
+              "r4.n": "10.30.0.192",
+              "r4.b": "10.30.0.255",
+              "r4.f": "10.30.0.193",
+              "r4.l": "10.30.0.254",
+              "r4.u": [
+                "62"
+              ],
+              "r5.n": "203.0.113.10",
+              "r5.b": [
+                "none",
+                "-",
+                "no broadcast",
+                "n/a",
+                "không có"
+              ],
+              "r5.f": "203.0.113.10",
+              "r5.l": "203.0.113.10",
+              "r5.u": [
+                "1"
+              ],
+              "r6.n": "192.0.2.0",
+              "r6.b": [
+                "none",
+                "-",
+                "no broadcast",
+                "n/a",
+                "không có"
+              ],
+              "r6.f": "192.0.2.0",
+              "r6.l": "192.0.2.1",
+              "r6.u": [
+                "2"
+              ]
+            },
+            "giaiThich": "<p>/24 and /16 end on a byte boundary: zero the host bytes, then set them to 255. /26: block size 256 − 192 = 64, so networks start at 0, 64, 128, 192 — 77 is in 64–127 and 200 is in 192–255 (that is the \"servers\" subnet of Lab 2). The same address 10.10.1.10 with /16 is in a network 256 times bigger: 10.10.0.0 – 10.10.255.255. /32 is one machine (network = first = last = the address), /31 has exactly two addresses and no broadcast — cidr.py prints \"broadcast none\" for both.</p><p><i>VI: /24 và /16 kết thúc đúng ranh giới byte: byte host thành 0, rồi thành 255. /26: cỡ khối 256 − 192 = 64, nên các mạng bắt đầu ở 0, 64, 128, 192 — 77 nằm trong 64–127 và 200 nằm trong 192–255 (đó là subnet \"servers\" của Lab 2). Cùng địa chỉ 10.10.1.10 mà /16 thì nằm trong mạng lớn gấp 256 lần: 10.10.0.0 – 10.10.255.255. /32 là một máy (mạng = đầu = cuối = chính địa chỉ đó), /31 có đúng hai địa chỉ và không có broadcast — cidr.py in \"broadcast none\" cho cả hai.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking 10.10.1.0 as the network of 10.10.1.10/16 — the third byte is a host byte with /16.|||Lấy 10.10.1.0 làm mạng của 10.10.1.10/16 — với /16 byte thứ ba là byte host."
+        },
+        {
+          "loi": "Giving 192.168.50.77/26 the broadcast 192.168.50.255: that is the /24 broadcast.|||Cho 192.168.50.77/26 broadcast 192.168.50.255: đó là broadcast của /24."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bitwise AND",
+          "vi": "phép AND theo bit",
+          "giaiThich": "1 AND 1 = 1, còn lại = 0."
+        },
+        {
+          "en": "broadcast address",
+          "vi": "địa chỉ broadcast",
+          "giaiThich": "Mọi bit host = 1: \"mọi máy trong mạng này\"."
+        },
+        {
+          "en": "block size",
+          "vi": "cỡ khối",
+          "giaiThich": "256 − byte mặt nạ: bước nhảy giữa các mạng."
+        }
+      ]
+    },
+    {
+      "title": "CIDR 4 — \"Is it on my network?\" and the /16 typo",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "local delivery vs gateway",
+        "wrong mask"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Before sending, a machine applies <b>its own</b> mask to the destination: same network ⇒ ARP for the destination itself; otherwise ⇒ the default gateway. The lab client 10.10.1.10/24 (lab/out/c21-dia-chi):<pre>$ ip route get 10.10.1.11\n10.10.1.11 dev eth0 src 10.10.1.10 uid 0 \n$ ip route get 10.10.1.200\n10.10.1.200 dev eth0 src 10.10.1.10 uid 0 \n$ ip route get 10.10.2.10\n10.10.2.10 via 10.10.1.254 dev eth0 src 10.10.1.10 uid 0 </pre>Then client2 was configured by hand with the mask typed as /16 instead of /24 (lab/out/c21-sai-mask):<pre>$ ip -br -4 addr show eth0\neth0@if2838      UP             10.10.1.11/16 \n$ ip route\ndefault via 10.10.1.254 dev eth0 \n10.10.0.0/16 dev eth0 proto kernel scope link src 10.10.1.11 \n$ ip route get 10.10.2.10\n10.10.2.10 dev eth0 src 10.10.1.11 uid 0 \n    cache \n$ ping -c 4 10.10.2.10\nPING 10.10.2.10 (10.10.2.10) 56(84) bytes of data.\nFrom 10.10.1.11 icmp_seq=1 Destination Host Unreachable\n--- 10.10.2.10 ping statistics ---\n4 packets transmitted, 0 received, +1 errors, 100% packet loss, time 3075ms\npipe 4\n$ tcpdump -n -r /tmp/m.pcap\nreading from file /tmp/m.pcap, link-type EN10MB (Ethernet), snapshot length 262144\n05:12:20.595710 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:21.622394 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:22.646419 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:23.670731 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:23.862451 ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b, length 28\n05:12:24.694678 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:25.719207 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n$ ip neigh show 10.10.2.10\n10.10.2.10 dev eth0 FAILED </pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi gửi, một máy áp mặt nạ <b>của chính nó</b> lên địa chỉ đích: cùng mạng ⇒ hỏi ARP cho chính đích; khác mạng ⇒ cổng mặc định. Client của lab 10.10.1.10/24 (lab/out/c21-dia-chi):<pre>$ ip route get 10.10.1.11\n10.10.1.11 dev eth0 src 10.10.1.10 uid 0 \n$ ip route get 10.10.1.200\n10.10.1.200 dev eth0 src 10.10.1.10 uid 0 \n$ ip route get 10.10.2.10\n10.10.2.10 via 10.10.1.254 dev eth0 src 10.10.1.10 uid 0 </pre>Rồi client2 được cấu hình tay với mặt nạ gõ nhầm /16 thay vì /24 (lab/out/c21-sai-mask):<pre>$ ip -br -4 addr show eth0\neth0@if2838      UP             10.10.1.11/16 \n$ ip route\ndefault via 10.10.1.254 dev eth0 \n10.10.0.0/16 dev eth0 proto kernel scope link src 10.10.1.11 \n$ ip route get 10.10.2.10\n10.10.2.10 dev eth0 src 10.10.1.11 uid 0 \n    cache \n$ ping -c 4 10.10.2.10\nPING 10.10.2.10 (10.10.2.10) 56(84) bytes of data.\nFrom 10.10.1.11 icmp_seq=1 Destination Host Unreachable\n--- 10.10.2.10 ping statistics ---\n4 packets transmitted, 0 received, +1 errors, 100% packet loss, time 3075ms\npipe 4\n$ tcpdump -n -r /tmp/m.pcap\nreading from file /tmp/m.pcap, link-type EN10MB (Ethernet), snapshot length 262144\n05:12:20.595710 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:21.622394 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:22.646419 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:23.670731 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:23.862451 ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b, length 28\n05:12:24.694678 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n05:12:25.719207 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28\n$ ip neigh show 10.10.2.10\n10.10.2.10 dev eth0 FAILED </pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read ip route get: \"via X\" ⇒ through router X; only \"dev\" ⇒ the kernel thinks the address is on that cable.|||Đọc ip route get: \"via X\" ⇒ qua router X; chỉ có \"dev\" ⇒ nhân nghĩ địa chỉ ở ngay trên dây đó.",
+        "Look at who the error comes \"From\": your own address means your own kernel gave up.|||Nhìn lỗi đến \"From\" ai: địa chỉ của chính bạn nghĩa là nhân của bạn đã bỏ cuộc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 4 — \"Is it on my network?\" and the /16 typo\n\nAnswer in the answer panel (no code needed).\n\n1. No machine has 10.10.1.200, yet ip route get shows \"dev eth0\" with no \"via\". Why?Không máy nào có 10.10.1.200, vậy mà ip route get ghi \"dev eth0\" không có \"via\". Vì sao?\n2. With /16, ip route get 10.10.2.10 lost its \"via 10.10.1.254\". What does client2 do next?Với /16, ip route get 10.10.2.10 mất \"via 10.10.1.254\". client2 làm gì tiếp theo?\n3. ping prints \"From 10.10.1.11 … Destination Host Unreachable\". Who produced that error?ping in \"From 10.10.1.11 … Destination Host Unreachable\". Ai tạo ra lỗi đó?\n4. The capture also contains one line \"ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b\". What is it?Bản bắt còn có một dòng \"ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b\". Đó là gì?\n5. With the /16 mask, client2 still reaches 8.8.8.8 on the Internet. Why?Với mặt nạ /16, client2 vẫn tới được 8.8.8.8 trên Internet. Vì sao?\n6. An intern's VM 10.10.1.50 (mask 255.255.0.0, gateway 10.10.1.254) reaches the Internet but not the API 10.10.2.20. The first thing to check?Máy ảo 10.10.1.50 của bạn thực tập (mặt nạ 255.255.0.0, cổng 10.10.1.254) ra Internet được nhưng không tới API 10.10.2.20. Việc đầu tiên cần kiểm?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 4 — \"Is it on my network?\" and the /16 typo — answer key\n\n1. No machine has 10.10.1.200, yet ip route get shows \"dev eth0\" with no \"via\". Why?Không máy nào có 10.10.1.200, vậy mà ip route get ghi \"dev eth0\" không có \"via\". Vì sao?\n   Answer: a) The decision uses only the mask: .200 is inside 10.10.1.0/24, so it is \"on-link\"\n   Routing decides from the table, not from who exists. Delivery would start with an ARP question that nobody answers.VI: Định tuyến quyết theo bảng, không theo việc ai đang tồn tại. Việc giao sẽ bắt đầu bằng một câu hỏi ARP không ai trả lời.\n\n2. With /16, ip route get 10.10.2.10 lost its \"via 10.10.1.254\". What does client2 do next?Với /16, ip route get 10.10.2.10 mất \"via 10.10.1.254\". client2 làm gì tiếp theo?\n   Answer: b) It asks ARP for 10.10.2.10 itself, on a LAN where that server is not\n   10.10.2.10 is inside 10.10.0.0/16, so the kernel treats it as a neighbour. The capture shows exactly that: who-has 10.10.2.10 tell 10.10.1.11, again and again.VI: 10.10.2.10 nằm trong 10.10.0.0/16, nên nhân coi nó là hàng xóm. Bản bắt gói cho thấy đúng thế: who-has 10.10.2.10 tell 10.10.1.11, lặp đi lặp lại.\n\n3. ping prints \"From 10.10.1.11 … Destination Host Unreachable\". Who produced that error?ping in \"From 10.10.1.11 … Destination Host Unreachable\". Ai tạo ra lỗi đó?\n   Answer: c) client2's own kernel, after its ARP requests got no answer\n   \"From 10.10.1.11\" is client2 itself: the neighbour entry ended FAILED, so the kernel reports the host unreachable. No router was ever involved.VI: \"From 10.10.1.11\" chính là client2: mục hàng xóm kết thúc ở FAILED, nên nhân báo host không tới được. Không router nào dính vào.\n\n4. The capture also contains one line \"ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b\". What is it?Bản bắt còn có một dòng \"ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b\". Đó là gì?\n   Answer: c) client2 answering another machine's ARP question — background traffic\n   It is a reply about 10.10.1.11 (client2's own address), sent by client2. Nothing ever answers \"who-has 10.10.2.10\" — that is why the entry is FAILED.VI: Đó là trả lời về 10.10.1.11 (địa chỉ của chính client2), do client2 gửi. Không gì trả lời \"who-has 10.10.2.10\" — vì thế mục đó FAILED.\n\n5. With the /16 mask, client2 still reaches 8.8.8.8 on the Internet. Why?Với mặt nạ /16, client2 vẫn tới được 8.8.8.8 trên Internet. Vì sao?\n   Answer: b) 8.8.8.8 is outside 10.10.0.0/16, so it still goes to the default gateway\n   A wrong mask only breaks the addresses it wrongly includes: 10.10.x.x outside the real /24. Everything else still uses \"default via\". That is why \"the network works\" and the bug survives.VI: Mặt nạ sai chỉ làm hỏng những địa chỉ nó bao nhầm: các 10.10.x.x ngoài /24 thật. Mọi thứ khác vẫn đi \"default via\". Vì thế \"mạng vẫn chạy\" và lỗi sống sót.\n\n6. An intern's VM 10.10.1.50 (mask 255.255.0.0, gateway 10.10.1.254) reaches the Internet but not the API 10.10.2.20. The first thing to check?Máy ảo 10.10.1.50 của bạn thực tập (mặt nạ 255.255.0.0, cổng 10.10.1.254) ra Internet được nhưng không tới API 10.10.2.20. Việc đầu tiên cần kiểm?\n   Answer: c) The mask: ip -br addr and ip route get 10.10.2.20 (no \"via\" ⇒ /16 bug)\n   With /16 the VM thinks 10.10.2.20 is on its own cable and ARPs for it. Fix the mask to /24 and the route gets \"via 10.10.1.254\" back.VI: Với /16 máy ảo tưởng 10.10.2.20 ở cùng dây và hỏi ARP cho nó. Sửa mặt nạ về /24 thì tuyến có lại \"via 10.10.1.254\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The decision uses only the mask: .200 is inside 10.10.1.0/24, so it is \"on-link\"</p><p>Routing decides from the table, not from who exists. Delivery would start with an ARP question that nobody answers.</p><p><i>VI: Định tuyến quyết theo bảng, không theo việc ai đang tồn tại. Việc giao sẽ bắt đầu bằng một câu hỏi ARP không ai trả lời.</i></p></li><li><p><b>b)</b> It asks ARP for 10.10.2.10 itself, on a LAN where that server is not</p><p>10.10.2.10 is inside 10.10.0.0/16, so the kernel treats it as a neighbour. The capture shows exactly that: who-has 10.10.2.10 tell 10.10.1.11, again and again.</p><p><i>VI: 10.10.2.10 nằm trong 10.10.0.0/16, nên nhân coi nó là hàng xóm. Bản bắt gói cho thấy đúng thế: who-has 10.10.2.10 tell 10.10.1.11, lặp đi lặp lại.</i></p></li><li><p><b>c)</b> client2's own kernel, after its ARP requests got no answer</p><p>\"From 10.10.1.11\" is client2 itself: the neighbour entry ended FAILED, so the kernel reports the host unreachable. No router was ever involved.</p><p><i>VI: \"From 10.10.1.11\" chính là client2: mục hàng xóm kết thúc ở FAILED, nên nhân báo host không tới được. Không router nào dính vào.</i></p></li><li><p><b>c)</b> client2 answering another machine's ARP question — background traffic</p><p>It is a reply about 10.10.1.11 (client2's own address), sent by client2. Nothing ever answers \"who-has 10.10.2.10\" — that is why the entry is FAILED.</p><p><i>VI: Đó là trả lời về 10.10.1.11 (địa chỉ của chính client2), do client2 gửi. Không gì trả lời \"who-has 10.10.2.10\" — vì thế mục đó FAILED.</i></p></li><li><p><b>b)</b> 8.8.8.8 is outside 10.10.0.0/16, so it still goes to the default gateway</p><p>A wrong mask only breaks the addresses it wrongly includes: 10.10.x.x outside the real /24. Everything else still uses \"default via\". That is why \"the network works\" and the bug survives.</p><p><i>VI: Mặt nạ sai chỉ làm hỏng những địa chỉ nó bao nhầm: các 10.10.x.x ngoài /24 thật. Mọi thứ khác vẫn đi \"default via\". Vì thế \"mạng vẫn chạy\" và lỗi sống sót.</i></p></li><li><p><b>c)</b> The mask: ip -br addr and ip route get 10.10.2.20 (no \"via\" ⇒ /16 bug)</p><p>With /16 the VM thinks 10.10.2.20 is on its own cable and ARPs for it. Fix the mask to /24 and the route gets \"via 10.10.1.254\" back.</p><p><i>VI: Với /16 máy ảo tưởng 10.10.2.20 ở cùng dây và hỏi ARP cho nó. Sửa mặt nạ về /24 thì tuyến có lại \"via 10.10.1.254\".</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>No machine has 10.10.1.200, yet ip route get shows \"dev eth0\" with no \"via\". Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Không máy nào có 10.10.1.200, vậy mà ip route get ghi \"dev eth0\" không có \"via\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The decision uses only the mask: .200 is inside 10.10.1.0/24, so it is \"on-link\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "The kernel already knows a machine with that address is on the LAN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every address that starts with 10 is delivered on eth0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The router 10.10.1.254 answered for it, so no via is needed"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Routing decides from the table, not from who exists. Delivery would start with an ARP question that nobody answers.</p><p><i>VI: Định tuyến quyết theo bảng, không theo việc ai đang tồn tại. Việc giao sẽ bắt đầu bằng một câu hỏi ARP không ai trả lời.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With /16, ip route get 10.10.2.10 lost its \"via 10.10.1.254\". What does client2 do next?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với /16, ip route get 10.10.2.10 mất \"via 10.10.1.254\". client2 làm gì tiếp theo?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It asks the DNS server where 10.10.2.10 is located"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It asks ARP for 10.10.2.10 itself, on a LAN where that server is not"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It sends the packet to the broadcast address 10.10.255.255 instead"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It sends the packet to the router anyway, because the gateway is set"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>10.10.2.10 is inside 10.10.0.0/16, so the kernel treats it as a neighbour. The capture shows exactly that: who-has 10.10.2.10 tell 10.10.1.11, again and again.</p><p><i>VI: 10.10.2.10 nằm trong 10.10.0.0/16, nên nhân coi nó là hàng xóm. Bản bắt gói cho thấy đúng thế: who-has 10.10.2.10 tell 10.10.1.11, lặp đi lặp lại.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>ping prints \"From 10.10.1.11 … Destination Host Unreachable\". Who produced that error?</p><p style=\"opacity:.75;font-size:.92em\"><i>ping in \"From 10.10.1.11 … Destination Host Unreachable\". Ai tạo ra lỗi đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The switch, which had no MAC for the destination"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The router 10.10.1.254, which could not reach the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "client2's own kernel, after its ARP requests got no answer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The server 10.10.2.10, which refused the ICMP echo"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>\"From 10.10.1.11\" is client2 itself: the neighbour entry ended FAILED, so the kernel reports the host unreachable. No router was ever involved.</p><p><i>VI: \"From 10.10.1.11\" chính là client2: mục hàng xóm kết thúc ở FAILED, nên nhân báo host không tới được. Không router nào dính vào.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The capture also contains one line \"ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b\". What is it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản bắt còn có một dòng \"ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b\". Đó là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A gratuitous ARP that fixes the wrong mask automatically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server finally answering client2's question about 10.10.2.10"
+              },
+              {
+                "ma": "c",
+                "noiDung": "client2 answering another machine's ARP question — background traffic"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The router announcing that it will forward for 10.10.2.10"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>It is a reply about 10.10.1.11 (client2's own address), sent by client2. Nothing ever answers \"who-has 10.10.2.10\" — that is why the entry is FAILED.</p><p><i>VI: Đó là trả lời về 10.10.1.11 (địa chỉ của chính client2), do client2 gửi. Không gì trả lời \"who-has 10.10.2.10\" — vì thế mục đó FAILED.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>With the /16 mask, client2 still reaches 8.8.8.8 on the Internet. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với mặt nạ /16, client2 vẫn tới được 8.8.8.8 trên Internet. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The DNS server rewrites the mask for addresses outside the LAN"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8.8.8.8 is outside 10.10.0.0/16, so it still goes to the default gateway"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The Internet ignores masks and always routes through the router"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The router corrects the mask of every packet that it receives"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A wrong mask only breaks the addresses it wrongly includes: 10.10.x.x outside the real /24. Everything else still uses \"default via\". That is why \"the network works\" and the bug survives.</p><p><i>VI: Mặt nạ sai chỉ làm hỏng những địa chỉ nó bao nhầm: các 10.10.x.x ngoài /24 thật. Mọi thứ khác vẫn đi \"default via\". Vì thế \"mạng vẫn chạy\" và lỗi sống sót.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>An intern's VM 10.10.1.50 (mask 255.255.0.0, gateway 10.10.1.254) reaches the Internet but not the API 10.10.2.20. The first thing to check?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy ảo 10.10.1.50 của bạn thực tập (mặt nạ 255.255.0.0, cổng 10.10.1.254) ra Internet được nhưng không tới API 10.10.2.20. Việc đầu tiên cần kiểm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DNS: the API's name probably resolves to a wrong address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The API: restart it, because the Internet works fine for the VM"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The mask: ip -br addr and ip route get 10.10.2.20 (no \"via\" ⇒ /16 bug)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The cable: replace it and try again, then call the network team"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>With /16 the VM thinks 10.10.2.20 is on its own cable and ARPs for it. Fix the mask to /24 and the route gets \"via 10.10.1.254\" back.</p><p><i>VI: Với /16 máy ảo tưởng 10.10.2.20 ở cùng dây và hỏi ARP cho nó. Sửa mặt nạ về /24 thì tuyến có lại \"via 10.10.1.254\".</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming the firewall or the server when ip route get has no \"via\".|||Đổ cho tường lửa hay máy chủ khi ip route get không có \"via\"."
+        },
+        {
+          "loi": "Concluding \"the network is fine\" because the Internet works.|||Kết luận \"mạng ổn\" vì Internet vẫn chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "on-link",
+          "vi": "cùng đường truyền",
+          "giaiThich": "Đích nằm trong mạng của chính card ⇒ giao thẳng."
+        },
+        {
+          "en": "default gateway",
+          "vi": "cổng mặc định"
+        },
+        {
+          "en": "Destination Host Unreachable",
+          "vi": "không tới được máy đích",
+          "giaiThich": "Ở đây do chính nhân báo khi ARP không có trả lời."
+        }
+      ]
+    },
+    {
+      "title": "CIDR 5 — Plan the LabFlow office by hand (VLSM)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "VLSM"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>LabFlow gets <code>10.20.0.0/22</code> (1 024 addresses) for IoT 300, web 100, db 20, mgmt 10. Method: sort largest first; each need takes the smallest block that holds hosts + 2; place it at the next free address that is a <b>multiple of its own size</b> (alignment). Fill the plan, then do the same needs in the order someone typed them (web, db, mgmt, iot) and count the hole. Afterwards, compare with the real <code>chia.py</code> output (shown after Submit in the explanation).</p><p><i>This set has 2 tables. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow nhận <code>10.20.0.0/22</code> (1 024 địa chỉ) cho IoT 300, web 100, db 20, mgmt 10. Cách làm: xếp lớn trước; mỗi nhu cầu lấy khối nhỏ nhất chứa đủ số máy + 2; đặt nó ở địa chỉ trống kế tiếp là <b>bội số của chính cỡ nó</b> (căn lề). Điền kế hoạch, rồi làm cùng các nhu cầu theo thứ tự ai đó gõ (web, db, mgmt, iot) và đếm lỗ hổng. Sau đó so với output <code>chia.py</code> thật (hiện trong giải thích sau khi Nộp).</p><p><i>Bộ này có 2 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Smallest power of two ≥ hosts + 2: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024. Prefix = 32 − (number of host bits).|||Lũy thừa nhỏ nhất của hai ≥ số máy + 2: 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024. Prefix = 32 − (số bit host).",
+        "Count addresses from the start of the block: 10.20.2.0 is address number 512 (two full /24s).|||Đếm địa chỉ từ đầu khối: 10.20.2.0 là địa chỉ thứ 512 (hai /24 đầy)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 5 — Plan the LabFlow office by hand (VLSM)\n\nAnswer in the answer panel (no code needed).\n\n1. Largest firstLớn trước\n2. In the order given: web, db, mgmt, iotTheo thứ tự gõ: web, db, mgmt, iot\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CIDR 5 — Plan the LabFlow office by hand (VLSM) — answer key\n\n1. Largest firstLớn trước\n   - r1.s: 512\n   - r1.p: /23 / 23\n   - r1.n: 10.20.0.0/23\n   - r1.b: 10.20.1.255\n   - r2.s: 128\n   - r2.p: /25 / 25\n   - r2.n: 10.20.2.0/25\n   - r2.b: 10.20.2.127\n   - r3.s: 32\n   - r3.p: /27 / 27\n   - r3.n: 10.20.2.128/27\n   - r3.b: 10.20.2.159\n   - r4.s: 16\n   - r4.p: /28 / 28\n   - r4.n: 10.20.2.160/28\n   - r4.b: 10.20.2.175\n   300 + 2 = 302 needs 512 = 2^9 ⇒ /23; 102 ⇒ 128 ⇒ /25; 22 ⇒ 32 ⇒ /27; 12 ⇒ 16 ⇒ /28. Placed back to back, every block is already aligned: the real tool printedblock 10.20.0.0/22 = 1024 addresses; needs sorted largest first name hosts subnet first host last host broadcast usable iot 300 10.20.0.0/23 10.20.0.1 10.20.1.254 10.20.1.255 510 web 100 10.20.2.0/25 10.20.2.1 10.20.2.126 10.20.2.127 126 db 20 10.20.2.128/27 10.20.2.129 10.20.2.158 10.20.2.159 30 mgmt 10 10.20.2.160/28 10.20.2.161 10.20.2.174 10.20.2.175 14 check: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176VI: 300 + 2 = 302 cần 512 = 2^9 ⇒ /23; 102 ⇒ 128 ⇒ /25; 22 ⇒ 32 ⇒ /27; 12 ⇒ 16 ⇒ /28. Đặt liền nhau, khối nào cũng đã đúng căn lề: công cụ thật in rablock 10.20.0.0/22 = 1024 addresses; needs sorted largest first name hosts subnet first host last host broadcast usable iot 300 10.20.0.0/23 10.20.0.1 10.20.1.254 10.20.1.255 510 web 100 10.20.2.0/25 10.20.2.1 10.20.2.126 10.20.2.127 126 db 20 10.20.2.128/27 10.20.2.129 10.20.2.158 10.20.2.159 30 mgmt 10 10.20.2.160/28 10.20.2.161 10.20.2.174 10.20.2.175 14 check: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176\n\n2. In the order given: web, db, mgmt, iotTheo thứ tự gõ: web, db, mgmt, iot\n   - r1.n: 10.20.0.0/25\n   - r2.n: 10.20.0.128/27\n   - r3.n: 10.20.0.160/28\n   - r4.n: 10.20.2.0/23\n   - r5.n: 336\n   After mgmt the next free address is 10.20.0.176, but a /23 must start at a multiple of 512 addresses: 10.20.0.0 or 10.20.2.0. So iot jumps to 10.20.2.0 and 10.20.0.176 – 10.20.1.255 (512 − 176 = 336 addresses) stays empty. Same total used (688), but now the block is full. Real output:block 10.20.0.0/22 = 1024 addresses; needs in the order given name hosts subnet first host last host broadcast usable web 100 10.20.0.0/25 10.20.0.1 10.20.0.126 10.20.0.127 126 db 20 10.20.0.128/27 10.20.0.129 10.20.0.158 10.20.0.159 30 mgmt 10 10.20.0.160/28 10.20.0.161 10.20.0.174 10.20.0.175 14 iot 300 10.20.2.0/23 10.20.2.1 10.20.3.254 10.20.3.255 510 gap 10.20.0.176 - 10.20.1.255 (336 addresses skipped to keep the next subnet aligned) check: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block fullVI: Sau mgmt, địa chỉ trống kế tiếp là 10.20.0.176, nhưng một /23 phải bắt đầu ở bội số của 512 địa chỉ: 10.20.0.0 hoặc 10.20.2.0. Nên iot nhảy tới 10.20.2.0 và 10.20.0.176 – 10.20.1.255 (512 − 176 = 336 địa chỉ) bỏ trống. Tổng dùng vẫn vậy (688), nhưng giờ khối đã đầy. Output thật:block 10.20.0.0/22 = 1024 addresses; needs in the order given name hosts subnet first host last host broadcast usable web 100 10.20.0.0/25 10.20.0.1 10.20.0.126 10.20.0.127 126 db 20 10.20.0.128/27 10.20.0.129 10.20.0.158 10.20.0.159 30 mgmt 10 10.20.0.160/28 10.20.0.161 10.20.0.174 10.20.0.175 14 iot 300 10.20.2.0/23 10.20.2.1 10.20.3.254 10.20.3.255 510 gap 10.20.0.176 - 10.20.1.255 (336 addresses skipped to keep the next subnet aligned) check: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block full\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>300 + 2 = 302 needs 512 = 2^9 ⇒ /23; 102 ⇒ 128 ⇒ /25; 22 ⇒ 32 ⇒ /27; 12 ⇒ 16 ⇒ /28. Placed back to back, every block is already aligned: the real tool printed<pre>block 10.20.0.0/22 = 1024 addresses; needs sorted largest first\nname   hosts  subnet           first host   last host    broadcast    usable\niot      300  10.20.0.0/23     10.20.0.1    10.20.1.254  10.20.1.255     510\nweb      100  10.20.2.0/25     10.20.2.1    10.20.2.126  10.20.2.127     126\ndb        20  10.20.2.128/27   10.20.2.129  10.20.2.158  10.20.2.159      30\nmgmt      10  10.20.2.160/28   10.20.2.161  10.20.2.174  10.20.2.175      14\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176</pre></p><p><i>VI: 300 + 2 = 302 cần 512 = 2^9 ⇒ /23; 102 ⇒ 128 ⇒ /25; 22 ⇒ 32 ⇒ /27; 12 ⇒ 16 ⇒ /28. Đặt liền nhau, khối nào cũng đã đúng căn lề: công cụ thật in ra<pre>block 10.20.0.0/22 = 1024 addresses; needs sorted largest first\nname   hosts  subnet           first host   last host    broadcast    usable\niot      300  10.20.0.0/23     10.20.0.1    10.20.1.254  10.20.1.255     510\nweb      100  10.20.2.0/25     10.20.2.1    10.20.2.126  10.20.2.127     126\ndb        20  10.20.2.128/27   10.20.2.129  10.20.2.158  10.20.2.159      30\nmgmt      10  10.20.2.160/28   10.20.2.161  10.20.2.174  10.20.2.175      14\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176</pre></i></p><p>After mgmt the next free address is 10.20.0.176, but a /23 must start at a multiple of 512 addresses: 10.20.0.0 or 10.20.2.0. So iot jumps to 10.20.2.0 and 10.20.0.176 – 10.20.1.255 (512 − 176 = 336 addresses) stays empty. Same total used (688), but now the block is full. Real output:<pre>block 10.20.0.0/22 = 1024 addresses; needs in the order given\nname   hosts  subnet           first host   last host    broadcast    usable\nweb      100  10.20.0.0/25     10.20.0.1    10.20.0.126  10.20.0.127     126\ndb        20  10.20.0.128/27   10.20.0.129  10.20.0.158  10.20.0.159      30\nmgmt      10  10.20.0.160/28   10.20.0.161  10.20.0.174  10.20.0.175      14\niot      300  10.20.2.0/23     10.20.2.1    10.20.3.254  10.20.3.255     510\ngap    10.20.0.176 - 10.20.1.255  (336 addresses skipped to keep the next subnet aligned)\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block full</pre></p><p><i>VI: Sau mgmt, địa chỉ trống kế tiếp là 10.20.0.176, nhưng một /23 phải bắt đầu ở bội số của 512 địa chỉ: 10.20.0.0 hoặc 10.20.2.0. Nên iot nhảy tới 10.20.2.0 và 10.20.0.176 – 10.20.1.255 (512 − 176 = 336 địa chỉ) bỏ trống. Tổng dùng vẫn vậy (688), nhưng giờ khối đã đầy. Output thật:<pre>block 10.20.0.0/22 = 1024 addresses; needs in the order given\nname   hosts  subnet           first host   last host    broadcast    usable\nweb      100  10.20.0.0/25     10.20.0.1    10.20.0.126  10.20.0.127     126\ndb        20  10.20.0.128/27   10.20.0.129  10.20.0.158  10.20.0.159      30\nmgmt      10  10.20.0.160/28   10.20.0.161  10.20.0.174  10.20.0.175      14\niot      300  10.20.2.0/23     10.20.2.1    10.20.3.254  10.20.3.255     510\ngap    10.20.0.176 - 10.20.1.255  (336 addresses skipped to keep the next subnet aligned)\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block full</pre></i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Largest first</p><p style=\"opacity:.75;font-size:.92em\"><i>Lớn trước</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Need"
+              },
+              {
+                "ma": "s",
+                "ten": "Block size (addresses)"
+              },
+              {
+                "ma": "p",
+                "ten": "Prefix"
+              },
+              {
+                "ma": "n",
+                "ten": "Subnet (network/prefix)"
+              },
+              {
+                "ma": "b",
+                "ten": "Broadcast"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "iot — 300 hosts"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "web — 100 hosts"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "db — 20 hosts"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "mgmt — 10 hosts"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": [
+                "512"
+              ],
+              "r1.p": [
+                "/23",
+                "23"
+              ],
+              "r1.n": [
+                "10.20.0.0/23"
+              ],
+              "r1.b": [
+                "10.20.1.255"
+              ],
+              "r2.s": [
+                "128"
+              ],
+              "r2.p": [
+                "/25",
+                "25"
+              ],
+              "r2.n": [
+                "10.20.2.0/25"
+              ],
+              "r2.b": [
+                "10.20.2.127"
+              ],
+              "r3.s": [
+                "32"
+              ],
+              "r3.p": [
+                "/27",
+                "27"
+              ],
+              "r3.n": [
+                "10.20.2.128/27"
+              ],
+              "r3.b": [
+                "10.20.2.159"
+              ],
+              "r4.s": [
+                "16"
+              ],
+              "r4.p": [
+                "/28",
+                "28"
+              ],
+              "r4.n": [
+                "10.20.2.160/28"
+              ],
+              "r4.b": [
+                "10.20.2.175"
+              ]
+            },
+            "giaiThich": "<p>300 + 2 = 302 needs 512 = 2^9 ⇒ /23; 102 ⇒ 128 ⇒ /25; 22 ⇒ 32 ⇒ /27; 12 ⇒ 16 ⇒ /28. Placed back to back, every block is already aligned: the real tool printed<pre>block 10.20.0.0/22 = 1024 addresses; needs sorted largest first\nname   hosts  subnet           first host   last host    broadcast    usable\niot      300  10.20.0.0/23     10.20.0.1    10.20.1.254  10.20.1.255     510\nweb      100  10.20.2.0/25     10.20.2.1    10.20.2.126  10.20.2.127     126\ndb        20  10.20.2.128/27   10.20.2.129  10.20.2.158  10.20.2.159      30\nmgmt      10  10.20.2.160/28   10.20.2.161  10.20.2.174  10.20.2.175      14\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176</pre></p><p><i>VI: 300 + 2 = 302 cần 512 = 2^9 ⇒ /23; 102 ⇒ 128 ⇒ /25; 22 ⇒ 32 ⇒ /27; 12 ⇒ 16 ⇒ /28. Đặt liền nhau, khối nào cũng đã đúng căn lề: công cụ thật in ra<pre>block 10.20.0.0/22 = 1024 addresses; needs sorted largest first\nname   hosts  subnet           first host   last host    broadcast    usable\niot      300  10.20.0.0/23     10.20.0.1    10.20.1.254  10.20.1.255     510\nweb      100  10.20.2.0/25     10.20.2.1    10.20.2.126  10.20.2.127     126\ndb        20  10.20.2.128/27   10.20.2.129  10.20.2.158  10.20.2.159      30\nmgmt      10  10.20.2.160/28   10.20.2.161  10.20.2.174  10.20.2.175      14\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176</pre></i></p>"
+          },
+          {
+            "ma": "b2",
+            "de": "<p>In the order given: web, db, mgmt, iot</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo thứ tự gõ: web, db, mgmt, iot</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Need"
+              },
+              {
+                "ma": "n",
+                "ten": "Subnet (network/prefix)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "web — 100 hosts"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "db — 20 hosts"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "mgmt — 10 hosts"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "iot — 300 hosts"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Addresses skipped before iot (the gap)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": [
+                "10.20.0.0/25"
+              ],
+              "r2.n": [
+                "10.20.0.128/27"
+              ],
+              "r3.n": [
+                "10.20.0.160/28"
+              ],
+              "r4.n": [
+                "10.20.2.0/23"
+              ],
+              "r5.n": [
+                "336"
+              ]
+            },
+            "giaiThich": "<p>After mgmt the next free address is 10.20.0.176, but a /23 must start at a multiple of 512 addresses: 10.20.0.0 or 10.20.2.0. So iot jumps to 10.20.2.0 and 10.20.0.176 – 10.20.1.255 (512 − 176 = 336 addresses) stays empty. Same total used (688), but now the block is full. Real output:<pre>block 10.20.0.0/22 = 1024 addresses; needs in the order given\nname   hosts  subnet           first host   last host    broadcast    usable\nweb      100  10.20.0.0/25     10.20.0.1    10.20.0.126  10.20.0.127     126\ndb        20  10.20.0.128/27   10.20.0.129  10.20.0.158  10.20.0.159      30\nmgmt      10  10.20.0.160/28   10.20.0.161  10.20.0.174  10.20.0.175      14\niot      300  10.20.2.0/23     10.20.2.1    10.20.3.254  10.20.3.255     510\ngap    10.20.0.176 - 10.20.1.255  (336 addresses skipped to keep the next subnet aligned)\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block full</pre></p><p><i>VI: Sau mgmt, địa chỉ trống kế tiếp là 10.20.0.176, nhưng một /23 phải bắt đầu ở bội số của 512 địa chỉ: 10.20.0.0 hoặc 10.20.2.0. Nên iot nhảy tới 10.20.2.0 và 10.20.0.176 – 10.20.1.255 (512 − 176 = 336 địa chỉ) bỏ trống. Tổng dùng vẫn vậy (688), nhưng giờ khối đã đầy. Output thật:<pre>block 10.20.0.0/22 = 1024 addresses; needs in the order given\nname   hosts  subnet           first host   last host    broadcast    usable\nweb      100  10.20.0.0/25     10.20.0.1    10.20.0.126  10.20.0.127     126\ndb        20  10.20.0.128/27   10.20.0.129  10.20.0.158  10.20.0.159      30\nmgmt      10  10.20.0.160/28   10.20.0.161  10.20.0.174  10.20.0.175      14\niot      300  10.20.2.0/23     10.20.2.1    10.20.3.254  10.20.3.255     510\ngap    10.20.0.176 - 10.20.1.255  (336 addresses skipped to keep the next subnet aligned)\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block full</pre></i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the 2 reserved addresses: 254 hosts fit a /24 (256), 255 hosts do not.|||Quên 2 địa chỉ dành riêng: 254 máy vừa một /24 (256), 255 máy thì không."
+        },
+        {
+          "loi": "Placing the /23 at 10.20.0.176 (not aligned): a router would read 10.20.0.176/23 as the network 10.20.0.0/23.|||Đặt /23 ở 10.20.0.176 (không căn lề): router sẽ đọc 10.20.0.176/23 thành mạng 10.20.0.0/23."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "VLSM",
+          "vi": "mặt nạ độ dài thay đổi",
+          "giaiThich": "Nhiều subnet khác cỡ trong một khối."
+        },
+        {
+          "en": "alignment",
+          "vi": "căn lề",
+          "giaiThich": "Một khối cỡ N phải bắt đầu ở bội số của N."
+        },
+        {
+          "en": "gap",
+          "vi": "lỗ hổng",
+          "giaiThich": "Địa chỉ bị bỏ trống để khối sau được căn lề."
+        }
+      ]
+    },
+    {
+      "title": "CIDR 6 — Write cidr(s) like cidr.py",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "CIDR arithmetic"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The lab tool <code>cidr.py</code> does subnet math the way you did it by hand. Real run (lab/out/c21-dia-chi):</p><pre>address    192.168.50.77    11000000.10101000.00110010.01001101\nmask /26   255.255.255.192  11111111.11111111.11111111.11000000\nnetwork    192.168.50.64    11000000.10101000.00110010.01000000   (address AND mask)\nbroadcast  192.168.50.127   11000000.10101000.00110010.01111111   (host bits all 1)\nhosts      192.168.50.65 - 192.168.50.126   usable 62 of 64 addresses\ncheck      ipaddress: 192.168.50.64/26, 62 usable, 192.168.50.65 - 192.168.50.126  -&gt; same</pre><p>Write <code>cidr(s)</code>: <code>s</code> is <code>\"a.b.c.d/p\"</code>. Return</p>\n<pre>{ network, mask, broadcast, first, last, usable, addresses }</pre>\n<ul>\n<li><code>network</code>, <code>mask</code>, <code>broadcast</code>, <code>first</code>, <code>last</code> — dotted strings; <code>usable</code>, <code>addresses</code> — numbers.</li>\n<li>For p ≤ 30: first = network + 1, last = broadcast − 1, usable = addresses − 2.</li>\n<li>For /31 and /32: <code>broadcast: null</code>, first = network, last = the last address, usable = addresses (cidr.py prints \"broadcast none\").</li>\n<li>Throw a <code>RangeError</code> when the input is not a valid address/prefix (a byte above 255, a prefix above 32, not four bytes).</li>\n</ul>\n<p>Visible cases are real runs from the lab. Hidden cases include /16, /31, a Lab 2 server address, /0 and /12, and broken input.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the object; do not print it.</li>\n  <li>Throw RangeError for invalid input.</li>\n</ul>",
+      "problemHtmlVi": "<p>Công cụ lab <code>cidr.py</code> tính subnet đúng như cách bạn làm tay. Lượt chạy thật (lab/out/c21-dia-chi):</p><pre>address    192.168.50.77    11000000.10101000.00110010.01001101\nmask /26   255.255.255.192  11111111.11111111.11111111.11000000\nnetwork    192.168.50.64    11000000.10101000.00110010.01000000   (address AND mask)\nbroadcast  192.168.50.127   11000000.10101000.00110010.01111111   (host bits all 1)\nhosts      192.168.50.65 - 192.168.50.126   usable 62 of 64 addresses\ncheck      ipaddress: 192.168.50.64/26, 62 usable, 192.168.50.65 - 192.168.50.126  -&gt; same</pre><p>Viết <code>cidr(s)</code>: <code>s</code> là <code>\"a.b.c.d/p\"</code>. Trả về</p>\n<pre>{ network, mask, broadcast, first, last, usable, addresses }</pre>\n<ul>\n<li><code>network</code>, <code>mask</code>, <code>broadcast</code>, <code>first</code>, <code>last</code> — chuỗi dạng chấm; <code>usable</code>, <code>addresses</code> — số.</li>\n<li>Với p ≤ 30: first = network + 1, last = broadcast − 1, usable = addresses − 2.</li>\n<li>Với /31 và /32: <code>broadcast: null</code>, first = network, last = địa chỉ cuối, usable = addresses (cidr.py in \"broadcast none\").</li>\n<li>Ném <code>RangeError</code> khi đầu vào không phải địa chỉ/prefix hợp lệ (byte lớn hơn 255, prefix lớn hơn 32, không đủ bốn byte).</li>\n</ul>\n<p>Ca hiện là các lượt chạy thật trong lab. Ca ẩn có /16, /31, một địa chỉ máy chủ của Lab 2, /0 và /12, và đầu vào hỏng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về object, đừng in ra.</li>\n  <li>Ném RangeError khi đầu vào sai.</li>\n</ul>",
+      "inputSpec": "s — a string \"a.b.c.d/p\".|||s — chuỗi \"a.b.c.d/p\".",
+      "outputSpec": "{ network, mask, broadcast, first, last, usable, addresses }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cidr(\"10.10.1.10/24\")",
+          "output": "{\"network\":\"10.10.1.0\",\"mask\":\"255.255.255.0\",\"broadcast\":\"10.10.1.255\",\"first\":\"10.10.1.1\",\"last\":\"10.10.1.254\",\"usable\":254,\"addresses\":256}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Turn the address into one number: n = n·256 + byte, four times. Size = 2^(32 − p).|||Đổi địa chỉ thành một số: n = n·256 + byte, bốn lần. Cỡ = 2^(32 − p).",
+        "network = Math.floor(n / size) · size is exactly \"AND with the mask\"; broadcast = network + size − 1; mask = 2^32 − size.|||network = Math.floor(n / size) · size chính là \"AND với mặt nạ\"; broadcast = network + size − 1; mask = 2^32 − size.",
+        "Back to dotted: Math.floor(n / 16777216) % 256, then / 65536, / 256, and n % 256.|||Đổi lại dạng chấm: Math.floor(n / 16777216) % 256, rồi / 65536, / 256, và n % 256."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"a.b.c.d/p\" ⇒ { network, mask, broadcast, first, last, usable, addresses } like cidr.py */\nfunction cidr(s) {\n  // Write your solution here\n  return { network: null, mask: null, broadcast: null, first: null, last: null, usable: 0, addresses: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction cidr(s) {\n  var parts = String(s).split('/');\n  if (parts.length !== 2 || !/^\\d{1,2}$/.test(parts[1]) || Number(parts[1]) > 32) throw new RangeError('expected a.b.c.d/0-32: ' + s);\n  var bytes = parts[0].split('.');\n  if (bytes.length !== 4) throw new RangeError('an IPv4 address has 4 bytes: ' + s);\n  var ip = 0;\n  bytes.forEach(function (b) {\n    if (!/^\\d{1,3}$/.test(b) || Number(b) > 255) throw new RangeError('a byte is 0-255: ' + b);\n    ip = ip * 256 + Number(b);                       // 32-bit number, kept positive (no << in JavaScript)\n  });\n  var p = Number(parts[1]);\n  var size = Math.pow(2, 32 - p);                    // addresses in the network\n  var net = Math.floor(ip / size) * size;            // = ip AND mask: clear the host bits\n  var bcast = net + size - 1;                        // host bits all 1\n  function dotted(n) { return [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, n % 256].join('.'); }\n  var small = p >= 31;                               // /31: point-to-point (RFC 3021) · /32: one machine — no broadcast\n  return {\n    network: dotted(net),\n    mask: dotted(4294967296 - size),                 // p ones then zeros\n    broadcast: small ? null : dotted(bcast),\n    first: dotted(small ? net : net + 1),\n    last: dotted(small ? bcast : bcast - 1),\n    usable: small ? size : size - 2,\n    addresses: size,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An IPv4 address is one 32-bit number, so all the work is arithmetic on that number: the network is the address rounded down to a multiple of the network size (the same as AND with the mask), the broadcast is the last address before the next network, and the hosts lie between them. Doing it with division instead of bit shifts keeps every value positive for the whole range 0.0.0.0/0 to /32 — JavaScript's bit operators work on signed 32-bit integers. The /31 and /32 special cases follow RFC 3021 and match what cidr.py and Python's ipaddress print.</p>",
+      "solutionExplanationHtmlVi": "<p>Địa chỉ IPv4 là một số 32 bit, nên mọi việc là số học trên số đó: mạng là địa chỉ làm tròn xuống bội số của cỡ mạng (giống AND với mặt nạ), broadcast là địa chỉ cuối trước mạng kế tiếp, các host nằm giữa. Dùng phép chia thay phép dịch bit giữ mọi giá trị dương trên cả dải từ 0.0.0.0/0 tới /32 — toán tử bit của JavaScript làm việc trên số nguyên 32 bit có dấu. Trường hợp đặc biệt /31 và /32 theo RFC 3021 và khớp với cidr.py và ipaddress của Python.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The lab client 10.10.1.10/24 (c21-dia-chi)",
+              "vi": "Client của lab 10.10.1.10/24 (c21-dia-chi)"
+            },
+            "goi": "cidr(\"10.10.1.10/24\")",
+            "mongDoi": {
+              "network": "10.10.1.0",
+              "mask": "255.255.255.0",
+              "broadcast": "10.10.1.255",
+              "first": "10.10.1.1",
+              "last": "10.10.1.254",
+              "usable": 254,
+              "addresses": 256
+            }
+          },
+          {
+            "moTa": {
+              "en": "192.168.50.77/26 (c21-dia-chi)",
+              "vi": "192.168.50.77/26 (c21-dia-chi)"
+            },
+            "goi": "cidr(\"192.168.50.77/26\")",
+            "mongDoi": {
+              "network": "192.168.50.64",
+              "mask": "255.255.255.192",
+              "broadcast": "192.168.50.127",
+              "first": "192.168.50.65",
+              "last": "192.168.50.126",
+              "usable": 62,
+              "addresses": 64
+            }
+          },
+          {
+            "moTa": {
+              "en": "203.0.113.10/32 — one machine (c21-dia-chi)",
+              "vi": "203.0.113.10/32 — một máy (c21-dia-chi)"
+            },
+            "goi": "cidr(\"203.0.113.10/32\")",
+            "mongDoi": {
+              "network": "203.0.113.10",
+              "mask": "255.255.255.255",
+              "broadcast": null,
+              "first": "203.0.113.10",
+              "last": "203.0.113.10",
+              "usable": 1,
+              "addresses": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "cidr(\"10.10.1.10/16\")",
+            "mongDoi": {
+              "network": "10.10.0.0",
+              "mask": "255.255.0.0",
+              "broadcast": "10.10.255.255",
+              "first": "10.10.0.1",
+              "last": "10.10.255.254",
+              "usable": 65534,
+              "addresses": 65536
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "cidr(\"192.0.2.0/31\")",
+            "mongDoi": {
+              "network": "192.0.2.0",
+              "mask": "255.255.255.254",
+              "broadcast": null,
+              "first": "192.0.2.0",
+              "last": "192.0.2.1",
+              "usable": 2,
+              "addresses": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "cidr(\"10.30.0.200/26\")",
+            "mongDoi": {
+              "network": "10.30.0.192",
+              "mask": "255.255.255.192",
+              "broadcast": "10.30.0.255",
+              "first": "10.30.0.193",
+              "last": "10.30.0.254",
+              "usable": 62,
+              "addresses": 64
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "cidr(\"10.10.1.50/16\")",
+            "mongDoi": {
+              "network": "10.10.0.0",
+              "mask": "255.255.0.0",
+              "broadcast": "10.10.255.255",
+              "first": "10.10.0.1",
+              "last": "10.10.255.254",
+              "usable": 65534,
+              "addresses": 65536
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "cidr(\"0.0.0.0/0\")",
+            "mongDoi": {
+              "network": "0.0.0.0",
+              "mask": "0.0.0.0",
+              "broadcast": "255.255.255.255",
+              "first": "0.0.0.1",
+              "last": "255.255.255.254",
+              "usable": 4294967294,
+              "addresses": 4294967296
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "cidr(\"172.31.255.255/12\")",
+            "mongDoi": {
+              "network": "172.16.0.0",
+              "mask": "255.240.0.0",
+              "broadcast": "172.31.255.255",
+              "first": "172.16.0.1",
+              "last": "172.31.255.254",
+              "usable": 1048574,
+              "addresses": 1048576
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "cidr(\"203.0.113.77/28\")",
+            "mongDoi": {
+              "network": "203.0.113.64",
+              "mask": "255.255.255.240",
+              "broadcast": "203.0.113.79",
+              "first": "203.0.113.65",
+              "last": "203.0.113.78",
+              "usable": 14,
+              "addresses": 16
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "cidr(\"10.10.1.300/24\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "cidr(\"10.10.1.10/33\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "cidr(\"10.10.1/24\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Building the mask with 0xffffffff << (32 − p): JavaScript shifts are 32-bit and signed, so /0 and every address above 128.0.0.0 come out wrong (negative numbers).|||Dựng mặt nạ bằng 0xffffffff << (32 − p): phép dịch của JavaScript là 32 bit có dấu, nên /0 và mọi địa chỉ trên 128.0.0.0 ra sai (số âm)."
+        },
+        {
+          "loi": "Applying \"− 2\" to /31 and /32: you get 0 and −1 usable hosts.|||Áp \"− 2\" cho /31 và /32: ra 0 và −1 host dùng được."
+        },
+        {
+          "loi": "Only handling prefixes that end on a byte (/8, /16, /24) by cutting the string.|||Chỉ xử lý prefix kết thúc đúng byte (/8, /16, /24) bằng cách cắt chuỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dotted decimal",
+          "vi": "thập phân có chấm"
+        },
+        {
+          "en": "RangeError",
+          "vi": "lỗi giá trị ngoài miền",
+          "giaiThich": "Lỗi JavaScript dùng khi đối số nằm ngoài miền cho phép."
+        },
+        {
+          "en": "RFC 3021",
+          "vi": "chuẩn dùng /31 cho đường điểm-điểm"
+        }
+      ]
+    },
+    {
+      "title": "CIDR 7 — Write vlsm(block, needs) like chia.py",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 40,
+      "points": 30,
+      "concepts": [
+        "VLSM",
+        "alignment"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p><code>chia.py</code> splits a block into subnets of different sizes and checks itself. Real runs (lab/out/c21-chia):</p><pre>$ python3 chia.py 10.20.0.0/22 iot=300 web=100 db=20 mgmt=10\nblock 10.20.0.0/22 = 1024 addresses; needs sorted largest first\nname   hosts  subnet           first host   last host    broadcast    usable\niot      300  10.20.0.0/23     10.20.0.1    10.20.1.254  10.20.1.255     510\nweb      100  10.20.2.0/25     10.20.2.1    10.20.2.126  10.20.2.127     126\ndb        20  10.20.2.128/27   10.20.2.129  10.20.2.158  10.20.2.159      30\nmgmt      10  10.20.2.160/28   10.20.2.161  10.20.2.174  10.20.2.175      14\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176\n$ python3 chia.py --as-given 10.20.0.0/22 web=100 db=20 mgmt=10 iot=300\nblock 10.20.0.0/22 = 1024 addresses; needs in the order given\nname   hosts  subnet           first host   last host    broadcast    usable\nweb      100  10.20.0.0/25     10.20.0.1    10.20.0.126  10.20.0.127     126\ndb        20  10.20.0.128/27   10.20.0.129  10.20.0.158  10.20.0.159      30\nmgmt      10  10.20.0.160/28   10.20.0.161  10.20.0.174  10.20.0.175      14\niot      300  10.20.2.0/23     10.20.2.1    10.20.3.254  10.20.3.255     510\ngap    10.20.0.176 - 10.20.1.255  (336 addresses skipped to keep the next subnet aligned)\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block full\n$ python3 chia.py 10.20.0.0/24 iot=300\nblock 10.20.0.0/24 = 256 addresses; needs sorted largest first\n✗ iot needs /23 (512 addresses) — no aligned /23 left in 10.20.0.0/24: the plan does not fit</pre><p>Write <code>vlsm(block, needs, asGiven)</code>. <code>block</code> is a network like <code>\"10.20.0.0/22\"</code>; <code>needs</code> is <code>[{ name, hosts }]</code> (hosts ≥ 1); <code>asGiven</code> (optional) = keep the order given instead of sorting.</p>\n<ol>\n<li>Unless <code>asGiven</code>: sort largest <code>hosts</code> first; needs with the same size keep their order. Do not change the caller's array.</li>\n<li>Each need gets the smallest block of 2<sup>k</sup> addresses with 2<sup>k</sup> ≥ hosts + 2 (prefix 32 − k).</li>\n<li>It starts at the next free address rounded <b>up</b> to a multiple of its size. Skipped addresses become a gap <code>{ from, to, size }</code>.</li>\n<li>If it would end past the block ⇒ stop and return <code>{ ok: false, name, prefix, size }</code> for that need.</li>\n<li>Otherwise return <code>{ ok: true, subnets, gaps, used, total, nextFree }</code>: each subnet <code>{ name, hosts, subnet: \"a.b.c.d/p\", first, last, broadcast, usable }</code>; <code>used</code> = addresses in all subnets; <code>total</code> = block size; <code>nextFree</code> = the next free address, or <code>null</code> when the block is full.</li>\n</ol>\n<p>The three visible cases are the three real runs above. Hidden cases: the practice plan of lesson 2.1 (10.40.0.0/23), the Lab 2 office plan (10.30.0.0/23), ties, a 1-host need, a block filled exactly, and an \"as given\" plan that stops halfway.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>chia.py</code> chia một khối thành các subnet khác cỡ và tự kiểm. Các lượt chạy thật (lab/out/c21-chia):</p><pre>$ python3 chia.py 10.20.0.0/22 iot=300 web=100 db=20 mgmt=10\nblock 10.20.0.0/22 = 1024 addresses; needs sorted largest first\nname   hosts  subnet           first host   last host    broadcast    usable\niot      300  10.20.0.0/23     10.20.0.1    10.20.1.254  10.20.1.255     510\nweb      100  10.20.2.0/25     10.20.2.1    10.20.2.126  10.20.2.127     126\ndb        20  10.20.2.128/27   10.20.2.129  10.20.2.158  10.20.2.159      30\nmgmt      10  10.20.2.160/28   10.20.2.161  10.20.2.174  10.20.2.175      14\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, next free 10.20.2.176\n$ python3 chia.py --as-given 10.20.0.0/22 web=100 db=20 mgmt=10 iot=300\nblock 10.20.0.0/22 = 1024 addresses; needs in the order given\nname   hosts  subnet           first host   last host    broadcast    usable\nweb      100  10.20.0.0/25     10.20.0.1    10.20.0.126  10.20.0.127     126\ndb        20  10.20.0.128/27   10.20.0.129  10.20.0.158  10.20.0.159      30\nmgmt      10  10.20.0.160/28   10.20.0.161  10.20.0.174  10.20.0.175      14\niot      300  10.20.2.0/23     10.20.2.1    10.20.3.254  10.20.3.255     510\ngap    10.20.0.176 - 10.20.1.255  (336 addresses skipped to keep the next subnet aligned)\ncheck: all inside 10.20.0.0/22: True · any overlap: False · used 688 of 1024, block full\n$ python3 chia.py 10.20.0.0/24 iot=300\nblock 10.20.0.0/24 = 256 addresses; needs sorted largest first\n✗ iot needs /23 (512 addresses) — no aligned /23 left in 10.20.0.0/24: the plan does not fit</pre><p>Viết <code>vlsm(block, needs, asGiven)</code>. <code>block</code> là một mạng như <code>\"10.20.0.0/22\"</code>; <code>needs</code> là <code>[{ name, hosts }]</code> (hosts ≥ 1); <code>asGiven</code> (tuỳ chọn) = giữ thứ tự đã cho thay vì sắp xếp.</p>\n<ol>\n<li>Nếu không có <code>asGiven</code>: sắp <code>hosts</code> lớn trước; nhu cầu cùng cỡ giữ nguyên thứ tự. Không sửa mảng của người gọi.</li>\n<li>Mỗi nhu cầu lấy khối nhỏ nhất 2<sup>k</sup> địa chỉ với 2<sup>k</sup> ≥ hosts + 2 (prefix 32 − k).</li>\n<li>Khối bắt đầu ở địa chỉ trống kế tiếp làm tròn <b>lên</b> bội số của cỡ nó. Địa chỉ bị bỏ qua thành một lỗ hổng <code>{ from, to, size }</code>.</li>\n<li>Nếu khối vượt quá cuối khối lớn ⇒ dừng và trả <code>{ ok: false, name, prefix, size }</code> cho nhu cầu đó.</li>\n<li>Ngược lại trả <code>{ ok: true, subnets, gaps, used, total, nextFree }</code>: mỗi subnet <code>{ name, hosts, subnet: \"a.b.c.d/p\", first, last, broadcast, usable }</code>; <code>used</code> = số địa chỉ của mọi subnet; <code>total</code> = cỡ khối; <code>nextFree</code> = địa chỉ trống kế tiếp, hoặc <code>null</code> khi khối đã đầy.</li>\n</ol>\n<p>Ba ca hiện là ba lượt chạy thật ở trên. Ca ẩn: kế hoạch thực hành của bài 2.1 (10.40.0.0/23), kế hoạch văn phòng của Lab 2 (10.30.0.0/23), nhu cầu cùng cỡ, nhu cầu 1 máy, khối được lấp vừa khít, và một kế hoạch \"theo thứ tự gõ\" dừng giữa chừng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "block — \"a.b.c.d/p\" (a network address); needs — [{ name, hosts }]; asGiven — optional boolean.|||block — \"a.b.c.d/p\" (địa chỉ mạng); needs — [{ name, hosts }]; asGiven — boolean tuỳ chọn.",
+      "outputSpec": "{ ok: true, subnets, gaps, used, total, nextFree } or { ok: false, name, prefix, size }|||{ ok: true, subnets, gaps, used, total, nextFree } hoặc { ok: false, name, prefix, size }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "vlsm(\"10.20.0.0/22\", [{\"name\":\"iot\",\"hosts\":300},{\"name\":\"web\",\"hosts\":100},{\"name\":\"db\",\"hosts\":20},{\"name\":\"mgmt\",\"hosts\":10}])",
+          "output": "{\"ok\":true,\"subnets\":[{\"name\":\"iot\",\"hosts\":300,\"subnet\":\"10.20.0.0/23\",\"first\":\"10.20.0.1\",\"last\":\"10.20.1.254\",\"broadcast\":\"10.20.1.255\",\"usable\":510},{\"name\":\"web\",\"hosts\":100,\"subnet\":\"10.20.2.0/25\",\"first\":\"10.20.2.1\",\"last\":\"10.20.2.126\",\"broadcast\":\"10.20.2.127\",\"usable\":126},{\"name\":\"db\",\"hosts\":20,\"subnet\":\"10.20.2.128/27\",\"first\":\"10.20.2.129\",\"last\":\"10.20.2.158\",\"broadcast\":\"10.20.2.159\",\"usable\":30},{\"name\":\"mgmt\",\"hosts\":10,\"subnet\":\"10.20.2.160/28\",\"first\":\"10.20.2.161\",\"last\":\"10.20.2.174\",\"broadcast\":\"10.20.2.175\",\"usable\":14}],\"gaps\":[],\"used\":688,\"total\":1024,\"nextFree\":\"10.20.2.176\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Work with numbers, as in cidr(): next = the first address of the block, end = next + total.|||Làm việc với số, như trong cidr(): next = địa chỉ đầu của khối, end = next + total.",
+        "Rounding up to a multiple: start = Math.ceil(next / size) · size. A gap exists when start > next.|||Làm tròn lên bội số: start = Math.ceil(next / size) · size. Có lỗ hổng khi start > next.",
+        "Sort a copy: needs.slice().sort((a, b) => b.hosts − a.hosts). Array sort is stable in modern JavaScript, so ties keep their order.|||Sắp một bản sao: needs.slice().sort((a, b) => b.hosts − a.hosts). Sắp xếp mảng trong JavaScript hiện đại là ổn định, nên nhu cầu bằng nhau giữ thứ tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * block: \"10.20.0.0/22\"   needs: [{ name: 'iot', hosts: 300 }, …]   asGiven: optional\n * ⇒ { ok: true, subnets, gaps, used, total, nextFree }  or  { ok: false, name, prefix, size }\n */\nfunction vlsm(block, needs, asGiven) {\n  // Write your solution here\n  return { ok: true, subnets: [], gaps: [], used: 0, total: 0, nextFree: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction vlsm(block, needs, asGiven) {\n  function toNum(a) { return a.split('.').reduce(function (n, b) { return n * 256 + Number(b); }, 0); }\n  function dotted(n) { return [Math.floor(n / 16777216) % 256, Math.floor(n / 65536) % 256, Math.floor(n / 256) % 256, n % 256].join('.'); }\n  var bp = block.split('/');\n  var total = Math.pow(2, 32 - Number(bp[1]));\n  var start0 = toNum(bp[0]);\n  var list = needs.slice();                                   // never sort the caller's array\n  if (!asGiven) list.sort(function (a, b) { return b.hosts - a.hosts; });   // largest first; ties keep their order (stable sort)\n  var next = start0, end = start0 + total, subnets = [], gaps = [];\n  for (var i = 0; i < list.length; i++) {\n    var need = list[i];\n    var bits = 0;\n    while (Math.pow(2, bits) < need.hosts + 2) bits++;        // + 2: network and broadcast are never given to a machine\n    var size = Math.pow(2, bits), p = 32 - bits;\n    var start = Math.ceil(next / size) * size;                // a block starts at a multiple of its own size\n    if (start + size > end) return { ok: false, name: need.name, prefix: p, size: size };\n    if (start > next) gaps.push({ from: dotted(next), to: dotted(start - 1), size: start - next });\n    subnets.push({ name: need.name, hosts: need.hosts, subnet: dotted(start) + '/' + p, first: dotted(start + 1), last: dotted(start + size - 2), broadcast: dotted(start + size - 1), usable: size - 2 });\n    next = start + size;\n  }\n  var used = subnets.reduce(function (s, x) { return s + x.usable + 2; }, 0);\n  return { ok: true, subnets: subnets, gaps: gaps, used: used, total: total, nextFree: next < end ? dotted(next) : null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sorting largest first works because block sizes are powers of two: when every block placed so far is at least as big as the next one, the next free address is automatically a multiple of the next size, so no address is wasted. Placing in another order forces the big block to jump to its alignment boundary — the 336-address gap of the real run. The \"does not fit\" check must happen per need, after alignment, which is exactly when chia.py stops with \"no aligned /23 left\".</p>",
+      "solutionExplanationHtmlVi": "<p>Xếp lớn trước chạy được vì cỡ khối là lũy thừa của hai: khi mọi khối đã đặt đều lớn ít nhất bằng khối kế tiếp, địa chỉ trống kế tiếp tự động là bội số của cỡ kế tiếp, nên không phí địa chỉ nào. Đặt theo thứ tự khác buộc khối lớn nhảy tới ranh giới căn lề của nó — lỗ hổng 336 địa chỉ trong lượt chạy thật. Phép kiểm \"không vừa\" phải làm cho từng nhu cầu, sau khi căn lề, đúng lúc chia.py dừng với \"no aligned /23 left\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "chia.py 10.20.0.0/22 iot=300 web=100 db=20 mgmt=10 (real)",
+              "vi": "chia.py 10.20.0.0/22 iot=300 web=100 db=20 mgmt=10 (thật)"
+            },
+            "goi": "vlsm(\"10.20.0.0/22\", [{\"name\":\"iot\",\"hosts\":300},{\"name\":\"web\",\"hosts\":100},{\"name\":\"db\",\"hosts\":20},{\"name\":\"mgmt\",\"hosts\":10}])",
+            "mongDoi": {
+              "ok": true,
+              "subnets": [
+                {
+                  "name": "iot",
+                  "hosts": 300,
+                  "subnet": "10.20.0.0/23",
+                  "first": "10.20.0.1",
+                  "last": "10.20.1.254",
+                  "broadcast": "10.20.1.255",
+                  "usable": 510
+                },
+                {
+                  "name": "web",
+                  "hosts": 100,
+                  "subnet": "10.20.2.0/25",
+                  "first": "10.20.2.1",
+                  "last": "10.20.2.126",
+                  "broadcast": "10.20.2.127",
+                  "usable": 126
+                },
+                {
+                  "name": "db",
+                  "hosts": 20,
+                  "subnet": "10.20.2.128/27",
+                  "first": "10.20.2.129",
+                  "last": "10.20.2.158",
+                  "broadcast": "10.20.2.159",
+                  "usable": 30
+                },
+                {
+                  "name": "mgmt",
+                  "hosts": 10,
+                  "subnet": "10.20.2.160/28",
+                  "first": "10.20.2.161",
+                  "last": "10.20.2.174",
+                  "broadcast": "10.20.2.175",
+                  "usable": 14
+                }
+              ],
+              "gaps": [],
+              "used": 688,
+              "total": 1024,
+              "nextFree": "10.20.2.176"
+            }
+          },
+          {
+            "moTa": {
+              "en": "chia.py --as-given … (real): the 336-address gap",
+              "vi": "chia.py --as-given … (thật): lỗ hổng 336 địa chỉ"
+            },
+            "goi": "vlsm(\"10.20.0.0/22\", [{\"name\":\"web\",\"hosts\":100},{\"name\":\"db\",\"hosts\":20},{\"name\":\"mgmt\",\"hosts\":10},{\"name\":\"iot\",\"hosts\":300}], true)",
+            "mongDoi": {
+              "ok": true,
+              "subnets": [
+                {
+                  "name": "web",
+                  "hosts": 100,
+                  "subnet": "10.20.0.0/25",
+                  "first": "10.20.0.1",
+                  "last": "10.20.0.126",
+                  "broadcast": "10.20.0.127",
+                  "usable": 126
+                },
+                {
+                  "name": "db",
+                  "hosts": 20,
+                  "subnet": "10.20.0.128/27",
+                  "first": "10.20.0.129",
+                  "last": "10.20.0.158",
+                  "broadcast": "10.20.0.159",
+                  "usable": 30
+                },
+                {
+                  "name": "mgmt",
+                  "hosts": 10,
+                  "subnet": "10.20.0.160/28",
+                  "first": "10.20.0.161",
+                  "last": "10.20.0.174",
+                  "broadcast": "10.20.0.175",
+                  "usable": 14
+                },
+                {
+                  "name": "iot",
+                  "hosts": 300,
+                  "subnet": "10.20.2.0/23",
+                  "first": "10.20.2.1",
+                  "last": "10.20.3.254",
+                  "broadcast": "10.20.3.255",
+                  "usable": 510
+                }
+              ],
+              "gaps": [
+                {
+                  "from": "10.20.0.176",
+                  "to": "10.20.1.255",
+                  "size": 336
+                }
+              ],
+              "used": 688,
+              "total": 1024,
+              "nextFree": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "chia.py 10.20.0.0/24 iot=300 (real): does not fit",
+              "vi": "chia.py 10.20.0.0/24 iot=300 (thật): không vừa"
+            },
+            "goi": "vlsm(\"10.20.0.0/24\", [{\"name\":\"iot\",\"hosts\":300}])",
+            "mongDoi": {
+              "ok": false,
+              "name": "iot",
+              "prefix": 23,
+              "size": 512
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "vlsm(\"10.40.0.0/23\", [{\"name\":\"wifi\",\"hosts\":200},{\"name\":\"cameras\",\"hosts\":40},{\"name\":\"servers\",\"hosts\":25},{\"name\":\"printers\",\"hosts\":5}])",
+            "mongDoi": {
+              "ok": true,
+              "subnets": [
+                {
+                  "name": "wifi",
+                  "hosts": 200,
+                  "subnet": "10.40.0.0/24",
+                  "first": "10.40.0.1",
+                  "last": "10.40.0.254",
+                  "broadcast": "10.40.0.255",
+                  "usable": 254
+                },
+                {
+                  "name": "cameras",
+                  "hosts": 40,
+                  "subnet": "10.40.1.0/26",
+                  "first": "10.40.1.1",
+                  "last": "10.40.1.62",
+                  "broadcast": "10.40.1.63",
+                  "usable": 62
+                },
+                {
+                  "name": "servers",
+                  "hosts": 25,
+                  "subnet": "10.40.1.64/27",
+                  "first": "10.40.1.65",
+                  "last": "10.40.1.94",
+                  "broadcast": "10.40.1.95",
+                  "usable": 30
+                },
+                {
+                  "name": "printers",
+                  "hosts": 5,
+                  "subnet": "10.40.1.96/29",
+                  "first": "10.40.1.97",
+                  "last": "10.40.1.102",
+                  "broadcast": "10.40.1.103",
+                  "usable": 6
+                }
+              ],
+              "gaps": [],
+              "used": 360,
+              "total": 512,
+              "nextFree": "10.40.1.104"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "vlsm(\"10.30.0.0/23\", [{\"name\":\"wifi\",\"hosts\":120},{\"name\":\"servers\",\"hosts\":50},{\"name\":\"cameras\",\"hosts\":25},{\"name\":\"printers\",\"hosts\":6},{\"name\":\"vpn\",\"hosts\":60}])",
+            "mongDoi": {
+              "ok": true,
+              "subnets": [
+                {
+                  "name": "wifi",
+                  "hosts": 120,
+                  "subnet": "10.30.0.0/25",
+                  "first": "10.30.0.1",
+                  "last": "10.30.0.126",
+                  "broadcast": "10.30.0.127",
+                  "usable": 126
+                },
+                {
+                  "name": "vpn",
+                  "hosts": 60,
+                  "subnet": "10.30.0.128/26",
+                  "first": "10.30.0.129",
+                  "last": "10.30.0.190",
+                  "broadcast": "10.30.0.191",
+                  "usable": 62
+                },
+                {
+                  "name": "servers",
+                  "hosts": 50,
+                  "subnet": "10.30.0.192/26",
+                  "first": "10.30.0.193",
+                  "last": "10.30.0.254",
+                  "broadcast": "10.30.0.255",
+                  "usable": 62
+                },
+                {
+                  "name": "cameras",
+                  "hosts": 25,
+                  "subnet": "10.30.1.0/27",
+                  "first": "10.30.1.1",
+                  "last": "10.30.1.30",
+                  "broadcast": "10.30.1.31",
+                  "usable": 30
+                },
+                {
+                  "name": "printers",
+                  "hosts": 6,
+                  "subnet": "10.30.1.32/29",
+                  "first": "10.30.1.33",
+                  "last": "10.30.1.38",
+                  "broadcast": "10.30.1.39",
+                  "usable": 6
+                }
+              ],
+              "gaps": [],
+              "used": 296,
+              "total": 512,
+              "nextFree": "10.30.1.40"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "vlsm(\"192.168.0.0/24\", [{\"name\":\"a\",\"hosts\":30},{\"name\":\"b\",\"hosts\":60},{\"name\":\"c\",\"hosts\":30},{\"name\":\"d\",\"hosts\":60}])",
+            "mongDoi": {
+              "ok": true,
+              "subnets": [
+                {
+                  "name": "b",
+                  "hosts": 60,
+                  "subnet": "192.168.0.0/26",
+                  "first": "192.168.0.1",
+                  "last": "192.168.0.62",
+                  "broadcast": "192.168.0.63",
+                  "usable": 62
+                },
+                {
+                  "name": "d",
+                  "hosts": 60,
+                  "subnet": "192.168.0.64/26",
+                  "first": "192.168.0.65",
+                  "last": "192.168.0.126",
+                  "broadcast": "192.168.0.127",
+                  "usable": 62
+                },
+                {
+                  "name": "a",
+                  "hosts": 30,
+                  "subnet": "192.168.0.128/27",
+                  "first": "192.168.0.129",
+                  "last": "192.168.0.158",
+                  "broadcast": "192.168.0.159",
+                  "usable": 30
+                },
+                {
+                  "name": "c",
+                  "hosts": 30,
+                  "subnet": "192.168.0.160/27",
+                  "first": "192.168.0.161",
+                  "last": "192.168.0.190",
+                  "broadcast": "192.168.0.191",
+                  "usable": 30
+                }
+              ],
+              "gaps": [],
+              "used": 192,
+              "total": 256,
+              "nextFree": "192.168.0.192"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "vlsm(\"10.0.0.0/29\", [{\"name\":\"link1\",\"hosts\":1},{\"name\":\"link2\",\"hosts\":2}])",
+            "mongDoi": {
+              "ok": true,
+              "subnets": [
+                {
+                  "name": "link2",
+                  "hosts": 2,
+                  "subnet": "10.0.0.0/30",
+                  "first": "10.0.0.1",
+                  "last": "10.0.0.2",
+                  "broadcast": "10.0.0.3",
+                  "usable": 2
+                },
+                {
+                  "name": "link1",
+                  "hosts": 1,
+                  "subnet": "10.0.0.4/30",
+                  "first": "10.0.0.5",
+                  "last": "10.0.0.6",
+                  "broadcast": "10.0.0.7",
+                  "usable": 2
+                }
+              ],
+              "gaps": [],
+              "used": 8,
+              "total": 8,
+              "nextFree": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "vlsm(\"10.0.0.0/24\", [{\"name\":\"x\",\"hosts\":126},{\"name\":\"y\",\"hosts\":126}])",
+            "mongDoi": {
+              "ok": true,
+              "subnets": [
+                {
+                  "name": "x",
+                  "hosts": 126,
+                  "subnet": "10.0.0.0/25",
+                  "first": "10.0.0.1",
+                  "last": "10.0.0.126",
+                  "broadcast": "10.0.0.127",
+                  "usable": 126
+                },
+                {
+                  "name": "y",
+                  "hosts": 126,
+                  "subnet": "10.0.0.128/25",
+                  "first": "10.0.0.129",
+                  "last": "10.0.0.254",
+                  "broadcast": "10.0.0.255",
+                  "usable": 126
+                }
+              ],
+              "gaps": [],
+              "used": 256,
+              "total": 256,
+              "nextFree": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "vlsm(\"10.0.0.0/24\", [{\"name\":\"small\",\"hosts\":10},{\"name\":\"big\",\"hosts\":200}], true)",
+            "mongDoi": {
+              "ok": false,
+              "name": "big",
+              "prefix": 24,
+              "size": 256
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the caller's array is not reordered",
+              "vi": "Ẩn: mảng của người gọi không bị đổi thứ tự"
+            },
+            "goi": "(function () { var n = [{ name: 'a', hosts: 5 }, { name: 'b', hosts: 50 }]; vlsm('10.1.0.0/24', n); return n.map(function (x) { return x.name; }); })()",
+            "mongDoi": [
+              "a",
+              "b"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the + 2: a need of 126 hosts fits a /25 (128), one of 127 does not.|||Quên + 2: nhu cầu 126 máy vừa một /25 (128), 127 máy thì không."
+        },
+        {
+          "loi": "Placing each block right after the previous one without aligning it — the \"as given\" case then has no gap and a wrong /23.|||Đặt mỗi khối ngay sau khối trước mà không căn lề — ca \"theo thứ tự gõ\" khi đó không có lỗ hổng và ra một /23 sai."
+        },
+        {
+          "loi": "Sorting the caller's needs array in place.|||Sắp xếp ngay trên mảng needs của người gọi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stable sort",
+          "vi": "sắp xếp ổn định",
+          "giaiThich": "Phần tử bằng nhau giữ thứ tự ban đầu."
+        },
+        {
+          "en": "alignment",
+          "vi": "căn lề"
+        },
+        {
+          "en": "next free address",
+          "vi": "địa chỉ trống kế tiếp"
+        }
+      ]
+    }
+  ]
+}

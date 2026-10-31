@@ -1,0 +1,4 @@
+# Ch2 · 2.4 — sửa đường IPv6 của nhà mạng
+$ ip6tables -D FORWARD -d 2001:db8:d::/48 -j DROP
+$ ip6tables -S FORWARD
+-P FORWARD ACCEPT

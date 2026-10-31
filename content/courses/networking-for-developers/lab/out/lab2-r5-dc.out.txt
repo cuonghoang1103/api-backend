@@ -1,0 +1,14 @@
+# Lab 2 · R5 — chẩn đoán và sửa trên router dc
+$ ip route get 203.0.113.10
+203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0 
+    cache 
+$ ip route get 203.0.113.100
+203.0.113.100 dev dc0 src 203.0.113.1 uid 0 
+    cache 
+$ ip route | grep 203.0.113
+203.0.113.0/26 via 192.0.2.1 dev ix0 
+203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1 
+$ ip route del 203.0.113.0/26 via 192.0.2.1
+$ ip route get 203.0.113.10
+203.0.113.10 dev dc0 src 203.0.113.1 uid 0 
+    cache 

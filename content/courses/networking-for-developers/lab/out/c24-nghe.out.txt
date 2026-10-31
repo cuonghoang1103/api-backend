@@ -1,0 +1,5 @@
+# Ch2 · 2.4 — máy chủ: app nghe 0.0.0.0 (chỉ IPv4) với app nghe :: (cả hai) — và địa chỉ "::ffff:" trong log
+$ ss -tln 'sport = :3000 or sport = :3001'
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 0      511          0.0.0.0:3000      0.0.0.0:*   
+LISTEN 0      511                *:3001            *:*   

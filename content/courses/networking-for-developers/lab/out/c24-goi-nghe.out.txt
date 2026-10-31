@@ -1,0 +1,10 @@
+# Ch2 · 2.4 — laptop gọi hai app trên server bằng IPv4 và IPv6
+$ curl -s http://203.0.113.10:3000/
+v4-only app sees 198.51.100.2
+$ curl -sS -m 3 "http://[2001:db8:d::10]:3000/"; echo "curl exit code $?"
+curl: (7) Failed to connect to 2001:db8:d::10 port 3000 after 0 ms: Could not connect to server
+curl exit code 7
+$ curl -s http://203.0.113.10:3001/
+dual-stack app sees ::ffff:198.51.100.2
+$ curl -s "http://[2001:db8:d::10]:3001/"
+dual-stack app sees 2001:db8:a:50::10

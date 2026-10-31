@@ -1,0 +1,19 @@
+# Ch2 · 2.4 — một tên, hai địa chỉ: curl thử IPv6 trước
+$ dig +short labflow.test A
+203.0.113.10
+$ dig +short labflow.test AAAA
+2001:db8:d::10
+$ getent ahosts labflow.test
+2001:db8:d::10  STREAM labflow.test
+2001:db8:d::10  DGRAM  
+2001:db8:d::10  RAW    
+203.0.113.10    STREAM 
+203.0.113.10    DGRAM  
+203.0.113.10    RAW    
+$ curl -sv -o /dev/null http://labflow.test/ 2>&1 | grep -E '^\* (Host|  Trying|Connected|Established)'
+* Host labflow.test:80 was resolved.
+*   Trying [2001:db8:d::10]:80...
+* Established connection to labflow.test (2001:db8:d::10 port 80) from 2001:db8:a:50::10 port 58840 
+$ curl -s http://labflow.test/
+LabFlow edge (server 203.0.113.10)
+you came from 2001:db8:a:50::10 port 58854

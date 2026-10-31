@@ -1,0 +1,23 @@
+# Lab 2 · R6 — chẩn đoán và sửa trên isp
+$ vtysh -c 'show ip bgp' | grep -E 'Network|/'
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  198.18.0.0/24    192.0.2.66               0             0 64511 i
+ *>  198.51.100.0/24  0.0.0.0                  0         32768 i
+ *>  203.0.113.0/24   192.0.2.3                0             0 64510 i
+ *>  203.0.113.0/25   192.0.2.66               0             0 64511 i
+$ vtysh -c 'show ip bgp 203.0.113.10'
+BGP routing table entry for 203.0.113.0/25, version 4
+Paths: (1 available, best #1, table default)
+  Advertised to peers:
+  192.0.2.3 192.0.2.66
+  64511
+    192.0.2.66 from 192.0.2.66 (192.0.2.66)
+      Origin IGP, metric 0, valid, external, best (First path received)
+      Last update: Sun Nov  1 05:17:31 2026
+$ vtysh -c 'configure terminal' -c 'ip prefix-list FROM-ROGUE seq 10 permit 198.18.0.0/24' -c 'router bgp 64500' -c 'address-family ipv4 unicast' -c 'neighbor 192.0.2.66 prefix-list FROM-ROGUE in' -c 'end'
+$ vtysh -c 'clear bgp ipv4 unicast 192.0.2.66 soft in'
+$ vtysh -c 'show ip bgp' | grep -E 'Network|/'
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>  198.18.0.0/24    192.0.2.66               0             0 64511 i
+ *>  198.51.100.0/24  0.0.0.0                  0         32768 i
+ *>  203.0.113.0/24   192.0.2.3                0             0 64510 i

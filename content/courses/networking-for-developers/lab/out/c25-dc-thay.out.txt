@@ -1,0 +1,10 @@
+# Ch2 · 2.5 — chủ dải (DC) nhìn thấy gì: dải của mình xuất hiện với một AS gốc lạ
+$ vtysh -c 'show ip bgp 203.0.113.0/25'
+BGP routing table entry for 203.0.113.0/25, version 6
+Paths: (1 available, best #1, table default)
+  Advertised to peers:
+  192.0.2.1
+  64500 64511
+    192.0.2.66 from 192.0.2.1 (192.0.2.1)
+      Origin IGP, valid, external, best (First path received)
+      Last update: Sun Nov  1 05:13:39 2026

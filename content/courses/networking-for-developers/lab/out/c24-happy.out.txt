@@ -1,0 +1,15 @@
+# Ch2 · 2.4 — Happy Eyeballs: v6 hỏng mà trang vẫn mở, chỉ chậm hơn một chút
+$ curl -sv -o /dev/null http://labflow.test/ 2>&1 | grep -E '^\* (  Trying|Connected|Established)'
+*   Trying [2001:db8:d::10]:80...
+*   Trying 203.0.113.10:80...
+* Established connection to labflow.test (203.0.113.10 port 80) from 192.168.50.10 port 45964 
+$ curl -s -o /dev/null -w 'connected to %{remote_ip} after %{time_connect} s\n' http://labflow.test/
+connected to 203.0.113.10 after 0.210868 s
+$ curl -6 -sS -o /dev/null -m 5 -w '%{remote_ip}\n' http://labflow.test/; echo "curl exit code $?"
+curl: (28) Connection timed out after 5003 milliseconds
+
+curl exit code 28
+$ node -e "const t=Date.now(); fetch('http://labflow.test/').then(r=>r.text()).then(b=>console.log('node fetch:', b.split('\n')[1], 'after', Date.now()-t, 'ms'))"
+node fetch: you came from 198.51.100.2 port 38370 after 324 ms
+$ node --no-network-family-autoselection -e "const t=Date.now(); fetch('http://labflow.test/', {signal: AbortSignal.timeout(8000)}).then(r=>console.log(r.status)).catch(e=>console.log('node fetch without Happy Eyeballs:', e.cause?.code || e.name, 'after', Date.now()-t, 'ms'))"
+node fetch without Happy Eyeballs: TimeoutError after 8002 ms

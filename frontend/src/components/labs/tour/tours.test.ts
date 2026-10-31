@@ -160,6 +160,16 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'socket-demux': (s) => s.sock?.probeVia === 'rst' && s.sock?.probePort === 81,
   'socket-bind': (s) => s.sock?.bind === '0.0.0.0' && s.sock?.atEnd === true && s.sock?.okCount === 4,
   'waterfall-phases': (s) => s.wf?.preset === 'warm' && s.wf?.atEnd === true && (s.wf?.rtt as number) >= 150 && s.wf?.cum === true,
+  'subnet-mask': (s) => s.subnet?.preset === 'mask' && s.subnet?.addr === '192.168.50.77' && s.subnet?.prefix === 26 && s.subnet?.network === '192.168.50.64' && s.subnet?.usable === 62 && s.subnet?.atEnd === true,
+  'subnet-vlsm': (s) => s.subnet?.preset === 'vlsm' && s.subnet?.order === 'sorted' && s.subnet?.gap === 0 && s.subnet?.fits === true && s.subnet?.atEnd === true,
+  'route-lpm': (s) => s.route?.preset === 'lookup' && s.route?.router === 'dc' && s.route?.dst === '203.0.113.10' && s.route?.forgotten === true && s.route?.winnerLen === 32 && s.route?.atEnd === true,
+  'route-trace': (s) => s.route?.preset === 'trace' && s.route?.silent === true && s.route?.atEnd === true && s.route?.reached === true && s.route?.star3 === true,
+  'nat-home': (s) => s.nat?.preset === 'home' && s.nat?.rows === 3 && s.nat?.collision === true && s.nat?.phonePort === 4734 && s.nat?.atEnd === true,
+  'nat-inbound': (s) => s.nat?.preset === 'inbound' && s.nat?.dnat === true && s.nat?.inboundOk === true && s.nat?.atEnd === true,
+  'ipv6-compress': (s) => s.ipsix?.addr === '2001:0db8:0000:0000:0001:0000:0000:0001' && s.ipsix?.result === '2001:db8::1:0:0:1' && s.ipsix?.pickOk === true,
+  'ipv6-happy': (s) => s.ipsix?.preset === 'happy' && s.ipsix?.broken === true && s.ipsix?.connected === true && s.ipsix?.family === '4' && s.ipsix?.atEnd === true,
+  'bgp-path': (s) => s.bgp?.preset === 'announce' && s.bgp?.atEnd === true && s.bgp?.pickedNet === '198.18.0.0/24' && s.bgp?.pickedOrigin === 64511,
+  'bgp-hijack': (s) => s.bgp?.preset === 'hijack' && s.bgp?.filter === true && s.bgp?.sawHijack === true && s.bgp?.nextHop === '192.0.2.3',
 };
 
 describe('tours — run on the real simulations', () => {

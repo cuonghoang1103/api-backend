@@ -1,0 +1,51 @@
+# Ch2 · 2.1 — mặt nạ gõ sai: client2 cấu hình như một máy văn phòng (địa chỉ + mặt nạ + cổng mặc định)
+$ ip -br -4 addr show eth0
+eth0@if2838      UP             10.10.1.11/24 
+$ ip route
+default via 10.10.1.254 dev eth0 
+10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.11 
+$ ping -c 1 -W 1 10.10.2.10
+PING 10.10.2.10 (10.10.2.10) 56(84) bytes of data.
+64 bytes from 10.10.2.10: icmp_seq=1 ttl=63 time=1.41 ms
+
+--- 10.10.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 1.409/1.409/1.409/0.000 ms
+# gõ nhầm /16 thay vì /24
+$ ip -br -4 addr show eth0
+eth0@if2838      UP             10.10.1.11/16 
+$ ip route
+default via 10.10.1.254 dev eth0 
+10.10.0.0/16 dev eth0 proto kernel scope link src 10.10.1.11 
+$ ip route get 10.10.2.10
+10.10.2.10 dev eth0 src 10.10.1.11 uid 0 
+    cache 
+$ ping -c 4 10.10.2.10
+PING 10.10.2.10 (10.10.2.10) 56(84) bytes of data.
+From 10.10.1.11 icmp_seq=1 Destination Host Unreachable
+
+--- 10.10.2.10 ping statistics ---
+4 packets transmitted, 0 received, +1 errors, 100% packet loss, time 3075ms
+pipe 4
+$ tcpdump -n -r /tmp/m.pcap
+reading from file /tmp/m.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+05:12:20.595710 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28
+05:12:21.622394 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28
+05:12:22.646419 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28
+05:12:23.670731 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28
+05:12:23.862451 ARP, Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b, length 28
+05:12:24.694678 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28
+05:12:25.719207 ARP, Request who-has 10.10.2.10 tell 10.10.1.11, length 28
+$ ip neigh show 10.10.2.10
+10.10.2.10 dev eth0 FAILED 
+# sửa lại /24
+$ ip route get 10.10.2.10
+10.10.2.10 via 10.10.1.254 dev eth0 src 10.10.1.11 uid 0 
+    cache 
+$ ping -c 1 -W 1 10.10.2.10
+PING 10.10.2.10 (10.10.2.10) 56(84) bytes of data.
+64 bytes from 10.10.2.10: icmp_seq=1 ttl=63 time=0.110 ms
+
+--- 10.10.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.110/0.110/0.110/0.000 ms

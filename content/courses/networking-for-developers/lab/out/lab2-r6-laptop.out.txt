@@ -1,0 +1,16 @@
+# Lab 2 · R6 — triệu chứng sự cố B, nhìn từ laptop
+$ curl -4 -sS -m 3 -o /dev/null http://203.0.113.10/; echo "curl exit code $?"
+curl: (28) Connection timed out after 3012 milliseconds
+curl exit code 28
+$ curl -6 -s -m 3 "http://[2001:db8:d::10]/" | tail -1
+you came from 2001:db8:a:50::10 port 36574
+$ dig +time=2 +tries=1 +short labflow.test; echo "dig exit code $?"
+;; communications error to 198.51.100.1#53: timed out
+;; no servers could be reached
+dig exit code 9
+$ traceroute -n -q 1 -N 1 -w 1 -m 4 203.0.113.10
+traceroute to 203.0.113.10 (203.0.113.10), 4 hops max, 60 byte packets
+ 1  192.168.50.1  0.062 ms
+ 2  198.51.100.1  0.036 ms
+ 3  *
+ 4  *

@@ -1,0 +1,17 @@
+# Lab 2 · R1 — kế hoạch địa chỉ văn phòng LabFlow: khối 10.30.0.0/23
+$ python3 ../chia.py 10.30.0.0/23 wifi=120 servers=50 cameras=25 printers=6 vpn=60
+block 10.30.0.0/23 = 512 addresses; needs sorted largest first
+name      hosts  subnet           first host   last host    broadcast    usable
+wifi        120  10.30.0.0/25     10.30.0.1    10.30.0.126  10.30.0.127     126
+vpn          60  10.30.0.128/26   10.30.0.129  10.30.0.190  10.30.0.191      62
+servers      50  10.30.0.192/26   10.30.0.193  10.30.0.254  10.30.0.255      62
+cameras      25  10.30.1.0/27     10.30.1.1    10.30.1.30   10.30.1.31       30
+printers      6  10.30.1.32/29    10.30.1.33   10.30.1.38   10.30.1.39        6
+check: all inside 10.30.0.0/23: True · any overlap: False · used 296 of 512, next free 10.30.1.40
+$ python3 ../cidr.py 10.30.0.200/26
+address    10.30.0.200      00001010.00011110.00000000.11001000
+mask /26   255.255.255.192  11111111.11111111.11111111.11000000
+network    10.30.0.192      00001010.00011110.00000000.11000000   (address AND mask)
+broadcast  10.30.0.255      00001010.00011110.00000000.11111111   (host bits all 1)
+hosts      10.30.0.193 - 10.30.0.254   usable 62 of 64 addresses
+check      ipaddress: 10.30.0.192/26, 62 usable, 10.30.0.193 - 10.30.0.254  -> same

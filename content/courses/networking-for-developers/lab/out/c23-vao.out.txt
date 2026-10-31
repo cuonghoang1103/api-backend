@@ -1,0 +1,8 @@
+# Ch2 · 2.3 — từ máy chủ ngoài Internet: có gọi NGƯỢC vào laptop được không?
+$ nc -vz -w 3 192.168.50.10 8080
+nc: connect to 192.168.50.10 port 8080 (tcp) failed: Network is unreachable
+$ traceroute -n -q 1 -m 3 192.168.50.10
+traceroute to 192.168.50.10 (192.168.50.10), 3 hops max, 60 byte packets
+ 1  203.0.113.1  0.066 ms !N
+$ nc -vz -w 3 198.51.100.2 8080
+nc: connect to 198.51.100.2 port 8080 (tcp) failed: Connection refused

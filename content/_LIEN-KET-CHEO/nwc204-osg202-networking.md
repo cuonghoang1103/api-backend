@@ -1,0 +1,33 @@
+# Liên kết chéo Academy (NWC204 · OSG202) ↔ Networking for Developers
+
+Deep link: `/courses/<slug-khoá>/learn?lessonSlug=<slug-bài>`. Academy: NWC204 = `nwc204-computer-networking`, OSG202 = `operating-systems`. Courses: `networking-for-developers`.
+Khối `<a class="link-card lien-ket-cheo">` cuối `ml-en` và `ml-vi`, HAI CHIỀU:
+- chiều Courses → Academy: `cauNoi()` trong `content/courses/networking-for-developers/_ui.mjs` (đặt trong bài khoá);
+- chiều Academy → Courses: `sauHon()` trong `content/academy/nwc204/_lien-ket-courses.mjs` và `content/academy/osg202/_lien-ket-courses.mjs` (đặt cuối bài Academy).
+
+## Mục 0 + Chương 1 (31/10/2026)
+
+| Academy | Courses (networking-for-developers) | Giống | Courses sâu thêm |
+|---|---|---|---|
+| `nwc204-1-1-mang-la-gi-thanh-phan-to-po` | `netdev-0-8-bat-dau-tai-day` | mạng là gì, thành phần, Internet là mạng của các mạng | các cặp thuật ngữ dễ nhầm, mốc lịch sử có nguồn, lập trình viên dùng mạng vào việc gì |
+| `nwc204-3-3-lab-1-2-wireshark` | `netdev-0-1-cai-dat` | bắt gói bằng Wireshark | phòng lab Docker dựng lại được, tcpdump/tshark trong container |
+| `nwc204-14-2-web-email-dns-dhcp-chia-se-tep` | `netdev-0-2-go-dia-chi` | DNS, HTTP ở tầng ứng dụng | đo từng chặng của một request bằng curl -w |
+| `nwc204-3-2-mo-hinh-tham-chieu-va-dong-goi` | `netdev-1-1-osi-tcpip`, `netdev-1-2-dong-goi` | mô hình tầng, đóng gói | đọc một frame thật từng byte, MTU/MSS và bẫy offload |
+| `nwc204-4b-2-he-thap-luc-phan-mac-va-ipv6` | `netdev-1-0-bit-byte` | hex, MAC | UTF-8, thứ tự byte mạng, bit/s và byte/s |
+| `nwc204-6-2-bang-mac-va-cach-switch-chuyen-tiep`, `nwc204-8-2-arp-va-neighbor-discovery` | `netdev-1-3-ethernet-arp` | switch học MAC, ARP | bảng bridge Linux thật, MAC viết lại qua router, lỗi cache ARP cũ |
+| `nwc204-13-1-tang-giao-van-va-so-hieu-cong` | `netdev-1-4-cong-socket` | cổng, socket | ss trên máy thật, 127.0.0.1 với 0.0.0.0 |
+
+## Chương 2 (01/11/2026)
+
+| Academy | Courses (networking-for-developers) | Giống | Courses sâu thêm |
+|---|---|---|---|
+| `nwc204-10-1-cau-truc-dia-chi-ipv4` | `netdev-2-1-ipv4-cidr` | phần mạng/phần host, mặt nạ, AND, dải riêng | mặt nạ là quyết định của nhân (ip route get), lỗi gõ sai /16 bắt gói thật, /31 và /32, dải đặc biệt, kho địa chỉ Docker |
+| `nwc204-10-2-chia-subnet-va-vlsm` | `netdev-2-1-ipv4-cidr` | mượn bit host, VLSM lớn trước | kế hoạch văn phòng LabFlow có script kiểm (chia.py), lỗ hổng căn lề, kế hoạch không vừa |
+| `nwc204-7-2-goi-ipv6-va-bang-dinh-tuyen` | `netdev-2-2-dinh-tuyen` | máy trạm chọn giao tại chỗ hay qua gateway, đọc bảng định tuyến | bảng Linux trên bốn router của lab đang chạy, khớp tiền tố dài nhất, vòng lặp do /32 bị quên |
+| `nwc204-12-2-ping-traceroute-va-lab-2-3` | `netdev-2-2-dinh-tuyen` | traceroute dùng TTL và ICMP Time exceeded | gói thăm dò bắt bằng tshark, * * * đo bằng mtr, traceroute trong Docker Desktop |
+| `nwc204-11-1-cau-truc-dia-chi-ipv6` | `netdev-2-4-ipv6` | 128 bit, luật viết gọn, link-local, EUI-64 | bẫy viết gọn kiểm bằng thư viện, NDP bắt gói, không NAT, Happy Eyeballs đo thật |
+| `nwc204-11-2-cau-hinh-va-chia-subnet-ipv6` | `netdev-2-4-ipv6` | SLAAC/DHCPv6, solicited-node multicast, chia /48 → /64 | lab dual-stack, ba lỗi IPv6 của lập trình viên (request đầu chậm, localhost = ::1, ::ffff:) |
+| `nwc204-1-1-mang-la-gi-thanh-phan-to-po` | `netdev-2-5-bgp-internet` | Internet là mạng của các mạng do nhà mạng vận hành | AS, BGP với FRR thật, cướp tuyến và rút tuyến dựng lại, RPKI kiểm cho cuongthai.com |
+| `osg202-slide-cs6-1` (OSG202 ⭐ CS.6 — Containers 1/2) | `netdev-2-3-nat` | container có network namespace riêng | gói tin của container: bridge, -p là luật DNAT đọc từ nhân, masquerade, IP người gọi ứng dụng thấy, cổng công bố vượt ufw |
+
+Không cặp (Ch2): `netdev-2-6-lab-duong-vao-labflow` (lab chương), `netdev-2-7-quiz`. NAT (2.3) không có bài tương ứng trong NWC204 (môn không dạy NAT) — cặp với OSG202 CS.6 thay thế. SDN302 không có bài về địa chỉ/định tuyến; cặp SDN302 8.2 (production, trust proxy) để dành cho Chương 7 (proxy, X-Forwarded-For).

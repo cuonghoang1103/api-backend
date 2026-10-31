@@ -47,12 +47,22 @@ export const NET_SIMS = {
   arp: ['lan', 'gateway', 'stale'],
   socket: ['demux', 'bind', 'ephemeral'],
   waterfall: ['cold', 'warm', 'far'],
+  subnet: ['mask', 'same', 'vlsm'],
+  route: ['lookup', 'trace', 'loop'],
+  nat: ['home', 'inbound', 'cgnat'],
+  ipv6: ['addr', 'happy', 'localhost'],
+  bgp: ['announce', 'hijack', 'withdraw'],
 };
 export const NET_TOURS = {
   encap: ['encap-layers', 'encap-hop', 'encap-mtu', 'encap-start'],
   arp: ['arp-lan', 'arp-gateway', 'arp-start'],
   socket: ['socket-demux', 'socket-bind', 'socket-start'],
   waterfall: ['waterfall-phases', 'waterfall-start'],
+  subnet: ['subnet-mask', 'subnet-vlsm', 'subnet-start'],
+  route: ['route-lpm', 'route-trace', 'route-start'],
+  nat: ['nat-home', 'nat-inbound', 'nat-start'],
+  ipv6: ['ipv6-compress', 'ipv6-happy', 'ipv6-start'],
+  bgp: ['bgp-path', 'bgp-hijack', 'bgp-start'],
 };
 
 export const LAB_NS = {

@@ -8,6 +8,7 @@
  *
  *   node scripts/_kiem-lap-day-slide.mjs --deck scripts/slides-src/nfd-01-3.mjs [--nguong 0.7]
  *   node scripts/_kiem-lap-day-slide.mjs --decks 'scripts/slides-src/nfd-*.mjs'      # nhiều deck, tổng kết cuối
+ *   3. CHÂN SLIDE: đường dẫn bên trái đè lên tên chương ở giữa (tên chương dài — gặp ở Ch2, 01/11/2026).
  * Bìa (cover) bỏ qua. Thoát 1 nếu có slide lỗi, 2 nếu bộ đo tự kiểm hỏng.
  * ⚠️ Không sửa `_render-slides.mjs`: chỉ đọc khối CSS của nó (như _kiem-tran-slide.mjs) để đo cùng một bộ style.
  */
@@ -61,7 +62,14 @@ const do1 = async (body) => {
     const cao = inner.bottom - inner.top;
     const lap = kids.length ? (bottom - top) / cao : 0;
     const tranDoc = nd.scrollHeight - nd.clientHeight;
-    return { tran, lap, tranDoc };
+    // 3. CHÂN SLIDE: đường dẫn bên trái (.chan .tr) không được đè lên tên chương ở giữa (chữ trần trong .chan) — 01/11/2026
+    let chongChan = 0;
+    const chan = document.querySelector('.pg .chan'), tr = chan && chan.querySelector('.tr');
+    if (chan && tr) {
+      const tn = [...chan.childNodes].find((x) => x.nodeType === 3 && x.textContent.trim());
+      if (tn) { const rg = document.createRange(); rg.selectNodeContents(tn); chongChan = tr.getBoundingClientRect().right + 8 - rg.getBoundingClientRect().left; }
+    }
+    return { tran, lap, tranDoc, chongChan };
   });
 };
 
@@ -88,6 +96,7 @@ for (const d of decks) {
     if (r.tran.length) vande.push('TRÀN NGANG ' + r.tran.join(' · '));
     if (r.tranDoc > 2) vande.push(`TRÀN DỌC +${r.tranDoc}px`);
     if (r.lap < NGUONG) vande.push(`TRỐNG: nội dung chỉ chiếm ${Math.round(r.lap * 100)} % chiều cao`);
+    if (r.chongChan > 0) vande.push(`CHÂN SLIDE: đường dẫn đè lên tên chương ${Math.round(r.chongChan)}px — rút ngắn meta.chuong`);
     if (vande.length) xau.push(`   ${String(i + 1).padStart(3, '0')}  ${vande.join(' | ')}`);
   }
   loi += xau.length;

@@ -1,0 +1,5 @@
+# Lab 2 · R3 — bằng chứng trong router nhà: hai máy trong nhà, một địa chỉ công cộng
+$ conntrack -L -p tcp --dport 80
+conntrack v1.4.9 (conntrack-tools): 2 flow entries have been shown.
+tcp      6 119 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=57986 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=57986 [ASSURED] mark=0 use=1
+tcp      6 119 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41112 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41112 [ASSURED] mark=0 use=1

@@ -1,0 +1,20 @@
+# Ch2 · 2.3 — bên trong router nhà: luật NAT, hai phía của cùng một kết nối, và bảng conntrack
+$ iptables -t nat -S POSTROUTING
+-P POSTROUTING ACCEPT
+-A POSTROUTING -d 127.0.0.11/32 -j DOCKER_POSTROUTING
+-A POSTROUTING -o wan0 -j MASQUERADE
+$ tcpdump -n -t -q -r /tmp/lan.pcap 'tcp[tcpflags] == tcp-syn'
+reading from file /tmp/lan.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+IP 192.168.50.10.41122 > 203.0.113.10.80: tcp 0
+IP 192.168.50.10.41000 > 203.0.113.10.80: tcp 0
+IP 192.168.50.11.41000 > 203.0.113.10.80: tcp 0
+$ tcpdump -n -t -q -r /tmp/wan.pcap 'tcp[tcpflags] == tcp-syn'
+reading from file /tmp/wan.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+IP 198.51.100.2.41122 > 203.0.113.10.80: tcp 0
+IP 198.51.100.2.41000 > 203.0.113.10.80: tcp 0
+IP 198.51.100.2.4734 > 203.0.113.10.80: tcp 0
+$ conntrack -L -p tcp --dport 80
+conntrack v1.4.9 (conntrack-tools): 3 flow entries have been shown.
+tcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41122 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41122 [ASSURED] mark=0 use=1
+tcp      6 117 TIME_WAIT src=192.168.50.11 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=4734 [ASSURED] mark=0 use=1
+tcp      6 117 TIME_WAIT src=192.168.50.10 dst=203.0.113.10 sport=41000 dport=80 src=203.0.113.10 dst=198.51.100.2 sport=80 dport=41000 [ASSURED] mark=0 use=1

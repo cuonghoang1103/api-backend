@@ -1,0 +1,51 @@
+# Ch2 · 2.1 IPv4 & CIDR — máy client của lab Ch1 (10.10.1.10/24)
+$ ip -br -4 addr show eth0
+eth0@if2837      UP             10.10.1.10/24 
+$ ip route
+default via 10.10.1.1 dev eth0 
+10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 
+10.10.2.0/24 via 10.10.1.254 dev eth0 
+$ python3 cidr.py 10.10.1.10/24
+address    10.10.1.10       00001010.00001010.00000001.00001010
+mask /24   255.255.255.0    11111111.11111111.11111111.00000000
+network    10.10.1.0        00001010.00001010.00000001.00000000   (address AND mask)
+broadcast  10.10.1.255      00001010.00001010.00000001.11111111   (host bits all 1)
+hosts      10.10.1.1 - 10.10.1.254   usable 254 of 256 addresses
+check      ipaddress: 10.10.1.0/24, 254 usable, 10.10.1.1 - 10.10.1.254  -> same
+$ python3 cidr.py 10.10.1.10/16
+address    10.10.1.10       00001010.00001010.00000001.00001010
+mask /16   255.255.0.0      11111111.11111111.00000000.00000000
+network    10.10.0.0        00001010.00001010.00000000.00000000   (address AND mask)
+broadcast  10.10.255.255    00001010.00001010.11111111.11111111   (host bits all 1)
+hosts      10.10.0.1 - 10.10.255.254   usable 65534 of 65536 addresses
+check      ipaddress: 10.10.0.0/16, 65534 usable, 10.10.0.1 - 10.10.255.254  -> same
+$ python3 cidr.py 192.168.50.77/26
+address    192.168.50.77    11000000.10101000.00110010.01001101
+mask /26   255.255.255.192  11111111.11111111.11111111.11000000
+network    192.168.50.64    11000000.10101000.00110010.01000000   (address AND mask)
+broadcast  192.168.50.127   11000000.10101000.00110010.01111111   (host bits all 1)
+hosts      192.168.50.65 - 192.168.50.126   usable 62 of 64 addresses
+check      ipaddress: 192.168.50.64/26, 62 usable, 192.168.50.65 - 192.168.50.126  -> same
+$ python3 cidr.py 203.0.113.10/32
+address    203.0.113.10     11001011.00000000.01110001.00001010
+mask /32   255.255.255.255  11111111.11111111.11111111.11111111
+network    203.0.113.10     11001011.00000000.01110001.00001010   (address AND mask)
+broadcast  none             (/32: too few host bits to spare one for broadcast)
+hosts      203.0.113.10 - 203.0.113.10   usable 1 of 1 addresses
+check      ipaddress: 203.0.113.10/32, 1 usable, 203.0.113.10 - 203.0.113.10  -> same
+$ python3 cidr.py 192.0.2.0/31
+address    192.0.2.0        11000000.00000000.00000010.00000000
+mask /31   255.255.255.254  11111111.11111111.11111111.11111110
+network    192.0.2.0        11000000.00000000.00000010.00000000   (address AND mask)
+broadcast  none             (/31: too few host bits to spare one for broadcast)
+hosts      192.0.2.0 - 192.0.2.1   usable 2 of 2 addresses
+check      ipaddress: 192.0.2.0/31, 2 usable, 192.0.2.0 - 192.0.2.1  -> same
+$ ip route get 10.10.1.11
+10.10.1.11 dev eth0 src 10.10.1.10 uid 0 
+    cache 
+$ ip route get 10.10.1.200
+10.10.1.200 dev eth0 src 10.10.1.10 uid 0 
+    cache 
+$ ip route get 10.10.2.10
+10.10.2.10 via 10.10.1.254 dev eth0 src 10.10.1.10 uid 0 
+    cache 

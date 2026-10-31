@@ -1,0 +1,3 @@
+# Ch2 · 2.3 CGNAT — điện thoại 4G: địa chỉ 100.64.0.10 do nhà mạng cấp, không phải địa chỉ công cộng
+ip -br -4 addr show eth0
+curl -s http://203.0.113.10/

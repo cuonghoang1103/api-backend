@@ -1,0 +1,17 @@
+# Ch2 · 2.4 — IPv6 không có ARP: Neighbor Discovery (ICMPv6) tìm MAC của hàng xóm
+$ ping -6 -c 1 2001:db8:a:50::11
+PING 2001:db8:a:50::11 (2001:db8:a:50::11) 56 data bytes
+64 bytes from 2001:db8:a:50::11: icmp_seq=1 ttl=64 time=0.093 ms
+
+--- 2001:db8:a:50::11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.093/0.093/0.093/0.000 ms
+$ tcpdump -n -t -r /tmp/n.pcap
+reading from file /tmp/n.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+IP6 2001:db8:a:50::10 > ff02::1:ff00:11: ICMP6, neighbor solicitation, who has 2001:db8:a:50::11, length 32
+IP6 2001:db8:a:50::10 > 2001:db8:a:50::11: ICMP6, echo request, id 360, seq 1, length 64
+$ tcpdump -n -t -r /tmp/n2.pcap
+reading from file /tmp/n2.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+IP6 2001:db8:a:50::11 > 2001:db8:a:50::10: ICMP6, neighbor advertisement, tgt is 2001:db8:a:50::11, length 32
+$ ip -6 neigh show 2001:db8:a:50::11
+2001:db8:a:50::11 dev eth0 lladdr 02:00:c0:a8:32:0b REACHABLE 

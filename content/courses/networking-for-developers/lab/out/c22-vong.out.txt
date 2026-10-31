@@ -1,0 +1,20 @@
+# Ch2 · 2.2 — từ laptop: gói chạy vòng giữa dc và isp cho tới khi TTL về 0
+$ ping -c 2 203.0.113.10
+PING 203.0.113.10 (203.0.113.10) 56(84) bytes of data.
+From 198.51.100.1 icmp_seq=1 Time to live exceeded
+From 198.51.100.1 icmp_seq=2 Time to live exceeded
+
+--- 203.0.113.10 ping statistics ---
+2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 1062ms
+
+$ traceroute -n -q 1 -N 1 -m 9 203.0.113.10
+traceroute to 203.0.113.10 (203.0.113.10), 9 hops max, 60 byte packets
+ 1  192.168.50.1  0.065 ms
+ 2  198.51.100.1  0.041 ms
+ 3  192.0.2.3  0.067 ms
+ 4  198.51.100.1  0.026 ms
+ 5  192.0.2.3  0.028 ms
+ 6  198.51.100.1  0.033 ms
+ 7  192.0.2.3  0.034 ms
+ 8  198.51.100.1  0.035 ms
+ 9  192.0.2.3  0.033 ms

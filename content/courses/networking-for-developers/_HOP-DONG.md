@@ -2,6 +2,9 @@
 
 > Đọc HẾT trước khi sửa một dòng. Bài MẪU đã soạn trọn (31/10/2026): **Mục 0** (`s00-gioi-thieu.mjs` + `bai/00a…003`) và
 > **Chương 1** (`s01-tang-goi-tin.mjs` + `bai/010…016`). Chỗ nào file này không nói, làm như Chương 1.
+> **Chương 2 soạn trọn 01/11/2026** (`s02-dia-chi-dinh-tuyen.mjs` + `bai/020…026`, deck `nfd-02-1…5` + `nfd-lab-2` ở NFD/v1,
+> 5 mô phỏng mới subnet/route/nat/ipv6/bgp, Code Lab `netdev-2-*`). Bài MỞ CHƯƠNG (2.1) có khối "🎯 Chương N trong một khung —
+> học xong làm được gì + vì sao lập trình viên cần" ở đầu bài đọc và slide 2 của deck — chương sau làm y như vậy.
 
 ## 0. Khoá này là gì
 
@@ -49,6 +52,18 @@ Bẫy đã gặp: tcpdump cần `sleep 2` sau khi chạy ngầm và dừng bằn
 bridge Docker Desktop phản hồi broadcast của chính mình (ARP hiện 2 lần — `-Q in`); header HTTP có `\r` (đã lọc ở run/ra).
 ⛔ Chỉ bắt gói/quét trên lab của mình hoặc cuongthai.com. Dọn: `docker compose -f moi-truong/compose.yml -p nfd down`.
 
+**"Internet trong một hộp" (từ Ch2):** `moi-truong/internet.yml`, project `nfi`, ảnh `net-lab-inet` (`Dockerfile.inet` = net-lab + FRR +
+dnsmasq; ảnh gốc giữ nguyên ⇒ output Mục 0–Ch1 không đổi). Nhà 192.168.50.0/24 (laptop .10, phone .11, homegw .1 NAT) → ISP AS64500
+(198.51.100.1, CGNAT 100.64.0.0/24 ⇒ 198.51.100.200, resolver dnsmasq) → IX 192.0.2.0/24 (BGP thật bằng FRR) → DC AS64510 203.0.113.0/24
+(server .10 nginx trả "you came from IP port", ns .53 dnsmasq cho labflow.test) + rogue AS64511 .66. IPv6 không NAT: 2001:db8:a:50::/64,
+2001:db8:d::/64. Mọi địa chỉ "công cộng" là dải tài liệu (RFC 5737/3849/5398). Kịch bản chạy bằng `./chay.sh nfi-<máy> ch02/x.sh`.
+Bẫy đã gặp: FRR cần thêm `SYS_ADMIN` (chỉ router); cầu Docker Desktop tự masquerade địa chỉ lạ ⇒ mọi mạng nfi đặt
+`com.docker.network.bridge.enable_ip_masquerade: "false"`; `interface_name` đặt tên card (lan0/wan0/ix0…); traceroute từ container
+Docker Desktop ra Internet thật chỉ thấy hop 1 (proxy không gian người dùng) — là nội dung bài, không phải lỗi; `curl --local-port` dính
+TIME_WAIT 60 s nếu chạy lại ngay; câu hỏi DNS treo từ lúc bị cướp tuyến làm dnsmasq trả lệch ID ⇒ rút tuyến chạy TRƯỚC cướp tuyến.
+Chạy lại cả chương: `bash code/dung-output-ch2.sh` (≈2 phút; output GIỮ: c24-happy, c25-that, bộ ba c23-laptop/phone/homegw, c23-docker —
+bài trích số đo/số cổng/IP của chúng; `DO_LAI=1` để bắt lại rồi SỬA lời bài). Lời giải Lab 2: `code/ch02/lab2/chay-loi-giai.sh`.
+
 ## 3. Mỗi bài (cả EN lẫn VI đầy đủ ý)
 
 `${G}` (walk slide) ở đầu → `<div class="ml-en">` eyebrow · h2 · lead (câu hỏi bài trả lời) · các h3 giảng + `run()` output thật
@@ -69,12 +84,16 @@ khối mã/bảng/hình, tràn dọc, nội dung < 70 % chiều cao). `lamDeck` 
 cho vừa khung) — slide vẫn trống thì THÊM nội dung có ích (bảng, bước, hình), đừng hạ ngưỡng. Output dài: `ra(…, { gay, cut,
 boLenh })` (lệnh dài tự gãy dòng ở dấu cách bằng ` \`; `boLenh` = chỉ output). Rồi ghép ảnh 3×3 và MỞ xem từng tấm. Deck đã đẩy mà sửa ⇒ prefix kế tiếp (đang là NFD/v2 cho cả 10 deck Mục 0–Ch1) + ghi `VER` trong `_slides.mjs`. KHÔNG GET ảnh
 media.cuongthai.com trước khi đẩy.
+Bộ kiểm còn bắt **chân slide đè nhau** (01/11/2026): `meta.chuong` dài thì tên chương ở giữa đè lên đường dẫn bên trái — giữ ≤ ~31 ký tự
+(Ch2 dùng "Chapter 2 — IP, routing and NAT"). Sơ đồ "Internet trong một hộp" dùng chung: `scripts/slides-src/_nfd-inet.mjs › inetTopo()`.
 
 ## 5. Mô phỏng `/net-lab`
 
 `frontend/src/components/net-lab/` (registry, *Sim.tsx, engine + test), tour `labs/tour/tours-net.ts`, danh sách nội dung
 `content/_labs.mjs` (NET_SIMS/NET_TOURS — PHẢI khớp `labs/registry.test.ts`). Có sẵn: encap (http/hop/mtu), arp (lan/gateway/stale),
-socket (demux/bind/ephemeral), waterfall (cold/warm/far). Chương sau cần mô phỏng mới (vd dns-trace, tcp-window, tls13, h2-hol,
+socket (demux/bind/ephemeral), waterfall (cold/warm/far); Ch2: subnet (mask/same/vlsm), route (lookup/trace/loop), nat (home/inbound/cgnat),
+ipv6 (addr/happy/localhost), bgp (announce/hijack/withdraw) — dữ liệu thật ở `engine/capture2.ts` (có test đối chiếu từng dòng với .out.txt),
+tour `labs/tour/tours-net2.ts`. Chương sau cần mô phỏng mới (vd dns-trace, tcp-window, tls13, h2-hol,
 nat-table, lb) ⇒ dựng theo cùng khuôn + tour + WhereBox, số tính ra phải ghi nhãn "tính ra".
 
 ## 6. Quiz, lab chương, Code Lab

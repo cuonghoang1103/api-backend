@@ -18,6 +18,7 @@
  * ⚠️ File này CHỈ chứa chương 7. Đừng sửa NWC204.mjs ở đây.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch07', {
   code: 'NWC204',
@@ -920,6 +921,7 @@ L    192.168.1.1/32   directly connected, Gi0/1</code></pre>
 <li>★ Giải thích cho một người chưa từng dùng Linux vì sao <code>ip route get 8.8.8.8</code> là câu trả lời tốt hơn cho câu hỏi "gói này đi đâu?" so với việc đọc <code>ip route</code>. Trong câu trả lời phải dùng chữ "luật".</li>
 </ul>`,
     ),
+    sauHon({ bai: 'netdev-2-2-dinh-tuyen', so: '2.2', ten: ['Routing tables, gateways and traceroute', 'Bảng định tuyến, gateway và traceroute'], them: ['Linux routing tables read on four routers of a running lab, longest prefix match decided live, and a routing loop caused by a forgotten /32', 'bảng định tuyến Linux đọc trên bốn router của một lab đang chạy, khớp tiền tố dài nhất quyết định trực tiếp, và một vòng lặp định tuyến do một /32 bị quên'] }),
   ].join('\n'),
 };
 

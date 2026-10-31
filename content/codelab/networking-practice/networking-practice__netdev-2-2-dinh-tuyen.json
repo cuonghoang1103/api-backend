@@ -1,0 +1,1470 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-2-2-dinh-tuyen",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-2-2-dinh-tuyen"
+  },
+  "exercises": [
+    {
+      "title": "Routing 1 — Read a routing table column by column",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "routing table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output from the \"Internet in a box\" lab (lab/out/c22-laptop, c22-routers, c22-isp):<pre># laptop (home)\n$ ip route\ndefault via 192.168.50.1 dev eth0\n192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.168.50.1 dev eth0 src 192.168.50.10 uid 0\n\n# homegw (home router)\n$ ip route\ndefault via 198.51.100.1 dev wan0\n192.168.50.0/24 dev lan0 proto kernel scope link src 192.168.50.1\n198.51.100.0/24 dev wan0 proto kernel scope link src 198.51.100.2\n\n# isp\n$ ip route\n100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\n192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\n198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\n$ ip route get 8.8.8.8\nRTNETLINK answers: Network is unreachable</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật từ lab \"Internet trong một hộp\" (lab/out/c22-laptop, c22-routers, c22-isp):<pre># laptop (ở nhà)\n$ ip route\ndefault via 192.168.50.1 dev eth0\n192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.168.50.1 dev eth0 src 192.168.50.10 uid 0\n\n# homegw (router nhà)\n$ ip route\ndefault via 198.51.100.1 dev wan0\n192.168.50.0/24 dev lan0 proto kernel scope link src 192.168.50.1\n198.51.100.0/24 dev wan0 proto kernel scope link src 198.51.100.2\n\n# isp\n$ ip route\n100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\n192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\n198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\n$ ip route get 8.8.8.8\nRTNETLINK answers: Network is unreachable</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"via X\" = hand it to router X; no \"via\" = the destination is on that cable.|||\"via X\" = trao cho router X; không có \"via\" = đích ở ngay trên dây đó.",
+        "proto kernel = made from an interface address; proto bgp = learned from a neighbour network.|||proto kernel = dựng từ địa chỉ của card; proto bgp = học từ một mạng hàng xóm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 1 — Read a routing table column by column\n\nAnswer in the answer panel (no code needed).\n\n1. On the laptop, \"default via 192.168.50.1 dev eth0\" means …Trên laptop, \"default via 192.168.50.1 dev eth0\" nghĩa là …\n2. Who wrote \"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"?Ai viết dòng \"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"?\n3. The laptop sends both 203.0.113.10 and 8.8.8.8 \"via 192.168.50.1\". What does it know about the path after that?Laptop gửi cả 203.0.113.10 và 8.8.8.8 \"via 192.168.50.1\". Nó biết gì về đường đi sau đó?\n4. The ISP router answers \"Network is unreachable\" for 8.8.8.8 at once. Why?Router isp trả lời ngay \"Network is unreachable\" cho 8.8.8.8. Vì sao?\n5. Where does the ISP's line \"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\" come from?Dòng \"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\" của isp từ đâu ra?\n6. The home router's table has two connected networks and \"default via 198.51.100.1 dev wan0\". 198.51.100.1 is …Bảng của router nhà có hai mạng nối trực tiếp và \"default via 198.51.100.1 dev wan0\". 198.51.100.1 là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 1 — Read a routing table column by column — answer key\n\n1. On the laptop, \"default via 192.168.50.1 dev eth0\" means …Trên laptop, \"default via 192.168.50.1 dev eth0\" nghĩa là …\n   Answer: a) anything no other line matches goes to 192.168.50.1 out of eth0\n   default = 0.0.0.0/0, the shortest possible prefix: it matches everything, so it is used only when no more specific line matches. 192.168.50.1 is the next hop — the home router.VI: default = 0.0.0.0/0, prefix ngắn nhất có thể: khớp mọi thứ, nên chỉ được dùng khi không có dòng cụ thể hơn khớp. 192.168.50.1 là chặng kế — router nhà.\n\n2. Who wrote \"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"?Ai viết dòng \"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"?\n   Answer: d) The kernel, from the address and mask of eth0 (a connected route)\n   proto kernel scope link = directly connected, created automatically when 192.168.50.10/24 was set. No \"via\": deliver directly. src = the source address used for this route.VI: proto kernel scope link = nối trực tiếp, tự tạo khi đặt 192.168.50.10/24. Không có \"via\": giao thẳng. src = địa chỉ nguồn dùng cho tuyến này.\n\n3. The laptop sends both 203.0.113.10 and 8.8.8.8 \"via 192.168.50.1\". What does it know about the path after that?Laptop gửi cả 203.0.113.10 và 8.8.8.8 \"via 192.168.50.1\". Nó biết gì về đường đi sau đó?\n   Answer: d) Nothing — each machine only chooses the next hop\n   IP routing is hop by hop: every router makes its own local decision with its own table. Nobody plans the whole path.VI: Định tuyến IP đi từng chặng: mỗi router tự quyết bằng bảng của chính nó. Không ai lên kế hoạch cả đường đi.\n\n4. The ISP router answers \"Network is unreachable\" for 8.8.8.8 at once. Why?Router isp trả lời ngay \"Network is unreachable\" cho 8.8.8.8. Vì sao?\n   Answer: b) It has no default route, and no line in its table covers 8.8.8.8\n   Core routers on the Internet do not \"pass it on to someone else\": they must know every network. In the lab nobody announces a range containing 8.8.8.8, so there is simply no line.VI: Router lõi của Internet không \"đẩy cho người khác\": chúng phải biết mọi mạng. Trong lab không ai quảng bá một dải chứa 8.8.8.8, nên đơn giản là không có dòng nào.\n\n5. Where does the ISP's line \"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\" come from?Dòng \"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\" của isp từ đâu ra?\n   Answer: c) The router software learned it from a neighbour with BGP and put it in the kernel\n   proto bgp: FRR received \"203.0.113.0/24 is reachable through me\" from the datacenter (192.0.2.3) and installed the best route into the kernel — lesson 2.5.VI: proto bgp: FRR nhận \"203.0.113.0/24 tới được qua tôi\" từ trung tâm dữ liệu (192.0.2.3) và cài tuyến tốt nhất vào nhân — bài 2.5.\n\n6. The home router's table has two connected networks and \"default via 198.51.100.1 dev wan0\". 198.51.100.1 is …Bảng của router nhà có hai mạng nối trực tiếp và \"default via 198.51.100.1 dev wan0\". 198.51.100.1 là …\n   Answer: d) the ISP's router, the next hop on the way out of the house\n   wan0 has 198.51.100.2/24; its neighbour 198.51.100.1 on that link is the ISP. The house knows nothing else: everything that is not 192.168.50.0/24 or 198.51.100.0/24 goes to the ISP.VI: wan0 có 198.51.100.2/24; hàng xóm 198.51.100.1 trên đường đó là isp. Ngôi nhà không biết gì khác: mọi thứ không thuộc 192.168.50.0/24 hay 198.51.100.0/24 đều đi tới isp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> anything no other line matches goes to 192.168.50.1 out of eth0</p><p>default = 0.0.0.0/0, the shortest possible prefix: it matches everything, so it is used only when no more specific line matches. 192.168.50.1 is the next hop — the home router.</p><p><i>VI: default = 0.0.0.0/0, prefix ngắn nhất có thể: khớp mọi thứ, nên chỉ được dùng khi không có dòng cụ thể hơn khớp. 192.168.50.1 là chặng kế — router nhà.</i></p></li><li><p><b>d)</b> The kernel, from the address and mask of eth0 (a connected route)</p><p>proto kernel scope link = directly connected, created automatically when 192.168.50.10/24 was set. No \"via\": deliver directly. src = the source address used for this route.</p><p><i>VI: proto kernel scope link = nối trực tiếp, tự tạo khi đặt 192.168.50.10/24. Không có \"via\": giao thẳng. src = địa chỉ nguồn dùng cho tuyến này.</i></p></li><li><p><b>d)</b> Nothing — each machine only chooses the next hop</p><p>IP routing is hop by hop: every router makes its own local decision with its own table. Nobody plans the whole path.</p><p><i>VI: Định tuyến IP đi từng chặng: mỗi router tự quyết bằng bảng của chính nó. Không ai lên kế hoạch cả đường đi.</i></p></li><li><p><b>b)</b> It has no default route, and no line in its table covers 8.8.8.8</p><p>Core routers on the Internet do not \"pass it on to someone else\": they must know every network. In the lab nobody announces a range containing 8.8.8.8, so there is simply no line.</p><p><i>VI: Router lõi của Internet không \"đẩy cho người khác\": chúng phải biết mọi mạng. Trong lab không ai quảng bá một dải chứa 8.8.8.8, nên đơn giản là không có dòng nào.</i></p></li><li><p><b>c)</b> The router software learned it from a neighbour with BGP and put it in the kernel</p><p>proto bgp: FRR received \"203.0.113.0/24 is reachable through me\" from the datacenter (192.0.2.3) and installed the best route into the kernel — lesson 2.5.</p><p><i>VI: proto bgp: FRR nhận \"203.0.113.0/24 tới được qua tôi\" từ trung tâm dữ liệu (192.0.2.3) và cài tuyến tốt nhất vào nhân — bài 2.5.</i></p></li><li><p><b>d)</b> the ISP's router, the next hop on the way out of the house</p><p>wan0 has 198.51.100.2/24; its neighbour 198.51.100.1 on that link is the ISP. The house knows nothing else: everything that is not 192.168.50.0/24 or 198.51.100.0/24 goes to the ISP.</p><p><i>VI: wan0 có 198.51.100.2/24; hàng xóm 198.51.100.1 trên đường đó là isp. Ngôi nhà không biết gì khác: mọi thứ không thuộc 192.168.50.0/24 hay 198.51.100.0/24 đều đi tới isp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>On the laptop, \"default via 192.168.50.1 dev eth0\" means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên laptop, \"default via 192.168.50.1 dev eth0\" nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "anything no other line matches goes to 192.168.50.1 out of eth0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every packet, without exception, goes to 192.168.50.1 first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the laptop is the default router for the network 192.168.50.0/24"
+              },
+              {
+                "ma": "d",
+                "noiDung": "192.168.50.1 is the DNS server the laptop asks for every name"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>default = 0.0.0.0/0, the shortest possible prefix: it matches everything, so it is used only when no more specific line matches. 192.168.50.1 is the next hop — the home router.</p><p><i>VI: default = 0.0.0.0/0, prefix ngắn nhất có thể: khớp mọi thứ, nên chỉ được dùng khi không có dòng cụ thể hơn khớp. 192.168.50.1 là chặng kế — router nhà.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Who wrote \"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai viết dòng \"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The administrator, who typed it after setting the address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "BGP, which learned it from the ISP's routers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The home router, which sent it to the laptop with DHCP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The kernel, from the address and mask of eth0 (a connected route)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>proto kernel scope link = directly connected, created automatically when 192.168.50.10/24 was set. No \"via\": deliver directly. src = the source address used for this route.</p><p><i>VI: proto kernel scope link = nối trực tiếp, tự tạo khi đặt 192.168.50.10/24. Không có \"via\": giao thẳng. src = địa chỉ nguồn dùng cho tuyến này.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The laptop sends both 203.0.113.10 and 8.8.8.8 \"via 192.168.50.1\". What does it know about the path after that?</p><p style=\"opacity:.75;font-size:.92em\"><i>Laptop gửi cả 203.0.113.10 và 8.8.8.8 \"via 192.168.50.1\". Nó biết gì về đường đi sau đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The full list of routers, sent back by the home router"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The path that traceroute measured the last time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the last router before each destination"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — each machine only chooses the next hop"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>IP routing is hop by hop: every router makes its own local decision with its own table. Nobody plans the whole path.</p><p><i>VI: Định tuyến IP đi từng chặng: mỗi router tự quyết bằng bảng của chính nó. Không ai lên kế hoạch cả đường đi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The ISP router answers \"Network is unreachable\" for 8.8.8.8 at once. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Router isp trả lời ngay \"Network is unreachable\" cho 8.8.8.8. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Google blocks traceroute and ping from unknown ISPs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It has no default route, and no line in its table covers 8.8.8.8"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Its link to the Internet is down, so every lookup fails"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The laptop's NAT has not created a conntrack entry yet"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Core routers on the Internet do not \"pass it on to someone else\": they must know every network. In the lab nobody announces a range containing 8.8.8.8, so there is simply no line.</p><p><i>VI: Router lõi của Internet không \"đẩy cho người khác\": chúng phải biết mọi mạng. Trong lab không ai quảng bá một dải chứa 8.8.8.8, nên đơn giản là không có dòng nào.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Where does the ISP's line \"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\" come from?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng \"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\" của isp từ đâu ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The kernel computed it from the address and mask of ix0"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An administrator typed it as a temporary test route"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The router software learned it from a neighbour with BGP and put it in the kernel"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DHCP gave it to the router when the ix0 link came up"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>proto bgp: FRR received \"203.0.113.0/24 is reachable through me\" from the datacenter (192.0.2.3) and installed the best route into the kernel — lesson 2.5.</p><p><i>VI: proto bgp: FRR nhận \"203.0.113.0/24 tới được qua tôi\" từ trung tâm dữ liệu (192.0.2.3) và cài tuyến tốt nhất vào nhân — bài 2.5.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>The home router's table has two connected networks and \"default via 198.51.100.1 dev wan0\". 198.51.100.1 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng của router nhà có hai mạng nối trực tiếp và \"default via 198.51.100.1 dev wan0\". 198.51.100.1 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "LabFlow's server, the final destination of the request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the home router's own public address on the WAN side"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the laptop, which the router uses as a gateway"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the ISP's router, the next hop on the way out of the house"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>wan0 has 198.51.100.2/24; its neighbour 198.51.100.1 on that link is the ISP. The house knows nothing else: everything that is not 192.168.50.0/24 or 198.51.100.0/24 goes to the ISP.</p><p><i>VI: wan0 có 198.51.100.2/24; hàng xóm 198.51.100.1 trên đường đó là isp. Ngôi nhà không biết gì khác: mọi thứ không thuộc 192.168.50.0/24 hay 198.51.100.0/24 đều đi tới isp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the first router knows (or chooses) the whole path.|||Nghĩ router đầu tiên biết (hoặc chọn) cả đường đi."
+        },
+        {
+          "loi": "Expecting every router to have a default route.|||Tưởng router nào cũng có tuyến mặc định."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "routing table",
+          "vi": "bảng định tuyến"
+        },
+        {
+          "en": "next hop",
+          "vi": "chặng kế"
+        },
+        {
+          "en": "connected route",
+          "vi": "tuyến nối trực tiếp",
+          "giaiThich": "Tuyến nhân tự tạo từ địa chỉ + mặt nạ của card."
+        },
+        {
+          "en": "default route",
+          "vi": "tuyến mặc định",
+          "giaiThich": "0.0.0.0/0, khớp mọi thứ."
+        }
+      ]
+    },
+    {
+      "title": "Routing 2 — Longest prefix match by hand",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "longest prefix match"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Among all lines that match a destination, the one with the <b>longest prefix</b> wins (equal length ⇒ lower metric). Note that <code>ip route</code> prints a /32 without \"/32\". Real tables:<pre># laptop\ndefault via 192.168.50.1 dev eth0\n192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\n# isp (normal)\n100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\n192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\n198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\n# dc, after someone added a test route and forgot it (c22-dc-vong)\n203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\n203.0.113.10 via 192.0.2.1 dev ix0\n# dc, Lab 2 incident A (lab2-r5-dc)\n203.0.113.0/26 via 192.0.2.1 dev ix0\n203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\n# isp, while AS64511 announces a /25 (c25-isp-cuop)\n203.0.113.0/25 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20</pre>For each row choose the winning line and the next hop. Row 9 was not measured in the lab: apply the rule.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong mọi dòng khớp một đích, dòng có <b>prefix dài nhất</b> thắng (dài bằng nhau ⇒ metric nhỏ hơn). Chú ý <code>ip route</code> in một /32 mà không ghi \"/32\". Các bảng thật:<pre># laptop\ndefault via 192.168.50.1 dev eth0\n192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\n# isp (bình thường)\n100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\n192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\n198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\n# dc, sau khi ai đó thêm tuyến thử rồi quên (c22-dc-vong)\n203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\n203.0.113.10 via 192.0.2.1 dev ix0\n# dc, sự cố A của Lab 2 (lab2-r5-dc)\n203.0.113.0/26 via 192.0.2.1 dev ix0\n203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\n# isp, lúc AS64511 quảng bá một /25 (c25-isp-cuop)\n203.0.113.0/25 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20</pre>Với mỗi dòng, chọn tuyến thắng và chặng kế. Dòng 9 không đo trong lab: hãy áp luật.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "List every line that matches, then keep the longest. default always matches with length 0.|||Liệt kê mọi dòng khớp, rồi giữ dòng dài nhất. default luôn khớp với độ dài 0.",
+        "/25 = .0–.127, /26 = .0–.63 of the 203.0.113 network.|||/25 = .0–.127, /26 = .0–.63 của mạng 203.0.113."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 2 — Longest prefix match by hand\n\nAnswer in the answer panel (no code needed).\n\n1. Which line wins?Dòng nào thắng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 2 — Longest prefix match by hand — answer key\n\n1. Which line wins?Dòng nào thắng?\n   - r1.t: 192.168.50.0/24\n   - r1.c: directly (no via)\n   - r2.t: default (0.0.0.0/0)\n   - r2.c: 192.168.50.1\n   - r3.t: 203.0.113.0/24\n   - r3.c: 192.0.2.3\n   - r4.t: 100.64.0.0/24\n   - r4.c: directly (no via)\n   - r5.t: no line matches\n   - r5.c: nowhere: Network is unreachable\n   - r6.t: 203.0.113.10/32\n   - r6.c: 192.0.2.1\n   - r7.t: 203.0.113.0/24\n   - r7.c: directly (no via)\n   - r8.t: 203.0.113.0/25\n   - r8.c: 192.0.2.66\n   - r9.t: 203.0.113.0/24\n   - r9.c: 192.0.2.3\n   Rows 1–8 are confirmed by ip route get in the lab: laptop → 192.168.50.11 dev eth0 src 192.168.50.10 uid 0; isp → 203.0.113.200 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0; dc (forgotten /32) → 203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0; dc (incident A) → 203.0.113.100 dev dc0 src 203.0.113.1 uid 0; isp (hijack) → 203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0. The /32 and the /25 win because they are longer than the /24, whatever they say. The /26 covers only .0–.63, so .100 still uses the connected /24; the hijacker's /25 covers .0–.127, so .200 still goes to the datacenter.VI: Dòng 1–8 đã được ip route get xác nhận trong lab: laptop → 192.168.50.11 dev eth0 src 192.168.50.10 uid 0; isp → 203.0.113.200 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0; dc (quên /32) → 203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0; dc (sự cố A) → 203.0.113.100 dev dc0 src 203.0.113.1 uid 0; isp (bị cướp) → 203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0. /32 và /25 thắng vì dài hơn /24, bất kể chúng nói gì. /26 chỉ phủ .0–.63, nên .100 vẫn dùng /24 nối trực tiếp; /25 của kẻ cướp phủ .0–.127, nên .200 vẫn đi về trung tâm dữ liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Rows 1–8 are confirmed by ip route get in the lab: laptop → 192.168.50.11 dev eth0 src 192.168.50.10 uid 0; isp → 203.0.113.200 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0; dc (forgotten /32) → 203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0; dc (incident A) → 203.0.113.100 dev dc0 src 203.0.113.1 uid 0; isp (hijack) → 203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0. The /32 and the /25 win because they are longer than the /24, whatever they say. The /26 covers only .0–.63, so .100 still uses the connected /24; the hijacker's /25 covers .0–.127, so .200 still goes to the datacenter.</p><p><i>VI: Dòng 1–8 đã được ip route get xác nhận trong lab: laptop → 192.168.50.11 dev eth0 src 192.168.50.10 uid 0; isp → 203.0.113.200 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0; dc (quên /32) → 203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0; dc (sự cố A) → 203.0.113.100 dev dc0 src 203.0.113.1 uid 0; isp (bị cướp) → 203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0. /32 và /25 thắng vì dài hơn /24, bất kể chúng nói gì. /26 chỉ phủ .0–.63, nên .100 vẫn dùng /24 nối trực tiếp; /25 của kẻ cướp phủ .0–.127, nên .200 vẫn đi về trung tâm dữ liệu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Which line wins?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng nào thắng?</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Router → destination"
+              },
+              {
+                "ma": "t",
+                "ten": "Winning line",
+                "luaChon": [
+                  "default (0.0.0.0/0)",
+                  "192.168.50.0/24",
+                  "100.64.0.0/24",
+                  "198.18.0.0/24",
+                  "203.0.113.0/24",
+                  "203.0.113.0/25",
+                  "203.0.113.0/26",
+                  "203.0.113.10/32",
+                  "no line matches"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "Next hop",
+                "luaChon": [
+                  "directly (no via)",
+                  "192.168.50.1",
+                  "198.51.100.1",
+                  "192.0.2.1",
+                  "192.0.2.3",
+                  "192.0.2.66",
+                  "nowhere: Network is unreachable"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "1. laptop → 192.168.50.11 (the phone)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "2. laptop → 8.8.8.8"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "3. isp → 203.0.113.200"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "4. isp → 100.64.0.10 (the 4G phone)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "5. isp → 8.8.8.8"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "6. dc (forgotten /32) → 203.0.113.10"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "7. dc (incident A) → 203.0.113.100"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "8. isp (hijack) → 203.0.113.10"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "x": "9. isp (hijack) → 203.0.113.200 — rule, not measured"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "192.168.50.0/24",
+              "r1.c": "directly (no via)",
+              "r2.t": "default (0.0.0.0/0)",
+              "r2.c": "192.168.50.1",
+              "r3.t": "203.0.113.0/24",
+              "r3.c": "192.0.2.3",
+              "r4.t": "100.64.0.0/24",
+              "r4.c": "directly (no via)",
+              "r5.t": "no line matches",
+              "r5.c": "nowhere: Network is unreachable",
+              "r6.t": "203.0.113.10/32",
+              "r6.c": "192.0.2.1",
+              "r7.t": "203.0.113.0/24",
+              "r7.c": "directly (no via)",
+              "r8.t": "203.0.113.0/25",
+              "r8.c": "192.0.2.66",
+              "r9.t": "203.0.113.0/24",
+              "r9.c": "192.0.2.3"
+            },
+            "giaiThich": "<p>Rows 1–8 are confirmed by ip route get in the lab: laptop → 192.168.50.11 dev eth0 src 192.168.50.10 uid 0; isp → 203.0.113.200 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0; dc (forgotten /32) → 203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0; dc (incident A) → 203.0.113.100 dev dc0 src 203.0.113.1 uid 0; isp (hijack) → 203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0. The /32 and the /25 win because they are longer than the /24, whatever they say. The /26 covers only .0–.63, so .100 still uses the connected /24; the hijacker's /25 covers .0–.127, so .200 still goes to the datacenter.</p><p><i>VI: Dòng 1–8 đã được ip route get xác nhận trong lab: laptop → 192.168.50.11 dev eth0 src 192.168.50.10 uid 0; isp → 203.0.113.200 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0; dc (quên /32) → 203.0.113.10 via 192.0.2.1 dev ix0 src 192.0.2.3 uid 0; dc (sự cố A) → 203.0.113.100 dev dc0 src 203.0.113.1 uid 0; isp (bị cướp) → 203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0. /32 và /25 thắng vì dài hơn /24, bất kể chúng nói gì. /26 chỉ phủ .0–.63, nên .100 vẫn dùng /24 nối trực tiếp; /25 của kẻ cướp phủ .0–.127, nên .200 vẫn đi về trung tâm dữ liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the first matching line of the table instead of the longest.|||Lấy dòng khớp đầu tiên của bảng thay vì dòng dài nhất."
+        },
+        {
+          "loi": "Reading \"203.0.113.10 via 192.0.2.1\" as a /24 because no prefix is printed — it is a /32.|||Đọc \"203.0.113.10 via 192.0.2.1\" thành /24 vì không in prefix — nó là /32."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "longest prefix match",
+          "vi": "khớp tiền tố dài nhất"
+        },
+        {
+          "en": "more specific",
+          "vi": "cụ thể hơn",
+          "giaiThich": "Prefix dài hơn, phủ ít địa chỉ hơn."
+        },
+        {
+          "en": "metric",
+          "vi": "chỉ số ưu tiên",
+          "giaiThich": "Nhỏ hơn thì được ưu tiên khi prefix dài bằng nhau."
+        }
+      ]
+    },
+    {
+      "title": "Routing 3 — TTL, Time exceeded and how traceroute works",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "TTL",
+        "traceroute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>traceroute from the laptop to LabFlow, captured with tshark (columns: source, destination, IP TTL, info — lab/out/c22-trace):<pre>$ traceroute -n 203.0.113.10\ntraceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.591 ms  0.509 ms  0.495 ms\n 2  198.51.100.1  0.483 ms  0.409 ms  0.388 ms\n 3  192.0.2.3  0.364 ms  0.329 ms  0.308 ms\n 4  203.0.113.10  0.279 ms  0.199 ms  0.160 ms\n\n$ tshark … (one probe per TTL: traceroute -n -q 1 -N 1)\n192.168.50.10\t203.0.113.10\t1\t53040 → 33434 Len=32\n192.168.50.1\t192.168.50.10\t64\tTime-to-live exceeded (Time to live exceeded in transit)\n192.168.50.10\t203.0.113.10\t2\t52581 → 33435 Len=32\n198.51.100.1\t192.168.50.10\t63\tTime-to-live exceeded (Time to live exceeded in transit)\n192.168.50.10\t203.0.113.10\t3\t47619 → 33436 Len=32\n192.0.2.3\t192.168.50.10\t62\tTime-to-live exceeded (Time to live exceeded in transit)\n192.168.50.10\t203.0.113.10\t4\t43503 → 33437 Len=32\n203.0.113.10\t192.168.50.10\t61\tDestination unreachable (Port unreachable)</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>traceroute từ laptop tới LabFlow, bắt gói bằng tshark (cột: nguồn, đích, TTL của IP, thông tin — lab/out/c22-trace):<pre>$ traceroute -n 203.0.113.10\ntraceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.591 ms  0.509 ms  0.495 ms\n 2  198.51.100.1  0.483 ms  0.409 ms  0.388 ms\n 3  192.0.2.3  0.364 ms  0.329 ms  0.308 ms\n 4  203.0.113.10  0.279 ms  0.199 ms  0.160 ms\n\n$ tshark … (mỗi TTL một gói thử: traceroute -n -q 1 -N 1)\n192.168.50.10\t203.0.113.10\t1\t53040 → 33434 Len=32\n192.168.50.1\t192.168.50.10\t64\tTime-to-live exceeded (Time to live exceeded in transit)\n192.168.50.10\t203.0.113.10\t2\t52581 → 33435 Len=32\n198.51.100.1\t192.168.50.10\t63\tTime-to-live exceeded (Time to live exceeded in transit)\n192.168.50.10\t203.0.113.10\t3\t47619 → 33436 Len=32\n192.0.2.3\t192.168.50.10\t62\tTime-to-live exceeded (Time to live exceeded in transit)\n192.168.50.10\t203.0.113.10\t4\t43503 → 33437 Len=32\n203.0.113.10\t192.168.50.10\t61\tDestination unreachable (Port unreachable)</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the capture in pairs: probe with TTL n → who answered.|||Đọc bản bắt theo cặp: gói thử TTL n → ai trả lời.",
+        "\"Time exceeded\" comes from a router on the way; \"Port unreachable\" comes from the destination itself.|||\"Time exceeded\" đến từ một router trên đường; \"Port unreachable\" đến từ chính đích."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 3 — TTL, Time exceeded and how traceroute works\n\nAnswer in the answer panel (no code needed).\n\n1. The probe with TTL 1 is answered by 192.168.50.1 with \"Time-to-live exceeded\". Why that router?Gói thử TTL 1 được 192.168.50.1 trả lời \"Time-to-live exceeded\". Vì sao là router đó?\n2. The TTL 4 probe gets \"Port unreachable\" from 203.0.113.10. What does traceroute conclude?Gói thử TTL 4 nhận \"Port unreachable\" từ 203.0.113.10. traceroute kết luận gì?\n3. The answers arrive with TTL 64, 63, 62, 61. What does that column tell you?Các câu trả lời về với TTL 64, 63, 62, 61. Cột đó cho biết gì?\n4. Why does IP have a TTL at all?Vì sao IP lại có TTL?\n5. A firewall on the path drops UDP, so traceroute shows only stars. What do you try?Một tường lửa trên đường vứt UDP, nên traceroute chỉ hiện dấu sao. Bạn thử gì?\n6. Each line of the first traceroute shows three times. What are they?Mỗi dòng của traceroute đầu tiên hiện ba thời gian. Chúng là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 3 — TTL, Time exceeded and how traceroute works — answer key\n\n1. The probe with TTL 1 is answered by 192.168.50.1 with \"Time-to-live exceeded\". Why that router?Gói thử TTL 1 được 192.168.50.1 trả lời \"Time-to-live exceeded\". Vì sao là router đó?\n   Answer: c) It is the first router: it subtracts 1, reaches 0, drops the probe and reports it\n   Every router subtracts 1 before forwarding; at 0 it drops the packet and sends ICMP Time exceeded to the source. TTL 1 dies at the first router, TTL 2 at the second…VI: Router nào cũng trừ 1 trước khi chuyển tiếp; về 0 thì vứt gói và gửi ICMP Time exceeded về nguồn. TTL 1 chết ở router đầu, TTL 2 ở router thứ hai…\n\n2. The TTL 4 probe gets \"Port unreachable\" from 203.0.113.10. What does traceroute conclude?Gói thử TTL 4 nhận \"Port unreachable\" từ 203.0.113.10. traceroute kết luận gì?\n   Answer: c) It has arrived: it sent UDP to an unused port on purpose, and the destination rejected it\n   Linux traceroute sends UDP to ports 33434 and up (see 33434 … 33437 in the capture). Nobody listens there, so the destination itself answers \"port unreachable\" — the signal that the last hop is the target.VI: traceroute của Linux gửi UDP tới cổng 33434 trở lên (xem 33434 … 33437 trong bản bắt). Không ai nghe ở đó, nên chính đích trả lời \"port unreachable\" — tín hiệu rằng chặng cuối là đích.\n\n3. The answers arrive with TTL 64, 63, 62, 61. What does that column tell you?Các câu trả lời về với TTL 64, 63, 62, 61. Cột đó cho biết gì?\n   Answer: b) Each reply started at 64 and crossed one more router on its way back\n   The replies are new packets with TTL 64. The one from 192.168.50.1 crossed no router (64); the server's crossed three (61).VI: Câu trả lời là gói mới với TTL 64. Câu của 192.168.50.1 không qua router nào (64); câu của server qua ba router (61).\n\n4. Why does IP have a TTL at all?Vì sao IP lại có TTL?\n   Answer: c) So a packet caught in a routing loop dies instead of circling forever\n   traceroute only re-uses the rule. The rule exists for loops — you will see one in exercise 4.VI: traceroute chỉ tận dụng luật đó. Luật tồn tại vì vòng lặp — bạn sẽ thấy một vòng ở bài 4.\n\n5. A firewall on the path drops UDP, so traceroute shows only stars. What do you try?Một tường lửa trên đường vứt UDP, nên traceroute chỉ hiện dấu sao. Bạn thử gì?\n   Answer: c) traceroute -I (ICMP echo) or -T (TCP SYN), like Windows tracert\n   Only the probe type changes; the TTL trick is the same. Windows tracert uses ICMP echo by default; -T to port 443 often passes where UDP does not.VI: Chỉ đổi loại gói thử; mẹo TTL vẫn thế. tracert của Windows dùng ICMP echo mặc định; -T tới cổng 443 thường qua được chỗ UDP bị chặn.\n\n6. Each line of the first traceroute shows three times. What are they?Mỗi dòng của traceroute đầu tiên hiện ba thời gian. Chúng là gì?\n   Answer: d) The round-trip times of three probes sent with the same TTL\n   Three probes per TTL by default (-q 3). Three different answers per line are possible too: then the path has several equal routers (load balancing).VI: Mặc định ba gói thử mỗi TTL (-q 3). Ba câu trả lời khác nhau trên một dòng cũng có thể xảy ra: khi đó đường có nhiều router ngang nhau (cân bằng tải).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> It is the first router: it subtracts 1, reaches 0, drops the probe and reports it</p><p>Every router subtracts 1 before forwarding; at 0 it drops the packet and sends ICMP Time exceeded to the source. TTL 1 dies at the first router, TTL 2 at the second…</p><p><i>VI: Router nào cũng trừ 1 trước khi chuyển tiếp; về 0 thì vứt gói và gửi ICMP Time exceeded về nguồn. TTL 1 chết ở router đầu, TTL 2 ở router thứ hai…</i></p></li><li><p><b>c)</b> It has arrived: it sent UDP to an unused port on purpose, and the destination rejected it</p><p>Linux traceroute sends UDP to ports 33434 and up (see 33434 … 33437 in the capture). Nobody listens there, so the destination itself answers \"port unreachable\" — the signal that the last hop is the target.</p><p><i>VI: traceroute của Linux gửi UDP tới cổng 33434 trở lên (xem 33434 … 33437 trong bản bắt). Không ai nghe ở đó, nên chính đích trả lời \"port unreachable\" — tín hiệu rằng chặng cuối là đích.</i></p></li><li><p><b>b)</b> Each reply started at 64 and crossed one more router on its way back</p><p>The replies are new packets with TTL 64. The one from 192.168.50.1 crossed no router (64); the server's crossed three (61).</p><p><i>VI: Câu trả lời là gói mới với TTL 64. Câu của 192.168.50.1 không qua router nào (64); câu của server qua ba router (61).</i></p></li><li><p><b>c)</b> So a packet caught in a routing loop dies instead of circling forever</p><p>traceroute only re-uses the rule. The rule exists for loops — you will see one in exercise 4.</p><p><i>VI: traceroute chỉ tận dụng luật đó. Luật tồn tại vì vòng lặp — bạn sẽ thấy một vòng ở bài 4.</i></p></li><li><p><b>c)</b> traceroute -I (ICMP echo) or -T (TCP SYN), like Windows tracert</p><p>Only the probe type changes; the TTL trick is the same. Windows tracert uses ICMP echo by default; -T to port 443 often passes where UDP does not.</p><p><i>VI: Chỉ đổi loại gói thử; mẹo TTL vẫn thế. tracert của Windows dùng ICMP echo mặc định; -T tới cổng 443 thường qua được chỗ UDP bị chặn.</i></p></li><li><p><b>d)</b> The round-trip times of three probes sent with the same TTL</p><p>Three probes per TTL by default (-q 3). Three different answers per line are possible too: then the path has several equal routers (load balancing).</p><p><i>VI: Mặc định ba gói thử mỗi TTL (-q 3). Ba câu trả lời khác nhau trên một dòng cũng có thể xảy ra: khi đó đường có nhiều router ngang nhau (cân bằng tải).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The probe with TTL 1 is answered by 192.168.50.1 with \"Time-to-live exceeded\". Why that router?</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói thử TTL 1 được 192.168.50.1 trả lời \"Time-to-live exceeded\". Vì sao là router đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is the only router that is allowed to answer ICMP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is the router closest to LabFlow, so it answers for the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is the first router: it subtracts 1, reaches 0, drops the probe and reports it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is the DNS server that the laptop uses for every name"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every router subtracts 1 before forwarding; at 0 it drops the packet and sends ICMP Time exceeded to the source. TTL 1 dies at the first router, TTL 2 at the second…</p><p><i>VI: Router nào cũng trừ 1 trước khi chuyển tiếp; về 0 thì vứt gói và gửi ICMP Time exceeded về nguồn. TTL 1 chết ở router đầu, TTL 2 ở router thứ hai…</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The TTL 4 probe gets \"Port unreachable\" from 203.0.113.10. What does traceroute conclude?</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói thử TTL 4 nhận \"Port unreachable\" từ 203.0.113.10. traceroute kết luận gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The web server is broken: port 80 refused the connection"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The route is a loop and the packet came back to the sender"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It has arrived: it sent UDP to an unused port on purpose, and the destination rejected it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A firewall on the path blocked the probe before the destination"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Linux traceroute sends UDP to ports 33434 and up (see 33434 … 33437 in the capture). Nobody listens there, so the destination itself answers \"port unreachable\" — the signal that the last hop is the target.</p><p><i>VI: traceroute của Linux gửi UDP tới cổng 33434 trở lên (xem 33434 … 33437 trong bản bắt). Không ai nghe ở đó, nên chính đích trả lời \"port unreachable\" — tín hiệu rằng chặng cuối là đích.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The answers arrive with TTL 64, 63, 62, 61. What does that column tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Các câu trả lời về với TTL 64, 63, 62, 61. Cột đó cho biết gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The routers count down how many hops are left to the destination"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each reply started at 64 and crossed one more router on its way back"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Each reply was sent four times and only the last one arrived"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The routers became slower one by one along the path"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The replies are new packets with TTL 64. The one from 192.168.50.1 crossed no router (64); the server's crossed three (61).</p><p><i>VI: Câu trả lời là gói mới với TTL 64. Câu của 192.168.50.1 không qua router nào (64); câu của server qua ba router (61).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does IP have a TTL at all?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao IP lại có TTL?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So that routers can choose the shortest path to the destination"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So that the receiver knows how old the data in the packet is"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So a packet caught in a routing loop dies instead of circling forever"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So that traceroute can measure the path of a packet"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>traceroute only re-uses the rule. The rule exists for loops — you will see one in exercise 4.</p><p><i>VI: traceroute chỉ tận dụng luật đó. Luật tồn tại vì vòng lặp — bạn sẽ thấy một vòng ở bài 4.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A firewall on the path drops UDP, so traceroute shows only stars. What do you try?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tường lửa trên đường vứt UDP, nên traceroute chỉ hiện dấu sao. Bạn thử gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing — no tool can see past a firewall"
+              },
+              {
+                "ma": "b",
+                "noiDung": "traceroute -q 1, so that only one probe is sent per hop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "traceroute -I (ICMP echo) or -T (TCP SYN), like Windows tracert"
+              },
+              {
+                "ma": "d",
+                "noiDung": "traceroute -n, so that names are not looked up"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Only the probe type changes; the TTL trick is the same. Windows tracert uses ICMP echo by default; -T to port 443 often passes where UDP does not.</p><p><i>VI: Chỉ đổi loại gói thử; mẹo TTL vẫn thế. tracert của Windows dùng ICMP echo mặc định; -T tới cổng 443 thường qua được chỗ UDP bị chặn.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Each line of the first traceroute shows three times. What are they?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi dòng của traceroute đầu tiên hiện ba thời gian. Chúng là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The time to the router, through it, and back to the laptop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The time in three units: milliseconds, microseconds, seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The minimum, average and maximum of ten probes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The round-trip times of three probes sent with the same TTL"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Three probes per TTL by default (-q 3). Three different answers per line are possible too: then the path has several equal routers (load balancing).</p><p><i>VI: Mặc định ba gói thử mỗi TTL (-q 3). Ba câu trả lời khác nhau trên một dòng cũng có thể xảy ra: khi đó đường có nhiều router ngang nhau (cân bằng tải).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking traceroute asks each router for its name or position.|||Nghĩ traceroute hỏi từng router tên hay vị trí của nó."
+        },
+        {
+          "loi": "Reading \"Port unreachable\" at the last hop as a failure of the web server.|||Đọc \"Port unreachable\" ở chặng cuối thành lỗi của web server."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TTL (time to live)",
+          "vi": "thời gian sống",
+          "giaiThich": "Bộ đếm trong header IP, mỗi router trừ 1."
+        },
+        {
+          "en": "ICMP Time exceeded",
+          "vi": "thông báo hết TTL"
+        },
+        {
+          "en": "probe",
+          "vi": "gói thử"
+        }
+      ]
+    },
+    {
+      "title": "Routing 4 — Stars, mtr and the signature of a loop",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "reading traceroute",
+        "routing loop"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Four real situations from the lab.<pre># A — the DC router is configured not to send Time exceeded (c22-sao)\n$ traceroute -n -w 1 203.0.113.10\ntraceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.048 ms  0.010 ms  0.009 ms\n 2  198.51.100.1  0.034 ms  0.017 ms  0.015 ms\n 3  * * *\n 4  203.0.113.10  0.030 ms  0.020 ms *\n$ mtr -n -r -c 10 203.0.113.10\nStart: 2026-11-01T05:12:59+0700\nHOST: laptop                      Loss%   Snt   Last   Avg  Best  Wrst StDev\n  1.|-- 192.168.50.1               0.0%    10    0.2   0.2   0.1   0.7   0.2\n  2.|-- 198.51.100.1               0.0%    10    0.1   0.2   0.1   0.3   0.1\n  3.|-- ???                       100.0    10    0.0   0.0   0.0   0.0   0.0\n  4.|-- 203.0.113.10               0.0%    10    0.4   0.2   0.1   0.4   0.1\n$ curl -s -m 3 http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 41106\n\n# B — after a forgotten route on dc (c22-vong)\n$ ping -c 2 203.0.113.10\nPING 203.0.113.10 (203.0.113.10) 56(84) bytes of data.\nFrom 198.51.100.1 icmp_seq=1 Time to live exceeded\nFrom 198.51.100.1 icmp_seq=2 Time to live exceeded\n$ traceroute -n -q 1 -N 1 -m 9 203.0.113.10\ntraceroute to 203.0.113.10 (203.0.113.10), 9 hops max, 60 byte packets\n 1  192.168.50.1  0.065 ms\n 2  198.51.100.1  0.041 ms\n 3  192.0.2.3  0.067 ms\n 4  198.51.100.1  0.026 ms\n 5  192.0.2.3  0.028 ms\n 6  198.51.100.1  0.033 ms\n 7  192.0.2.3  0.034 ms\n 8  198.51.100.1  0.035 ms\n 9  192.0.2.3  0.033 ms\n\n# C — Lab 2 incident A: dc has 203.0.113.0/26 via 192.0.2.1 (lab2-r5-laptop)\n$ traceroute -n -q 1 -N 1 -m 5 203.0.113.100\ntraceroute to 203.0.113.100 (203.0.113.100), 5 hops max, 60 byte packets\n 1  192.168.50.1  0.051 ms\n 2  198.51.100.1  0.026 ms\n 3  192.0.2.3  0.029 ms\n 4  192.0.2.3  3064.414 ms !H\n\n# D — inside a container on Docker Desktop, to the real Internet (c22-docker-desktop)\n$ traceroute -n -q 1 -w 1 -m 6 1.1.1.1\ntraceroute to 1.1.1.1 (1.1.1.1), 6 hops max, 60 byte packets\n 1  172.17.0.1  0.058 ms\n 2  *\n 3  *\n 4  *\n 5  *\n 6  *</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bốn tình huống thật trong lab.<pre># A — router dc được cấu hình không gửi Time exceeded (c22-sao)\n$ traceroute -n -w 1 203.0.113.10\ntraceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.048 ms  0.010 ms  0.009 ms\n 2  198.51.100.1  0.034 ms  0.017 ms  0.015 ms\n 3  * * *\n 4  203.0.113.10  0.030 ms  0.020 ms *\n$ mtr -n -r -c 10 203.0.113.10\nStart: 2026-11-01T05:12:59+0700\nHOST: laptop                      Loss%   Snt   Last   Avg  Best  Wrst StDev\n  1.|-- 192.168.50.1               0.0%    10    0.2   0.2   0.1   0.7   0.2\n  2.|-- 198.51.100.1               0.0%    10    0.1   0.2   0.1   0.3   0.1\n  3.|-- ???                       100.0    10    0.0   0.0   0.0   0.0   0.0\n  4.|-- 203.0.113.10               0.0%    10    0.4   0.2   0.1   0.4   0.1\n$ curl -s -m 3 http://203.0.113.10/\nLabFlow edge (server 203.0.113.10)\nyou came from 198.51.100.2 port 41106\n\n# B — sau một tuyến bị quên trên dc (c22-vong)\n$ ping -c 2 203.0.113.10\nPING 203.0.113.10 (203.0.113.10) 56(84) bytes of data.\nFrom 198.51.100.1 icmp_seq=1 Time to live exceeded\nFrom 198.51.100.1 icmp_seq=2 Time to live exceeded\n$ traceroute -n -q 1 -N 1 -m 9 203.0.113.10\ntraceroute to 203.0.113.10 (203.0.113.10), 9 hops max, 60 byte packets\n 1  192.168.50.1  0.065 ms\n 2  198.51.100.1  0.041 ms\n 3  192.0.2.3  0.067 ms\n 4  198.51.100.1  0.026 ms\n 5  192.0.2.3  0.028 ms\n 6  198.51.100.1  0.033 ms\n 7  192.0.2.3  0.034 ms\n 8  198.51.100.1  0.035 ms\n 9  192.0.2.3  0.033 ms\n\n# C — sự cố A của Lab 2: dc có 203.0.113.0/26 via 192.0.2.1 (lab2-r5-laptop)\n$ traceroute -n -q 1 -N 1 -m 5 203.0.113.100\ntraceroute to 203.0.113.100 (203.0.113.100), 5 hops max, 60 byte packets\n 1  192.168.50.1  0.051 ms\n 2  198.51.100.1  0.026 ms\n 3  192.0.2.3  0.029 ms\n 4  192.0.2.3  3064.414 ms !H\n\n# D — trong một container trên Docker Desktop, ra Internet thật (c22-docker-desktop)\n$ traceroute -n -q 1 -w 1 -m 6 1.1.1.1\ntraceroute to 1.1.1.1 (1.1.1.1), 6 hops max, 60 byte packets\n 1  172.17.0.1  0.058 ms\n 2  *\n 3  *\n 4  *\n 5  *\n 6  *</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Always look at the last hop and at the real request (curl) before blaming a middle hop.|||Luôn nhìn chặng cuối và request thật (curl) trước khi đổ lỗi cho chặng giữa.",
+        "Two addresses taking turns = loop; one address with !H or !N = an explicit \"cannot deliver\".|||Hai địa chỉ thay phiên = vòng lặp; một địa chỉ với !H hay !N = lời báo rõ \"không giao được\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 4 — Stars, mtr and the signature of a loop\n\nAnswer in the answer panel (no code needed).\n\n1. A: mtr shows 100 % loss at hop 3. A customer says \"your network is broken at hop 3\". You answer …A: mtr báo mất 100 % ở hop 3. Khách nói \"mạng của bạn hỏng ở hop 3\". Bạn trả lời …\n2. A: the last line ends with one \"*\" (0.030 ms 0.020 ms *). Most likely?A: dòng cuối kết thúc bằng một \"*\" (0.030 ms 0.020 ms *). Khả dĩ nhất?\n3. B: hops alternate 192.0.2.3, 198.51.100.1, 192.0.2.3 … and ping says \"Time to live exceeded\". This is …B: các hop luân phiên 192.0.2.3, 198.51.100.1, 192.0.2.3 … và ping báo \"Time to live exceeded\". Đây là …\n4. B: the ISP answers from 198.51.100.1, not from its IX address 192.0.2.1. Why?B: isp trả lời từ 198.51.100.1, không phải địa chỉ IX 192.0.2.1 của nó. Vì sao?\n5. C: hop 4 shows 192.0.2.3 again with \"3064.414 ms !H\". Is this the loop of incident A?C: hop 4 lại hiện 192.0.2.3 với \"3064.414 ms !H\". Đây có phải vòng lặp của sự cố A?\n6. D: inside a Docker Desktop container, traceroute to 1.1.1.1 shows 172.17.0.1 and then only stars. Conclusion?D: trong container trên Docker Desktop, traceroute tới 1.1.1.1 hiện 172.17.0.1 rồi toàn dấu sao. Kết luận?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Routing 4 — Stars, mtr and the signature of a loop — answer key\n\n1. A: mtr shows 100 % loss at hop 3. A customer says \"your network is broken at hop 3\". You answer …A: mtr báo mất 100 % ở hop 3. Khách nói \"mạng của bạn hỏng ở hop 3\". Bạn trả lời …\n   Answer: c) Hop 3 only stays silent; hop 4 has 0 % loss and the site answers\n   Packets go through hop 3 perfectly (hop 4 and curl prove it); the router just does not send Time exceeded. Loss matters only if it continues to every later hop, up to the destination.VI: Gói đi qua hop 3 hoàn hảo (hop 4 và curl chứng minh); router chỉ không gửi Time exceeded. Mất gói chỉ đáng lo khi nó kéo dài tới mọi hop sau, tới tận đích.\n\n2. A: the last line ends with one \"*\" (0.030 ms 0.020 ms *). Most likely?A: dòng cuối kết thúc bằng một \"*\" (0.030 ms 0.020 ms *). Khả dĩ nhất?\n   Answer: d) Linux rate-limits ICMP errors (about one per second per destination)\n   Three probes leave almost at once; the destination answers the first ones and the limiter swallows the next. One star with answers around it is noise, not loss.VI: Ba gói thử đi gần như cùng lúc; đích trả lời mấy gói đầu và bộ giới hạn nuốt gói sau. Một dấu sao giữa các câu trả lời là nhiễu, không phải mất gói.\n\n3. B: hops alternate 192.0.2.3, 198.51.100.1, 192.0.2.3 … and ping says \"Time to live exceeded\". This is …B: các hop luân phiên 192.0.2.3, 198.51.100.1, 192.0.2.3 … và ping báo \"Time to live exceeded\". Đây là …\n   Answer: c) a routing loop: dc and isp send the packet back and forth until TTL is 0\n   dc has 203.0.113.10/32 via 192.0.2.1 (longer than its connected /24, so it wins) and sends the packet back to the ISP; the ISP's BGP route sends it to dc again. Alternating addresses = loop.VI: dc có 203.0.113.10/32 via 192.0.2.1 (dài hơn /24 nối trực tiếp, nên thắng) và gửi gói về isp; tuyến BGP của isp lại gửi nó tới dc. Địa chỉ luân phiên = vòng lặp.\n\n4. B: the ISP answers from 198.51.100.1, not from its IX address 192.0.2.1. Why?B: isp trả lời từ 198.51.100.1, không phải địa chỉ IX 192.0.2.1 của nó. Vì sao?\n   Answer: a) A router replies from its address on the way back to the sender\n   The Time exceeded message is a new packet from the ISP to the laptop; its source is the interface it leaves by, cust0 = 198.51.100.1.VI: Thông báo Time exceeded là gói mới từ isp tới laptop; nguồn của nó là card nó đi ra, cust0 = 198.51.100.1.\n\n5. C: hop 4 shows 192.0.2.3 again with \"3064.414 ms !H\". Is this the loop of incident A?C: hop 4 lại hiện 192.0.2.3 với \"3064.414 ms !H\". Đây có phải vòng lặp của sự cố A?\n   Answer: a) No: .100 is outside the /26, dc delivers it directly, nobody has .100, so \"host unreachable\"\n   !H = ICMP host unreachable from dc, after ~3 s of ARP requests for 203.0.113.100 that nobody answered. Only .0–.63 loop in incident A (they match the /26) — including the name server .53.VI: !H = ICMP host unreachable từ dc, sau ~3 s hỏi ARP cho 203.0.113.100 mà không ai trả lời. Trong sự cố A chỉ .0–.63 bị lặp (khớp /26) — gồm cả máy chủ tên .53.\n\n6. D: inside a Docker Desktop container, traceroute to 1.1.1.1 shows 172.17.0.1 and then only stars. Conclusion?D: trong container trên Docker Desktop, traceroute tới 1.1.1.1 hiện 172.17.0.1 rồi toàn dấu sao. Kết luận?\n   Answer: c) Docker Desktop's user-space proxy does not pass the TTL trick; trace from the host instead\n   The container has a default route (172.17.0.1) and real traffic works; only the probes with small TTL are not forwarded as such. Run traceroute -n (or tracert -d) on your own computer.VI: Container có tuyến mặc định (172.17.0.1) và lưu lượng thật vẫn chạy; chỉ các gói thử TTL nhỏ không được chuyển như vậy. Chạy traceroute -n (hoặc tracert -d) trên chính máy bạn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Hop 3 only stays silent; hop 4 has 0 % loss and the site answers</p><p>Packets go through hop 3 perfectly (hop 4 and curl prove it); the router just does not send Time exceeded. Loss matters only if it continues to every later hop, up to the destination.</p><p><i>VI: Gói đi qua hop 3 hoàn hảo (hop 4 và curl chứng minh); router chỉ không gửi Time exceeded. Mất gói chỉ đáng lo khi nó kéo dài tới mọi hop sau, tới tận đích.</i></p></li><li><p><b>d)</b> Linux rate-limits ICMP errors (about one per second per destination)</p><p>Three probes leave almost at once; the destination answers the first ones and the limiter swallows the next. One star with answers around it is noise, not loss.</p><p><i>VI: Ba gói thử đi gần như cùng lúc; đích trả lời mấy gói đầu và bộ giới hạn nuốt gói sau. Một dấu sao giữa các câu trả lời là nhiễu, không phải mất gói.</i></p></li><li><p><b>c)</b> a routing loop: dc and isp send the packet back and forth until TTL is 0</p><p>dc has 203.0.113.10/32 via 192.0.2.1 (longer than its connected /24, so it wins) and sends the packet back to the ISP; the ISP's BGP route sends it to dc again. Alternating addresses = loop.</p><p><i>VI: dc có 203.0.113.10/32 via 192.0.2.1 (dài hơn /24 nối trực tiếp, nên thắng) và gửi gói về isp; tuyến BGP của isp lại gửi nó tới dc. Địa chỉ luân phiên = vòng lặp.</i></p></li><li><p><b>a)</b> A router replies from its address on the way back to the sender</p><p>The Time exceeded message is a new packet from the ISP to the laptop; its source is the interface it leaves by, cust0 = 198.51.100.1.</p><p><i>VI: Thông báo Time exceeded là gói mới từ isp tới laptop; nguồn của nó là card nó đi ra, cust0 = 198.51.100.1.</i></p></li><li><p><b>a)</b> No: .100 is outside the /26, dc delivers it directly, nobody has .100, so \"host unreachable\"</p><p>!H = ICMP host unreachable from dc, after ~3 s of ARP requests for 203.0.113.100 that nobody answered. Only .0–.63 loop in incident A (they match the /26) — including the name server .53.</p><p><i>VI: !H = ICMP host unreachable từ dc, sau ~3 s hỏi ARP cho 203.0.113.100 mà không ai trả lời. Trong sự cố A chỉ .0–.63 bị lặp (khớp /26) — gồm cả máy chủ tên .53.</i></p></li><li><p><b>c)</b> Docker Desktop's user-space proxy does not pass the TTL trick; trace from the host instead</p><p>The container has a default route (172.17.0.1) and real traffic works; only the probes with small TTL are not forwarded as such. Run traceroute -n (or tracert -d) on your own computer.</p><p><i>VI: Container có tuyến mặc định (172.17.0.1) và lưu lượng thật vẫn chạy; chỉ các gói thử TTL nhỏ không được chuyển như vậy. Chạy traceroute -n (hoặc tracert -d) trên chính máy bạn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A: mtr shows 100 % loss at hop 3. A customer says \"your network is broken at hop 3\". You answer …</p><p style=\"opacity:.75;font-size:.92em\"><i>A: mtr báo mất 100 % ở hop 3. Khách nói \"mạng của bạn hỏng ở hop 3\". Bạn trả lời …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hop 3 is slow, which is why the page takes 100 % longer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Hop 3 is outside our network, so we cannot do anything"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Hop 3 only stays silent; hop 4 has 0 % loss and the site answers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Hop 3 drops every packet; we are replacing that router now"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Packets go through hop 3 perfectly (hop 4 and curl prove it); the router just does not send Time exceeded. Loss matters only if it continues to every later hop, up to the destination.</p><p><i>VI: Gói đi qua hop 3 hoàn hảo (hop 4 và curl chứng minh); router chỉ không gửi Time exceeded. Mất gói chỉ đáng lo khi nó kéo dài tới mọi hop sau, tới tận đích.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A: the last line ends with one \"*\" (0.030 ms 0.020 ms *). Most likely?</p><p style=\"opacity:.75;font-size:.92em\"><i>A: dòng cuối kết thúc bằng một \"*\" (0.030 ms 0.020 ms *). Khả dĩ nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The firewall on dc dropped the third probe on purpose"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The third probe took another path that does not exist"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server lost one third of all packets during the test"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Linux rate-limits ICMP errors (about one per second per destination)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Three probes leave almost at once; the destination answers the first ones and the limiter swallows the next. One star with answers around it is noise, not loss.</p><p><i>VI: Ba gói thử đi gần như cùng lúc; đích trả lời mấy gói đầu và bộ giới hạn nuốt gói sau. Một dấu sao giữa các câu trả lời là nhiễu, không phải mất gói.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>B: hops alternate 192.0.2.3, 198.51.100.1, 192.0.2.3 … and ping says \"Time to live exceeded\". This is …</p><p style=\"opacity:.75;font-size:.92em\"><i>B: các hop luân phiên 192.0.2.3, 198.51.100.1, 192.0.2.3 … và ping báo \"Time to live exceeded\". Đây là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "NAT: the ISP rewrites the address and sends it back"
+              },
+              {
+                "ma": "b",
+                "noiDung": "load balancing: two equal paths are used one after the other"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a routing loop: dc and isp send the packet back and forth until TTL is 0"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a slow server: the packet waits at each router in turn"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>dc has 203.0.113.10/32 via 192.0.2.1 (longer than its connected /24, so it wins) and sends the packet back to the ISP; the ISP's BGP route sends it to dc again. Alternating addresses = loop.</p><p><i>VI: dc có 203.0.113.10/32 via 192.0.2.1 (dài hơn /24 nối trực tiếp, nên thắng) và gửi gói về isp; tuyến BGP của isp lại gửi nó tới dc. Địa chỉ luân phiên = vòng lặp.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>B: the ISP answers from 198.51.100.1, not from its IX address 192.0.2.1. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>B: isp trả lời từ 198.51.100.1, không phải địa chỉ IX 192.0.2.1 của nó. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A router replies from its address on the way back to the sender"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The packet was NATed by the ISP before it looped"
+              },
+              {
+                "ma": "c",
+                "noiDung": "traceroute picks the address with the lowest number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The ISP's IX address is private, so it may not be shown"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The Time exceeded message is a new packet from the ISP to the laptop; its source is the interface it leaves by, cust0 = 198.51.100.1.</p><p><i>VI: Thông báo Time exceeded là gói mới từ isp tới laptop; nguồn của nó là card nó đi ra, cust0 = 198.51.100.1.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>C: hop 4 shows 192.0.2.3 again with \"3064.414 ms !H\". Is this the loop of incident A?</p><p style=\"opacity:.75;font-size:.92em\"><i>C: hop 4 lại hiện 192.0.2.3 với \"3064.414 ms !H\". Đây có phải vòng lặp của sự cố A?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No: .100 is outside the /26, dc delivers it directly, nobody has .100, so \"host unreachable\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "No: !H means the web server is down and must be restarted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes: 3 seconds is the time the packet spent circling the loop"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes: the same router twice in a row is the signature of every loop"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>!H = ICMP host unreachable from dc, after ~3 s of ARP requests for 203.0.113.100 that nobody answered. Only .0–.63 loop in incident A (they match the /26) — including the name server .53.</p><p><i>VI: !H = ICMP host unreachable từ dc, sau ~3 s hỏi ARP cho 203.0.113.100 mà không ai trả lời. Trong sự cố A chỉ .0–.63 bị lặp (khớp /26) — gồm cả máy chủ tên .53.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>D: inside a Docker Desktop container, traceroute to 1.1.1.1 shows 172.17.0.1 and then only stars. Conclusion?</p><p style=\"opacity:.75;font-size:.92em\"><i>D: trong container trên Docker Desktop, traceroute tới 1.1.1.1 hiện 172.17.0.1 rồi toàn dấu sao. Kết luận?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The Internet drops every packet after the first router"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The container has no default route, so packets stop at 172.17.0.1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Docker Desktop's user-space proxy does not pass the TTL trick; trace from the host instead"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1.1.1.1 is unreachable from Vietnam because of a cable cut"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The container has a default route (172.17.0.1) and real traffic works; only the probes with small TTL are not forwarded as such. Run traceroute -n (or tracert -d) on your own computer.</p><p><i>VI: Container có tuyến mặc định (172.17.0.1) và lưu lượng thật vẫn chạy; chỉ các gói thử TTL nhỏ không được chuyển như vậy. Chạy traceroute -n (hoặc tracert -d) trên chính máy bạn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Opening a ticket against the router at the first \"* * *\".|||Mở ticket cho router ở dòng \"* * *\" đầu tiên."
+        },
+        {
+          "loi": "Calling any repeated address a loop, even when it ends with !H.|||Gọi mọi địa chỉ lặp lại là vòng lặp, kể cả khi nó kết thúc bằng !H."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mtr",
+          "vi": "traceroute chạy liên tục và đếm mất gói"
+        },
+        {
+          "en": "routing loop",
+          "vi": "vòng lặp định tuyến"
+        },
+        {
+          "en": "ICMP rate limit",
+          "vi": "giới hạn tốc độ ICMP"
+        },
+        {
+          "en": "!H / !N",
+          "vi": "host / mạng không tới được",
+          "giaiThich": "Ký hiệu traceroute in khi nhận ICMP unreachable."
+        }
+      ]
+    },
+    {
+      "title": "Routing 5 — Write lookup(table, dst): longest prefix match",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "longest prefix match",
+        "routing table"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Write <code>lookup(table, dst)</code> — what the kernel does for every packet. <code>table</code> is an array of lines exactly as <code>ip route</code> prints them; <code>dst</code> is a dotted IPv4 address. Real example (lab/out/c22-isp):</p><pre>$ ip route\n100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\n192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\n198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0\n$ ip route get 8.8.8.8\nRTNETLINK answers: Network is unreachable</pre><ul>\n<li>The first word of a line is <code>default</code> (= <code>0.0.0.0/0</code>) or a prefix. A prefix without \"/\" is a <b>/32</b> (that is how <code>ip route</code> prints a host route).</li>\n<li>Other words come in pairs: <code>via X</code>, <code>dev Y</code>, <code>metric N</code> (no metric = 0); ignore the rest (<code>proto</code>, <code>scope</code>, <code>src</code>, <code>nhid</code>…).</li>\n<li>Among the lines that match, pick the longest prefix; same length ⇒ the lower metric; still equal ⇒ the earlier line.</li>\n<li>Return <code>{ dst, route: \"a.b.c.d/len\", via, dev }</code> (<code>via: null</code> for a connected route; default ⇒ <code>route: \"0.0.0.0/0\"</code>), or <code>{ error: \"Network is unreachable\" }</code> when nothing matches.</li>\n</ul><p>Visible cases: the laptop and the ISP. Hidden cases: the home router, the DC with the forgotten /32, the DC of Lab 2 incident A (/26), the ISP during the BGP hijack (/25), Docker Desktop, and a constructed laptop with Wi-Fi and Ethernet both up (two default routes, metrics 600 and 100).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>lookup(table, dst)</code> — việc nhân làm cho mỗi gói tin. <code>table</code> là mảng các dòng đúng như <code>ip route</code> in ra; <code>dst</code> là địa chỉ IPv4 dạng chấm. Ví dụ thật (lab/out/c22-isp):</p><pre>$ ip route\n100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\n192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\n198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\n198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\n203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0\n$ ip route get 8.8.8.8\nRTNETLINK answers: Network is unreachable</pre><ul>\n<li>Chữ đầu của một dòng là <code>default</code> (= <code>0.0.0.0/0</code>) hoặc một prefix. Prefix không có \"/\" là <b>/32</b> (cách <code>ip route</code> in tuyến tới một máy).</li>\n<li>Các chữ khác đi theo cặp: <code>via X</code>, <code>dev Y</code>, <code>metric N</code> (không có metric = 0); bỏ qua phần còn lại (<code>proto</code>, <code>scope</code>, <code>src</code>, <code>nhid</code>…).</li>\n<li>Trong các dòng khớp, chọn prefix dài nhất; dài bằng nhau ⇒ metric nhỏ hơn; vẫn bằng ⇒ dòng đứng trước.</li>\n<li>Trả <code>{ dst, route: \"a.b.c.d/len\", via, dev }</code> (<code>via: null</code> với tuyến nối trực tiếp; default ⇒ <code>route: \"0.0.0.0/0\"</code>), hoặc <code>{ error: \"Network is unreachable\" }</code> khi không dòng nào khớp.</li>\n</ul><p>Ca hiện: laptop và isp. Ca ẩn: router nhà, dc với /32 bị quên, dc của sự cố A trong Lab 2 (/26), isp lúc bị cướp tuyến BGP (/25), Docker Desktop, và một laptop dựng sẵn bật cả Wi-Fi lẫn Ethernet (hai tuyến mặc định, metric 600 và 100).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "table — array of ip route lines; dst — dotted IPv4.|||table — mảng dòng ip route; dst — IPv4 dạng chấm.",
+      "outputSpec": "{ dst, route, via, dev } or { error: \"Network is unreachable\" }|||{ dst, route, via, dev } hoặc { error: \"Network is unreachable\" }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "lookup([\"default via 192.168.50.1 dev eth0\",\"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"], \"192.168.50.11\")",
+          "output": "{\"dst\":\"192.168.50.11\",\"route\":\"192.168.50.0/24\",\"via\":null,\"dev\":\"eth0\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split each line into words. The value after \"via\" is t[t.indexOf(\"via\") + 1].|||Tách mỗi dòng thành từ. Giá trị sau \"via\" là t[t.indexOf(\"via\") + 1].",
+        "Match test, as in lesson 1.4: Math.floor(prefixNumber / 2^(32 − len)) === Math.floor(dstNumber / 2^(32 − len)). It works for /0 and /32.|||Phép thử khớp, như bài 1.4: Math.floor(sốPrefix / 2^(32 − len)) === Math.floor(sốĐích / 2^(32 − len)). Đúng cả với /0 và /32.",
+        "Keep the best candidate while you walk the table; replace it only if the new one is strictly better.|||Giữ ứng viên tốt nhất khi duyệt bảng; chỉ thay khi ứng viên mới tốt hơn hẳn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** table: lines of \"ip route\"; dst: \"a.b.c.d\" ⇒ { dst, route, via, dev } | { error: 'Network is unreachable' } */\nfunction lookup(table, dst) {\n  // Write your solution here\n  return { error: 'Network is unreachable' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction lookup(table, dst) {\n  function toNum(ip) { return ip.split('.').reduce(function (n, b) { return n * 256 + Number(b); }, 0); }\n  var d = toNum(dst);\n  var best = null;\n  table.forEach(function (line, i) {\n    var t = line.trim().split(/\\s+/);\n    if (!t[0]) return;\n    // first word: \"default\" (= 0.0.0.0/0) or a prefix; ip route prints a /32 without \"/32\"\n    var pfx = t[0] === 'default' ? '0.0.0.0/0' : (t[0].indexOf('/') < 0 ? t[0] + '/32' : t[0]);\n    var len = Number(pfx.split('/')[1]);\n    var size = Math.pow(2, 32 - len);\n    if (Math.floor(toNum(pfx.split('/')[0]) / size) !== Math.floor(d / size)) return;   // the first len bits differ\n    function val(key) { var k = t.indexOf(key); return k > 0 && k + 1 < t.length ? t[k + 1] : null; }\n    var metric = val('metric') === null ? 0 : Number(val('metric'));\n    var cand = { len: len, metric: metric, i: i, route: pfx, via: val('via'), dev: val('dev') };\n    // longest prefix first; for the same length the lower metric; then the line that comes first\n    if (!best || len > best.len || (len === best.len && metric < best.metric)) best = cand;\n  });\n  if (!best) return { error: 'Network is unreachable' };\n  return { dst: dst, route: best.route, via: best.via, dev: best.dev };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The routing decision is a pure function of the table and the destination: every matching line is a candidate and the most specific one wins, because a longer prefix is a more precise statement about where those addresses are. That is why a forgotten /32 or a hijacker's /25 overrides a correct /24, and why a /26 hurts only .0–.63. The metric only breaks ties between lines of the same length — the usual case of a laptop with Ethernet (metric 100) preferred over Wi-Fi (600). With no default route and no match, the answer is final: \"Network is unreachable\", as the ISP said for 8.8.8.8.</p>",
+      "solutionExplanationHtmlVi": "<p>Quyết định định tuyến là một hàm thuần của bảng và đích: mọi dòng khớp là ứng viên và dòng cụ thể nhất thắng, vì prefix dài hơn là một khẳng định chính xác hơn về nơi các địa chỉ đó ở. Vì thế một /32 bị quên hay /25 của kẻ cướp đè lên /24 đúng, và một /26 chỉ làm hỏng .0–.63. Metric chỉ phân xử giữa các dòng dài bằng nhau — trường hợp quen thuộc của laptop có Ethernet (metric 100) được ưu tiên hơn Wi-Fi (600). Không có tuyến mặc định và không dòng nào khớp thì câu trả lời là dứt khoát: \"Network is unreachable\", như isp đã nói với 8.8.8.8.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "laptop → 192.168.50.11 (real table)",
+              "vi": "laptop → 192.168.50.11 (bảng thật)"
+            },
+            "goi": "lookup([\"default via 192.168.50.1 dev eth0\",\"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"], \"192.168.50.11\")",
+            "mongDoi": {
+              "dst": "192.168.50.11",
+              "route": "192.168.50.0/24",
+              "via": null,
+              "dev": "eth0"
+            }
+          },
+          {
+            "moTa": {
+              "en": "laptop → 8.8.8.8",
+              "vi": "laptop → 8.8.8.8"
+            },
+            "goi": "lookup([\"default via 192.168.50.1 dev eth0\",\"192.168.50.0/24 dev eth0 proto kernel scope link src 192.168.50.10\"], \"8.8.8.8\")",
+            "mongDoi": {
+              "dst": "8.8.8.8",
+              "route": "0.0.0.0/0",
+              "via": "192.168.50.1",
+              "dev": "eth0"
+            }
+          },
+          {
+            "moTa": {
+              "en": "isp → 203.0.113.10",
+              "vi": "isp → 203.0.113.10"
+            },
+            "goi": "lookup([\"100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\",\"192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\",\"198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\",\"198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\",\"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\"], \"203.0.113.10\")",
+            "mongDoi": {
+              "dst": "203.0.113.10",
+              "route": "203.0.113.0/24",
+              "via": "192.0.2.3",
+              "dev": "ix0"
+            }
+          },
+          {
+            "moTa": {
+              "en": "isp → 8.8.8.8 (no default route)",
+              "vi": "isp → 8.8.8.8 (không có tuyến mặc định)"
+            },
+            "goi": "lookup([\"100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\",\"192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\",\"198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\",\"198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\",\"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\"], \"8.8.8.8\")",
+            "mongDoi": {
+              "error": "Network is unreachable"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "lookup([\"default via 198.51.100.1 dev wan0\",\"192.168.50.0/24 dev lan0 proto kernel scope link src 192.168.50.1\",\"198.51.100.0/24 dev wan0 proto kernel scope link src 198.51.100.2\"], \"203.0.113.10\")",
+            "mongDoi": {
+              "dst": "203.0.113.10",
+              "route": "0.0.0.0/0",
+              "via": "198.51.100.1",
+              "dev": "wan0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "lookup([\"100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\",\"192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\",\"198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\",\"198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\",\"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\"], \"100.64.0.10\")",
+            "mongDoi": {
+              "dst": "100.64.0.10",
+              "route": "100.64.0.0/24",
+              "via": null,
+              "dev": "mob0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "lookup([\"100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1\",\"192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1\",\"198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\",\"198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1\",\"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\"], \"198.18.0.77\")",
+            "mongDoi": {
+              "dst": "198.18.0.77",
+              "route": "198.18.0.0/24",
+              "via": "192.0.2.66",
+              "dev": "ix0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "lookup([\"203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\",\"203.0.113.10 via 192.0.2.1 dev ix0\"], \"203.0.113.10\")",
+            "mongDoi": {
+              "dst": "203.0.113.10",
+              "route": "203.0.113.10/32",
+              "via": "192.0.2.1",
+              "dev": "ix0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "lookup([\"203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\",\"203.0.113.10 via 192.0.2.1 dev ix0\"], \"203.0.113.11\")",
+            "mongDoi": {
+              "dst": "203.0.113.11",
+              "route": "203.0.113.0/24",
+              "via": null,
+              "dev": "dc0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "lookup([\"203.0.113.0/26 via 192.0.2.1 dev ix0\",\"203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\"], \"203.0.113.53\")",
+            "mongDoi": {
+              "dst": "203.0.113.53",
+              "route": "203.0.113.0/26",
+              "via": "192.0.2.1",
+              "dev": "ix0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "lookup([\"203.0.113.0/26 via 192.0.2.1 dev ix0\",\"203.0.113.0/24 dev dc0 proto kernel scope link src 203.0.113.1\"], \"203.0.113.100\")",
+            "mongDoi": {
+              "dst": "203.0.113.100",
+              "route": "203.0.113.0/24",
+              "via": null,
+              "dev": "dc0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "lookup([\"203.0.113.0/25 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\",\"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\"], \"203.0.113.10\")",
+            "mongDoi": {
+              "dst": "203.0.113.10",
+              "route": "203.0.113.0/25",
+              "via": "192.0.2.66",
+              "dev": "ix0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "lookup([\"203.0.113.0/25 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20\",\"203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20\"], \"203.0.113.200\")",
+            "mongDoi": {
+              "dst": "203.0.113.200",
+              "route": "203.0.113.0/24",
+              "via": "192.0.2.3",
+              "dev": "ix0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 14",
+              "vi": "Ca ẩn 14"
+            },
+            "goi": "lookup([\"default via 172.17.0.1 dev eth0\",\"172.17.0.0/16 dev eth0 proto kernel scope link src 172.17.0.5\"], \"1.1.1.1\")",
+            "mongDoi": {
+              "dst": "1.1.1.1",
+              "route": "0.0.0.0/0",
+              "via": "172.17.0.1",
+              "dev": "eth0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: two default routes (constructed) — the lower metric wins",
+              "vi": "Ẩn: hai tuyến mặc định (dựng) — metric nhỏ hơn thắng"
+            },
+            "goi": "lookup([\"default via 192.168.1.1 dev wlan0 proto dhcp src 192.168.1.23 metric 600\",\"default via 192.168.1.1 dev eth0 proto dhcp src 192.168.1.42 metric 100\",\"192.168.1.0/24 dev eth0 proto kernel scope link src 192.168.1.42 metric 100\",\"192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.23 metric 600\"], \"1.1.1.1\")",
+            "mongDoi": {
+              "dst": "1.1.1.1",
+              "route": "0.0.0.0/0",
+              "via": "192.168.1.1",
+              "dev": "eth0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 16",
+              "vi": "Ca ẩn 16"
+            },
+            "goi": "lookup([], \"10.0.0.1\")",
+            "mongDoi": {
+              "error": "Network is unreachable"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the first matching line: on the ISP table the hijacker's /25 comes first by accident, on the DC table the /24 comes first — order is not priority.|||Trả dòng khớp đầu tiên: ở bảng isp /25 của kẻ cướp tình cờ đứng trước, ở bảng dc /24 đứng trước — thứ tự không phải độ ưu tiên."
+        },
+        {
+          "loi": "Treating \"203.0.113.10 via 192.0.2.1\" as a line without a prefix and skipping it — that /32 is the line that wins.|||Coi \"203.0.113.10 via 192.0.2.1\" là dòng không có prefix rồi bỏ qua — chính /32 đó là dòng thắng."
+        },
+        {
+          "loi": "Reading the word after \"nhid\" or \"metric\" as the next hop.|||Đọc chữ sau \"nhid\" hay \"metric\" thành chặng kế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "host route",
+          "vi": "tuyến tới một máy",
+          "giaiThich": "Prefix /32."
+        },
+        {
+          "en": "metric",
+          "vi": "chỉ số ưu tiên"
+        },
+        {
+          "en": "tie-break",
+          "vi": "luật phân xử khi bằng nhau"
+        }
+      ]
+    },
+    {
+      "title": "Routing 6 — Write traceVerdict(text): read traceroute like an engineer",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "reading traceroute",
+        "troubleshooting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Write <code>traceVerdict(text)</code>. <code>text</code> is the full output of <code>traceroute -n</code> (header line \"traceroute to NAME (ADDRESS), …\" then one line per hop). Return <code>{ verdict, lastResponder }</code>, checking in this order:</p>\n<ol>\n<li><code>\"unreachable\"</code> — some hop carries a flag that starts with \"!\" (<code>!H</code>, <code>!N</code>, <code>!X</code>…): a router said explicitly it cannot deliver. <code>lastResponder</code> = the address on that hop.</li>\n<li><code>\"loop\"</code> — an address that answered at one hop answers again at a later hop, with a <b>different</b> address in between.</li>\n<li>The last hop that answered contains the target address: <code>\"silent-hop\"</code> if some hop was all stars, otherwise <code>\"ok\"</code>.</li>\n<li>Otherwise <code>\"loss-to-end\"</code> — the probes stop getting answers and never reach the target.</li>\n</ol>\n<p><code>lastResponder</code> (rules 2–4) = the last address printed in the output, or <code>null</code> if nobody answered. Times like <code>0.059</code> and the word <code>ms</code> are not addresses; one hop line may show several addresses (load balancing). Example (lab/out/c22-sao):</p><pre>traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.048 ms  0.010 ms  0.009 ms\n 2  198.51.100.1  0.034 ms  0.017 ms  0.015 ms\n 3  * * *\n 4  203.0.113.10  0.030 ms  0.020 ms *</pre><p>⇒ <code>{ verdict: \"silent-hop\", lastResponder: \"203.0.113.10\" }</code>. Visible cases: four real traces. Hidden: ten more real traces (the loop of Lab 2 incident A, its <code>!H</code> for .100, the BGP hijack and the withdrawal, the 4G phone, IPv6, Docker Desktop, an inbound attempt with <code>!N</code>) and one <b>constructed</b> load-balanced path.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>traceVerdict(text)</code>. <code>text</code> là toàn bộ output của <code>traceroute -n</code> (dòng đầu \"traceroute to TÊN (ĐỊA_CHỈ), …\" rồi mỗi hop một dòng). Trả <code>{ verdict, lastResponder }</code>, xét theo thứ tự:</p>\n<ol>\n<li><code>\"unreachable\"</code> — một hop mang cờ bắt đầu bằng \"!\" (<code>!H</code>, <code>!N</code>, <code>!X</code>…): một router nói rõ nó không giao được. <code>lastResponder</code> = địa chỉ ở hop đó.</li>\n<li><code>\"loop\"</code> — một địa chỉ đã trả lời ở một hop lại trả lời ở hop sau, với một địa chỉ <b>khác</b> ở giữa.</li>\n<li>Hop cuối cùng có trả lời chứa địa chỉ đích: <code>\"silent-hop\"</code> nếu có hop toàn dấu sao, ngược lại <code>\"ok\"</code>.</li>\n<li>Còn lại <code>\"loss-to-end\"</code> — gói thử thôi được trả lời và không bao giờ tới đích.</li>\n</ol>\n<p><code>lastResponder</code> (luật 2–4) = địa chỉ cuối cùng được in trong output, hoặc <code>null</code> nếu không ai trả lời. Thời gian như <code>0.059</code> và chữ <code>ms</code> không phải địa chỉ; một dòng hop có thể hiện nhiều địa chỉ (cân bằng tải). Ví dụ (lab/out/c22-sao):</p><pre>traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\n 1  192.168.50.1  0.048 ms  0.010 ms  0.009 ms\n 2  198.51.100.1  0.034 ms  0.017 ms  0.015 ms\n 3  * * *\n 4  203.0.113.10  0.030 ms  0.020 ms *</pre><p>⇒ <code>{ verdict: \"silent-hop\", lastResponder: \"203.0.113.10\" }</code>. Ca hiện: bốn lượt traceroute thật. Ca ẩn: thêm mười lượt thật (vòng lặp của sự cố A trong Lab 2, <code>!H</code> của nó cho .100, cướp tuyến BGP và rút tuyến, điện thoại 4G, IPv6, Docker Desktop, một lần gọi ngược vào với <code>!N</code>) và một đường cân bằng tải <b>dựng</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — the output of traceroute -n (IPv4 or IPv6).|||text — output của traceroute -n (IPv4 hoặc IPv6).",
+      "outputSpec": "{ verdict: \"ok\" | \"silent-hop\" | \"loop\" | \"loss-to-end\" | \"unreachable\", lastResponder: string | null }|||{ verdict: \"ok\" | \"silent-hop\" | \"loop\" | \"loss-to-end\" | \"unreachable\", lastResponder: chuỗi | null }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\\n 1  192.168.50.1  0.591 ms  0.509 ms  0.495 ms\\n 2  198.51.100.1  0.483 ms  0.409 ms  0.388 ms\\n 3  192.0.2.3  0.364 ms  0.329 ms  0.308 ms\\n 4  203.0.113.10  0.279 ms  0.199 ms  0.160 ms\")",
+          "output": "{\"verdict\":\"ok\",\"lastResponder\":\"203.0.113.10\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Parse first: the target from the header with /\\(([^)]+)\\)/, then for each hop line its number, its addresses (words with three dots, or with \":\") and a word starting with \"!\".|||Phân tích trước: đích từ dòng đầu bằng /\\(([^)]+)\\)/, rồi với mỗi dòng hop: số thứ tự, các địa chỉ (từ có ba dấu chấm, hoặc có \":\") và từ bắt đầu bằng \"!\".",
+        "Apply the rules in the given order: the !H case of Lab 2 has the same address on two consecutive hops and must not become a loop.|||Áp luật đúng thứ tự: ca !H của Lab 2 có cùng địa chỉ ở hai hop liền nhau và không được thành vòng lặp.",
+        "\"Reached\" = the target is among the addresses of the last hop that answered — a final \"*\" after an answer does not matter.|||\"Tới đích\" = đích nằm trong các địa chỉ của hop cuối có trả lời — một \"*\" cuối sau câu trả lời không quan trọng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** text: traceroute -n output ⇒ { verdict: 'ok'|'silent-hop'|'loop'|'loss-to-end'|'unreachable', lastResponder } */\nfunction traceVerdict(text) {\n  // Write your solution here\n  return { verdict: 'ok', lastResponder: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction traceVerdict(text) {\n  var lines = String(text).split('\\n');\n  var target = null, hops = [];\n  function isIp(w) { return /^\\d+\\.\\d+\\.\\d+\\.\\d+$/.test(w) || (w.indexOf(':') >= 0 && /^[0-9a-fA-F:.]+$/.test(w)); }\n  lines.forEach(function (line) {\n    var head = /^traceroute to \\S+ \\(([^)]+)\\)/.exec(line.trim());\n    if (head) { target = head[1]; return; }\n    var m = /^\\s*(\\d+)\\s+(.*)$/.exec(line);\n    if (!m) return;\n    var words = m[2].trim().split(/\\s+/);\n    hops.push({\n      n: Number(m[1]),\n      addrs: words.filter(isIp),\n      flag: words.filter(function (w) { return /^![A-Z0-9]*$/.test(w); })[0] || null,   // !H !N !X !P …\n    });\n  });\n  var answered = hops.filter(function (h) { return h.addrs.length > 0; });\n  var lastResponder = answered.length ? answered[answered.length - 1].addrs[answered[answered.length - 1].addrs.length - 1] : null;\n  // 1. an explicit \"cannot deliver\" from a router beats everything else\n  var bad = hops.filter(function (h) { return h.flag; })[0];\n  if (bad) return { verdict: 'unreachable', lastResponder: bad.addrs[bad.addrs.length - 1] || lastResponder };\n  // 2. loop: an address answers again later, with a different address in between\n  for (var i = 0; i < hops.length; i++) {\n    for (var j = i + 2; j < hops.length; j++) {\n      var again = hops[j].addrs.some(function (a) { return hops[i].addrs.indexOf(a) >= 0; });\n      if (!again) continue;\n      for (var k = i + 1; k < j; k++) {\n        if (hops[k].addrs.some(function (a) { return hops[i].addrs.indexOf(a) < 0; })) return { verdict: 'loop', lastResponder: lastResponder };\n      }\n    }\n  }\n  // 3. reached the target? then silent hops in the middle are harmless\n  var reached = answered.length > 0 && answered[answered.length - 1].addrs.indexOf(target) >= 0;\n  if (reached) {\n    var silent = hops.some(function (h) { return h.addrs.length === 0; });\n    return { verdict: silent ? 'silent-hop' : 'ok', lastResponder: lastResponder };\n  }\n  return { verdict: 'loss-to-end', lastResponder: lastResponder };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>traceroute gives evidence, not a verdict, and the evidence has a few typical shapes. A flag such as !H or !N is a router stating it cannot deliver — the strongest signal, so it is checked first. Addresses taking turns are the signature of a loop: TTL drains while two routers hand the packet back and forth. If the target answers at the end, every silent hop before it is a router that does not talk about itself, not a fault. Only answers that stop and never come back up to the target describe real loss — and lastResponder then names the place to look, as in the BGP hijack where the trace ends at the ISP.</p>",
+      "solutionExplanationHtmlVi": "<p>traceroute cho bằng chứng, không cho phán quyết, và bằng chứng có vài hình dạng điển hình. Cờ như !H hay !N là một router tuyên bố nó không giao được — tín hiệu mạnh nhất, nên xét trước. Địa chỉ thay phiên là dấu hiệu của vòng lặp: TTL cạn dần trong khi hai router chuyền gói qua lại. Nếu đích trả lời ở cuối, mọi hop im lặng trước đó là router không nói về mình, không phải lỗi. Chỉ khi câu trả lời dừng hẳn và không bao giờ tới đích mới là mất gói thật — và lastResponder khi đó chỉ ra chỗ cần nhìn, như vụ cướp tuyến BGP khi traceroute dừng ở isp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real: laptop → LabFlow, all four hops answer (c22-trace)",
+              "vi": "Thật: laptop → LabFlow, cả bốn hop trả lời (c22-trace)"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\\n 1  192.168.50.1  0.591 ms  0.509 ms  0.495 ms\\n 2  198.51.100.1  0.483 ms  0.409 ms  0.388 ms\\n 3  192.0.2.3  0.364 ms  0.329 ms  0.308 ms\\n 4  203.0.113.10  0.279 ms  0.199 ms  0.160 ms\")",
+            "mongDoi": {
+              "verdict": "ok",
+              "lastResponder": "203.0.113.10"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Real: silent DC router (c22-sao)",
+              "vi": "Thật: router dc im lặng (c22-sao)"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\\n 1  192.168.50.1  0.048 ms  0.010 ms  0.009 ms\\n 2  198.51.100.1  0.034 ms  0.017 ms  0.015 ms\\n 3  * * *\\n 4  203.0.113.10  0.030 ms  0.020 ms *\")",
+            "mongDoi": {
+              "verdict": "silent-hop",
+              "lastResponder": "203.0.113.10"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Real: the forgotten /32 (c22-vong)",
+              "vi": "Thật: /32 bị quên (c22-vong)"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 9 hops max, 60 byte packets\\n 1  192.168.50.1  0.065 ms\\n 2  198.51.100.1  0.041 ms\\n 3  192.0.2.3  0.067 ms\\n 4  198.51.100.1  0.026 ms\\n 5  192.0.2.3  0.028 ms\\n 6  198.51.100.1  0.033 ms\\n 7  192.0.2.3  0.034 ms\\n 8  198.51.100.1  0.035 ms\\n 9  192.0.2.3  0.033 ms\")",
+            "mongDoi": {
+              "verdict": "loop",
+              "lastResponder": "192.0.2.3"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Real: during the BGP hijack (c25-laptop-cuop)",
+              "vi": "Thật: lúc bị cướp tuyến BGP (c25-laptop-cuop)"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 5 hops max, 60 byte packets\\n 1  192.168.50.1  0.058 ms\\n 2  198.51.100.1  0.036 ms\\n 3  *\\n 4  *\\n 5  *\")",
+            "mongDoi": {
+              "verdict": "loss-to-end",
+              "lastResponder": "198.51.100.1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 7 hops max, 60 byte packets\\n 1  192.168.50.1  0.060 ms\\n 2  198.51.100.1  0.036 ms\\n 3  192.0.2.3  0.076 ms\\n 4  198.51.100.1  0.026 ms\\n 5  192.0.2.3  0.025 ms\\n 6  198.51.100.1  0.023 ms\\n 7  192.0.2.3  0.026 ms\")",
+            "mongDoi": {
+              "verdict": "loop",
+              "lastResponder": "192.0.2.3"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.100 (203.0.113.100), 5 hops max, 60 byte packets\\n 1  192.168.50.1  0.051 ms\\n 2  198.51.100.1  0.026 ms\\n 3  192.0.2.3  0.029 ms\\n 4  192.0.2.3  3064.414 ms !H\")",
+            "mongDoi": {
+              "verdict": "unreachable",
+              "lastResponder": "192.0.2.3"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 4 hops max, 60 byte packets\\n 1  192.168.50.1  0.039 ms\\n 2  198.51.100.1  0.027 ms !N\")",
+            "mongDoi": {
+              "verdict": "unreachable",
+              "lastResponder": "198.51.100.1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "traceVerdict(\"traceroute to 1.1.1.1 (1.1.1.1), 6 hops max, 60 byte packets\\n 1  172.17.0.1  0.058 ms\\n 2  *\\n 3  *\\n 4  *\\n 5  *\\n 6  *\")",
+            "mongDoi": {
+              "verdict": "loss-to-end",
+              "lastResponder": "172.17.0.1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\\n 1  100.64.0.1  0.094 ms\\n 2  192.0.2.3  0.053 ms\\n 3  203.0.113.10  0.036 ms\")",
+            "mongDoi": {
+              "verdict": "ok",
+              "lastResponder": "203.0.113.10"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "traceVerdict(\"traceroute to 2001:db8:d::10 (2001:db8:d::10), 30 hops max, 80 byte packets\\n 1  2001:db8:a:50::1  0.084 ms\\n 2  2001:db8:a:1::1  0.060 ms\\n 3  2001:db8:ffff::3  0.056 ms\\n 4  2001:db8:d::10  0.051 ms\")",
+            "mongDoi": {
+              "verdict": "ok",
+              "lastResponder": "2001:db8:d::10"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 4 hops max, 60 byte packets\\n 1  192.168.50.1  0.062 ms\\n 2  198.51.100.1  0.036 ms\\n 3  *\\n 4  *\")",
+            "mongDoi": {
+              "verdict": "loss-to-end",
+              "lastResponder": "198.51.100.1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "traceVerdict(\"traceroute to 192.168.50.10 (192.168.50.10), 3 hops max, 60 byte packets\\n 1  203.0.113.1  0.066 ms !N\")",
+            "mongDoi": {
+              "verdict": "unreachable",
+              "lastResponder": "203.0.113.1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: a load-balanced hop (constructed)",
+              "vi": "Ẩn: một hop cân bằng tải (dựng)"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets\\n 1  192.168.50.1  0.412 ms  0.388 ms  0.371 ms\\n 2  198.51.100.1  1.204 ms 198.51.100.9  1.311 ms 198.51.100.1  1.198 ms\\n 3  192.0.2.3  2.010 ms  1.987 ms  2.003 ms\\n 4  203.0.113.10  2.411 ms  2.398 ms  2.420 ms\")",
+            "mongDoi": {
+              "verdict": "ok",
+              "lastResponder": "203.0.113.10"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: nobody answers (constructed)",
+              "vi": "Ẩn: không ai trả lời (dựng)"
+            },
+            "goi": "traceVerdict(\"traceroute to 203.0.113.10 (203.0.113.10), 3 hops max, 60 byte packets\\n 1  *\\n 2  *\\n 3  *\")",
+            "mongDoi": {
+              "verdict": "loss-to-end",
+              "lastResponder": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the trace \"broken\" at the first line of stars, without looking at the hops after it.|||Gọi traceroute là \"hỏng\" ở dòng sao đầu tiên mà không nhìn các hop sau."
+        },
+        {
+          "loi": "Taking \"0.059\" for an address because it contains a dot.|||Coi \"0.059\" là địa chỉ vì nó có dấu chấm."
+        },
+        {
+          "loi": "Calling any repeated address a loop — consecutive answers from one router followed by !H are not.|||Gọi mọi địa chỉ lặp là vòng lặp — câu trả lời liền nhau từ một router kèm !H thì không phải."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verdict",
+          "vi": "kết luận"
+        },
+        {
+          "en": "load balancing (ECMP)",
+          "vi": "cân bằng tải trên nhiều đường ngang nhau"
+        },
+        {
+          "en": "last responder",
+          "vi": "chặng cuối còn trả lời"
+        }
+      ]
+    }
+  ]
+}

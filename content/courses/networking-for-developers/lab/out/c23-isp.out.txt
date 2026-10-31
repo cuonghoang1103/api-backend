@@ -1,0 +1,8 @@
+# Ch2 · 2.3 — NAT của nhà mạng (CGNAT) trên isp
+$ iptables -t nat -S POSTROUTING
+-P POSTROUTING ACCEPT
+-A POSTROUTING -d 127.0.0.11/32 -j DOCKER_POSTROUTING
+-A POSTROUTING -s 100.64.0.0/24 -o ix0 -j SNAT --to-source 198.51.100.200
+$ conntrack -L -s 100.64.0.10 -p tcp
+conntrack v1.4.9 (conntrack-tools): 1 flow entries have been shown.
+tcp      6 119 TIME_WAIT src=100.64.0.10 dst=203.0.113.10 sport=47852 dport=80 src=203.0.113.10 dst=198.51.100.200 sport=80 dport=47852 [ASSURED] mark=0 use=1

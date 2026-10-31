@@ -1,0 +1,1808 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-2-5-bgp-internet",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-2-5-bgp-internet"
+  },
+  "exercises": [
+    {
+      "title": "BGP 1 — Autonomous systems, transit, peering and exchange points",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "autonomous systems",
+        "BGP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The Internet is tens of thousands of independent networks. Real output from the lab's ISP router (FRR, legend lines hidden — lab/out/c25-isp) and from the real Internet through RIPE's public API (lab/out/c25-that):<pre>$ vtysh -c 'show bgp ipv4 unicast summary'\nBGP router identifier 192.0.2.1, local AS number 64500 VRF default vrf-id 0\nRIB entries 5, using 640 bytes of memory\nPeers 2, using 47 KiB of memory\nNeighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc\n192.0.2.3       4      64510         6         6        3    0    0 00:00:55            1        3 dc (LabFlow\n192.0.2.66      4      64511         6         7        3    0    0 00:00:55            1        3 rogue\nTotal number of neighbors 2\n\n# real Internet (RIPEstat, read-only)\n# dig +short cuongthai.com A\n160.187.1.208\n# RIPEstat prefix-overview for that address\n160.187.0.0/23 is announced by AS152992 (DATAONLINE-VN - ONLINE DATA COMPANY LIMITED)</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Internet là hàng chục nghìn mạng độc lập. Output thật từ router isp của lab (FRR, đã ẩn các dòng chú giải — lab/out/c25-isp) và từ Internet thật qua API công khai của RIPE (lab/out/c25-that):<pre>$ vtysh -c 'show bgp ipv4 unicast summary'\nBGP router identifier 192.0.2.1, local AS number 64500 VRF default vrf-id 0\nRIB entries 5, using 640 bytes of memory\nPeers 2, using 47 KiB of memory\nNeighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc\n192.0.2.3       4      64510         6         6        3    0    0 00:00:55            1        3 dc (LabFlow\n192.0.2.66      4      64511         6         7        3    0    0 00:00:55            1        3 rogue\nTotal number of neighbors 2\n\n# Internet thật (RIPEstat, chỉ đọc)\n# dig +short cuongthai.com A\n160.187.1.208\n# RIPEstat prefix-overview for that address\n160.187.0.0/23 is announced by AS152992 (DATAONLINE-VN - ONLINE DATA COMPANY LIMITED)</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Transit = customer pays provider; peering = two equals swap traffic.|||Transit = khách trả tiền cho nhà cung cấp; peering = hai bên ngang nhau trao lưu lượng.",
+        "An exchange point is where peering physically happens.|||Điểm trao đổi là nơi peering diễn ra về mặt vật lý."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 1 — Autonomous systems, transit, peering and exchange points\n\nAnswer in the answer panel (no code needed).\n\n1. What is an Autonomous System (AS)?Hệ tự trị (AS) là gì?\n2. A small ISP pays a big one to carry its traffic to the whole Internet. That is …Một nhà mạng nhỏ trả tiền cho nhà mạng lớn để chở lưu lượng của mình ra cả Internet. Đó là …\n3. Why does Vietnam run VNIX (VNNIC, in Hanoi, Da Nang and Ho Chi Minh City)?Vì sao Việt Nam vận hành VNIX (VNNIC, ở Hà Nội, Đà Nẵng và TP. Hồ Chí Minh)?\n4. In the summary, both neighbours show \"1\" under State/PfxRcd. Meaning?Trong bản tóm tắt, cả hai hàng xóm hiện \"1\" ở cột State/PfxRcd. Nghĩa là gì?\n5. BGP routers talk to each other over …Các router BGP nói chuyện với nhau qua …\n6. The lab uses AS64500, AS64510 and AS64511. Why those numbers?Lab dùng AS64500, AS64510 và AS64511. Vì sao là các số đó?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 1 — Autonomous systems, transit, peering and exchange points — answer key\n\n1. What is an Autonomous System (AS)?Hệ tự trị (AS) là gì?\n   Answer: d) A network under one administration and routing policy, with an AS number\n   ISPs, clouds, universities and big companies each run one or more ASes. Cloudflare is AS13335, Google AS15169; the network carrying cuongthai.com's server is AS152992.VI: Nhà mạng, cloud, trường đại học và công ty lớn mỗi bên vận hành một hay nhiều AS. Cloudflare là AS13335, Google AS15169; mạng chở máy chủ của cuongthai.com là AS152992.\n\n2. A small ISP pays a big one to carry its traffic to the whole Internet. That is …Một nhà mạng nhỏ trả tiền cho nhà mạng lớn để chở lưu lượng của mình ra cả Internet. Đó là …\n   Answer: d) transit\n   Transit = paid access to everything. Peering = two networks exchange only their own customers' traffic, usually without payment.VI: Transit = trả tiền để tới mọi nơi. Peering = hai mạng chỉ trao đổi lưu lượng của khách hàng mình, thường không trả tiền.\n\n3. Why does Vietnam run VNIX (VNNIC, in Hanoi, Da Nang and Ho Chi Minh City)?Vì sao Việt Nam vận hành VNIX (VNNIC, ở Hà Nội, Đà Nẵng và TP. Hồ Chí Minh)?\n   Answer: b) So traffic between two Vietnamese ISPs does not travel abroad and back\n   An exchange point is a shared switch where many networks plug in and peer. Without it, two local ISPs might only meet through a transit provider in another country.VI: Điểm trao đổi là một switch dùng chung nơi nhiều mạng cắm vào và peering. Không có nó, hai nhà mạng trong nước có thể chỉ gặp nhau qua nhà cung cấp transit ở nước khác.\n\n4. In the summary, both neighbours show \"1\" under State/PfxRcd. Meaning?Trong bản tóm tắt, cả hai hàng xóm hiện \"1\" ở cột State/PfxRcd. Nghĩa là gì?\n   Answer: d) The session is up (Established) and each neighbour sent one prefix\n   When a session is down, the column shows a state such as Active or Idle; when it is up, it shows the number of prefixes received. The DC sent 203.0.113.0/24, the other network 198.18.0.0/24.VI: Khi phiên rớt, cột này hiện trạng thái như Active hay Idle; khi phiên chạy, nó hiện số prefix nhận được. DC gửi 203.0.113.0/24, mạng kia 198.18.0.0/24.\n\n5. BGP routers talk to each other over …Các router BGP nói chuyện với nhau qua …\n   Answer: a) a TCP session on port 179\n   BGP is an application on top of TCP (port 179): open a session to each neighbour, then send announcements and withdrawals.VI: BGP là một ứng dụng chạy trên TCP (cổng 179): mở phiên tới từng hàng xóm, rồi gửi các thông báo quảng bá và rút tuyến.\n\n6. The lab uses AS64500, AS64510 and AS64511. Why those numbers?Lab dùng AS64500, AS64510 và AS64511. Vì sao là các số đó?\n   Answer: b) 64496–64511 are reserved for documentation, like 203.0.113.0/24\n   Like the documentation address ranges, these ASNs belong to nobody, so the lab never imitates a real network.VI: Giống các dải địa chỉ dành cho tài liệu, các ASN này không thuộc về ai, nên lab không bao giờ giả một mạng thật.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> A network under one administration and routing policy, with an AS number</p><p>ISPs, clouds, universities and big companies each run one or more ASes. Cloudflare is AS13335, Google AS15169; the network carrying cuongthai.com's server is AS152992.</p><p><i>VI: Nhà mạng, cloud, trường đại học và công ty lớn mỗi bên vận hành một hay nhiều AS. Cloudflare là AS13335, Google AS15169; mạng chở máy chủ của cuongthai.com là AS152992.</i></p></li><li><p><b>d)</b> transit</p><p>Transit = paid access to everything. Peering = two networks exchange only their own customers' traffic, usually without payment.</p><p><i>VI: Transit = trả tiền để tới mọi nơi. Peering = hai mạng chỉ trao đổi lưu lượng của khách hàng mình, thường không trả tiền.</i></p></li><li><p><b>b)</b> So traffic between two Vietnamese ISPs does not travel abroad and back</p><p>An exchange point is a shared switch where many networks plug in and peer. Without it, two local ISPs might only meet through a transit provider in another country.</p><p><i>VI: Điểm trao đổi là một switch dùng chung nơi nhiều mạng cắm vào và peering. Không có nó, hai nhà mạng trong nước có thể chỉ gặp nhau qua nhà cung cấp transit ở nước khác.</i></p></li><li><p><b>d)</b> The session is up (Established) and each neighbour sent one prefix</p><p>When a session is down, the column shows a state such as Active or Idle; when it is up, it shows the number of prefixes received. The DC sent 203.0.113.0/24, the other network 198.18.0.0/24.</p><p><i>VI: Khi phiên rớt, cột này hiện trạng thái như Active hay Idle; khi phiên chạy, nó hiện số prefix nhận được. DC gửi 203.0.113.0/24, mạng kia 198.18.0.0/24.</i></p></li><li><p><b>a)</b> a TCP session on port 179</p><p>BGP is an application on top of TCP (port 179): open a session to each neighbour, then send announcements and withdrawals.</p><p><i>VI: BGP là một ứng dụng chạy trên TCP (cổng 179): mở phiên tới từng hàng xóm, rồi gửi các thông báo quảng bá và rút tuyến.</i></p></li><li><p><b>b)</b> 64496–64511 are reserved for documentation, like 203.0.113.0/24</p><p>Like the documentation address ranges, these ASNs belong to nobody, so the lab never imitates a real network.</p><p><i>VI: Giống các dải địa chỉ dành cho tài liệu, các ASN này không thuộc về ai, nên lab không bao giờ giả một mạng thật.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What is an Autonomous System (AS)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hệ tự trị (AS) là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One router of an ISP, numbered by the manufacturer"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The part of the Internet that one country controls"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A group of websites that share the same IP address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A network under one administration and routing policy, with an AS number"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>ISPs, clouds, universities and big companies each run one or more ASes. Cloudflare is AS13335, Google AS15169; the network carrying cuongthai.com's server is AS152992.</p><p><i>VI: Nhà mạng, cloud, trường đại học và công ty lớn mỗi bên vận hành một hay nhiều AS. Cloudflare là AS13335, Google AS15169; mạng chở máy chủ của cuongthai.com là AS152992.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A small ISP pays a big one to carry its traffic to the whole Internet. That is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một nhà mạng nhỏ trả tiền cho nhà mạng lớn để chở lưu lượng của mình ra cả Internet. Đó là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "anycast"
+              },
+              {
+                "ma": "b",
+                "noiDung": "peering"
+              },
+              {
+                "ma": "c",
+                "noiDung": "NAT"
+              },
+              {
+                "ma": "d",
+                "noiDung": "transit"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Transit = paid access to everything. Peering = two networks exchange only their own customers' traffic, usually without payment.</p><p><i>VI: Transit = trả tiền để tới mọi nơi. Peering = hai mạng chỉ trao đổi lưu lượng của khách hàng mình, thường không trả tiền.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does Vietnam run VNIX (VNNIC, in Hanoi, Da Nang and Ho Chi Minh City)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao Việt Nam vận hành VNIX (VNNIC, ở Hà Nội, Đà Nẵng và TP. Hồ Chí Minh)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To give every home in Vietnam an IPv6 address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So traffic between two Vietnamese ISPs does not travel abroad and back"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So that all Vietnamese websites share one public IP address"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To filter every BGP announcement that enters the country"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An exchange point is a shared switch where many networks plug in and peer. Without it, two local ISPs might only meet through a transit provider in another country.</p><p><i>VI: Điểm trao đổi là một switch dùng chung nơi nhiều mạng cắm vào và peering. Không có nó, hai nhà mạng trong nước có thể chỉ gặp nhau qua nhà cung cấp transit ở nước khác.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In the summary, both neighbours show \"1\" under State/PfxRcd. Meaning?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bản tóm tắt, cả hai hàng xóm hiện \"1\" ở cột State/PfxRcd. Nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The session failed once and was restarted one time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Each neighbour has one router left, the others are down"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Each neighbour is one AS away from the ISP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The session is up (Established) and each neighbour sent one prefix"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>When a session is down, the column shows a state such as Active or Idle; when it is up, it shows the number of prefixes received. The DC sent 203.0.113.0/24, the other network 198.18.0.0/24.</p><p><i>VI: Khi phiên rớt, cột này hiện trạng thái như Active hay Idle; khi phiên chạy, nó hiện số prefix nhận được. DC gửi 203.0.113.0/24, mạng kia 198.18.0.0/24.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>BGP routers talk to each other over …</p><p style=\"opacity:.75;font-size:.92em\"><i>Các router BGP nói chuyện với nhau qua …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a TCP session on port 179"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ICMP messages like traceroute"
+              },
+              {
+                "ma": "c",
+                "noiDung": "UDP broadcasts on the exchange LAN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "HTTPS requests to a central registry"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>BGP is an application on top of TCP (port 179): open a session to each neighbour, then send announcements and withdrawals.</p><p><i>VI: BGP là một ứng dụng chạy trên TCP (cổng 179): mở phiên tới từng hàng xóm, rồi gửi các thông báo quảng bá và rút tuyến.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>The lab uses AS64500, AS64510 and AS64511. Why those numbers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lab dùng AS64500, AS64510 và AS64511. Vì sao là các số đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are private ASNs that every home router uses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "64496–64511 are reserved for documentation, like 203.0.113.0/24"
+              },
+              {
+                "ma": "c",
+                "noiDung": "FRR assigns them automatically to new routers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are the ASNs of three real Vietnamese ISPs"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Like the documentation address ranges, these ASNs belong to nobody, so the lab never imitates a real network.</p><p><i>VI: Giống các dải địa chỉ dành cho tài liệu, các ASN này không thuộc về ai, nên lab không bao giờ giả một mạng thật.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking one company \"runs the Internet\".|||Nghĩ một công ty nào đó \"vận hành Internet\"."
+        },
+        {
+          "loi": "Confusing an AS with a single router or a single IP range.|||Nhầm AS với một router hay một dải IP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Autonomous System (AS)",
+          "vi": "hệ tự trị"
+        },
+        {
+          "en": "ASN",
+          "vi": "số hiệu AS"
+        },
+        {
+          "en": "transit / peering",
+          "vi": "mua đường đi / trao đổi ngang hàng"
+        },
+        {
+          "en": "IXP",
+          "vi": "điểm trao đổi Internet",
+          "giaiThich": "Ở Việt Nam: VNIX."
+        }
+      ]
+    },
+    {
+      "title": "BGP 2 — Read show ip bgp: best route, next hop, AS path, origin",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "reading BGP tables"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real tables from the lab (legend hidden): the ISP (AS64500, lab/out/c25-isp) and the datacenter (AS64510, lab/out/c25-dc).<pre># isp\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n *&gt;  203.0.113.0/24   192.0.2.3                0             0 64510 i\nDisplayed 3 routes and 3 total paths\n\n# dc\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66                             0 64500 64511 i\n *&gt;  198.51.100.0/24  192.0.2.1                0             0 64500 i\n *&gt;  203.0.113.0/24   0.0.0.0                  0         32768 i\nDisplayed 3 routes and 3 total paths</pre><code>*&gt;</code> = valid and best. Next Hop <code>0.0.0.0</code> = announced by this router itself. Path = the ASes the route crossed, the <b>last</b> one is the origin; <code>i</code> = originated inside that AS. Write the AS path with spaces (\"64500 64511\"), or \"empty\".</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng thật trong lab (đã ẩn chú giải): isp (AS64500, lab/out/c25-isp) và trung tâm dữ liệu (AS64510, lab/out/c25-dc).<pre># isp\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n *&gt;  203.0.113.0/24   192.0.2.3                0             0 64510 i\nDisplayed 3 routes and 3 total paths\n\n# dc\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66                             0 64500 64511 i\n *&gt;  198.51.100.0/24  192.0.2.1                0             0 64500 i\n *&gt;  203.0.113.0/24   0.0.0.0                  0         32768 i\nDisplayed 3 routes and 3 total paths</pre><code>*&gt;</code> = hợp lệ và tốt nhất. Next Hop <code>0.0.0.0</code> = do chính router này quảng bá. Path = các AS mà tuyến đã đi qua, AS <b>cuối</b> là AS gốc; <code>i</code> = khởi phát bên trong AS đó. Ghi AS path cách nhau bằng dấu cách (\"64500 64511\"), hoặc \"empty\".</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the Path column right to left: the rightmost number owns the prefix.|||Đọc cột Path từ phải sang trái: số ngoài cùng bên phải sở hữu prefix.",
+        "Weight 32768 and next hop 0.0.0.0 are FRR's signs of a locally originated route.|||Weight 32768 và next hop 0.0.0.0 là dấu hiệu của FRR cho tuyến khởi phát tại chỗ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 2 — Read show ip bgp: best route, next hop, AS path, origin\n\nAnswer in the answer panel (no code needed).\n\n1. Route by routeTừng tuyến\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 2 — Read show ip bgp: best route, next hop, AS path, origin — answer key\n\n1. Route by routeTừng tuyến\n   - r1.h: 192.0.2.66\n   - r1.p: 64511\n   - r1.o: 64511 / as64511\n   - r1.s: no\n   - r2.h: 0.0.0.0\n   - r2.p: empty / (empty) / none / -\n   - r2.o: 64500 / as64500\n   - r2.s: yes\n   - r3.h: 192.0.2.3\n   - r3.p: 64510\n   - r3.o: 64510 / as64510\n   - r3.s: no\n   - r4.h: 192.0.2.66\n   - r4.p: 64500 64511\n   - r4.o: 64511 / as64511\n   - r4.s: no\n   - r5.h: 192.0.2.1\n   - r5.p: 64500\n   - r5.o: 64500 / as64500\n   - r5.s: no\n   - r6.h: 0.0.0.0\n   - r6.p: empty / (empty) / none / -\n   - r6.o: 64510 / as64510\n   - r6.s: yes\n   A route originated by the router itself has an empty path and next hop 0.0.0.0 — its origin is the router's own AS (the header says \"local AS 64500\"). The DC learned 198.18.0.0/24 through the ISP, so the ISP put its own number in front: path 64500 64511, origin still 64511. Its next hop is nevertheless 192.0.2.66: on a shared exchange LAN, the ISP passes on the original router's address so packets go there directly. Every row is *>: one path per prefix, so each is the best.VI: Tuyến do chính router khởi phát có path rỗng và next hop 0.0.0.0 — AS gốc là AS của chính router (dòng đầu ghi \"local AS 64500\"). DC học 198.18.0.0/24 qua isp, nên isp đặt số của mình lên trước: path 64500 64511, AS gốc vẫn là 64511. Tuy vậy next hop của nó là 192.0.2.66: trên LAN dùng chung của điểm trao đổi, isp chuyển tiếp địa chỉ của router gốc để gói đi thẳng tới đó. Mọi dòng đều *>: mỗi prefix một đường, nên đường nào cũng là tốt nhất.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A route originated by the router itself has an empty path and next hop 0.0.0.0 — its origin is the router's own AS (the header says \"local AS 64500\"). The DC learned 198.18.0.0/24 through the ISP, so the ISP put its own number in front: path 64500 64511, origin still 64511. Its next hop is nevertheless 192.0.2.66: on a shared exchange LAN, the ISP passes on the original router's address so packets go there directly. Every row is *&gt;: one path per prefix, so each is the best.</p><p><i>VI: Tuyến do chính router khởi phát có path rỗng và next hop 0.0.0.0 — AS gốc là AS của chính router (dòng đầu ghi \"local AS 64500\"). DC học 198.18.0.0/24 qua isp, nên isp đặt số của mình lên trước: path 64500 64511, AS gốc vẫn là 64511. Tuy vậy next hop của nó là 192.0.2.66: trên LAN dùng chung của điểm trao đổi, isp chuyển tiếp địa chỉ của router gốc để gói đi thẳng tới đó. Mọi dòng đều *&gt;: mỗi prefix một đường, nên đường nào cũng là tốt nhất.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Route by route</p><p style=\"opacity:.75;font-size:.92em\"><i>Từng tuyến</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Router · prefix"
+              },
+              {
+                "ma": "h",
+                "ten": "Next hop"
+              },
+              {
+                "ma": "p",
+                "ten": "AS path"
+              },
+              {
+                "ma": "o",
+                "ten": "Origin AS"
+              },
+              {
+                "ma": "s",
+                "ten": "Announced by this router itself?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "isp · 198.18.0.0/24"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "isp · 198.51.100.0/24"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "isp · 203.0.113.0/24"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "dc · 198.18.0.0/24"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "dc · 198.51.100.0/24"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "dc · 203.0.113.0/24"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.h": [
+                "192.0.2.66"
+              ],
+              "r1.p": [
+                "64511"
+              ],
+              "r1.o": [
+                "64511",
+                "as64511"
+              ],
+              "r1.s": "no",
+              "r2.h": [
+                "0.0.0.0"
+              ],
+              "r2.p": [
+                "empty",
+                "(empty)",
+                "none",
+                "-"
+              ],
+              "r2.o": [
+                "64500",
+                "as64500"
+              ],
+              "r2.s": "yes",
+              "r3.h": [
+                "192.0.2.3"
+              ],
+              "r3.p": [
+                "64510"
+              ],
+              "r3.o": [
+                "64510",
+                "as64510"
+              ],
+              "r3.s": "no",
+              "r4.h": [
+                "192.0.2.66"
+              ],
+              "r4.p": [
+                "64500 64511"
+              ],
+              "r4.o": [
+                "64511",
+                "as64511"
+              ],
+              "r4.s": "no",
+              "r5.h": [
+                "192.0.2.1"
+              ],
+              "r5.p": [
+                "64500"
+              ],
+              "r5.o": [
+                "64500",
+                "as64500"
+              ],
+              "r5.s": "no",
+              "r6.h": [
+                "0.0.0.0"
+              ],
+              "r6.p": [
+                "empty",
+                "(empty)",
+                "none",
+                "-"
+              ],
+              "r6.o": [
+                "64510",
+                "as64510"
+              ],
+              "r6.s": "yes"
+            },
+            "giaiThich": "<p>A route originated by the router itself has an empty path and next hop 0.0.0.0 — its origin is the router's own AS (the header says \"local AS 64500\"). The DC learned 198.18.0.0/24 through the ISP, so the ISP put its own number in front: path 64500 64511, origin still 64511. Its next hop is nevertheless 192.0.2.66: on a shared exchange LAN, the ISP passes on the original router's address so packets go there directly. Every row is *&gt;: one path per prefix, so each is the best.</p><p><i>VI: Tuyến do chính router khởi phát có path rỗng và next hop 0.0.0.0 — AS gốc là AS của chính router (dòng đầu ghi \"local AS 64500\"). DC học 198.18.0.0/24 qua isp, nên isp đặt số của mình lên trước: path 64500 64511, AS gốc vẫn là 64511. Tuy vậy next hop của nó là 192.0.2.66: trên LAN dùng chung của điểm trao đổi, isp chuyển tiếp địa chỉ của router gốc để gói đi thẳng tới đó. Mọi dòng đều *&gt;: mỗi prefix một đường, nên đường nào cũng là tốt nhất.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the first number of the path as the owner.|||Lấy số đầu tiên của path làm chủ sở hữu."
+        },
+        {
+          "loi": "Reading next hop 0.0.0.0 as \"send to 0.0.0.0\" or \"unreachable\".|||Đọc next hop 0.0.0.0 thành \"gửi tới 0.0.0.0\" hay \"không tới được\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "best path (*>)",
+          "vi": "đường tốt nhất"
+        },
+        {
+          "en": "next hop",
+          "vi": "chặng kế"
+        },
+        {
+          "en": "AS path",
+          "vi": "danh sách AS đã đi qua"
+        },
+        {
+          "en": "origin AS",
+          "vi": "AS gốc",
+          "giaiThich": "AS cuối của path: mạng sở hữu prefix."
+        }
+      ]
+    },
+    {
+      "title": "BGP 3 — Hijack by a more specific prefix, and the filter",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "BGP hijack",
+        "route filtering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The rogue network AS64511 announced <code>203.0.113.0/25</code> — half of LabFlow's /24 — and dropped everything sent there (as Pakistan Telecom did to YouTube in 2008). Real output (lab/out/c25-isp-cuop, c25-laptop-cuop, c25-dc-thay, c25-isp-loc):<pre># isp\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n *&gt;  203.0.113.0/24   192.0.2.3                0             0 64510 i\n *&gt;  203.0.113.0/25   192.0.2.66               0             0 64511 i\nDisplayed 4 routes and 4 total paths\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0\n\n# laptop\ncurl: (28) Connection timed out after 3003 milliseconds\ncurl exit code 28\ntraceroute to 203.0.113.10 (203.0.113.10), 5 hops max, 60 byte packets\n 1  192.168.50.1  0.058 ms\n 2  198.51.100.1  0.036 ms\n 3  *\n 4  *\n 5  *\n\n# dc (the victim)\n$ vtysh -c 'show ip bgp 203.0.113.0/25'\nBGP routing table entry for 203.0.113.0/25, version 6\nPaths: (1 available, best #1, table default)\n  Advertised to peers:\n  192.0.2.1\n  64500 64511\n    192.0.2.66 from 192.0.2.1 (192.0.2.1)\n      Origin IGP, valid, external, best (First path received)\n      Last update: Sun Nov  1 05:13:39 2026\n\n# the fix on isp\n$ vtysh -c 'configure terminal' -c 'ip prefix-list FROM-ROGUE seq 10 permit 198.18.0.0/24' -c 'router bgp 64500' -c 'address-family ipv4 unicast' -c 'neighbor 192.0.2.66 prefix-list FROM-ROGUE in' -c 'end'\n$ vtysh -c 'clear bgp ipv4 unicast 192.0.2.66 soft in'\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mạng xấu AS64511 quảng bá <code>203.0.113.0/25</code> — một nửa /24 của LabFlow — và vứt mọi thứ gửi tới đó (như Pakistan Telecom làm với YouTube năm 2008). Output thật (lab/out/c25-isp-cuop, c25-laptop-cuop, c25-dc-thay, c25-isp-loc):<pre># isp\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n *&gt;  203.0.113.0/24   192.0.2.3                0             0 64510 i\n *&gt;  203.0.113.0/25   192.0.2.66               0             0 64511 i\nDisplayed 4 routes and 4 total paths\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.0.2.66 dev ix0 src 192.0.2.1 uid 0\n\n# laptop\ncurl: (28) Connection timed out after 3003 milliseconds\ncurl exit code 28\ntraceroute to 203.0.113.10 (203.0.113.10), 5 hops max, 60 byte packets\n 1  192.168.50.1  0.058 ms\n 2  198.51.100.1  0.036 ms\n 3  *\n 4  *\n 5  *\n\n# dc (nạn nhân)\n$ vtysh -c 'show ip bgp 203.0.113.0/25'\nBGP routing table entry for 203.0.113.0/25, version 6\nPaths: (1 available, best #1, table default)\n  Advertised to peers:\n  192.0.2.1\n  64500 64511\n    192.0.2.66 from 192.0.2.1 (192.0.2.1)\n      Origin IGP, valid, external, best (First path received)\n      Last update: Sun Nov  1 05:13:39 2026\n\n# cách sửa trên isp\n$ vtysh -c 'configure terminal' -c 'ip prefix-list FROM-ROGUE seq 10 permit 198.18.0.0/24' -c 'router bgp 64500' -c 'address-family ipv4 unicast' -c 'neighbor 192.0.2.66 prefix-list FROM-ROGUE in' -c 'end'\n$ vtysh -c 'clear bgp ipv4 unicast 192.0.2.66 soft in'\n$ ip route get 203.0.113.10\n203.0.113.10 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two prefixes, two \"best\" routes — the kernel decides between them by length.|||Hai prefix, hai tuyến \"best\" — nhân chọn giữa chúng theo độ dài.",
+        "The victim's clue is an unexpected origin AS on its own address range.|||Manh mối của nạn nhân là một AS gốc lạ trên dải địa chỉ của chính mình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 3 — Hijack by a more specific prefix, and the filter\n\nAnswer in the answer panel (no code needed).\n\n1. The ISP has both 203.0.113.0/24 (AS64510) and 203.0.113.0/25 (AS64511), both marked best. Which one carries traffic to .10?isp có cả 203.0.113.0/24 (AS64510) lẫn 203.0.113.0/25 (AS64511), cả hai đều best. Đường nào chở lưu lượng tới .10?\n2. Which addresses of LabFlow are affected by the /25?Địa chỉ nào của LabFlow bị /25 ảnh hưởng?\n3. How could LabFlow's own datacenter notice the hijack?Trung tâm dữ liệu của chính LabFlow nhận ra vụ cướp thế nào?\n4. What does \"neighbor 192.0.2.66 prefix-list FROM-ROGUE in\" with \"permit 198.18.0.0/24\" do?\"neighbor 192.0.2.66 prefix-list FROM-ROGUE in\" với \"permit 198.18.0.0/24\" làm gì?\n5. 24 February 2008: Pakistan Telecom (AS17557) announced 208.65.153.0/24. Why did most of the Internet follow it?24/2/2008: Pakistan Telecom (AS17557) quảng bá 208.65.153.0/24. Vì sao phần lớn Internet đi theo nó?\n6. YouTube's counter-move was to announce two /25s. Why does that help?Đòn đáp trả của YouTube là quảng bá hai /25. Vì sao cách đó giúp được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 3 — Hijack by a more specific prefix, and the filter — answer key\n\n1. The ISP has both 203.0.113.0/24 (AS64510) and 203.0.113.0/25 (AS64511), both marked best. Which one carries traffic to .10?isp có cả 203.0.113.0/24 (AS64510) lẫn 203.0.113.0/25 (AS64511), cả hai đều best. Đường nào chở lưu lượng tới .10?\n   Answer: d) The /25: in the kernel the longest prefix wins, whoever announced it\n   They are different prefixes, so BGP keeps both as \"best\" for their own prefix. Forwarding then uses longest prefix match (lesson 2.2): ip route get says via 192.0.2.66.VI: Chúng là hai prefix khác nhau, nên BGP giữ cả hai là \"best\" cho prefix của riêng nó. Chuyển tiếp khi đó dùng khớp tiền tố dài nhất (bài 2.2): ip route get ghi via 192.0.2.66.\n\n2. Which addresses of LabFlow are affected by the /25?Địa chỉ nào của LabFlow bị /25 ảnh hưởng?\n   Answer: b) .0 to .127 — the server .10 and the name server .53\n   A /25 covers half: .0–.127. That includes the web server and DNS (.53), which is why users saw timeouts and names that did not resolve. .200 would still follow the /24 (by the rule — not measured).VI: Một /25 phủ một nửa: .0–.127. Gồm cả web server và DNS (.53), vì thế người dùng thấy hết giờ chờ và tên không phân giải được. .200 vẫn đi theo /24 (theo luật — không đo).\n\n3. How could LabFlow's own datacenter notice the hijack?Trung tâm dữ liệu của chính LabFlow nhận ra vụ cướp thế nào?\n   Answer: a) It receives its own range back as a /25 with origin AS64511\n   show ip bgp 203.0.113.0/25 on dc shows path 64500 64511 — \"your prefix is announced by someone else\". Monitoring services (RIPE RIS, Cloudflare Radar, BGP alerting) raise exactly this alarm.VI: show ip bgp 203.0.113.0/25 trên dc hiện path 64500 64511 — \"prefix của bạn đang bị người khác quảng bá\". Các dịch vụ giám sát (RIPE RIS, Cloudflare Radar, cảnh báo BGP) báo đúng điều này.\n\n4. What does \"neighbor 192.0.2.66 prefix-list FROM-ROGUE in\" with \"permit 198.18.0.0/24\" do?\"neighbor 192.0.2.66 prefix-list FROM-ROGUE in\" với \"permit 198.18.0.0/24\" làm gì?\n   Answer: b) Accept from AS64511 only the prefix it owns; everything else from it is rejected\n   A prefix-list ends with an implicit deny. After \"clear … soft in\", the /25 disappears and ip route get goes via 192.0.2.3 again.VI: Prefix-list kết thúc bằng một lệnh cấm ngầm. Sau \"clear … soft in\", /25 biến mất và ip route get lại đi via 192.0.2.3.\n\n5. 24 February 2008: Pakistan Telecom (AS17557) announced 208.65.153.0/24. Why did most of the Internet follow it?24/2/2008: Pakistan Telecom (AS17557) quảng bá 208.65.153.0/24. Vì sao phần lớn Internet đi theo nó?\n   Answer: b) It was more specific than YouTube's 208.65.152.0/22, and PCCW (AS3491) passed it on unfiltered\n   /24 beats /22 everywhere by longest prefix match. YouTube answered about 80 minutes later with the same /24 and then two /25s; PCCW withdrew the bad route at 21:01 UTC — about two hours in total.VI: /24 thắng /22 ở mọi nơi nhờ khớp tiền tố dài nhất. Khoảng 80 phút sau YouTube đáp lại bằng chính /24 đó rồi hai /25; PCCW rút tuyến sai lúc 21:01 UTC — tổng cộng khoảng hai giờ.\n\n6. YouTube's counter-move was to announce two /25s. Why does that help?Đòn đáp trả của YouTube là quảng bá hai /25. Vì sao cách đó giúp được?\n   Answer: d) A /25 is longer than the hijacker's /24, so it wins back the traffic\n   Longest prefix match cuts both ways: the most specific announcement wins, whoever makes it. That is also why real networks filter announcements longer than /24.VI: Khớp tiền tố dài nhất có hai mặt: thông báo cụ thể nhất thắng, bất kể ai gửi. Đó cũng là lý do mạng thật lọc các thông báo dài hơn /24.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The /25: in the kernel the longest prefix wins, whoever announced it</p><p>They are different prefixes, so BGP keeps both as \"best\" for their own prefix. Forwarding then uses longest prefix match (lesson 2.2): ip route get says via 192.0.2.66.</p><p><i>VI: Chúng là hai prefix khác nhau, nên BGP giữ cả hai là \"best\" cho prefix của riêng nó. Chuyển tiếp khi đó dùng khớp tiền tố dài nhất (bài 2.2): ip route get ghi via 192.0.2.66.</i></p></li><li><p><b>b)</b> .0 to .127 — the server .10 and the name server .53</p><p>A /25 covers half: .0–.127. That includes the web server and DNS (.53), which is why users saw timeouts and names that did not resolve. .200 would still follow the /24 (by the rule — not measured).</p><p><i>VI: Một /25 phủ một nửa: .0–.127. Gồm cả web server và DNS (.53), vì thế người dùng thấy hết giờ chờ và tên không phân giải được. .200 vẫn đi theo /24 (theo luật — không đo).</i></p></li><li><p><b>a)</b> It receives its own range back as a /25 with origin AS64511</p><p>show ip bgp 203.0.113.0/25 on dc shows path 64500 64511 — \"your prefix is announced by someone else\". Monitoring services (RIPE RIS, Cloudflare Radar, BGP alerting) raise exactly this alarm.</p><p><i>VI: show ip bgp 203.0.113.0/25 trên dc hiện path 64500 64511 — \"prefix của bạn đang bị người khác quảng bá\". Các dịch vụ giám sát (RIPE RIS, Cloudflare Radar, cảnh báo BGP) báo đúng điều này.</i></p></li><li><p><b>b)</b> Accept from AS64511 only the prefix it owns; everything else from it is rejected</p><p>A prefix-list ends with an implicit deny. After \"clear … soft in\", the /25 disappears and ip route get goes via 192.0.2.3 again.</p><p><i>VI: Prefix-list kết thúc bằng một lệnh cấm ngầm. Sau \"clear … soft in\", /25 biến mất và ip route get lại đi via 192.0.2.3.</i></p></li><li><p><b>b)</b> It was more specific than YouTube's 208.65.152.0/22, and PCCW (AS3491) passed it on unfiltered</p><p>/24 beats /22 everywhere by longest prefix match. YouTube answered about 80 minutes later with the same /24 and then two /25s; PCCW withdrew the bad route at 21:01 UTC — about two hours in total.</p><p><i>VI: /24 thắng /22 ở mọi nơi nhờ khớp tiền tố dài nhất. Khoảng 80 phút sau YouTube đáp lại bằng chính /24 đó rồi hai /25; PCCW rút tuyến sai lúc 21:01 UTC — tổng cộng khoảng hai giờ.</i></p></li><li><p><b>d)</b> A /25 is longer than the hijacker's /24, so it wins back the traffic</p><p>Longest prefix match cuts both ways: the most specific announcement wins, whoever makes it. That is also why real networks filter announcements longer than /24.</p><p><i>VI: Khớp tiền tố dài nhất có hai mặt: thông báo cụ thể nhất thắng, bất kể ai gửi. Đó cũng là lý do mạng thật lọc các thông báo dài hơn /24.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The ISP has both 203.0.113.0/24 (AS64510) and 203.0.113.0/25 (AS64511), both marked best. Which one carries traffic to .10?</p><p style=\"opacity:.75;font-size:.92em\"><i>isp có cả 203.0.113.0/24 (AS64510) lẫn 203.0.113.0/25 (AS64511), cả hai đều best. Đường nào chở lưu lượng tới .10?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both in turn: the ISP balances the load between them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Neither: the conflict makes the ISP drop the packets"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The /24: BGP always prefers the older, original route"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The /25: in the kernel the longest prefix wins, whoever announced it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>They are different prefixes, so BGP keeps both as \"best\" for their own prefix. Forwarding then uses longest prefix match (lesson 2.2): ip route get says via 192.0.2.66.</p><p><i>VI: Chúng là hai prefix khác nhau, nên BGP giữ cả hai là \"best\" cho prefix của riêng nó. Chuyển tiếp khi đó dùng khớp tiền tố dài nhất (bài 2.2): ip route get ghi via 192.0.2.66.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which addresses of LabFlow are affected by the /25?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ nào của LabFlow bị /25 ảnh hưởng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": ".128 to .255, the half that the /24 no longer covers"
+              },
+              {
+                "ma": "b",
+                "noiDung": ".0 to .127 — the server .10 and the name server .53"
+              },
+              {
+                "ma": "c",
+                "noiDung": "All 256 addresses of the /24"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only .10, the one address the hijacker chose"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A /25 covers half: .0–.127. That includes the web server and DNS (.53), which is why users saw timeouts and names that did not resolve. .200 would still follow the /24 (by the rule — not measured).</p><p><i>VI: Một /25 phủ một nửa: .0–.127. Gồm cả web server và DNS (.53), vì thế người dùng thấy hết giờ chờ và tên không phân giải được. .200 vẫn đi theo /24 (theo luật — không đo).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How could LabFlow's own datacenter notice the hijack?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trung tâm dữ liệu của chính LabFlow nhận ra vụ cướp thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It receives its own range back as a /25 with origin AS64511"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It cannot: a hijack is invisible to the victim"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Its routers lose their BGP session with the ISP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Its web server logs show requests from AS64511"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>show ip bgp 203.0.113.0/25 on dc shows path 64500 64511 — \"your prefix is announced by someone else\". Monitoring services (RIPE RIS, Cloudflare Radar, BGP alerting) raise exactly this alarm.</p><p><i>VI: show ip bgp 203.0.113.0/25 trên dc hiện path 64500 64511 — \"prefix của bạn đang bị người khác quảng bá\". Các dịch vụ giám sát (RIPE RIS, Cloudflare Radar, cảnh báo BGP) báo đúng điều này.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>What does \"neighbor 192.0.2.66 prefix-list FROM-ROGUE in\" with \"permit 198.18.0.0/24\" do?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"neighbor 192.0.2.66 prefix-list FROM-ROGUE in\" với \"permit 198.18.0.0/24\" làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ask AS64511 to stop announcing 203.0.113.0/25"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Accept from AS64511 only the prefix it owns; everything else from it is rejected"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Block every packet coming from 192.0.2.66 at the ISP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Send 198.18.0.0/24 to the rogue network only"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A prefix-list ends with an implicit deny. After \"clear … soft in\", the /25 disappears and ip route get goes via 192.0.2.3 again.</p><p><i>VI: Prefix-list kết thúc bằng một lệnh cấm ngầm. Sau \"clear … soft in\", /25 biến mất và ip route get lại đi via 192.0.2.3.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>24 February 2008: Pakistan Telecom (AS17557) announced 208.65.153.0/24. Why did most of the Internet follow it?</p><p style=\"opacity:.75;font-size:.92em\"><i>24/2/2008: Pakistan Telecom (AS17557) quảng bá 208.65.153.0/24. Vì sao phần lớn Internet đi theo nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "YouTube had withdrawn its own /22 for maintenance that day"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It was more specific than YouTube's 208.65.152.0/22, and PCCW (AS3491) passed it on unfiltered"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Pakistan Telecom had a shorter AS path to every network"
+              },
+              {
+                "ma": "d",
+                "noiDung": "RPKI marked the Pakistan route as valid by mistake"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>/24 beats /22 everywhere by longest prefix match. YouTube answered about 80 minutes later with the same /24 and then two /25s; PCCW withdrew the bad route at 21:01 UTC — about two hours in total.</p><p><i>VI: /24 thắng /22 ở mọi nơi nhờ khớp tiền tố dài nhất. Khoảng 80 phút sau YouTube đáp lại bằng chính /24 đó rồi hai /25; PCCW rút tuyến sai lúc 21:01 UTC — tổng cộng khoảng hai giờ.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>YouTube's counter-move was to announce two /25s. Why does that help?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đòn đáp trả của YouTube là quảng bá hai /25. Vì sao cách đó giúp được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A /25 is signed, while the hijacker's /24 was not"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two announcements are counted as two votes against one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It forced PCCW to restart all its BGP sessions"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A /25 is longer than the hijacker's /24, so it wins back the traffic"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Longest prefix match cuts both ways: the most specific announcement wins, whoever makes it. That is also why real networks filter announcements longer than /24.</p><p><i>VI: Khớp tiền tố dài nhất có hai mặt: thông báo cụ thể nhất thắng, bất kể ai gửi. Đó cũng là lý do mạng thật lọc các thông báo dài hơn /24.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Looking for the problem inside LabFlow's servers while the routes are stolen outside.|||Tìm lỗi trong máy chủ LabFlow trong khi tuyến bị cướp ở bên ngoài."
+        },
+        {
+          "loi": "Filtering the rogue's packets instead of its announcements.|||Lọc gói tin của mạng xấu thay vì lọc thông báo tuyến của nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BGP hijack",
+          "vi": "cướp tuyến BGP"
+        },
+        {
+          "en": "prefix-list",
+          "vi": "danh sách prefix được nhận"
+        },
+        {
+          "en": "soft reconfiguration (soft in)",
+          "vi": "áp lại bộ lọc mà không cắt phiên"
+        },
+        {
+          "en": "blackhole",
+          "vi": "hố đen",
+          "giaiThich": "Tuyến vứt mọi gói gửi tới."
+        }
+      ]
+    },
+    {
+      "title": "BGP 4 — RPKI for cuongthai.com, and the Facebook-style withdrawal",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 16,
+      "points": 20,
+      "concepts": [
+        "RPKI",
+        "route withdrawal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real RPKI data for cuongthai.com, from RIPEstat (lab/out/c25-that), then the lab's datacenter stops announcing its range (lab/out/c25-isp-rut, c25-laptop-rut):<pre># dig +short cuongthai.com A\n160.187.1.208\n# RIPEstat prefix-overview for that address\n160.187.0.0/23 is announced by AS152992 (DATAONLINE-VN - ONLINE DATA COMPANY LIMITED)\n# RIPEstat rpki-validation: AS152992, 160.187.0.0/23\nAS152992 announcing 160.187.0.0/23: valid\n# … and the ROA it was checked against\nROA: origin AS152992, prefix 160.187.0.0/23, max length /24\n# RIPEstat rpki-validation: AS64511, 160.187.0.0/23\nAS64511 announcing 160.187.0.0/23: invalid_asn\n# RIPEstat rpki-validation: AS152992, 160.187.1.0/25\nAS152992 announcing 160.187.1.0/25: invalid_length\n\n# after \"no network 203.0.113.0/24\" on dc — isp:\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n$ ip route get 203.0.113.53\nRTNETLINK answers: Network is unreachable\n\n# laptop\n$ dig +tries=1 labflow.test   (selected lines)\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: REFUSED, id: 14418\n; EDE: 23 (Network Error)\n;; SERVER: 198.51.100.1#53(198.51.100.1) (UDP)\ncurl: (6) Could not resolve host: labflow.test\ncurl exit code 6\ntraceroute to 203.0.113.10 (203.0.113.10), 4 hops max, 60 byte packets\n 1  192.168.50.1  0.039 ms\n 2  198.51.100.1  0.027 ms !N</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dữ liệu RPKI thật của cuongthai.com, từ RIPEstat (lab/out/c25-that), rồi trung tâm dữ liệu của lab thôi quảng bá dải của mình (lab/out/c25-isp-rut, c25-laptop-rut):<pre># dig +short cuongthai.com A\n160.187.1.208\n# RIPEstat prefix-overview for that address\n160.187.0.0/23 is announced by AS152992 (DATAONLINE-VN - ONLINE DATA COMPANY LIMITED)\n# RIPEstat rpki-validation: AS152992, 160.187.0.0/23\nAS152992 announcing 160.187.0.0/23: valid\n# … and the ROA it was checked against\nROA: origin AS152992, prefix 160.187.0.0/23, max length /24\n# RIPEstat rpki-validation: AS64511, 160.187.0.0/23\nAS64511 announcing 160.187.0.0/23: invalid_asn\n# RIPEstat rpki-validation: AS152992, 160.187.1.0/25\nAS152992 announcing 160.187.1.0/25: invalid_length\n\n# sau \"no network 203.0.113.0/24\" trên dc — isp:\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n$ ip route get 203.0.113.53\nRTNETLINK answers: Network is unreachable\n\n# laptop\n$ dig +tries=1 labflow.test   (các dòng chọn lọc)\n;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: REFUSED, id: 14418\n; EDE: 23 (Network Error)\n;; SERVER: 198.51.100.1#53(198.51.100.1) (UDP)\ncurl: (6) Could not resolve host: labflow.test\ncurl exit code 6\ntraceroute to 203.0.113.10 (203.0.113.10), 4 hops max, 60 byte packets\n 1  192.168.50.1  0.039 ms\n 2  198.51.100.1  0.027 ms !N</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "RFC 6811: no covering ROA ⇒ not_found; a covering ROA with the same AS and an allowed length ⇒ valid; otherwise invalid.|||RFC 6811: không ROA nào phủ ⇒ not_found; có ROA phủ cùng AS và độ dài cho phép ⇒ valid; còn lại invalid.",
+        "\"DNS is down\" for a whole service: check whether the name server's prefix is still announced.|||\"DNS sập\" cho cả một dịch vụ: kiểm xem prefix của máy chủ tên còn được quảng bá không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 4 — RPKI for cuongthai.com, and the Facebook-style withdrawal\n\nAnswer in the answer panel (no code needed).\n\n1. The ROA says: origin AS152992, prefix 160.187.0.0/23, max length /24. AS152992 announces the /23. Status?ROA ghi: AS gốc 152992, prefix 160.187.0.0/23, độ dài tối đa /24. AS152992 quảng bá /23. Trạng thái?\n2. The same /23 announced by AS64511 is \"invalid_asn\". What would a validating router do with it?Cùng /23 đó do AS64511 quảng bá là \"invalid_asn\". Một router có kiểm RPKI làm gì với nó?\n3. Why is 160.187.1.0/25 announced by the rightful AS152992 \"invalid_length\"?Vì sao 160.187.1.0/25 do chính AS152992 quảng bá lại là \"invalid_length\"?\n4. 27 June 2024: 1.1.1.1/32 was hijacked by AS267613 and, separately, leaked as a /24 by AS262504. What did RPKI catch?27/6/2024: 1.1.1.1/32 bị AS267613 cướp và, riêng rẽ, bị AS262504 làm rò thành /24. RPKI bắt được gì?\n5. After the withdrawal, dig answers REFUSED (EDE 23 \"Network Error\") at once and curl says \"Could not resolve host\". Why a name error, not a timeout?Sau khi rút tuyến, dig trả lời REFUSED (EDE 23 \"Network Error\") ngay và curl báo \"Could not resolve host\". Vì sao lỗi tên, không phải hết giờ?\n6. 4 October 2021: Facebook's DNS servers withdrew their own prefixes. Which sequence is right?4/10/2021: máy chủ DNS của Facebook tự rút prefix của mình. Trình tự nào đúng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BGP 4 — RPKI for cuongthai.com, and the Facebook-style withdrawal — answer key\n\n1. The ROA says: origin AS152992, prefix 160.187.0.0/23, max length /24. AS152992 announces the /23. Status?ROA ghi: AS gốc 152992, prefix 160.187.0.0/23, độ dài tối đa /24. AS152992 quảng bá /23. Trạng thái?\n   Answer: c) valid\n   A ROA covers the route, the origin matches, and /23 ≤ /24. RIPEstat answered valid.VI: Một ROA phủ tuyến, AS gốc khớp, và /23 ≤ /24. RIPEstat trả lời valid.\n\n2. The same /23 announced by AS64511 is \"invalid_asn\". What would a validating router do with it?Cùng /23 đó do AS64511 quảng bá là \"invalid_asn\". Một router có kiểm RPKI làm gì với nó?\n   Answer: a) Drop it: a ROA exists for the prefix and the origin does not match\n   Route origin validation (RFC 6811) rejects announcements that contradict a ROA. The 2008 hijack would be caught this way today — on networks that validate.VI: Kiểm nguồn gốc tuyến (RFC 6811) từ chối các thông báo mâu thuẫn với ROA. Vụ cướp năm 2008 hôm nay sẽ bị bắt theo cách này — ở các mạng có kiểm.\n\n3. Why is 160.187.1.0/25 announced by the rightful AS152992 \"invalid_length\"?Vì sao 160.187.1.0/25 do chính AS152992 quảng bá lại là \"invalid_length\"?\n   Answer: d) The ROA allows prefixes only up to /24; a /25 is longer than allowed\n   max length protects against more-specific hijacks: even a forged origin could not make a /25 valid. Set max length as tight as you really announce.VI: max length chống cướp bằng dải cụ thể hơn: kể cả giả AS gốc cũng không làm /25 thành valid. Đặt max length sát với thứ bạn thật sự quảng bá.\n\n4. 27 June 2024: 1.1.1.1/32 was hijacked by AS267613 and, separately, leaked as a /24 by AS262504. What did RPKI catch?27/6/2024: 1.1.1.1/32 bị AS267613 cướp và, riêng rẽ, bị AS262504 làm rò thành /24. RPKI bắt được gì?\n   Answer: c) The /32 (marked invalid), but not the leak, which kept Cloudflare's correct origin\n   Origin validation only checks the last AS of the path. A leak with the right origin passes; protecting the path needs newer work such as ASPA.VI: Kiểm nguồn gốc chỉ xét AS cuối của path. Một vụ rò giữ đúng AS gốc thì lọt; bảo vệ cả đường đi cần cơ chế mới hơn như ASPA.\n\n5. After the withdrawal, dig answers REFUSED (EDE 23 \"Network Error\") at once and curl says \"Could not resolve host\". Why a name error, not a timeout?Sau khi rút tuyến, dig trả lời REFUSED (EDE 23 \"Network Error\") ngay và curl báo \"Could not resolve host\". Vì sao lỗi tên, không phải hết giờ?\n   Answer: c) The ISP's resolver has no route to LabFlow's name server .53 either\n   The name server lives in the withdrawn range: ip route get 203.0.113.53 on isp says \"Network is unreachable\". Big public resolvers would say SERVFAIL — same meaning for your app.VI: Máy chủ tên nằm trong dải bị rút: ip route get 203.0.113.53 trên isp báo \"Network is unreachable\". Các resolver công cộng lớn sẽ nói SERVFAIL — cùng nghĩa với ứng dụng của bạn.\n\n6. 4 October 2021: Facebook's DNS servers withdrew their own prefixes. Which sequence is right?4/10/2021: máy chủ DNS của Facebook tự rút prefix của mình. Trình tự nào đúng?\n   Answer: a) A maintenance command cut the backbone, the DNS servers withdrew their routes, resolvers failed ~5.5 h\n   Around 15:40 UTC Cloudflare saw a burst of routing changes; by 15:58 the DNS prefixes were gone; names resolved again around 21:20. The DNS servers were running — they were unreachable.VI: Khoảng 15:40 UTC Cloudflare thấy một loạt thay đổi định tuyến; tới 15:58 các prefix DNS biến mất; khoảng 21:20 tên mới phân giải lại được. Máy chủ DNS vẫn chạy — chỉ là không tới được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> valid</p><p>A ROA covers the route, the origin matches, and /23 ≤ /24. RIPEstat answered valid.</p><p><i>VI: Một ROA phủ tuyến, AS gốc khớp, và /23 ≤ /24. RIPEstat trả lời valid.</i></p></li><li><p><b>a)</b> Drop it: a ROA exists for the prefix and the origin does not match</p><p>Route origin validation (RFC 6811) rejects announcements that contradict a ROA. The 2008 hijack would be caught this way today — on networks that validate.</p><p><i>VI: Kiểm nguồn gốc tuyến (RFC 6811) từ chối các thông báo mâu thuẫn với ROA. Vụ cướp năm 2008 hôm nay sẽ bị bắt theo cách này — ở các mạng có kiểm.</i></p></li><li><p><b>d)</b> The ROA allows prefixes only up to /24; a /25 is longer than allowed</p><p>max length protects against more-specific hijacks: even a forged origin could not make a /25 valid. Set max length as tight as you really announce.</p><p><i>VI: max length chống cướp bằng dải cụ thể hơn: kể cả giả AS gốc cũng không làm /25 thành valid. Đặt max length sát với thứ bạn thật sự quảng bá.</i></p></li><li><p><b>c)</b> The /32 (marked invalid), but not the leak, which kept Cloudflare's correct origin</p><p>Origin validation only checks the last AS of the path. A leak with the right origin passes; protecting the path needs newer work such as ASPA.</p><p><i>VI: Kiểm nguồn gốc chỉ xét AS cuối của path. Một vụ rò giữ đúng AS gốc thì lọt; bảo vệ cả đường đi cần cơ chế mới hơn như ASPA.</i></p></li><li><p><b>c)</b> The ISP's resolver has no route to LabFlow's name server .53 either</p><p>The name server lives in the withdrawn range: ip route get 203.0.113.53 on isp says \"Network is unreachable\". Big public resolvers would say SERVFAIL — same meaning for your app.</p><p><i>VI: Máy chủ tên nằm trong dải bị rút: ip route get 203.0.113.53 trên isp báo \"Network is unreachable\". Các resolver công cộng lớn sẽ nói SERVFAIL — cùng nghĩa với ứng dụng của bạn.</i></p></li><li><p><b>a)</b> A maintenance command cut the backbone, the DNS servers withdrew their routes, resolvers failed ~5.5 h</p><p>Around 15:40 UTC Cloudflare saw a burst of routing changes; by 15:58 the DNS prefixes were gone; names resolved again around 21:20. The DNS servers were running — they were unreachable.</p><p><i>VI: Khoảng 15:40 UTC Cloudflare thấy một loạt thay đổi định tuyến; tới 15:58 các prefix DNS biến mất; khoảng 21:20 tên mới phân giải lại được. Máy chủ DNS vẫn chạy — chỉ là không tới được.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The ROA says: origin AS152992, prefix 160.187.0.0/23, max length /24. AS152992 announces the /23. Status?</p><p style=\"opacity:.75;font-size:.92em\"><i>ROA ghi: AS gốc 152992, prefix 160.187.0.0/23, độ dài tối đa /24. AS152992 quảng bá /23. Trạng thái?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "invalid_asn"
+              },
+              {
+                "ma": "b",
+                "noiDung": "not_found"
+              },
+              {
+                "ma": "c",
+                "noiDung": "valid"
+              },
+              {
+                "ma": "d",
+                "noiDung": "invalid_length"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A ROA covers the route, the origin matches, and /23 ≤ /24. RIPEstat answered valid.</p><p><i>VI: Một ROA phủ tuyến, AS gốc khớp, và /23 ≤ /24. RIPEstat trả lời valid.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The same /23 announced by AS64511 is \"invalid_asn\". What would a validating router do with it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng /23 đó do AS64511 quảng bá là \"invalid_asn\". Một router có kiểm RPKI làm gì với nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Drop it: a ROA exists for the prefix and the origin does not match"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Accept it, because AS64511 is a documentation number"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Prefer it, because it is more recent than the valid one"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Forward it to RIPE for a manual decision"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Route origin validation (RFC 6811) rejects announcements that contradict a ROA. The 2008 hijack would be caught this way today — on networks that validate.</p><p><i>VI: Kiểm nguồn gốc tuyến (RFC 6811) từ chối các thông báo mâu thuẫn với ROA. Vụ cướp năm 2008 hôm nay sẽ bị bắt theo cách này — ở các mạng có kiểm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is 160.187.1.0/25 announced by the rightful AS152992 \"invalid_length\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao 160.187.1.0/25 do chính AS152992 quảng bá lại là \"invalid_length\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "RPKI does not support prefixes longer than /24 at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AS152992 has no ROA for the 160.187.1.0 half"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A /25 is not inside 160.187.0.0/23"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The ROA allows prefixes only up to /24; a /25 is longer than allowed"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>max length protects against more-specific hijacks: even a forged origin could not make a /25 valid. Set max length as tight as you really announce.</p><p><i>VI: max length chống cướp bằng dải cụ thể hơn: kể cả giả AS gốc cũng không làm /25 thành valid. Đặt max length sát với thứ bạn thật sự quảng bá.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>27 June 2024: 1.1.1.1/32 was hijacked by AS267613 and, separately, leaked as a /24 by AS262504. What did RPKI catch?</p><p style=\"opacity:.75;font-size:.92em\"><i>27/6/2024: 1.1.1.1/32 bị AS267613 cướp và, riêng rẽ, bị AS262504 làm rò thành /24. RPKI bắt được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both, because both were announced by wrong networks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the leak, because /32 routes are never validated"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The /32 (marked invalid), but not the leak, which kept Cloudflare's correct origin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither, because 1.1.1.1 has no ROA"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Origin validation only checks the last AS of the path. A leak with the right origin passes; protecting the path needs newer work such as ASPA.</p><p><i>VI: Kiểm nguồn gốc chỉ xét AS cuối của path. Một vụ rò giữ đúng AS gốc thì lọt; bảo vệ cả đường đi cần cơ chế mới hơn như ASPA.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>After the withdrawal, dig answers REFUSED (EDE 23 \"Network Error\") at once and curl says \"Could not resolve host\". Why a name error, not a timeout?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi rút tuyến, dig trả lời REFUSED (EDE 23 \"Network Error\") ngay và curl báo \"Could not resolve host\". Vì sao lỗi tên, không phải hết giờ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl cannot resolve names that end in .test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "LabFlow deleted its DNS records during the withdrawal"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The ISP's resolver has no route to LabFlow's name server .53 either"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The laptop's DNS cache expired at the same moment"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The name server lives in the withdrawn range: ip route get 203.0.113.53 on isp says \"Network is unreachable\". Big public resolvers would say SERVFAIL — same meaning for your app.</p><p><i>VI: Máy chủ tên nằm trong dải bị rút: ip route get 203.0.113.53 trên isp báo \"Network is unreachable\". Các resolver công cộng lớn sẽ nói SERVFAIL — cùng nghĩa với ứng dụng của bạn.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>4 October 2021: Facebook's DNS servers withdrew their own prefixes. Which sequence is right?</p><p style=\"opacity:.75;font-size:.92em\"><i>4/10/2021: máy chủ DNS của Facebook tự rút prefix của mình. Trình tự nào đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A maintenance command cut the backbone, the DNS servers withdrew their routes, resolvers failed ~5.5 h"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A cable cut in the Atlantic isolated the datacenters, so every server was offline for ~5 h"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The facebook.com records expired, nobody renewed the domain, so names failed for ~5 h"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A hacker hijacked the DNS prefixes with more specific /25 routes, so resolvers failed for ~5 h"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Around 15:40 UTC Cloudflare saw a burst of routing changes; by 15:58 the DNS prefixes were gone; names resolved again around 21:20. The DNS servers were running — they were unreachable.</p><p><i>VI: Khoảng 15:40 UTC Cloudflare thấy một loạt thay đổi định tuyến; tới 15:58 các prefix DNS biến mất; khoảng 21:20 tên mới phân giải lại được. Máy chủ DNS vẫn chạy — chỉ là không tới được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing RPKI stops every BGP incident (route leaks keep the right origin).|||Tin RPKI chặn được mọi sự cố BGP (rò tuyến giữ đúng AS gốc)."
+        },
+        {
+          "loi": "Restarting the DNS servers when their routes are what disappeared.|||Khởi động lại máy chủ DNS trong khi thứ biến mất là tuyến tới chúng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RPKI",
+          "vi": "hạ tầng khoá công khai cho tài nguyên Internet"
+        },
+        {
+          "en": "ROA",
+          "vi": "bản ghi cho phép AS khởi phát prefix"
+        },
+        {
+          "en": "max length",
+          "vi": "độ dài prefix tối đa được phép"
+        },
+        {
+          "en": "route withdrawal",
+          "vi": "rút tuyến"
+        },
+        {
+          "en": "SERVFAIL / REFUSED",
+          "vi": "mã lỗi DNS"
+        }
+      ]
+    },
+    {
+      "title": "BGP 5 — Write parseBgpTable(text) for FRR's show ip bgp",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "parsing fixed-width output",
+        "BGP tables"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Write <code>parseBgpTable(text)</code>. <code>text</code> is the full output of FRR's <code>show ip bgp</code> (or <code>show bgp ipv6 unicast</code>), legend included. Real example (lab/out/c25-isp):</p><pre>BGP table version is 3, local router ID is 192.0.2.1, vrf id 0\nDefault local pref 100, local AS 64500\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, &gt; best, = multipath,\n               i internal, r RIB-failure, S Stale, R Removed\nNexthop codes: @NNN nexthop's vrf id, &lt; announce-nh-self\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n *&gt;  203.0.113.0/24   192.0.2.3                0             0 64510 i\n\nDisplayed 3 routes and 3 total paths</pre><p>Return one object per route line, in order: <code>{ status, best, network, nextHop, path, originAs, origin }</code>.</p>\n<ul>\n<li>Route lines start after the header line <code>Network  Next Hop … Path</code>; a route line has <code>*</code> in its first four characters. <code>status</code> = the first word (<code>\"*&gt;\"</code>, <code>\"*u\"</code>…); <code>best</code> = it contains <code>&gt;</code>.</li>\n<li>The Path column starts <b>exactly under the word \"Path\"</b> of the header: everything from that position is the AS numbers and, last, the origin code (<code>i</code>, <code>e</code> or <code>?</code>). Do not guess from the numbers in the middle: Metric and Weight may be blank, and ASNs are numbers too.</li>\n<li><code>path</code> = array of numbers (may be empty); <code>originAs</code> = its last number, or — when it is empty — the router's own AS from the line <code>\"… local AS 64500\"</code> (<code>null</code> if the text has no such line).</li>\n<li>A long next hop (IPv6) pushes the rest of the line onto the next line, which starts with spaces. A second path for the same prefix has no Network: use the previous one.</li>\n<li>Ignore everything else (legend, <code>Displayed …</code>, <code>Total number …</code>, blank lines).</li>\n</ul><p>Hidden cases: the DC table, the rogue router (<code>*u</code>), the hijack and the withdrawal on the ISP, the real IPv6 table with its wrapped line, Lab 2's <code>grep</code>-filtered table (no \"local AS\" line), and a <b>constructed</b> table with two paths for one prefix.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>parseBgpTable(text)</code>. <code>text</code> là toàn bộ output <code>show ip bgp</code> của FRR (hoặc <code>show bgp ipv6 unicast</code>), có cả chú giải. Ví dụ thật (lab/out/c25-isp):</p><pre>BGP table version is 3, local router ID is 192.0.2.1, vrf id 0\nDefault local pref 100, local AS 64500\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, &gt; best, = multipath,\n               i internal, r RIB-failure, S Stale, R Removed\nNexthop codes: @NNN nexthop's vrf id, &lt; announce-nh-self\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\nRPKI validation codes: V valid, I invalid, N Not found\n\n     Network          Next Hop            Metric LocPrf Weight Path\n *&gt;  198.18.0.0/24    192.0.2.66               0             0 64511 i\n *&gt;  198.51.100.0/24  0.0.0.0                  0         32768 i\n *&gt;  203.0.113.0/24   192.0.2.3                0             0 64510 i\n\nDisplayed 3 routes and 3 total paths</pre><p>Trả về một object cho mỗi dòng tuyến, theo thứ tự: <code>{ status, best, network, nextHop, path, originAs, origin }</code>.</p>\n<ul>\n<li>Dòng tuyến bắt đầu sau dòng tiêu đề <code>Network  Next Hop … Path</code>; dòng tuyến có <code>*</code> trong bốn ký tự đầu. <code>status</code> = chữ đầu (<code>\"*&gt;\"</code>, <code>\"*u\"</code>…); <code>best</code> = nó chứa <code>&gt;</code>.</li>\n<li>Cột Path bắt đầu <b>đúng dưới chữ \"Path\"</b> của dòng tiêu đề: mọi thứ từ vị trí đó là các số AS và, cuối cùng, mã nguồn gốc (<code>i</code>, <code>e</code> hoặc <code>?</code>). Đừng đoán từ các số ở giữa: Metric và Weight có thể trống, mà ASN cũng là số.</li>\n<li><code>path</code> = mảng số (có thể rỗng); <code>originAs</code> = số cuối của nó, hoặc — khi rỗng — AS của chính router lấy từ dòng <code>\"… local AS 64500\"</code> (<code>null</code> nếu văn bản không có dòng đó).</li>\n<li>Next hop dài (IPv6) đẩy phần còn lại của dòng xuống dòng sau, dòng đó bắt đầu bằng dấu cách. Đường thứ hai cho cùng một prefix không có Network: dùng prefix của dòng trước.</li>\n<li>Bỏ qua mọi thứ khác (chú giải, <code>Displayed …</code>, <code>Total number …</code>, dòng trống).</li>\n</ul><p>Ca ẩn: bảng của dc, router xấu (<code>*u</code>), lúc bị cướp và lúc rút tuyến trên isp, bảng IPv6 thật với dòng bị ngắt, bảng của Lab 2 đã lọc bằng <code>grep</code> (không có dòng \"local AS\"), và một bảng <b>dựng</b> có hai đường cho một prefix.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — FRR show ip bgp output.|||text — output show ip bgp của FRR.",
+      "outputSpec": "[{ status, best, network, nextHop, path: [numbers], originAs, origin }]|||[{ status, best, network, nextHop, path: [số], originAs, origin }]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseBgpTable(\"BGP table version is 3, local router ID is 192.0.2.1, vrf id 0\\nDefault local pref 100, local AS 64500\\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, > best, = multipath,\\n               i internal, r RIB-failure, S Stale, R Removed\\nNexthop codes: @NNN nexthop's vrf id, < announce-nh-self\\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\\nRPKI validation codes: V valid, I invalid, N Not found\\n\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *>  198.18.0.0/24    192.0.2.66               0             0 64511 i\\n *>  198.51.100.0/24  0.0.0.0                  0         32768 i\\n *>  203.0.113.0/24   192.0.2.3                0             0 64510 i\\n\\nDisplayed 3 routes and 3 total paths\")",
+          "output": "[{\"status\":\"*>\",\"best\":true,\"network\":\"198.18.0.0/24\",\"nextHop\":\"192.0.2.66\",\"path\":[64511],\"originAs\":64511,\"origin\":\"i\"},{\"status\":\"*>\",\"best\":true,\"network\":\"198.51.100.0/24\",\"nextHop\":\"0.0.0.0\",\"path\":[],\"originAs\":64500,\"origin\":\"i\"},{\"status\":\"*>\",\"best\":true,\"network\":\"203.0.113.0/24\",\"nextHop\":\"192.0.2.3\",\"path\":[64510],\"originAs\":64510,\"origin\":\"i\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Find the header first and remember pathCol = header.indexOf(\"Path\"). Remember \"local AS N\" from any line.|||Tìm dòng tiêu đề trước và nhớ pathCol = header.indexOf(\"Path\"). Nhớ \"local AS N\" từ bất kỳ dòng nào.",
+        "For a route line, line.slice(0, pathCol) split into words gives status, network (contains \"/\") and next hop; line.slice(pathCol) gives the path and the origin code.|||Với dòng tuyến, line.slice(0, pathCol) tách từ cho status, network (chứa \"/\") và next hop; line.slice(pathCol) cho path và mã nguồn gốc.",
+        "If a route line is shorter than pathCol, keep it \"open\" and take the path from the next line that starts with spaces.|||Nếu dòng tuyến ngắn hơn pathCol, giữ nó \"mở\" và lấy path từ dòng kế tiếp bắt đầu bằng dấu cách."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** FRR \"show ip bgp\" text ⇒ [{ status, best, network, nextHop, path, originAs, origin }] */\nfunction parseBgpTable(text) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseBgpTable(text) {\n  var lines = String(text).split('\\n');\n  var localAs = null, pathCol = -1, routes = [], last = null, lastNet = null;\n  function fill(r, line) {\n    if (line.length <= pathCol) return false;\n    var w = line.slice(pathCol).trim().split(/\\s+/);           // \"64500 64511 i\"\n    r.origin = w[w.length - 1];\n    r.path = w.slice(0, -1).map(Number);\n    r.originAs = r.path.length ? r.path[r.path.length - 1] : localAs;\n    return true;\n  }\n  lines.forEach(function (line) {\n    var m = /local AS (\\d+)/.exec(line);\n    if (m) localAs = Number(m[1]);\n    if (/^\\s*Network\\s+Next Hop/.test(line)) { pathCol = line.indexOf('Path'); return; }\n    if (pathCol < 0 || !line.trim()) return;\n    var st = /^ ?([sdhuirSR*=>]+)\\s+(.*)$/.exec(line);\n    if (st && line.indexOf('*') >= 0 && line.indexOf('*') < 4) {\n      var w = line.slice(0, pathCol).trim().split(/\\s+/);    // [status, network?, next hop, …]\n      var hasNet = w[1] && w[1].indexOf('/') >= 0;\n      var r = { status: w[0], best: w[0].indexOf('>') >= 0, network: hasNet ? w[1] : lastNet, nextHop: hasNet ? w[2] : w[1], path: [], originAs: null, origin: null };\n      lastNet = r.network;\n      routes.push(r);\n      last = fill(r, line) ? null : r;                         // a long next hop pushes the rest onto the next line\n      return;\n    }\n    if (last && /^\\s/.test(line)) { fill(last, line); last = null; }\n  });\n  return routes;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Router tables are fixed-width text meant for humans, so the reliable anchor is the header, not the values: the Path column always starts under \"Path\", which turns the ambiguous run of numbers (metric, weight, ASNs) into an unambiguous split. The origin AS is the last element of the path — the network that owns the prefix — except for routes the router originates itself, whose path is empty and whose owner is the local AS printed above the table. Handling the two FRR line shapes that real output contains (a wrapped line after a long IPv6 next hop, and continuation paths without a Network) is what lets the same parser read every table in this lesson.</p>",
+      "solutionExplanationHtmlVi": "<p>Bảng của router là chữ độ rộng cố định viết cho người đọc, nên mốc đáng tin là dòng tiêu đề chứ không phải giá trị: cột Path luôn bắt đầu dưới chữ \"Path\", biến dãy số mơ hồ (metric, weight, ASN) thành một phép tách rõ ràng. AS gốc là phần tử cuối của path — mạng sở hữu prefix — trừ các tuyến router tự khởi phát, có path rỗng và chủ sở hữu là local AS in phía trên bảng. Xử lý hai dạng dòng của FRR có trong output thật (dòng bị ngắt sau next hop IPv6 dài, và đường tiếp theo không có Network) là thứ giúp cùng một bộ đọc đọc được mọi bảng trong bài.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The ISP table (real, c25-isp)",
+              "vi": "Bảng của isp (thật, c25-isp)"
+            },
+            "goi": "parseBgpTable(\"BGP table version is 3, local router ID is 192.0.2.1, vrf id 0\\nDefault local pref 100, local AS 64500\\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, > best, = multipath,\\n               i internal, r RIB-failure, S Stale, R Removed\\nNexthop codes: @NNN nexthop's vrf id, < announce-nh-self\\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\\nRPKI validation codes: V valid, I invalid, N Not found\\n\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *>  198.18.0.0/24    192.0.2.66               0             0 64511 i\\n *>  198.51.100.0/24  0.0.0.0                  0         32768 i\\n *>  203.0.113.0/24   192.0.2.3                0             0 64510 i\\n\\nDisplayed 3 routes and 3 total paths\")",
+            "mongDoi": [
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.18.0.0/24",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.51.100.0/24",
+                "nextHop": "0.0.0.0",
+                "path": [],
+                "originAs": 64500,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "203.0.113.0/24",
+                "nextHop": "192.0.2.3",
+                "path": [
+                  64510
+                ],
+                "originAs": 64510,
+                "origin": "i"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The DC table (real, c25-dc): blank metrics",
+              "vi": "Bảng của dc (thật, c25-dc): metric trống"
+            },
+            "goi": "parseBgpTable(\"BGP table version is 3, local router ID is 192.0.2.3, vrf id 0\\nDefault local pref 100, local AS 64510\\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, > best, = multipath,\\n               i internal, r RIB-failure, S Stale, R Removed\\nNexthop codes: @NNN nexthop's vrf id, < announce-nh-self\\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\\nRPKI validation codes: V valid, I invalid, N Not found\\n\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *>  198.18.0.0/24    192.0.2.66                             0 64500 64511 i\\n *>  198.51.100.0/24  192.0.2.1                0             0 64500 i\\n *>  203.0.113.0/24   0.0.0.0                  0         32768 i\\n\\nDisplayed 3 routes and 3 total paths\")",
+            "mongDoi": [
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.18.0.0/24",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64500,
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.51.100.0/24",
+                "nextHop": "192.0.2.1",
+                "path": [
+                  64500
+                ],
+                "originAs": 64500,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "203.0.113.0/24",
+                "nextHop": "0.0.0.0",
+                "path": [],
+                "originAs": 64510,
+                "origin": "i"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseBgpTable(\"BGP table version is 5, local router ID is 192.0.2.66, vrf id 0\\nDefault local pref 100, local AS 64511\\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, > best, = multipath,\\n               i internal, r RIB-failure, S Stale, R Removed\\nNexthop codes: @NNN nexthop's vrf id, < announce-nh-self\\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\\nRPKI validation codes: V valid, I invalid, N Not found\\n\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *>  198.18.0.0/24    0.0.0.0                  0         32768 i\\n *>  198.51.100.0/24  192.0.2.1                0             0 64500 i\\n *>  203.0.113.0/24   192.0.2.3                              0 64500 64510 i\\n *u  203.0.113.0/25   0.0.0.0                  0         32768 i\\n\\nDisplayed 4 routes and 4 total paths\")",
+            "mongDoi": [
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.18.0.0/24",
+                "nextHop": "0.0.0.0",
+                "path": [],
+                "originAs": 64511,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.51.100.0/24",
+                "nextHop": "192.0.2.1",
+                "path": [
+                  64500
+                ],
+                "originAs": 64500,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "203.0.113.0/24",
+                "nextHop": "192.0.2.3",
+                "path": [
+                  64500,
+                  64510
+                ],
+                "originAs": 64510,
+                "origin": "i"
+              },
+              {
+                "status": "*u",
+                "best": false,
+                "network": "203.0.113.0/25",
+                "nextHop": "0.0.0.0",
+                "path": [],
+                "originAs": 64511,
+                "origin": "i"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseBgpTable(\"BGP table version is 6, local router ID is 192.0.2.1, vrf id 0\\nDefault local pref 100, local AS 64500\\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, > best, = multipath,\\n               i internal, r RIB-failure, S Stale, R Removed\\nNexthop codes: @NNN nexthop's vrf id, < announce-nh-self\\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\\nRPKI validation codes: V valid, I invalid, N Not found\\n\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *>  198.18.0.0/24    192.0.2.66               0             0 64511 i\\n *>  198.51.100.0/24  0.0.0.0                  0         32768 i\\n *>  203.0.113.0/24   192.0.2.3                0             0 64510 i\\n *>  203.0.113.0/25   192.0.2.66               0             0 64511 i\\n\\nDisplayed 4 routes and 4 total paths\")",
+            "mongDoi": [
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.18.0.0/24",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.51.100.0/24",
+                "nextHop": "0.0.0.0",
+                "path": [],
+                "originAs": 64500,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "203.0.113.0/24",
+                "nextHop": "192.0.2.3",
+                "path": [
+                  64510
+                ],
+                "originAs": 64510,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "203.0.113.0/25",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseBgpTable(\"BGP table version is 4, local router ID is 192.0.2.1, vrf id 0\\nDefault local pref 100, local AS 64500\\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, > best, = multipath,\\n               i internal, r RIB-failure, S Stale, R Removed\\nNexthop codes: @NNN nexthop's vrf id, < announce-nh-self\\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\\nRPKI validation codes: V valid, I invalid, N Not found\\n\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *>  198.18.0.0/24    192.0.2.66               0             0 64511 i\\n *>  198.51.100.0/24  0.0.0.0                  0         32768 i\\n\\nDisplayed 2 routes and 2 total paths\")",
+            "mongDoi": [
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.18.0.0/24",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.51.100.0/24",
+                "nextHop": "0.0.0.0",
+                "path": [],
+                "originAs": 64500,
+                "origin": "i"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the real IPv6 table with a wrapped line",
+              "vi": "Ẩn: bảng IPv6 thật có dòng bị ngắt"
+            },
+            "goi": "parseBgpTable(\"BGP table version is 2, local router ID is 192.0.2.1, vrf id 0\\nDefault local pref 100, local AS 64500\\nStatus codes:  s suppressed, d damped, h history, u unsorted, * valid, > best, = multipath,\\n               i internal, r RIB-failure, S Stale, R Removed\\nNexthop codes: @NNN nexthop's vrf id, < announce-nh-self\\nOrigin codes:  i - IGP, e - EGP, ? - incomplete\\nRPKI validation codes: V valid, I invalid, N Not found\\n\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *>  2001:db8:a::/48  ::                       0         32768 i\\n *>  2001:db8:d::/48  fe80::c0ff:fe00:203\\n                                               0             0 64510 i\\n\\nDisplayed 2 routes and 2 total paths\")",
+            "mongDoi": [
+              {
+                "status": "*>",
+                "best": true,
+                "network": "2001:db8:a::/48",
+                "nextHop": "::",
+                "path": [],
+                "originAs": 64500,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "2001:db8:d::/48",
+                "nextHop": "fe80::c0ff:fe00:203",
+                "path": [
+                  64510
+                ],
+                "originAs": 64510,
+                "origin": "i"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: Lab 2 table filtered by grep (no local AS)",
+              "vi": "Ẩn: bảng Lab 2 đã lọc bằng grep (không có local AS)"
+            },
+            "goi": "parseBgpTable(\"     Network          Next Hop            Metric LocPrf Weight Path\\n *>  198.18.0.0/24    192.0.2.66               0             0 64511 i\\n *>  198.51.100.0/24  0.0.0.0                  0         32768 i\\n *>  203.0.113.0/24   192.0.2.3                0             0 64510 i\")",
+            "mongDoi": [
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.18.0.0/24",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.51.100.0/24",
+                "nextHop": "0.0.0.0",
+                "path": [],
+                "originAs": null,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "203.0.113.0/24",
+                "nextHop": "192.0.2.3",
+                "path": [
+                  64510
+                ],
+                "originAs": 64510,
+                "origin": "i"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: two paths for one prefix (constructed)",
+              "vi": "Ẩn: hai đường cho một prefix (dựng)"
+            },
+            "goi": "parseBgpTable(\"BGP table version is 3, local router ID is 192.0.2.1, vrf id 0\\nDefault local pref 100, local AS 64500\\n     Network          Next Hop            Metric LocPrf Weight Path\\n *   203.0.113.0/24   192.0.2.66                             0 64511 i\\n *>                   192.0.2.3                0             0 64510 i\\n *>  198.18.0.0/24    192.0.2.66               0             0 64511 i\\n\\nDisplayed 2 routes and 3 total paths\")",
+            "mongDoi": [
+              {
+                "status": "*",
+                "best": false,
+                "network": "203.0.113.0/24",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "203.0.113.0/24",
+                "nextHop": "192.0.2.3",
+                "path": [
+                  64510
+                ],
+                "originAs": 64510,
+                "origin": "i"
+              },
+              {
+                "status": "*>",
+                "best": true,
+                "network": "198.18.0.0/24",
+                "nextHop": "192.0.2.66",
+                "path": [
+                  64511
+                ],
+                "originAs": 64511,
+                "origin": "i"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting the whole line on spaces and taking \"the numbers after the next hop\" as the path: \"0 64500 64511\" on the DC table is weight 0 + path, while \"0 0 64511\" on the ISP is metric, weight, path.|||Tách cả dòng theo dấu cách rồi lấy \"các số sau next hop\" làm path: \"0 64500 64511\" ở bảng dc là weight 0 + path, còn \"0 0 64511\" ở isp là metric, weight, path."
+        },
+        {
+          "loi": "Taking the first AS of the path as the origin.|||Lấy AS đầu tiên của path làm AS gốc."
+        },
+        {
+          "loi": "Losing the IPv6 route whose path is on the next line, or the second path that has no Network.|||Đánh mất tuyến IPv6 có path ở dòng sau, hoặc đường thứ hai không có Network."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fixed-width column",
+          "vi": "cột độ rộng cố định"
+        },
+        {
+          "en": "origin code (i / e / ?)",
+          "vi": "mã nguồn gốc",
+          "giaiThich": "i = IGP: khởi phát bên trong AS."
+        },
+        {
+          "en": "local AS",
+          "vi": "AS của chính router"
+        }
+      ]
+    },
+    {
+      "title": "BGP 6 — Write rpkiValidate(prefix, originAs, roas) per RFC 6811",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "RPKI",
+        "route origin validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real answers from RIPE's validator for cuongthai.com (lab/out/c25-that):</p><pre># RIPEstat rpki-validation: AS152992, 160.187.0.0/23\nAS152992 announcing 160.187.0.0/23: valid\n# … and the ROA it was checked against\nROA: origin AS152992, prefix 160.187.0.0/23, max length /24\n# RIPEstat rpki-validation: AS64511, 160.187.0.0/23\nAS64511 announcing 160.187.0.0/23: invalid_asn\n# RIPEstat rpki-validation: AS152992, 160.187.1.0/25\nAS152992 announcing 160.187.1.0/25: invalid_length</pre><p>Write <code>rpkiValidate(prefix, originAs, roas)</code> for IPv4. <code>roas</code> is <code>[{ prefix, asn, maxLength }]</code> (<code>maxLength</code> missing ⇒ the ROA prefix length). Return:</p>\n<ol>\n<li><code>\"not_found\"</code> — no ROA <b>covers</b> the route (the route is the ROA prefix or a more specific part of it);</li>\n<li><code>\"valid\"</code> — some covering ROA has <code>asn === originAs</code> and route length ≤ its maxLength;</li>\n<li><code>\"invalid_length\"</code> — not valid, but some covering ROA has the right ASN (the route is too specific);</li>\n<li><code>\"invalid_asn\"</code> — otherwise (no covering ROA allows this origin).</li>\n</ol>\n<p>A ROA with <code>asn: 0</code> means \"no AS may originate this prefix\" and never matches. Visible cases: the three real RIPEstat answers. Hidden cases use the real cuongthai.com ROA, a ROA for the lab (<b>constructed</b>: LabFlow would publish 203.0.113.0/24, AS64510, max /24), a ROA modelled on the 1.1.1.1 story of the lesson (<b>constructed</b>), several ROAs, AS 0, a less specific route, and a missing maxLength.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu trả lời thật từ bộ kiểm của RIPE cho cuongthai.com (lab/out/c25-that):</p><pre># RIPEstat rpki-validation: AS152992, 160.187.0.0/23\nAS152992 announcing 160.187.0.0/23: valid\n# … and the ROA it was checked against\nROA: origin AS152992, prefix 160.187.0.0/23, max length /24\n# RIPEstat rpki-validation: AS64511, 160.187.0.0/23\nAS64511 announcing 160.187.0.0/23: invalid_asn\n# RIPEstat rpki-validation: AS152992, 160.187.1.0/25\nAS152992 announcing 160.187.1.0/25: invalid_length</pre><p>Viết <code>rpkiValidate(prefix, originAs, roas)</code> cho IPv4. <code>roas</code> là <code>[{ prefix, asn, maxLength }]</code> (thiếu <code>maxLength</code> ⇒ bằng độ dài prefix của ROA). Trả:</p>\n<ol>\n<li><code>\"not_found\"</code> — không ROA nào <b>phủ</b> tuyến (tuyến là chính prefix của ROA hoặc một phần cụ thể hơn của nó);</li>\n<li><code>\"valid\"</code> — có ROA phủ với <code>asn === originAs</code> và độ dài tuyến ≤ maxLength của nó;</li>\n<li><code>\"invalid_length\"</code> — không valid, nhưng có ROA phủ đúng ASN (tuyến quá cụ thể);</li>\n<li><code>\"invalid_asn\"</code> — còn lại (không ROA phủ nào cho phép AS gốc này).</li>\n</ol>\n<p>ROA có <code>asn: 0</code> nghĩa là \"không AS nào được khởi phát prefix này\" và không bao giờ khớp. Ca hiện: ba câu trả lời thật của RIPEstat. Ca ẩn dùng ROA thật của cuongthai.com, một ROA cho lab (<b>dựng</b>: LabFlow sẽ công bố 203.0.113.0/24, AS64510, tối đa /24), một ROA mô phỏng câu chuyện 1.1.1.1 trong bài (<b>dựng</b>), nhiều ROA, AS 0, một tuyến kém cụ thể hơn, và thiếu maxLength.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "prefix — \"a.b.c.d/len\"; originAs — a number; roas — [{ prefix, asn, maxLength? }].|||prefix — \"a.b.c.d/len\"; originAs — số; roas — [{ prefix, asn, maxLength? }].",
+      "outputSpec": "\"valid\" | \"invalid_asn\" | \"invalid_length\" | \"not_found\"",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rpkiValidate(\"160.187.0.0/23\", 152992, [{\"prefix\":\"160.187.0.0/23\",\"asn\":152992,\"maxLength\":24}])",
+          "output": "\"valid\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Covers = route length ≥ ROA length and the first ROA-length bits are equal (the same test as lookup in lesson 2.2).|||Phủ = độ dài tuyến ≥ độ dài ROA và các bit đầu (bằng độ dài ROA) bằng nhau (cùng phép thử với lookup ở bài 2.2).",
+        "Collect the covering ROAs first; then the order of the checks gives the four answers.|||Gom các ROA phủ trước; rồi thứ tự các phép kiểm cho ra bốn câu trả lời."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** RFC 6811 origin validation (IPv4) ⇒ 'valid' | 'invalid_asn' | 'invalid_length' | 'not_found' */\nfunction rpkiValidate(prefix, originAs, roas) {\n  // Write your solution here\n  return 'valid';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction rpkiValidate(prefix, originAs, roas) {\n  function parse(p) {\n    var a = p.split('/');\n    return { n: a[0].split('.').reduce(function (x, b) { return x * 256 + Number(b); }, 0), len: Number(a[1]) };\n  }\n  var r = parse(prefix);\n  // RFC 6811: a ROA \"covers\" the route when the route is the ROA prefix or a more specific part of it\n  var covering = roas.filter(function (roa) {\n    var p = parse(roa.prefix);\n    var size = Math.pow(2, 32 - p.len);\n    return r.len >= p.len && Math.floor(r.n / size) === Math.floor(p.n / size);\n  });\n  if (!covering.length) return 'not_found';\n  function maxLen(roa) { return roa.maxLength == null ? parse(roa.prefix).len : roa.maxLength; }\n  // AS 0 in a ROA means \"nobody may originate this\": it never matches\n  if (covering.some(function (roa) { return roa.asn !== 0 && roa.asn === originAs && r.len <= maxLen(roa); })) return 'valid';\n  if (covering.some(function (roa) { return roa.asn !== 0 && roa.asn === originAs; })) return 'invalid_length';\n  return 'invalid_asn';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Origin validation answers one narrow question: may this AS originate this prefix at this length? A ROA only speaks about the space it covers, so routes outside every ROA are not_found (most of the Internet's routes were in that state for years), while a route inside a ROA must match both its ASN and its maxLength. That is why the 2008-style more specific hijack fails twice — wrong origin and too long — and why the 1.1.1.1 leak of 2024 passed: its origin was correct, and RPKI does not look at the rest of the path.</p>",
+      "solutionExplanationHtmlVi": "<p>Kiểm nguồn gốc trả lời đúng một câu hỏi hẹp: AS này có được khởi phát prefix này với độ dài này không? ROA chỉ nói về vùng địa chỉ nó phủ, nên tuyến nằm ngoài mọi ROA là not_found (nhiều năm phần lớn tuyến trên Internet ở trạng thái đó), còn tuyến nằm trong một ROA phải khớp cả ASN lẫn maxLength. Vì thế vụ cướp kiểu 2008 bằng dải cụ thể hơn trượt hai lần — sai AS gốc và quá dài — và vì thế vụ rò 1.1.1.1 năm 2024 lọt: AS gốc của nó đúng, mà RPKI không nhìn phần còn lại của path.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "AS152992 announcing 160.187.0.0/23 (real: valid)",
+              "vi": "AS152992 quảng bá 160.187.0.0/23 (thật: valid)"
+            },
+            "goi": "rpkiValidate(\"160.187.0.0/23\", 152992, [{\"prefix\":\"160.187.0.0/23\",\"asn\":152992,\"maxLength\":24}])",
+            "mongDoi": "valid"
+          },
+          {
+            "moTa": {
+              "en": "AS64511 announcing 160.187.0.0/23 (real: invalid_asn)",
+              "vi": "AS64511 quảng bá 160.187.0.0/23 (thật: invalid_asn)"
+            },
+            "goi": "rpkiValidate(\"160.187.0.0/23\", 64511, [{\"prefix\":\"160.187.0.0/23\",\"asn\":152992,\"maxLength\":24}])",
+            "mongDoi": "invalid_asn"
+          },
+          {
+            "moTa": {
+              "en": "AS152992 announcing 160.187.1.0/25 (real: invalid_length)",
+              "vi": "AS152992 quảng bá 160.187.1.0/25 (thật: invalid_length)"
+            },
+            "goi": "rpkiValidate(\"160.187.1.0/25\", 152992, [{\"prefix\":\"160.187.0.0/23\",\"asn\":152992,\"maxLength\":24}])",
+            "mongDoi": "invalid_length"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "rpkiValidate(\"160.187.1.0/24\", 152992, [{\"prefix\":\"160.187.0.0/23\",\"asn\":152992,\"maxLength\":24}])",
+            "mongDoi": "valid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "rpkiValidate(\"160.187.0.0/22\", 152992, [{\"prefix\":\"160.187.0.0/23\",\"asn\":152992,\"maxLength\":24}])",
+            "mongDoi": "not_found",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "rpkiValidate(\"203.0.113.0/25\", 64511, [{\"prefix\":\"203.0.113.0/24\",\"asn\":64510,\"maxLength\":24}])",
+            "mongDoi": "invalid_asn",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "rpkiValidate(\"203.0.113.0/24\", 64510, [{\"prefix\":\"203.0.113.0/24\",\"asn\":64510,\"maxLength\":24}])",
+            "mongDoi": "valid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "rpkiValidate(\"203.0.113.0/25\", 64510, [{\"prefix\":\"203.0.113.0/24\",\"asn\":64510,\"maxLength\":24}])",
+            "mongDoi": "invalid_length",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "rpkiValidate(\"198.18.0.0/24\", 64511, [{\"prefix\":\"203.0.113.0/24\",\"asn\":64510,\"maxLength\":24}])",
+            "mongDoi": "not_found",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "rpkiValidate(\"1.1.1.1/32\", 267613, [{\"prefix\":\"1.1.1.0/24\",\"asn\":13335,\"maxLength\":24}])",
+            "mongDoi": "invalid_asn",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "rpkiValidate(\"1.1.1.0/24\", 13335, [{\"prefix\":\"1.1.1.0/24\",\"asn\":13335,\"maxLength\":24}])",
+            "mongDoi": "valid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "rpkiValidate(\"203.0.113.128/25\", 64511, [{\"prefix\":\"203.0.113.0/24\",\"asn\":64510,\"maxLength\":24},{\"prefix\":\"203.0.113.128/25\",\"asn\":64511,\"maxLength\":25}])",
+            "mongDoi": "valid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "rpkiValidate(\"192.0.2.0/24\", 64500, [{\"prefix\":\"192.0.2.0/24\",\"asn\":0,\"maxLength\":24}])",
+            "mongDoi": "invalid_asn",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 14",
+              "vi": "Ca ẩn 14"
+            },
+            "goi": "rpkiValidate(\"198.51.100.0/25\", 64500, [{\"prefix\":\"198.51.100.0/24\",\"asn\":64500}])",
+            "mongDoi": "invalid_length",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a route \"not_found\" because no ROA has exactly the same prefix — a /25 inside a ROA's /23 is covered.|||Gọi tuyến là \"not_found\" vì không ROA nào có đúng cùng prefix — một /25 nằm trong /23 của ROA là được phủ."
+        },
+        {
+          "loi": "Treating a route less specific than the ROA (a /22 around a /23 ROA) as covered.|||Coi tuyến kém cụ thể hơn ROA (một /22 bao một ROA /23) là được phủ."
+        },
+        {
+          "loi": "Returning \"invalid_asn\" for the rightful owner's /25 — the right ASN with a wrong length is invalid_length.|||Trả \"invalid_asn\" cho /25 của chính chủ — đúng ASN mà sai độ dài là invalid_length."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "covering ROA",
+          "vi": "ROA phủ tuyến"
+        },
+        {
+          "en": "maxLength",
+          "vi": "độ dài tối đa"
+        },
+        {
+          "en": "AS 0 ROA",
+          "vi": "ROA cấm mọi AS"
+        }
+      ]
+    },
+    {
+      "title": "BGP 7 — Write detectHijacks(mine, routes): a BGP alarm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "BGP monitoring",
+        "hijack detection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Monitoring services watch BGP tables and alert owners. Build the core of one. <code>mine</code> is <code>[{ prefix, asn }]</code> — your IPv4 ranges and the AS that should originate them; <code>routes</code> is <code>[{ network, originAs }]</code> as your <code>parseBgpTable</code> returns (other fields may be present and are ignored). Return <code>{ alerts, missing }</code>:</p>\n<ul>\n<li><code>alerts</code> — for every route (in order) that is one of your prefixes or <b>inside</b> it, with <code>originAs</code> different from yours: <code>{ network, originAs, victim, kind }</code>, <code>kind</code> = <code>\"same-prefix\"</code> or <code>\"more-specific\"</code>. A route that only <b>contains</b> your prefix (less specific) is not an alert — longest prefix match still sends your traffic to you.</li>\n<li><code>missing</code> — your prefixes that no route announces with your AS (withdrawn, or replaced), in the order of <code>mine</code>.</li>\n<li>Skip IPv6 routes and IPv6 entries of <code>mine</code> (they contain \":\").</li>\n</ul><p>Visible cases are built by parsing the real ISP tables: normal (c25-isp), during the hijack (c25-isp-cuop) and after the withdrawal (c25-isp-rut). Hidden: Lab 2 incident B, the DC's own view during the hijack, a constructed same-prefix announcement and a constructed less specific one, several prefixes of your own.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các dịch vụ giám sát theo dõi bảng BGP và báo cho chủ sở hữu. Hãy dựng phần lõi của một dịch vụ như vậy. <code>mine</code> là <code>[{ prefix, asn }]</code> — các dải IPv4 của bạn và AS phải khởi phát chúng; <code>routes</code> là <code>[{ network, originAs }]</code> như <code>parseBgpTable</code> của bạn trả về (có thể có trường khác, bỏ qua). Trả <code>{ alerts, missing }</code>:</p>\n<ul>\n<li><code>alerts</code> — với mỗi tuyến (theo thứ tự) là một prefix của bạn hoặc nằm <b>bên trong</b> nó, mà <code>originAs</code> khác của bạn: <code>{ network, originAs, victim, kind }</code>, <code>kind</code> = <code>\"same-prefix\"</code> hoặc <code>\"more-specific\"</code>. Tuyến chỉ <b>bao</b> prefix của bạn (kém cụ thể hơn) thì không báo — khớp tiền tố dài nhất vẫn đưa lưu lượng về bạn.</li>\n<li><code>missing</code> — các prefix của bạn không có tuyến nào quảng bá với AS của bạn (đã rút, hoặc bị thay), theo thứ tự của <code>mine</code>.</li>\n<li>Bỏ qua tuyến IPv6 và mục IPv6 trong <code>mine</code> (chúng có \":\").</li>\n</ul><p>Ca hiện dựng bằng cách đọc các bảng isp thật: bình thường (c25-isp), lúc bị cướp (c25-isp-cuop) và sau khi rút tuyến (c25-isp-rut). Ca ẩn: sự cố B của Lab 2, góc nhìn của chính dc lúc bị cướp, một thông báo cùng prefix dựng và một thông báo kém cụ thể hơn dựng, nhiều prefix của bạn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "mine — [{ prefix, asn }]; routes — [{ network, originAs }].",
+      "outputSpec": "{ alerts: [{ network, originAs, victim, kind }], missing: [prefix] }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500},{\"network\":\"203.0.113.0/24\",\"originAs\":64510}])",
+          "output": "{\"alerts\":[],\"missing\":[]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "\"Inside\" is the covering test of exercise 6, with your prefix as the outer one.|||\"Bên trong\" là phép thử phủ của bài 6, với prefix của bạn là cái bao ngoài.",
+        "missing is a separate pass: for each of your prefixes, look for an exact network with your AS.|||missing là một vòng riêng: với mỗi prefix của bạn, tìm đúng network đó với AS của bạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** mine: [{ prefix, asn }]   routes: [{ network, originAs }]  ⇒ { alerts: [...], missing: [...] } */\nfunction detectHijacks(mine, routes) {\n  // Write your solution here\n  return { alerts: [], missing: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction detectHijacks(mine, routes) {\n  function parse(p) {\n    var a = p.split('/');\n    return { n: a[0].split('.').reduce(function (x, b) { return x * 256 + Number(b); }, 0), len: Number(a[1]) };\n  }\n  function inside(inner, outer) {               // inner is outer or a more specific part of it\n    var i = parse(inner), o = parse(outer), size = Math.pow(2, 32 - o.len);\n    return i.len >= o.len && Math.floor(i.n / size) === Math.floor(o.n / size);\n  }\n  var v4 = routes.filter(function (r) { return r.network && r.network.indexOf(':') < 0; });\n  var my = mine.filter(function (m) { return m.prefix.indexOf(':') < 0; });   // IPv4 only in this exercise\n  var alerts = [];\n  v4.forEach(function (r) {\n    my.forEach(function (m) {\n      if (!inside(r.network, m.prefix) || r.originAs === m.asn) return;\n      alerts.push({ network: r.network, originAs: r.originAs, victim: m.prefix, kind: r.network === m.prefix ? 'same-prefix' : 'more-specific' });\n    });\n  });\n  var missing = my.filter(function (m) {\n    return !v4.some(function (r) { return r.network === m.prefix && r.originAs === m.asn; });\n  }).map(function (m) { return m.prefix; });\n  return { alerts: alerts, missing: missing };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>What hurts you in BGP is any announcement that can win your traffic: the same prefix from another origin (a tie that some networks will break the wrong way) or a more specific one (which wins everywhere by longest prefix match). Less specific announcements cannot steal traffic while your own route exists, so alerting on them is noise. The second failure mode is silence: after a withdrawal there is nothing foreign to see, only your own route missing — exactly the Facebook 2021 picture — so a monitor must check presence as well as origin.</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ làm hại bạn trong BGP là mọi thông báo có thể giành được lưu lượng của bạn: cùng prefix từ AS gốc khác (thế hoà mà vài mạng sẽ phân xử sai) hoặc prefix cụ thể hơn (thắng ở mọi nơi nhờ khớp tiền tố dài nhất). Thông báo kém cụ thể hơn không cướp được lưu lượng khi tuyến của bạn còn đó, nên báo động cho chúng là nhiễu. Kiểu hỏng thứ hai là im lặng: sau khi rút tuyến không có gì lạ để thấy, chỉ có tuyến của bạn biến mất — đúng bức tranh Facebook 2021 — nên bộ giám sát phải kiểm cả sự có mặt lẫn AS gốc.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The ISP table, normal (real c25-isp, parsed)",
+              "vi": "Bảng isp, bình thường (c25-isp thật, đã đọc)"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500},{\"network\":\"203.0.113.0/24\",\"originAs\":64510}])",
+            "mongDoi": {
+              "alerts": [],
+              "missing": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "The ISP table during the hijack (real c25-isp-cuop)",
+              "vi": "Bảng isp lúc bị cướp (c25-isp-cuop thật)"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500},{\"network\":\"203.0.113.0/24\",\"originAs\":64510},{\"network\":\"203.0.113.0/25\",\"originAs\":64511}])",
+            "mongDoi": {
+              "alerts": [
+                {
+                  "network": "203.0.113.0/25",
+                  "originAs": 64511,
+                  "victim": "203.0.113.0/24",
+                  "kind": "more-specific"
+                }
+              ],
+              "missing": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "The ISP table after the withdrawal (real c25-isp-rut)",
+              "vi": "Bảng isp sau khi rút tuyến (c25-isp-rut thật)"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500}])",
+            "mongDoi": {
+              "alerts": [],
+              "missing": [
+                "203.0.113.0/24"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":null},{\"network\":\"203.0.113.0/24\",\"originAs\":64510},{\"network\":\"203.0.113.0/25\",\"originAs\":64511}])",
+            "mongDoi": {
+              "alerts": [
+                {
+                  "network": "203.0.113.0/25",
+                  "originAs": 64511,
+                  "victim": "203.0.113.0/24",
+                  "kind": "more-specific"
+                }
+              ],
+              "missing": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500},{\"network\":\"203.0.113.0/24\",\"originAs\":64510},{\"network\":\"203.0.113.0/25\",\"originAs\":64511}])",
+            "mongDoi": {
+              "alerts": [
+                {
+                  "network": "203.0.113.0/25",
+                  "originAs": 64511,
+                  "victim": "203.0.113.0/24",
+                  "kind": "more-specific"
+                }
+              ],
+              "missing": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden: same prefix from AS64511 (constructed table)",
+              "vi": "Ẩn: cùng prefix từ AS64511 (bảng dựng)"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"203.0.113.0/24\",\"originAs\":64511},{\"network\":\"203.0.113.0/24\",\"originAs\":64510},{\"network\":\"198.18.0.0/24\",\"originAs\":64511}])",
+            "mongDoi": {
+              "alerts": [
+                {
+                  "network": "203.0.113.0/24",
+                  "originAs": 64511,
+                  "victim": "203.0.113.0/24",
+                  "kind": "same-prefix"
+                }
+              ],
+              "missing": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500},{\"network\":\"203.0.113.0/24\",\"originAs\":64510},{\"network\":\"203.0.0.0/16\",\"originAs\":64511}])",
+            "mongDoi": {
+              "alerts": [],
+              "missing": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510},{\"prefix\":\"2001:db8:d::/48\",\"asn\":64510},{\"prefix\":\"198.18.0.0/24\",\"asn\":64511}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500},{\"network\":\"203.0.113.0/24\",\"originAs\":64510},{\"network\":\"203.0.113.0/25\",\"originAs\":64511},{\"network\":\"2001:db8:a::/48\",\"originAs\":64500},{\"network\":\"2001:db8:d::/48\",\"originAs\":64510}])",
+            "mongDoi": {
+              "alerts": [
+                {
+                  "network": "203.0.113.0/25",
+                  "originAs": 64511,
+                  "victim": "203.0.113.0/24",
+                  "kind": "more-specific"
+                }
+              ],
+              "missing": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "detectHijacks([{\"prefix\":\"203.0.113.0/24\",\"asn\":64510},{\"prefix\":\"2001:db8:d::/48\",\"asn\":64510},{\"prefix\":\"198.18.0.0/24\",\"asn\":64511}], [{\"network\":\"198.18.0.0/24\",\"originAs\":64511},{\"network\":\"198.51.100.0/24\",\"originAs\":64500}])",
+            "mongDoi": {
+              "alerts": [],
+              "missing": [
+                "203.0.113.0/24"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Alerting on 203.0.0.0/16 announced by someone else: it is less specific, your /24 still wins.|||Báo động cho 203.0.0.0/16 do người khác quảng bá: nó kém cụ thể hơn, /24 của bạn vẫn thắng."
+        },
+        {
+          "loi": "Reporting nothing after a withdrawal, because no foreign route appeared — the silence is the alarm.|||Không báo gì sau khi rút tuyến, vì không có tuyến lạ nào xuất hiện — chính sự im lặng là báo động."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "monitoring",
+          "vi": "giám sát"
+        },
+        {
+          "en": "less specific",
+          "vi": "kém cụ thể hơn",
+          "giaiThich": "Prefix ngắn hơn, bao prefix kia."
+        },
+        {
+          "en": "alert",
+          "vi": "cảnh báo"
+        }
+      ]
+    }
+  ]
+}

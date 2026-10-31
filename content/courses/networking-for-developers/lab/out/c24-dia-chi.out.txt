@@ -1,0 +1,26 @@
+# Ch2 · 2.4 IPv6 — laptop: hai địa chỉ v6 trên một card, tuyến v6, và máy chủ thấy gì (KHÔNG có NAT)
+$ ip -br -6 addr show eth0
+eth0@if2877      UP             2001:db8:a:50::10/64 fe80::c0ff:fea8:320a/64 
+$ ip -6 route
+2001:db8:a:50::/64 dev eth0 proto kernel metric 256 pref medium
+fe80::/64 dev eth0 proto kernel metric 256 pref medium
+default via 2001:db8:a:50::1 dev eth0 metric 1024 pref medium
+$ python3 -c "import ipaddress as i; a = i.ip_address('2001:db8:a:50::10'); print(a.exploded, '->', a.compressed)"
+2001:0db8:000a:0050:0000:0000:0000:0010 -> 2001:db8:a:50::10
+$ python3 -c "import ipaddress as i; print(i.ip_address('2001:0db8:0000:0000:0001:0000:0000:0001').compressed)"
+2001:db8::1:0:0:1
+$ python3 -c "import ipaddress as i; n = i.ip_network('2001:db8:a:50::/64'); print(n, 'holds', n.num_addresses, 'addresses')"
+2001:db8:a:50::/64 holds 18446744073709551616 addresses
+$ ping -6 -c 1 2001:db8:d::10
+PING 2001:db8:d::10 (2001:db8:d::10) 56 data bytes
+64 bytes from 2001:db8:d::10: icmp_seq=1 ttl=61 time=0.226 ms
+
+--- 2001:db8:d::10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.226/0.226/0.226/0.000 ms
+$ curl -s "http://[2001:db8:d::10]/"
+LabFlow edge (server 203.0.113.10)
+you came from 2001:db8:a:50::10 port 58834
+$ curl -s http://203.0.113.10/
+LabFlow edge (server 203.0.113.10)
+you came from 198.51.100.2 port 42874

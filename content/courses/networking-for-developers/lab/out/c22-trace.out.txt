@@ -1,0 +1,23 @@
+# Ch2 · 2.2 — traceroute từ laptop tới cổng LabFlow; bắt gói để thấy TTL tăng dần và ai trả lời
+$ traceroute -n 203.0.113.10
+traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets
+ 1  192.168.50.1  0.591 ms  0.509 ms  0.495 ms
+ 2  198.51.100.1  0.483 ms  0.409 ms  0.388 ms
+ 3  192.0.2.3  0.364 ms  0.329 ms  0.308 ms
+ 4  203.0.113.10  0.279 ms  0.199 ms  0.160 ms
+$ traceroute -n -q 1 -N 1 203.0.113.10
+traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets
+ 1  192.168.50.1  0.059 ms
+ 2  198.51.100.1  0.035 ms
+ 3  192.0.2.3  0.034 ms
+ 4  203.0.113.10  0.034 ms
+$ tshark -r /tmp/t.pcap -T fields -E occurrence=f -e ip.src -e ip.dst -e ip.ttl -e _ws.col.Info
+Running as user "root" and group "root". This could be dangerous.
+192.168.50.10	203.0.113.10	1	53040 → 33434 Len=32
+192.168.50.1	192.168.50.10	64	Time-to-live exceeded (Time to live exceeded in transit)
+192.168.50.10	203.0.113.10	2	52581 → 33435 Len=32
+198.51.100.1	192.168.50.10	63	Time-to-live exceeded (Time to live exceeded in transit)
+192.168.50.10	203.0.113.10	3	47619 → 33436 Len=32
+192.0.2.3	192.168.50.10	62	Time-to-live exceeded (Time to live exceeded in transit)
+192.168.50.10	203.0.113.10	4	43503 → 33437 Len=32
+203.0.113.10	192.168.50.10	61	Destination unreachable (Port unreachable)

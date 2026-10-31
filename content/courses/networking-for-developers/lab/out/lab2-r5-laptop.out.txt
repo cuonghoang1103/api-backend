@@ -1,0 +1,21 @@
+# Lab 2 · R5 — triệu chứng sự cố A, nhìn từ laptop
+$ curl -sS -m 3 -o /dev/null http://labflow.test/; echo "curl exit code $?"
+curl: (28) Resolving timed out after 3002 milliseconds
+curl exit code 28
+$ ping -4 -c 1 labflow.test
+ping: labflow.test: Temporary failure in name resolution
+$ traceroute -n -q 1 -N 1 -m 7 203.0.113.10
+traceroute to 203.0.113.10 (203.0.113.10), 7 hops max, 60 byte packets
+ 1  192.168.50.1  0.060 ms
+ 2  198.51.100.1  0.036 ms
+ 3  192.0.2.3  0.076 ms
+ 4  198.51.100.1  0.026 ms
+ 5  192.0.2.3  0.025 ms
+ 6  198.51.100.1  0.023 ms
+ 7  192.0.2.3  0.026 ms
+$ traceroute -n -q 1 -N 1 -m 5 203.0.113.100
+traceroute to 203.0.113.100 (203.0.113.100), 5 hops max, 60 byte packets
+ 1  192.168.50.1  0.051 ms
+ 2  198.51.100.1  0.026 ms
+ 3  192.0.2.3  0.029 ms
+ 4  192.0.2.3  3064.414 ms !H

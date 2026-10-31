@@ -1,0 +1,7 @@
+# net-lab-inet — ảnh net-lab + FRR (BGP) + dnsmasq, cho "Internet trong một hộp" của Chương 2 (internet.yml).
+# Dựng SAU net-lab (ảnh gốc giữ nguyên ⇒ output Mục 0–Ch1 không đổi):
+#   docker build -t net-lab -f Dockerfile .  &&  docker build -t net-lab-inet -f Dockerfile.inet .
+# FRR = bộ định tuyến mã nguồn mở (zebra + bgpd), cú pháp giống router Cisco; dnsmasq = DNS nhỏ (resolver của ISP, máy chủ tên của DC).
+FROM net-lab
+RUN apt-get update && apt-get install -y --no-install-recommends frr dnsmasq-base \
+ && rm -rf /var/lib/apt/lists/*

@@ -1,0 +1,15 @@
+# Ch2 · 2.3 — docker run -p chính là DNAT (chạy trên máy của bạn; container nginx tạm, nhãn netlab=1)
+$ docker run -d --rm --label netlab=1 --name nfd-pdemo -p 18080:80 net-lab nginx -g 'daemon off;' | cut -c1-12
+179d32df51b4
+$ docker inspect nfd-pdemo -f '{{.NetworkSettings.Networks.bridge.IPAddress}}'
+172.17.0.5
+$ docker run --rm --label netlab=1 --net host --cap-add NET_ADMIN net-lab iptables -t nat -S DOCKER | grep 18080
+-A DOCKER -p tcp -m tcp --dport 18080 -j DNAT --to-destination 172.17.0.5:80
+$ docker run --rm --label netlab=1 --net host --cap-add NET_ADMIN net-lab iptables -t nat -S POSTROUTING | grep '172.17.0.0/16'
+-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE
+$ curl -s -o /dev/null -w 'HTTP %{http_code} from 127.0.0.1:18080\n' http://127.0.0.1:18080/
+HTTP 200 from 127.0.0.1:18080
+$ docker exec nfd-pdemo tail -n 1 /var/log/nginx/access.log
+192.168.65.1 - - [01/Nov/2026:05:13:25 +0700] "GET / HTTP/1.1" 200 615 "-" "curl/8.7.1"
+$ docker rm -f nfd-pdemo
+nfd-pdemo

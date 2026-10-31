@@ -68,6 +68,42 @@
       "name": "Lab 1 — Dissect one request of LabFlow",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 1 — Dissect one request of LabFlow"
+    },
+    {
+      "slug": "netdev-2-1-ipv4-cidr",
+      "name": "2.1 IPv4, CIDR and subnetting by hand",
+      "level": "BEGINNER",
+      "description": "Luyện: CIDR 1 — Masks, prefixes and sizes · CIDR 2 — Special ranges and where they bite · CIDR 3 — Network, broadcast, first and last host by hand · CIDR 4 — \"Is it on my network?\" and the /16 typo · CIDR 5 — Plan the LabFlow office by hand (VLSM) · CIDR 6 — Write cidr(s) like cidr.py · CIDR 7 — Write vlsm(block, needs) like chia.py"
+    },
+    {
+      "slug": "netdev-2-2-dinh-tuyen",
+      "name": "2.2 Routing tables, gateways and traceroute",
+      "level": "BEGINNER",
+      "description": "Luyện: Routing 1 — Read a routing table column by column · Routing 2 — Longest prefix match by hand · Routing 3 — TTL, Time exceeded and how traceroute works · Routing 4 — Stars, mtr and the signature of a loop · Routing 5 — Write lookup(table, dst): longest prefix match · Routing 6 — Write traceVerdict(text): read traceroute like an engineer"
+    },
+    {
+      "slug": "netdev-2-3-nat",
+      "name": "2.3 NAT, private ranges and Docker networks",
+      "level": "BEGINNER",
+      "description": "Luyện: NAT 1 — Private ranges and the home router's rewrite · NAT 2 — Read the real conntrack table · NAT 3 — One public address, many devices: ports and timeouts · NAT 4 — Calling in: port forwarding, CGNAT and docker -p · NAT 5 — Write parseConntrack(text) · NAT 6 — Write a NAT router: natOut() and natIn()"
+    },
+    {
+      "slug": "netdev-2-4-ipv6",
+      "name": "2.4 IPv6 for developers",
+      "level": "BEGINNER",
+      "description": "Luyện: IPv6 1 — Compress and expand by hand (RFC 5952) · IPv6 2 — /64 networks, global and link-local addresses · IPv6 3 — EUI-64 link-local and Neighbor Discovery · IPv6 4 — Happy Eyeballs, localhost and ::ffff: (measured) · IPv6 5 — Write eui64LinkLocal(mac) and solicitedNode(addr) · IPv6 6 — Write expand(addr) and compress(addr) exactly per RFC 5952 · IPv6 7 — Write normalizeClientIp(s) for logs and rate limits"
+    },
+    {
+      "slug": "netdev-2-5-bgp-internet",
+      "name": "2.5 How the Internet is stitched together: AS and BGP",
+      "level": "BEGINNER",
+      "description": "Luyện: BGP 1 — Autonomous systems, transit, peering and exchange points · BGP 2 — Read show ip bgp: best route, next hop, AS path, origin · BGP 3 — Hijack by a more specific prefix, and the filter · BGP 4 — RPKI for cuongthai.com, and the Facebook-style withdrawal · BGP 5 — Write parseBgpTable(text) for FRR's show ip bgp · BGP 6 — Write rpkiValidate(prefix, originAs, roas) per RFC 6811 · BGP 7 — Write detectHijacks(mine, routes): a BGP alarm"
+    },
+    {
+      "slug": "netdev-2-6-lab-duong-vao-labflow",
+      "name": "Lab 2 — The road into LabFlow",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 2 — The road into LabFlow"
     }
   ]
 }

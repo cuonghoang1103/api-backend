@@ -1,0 +1,6 @@
+# Lab 2 · R2 — đường đi từ điện thoại 4G
+$ traceroute -n -q 1 -N 1 203.0.113.10
+traceroute to 203.0.113.10 (203.0.113.10), 30 hops max, 60 byte packets
+ 1  100.64.0.1  0.094 ms
+ 2  192.0.2.3  0.053 ms
+ 3  203.0.113.10  0.036 ms

@@ -1,0 +1,6 @@
+# Ch2 · 2.1 — Docker cũng chia subnet: mạng mặc định và hai mạng của lab (chạy trên máy của bạn)
+$ docker network inspect bridge -f '{{.Name}}: {{range .IPAM.Config}}{{.Subnet}} gateway {{.Gateway}}{{end}}'
+bridge: 172.17.0.0/16 gateway 172.17.0.1
+$ docker network inspect nfd-lan nfd-dmz -f '{{.Name}}: {{range .IPAM.Config}}{{.Subnet}} gateway {{.Gateway}}{{end}}'
+nfd-lan: 10.10.1.0/24 gateway 10.10.1.1
+nfd-dmz: 10.10.2.0/24 gateway 10.10.2.1

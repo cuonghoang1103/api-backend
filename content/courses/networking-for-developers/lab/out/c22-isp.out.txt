@@ -1,0 +1,20 @@
+# Ch2 · 2.2 — bảng định tuyến của nhà mạng (isp): không có tuyến mặc định
+$ ip -br -4 addr show up
+lo               UNKNOWN        127.0.0.1/8 198.51.100.200/32 
+ix0@if2871       UP             192.0.2.1/24 
+mob0@if2872      UP             100.64.0.1/24 
+cust0@if2873     UP             198.51.100.1/24 
+$ ip route
+100.64.0.0/24 dev mob0 proto kernel scope link src 100.64.0.1 
+192.0.2.0/24 dev ix0 proto kernel scope link src 192.0.2.1 
+198.18.0.0/24 nhid 24 via 192.0.2.66 dev ix0 proto bgp metric 20 
+198.51.100.0/24 dev cust0 proto kernel scope link src 198.51.100.1 
+203.0.113.0/24 nhid 22 via 192.0.2.3 dev ix0 proto bgp metric 20 
+$ ip route get 203.0.113.10
+203.0.113.10 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0 
+    cache 
+$ ip route get 203.0.113.200
+203.0.113.200 via 192.0.2.3 dev ix0 src 192.0.2.1 uid 0 
+    cache 
+$ ip route get 8.8.8.8
+RTNETLINK answers: Network is unreachable

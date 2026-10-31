@@ -1,0 +1,3 @@
+# Ch2 · 2.3 — mở cổng (port forwarding) trên router nhà: 198.51.100.2:8080 ⇒ laptop 192.168.50.10:8080
+iptables -t nat -A PREROUTING -i wan0 -p tcp --dport 8080 -j DNAT --to-destination 192.168.50.10:8080
+iptables -t nat -S PREROUTING

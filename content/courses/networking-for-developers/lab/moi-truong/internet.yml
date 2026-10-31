@@ -1,0 +1,123 @@
+# "Internet trong một hộp" — phòng lab Chương 2 (địa chỉ IP, định tuyến, NAT, IPv6, BGP) của khoá Networking for Developers.
+#
+#  NHÀ 192.168.50.0/24          ISP AS64500                  IX 192.0.2.0/24                 DC AS64510 203.0.113.0/24
+#  laptop .10 ─┐                                         ┌── dc (router) .3 ──── dc0 .1 ──┬─ server .10 (nginx = cổng LabFlow)
+#  phone  .11 ─┴─ homegw .1 ═NAT═ wan0 .2 ── cust0 .1 [isp] ix0 .1 ──┤                                └─ ns .53 (máy chủ tên)
+#                         198.51.100.0/24 (đường lên nhà)         └── rogue AS64511 .66 (chỉ dùng ở bài 2.5)
+#  mobile 100.64.0.10 ── mob0 .1 [isp: CGNAT ⇒ 198.51.100.200]
+#  IPv6 (không NAT): nhà 2001:db8:a:50::/64 · đường lên 2001:db8:a:1::/64 · IX 2001:db8:ffff::/64 · DC 2001:db8:d::/64
+#
+# Địa chỉ "công cộng" đều là dải DÀNH CHO TÀI LIỆU (RFC 5737: 192.0.2.0/24, 198.51.100.0/24, 203.0.113.0/24; RFC 3849:
+# 2001:db8::/32; ASN 64496–64511 của RFC 5398) ⇒ không đụng địa chỉ thật của ai. 100.64.0.0/10 = dải CGNAT (RFC 6598).
+#   docker build -t net-lab-inet -f Dockerfile.inet .     # ảnh net-lab + FRR + dnsmasq
+#   docker compose -f internet.yml -p nfi up -d           # dựng (≈10 s cho BGP lên)
+#   docker exec -it nfi-laptop bash                        # vào máy laptop ở nhà
+#   docker compose -f internet.yml -p nfi down             # dọn
+# Cổng mặc định Docker của mỗi mạng đặt ở .254 / ::ffff (không ai dùng) — mọi máy tự đặt tuyến mặc định qua router của lab.
+# enable_ip_masquerade=false: tắt NAT RIÊNG của Docker trên các cầu này. Không tắt thì cầu ảo của Docker Desktop tự đổi IP nguồn
+# 198.51.100.200 (CGNAT của isp) thành 192.0.2.254 giữa đường (đo 01/11/2026) — trong lab chỉ được có NAT của chính lab.
+name: nfi
+x-lab: &lab
+  image: net-lab-inet
+  init: true
+  cap_add: [NET_ADMIN, NET_RAW]
+  labels: { netlab: "1" }
+  volumes: ["../:/lab/k:ro"]
+  sysctls: { net.ipv6.conf.all.disable_ipv6: "0" }
+x-router: &router
+  <<: *lab
+  cap_add: [NET_ADMIN, NET_RAW, SYS_ADMIN]   # FRR (zebra/bgpd) đòi thêm SYS_ADMIN lúc khởi động — chỉ router; vẫn KHÔNG --privileged
+  sysctls: { net.ipv4.ip_forward: "1", net.ipv6.conf.all.forwarding: "1", net.ipv6.conf.all.disable_ipv6: "0" }
+services:
+  laptop:
+    <<: *lab
+    container_name: nfi-laptop
+    hostname: laptop
+    networks: { home: { ipv4_address: 192.168.50.10, ipv6_address: "2001:db8:a:50::10", mac_address: "02:00:c0:a8:32:0a" } }
+    command: ["bash", "/lab/k/moi-truong/inet/may.sh", "192.168.50.1", "2001:db8:a:50::1", "198.51.100.1"]
+  phone:
+    <<: *lab
+    container_name: nfi-phone
+    hostname: phone
+    networks: { home: { ipv4_address: 192.168.50.11, ipv6_address: "2001:db8:a:50::11", mac_address: "02:00:c0:a8:32:0b" } }
+    command: ["bash", "/lab/k/moi-truong/inet/may.sh", "192.168.50.1", "2001:db8:a:50::1", "198.51.100.1"]
+  homegw:
+    <<: *router
+    container_name: nfi-homegw
+    hostname: homegw
+    networks:
+      home: { ipv4_address: 192.168.50.1, ipv6_address: "2001:db8:a:50::1", mac_address: "02:00:c0:a8:32:01", interface_name: lan0 }
+      access: { ipv4_address: 198.51.100.2, ipv6_address: "2001:db8:a:1::2", mac_address: "02:00:c6:33:64:02", interface_name: wan0 }
+    command: ["bash", "/lab/k/moi-truong/inet/homegw.sh"]
+  mobile:
+    <<: *lab
+    container_name: nfi-mobile
+    hostname: mobile
+    networks: { mobile: { ipv4_address: 100.64.0.10, mac_address: "02:00:64:40:00:0a" } }
+    command: ["bash", "/lab/k/moi-truong/inet/may.sh", "100.64.0.1", "", "198.51.100.1"]
+  isp:
+    <<: *router
+    container_name: nfi-isp
+    hostname: isp
+    networks:
+      access: { ipv4_address: 198.51.100.1, ipv6_address: "2001:db8:a:1::1", mac_address: "02:00:c6:33:64:01", interface_name: cust0 }
+      mobile: { ipv4_address: 100.64.0.1, mac_address: "02:00:64:40:00:01", interface_name: mob0 }
+      ix: { ipv4_address: 192.0.2.1, ipv6_address: "2001:db8:ffff::1", mac_address: "02:00:c0:00:02:01", interface_name: ix0 }
+    command: ["bash", "/lab/k/moi-truong/inet/isp.sh"]
+  dc:
+    <<: *router
+    container_name: nfi-dc
+    hostname: dc
+    networks:
+      ix: { ipv4_address: 192.0.2.3, ipv6_address: "2001:db8:ffff::3", mac_address: "02:00:c0:00:02:03", interface_name: ix0 }
+      dcnet: { ipv4_address: 203.0.113.1, ipv6_address: "2001:db8:d::1", mac_address: "02:00:cb:00:71:01", interface_name: dc0 }
+    command: ["bash", "/lab/k/moi-truong/inet/dc.sh"]
+  rogue:
+    <<: *router
+    container_name: nfi-rogue
+    hostname: rogue
+    networks:
+      ix: { ipv4_address: 192.0.2.66, ipv6_address: "2001:db8:ffff::66", mac_address: "02:00:c0:00:02:42", interface_name: ix0 }
+    command: ["bash", "/lab/k/moi-truong/inet/rogue.sh"]
+  server:
+    <<: *lab
+    container_name: nfi-server
+    hostname: server
+    networks: { dcnet: { ipv4_address: 203.0.113.10, ipv6_address: "2001:db8:d::10", mac_address: "02:00:cb:00:71:0a" } }
+    command: ["bash", "/lab/k/moi-truong/inet/server.sh"]
+  ns:
+    <<: *lab
+    container_name: nfi-ns
+    hostname: ns
+    networks: { dcnet: { ipv4_address: 203.0.113.53, ipv6_address: "2001:db8:d::53", mac_address: "02:00:cb:00:71:35" } }
+    command: ["bash", "/lab/k/moi-truong/inet/ns.sh"]
+networks:
+  home:
+    name: nfi-home
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false" }
+    enable_ipv6: true
+    ipam: { config: [{ subnet: 192.168.50.0/24, gateway: 192.168.50.254 }, { subnet: "2001:db8:a:50::/64", gateway: "2001:db8:a:50::ffff" }] }
+  access:
+    name: nfi-access
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false" }
+    enable_ipv6: true
+    ipam: { config: [{ subnet: 198.51.100.0/24, gateway: 198.51.100.254 }, { subnet: "2001:db8:a:1::/64", gateway: "2001:db8:a:1::ffff" }] }
+  mobile:
+    name: nfi-mobile
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false" }
+    ipam: { config: [{ subnet: 100.64.0.0/24, gateway: 100.64.0.254 }] }
+  ix:
+    name: nfi-ix
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false" }
+    enable_ipv6: true
+    ipam: { config: [{ subnet: 192.0.2.0/24, gateway: 192.0.2.254 }, { subnet: "2001:db8:ffff::/64", gateway: "2001:db8:ffff::ffff" }] }
+  dcnet:
+    name: nfi-dc
+    labels: { netlab: "1" }
+    driver_opts: { com.docker.network.bridge.enable_ip_masquerade: "false" }
+    enable_ipv6: true
+    ipam: { config: [{ subnet: 203.0.113.0/24, gateway: 203.0.113.254 }, { subnet: "2001:db8:d::/64", gateway: "2001:db8:d::ffff" }] }

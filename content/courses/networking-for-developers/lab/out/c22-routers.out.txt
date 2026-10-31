@@ -1,0 +1,12 @@
+# Ch2 · 2.2 — bảng định tuyến của router nhà (homegw)
+$ ip -br -4 addr show up
+lo               UNKNOWN        127.0.0.1/8 
+lan0@if2874      UP             192.168.50.1/24 
+wan0@if2875      UP             198.51.100.2/24 
+$ ip route
+default via 198.51.100.1 dev wan0 
+192.168.50.0/24 dev lan0 proto kernel scope link src 192.168.50.1 
+198.51.100.0/24 dev wan0 proto kernel scope link src 198.51.100.2 
+$ ip route get 203.0.113.10
+203.0.113.10 via 198.51.100.1 dev wan0 src 198.51.100.2 uid 0 
+    cache 

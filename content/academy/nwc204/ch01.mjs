@@ -397,6 +397,7 @@ default via 192.168.1.1 dev eth0</code></pre>
 <p><strong>CQ1.2.</strong> Ba thứ, thiếu một là hỏng: mỗi máy có một <em>địa chỉ</em>, chúng dùng chung một <em>môi trường truyền</em>, và chúng tuân theo một bộ <em>quy tắc</em> đã thống nhất (giao thức). Bỏ đi bất kỳ thứ nào là truyền thông dừng — và đó đúng là bố cục của Module 3.</p></div>`,
     ),
     sauHon({ bai: 'netdev-0-8-bat-dau-tai-day', so: '0.A', ten: ['What a network is, where the Internet came from, and why it matters to you', 'Mạng là gì, Internet ra đời thế nào, và vì sao nó quan trọng với bạn'], them: ['the confusing pairs, seven dated milestones, and what a developer does with networking every week', 'các cặp thuật ngữ dễ nhầm, bảy mốc lịch sử có nguồn, và lập trình viên dùng mạng vào việc gì mỗi tuần'] }),
+    sauHon({ bai: 'netdev-2-5-bgp-internet', so: '2.5', ten: ['How the Internet is stitched together: AS and BGP', 'Internet được nối lại thế nào: AS và BGP'], them: ['how the networks of the Internet really exchange routes — real BGP tables, a hijack and a withdrawal replayed in a lab, and RPKI checked for cuongthai.com', 'các mạng trên Internet thật sự trao đổi tuyến ra sao — bảng BGP thật, một vụ cướp tuyến và một lần rút tuyến dựng lại trong lab, và RPKI kiểm cho cuongthai.com'] }),
   ].join('\n'),
 };
 

@@ -28,6 +28,7 @@
  *    lesson.content là ARRAY và academy-ra-soat.mjs đổ ở dòng 52.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch12', {
   code: 'NWC204',
@@ -813,6 +814,7 @@ rtt min/avg/max/mdev = 12.1/94.7/380.2/98.4 ms</code></pre>
 <p>Vậy ba trong bốn câu thuộc về chương trước, còn câu duy nhất thuộc về đây thì lại rơi vào buổi 40, tức nửa sau của bài lab, chứ không phải buổi 37 nơi dạy mục 12.1. Độ trôi khoảng một chương, nêu lần đầu ở buổi 19, vẫn nguyên như cũ.</p>
 <p><strong>Trả lời CQ14.1.</strong> ICMP là cái kênh phản hồi mà IP không có. IP là giao thức nỗ lực tối đa và không có cách nào báo một thất bại, nên khi một router vứt một gói đi hoặc một host không nhận được gói thì ICMP mang lý do quay về với người gửi. Nó <em>không</em> làm IP trở nên tin cậy — không có gì được gửi lại — nó làm IP chẩn đoán được. Nó đi bên trong IP với số hiệu giao thức 1 (58 cho ICMPv6), không có số hiệu cổng, và bản thân nó cũng có thể bị mất. Ba nhóm thông điệp mang gần hết giá trị: Echo Request và Reply, tức ping; Time Exceeded, tức traceroute; và Destination Unreachable, mà phần code nói vì sao việc giao hỏng. Trong IPv6 thì nó hoàn toàn không phải tuỳ chọn — Neighbor Discovery, Router Advertisement và Packet Too Big đều là ICMPv6, nên chặn nó là làm hỏng chính giao thức.</p></div>`,
     ),
+    sauHon({ bai: 'netdev-2-2-dinh-tuyen', so: '2.2', ten: ['Routing tables, gateways and traceroute', 'Bảng định tuyến, gateway và traceroute'], them: ['traceroute probes and Time exceeded replies captured with tshark, * * * at a silent router measured with mtr, and why Docker Desktop hides the real path', 'gói thăm dò traceroute và câu trả lời Time exceeded bắt bằng tshark, * * * ở một router im lặng đo bằng mtr, và vì sao Docker Desktop che mất đường đi thật'] }),
   ].join('\n'),
 };
 

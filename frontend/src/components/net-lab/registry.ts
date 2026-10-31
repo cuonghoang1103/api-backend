@@ -37,4 +37,40 @@ export const NET_LABS: Record<string, LabDef> = {
     presets: ['cold', 'warm', 'far'],
     load: () => import('./WaterfallSim'),
   },
+  // ── Chương 2: địa chỉ, định tuyến, NAT, IPv6, BGP — "Internet in a box" (01/11/2026), số liệu engine/capture2.ts ──
+  subnet: {
+    en: 'Subnets: address, mask, network', vi: 'Subnet: địa chỉ, mặt nạ, mạng', chapterEn: 'Addresses & routing', chapterVi: 'Địa chỉ & định tuyến',
+    descEn: 'An IPv4 address in 32 bits, AND with the mask, broadcast, usable hosts (/31, /32) — exactly like cidr.py in the lab; “is it on my network?” and the real /16-instead-of-/24 bug; carving 10.20.0.0/22 with VLSM.',
+    descVi: 'Địa chỉ IPv4 thành 32 bit, AND với mặt nạ, broadcast, số máy dùng được (/31, /32) — đúng như cidr.py trong lab; “có cùng mạng không?” và lỗi thật gõ /16 thay /24; chia 10.20.0.0/22 bằng VLSM.',
+    presets: ['mask', 'same', 'vlsm'],
+    load: () => import('./SubnetSim'),
+  },
+  route: {
+    en: 'Routing: longest prefix, traceroute, loops', vi: 'Định tuyến: tiền tố dài nhất, traceroute, vòng lặp', chapterEn: 'Addresses & routing', chapterVi: 'Địa chỉ & định tuyến',
+    descEn: 'Real routing tables of a laptop, a home router and an ISP: which line wins and why; traceroute TTL by TTL with real ICMP replies, a silent hop “* * *”; a forgotten /32 that makes packets ping-pong until TTL runs out.',
+    descVi: 'Bảng định tuyến thật của laptop, router nhà và nhà mạng: dòng nào thắng và vì sao; traceroute từng TTL với câu trả lời ICMP thật, chặng im lặng “* * *”; một tuyến /32 bị quên làm gói chạy qua lại tới khi hết TTL.',
+    presets: ['lookup', 'trace', 'loop'],
+    load: () => import('./RouteSim'),
+  },
+  nat: {
+    en: 'NAT: many devices, one public IP', vi: 'NAT: nhiều máy, một IP công cộng', chapterEn: 'Addresses & routing', chapterVi: 'Địa chỉ & định tuyến',
+    descEn: 'Packet headers before and after the home router, conntrack rows appearing, the real port collision 41000 → 4734; why the Internet cannot call your laptop and how port forwarding (DNAT) fixes it; carrier-grade NAT on 4G; docker -p.',
+    descVi: 'Header gói trước và sau router nhà, các dòng conntrack hiện ra, va chạm cổng thật 41000 → 4734; vì sao Internet không gọi được laptop của bạn và mở cổng (DNAT) sửa thế nào; NAT của nhà mạng trên 4G; docker -p.',
+    presets: ['home', 'inbound', 'cgnat'],
+    load: () => import('./NatSim'),
+  },
+  ipv6: {
+    en: 'IPv6: addresses, Happy Eyeballs, localhost', vi: 'IPv6: địa chỉ, Happy Eyeballs, localhost', chapterEn: 'Addresses & routing', chapterVi: 'Địa chỉ & định tuyến',
+    descEn: 'Compress an IPv6 address step by step (the “::” trap), /64 = 18 446 744 073 709 551 616 addresses, link-local from the MAC, NDP instead of ARP; a silently broken IPv6 path and real fallback timings; why localhost:5000 gives ECONNREFUSED ::1.',
+    descVi: 'Viết gọn địa chỉ IPv6 từng bước (bẫy “::”), /64 = 18 446 744 073 709 551 616 địa chỉ, link-local sinh từ MAC, NDP thay ARP; đường IPv6 hỏng lặng lẽ và thời gian lùi về IPv4 đo thật; vì sao localhost:5000 báo ECONNREFUSED ::1.',
+    presets: ['addr', 'happy', 'localhost'],
+    load: () => import('./Ipv6Sim'),
+  },
+  bgp: {
+    en: 'BGP: how the Internet finds a network', vi: 'BGP: Internet tìm một mạng thế nào', chapterEn: 'Addresses & routing', chapterVi: 'Địa chỉ & định tuyến',
+    descEn: 'Three ASes on an exchange point fill their BGP tables (real show ip bgp): AS path and origin; a more-specific /25 hijack that black-holes LabFlow, fixed by a prefix-list, and RPKI with real RIPEstat data for cuongthai.com; a Facebook-style withdrawal.',
+    descVi: 'Ba AS trên một điểm trao đổi điền bảng BGP (show ip bgp thật): AS path và AS gốc; vụ cướp tuyến /25 cụ thể hơn đẩy LabFlow vào hố đen, sửa bằng prefix-list, và RPKI với số liệu RIPEstat thật của cuongthai.com; rút tuyến kiểu Facebook.',
+    presets: ['announce', 'hijack', 'withdraw'],
+    load: () => import('./BgpSim'),
+  },
 };

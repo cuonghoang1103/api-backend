@@ -1,0 +1,5 @@
+# Lab 2 · R3 — máy chủ thấy laptop thế nào (IPv4 rồi IPv6)
+$ curl -4 -s http://labflow.test/ | tail -1
+you came from 198.51.100.2 port 41112
+$ curl -6 -s http://labflow.test/ | tail -1
+you came from 2001:db8:a:50::10 port 34950

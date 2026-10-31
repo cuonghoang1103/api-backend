@@ -1,0 +1,30 @@
+# Ch2 · 2.5 — người dùng: không phải "trang chậm" mà là "tên miền không tồn tại nữa"
+$ dig +tries=1 labflow.test
+
+; <<>> DiG 9.20.24-1ubuntu0.4-Ubuntu <<>> +tries=1 labflow.test
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: REFUSED, id: 14418
+;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; EDE: 23 (Network Error)
+;; QUESTION SECTION:
+;labflow.test.			IN	A
+
+;; Query time: 0 msec
+;; SERVER: 198.51.100.1#53(198.51.100.1) (UDP)
+;; WHEN: Sun Nov 01 05:13:38 +07 2026
+;; MSG SIZE  rcvd: 47
+
+$ curl -sS -m 3 http://labflow.test/; echo "curl exit code $?"
+curl: (6) Could not resolve host: labflow.test
+curl exit code 6
+$ curl -sS -m 3 http://203.0.113.10/; echo "curl exit code $?"
+curl: (7) Failed to connect to 203.0.113.10 port 80 after 0 ms: Could not connect to server
+curl exit code 7
+$ traceroute -n -q 1 -N 1 -m 4 203.0.113.10
+traceroute to 203.0.113.10 (203.0.113.10), 4 hops max, 60 byte packets
+ 1  192.168.50.1  0.039 ms
+ 2  198.51.100.1  0.027 ms !N

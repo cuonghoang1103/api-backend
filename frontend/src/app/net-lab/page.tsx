@@ -10,9 +10,9 @@ const NetLabGallery = dynamic(() => import('@/components/net-lab/NetLabGallery')
 });
 
 export const metadata: Metadata = {
-  title: 'Phòng lab mạng — nhìn thấy gói tin, ARP, socket và độ trễ',
+  title: 'Phòng lab mạng — gói tin, ARP, socket, subnet, định tuyến, NAT, IPv6, BGP',
   description:
-    'Mô phỏng tương tác cho khoá Networking for Developers: đóng gói HTTP → TCP → IP → Ethernet với hex dump thật, router đổi gì, MTU và segmentation offload, ARP và công tắc, socket và cổng (bind 0.0.0.0, cạn cổng tạm), biểu đồ thác DNS → TCP → TLS → TTFB từ số curl thật.',
+    'Mô phỏng tương tác cho khoá Networking for Developers: đóng gói HTTP → TCP → IP → Ethernet với hex dump thật, ARP và công tắc, socket và cổng, biểu đồ thác DNS → TCP → TLS → TTFB; chia subnet, bảng định tuyến và traceroute, NAT và CGNAT, IPv6 và Happy Eyeballs, BGP bị cướp tuyến — số liệu từ lab Docker thật.',
   alternates: { canonical: `${SITE_URL}/net-lab` },
   openGraph: {
     title: 'Phòng lab mạng — nhìn thấy mạng làm việc',

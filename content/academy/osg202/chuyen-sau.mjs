@@ -7,6 +7,7 @@
  */
 
 import { registerDeck, walk, walkHead, books, bi } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 registerDeck('cs1', { code: '⭐ CS.1', en: '⭐ Advanced 1 — Linux process model in practice', vi: '⭐ Chuyên sâu 1 — Mô hình tiến trình Linux trong thực tế', total: 28, w: 1280, h: 720 });
 registerDeck('cs2', { code: '⭐ CS.2', en: '⭐ Advanced 2 — File descriptors and I/O plumbing', vi: '⭐ Chuyên sâu 2 — File descriptor và đường ống I/O', total: 27, w: 1280, h: 720 });
@@ -12638,6 +12639,7 @@ cat: /etc/shadow: Permission denied</div>
       ['mos4', 'Chapter 1, section 1.7.5 (virtual machines) and Chapter 7 (virtualization and the cloud, 7.1–7.3: hypervisors type 1 and 2) — the school lesson N1.A; Chapter 10, section 10.3 (processes in Linux)', 'Chương 1, mục 1.7.5 (máy ảo) và Chương 7 (ảo hoá và đám mây, 7.1–7.3: hypervisor loại 1 và 2) — bài trường N1.A; Chương 10, mục 10.3 (tiến trình trong Linux)'],
       ['ostep', 'Appendix "Virtual Machine Monitors" (what a hypervisor must do — compare with what a container runtime does not)', 'Phụ lục "Virtual Machine Monitors" (một hypervisor phải làm gì — so với những gì runtime container không làm)'],
     ]),
+    sauHon({ khoa: 'networking-for-developers', tenKhoa: 'Networking for Developers', bai: 'netdev-2-3-nat', so: '2.3', ten: ['NAT, private ranges and Docker networks', 'NAT, dải IP riêng và mạng Docker'], them: ['what happens to a container’s packets: the bridge, docker run -p read from the kernel as a DNAT rule, masquerade on the way out, the client IP the app really sees, and why published ports bypass ufw', 'chuyện gì xảy ra với gói tin của container: bridge, docker run -p đọc ra từ nhân là một luật DNAT, masquerade khi đi ra, IP người gọi mà ứng dụng thật sự thấy, và vì sao cổng công bố vượt qua ufw'] }),
   ].join('\n'),
 };
 

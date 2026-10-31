@@ -1,0 +1,9 @@
+# Ch2 · 2.3 NAT — laptop ở nhà (địa chỉ riêng 192.168.50.10) gọi cổng LabFlow
+$ ip -br -4 addr show eth0
+eth0@if2877      UP             192.168.50.10/24 
+$ curl -s http://203.0.113.10/
+LabFlow edge (server 203.0.113.10)
+you came from 198.51.100.2 port 41122
+$ curl -s --local-port 41000 http://203.0.113.10/
+LabFlow edge (server 203.0.113.10)
+you came from 198.51.100.2 port 41000

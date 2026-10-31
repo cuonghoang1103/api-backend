@@ -1,0 +1,19 @@
+# Ch2 · 2.4 — "localhost" có HAI địa chỉ: ::1 và 127.0.0.1 (bẫy kinh điển của Node.js ≥ 17)
+$ getent ahosts localhost
+::1             STREAM localhost
+::1             DGRAM  
+::1             RAW    
+127.0.0.1       STREAM 
+127.0.0.1       DGRAM  
+127.0.0.1       RAW    
+$ ss -tln 'sport = :5000'
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port
+LISTEN 0      511        127.0.0.1:5000      0.0.0.0:*   
+$ node -e "require('dns').lookup('localhost', {all: true}, (e, a) => console.log(a))"
+[ { address: '::1', family: 6 }, { address: '127.0.0.1', family: 4 } ]
+$ curl -s http://localhost:5000/
+dev server on 127.0.0.1:5000
+$ node -e "fetch('http://localhost:5000/').then(r=>r.text()).then(t=>process.stdout.write('node 22 fetch: '+t))"
+node 22 fetch: dev server on 127.0.0.1:5000
+$ node --no-network-family-autoselection -e "fetch('http://localhost:5000/').then(r=>r.text()).then(console.log).catch(e=>console.log('node without autoselect:', e.cause?.code, e.cause?.address + ':' + e.cause?.port))"
+node without autoselect: ECONNREFUSED ::1:5000

@@ -15,7 +15,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/TST';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'tst-01-1': 'v2' }. */
-const VER = {};
+const VER = { 'tst-lab-1': 'v2' }; // 01/11: nhãn góc "Lesson Lab 1" → "Lab 1" (_tst-chung.mjs), dựng lại + đẩy TST/v2
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

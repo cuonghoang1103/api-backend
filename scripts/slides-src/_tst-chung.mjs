@@ -268,10 +268,11 @@ export function pg({ t, body = '', topic, bai = '', page, cover = false, sub = '
 export function lamDeck(meta, items) {
   const { khoa = 'Testing', duong, bieuTuong, khau } = meta;
   const topic = `${khoa} · ${meta.chuong}`;
-  const baiNhan = meta.bai ? `Lesson ${meta.bai}` : '';
+  // THÊM 01/11: bai bắt đầu bằng chữ ("Lab 1") thì không thêm chữ "Lesson" phía trước.
+  const baiNhan = meta.bai ? (/^[A-Za-z]/.test(meta.bai) ? meta.bai : `Lesson ${meta.bai}`) : '';
   return items.map((it, i) => ({
     t: '', kind: undefined,
-    body: pg({ khoa, ...(duong && { duong }), ...(bieuTuong && { bieuTuong }), ...(khau && { khau }), ...it, topic, bai: baiNhan, page: i + 1, nhan: it.nhan ?? `${meta.chuong}${meta.bai ? ` · Lesson ${meta.bai}` : ''}` }),
+    body: pg({ khoa, ...(duong && { duong }), ...(bieuTuong && { bieuTuong }), ...(khau && { khau }), ...it, topic, bai: baiNhan, page: i + 1, nhan: it.nhan ?? `${meta.chuong}${baiNhan ? ` · ${baiNhan}` : ''}` }),
   }));
 }
 

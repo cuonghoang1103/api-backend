@@ -2730,6 +2730,16 @@ all-transitions tests: 3 -&gt; 5 of 5
       ['sp5', '§5.1.3 "State Transition Testing" — PDF pp.184–191', '§5.1.3 "State Transition Testing" — PDF 184–191'],
       ['sp4', '§5.1.3 "State Transition Testing" — pp.128–135 (PDF pp.143–150)', '§5.1.3 "State Transition Testing" — trang 128–135 (PDF 143–150)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 2)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-2-2-thoi-gian" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 2.2: testing time-based states in code</span><span class="lc-sub">Same as this lesson: a state that changes with events — BR-02 locks an account after the 5th wrong password, like the ATM eating the card after the 3rd wrong PIN. Different: Courses also tests the transition back (locked → unlocked after exactly 15 minutes) with fake timers, checks 14:59.999 vs 15:00 in under a millisecond, and Lab 2 plants bugs in those transitions.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-2-2-thoi-gian" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 2.2: test trạng thái theo thời gian bằng code</span><span class="lc-sub">Giống bài này: một trạng thái đổi theo sự kiện — BR-02 khoá tài khoản sau lần sai mật khẩu thứ 5, như máy ATM nuốt thẻ sau lần sai PIN thứ 3. Khác: Courses test cả chuyển đổi ngược (đang khoá → mở khoá sau đúng 15 phút) bằng fake timers, kiểm 14:59.999 so với 15:00 trong chưa tới một mili-giây, và Lab 2 cài bug vào chính các chuyển đổi đó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

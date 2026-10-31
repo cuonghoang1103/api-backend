@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 2 (deck tst-lab-2, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-lab-2', 'Lab 2 — async, time and errors: kill 8 mutants', 'Lab 2 — bất đồng bộ, thời gian và lỗi: diệt 8 đột biến', [
+  [1, 'Lab 2 — async, time and errors: kill 8 mutants',
+    `<p>The chapter lab, graded the same way as Lab 1: a script plants eight bugs one at a time and checks whether your tests notice. This time the bugs hide exactly where Chapter 2 taught you to look — time limits, delays, catch branches and time zones.</p>`,
+    `<p>Lab của chương, chấm đúng như Lab 1: một script cài tám con bug, mỗi lần một con, rồi kiểm xem test của bạn có nhận ra không. Lần này bug nấp đúng những chỗ Chương 2 đã dạy bạn soi — giới hạn thời gian, khoảng chờ, nhánh catch và múi giờ.</p>`],
+  [2, 'Your mission',
+    `<p>Write tests for four small modules and for the failure paths of <code>bookLab</code>. Every test must be repeatable: no real clock, no real waiting, no luck. Then run <code>node scripts/dot-bien-2.mjs</code> and aim for eight out of eight.</p>`,
+    `<p>Viết test cho bốn module nhỏ và cho các nhánh thất bại của <code>bookLab</code>. Mọi test phải lặp lại được: không đồng hồ thật, không chờ thật, không trông vào may rủi. Rồi chạy <code>node scripts/dot-bien-2.mjs</code> và nhắm tới tám trên tám.</p>`],
+  [3, 'The code under test',
+    `<p>Five units from lessons 2.1 to 2.3: <code>canCancel</code> (Lite-3), <code>daysAheadVN</code> (BR-05 in Viet Nam's calendar), the login guard (BR-02), <code>retry</code> with back-off, and <code>bookLab</code>. Do not edit them: the script looks for exact lines and stops with "Mutant N: not found" if the line has changed.</p>`,
+    `<p>Năm đơn vị từ bài 2.1 tới 2.3: <code>canCancel</code> (Lite-3), <code>daysAheadVN</code> (BR-05 theo lịch Việt Nam), bộ chặn đăng nhập (BR-02), <code>retry</code> có giãn cách, và <code>bookLab</code>. Đừng sửa chúng: script tìm đúng từng dòng và dừng với "Mutant N: not found" nếu dòng đó đã đổi.</p>`],
+  [4, 'The 8 planted bugs',
+    `<p>Each row is one bug the script plants: <code>&gt;=</code> becomes <code>&gt;</code> on two limits, a lock that lasts one millisecond too long, a success that no longer resets the counter, a retry without back-off, a retry with one attempt too few, a catch that leaks the raw database error, and days counted in UTC. One line changes, your tests run, the line is restored.</p>`,
+    `<p>Mỗi dòng là một con bug mà script cài: <code>&gt;=</code> thành <code>&gt;</code> ở hai giới hạn, một lần khoá kéo dài thêm một mili-giây, một lần đăng nhập đúng không còn xoá bộ đếm, retry không giãn cách, retry thiếu một lần thử, một nhánh catch để lọt lỗi gốc của cơ sở dữ liệu, và ngày được đếm theo UTC. Đổi một dòng, chạy test của bạn, trả dòng đó về.</p>`],
+  [5, 'A typical first attempt: 0 of 8',
+    `<p>Five tests, all green — and not one of the eight bugs noticed. Each test stays far from the line where its bug lives: two hours before instead of sixty minutes, midday instead of near midnight, ten failures instead of exactly five, a retry that succeeds at once, only the happy path of <code>bookLab</code>. Green tests are not the same as useful tests.</p>`,
+    `<p>Năm test, xanh hết — và không nhận ra con bug nào trong tám con. Test nào cũng đứng xa dòng có bug: trước hai tiếng thay vì sáu mươi phút, buổi trưa thay vì sát nửa đêm, mười lần sai thay vì đúng năm, một lần retry thành công ngay, chỉ nhánh suôn của <code>bookLab</code>. Test xanh không đồng nghĩa với test có ích.</p>`],
+  [6, 'The reference solution: 8 of 8',
+    `<p>The reference suite has 22 tests in five files, 62 together with Lab 1, and kills all eight. What made the difference is listed on the right: tests on every limit and one step either side, time moved precisely, a fake repository that fails, and a "now" between midnight and 07:00 Viet Nam time.</p>`,
+    `<p>Bộ lời giải có 22 test trong năm file, 62 test khi gộp với Lab 1, và diệt cả tám con. Thứ tạo ra khác biệt được liệt kê bên phải: test ngay trên mọi giới hạn và lệch một bước hai bên, đẩy thời gian chính xác, một repository giả cố ý hỏng, và một "bây giờ" nằm giữa nửa đêm và 07:00 giờ Việt Nam.</p>`],
+  [7, 'Rubric (10 points)',
+    `<p>Four points for mutants, but six for how you got there: time controlled without real waiting, async done right, errors asserted by code and cause, repeatable under two time zones, and clear names. A suite that kills eight mutants but sleeps for three real seconds loses the time points.</p>`,
+    `<p>Bốn điểm cho số đột biến, nhưng sáu điểm cho cách bạn đạt được: kiểm soát thời gian mà không chờ thật, làm bất đồng bộ đúng cách, khẳng định lỗi bằng mã và nguyên nhân, lặp lại được dưới hai múi giờ, và tên test rõ ràng. Một bộ test diệt đủ tám con nhưng ngủ ba giây thật vẫn mất điểm phần thời gian.</p>`],
+  [8, 'Hints, from gentle to strong',
+    `<p>Open one hint at a time. Start from the limits table; move an injected clock yourself; step <code>retry</code> through time with <code>advanceTimersByTimeAsync</code>; reach mutant 7 with a repository whose <code>findOverlap</code> throws; reach mutant 8 with a "now" before 07:00 Viet Nam time.</p>`,
+    `<p>Mở từng gợi ý một. Bắt đầu từ bảng giới hạn; tự đẩy một đồng hồ được tiêm vào; cho <code>retry</code> đi qua thời gian từng bước bằng <code>advanceTimersByTimeAsync</code>; tới đột biến 7 bằng một repository có <code>findOverlap</code> ném lỗi; tới đột biến 8 bằng một "bây giờ" trước 07:00 giờ Việt Nam.</p>`],
+  [9, 'Before you call it done',
+    `<p>Green, fast and repeatable under <code>TZ=UTC</code>; eight of eight for Lab 2 and still eight of eight for Lab 1; only test files changed; one clear commit. Then you are ready for Chapter 3, where the hand-made fakes of this chapter get proper names and tools.</p>`,
+    `<p>Xanh, nhanh và lặp lại được dưới <code>TZ=UTC</code>; tám trên tám cho Lab 2 và vẫn tám trên tám cho Lab 1; chỉ các file test thay đổi; một commit rõ ràng. Khi đó bạn sẵn sàng cho Chương 3, nơi những đồ giả tự dựng của chương này có tên gọi và công cụ đàng hoàng.</p>`],
+]);

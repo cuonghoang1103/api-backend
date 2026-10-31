@@ -494,6 +494,16 @@ const L61 = {
       ['sp5', '§5.3 "Experience-Based Test Techniques" — error guessing, checklist-based testing (with the GUI style-guide case study), exploratory testing (with the VSR-II case study) — PDF pp.233–239', '§5.3 "Experience-Based Test Techniques" — error guessing, checklist-based testing (có case study kiểm style-guide GUI), exploratory testing (có case study VSR-II) — PDF 233–239'],
       ['sp4', '§5.3 "Intuitive and Experience-Based Test Case Determination" — pp.161–164 (PDF pp.176–179)', '§5.3 "Intuitive and Experience-Based Test Case Determination" — trang 161–164 (PDF 176–179)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 2)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-2-3-loi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 2.3: error guessing written as tests</span><span class="lc-sub">Same as this lesson: guess where the software fails from experience — invalid input, conflicts, a dependency that is down or never answers. Different: Courses turns each guess into a runnable Vitest test on LabFlow Lite (a fake repository that throws ECONNREFUSED, a failing insert), asserts the error code and cause, and shows the try/catch test that passes when nothing is thrown.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-2-3-loi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 2.3: đoán lỗi viết thành test</span><span class="lc-sub">Giống bài này: dựa kinh nghiệm đoán phần mềm hỏng ở đâu — đầu vào sai, xung đột, phụ thuộc chết hoặc không bao giờ trả lời. Khác: Courses biến mỗi phỏng đoán thành một test Vitest chạy được trên LabFlow Lite (repository giả ném ECONNREFUSED, lần ghi bị hỏng), khẳng định mã lỗi và nguyên nhân, và chỉ ra cái test try/catch vẫn đạt khi không có gì bị ném.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

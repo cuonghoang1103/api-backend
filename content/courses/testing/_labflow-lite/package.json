@@ -1,0 +1,22 @@
+{
+  "name": "labflow-lite",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "fast-check": "^4.10.2",
+    "supertest": "^7.3.1",
+    "vitest": "^5.0.5"
+  },
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}

@@ -1,0 +1,518 @@
+{
+ "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ).",
+ "de": [
+  {
+   "id": "tst-cl-1-1",
+   "bai": "tst-1-1-cau-truc",
+   "tieuDe": "Approval and booking status (BR-06, Lite-2)|||Duyệt và trạng thái lượt đặt (BR-06, Lite-2)",
+   "ham": "needsApproval, createBooking",
+   "fileDung": [
+    "src/rules/booking.js"
+   ],
+   "testThamKhao": [
+    "src/"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+   "dotBien": [
+    {
+     "file": "src/rules/booking.js",
+     "from": "return seats > APPROVAL_SEATS;",
+     "to": "return seats >= APPROVAL_SEATS;",
+     "label": "exactly 30 student seats needs approval"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "role === 'LECTURER' || role === 'ADMIN'",
+     "to": "role === 'LECTURER'",
+     "label": "ADMIN needs approval"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "? 'PENDING' : 'CONFIRMED'",
+     "to": "? 'CONFIRMED' : 'PENDING'",
+     "label": "statuses swapped"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "seats < 1",
+     "to": "seats < 0",
+     "label": "0 seats accepted"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "if (!slot.ok) throw new Error(slot.code);",
+     "to": "if (!slot.ok) return null;",
+     "label": "invalid slot returns null instead of throwing"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-1-2",
+   "bai": "tst-1-2-matcher",
+   "tieuDe": "Time parsing, formatting and usage rate|||Đọc/ghi giờ và tỉ lệ sử dụng",
+   "ham": "parseTime, formatTime (+ usageRate in booking.js)",
+   "fileDung": [
+    "src/rules/time.js",
+    "src/rules/booking.js"
+   ],
+   "testThamKhao": [
+    "src/",
+    "demo/th12.test.js"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+   "dotBien": [
+    {
+     "file": "src/rules/time.js",
+     "from": "h > 23",
+     "to": "h > 24",
+     "label": "\"24:00\" accepted"
+    },
+    {
+     "file": "src/rules/time.js",
+     "from": "min > 59",
+     "to": "min > 60",
+     "label": "\"07:60\" accepted"
+    },
+    {
+     "file": "src/rules/time.js",
+     "from": "throw new TypeError(",
+     "to": "throw new RangeError(",
+     "label": "bad format throws the wrong error class"
+    },
+    {
+     "file": "src/rules/time.js",
+     "from": "Math.floor(minutes / 60)",
+     "to": "Math.round(minutes / 60)",
+     "label": "formatTime rounds the hour"
+    },
+    {
+     "file": "src/rules/time.js",
+     "from": "String(h).padStart(2, '0')",
+     "to": "String(h)",
+     "label": "\"7:00\" instead of \"07:00\""
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "rate += b.minutes / (CLOSE - OPEN)",
+     "to": "rate = b.minutes / (CLOSE - OPEN)",
+     "label": "usageRate counts only the last booking"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-1-3",
+   "bai": "tst-1-3-ten-test",
+   "tieuDe": "checkSlot as an it.each table|||checkSlot thành bảng it.each",
+   "ham": "checkSlot",
+   "fileDung": [
+    "src/rules/booking.js"
+   ],
+   "testThamKhao": [
+    "src/"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+   "dotBien": [
+    {
+     "file": "src/rules/booking.js",
+     "from": "s % STEP !== 0 || e % STEP !== 0",
+     "to": "s % STEP !== 0",
+     "label": "end time off the 30-minute grid accepted"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "if (e <= s)",
+     "to": "if (e < s)",
+     "label": "zero-length slot accepted"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "s < OPEN",
+     "to": "s <= OPEN",
+     "label": "slot starting at 07:00 rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "e > CLOSE",
+     "to": "e >= CLOSE",
+     "label": "slot ending at 21:00 rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "code: 'OUTSIDE_HOURS'",
+     "to": "code: 'OFF_GRID'",
+     "label": "wrong rule code for opening hours"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-1-4",
+   "bai": "tst-1-4-ham-thuan",
+   "tieuDe": "Booking window and limits (EP, BVA)|||Khung đặt trước và các giới hạn (EP, BVA)",
+   "ham": "isWithinBookingWindow, checkSlot, needsApproval",
+   "fileDung": [
+    "src/rules/booking.js"
+   ],
+   "testThamKhao": [
+    "src/"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+   "dotBien": [
+    {
+     "file": "src/rules/booking.js",
+     "from": "daysAhead <= MAX_DAYS_AHEAD",
+     "to": "daysAhead < MAX_DAYS_AHEAD",
+     "label": "14 days ahead rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "daysAhead >= 0",
+     "to": "daysAhead > 0",
+     "label": "booking for today rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "Number.isInteger(daysAhead) && ",
+     "to": "",
+     "label": "2.5 days accepted"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "e - s > MAX_MINUTES",
+     "to": "e - s >= MAX_MINUTES",
+     "label": "exactly 4 hours rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "!Number.isInteger(seats) || ",
+     "to": "",
+     "label": "2.5 seats accepted"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-lab-1",
+   "bai": "tst-1-5-lab-quy-tac",
+   "tieuDe": "Lab 1 — rules suite, 8 mutants|||Lab 1 — bộ test luật, 8 đột biến",
+   "ham": "(lab)",
+   "fileDung": [
+    "src/rules/booking.js",
+    "src/rules/time.js"
+   ],
+   "testThamKhao": [
+    "src/"
+   ],
+   "yeuCau": "Same as the chapter lab: dot-bien.mjs prints 8/8|||Như lab của chương: dot-bien.mjs in 8/8",
+   "dotBien": [
+    {
+     "file": "src/rules/booking.js",
+     "from": "daysAhead <= MAX_DAYS_AHEAD",
+     "to": "daysAhead < MAX_DAYS_AHEAD",
+     "label": "BR-05: 14 days ahead rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "return seats > APPROVAL_SEATS;",
+     "to": "return seats >= APPROVAL_SEATS;",
+     "label": "BR-06: 30 seats needs approval"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "e > CLOSE",
+     "to": "e >= CLOSE",
+     "label": "slot ending at 21:00 rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "e - s > MAX_MINUTES",
+     "to": "e - s >= MAX_MINUTES",
+     "label": "exactly 4 hours rejected"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "if (e <= s)",
+     "to": "if (e < s)",
+     "label": "zero-length slot accepted"
+    },
+    {
+     "file": "src/rules/booking.js",
+     "from": "role === 'LECTURER' || role === 'ADMIN'",
+     "to": "role === 'LECTURER'",
+     "label": "ADMIN needs approval"
+    },
+    {
+     "file": "src/rules/time.js",
+     "from": "h > 23",
+     "to": "h > 24",
+     "label": "\"24:00\" accepted"
+    },
+    {
+     "file": "src/rules/time.js",
+     "from": "Math.floor(minutes / 60)",
+     "to": "Math.round(minutes / 60)",
+     "label": "formatTime rounds the hour"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-2-1",
+   "bai": "tst-2-1-async",
+   "tieuDe": "bookLab: async results and overlaps|||bookLab: kết quả bất đồng bộ và trùng lịch",
+   "ham": "bookLab, createMemoryRepo",
+   "fileDung": [
+    "src/booking/service.js"
+   ],
+   "testThamKhao": [
+    "src/",
+    "demo2/async-dung.test.js",
+    "demo2/th21.test.js"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; async tests only; every promise awaited|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; test async, await mọi promise",
+   "dotBien": [
+    {
+     "file": "src/booking/service.js",
+     "from": "if (clash) throw new BookingError('OVERLAP');",
+     "to": "if (clash) return clash;",
+     "label": "overlap resolves with the old booking"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "b.start < end && start < b.end",
+     "to": "b.start <= end && start <= b.end",
+     "label": "back-to-back slot (10:00 after 08:00–10:00) rejected"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "b.lab === lab && ",
+     "to": "",
+     "label": "a booking in another lab blocks the slot"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "needsApproval(input) ? 'PENDING' : 'CONFIRMED'",
+     "to": "'CONFIRMED'",
+     "label": "31-seat student booking stored as CONFIRMED"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "if (!slot.ok) throw new BookingError(slot.code);",
+     "to": "if (!slot.ok) throw new Error(slot.code);",
+     "label": "rule violation is a plain Error, not a BookingError"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-2-2",
+   "bai": "tst-2-2-thoi-gian",
+   "tieuDe": "Time rules: cancel, lock-out, retry, Viet Nam days|||Luật thời gian: huỷ, khoá, retry, ngày theo giờ VN",
+   "ham": "canCancel, createLoginGuard, retry, daysAheadVN",
+   "fileDung": [
+    "src/rules/cancel.js",
+    "src/auth/login-guard.js",
+    "src/lib/retry.js",
+    "src/rules/days.js"
+   ],
+   "testThamKhao": [
+    "src/",
+    "demo2/th22.test.js"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no real waiting: injected clock or fake timers, restored in afterEach; green under TZ=UTC|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không chờ thật: tiêm đồng hồ hoặc fake timers, trả lại trong afterEach; xanh dưới TZ=UTC",
+   "dotBien": [
+    {
+     "file": "src/rules/cancel.js",
+     "from": "minutesLeft >= CANCEL_LIMIT_MINUTES",
+     "to": "minutesLeft > CANCEL_LIMIT_MINUTES",
+     "label": "cancel exactly 60 minutes before refused"
+    },
+    {
+     "file": "src/rules/cancel.js",
+     "from": "/ 60000",
+     "to": "/ 1000",
+     "label": "minutes computed as seconds"
+    },
+    {
+     "file": "src/auth/login-guard.js",
+     "from": "LOCK_MINUTES * 60000",
+     "to": "LOCK_MINUTES * 1000",
+     "label": "lock lasts 15 seconds, not 15 minutes"
+    },
+    {
+     "file": "src/auth/login-guard.js",
+     "from": "        s.failures = 0;\n",
+     "to": "",
+     "label": "counter not reset when the lock starts"
+    },
+    {
+     "file": "src/lib/retry.js",
+     "from": "delayMs * i",
+     "to": "delayMs",
+     "label": "no back-off"
+    },
+    {
+     "file": "src/rules/days.js",
+     "from": "now.getTime() + VN_OFFSET_MS",
+     "to": "now.getTime()",
+     "label": "days counted in UTC"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-2-3",
+   "bai": "tst-2-3-loi",
+   "tieuDe": "Failure paths of bookLab|||Các nhánh thất bại của bookLab",
+   "ham": "BookingError, bookLab",
+   "fileDung": [
+    "src/booking/service.js"
+   ],
+   "testThamKhao": [
+    "src/"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; errors asserted by code/cause with rejects; no try/catch without a guard|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; khẳng định lỗi bằng code/cause với rejects; không try/catch thiếu chốt chặn",
+   "dotBien": [
+    {
+     "file": "src/booking/service.js",
+     "from": "throw new BookingError('STORAGE_DOWN', { cause: err });\n  }\n  if (clash)",
+     "to": "throw err;\n  }\n  if (clash)",
+     "label": "lookup failure leaks the raw error"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "return await repo.insert(",
+     "to": "return repo.insert(",
+     "label": "insert failure escapes the try/catch (missing await)"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "super(code, options);",
+     "to": "super(code);",
+     "label": "cause is lost"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "    this.code = code;\n",
+     "to": "",
+     "label": "error has no code"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "if (!slot.ok) throw new BookingError(slot.code);",
+     "to": "if (!slot.ok) throw new BookingError('INVALID');",
+     "label": "every rule violation gets the same code"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-2-4",
+   "bai": "tst-2-4-ngau-nhien",
+   "tieuDe": "Booking codes and records|||Mã đặt chỗ và bản ghi",
+   "ham": "makeBookingCode, seededRandom, newBookingRecord",
+   "fileDung": [
+    "src/rules/code.js"
+   ],
+   "testThamKhao": [
+    "demo2/ngau-nhien.test.js",
+    "demo2/th24.test.js"
+   ],
+   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; repeatable: injected or seeded randomness, spies restored|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; lặp lại được: tiêm hoặc seed ngẫu nhiên, spy được trả lại",
+   "dotBien": [
+    {
+     "file": "src/rules/code.js",
+     "from": "random() * ALPHABET.length",
+     "to": "random() * (ALPHABET.length - 1)",
+     "label": "last character of the alphabet never used"
+    },
+    {
+     "file": "src/rules/code.js",
+     "from": "return 'LF-' + code;",
+     "to": "return 'LF' + code;",
+     "label": "prefix without the dash"
+    },
+    {
+     "file": "src/rules/code.js",
+     "from": "i < length",
+     "to": "i < length - 1",
+     "label": "codes one character short"
+    },
+    {
+     "file": "src/rules/code.js",
+     "from": "createdAt: now().toISOString()",
+     "to": "createdAt: new Date().toISOString()",
+     "label": "injected clock ignored"
+    },
+    {
+     "file": "src/rules/code.js",
+     "from": "id: newId()",
+     "to": "id: crypto.randomUUID()",
+     "label": "injected id generator ignored"
+    }
+   ]
+  },
+  {
+   "id": "tst-cl-lab-2",
+   "bai": "tst-2-5-lab-bat-dong-bo",
+   "tieuDe": "Lab 2 — async, time and errors, 8 mutants|||Lab 2 — bất đồng bộ, thời gian, lỗi, 8 đột biến",
+   "ham": "(lab)",
+   "fileDung": [
+    "src/rules/cancel.js",
+    "src/auth/login-guard.js",
+    "src/lib/retry.js",
+    "src/booking/service.js",
+    "src/rules/days.js"
+   ],
+   "testThamKhao": [
+    "src/"
+   ],
+   "yeuCau": "Same as the chapter lab: dot-bien-2.mjs prints 8/8|||Như lab của chương: dot-bien-2.mjs in 8/8",
+   "dotBien": [
+    {
+     "file": "src/rules/cancel.js",
+     "from": "minutesLeft >= CANCEL_LIMIT_MINUTES",
+     "to": "minutesLeft > CANCEL_LIMIT_MINUTES",
+     "label": "Lite-3: cancel exactly 60 min before refused"
+    },
+    {
+     "file": "src/auth/login-guard.js",
+     "from": "s.failures >= MAX_FAILURES",
+     "to": "s.failures > MAX_FAILURES",
+     "label": "BR-02: locks after 6 failures, not 5"
+    },
+    {
+     "file": "src/auth/login-guard.js",
+     "from": "s.lockedUntil > now()",
+     "to": "s.lockedUntil >= now()",
+     "label": "BR-02: still locked at exactly 15:00"
+    },
+    {
+     "file": "src/auth/login-guard.js",
+     "from": "state.delete(email);",
+     "to": "void email;",
+     "label": "success does not reset the counter"
+    },
+    {
+     "file": "src/lib/retry.js",
+     "from": "delayMs * i",
+     "to": "delayMs",
+     "label": "retry waits 1 s every time (no back-off)"
+    },
+    {
+     "file": "src/lib/retry.js",
+     "from": "i <= attempts",
+     "to": "i < attempts",
+     "label": "retry makes one attempt too few"
+    },
+    {
+     "file": "src/booking/service.js",
+     "from": "throw new BookingError('STORAGE_DOWN', { cause: err });\n  }\n  if (clash)",
+     "to": "throw err;\n  }\n  if (clash)",
+     "label": "lookup failure leaks the raw error",
+     "ghiChu": "script dot-bien-2.mjs dùng String.replace (chỗ khớp ĐẦU TIÊN); ở đây ghi kèm ngữ cảnh để khớp đúng 1 chỗ"
+    },
+    {
+     "file": "src/rules/days.js",
+     "from": "now.getTime() + VN_OFFSET_MS",
+     "to": "now.getTime()",
+     "label": "days counted in UTC, not Viet Nam time"
+    }
+   ]
+  }
+ ]
+}

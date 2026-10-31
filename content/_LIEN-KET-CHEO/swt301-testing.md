@@ -17,6 +17,10 @@ thêm vào cuối mảng `content` của bài). Chỉ gắn khi đã đọc nộ
 | `swt301-blackbox-ep-bva` (4.2) | `tst-1-4-ham-thuan` | phân vùng hợp lệ/không hợp lệ | mỗi phân vùng thành dòng `it.each`, phân vùng "không phải số nguyên" |
 | `swt301-blackbox-bva-template` (4.3) | `tst-1-4-ham-thuan` | BVA bắt off-by-one mà EP bỏ lọt | lỗi `< 14` cài sẵn → đúng 1 dòng đỏ; biên trên lưới 30 phút; property-based (fast-check) |
 | `swt301-blackbox-decision-state` (4.4) | `tst-1-4-ham-thuan` | bảng quyết định, mỗi cột một luật | cột → dòng `it.each` cho BR-06, số chỗ tại biên 30/31 |
+| `swt301-blackbox-state-transition` (4.5) | `tst-2-2-thoi-gian` | trạng thái đổi theo sự kiện: sai PIN lần 3 nuốt thẻ ↔ sai mật khẩu lần 5 khoá tài khoản (BR-02) | chuyển đổi ngược theo thời gian (hết khoá sau đúng 15 phút) test bằng fake timers/đồng hồ tiêm, biên 14:59.999/15:00; Lab 2 cài bug vào chính các chuyển đổi |
+| `swt301-experience-based` (6.1) | `tst-2-3-loi` | error guessing — danh sách chỗ hay hỏng từ kinh nghiệm | mỗi phỏng đoán thành test chạy được: repository giả ném ECONNREFUSED, ghi hỏng, khẳng định mã lỗi + cause; bẫy try/catch xanh khi không có gì ném |
 
-Không cặp (đợt này): `tst-1-2-matcher` (SWT301 không dạy matcher JS; phần `assertThrows` đã nằm trong bảng JUnit ↔ Vitest của 1.1), Lab 1 (kiểm thử đột biến — SWT301 chưa có bài tương ứng; Chương 8 Courses sẽ nối với SWT301 Ch.5 coverage).
-Chương 2–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch3 test double ↔ `swt301-test-levels` stub/driver; Ch8 coverage ↔ `swt301-whitebox-coverage`; Ch10 TDD ↔ `swt301-tdd-bdd`).
+Ngoài SWT301 (01/11, Chương 2): `tst-2-1-async` → khoá Node.js `nodejs-1-4-bat-dong-bo` (ôn async/await, thẻ một chiều).
+
+Không cặp (đợt mẫu): `tst-1-2-matcher` (SWT301 không dạy matcher JS; phần `assertThrows` đã nằm trong bảng JUnit ↔ Vitest của 1.1), Lab 1 (kiểm thử đột biến — SWT301 chưa có bài tương ứng; Chương 8 Courses sẽ nối với SWT301 Ch.5 coverage).
+Không cặp Chương 2: `tst-2-1-async`, `tst-2-4-ngau-nhien`, Lab 2, quiz (SWT301 không dạy promise, fake timers hay seed). Chương 3–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch3 test double ↔ `swt301-test-levels` stub/driver; Ch8 coverage ↔ `swt301-whitebox-coverage`; Ch10 TDD ↔ `swt301-tdd-bdd`).

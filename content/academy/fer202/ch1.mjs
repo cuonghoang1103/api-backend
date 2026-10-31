@@ -241,7 +241,12 @@ root.<span class="hljs-title function_">render</span>(<span class="language-xml"
 </tbody>
 </table>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> The starter uses <code>&lt;React.StrictMode&gt;</code> in the original index.js. In development it intentionally <strong>double-invokes</strong> your components to surface impure code — that is why a <code>console.log</code> in a component can print twice locally. It does not happen in production builds.</div>
-<div class="di-toi"><a class="link-card codelab" href="${CODELAB('react')}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Edit App.js live</span><span class="lc-sub">Try the app structure in the browser — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div>`,
+<div class="di-toi"><a class="link-card codelab" href="${CODELAB('react')}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Edit App.js live</span><span class="lc-sub">Try the app structure in the browser — Code Lab.</span></span><span class="lc-cta">PRACTICE →</span></a></div><a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-1-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 0.1: Setting up with Vite and TypeScript</span><span class="lc-sub">This exercise scaffolds with Create React App. Once you are working, or if you want to go deeper, continue with the React course on Courses: same goal, a running React project, but with Vite + TypeScript (how most projects start today). It also adds: a measured comparison with Create React App, reading the project layout, vite build vs tsc -b, cleaning the template and adding Vitest.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+`,
     `<span class="eyebrow">Chương 1 · Exercise 2 · Slot 1 slide 23–25</span>
 <h2>Dựng app React đầu tiên</h2>
 <p class="lead"><b>Mục tiêu:</b> tạo, chạy và tinh giản một app React mới để hiểu cấu trúc trước khi thêm code của mình.</p>
@@ -276,7 +281,12 @@ root.<span class="hljs-title function_">render</span>(<span class="language-xml"
 </tbody>
 </table>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> Bản mẫu dùng <code>&lt;React.StrictMode&gt;</code> trong index.js gốc. Khi phát triển nó cố ý <strong>gọi component hai lần</strong> để lộ code không thuần khiết — đó là lý do một <code>console.log</code> trong component có thể in hai lần ở máy bạn. Điều này không xảy ra ở bản build production.</div>
-<div class="di-toi"><a class="link-card codelab" href="${CODELAB('react')}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Sửa App.js trực tiếp</span><span class="lc-sub">Thử cấu trúc app ngay trên trình duyệt — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div>`,
+<div class="di-toi"><a class="link-card codelab" href="${CODELAB('react')}" target="_blank" rel="noopener"><span class="lc-ico">⌨️</span><span class="lc-body"><span class="lc-title">Sửa App.js trực tiếp</span><span class="lc-sub">Thử cấu trúc app ngay trên trình duyệt — Code Lab.</span></span><span class="lc-cta">LUYỆN TẬP →</span></a></div><a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-1-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 0.1: Cài đặt với Vite và TypeScript</span><span class="lc-sub">Bài tập này tạo app bằng Create React App. Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses: cùng mục tiêu có một dự án React chạy được, nhưng dùng Vite + TypeScript (cách đa số dự án hiện nay khởi tạo). Ở đó có thêm: đo thật so với Create React App, đọc cấu trúc dự án, vite build khác tsc -b, dọn template và thêm Vitest.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+`,
   ),
 };
 

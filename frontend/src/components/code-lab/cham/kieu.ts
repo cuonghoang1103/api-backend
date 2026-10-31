@@ -42,7 +42,7 @@ export interface KetQuaKiem {
   /** Giá trị mong đợi (chỉ kiểm mẫu, loại js/console) — để hiện "mong đợi vs nhận". */
   mong?: string;
   ms?: number;
-  /** Loại 'sql' (29/10/2026): bảng mong đợi / nhận được (≤ 30 dòng) + dòng thiếu/thừa — TestPanel vẽ bảng so. Kiểm ẩn: không có. */
+  /** Loại 'sql'/'sql-pg' (29/10 · 31/10/2026): bảng mong đợi / nhận được (≤ 30 dòng) + dòng thiếu/thừa — TestPanel vẽ bảng so. Kiểm ẩn: không có. */
   bangSql?: {
     mong?: { cot: string[]; hang: unknown[][]; tong?: number };
     thay?: { cot: string[]; hang: unknown[][]; tong?: number };
@@ -58,10 +58,10 @@ export interface DiemNhom { ma: string; ten: string; diem: number; dat: number; 
 export interface Diem { score: number; maxScore: number; nhom: DiemNhom[] }
 
 /** Loại chấm chạy được trong trình duyệt hôm nay. */
-export const LOAI_TRINH_DUYET = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql']);
+export const LOAI_TRINH_DUYET = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql', 'sql-pg']);
 export const LOAI_TINH = new Set(['choice', 'order', 'table']);
 /** Loại chờ máy chấm máy chủ (máy Linux nhà) — giao diện ghi "sắp có". */
-export const LOAI_MAY_CHU = new Set(['java', 'tsql', 'bash', 'sql-pg', 'python', 'text-ai']);
+export const LOAI_MAY_CHU = new Set(['java', 'tsql', 'bash', 'python', 'text-ai']);
 
 export const TEN_LOAI: Record<string, string> = {
   dom: 'HTML/CSS · chấm DOM',
@@ -76,7 +76,7 @@ export const TEN_LOAI: Record<string, string> = {
   python: 'Python',
   java: 'Java',
   tsql: 'T-SQL',
-  'sql-pg': 'PostgreSQL',
+  'sql-pg': 'SQL · PostgreSQL 18 (WASM)',
   bash: 'Bash',
   'text-ai': 'Tự luận · AI chấm',
   manual: 'Tự đánh dấu',

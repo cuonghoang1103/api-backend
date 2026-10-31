@@ -77,7 +77,8 @@ duLieuMau, chucNang: [{ ten, diem, moTa, yeuCau[], hook[], khoa?, viDu? }], idBa
 `order` | thuần JS | `cauHoi: [{ ma, de, muc:[{ma,noiDung}] (thứ tự hiện), dapAn:['c','a','b'], giaiThich? }]`
 `table` | thuần JS | `bang: [{ ma, de, cot:[{ma,ten,luaChon?,phanBietHoa?}], hang:[{ma,o:{cot:'giá trị cho sẵn'}}], dapAn:{'<hàng>.<cột>': 'đáp án' \| ['các','đáp án']}, giaiThich?, nhom? }]` — mỗi ô đáp án là một kiểm (SWT301: phân vùng, giá trị biên, bảng quyết định…)
 `sql` (29/10/2026) | Worker (PGlite) | SQL chạy thật trên PostgreSQL 18 (WASM) ở **chế độ SQL Server** — mục 3b
-`java` `tsql` `bash` `sql-pg` `python` `text-ai` | — | **chưa chấm** (máy chủ nhà / AI — đợt sau); giao diện ghi "sắp có", người học tự đánh dấu
+`sql-pg` (31/10/2026) | Worker (PGlite) | cùng bộ chạy, **PostgreSQL nguyên bản** (khoá PostgreSQL) — mục 3b′
+`java` `tsql` `bash` `python` `text-ai` | — | **chưa chấm** (máy chủ nhà / AI — đợt sau); giao diện ghi "sắp có", người học tự đánh dấu
 
 Kiểm chung: `{ moTa, kiem, an?: true (kiểm ẩn — chỉ khi Nộp), nhom?: 'f1', truoc?: [bước], choToiDa?: ms }`.
 
@@ -152,6 +153,25 @@ tests: { loai: 'sql', csdl: '<DDL + INSERT kiểu SQL Server — như DBscript.s
   `hop-cat-khung.html` (CSP riêng đã có jsdelivr + `'unsafe-eval'`).
 - **Đề lớn SQL** (Lab/PE): `deLonSql()` trong `dbi202-practice/nguon/_chung.mjs` — mỗi câu một tệp `Q1.sql … Qn.sql` như quy
   định PE, kiểm câu i tự gắn `tep: 'Qi.sql'` + `nhom: 'fi'`; `moHinh` nhận MẢNG bảng.
+
+## 3b′. Máy chấm PostgreSQL nguyên bản (`loai: 'sql-pg'`, 31/10/2026)
+
+Cùng mã, cùng lược đồ kiểm với mục 3b; khác ở **chế độ** (`chamSql.ts › cheDoCua`, `sqlRunner.ts` `cheDo: 'pg'`):
+
+- **Không dò phương ngữ, không dịch dữ liệu mẫu**: LIMIT, ILIKE, `::`, `||`, RETURNING, ON CONFLICT, DISTINCT ON,
+  WITH RECURSIVE (+ CYCLE), hàm cửa sổ, FILTER, PL/pgSQL (`CREATE FUNCTION … $$ … $$`, `DO $$ … $$`) đều chạy. Chuỗi so
+  sánh **phân biệt hoa thường**, AVG(int) trả numeric, GROUP BY khoá chính cho chọn cột phụ thuộc — như máy chủ thật.
+  Worker riêng (không citext, không schema `cl_ss`); trang chỉ giữ MỘT worker — đổi loại ⇒ đóng cái cũ.
+- Câu người học **lỗi** mà mang dấu T-SQL (TOP, ISNULL, GETDATE, `[tên]`, IDENTITY(1,1)…) ⇒ thông báo PostgreSQL + gợi ý cách
+  viết PostgreSQL (`sqlLoi.ts › goiYTsqlChoPg`). Không chặn gì trước khi chạy ngoài giới hạn chung + BEGIN/COMMIT.
+- Soạn đề: `postgresql-practice/nguon/_chung.mjs › sqlPg()` (CSDL `CT_SHOP` = CT Shop thu gọn, cùng tên bảng với lab
+  khoá). Cột thời gian dùng `timestamp` (không múi giờ); không kiểm thứ tự theo chữ có dấu (PGlite collation C).
+- **Quá giờ**: `timeoutMs` (mặc định 8 s) ⇒ huỷ worker, kiểm sau cùng mã báo ngay. Đề có dữ liệu vòng (CTE đệ quy) nên
+  đặt `timeoutMs: 4000`. KHÔNG đưa câu vô hạn vào `saiMau` (bộ xuất Node không có giới hạn giờ); script Chromium tự
+  thử đường quá giờ cho mỗi loại SQL có trong bộ đề.
+- Xuất: `node scripts/codelab-xuat-de.mjs --track postgresql-practice` — ⚠ cần cổng `loai` ở dòng "SQL (29/10/2026)" của
+  bộ xuất nhận cả `'sql-pg'` (xem ghi chú commit 31/10). Kiểm: `npx tsx scripts/codelab-kiem-cham-trinh-duyet.mjs
+  --track postgresql-practice [--do-sql]` (`--do-sql` đo dung lượng tải + thời gian khởi động PGlite).
 
 ## 3c. Bộ sinh bằng mã (OSG202, CEA201, MAD101, NWC204)
 

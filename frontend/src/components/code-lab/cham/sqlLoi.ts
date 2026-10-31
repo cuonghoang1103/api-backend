@@ -21,6 +21,10 @@
  *          với PRIMARY KEY).
  *   Còn lệch, KHÔNG giả lập được: thứ tự NULL khi ORDER BY (SQL Server NULL đứng ĐẦU khi ASC, PostgreSQL
  *   đứng CUỐI) ⇒ đề có kiểm thứ tự không được để NULL trong khoá sắp xếp (README Code Lab mục SQL).
+ *
+ * Loại 'sql-pg' (31/10/2026, khoá PostgreSQL) KHÔNG theo các luật trên: PostgreSQL nguyên bản, không dò phương
+ * ngữ trước khi chạy, dữ liệu mẫu nạp nguyên văn (không csdlChoPg). T-SQL chỉ được nhắc khi câu đã lỗi —
+ * goiYTsqlChoPg().
  */
 
 // ─── làm sạch: bỏ chú thích / nội dung chuỗi, GIỮ vị trí ký tự ─────────────────────────────────────
@@ -312,6 +316,43 @@ export function kiemPhuongNgu(sql: string): ViPham[] {
       ? cauSach.some((c) => (l.re as RegExp).test(c.sach))
       : cauSach.some((c) => (l.xet as (a: string, b: string) => boolean)(c.sach, c.giu));
     if (trung) out.push({ ma: l.ma, phia: l.phia, vi: l.vi, en: l.en });
+  }
+  return out;
+}
+
+// ─── chế độ PostgreSQL nguyên bản (loại 'sql-pg', 31/10/2026) ─────────────────────────────────────
+//
+// Ở loại 'sql-pg' KHÔNG chặn cú pháp nào trước khi chạy: PostgreSQL thật tự báo lỗi. Nhưng người học
+// đi từ DBI202 (SQL Server) hay viết T-SQL — khi câu LỖI, dò lại bằng chính LUAT phía 'tsql' rồi chỉ cách viết
+// của PostgreSQL (khác lời khuyên "tập con chung" của loại 'sql'). Chỉ dùng khi đã lỗi ⇒ dò nhầm không làm
+// trượt bài nào.
+const GOI_Y_PG: Record<string, [string, string]> = {
+  'tsql-top': ['PostgreSQL không có TOP n: viết ORDER BY … LIMIT n (hoặc FETCH FIRST n ROWS ONLY).', 'PostgreSQL has no TOP n: write ORDER BY … LIMIT n (or FETCH FIRST n ROWS ONLY).'],
+  'tsql-isnull': ['ISNULL(x, y) là T-SQL — PostgreSQL dùng COALESCE(x, y).', 'ISNULL(x, y) is T-SQL — PostgreSQL uses COALESCE(x, y).'],
+  'tsql-getdate': ['GETDATE() là T-SQL — PostgreSQL dùng now() / CURRENT_TIMESTAMP / CURRENT_DATE.', 'GETDATE() is T-SQL — PostgreSQL uses now() / CURRENT_TIMESTAMP / CURRENT_DATE.'],
+  'tsql-datefn': ['YEAR()/DATEDIFF()/DATEADD() là T-SQL — PostgreSQL: EXTRACT(YEAR FROM d), date_trunc(\'month\', d), d + INTERVAL \'7 days\', age(a, b).', 'YEAR()/DATEDIFF()/DATEADD() are T-SQL — PostgreSQL: EXTRACT(YEAR FROM d), date_trunc(\'month\', d), d + INTERVAL \'7 days\', age(a, b).'],
+  'tsql-strfn': ['LEN/CHARINDEX/STUFF là T-SQL — PostgreSQL: length(s), position(\'x\' IN s) / strpos(s, \'x\'), overlay(…), repeat(s, n).', 'LEN/CHARINDEX/STUFF are T-SQL — PostgreSQL: length(s), position(\'x\' IN s) / strpos(s, \'x\'), overlay(…), repeat(s, n).'],
+  'tsql-convert': ['CONVERT/IIF/FORMAT là T-SQL — PostgreSQL: CAST(x AS kiểu) hoặc x::kiểu, CASE WHEN … END, to_char(x, \'…\').', 'CONVERT/IIF/FORMAT are T-SQL — PostgreSQL: CAST(x AS type) or x::type, CASE WHEN … END, to_char(x, \'…\').'],
+  'tsql-identity': ['IDENTITY(1,1) là T-SQL — PostgreSQL: id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY (hoặc SERIAL).', 'IDENTITY(1,1) is T-SQL — PostgreSQL: id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY (or SERIAL).'],
+  'tsql-ntype': ['NVARCHAR/NCHAR là kiểu SQL Server — PostgreSQL dùng VARCHAR(n) hoặc TEXT (đã là UTF-8, chứa được tiếng Việt).', 'NVARCHAR/NCHAR are SQL Server types — PostgreSQL uses VARCHAR(n) or TEXT (already UTF-8).'],
+  'tsql-datetime': ['DATETIME là kiểu SQL Server — PostgreSQL dùng TIMESTAMP (hoặc TIMESTAMPTZ khi cần múi giờ).', 'DATETIME is a SQL Server type — PostgreSQL uses TIMESTAMP (or TIMESTAMPTZ with a time zone).'],
+  'tsql-bit-money': ['BIT/MONEY/TINYINT là kiểu SQL Server — PostgreSQL: BOOLEAN, NUMERIC(12,2), SMALLINT.', 'BIT/MONEY/TINYINT are SQL Server types — PostgreSQL: BOOLEAN, NUMERIC(12,2), SMALLINT.'],
+  'tsql-bracket': ['[tên] là cách đặt tên của SQL Server — PostgreSQL dùng nháy kép "tên" (và khi đó phân biệt HOA/thường).', '[name] is SQL Server quoting — PostgreSQL uses double quotes "name" (case-sensitive then).'],
+  'tsql-batch': ['@biến, DECLARE, PRINT, GO, EXEC là T-SQL — PostgreSQL viết khối PL/pgSQL: DO $$ DECLARE … BEGIN … END $$; in ra bằng RAISE NOTICE; gọi thủ tục bằng CALL.', '@variables, DECLARE, PRINT, GO, EXEC are T-SQL — PostgreSQL uses PL/pgSQL blocks: DO $$ DECLARE … BEGIN … END $$; print with RAISE NOTICE; call procedures with CALL.'],
+  'tsql-prog': ['Hàm/thủ tục/trigger PostgreSQL viết bằng PL/pgSQL: CREATE FUNCTION f(…) RETURNS … LANGUAGE plpgsql AS $$ BEGIN … END $$; trigger = một hàm RETURNS trigger + CREATE TRIGGER … EXECUTE FUNCTION f().', 'PostgreSQL functions/procedures/triggers use PL/pgSQL: CREATE FUNCTION f(…) RETURNS … LANGUAGE plpgsql AS $$ BEGIN … END $$; a trigger is a RETURNS trigger function + CREATE TRIGGER … EXECUTE FUNCTION f().'],
+  'tsql-apply': ['CROSS/OUTER APPLY ⇒ JOIN LATERAL; OUTPUT INSERTED ⇒ RETURNING; NOLOCK không cần (MVCC); PIVOT ⇒ SUM(…) FILTER (WHERE …).', 'CROSS/OUTER APPLY ⇒ JOIN LATERAL; OUTPUT INSERTED ⇒ RETURNING; NOLOCK is unnecessary (MVCC); PIVOT ⇒ SUM(…) FILTER (WHERE …).'],
+  'tsql-alter-col': ['PostgreSQL đổi kiểu cột: ALTER TABLE t ALTER COLUMN c TYPE kiểu_mới.', 'PostgreSQL changes a column type with ALTER TABLE t ALTER COLUMN c TYPE new_type.'],
+  'tsql-alias-quote': ['Bí danh trong nháy ĐƠN là T-SQL — PostgreSQL: AS tong_tien, hoặc nháy KÉP AS "Tổng tiền".', 'Single-quoted aliases are T-SQL — PostgreSQL: AS total, or double quotes AS "Total".'],
+};
+
+/** Câu đã LỖI ở chế độ PostgreSQL: các gợi ý "đây là T-SQL, PostgreSQL viết thế này" (rỗng nếu không thấy). */
+export function goiYTsqlChoPg(sql: string): Array<{ ma: string; vi: string; en: string }> {
+  const out: Array<{ ma: string; vi: string; en: string }> = [];
+  for (const v of kiemPhuongNgu(sql)) {
+    if (v.phia !== 'tsql' || !GOI_Y_PG[v.ma]) continue;
+    // GENERATED … AS IDENTITY là cú pháp PostgreSQL chuẩn — chỉ nhắc khi thấy IDENTITY( kiểu SQL Server
+    if (v.ma === 'tsql-identity' && !/\bIDENTITY\s*\(/i.test(lamSach(sql))) continue;
+    out.push({ ma: v.ma, vi: GOI_Y_PG[v.ma][0], en: GOI_Y_PG[v.ma][1] });
   }
   return out;
 }

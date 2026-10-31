@@ -1,6 +1,7 @@
 /**
  * codelab-sql-node.mjs — máy chấm SQL của Code Lab chạy trong NODE (29/10/2026).
  * ─────────────────────────────────────────────────────────────────────────────────────────────
+ * Loại 'sql' (DBI202, giả lập SQL Server) và 'sql-pg' (khoá PostgreSQL, PostgreSQL nguyên bản — 31/10/2026).
  * Dùng CHÍNH bộ chạy + bộ so của trình duyệt (frontend/src/components/code-lab/cham/sqlRunner.ts,
  * chamSql.ts, sqlSoSanh.ts — nạp bằng tsx) với PGlite bản Node, để:
  *   - bộ xuất đề (codelab-xuat-de.mjs) DỰNG `mongDoi` của mọi kiểm SQL bằng cách chạy LỜI GIẢI — tác giả
@@ -50,10 +51,13 @@ async function thuMucPglite(phienBan) {
   return dich;
 }
 
-let _may = null;
-/** Máy SQL (một phiên PGlite dùng lại) — cùng giao diện `chay(kb)` với worker trình duyệt. */
-export async function layMaySql() {
-  if (_may) return _may;
+const _may = new Map();
+/**
+ * Máy SQL (một phiên PGlite dùng lại cho mỗi chế độ) — cùng giao diện `chay(kb)` với worker trình duyệt.
+ * cheDo: 'sqlserver' (loại 'sql', mặc định) | 'pg' (loại 'sql-pg' — PostgreSQL nguyên bản).
+ */
+export async function layMaySql(cheDo = 'sqlserver') {
+  if (_may.has(cheDo)) return _may.get(cheDo);
   const { runner } = await napMayCham();
   const d = await thuMucPglite(runner.PGLITE_PHIEN_BAN);
   const req = createRequire(path.join(d, 'package.json'));
@@ -61,8 +65,9 @@ export async function layMaySql() {
   const [{ PGlite }, { citext }] = await Promise.all([goi('@electric-sql/pglite'), goi('@electric-sql/pglite/contrib/citext')]);
   // eslint-disable-next-line no-new-func
   const CL = new Function(`${runner.SQL_RUNNER_SRC}\nreturn __CL_SQL__;`)();
-  _may = await CL.tao(PGlite, citext);
-  return _may;
+  const may = await CL.tao(PGlite, citext, cheDo);
+  _may.set(cheDo, may);
+  return may;
 }
 
 /**
@@ -75,10 +80,11 @@ export async function chayKiemSql(tj, k, files, mong = null) {
   const tep = cham.tepCuaKiem(tj, k, files);
   const sql = files[tep];
   if (sql == null) return { dat: false, thay: `thiếu tệp ${tep}` };
-  const truoc = cham.kiemTruocKhiChay(sql);
+  const cheDo = cham.cheDoCua(tj);
+  const truoc = cham.kiemTruocKhiChay(sql, cheDo);
   if (truoc) return { dat: false, thay: truoc.vi, truoc };
   const kb = cham.dungKichBan(tj, k, sql);
-  const may = await layMaySql();
+  const may = await layMaySql(cheDo);
   const kq = await may.chay(kb);
   return cham.danhGiaKichBan(k, kb, sql, kq, mong);
 }
@@ -93,7 +99,7 @@ const CAN_MONG = new Set(['ket-qua', 'sau-lenh']);
 export async function dienMongDoiSql(ex, saiMau = []) {
   const tj = ex.testsJson;
   const loi = [];
-  if (!tj || tj.loai !== 'sql') return loi;
+  if (!tj || (tj.loai !== 'sql' && tj.loai !== 'sql-pg')) return loi;
   const giai = Object.fromEntries((ex.solutionCodeJson || []).map((b) => [b.name, b.code]));
   const dau = Object.fromEntries((ex.starterCodeJson || []).map((b) => [b.name, b.code]));
   for (const [i, k] of (tj.kiem || []).entries()) {

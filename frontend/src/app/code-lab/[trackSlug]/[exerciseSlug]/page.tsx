@@ -670,6 +670,13 @@ export default function ExerciseDetailPage() {
               <p className="mt-1 opacity-80">Runs on PostgreSQL 18 (WASM) in SQL Server mode: case-insensitive strings, integer AVG, strict GROUP BY. Write portable SQL — T-SQL-only and PostgreSQL-only syntax is flagged, not graded.</p>
             </details>
           )}
+          {loai === 'sql-pg' && (
+            <details className="cl-note-sql">
+              <summary>🐘 <b>Chạy trên PostgreSQL 18 (WASM) trong trình duyệt</b> · PostgreSQL nguyên bản</summary>
+              <p className="mt-1">Mọi cú pháp PostgreSQL đều chạy: LIMIT, ILIKE, <code>::</code>, RETURNING, ON CONFLICT, DISTINCT ON, CTE đệ quy, hàm cửa sổ, PL/pgSQL. Chuỗi so sánh <b>phân biệt hoa thường</b>, AVG trả số thập phân — đúng như máy chủ PostgreSQL thật. Mỗi kiểm chạy trên CSDL mẫu sạch rồi huỷ; truy vấn chạy quá giờ bị dừng. Lần chạy đầu tải ~5 MB (rồi trình duyệt giữ lại).</p>
+              <p className="mt-1 opacity-80">Native PostgreSQL 18 (WASM): every PostgreSQL feature works; strings are case-sensitive and AVG returns numeric, exactly like a real server. Each check runs on a fresh sample database and is rolled back; runaway queries are stopped.</p>
+            </details>
+          )}
 
           {daDat && nav.next && (
             <Link href={`/code-lab/${params.trackSlug}/${nav.next.slug}${qs}`} className="cl-accepted-next">

@@ -16,6 +16,10 @@
  *       CSP của app (cấm script nội tuyến + eval), worker/khung HỘP CÁT với CSP riêng đọc từ
  *       desktop/src/main/security.ts — kiểm đường __CT_HOP_CAT_WORKER__ / __CT_HOP_CAT_KHUNG__.
  *       (ES modules: app chưa chấm được — kiểm đó báo "bỏ qua", không tính hỏng.)
+ *   npx tsx scripts/codelab-kiem-cham-trinh-duyet.mjs --track postgresql-practice --do-sql
+ *       SQL (31/10/2026): có đề 'sql'/'sql-pg' ⇒ TỰ KIỂM thêm đường QUÁ GIỜ (CTE đệ quy vô hạn phải bị dừng sau
+ *       timeoutMs, worker dựng lại, kiểm sau vẫn chạy). `--do-sql` ⇒ ĐO PGlite: dung lượng tải (nén, qua mạng) +
+ *       thời gian khởi động lần đầu (bộ đệm trống) và lần sau (bộ đệm HTTP ấm, worker mới) cho từng chế độ.
  *
  * Cần mạng tới cdn.jsdelivr.net cho đề React (React UMD + sucrase). Thoát 1 nếu có đề hỏng.
  */
@@ -37,6 +41,7 @@ const TRACK = lay('--track');
 const CHI = lay('--chi');
 const CHI_TIET = args.includes('--chi-tiet');
 const APP = args.includes('--app');
+const DO_SQL = args.includes('--do-sql');
 
 // ─── đề ───
 const thuMuc = path.join(GOC, 'content/codelab');
@@ -175,6 +180,69 @@ for (const d of de) {
     for (const k of truotGiai.slice(0, CHI_TIET ? 99 : 3)) console.log(`      #${k.i + 1} ${k.moTa} — thấy: ${k.thay ?? '—'}`);
   } else if (CHI_TIET) console.log(`  ✓ [${d.module}] ${loai} "${d.title}" ${g.dat}/${g.tong} · khởi đầu trượt ${truotDau}`);
 }
+// ─── SQL: tự kiểm đường QUÁ GIỜ (truy vấn chạy mãi ⇒ huỷ worker, kiểm sau dựng lại máy) ───
+const coLoaiSql = [...new Set(de.map((d) => d.tj.loai).filter((l) => l === 'sql' || l === 'sql-pg'))];
+for (const loai of coLoaiSql) {
+  // sql-pg: CTE đệ quy vô hạn · sql (chế độ SQL Server chặn WITH RECURSIVE trước khi chạy): tích Descartes khổng lồ
+  const vo = loai === 'sql-pg'
+    ? 'WITH RECURSIVE r(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM r) SELECT count(*) AS n FROM r'
+    : 'SELECT COUNT(*) AS n FROM pg_class a, pg_class b, pg_class c, pg_class d, pg_class e';
+  const tj = { loai, csdl: '', timeoutMs: 3000, kiem: [
+    { i: 0, kiem: 'ket-qua', moTa: 'CTE đệ quy vô hạn', mongDoi: { cot: ['n'], hang: [[1]] } },
+    { i: 1, kiem: 'ket-qua', moTa: 'kiểm sau (cùng mã) báo ngay, không đợi thêm', mongDoi: { cot: ['n'], hang: [[1]] } },
+  ] };
+  const tj2 = { loai, csdl: '', kiem: [{ i: 0, kiem: 'ket-qua', moTa: 'máy dựng lại', mongDoi: { cot: ['n'], hang: [[1]] } }] };
+  const r = await page.evaluate(async ({ tj, tj2, vo }) => {
+    const t0 = performance.now();
+    const a = await window.ClCham.chamBai({ exerciseId: 0, tj, files: { 'query.sql': vo } });
+    const t1 = performance.now();
+    const b = await window.ClCham.chamBai({ exerciseId: 0, tj: tj2, files: { 'query.sql': 'SELECT 1 AS n' } });
+    return { a: a.ketQua.map((k) => ({ dat: k.dat, thay: k.thay, ms: k.ms })), msA: Math.round(t1 - t0), b: b.ketQua.map((k) => ({ dat: k.dat, thay: k.thay })) };
+  }, { tj, tj2, vo });
+  const ok = r.a.length === 2 && r.a.every((k) => !k.dat && /Quá 3 giây/.test(k.thay ?? '')) && r.msA < 3000 + 2500 && r.b[0]?.dat === true;
+  console.log(`${ok ? '  ✓' : '  ✗'} [tự kiểm ${loai}] truy vấn vô hạn bị dừng sau ~${r.a[0]?.ms ?? '?'} ms (cả 2 kiểm: ${r.msA} ms) · máy dựng lại chấm tiếp: ${r.b[0]?.dat ? 'đạt' : `TRƯỢT — ${r.b[0]?.thay}`}`);
+  if (!ok) { hong++; console.log(`      ${JSON.stringify(r).slice(0, 400)}`); }
+}
+
+// ─── --do-sql: đo PGlite (tải nén + khởi động lần đầu / lần sau) cho từng chế độ ───
+if (DO_SQL) {
+  console.log('\nĐo PGlite (mỗi chế độ: ngữ cảnh trình duyệt MỚI = bộ đệm trống, rồi trang mới cùng ngữ cảnh = bộ đệm HTTP ấm):');
+  for (const loai of ['sql-pg', 'sql']) {
+    const ctx = await trinhDuyet.newContext();
+    const do1 = async () => {
+      const p = await ctx.newPage();
+      let byteNen = 0, byteGoc = 0, soTep = 0, tuBoDem = 0;
+      p.on('requestfinished', async (req) => {
+        if (!/pglite/i.test(req.url())) return;
+        const res = await req.response();
+        const sz = await req.sizes().catch(() => null);
+        soTep++;
+        if (res && res.fromServiceWorker()) return;
+        // responseBodySize = byte NÉN nhận qua mạng; -1/0 ⇒ lấy từ bộ đệm HTTP
+        if (sz && sz.responseBodySize > 0) byteNen += sz.responseBodySize; else tuBoDem++;
+        try { byteGoc += (await res.body()).length; } catch { /* worker: không lấy được thân */ }
+      });
+      await p.goto(url);
+      const ms = await p.evaluate(async (loai) => {
+        const t0 = performance.now();
+        const r = await window.ClCham.chamBai({ exerciseId: 0, tj: { loai, csdl: 'CREATE TABLE t (a int); INSERT INTO t VALUES (1)', kiem: [{ i: 0, kiem: 'ket-qua', moTa: 'đo', mongDoi: { cot: ['a'], hang: [[1]] } }] }, files: { 'query.sql': 'SELECT a FROM t' } });
+        const t1 = performance.now();
+        const r2 = await window.ClCham.chamBai({ exerciseId: 0, tj: { loai, csdl: 'CREATE TABLE t (a int); INSERT INTO t VALUES (1)', kiem: [{ i: 0, kiem: 'ket-qua', moTa: 'đo', mongDoi: { cot: ['a'], hang: [[1]] } }] }, files: { 'query.sql': 'SELECT a FROM t' } });
+        return { mo: Math.round(t1 - t0), kiem: Math.round(performance.now() - t1), dat: r.dat === 1 && r2.dat === 1 };
+      }, loai);
+      await p.waitForTimeout(300);
+      await p.close();
+      return { ...ms, byteNen, byteGoc, soTep, tuBoDem };
+    };
+    const lan1 = await do1();
+    const lan2 = await do1();
+    const mb = (b) => `${(b / 1048576).toFixed(2)} MB`;
+    console.log(`  ${loai.padEnd(7)} lần đầu: ${lan1.mo} ms tới kiểm đầu tiên xong · tải ${lan1.soTep} tệp ${mb(lan1.byteNen)} qua mạng${lan1.byteGoc ? ` (${mb(lan1.byteGoc)} giải nén)` : ''}`);
+    console.log(`  ${''.padEnd(7)} lần sau: ${lan2.mo} ms · qua mạng ${mb(lan2.byteNen)} (${lan2.tuBoDem}/${lan2.soTep} tệp từ bộ đệm) · một kiểm khi máy đã mở: ${lan2.kiem} ms · đúng: ${lan1.dat && lan2.dat}`);
+    await ctx.close();
+  }
+}
+
 await trinhDuyet.close();
 sv.close();
 

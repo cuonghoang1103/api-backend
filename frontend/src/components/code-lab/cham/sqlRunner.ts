@@ -18,8 +18,12 @@
  * Sau ROLLBACK so "vân tay" của catalog (số bảng/hàm/schema/kiểu + search_path) với lúc mở; lệch (mã người
  * học COMMIT, đổi search_path…) ⇒ dựng CSDL mới (~1 s) để kiểm sau sạch sẽ.
  *
- * Chế độ SQL Server (xem sqlLoi.ts): extension citext (cột chữ của dữ liệu mẫu), avg(int) cắt phần lẻ
- * trong schema `cl_ss` đứng TRƯỚC pg_catalog trong search_path.
+ * HAI chế độ (`cheDo`, chọn lúc dựng máy — một worker một chế độ):
+ *   'sqlserver' (loại 'sql', DBI202) — extension citext (cột chữ của dữ liệu mẫu), avg(int) cắt phần lẻ trong
+ *               schema `cl_ss` đứng TRƯỚC pg_catalog trong search_path (xem sqlLoi.ts);
+ *   'pg'        (loại 'sql-pg', 31/10/2026 — khoá PostgreSQL) — PostgreSQL NGUYÊN BẢN: không extension, không
+ *               schema phụ, search_path mặc định ⇒ LIMIT, ILIKE, ::, RETURNING, ON CONFLICT, DISTINCT ON,
+ *               WITH RECURSIVE, hàm cửa sổ, PL/pgSQL… chạy và chấm đúng như máy chủ PostgreSQL thật.
  */
 
 export const PGLITE_PHIEN_BAN = '0.5.8';
@@ -32,7 +36,7 @@ var __CL_SQL__ = (function () {
   var THO = function (v) { return v; };
   // numeric/int8/date/time/timestamp/interval ⇒ để CHỮ (trang chuẩn hoá) — tránh lệch múi giờ và mất chữ số
   var BO_DOC = { 20: THO, 1700: THO, 1082: THO, 1083: THO, 1114: THO, 1184: THO, 1186: THO, 1266: THO };
-  var KHOI_DAU = [
+  var KHOI_DAU_SS = [
     'CREATE EXTENSION IF NOT EXISTS citext',
     'CREATE SCHEMA cl_ss',
     // SQL Server: AVG(cột INT) trả INT, cắt phần lẻ (SUM/COUNT chia nguyên) — PostgreSQL trả numeric
@@ -88,12 +92,16 @@ var __CL_SQL__ = (function () {
     return (ds || []).filter(function (r) { return r.fields && r.fields.length; }).map(bang);
   }
 
-  async function tao(PGlite, citext) {
+  // cheDo: 'sqlserver' (mặc định — cần citext) | 'pg' (PostgreSQL nguyên bản, citext bỏ qua)
+  async function tao(PGlite, citext, cheDo) {
+    var laPg = cheDo === 'pg';
     var db = null, vanTayGoc = null, soLanMo = 0;
     async function moi() {
       if (db) { try { await db.close(); } catch (e) { /* bỏ */ } }
-      db = await PGlite.create({ extensions: { citext: citext }, parsers: BO_DOC });
-      await db.exec(KHOI_DAU);
+      db = laPg
+        ? await PGlite.create({ parsers: BO_DOC })
+        : await PGlite.create({ extensions: { citext: citext }, parsers: BO_DOC });
+      if (!laPg) await db.exec(KHOI_DAU_SS);
       vanTayGoc = (await db.query(VAN_TAY)).rows[0].v;
       soLanMo++;
     }
@@ -134,22 +142,31 @@ var __CL_SQL__ = (function () {
       }
       return { buoc: out, ms: Date.now() - t0, soLanMo: soLanMo };
     }
-    return { chay: chay };
+    return { chay: chay, cheDo: laPg ? 'pg' : 'sqlserver' };
   }
   return { tao: tao };
 })();
 `;
 
-/** Mã worker (module) cho web: nạp PGlite từ CDN rồi phục vụ { id, kb } ⇒ { id, kq } . */
-export function maWorkerSql(): string {
-  return `${SQL_RUNNER_SRC}
-var __may = null, __loiMo = null;
+export type CheDoSql = 'sqlserver' | 'pg';
+
+/** Đoạn mã nạp PGlite từ CDN (chế độ 'pg' không tải citext). */
+function maNap(cheDo: CheDoSql): string {
+  const nap = [`import(${JSON.stringify(`${PGLITE_CDN}index.js`)})`];
+  if (cheDo !== 'pg') nap.push(`import(${JSON.stringify(`${PGLITE_CDN}contrib/citext.js`)})`);
+  return `var __may = null, __loiMo = null;
 var __san = (async function () {
   try {
-    var m = await Promise.all([import(${JSON.stringify(`${PGLITE_CDN}index.js`)}), import(${JSON.stringify(`${PGLITE_CDN}contrib/citext.js`)})]);
-    __may = await __CL_SQL__.tao(m[0].PGlite, m[1].citext);
+    var m = await Promise.all([${nap.join(', ')}]);
+    __may = await __CL_SQL__.tao(m[0].PGlite, m[1] ? m[1].citext : null, ${JSON.stringify(cheDo)});
   } catch (e) { __loiMo = String((e && e.message) || e); }
-})();
+})();`;
+}
+
+/** Mã worker (module) cho web: nạp PGlite từ CDN rồi phục vụ { id, kb } ⇒ { id, kq } . */
+export function maWorkerSql(cheDo: CheDoSql = 'sqlserver'): string {
+  return `${SQL_RUNNER_SRC}
+${maNap(cheDo)}
 self.onmessage = async function (ev) {
   var d = ev.data || {};
   await __san;
@@ -161,25 +178,54 @@ self.onmessage = async function (ev) {
 `;
 }
 
-/** Trang cho khung hộp cát (app desktop): cùng giao thức qua postMessage với trang mẹ. */
-export function trangKhungSql(): string {
+/**
+ * Trang cho khung hộp cát (app desktop): cùng giao thức qua postMessage với trang mẹ.
+ *
+ * 31/10/2026: PGlite chạy trong một Worker blob TẠO TỪ BÊN TRONG khung — KHÔNG chạy trên luồng chính của khung.
+ * Đo bằng Chromium (scripts/codelab-kiem-cham-trinh-duyet.mjs --app): khung sandbox gốc mờ ở CHUNG tiến trình với
+ * trang mẹ, nên một truy vấn chạy mãi trên luồng chính của khung khoá luôn trang mẹ — hẹn giờ của chamSql không
+ * bao giờ chạy, cả app đứng hình. Trong worker thì luồng chính rảnh; quá giờ trang mẹ gỡ khung ⇒ worker chết theo.
+ * Cần `worker-src blob:` trong CSP_HOP_CAT_KHUNG (desktop/src/main/security.ts). App CŨ chưa có chỉ thị đó ⇒ tạo
+ * worker hỏng ⇒ LÙI về chạy trên luồng chính của khung như trước (chấm được, chỉ là quá giờ thì treo như cũ).
+ */
+export function trangKhungSql(cheDo: CheDoSql = 'sqlserver'): string {
+  const nap = [`import(${JSON.stringify(`${PGLITE_CDN}index.js`)})`];
+  if (cheDo !== 'pg') nap.push(`import(${JSON.stringify(`${PGLITE_CDN}contrib/citext.js`)})`);
   const ma = `${SQL_RUNNER_SRC}
-var __may = null, __loiMo = null;
-var __san = (async function () {
-  try {
-    var m = await Promise.all([import(${JSON.stringify(`${PGLITE_CDN}index.js`)}), import(${JSON.stringify(`${PGLITE_CDN}contrib/citext.js`)})]);
-    __may = await __CL_SQL__.tao(m[0].PGlite, m[1].citext);
-  } catch (e) { __loiMo = String((e && e.message) || e); }
-})();
-window.addEventListener('message', async function (ev) {
+var MA_WORKER = ${JSON.stringify(maWorkerSql(cheDo))};
+var guiCha = function (x, id) { x.__clSql = true; x.id = id; window.parent.postMessage(x, '*'); };
+var __napInline = null;
+function napInline() {
+  if (!__napInline) __napInline = (async function () {
+    var m = await Promise.all([${nap.join(', ')}]);
+    return __CL_SQL__.tao(m[0].PGlite, m[1] ? m[1].citext : null, ${JSON.stringify(cheDo)});
+  })();
+  return __napInline;
+}
+async function xuLyInline(d) {
+  var may;
+  try { may = await napInline(); } catch (e) { return guiCha({ loiMo: String((e && e.message) || e) }, d.id); }
+  if (d.mo) return guiCha({ san: true }, d.id);
+  try { guiCha({ kq: await may.chay(d.kb) }, d.id); } catch (e) { guiCha({ loiMay: String((e && e.message) || e) }, d.id); }
+}
+var w = null, wSong = false, cho = {};
+try {
+  w = new Worker(URL.createObjectURL(new Blob([MA_WORKER], { type: 'text/javascript' })), { name: 'cl-sql' });   // classic: worker module từ blob trong tài liệu gốc mờ hỏng (đo 31/10)
+  w.onmessage = function (ev) { var x = ev.data || {}; wSong = true; delete cho[x.id]; var id = x.id; delete x.id; guiCha(x, id); };
+  w.onerror = function (ev) {
+    if (ev && ev.preventDefault) ev.preventDefault();
+    var ds = Object.keys(cho).map(function (k) { return cho[k]; });
+    cho = {};
+    if (!wSong) { w = null; ds.forEach(xuLyInline); }   // không tạo được worker (CSP app cũ) ⇒ chạy trên luồng khung
+    else ds.forEach(function (d) { guiCha({ loiMay: (ev && ev.message) || 'worker SQL hỏng' }, d.id); });
+  };
+} catch (e) { w = null; }
+window.addEventListener('message', function (ev) {
   if (ev.source !== window.parent) return;
   var d = ev.data || {};
   if (!d.__clSql) return;
-  await __san;
-  var gui = function (x) { x.__clSql = true; x.id = d.id; window.parent.postMessage(x, '*'); };
-  if (__loiMo) return gui({ loiMo: __loiMo });
-  if (d.mo) return gui({ san: true });
-  try { gui({ kq: await __may.chay(d.kb) }); } catch (e) { gui({ loiMay: String((e && e.message) || e) }); }
+  if (w) { cho[d.id] = d; w.postMessage({ id: d.id, mo: d.mo, kb: d.kb }); }
+  else xuLyInline(d);
 });
 window.parent.postMessage({ __clSql: true, id: 'khung-san' }, '*');
 `;

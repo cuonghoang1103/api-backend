@@ -9,7 +9,7 @@ import assert from 'node:assert/strict';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { bangChu, chuanHoaBang, chuanHoaGiaTri, soSanhBang, type BangSql } from './sqlSoSanh';
-import { boNgoac, chuGocCot, coLenhGiaoDich, csdlChoPg, dongCot, groupByDungBiDanh, kiemPhuongNgu, lamSach, moTaLoiSql, tachLenhSql } from './sqlLoi';
+import { boNgoac, chuGocCot, coLenhGiaoDich, csdlChoPg, dongCot, goiYTsqlChoPg, groupByDungBiDanh, kiemPhuongNgu, lamSach, moTaLoiSql, tachLenhSql } from './sqlLoi';
 import { kiemTruocKhiChay } from './chamSql';
 
 const B = (cot: string[], hang: unknown[][]): BangSql => ({ cot, hang });
@@ -282,5 +282,89 @@ INSERT INTO tblEmp VALUES (1, N'an', 1, 100, 20), (2, N'Bình', 1, 200, 21), (3,
     const r = await chay('SELECT empName\nFROM tblEmp\nWHER empSSN = 1');
     assert.equal(r.dat, false);
     assert.match(r.thay ?? '', /dòng 3/);
+  });
+});
+
+describe('loại sql-pg — PostgreSQL nguyên bản (31/10/2026)', () => {
+  it('kiemTruocKhiChay: chế độ pg KHÔNG chặn cú pháp riêng PostgreSQL; chế độ SQL Server vẫn chặn', () => {
+    const q = "SELECT name FROM t WHERE name ILIKE 'a%' ORDER BY id LIMIT 3";
+    assert.notEqual(kiemTruocKhiChay(q), null);
+    assert.equal(kiemTruocKhiChay(q, 'pg'), null);
+    // giao dịch vẫn cấm ở cả hai
+    assert.notEqual(kiemTruocKhiChay('BEGIN; SELECT 1; COMMIT;', 'pg'), null);
+    // BEGIN … END trong thân hàm $$ … $$ không phải lệnh giao dịch
+    assert.equal(kiemTruocKhiChay('CREATE FUNCTION f() RETURNS int LANGUAGE plpgsql AS $$ BEGIN RETURN 1; END $$;', 'pg'), null);
+  });
+
+  it('goiYTsqlChoPg: TOP/ISNULL/[tên] ⇒ cách viết PostgreSQL; GENERATED … AS IDENTITY không bị nhắc', () => {
+    const ma = goiYTsqlChoPg('SELECT TOP 3 ISNULL([price], 0) FROM product').map((g) => g.ma);
+    assert.deepEqual(ma.sort(), ['tsql-bracket', 'tsql-isnull', 'tsql-top']);
+    assert.match(goiYTsqlChoPg('SELECT TOP 3 * FROM t')[0].vi, /LIMIT/);
+    assert.deepEqual(goiYTsqlChoPg('CREATE TABLE t (id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY)'), []);
+    assert.equal(goiYTsqlChoPg('CREATE TABLE t (id INT IDENTITY(1,1) PRIMARY KEY)')[0].ma, 'tsql-identity');
+  });
+});
+
+describe('bộ chạy PGlite — chế độ PostgreSQL (sql-pg)', () => {
+  let nodePg: SqlNode | null = null;
+  let boQua = '';
+  before(async () => {
+    try {
+      nodePg = (await import(pathToFileURL(tepNode).href)) as SqlNode;
+      await nodePg.chayKiemSql({ loai: 'sql-pg', csdl: 'CREATE TABLE t (a INT)' }, { kiem: 'ket-qua', moTa: 'x' }, { 'query.sql': 'SELECT 1 AS x' });
+    } catch (e) {
+      boQua = `không nạp được PGlite: ${e instanceof Error ? e.message : String(e)}`;
+      nodePg = null;
+    }
+  });
+  const csdl = `CREATE TABLE dept (id INT PRIMARY KEY, name TEXT NOT NULL);
+CREATE TABLE emp (id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY, name TEXT NOT NULL, dept_id INT REFERENCES dept(id), age INT, boss_id INT);
+INSERT INTO dept VALUES (1, 'Sales'), (2, 'IT');
+INSERT INTO emp (name, dept_id, age, boss_id) VALUES ('an', 1, 20, NULL), ('Bình', 1, 21, 1), ('cường', 2, 22, 2), ('Dũng', 2, 22, 3);`;
+  const tj = { loai: 'sql-pg', csdl, tepChinh: 'query.sql' };
+  const chay = (sql: string, k: Record<string, unknown> = { kiem: 'ket-qua', moTa: 't' }) => (nodePg as SqlNode).chayKiemSql(tj, k, { 'query.sql': sql });
+
+  it('so chuỗi PHÂN BIỆT hoa thường; ILIKE, LIMIT, :: chạy', async (t) => {
+    if (!nodePg) return t.skip(boQua);
+    assert.deepEqual((await chay("SELECT id FROM emp WHERE name = 'AN'")).bang?.hang, []);
+    assert.deepEqual((await chay("SELECT id FROM emp WHERE name ILIKE 'AN'")).bang?.hang, [[1]]);
+    assert.deepEqual((await chay('SELECT id::text AS s FROM emp ORDER BY id DESC LIMIT 2')).bang?.hang, [['4'], ['3']]);
+  });
+
+  it('AVG(int) giữ phần lẻ (numeric) như PostgreSQL thật; GROUP BY khoá chính cho chọn cột phụ thuộc', async (t) => {
+    if (!nodePg) return t.skip(boQua);
+    assert.deepEqual((await chay('SELECT AVG(age) AS a FROM emp')).bang?.hang, [[21.25]]);
+    const r = await chay('SELECT d.id, d.name, COUNT(*) AS n FROM dept d JOIN emp e ON e.dept_id = d.id GROUP BY d.id');
+    assert.equal(r.dat, true);
+  });
+
+  it('RETURNING, ON CONFLICT, CTE đệ quy, PL/pgSQL', async (t) => {
+    if (!nodePg) return t.skip(boQua);
+    assert.deepEqual((await chay("INSERT INTO dept VALUES (3, 'HR') RETURNING id, name")).bang?.hang, [[3, 'HR']]);
+    const up = await chay("INSERT INTO dept VALUES (1, 'Sales VN') ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name", { kiem: 'sau-lenh', moTa: 's', kiemTra: 'SELECT id, name FROM dept ORDER BY id' });
+    assert.deepEqual(up.bang?.hang, [[1, 'Sales VN'], [2, 'IT']]);
+    const cay = await chay('WITH RECURSIVE c AS (SELECT id, 0 AS d FROM emp WHERE boss_id IS NULL UNION ALL SELECT e.id, c.d + 1 FROM emp e JOIN c ON e.boss_id = c.id) SELECT id, d FROM c ORDER BY id');
+    assert.deepEqual(cay.bang?.hang, [[1, 0], [2, 1], [3, 2], [4, 3]]);
+    const ham = await chay("CREATE FUNCTION tuoi_tb(p INT) RETURNS NUMERIC LANGUAGE plpgsql AS $$ BEGIN RETURN (SELECT ROUND(AVG(age), 1) FROM emp WHERE dept_id = p); END $$;\nSELECT tuoi_tb(1) AS t");
+    assert.deepEqual(ham.bang?.hang, [[20.5]]);
+  });
+
+  it('mỗi kiểm cô lập (cả hàm tạo trong bài); đổi chế độ không làm bẩn máy SQL Server', async (t) => {
+    if (!nodePg || !node) return t.skip(boQua || lyDoBoQua);
+    await chay('CREATE FUNCTION f() RETURNS int LANGUAGE sql AS $$ SELECT 1 $$; DELETE FROM emp');
+    assert.deepEqual((await chay('SELECT COUNT(*) AS n FROM emp')).bang?.hang, [[4]]);
+    const f = await chay('SELECT f() AS x');
+    assert.equal(f.dat, false);
+    // chế độ SQL Server vẫn còn citext + avg cắt phần lẻ
+    const ss = await node.chayKiemSql({ loai: 'sql', csdl: 'CREATE TABLE t (a INT); INSERT INTO t VALUES (1), (2)' }, { kiem: 'ket-qua', moTa: 'x' }, { 'query.sql': 'SELECT AVG(a) AS a FROM t' });
+    assert.deepEqual(ss.bang?.hang, [[1]]);
+  });
+
+  it('câu T-SQL lỗi ⇒ thông báo PostgreSQL + gợi ý cách viết PostgreSQL', async (t) => {
+    if (!nodePg) return t.skip(boQua);
+    const r = await chay('SELECT TOP 2 name FROM emp ORDER BY id');
+    assert.equal(r.dat, false);
+    assert.match(r.thay ?? '', /LIMIT/);
+    assert.match(r.thay ?? '', /T-SQL/);
   });
 });

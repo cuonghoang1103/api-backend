@@ -53,6 +53,7 @@ export async function chamBai({ exerciseId, tj, files, traLoi, onTung }: ChamVao
       ketQua = await chamKhung(tj, kiem, files, onTung);
       break;
     case 'sql':
+    case 'sql-pg': // 31/10/2026: PostgreSQL nguyên bản (chamSql chọn chế độ theo tj.loai)
       ketQua = await chamSql(tj, kiem, files, onTung);
       break;
     case 'choice':

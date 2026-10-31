@@ -13,8 +13,11 @@
  *                                         được tệp/mạng nhưng một truy vấn chạy mãi vẫn chiếm CPU, ~100 MB RAM mỗi
  *                                         phiên trên máy 6 GB) ⇒ như loại code khác: trình duyệt báo, máy chủ kiểm
  *                                         hình dạng ⇒ tiến độ cá nhân. Chấm có chứng thực ⇒ máy chấm T-SQL ở máy nhà.
+ *   sql-pg (31/10/2026)                 ⇒ cùng bộ chạy PGlite, chế độ PostgreSQL NGUYÊN BẢN (khoá PostgreSQL —
+ *                                         LIMIT, RETURNING, ON CONFLICT, CTE đệ quy, PL/pgSQL…). Toàn vẹn như 'sql':
+ *                                         KHÔNG chạy lại trên VPS, kết quả trình duyệt ⇒ tiến độ cá nhân.
  *   python                              ⇒ Pyodide (đợt sau)
- *   java · tsql · bash · sql-pg         ⇒ máy chấm máy chủ ở máy Linux nhà (đợt sau) — "sắp có"
+ *   java · tsql · bash                  ⇒ máy chấm máy chủ ở máy Linux nhà (đợt sau) — "sắp có"
  *   text-ai                             ⇒ AI chấm theo rubric (đợt sau)
  *   manual                              ⇒ người học tự đánh dấu
  *
@@ -43,7 +46,7 @@ export const GRADE_KINDS = [
 export type GradeKind = (typeof GRADE_KINDS)[number];
 
 /** Chấm được ngay trong trình duyệt hôm nay. */
-export const BROWSER_GRADE_KINDS: ReadonlySet<string> = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql']);
+export const BROWSER_GRADE_KINDS: ReadonlySet<string> = new Set(['dom', 'js', 'console', 'module', 'react', 'choice', 'order', 'table', 'sql', 'sql-pg']);
 /** Chấm thuần dữ liệu — máy chủ chấm lại được từ đáp án người học gửi. */
 export const STATIC_GRADE_KINDS: ReadonlySet<string> = new Set(['choice', 'order', 'table']);
 

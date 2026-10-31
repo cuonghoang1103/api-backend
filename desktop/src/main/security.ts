@@ -195,10 +195,16 @@ const CSP_HOP_CAT_WORKER = [
  * Khung HỘP CÁT của máy chấm Code Lab (28/10/2026): trang của NGƯỜI HỌC (HTML/CSS/JS, React) chạy trong
  * iframe sandbox gốc mờ. Được script nội tuyến/eval (mã người học + tác tử chấm) và React UMD từ
  * cdn.jsdelivr.net; connect-src chỉ jsdelivr (CSS bootstrap tải bằng fetch). Không gì khác ra mạng.
+ *
+ * `worker-src blob:` (31/10/2026): máy chấm SQL (PGlite) chạy trong một Worker blob tạo TỪ khung. Không có nó,
+ * PGlite chạy trên luồng chính của khung — mà khung sandbox ở CHUNG tiến trình với renderer ⇒ một truy vấn chạy mãi
+ * (CTE đệ quy vô hạn…) đóng băng cả app, hẹn giờ của máy chấm không chạy được (đo bằng Chromium 31/10). Worker thừa
+ * kế đúng CSP này (không ra mạng ngoài jsdelivr) và chết theo khung khi trang mẹ gỡ khung lúc quá giờ.
  */
 const CSP_HOP_CAT_KHUNG = [
   "default-src 'none'",
   "script-src 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net",
+  'worker-src blob:',
   "style-src 'unsafe-inline'",
   'img-src data: blob: https:',
   'font-src data:',

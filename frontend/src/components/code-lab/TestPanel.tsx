@@ -87,7 +87,7 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
                     </dl>
                   )}
                   {/* SQL (29/10/2026): bảng mong đợi của kiểm mẫu */}
-                  {tj?.loai === 'sql' && laBangSql(k.mongDoi) && <BangSqlNho b={k.mongDoi} />}
+                  {(tj?.loai === 'sql' || tj?.loai === 'sql-pg') && laBangSql(k.mongDoi) && <BangSqlNho b={k.mongDoi} />}
                 </li>
               );
             })}

@@ -1,5 +1,5 @@
 /**
- * Máy chấm SQL trong TRÌNH DUYỆT — loại 'sql' (29/10/2026). PostgreSQL 18 (PGlite/WASM) chạy trong Web
+ * Máy chấm SQL trong TRÌNH DUYỆT — loại 'sql' (29/10/2026) và 'sql-pg' (31/10/2026). PostgreSQL 18 (PGlite/WASM) chạy trong Web
  * Worker; mỗi kiểm: nạp dữ liệu mẫu ⇒ chạy mã người học ⇒ (truy vấn kiểm) ⇒ so bảng kết quả ⇒ ROLLBACK.
  *
  * Bộ kiểm (`testsJson`, lược đồ đủ: content/codelab/README.md mục "SQL"):
@@ -12,8 +12,11 @@
  *   ]}
  * `mongDoi` do bộ xuất đề dựng bằng cách chạy LỜI GIẢI qua đúng bộ chạy này (scripts/codelab-xuat-de.mjs).
  *
- * Phương ngữ: xem sqlLoi.ts (đầu tệp) — mã có cú pháp chỉ SQL Server hoặc chỉ PostgreSQL hiểu bị BÁO, không
- * chấm; hành vi khác nhau với cùng cú pháp được giả lập theo SQL Server.
+ * Phương ngữ theo loại:
+ *   'sql'    (DBI202) — xem sqlLoi.ts (đầu tệp): mã có cú pháp chỉ SQL Server hoặc chỉ PostgreSQL hiểu bị BÁO, không
+ *            chấm; hành vi khác nhau với cùng cú pháp được giả lập theo SQL Server.
+ *   'sql-pg' (khoá PostgreSQL) — PostgreSQL NGUYÊN BẢN: không dò phương ngữ, dữ liệu mẫu nạp nguyên văn, worker
+ *            riêng không citext/cl_ss (sqlRunner cheDo 'pg'). Câu lỗi mà có dấu T-SQL ⇒ thêm gợi ý cách viết PostgreSQL.
  *
  * Giới hạn: mã ≤ 20 000 ký tự, ≤ 40 câu lệnh, không BEGIN/COMMIT/ROLLBACK; mỗi bảng kết quả ≤ 2 000 dòng
  * (sqlRunner.TRAN_DONG); mỗi kiểm ≤ timeoutMs (mặc định 8 s) — quá ⇒ huỷ worker (truy vấn chạy mãi / tích
@@ -24,15 +27,20 @@
  * Khung là iframe gốc mờ; quá giờ ⇒ gỡ khung.
  */
 import { kiemMaNguon } from './chamJs';
-import { chuGocCot, coLenhGiaoDich, csdlChoPg, kiemPhuongNgu, moTaLoiSql, tachLenhSql, type LoiSql } from './sqlLoi';
+import { chuGocCot, coLenhGiaoDich, csdlChoPg, goiYTsqlChoPg, kiemPhuongNgu, moTaLoiSql, tachLenhSql, type LoiSql } from './sqlLoi';
 import { bangChu, chuanHoaBang, soSanhBang, type BangSql, type TuyChonSo } from './sqlSoSanh';
-import { maWorkerSql, trangKhungSql } from './sqlRunner';
+import { maWorkerSql, trangKhungSql, type CheDoSql } from './sqlRunner';
 import type { Kiem, KetQuaKiem, TepMap, TestsJson } from './kieu';
 
 export const SQL_TRAN_KY_TU = 20000;
 export const SQL_TRAN_CAU = 40;
 const MO_TOI_DA_MS = 90000; // lần đầu: tải ~5 MB + biên dịch WASM + initdb
 const KIEM_MAC_DINH_MS = 8000;
+
+/** Loại chấm ⇒ chế độ của máy SQL: 'sql-pg' = PostgreSQL nguyên bản; còn lại ('sql') = giả lập SQL Server. */
+export function cheDoCua(tj: Pick<TestsJson, 'loai'>): CheDoSql {
+  return tj.loai === 'sql-pg' ? 'pg' : 'sqlserver';
+}
 
 // ─── phiên máy SQL (dùng lại giữa các lần Chạy thử; tự đóng khi rảnh) ─────────────────────────────
 
@@ -47,8 +55,8 @@ interface PhienSql {
 
 let demTin = 0;
 
-function taoPhienWorker(): PhienSql {
-  const url = URL.createObjectURL(new Blob([maWorkerSql()], { type: 'text/javascript' }));
+function taoPhienWorker(cheDo: CheDoSql): PhienSql {
+  const url = URL.createObjectURL(new Blob([maWorkerSql(cheDo)], { type: 'text/javascript' }));
   const w = new Worker(url, { type: 'module', name: 'cl-sql' });
   const cho = new Map<number, (v: TraLoiMay | null) => void>();
   let chet = false;
@@ -68,7 +76,7 @@ function taoPhienWorker(): PhienSql {
   };
 }
 
-function taoPhienKhung(hopCat: string): PhienSql {
+function taoPhienKhung(hopCat: string, cheDo: CheDoSql): PhienSql {
   const f = document.createElement('iframe');
   f.setAttribute('sandbox', 'allow-scripts');
   f.setAttribute('aria-hidden', 'true');
@@ -89,7 +97,7 @@ function taoPhienKhung(hopCat: string): PhienSql {
     cho.delete(k);
   };
   window.addEventListener('message', nghe);
-  f.addEventListener('load', () => f.contentWindow?.postMessage({ __napTrang: trangKhungSql() }, '*'), { once: true });
+  f.addEventListener('load', () => f.contentWindow?.postMessage({ __napTrang: trangKhungSql(cheDo) }, '*'), { once: true });
   f.src = hopCat;
   document.body.appendChild(f);
   return {
@@ -107,14 +115,18 @@ function taoPhienKhung(hopCat: string): PhienSql {
 }
 
 let phien: PhienSql | null = null;
+let phienCheDo: CheDoSql = 'sqlserver';
 let phienSan = false;
 let henDong: ReturnType<typeof setTimeout> | null = null;
 
-function layPhien(): PhienSql {
+/** Một phiên (một worker ~100 MB) tại một thời điểm: đổi chế độ ⇒ đóng phiên cũ, mở phiên mới. */
+function layPhien(cheDo: CheDoSql): PhienSql {
   if (henDong) { clearTimeout(henDong); henDong = null; }
+  if (phien && phienCheDo !== cheDo) boPhien();
   if (!phien) {
     const hopCat = (globalThis as { __CT_HOP_CAT_KHUNG__?: string }).__CT_HOP_CAT_KHUNG__;
-    phien = hopCat ? taoPhienKhung(hopCat) : taoPhienWorker();
+    phien = hopCat ? taoPhienKhung(hopCat, cheDo) : taoPhienWorker(cheDo);
+    phienCheDo = cheDo;
     phienSan = false;
   }
   return phien;
@@ -130,8 +142,8 @@ function henDongPhien() {
   henDong = setTimeout(boPhien, 180000);
 }
 
-async function moPhien(): Promise<{ loi?: string }> {
-  const p = layPhien();
+async function moPhien(cheDo: CheDoSql): Promise<{ loi?: string }> {
+  const p = layPhien(cheDo);
   if (phienSan) return {};
   const r = await p.gui({ mo: true }, MO_TOI_DA_MS);
   if (!r) { boPhien(); return { loi: 'Không khởi động được PostgreSQL (WASM) sau 90 giây — mạng chậm hoặc CDN cdn.jsdelivr.net bị chặn. Thử lại. · Could not start PostgreSQL (WASM) within 90 s — slow network or the CDN is blocked.' }; }
@@ -151,8 +163,8 @@ export function tepCuaKiem(tj: TestsJson, k: Kiem, files: TepMap): string {
   return Object.keys(files).find((t) => /\.sql$/i.test(t)) ?? 'query.sql';
 }
 
-/** Kiểm trước khi chạy (giới hạn, giao dịch, phương ngữ). null ⇒ qua. */
-export function kiemTruocKhiChay(sql: string): { vi: string; en: string; maPhuongNgu?: string[] } | null {
+/** Kiểm trước khi chạy (giới hạn, giao dịch, phương ngữ — chỉ chế độ SQL Server). null ⇒ qua. */
+export function kiemTruocKhiChay(sql: string, cheDo: CheDoSql = 'sqlserver'): { vi: string; en: string; maPhuongNgu?: string[] } | null {
   if (!sql.trim() || !tachLenhSql(sql).length) return { vi: 'Tệp chưa có câu SQL nào.', en: 'The file has no SQL statement yet.' };
   if (sql.length > SQL_TRAN_KY_TU) return { vi: `Mã dài quá ${SQL_TRAN_KY_TU} ký tự.`, en: `Code longer than ${SQL_TRAN_KY_TU} characters.` };
   if (tachLenhSql(sql).length > SQL_TRAN_CAU) return { vi: `Quá ${SQL_TRAN_CAU} câu lệnh.`, en: `More than ${SQL_TRAN_CAU} statements.` };
@@ -162,7 +174,8 @@ export function kiemTruocKhiChay(sql: string): { vi: string; en: string; maPhuon
       en: 'Remove BEGIN/COMMIT/ROLLBACK: the grader wraps every check in its own transaction and rolls it back.',
     };
   }
-  const vp = kiemPhuongNgu(sql);
+  // PostgreSQL nguyên bản: không chặn cú pháp nào — PostgreSQL tự báo lỗi (kèm gợi ý T-SQL nếu có, danhGiaKichBan)
+  const vp = cheDo === 'pg' ? [] : kiemPhuongNgu(sql);
   if (vp.length) {
     const tsql = vp.filter((v) => v.phia === 'tsql');
     const pg = vp.filter((v) => v.phia === 'pg');
@@ -181,15 +194,17 @@ export function kiemTruocKhiChay(sql: string): { vi: string; en: string; maPhuon
   return null;
 }
 
-/** Các bước của một kiểm. */
-export function dungKichBan(tj: TestsJson, k: Kiem, sqlBai: string): { buoc: Array<{ loai: string; sql: string }> } {
+/** Các bước của một kiểm (`cheDo` đi kèm để danhGiaKichBan biết cách giải thích lỗi; bộ chạy bỏ qua nó). */
+export function dungKichBan(tj: TestsJson, k: Kiem, sqlBai: string): { buoc: Array<{ loai: string; sql: string }>; cheDo: CheDoSql } {
+  const cheDo = cheDoCua(tj);
   const csdl = [typeof k.csdl === 'string' ? k.csdl : String(tj.csdl ?? ''), typeof k.themCsdl === 'string' ? k.themCsdl : ''].filter((x) => x.trim()).join(';\n');
   const buoc: Array<{ loai: string; sql: string }> = [];
-  if (csdl.trim()) buoc.push({ loai: 'csdl', sql: csdlChoPg(csdl) });
+  // 'sql': dữ liệu mẫu viết kiểu SQL Server ⇒ dịch sang PostgreSQL giả lập SQL Server; 'sql-pg': nạp nguyên văn
+  if (csdl.trim()) buoc.push({ loai: 'csdl', sql: cheDo === 'pg' ? csdl : csdlChoPg(csdl) });
   buoc.push({ loai: 'bai', sql: sqlBai });
   if (k.kiem === 'sau-lenh') buoc.push({ loai: 'truyVan', sql: String(k.kiemTra ?? '') });
   if (k.kiem === 'bi-chan' || k.kiem === 'chay-duoc') buoc.push({ loai: 'thu', sql: String(k.thu ?? '') });
-  return { buoc };
+  return { buoc, cheDo };
 }
 
 export interface DanhGiaSql {
@@ -213,7 +228,7 @@ const tuyChon = (k: Kiem): TuyChonSo => ({
  * Đánh giá kết quả một kịch bản (thuần — Node dùng lại để dựng `mongDoi` từ lời giải). `mong` = null ⇒ chỉ
  * lấy bảng thực.
  */
-export function danhGiaKichBan(k: Kiem, kb: { buoc: Array<{ loai: string }> }, sqlBai: string, kq: KqKichBan, mong: BangSql | null): DanhGiaSql {
+export function danhGiaKichBan(k: Kiem, kb: { buoc: Array<{ loai: string }>; cheDo?: CheDoSql }, sqlBai: string, kq: KqKichBan, mong: BangSql | null): DanhGiaSql {
   const vt = (loai: string) => kb.buoc.findIndex((b) => b.loai === loai);
   const lay = (loai: string) => { const i = vt(loai); return i >= 0 ? kq.buoc[i] : undefined; };
   const csdl = lay('csdl');
@@ -225,6 +240,11 @@ export function danhGiaKichBan(k: Kiem, kb: { buoc: Array<{ loai: string }> }, s
   if (!bai) return { dat: false, thay: hai('Không chạy được mã của bạn.', 'Your code did not run.') };
   if (!bai.ok) {
     const m = moTaLoiSql(sqlBai, bai.loi ?? { thongDiep: 'lỗi' });
+    // PostgreSQL nguyên bản: câu lỗi mà mang dấu T-SQL ⇒ chỉ cách viết của PostgreSQL
+    const gy = kb.cheDo === 'pg' ? goiYTsqlChoPg(sqlBai) : [];
+    if (gy.length) {
+      return { dat: false, thay: hai(`${m.vi}\nCú pháp SQL Server (T-SQL) — PostgreSQL viết khác:\n${gy.map((g) => `• ${g.vi}`).join('\n')}`, `${m.en}\nSQL Server (T-SQL) syntax — PostgreSQL spells it differently:\n${gy.map((g) => `• ${g.en}`).join('\n')}`) };
+    }
     return { dat: false, thay: hai(m.vi, m.en) };
   }
   const so = (thayTho: BangSql, nguonTen: string): DanhGiaSql => {
@@ -292,6 +312,7 @@ export async function chamSql(tj: TestsJson, kiem: Kiem[], files: TepMap, onTung
     onTung?.(kq);
   };
   const hetMs = Math.min(30000, Number(tj.timeoutMs) || KIEM_MAC_DINH_MS);
+  const cheDo = cheDoCua(tj);
   let loiMo: string | null = null;
   // mã đã quá giờ một lần ⇒ các kiểm sau dùng CÙNG mã báo ngay (khỏi đợi thêm N × timeout)
   const quaGio = new Set<string>();
@@ -301,16 +322,18 @@ export async function chamSql(tj: TestsJson, kiem: Kiem[], files: TepMap, onTung
     const tep = tepCuaKiem(tj, k, files);
     const sql = files[tep];
     if (sql == null) { xong(idx, { dat: false, thay: hai(`Thiếu tệp ${tep}.`, `Missing file ${tep}.`) }); continue; }
-    const truoc = kiemTruocKhiChay(sql);
+    const truoc = kiemTruocKhiChay(sql, cheDo);
     if (truoc) { xong(idx, { dat: false, thay: hai(truoc.vi, truoc.en) }); continue; }
     if (loiMo) { xong(idx, { dat: false, thay: loiMo }); continue; }
-    const mo = await moPhien();
+    const mo = await moPhien(cheDo);
     if (mo.loi) { loiMo = mo.loi; xong(idx, { dat: false, thay: loiMo }); continue; }
-    const thongBaoQuaGio = hai(`Quá ${hetMs / 1000} giây — truy vấn chạy mãi? (nối thiếu điều kiện ⇒ tích Descartes, hay truy vấn con lồng quá sâu)`, `Over ${hetMs / 1000} s — runaway query? (missing join condition ⇒ Cartesian product, or deeply nested subqueries)`);
+    const thongBaoQuaGio = cheDo === 'pg'
+      ? hai(`Quá ${hetMs / 1000} giây — máy chấm đã dừng PostgreSQL. Truy vấn chạy mãi? (CTE đệ quy thiếu điều kiện dừng / gặp vòng lặp trong dữ liệu, vòng LOOP không EXIT, nối thiếu điều kiện ⇒ tích Descartes)`, `Over ${hetMs / 1000} s — the grader stopped PostgreSQL. Runaway query? (recursive CTE without a stop condition / a cycle in the data, a LOOP without EXIT, missing join condition ⇒ Cartesian product)`)
+      : hai(`Quá ${hetMs / 1000} giây — truy vấn chạy mãi? (nối thiếu điều kiện ⇒ tích Descartes, hay truy vấn con lồng quá sâu)`, `Over ${hetMs / 1000} s — runaway query? (missing join condition ⇒ Cartesian product, or deeply nested subqueries)`);
     if (quaGio.has(sql)) { xong(idx, { dat: false, thay: thongBaoQuaGio }); continue; }
     const kb = dungKichBan(tj, k, sql);
     const t1 = performance.now();
-    const r = await layPhien().gui({ kb }, hetMs);
+    const r = await layPhien(cheDo).gui({ kb }, hetMs);
     if (!r) {
       boPhien(); // worker đang kẹt trong một truy vấn — huỷ, kiểm sau dựng lại
       quaGio.add(sql);

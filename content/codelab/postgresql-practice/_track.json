@@ -1,0 +1,31 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "postgresql-practice",
+  "name": "PostgreSQL — Luyện tập SQL chấm thật",
+  "language": "sql",
+  "color": "#336791",
+  "docsUrl": "https://www.postgresql.org/docs/current/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện đi kèm khoá PostgreSQL, có MÁY CHẤM SQL THẬT ngay trong trình duyệt: PostgreSQL 18 (WASM) nguyên bản — LIMIT, RETURNING, ON CONFLICT, DISTINCT ON, CTE đệ quy, hàm cửa sổ, PL/pgSQL đều chạy và được chấm như máy chủ thật. CSDL CT Shop của khoá, mỗi bài học một bộ đề dễ → khó, kiểm ẩn đổi dữ liệu để bắt lời giải chép cứng.",
+  "modules": [
+    {
+      "slug": "postgresql-4-1-insert",
+      "name": "4.1 INSERT: many rows, RETURNING & UPSERT",
+      "level": "BEGINNER",
+      "description": "INSERT để cột identity tự cấp id, RETURNING lấy lại dòng vừa ghi, VALUES nhiều dòng + DEFAULT, UPSERT bằng ON CONFLICT … DO UPDATE với EXCLUDED."
+    },
+    {
+      "slug": "postgresql-4-3-order-limit-distinct",
+      "name": "4.3 ORDER BY, LIMIT/OFFSET & DISTINCT ON",
+      "level": "BEGINNER",
+      "description": "Top N có khoá phá hoà, phân trang LIMIT/OFFSET đúng trang, đơn mới nhất của mỗi khách bằng DISTINCT ON."
+    },
+    {
+      "slug": "postgresql-7-4-recursive-cte",
+      "name": "7.4 Recursive CTEs: walking a hierarchy",
+      "level": "INTERMEDIATE",
+      "description": "WITH RECURSIVE đi xuống cây danh mục kèm độ sâu, dựng breadcrumb từ gốc, và chống vòng lặp bằng CYCLE … SET … USING (dữ liệu có vòng — câu ngây thơ bị máy chấm dừng sau 4 giây)."
+    }
+  ]
+}

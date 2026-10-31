@@ -1,0 +1,274 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-6-5-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-6-5-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 6 · 1 — A reviewer’s order of work",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "security review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Order the steps of the Lab 6 security review as in the reference solution.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước của buổi review bảo mật Lab 6 như lời giải tham khảo.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "You cannot fix what you have not proved.|||Không vá được thứ chưa chứng minh.",
+        "When is a test worth keeping?|||Khi nào một test đáng giữ lại?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 6 · 1 — A reviewer’s order of work\n\nAnswer in the answer panel (no code needed).\n\n1. From first to lastTừ đầu tới cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 6 · 1 — A reviewer’s order of work — answer key\n\n1. From first to lastTừ đầu tới cuối\n   Answer: m2) Run node audit.mjs against the LABFLOW_VULN=1 build and list every FAIL  →  m3) Prove each FAIL with one curl exploit and its real output  →  m5) Explain the chain: API3 escalation makes API5 and API6 fail too  →  m6) Close each hole: policy + 404, HS256 only + expiry + login limit, strict schema, safeFetch, CORS list  →  m4) Write test/security.test.mjs: green on the fixed build  →  m1) Switch the holes back on: the same tests must turn red\n   Find, prove, understand, fix, then leave tests that are green on the fix and red on the hole — a test that passes both tests nothing.VI: Tìm, chứng minh, hiểu, vá, rồi để lại bộ test xanh trên bản vá và đỏ trên lỗ hổng — test đạt cả hai thì không kiểm gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Find, prove, understand, fix, then leave tests that are green on the fix and red on the hole — a test that passes both tests nothing.</p><p><i>VI: Tìm, chứng minh, hiểu, vá, rồi để lại bộ test xanh trên bản vá và đỏ trên lỗ hổng — test đạt cả hai thì không kiểm gì.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From first to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ đầu tới cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Switch the holes back on: the same tests must turn red"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Run node audit.mjs against the LABFLOW_VULN=1 build and list every FAIL"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Prove each FAIL with one curl exploit and its real output"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Write test/security.test.mjs: green on the fixed build"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Explain the chain: API3 escalation makes API5 and API6 fail too"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Close each hole: policy + 404, HS256 only + expiry + login limit, strict schema, safeFetch, CORS list"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m3",
+              "m5",
+              "m6",
+              "m4",
+              "m1"
+            ],
+            "giaiThich": "<p>Find, prove, understand, fix, then leave tests that are green on the fix and red on the hole — a test that passes both tests nothing.</p><p><i>VI: Tìm, chứng minh, hiểu, vá, rồi để lại bộ test xanh trên bản vá và đỏ trên lỗ hổng — test đạt cả hai thì không kiểm gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Fixing before writing down the exploit — no evidence for the report.|||Vá trước khi ghi lại cách khai thác — báo cáo không có bằng chứng."
+        },
+        {
+          "loi": "Never running the tests against the vulnerable build.|||Không bao giờ chạy test với bản có lỗ hổng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "finding",
+          "vi": "phát hiện (một lỗ hổng đã chứng minh)"
+        },
+        {
+          "en": "exploit",
+          "vi": "cách khai thác"
+        }
+      ]
+    },
+    {
+      "title": "Lab 6 · 2 — Vulnerable vs fixed: predict the status",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "security review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Predict the status code of each request on the vulnerable build (LABFLOW_VULN=1) and on the fixed build.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dự đoán mã trạng thái của từng request trên bản có lỗ (LABFLOW_VULN=1) và trên bản đã vá.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Without the limit, a wrong password is simply wrong.|||Không có giới hạn thì mật khẩu sai chỉ đơn giản là sai.",
+        "A strict schema rejects unknown fields with 400.|||Schema chặt từ chối trường lạ bằng 400."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 6 · 2 — Vulnerable vs fixed: predict the status\n\nAnswer in the answer panel (no code needed).\n\n1. Request → vulnerable / fixedRequest → bản lỗi / bản vá\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 6 · 2 — Vulnerable vs fixed: predict the status — answer key\n\n1. Request → vulnerable / fixedRequest → bản lỗi / bản vá\n   - r1.v: 200\n   - r1.f: 404\n   - r2.v: 200\n   - r2.f: 401\n   - r3.v: 401\n   - r3.f: 429\n   - r4.v: 200\n   - r4.f: 400\n   - r5.v: 200\n   - r5.f: 422\n   Real runs: BOLA 200 ⇒ 404; alg none accepted ⇒ 401; no limit (401 again) ⇒ 429; mass assignment 200 ⇒ strict schema 400; SSRF probe 200 ⇒ 422 “https only”.VI: Lần chạy thật: BOLA 200 ⇒ 404; alg none được nhận ⇒ 401; không giới hạn (vẫn 401) ⇒ 429; gán hàng loạt 200 ⇒ schema chặt 400; dò SSRF 200 ⇒ 422 “https only”.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Real runs: BOLA 200 ⇒ 404; alg none accepted ⇒ 401; no limit (401 again) ⇒ 429; mass assignment 200 ⇒ strict schema 400; SSRF probe 200 ⇒ 422 “https only”.</p><p><i>VI: Lần chạy thật: BOLA 200 ⇒ 404; alg none được nhận ⇒ 401; không giới hạn (vẫn 401) ⇒ 429; gán hàng loạt 200 ⇒ schema chặt 400; dò SSRF 200 ⇒ 422 “https only”.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → vulnerable / fixed</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → bản lỗi / bản vá</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "v",
+                "ten": "Vulnerable",
+                "luaChon": [
+                  "200",
+                  "400",
+                  "401",
+                  "404",
+                  "422",
+                  "429"
+                ]
+              },
+              {
+                "ma": "f",
+                "ten": "Fixed",
+                "luaChon": [
+                  "200",
+                  "400",
+                  "401",
+                  "404",
+                  "422",
+                  "429"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Bin: GET /v2/bookings/<An’s id>/receipt"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "GET /v2/admin/deprecations with a forged \"alg\":\"none\" manager token"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "The 6th wrong password for Bin within a minute"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "An: PATCH /v2/me {\"role\":\"LAB_MANAGER\"}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Lan: POST /v2/devices/dev_1/manual {\"url\":\"http://127.0.0.1:4000/health\"}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.v": "200",
+              "r1.f": "404",
+              "r2.v": "200",
+              "r2.f": "401",
+              "r3.v": "401",
+              "r3.f": "429",
+              "r4.v": "200",
+              "r4.f": "400",
+              "r5.v": "200",
+              "r5.f": "422"
+            },
+            "giaiThich": "<p>Real runs: BOLA 200 ⇒ 404; alg none accepted ⇒ 401; no limit (401 again) ⇒ 429; mass assignment 200 ⇒ strict schema 400; SSRF probe 200 ⇒ 422 “https only”.</p><p><i>VI: Lần chạy thật: BOLA 200 ⇒ 404; alg none được nhận ⇒ 401; không giới hạn (vẫn 401) ⇒ 429; gán hàng loạt 200 ⇒ schema chặt 400; dò SSRF 200 ⇒ 422 “https only”.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting 403 for Bin on the fixed build — hidden objects answer 404.|||Chờ 403 cho Bình trên bản vá — đối tượng bị ẩn trả 404."
+        },
+        {
+          "loi": "Expecting 422 for the role field — unknown fields are a 400 at the edge (2.2).|||Chờ 422 cho trường role — trường lạ là 400 ngay ở cửa (2.2)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "vulnerable build",
+          "vi": "bản dựng có lỗ hổng"
+        },
+        {
+          "en": "regression test",
+          "vi": "test chống lỗi quay lại"
+        }
+      ]
+    }
+  ]
+}

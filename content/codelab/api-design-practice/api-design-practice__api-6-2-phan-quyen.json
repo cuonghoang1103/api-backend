@@ -1,0 +1,472 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-6-2-phan-quyen",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-6-2-phan-quyen"
+  },
+  "exercises": [
+    {
+      "title": "Authorisation 1 — Which level is missing?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authorization",
+        "OWASP API Top 10"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>For each bug, choose the level of authorisation that was not checked.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi lỗi, chọn tầng phân quyền đã không được kiểm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Is the problem the operation, the record, or one field?|||Vấn đề nằm ở thao tác, ở bản ghi, hay ở một trường?",
+        "Would the bug disappear if only managers could call the route?|||Lỗi có biến mất nếu chỉ quản lý được gọi route không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authorisation 1 — Which level is missing?\n\nAnswer in the answer panel (no code needed).\n\n1. Bug → missing levelLỗi → tầng bị thiếu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authorisation 1 — Which level is missing? — answer key\n\n1. Bug → missing levelLỗi → tầng bị thiếu\n   - r1.a: Object level (API1)\n   - r2.a: Function level (API5)\n   - r3.a: Property level (API3)\n   - r4.a: Object level (API1)\n   - r5.a: Property level (API3)\n   - r6.a: Function level (API5)\n   Function: may this role call the operation at all? Object: may this person touch this record? Property: may they read or change this field?VI: Chức năng: vai trò này có được gọi thao tác không? Đối tượng: người này có được đụng bản ghi này không? Thuộc tính: họ có được đọc hay sửa trường này không?\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Function: may this role call the operation at all? Object: may this person touch this record? Property: may they read or change this field?</p><p><i>VI: Chức năng: vai trò này có được gọi thao tác không? Đối tượng: người này có được đụng bản ghi này không? Thuộc tính: họ có được đọc hay sửa trường này không?</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Bug → missing level</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi → tầng bị thiếu</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Bug"
+              },
+              {
+                "ma": "a",
+                "ten": "Level",
+                "luaChon": [
+                  "Function level (API5)",
+                  "Object level (API1)",
+                  "Property level (API3)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Bin reads An’s receipt by changing bk_2 to bk_1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "A student calls PATCH /v2/devices/dev_1 and it works"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "PATCH /v2/me with {\"role\":\"LAB_MANAGER\"} makes An a manager"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "A student cancels another student’s booking with DELETE /v2/bookings/bk_7"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "GET /v2/me returns passwordHash"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "A student opens GET /v2/admin/deprecations"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "Object level (API1)",
+              "r2.a": "Function level (API5)",
+              "r3.a": "Property level (API3)",
+              "r4.a": "Object level (API1)",
+              "r5.a": "Property level (API3)",
+              "r6.a": "Function level (API5)"
+            },
+            "giaiThich": "<p>Function: may this role call the operation at all? Object: may this person touch this record? Property: may they read or change this field?</p><p><i>VI: Chức năng: vai trò này có được gọi thao tác không? Đối tượng: người này có được đụng bản ghi này không? Thuộc tính: họ có được đọc hay sửa trường này không?</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling every authorisation bug “BOLA”.|||Gọi mọi lỗi phân quyền là “BOLA”."
+        },
+        {
+          "loi": "Treating reading a hidden field (passwordHash) as an object-level bug.|||Coi việc đọc được trường ẩn (passwordHash) là lỗi cấp đối tượng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BOLA (Broken Object Level Authorization)",
+          "vi": "lỗi phân quyền cấp đối tượng"
+        },
+        {
+          "en": "mass assignment",
+          "vi": "gán hàng loạt trường từ body"
+        }
+      ]
+    },
+    {
+      "title": "Authorisation 2 — Policy decisions",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authorization"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Decisions behind LabFlow’s fix in lesson 6.2.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những quyết định đằng sau bản vá của LabFlow ở bài 6.2.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What does each answer tell an attacker?|||Mỗi câu trả lời cho kẻ tấn công biết gì?",
+        "What happens when someone forgets to write a rule?|||Chuyện gì xảy ra khi ai đó quên viết một luật?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authorisation 2 — Policy decisions\n\nAnswer in the answer panel (no code needed).\n\n1. Bin asks for An’s receipt after the fix. Why 404 and not 403?Sau khi vá, Bình hỏi biên nhận của An. Vì sao 404 chứ không phải 403?\n2. A POLICIES table has no rule for \"booking:export\". What does can(user, \"booking:export\", b) return?Bảng POLICIES không có luật cho \"booking:export\". can(user, \"booking:export\", b) trả gì?\n3. Would random UUIDs instead of bk_1, bk_2 … have fixed the receipt bug?Dùng UUID ngẫu nhiên thay cho bk_1, bk_2 … có vá được lỗi biên nhận không?\n4. The matrix ran AFTER the audit and showed every Bin cell wrong. Why?Ma trận chạy SAU bộ kiểm và mọi ô của Bình đều sai. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authorisation 2 — Policy decisions — answer key\n\n1. Bin asks for An’s receipt after the fix. Why 404 and not 403?Sau khi vá, Bình hỏi biên nhận của An. Vì sao 404 chứ không phải 403?\n   Answer: d) A 403 would confirm that bk_1 exists; 404 reveals nothing\n   Hidden objects answer like missing ones. The old GET /bookings/:id keeps its 403 — changing a status code is a breaking change (4.1).VI: Đối tượng bị ẩn trả lời như không tồn tại. GET /bookings/:id cũ giữ 403 — đổi mã trạng thái là thay đổi phá vỡ (4.1).\n\n2. A POLICIES table has no rule for \"booking:export\". What does can(user, \"booking:export\", b) return?Bảng POLICIES không có luật cho \"booking:export\". can(user, \"booking:export\", b) trả gì?\n   Answer: b) false — deny by default\n   Boolean(POLICIES[action]?.(…)) is false when the rule is missing. Forgetting a rule must close the door, not open it.VI: Boolean(POLICIES[action]?.(…)) ra false khi thiếu luật. Quên một luật phải đóng cửa, không phải mở cửa.\n\n3. Would random UUIDs instead of bk_1, bk_2 … have fixed the receipt bug?Dùng UUID ngẫu nhiên thay cho bk_1, bk_2 … có vá được lỗi biên nhận không?\n   Answer: b) No — guessing gets harder, but ids leak through links, logs and screenshots\n   Only the object-level check fixes BOLA; random ids are at most an extra layer.VI: Chỉ phép kiểm cấp đối tượng mới vá được BOLA; id ngẫu nhiên nhiều lắm là một lớp phụ.\n\n4. The matrix ran AFTER the audit and showed every Bin cell wrong. Why?Ma trận chạy SAU bộ kiểm và mọi ô của Bình đều sai. Vì sao?\n   Answer: a) The audit triggered Bin’s login limit on purpose, so Bin could not log in\n   The audit’s API2 check sends six wrong passwords for Bin. A rate limit doing its job — run the matrix first.VI: Phép kiểm API2 của bộ kiểm gửi sáu mật khẩu sai cho Bình. Giới hạn tần suất đang làm đúng việc — chạy ma trận trước.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> A 403 would confirm that bk_1 exists; 404 reveals nothing</p><p>Hidden objects answer like missing ones. The old GET /bookings/:id keeps its 403 — changing a status code is a breaking change (4.1).</p><p><i>VI: Đối tượng bị ẩn trả lời như không tồn tại. GET /bookings/:id cũ giữ 403 — đổi mã trạng thái là thay đổi phá vỡ (4.1).</i></p></li><li><p><b>b)</b> false — deny by default</p><p>Boolean(POLICIES[action]?.(…)) is false when the rule is missing. Forgetting a rule must close the door, not open it.</p><p><i>VI: Boolean(POLICIES[action]?.(…)) ra false khi thiếu luật. Quên một luật phải đóng cửa, không phải mở cửa.</i></p></li><li><p><b>b)</b> No — guessing gets harder, but ids leak through links, logs and screenshots</p><p>Only the object-level check fixes BOLA; random ids are at most an extra layer.</p><p><i>VI: Chỉ phép kiểm cấp đối tượng mới vá được BOLA; id ngẫu nhiên nhiều lắm là một lớp phụ.</i></p></li><li><p><b>a)</b> The audit triggered Bin’s login limit on purpose, so Bin could not log in</p><p>The audit’s API2 check sends six wrong passwords for Bin. A rate limit doing its job — run the matrix first.</p><p><i>VI: Phép kiểm API2 của bộ kiểm gửi sáu mật khẩu sai cho Bình. Giới hạn tần suất đang làm đúng việc — chạy ma trận trước.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Bin asks for An’s receipt after the fix. Why 404 and not 403?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi vá, Bình hỏi biên nhận của An. Vì sao 404 chứ không phải 403?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because Express turns every 403 into 404 when a route throws"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because 403 is reserved for the admin routes only in LabFlow"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because the receipt is deleted for anybody who is not its owner"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 403 would confirm that bk_1 exists; 404 reveals nothing"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Hidden objects answer like missing ones. The old GET /bookings/:id keeps its 403 — changing a status code is a breaking change (4.1).</p><p><i>VI: Đối tượng bị ẩn trả lời như không tồn tại. GET /bookings/:id cũ giữ 403 — đổi mã trạng thái là thay đổi phá vỡ (4.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A POLICIES table has no rule for \"booking:export\". What does can(user, \"booking:export\", b) return?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bảng POLICIES không có luật cho \"booking:export\". can(user, \"booking:export\", b) trả gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "true for managers and false for students"
+              },
+              {
+                "ma": "b",
+                "noiDung": "false — deny by default"
+              },
+              {
+                "ma": "c",
+                "noiDung": "true — no rule means no restriction"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It throws, so the route answers 500"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Boolean(POLICIES[action]?.(…)) is false when the rule is missing. Forgetting a rule must close the door, not open it.</p><p><i>VI: Boolean(POLICIES[action]?.(…)) ra false khi thiếu luật. Quên một luật phải đóng cửa, không phải mở cửa.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Would random UUIDs instead of bk_1, bk_2 … have fixed the receipt bug?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dùng UUID ngẫu nhiên thay cho bk_1, bk_2 … có vá được lỗi biên nhận không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, as long as the UUID is version 4 and not version 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — guessing gets harder, but ids leak through links, logs and screenshots"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No, because UUIDs are always sent to every client in each list"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — nobody can guess a UUID, so the check becomes unnecessary"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Only the object-level check fixes BOLA; random ids are at most an extra layer.</p><p><i>VI: Chỉ phép kiểm cấp đối tượng mới vá được BOLA; id ngẫu nhiên nhiều lắm là một lớp phụ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The matrix ran AFTER the audit and showed every Bin cell wrong. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ma trận chạy SAU bộ kiểm và mọi ô của Bình đều sai. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The audit triggered Bin’s login limit on purpose, so Bin could not log in"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The matrix uses demo tokens, which the audit had switched off"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The audit deleted all of Bin’s bookings before the matrix started"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The fix only works for the first person who logs in after a restart"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The audit’s API2 check sends six wrong passwords for Bin. A rate limit doing its job — run the matrix first.</p><p><i>VI: Phép kiểm API2 của bộ kiểm gửi sáu mật khẩu sai cho Bình. Giới hạn tần suất đang làm đúng việc — chạy ma trận trước.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "403 for hidden objects.|||403 cho đối tượng bị ẩn."
+        },
+        {
+          "loi": "Allow by default when a rule is missing.|||Mặc định cho phép khi thiếu luật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "deny by default",
+          "vi": "mặc định từ chối"
+        },
+        {
+          "en": "policy",
+          "vi": "chính sách (luật ai được làm gì)"
+        }
+      ]
+    },
+    {
+      "title": "Authorisation 3 — Write violations(people, owners, observed): the authorisation matrix",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "authorization",
+        "testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The matrix of lesson 6.2 asks every person for every receipt and compares with the policy. Inputs:</p><ul>\n<li><code>people</code> — <code>[{ id, role }]</code>, in this order</li>\n<li><code>owners</code> — <code>{ bookingId: userId }</code>, in this key order</li>\n<li><code>observed</code> — <code>{ userId: { bookingId: status } }</code> (a status may be missing)</li></ul>\n<p>Expected: <code>200</code> if the person is a <code>LAB_MANAGER</code> or owns the booking, else <code>404</code>. Return the list of wrong cells as <code>'usr_2→bk_1'</code>, person by person, booking by booking. A missing status is wrong.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ma trận của bài 6.2 hỏi mọi biên nhận bằng tài khoản của từng người rồi so với chính sách. Đầu vào:</p><ul>\n<li><code>people</code> — <code>[{ id, role }]</code>, theo thứ tự này</li>\n<li><code>owners</code> — <code>{ bookingId: userId }</code>, theo thứ tự khoá này</li>\n<li><code>observed</code> — <code>{ userId: { bookingId: status } }</code> (có thể thiếu status)</li></ul>\n<p>Kỳ vọng: <code>200</code> nếu người đó là <code>LAB_MANAGER</code> hoặc sở hữu booking, ngược lại <code>404</code>. Trả danh sách ô sai dạng <code>'usr_2→bk_1'</code>, lần lượt từng người, từng booking. Thiếu status là sai.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "people, owners, observed",
+      "outputSpec": "array of \"user→booking\" strings|||mảng chuỗi \"người→booking\"",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "violations([{\"id\":\"usr_1\",\"role\":\"STUDENT\"},{\"id\":\"usr_2\",\"role\":\"STUDENT\"},{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"}], {\"bk_1\":\"usr_1\",\"bk_2\":\"usr_2\",\"bk_3\":\"usr_1\",\"bk_4\":\"usr_2\"}, {\"usr_1\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200},\"usr_2\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200},\"usr_3\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200}})",
+          "output": "[\"usr_1→bk_2\",\"usr_1→bk_4\",\"usr_2→bk_1\",\"usr_2→bk_3\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Two nested loops: people outside, bookings inside.|||Hai vòng lặp lồng: người ở ngoài, booking ở trong.",
+        "The owner comes from owners, never from the observed answer.|||Chủ sở hữu lấy từ owners, không bao giờ từ câu trả lời quan sát được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** wrong cells of the receipt authorisation matrix */\nfunction violations(people, owners, observed) {\n  // Write your solution here\n  const wrong = [];\n  for (const p of people) for (const bk of Object.keys(owners))\n    if (observed[p.id][bk] !== 200) wrong.push(p.id + '→' + bk);\n  return wrong;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction violations(people, owners, observed) {\n  const wrong = [];\n  for (const p of people) {\n    for (const bk of Object.keys(owners)) {\n      const expected = p.role === 'LAB_MANAGER' || owners[bk] === p.id ? 200 : 404;\n      const got = observed[p.id] && observed[p.id][bk];\n      if (got !== expected) wrong.push(p.id + '→' + bk);\n    }\n  }\n  return wrong;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On the quick build every student cell for someone else’s booking is 200 ⇒ wrong (8 cells with 8 bookings in lesson 6.2); after the fix the list is empty.</p>",
+      "solutionExplanationHtmlVi": "<p>Trên bản viết vội mọi ô của sinh viên với booking người khác là 200 ⇒ sai (8 ô với 8 booking ở bài 6.2); sau khi vá danh sách rỗng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The quick receipt (LABFLOW_VULN=1)",
+              "vi": "Biên nhận viết vội (LABFLOW_VULN=1)"
+            },
+            "goi": "violations([{\"id\":\"usr_1\",\"role\":\"STUDENT\"},{\"id\":\"usr_2\",\"role\":\"STUDENT\"},{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"}], {\"bk_1\":\"usr_1\",\"bk_2\":\"usr_2\",\"bk_3\":\"usr_1\",\"bk_4\":\"usr_2\"}, {\"usr_1\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200},\"usr_2\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200},\"usr_3\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200}})",
+            "mongDoi": [
+              "usr_1→bk_2",
+              "usr_1→bk_4",
+              "usr_2→bk_1",
+              "usr_2→bk_3"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "After the fix",
+              "vi": "Sau khi vá"
+            },
+            "goi": "violations([{\"id\":\"usr_1\",\"role\":\"STUDENT\"},{\"id\":\"usr_2\",\"role\":\"STUDENT\"},{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"}], {\"bk_1\":\"usr_1\",\"bk_2\":\"usr_2\",\"bk_3\":\"usr_1\",\"bk_4\":\"usr_2\"}, {\"usr_1\":{\"bk_1\":200,\"bk_2\":404,\"bk_3\":200,\"bk_4\":404},\"usr_2\":{\"bk_1\":404,\"bk_2\":200,\"bk_3\":404,\"bk_4\":200},\"usr_3\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200}})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "403 instead of 404",
+              "vi": "403 thay vì 404"
+            },
+            "goi": "violations([{\"id\":\"usr_1\",\"role\":\"STUDENT\"},{\"id\":\"usr_2\",\"role\":\"STUDENT\"},{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"}], {\"bk_1\":\"usr_1\",\"bk_2\":\"usr_2\",\"bk_3\":\"usr_1\",\"bk_4\":\"usr_2\"}, {\"usr_1\":{\"bk_1\":200,\"bk_2\":404,\"bk_3\":200,\"bk_4\":404},\"usr_2\":{\"bk_1\":403,\"bk_2\":200,\"bk_3\":404,\"bk_4\":200},\"usr_3\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200}})",
+            "mongDoi": [
+              "usr_2→bk_1"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Manager locked out of one booking",
+              "vi": "Quản lý bị chặn một booking"
+            },
+            "goi": "violations([{\"id\":\"usr_1\",\"role\":\"STUDENT\"},{\"id\":\"usr_2\",\"role\":\"STUDENT\"},{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"}], {\"bk_1\":\"usr_1\",\"bk_2\":\"usr_2\",\"bk_3\":\"usr_1\",\"bk_4\":\"usr_2\"}, {\"usr_1\":{\"bk_1\":200,\"bk_2\":404,\"bk_3\":200,\"bk_4\":404},\"usr_2\":{\"bk_1\":404,\"bk_2\":200,\"bk_3\":404,\"bk_4\":200},\"usr_3\":{\"bk_1\":200,\"bk_2\":404,\"bk_3\":200,\"bk_4\":200}})",
+            "mongDoi": [
+              "usr_3→bk_2"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Bin could not log in",
+              "vi": "Bình không đăng nhập được"
+            },
+            "goi": "violations([{\"id\":\"usr_1\",\"role\":\"STUDENT\"},{\"id\":\"usr_2\",\"role\":\"STUDENT\"},{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"}], {\"bk_1\":\"usr_1\",\"bk_2\":\"usr_2\",\"bk_3\":\"usr_1\",\"bk_4\":\"usr_2\"}, {\"usr_1\":{\"bk_1\":200,\"bk_2\":404,\"bk_3\":200,\"bk_4\":404},\"usr_3\":{\"bk_1\":200,\"bk_2\":200,\"bk_3\":200,\"bk_4\":200}})",
+            "mongDoi": [
+              "usr_2→bk_1",
+              "usr_2→bk_2",
+              "usr_2→bk_3",
+              "usr_2→bk_4"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "violations([], {\"bk_1\":\"usr_1\",\"bk_2\":\"usr_2\",\"bk_3\":\"usr_1\",\"bk_4\":\"usr_2\"}, {})",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting a manager’s 200 on someone else’s booking as wrong.|||Tính 200 của quản lý trên booking người khác là sai."
+        },
+        {
+          "loi": "Treating a 403 as acceptable — the policy says 404.|||Chấp nhận 403 — chính sách nói 404."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "authorisation matrix",
+          "vi": "ma trận phân quyền"
+        },
+        {
+          "en": "expected vs observed",
+          "vi": "kỳ vọng so với quan sát"
+        }
+      ]
+    }
+  ]
+}

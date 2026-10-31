@@ -188,6 +188,36 @@
       "name": "Lab 5 — Reporting that survives the basement",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 5 · 1 — The middleware order · Lab 5 · 2 — Part A: predict the answers"
+    },
+    {
+      "slug": "api-6-1-xac-thuc",
+      "name": "6.1 Authentication options",
+      "level": "BEGINNER",
+      "description": "Luyện: Authentication 1 — What the real runs showed · Authentication 2 — Write verdict(header, payload, signatureValid, nowSec): LabFlow’s token check · Authentication 3 — Write loginStatuses(attempts, capacity, windowSec): the login limit"
+    },
+    {
+      "slug": "api-6-2-phan-quyen",
+      "name": "6.2 Authorisation and BOLA",
+      "level": "BEGINNER",
+      "description": "Luyện: Authorisation 1 — Which level is missing? · Authorisation 2 — Policy decisions · Authorisation 3 — Write violations(people, owners, observed): the authorisation matrix"
+    },
+    {
+      "slug": "api-6-3-owasp-api",
+      "name": "6.3 OWASP API Security Top 10",
+      "level": "BEGINNER",
+      "description": "Luyện: OWASP 1 — Name the risk · OWASP 2 — Write isPrivate(ip): addresses safeFetch must refuse · OWASP 3 — Write urlVerdict(raw, resolve): safeFetch’s decision before fetching"
+    },
+    {
+      "slug": "api-6-4-cors",
+      "name": "6.4 CORS, CSRF and browsers",
+      "level": "BEGINNER",
+      "description": "Luyện: CORS 1 — What the browser measurement showed · CORS 2 — Write corsAnswer(method, origin, requestMethod, allowed): LabFlow’s CORS middleware"
+    },
+    {
+      "slug": "api-6-5-lab",
+      "name": "Lab 6 — Security review",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 6 · 1 — A reviewer’s order of work · Lab 6 · 2 — Vulnerable vs fixed: predict the status"
     }
   ]
 }

@@ -1,0 +1,502 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-6-1-xac-thuc",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-6-1-xac-thuc"
+  },
+  "exercises": [
+    {
+      "title": "Authentication 1 — What the real runs showed",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "authentication",
+        "JWT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 6.1 (LabFlow with real logins: scrypt passwords, a hand-built HS256 JWT, a login limit).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 6.1 (LabFlow có đăng nhập thật: mật khẩu scrypt, JWT HS256 tự dựng, giới hạn đăng nhập).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Signed is not encrypted.|||Có chữ ký không phải là được mã hoá.",
+        "What does a token bucket count?|||Xô token đếm cái gì?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authentication 1 — What the real runs showed\n\nAnswer in the answer panel (no code needed).\n\n1. An’s token payload, decoded with base64url, shows {\"sub\":\"usr_1\",\"role\":\"STUDENT\",…}. What does that tell you?Payload token của An giải mã base64url thấy {\"sub\":\"usr_1\",\"role\":\"STUDENT\",…}. Điều đó cho biết gì?\n2. The attacker changed role to LAB_MANAGER in the payload and kept the old signature. LabFlow answered …Kẻ tấn công đổi role thành LAB_MANAGER trong payload và giữ chữ ký cũ. LabFlow trả …\n3. Lan guessed six wrong passwords in a row, then typed the right one. What did she get?Cô Lan đoán sai sáu lần liên tiếp rồi gõ đúng mật khẩu. Cô nhận được gì?\n4. A wrong password and an unknown email both get 401 INVALID_CREDENTIALS with the same text. Why?Sai mật khẩu và email không tồn tại đều nhận 401 INVALID_CREDENTIALS với cùng một câu. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Authentication 1 — What the real runs showed — answer key\n\n1. An’s token payload, decoded with base64url, shows {\"sub\":\"usr_1\",\"role\":\"STUDENT\",…}. What does that tell you?Payload token của An giải mã base64url thấy {\"sub\":\"usr_1\",\"role\":\"STUDENT\",…}. Điều đó cho biết gì?\n   Answer: a) A JWT is signed, not encrypted — anyone can read it, so no secrets inside\n   HS256 is a signature (HMAC). The payload is only base64url-encoded: readable by anyone, unforgeable without the key.VI: HS256 là chữ ký (HMAC). Payload chỉ được mã hoá base64url: ai cũng đọc được, không giả được nếu không có khoá.\n\n2. The attacker changed role to LAB_MANAGER in the payload and kept the old signature. LabFlow answered …Kẻ tấn công đổi role thành LAB_MANAGER trong payload và giữ chữ ký cũ. LabFlow trả …\n   Answer: c) 401 INVALID_TOKEN — the signature covers the header and the payload\n   Changing one byte of header or payload invalidates the HMAC.VI: Đổi một byte của header hay payload là HMAC không còn khớp.\n\n3. Lan guessed six wrong passwords in a row, then typed the right one. What did she get?Cô Lan đoán sai sáu lần liên tiếp rồi gõ đúng mật khẩu. Cô nhận được gì?\n   Answer: b) 429 with Retry-After: 180 — the limit counts attempts, not only failures\n   loginLimit is a token bucket per (IP, email): 5 per 900 s, one token every 180 s. The trade-off: the real Lan waits too.VI: loginLimit là xô token theo (IP, email): 5 lần mỗi 900 giây, cứ 180 giây có một token. Cái giá: cô Lan thật cũng phải đợi.\n\n4. A wrong password and an unknown email both get 401 INVALID_CREDENTIALS with the same text. Why?Sai mật khẩu và email không tồn tại đều nhận 401 INVALID_CREDENTIALS với cùng một câu. Vì sao?\n   Answer: c) So nobody can find out which emails have an account (user enumeration)\n   LabFlow even compares against a dummy hash for unknown emails, so the timing matches too.VI: LabFlow còn so với một hash giả khi email không tồn tại, nên thời gian cũng giống nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> A JWT is signed, not encrypted — anyone can read it, so no secrets inside</p><p>HS256 is a signature (HMAC). The payload is only base64url-encoded: readable by anyone, unforgeable without the key.</p><p><i>VI: HS256 là chữ ký (HMAC). Payload chỉ được mã hoá base64url: ai cũng đọc được, không giả được nếu không có khoá.</i></p></li><li><p><b>c)</b> 401 INVALID_TOKEN — the signature covers the header and the payload</p><p>Changing one byte of header or payload invalidates the HMAC.</p><p><i>VI: Đổi một byte của header hay payload là HMAC không còn khớp.</i></p></li><li><p><b>b)</b> 429 with Retry-After: 180 — the limit counts attempts, not only failures</p><p>loginLimit is a token bucket per (IP, email): 5 per 900 s, one token every 180 s. The trade-off: the real Lan waits too.</p><p><i>VI: loginLimit là xô token theo (IP, email): 5 lần mỗi 900 giây, cứ 180 giây có một token. Cái giá: cô Lan thật cũng phải đợi.</i></p></li><li><p><b>c)</b> So nobody can find out which emails have an account (user enumeration)</p><p>LabFlow even compares against a dummy hash for unknown emails, so the timing matches too.</p><p><i>VI: LabFlow còn so với một hash giả khi email không tồn tại, nên thời gian cũng giống nhau.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>An’s token payload, decoded with base64url, shows {\"sub\":\"usr_1\",\"role\":\"STUDENT\",…}. What does that tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Payload token của An giải mã base64url thấy {\"sub\":\"usr_1\",\"role\":\"STUDENT\",…}. Điều đó cho biết gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A JWT is signed, not encrypted — anyone can read it, so no secrets inside"
+              },
+              {
+                "ma": "b",
+                "noiDung": "base64url is a weak form of encryption that only the server can undo"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The token was leaked, because a valid token cannot be decoded by anyone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The server forgot to encrypt it; HS256 normally hides the payload"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>HS256 is a signature (HMAC). The payload is only base64url-encoded: readable by anyone, unforgeable without the key.</p><p><i>VI: HS256 là chữ ký (HMAC). Payload chỉ được mã hoá base64url: ai cũng đọc được, không giả được nếu không có khoá.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The attacker changed role to LAB_MANAGER in the payload and kept the old signature. LabFlow answered …</p><p style=\"opacity:.75;font-size:.92em\"><i>Kẻ tấn công đổi role thành LAB_MANAGER trong payload và giữ chữ ký cũ. LabFlow trả …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "401 TOKEN_EXPIRED — every changed token is treated as an expired one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "200 — the signature only covers the header, so the payload can change"
+              },
+              {
+                "ma": "c",
+                "noiDung": "401 INVALID_TOKEN — the signature covers the header and the payload"
+              },
+              {
+                "ma": "d",
+                "noiDung": "403 FORBIDDEN — the role exists but the route checks it again later"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Changing one byte of header or payload invalidates the HMAC.</p><p><i>VI: Đổi một byte của header hay payload là HMAC không còn khớp.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Lan guessed six wrong passwords in a row, then typed the right one. What did she get?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cô Lan đoán sai sáu lần liên tiếp rồi gõ đúng mật khẩu. Cô nhận được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "423 Locked — LabFlow locks the account until an admin unlocks it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "429 with Retry-After: 180 — the limit counts attempts, not only failures"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 and a token — the right password always resets the counter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "401 INVALID_CREDENTIALS — the account is locked for good after five"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>loginLimit is a token bucket per (IP, email): 5 per 900 s, one token every 180 s. The trade-off: the real Lan waits too.</p><p><i>VI: loginLimit là xô token theo (IP, email): 5 lần mỗi 900 giây, cứ 180 giây có một token. Cái giá: cô Lan thật cũng phải đợi.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A wrong password and an unknown email both get 401 INVALID_CREDENTIALS with the same text. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sai mật khẩu và email không tồn tại đều nhận 401 INVALID_CREDENTIALS với cùng một câu. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To save one query to the database on every login request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because LabFlow cannot tell these two cases apart internally at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So nobody can find out which emails have an account (user enumeration)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because RFC 9110 requires one single error message for every 401"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>LabFlow even compares against a dummy hash for unknown emails, so the timing matches too.</p><p><i>VI: LabFlow còn so với một hash giả khi email không tồn tại, nên thời gian cũng giống nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting secrets into a JWT payload.|||Để bí mật trong payload của JWT."
+        },
+        {
+          "loi": "Different messages for “no such user” and “wrong password”.|||Thông báo khác nhau cho “không có người dùng” và “sai mật khẩu”."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "JWT (JSON Web Token)",
+          "vi": "chuỗi token gồm header.payload.chữ ký"
+        },
+        {
+          "en": "user enumeration",
+          "vi": "dò ra tài khoản nào tồn tại"
+        }
+      ]
+    },
+    {
+      "title": "Authentication 2 — Write verdict(header, payload, signatureValid, nowSec): LabFlow’s token check",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "JWT",
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The decoded parts of a token arrive already parsed. Return, in this order of checks:</p><ul>\n<li><code>'INVALID_TOKEN'</code> if <code>header.alg</code> is not exactly <code>'HS256'</code> (the SERVER decides the algorithm — <code>\"none\"</code> is refused) or the signature is not valid</li>\n<li><code>'INVALID_TOKEN'</code> if <code>payload.iss</code> is not <code>'labflow'</code></li>\n<li><code>'TOKEN_EXPIRED'</code> unless <code>payload.exp</code> is a number greater than <code>nowSec</code></li>\n<li>otherwise <code>'OK'</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các phần của token đã được giải mã sẵn. Trả về, theo đúng thứ tự kiểm:</p><ul>\n<li><code>'INVALID_TOKEN'</code> nếu <code>header.alg</code> không đúng là <code>'HS256'</code> (SERVER quyết định thuật toán — <code>\"none\"</code> bị từ chối) hoặc chữ ký không hợp lệ</li>\n<li><code>'INVALID_TOKEN'</code> nếu <code>payload.iss</code> khác <code>'labflow'</code></li>\n<li><code>'TOKEN_EXPIRED'</code> trừ khi <code>payload.exp</code> là số lớn hơn <code>nowSec</code></li>\n<li>còn lại <code>'OK'</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "header, payload — objects; signatureValid — boolean; nowSec — seconds|||header, payload — object; signatureValid — boolean; nowSec — giây",
+      "outputSpec": "\"OK\" | \"INVALID_TOKEN\" | \"TOKEN_EXPIRED\"",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verdict({\"alg\":\"HS256\",\"typ\":\"JWT\"}, {\"iss\":\"labflow\",\"sub\":\"usr_1\",\"role\":\"STUDENT\",\"iat\":1793480866,\"exp\":1793481766}, true, 1793480926)",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check the algorithm before anything that the token claims about itself.|||Kiểm thuật toán trước mọi thứ token tự khai về mình.",
+        "A missing exp is not “never expires”.|||Thiếu exp không có nghĩa là “không bao giờ hết hạn”."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** LabFlow's token check, on already decoded parts */\nfunction verdict(header, payload, signatureValid, nowSec) {\n  // Write your solution here\n  if (!signatureValid) return 'INVALID_TOKEN';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction verdict(header, payload, signatureValid, nowSec) {\n  if (!header || header.alg !== 'HS256' || !signatureValid) return 'INVALID_TOKEN';\n  if (!payload || payload.iss !== 'labflow') return 'INVALID_TOKEN';\n  if (!(typeof payload.exp === 'number' && payload.exp > nowSec)) return 'TOKEN_EXPIRED';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An’s token at iat + 60 is OK; 16 minutes later it is TOKEN_EXPIRED; the forged alg none token is INVALID_TOKEN — the three results of lesson 6.1.</p>",
+      "solutionExplanationHtmlVi": "<p>Token của An lúc iat + 60 là OK; 16 phút sau là TOKEN_EXPIRED; token giả alg none là INVALID_TOKEN — ba kết quả của bài 6.1.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An’s token one minute after login",
+              "vi": "Token của An một phút sau khi đăng nhập"
+            },
+            "goi": "verdict({\"alg\":\"HS256\",\"typ\":\"JWT\"}, {\"iss\":\"labflow\",\"sub\":\"usr_1\",\"role\":\"STUDENT\",\"iat\":1793480866,\"exp\":1793481766}, true, 1793480926)",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "16 minutes later",
+              "vi": "16 phút sau"
+            },
+            "goi": "verdict({\"alg\":\"HS256\",\"typ\":\"JWT\"}, {\"iss\":\"labflow\",\"sub\":\"usr_1\",\"role\":\"STUDENT\",\"iat\":1793480866,\"exp\":1793481766}, true, 1793481826)",
+            "mongDoi": "TOKEN_EXPIRED"
+          },
+          {
+            "moTa": {
+              "en": "alg none (forge.mjs none)",
+              "vi": "alg none (forge.mjs none)"
+            },
+            "goi": "verdict({\"alg\":\"none\",\"typ\":\"JWT\"}, {\"iss\":\"labflow\",\"sub\":\"usr_3\",\"role\":\"LAB_MANAGER\",\"iat\":1793480866,\"exp\":1793481766}, true, 1793480926)",
+            "mongDoi": "INVALID_TOKEN"
+          },
+          {
+            "moTa": {
+              "en": "Role changed, old signature",
+              "vi": "Đổi role, giữ chữ ký cũ"
+            },
+            "goi": "verdict({\"alg\":\"HS256\",\"typ\":\"JWT\"}, {\"iss\":\"labflow\",\"sub\":\"usr_1\",\"role\":\"LAB_MANAGER\",\"iat\":1793480866,\"exp\":1793481766}, false, 1793480926)",
+            "mongDoi": "INVALID_TOKEN",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "verdict({\"alg\":\"HS256\",\"typ\":\"JWT\"}, {\"iss\":\"evil\",\"sub\":\"usr_1\",\"role\":\"STUDENT\",\"iat\":1793480866,\"exp\":1793481766}, true, 1793480926)",
+            "mongDoi": "INVALID_TOKEN",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Exactly at exp",
+              "vi": "Đúng giây exp"
+            },
+            "goi": "verdict({\"alg\":\"HS256\",\"typ\":\"JWT\"}, {\"iss\":\"labflow\",\"sub\":\"usr_1\",\"role\":\"STUDENT\",\"iat\":1793480866,\"exp\":1793481766}, true, 1793481766)",
+            "mongDoi": "TOKEN_EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No exp claim",
+              "vi": "Không có exp"
+            },
+            "goi": "verdict({\"alg\":\"HS256\",\"typ\":\"JWT\"}, {\"iss\":\"labflow\",\"sub\":\"usr_1\"}, true, 1793480926)",
+            "mongDoi": "TOKEN_EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "verdict({\"alg\":\"hs256\"}, {\"iss\":\"labflow\",\"sub\":\"usr_1\",\"role\":\"STUDENT\",\"iat\":1793480866,\"exp\":1793481766}, true, 1793480926)",
+            "mongDoi": "INVALID_TOKEN",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting header.alg to choose how to verify — alg none slips in.|||Tin header.alg để chọn cách kiểm — alg none lọt qua."
+        },
+        {
+          "loi": "Using >= instead of > at the exact second of expiry.|||Dùng >= thay vì > đúng giây hết hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "claim",
+          "vi": "một mục trong payload (sub, role, exp…)"
+        },
+        {
+          "en": "expiry",
+          "vi": "thời điểm hết hạn"
+        }
+      ]
+    },
+    {
+      "title": "Authentication 3 — Write loginStatuses(attempts, capacity, windowSec): the login limit",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "authentication",
+        "rate limiting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>LabFlow limits logins per (IP, email) with a token bucket: <code>capacity</code> tokens, refilled at <code>capacity / windowSec</code> per second, starting full at the first attempt’s time. <code>attempts</code> is a list of <code>{ t, correct }</code> (seconds, ascending) for ONE key. For each attempt return a string:</p><ul>\n<li>no whole token ⇒ <code>'429 wait N'</code> where N = seconds until one token, rounded up (no token is used)</li>\n<li>otherwise use one token and return <code>'200'</code> if the password was correct, <code>'401'</code> if not</li></ul>\n<p>Every attempt costs a token — right or wrong. That is why the right password after five wrong ones still gets 429.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow giới hạn đăng nhập theo (IP, email) bằng xô token: <code>capacity</code> token, rót <code>capacity / windowSec</code> mỗi giây, đầy xô lúc lần thử đầu tiên. <code>attempts</code> là danh sách <code>{ t, correct }</code> (giây, tăng dần) của MỘT khoá. Với mỗi lần thử trả một chuỗi:</p><ul>\n<li>không còn trọn một token ⇒ <code>'429 wait N'</code>, N = số giây tới khi có một token, làm tròn lên (không tốn token)</li>\n<li>ngược lại dùng một token và trả <code>'200'</code> nếu mật khẩu đúng, <code>'401'</code> nếu sai</li></ul>\n<p>Lần thử nào cũng tốn một token — đúng hay sai. Vì thế mật khẩu đúng sau năm lần sai vẫn nhận 429.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "attempts [{ t, correct }], capacity, windowSec",
+      "outputSpec": "array of \"200\" | \"401\" | \"429 wait N\"|||mảng \"200\" | \"401\" | \"429 wait N\"",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "loginStatuses([{\"t\":0,\"correct\":false},{\"t\":1,\"correct\":false},{\"t\":2,\"correct\":false},{\"t\":3,\"correct\":false},{\"t\":4,\"correct\":false},{\"t\":5,\"correct\":false}], 5, 900)",
+          "output": "[\"401\",\"401\",\"401\",\"401\",\"401\",\"429 wait 175\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "5 per 900 s ⇒ one token every 180 s.|||5 lần mỗi 900 giây ⇒ cứ 180 giây một token.",
+        "Refill before deciding, and move the clock even when refusing.|||Rót trước khi quyết định, và dời mốc thời gian kể cả khi từ chối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** one status per login attempt for one (IP, email) key */\nfunction loginStatuses(attempts, capacity, windowSec) {\n  // Write your solution here\n  let fails = 0;\n  return attempts.map((a) => (a.correct ? '200' : (++fails > capacity ? '429 wait ' + windowSec : '401')));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction loginStatuses(attempts, capacity, windowSec) {\n  const perSec = capacity / windowSec;\n  let tokens = capacity;\n  let at = attempts.length ? attempts[0].t : 0;\n  return attempts.map(({ t, correct }) => {\n    tokens = Math.min(capacity, tokens + (t - at) * perSec);\n    at = t;\n    if (tokens < 1) return '429 wait ' + Math.ceil((1 - tokens) / perSec);\n    tokens -= 1;\n    return correct ? '200' : '401';\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lesson 6.1: a1 … f6 wrong give 401 ×5 then 429; the right password right after gets 429 with Retry-After 180.</p>",
+      "solutionExplanationHtmlVi": "<p>Bài 6.1: a1 … f6 sai cho 401 ×5 rồi 429; mật khẩu đúng ngay sau đó nhận 429 kèm Retry-After 180.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Six wrong guesses (lesson 6.1)",
+              "vi": "Sáu lần đoán sai (bài 6.1)"
+            },
+            "goi": "loginStatuses([{\"t\":0,\"correct\":false},{\"t\":1,\"correct\":false},{\"t\":2,\"correct\":false},{\"t\":3,\"correct\":false},{\"t\":4,\"correct\":false},{\"t\":5,\"correct\":false}], 5, 900)",
+            "mongDoi": [
+              "401",
+              "401",
+              "401",
+              "401",
+              "401",
+              "429 wait 175"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "The right password after five wrong ones",
+              "vi": "Mật khẩu đúng sau năm lần sai"
+            },
+            "goi": "loginStatuses([{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":true}], 5, 900)",
+            "mongDoi": [
+              "401",
+              "401",
+              "401",
+              "401",
+              "401",
+              "429 wait 180"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Normal use",
+              "vi": "Dùng bình thường"
+            },
+            "goi": "loginStatuses([{\"t\":0,\"correct\":true},{\"t\":100,\"correct\":true},{\"t\":200,\"correct\":false},{\"t\":300,\"correct\":true}], 5, 900)",
+            "mongDoi": [
+              "200",
+              "200",
+              "401",
+              "200"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Three minutes later",
+              "vi": "Ba phút sau"
+            },
+            "goi": "loginStatuses([{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":180,\"correct\":true},{\"t\":180,\"correct\":true}], 5, 900)",
+            "mongDoi": [
+              "401",
+              "401",
+              "401",
+              "401",
+              "401",
+              "200",
+              "429 wait 180"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "loginStatuses([{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":0,\"correct\":false},{\"t\":90,\"correct\":true},{\"t\":5000,\"correct\":true}], 5, 900)",
+            "mongDoi": [
+              "401",
+              "401",
+              "401",
+              "401",
+              "401",
+              "429 wait 90",
+              "200"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "loginStatuses([], 5, 900)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting only failed attempts — then a correct guess resets nothing and guessing continues.|||Chỉ đếm lần sai — đoán trúng thì không ảnh hưởng và việc đoán vẫn tiếp tục."
+        },
+        {
+          "loi": "Spending a token on a refused attempt.|||Trừ token cho cả lần bị từ chối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "brute force",
+          "vi": "đoán mò hàng loạt"
+        },
+        {
+          "en": "Retry-After",
+          "vi": "header: chờ bao lâu rồi thử lại"
+        }
+      ]
+    }
+  ]
+}

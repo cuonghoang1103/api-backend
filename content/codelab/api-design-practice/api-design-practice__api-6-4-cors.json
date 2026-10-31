@@ -1,0 +1,353 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-6-4-cors",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-6-4-cors"
+  },
+  "exercises": [
+    {
+      "title": "CORS 1 — What the browser measurement showed",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "CORS",
+        "browser security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 6.4 (pages on :5173 and :5174 calling LabFlow on :4000 in a real Chromium, with the server log on).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 6.4 (trang ở :5173 và :5174 gọi LabFlow ở :4000 trong Chromium thật, có bật log server).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Simple request: sent, then hidden. Non-simple: asked first.|||Request đơn giản: gửi rồi giấu. Không đơn giản: hỏi trước.",
+        "Read the server log, not only the browser console.|||Đọc log server, không chỉ console trình duyệt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CORS 1 — What the browser measurement showed\n\nAnswer in the answer panel (no code needed).\n\n1. The page on :5174 (not allowed) did GET /v2/labs and saw “Failed to fetch”. What did the server log show?Trang ở :5174 (không được phép) gọi GET /v2/labs và thấy “Failed to fetch”. Log server cho thấy gì?\n2. The same page tried POST /v2/auth/login with a JSON body. What reached the server?Cùng trang đó thử POST /v2/auth/login với body JSON. Cái gì tới được server?\n3. Why does LabFlow send Vary: Origin on every answer?Vì sao LabFlow gửi Vary: Origin trên mọi câu trả lời?\n4. With LABFLOW_VULN=1 the server answers Origin: https://evil.example with that same origin and Allow-Credentials: true. Consequence?Với LABFLOW_VULN=1 server trả lời Origin: https://evil.example bằng đúng origin đó kèm Allow-Credentials: true. Hệ quả?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# CORS 1 — What the browser measurement showed — answer key\n\n1. The page on :5174 (not allowed) did GET /v2/labs and saw “Failed to fetch”. What did the server log show?Trang ở :5174 (không được phép) gọi GET /v2/labs và thấy “Failed to fetch”. Log server cho thấy gì?\n   Answer: b) The GET reached the server and was answered — the browser only hid the response\n   A simple request is sent; CORS decides only whether the page may READ the answer. CORS protects users’ browsers, not your server.VI: Request đơn giản vẫn được gửi; CORS chỉ quyết định trang có được ĐỌC câu trả lời không. CORS bảo vệ trình duyệt người dùng, không bảo vệ server.\n\n2. The same page tried POST /v2/auth/login with a JSON body. What reached the server?Cùng trang đó thử POST /v2/auth/login với body JSON. Cái gì tới được server?\n   Answer: a) Only the OPTIONS preflight — the POST was never sent\n   Content-Type: application/json makes it non-simple ⇒ preflight first; no permission ⇒ the real request is not sent.VI: Content-Type: application/json làm nó không còn đơn giản ⇒ preflight trước; không có quyền ⇒ request thật không được gửi.\n\n3. Why does LabFlow send Vary: Origin on every answer?Vì sao LabFlow gửi Vary: Origin trên mọi câu trả lời?\n   Answer: a) The answer differs by Origin, so caches must not reuse one origin’s answer for another\n   Without it a CDN could serve the allowed origin’s Access-Control-Allow-Origin to a stranger, or the reverse.VI: Thiếu nó, một CDN có thể đưa Access-Control-Allow-Origin của origin được phép cho người lạ, hoặc ngược lại.\n\n4. With LABFLOW_VULN=1 the server answers Origin: https://evil.example with that same origin and Allow-Credentials: true. Consequence?Với LABFLOW_VULN=1 server trả lời Origin: https://evil.example bằng đúng origin đó kèm Allow-Credentials: true. Hệ quả?\n   Answer: d) Any website can read logged-in users’ data through their browsers\n   Browsers refuse * with credentials exactly for this; reflecting the origin bypasses the guard.VI: Trình duyệt từ chối * kèm credentials chính vì lý do này; phản chiếu origin là lách qua hàng rào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The GET reached the server and was answered — the browser only hid the response</p><p>A simple request is sent; CORS decides only whether the page may READ the answer. CORS protects users’ browsers, not your server.</p><p><i>VI: Request đơn giản vẫn được gửi; CORS chỉ quyết định trang có được ĐỌC câu trả lời không. CORS bảo vệ trình duyệt người dùng, không bảo vệ server.</i></p></li><li><p><b>a)</b> Only the OPTIONS preflight — the POST was never sent</p><p>Content-Type: application/json makes it non-simple ⇒ preflight first; no permission ⇒ the real request is not sent.</p><p><i>VI: Content-Type: application/json làm nó không còn đơn giản ⇒ preflight trước; không có quyền ⇒ request thật không được gửi.</i></p></li><li><p><b>a)</b> The answer differs by Origin, so caches must not reuse one origin’s answer for another</p><p>Without it a CDN could serve the allowed origin’s Access-Control-Allow-Origin to a stranger, or the reverse.</p><p><i>VI: Thiếu nó, một CDN có thể đưa Access-Control-Allow-Origin của origin được phép cho người lạ, hoặc ngược lại.</i></p></li><li><p><b>d)</b> Any website can read logged-in users’ data through their browsers</p><p>Browsers refuse * with credentials exactly for this; reflecting the origin bypasses the guard.</p><p><i>VI: Trình duyệt từ chối * kèm credentials chính vì lý do này; phản chiếu origin là lách qua hàng rào.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The page on :5174 (not allowed) did GET /v2/labs and saw “Failed to fetch”. What did the server log show?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trang ở :5174 (không được phép) gọi GET /v2/labs và thấy “Failed to fetch”. Log server cho thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The GET reached the server, which answered 403 Forbidden to it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The GET reached the server and was answered — the browser only hid the response"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An OPTIONS preflight, then nothing else from that page at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — the browser blocked the GET before it left the page"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A simple request is sent; CORS decides only whether the page may READ the answer. CORS protects users’ browsers, not your server.</p><p><i>VI: Request đơn giản vẫn được gửi; CORS chỉ quyết định trang có được ĐỌC câu trả lời không. CORS bảo vệ trình duyệt người dùng, không bảo vệ server.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The same page tried POST /v2/auth/login with a JSON body. What reached the server?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng trang đó thử POST /v2/auth/login với body JSON. Cái gì tới được server?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the OPTIONS preflight — the POST was never sent"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both, but the POST body arrived at the server empty"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The POST, followed by an OPTIONS request after the answer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing, because the browser knew the origin in advance"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Content-Type: application/json makes it non-simple ⇒ preflight first; no permission ⇒ the real request is not sent.</p><p><i>VI: Content-Type: application/json làm nó không còn đơn giản ⇒ preflight trước; không có quyền ⇒ request thật không được gửi.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does LabFlow send Vary: Origin on every answer?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow gửi Vary: Origin trên mọi câu trả lời?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The answer differs by Origin, so caches must not reuse one origin’s answer for another"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because browsers refuse every response that does not carry it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because Express requires it whenever a route sets a header"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To tell the client which origins are allowed to call the API"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without it a CDN could serve the allowed origin’s Access-Control-Allow-Origin to a stranger, or the reverse.</p><p><i>VI: Thiếu nó, một CDN có thể đưa Access-Control-Allow-Origin của origin được phép cho người lạ, hoặc ngược lại.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>With LABFLOW_VULN=1 the server answers Origin: https://evil.example with that same origin and Allow-Credentials: true. Consequence?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với LABFLOW_VULN=1 server trả lời Origin: https://evil.example bằng đúng origin đó kèm Allow-Credentials: true. Hệ quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing, since browsers ignore Allow-Credentials on GET requests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The API stops working for the allowed front-end on :5173"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only evil.example’s own server can call the API from now on"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Any website can read logged-in users’ data through their browsers"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Browsers refuse * with credentials exactly for this; reflecting the origin bypasses the guard.</p><p><i>VI: Trình duyệt từ chối * kèm credentials chính vì lý do này; phản chiếu origin là lách qua hàng rào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking CORS protects the server.|||Nghĩ rằng CORS bảo vệ server."
+        },
+        {
+          "loi": "Reflecting the Origin header back.|||Phản chiếu lại header Origin."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "origin",
+          "vi": "scheme + host + cổng"
+        },
+        {
+          "en": "preflight",
+          "vi": "request OPTIONS hỏi quyền trước"
+        }
+      ]
+    },
+    {
+      "title": "CORS 2 — Write corsAnswer(method, origin, requestMethod, allowed): LabFlow’s CORS middleware",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "CORS"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Return <code>{ status, headers }</code> — <code>status: 204</code> when the middleware answers a preflight itself, <code>null</code> when the request goes on to the route.</p><ul>\n<li>Always <code>Vary: 'Origin'</code>. No <code>origin</code> ⇒ nothing else, <code>status: null</code>.</li>\n<li>Origin in <code>allowed</code> ⇒ <code>Access-Control-Allow-Origin</code> = that exact origin (never <code>*</code>).</li>\n<li>A preflight is <code>method === 'OPTIONS'</code> with a <code>requestMethod</code>. Answer 204; if allowed, also <code>Access-Control-Allow-Methods: 'GET, HEAD, POST, PUT, PATCH, DELETE'</code> and <code>Access-Control-Max-Age: '600'</code>.</li></ul>\n<p>(The real middleware also sets Expose-Headers and Allow-Headers; they are left out here.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>{ status, headers }</code> — <code>status: 204</code> khi middleware tự trả lời preflight, <code>null</code> khi request đi tiếp vào route.</p><ul>\n<li>Luôn có <code>Vary: 'Origin'</code>. Không có <code>origin</code> ⇒ không thêm gì, <code>status: null</code>.</li>\n<li>Origin nằm trong <code>allowed</code> ⇒ <code>Access-Control-Allow-Origin</code> = đúng origin đó (không bao giờ <code>*</code>).</li>\n<li>Preflight là <code>method === 'OPTIONS'</code> kèm <code>requestMethod</code>. Trả 204; nếu được phép thì thêm <code>Access-Control-Allow-Methods: 'GET, HEAD, POST, PUT, PATCH, DELETE'</code> và <code>Access-Control-Max-Age: '600'</code>.</li></ul>\n<p>(Middleware thật còn đặt Expose-Headers và Allow-Headers; ở đây bỏ qua.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "method, origin (string | null), requestMethod (string | null), allowed (string[])|||method, origin (chuỗi | null), requestMethod (chuỗi | null), allowed (string[])",
+      "outputSpec": "{ status: 204 | null, headers }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "corsAnswer(\"OPTIONS\", \"http://localhost:5173\", \"POST\", [\"http://localhost:5173\"])",
+          "output": "{\"status\":204,\"headers\":{\"Vary\":\"Origin\",\"Access-Control-Allow-Origin\":\"http://localhost:5173\",\"Access-Control-Allow-Methods\":\"GET, HEAD, POST, PUT, PATCH, DELETE\",\"Access-Control-Max-Age\":\"600\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Vary goes on every answer, allowed or not.|||Vary có trên mọi câu trả lời, được phép hay không.",
+        "A stranger’s preflight still gets 204 — just without permission headers.|||Preflight của người lạ vẫn nhận 204 — chỉ là không có header cấp quyền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** what LabFlow's CORS middleware answers */\nfunction corsAnswer(method, origin, requestMethod, allowed) {\n  // Write your solution here\n  return { status: method === 'OPTIONS' ? 204 : null, headers: { 'Access-Control-Allow-Origin': '*' } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction corsAnswer(method, origin, requestMethod, allowed) {\n  const headers = { Vary: 'Origin' };\n  if (!origin) return { status: null, headers };\n  const ok = allowed.includes(origin);\n  if (ok) headers['Access-Control-Allow-Origin'] = origin;\n  if (method === 'OPTIONS' && requestMethod) {\n    if (ok) {\n      headers['Access-Control-Allow-Methods'] = 'GET, HEAD, POST, PUT, PATCH, DELETE';\n      headers['Access-Control-Max-Age'] = '600';\n    }\n    return { status: 204, headers };\n  }\n  return { status: null, headers };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lesson 6.4: :5173 got the full preflight; :5174 got 204 with only Vary: Origin; GET /v2/labs from :5174 got 200 without Access-Control-Allow-Origin.</p>",
+      "solutionExplanationHtmlVi": "<p>Bài 6.4: :5173 nhận preflight đầy đủ; :5174 nhận 204 chỉ có Vary: Origin; GET /v2/labs từ :5174 nhận 200 không có Access-Control-Allow-Origin.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Preflight from the allowed page",
+              "vi": "Preflight từ trang được phép"
+            },
+            "goi": "corsAnswer(\"OPTIONS\", \"http://localhost:5173\", \"POST\", [\"http://localhost:5173\"])",
+            "mongDoi": {
+              "status": 204,
+              "headers": {
+                "Vary": "Origin",
+                "Access-Control-Allow-Origin": "http://localhost:5173",
+                "Access-Control-Allow-Methods": "GET, HEAD, POST, PUT, PATCH, DELETE",
+                "Access-Control-Max-Age": "600"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Preflight from the stranger",
+              "vi": "Preflight từ người lạ"
+            },
+            "goi": "corsAnswer(\"OPTIONS\", \"http://localhost:5174\", \"POST\", [\"http://localhost:5173\"])",
+            "mongDoi": {
+              "status": 204,
+              "headers": {
+                "Vary": "Origin"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Simple GET from the stranger",
+              "vi": "GET đơn giản từ người lạ"
+            },
+            "goi": "corsAnswer(\"GET\", \"http://localhost:5174\", null, [\"http://localhost:5173\"])",
+            "mongDoi": {
+              "status": null,
+              "headers": {
+                "Vary": "Origin"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "curl (no Origin)",
+              "vi": "curl (không có Origin)"
+            },
+            "goi": "corsAnswer(\"GET\", null, null, [\"http://localhost:5173\"])",
+            "mongDoi": {
+              "status": null,
+              "headers": {
+                "Vary": "Origin"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "OPTIONS that is not a preflight",
+              "vi": "OPTIONS không phải preflight"
+            },
+            "goi": "corsAnswer(\"OPTIONS\", \"http://localhost:5173\", null, [\"http://localhost:5173\"])",
+            "mongDoi": {
+              "status": null,
+              "headers": {
+                "Vary": "Origin",
+                "Access-Control-Allow-Origin": "http://localhost:5173"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "corsAnswer(\"PATCH\", \"https://app.labflow.example\", null, [\"http://localhost:5173\",\"https://app.labflow.example\"])",
+            "mongDoi": {
+              "status": null,
+              "headers": {
+                "Vary": "Origin",
+                "Access-Control-Allow-Origin": "https://app.labflow.example"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering * — refused with credentials and leaks without them.|||Trả * — bị từ chối khi có credentials và rò rỉ khi không có."
+        },
+        {
+          "loi": "Treating every OPTIONS as a preflight.|||Coi mọi OPTIONS là preflight."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "allow-list",
+          "vi": "danh sách cho phép"
+        },
+        {
+          "en": "Max-Age",
+          "vi": "trình duyệt nhớ kết quả preflight bao lâu (giây)"
+        }
+      ]
+    }
+  ]
+}

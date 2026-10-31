@@ -323,6 +323,11 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Status codes, response shapes and REST conventions.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-4-1-rest-mvc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 4.1: A full REST API with Express, Mongoose &amp; MVC</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: the 200/201/400/401/403/404 status table and a consistent response shape. Different: Courses explains choosing a code by what happened, not just listing them. In this lesson we add: 204 and 409/422, three common mix-ups (such as 401 vs 403), returning 201 with a Location header, field-naming conventions to settle early. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -410,6 +415,11 @@ Content-Type: application/json; charset=utf-8
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Mã trạng thái, hình dạng phản hồi và quy ước REST.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-4-1-rest-mvc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 4.1: REST API đầy đủ với Express, Mongoose &amp; MVC</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: bảng mã trạng thái 200/201/400/401/403/404 và một hình dạng phản hồi nhất quán. Khác: Courses lý giải chọn mã theo thứ đã xảy ra, không chỉ liệt kê. Ở bài này mình học thêm: 204 và 409/422, ba chỗ hay nhầm (như 401 với 403), trả 201 kèm header Location, quy ước đặt trường chốt sớm. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,
@@ -543,6 +553,11 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — RESTful API Design and Implementation</span><span class="lc-sub">Validation, error shapes and safe input handling.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-8-2-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 8.2: Production hardening: env, validation, rate limit &amp; index</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: validating input with Zod/Joi instead of a wall of ifs. Different: Courses turns the schema into middleware and inspects its output. In this lesson we add: one schema instead of a wall of ifs, real output, the query-string problem, the attack a schema silently blocks. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -665,6 +680,11 @@ Content-Type: application/json; charset=utf-8
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-321" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 321 — Thiết kế &amp; hiện thực REST API</span><span class="lc-sub">Kiểm tra dữ liệu, hình dạng lỗi và xử lý đầu vào an toàn.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-8-2-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 8.2: Gia cố production: env, validation, rate limit &amp; index</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: validate đầu vào bằng Zod/Joi thay vì chuỗi if. Khác: Courses biến lược đồ thành middleware và xem dữ liệu đầu ra của nó. Ở bài này mình học thêm: một lược đồ thay cả bức tường if, output thật, bài toán query string, đòn tấn công mà lược đồ lặng lẽ chặn đứng. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,

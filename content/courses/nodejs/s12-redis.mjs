@@ -815,6 +815,11 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Two commands are not one operation</span><span class="lz-d"><code>INCR</code> then <code>EXPIRE</code> can crash between them and leave a counter with no TTL — a rate limit that blocks the user forever.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lua, or a command with options, makes it one</span><span class="lz-d"><code>SET key val NX EX 30</code> for a lock; a script for anything more complex. Redis runs a script atomically.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-8-2-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 8.2: Production hardening: env, validation, rate limit &amp; index</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: limiting requests to stop abuse. Different: Academy uses express-rate-limit per IP; Courses builds the limiter on Redis. In this lesson we add: three algorithms (fixed window and its boundary hole, sliding window, token bucket), the INCR-then-EXPIRE bug, distributed locks. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -941,6 +946,11 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Hai lệnh KHÔNG phải một thao tác</span><span class="lz-d"><code>INCR</code> rồi <code>EXPIRE</code> có thể sập ở giữa và để lại một bộ đếm không có TTL — một giới hạn tần suất khoá người dùng lại mãi mãi.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lua, hoặc một lệnh có tuỳ chọn, gộp chúng thành một</span><span class="lz-d"><code>SET key val NX EX 30</code> cho một cái khoá; một script cho những thứ phức tạp hơn. Redis chạy một script một cách nguyên tử.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-8-2-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 8.2: Gia cố production: env, validation, rate limit &amp; index</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: giới hạn số request để chặn lạm dụng. Khác: Academy dùng express-rate-limit đếm theo IP; Courses tự dựng bộ giới hạn trên Redis. Ở bài này mình học thêm: ba thuật toán (cửa sổ cố định và lỗ ở ranh giới, cửa sổ trượt, token bucket), con bug INCR rồi EXPIRE, khoá phân tán. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
 </div>
 `,
     },

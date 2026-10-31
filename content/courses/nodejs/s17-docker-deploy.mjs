@@ -758,6 +758,11 @@ if (missing.length) {
 <div class="link-card codelab">
   <a href="/code-lab/deploy-vps${REF}#module-1005"><span class="lc-t">Code Lab · Securing a server</span><span class="lc-d">Where credentials belong on a VPS</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-6-1-react-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 6.1: Connecting React, deploying &amp; BaaS</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: secrets and config travel through environment variables, never hard-coded. Different: Academy deploys to Render/Railway; Courses packages with Docker and shows how secrets leak into the image. In this lesson we add: docker history exposing a token you deleted, ENV writing a password into the image Config, mounting secrets at build time the right way. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -853,6 +858,11 @@ if (missing.length) {
 <div class="link-card codelab">
   <a href="/code-lab/deploy-vps${REF}#module-1005"><span class="lc-t">Code Lab · Securing a server</span><span class="lc-d">Thông tin xác thực nên nằm ở đâu trên VPS</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-6-1-react-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 6.1: Nối React, triển khai &amp; BaaS</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: bí mật và cấu hình đi qua biến môi trường, không hard-code. Khác: Academy deploy lên Render/Railway; Courses đóng gói bằng Docker và chỉ ra bí mật lọt vào ảnh thế nào. Ở bài này mình học thêm: docker history lộ token dù đã xoá, ENV ghi mật khẩu vào Config của ảnh, cách đúng là gắn bí mật lúc build. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
 </div>
 `,
     },
@@ -1170,6 +1180,11 @@ git revert &lt;sha_xau&gt;
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-992"><span class="lc-t">Code Lab · Debugging Production Incidents</span><span class="lc-d">Working from symptom to cause under pressure</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-6-1-react-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 6.1: Connecting React, deploying &amp; BaaS</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: "works locally, fails in production" is almost always a deploy problem. Different: Courses recounts a real deploy incident and a one-command diagnosis. In this lesson we add: why a green health check can hide a missing feature, unauthenticated curl to tell 401 from 404, smoke tests and rollback. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1268,6 +1283,11 @@ git revert &lt;sha_xau&gt;
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-992"><span class="lc-t">Code Lab · Debugging Production Incidents</span><span class="lc-d">Đi từ triệu chứng tới nguyên nhân trong lúc căng thẳng</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-6-1-react-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 6.1: Nối React, triển khai &amp; BaaS</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: "chạy local nhưng lỗi ở production" gần như luôn là chuyện deploy. Khác: Courses kể một sự cố deploy thật và cách chẩn đoán bằng một lệnh. Ở bài này mình học thêm: vì sao health check xanh mà tính năng vẫn mất, curl không xác thực để phân biệt 401 với 404, smoke test và quay lui. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
 </div>
 `,
     },

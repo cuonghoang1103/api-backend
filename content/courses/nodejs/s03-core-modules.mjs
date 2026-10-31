@@ -750,6 +750,11 @@ Content-Type: application/json; charset=utf-8
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">Ready for chapter 5 — 10 exercises on routing and middleware.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-1-2-http-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 1.2: APIs, HTTP &amp; your first Node server</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: building a server with Node's plain http module. Different: Courses uses that server to show the pain points and lead into Express. In this lesson we add: what the bare server makes you do by hand, streaming the response, and what the raw http module leaves to you. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -831,6 +836,11 @@ Content-Type: application/json; charset=utf-8
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Các khái niệm lõi của Express</span><span class="lc-sub">Chuẩn bị cho chương 5 — 10 bài tập về định tuyến và middleware.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-1-2-http-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 1.2: API, HTTP &amp; server Node đầu tiên</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: dựng server bằng module http thuần của Node. Khác: Courses dùng server đó để chỉ ra những chỗ khó chịu và dẫn sang Express. Ở bài này mình học thêm: những chỗ bắt bạn tự làm tay, trả phản hồi theo dòng chảy, module http trần bắt bạn tự làm những gì. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,

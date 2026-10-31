@@ -146,6 +146,11 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 915 — Nginx Security Hardening</span><span class="lc-sub">10 bài tập: đặt header ở tầng proxy, TLS, và chặn ở vòng ngoài.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-2-jwt-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.2: JWT, HTTPS, CORS &amp; file upload/download</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: CORS lets a React app call the API. Different: Courses explains what CORS relaxes in the Same-Origin Policy, with measurements. In this lesson we add: what helmet really does, the five headers that matter, reading CSP directive by directive, what nobody tells you about CORS, the Vary header. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -276,6 +281,11 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
 <a class="link-card codelab" href="/code-lab/nginx${REF}#module-915" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 915 — Nginx Security Hardening</span><span class="lc-sub">10 bài tập: đặt header ở tầng proxy, TLS, và chặn ở vòng ngoài.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-2-jwt-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.2: JWT, HTTPS, CORS &amp; upload/download file</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: CORS cho phép app React gọi API. Khác: Courses giải thích CORS nới lỏng cái gì của Same-Origin Policy và có phép đo. Ở bài này mình học thêm: helmet thật sự làm gì, năm header quan trọng, đọc CSP từng chỉ thị, điều không ai nói về CORS, header Vary. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,

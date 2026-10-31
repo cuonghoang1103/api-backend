@@ -341,6 +341,11 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">Routing, params and routers, with exercises.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-2-1-express-routing" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 2.1: Express routing &amp; your first app</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: Express routing and organising routes with Router. Different: Courses uses Express 5 and shows real bugs rather than only stating rules. In this lesson we add: anatomy of a route, path parameters, the route-order bug seen first-hand, query strings, wildcards and the Express 5 change. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -425,6 +430,11 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Kiến thức cốt lõi Express.js</span><span class="lc-sub">Định tuyến, tham số và router, kèm bài tập.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-2-1-express-routing" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 2.1: Express routing &amp; app đầu tiên</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: định tuyến Express và tổ chức route bằng Router. Khác: Courses dùng Express 5 và đo lỗi thật thay vì chỉ nêu quy tắc. Ở bài này mình học thêm: giải phẫu một route, tham số trên đường dẫn, bug thứ tự route xem tận mắt, query string, ký tự đại diện và thay đổi ở Express 5. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,
@@ -566,6 +576,11 @@ curl exit=28   ← Operation timed out</div>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">Middleware, next() and the request pipeline.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-2-2-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 2.2: Middleware: the heart of Express</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: middleware, writing your own logger, and declaration order deciding run order. Different: Courses writes a real timing logger and goes into scoped middleware. In this lesson we add: the chain in its exact run order, the built-in middleware you will actually use, scoped middleware — the shape of every guard. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -689,6 +704,11 @@ curl exit=28   ← Operation timed out</div>
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Kiến thức cốt lõi Express.js</span><span class="lc-sub">Middleware, next() và đường ống xử lý request.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-2-2-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 2.2: Middleware: trái tim của Express</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: middleware, tự viết một logger và thứ tự khai báo quyết định thứ tự chạy. Khác: Courses viết logger đo thời gian thật và đi vào middleware theo phạm vi. Ở bài này mình học thêm: dây chuyền theo đúng thứ tự chạy, những middleware có sẵn dùng thật, middleware theo phạm vi — hình dạng của mọi chốt chặn. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,
@@ -831,6 +851,11 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Express.js Core Concepts</span><span class="lc-sub">Error middleware and response shapes, with exercises.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-2-2-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 2.2: Middleware: the heart of Express</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: an error handler is a four-argument middleware. Different: Courses shows three ways an error reaches the handler and which one Express 4 misses. In this lesson we add: a throw inside async code (Express 5 catches it, Express 4 does not, with proof), an error class carrying an HTTP code, JSON 404s, two kinds of error that still kill the process. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -955,6 +980,11 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-320" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 320 — Kiến thức cốt lõi Express.js</span><span class="lc-sub">Middleware xử lý lỗi và hình dạng phản hồi, kèm bài tập.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-2-2-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 2.2: Middleware: trái tim của Express</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: error handler là middleware nhận bốn tham số. Khác: Courses chỉ ra ba đường để lỗi tới handler và đường nào làm Express 4 bỏ sót. Ở bài này mình học thêm: lỗi throw trong code async (Express 5 bắt được, Express 4 thì không, kèm bằng chứng), lớp lỗi mang mã HTTP, 404 dạng JSON, hai loại lỗi vẫn giết được tiến trình. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,

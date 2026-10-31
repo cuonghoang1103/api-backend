@@ -423,6 +423,11 @@ res.clearCookie('__Host-session', {
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies#cookie_prefixes" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">MDN — cookie prefixes</span><span class="lc-sub">developer.mozilla.org · __Host- and __Secure-, and what each enforces</span></span></a>
 <a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">CuongThai course — Web foundations</span><span class="lc-sub">Origins, sites and the same-origin policy these attributes build on</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Steal a cookie with and without HttpOnly, then submit a cross-site form with each SameSite value</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-1-passwords-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.1: Passwords, bcrypt, sessions &amp; Passport</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: sessions travel in a cookie. Different: Academy uses Passport-local; Courses dissects each attribute of the session cookie. In this lesson we add: HttpOnly stops a token being read but not used, and which attacks each other attribute blocks; the chapter also covers the sessions table and CSRF. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -550,6 +555,11 @@ res.clearCookie('__Host-session', {
 <a class="link-card" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies#cookie_prefixes" target="_blank" rel="noopener"><span class="lc-ico">🔒</span><span class="lc-body"><span class="lc-title">MDN — tiền tố cookie</span><span class="lc-sub">developer.mozilla.org · __Host- và __Secure-, và mỗi cái cưỡng chế điều gì</span></span></a>
 <a class="link-card" href="/courses/web-foundations/learn${REF}"><span class="lc-ico">🌐</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Nền tảng Lập trình Web</span><span class="lc-sub">Origin, site và chính sách cùng-origin mà những thuộc tính này dựng lên trên</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Cắp một cookie có và không có HttpOnly, rồi gửi một form xuyên trang với từng giá trị SameSite</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-1-passwords-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.1: Mật khẩu, bcrypt, session &amp; Passport</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: session đi kèm cookie. Khác: Academy dùng Passport-local; Courses mổ từng thuộc tính của cookie phiên. Ở bài này mình học thêm: HttpOnly chặn việc token bị đọc nhưng không chặn việc nó bị dùng, và các thuộc tính khác chặn cú tấn công nào; kèm cả chương về bảng phiên và CSRF. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
 </div>
 `,
     },

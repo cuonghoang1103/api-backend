@@ -212,6 +212,11 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 949 — Password Hashing (bcrypt)</span><span class="lc-sub">10 bài tập: băm, so khớp, cost factor, nâng cấp hash.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-1-passwords-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.1: Passwords, bcrypt, sessions &amp; Passport</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: hashing passwords with bcrypt instead of storing them plain. Different: Courses makes argon2id the default (bcrypt if you must) and proves it with measurements. In this lesson we add: four ways to lose, how fast "fast" is, building a rainbow table on the spot, salts, hashing cost under load, raising the cost without forcing password resets. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -402,6 +407,11 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
 <a class="link-card codelab" href="/code-lab/authentication${REF}#module-949" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 949 — Password Hashing (bcrypt)</span><span class="lc-sub">10 bài tập: băm, so khớp, cost factor, nâng cấp hash.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-1-passwords-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.1: Mật khẩu, bcrypt, session &amp; Passport</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: băm mật khẩu bằng bcrypt thay vì lưu thô. Khác: Courses chọn argon2id làm mặc định (bcrypt nếu buộc phải) và chứng minh bằng phép đo. Ở bài này mình học thêm: bốn cách thua, "nhanh" là nhanh cỡ nào, dựng bảng cầu vồng tại chỗ, muối, chi phí băm khi có tải, nâng chi phí mà không bắt ai đổi mật khẩu. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,
@@ -647,6 +657,11 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 952 — Refresh Tokens &amp; Rotation</span><span class="lc-sub">10 bài tập: xoay vòng, phát hiện tái sử dụng, thu hồi cả họ.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-2-jwt-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.2: JWT, HTTPS, CORS &amp; file upload/download</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: the JWT flow: issue a token at login, verify on every request. Different: Courses adds refresh tokens and demonstrates the attacks with running code. In this lesson we add: dissecting a JWT by hand, three attacks (editing the payload, decode instead of verify, lying about the algorithm), why a refresh token is not a JWT, rotation and why reuse means theft. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -875,6 +890,11 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
 <a class="link-card codelab" href="/code-lab/authentication${REF}#module-952" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 952 — Refresh Tokens &amp; Rotation</span><span class="lc-sub">10 bài tập: xoay vòng, phát hiện tái sử dụng, thu hồi cả họ.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-5-2-jwt-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.2: JWT, HTTPS, CORS &amp; upload/download file</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: luồng JWT: phát token khi đăng nhập, verify ở mỗi request. Khác: Courses thêm refresh token và chứng minh các đòn tấn công bằng code chạy thật. Ở bài này mình học thêm: mổ một JWT bằng tay, ba đòn tấn công (sửa payload, dùng decode thay vì verify, nói dối về thuật toán), refresh token không phải JWT, xoay vòng và vì sao "dùng lại" nghĩa là bị trộm. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
 `,

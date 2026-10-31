@@ -94,6 +94,11 @@ src/utils         5 file      336 dòng
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Layering, boundaries and dependency direction</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-4-1-rest-mvc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 4.1: A full REST API with Express, Mongoose &amp; MVC</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: layering route – controller/service – data so a growing API stays maintainable. Different: Courses measures whether the layer boundaries actually hold on a real backend. In this lesson we add: what each layer may and may not know, and why a service that does not know it was called over HTTP can be reused by workers and tests. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -173,6 +178,11 @@ src/utils         5 file      336 dòng
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Phân tầng, ranh giới và chiều phụ thuộc</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-4-1-rest-mvc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 4.1: REST API đầy đủ với Express, Mongoose &amp; MVC</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: phân lớp route – controller/service – dữ liệu để API lớn dần vẫn dễ sửa. Khác: Courses đo xem ranh giới giữa các tầng có thật sự đứng vững trên một backend thật. Ở bài này mình học thêm: mỗi tầng được phép biết gì (và không được biết gì), vì sao service không biết mình được gọi qua HTTP thì dùng lại được cho worker và test. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
 </div>
 `,
     },

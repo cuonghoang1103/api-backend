@@ -210,6 +210,11 @@ immediate timeout</div>
   <span class="lc-body"><span class="lc-title">Jake Archibald — In the loop</span><span class="lc-sub">The talk that made the browser and Node loops legible to a generation of developers.</span></span>
 </a>
 
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-1-1-node-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 1.1: Node.js, the event loop &amp; modules</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: the event loop and why Node does not block while waiting for I/O. Different: Academy explains the event loop in simplified form; Courses walks through its phases. In this lesson we add: six phases, proving the run order yourself, setTimeout(0) vs setImmediate, why timers are never exact; lesson 2.4 also measures event-loop blocking with real numbers. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -275,6 +280,11 @@ immediate timeout</div>
   <span class="lc-body"><span class="lc-title">Jake Archibald — In the loop</span><span class="lc-sub">Bài nói đã làm vòng lặp của trình duyệt và của Node trở nên dễ đọc với cả một thế hệ lập trình viên.</span></span>
 </a>
 
+<a class="link-card lien-ket-cheo" href="/courses/server-side-development-nodejs-express-mongodb/learn?lessonSlug=sdn302-1-1-node-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 1.1: Node.js, event loop &amp; module</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: event loop và vì sao Node không bị chặn khi chờ I/O. Khác: Academy giải thích event loop ở dạng đơn giản hoá; Courses đi qua từng pha của nó. Ở bài này mình học thêm: sáu pha, tự chứng minh thứ tự chạy, setTimeout(0) so với setImmediate, vì sao timer không bao giờ chính xác; bài 2.4 còn đo chuyện chặn event loop bằng số thật. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
 </div>
 `,
     },

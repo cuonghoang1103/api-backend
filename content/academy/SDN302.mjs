@@ -443,6 +443,11 @@ module.exports = myFunction;
 <span class="tok-keyword">export default</span> myFunction;</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The microtask queue runs before timers.</b> Promises (and <code>await</code>) resolve on the <em>microtask</em> queue, which the event loop drains fully before the next <code>setTimeout</code> callback. That is why a resolved promise logs before a <code>setTimeout(…, 0)</code>. Understanding this ordering explains puzzling async bugs the syllabus never touches — and it is a favourite senior interview question.</div>
 <div class="pitfall">Do not put CPU-heavy work (huge loops, image processing) on the main thread — it blocks the event loop and freezes every other request. Offload it to a worker thread or a separate service.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-2-2-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 2.2: The event loop, phase by phase</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: the event loop and why Node does not block while waiting for I/O. Different: Academy explains the event loop in simplified form; Courses walks through its phases. It also adds: six phases, proving the run order yourself, setTimeout(0) vs setImmediate, why timers are never exact; lesson 2.4 also measures event-loop blocking with real numbers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -474,6 +479,11 @@ module.exports = myFunction;
 <span class="tok-keyword">export default</span> myFunction;</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Hàng đợi microtask chạy trước timer.</b> Promise (và <code>await</code>) resolve trên hàng đợi <em>microtask</em>, mà event loop rút cạn hoàn toàn trước callback <code>setTimeout</code> tiếp theo. Đó là lý do một promise đã resolve log ra trước một <code>setTimeout(…, 0)</code>. Hiểu thứ tự này giải thích các bug async khó hiểu mà giáo trình không chạm — và là câu phỏng vấn senior ưa thích.</div>
 <div class="pitfall">Đừng đặt việc nặng CPU (vòng lặp khổng lồ, xử lý ảnh) trên luồng chính — nó chặn event loop và đóng băng mọi request khác. Đẩy nó sang worker thread hoặc một service riêng.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-2-2-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 2.2: Event loop, đi qua từng pha</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: event loop và vì sao Node không bị chặn khi chờ I/O. Khác: Academy giải thích event loop ở dạng đơn giản hoá; Courses đi qua từng pha của nó. Ở đó có thêm: sáu pha, tự chứng minh thứ tự chạy, setTimeout(0) so với setImmediate, vì sao timer không bao giờ chính xác; bài 2.4 còn đo chuyện chặn event loop bằng số thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -514,6 +524,11 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
 <em>Notice how much manual work this is: parsing the URL, matching the method, setting headers. Express turns all of this into <code>app.get('/api/hello', ...)</code>.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>REST maps HTTP methods to intentions.</b> GET reads (safe, no side effects), POST creates, PUT/PATCH updates, DELETE removes. Using the right method is not decoration — caches, proxies and browsers behave differently per method (a GET can be cached and prefetched; a POST cannot). Designing to this "uniform interface" is what makes an API predictable, a REST principle the raw server does not enforce for you.</div>
 <div class="pitfall">A raw server does not parse JSON bodies for you — <code>req</code> streams raw chunks you must collect and <code>JSON.parse</code>. This is exactly the tedium Express middleware (<code>express.json()</code>) removes; know it exists so you understand what the middleware does.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-5-http-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 3.5: An HTTP server without a framework</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: building a server with Node's plain http module. Different: Courses uses that server to show the pain points and lead into Express. It also adds: what the bare server makes you do by hand, streaming the response, and what the raw http module leaves to you.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -547,6 +562,11 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
 <em>Để ý phải làm thủ công bao nhiêu: phân tích URL, khớp method, đặt header. Express biến tất cả thành <code>app.get('/api/hello', ...)</code>.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>REST ánh xạ method HTTP với ý định.</b> GET đọc (an toàn, không tác dụng phụ), POST tạo, PUT/PATCH cập nhật, DELETE xoá. Dùng đúng method không phải trang trí — cache, proxy và trình duyệt hành xử khác nhau theo method (một GET có thể được cache và prefetch; một POST thì không). Thiết kế theo "giao diện đồng nhất" này là điều làm API dễ đoán, một nguyên tắc REST mà server thuần không tự thực thi cho bạn.</div>
 <div class="pitfall">Server thuần không tự phân tích JSON body — <code>req</code> stream các chunk thô mà bạn phải gom lại và <code>JSON.parse</code>. Đây chính là sự nhọc nhằn mà middleware Express (<code>express.json()</code>) loại bỏ; biết nó tồn tại để hiểu middleware làm gì.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-5-http-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 3.5: Server HTTP không dùng framework</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: dựng server bằng module http thuần của Node. Khác: Courses dùng server đó để chỉ ra những chỗ khó chịu và dẫn sang Express. Ở đó có thêm: những chỗ bắt bạn tự làm tay, trả phản hồi theo dòng chảy, module http trần bắt bạn tự làm những gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -617,6 +637,11 @@ npx express-generator --view=ejs myapp
 cd myapp &amp;&amp; npm install &amp;&amp; npm start</code></pre></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Mount routers per resource, not per verb.</b> One router file per resource (<code>products</code>, <code>users</code>, <code>orders</code>), each with its five CRUD routes, keeps a growing API navigable — you always know which file owns a URL. This "resource router" convention scales to dozens of endpoints without a 1,000-line app.js. The generator hints at it; disciplined teams enforce it.</div>
 <div class="pitfall">Forgetting <code>app.use(express.json())</code> means <code>req.body</code> is <code>undefined</code> on POST/PUT — a classic "why is my body empty?" bug. Add the JSON parser before your routes.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-2-dinh-tuyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 5.2: Routing: params, query and Router</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: Express routing and organising routes with Router. Different: Courses uses Express 5 and shows real bugs rather than only stating rules. It also adds: anatomy of a route, path parameters, the route-order bug seen first-hand, query strings, wildcards and the Express 5 change.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -655,6 +680,11 @@ npx express-generator --view=ejs myapp
 cd myapp &amp;&amp; npm install &amp;&amp; npm start</code></pre></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Gắn router theo tài nguyên, không theo động từ.</b> Một file router mỗi tài nguyên (<code>products</code>, <code>users</code>, <code>orders</code>), mỗi cái năm route CRUD, giữ một API lớn dần vẫn dễ điều hướng — bạn luôn biết file nào sở hữu một URL. Quy ước "resource router" này khả mở tới hàng chục endpoint mà không cần một app.js 1.000 dòng. Generator gợi ý điều đó; nhóm kỷ luật thực thi nó.</div>
 <div class="pitfall">Quên <code>app.use(express.json())</code> nghĩa là <code>req.body</code> bị <code>undefined</code> khi POST/PUT — một bug kinh điển "sao body của em rỗng?". Thêm JSON parser trước các route.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-2-dinh-tuyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 5.2: Định tuyến: params, query và Router</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: định tuyến Express và tổ chức route bằng Router. Khác: Courses dùng Express 5 và đo lỗi thật thay vì chỉ nêu quy tắc. Ở đó có thêm: giải phẫu một route, tham số trên đường dẫn, bug thứ tự route xem tận mắt, query string, ký tự đại diện và thay đổi ở Express 5.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -699,6 +729,16 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
 <div class="callout ok">Middleware runs top to bottom. Put <code>express.json()</code> and <code>cors()</code> <em>before</em> routes, and the error handler <em>after</em> all routes. A misplaced middleware silently does nothing (e.g., a body parser after the route that needs the body).</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Wrap async handlers to forward errors.</b> An async route that throws will not reach your error handler unless you <code>next(err)</code> — a rejected promise is not caught by Express automatically (pre-v5). The pro fix is a tiny wrapper: <code>const wrap = fn =&gt; (req,res,next) =&gt; fn(req,res,next).catch(next);</code>. This one helper eliminates a whole class of "my error handler never runs" bugs the syllabus does not warn about.</div>
 <div class="pitfall">An error-handling middleware MUST declare all four parameters <code>(err, req, res, next)</code> — Express detects error handlers by their arity. Drop the <code>err</code> and it silently becomes a normal middleware that never catches errors.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-3-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 5.3: Middleware: the chain every request passes through</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: middleware, writing your own logger, and declaration order deciding run order. Different: Courses writes a real timing logger and goes into scoped middleware. It also adds: the chain in its exact run order, the built-in middleware you will actually use, scoped middleware — the shape of every guard.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-4-xu-ly-loi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 5.4: Centralised error handling</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: an error handler is a four-argument middleware. Different: Courses shows three ways an error reaches the handler and which one Express 4 misses. It also adds: a throw inside async code (Express 5 catches it, Express 4 does not, with proof), an error class carrying an HTTP code, JSON 404s, two kinds of error that still kill the process.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -736,6 +776,16 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
 <div class="callout ok">Middleware chạy từ trên xuống. Đặt <code>express.json()</code> và <code>cors()</code> <em>trước</em> các route, và error handler <em>sau</em> mọi route. Một middleware đặt sai chỗ âm thầm không làm gì (vd body parser đặt sau route cần body).</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Bọc async handler để chuyển lỗi.</b> Một route async ném lỗi sẽ không tới error handler trừ khi bạn <code>next(err)</code> — một promise bị reject không được Express bắt tự động (trước v5). Cách pro là một wrapper nhỏ: <code>const wrap = fn =&gt; (req,res,next) =&gt; fn(req,res,next).catch(next);</code>. Helper này loại bỏ cả một lớp bug "error handler của em không bao giờ chạy" mà giáo trình không cảnh báo.</div>
 <div class="pitfall">Một middleware xử lý lỗi PHẢI khai đủ bốn tham số <code>(err, req, res, next)</code> — Express nhận diện error handler qua số tham số. Bỏ <code>err</code> là nó âm thầm thành middleware thường, không bao giờ bắt lỗi.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-3-middleware" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 5.3: Middleware: sợi dây chuyền mọi request đi qua</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: middleware, tự viết một logger và thứ tự khai báo quyết định thứ tự chạy. Khác: Courses viết logger đo thời gian thật và đi vào middleware theo phạm vi. Ở đó có thêm: dây chuyền theo đúng thứ tự chạy, những middleware có sẵn dùng thật, middleware theo phạm vi — hình dạng của mọi chốt chặn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-4-xu-ly-loi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 5.4: Xử lý lỗi tập trung</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: error handler là middleware nhận bốn tham số. Khác: Courses chỉ ra ba đường để lỗi tới handler và đường nào làm Express 4 bỏ sót. Ở đó có thêm: lỗi throw trong code async (Express 5 bắt được, Express 4 thì không, kèm bằng chứng), lớp lỗi mang mã HTTP, 404 dạng JSON, hai loại lỗi vẫn giết được tiến trình.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -979,6 +1029,16 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 </a>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Return a consistent error shape.</b> Decide once that every error response is <code>{ error: "message" }</code> (or <code>{ error, details }</code>) and use it everywhere. A predictable envelope lets the React front-end handle all failures with one code path, instead of guessing the shape per endpoint. Consistency across responses is an API-design quality graders and real clients both reward.</div>
 <div class="pitfall">Returning <code>200</code> for everything — including "not found" and validation errors — makes the API impossible for a client to handle correctly. The status code is part of the contract; use the right one.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-6-2-ma-trang-thai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 6.2: Status codes and response shape</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: the 200/201/400/401/403/404 status table and a consistent response shape. Different: Courses explains choosing a code by what happened, not just listing them. It also adds: 204 and 409/422, three common mix-ups (such as 401 vs 403), returning 201 with a Location header, field-naming conventions to settle early.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-18-1-tang-va-trach-nhiem" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 18.1: Layers and responsibilities</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: layering route – controller/service – data so a growing API stays maintainable. Different: Courses measures whether the layer boundaries actually hold on a real backend. It also adds: what each layer may and may not know, and why a service that does not know it was called over HTTP can be reused by workers and tests.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -1021,6 +1081,16 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 </a>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trả về một hình dạng lỗi nhất quán.</b> Quyết định một lần rằng mọi response lỗi là <code>{ error: "message" }</code> (hoặc <code>{ error, details }</code>) và dùng nó khắp nơi. Một phong bì dễ đoán để front-end React xử lý mọi thất bại bằng một luồng code, thay vì đoán hình dạng theo từng endpoint. Sự nhất quán giữa các response là chất lượng thiết kế API mà giám khảo lẫn client thật đều thưởng.</div>
 <div class="pitfall">Trả <code>200</code> cho mọi thứ — kể cả "không tìm thấy" và lỗi validation — làm API không thể để client xử lý đúng. Mã trạng thái là một phần của hợp đồng; dùng cái đúng.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-6-2-ma-trang-thai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 6.2: Mã trạng thái và hình dạng phản hồi</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: bảng mã trạng thái 200/201/400/401/403/404 và một hình dạng phản hồi nhất quán. Khác: Courses lý giải chọn mã theo thứ đã xảy ra, không chỉ liệt kê. Ở đó có thêm: 204 và 409/422, ba chỗ hay nhầm (như 401 với 403), trả 201 kèm header Location, quy ước đặt trường chốt sớm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-18-1-tang-va-trach-nhiem" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 18.1: Các tầng và trách nhiệm</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: phân lớp route – controller/service – dữ liệu để API lớn dần vẫn dễ sửa. Khác: Courses đo xem ranh giới giữa các tầng có thật sự đứng vững trên một backend thật. Ở đó có thêm: mỗi tầng được phép biết gì (và không được biết gì), vì sao service không biết mình được gọi qua HTTP thì dùng lại được cho worker và test.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -1155,6 +1225,16 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 </a>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Return the same error for "no such user" and "wrong password".</b> If your API says "email not found" vs "wrong password", an attacker can enumerate which emails are registered. A single generic "Invalid credentials" for both closes this leak. Small wording choices like this are real security, not pedantry — and the syllabus teaches the mechanism but not the threat model.</div>
 <div class="pitfall">Never log or return the password field — even hashed. Use <code>.select('-password')</code> by default on the User model, and strip it before sending any user object to the client.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-1-mat-khau-va-bam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 8.1: Storing passwords: why almost every way is wrong</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: hashing passwords with bcrypt instead of storing them plain. Different: Courses makes argon2id the default (bcrypt if you must) and proves it with measurements. It also adds: four ways to lose, how fast "fast" is, building a rainbow table on the spot, salts, hashing cost under load, raising the cost without forcing password resets.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 3.2: Each cookie attribute and what it really blocks</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Authentication course on Courses. Same as this lesson: sessions travel in a cookie. Different: Academy uses Passport-local; Courses dissects each attribute of the session cookie. It also adds: HttpOnly stops a token being read but not used, and which attacks each other attribute blocks; the chapter also covers the sessions table and CSRF.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1192,6 +1272,16 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 </a>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trả cùng một lỗi cho "không có user" và "sai mật khẩu".</b> Nếu API nói "email không tồn tại" vs "sai mật khẩu", kẻ tấn công có thể dò email nào đã đăng ký. Một "Invalid credentials" chung cho cả hai bịt lỗ rò này. Những lựa chọn câu chữ nhỏ như vậy là bảo mật thật, không phải chi li — và giáo trình dạy cơ chế chứ không dạy mô hình đe doạ.</div>
 <div class="pitfall">Đừng bao giờ log hay trả field password — kể cả đã băm. Dùng <code>.select('-password')</code> mặc định trên model User, và loại nó trước khi gửi bất kỳ object user nào về client.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-1-mat-khau-va-bam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 8.1: Lưu mật khẩu: vì sao gần như mọi cách đều sai</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: băm mật khẩu bằng bcrypt thay vì lưu thô. Khác: Courses chọn argon2id làm mặc định (bcrypt nếu buộc phải) và chứng minh bằng phép đo. Ở đó có thêm: bốn cách thua, "nhanh" là nhanh cỡ nào, dựng bảng cầu vồng tại chỗ, muối, chi phí băm khi có tải, nâng chi phí mà không bắt ai đổi mật khẩu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 3.2: Từng thuộc tính cookie và nó thật sự chặn được gì</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Authentication ở Courses. Giống bài này: session đi kèm cookie. Khác: Academy dùng Passport-local; Courses mổ từng thuộc tính của cookie phiên. Ở đó có thêm: HttpOnly chặn việc token bị đọc nhưng không chặn việc nó bị dùng, và các thuộc tính khác chặn cú tấn công nào; kèm cả chương về bảng phiên và CSRF.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -1262,6 +1352,21 @@ https.<span class="tok-function">createServer</span>({
 <em>HTTPS encrypts the <em>whole</em> request &mdash; including the <code>Authorization</code> header carrying the JWT above, which travels in clear text over plain HTTP. A self-signed certificate is fine for development (the browser will warn); in production the certificate comes from a CA and is usually terminated by the hosting platform or a reverse proxy, so your Node app keeps listening on plain HTTP behind it.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Keep the JWT secret in an environment variable, never in code.</b> A signing secret committed to Git is a full account-forgery key for anyone who reads the repo. Load it from <code>process.env.JWT_SECRET</code> (via a <code>.env</code> file that is git-ignored). This env-not-code discipline for secrets is the single most common real-world back-end mistake — and it is not on the syllabus.</div>
 <div class="pitfall">Do not put sensitive data (passwords, roles you do not want visible) inside the JWT <em>payload</em> — it is only base64-encoded, not encrypted. Anyone can decode and read it; only the signature is protected.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 8.2: JWT, refresh tokens and rotation</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: the JWT flow: issue a token at login, verify on every request. Different: Courses adds refresh tokens and demonstrates the attacks with running code. It also adds: dissecting a JWT by hand, three attacks (editing the payload, decode instead of verify, lying about the algorithm), why a refresh token is not a JWT, rotation and why reuse means theft.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 9.1: Security headers, CSP and CORS</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: CORS lets a React app call the API. Different: Courses explains what CORS relaxes in the Same-Origin Policy, with measurements. It also adds: what helmet really does, the five headers that matter, reading CSP directive by directive, what nobody tells you about CORS, the Vary header.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 10.1: Receiving files: multipart, base64 and the RAM cost</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: receiving uploads with Multer. Different: Courses measures the memory of each way of receiving files. It also adds: what multipart really looks like, base64 is not free, memoryStorage vs diskStorage measured by RSS, size limits; later lessons cover object storage, signed URLs and checking real file types.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1325,6 +1430,21 @@ https.<span class="tok-function">createServer</span>({
 <em>HTTPS mã hoá <em>toàn bộ</em> request &mdash; kể cả header <code>Authorization</code> mang JWT ở trên, thứ đi dạng chữ thường trên HTTP trần. Chứng chỉ tự ký đủ dùng khi phát triển (trình duyệt sẽ cảnh báo); ở production chứng chỉ do CA cấp và thường được nền tảng hosting hoặc reverse proxy kết thúc, nên app Node của bạn vẫn nghe HTTP thường ở phía sau.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Giữ JWT secret trong biến môi trường, không bao giờ trong code.</b> Một secret ký commit vào Git là chìa khoá giả mạo tài khoản cho bất kỳ ai đọc repo. Nạp nó từ <code>process.env.JWT_SECRET</code> (qua một tệp <code>.env</code> đã git-ignore). Kỷ luật secret-để-env-không-trong-code này là lỗi back-end thực tế phổ biến nhất — và không có trong giáo trình.</div>
 <div class="pitfall">Đừng đặt dữ liệu nhạy cảm (mật khẩu, vai trò bạn không muốn lộ) trong <em>payload</em> JWT — nó chỉ base64-encode, không mã hoá. Ai cũng decode và đọc được; chỉ chữ ký được bảo vệ.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-2-jwt-access-refresh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 8.2: JWT, refresh token và xoay vòng</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: luồng JWT: phát token khi đăng nhập, verify ở mỗi request. Khác: Courses thêm refresh token và chứng minh các đòn tấn công bằng code chạy thật. Ở đó có thêm: mổ một JWT bằng tay, ba đòn tấn công (sửa payload, dùng decode thay vì verify, nói dối về thuật toán), refresh token không phải JWT, xoay vòng và vì sao "dùng lại" nghĩa là bị trộm.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 9.1: Header bảo mật, CSP và CORS</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: CORS cho phép app React gọi API. Khác: Courses giải thích CORS nới lỏng cái gì của Same-Origin Policy và có phép đo. Ở đó có thêm: helmet thật sự làm gì, năm header quan trọng, đọc CSP từng chỉ thị, điều không ai nói về CORS, header Vary.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 10.1: Nhận file: multipart, base64 và cái giá bằng RAM</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: nhận file upload bằng Multer. Khác: Courses đo bộ nhớ của từng cách nhận file. Ở đó có thêm: multipart thật ra trông thế nào, base64 không miễn phí, so memoryStorage với diskStorage bằng RSS, giới hạn kích cỡ; các bài sau còn object storage và URL ký sẵn, kiểm file thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -1380,6 +1500,16 @@ https.<span class="tok-function">createServer</span>({
 <p>BaaS platforms (Firebase, Supabase, MongoDB Atlas App Services) provide ready-made auth, database and storage so small apps skip building a server. They handle secure client–server communication for you — useful when speed matters more than control.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The 12-factor config rule: config lives in the environment.</b> The <em>same</em> code should run locally and in production; only environment variables differ (local Mongo vs Atlas, dev secret vs prod secret). Never hard-code a URL or port. This makes deploys reproducible and secrets safe — a professional norm (the "12-factor app") the syllabus does not name but every hosting platform assumes.</div>
 <div class="pitfall">A deploy that "works locally but 500s in production" is almost always a missing environment variable on the host (MONGODB_URI, JWT_SECRET). Setting env vars in the host dashboard is a separate step from pushing code — do not forget it.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-4-bi-mat-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 17.4: Secrets: still there after you deleted them</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: secrets and config travel through environment variables, never hard-coded. Different: Academy deploys to Render/Railway; Courses packages with Docker and shows how secrets leak into the image. It also adds: docker history exposing a token you deleted, ENV writing a password into the image Config, mounting secrets at build time the right way.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 17.6: When a deploy lies: stale build, smoke test, rollback</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: "works locally, fails in production" is almost always a deploy problem. Different: Courses recounts a real deploy incident and a one-command diagnosis. It also adds: why a green health check can hide a missing feature, unauthenticated curl to tell 401 from 404, smoke tests and rollback.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -1403,6 +1533,16 @@ https.<span class="tok-function">createServer</span>({
 <p>Nền tảng BaaS (Firebase, Supabase, MongoDB Atlas App Services) cung cấp sẵn auth, database và storage nên app nhỏ bỏ qua việc xây server. Chúng lo giao tiếp client–server an toàn cho bạn — hữu ích khi tốc độ quan trọng hơn quyền kiểm soát.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quy tắc 12-factor: config nằm trong môi trường.</b> <em>Cùng</em> một mã nên chạy local và production; chỉ biến môi trường khác (Mongo local vs Atlas, secret dev vs prod). Đừng bao giờ hard-code URL hay port. Điều này làm deploy tái lập được và secret an toàn — một chuẩn chuyên nghiệp ("12-factor app") mà giáo trình không gọi tên nhưng mọi nền tảng hosting đều mặc định.</div>
 <div class="pitfall">Một deploy "chạy local nhưng 500 ở production" gần như luôn là thiếu một biến môi trường trên host (MONGODB_URI, JWT_SECRET). Đặt env trên dashboard của host là một bước riêng, khác với push code — đừng quên.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-4-bi-mat-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 17.4: Bí mật: vẫn còn nguyên sau khi bạn đã xoá</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: bí mật và cấu hình đi qua biến môi trường, không hard-code. Khác: Academy deploy lên Render/Railway; Courses đóng gói bằng Docker và chỉ ra bí mật lọt vào ảnh thế nào. Ở đó có thêm: docker history lộ token dù đã xoá, ENV ghi mật khẩu vào Config của ảnh, cách đúng là gắn bí mật lúc build.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 17.6: Khi deploy nói dối: build cũ, smoke test, quay lui</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: "chạy local nhưng lỗi ở production" gần như luôn là chuyện deploy. Khác: Courses kể một sự cố deploy thật và cách chẩn đoán bằng một lệnh. Ở đó có thêm: vì sao health check xanh mà tính năng vẫn mất, curl không xác thực để phân biệt 401 với 404, smoke test và quay lui.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {
@@ -1679,6 +1819,16 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <em>The unique index both enforces "one account per email" at the database level AND makes login lookups by email fast — two wins from one line.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Validate at the edge, trust nothing inside.</b> Put all input validation in one place (a validation middleware per route) so by the time a request reaches your service layer, the data is already guaranteed clean. This "validate at the boundary" pattern means your business logic never has to defensively re-check inputs — it is a cornerstone of robust back-ends that the CRUD-focused syllabus does not emphasise.</div>
 <div class="pitfall">Adding a <code>unique</code> constraint to a schema does NOT retroactively clean existing duplicate data, and the index build can fail if duplicates already exist. Enforce uniqueness from the start, or clean the collection before adding the index.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-6-3-validate-schema" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 6.3: Validating data with a schema</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: validating input with Zod/Joi instead of a wall of ifs. Different: Courses turns the schema into middleware and inspects its output. It also adds: one schema instead of a wall of ifs, real output, the query-string problem, the attack a schema silently blocks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 12.4: Rate limiting and distributed locks done right</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: limiting requests to stop abuse. Different: Academy uses express-rate-limit per IP; Courses builds the limiter on Redis. It also adds: three algorithms (fixed window and its boundary hole, sliding window, token bucket), the INCR-then-EXPIRE bug, distributed locks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2 · ★ Ngoài giáo trình</span>
@@ -1696,6 +1846,16 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <em>Index unique vừa thực thi "một tài khoản mỗi email" ở mức database VỪA làm tra cứu đăng nhập theo email nhanh — hai lợi ích từ một dòng.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Validate ở ranh giới, đừng tin gì bên trong.</b> Đặt mọi validation đầu vào ở một chỗ (một validation middleware mỗi route) để khi một request tới lớp service, dữ liệu đã được đảm bảo sạch. Khuôn "validate ở ranh giới" này nghĩa là logic nghiệp vụ không bao giờ phải phòng thủ kiểm lại đầu vào — một nền tảng của back-end bền mà giáo trình tập trung CRUD không nhấn.</div>
 <div class="pitfall">Thêm ràng buộc <code>unique</code> vào schema KHÔNG dọn hồi tố dữ liệu trùng đã có, và việc build index có thể thất bại nếu đã tồn tại bản trùng. Thực thi tính duy nhất từ đầu, hoặc dọn collection trước khi thêm index.</div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-6-3-validate-schema" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 6.3: Kiểm tra dữ liệu bằng lược đồ</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: validate đầu vào bằng Zod/Joi thay vì chuỗi if. Khác: Courses biến lược đồ thành middleware và xem dữ liệu đầu ra của nó. Ở đó có thêm: một lược đồ thay cả bức tường if, output thật, bài toán query string, đòn tấn công mà lược đồ lặng lẽ chặn đứng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 12.4: Giới hạn tần suất và khoá phân tán cho đúng</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: giới hạn số request để chặn lạm dụng. Khác: Academy dùng express-rate-limit đếm theo IP; Courses tự dựng bộ giới hạn trên Redis. Ở đó có thêm: ba thuật toán (cửa sổ cố định và lỗ ở ranh giới, cửa sổ trượt, token bucket), con bug INCR rồi EXPIRE, khoá phân tán.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>`,
         },
         {

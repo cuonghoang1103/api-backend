@@ -1528,6 +1528,26 @@ const L22 = {
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 0.2: kim tự tháp test, đo thật</span><span class="lc-sub">Giống bài này: cấp component (unit) và cấp tích hợp. Khác: Courses test một luật LabFlow ở hai cấp và đo chi phí — khoảng 0,015 ms mỗi lần kiểm unit so với khoảng 1 ms mỗi lần kiểm HTTP — rồi đặt từng test của LabFlow Lite vào đúng cấp.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>`),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 3)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-1-phan-loai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 3.1: stub, mock, spy, fake</span><span class="lc-sub">Same as this lesson: a component is tested in isolation by replacing its neighbours with stubs. Different: Courses names all five kinds of test double (dummy, stub, spy, mock, fake), builds each one in Vitest around a real LabFlow e-mail feature, and shows when checking state beats checking calls.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-1-phan-loai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 3.1: stub, mock, spy, fake</span><span class="lc-sub">Giống bài này: test một component cô lập bằng cách thay các thành phần xung quanh bằng stub. Khác: Courses gọi tên đủ năm loại đồ đóng thế (dummy, stub, spy, mock, fake), dựng từng loại bằng Vitest quanh tính năng gửi thư thật của LabFlow, và chỉ ra khi nào kiểm trạng thái tốt hơn kiểm lời gọi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 4)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-4-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 4.1: integration tests with a real database</span><span class="lc-sub">Same as this lesson: integration testing checks how components work together. Different: Courses integrates LabFlow Lite with a real PostgreSQL 17 started by the test run, and shows a double booking that only appears when two real connections race — fixed by a database constraint.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-4-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 4.1: test tích hợp với cơ sở dữ liệu thật</span><span class="lc-sub">Giống bài này: integration testing kiểm các thành phần làm việc cùng nhau. Khác: Courses tích hợp LabFlow Lite với PostgreSQL 17 thật do chính lần chạy test bật lên, và chỉ ra một vụ đặt trùng phòng chỉ xuất hiện khi hai kết nối thật tranh nhau — được sửa bằng một ràng buộc trong cơ sở dữ liệu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

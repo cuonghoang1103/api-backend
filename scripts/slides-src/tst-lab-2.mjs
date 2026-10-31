@@ -35,6 +35,10 @@ const STRONG = `$ node scripts/dot-bien-2.mjs
 
 8/8 mutants killed`;
 
+const FULL = ` Test Files  7 passed (7)
+      Tests  62 passed (62)
+   Duration  175ms (tests 40%, import 32%, transform 20%, worker 8%)`;
+
 export const slides = lamDeck({ chuong: 'Chapter 2 — Async code, time and errors', bai: 'Lab 2' }, [
   { cover: true, t: 'Lab 2 — async, time and errors:<br>kill 8 mutants', sub: 'Chapter 2 lab · 90 minutes · graded by a script, not by opinion' },
   { t: 'Your mission', to: true, giua: true, body: steps([
@@ -62,7 +66,7 @@ export const slides = lamDeck({ chuong: 'Chapter 2 — Async code, time and erro
     flow([{ t: 'Plant 1 bug', s: 'edit one line', mau: '#c0392b' }, { t: 'vitest run src/', s: 'your tests', mau: '#336791' }, { t: 'Red = killed', s: 'green = survived', mau: '#e08a1e' }, { t: 'Restore', s: 'always', mau: '#2f7d4f' }], { h: 110, fs: 20 }) },
   { t: 'A typical first attempt: 0 of 8', body: vt(WEAK_RUN, { title: 'terminal — 5 tests, all green', fs: 16 }) +
     two(vt(WEAK, { title: 'and not one bug noticed', fs: 13 }), box('Why every mutant survived', 'Two hours before (not 60 min), midday (not near midnight), ten failures (not exactly 5), a retry that succeeds at once, only the happy path of bookLab. Each test stays far away from the line where the bug lives.', 'do2'), 'r64') },
-  { t: 'The reference solution: 8 of 8', body: two(vt(STRONG, { title: '22 tests in 5 new files (62 with Lab 1)', fs: 13 }), box('What made the difference', `<ul style="font-size:19px"><li>59 / 60 / 61 minutes before the start</li><li>exactly 4 and 5 failures; 14:59.999 and 15:00</li><li>4 failures, a success, 1 more: not locked</li><li>${c('advanceTimersByTimeAsync')}: 999 / 1 000 / 2 999 / 3 000 ms</li><li>a repo that throws: ${c('code')} + ${c('cause')}</li><li>06:30 Viet Nam time = 23:30 UTC the day before</li></ul>`, 'xanh'), 'r64') },
+  { t: 'The reference solution: 8 of 8', body: two(`<div>${vt(STRONG, { title: '22 tests in 5 new files (62 with Lab 1)', fs: 13 })}${vt(FULL, { title: 'npm test — whole suite, also under TZ=UTC', fs: 15 })}</div>`, box('What made the difference', `<ul style="font-size:19px"><li>59 / 60 / 61 minutes before the start</li><li>exactly 4 and 5 failures; 14:59.999 and 15:00</li><li>4 failures, a success, 1 more: not locked</li><li>${c('advanceTimersByTimeAsync')}: 999 / 1 000 / 2 999 / 3 000 ms</li><li>a repo that throws: ${c('code')} + ${c('cause')}</li><li>06:30 Viet Nam time = 23:30 UTC the day before</li></ul>`, 'xanh'), 'r64') },
   { t: 'Rubric (10 points)', body: zm(`<table class="t"><tr><th>Criterion</th><th>Points</th><th>How it is checked</th></tr>
     <tr><td>Mutants killed</td><td>4 (0.5 each)</td><td>${c('node scripts/dot-bien-2.mjs')}</td></tr>
     <tr><td>Time controlled: injected clock or fake timers, always restored; no real waiting</td><td>2</td><td>suite under 1 s · ${c('useRealTimers')} in ${c('afterEach')}</td></tr>

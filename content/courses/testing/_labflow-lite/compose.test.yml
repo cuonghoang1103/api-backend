@@ -1,0 +1,16 @@
+# Throwaway PostgreSQL for tests. Data lives in RAM (tmpfs): fast, and gone when the container stops.
+services:
+  db-test:
+    image: postgres:17
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: labflow_test
+    ports:
+      - "54329:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d labflow_test"]
+      interval: 1s
+      timeout: 3s
+      retries: 30

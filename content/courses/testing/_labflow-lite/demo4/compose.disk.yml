@@ -1,0 +1,18 @@
+# The same database on a normal Docker volume (disk) — only to measure the difference with tmpfs.
+services:
+  db-disk:
+    image: postgres:17
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: labflow_test
+    ports:
+      - "54339:5432"
+    volumes:
+      - db-disk-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d labflow_test"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+volumes:
+  db-disk-data:

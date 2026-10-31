@@ -1,8 +1,8 @@
 # Hợp đồng soạn khoá "Testing" (/courses/testing)
 
-> Đọc HẾT file này trước khi soạn một chương mới. Viết 01/11/2026 sau khi Mục 0 + Chương 1 (đợt mẫu, `bdd965397`) và
-> Chương 2 xong. **Bài mẫu:** Chương 2 — `testing/s02-bat-dong-bo.mjs` + `s02/*.mjs` + deck `scripts/slides-src/tst-02-*.mjs`,
-> `tst-lab-2.mjs`. Chỗ nào file này không nói, bắt chước đúng các file đó.
+> Đọc HẾT file này trước khi soạn một chương mới. Viết 01/11/2026 sau Mục 0 + Chương 1 (đợt mẫu, `bdd965397`) và Chương 2
+> (`73346c69c`); cập nhật khi xong Chương 3–4. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
+> deck `tst-03-*`, `tst-04-*`, `tst-lab-3/4`. Chỗ nào file này không nói, bắt chước đúng các file đó.
 
 ## 0. Khoá này là gì, dạy ai
 
@@ -43,7 +43,9 @@
      → **🧪 Practice (15 minutes)** trong `div.callout.ok` (đề + **lời giải + output thật** + "Done when") → **🗂 Key terms** (`div.kv-grid`)
      → **📌 Summary** → thẻ `lienKet(...)` nếu có (mục 6). `</div>`
   3. `<div class="ml-vi">` — bản tiếng Việt **đầy đủ tương đương** (không tóm tắt), cùng mã/output.
-- Độ dài tham khảo (gồm phần giảng slide): bài dạy 45–70k ký tự, lab ~60k, quiz ~17k.
+- **Độ dài (điều phối chốt 01/11): 25–40k ký tự/bài kể cả phần giảng slide** — đủ ý nhưng gọn; chủ đề thật sự lớn thì TÁCH 2 bài.
+  Ch2 (45–68k) là quá dài, đừng chép độ dài đó. Cách gọn: 10–11 slide/bài, lời giảng 40–70 từ/slide, output dài thì LỌC dòng bằng hằng
+  ở đầu file (vd `const gon = (t) => t.split('\n').filter((l) => /✓|×|Tests /.test(l)).join('\n')`) — chỉ bỏ dòng, không sửa chữ.
 - Mỗi bài nên có: một bug/bẫy THẬT chạy ra đỏ, một bảng tóm "khi nào dùng gì", một đoạn đối chiếu JUnit/Spring khi có ích.
 
 ### Luật chữ trong template literal (bộ kiểm `scripts/course-content-check.mjs` bắt)
@@ -58,9 +60,18 @@
 ```bash
 cp -r content/courses/testing/_labflow-lite <SCRATCH>/lab/labflow-lite
 cd <SCRATCH>/lab/labflow-lite && npm ci            # Node 22 (chuẩn: 22.23.3), Vitest 5.0.5, fast-check 4, Express 5, Supertest 7
-npx vitest run src/ test/                           # 66 passed (cuối Ch2)
-node scripts/dot-bien.mjs && node scripts/dot-bien-2.mjs   # 8/8 và 8/8
+npx vitest run src/                                 # 73 passed (cuối Ch4) — đây là “unit suite”
+npm run test:int -- test/integration                # 11 passed — cần Docker (Testcontainers, postgres:17)
+for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4; do node scripts/$s.mjs | tail -1; done   # 4 × 8/8
 ```
+- ⚠️ `npm test` = `vitest run` chạy CẢ `demo*/` (có test cố ý đỏ) ⇒ khi nói “bộ unit xanh” hãy ghi `npx vitest run src/`.
+- Ch4: `vitest.integration.config.js` (include `test/integration/**`, `demo4/**/*.int.test.js`; `globalSetup`; `fileParallelism: false`),
+  `vitest.config.js` loại `test/integration/**` và `demo4/**`. `TEST_DATABASE_URL` có ⇒ dùng CSDL đó (compose `compose.test.yml`, cổng 54329);
+  không ⇒ Testcontainers. `TST_SCHEMA` đổi file schema (demo). Test tích hợp nhận URL bằng `inject('databaseUrl')` (`test/support/db.js`).
+- Test tranh chấp trên CSDL thật: mở sẵn 2 kết nối (`Promise.all([pool.query('SELECT 1'), …])`) — pool nguội thì lượt 2 chậm vì
+  bắt tay kết nối và tranh chấp KHÔNG xảy ra (đo 01/11). File test tích hợp nào cũng `TRUNCATE` một lần ở `beforeAll` (rollback không
+  huỷ được dòng file khác đã commit — đo được: 20/20 đỏ).
+- Cổng: kiểm `lsof -i :PORT` trước khi chọn (54330 trên máy soạn bị đường hầm SSH chiếm ⇒ báo sai mật khẩu khó hiểu).
 - `vitest.config.js`: `reporters: ['tree']`, `expect: { requireAssertions: true }`. Ch2 dạy thêm `restoreMocks: true` (Lab 2 yêu cầu).
 - `src/` = code thật + **bộ test tham khảo** (lời giải các lab, luôn xanh). `demo/`, `demo2/`, … = thí nghiệm từng bài, có test CỐ Ý ĐỎ
   ⇒ CI/script đột biến chỉ chạy `src/`. Chương N mới ⇒ thư mục `demoN/`, file thực hành `demoN/thNM.test.js`.
@@ -107,7 +118,7 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - **Upload** (chủ ý chạm bucket R2 thật): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/final --prefix TST/v1 --decks <deck,…>`
   ⇒ `images/academy/TST/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy** (Cloudflare cache luôn cái 404).
   Deck đã đẩy mà phải dựng lại ⇒ đẩy sang `TST/v2` (v3…) và ghi `VER = { '<deck>': 'v2' }` trong `_slides.mjs` — đừng ghi đè v1.
-  Hiện: `tst-lab-1` = v2, còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+  Hiện: `tst-lab-1`, `tst-lab-2` = v2, còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 
 ## 5. Lời giảng dưới slide (`giang/<deck>.mjs`)
 - Đúng **một dòng/slide**, đủ 1..N (walkTst ném lỗi nếu thiếu/trùng). EN 50–90 từ, VI tương đương, giải thích **vì sao**, không đọc lại slide.
@@ -120,6 +131,9 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
   href="/courses/testing/learn?lessonSlug=…" target="_blank" rel="noopener">` với `lc-ico/lc-body/lc-title/lc-sub/lc-cta`) vào **cuối mảng
   `content`** của bài, ngay trước `].join('\n'),` và sau `books([...])` nếu có. **Trước khi sửa: `git status --short <file>` — có thay đổi của
   phiên khác thì BỎ QUA** file đó và ghi lại trong báo cáo.
+- SDN302 (Academy, `server-side-development-nodejs-express-mongodb`) nằm trọn trong `content/academy/SDN302.mjs`, nội dung là HTML
+  trong template literal: chèn thẻ ngay sau thẻ `lien-ket-cheo` cuối cùng của khối `ml-en` và của khối `ml-vi` trong đúng bài
+  (Ch3: `sdn302-4-1-rest-mvc` ↔ `tst-3-4-thiet-ke`). Khoá Node.js (Courses) chỉ gắn một chiều từ Testing: `lienKet({ khoa: 'nodejs', … })`.
 - Chỉ gắn khi đã ĐỌC bài SWT301 và liên quan thật. Ghi mỗi cặp vào `content/_LIEN-KET-CHEO/swt301-testing.md`.
 - Kiểm SWT301 sau khi sửa: `node --check` từng file + cân thẻ (ml-en = ml-vi; div/p/pre/code/span/a mở = đóng) trên `content/academy/SWT301.mjs`
   (`course-content-check.mjs` không chạy được với SWT301 vì có bài quiz không có content — lỗi có sẵn).
@@ -136,8 +150,11 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - Deck lab 9 slide: cover · mission · code under test · 8 bugs · first attempt · reference · rubric · hints · checklist.
 
 ### 7.2 Đề Code Lab kiểu `mutation` (chờ máy chấm)
-`testing/_de-codelab-mutation.json` — 10 đề, 58 đột biến, **đã kiểm 58/58 bị diệt** bằng
-`node scripts/tst/kiem-de-mutation.mjs <SCRATCH>/lab/labflow-lite content/courses/testing/_de-codelab-mutation.json` (01/11/2026).
+`testing/_de-codelab-mutation.json` — 19 đề, 102 đột biến + 1 thay đổi vô hại, **đã kiểm 103/103 đạt** trên một bản sao mới của
+`_labflow-lite` (`npm ci`, Docker bật) bằng
+`node scripts/tst/kiem-de-mutation.mjs <SCRATCH>/lab/labflow-lite content/courses/testing/_de-codelab-mutation.json [id…]` (01/11/2026).
+Trường thêm: `config` (Ch4: `vitest.integration.config.js`, cần Docker) · `voHai[{file, from, to, label}]` = thay đổi VÔ HẠI mà test
+phải VẪN XANH (bắt test quá chi tiết — đề 3.3).
 Mỗi đề: `id`, `bai` (slug bài gắn), `tieuDe` EN\|\|\|VI, `ham`, `fileDung` (code đúng trong `_labflow-lite`), `testThamKhao` (bộ test
 chứng minh mọi đột biến diệt được), `yeuCau`, `dotBien[{ file, from, to, label }]` (`from` khớp **đúng 1 chỗ**, kể cả xuống dòng).
 Máy chấm sau này: chạy file test của người học trên code đúng (phải xanh, có `requireAssertions`) rồi với từng đột biến (phải đỏ).
@@ -154,9 +171,20 @@ Máy chấm sau này: chạy file test của người học trên code đúng (p
 | tst-cl-2-3 | tst-2-3-loi | BookingError, bookLab | lỗi đọc lọt ra · thiếu `await` khi `return repo.insert` (lỗi ghi thoát try/catch) · mất cause · mất code · mọi lỗi luật cùng một mã |
 | tst-cl-2-4 | tst-2-4-ngau-nhien | makeBookingCode, newBookingRecord | không bao giờ ra ký tự cuối · thiếu dấu "-" · mã thiếu 1 ký tự · bỏ qua đồng hồ tiêm · bỏ qua bộ sinh id tiêm |
 | tst-cl-lab-2 | tst-2-5-lab-bat-dong-bo | (8 đột biến của `dot-bien-2.mjs`) | |
+| tst-cl-3-1 | tst-3-1-phan-loai | bookAndNotify | thiếu `notified: true` · thư hỏng vẫn báo đã gửi · quên `await mailer.send` · xác nhận gửi người duyệt · cảnh báo ghi phòng thay id |
+| tst-cl-3-2 | tst-3-2-mock-module | createHttpMailer, sendReminder | sai đường dẫn · sai method · thiếu subject trong JSON · trả cả body · 429 thành lỗi chung · nhắc lịch mất “tomorrow” |
+| tst-cl-3-3 | tst-3-3-qua-da | bookAndNotify, bookLab | mọi lượt CONFIRMED · độ dài luôn 60 · thư duyệt gửi sinh viên · **vô hại:** lưu thêm cột `source` (phải vẫn xanh) |
+| tst-cl-3-4 | tst-3-4-thiet-ke | buildMail, createReminder | tiêu đề mất “confirmed” · “31 seat” · mất giờ bắt đầu · nhắc “today” |
+| tst-cl-lab-3 | tst-3-5-lab-test-double | (8 đột biến của `dot-bien-3.mjs`) | |
+| tst-cl-4-1 | tst-4-1-vi-sao | createPgRepo, bookLab (config tích hợp) | 23P01 → 23505 · OVERLAP thành STORAGE_DOWN · mất cause · thiếu id |
+| tst-cl-4-23 | tst-4-2 + tst-4-3 | global setup, schema | test chạy PostgreSQL 16 · schema thiếu ràng buộc · thiếu btree_gist |
+| tst-cl-4-4 | tst-4-4-co-lap | bookLab, createPgRepo | 31 chỗ lưu CONFIRMED · độ dài luôn 60 · số chỗ luôn 20 |
+| tst-cl-lab-4 | tst-4-5-lab-tich-hop | (8 đột biến của `dot-bien-4.mjs`, mỗi lần một PostgreSQL mới) | |
 
 Chương mới ⇒ thêm 1 đề/bài dạy (3–8 đột biến, mỗi con là một bug THẬT có nghĩa với người dùng, không đột biến tương đương), chạy
-`kiem-de-mutation.mjs` tới khi `N/N`, rồi cập nhật bảng này.
+`kiem-de-mutation.mjs` tới khi `N/N`, rồi cập nhật bảng này. Đột biến phải giữ cú pháp hợp lệ: xoá `lab = $1 AND` làm `$1` thừa ⇒ cả câu
+SQL hỏng ⇒ test nào cũng “diệt” vì lý do sai; thay bằng `$1::text IS NOT NULL AND` (đo 01/11: bộ yếu diệt bản xoá, để sống bản thay).
+Bài hạ tầng (4.2/4.3) gộp một đề; đề phải có test tham khảo NẰM TRONG dự án (`testThamKhao`).
 
 ## 8. Quy trình một chương (tóm tắt)
 1. Đọc khung chương trong `testing.mjs` + bài SWT301 liên quan. 2. Viết code mới vào LabFlow Lite (scratch), chạy, bắt bug thật.

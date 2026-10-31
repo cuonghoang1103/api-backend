@@ -19,8 +19,18 @@ thêm vào cuối mảng `content` của bài). Chỉ gắn khi đã đọc nộ
 | `swt301-blackbox-decision-state` (4.4) | `tst-1-4-ham-thuan` | bảng quyết định, mỗi cột một luật | cột → dòng `it.each` cho BR-06, số chỗ tại biên 30/31 |
 | `swt301-blackbox-state-transition` (4.5) | `tst-2-2-thoi-gian` | trạng thái đổi theo sự kiện: sai PIN lần 3 nuốt thẻ ↔ sai mật khẩu lần 5 khoá tài khoản (BR-02) | chuyển đổi ngược theo thời gian (hết khoá sau đúng 15 phút) test bằng fake timers/đồng hồ tiêm, biên 14:59.999/15:00; Lab 2 cài bug vào chính các chuyển đổi |
 | `swt301-experience-based` (6.1) | `tst-2-3-loi` | error guessing — danh sách chỗ hay hỏng từ kinh nghiệm | mỗi phỏng đoán thành test chạy được: repository giả ném ECONNREFUSED, ghi hỏng, khẳng định mã lỗi + cause; bẫy try/catch xanh khi không có gì ném |
+| `swt301-test-levels` (2.2) | `tst-3-1-phan-loai` | thay thành phần xung quanh bằng stub (top-down) / driver (bottom-up) để test cô lập | đủ 5 loại double (dummy, stub, spy, mock, fake) dựng bằng Vitest quanh tính năng gửi thư; kiểm trạng thái vs tương tác |
+| `swt301-test-levels` (2.2) | `tst-4-1-vi-sao` | integration testing: các thành phần làm việc cùng nhau | tích hợp với PostgreSQL 17 thật (Testcontainers); lỗi đặt trùng chỉ lộ khi hai kết nối thật tranh nhau, sửa bằng ràng buộc EXCLUDE |
 
 Ngoài SWT301 (01/11, Chương 2): `tst-2-1-async` → khoá Node.js `nodejs-1-4-bat-dong-bo` (ôn async/await, thẻ một chiều).
 
+SDN302 (Academy, slug `server-side-development-nodejs-express-mongodb`) ↔ Testing — hai chiều:
+
+| SDN302 | Courses testing | Giống | Courses sâu thêm |
+|---|---|---|---|
+| `sdn302-4-1-rest-mvc` (4.1) | `tst-3-4-thiet-ke` | tách routes → controllers → services → models | đo cái giá với test: service nhận phụ thuộc qua tham số 11 dòng test, service tự import pool/mail 21 dòng + 2 vi.mock + đồng hồ giả |
+
+Một chiều sang khoá Node.js (Courses): `tst-3-4` → `nodejs-14-2-unit-test`; `tst-4-1` → `nodejs-14-4-db-that`; `tst-4-4` → `nodejs-7-3-crud-transaction`.
+
 Không cặp (đợt mẫu): `tst-1-2-matcher` (SWT301 không dạy matcher JS; phần `assertThrows` đã nằm trong bảng JUnit ↔ Vitest của 1.1), Lab 1 (kiểm thử đột biến — SWT301 chưa có bài tương ứng; Chương 8 Courses sẽ nối với SWT301 Ch.5 coverage).
-Không cặp Chương 2: `tst-2-1-async`, `tst-2-4-ngau-nhien`, Lab 2, quiz (SWT301 không dạy promise, fake timers hay seed). Chương 3–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch3 test double ↔ `swt301-test-levels` stub/driver; Ch8 coverage ↔ `swt301-whitebox-coverage`; Ch10 TDD ↔ `swt301-tdd-bdd`).
+Không cặp Chương 2: `tst-2-1-async`, `tst-2-4-ngau-nhien`, Lab 2, quiz (SWT301 không dạy promise, fake timers hay seed). Không cặp Chương 3–4: 3.2 (vi.mock/MSW), 3.3, 4.2–4.4, các Lab và quiz. Chương 5–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch8 coverage ↔ `swt301-whitebox-coverage`; Ch10 TDD ↔ `swt301-tdd-bdd`).

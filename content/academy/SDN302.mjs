@@ -1084,6 +1084,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 1.3: Status codes that mean something</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: the 200/201/400/401/403/404/500 table and never returning 200 for errors. Different: Courses triggers every code on a real API and chooses it with a fixed order of questions. It also adds: 201 with Location, 400 vs 422, 409 for state conflicts, 410, 415, and what a 500 must not leak.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-4-thiet-ke" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 3.4: designing code that is easy to test</span><span class="lc-sub">Same as this lesson: split routes → controllers → services → models so each layer has one job. Different: Courses measures what the split buys in tests — a service that receives its repository and mailer is tested with fakes in 11 lines, while one that imports its database pool and mail client needs two module mocks and a frozen clock (21 lines).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -1139,6 +1144,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-1-3-status" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 1.3: Mã trạng thái có ý nghĩa</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: bảng 200/201/400/401/403/404/500 và không bao giờ trả 200 cho lỗi. Khác: Courses kích hoạt từng mã trên API thật và chọn mã theo một thứ tự câu hỏi cố định. Ở đó có thêm: 201 kèm Location, 400 so với 422, 409 cho xung đột trạng thái, 410, 415, và những gì một lỗi 500 không được làm lộ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-4-thiet-ke" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 3.4: thiết kế code dễ test</span><span class="lc-sub">Giống bài này: tách routes → controllers → services → models để mỗi lớp một việc. Khác: Courses đo xem cách tách đó mang lại gì cho test — service nhận repository và mailer qua tham số được test bằng fake trong 11 dòng, còn service tự import pool cơ sở dữ liệu và client gửi thư cần hai mock module và một đồng hồ đóng băng (21 dòng).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

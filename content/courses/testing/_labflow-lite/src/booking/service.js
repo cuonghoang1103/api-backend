@@ -41,6 +41,7 @@ export async function bookLab(repo, input) {
   try {
     return await repo.insert({ ...input, minutes: slot.minutes, status });
   } catch (err) {
+    if (err instanceof BookingError) throw err; // Chapter 4: the database itself can say OVERLAP
     throw new BookingError('STORAGE_DOWN', { cause: err });
   }
 }

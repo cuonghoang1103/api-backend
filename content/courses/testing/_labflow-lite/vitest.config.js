@@ -1,8 +1,10 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig, configDefaults } from 'vitest/config';
 
 export default defineConfig({
   test: {
     reporters: ['tree'],                 // print the describe → it tree
     expect: { requireAssertions: true }, // a test without any expect fails (lesson 1.1)
+    restoreMocks: true,                  // undo every vi.spyOn before each test (lesson 2.4)
+    exclude: [...configDefaults.exclude, 'test/integration/**', 'demo4/**'], // need a database: npm run test:int
   },
 });

@@ -178,13 +178,18 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 [6] setImmediate   — check phase
 [5] setTimeout 0   — timers phase</div>
 <p>Read it carefully. All synchronous code finishes <strong>first</strong> — always. Then nextTick. Then microtasks. Only then does the loop start turning. And notice the last two came out in the "wrong" order…</p>
+<div class="pitfall"><strong>ES module trap.</strong> Save the same code as <code>.mjs</code> (ES module, which is what we use from chapter 5 on) and the order becomes <code>[1] [2] [4] [3] [5] [6]</code>: the Promise runs <em>before</em> <code>nextTick</code>. Reason: an ES module's top-level code itself runs inside a microtask, so the microtask queue is still being drained when <code>nextTick</code> gets its turn. In a CommonJS <code>.js</code>/<code>.cjs</code> file, <code>nextTick</code> wins. Measured on Node 22.23.3.</div>
 
 <h3>setTimeout(0) vs setImmediate: genuinely unpredictable</h3>
-<p>Running the same two lines five times in a row gives different answers:</p>
+<p>Run the same two lines many times and the answer is not fixed. We ran them 300 times on a fast machine: <code>immediate</code> came first 292 times and <code>timeout</code> came first 8 times. It is not a coin flip, but you cannot predict which one you will get on any single run:</p>
 <pre><code class="language-typescript"><span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
 <span class="tok-function">setImmediate</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'immediate '</span>));</code></pre>
-<div class="out">immediate timeout timeout immediate immediate timeout immediate timeout timeout immediate</div>
-<p>Why? <code>setTimeout(fn, 0)</code> really means "after <em>at least</em> 0 ms". Whether that deadline has already passed when the loop reaches the timers phase depends on how long the process took to start — microseconds of luck. So the order flips randomly.</p>
+<div class="out">immediate timeout 
+immediate timeout 
+immediate timeout 
+timeout immediate 
+immediate timeout</div>
+<p>Why? <code>setTimeout(fn, 0)</code> really means "after <em>at least</em> 1 ms": Node raises any delay below 1 ms to 1 ms, so there is no true 0. Whether that 1 ms deadline has already passed when the loop reaches the timers phase depends on how long the process took to start — microseconds of luck. So the order flips randomly.</p>
 <p>But inside an I/O callback the answer is <strong>always the same</strong>, because there we are already past the poll phase, and <code>check</code> comes immediately after it:</p>
 <pre><code class="language-typescript">fs.<span class="tok-function">readFile</span>(__filename, () =&gt; {
   <span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
@@ -238,13 +243,18 @@ process.<span class="tok-function">nextTick</span>(() =&gt; <span class="tok-fun
 [6] setImmediate   — pha check
 [5] setTimeout 0   — pha timers</div>
 <p>Hãy đọc kỹ. Toàn bộ code đồng bộ chạy xong <strong>trước tiên</strong> — luôn luôn. Rồi tới nextTick. Rồi microtask. Chỉ sau đó vòng lặp mới bắt đầu quay. Và để ý hai dòng cuối ra "sai" thứ tự…</p>
+<div class="pitfall"><strong>Bẫy ES module.</strong> Lưu đúng đoạn mã đó thành <code>.mjs</code> (ES module, thứ ta dùng từ chương 5 trở đi) thì thứ tự thành <code>[1] [2] [4] [3] [5] [6]</code>: Promise chạy <em>trước</em> <code>nextTick</code>. Lý do: bản thân mã cấp cao nhất của ES module chạy bên trong một microtask, nên hàng đợi microtask vẫn đang được xả khi tới lượt <code>nextTick</code>. Với file CommonJS <code>.js</code>/<code>.cjs</code> thì <code>nextTick</code> thắng. Đo thật trên Node 22.23.3.</div>
 
 <h3>setTimeout(0) vs setImmediate: thật sự không đoán được</h3>
-<p>Chạy đúng hai dòng đó năm lần liên tiếp cho ra kết quả khác nhau:</p>
+<p>Chạy đúng hai dòng đó nhiều lần thì kết quả không cố định. Chúng tôi chạy 300 lần trên một máy nhanh: <code>immediate</code> ra trước 292 lần, <code>timeout</code> ra trước 8 lần. Không phải tung đồng xu 50/50, nhưng bạn không thể đoán được lần chạy cụ thể nào sẽ ra gì:</p>
 <pre><code class="language-typescript"><span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);
 <span class="tok-function">setImmediate</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'immediate '</span>));</code></pre>
-<div class="out">immediate timeout timeout immediate immediate timeout immediate timeout timeout immediate</div>
-<p>Vì sao? <code>setTimeout(fn, 0)</code> thật ra nghĩa là "sau <em>ít nhất</em> 0 mili giây". Việc cái hạn đó đã trôi qua hay chưa vào lúc vòng lặp chạm pha timers phụ thuộc vào tiến trình khởi động mất bao lâu — vài micro giây may rủi. Nên thứ tự đảo lung tung.</p>
+<div class="out">immediate timeout 
+immediate timeout 
+immediate timeout 
+timeout immediate 
+immediate timeout</div>
+<p>Vì sao? <code>setTimeout(fn, 0)</code> thật ra nghĩa là "sau <em>ít nhất</em> 1 mili giây": Node nâng mọi độ trễ dưới 1 ms lên thành 1 ms nên không có mốc 0 thật. Việc cái hạn 1 ms đó đã trôi qua hay chưa vào lúc vòng lặp chạm pha timers phụ thuộc vào tiến trình khởi động mất bao lâu — vài micro giây may rủi. Nên thứ tự đảo lung tung.</p>
 <p>Nhưng bên trong một callback I/O thì câu trả lời <strong>luôn luôn như nhau</strong>, vì ở đó ta đã đi qua pha poll rồi, mà <code>check</code> nằm ngay sau nó:</p>
 <pre><code class="language-typescript">fs.<span class="tok-function">readFile</span>(__filename, () =&gt; {
   <span class="tok-function">setTimeout</span>(() =&gt; process.stdout.<span class="tok-function">write</span>(<span class="tok-string">'timeout '</span>), <span class="tok-number">0</span>);

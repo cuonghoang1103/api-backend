@@ -47,7 +47,7 @@ export default {
 </ul>
 
 <h3>What is Node.js, who made it, and what did it replace?</h3>
-<p>Before 2009, JavaScript ran in <em>one</em> place: the browser. If you wanted to write the server — the program that holds the database and answers requests — you used PHP, Java, Ruby or Python. In 2009 an engineer named <strong>Ryan Dahl</strong> took Google Chrome's JavaScript engine (V8) and wrapped it so JavaScript could run <em>outside</em> the browser, on a server. That is <strong>Node.js</strong>, and he presented it at JSConf EU 2009 — the talk in the video above, the actual birth of the thing you're learning.</p>
+<p>Before 2009, JavaScript ran in <em>one</em> place: the browser. If you wanted to write the server — the program that holds the database and answers requests — you used PHP, Java, Ruby or Python. In 2009 an engineer named <strong>Ryan Dahl</strong> took Google Chrome's JavaScript engine (V8) and wrapped it so JavaScript could run <em>outside</em> the browser, on a server. That is <strong>Node.js</strong>, and he presented it at JSConf EU 2009 — the talk is on the YouTube tab of this lesson, the actual birth of the thing you're learning.</p>
 <p>The second idea was the important one. Older servers handled each request on its own thread, which is heavy; Node instead uses a single-threaded, <strong>non-blocking event loop</strong> (Chapter 2), so one Node process can juggle thousands of connections cheaply — perfect for the I/O-heavy work of a web API. What it replaced, for many teams: the "one thread per request" model, and — huge in practice — the split brain of writing the frontend in JavaScript and the backend in a totally different language. With Node, <strong>one language runs the whole stack.</strong></p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Who &amp; when</span><span class="v">Ryan Dahl, 2009. Now stewarded by the OpenJS Foundation and a large community.</span></div>
@@ -82,7 +82,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">16</div><div class="lz-nbody"><div class="lz-ntitle">Performance &amp; scaling</div><div class="lz-nsub">Profiling, clustering, memory leaks, load testing</div></div></div>
   <div class="lz-stage">Stage 6 · Shipping</div>
   <div class="lz-node"><div class="lz-badge">17</div><div class="lz-nbody"><div class="lz-ntitle">Docker &amp; deployment</div><div class="lz-nsub">Images, compose, environment config, zero-downtime deploys</div></div></div>
-  <div class="lz-node"><div class="lz-badge">18</div><div class="lz-nbody"><div class="lz-ntitle">Architecture &amp; advanced patterns</div><div class="lz-nsub">Layering, monolith vs services, events, GraphQL, serverless</div></div></div>
+  <div class="lz-node"><div class="lz-badge">18</div><div class="lz-nbody"><div class="lz-ntitle">Architecture &amp; advanced patterns</div><div class="lz-nsub">Layering, monolith vs services, events, and what this course deliberately leaves out</div></div></div>
 </div>
 
 <h3>Who this is for</h3>
@@ -134,7 +134,7 @@ export default {
 </ul>
 
 <h3>Node.js là gì, ai tạo ra, và nó thay thế cái gì?</h3>
-<p>Trước 2009, JavaScript chạy ở <em>một</em> nơi: trình duyệt. Muốn viết server — chương trình giữ database và trả lời request — bạn dùng PHP, Java, Ruby hay Python. Năm 2009 một kỹ sư tên <strong>Ryan Dahl</strong> lấy engine JavaScript của Google Chrome (V8) và bọc nó lại để JavaScript chạy được <em>bên ngoài</em> trình duyệt, trên một server. Đó là <strong>Node.js</strong>, và ông trình bày nó tại JSConf EU 2009 — bài talk trong video phía trên, chính là khoảnh khắc khai sinh thứ bạn đang học.</p>
+<p>Trước 2009, JavaScript chạy ở <em>một</em> nơi: trình duyệt. Muốn viết server — chương trình giữ database và trả lời request — bạn dùng PHP, Java, Ruby hay Python. Năm 2009 một kỹ sư tên <strong>Ryan Dahl</strong> lấy engine JavaScript của Google Chrome (V8) và bọc nó lại để JavaScript chạy được <em>bên ngoài</em> trình duyệt, trên một server. Đó là <strong>Node.js</strong>, và ông trình bày nó tại JSConf EU 2009 — bài talk nằm ở tab YouTube của bài này, chính là khoảnh khắc khai sinh thứ bạn đang học.</p>
 <p>Ý tưởng thứ hai mới là ý quan trọng. Server đời cũ xử lý mỗi request trên một luồng riêng, rất nặng; Node thay vào đó dùng một <strong>vòng lặp sự kiện đơn luồng, không chặn</strong> (Chương 2), nên một tiến trình Node có thể tung hứng hàng nghìn kết nối một cách rẻ tiền — hoàn hảo cho công việc nặng I/O của một web API. Nó thay thế, với nhiều nhóm: mô hình "mỗi request một luồng", và — cực lớn trên thực tế — cảnh "đầu óc bị chẻ đôi" khi viết frontend bằng JavaScript còn backend bằng một ngôn ngữ hoàn toàn khác. Với Node, <strong>một ngôn ngữ chạy cả stack.</strong></p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Ai &amp; khi nào</span><span class="v">Ryan Dahl, 2009. Nay do OpenJS Foundation và một cộng đồng lớn dẫn dắt.</span></div>
@@ -169,7 +169,7 @@ export default {
   <div class="lz-node"><div class="lz-badge">16</div><div class="lz-nbody"><div class="lz-ntitle">Hiệu năng &amp; mở rộng</div><div class="lz-nsub">Đo hiệu năng, chạy nhiều tiến trình, rò rỉ bộ nhớ, test tải</div></div></div>
   <div class="lz-stage">Giai đoạn 6 · Đưa lên production</div>
   <div class="lz-node"><div class="lz-badge">17</div><div class="lz-nbody"><div class="lz-ntitle">Docker &amp; triển khai</div><div class="lz-nsub">Image, compose, cấu hình môi trường, deploy không downtime</div></div></div>
-  <div class="lz-node"><div class="lz-badge">18</div><div class="lz-nbody"><div class="lz-ntitle">Kiến trúc &amp; mẫu nâng cao</div><div class="lz-nsub">Phân tầng, monolith vs services, hướng sự kiện, GraphQL, serverless</div></div></div>
+  <div class="lz-node"><div class="lz-badge">18</div><div class="lz-nbody"><div class="lz-ntitle">Kiến trúc &amp; mẫu nâng cao</div><div class="lz-nsub">Phân tầng, monolith vs services, hướng sự kiện, và những gì khoá học cố ý không dạy</div></div></div>
 </div>
 
 <h3>Khoá này dành cho ai</h3>
@@ -342,10 +342,10 @@ export default {
 <p class="lead">Install Node <strong>through a version manager</strong>, never from the plain installer. Every real project pins a Node version, and sooner or later you will work on two projects that disagree. A version manager makes that a one-command switch instead of a reinstall.</p>
 
 <h3>Which version?</h3>
-<p>Node ships a new major every 6 months. Even-numbered majors (20, 22, 24…) become <strong>LTS</strong> — long-term support, patched for ~3 years. Odd majors are experimental and must never run in production.</p>
+<p>Node ships a new major every 6 months. Even-numbered majors (20, 22, 24…) become <strong>LTS</strong> — long-term support, patched for about 30 months (12 months of active support plus 18 of maintenance). Odd majors are experimental and must never run in production.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Use</span><span class="v">The current LTS. This course is written and verified on Node 22.x.</span></div>
-  <div class="kv"><span class="k">Avoid</span><span class="v">Odd majors (21, 23) and anything past end-of-life (16, 18 are done).</span></div>
+  <div class="kv"><span class="k">Avoid</span><span class="v">Odd majors (21, 23) and anything past end-of-life (16, 18 and, as of October 2026, 20 are done).</span></div>
   <div class="kv"><span class="k">Rule</span><span class="v">Your laptop, your CI and your server should run the same major. Version drift causes bugs that only appear after deploy.</span></div>
 </div>
 
@@ -373,6 +373,7 @@ node -p "process.versions.v8"</code></pre>
 <div class="out">v22.21.0
 10.9.4
 12.4.254.21-node.33</div>
+<p>Your exact numbers will differ (a newer patch such as 22.23.x is normal): only the major, <strong>22</strong>, has to match.</p>
 <p>That third line is worth a pause: it proves Node is really a wrapper around <strong>V8</strong>, Chrome's JavaScript engine. Chapter 2 goes into what else is bundled in there — the answer is mostly <em>libuv</em>, the library that gives Node its event loop:</p>
 <pre><code class="language-bash">node -p "process.versions.uv"</code></pre>
 <div class="out">1.51.0</div>
@@ -433,10 +434,10 @@ Type ".help" for more information.
 <p class="lead">Hãy cài Node <strong>qua trình quản lý phiên bản</strong>, đừng cài bằng bộ cài thường. Dự án thật nào cũng ghim một phiên bản Node, và sớm muộn bạn sẽ làm hai dự án đòi hai phiên bản khác nhau. Có trình quản lý phiên bản thì đó là một câu lệnh đổi qua lại, thay vì cài lại từ đầu.</p>
 
 <h3>Dùng phiên bản nào?</h3>
-<p>Node ra một bản major mới mỗi 6 tháng. Các major số chẵn (20, 22, 24…) trở thành <strong>LTS</strong> — hỗ trợ dài hạn, được vá lỗi khoảng 3 năm. Major số lẻ mang tính thử nghiệm, tuyệt đối không chạy production.</p>
+<p>Node ra một bản major mới mỗi 6 tháng. Các major số chẵn (20, 22, 24…) trở thành <strong>LTS</strong> — hỗ trợ dài hạn, được vá lỗi khoảng 30 tháng (12 tháng hỗ trợ chủ động cộng 18 tháng bảo trì). Major số lẻ mang tính thử nghiệm, tuyệt đối không chạy production.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">Nên dùng</span><span class="v">Bản LTS hiện hành. Khoá này viết và kiểm chứng trên Node 22.x.</span></div>
-  <div class="kv"><span class="k">Tránh</span><span class="v">Major số lẻ (21, 23) và những bản đã hết hạn hỗ trợ (16, 18 đã hết).</span></div>
+  <div class="kv"><span class="k">Tránh</span><span class="v">Major số lẻ (21, 23) và những bản đã hết hạn hỗ trợ (16, 18 và tính tới tháng 10/2026 cả 20 đã hết).</span></div>
   <div class="kv"><span class="k">Nguyên tắc</span><span class="v">Máy bạn, CI và server nên chạy cùng một major. Lệch phiên bản đẻ ra bug chỉ xuất hiện sau khi deploy.</span></div>
 </div>
 
@@ -464,6 +465,7 @@ node -p "process.versions.v8"</code></pre>
 <div class="out">v22.21.0
 10.9.4
 12.4.254.21-node.33</div>
+<p>Số cụ thể của bạn sẽ khác (bản vá mới hơn như 22.23.x là bình thường): chỉ cần phần major, <strong>22</strong>, khớp.</p>
 <p>Dòng thứ ba đáng để dừng lại một nhịp: nó chứng minh Node thực chất là lớp vỏ bọc quanh <strong>V8</strong> — engine JavaScript của Chrome. Chương 2 sẽ đi vào những gì còn được đóng gói kèm trong đó — chủ yếu là <em>libuv</em>, thư viện tạo nên event loop của Node:</p>
 <pre><code class="language-bash">node -p "process.versions.uv"</code></pre>
 <div class="out">1.51.0</div>

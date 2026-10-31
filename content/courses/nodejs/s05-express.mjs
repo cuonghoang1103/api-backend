@@ -475,7 +475,8 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api'</span>, (req
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/api/notes'</span>,
   (req, res, next) =&gt; { console.log(<span class="tok-string">'3. route-level middleware'</span>); next(); },
   (req, res)       =&gt; { console.log(<span class="tok-string">'4. final handler'</span>); res.json({ ok: <span class="tok-keyword">true</span> }); });
-app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'X. after the routes'</span>); next(); });</code></pre>
+app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'X. after the routes'</span>); next(); });
+app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/new'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">'new'</span> }));</code></pre>
 <pre><code class="language-bash">curl /api/notes</code></pre>
 <div class="out">1. global logger
 2. only for /api/*
@@ -598,7 +599,8 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api'</span>, (req
 app.<span class="tok-fn">get</span>(<span class="tok-string">'/api/notes'</span>,
   (req, res, next) =&gt; { console.log(<span class="tok-string">'3. middleware riêng của route'</span>); next(); },
   (req, res)       =&gt; { console.log(<span class="tok-string">'4. handler cuối'</span>); res.json({ ok: <span class="tok-keyword">true</span> }); });
-app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'X. sau các route'</span>); next(); });</code></pre>
+app.<span class="tok-fn">use</span>((req, res, next) =&gt; { console.log(<span class="tok-string">'X. sau các route'</span>); next(); });
+app.<span class="tok-fn">get</span>(<span class="tok-string">'/notes/new'</span>, (req, res) =&gt; res.json({ handler: <span class="tok-string">'new'</span> }));</code></pre>
 <pre><code class="language-bash">curl /api/notes</code></pre>
 <div class="out">1. logger toàn cục
 2. chỉ chạy với /api/*

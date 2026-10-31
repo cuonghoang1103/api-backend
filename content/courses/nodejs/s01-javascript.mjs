@@ -192,12 +192,12 @@ is count visible outside? undefined</div>
 <span class="tok-function">console.log</span>(<span class="tok-function">detached</span>());
 <span class="tok-function">console.log</span>(<span class="tok-string">'rebound with bind:'</span>, detached.<span class="tok-function">bind</span>(service)());</code></pre>
 <div class="out">Hello from NotesAPI
-Hello from (undefined)
+Hello from undefined
 Hello from undefined
 rebound with bind: Hello from NotesAPI</div>
 <p>The third line is the dangerous one: pulling a method off its object <strong>silently</strong> loses <code>this</code>. In a CommonJS file (non-strict) <code>this</code> falls back to the global object, so you get <code>undefined</code> instead of a crash. In an ES module, which is always strict, the same code throws:</p>
 <pre><code class="language-javascript"><span class="tok-comment">// same code, but in a .mjs file (ES module = always strict)</span>
-<span class="tok-keyword">const</span> detached = service.greet;
+<span class="tok-keyword">const</span> detached = service.greetNormal;
 <span class="tok-function">detached</span>();</code></pre>
 <div class="out">TypeError: Cannot read properties of undefined (reading 'name')</div>
 <div class="pitfall">This bites when you pass a method as a callback: <code>app.get('/notes', controller.list)</code> loses <code>this</code> inside <code>list</code>. Fixes, in order of preference: (1) don't use <code>this</code> — export plain functions; (2) <code>controller.list.bind(controller)</code>; (3) wrap it: <code>(req, res) =&gt; controller.list(req, res)</code>.</div>
@@ -262,12 +262,12 @@ count có lộ ra ngoài không? undefined</div>
 <span class="tok-function">console.log</span>(<span class="tok-function">detached</span>());
 <span class="tok-function">console.log</span>(<span class="tok-string">'buộc lại bằng bind:'</span>, detached.<span class="tok-function">bind</span>(service)());</code></pre>
 <div class="out">Xin chào từ NotesAPI
-Xin chào từ (undefined)
+Xin chào từ undefined
 Xin chào từ undefined
 buộc lại bằng bind: Xin chào từ NotesAPI</div>
 <p>Dòng thứ ba mới là dòng nguy hiểm: tách một method ra khỏi object sẽ <strong>âm thầm</strong> làm mất <code>this</code>. Trong file CommonJS (không strict), <code>this</code> rơi về đối tượng toàn cục nên bạn nhận <code>undefined</code> thay vì một tiếng nổ. Trong ES module — vốn luôn strict — cùng đoạn code đó ném lỗi:</p>
 <pre><code class="language-javascript"><span class="tok-comment">// vẫn code đó, nhưng đặt trong file .mjs (ES module = luôn strict)</span>
-<span class="tok-keyword">const</span> detached = service.chao;
+<span class="tok-keyword">const</span> detached = service.greetNormal;
 <span class="tok-function">detached</span>();</code></pre>
 <div class="out">TypeError: Cannot read properties of undefined (reading 'name')</div>
 <div class="pitfall">Lỗi này cắn bạn khi truyền một method làm callback: <code>app.get('/notes', controller.list)</code> sẽ làm mất <code>this</code> bên trong <code>list</code>. Cách sửa, xếp theo thứ tự nên dùng: (1) đừng dùng <code>this</code> — cứ export hàm thuần; (2) <code>controller.list.bind(controller)</code>; (3) bọc lại: <code>(req, res) =&gt; controller.list(req, res)</code>.</div>
@@ -347,8 +347,8 @@ the deep copy                      : {"name":"An","address":{"city":"Huế"},"ta
 <h3>Optional chaining and nullish coalescing</h3>
 <pre><code class="language-javascript"><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'unknown'</span>;   <span class="tok-comment">// no crash if address is missing</span>
 <span class="tok-keyword">const</span> limit = req.query.limit ?? <span class="tok-number">20</span>;             <span class="tok-comment">// ?? only falls back on null/undefined</span>
-<span class="tok-keyword">const</span> limitBad = req.query.limit || <span class="tok-number">20</span>;          <span class="tok-comment">// || also replaces 0 and '' — usually a bug</span></code></pre>
-<div class="pitfall">Use <code>??</code>, not <code>||</code>, for defaults on numbers. With <code>||</code>, a legitimate <code>limit=0</code> or <code>page=0</code> silently becomes 20 — because <code>0</code> is falsy. This is a real and very annoying pagination bug.</div>
+<span class="tok-keyword">const</span> limitBad = <span class="tok-function">Number</span>(req.query.limit) || <span class="tok-number">20</span>;  <span class="tok-comment">// || also replaces 0 and '' — usually a bug</span></code></pre>
+<div class="pitfall">Use <code>??</code>, not <code>||</code>, for defaults on numbers. With <code>||</code>, a legitimate <code>limit=0</code> or <code>page=0</code> silently becomes 20 — because <code>0</code> is falsy. This is a real and very annoying pagination bug. One precision: <code>req.query.limit</code> is always a <em>string</em>, so <code>'0'</code> is truthy and plain <code>req.query.limit || 20</code> would keep it. The bug only appears after you convert to a number, as in <code>Number(req.query.limit) || 20</code> — which is exactly what pagination code does next.</div>
 <div class="note-ct">On this site the "don't leak secrets" rule is enforced at the serialisation layer: a <code>serializeUser()</code> function builds the response object explicitly, field by field. Adding a column to the database therefore <em>cannot</em> accidentally expose it through the API — the opposite of returning the raw database row.</div>
 <h3>Value or reference, and where the line is</h3>
 <div class="lz-flow">
@@ -407,10 +407,10 @@ bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":
 <div class="callout ok">Dòng thứ hai là một thói quen bảo mật nên xây ngay từ bây giờ: bóc bí mật ra bằng destructuring, thay vì tin vào trí nhớ của mình về việc "được phép trả những trường nào".</div>
 
 <h3>Optional chaining và toán tử nullish</h3>
-<pre><code class="language-javascript"><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu diaChi</span>
+<pre><code class="language-javascript"><span class="tok-keyword">const</span> city = user?.address?.city ?? <span class="tok-string">'không rõ'</span>;  <span class="tok-comment">// không nổ nếu thiếu address</span>
 <span class="tok-keyword">const</span> limit = req.query.limit ?? <span class="tok-number">20</span>;              <span class="tok-comment">// ?? chỉ thay khi null/undefined</span>
-<span class="tok-keyword">const</span> limitSai = req.query.limit || <span class="tok-number">20</span>;           <span class="tok-comment">// || thay cả 0 và '' — thường là bug</span></code></pre>
-<div class="pitfall">Hãy dùng <code>??</code> chứ đừng dùng <code>||</code> để đặt giá trị mặc định cho số. Với <code>||</code>, một giá trị hợp lệ như <code>limit=0</code> hay <code>page=0</code> sẽ âm thầm biến thành 20 — vì <code>0</code> bị coi là "giá trị giả". Đây là một con bug phân trang có thật và rất khó chịu.</div>
+<span class="tok-keyword">const</span> limitSai = <span class="tok-function">Number</span>(req.query.limit) || <span class="tok-number">20</span>;  <span class="tok-comment">// || thay cả 0 và '' — thường là bug</span></code></pre>
+<div class="pitfall">Hãy dùng <code>??</code> chứ đừng dùng <code>||</code> để đặt giá trị mặc định cho số. Với <code>||</code>, một giá trị hợp lệ như <code>limit=0</code> hay <code>page=0</code> sẽ âm thầm biến thành 20 — vì <code>0</code> bị coi là "giá trị giả". Đây là một con bug phân trang có thật và rất khó chịu. Nói chính xác hơn: <code>req.query.limit</code> luôn là <em>chuỗi</em>, nên <code>'0'</code> là truthy và <code>req.query.limit || 20</code> trần sẽ giữ nguyên nó. Bug chỉ hiện ra sau khi bạn đổi sang số, như <code>Number(req.query.limit) || 20</code> — đúng thứ mã phân trang làm ngay sau đó.</div>
 <div class="note-ct">Ở website này, quy tắc "không để rò rỉ bí mật" được thực thi ngay tại tầng chuyển đổi dữ liệu: hàm <code>serializeUser()</code> dựng object phản hồi một cách tường minh, từng trường một. Nhờ vậy, thêm một cột vào cơ sở dữ liệu <em>không thể</em> vô tình phơi nó ra API — ngược hẳn với kiểu trả thẳng bản ghi thô từ database.</div>
 <h3>Giá trị hay tham chiếu, và ranh giới nằm ở đâu</h3>
 <div class="lz-flow">
@@ -511,7 +511,7 @@ allSettled    → [ 'fulfilled', 'rejected' ]</div>
     at Object.&lt;anonymous&gt; …
 Node.js v22.21.0
 [process exits with code 1 — "does this line run?" never prints]</div>
-<div class="pitfall">This is why an unhandled async error in one request can take down a server that was happily serving thousands of others. Express 4 does <strong>not</strong> catch errors thrown inside async handlers — you must wrap them. Chapter 5 builds the wrapper; for now just register a safety net:
+<div class="pitfall">This is why an unhandled async error in one request can take down a server that was happily serving thousands of others. Express 4 does <strong>not</strong> catch errors thrown inside async handlers — you must wrap them. <strong>Express 5</strong> (the version this course uses) does: a rejected async handler becomes a normal <code>500</code> response and the server stays alive (measured on Express 5.3). The danger that remains is errors Express never sees — a rejected promise nobody awaits, or a throw inside a timer or event callback. Chapter 5 builds the error-handling chain; for now just register a safety net:
 <br><br><code>process.on('unhandledRejection', (err) =&gt; { logger.error(err); });</code></div>
 
 <h3>Rules to internalise</h3>
@@ -600,7 +600,7 @@ allSettled    → [ 'fulfilled', 'rejected' ]</div>
     at Object.&lt;anonymous&gt; …
 Node.js v22.21.0
 [tiến trình thoát với mã 1 — "dòng này có chạy không?" KHÔNG bao giờ in ra]</div>
-<div class="pitfall">Đây chính là lý do một lỗi async không được xử lý trong MỘT request có thể hạ gục cả server đang phục vụ ngon lành hàng nghìn request khác. Express 4 <strong>không</strong> bắt lỗi ném ra từ handler async — bạn phải tự bọc. Chương 5 sẽ dựng lớp bọc đó; còn bây giờ hãy đặt sẵn một tấm lưới an toàn:
+<div class="pitfall">Đây chính là lý do một lỗi async không được xử lý trong MỘT request có thể hạ gục cả server đang phục vụ ngon lành hàng nghìn request khác. Express 4 <strong>không</strong> bắt lỗi ném ra từ handler async — bạn phải tự bọc. <strong>Express 5</strong> (bản khoá này dùng) thì có: handler async bị reject sẽ thành response <code>500</code> bình thường và server vẫn sống (đo thật trên Express 5.3). Mối nguy còn lại là những lỗi Express không nhìn thấy — một promise bị reject mà không ai await, hoặc một lỗi ném trong timer hay callback sự kiện. Chương 5 sẽ dựng chuỗi xử lý lỗi; còn bây giờ hãy đặt sẵn một tấm lưới an toàn:
 <br><br><code>process.on('unhandledRejection', (err) =&gt; { logger.error(err); });</code></div>
 
 <h3>Những nguyên tắc cần thấm</h3>
@@ -665,24 +665,24 @@ ESM  : top-level await works</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">.mjs</span><span class="v">Always an ES module.</span></div>
   <div class="kv"><span class="k">.cjs</span><span class="v">Always CommonJS.</span></div>
-  <div class="kv"><span class="k">.js</span><span class="v">Depends on the nearest package.json: <code>"type": "module"</code> → ESM, otherwise CommonJS.</span></div>
+  <div class="kv"><span class="k">.js</span><span class="v">Depends on the nearest package.json: <code>"type": "module"</code> → ESM, <code>"type": "commonjs"</code> → CommonJS. With no <code>type</code> at all, Node 22 reads the code: a file that uses <code>import</code> runs as ESM, anything else as CommonJS.</span></div>
 </div>
-<div class="pitfall">The most common error in this area reads: <em>"Cannot use import statement outside a module"</em>. It means you wrote <code>import</code> in a file Node is treating as CommonJS. Fix: add <code>"type": "module"</code> to package.json, or rename the file to <code>.mjs</code>. The mirror-image error — <em>"require is not defined in ES module scope"</em> — means the opposite.</div>
+<div class="pitfall">The most common error in this area reads: <em>"Cannot use import statement outside a module"</em>. It means you wrote <code>import</code> in a file Node is treating as CommonJS — in Node 22 that happens when package.json says <code>"type": "commonjs"</code> (a <code>.js</code> file with no <code>type</code> at all and an <code>import</code> in it just runs as ESM; older Node versions threw this error there too). Fix: add <code>"type": "module"</code> to package.json, or rename the file to <code>.mjs</code>. The mirror-image error — <em>"require is not defined in ES module scope"</em> — means the opposite.</div>
 
 <h3>Which should you choose?</h3>
 <p><strong>ES Modules, for anything new.</strong> It is the language standard, it works in browsers and Node alike, it enables top-level await, and the whole ecosystem is moving there. CommonJS remains everywhere in older packages and tutorials, so you must be able to read it — but you do not need to write it.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">ESM imports are static</span><span class="v">Resolved before the file runs — you cannot <code>import</code> conditionally inside an if. Use <code>await import('…')</code> for dynamic loading.</span></div>
   <div class="kv"><span class="k">ESM requires file extensions</span><span class="v"><code>import './math.js'</code> — not <code>'./math'</code>. CommonJS was lenient; ESM is not.</span></div>
-  <div class="kv"><span class="k">You can import CJS from ESM</span><span class="v">Usually as a default import. The reverse (<code>require</code> an ESM package) is what breaks — that is why some packages say "ESM only".</span></div>
+  <div class="kv"><span class="k">You can import CJS from ESM</span><span class="v">Usually as a default import (named imports can fail). The reverse also works since Node 22.12: <code>require()</code> loads an ES module, and only breaks with <code>ERR_REQUIRE_ASYNC_MODULE</code> when it has top-level <code>await</code>. Older Node versions could not — that is why some packages still say "ESM only".</span></div>
 </div>
 <div class="note-ct">This site's backend is <code>"type": "module"</code> — pure ESM, TypeScript compiled to ESM output. That is exactly why its maintenance scripts are written with <code>import</code> and can use top-level <code>await</code> without wrapping everything in an async main function.</div>
 <h3>How Node decides whether a file is CJS or ESM</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">The extension wins first</span><span class="lz-d"><code>.mjs</code> is always ESM; <code>.cjs</code> is always CommonJS. Explicit, and it settles the question without reading anything else.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Then package.json type</span><span class="lz-d"><code>"type": "module"</code> makes every <code>.js</code> in that package ESM. Absent or <code>"commonjs"</code>, they are CJS.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Then package.json type</span><span class="lz-d"><code>"type": "module"</code> makes every <code>.js</code> in that package ESM. <code>"commonjs"</code> makes them CJS. Absent, Node 22 inspects the code: <code>import</code>/<code>export</code> syntax means ESM, otherwise CJS.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The nearest package.json wins</span><span class="lz-d">Node walks up from the file. A subdirectory with its own <code>package.json</code> overrides the root, which is how one repo holds both.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And the two do not mix freely</span><span class="lz-d">ESM can <code>import</code> CJS; CJS cannot <code>require</code> ESM. That asymmetry is the source of most migration pain.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And the two mix, with caveats</span><span class="lz-d">ESM can <code>import</code> CJS. Since Node 22.12, CJS can <code>require()</code> an ES module too — unless that module (or something it imports) uses top-level <code>await</code>, which fails with <code>ERR_REQUIRE_ASYNC_MODULE</code>; use <code>import()</code> there. Interop is much better than it was, but older Node versions and "ESM only" packages still cause migration pain.</span></div>
 </div>
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/packages.html#determining-module-system" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
@@ -734,24 +734,24 @@ ESM  : top-level await chạy được</div>
 <div class="kv-grid">
   <div class="kv"><span class="k">.mjs</span><span class="v">Luôn là ES module.</span></div>
   <div class="kv"><span class="k">.cjs</span><span class="v">Luôn là CommonJS.</span></div>
-  <div class="kv"><span class="k">.js</span><span class="v">Phụ thuộc package.json gần nhất: có <code>"type": "module"</code> → ESM, không có → CommonJS.</span></div>
+  <div class="kv"><span class="k">.js</span><span class="v">Phụ thuộc package.json gần nhất: <code>"type": "module"</code> → ESM, <code>"type": "commonjs"</code> → CommonJS. Không khai <code>type</code> thì Node 22 tự đọc mã: file có <code>import</code> chạy như ESM, còn lại chạy như CommonJS.</span></div>
 </div>
-<div class="pitfall">Lỗi hay gặp nhất ở khu vực này là: <em>"Cannot use import statement outside a module"</em>. Nó có nghĩa bạn viết <code>import</code> trong một file mà Node đang coi là CommonJS. Cách sửa: thêm <code>"type": "module"</code> vào package.json, hoặc đổi đuôi file thành <code>.mjs</code>. Lỗi soi gương của nó — <em>"require is not defined in ES module scope"</em> — nghĩa là ngược lại.</div>
+<div class="pitfall">Lỗi hay gặp nhất ở khu vực này là: <em>"Cannot use import statement outside a module"</em>. Nó có nghĩa bạn viết <code>import</code> trong một file mà Node đang coi là CommonJS — ở Node 22 điều đó xảy ra khi package.json ghi <code>"type": "commonjs"</code> (file <code>.js</code> không khai <code>type</code> mà có <code>import</code> thì cứ chạy như ESM; các bản Node cũ hơn vẫn ném lỗi này cả ở trường hợp đó). Cách sửa: thêm <code>"type": "module"</code> vào package.json, hoặc đổi đuôi file thành <code>.mjs</code>. Lỗi soi gương của nó — <em>"require is not defined in ES module scope"</em> — nghĩa là ngược lại.</div>
 
 <h3>Nên chọn hệ nào?</h3>
 <p><strong>ES Modules, cho mọi thứ mới.</strong> Đó là chuẩn của ngôn ngữ, chạy được cả trên trình duyệt lẫn Node, cho phép top-level await, và cả hệ sinh thái đang dịch chuyển về đó. CommonJS vẫn còn ở khắp nơi trong các gói cũ và tutorial cũ, nên bạn phải đọc được nó — nhưng không cần viết nó nữa.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">import của ESM là tĩnh</span><span class="v">Được phân giải trước khi file chạy — bạn không thể <code>import</code> có điều kiện trong một câu if. Muốn nạp động thì dùng <code>await import('…')</code>.</span></div>
   <div class="kv"><span class="k">ESM bắt buộc ghi đuôi file</span><span class="v"><code>import './math.js'</code> — chứ không phải <code>'./math'</code>. CommonJS dễ tính, ESM thì không.</span></div>
-  <div class="kv"><span class="k">Có thể import CJS từ ESM</span><span class="v">Thường dưới dạng default import. Chiều ngược lại (<code>require</code> một gói ESM) mới là chiều gãy — đó là lý do vài gói ghi "ESM only".</span></div>
+  <div class="kv"><span class="k">Có thể import CJS từ ESM</span><span class="v">Thường dưới dạng default import (named import có thể lỗi). Chiều ngược lại cũng chạy từ Node 22.12: <code>require()</code> nạp được ES module, chỉ lỗi <code>ERR_REQUIRE_ASYNC_MODULE</code> khi nó có top-level <code>await</code>. Các bản Node cũ thì không — đó là lý do vài gói vẫn ghi "ESM only".</span></div>
 </div>
 <div class="note-ct">Backend của website này đặt <code>"type": "module"</code> — thuần ESM, TypeScript biên dịch ra ESM. Đó chính là lý do các script bảo trì của nó viết bằng <code>import</code> và dùng được <code>await</code> ở cấp cao nhất mà không phải bọc mọi thứ vào một hàm main async.</div>
 <h3>Node quyết định một file là CJS hay ESM thế nào</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Phần mở rộng thắng trước tiên</span><span class="lz-d"><code>.mjs</code> luôn là ESM; <code>.cjs</code> luôn là CommonJS. Tường minh, và nó dập tắt câu hỏi mà chẳng cần đọc gì thêm.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Rồi tới trường type trong package.json</span><span class="lz-d"><code>"type": "module"</code> làm mọi file <code>.js</code> trong package đó thành ESM. Không có nó hoặc để <code>"commonjs"</code> thì chúng là CJS.</span></div>
+  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">Rồi tới trường type trong package.json</span><span class="lz-d"><code>"type": "module"</code> làm mọi file <code>.js</code> trong package đó thành ESM. <code>"commonjs"</code> thì chúng là CJS. Không khai gì, Node 22 soi mã: có cú pháp <code>import</code>/<code>export</code> là ESM, không thì CJS.</span></div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">package.json GẦN NHẤT thắng</span><span class="lz-d">Node đi ngược lên từ file đó. Một thư mục con có <code>package.json</code> riêng sẽ đè lên cái ở gốc, và đó là cách một kho chứa được cả hai.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và hai bên không trộn tự do được</span><span class="lz-d">ESM <code>import</code> được CJS; CJS thì KHÔNG <code>require</code> được ESM. Sự bất đối xứng đó là nguồn gốc của phần lớn nỗi đau khi chuyển đổi.</span></div>
+  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và hai bên trộn được, có điều kiện</span><span class="lz-d">ESM có thể <code>import</code> CJS. Từ Node 22.12, CJS cũng <code>require()</code> được một ES module — trừ khi module đó (hoặc thứ nó import) dùng top-level <code>await</code>, lúc đó lỗi <code>ERR_REQUIRE_ASYNC_MODULE</code>; hãy dùng <code>import()</code>. Khả năng phối hợp tốt hơn trước nhiều, nhưng các bản Node cũ và gói "ESM only" vẫn gây khó khi chuyển đổi.</span></div>
 </div>
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/packages.html#determining-module-system" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
@@ -865,7 +865,7 @@ ESM  : top-level await chạy được</div>
             question: 'You wrote import in a .js file and got "Cannot use import statement outside a module". Why?|||Bạn viết import trong file .js và nhận lỗi "Cannot use import statement outside a module". Vì sao?',
             options: [
               'Node does not support import at all|||Node hoàn toàn không hỗ trợ import',
-              'The package.json is missing "type": "module", so the file is treated as CommonJS|||package.json thiếu "type": "module" nên file bị coi là CommonJS',
+              'Node is treating the file as CommonJS (for example package.json says "type": "commonjs")|||Node đang coi file là CommonJS (ví dụ package.json ghi "type": "commonjs")',
               'You must always use the .cjs extension|||Luôn phải dùng đuôi .cjs',
               'import only works inside async functions|||import chỉ chạy được bên trong hàm async',
             ],

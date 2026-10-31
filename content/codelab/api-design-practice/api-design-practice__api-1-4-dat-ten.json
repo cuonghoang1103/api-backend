@@ -1,0 +1,768 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-1-4-dat-ten",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-1-4-dat-ten"
+  },
+  "exercises": [
+    {
+      "title": "Naming 1 — Rename the fields the LabFlow way",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "naming"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A teammate’s first draft of the JSON. Pick the name LabFlow’s naming rules give each field (lesson 1.4: camelCase fields, ids end in Id, moments end in At, booleans ask a yes/no question, lists are plural, units when not obvious, enum values UPPER_SNAKE).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bản nháp JSON đầu tiên của một bạn cùng nhóm. Chọn tên mà luật đặt tên của LabFlow cho mỗi trường (bài 1.4: trường camelCase, id kết thúc bằng Id, thời điểm kết thúc bằng At, boolean là câu hỏi có/không, danh sách số nhiều, ghi đơn vị khi không hiển nhiên, giá trị enum UPPER_SNAKE).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "If you had to ask the author what it means, the name is wrong.|||Nếu phải hỏi tác giả nó nghĩa là gì thì tên đó sai.",
+        "The last row is a value, not a field name.|||Dòng cuối là một giá trị, không phải tên trường."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Naming 1 — Rename the fields the LabFlow way\n\nAnswer in the answer panel (no code needed).\n\n1. Draft → LabFlow nameNháp → tên LabFlow\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Naming 1 — Rename the fields the LabFlow way — answer key\n\n1. Draft → LabFlow nameNháp → tên LabFlow\n   - r1.n: capacity\n   - r2.n: startAt\n   - r3.n: isActive\n   - r4.n: labId\n   - r5.n: devices\n   - r6.n: durationMinutes\n   - r7.n: birthDate\n   - r8.n: IN_USE\n   Every rule removes a question a client would otherwise ask: “cap of what?”, “lab object or id?”, “90 seconds or minutes?”. A date without time is a Date (YYYY-MM-DD), not an At.VI: Mỗi luật xoá một câu hỏi mà client sẽ phải hỏi: \"cap là gì?\", \"lab là object hay id?\", \"90 giây hay phút?\". Ngày không có giờ là Date (YYYY-MM-DD), không phải At.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every rule removes a question a client would otherwise ask: “cap of what?”, “lab object or id?”, “90 seconds or minutes?”. A date without time is a Date (YYYY-MM-DD), not an At.</p><p><i>VI: Mỗi luật xoá một câu hỏi mà client sẽ phải hỏi: \"cap là gì?\", \"lab là object hay id?\", \"90 giây hay phút?\". Ngày không có giờ là Date (YYYY-MM-DD), không phải At.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Draft → LabFlow name</p><p style=\"opacity:.75;font-size:.92em\"><i>Nháp → tên LabFlow</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Draft"
+              },
+              {
+                "ma": "n",
+                "ten": "LabFlow name",
+                "luaChon": [
+                  "capacity",
+                  "startAt",
+                  "isActive",
+                  "labId",
+                  "devices",
+                  "durationMinutes",
+                  "birthDate",
+                  "IN_USE"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "\"cap\": 30"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "\"start_time\": \"2026-11-02T01:00:00.000Z\""
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "\"active\": true"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "\"lab\": \"lab_1\"   (inside a booking)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "\"deviceList\": [ … ]"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "\"duration\": 90"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "\"birthday_at\": \"2005-03-14\""
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "\"status\": \"in-use\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "capacity",
+              "r2.n": "startAt",
+              "r3.n": "isActive",
+              "r4.n": "labId",
+              "r5.n": "devices",
+              "r6.n": "durationMinutes",
+              "r7.n": "birthDate",
+              "r8.n": "IN_USE"
+            },
+            "giaiThich": "<p>Every rule removes a question a client would otherwise ask: “cap of what?”, “lab object or id?”, “90 seconds or minutes?”. A date without time is a Date (YYYY-MM-DD), not an At.</p><p><i>VI: Mỗi luật xoá một câu hỏi mà client sẽ phải hỏi: \"cap là gì?\", \"lab là object hay id?\", \"90 giây hay phút?\". Ngày không có giờ là Date (YYYY-MM-DD), không phải At.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping snake_case for one field because the database column is snake_case.|||Giữ snake_case cho một trường vì cột trong CSDL là snake_case."
+        },
+        {
+          "loi": "Naming a date-only field …At.|||Đặt tên trường chỉ có ngày là …At."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "camelCase",
+          "vi": "kiểu lạc đà",
+          "giaiThich": "startAt"
+        },
+        {
+          "en": "UPPER_SNAKE",
+          "vi": "chữ hoa nối gạch dưới",
+          "giaiThich": "IN_USE"
+        }
+      ]
+    },
+    {
+      "title": "Naming 2 — Numbers, money, ids and dates, measured",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "data formats"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Real output of naming.mjs from lesson 1.4 (Node 22), run in two time zones:<pre>JSON.parse('{\"id\": 9007199254740993}').id   9007199254740992\nNumber.MAX_SAFE_INTEGER                    9007199254740991\n0.1 + 0.2                                  0.30000000000000004\n4.35 * 100                                 434.99999999999994\n435 * 3 (whole cents, integers)            1305\n# TZ=Asia/Ho_Chi_Minh\nnew Date('2026-11-02T08:00:00')            2026-11-02T01:00:00.000Z\n# TZ=UTC\nnew Date('2026-11-02T08:00:00')            2026-11-02T08:00:00.000Z\nnew Date('2026-11-02T08:00:00+07:00')      2026-11-02T01:00:00.000Z\nnew Date('2026-11-02')                     2026-11-02T00:00:00.000Z</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật của naming.mjs trong bài 1.4 (Node 22), chạy ở hai múi giờ:<pre>JSON.parse('{\"id\": 9007199254740993}').id   9007199254740992\nNumber.MAX_SAFE_INTEGER                    9007199254740991\n0.1 + 0.2                                  0.30000000000000004\n4.35 * 100                                 434.99999999999994\n435 * 3 (whole cents, integers)            1305\n# TZ=Asia/Ho_Chi_Minh\nnew Date('2026-11-02T08:00:00')            2026-11-02T01:00:00.000Z\n# TZ=UTC\nnew Date('2026-11-02T08:00:00')            2026-11-02T08:00:00.000Z\nnew Date('2026-11-02T08:00:00+07:00')      2026-11-02T01:00:00.000Z\nnew Date('2026-11-02')                     2026-11-02T00:00:00.000Z</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer is in the measured output above.|||Mọi đáp án đều nằm trong output đo được ở trên.",
+        "Ask: will this value be the same in every language and every time zone?|||Hỏi: giá trị này có giữ nguyên ở mọi ngôn ngữ và mọi múi giờ không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Naming 2 — Numbers, money, ids and dates, measured\n\nAnswer in the answer panel (no code needed).\n\n1. Why does LabFlow send ids as strings (\"lab_1\", \"bk_7\") rather than numbers?Vì sao LabFlow gửi id dạng chuỗi (\"lab_1\", \"bk_7\") thay vì số?\n2. A device rental fee of 4.35 USD should travel as …Phí thuê thiết bị 4,35 USD nên được gửi đi dạng …\n3. The same line new Date('2026-11-02T08:00:00') gave 01:00Z on a laptop in Hanoi and 08:00Z in UTC. Contract rule?Cùng dòng new Date('2026-11-02T08:00:00') cho 01:00Z trên laptop ở Hà Nội và 08:00Z ở UTC. Luật hợp đồng?\n4. new Date('2026-11-02') gives midnight UTC, not local midnight. So a birthday should be …new Date('2026-11-02') cho nửa đêm UTC, không phải nửa đêm địa phương. Vậy ngày sinh nên là …\n5. GET /labs?Building=Beta returned all three labs before the fix. LabFlow now answers …GET /labs?Building=Beta trả cả ba phòng trước khi sửa. Giờ LabFlow trả …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Naming 2 — Numbers, money, ids and dates, measured — answer key\n\n1. Why does LabFlow send ids as strings (\"lab_1\", \"bk_7\") rather than numbers?Vì sao LabFlow gửi id dạng chuỗi (\"lab_1\", \"bk_7\") thay vì số?\n   Answer: a) JavaScript numbers lose precision above 2^53 − 1, so big numeric ids silently change; the prefix also says what kind of id it is\n   9007199254740993 came back as …992 with no error. A string id survives every language, and the prefix catches “a device id passed as a lab id”.VI: 9007199254740993 quay về thành …992 mà không báo lỗi. Id dạng chuỗi sống sót qua mọi ngôn ngữ, và tiền tố bắt được lỗi \"truyền id thiết bị vào chỗ id phòng\".\n\n2. A device rental fee of 4.35 USD should travel as …Phí thuê thiết bị 4,35 USD nên được gửi đi dạng …\n   Answer: c) {\"amountMinor\": 435, \"currency\": \"USD\"} — integer minor units plus an ISO 4217 code\n   4.35 * 100 is 434.99999999999994. Integers in the smallest unit (cents; for VND the đồng itself) make arithmetic exact; the currency code removes the guess.VI: 4.35 * 100 ra 434.99999999999994. Số nguyên theo đơn vị nhỏ nhất (cent; với VND là chính đồng) làm phép tính chính xác; mã tiền tệ xoá việc đoán.\n\n3. The same line new Date('2026-11-02T08:00:00') gave 01:00Z on a laptop in Hanoi and 08:00Z in UTC. Contract rule?Cùng dòng new Date('2026-11-02T08:00:00') cho 01:00Z trên laptop ở Hà Nội và 08:00Z ở UTC. Luật hợp đồng?\n   Answer: a) Require Z or ±hh:mm, store and return UTC with Z; clients convert for display\n   Without an offset the result depends on the machine running the code — seven hours apart from identical code. With +07:00 both runs agree.VI: Không có độ lệch thì kết quả phụ thuộc máy chạy code — lệch bảy tiếng với cùng một đoạn code. Có +07:00 thì hai lần chạy khớp nhau.\n\n4. new Date('2026-11-02') gives midnight UTC, not local midnight. So a birthday should be …new Date('2026-11-02') cho nửa đêm UTC, không phải nửa đêm địa phương. Vậy ngày sinh nên là …\n   Answer: b) a plain \"YYYY-MM-DD\" string, never converted to a date-time\n   A birthday is a calendar date, not an instant. Converting it to a time zone can move it to the previous day for users west of UTC.VI: Ngày sinh là một ngày lịch, không phải một thời điểm. Đổi nó sang múi giờ có thể lùi về hôm trước với người dùng ở phía tây UTC.\n\n5. GET /labs?Building=Beta returned all three labs before the fix. LabFlow now answers …GET /labs?Building=Beta trả cả ba phòng trước khi sửa. Giờ LabFlow trả …\n   Answer: c) 400 UNKNOWN_QUERY_PARAM — a misspelled filter must not silently return wrong data\n   Query keys are just object keys: Building ≠ building. Silently ignoring it showed Alpha rooms under a Beta filter; refusing makes the typo visible.VI: Khoá query chỉ là khoá object: Building ≠ building. Lặng lẽ bỏ qua làm hiện phòng Alpha dưới bộ lọc Beta; từ chối làm lỗi gõ hiện ra.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> JavaScript numbers lose precision above 2^53 − 1, so big numeric ids silently change; the prefix also says what kind of id it is</p><p>9007199254740993 came back as …992 with no error. A string id survives every language, and the prefix catches “a device id passed as a lab id”.</p><p><i>VI: 9007199254740993 quay về thành …992 mà không báo lỗi. Id dạng chuỗi sống sót qua mọi ngôn ngữ, và tiền tố bắt được lỗi \"truyền id thiết bị vào chỗ id phòng\".</i></p></li><li><p><b>c)</b> {\"amountMinor\": 435, \"currency\": \"USD\"} — integer minor units plus an ISO 4217 code</p><p>4.35 * 100 is 434.99999999999994. Integers in the smallest unit (cents; for VND the đồng itself) make arithmetic exact; the currency code removes the guess.</p><p><i>VI: 4.35 * 100 ra 434.99999999999994. Số nguyên theo đơn vị nhỏ nhất (cent; với VND là chính đồng) làm phép tính chính xác; mã tiền tệ xoá việc đoán.</i></p></li><li><p><b>a)</b> Require Z or ±hh:mm, store and return UTC with Z; clients convert for display</p><p>Without an offset the result depends on the machine running the code — seven hours apart from identical code. With +07:00 both runs agree.</p><p><i>VI: Không có độ lệch thì kết quả phụ thuộc máy chạy code — lệch bảy tiếng với cùng một đoạn code. Có +07:00 thì hai lần chạy khớp nhau.</i></p></li><li><p><b>b)</b> a plain \"YYYY-MM-DD\" string, never converted to a date-time</p><p>A birthday is a calendar date, not an instant. Converting it to a time zone can move it to the previous day for users west of UTC.</p><p><i>VI: Ngày sinh là một ngày lịch, không phải một thời điểm. Đổi nó sang múi giờ có thể lùi về hôm trước với người dùng ở phía tây UTC.</i></p></li><li><p><b>c)</b> 400 UNKNOWN_QUERY_PARAM — a misspelled filter must not silently return wrong data</p><p>Query keys are just object keys: Building ≠ building. Silently ignoring it showed Alpha rooms under a Beta filter; refusing makes the typo visible.</p><p><i>VI: Khoá query chỉ là khoá object: Building ≠ building. Lặng lẽ bỏ qua làm hiện phòng Alpha dưới bộ lọc Beta; từ chối làm lỗi gõ hiện ra.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why does LabFlow send ids as strings (\"lab_1\", \"bk_7\") rather than numbers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow gửi id dạng chuỗi (\"lab_1\", \"bk_7\") thay vì số?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "JavaScript numbers lose precision above 2^53 − 1, so big numeric ids silently change; the prefix also says what kind of id it is"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JSON cannot contain numbers larger than 1000"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express route parameters only work with strings that contain an underscore"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Strings are smaller than numbers in JSON"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>9007199254740993 came back as …992 with no error. A string id survives every language, and the prefix catches “a device id passed as a lab id”.</p><p><i>VI: 9007199254740993 quay về thành …992 mà không báo lỗi. Id dạng chuỗi sống sót qua mọi ngôn ngữ, và tiền tố bắt được lỗi \"truyền id thiết bị vào chỗ id phòng\".</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A device rental fee of 4.35 USD should travel as …</p><p style=\"opacity:.75;font-size:.92em\"><i>Phí thuê thiết bị 4,35 USD nên được gửi đi dạng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{\"amount\": \"4.35 USD\"} as one string"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{\"amount\": 4.35} — the client knows the currency"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{\"amountMinor\": 435, \"currency\": \"USD\"} — integer minor units plus an ISO 4217 code"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{\"amount\": 4.35, \"currency\": \"$\"}"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>4.35 * 100 is 434.99999999999994. Integers in the smallest unit (cents; for VND the đồng itself) make arithmetic exact; the currency code removes the guess.</p><p><i>VI: 4.35 * 100 ra 434.99999999999994. Số nguyên theo đơn vị nhỏ nhất (cent; với VND là chính đồng) làm phép tính chính xác; mã tiền tệ xoá việc đoán.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The same line new Date('2026-11-02T08:00:00') gave 01:00Z on a laptop in Hanoi and 08:00Z in UTC. Contract rule?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng dòng new Date('2026-11-02T08:00:00') cho 01:00Z trên laptop ở Hà Nội và 08:00Z ở UTC. Luật hợp đồng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Require Z or ±hh:mm, store and return UTC with Z; clients convert for display"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Send local times and let the server guess the zone from the IP address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Store the time exactly as the client sent it, without any conversion"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Always set TZ=Asia/Ho_Chi_Minh on every server and container"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without an offset the result depends on the machine running the code — seven hours apart from identical code. With +07:00 both runs agree.</p><p><i>VI: Không có độ lệch thì kết quả phụ thuộc máy chạy code — lệch bảy tiếng với cùng một đoạn code. Có +07:00 thì hai lần chạy khớp nhau.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>new Date('2026-11-02') gives midnight UTC, not local midnight. So a birthday should be …</p><p style=\"opacity:.75;font-size:.92em\"><i>new Date('2026-11-02') cho nửa đêm UTC, không phải nửa đêm địa phương. Vậy ngày sinh nên là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a local date-time at midnight with the +07:00 offset"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a plain \"YYYY-MM-DD\" string, never converted to a date-time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a Unix timestamp in seconds counted from 1 January 1970"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a UTC date-time at midnight, such as 2005-03-14T00:00Z"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A birthday is a calendar date, not an instant. Converting it to a time zone can move it to the previous day for users west of UTC.</p><p><i>VI: Ngày sinh là một ngày lịch, không phải một thời điểm. Đổi nó sang múi giờ có thể lùi về hôm trước với người dùng ở phía tây UTC.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>GET /labs?Building=Beta returned all three labs before the fix. LabFlow now answers …</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /labs?Building=Beta trả cả ba phòng trước khi sửa. Giờ LabFlow trả …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "200 with the Beta labs — query keys are case-insensitive"
+              },
+              {
+                "ma": "b",
+                "noiDung": "422, because Beta is not a building"
+              },
+              {
+                "ma": "c",
+                "noiDung": "400 UNKNOWN_QUERY_PARAM — a misspelled filter must not silently return wrong data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "404, because the filter matched nothing"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Query keys are just object keys: Building ≠ building. Silently ignoring it showed Alpha rooms under a Beta filter; refusing makes the typo visible.</p><p><i>VI: Khoá query chỉ là khoá object: Building ≠ building. Lặng lẽ bỏ qua làm hiện phòng Alpha dưới bộ lọc Beta; từ chối làm lỗi gõ hiện ra.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using floating-point numbers for money.|||Dùng số thực dấu phẩy động cho tiền."
+        },
+        {
+          "loi": "Treating a date-only value as a moment in time.|||Coi giá trị chỉ có ngày là một thời điểm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "minor units",
+          "vi": "đơn vị nhỏ nhất của tiền tệ"
+        },
+        {
+          "en": "offset",
+          "vi": "độ lệch múi giờ"
+        },
+        {
+          "en": "RFC 3339",
+          "vi": "chuẩn ngày giờ cho internet"
+        }
+      ]
+    },
+    {
+      "title": "Naming 3 — Write toCamelCase(value): database rows to API JSON",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "casing",
+        "recursion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>PostgreSQL columns are usually snake_case (<code>start_at</code>); LabFlow’s JSON is camelCase (<code>startAt</code>). Chapter 12 will read rows from the database, so write the converter now: <code>toCamelCase(value)</code> returns a NEW value where every object key has each <code>_x</code> (underscore + lowercase letter or digit) replaced by <code>X</code> — at every depth, inside arrays too. Values are never changed: the string <code>'IN_USE'</code> stays <code>'IN_USE'</code>; keys already in camelCase stay as they are.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cột PostgreSQL thường là snake_case (<code>start_at</code>); JSON của LabFlow là camelCase (<code>startAt</code>). Chương 12 sẽ đọc dòng từ cơ sở dữ liệu, nên viết bộ chuyển ngay bây giờ: <code>toCamelCase(value)</code> trả về giá trị MỚI trong đó mọi khoá object có từng <code>_x</code> (gạch dưới + chữ thường hoặc số) đổi thành <code>X</code> — ở mọi tầng, kể cả trong mảng. Giá trị không bao giờ bị đổi: chuỗi <code>'IN_USE'</code> giữ nguyên <code>'IN_USE'</code>; khoá đã là camelCase giữ nguyên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "value — any JSON value.|||value — giá trị JSON bất kỳ.",
+      "outputSpec": "The same structure with camelCase keys.|||Cùng cấu trúc với khoá camelCase.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toCamelCase({\"id\":\"bk_1\",\"lab_id\":\"lab_1\",\"user_id\":\"usr_1\",\"start_at\":\"2026-11-02T01:00:00.000Z\",\"end_at\":\"2026-11-02T03:00:00.000Z\",\"purpose\":\"SWT301 Lab 3\",\"status\":\"PENDING\",\"created_at\":\"2026-10-31T15:43:26.161Z\"})",
+          "output": "{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"userId\":\"usr_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"purpose\":\"SWT301 Lab 3\",\"status\":\"PENDING\",\"createdAt\":\"2026-10-31T15:43:26.161Z\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Three cases: array ⇒ map, plain object ⇒ rebuild with new keys, anything else ⇒ return as is.|||Ba trường hợp: mảng ⇒ map, object ⇒ dựng lại với khoá mới, còn lại ⇒ trả nguyên.",
+        "k.replace(/_([a-z0-9])/g, (m, c) => c.toUpperCase())"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** { lab_id: 'lab_1', start_at: … } ⇒ { labId: 'lab_1', startAt: … } (deep) */\nfunction toCamelCase(value) {\n  // Write your solution here\n  var out = {};\n  for (var k in value) out[k.replace('_', '')] = value[k];\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction toCamelCase(value) {\n  if (Array.isArray(value)) return value.map(toCamelCase);\n  if (value === null || typeof value !== 'object') return value;          // strings, numbers… untouched\n  var out = {};\n  Object.keys(value).forEach(function (k) {\n    var nk = k.replace(/_([a-z0-9])/g, function (m, ch) { return ch.toUpperCase(); });\n    out[nk] = toCamelCase(value[k]);\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Doing the conversion in one place (the data layer) keeps “one thing, one name” true for the whole API: the database may say lab_id, but no client ever sees it. Libraries such as pg-promise or Prisma’s @map do the same.</p>",
+      "solutionExplanationHtmlVi": "<p>Chuyển ở một chỗ (tầng dữ liệu) giữ luật \"một thứ, một tên\" đúng cho cả API: CSDL có thể ghi lab_id, nhưng không client nào thấy nó. Thư viện như pg-promise hay @map của Prisma làm đúng việc này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A booking row as PostgreSQL would return it",
+              "vi": "Một dòng booking như PostgreSQL trả về"
+            },
+            "goi": "toCamelCase({\"id\":\"bk_1\",\"lab_id\":\"lab_1\",\"user_id\":\"usr_1\",\"start_at\":\"2026-11-02T01:00:00.000Z\",\"end_at\":\"2026-11-02T03:00:00.000Z\",\"purpose\":\"SWT301 Lab 3\",\"status\":\"PENDING\",\"created_at\":\"2026-10-31T15:43:26.161Z\"})",
+            "mongDoi": {
+              "id": "bk_1",
+              "labId": "lab_1",
+              "userId": "usr_1",
+              "startAt": "2026-11-02T01:00:00.000Z",
+              "endAt": "2026-11-02T03:00:00.000Z",
+              "purpose": "SWT301 Lab 3",
+              "status": "PENDING",
+              "createdAt": "2026-10-31T15:43:26.161Z"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: toCamelCase({\"serial_no\":\"FTX1840ALBQ\",\"status\":\"IN_USE\",\"note\":null})",
+              "vi": "Ca 2"
+            },
+            "goi": "toCamelCase({\"serial_no\":\"FTX1840ALBQ\",\"status\":\"IN_USE\",\"note\":null})",
+            "mongDoi": {
+              "serialNo": "FTX1840ALBQ",
+              "status": "IN_USE",
+              "note": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "toCamelCase([{\"id\":\"bk_1\",\"lab_id\":\"lab_1\",\"user_id\":\"usr_1\",\"start_at\":\"2026-11-02T01:00:00.000Z\",\"end_at\":\"2026-11-02T03:00:00.000Z\",\"purpose\":\"SWT301 Lab 3\",\"status\":\"PENDING\",\"created_at\":\"2026-10-31T15:43:26.161Z\"},{\"id\":\"bk_2\",\"cancelled_at\":null}])",
+            "mongDoi": [
+              {
+                "id": "bk_1",
+                "labId": "lab_1",
+                "userId": "usr_1",
+                "startAt": "2026-11-02T01:00:00.000Z",
+                "endAt": "2026-11-02T03:00:00.000Z",
+                "purpose": "SWT301 Lab 3",
+                "status": "PENDING",
+                "createdAt": "2026-10-31T15:43:26.161Z"
+              },
+              {
+                "id": "bk_2",
+                "cancelledAt": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "toCamelCase({\"data\":[{\"lab_id\":\"lab_1\",\"devices\":[{\"device_id\":\"dev_1\",\"last_seen_at\":\"2026-10-31T00:00:00Z\"}]}],\"next_page_token\":\"abc_def\"})",
+            "mongDoi": {
+              "data": [
+                {
+                  "labId": "lab_1",
+                  "devices": [
+                    {
+                      "deviceId": "dev_1",
+                      "lastSeenAt": "2026-10-31T00:00:00Z"
+                    }
+                  ]
+                }
+              ],
+              "nextPageToken": "abc_def"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "toCamelCase({\"labId\":\"lab_1\",\"size_in_bytes_v2\":10,\"is_active\":true})",
+            "mongDoi": {
+              "labId": "lab_1",
+              "sizeInBytesV2": 10,
+              "isActive": true
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "toCamelCase(\"start_at\")",
+            "mongDoi": "start_at",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "toCamelCase([1,\"a_b\",null,[{\"x_y\":[]}]])",
+            "mongDoi": [
+              1,
+              "a_b",
+              null,
+              [
+                {
+                  "xY": []
+                }
+              ]
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Converting string values too — enum values and messages change meaning.|||Đổi cả giá trị chuỗi — giá trị enum và câu chữ đổi nghĩa."
+        },
+        {
+          "loi": "typeof null === \"object\": forgetting this crashes on null fields.|||typeof null === \"object\": quên điều này là crash với trường null."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "snake_case",
+          "vi": "chữ thường nối gạch dưới"
+        },
+        {
+          "en": "data layer",
+          "vi": "tầng dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "Naming 4 — Write parseInstant(s): accept only times with an offset",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "dates and time zones"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Write the date rule of LabFlow as one function <code>parseInstant(s)</code>:</p><ul>\n<li>Accept only RFC 3339 date-times with an offset: <code>YYYY-MM-DDThh:mm</code>, optional <code>:ss</code> and <code>.1–3 digits</code>, then <code>Z</code> or <code>±hh:mm</code>. Return the instant in UTC exactly like <code>toISOString()</code>: <code>'2026-11-02T01:00:00.000Z'</code>.</li>\n<li>Anything else — no offset, date only, not a string, <code>\"02/11/2026 8:00\"</code> — ⇒ <code>throw new RangeError(…)</code>.</li>\n<li>Impossible values (month 13) ⇒ <code>RangeError</code>. Trap: <code>new Date('2026-02-30T08:00:00Z')</code> does NOT fail in JavaScript — it silently becomes 2 March. Reject a calendar date that does not exist. Hint: the date written in the string must equal the date of the instant <i>in the sender’s own offset</i>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết luật ngày giờ của LabFlow thành một hàm <code>parseInstant(s)</code>:</p><ul>\n<li>Chỉ nhận date-time RFC 3339 có độ lệch: <code>YYYY-MM-DDThh:mm</code>, tuỳ chọn <code>:ss</code> và <code>.1–3 chữ số</code>, rồi <code>Z</code> hoặc <code>±hh:mm</code>. Trả về thời điểm theo UTC đúng như <code>toISOString()</code>: <code>'2026-11-02T01:00:00.000Z'</code>.</li>\n<li>Còn lại — không có độ lệch, chỉ có ngày, không phải chuỗi, <code>\"02/11/2026 8:00\"</code> — ⇒ <code>throw new RangeError(…)</code>.</li>\n<li>Giá trị không thể có (tháng 13) ⇒ <code>RangeError</code>. Bẫy: <code>new Date('2026-02-30T08:00:00Z')</code> KHÔNG báo lỗi trong JavaScript — nó lặng lẽ thành ngày 2 tháng 3. Hãy từ chối ngày lịch không tồn tại. Gợi ý: ngày viết trong chuỗi phải bằng ngày của thời điểm đó <i>tính theo độ lệch của chính người gửi</i>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "s — any value.|||s — giá trị bất kỳ.",
+      "outputSpec": "An ISO string in UTC ending in .sssZ, or a thrown RangeError.|||Chuỗi ISO theo UTC kết thúc bằng .sssZ, hoặc ném RangeError.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseInstant(\"2026-11-02T08:00:00+07:00\")",
+          "output": "\"2026-11-02T01:00:00.000Z\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Validate the shape with a regular expression first, then Date.parse.|||Kiểm hình dạng bằng biểu thức chính quy trước, rồi mới Date.parse.",
+        "For the calendar check: shift the instant by the offset in minutes, then compare toISOString().slice(0, 10) with the date in the string.|||Để kiểm ngày lịch: dịch thời điểm theo độ lệch (phút), rồi so toISOString().slice(0, 10) với ngày trong chuỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"2026-11-02T08:00:00+07:00\" ⇒ \"2026-11-02T01:00:00.000Z\"; no offset ⇒ throw RangeError */\nfunction parseInstant(s) {\n  // Write your solution here\n  return new Date(s).toISOString();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseInstant(s) {\n  var m = /^(\\d{4})-(\\d{2})-(\\d{2})T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,3})?)?(Z|([+-])(\\d{2}):(\\d{2}))$/.exec(typeof s === 'string' ? s : '');\n  if (!m) throw new RangeError('must be ISO 8601 with timezone: ' + s);\n  var ms = Date.parse(s);\n  if (Number.isNaN(ms)) throw new RangeError('invalid date-time: ' + s);\n  // JS Date rolls 2026-02-30 over to 2 March — check the calendar date in the sender's own offset\n  var off = m[6] === 'Z' ? 0 : (m[7] === '-' ? -1 : 1) * (Number(m[8]) * 60 + Number(m[9]));\n  var local = new Date(ms + off * 60000).toISOString().slice(0, 10);\n  if (local !== m[1] + '-' + m[2] + '-' + m[3]) throw new RangeError('no such calendar date: ' + s);\n  return new Date(ms).toISOString();\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The regular expression enforces the contract (an offset is mandatory); Date.parse turns a valid string into one instant; the calendar check closes JavaScript’s silent roll-over. Returning UTC with Z is the single storage format, so comparisons and sorting are plain string or number comparisons.</p>",
+      "solutionExplanationHtmlVi": "<p>Biểu thức chính quy ép hợp đồng (bắt buộc có độ lệch); Date.parse biến chuỗi hợp lệ thành một thời điểm; phép kiểm ngày lịch chặn việc JavaScript lặng lẽ cuộn ngày. Trả UTC có Z là định dạng lưu duy nhất, nên so sánh và sắp xếp chỉ là so chuỗi hay so số.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: parseInstant(\"2026-11-02T08:00:00+07:00\")",
+              "vi": "Ca 1"
+            },
+            "goi": "parseInstant(\"2026-11-02T08:00:00+07:00\")",
+            "mongDoi": "2026-11-02T01:00:00.000Z"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseInstant(\"2026-11-02T01:00:00Z\")",
+              "vi": "Ca 2"
+            },
+            "goi": "parseInstant(\"2026-11-02T01:00:00Z\")",
+            "mongDoi": "2026-11-02T01:00:00.000Z"
+          },
+          {
+            "moTa": {
+              "en": "No offset ⇒ RangeError",
+              "vi": "Không độ lệch ⇒ RangeError"
+            },
+            "goi": "parseInstant(\"2026-11-02T08:00:00\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseInstant(\"2026-11-02\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseInstant(\"02/11/2026 8:00\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseInstant(\"2026-11-02T08:00+07:00\")",
+            "mongDoi": "2026-11-02T01:00:00.000Z",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseInstant(\"2026-11-01T22:30:15.5-05:00\")",
+            "mongDoi": "2026-11-02T03:30:15.500Z",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "parseInstant(\"2026-11-02T01:00:00+07:00\")",
+            "mongDoi": "2026-11-01T18:00:00.000Z",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "parseInstant(\"2026-13-01T00:00:00Z\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "parseInstant(\"2026-02-30T08:00:00Z\")",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "parseInstant(\"2028-02-29T23:00:00-03:00\")",
+            "mongDoi": "2028-03-01T02:00:00.000Z",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "parseInstant(1762045200000)",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting new Date(s) alone: it accepts \"2026-11-02T08:00:00\" (local time) and 30 February.|||Chỉ tin new Date(s): nó nhận \"2026-11-02T08:00:00\" (giờ máy) và ngày 30 tháng 2."
+        },
+        {
+          "loi": "Comparing the UTC date with the string: \"2026-11-02T01:00:00+07:00\" is 1 November in UTC, and that is fine.|||So ngày UTC với chuỗi: \"2026-11-02T01:00:00+07:00\" là ngày 1/11 theo UTC, và điều đó đúng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "instant",
+          "vi": "thời điểm",
+          "giaiThich": "Một điểm duy nhất trên trục thời gian, không phụ thuộc múi giờ."
+        },
+        {
+          "en": "roll-over",
+          "vi": "cuộn ngày",
+          "giaiThich": "Ngày 30/2 bị tự đổi thành 2/3."
+        }
+      ]
+    }
+  ]
+}

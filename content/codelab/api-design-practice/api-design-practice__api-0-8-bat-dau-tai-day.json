@@ -1,0 +1,490 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-0-8-bat-dau-tai-day",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-0-8-bat-dau-tai-day"
+  },
+  "exercises": [
+    {
+      "title": "Start 1 — Five words people mix up",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "API vocabulary"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lesson “Start here 1/2” separates five words that teammates use as if they meant the same thing. Match each example from LabFlow to the word it illustrates.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài \"Bắt đầu tại đây 1/2\" tách năm từ mà các bạn cùng nhóm hay dùng như thể cùng nghĩa. Ghép mỗi ví dụ của LabFlow với từ mà nó minh hoạ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: who sees this — the client or only the server team?|||Hỏi: ai nhìn thấy thứ này — client hay chỉ đội server?",
+        "An endpoint always has a METHOD in front of the path.|||Endpoint luôn có PHƯƠNG THỨC đứng trước đường dẫn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 1 — Five words people mix up\n\nAnswer in the answer panel (no code needed).\n\n1. Example → word → meaningVí dụ → từ → nghĩa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 1 — Five words people mix up — answer key\n\n1. Example → word → meaningVí dụ → từ → nghĩa\n   - r1.w: API\n   - r1.m: The whole contract: every operation, format and error\n   - r2.w: resource\n   - r2.m: A kind of thing the API lets you work with\n   - r3.w: endpoint\n   - r3.m: One operation: an HTTP method + a path\n   - r4.w: route\n   - r4.m: The server code that handles one endpoint\n   - r5.w: URL\n   - r5.m: The full address of a resource\n   Clients only see endpoints and resources; routes are server code you can rewrite freely as long as each endpoint keeps its promise. A URL is just an address; the API is the whole contract.VI: Client chỉ thấy endpoint và tài nguyên; route là code phía server, viết lại thoải mái miễn mỗi endpoint giữ lời hứa. URL chỉ là địa chỉ; API là cả bản hợp đồng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Clients only see endpoints and resources; routes are server code you can rewrite freely as long as each endpoint keeps its promise. A URL is just an address; the API is the whole contract.</p><p><i>VI: Client chỉ thấy endpoint và tài nguyên; route là code phía server, viết lại thoải mái miễn mỗi endpoint giữ lời hứa. URL chỉ là địa chỉ; API là cả bản hợp đồng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Example → word → meaning</p><p style=\"opacity:.75;font-size:.92em\"><i>Ví dụ → từ → nghĩa</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "LabFlow example"
+              },
+              {
+                "ma": "w",
+                "ten": "Word",
+                "luaChon": [
+                  "API",
+                  "resource",
+                  "endpoint",
+                  "route",
+                  "URL"
+                ]
+              },
+              {
+                "ma": "m",
+                "ten": "Meaning",
+                "luaChon": [
+                  "The whole contract: every operation, format and error",
+                  "A kind of thing the API lets you work with",
+                  "One operation: an HTTP method + a path",
+                  "The server code that handles one endpoint",
+                  "The full address of a resource"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "“The LabFlow API”"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "a lab, a device, a booking"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "POST /bookings"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "app.post('/bookings', (req, res) => { … })"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "http://localhost:4000/labs/lab_1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w": "API",
+              "r1.m": "The whole contract: every operation, format and error",
+              "r2.w": "resource",
+              "r2.m": "A kind of thing the API lets you work with",
+              "r3.w": "endpoint",
+              "r3.m": "One operation: an HTTP method + a path",
+              "r4.w": "route",
+              "r4.m": "The server code that handles one endpoint",
+              "r5.w": "URL",
+              "r5.m": "The full address of a resource"
+            },
+            "giaiThich": "<p>Clients only see endpoints and resources; routes are server code you can rewrite freely as long as each endpoint keeps its promise. A URL is just an address; the API is the whole contract.</p><p><i>VI: Client chỉ thấy endpoint và tài nguyên; route là code phía server, viết lại thoải mái miễn mỗi endpoint giữ lời hứa. URL chỉ là địa chỉ; API là cả bản hợp đồng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the Express handler “the endpoint”: the handler is the route (implementation).|||Gọi handler Express là \"endpoint\": handler là route (phần cài đặt)."
+        },
+        {
+          "loi": "Calling the full URL “the resource”: the URL is the address of the resource.|||Gọi cả URL là \"tài nguyên\": URL là địa chỉ của tài nguyên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "endpoint",
+          "vi": "điểm cuối",
+          "giaiThich": "Một thao tác: phương thức + đường dẫn."
+        },
+        {
+          "en": "route",
+          "vi": "tuyến",
+          "giaiThich": "Code phía server xử lý một endpoint."
+        },
+        {
+          "en": "resource",
+          "vi": "tài nguyên"
+        }
+      ]
+    },
+    {
+      "title": "Start 2 — The API is a contract",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "API as a contract"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Five short situations from a team project. Choose what the API-design view of each one is.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm tình huống ngắn trong một đồ án nhóm. Chọn cách nhìn đúng theo thiết kế API cho mỗi tình huống.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate what clients depend on (the contract) from how the server does it (implementation).|||Tách thứ client phụ thuộc (hợp đồng) khỏi cách server làm (cài đặt).",
+        "Cost of change grows the moment someone depends on you.|||Chi phí thay đổi tăng vọt ngay khi có người phụ thuộc vào bạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 2 — The API is a contract\n\nAnswer in the answer panel (no code needed).\n\n1. The back end moves from Express to Spring Boot, but every endpoint answers exactly as before. Which clients must change?Back end chuyển từ Express sang Spring Boot, nhưng endpoint nào cũng trả lời y như cũ. Client nào phải sửa?\n2. Renaming the field items to data is a 2-minute change. When does it become expensive?Đổi tên trường items thành data mất 2 phút. Khi nào nó trở nên đắt?\n3. What does “REST API” in a junior job advert almost always mean?\"REST API\" trong tin tuyển junior gần như luôn nghĩa là gì?\n4. Six clients (web, mobile, admin, bot, report script, partner) each read the database directly. What is the main risk the API removes?Sáu client (web, mobile, admin, bot, script báo cáo, đối tác) đều đọc thẳng cơ sở dữ liệu. Rủi ro chính mà API loại bỏ là gì?\n5. Which pair is the same idea at two levels?Cặp nào là cùng một ý ở hai tầng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 2 — The API is a contract — answer key\n\n1. The back end moves from Express to Spring Boot, but every endpoint answers exactly as before. Which clients must change?Back end chuyển từ Express sang Spring Boot, nhưng endpoint nào cũng trả lời y như cũ. Client nào phải sửa?\n   Answer: a) None — the contract did not change\n   Like the restaurant kitchen: the menu (contract) stayed the same, so no customer notices. Routes and frameworks are implementation.VI: Như bếp nhà hàng: thực đơn (hợp đồng) giữ nguyên nên không khách nào nhận ra. Route và framework là phần cài đặt.\n\n2. Renaming the field items to data is a 2-minute change. When does it become expensive?Đổi tên trường items thành data mất 2 phút. Khi nào nó trở nên đắt?\n   Answer: c) After the first client ships and depends on items\n   Before any client exists, a rename is free; after release, every client and every old app version must change — a breaking change (Chapter 4).VI: Trước khi có client, đổi tên là miễn phí; sau khi phát hành, mọi client và mọi bản app cũ phải sửa — một thay đổi phá vỡ (Chương 4).\n\n3. What does “REST API” in a junior job advert almost always mean?\"REST API\" trong tin tuyển junior gần như luôn nghĩa là gì?\n   Answer: b) JSON over HTTP, URLs that name resources, methods and status codes used correctly\n   REST is a design style (Fielding, 2000) on top of HTTP. In job adverts it means resource-oriented JSON over HTTP — not a framework and not “anything over HTTP”.VI: REST là một phong cách thiết kế (Fielding, 2000) trên nền HTTP. Trong tin tuyển dụng nó nghĩa là JSON qua HTTP hướng tài nguyên — không phải một framework, cũng không phải \"bất cứ thứ gì qua HTTP\".\n\n4. Six clients (web, mobile, admin, bot, report script, partner) each read the database directly. What is the main risk the API removes?Sáu client (web, mobile, admin, bot, script báo cáo, đối tác) đều đọc thẳng cơ sở dữ liệu. Rủi ro chính mà API loại bỏ là gì?\n   Answer: c) Six copies of the business rules, six ways to get them wrong\n   With an API, rules such as “a lab cannot be booked twice” live in one place. Without it, each client re-implements them.VI: Có API, các luật như \"một phòng không được đặt trùng\" nằm ở một chỗ. Không có nó, client nào cũng tự viết lại.\n\n5. Which pair is the same idea at two levels?Cặp nào là cùng một ý ở hai tầng?\n   Answer: c) HTTP is the protocol; REST is a design style that uses it\n   HTTP defines messages (methods, codes, headers); REST is a way of designing with resources and uniform methods on top of it. RPC and GraphQL also run over HTTP.VI: HTTP định nghĩa thông điệp (phương thức, mã, header); REST là cách thiết kế với tài nguyên và phương thức đồng nhất ở bên trên. RPC và GraphQL cũng chạy qua HTTP.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> None — the contract did not change</p><p>Like the restaurant kitchen: the menu (contract) stayed the same, so no customer notices. Routes and frameworks are implementation.</p><p><i>VI: Như bếp nhà hàng: thực đơn (hợp đồng) giữ nguyên nên không khách nào nhận ra. Route và framework là phần cài đặt.</i></p></li><li><p><b>c)</b> After the first client ships and depends on items</p><p>Before any client exists, a rename is free; after release, every client and every old app version must change — a breaking change (Chapter 4).</p><p><i>VI: Trước khi có client, đổi tên là miễn phí; sau khi phát hành, mọi client và mọi bản app cũ phải sửa — một thay đổi phá vỡ (Chương 4).</i></p></li><li><p><b>b)</b> JSON over HTTP, URLs that name resources, methods and status codes used correctly</p><p>REST is a design style (Fielding, 2000) on top of HTTP. In job adverts it means resource-oriented JSON over HTTP — not a framework and not “anything over HTTP”.</p><p><i>VI: REST là một phong cách thiết kế (Fielding, 2000) trên nền HTTP. Trong tin tuyển dụng nó nghĩa là JSON qua HTTP hướng tài nguyên — không phải một framework, cũng không phải \"bất cứ thứ gì qua HTTP\".</i></p></li><li><p><b>c)</b> Six copies of the business rules, six ways to get them wrong</p><p>With an API, rules such as “a lab cannot be booked twice” live in one place. Without it, each client re-implements them.</p><p><i>VI: Có API, các luật như \"một phòng không được đặt trùng\" nằm ở một chỗ. Không có nó, client nào cũng tự viết lại.</i></p></li><li><p><b>c)</b> HTTP is the protocol; REST is a design style that uses it</p><p>HTTP defines messages (methods, codes, headers); REST is a way of designing with resources and uniform methods on top of it. RPC and GraphQL also run over HTTP.</p><p><i>VI: HTTP định nghĩa thông điệp (phương thức, mã, header); REST là cách thiết kế với tài nguyên và phương thức đồng nhất ở bên trên. RPC và GraphQL cũng chạy qua HTTP.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The back end moves from Express to Spring Boot, but every endpoint answers exactly as before. Which clients must change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Back end chuyển từ Express sang Spring Boot, nhưng endpoint nào cũng trả lời y như cũ. Client nào phải sửa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None — the contract did not change"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only clients written in JavaScript"
+              },
+              {
+                "ma": "c",
+                "noiDung": "All of them — the language changed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only the mobile app, because it is compiled"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Like the restaurant kitchen: the menu (contract) stayed the same, so no customer notices. Routes and frameworks are implementation.</p><p><i>VI: Như bếp nhà hàng: thực đơn (hợp đồng) giữ nguyên nên không khách nào nhận ra. Route và framework là phần cài đặt.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Renaming the field items to data is a 2-minute change. When does it become expensive?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đổi tên trường items thành data mất 2 phút. Khi nào nó trở nên đắt?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never — clients should read every field name dynamically"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only when the database column is renamed too"
+              },
+              {
+                "ma": "c",
+                "noiDung": "After the first client ships and depends on items"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if the API has more than 100 endpoints"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Before any client exists, a rename is free; after release, every client and every old app version must change — a breaking change (Chapter 4).</p><p><i>VI: Trước khi có client, đổi tên là miễn phí; sau khi phát hành, mọi client và mọi bản app cũ phải sửa — một thay đổi phá vỡ (Chương 4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What does “REST API” in a junior job advert almost always mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"REST API\" trong tin tuyển junior gần như luôn nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Any API that uses the HTTP protocol, including SOAP envelopes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JSON over HTTP, URLs that name resources, methods and status codes used correctly"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An API written with the Express framework in Node.js"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An API that returns XML documents with a schema"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>REST is a design style (Fielding, 2000) on top of HTTP. In job adverts it means resource-oriented JSON over HTTP — not a framework and not “anything over HTTP”.</p><p><i>VI: REST là một phong cách thiết kế (Fielding, 2000) trên nền HTTP. Trong tin tuyển dụng nó nghĩa là JSON qua HTTP hướng tài nguyên — không phải một framework, cũng không phải \"bất cứ thứ gì qua HTTP\".</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Six clients (web, mobile, admin, bot, report script, partner) each read the database directly. What is the main risk the API removes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sáu client (web, mobile, admin, bot, script báo cáo, đối tác) đều đọc thẳng cơ sở dữ liệu. Rủi ro chính mà API loại bỏ là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The clients would be slower than through HTTP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The database would need six different passwords"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Six copies of the business rules, six ways to get them wrong"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The database cannot handle six connections at once"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>With an API, rules such as “a lab cannot be booked twice” live in one place. Without it, each client re-implements them.</p><p><i>VI: Có API, các luật như \"một phòng không được đặt trùng\" nằm ở một chỗ. Không có nó, client nào cũng tự viết lại.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Which pair is the same idea at two levels?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cặp nào là cùng một ý ở hai tầng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "HTTP and REST are two names of RFC 9110"
+              },
+              {
+                "ma": "b",
+                "noiDung": "REST is the protocol; HTTP is a style that uses it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "HTTP is the protocol; REST is a design style that uses it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "REST replaced HTTP after the year 2000"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>HTTP defines messages (methods, codes, headers); REST is a way of designing with resources and uniform methods on top of it. RPC and GraphQL also run over HTTP.</p><p><i>VI: HTTP định nghĩa thông điệp (phương thức, mã, header); REST là cách thiết kế với tài nguyên và phương thức đồng nhất ở bên trên. RPC và GraphQL cũng chạy qua HTTP.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating REST as a library you install.|||Coi REST là một thư viện để cài."
+        },
+        {
+          "loi": "Thinking an internal rename is “free” after clients have shipped.|||Nghĩ đổi tên nội bộ là \"miễn phí\" sau khi client đã phát hành."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "contract",
+          "vi": "hợp đồng"
+        },
+        {
+          "en": "breaking change",
+          "vi": "thay đổi phá vỡ"
+        },
+        {
+          "en": "implementation",
+          "vi": "phần cài đặt"
+        }
+      ]
+    },
+    {
+      "title": "Start 3 — Put the history in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "history"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Every date below is sourced in the lesson (RFC editor, Fielding’s dissertation, graphql.org, OpenAPI history). Put the milestones in time order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi mốc dưới đây đều có nguồn trong bài (RFC editor, luận án Fielding, graphql.org, lịch sử OpenAPI). Sắp các mốc theo thời gian.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The idea of remote calls is older than the Web.|||Ý tưởng gọi từ xa còn cũ hơn cả Web.",
+        "REST got its name in the same year as SOAP 1.1.|||REST có tên cùng năm với SOAP 1.1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 3 — Put the history in order\n\nAnswer in the answer panel (no code needed).\n\n1. From remote calls to written contractsTừ gọi thủ tục từ xa tới hợp đồng viết ra\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 3 — Put the history in order — answer key\n\n1. From remote calls to written contractsTừ gọi thủ tục từ xa tới hợp đồng viết ra\n   Answer: m3) RFC 707 describes calling procedures on another machine (1976)  →  m5) HTTP/1.0 adds headers and status codes (RFC 1945, 1996)  →  m2) XML-RPC wraps function calls in XML (1998)  →  m1) Roy Fielding names REST in his dissertation (2000)  →  m7) Swagger 1.0 describes a REST API in one file (2011)  →  m6) Facebook publishes the GraphQL specification (2015)  →  m4) RFC 9457 standardises the JSON shape of API errors (2023)\n   1976 → 1996 → 1998 → 2000 → 2011 → 2015 → 2023. The direction: from “call a function over there” to a written, checkable contract.VI: 1976 → 1996 → 1998 → 2000 → 2011 → 2015 → 2023. Hướng đi: từ \"gọi một hàm ở đằng kia\" tới một hợp đồng viết ra và kiểm được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>1976 → 1996 → 1998 → 2000 → 2011 → 2015 → 2023. The direction: from “call a function over there” to a written, checkable contract.</p><p><i>VI: 1976 → 1996 → 1998 → 2000 → 2011 → 2015 → 2023. Hướng đi: từ \"gọi một hàm ở đằng kia\" tới một hợp đồng viết ra và kiểm được.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From remote calls to written contracts</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ gọi thủ tục từ xa tới hợp đồng viết ra</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Roy Fielding names REST in his dissertation (2000)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "XML-RPC wraps function calls in XML (1998)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "RFC 707 describes calling procedures on another machine (1976)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "RFC 9457 standardises the JSON shape of API errors (2023)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "HTTP/1.0 adds headers and status codes (RFC 1945, 1996)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Facebook publishes the GraphQL specification (2015)"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Swagger 1.0 describes a REST API in one file (2011)"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m5",
+              "m2",
+              "m1",
+              "m7",
+              "m6",
+              "m4"
+            ],
+            "giaiThich": "<p>1976 → 1996 → 1998 → 2000 → 2011 → 2015 → 2023. The direction: from “call a function over there” to a written, checkable contract.</p><p><i>VI: 1976 → 1996 → 1998 → 2000 → 2011 → 2015 → 2023. Hướng đi: từ \"gọi một hàm ở đằng kia\" tới một hợp đồng viết ra và kiểm được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Placing REST after GraphQL: REST was named fifteen years earlier.|||Đặt REST sau GraphQL: REST có tên sớm hơn mười lăm năm."
+        },
+        {
+          "loi": "Thinking Swagger came after OpenAPI: OpenAPI is Swagger renamed (2016).|||Nghĩ Swagger ra sau OpenAPI: OpenAPI chính là Swagger đổi tên (2016)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RPC",
+          "vi": "gọi thủ tục từ xa"
+        },
+        {
+          "en": "specification",
+          "vi": "đặc tả"
+        }
+      ]
+    }
+  ]
+}

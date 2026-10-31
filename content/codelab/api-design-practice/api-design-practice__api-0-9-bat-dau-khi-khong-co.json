@@ -1,0 +1,501 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-0-9-bat-dau-khi-khong-co",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-0-9-bat-dau-khi-khong-co"
+  },
+  "exercises": [
+    {
+      "title": "Incidents 1 — Which rule would have prevented it?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "API security",
+        "contracts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lesson “Start here 2/2” tells five sourced stories. For each one pick the design rule that would have prevented it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài \"Bắt đầu tại đây 2/2\" kể năm chuyện có nguồn. Với mỗi chuyện, chọn luật thiết kế lẽ ra đã chặn được nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what was missing: a permission check, an inventory, a limit, an authentication decision, or a promise kept?|||Hỏi thứ gì bị thiếu: một chốt quyền, một danh sách endpoint, một giới hạn, một quyết định xác thực, hay một lời hứa được giữ?",
+        "Only one story is not a data breach.|||Chỉ có một chuyện không phải rò rỉ dữ liệu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 1 — Which rule would have prevented it?\n\nAnswer in the answer panel (no code needed).\n\n1. Incident → ruleSự cố → luật\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 1 — Which rule would have prevented it? — answer key\n\n1. Incident → ruleSự cố → luật\n   - r1.r: Check permission on every object, not just login\n   - r2.r: Keep an endpoint inventory; delete dormant ones; test access rules\n   - r3.r: Return only needed fields, rate-limit, watch volumes\n   - r4.r: Decide explicitly who may call each endpoint; rate-limit enumeration\n   - r5.r: Version, announce deprecation, give a timeline\n   Logged in ≠ allowed (USPS). Forgotten endpoints keep old bugs (Optus). Excess data with nobody watching (T-Mobile). No authentication + no rate limit = enumeration (Authy). A contract changed overnight breaks the businesses built on it (Twitter).VI: Đã đăng nhập ≠ được phép (USPS). Endpoint bị quên giữ nguyên lỗi cũ (Optus). Thừa dữ liệu mà không ai theo dõi (T-Mobile). Không xác thực + không rate limit = dò liệt kê (Authy). Hợp đồng đổi qua đêm làm gãy những doanh nghiệp xây trên nó (Twitter).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Logged in ≠ allowed (USPS). Forgotten endpoints keep old bugs (Optus). Excess data with nobody watching (T-Mobile). No authentication + no rate limit = enumeration (Authy). A contract changed overnight breaks the businesses built on it (Twitter).</p><p><i>VI: Đã đăng nhập ≠ được phép (USPS). Endpoint bị quên giữ nguyên lỗi cũ (Optus). Thừa dữ liệu mà không ai theo dõi (T-Mobile). Không xác thực + không rate limit = dò liệt kê (Authy). Hợp đồng đổi qua đêm làm gãy những doanh nghiệp xây trên nó (Twitter).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Incident → rule</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự cố → luật</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Incident"
+              },
+              {
+                "ma": "r",
+                "ten": "Rule",
+                "luaChon": [
+                  "Check permission on every object, not just login",
+                  "Keep an endpoint inventory; delete dormant ones; test access rules",
+                  "Return only needed fields, rate-limit, watch volumes",
+                  "Decide explicitly who may call each endpoint; rate-limit enumeration",
+                  "Version, announce deprecation, give a timeline"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "USPS 2018 — any logged-in user could look up other users’ email, phone and address (~60M accounts)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Optus 2022 — an access check fixed on the main site but not on a second, dormant API domain"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "T-Mobile 2023 — one API drained of ~37M customer records for six weeks before anyone noticed"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Authy 2024 — an unauthenticated endpoint told attackers which phone numbers had accounts"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Twitter 2023 — third-party clients such as Tweetbot cut off overnight"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "Check permission on every object, not just login",
+              "r2.r": "Keep an endpoint inventory; delete dormant ones; test access rules",
+              "r3.r": "Return only needed fields, rate-limit, watch volumes",
+              "r4.r": "Decide explicitly who may call each endpoint; rate-limit enumeration",
+              "r5.r": "Version, announce deprecation, give a timeline"
+            },
+            "giaiThich": "<p>Logged in ≠ allowed (USPS). Forgotten endpoints keep old bugs (Optus). Excess data with nobody watching (T-Mobile). No authentication + no rate limit = enumeration (Authy). A contract changed overnight breaks the businesses built on it (Twitter).</p><p><i>VI: Đã đăng nhập ≠ được phép (USPS). Endpoint bị quên giữ nguyên lỗi cũ (Optus). Thừa dữ liệu mà không ai theo dõi (T-Mobile). Không xác thực + không rate limit = dò liệt kê (Authy). Hợp đồng đổi qua đêm làm gãy những doanh nghiệp xây trên nó (Twitter).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing up USPS (logged in, wrong object) with Authy (no login at all).|||Nhầm USPS (đã đăng nhập, sai đối tượng) với Authy (không cần đăng nhập)."
+        },
+        {
+          "loi": "Thinking “hackers were geniuses”: every case was an ordinary mistake.|||Nghĩ \"hacker là thiên tài\": mọi vụ đều là lỗi bình thường."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "object-level authorisation",
+          "vi": "phân quyền theo đối tượng"
+        },
+        {
+          "en": "enumeration",
+          "vi": "dò liệt kê"
+        },
+        {
+          "en": "deprecation",
+          "vi": "thông báo ngừng hỗ trợ"
+        }
+      ]
+    },
+    {
+      "title": "Incidents 2 — The demo-day disaster",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "contract mistakes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The illustrated story: the night before demo four small contract mistakes ruin the project. Choose the cause and the fix for each symptom.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tình huống minh hoạ: đêm trước buổi demo, bốn lỗi hợp đồng nhỏ làm hỏng cả đồ án. Chọn nguyên nhân và cách sửa cho từng triệu chứng.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each symptom is a contract that was never written down.|||Mỗi triệu chứng là một điều hợp đồng chưa từng được viết ra.",
+        "Lessons 1.2, 1.3 and 1.4 each fix one of these.|||Bài 1.2, 1.3 và 1.4 mỗi bài sửa một cái."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 2 — The demo-day disaster\n\nAnswer in the answer panel (no code needed).\n\n1. The list screen is suddenly empty. The back end renamed items to data last night. Best fix for next time?Màn danh sách bỗng trống. Back end đổi items thành data tối qua. Cách sửa tốt nhất cho lần sau?\n2. The form sends startAt \"2026-11-02T08:00\" with no offset; the UTC server stores 08:00Z and the screen shows 15:00. The contract rule is …Form gửi startAt \"2026-11-02T08:00\" không có độ lệch; server UTC lưu 08:00Z và màn hình hiện 15:00. Luật hợp đồng là …\n3. Every error returns HTTP 200 with {\"ok\": false}, so the app shows “Success!”. What breaks besides the screen?Mọi lỗi trả HTTP 200 kèm {\"ok\": false} nên app hiện \"Thành công!\". Ngoài màn hình còn gì hỏng?\n4. The edit form sends PUT /labs/lab_1 with only {\"name\": \"…\"} and the capacity disappears. Which fix matches HTTP semantics?Form sửa gửi PUT /labs/lab_1 chỉ với {\"name\": \"…\"} và sức chứa biến mất. Cách sửa nào đúng ngữ nghĩa HTTP?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 2 — The demo-day disaster — answer key\n\n1. The list screen is suddenly empty. The back end renamed items to data last night. Best fix for next time?Màn danh sách bỗng trống. Back end đổi items thành data tối qua. Cách sửa tốt nhất cho lần sau?\n   Answer: b) Treat field names as part of the contract: add the new one, keep the old one until clients move\n   Renaming is a breaking change. Additive change first (both fields), then remove the old one with notice — Chapter 4.VI: Đổi tên là thay đổi phá vỡ. Thêm trước (cả hai trường), rồi mới bỏ trường cũ có báo trước — Chương 4.\n\n2. The form sends startAt \"2026-11-02T08:00\" with no offset; the UTC server stores 08:00Z and the screen shows 15:00. The contract rule is …Form gửi startAt \"2026-11-02T08:00\" không có độ lệch; server UTC lưu 08:00Z và màn hình hiện 15:00. Luật hợp đồng là …\n   Answer: b) Times must carry an offset or Z; reject anything without one with 400\n   A time without an offset is ambiguous. LabFlow’s ISO check requires Z or ±hh:mm and returns 400 otherwise; storage is always UTC (lesson 1.4).VI: Thời điểm không có độ lệch là mơ hồ. Bộ kiểm ISO của LabFlow bắt buộc Z hoặc ±hh:mm, thiếu thì 400; lưu luôn bằng UTC (bài 1.4).\n\n3. Every error returns HTTP 200 with {\"ok\": false}, so the app shows “Success!”. What breaks besides the screen?Mọi lỗi trả HTTP 200 kèm {\"ok\": false} nên app hiện \"Thành công!\". Ngoài màn hình còn gì hỏng?\n   Answer: d) Every tool that reads the status line: fetch’s res.ok, retries, caches, monitoring\n   The status code is the part of the contract that generic tools understand. 200 for a failure lies to caches, retry logic and dashboards (lesson 1.3).VI: Mã trạng thái là phần hợp đồng mà mọi công cụ chung đều hiểu. 200 cho một thất bại là nói dối cache, logic thử lại và dashboard (bài 1.3).\n\n4. The edit form sends PUT /labs/lab_1 with only {\"name\": \"…\"} and the capacity disappears. Which fix matches HTTP semantics?Form sửa gửi PUT /labs/lab_1 chỉ với {\"name\": \"…\"} và sức chứa biến mất. Cách sửa nào đúng ngữ nghĩa HTTP?\n   Answer: d) PATCH for partial edits; PUT stays a full replacement that rejects missing fields\n   PUT means “replace with this representation”, so a missing field is a request error (400). Partial changes are PATCH (JSON Merge Patch) — lesson 1.2.VI: PUT nghĩa là \"thay bằng bản này\", nên thiếu trường là lỗi request (400). Sửa một phần là PATCH (JSON Merge Patch) — bài 1.2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Treat field names as part of the contract: add the new one, keep the old one until clients move</p><p>Renaming is a breaking change. Additive change first (both fields), then remove the old one with notice — Chapter 4.</p><p><i>VI: Đổi tên là thay đổi phá vỡ. Thêm trước (cả hai trường), rồi mới bỏ trường cũ có báo trước — Chương 4.</i></p></li><li><p><b>b)</b> Times must carry an offset or Z; reject anything without one with 400</p><p>A time without an offset is ambiguous. LabFlow’s ISO check requires Z or ±hh:mm and returns 400 otherwise; storage is always UTC (lesson 1.4).</p><p><i>VI: Thời điểm không có độ lệch là mơ hồ. Bộ kiểm ISO của LabFlow bắt buộc Z hoặc ±hh:mm, thiếu thì 400; lưu luôn bằng UTC (bài 1.4).</i></p></li><li><p><b>d)</b> Every tool that reads the status line: fetch’s res.ok, retries, caches, monitoring</p><p>The status code is the part of the contract that generic tools understand. 200 for a failure lies to caches, retry logic and dashboards (lesson 1.3).</p><p><i>VI: Mã trạng thái là phần hợp đồng mà mọi công cụ chung đều hiểu. 200 cho một thất bại là nói dối cache, logic thử lại và dashboard (bài 1.3).</i></p></li><li><p><b>d)</b> PATCH for partial edits; PUT stays a full replacement that rejects missing fields</p><p>PUT means “replace with this representation”, so a missing field is a request error (400). Partial changes are PATCH (JSON Merge Patch) — lesson 1.2.</p><p><i>VI: PUT nghĩa là \"thay bằng bản này\", nên thiếu trường là lỗi request (400). Sửa một phần là PATCH (JSON Merge Patch) — bài 1.2.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The list screen is suddenly empty. The back end renamed items to data last night. Best fix for next time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Màn danh sách bỗng trống. Back end đổi items thành data tối qua. Cách sửa tốt nhất cho lần sau?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Return the list as the whole body so there is no field name"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Treat field names as part of the contract: add the new one, keep the old one until clients move"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Ask the front end to read both names with ?? everywhere forever"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Rename it back and never rename anything again"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Renaming is a breaking change. Additive change first (both fields), then remove the old one with notice — Chapter 4.</p><p><i>VI: Đổi tên là thay đổi phá vỡ. Thêm trước (cả hai trường), rồi mới bỏ trường cũ có báo trước — Chương 4.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The form sends startAt \"2026-11-02T08:00\" with no offset; the UTC server stores 08:00Z and the screen shows 15:00. The contract rule is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Form gửi startAt \"2026-11-02T08:00\" không có độ lệch; server UTC lưu 08:00Z và màn hình hiện 15:00. Luật hợp đồng là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Store every time as a string exactly as received"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Times must carry an offset or Z; reject anything without one with 400"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Send times as “08:00” and the date in another field"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The server must guess the user’s time zone from the IP address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A time without an offset is ambiguous. LabFlow’s ISO check requires Z or ±hh:mm and returns 400 otherwise; storage is always UTC (lesson 1.4).</p><p><i>VI: Thời điểm không có độ lệch là mơ hồ. Bộ kiểm ISO của LabFlow bắt buộc Z hoặc ±hh:mm, thiếu thì 400; lưu luôn bằng UTC (bài 1.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Every error returns HTTP 200 with {\"ok\": false}, so the app shows “Success!”. What breaks besides the screen?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mọi lỗi trả HTTP 200 kèm {\"ok\": false} nên app hiện \"Thành công!\". Ngoài màn hình còn gì hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing — the body is enough for every client"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the browser console, which turns red"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the database, which stores the wrong value"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every tool that reads the status line: fetch’s res.ok, retries, caches, monitoring"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The status code is the part of the contract that generic tools understand. 200 for a failure lies to caches, retry logic and dashboards (lesson 1.3).</p><p><i>VI: Mã trạng thái là phần hợp đồng mà mọi công cụ chung đều hiểu. 200 cho một thất bại là nói dối cache, logic thử lại và dashboard (bài 1.3).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The edit form sends PUT /labs/lab_1 with only {\"name\": \"…\"} and the capacity disappears. Which fix matches HTTP semantics?</p><p style=\"opacity:.75;font-size:.92em\"><i>Form sửa gửi PUT /labs/lab_1 chỉ với {\"name\": \"…\"} và sức chứa biến mất. Cách sửa nào đúng ngữ nghĩa HTTP?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Make PUT quietly keep the old value of every field the form did not send"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Add a POST /labs/lab_1/update endpoint and use it for every kind of edit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Send the edit as a GET with the changed fields in query parameters"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PATCH for partial edits; PUT stays a full replacement that rejects missing fields"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>PUT means “replace with this representation”, so a missing field is a request error (400). Partial changes are PATCH (JSON Merge Patch) — lesson 1.2.</p><p><i>VI: PUT nghĩa là \"thay bằng bản này\", nên thiếu trường là lỗi request (400). Sửa một phần là PATCH (JSON Merge Patch) — bài 1.2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Fixing the screen instead of the contract.|||Sửa màn hình thay vì sửa hợp đồng."
+        },
+        {
+          "loi": "Making PUT “smart” — then it is no longer idempotent replacement.|||Làm PUT \"thông minh\" — khi đó nó không còn là phép thay thế lặp lại an toàn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "offset",
+          "vi": "độ lệch múi giờ",
+          "giaiThich": "+07:00 hoặc Z (= +00:00)."
+        },
+        {
+          "en": "partial update",
+          "vi": "cập nhật một phần"
+        }
+      ]
+    },
+    {
+      "title": "Incidents 3 — Write classifyStatus(code): never trust a 200 blindly",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "status classes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The demo broke because the app looked at the body and ignored the status line. Write <code>classifyStatus(code)</code> that returns the class of an HTTP status code, the way every client and dashboard reads it:</p><ul>\n<li>100–199 ⇒ <code>'informational'</code>, 200–299 ⇒ <code>'success'</code>, 300–399 ⇒ <code>'redirect'</code></li>\n<li>400–499 ⇒ <code>'client error'</code> (the caller must change the request), 500–599 ⇒ <code>'server error'</code></li>\n<li>anything else — not an integer, below 100, above 599 ⇒ <code>'invalid'</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Buổi demo hỏng vì app nhìn body mà bỏ qua dòng trạng thái. Viết <code>classifyStatus(code)</code> trả về lớp của một mã trạng thái HTTP, đúng cách mọi client và dashboard đọc nó:</p><ul>\n<li>100–199 ⇒ <code>'informational'</code>, 200–299 ⇒ <code>'success'</code>, 300–399 ⇒ <code>'redirect'</code></li>\n<li>400–499 ⇒ <code>'client error'</code> (bên gọi phải sửa request), 500–599 ⇒ <code>'server error'</code></li>\n<li>còn lại — không phải số nguyên, dưới 100, trên 599 ⇒ <code>'invalid'</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "code — any value (normally a number).|||code — giá trị bất kỳ (thường là số).",
+      "outputSpec": "One of the six strings above.|||Một trong sáu chuỗi ở trên.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "classifyStatus(201)",
+          "output": "\"success\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check “is this a valid code” first, then compare ranges from low to high.|||Kiểm \"có phải mã hợp lệ\" trước, rồi so các khoảng từ thấp lên cao.",
+        "Number.isInteger rejects 200.5 and \"200\".|||Number.isInteger loại 200.5 và \"200\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** code ⇒ 'informational' | 'success' | 'redirect' | 'client error' | 'server error' | 'invalid' */\nfunction classifyStatus(code) {\n  // Write your solution here\n  return code < 400 ? 'success' : 'client error';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction classifyStatus(code) {\n  if (!Number.isInteger(code) || code < 100 || code > 599) return 'invalid';\n  if (code < 200) return 'informational';\n  if (code < 300) return 'success';\n  if (code < 400) return 'redirect';\n  if (code < 500) return 'client error';  // the caller must change something\n  return 'server error';                  // the caller may retry later\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 9110 §15 groups codes by their first digit; the class is what generic software reacts to (fetch’s res.ok is exactly 200–299). Validating first keeps nonsense like 600 out of every branch.</p>",
+      "solutionExplanationHtmlVi": "<p>RFC 9110 §15 chia mã theo chữ số đầu; lớp là thứ phần mềm chung phản ứng theo (res.ok của fetch chính là 200–299). Kiểm hợp lệ trước giữ những thứ vô nghĩa như 600 khỏi mọi nhánh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: classifyStatus(201)",
+              "vi": "Ca 1"
+            },
+            "goi": "classifyStatus(201)",
+            "mongDoi": "success"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: classifyStatus(404)",
+              "vi": "Ca 2"
+            },
+            "goi": "classifyStatus(404)",
+            "mongDoi": "client error"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: classifyStatus(503)",
+              "vi": "Ca 3"
+            },
+            "goi": "classifyStatus(503)",
+            "mongDoi": "server error"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "classifyStatus(304)",
+            "mongDoi": "redirect",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "classifyStatus(100)",
+            "mongDoi": "informational",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "classifyStatus(599)",
+            "mongDoi": "server error",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "classifyStatus(600)",
+            "mongDoi": "invalid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "classifyStatus(99)",
+            "mongDoi": "invalid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "classifyStatus(200.5)",
+            "mongDoi": "invalid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "classifyStatus(\"404\")",
+            "mongDoi": "invalid",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "classifyStatus(422)",
+            "mongDoi": "client error",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Math.floor(code / 100) on 600 or 99 gives a class that does not exist.|||Math.floor(code / 100) với 600 hay 99 cho ra một lớp không tồn tại."
+        },
+        {
+          "loi": "Accepting the string \"404\": status codes are numbers in every client library.|||Chấp nhận chuỗi \"404\": mã trạng thái là số trong mọi thư viện client."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "status class",
+          "vi": "lớp mã trạng thái"
+        },
+        {
+          "en": "client error",
+          "vi": "lỗi phía client"
+        }
+      ]
+    }
+  ]
+}

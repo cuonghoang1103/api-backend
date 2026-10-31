@@ -1,0 +1,595 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-1-5-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-1-5-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 1.1 — The issue-report contract",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "resource design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lab 1 adds device issue reports to LabFlow. Each row is a request from the real lab run (tokens: tok_an = student An, tok_lan = lab manager Lan). Choose the endpoint and the status it returned.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 1 thêm báo hỏng thiết bị vào LabFlow. Mỗi dòng là một request trong lượt chạy thật của lab (token: tok_an = sinh viên An, tok_lan = quản lý phòng Lan). Chọn endpoint và mã trạng thái nó trả về.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A new report is created in the collection of its device.|||Báo hỏng mới được tạo trong bộ sưu tập của thiết bị.",
+        "Resolving twice is valid in general but not in the current state.|||Resolve hai lần hợp lệ nói chung nhưng không ở trạng thái hiện tại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 1.1 — The issue-report contract\n\nAnswer in the answer panel (no code needed).\n\n1. Request → endpoint → statusRequest → endpoint → mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 1.1 — The issue-report contract — answer key\n\n1. Request → endpoint → statusRequest → endpoint → mã\n   - r1.e: POST /devices/{deviceId}/issues\n   - r1.c: 201\n   - r2.e: POST /devices/{deviceId}/issues\n   - r2.c: 400\n   - r3.e: POST /devices/{deviceId}/issues\n   - r3.c: 404\n   - r4.e: GET /devices/{deviceId}/issues\n   - r4.c: 200\n   - r5.e: POST /issues/{issueId}/resolve\n   - r5.c: 403\n   - r6.e: POST /issues/{issueId}/resolve\n   - r6.c: 200\n   - r7.e: POST /issues/{issueId}/resolve\n   - r7.c: 409\n   The collection lives under the device (reports are about one device); each report also has its own top-level address /issues/{id}, so the Location header of the 201 points there. “Resolve” has rules (manager only, not twice) ⇒ an action resource, like cancel.VI: Bộ sưu tập nằm dưới thiết bị (báo hỏng là về một thiết bị); mỗi báo hỏng cũng có địa chỉ riêng ở gốc /issues/{id}, nên header Location của 201 trỏ về đó. \"Resolve\" có luật (chỉ quản lý, không hai lần) ⇒ một tài nguyên hành động, giống cancel.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The collection lives under the device (reports are about one device); each report also has its own top-level address /issues/{id}, so the Location header of the 201 points there. “Resolve” has rules (manager only, not twice) ⇒ an action resource, like cancel.</p><p><i>VI: Bộ sưu tập nằm dưới thiết bị (báo hỏng là về một thiết bị); mỗi báo hỏng cũng có địa chỉ riêng ở gốc /issues/{id}, nên header Location của 201 trỏ về đó. \"Resolve\" có luật (chỉ quản lý, không hai lần) ⇒ một tài nguyên hành động, giống cancel.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → endpoint → status</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → endpoint → mã</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "e",
+                "ten": "Endpoint",
+                "luaChon": [
+                  "POST /devices/{deviceId}/issues",
+                  "GET /devices/{deviceId}/issues",
+                  "GET /issues/{issueId}",
+                  "POST /issues/{issueId}/resolve"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "Status",
+                "luaChon": [
+                  "200",
+                  "201",
+                  "400",
+                  "401",
+                  "403",
+                  "404",
+                  "405",
+                  "409"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "An reports “Cổng console không lên đèn”, severity HIGH, on dev_1"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "An reports on dev_1 with body {\"severity\": \"URGENT\"}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "An reports on dev_9"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Anyone lists the reports of dev_1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "An (a student) tries to resolve iss_1"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Lan resolves iss_1"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Lan resolves iss_1 a second time"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": "POST /devices/{deviceId}/issues",
+              "r1.c": "201",
+              "r2.e": "POST /devices/{deviceId}/issues",
+              "r2.c": "400",
+              "r3.e": "POST /devices/{deviceId}/issues",
+              "r3.c": "404",
+              "r4.e": "GET /devices/{deviceId}/issues",
+              "r4.c": "200",
+              "r5.e": "POST /issues/{issueId}/resolve",
+              "r5.c": "403",
+              "r6.e": "POST /issues/{issueId}/resolve",
+              "r6.c": "200",
+              "r7.e": "POST /issues/{issueId}/resolve",
+              "r7.c": "409"
+            },
+            "giaiThich": "<p>The collection lives under the device (reports are about one device); each report also has its own top-level address /issues/{id}, so the Location header of the 201 points there. “Resolve” has rules (manager only, not twice) ⇒ an action resource, like cancel.</p><p><i>VI: Bộ sưu tập nằm dưới thiết bị (báo hỏng là về một thiết bị); mỗi báo hỏng cũng có địa chỉ riêng ở gốc /issues/{id}, nên header Location của 201 trỏ về đó. \"Resolve\" có luật (chỉ quản lý, không hai lần) ⇒ một tài nguyên hành động, giống cancel.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "PATCH /issues/{id} {\"status\": \"RESOLVED\"} — lets anyone set any status.|||PATCH /issues/{id} {\"status\": \"RESOLVED\"} — cho ai cũng đặt được status bất kỳ."
+        },
+        {
+          "loi": "403 for a device that does not exist.|||403 cho thiết bị không tồn tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "issue report",
+          "vi": "báo hỏng"
+        },
+        {
+          "en": "severity",
+          "vi": "mức độ nghiêm trọng"
+        }
+      ]
+    },
+    {
+      "title": "Lab 1.2 — Write reportIssue(db, req): POST /devices/{id}/issues",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "validation order",
+        "side effects"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Re-create the lab’s <code>POST /devices/{deviceId}/issues</code> as a pure function. <code>req = { userId, deviceId, body, now }</code> (<code>userId</code> is null when the token is missing or wrong). Checks in the order the real router runs them:</p><ol>\n<li>No <code>userId</code> ⇒ <code>{ status: 401, body: { error: 'UNAUTHENTICATED' } }</code></li>\n<li>No such device ⇒ <code>{ status: 404, body: { error: 'DEVICE_NOT_FOUND' } }</code></li>\n<li>Body errors, ALL of them, title first ⇒ <code>{ status: 400, body: { error: 'VALIDATION_FAILED', details } }</code>: <code>title</code> missing or blank ⇒ <code>{ field: 'title', issue: 'required' }</code>; <code>severity</code> not LOW/MEDIUM/HIGH ⇒ <code>{ field: 'severity', issue: 'one of LOW, MEDIUM, HIGH' }</code></li>\n<li>Otherwise ⇒ <code>{ status: 201, location: '/issues/iss_N', body: issue, deviceStatus }</code> where N = number of existing issues + 1, <code>issue = { id, deviceId, reportedBy, title (trimmed), severity, status: 'OPEN', createdAt: now }</code>, and <code>deviceStatus</code> = <code>'MAINTENANCE'</code> for a HIGH report, otherwise the device’s current status.</li></ol>\n<p>Do not modify <code>db</code> — return what the server would store.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại <code>POST /devices/{deviceId}/issues</code> của lab thành một hàm thuần. <code>req = { userId, deviceId, body, now }</code> (<code>userId</code> là null khi thiếu hoặc sai token). Kiểm theo đúng thứ tự router thật chạy:</p><ol>\n<li>Không có <code>userId</code> ⇒ <code>{ status: 401, body: { error: 'UNAUTHENTICATED' } }</code></li>\n<li>Không có thiết bị ⇒ <code>{ status: 404, body: { error: 'DEVICE_NOT_FOUND' } }</code></li>\n<li>Lỗi body, TẤT CẢ, title trước ⇒ <code>{ status: 400, body: { error: 'VALIDATION_FAILED', details } }</code>: <code>title</code> thiếu hoặc rỗng ⇒ <code>{ field: 'title', issue: 'required' }</code>; <code>severity</code> không phải LOW/MEDIUM/HIGH ⇒ <code>{ field: 'severity', issue: 'one of LOW, MEDIUM, HIGH' }</code></li>\n<li>Còn lại ⇒ <code>{ status: 201, location: '/issues/iss_N', body: issue, deviceStatus }</code> với N = số báo hỏng hiện có + 1, <code>issue = { id, deviceId, reportedBy, title (đã cắt khoảng trắng), severity, status: 'OPEN', createdAt: now }</code>, và <code>deviceStatus</code> = <code>'MAINTENANCE'</code> nếu báo HIGH, ngược lại là status hiện tại của thiết bị.</li></ol>\n<p>Không sửa <code>db</code> — trả về thứ server sẽ lưu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "db — { devices, issues }; req — { userId, deviceId, body, now }.",
+      "outputSpec": "{ status, body, location?, deviceStatus? }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\"},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+          "output": "{\"status\":201,\"location\":\"/issues/iss_1\",\"body\":{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},\"deviceStatus\":\"MAINTENANCE\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Same three-step pattern as validateBooking: who are you → does it exist → is the body right.|||Cùng khuôn ba bước như validateBooking: bạn là ai → nó có tồn tại → body có đúng.",
+        "\"   \" is blank: check title.trim().|||\"   \" là rỗng: kiểm title.trim()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** db = { devices, issues }, req = { userId, deviceId, body, now } ⇒ { status, body, location?, deviceStatus? } */\nfunction reportIssue(db, req) {\n  // Write your solution here\n  var b = req.body;\n  if (!b.title) return { status: 400, body: { error: 'VALIDATION_FAILED' } };\n  return { status: 201, body: { id: 'iss_1', title: b.title, severity: b.severity, status: 'OPEN' } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction reportIssue(db, req) {\n  if (!req.userId) return { status: 401, body: { error: 'UNAUTHENTICATED' } };\n  var device = db.devices.find(function (d) { return d.id === req.deviceId; });\n  if (!device) return { status: 404, body: { error: 'DEVICE_NOT_FOUND' } };\n  var SEVERITIES = ['LOW', 'MEDIUM', 'HIGH'];\n  var b = req.body || {};\n  var details = [];\n  if (typeof b.title !== 'string' || !b.title.trim()) details.push({ field: 'title', issue: 'required' });\n  if (SEVERITIES.indexOf(b.severity) < 0) details.push({ field: 'severity', issue: 'one of LOW, MEDIUM, HIGH' });\n  if (details.length) return { status: 400, body: { error: 'VALIDATION_FAILED', details: details } };\n  var issue = {\n    id: 'iss_' + (db.issues.length + 1), deviceId: device.id, reportedBy: req.userId,\n    title: b.title.trim(), severity: b.severity, status: 'OPEN', createdAt: req.now,\n  };\n  return {\n    status: 201,\n    location: '/issues/' + issue.id,\n    body: issue,\n    deviceStatus: b.severity === 'HIGH' ? 'MAINTENANCE' : device.status,   // a HIGH report locks the device\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order follows the middleware chain: requireAuth runs before the handler, the handler loads the parent (device) before reading the body. Returning deviceStatus makes the side effect of a HIGH report explicit — the lab’s rubric asks you to prove it with GET /devices/dev_1.</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ tự đi theo chuỗi middleware: requireAuth chạy trước handler, handler nạp cha (thiết bị) trước khi đọc body. Trả deviceStatus làm rõ hiệu ứng phụ của báo HIGH — thang chấm của lab yêu cầu chứng minh bằng GET /devices/dev_1.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real 201 of the lab",
+              "vi": "201 thật của lab"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\"},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 201,
+              "location": "/issues/iss_1",
+              "body": {
+                "id": "iss_1",
+                "deviceId": "dev_1",
+                "reportedBy": "usr_1",
+                "title": "Cổng console không lên đèn",
+                "severity": "HIGH",
+                "status": "OPEN",
+                "createdAt": "2026-10-31T15:45:00.120Z"
+              },
+              "deviceStatus": "MAINTENANCE"
+            }
+          },
+          {
+            "moTa": {
+              "en": "The real 400 of the lab",
+              "vi": "400 thật của lab"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"body\":{\"severity\":\"URGENT\"},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 400,
+              "body": {
+                "error": "VALIDATION_FAILED",
+                "details": [
+                  {
+                    "field": "title",
+                    "issue": "required"
+                  },
+                  {
+                    "field": "severity",
+                    "issue": "one of LOW, MEDIUM, HIGH"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\"...",
+              "vi": "Ca 3"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_9\",\"body\":{\"title\":\"x\",\"severity\":\"LOW\"},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "DEVICE_NOT_FOUND"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":null,\"deviceId\":\"dev_9\",\"body\":{},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "error": "UNAUTHENTICATED"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_2\",\"deviceId\":\"dev_9\",\"body\":{\"severity\":\"URGENT\"},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "DEVICE_NOT_FOUND"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[{\"id\":\"iss_1\"},{\"id\":\"iss_2\"}]}, {\"userId\":\"usr_2\",\"deviceId\":\"dev_2\",\"body\":{\"title\":\"  Cổng 24 chập chờn  \",\"severity\":\"LOW\"},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 201,
+              "location": "/issues/iss_3",
+              "body": {
+                "id": "iss_3",
+                "deviceId": "dev_2",
+                "reportedBy": "usr_2",
+                "title": "Cổng 24 chập chờn",
+                "severity": "LOW",
+                "status": "OPEN",
+                "createdAt": "2026-10-31T15:45:00.120Z"
+              },
+              "deviceStatus": "AVAILABLE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_2\",\"body\":{\"title\":\"   \",\"severity\":\"high\"},\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 400,
+              "body": {
+                "error": "VALIDATION_FAILED",
+                "details": [
+                  {
+                    "field": "title",
+                    "issue": "required"
+                  },
+                  {
+                    "field": "severity",
+                    "issue": "one of LOW, MEDIUM, HIGH"
+                  }
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "reportIssue({\"devices\":[{\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\"},{\"id\":\"dev_2\",\"labId\":\"lab_1\",\"name\":\"Cisco Switch 2960\",\"type\":\"SWITCH\",\"serialNo\":\"FOC1932X0K7\",\"status\":\"AVAILABLE\"}],\"issues\":[]}, {\"userId\":\"usr_1\",\"deviceId\":\"dev_1\",\"now\":\"2026-10-31T15:45:00.120Z\"})",
+            "mongDoi": {
+              "status": 400,
+              "body": {
+                "error": "VALIDATION_FAILED",
+                "details": [
+                  {
+                    "field": "title",
+                    "issue": "required"
+                  },
+                  {
+                    "field": "severity",
+                    "issue": "one of LOW, MEDIUM, HIGH"
+                  }
+                ]
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Validating the body before checking the device — the real router answers 404 for dev_9 even with a bad body.|||Kiểm body trước khi kiểm thiết bị — router thật trả 404 cho dev_9 kể cả khi body sai."
+        },
+        {
+          "loi": "Accepting \"high\" in lower case: enum values are exact.|||Nhận \"high\" chữ thường: giá trị enum phải khớp chính xác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "side effect",
+          "vi": "hiệu ứng phụ"
+        },
+        {
+          "en": "parent resource",
+          "vi": "tài nguyên cha"
+        }
+      ]
+    },
+    {
+      "title": "Lab 1.3 — Write resolveIssue(db, req): POST /issues/{id}/resolve",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "authorisation order",
+        "action endpoints"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The action endpoint of the lab. <code>req = { user, issueId, now }</code>, <code>user</code> = <code>{ id, role }</code> or null. The real chain is <code>requireAuth → requireRole('LAB_MANAGER') → handler</code>, so:</p><ol>\n<li>no user ⇒ 401 <code>UNAUTHENTICATED</code></li>\n<li>role is not <code>LAB_MANAGER</code> ⇒ 403 <code>FORBIDDEN</code> (even for an issue that does not exist)</li>\n<li>no such issue ⇒ 404 <code>ISSUE_NOT_FOUND</code></li>\n<li>already <code>RESOLVED</code> ⇒ 409 <code>ALREADY_RESOLVED</code></li>\n<li>otherwise 200 with a copy of the issue whose <code>status</code> is <code>'RESOLVED'</code> and <code>resolvedAt</code> = <code>now</code>.</li></ol>\n<p>Every error is <code>{ status, body: { error } }</code>; success is <code>{ status: 200, body }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Endpoint hành động của lab. <code>req = { user, issueId, now }</code>, <code>user</code> = <code>{ id, role }</code> hoặc null. Chuỗi thật là <code>requireAuth → requireRole('LAB_MANAGER') → handler</code>, nên:</p><ol>\n<li>không có user ⇒ 401 <code>UNAUTHENTICATED</code></li>\n<li>vai trò không phải <code>LAB_MANAGER</code> ⇒ 403 <code>FORBIDDEN</code> (kể cả với báo hỏng không tồn tại)</li>\n<li>không có báo hỏng ⇒ 404 <code>ISSUE_NOT_FOUND</code></li>\n<li>đã <code>RESOLVED</code> ⇒ 409 <code>ALREADY_RESOLVED</code></li>\n<li>còn lại 200 với bản sao của báo hỏng có <code>status</code> là <code>'RESOLVED'</code> và <code>resolvedAt</code> = <code>now</code>.</li></ol>\n<p>Lỗi nào cũng là <code>{ status, body: { error } }</code>; thành công là <code>{ status: 200, body }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "db — { issues }; req — { user, issueId, now }.",
+      "outputSpec": "{ status, body }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T15:45:00.120Z\",\"resolvedAt\":\"2026-10-31T16:00:00.000Z\"}]}, {\"user\":{\"id\":\"usr_1\",\"role\":\"STUDENT\"},\"issueId\":\"iss_1\",\"now\":\"2026-10-31T15:45:00.191Z\"})",
+          "output": "{\"status\":403,\"body\":{\"error\":\"FORBIDDEN\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write the four guards as early returns, in the order of the middleware chain.|||Viết bốn chốt chặn thành các return sớm, theo thứ tự chuỗi middleware.",
+        "Copy the issue before changing it — db must stay untouched.|||Sao chép báo hỏng trước khi đổi — db phải giữ nguyên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** db = { issues }, req = { user, issueId, now } ⇒ { status, body } */\nfunction resolveIssue(db, req) {\n  // Write your solution here\n  var issue = db.issues.find(function (i) { return i.id === req.issueId; });\n  if (!issue) return { status: 404, body: { error: 'ISSUE_NOT_FOUND' } };\n  issue.status = 'RESOLVED';\n  return { status: 200, body: issue };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction resolveIssue(db, req) {\n  if (!req.user) return { status: 401, body: { error: 'UNAUTHENTICATED' } };\n  if (req.user.role !== 'LAB_MANAGER') return { status: 403, body: { error: 'FORBIDDEN' } };\n  var issue = db.issues.find(function (i) { return i.id === req.issueId; });\n  if (!issue) return { status: 404, body: { error: 'ISSUE_NOT_FOUND' } };\n  if (issue.status === 'RESOLVED') return { status: 409, body: { error: 'ALREADY_RESOLVED' } };\n  var out = {};\n  Object.keys(issue).forEach(function (k) { out[k] = issue[k]; });\n  out.status = 'RESOLVED';\n  out.resolvedAt = req.now;\n  return { status: 200, body: out };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Checking the role before loading the resource is what the real router does, and it also avoids telling unauthorised users which ids exist. 409 makes the second resolve visible instead of silently re-stamping resolvedAt.</p>",
+      "solutionExplanationHtmlVi": "<p>Kiểm vai trò trước khi nạp tài nguyên là đúng việc router thật làm, và còn tránh cho người không có quyền biết id nào tồn tại. 409 làm lần resolve thứ hai hiện rõ thay vì lặng lẽ đóng lại dấu resolvedAt.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real 403 of the lab (An)",
+              "vi": "403 thật của lab (An)"
+            },
+            "goi": "resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T15:45:00.120Z\",\"resolvedAt\":\"2026-10-31T16:00:00.000Z\"}]}, {\"user\":{\"id\":\"usr_1\",\"role\":\"STUDENT\"},\"issueId\":\"iss_1\",\"now\":\"2026-10-31T15:45:00.191Z\"})",
+            "mongDoi": {
+              "status": 403,
+              "body": {
+                "error": "FORBIDDEN"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "The real 200 of the lab (Lan)",
+              "vi": "200 thật của lab (Lan)"
+            },
+            "goi": "resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T15:45:00.120Z\",\"resolvedAt\":\"2026-10-31T16:00:00.000Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_1\",\"now\":\"2026-10-31T15:45:00.191Z\"})",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "id": "iss_1",
+                "deviceId": "dev_1",
+                "reportedBy": "usr_1",
+                "title": "Cổng console không lên đèn",
+                "severity": "HIGH",
+                "status": "RESOLVED",
+                "createdAt": "2026-10-31T15:45:00.120Z",
+                "resolvedAt": "2026-10-31T15:45:00.191Z"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"...",
+              "vi": "Ca 3"
+            },
+            "goi": "resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T15:45:00.120Z\",\"resolvedAt\":\"2026-10-31T16:00:00.000Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_2\",\"now\":\"2026-10-31T15:45:00.191Z\"})",
+            "mongDoi": {
+              "status": 409,
+              "body": {
+                "error": "ALREADY_RESOLVED"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T15:45:00.120Z\",\"resolvedAt\":\"2026-10-31T16:00:00.000Z\"}]}, {\"user\":null,\"issueId\":\"iss_1\",\"now\":\"2026-10-31T15:45:00.191Z\"})",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "error": "UNAUTHENTICATED"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T15:45:00.120Z\",\"resolvedAt\":\"2026-10-31T16:00:00.000Z\"}]}, {\"user\":{\"id\":\"usr_1\",\"role\":\"STUDENT\"},\"issueId\":\"iss_9\",\"now\":\"2026-10-31T15:45:00.191Z\"})",
+            "mongDoi": {
+              "status": 403,
+              "body": {
+                "error": "FORBIDDEN"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "resolveIssue({\"issues\":[{\"id\":\"iss_1\",\"deviceId\":\"dev_1\",\"reportedBy\":\"usr_1\",\"title\":\"Cổng console không lên đèn\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-31T15:45:00.120Z\"},{\"id\":\"iss_2\",\"deviceId\":\"dev_2\",\"reportedBy\":\"usr_2\",\"title\":\"Cổng 24 chập chờn\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-31T15:45:00.120Z\",\"resolvedAt\":\"2026-10-31T16:00:00.000Z\"}]}, {\"user\":{\"id\":\"usr_3\",\"role\":\"LAB_MANAGER\"},\"issueId\":\"iss_9\",\"now\":\"2026-10-31T15:45:00.191Z\"})",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "ISSUE_NOT_FOUND"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "db is not modified",
+              "vi": "Không sửa db"
+            },
+            "goi": "(function () { var db = { issues: [{ id: 'iss_5', status: 'OPEN' }] }; resolveIssue(db, { user: { id: 'usr_3', role: 'LAB_MANAGER' }, issueId: 'iss_5', now: 'T' }); return db; })()",
+            "mongDoi": {
+              "issues": [
+                {
+                  "id": "iss_5",
+                  "status": "OPEN"
+                }
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Looking up the issue first: a student would then learn which issue ids exist (404 vs 403).|||Tìm báo hỏng trước: sinh viên sẽ biết id báo hỏng nào tồn tại (404 hay 403)."
+        },
+        {
+          "loi": "Returning 200 again for an already resolved issue — the client cannot tell nothing happened.|||Trả 200 lần nữa cho báo hỏng đã xử lý — client không biết là không có gì xảy ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "role",
+          "vi": "vai trò"
+        },
+        {
+          "en": "guard clause",
+          "vi": "chốt chặn đầu hàm"
+        }
+      ]
+    }
+  ]
+}

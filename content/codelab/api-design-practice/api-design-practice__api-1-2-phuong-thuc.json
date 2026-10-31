@@ -1,0 +1,620 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-1-2-phuong-thuc",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-1-2-phuong-thuc"
+  },
+  "exercises": [
+    {
+      "title": "Methods 1 — Safe and idempotent, per RFC 9110",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "HTTP methods"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Safe = the client does not ask for any change. Idempotent = sending the same request twice leaves the server in the same state as once (the responses may differ). Fill in the table as RFC 9110 §9.2 defines it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Safe (an toàn) = client không yêu cầu thay đổi gì. Idempotent (lặp lại an toàn) = gửi cùng một request hai lần để lại trạng thái server như gửi một lần (response có thể khác). Điền bảng đúng như RFC 9110 §9.2 định nghĩa.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Idempotent is about the state after the request, not the response.|||Idempotent nói về trạng thái sau request, không phải response.",
+        "RFC 9110 does not promise PATCH is idempotent.|||RFC 9110 không hứa PATCH idempotent."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Methods 1 — Safe and idempotent, per RFC 9110\n\nAnswer in the answer panel (no code needed).\n\n1. Method guaranteesLời hứa của phương thức\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Methods 1 — Safe and idempotent, per RFC 9110 — answer key\n\n1. Method guaranteesLời hứa của phương thức\n   - r1.s: yes\n   - r1.i: yes\n   - r2.s: yes\n   - r2.i: yes\n   - r3.s: yes\n   - r3.i: yes\n   - r4.s: no\n   - r4.i: no\n   - r5.s: no\n   - r5.i: yes\n   - r6.s: no\n   - r6.i: no\n   - r7.s: no\n   - r7.i: yes\n   Every safe method is idempotent. PUT and DELETE are idempotent but not safe. POST and PATCH are neither in general — a PATCH like “add 1 to capacity” changes the state again each time. That is why clients and proxies retry GET/PUT/DELETE automatically but never POST.VI: Mọi phương thức an toàn đều idempotent. PUT và DELETE idempotent nhưng không an toàn. POST và PATCH nói chung không phải cả hai — một PATCH kiểu \"cộng 1 vào sức chứa\" đổi trạng thái thêm mỗi lần. Vì thế client và proxy tự thử lại GET/PUT/DELETE nhưng không bao giờ thử lại POST.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every safe method is idempotent. PUT and DELETE are idempotent but not safe. POST and PATCH are neither in general — a PATCH like “add 1 to capacity” changes the state again each time. That is why clients and proxies retry GET/PUT/DELETE automatically but never POST.</p><p><i>VI: Mọi phương thức an toàn đều idempotent. PUT và DELETE idempotent nhưng không an toàn. POST và PATCH nói chung không phải cả hai — một PATCH kiểu \"cộng 1 vào sức chứa\" đổi trạng thái thêm mỗi lần. Vì thế client và proxy tự thử lại GET/PUT/DELETE nhưng không bao giờ thử lại POST.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Method guarantees</p><p style=\"opacity:.75;font-size:.92em\"><i>Lời hứa của phương thức</i></p>",
+            "cot": [
+              {
+                "ma": "m",
+                "ten": "Method"
+              },
+              {
+                "ma": "s",
+                "ten": "Safe?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              },
+              {
+                "ma": "i",
+                "ten": "Idempotent?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "m": "GET"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "m": "HEAD"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "m": "OPTIONS"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "m": "POST"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "m": "PUT"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "m": "PATCH"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "m": "DELETE"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "yes",
+              "r1.i": "yes",
+              "r2.s": "yes",
+              "r2.i": "yes",
+              "r3.s": "yes",
+              "r3.i": "yes",
+              "r4.s": "no",
+              "r4.i": "no",
+              "r5.s": "no",
+              "r5.i": "yes",
+              "r6.s": "no",
+              "r6.i": "no",
+              "r7.s": "no",
+              "r7.i": "yes"
+            },
+            "giaiThich": "<p>Every safe method is idempotent. PUT and DELETE are idempotent but not safe. POST and PATCH are neither in general — a PATCH like “add 1 to capacity” changes the state again each time. That is why clients and proxies retry GET/PUT/DELETE automatically but never POST.</p><p><i>VI: Mọi phương thức an toàn đều idempotent. PUT và DELETE idempotent nhưng không an toàn. POST và PATCH nói chung không phải cả hai — một PATCH kiểu \"cộng 1 vào sức chứa\" đổi trạng thái thêm mỗi lần. Vì thế client và proxy tự thử lại GET/PUT/DELETE nhưng không bao giờ thử lại POST.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying DELETE is not idempotent because the second call gives 404.|||Nói DELETE không idempotent vì lần gọi thứ hai trả 404."
+        },
+        {
+          "loi": "Marking PATCH idempotent because JSON Merge Patch with fixed values happens to be.|||Đánh dấu PATCH idempotent vì JSON Merge Patch với giá trị cố định tình cờ là vậy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "safe",
+          "vi": "an toàn",
+          "giaiThich": "Không yêu cầu thay đổi trạng thái."
+        },
+        {
+          "en": "idempotent",
+          "vi": "lặp lại an toàn",
+          "giaiThich": "Gửi N lần = gửi 1 lần (về trạng thái)."
+        }
+      ]
+    },
+    {
+      "title": "Methods 2 — PUT, PATCH, DELETE in real LabFlow runs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "PUT vs PATCH",
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts measured in lesson 1.2: DELETE /devices/dev_2 ⇒ 204, then again ⇒ 404 DEVICE_NOT_FOUND; PUT /devices/dev_1 with only {\"status\": \"AVAILABLE\"} ⇒ 400 with four missing fields; OPTIONS /devices/dev_1 ⇒ 204 with Allow: GET, HEAD, PUT, PATCH, DELETE.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sự thật đo trong bài 1.2: DELETE /devices/dev_2 ⇒ 204, gọi lại ⇒ 404 DEVICE_NOT_FOUND; PUT /devices/dev_1 chỉ với {\"status\": \"AVAILABLE\"} ⇒ 400 kèm bốn trường thiếu; OPTIONS /devices/dev_1 ⇒ 204 kèm Allow: GET, HEAD, PUT, PATCH, DELETE.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Separate “what the server state is” from “what the response says”.|||Tách \"trạng thái server là gì\" khỏi \"response nói gì\".",
+        "null and “absent” mean different things in a merge patch.|||null và \"vắng mặt\" có nghĩa khác nhau trong merge patch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Methods 2 — PUT, PATCH, DELETE in real LabFlow runs\n\nAnswer in the answer panel (no code needed).\n\n1. The second DELETE returns 404. Is DELETE still idempotent?Lần DELETE thứ hai trả 404. DELETE vẫn idempotent chứ?\n2. Why does LabFlow’s PUT answer 400 when fields are missing instead of keeping the old values?Vì sao PUT của LabFlow trả 400 khi thiếu trường thay vì giữ giá trị cũ?\n3. With JSON Merge Patch, how do you remove the optional field note from a device?Với JSON Merge Patch, làm sao xoá trường tuỳ chọn note khỏi một thiết bị?\n4. A mobile app on a flaky network sends POST /bookings, gets a timeout, and retries automatically. Risk?App mobile mạng chập chờn gửi POST /bookings, bị timeout rồi tự thử lại. Rủi ro?\n5. What must a 405 response carry, per RFC 9110 §15.5.6?Theo RFC 9110 §15.5.6, response 405 phải kèm gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Methods 2 — PUT, PATCH, DELETE in real LabFlow runs — answer key\n\n1. The second DELETE returns 404. Is DELETE still idempotent?Lần DELETE thứ hai trả 404. DELETE vẫn idempotent chứ?\n   Answer: c) Yes — after one call or two the device is gone; only the response differs\n   Idempotency is about the resulting state. Many APIs return 404 the second time; some return 204 again — both are allowed.VI: Idempotent nói về trạng thái kết quả. Nhiều API trả 404 lần hai; có API trả 204 lần nữa — cả hai đều được phép.\n\n2. Why does LabFlow’s PUT answer 400 when fields are missing instead of keeping the old values?Vì sao PUT của LabFlow trả 400 khi thiếu trường thay vì giữ giá trị cũ?\n   Answer: a) PUT means “replace with this”; guessing hides client bugs and blurs it with PATCH\n   A strict PUT makes the contract clear: send everything, or use PATCH for a partial change.VI: PUT chặt làm hợp đồng rõ ràng: gửi đủ, hoặc dùng PATCH cho thay đổi một phần.\n\n3. With JSON Merge Patch, how do you remove the optional field note from a device?Với JSON Merge Patch, làm sao xoá trường tuỳ chọn note khỏi một thiết bị?\n   Answer: b) PATCH {\"note\": null}\n   RFC 7396: null in the patch means “remove this member”; an omitted member means “leave it unchanged”.VI: RFC 7396: null trong bản vá nghĩa là \"xoá trường này\"; trường không nhắc tới nghĩa là \"giữ nguyên\".\n\n4. A mobile app on a flaky network sends POST /bookings, gets a timeout, and retries automatically. Risk?App mobile mạng chập chờn gửi POST /bookings, bị timeout rồi tự thử lại. Rủi ro?\n   Answer: a) Two bookings may be created — POST is not idempotent (Chapter 5 adds idempotency keys)\n   The first request may have succeeded before the timeout. Without an idempotency key the retry creates another booking (here the overlap check would 409 — but not every POST has one).VI: Request đầu có thể đã thành công trước khi timeout. Không có idempotency key thì lần thử lại tạo thêm booking (ở đây kiểm trùng giờ sẽ 409 — nhưng không phải POST nào cũng có).\n\n5. What must a 405 response carry, per RFC 9110 §15.5.6?Theo RFC 9110 §15.5.6, response 405 phải kèm gì?\n   Answer: b) An Allow header listing the methods the resource supports\n   The origin server MUST send Allow with 405. LabFlow’s onlyAllow() sets it, and OPTIONS returns 204 with the same Allow (as measured above).VI: Server gốc PHẢI gửi Allow cùng 405. onlyAllow() của LabFlow đặt nó, và OPTIONS trả 204 với cùng Allow (như đã đo ở trên).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Yes — after one call or two the device is gone; only the response differs</p><p>Idempotency is about the resulting state. Many APIs return 404 the second time; some return 204 again — both are allowed.</p><p><i>VI: Idempotent nói về trạng thái kết quả. Nhiều API trả 404 lần hai; có API trả 204 lần nữa — cả hai đều được phép.</i></p></li><li><p><b>a)</b> PUT means “replace with this”; guessing hides client bugs and blurs it with PATCH</p><p>A strict PUT makes the contract clear: send everything, or use PATCH for a partial change.</p><p><i>VI: PUT chặt làm hợp đồng rõ ràng: gửi đủ, hoặc dùng PATCH cho thay đổi một phần.</i></p></li><li><p><b>b)</b> PATCH {\"note\": null}</p><p>RFC 7396: null in the patch means “remove this member”; an omitted member means “leave it unchanged”.</p><p><i>VI: RFC 7396: null trong bản vá nghĩa là \"xoá trường này\"; trường không nhắc tới nghĩa là \"giữ nguyên\".</i></p></li><li><p><b>a)</b> Two bookings may be created — POST is not idempotent (Chapter 5 adds idempotency keys)</p><p>The first request may have succeeded before the timeout. Without an idempotency key the retry creates another booking (here the overlap check would 409 — but not every POST has one).</p><p><i>VI: Request đầu có thể đã thành công trước khi timeout. Không có idempotency key thì lần thử lại tạo thêm booking (ở đây kiểm trùng giờ sẽ 409 — nhưng không phải POST nào cũng có).</i></p></li><li><p><b>b)</b> An Allow header listing the methods the resource supports</p><p>The origin server MUST send Allow with 405. LabFlow’s onlyAllow() sets it, and OPTIONS returns 204 with the same Allow (as measured above).</p><p><i>VI: Server gốc PHẢI gửi Allow cùng 405. onlyAllow() của LabFlow đặt nó, và OPTIONS trả 204 với cùng Allow (như đã đo ở trên).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The second DELETE returns 404. Is DELETE still idempotent?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần DELETE thứ hai trả 404. DELETE vẫn idempotent chứ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only if the server returns 204 both times"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — DELETE is idempotent only in HTTP/2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — after one call or two the device is gone; only the response differs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — the response changed, so it is not idempotent"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Idempotency is about the resulting state. Many APIs return 404 the second time; some return 204 again — both are allowed.</p><p><i>VI: Idempotent nói về trạng thái kết quả. Nhiều API trả 404 lần hai; có API trả 204 lần nữa — cả hai đều được phép.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why does LabFlow’s PUT answer 400 when fields are missing instead of keeping the old values?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao PUT của LabFlow trả 400 khi thiếu trường thay vì giữ giá trị cũ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PUT means “replace with this”; guessing hides client bugs and blurs it with PATCH"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Express cannot read a body that has fewer fields than the stored device"
+              },
+              {
+                "ma": "c",
+                "noiDung": "RFC 9110 forbids optional fields in any request body sent with PUT"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Missing fields would make the JSON body syntactically invalid"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A strict PUT makes the contract clear: send everything, or use PATCH for a partial change.</p><p><i>VI: PUT chặt làm hợp đồng rõ ràng: gửi đủ, hoặc dùng PATCH cho thay đổi một phần.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>With JSON Merge Patch, how do you remove the optional field note from a device?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với JSON Merge Patch, làm sao xoá trường tuỳ chọn note khỏi một thiết bị?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PATCH {\"note\": \"\"}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PATCH {\"note\": null}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DELETE /devices/dev_3/note"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PATCH {} — omitted fields are removed"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>RFC 7396: null in the patch means “remove this member”; an omitted member means “leave it unchanged”.</p><p><i>VI: RFC 7396: null trong bản vá nghĩa là \"xoá trường này\"; trường không nhắc tới nghĩa là \"giữ nguyên\".</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A mobile app on a flaky network sends POST /bookings, gets a timeout, and retries automatically. Risk?</p><p style=\"opacity:.75;font-size:.92em\"><i>App mobile mạng chập chờn gửi POST /bookings, bị timeout rồi tự thử lại. Rủi ro?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Two bookings may be created — POST is not idempotent (Chapter 5 adds idempotency keys)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "None — HTTP drops duplicate requests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The second request always gets 409, so it is harmless"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The server will merge the two bookings"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The first request may have succeeded before the timeout. Without an idempotency key the retry creates another booking (here the overlap check would 409 — but not every POST has one).</p><p><i>VI: Request đầu có thể đã thành công trước khi timeout. Không có idempotency key thì lần thử lại tạo thêm booking (ở đây kiểm trùng giờ sẽ 409 — nhưng không phải POST nào cũng có).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>What must a 405 response carry, per RFC 9110 §15.5.6?</p><p style=\"opacity:.75;font-size:.92em\"><i>Theo RFC 9110 §15.5.6, response 405 phải kèm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A Location header pointing to the right URL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An Allow header listing the methods the resource supports"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A WWW-Authenticate header"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A Retry-After header"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The origin server MUST send Allow with 405. LabFlow’s onlyAllow() sets it, and OPTIONS returns 204 with the same Allow (as measured above).</p><p><i>VI: Server gốc PHẢI gửi Allow cùng 405. onlyAllow() của LabFlow đặt nó, và OPTIONS trả 204 với cùng Allow (như đã đo ở trên).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending \"\" to clear a field — it sets an empty string.|||Gửi \"\" để xoá trường — nó đặt chuỗi rỗng."
+        },
+        {
+          "loi": "Retrying POST automatically like GET.|||Tự thử lại POST như GET."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "JSON Merge Patch",
+          "vi": "bản vá gộp JSON",
+          "giaiThich": "RFC 7396, Content-Type application/merge-patch+json."
+        },
+        {
+          "en": "Allow header",
+          "vi": "header Allow"
+        }
+      ]
+    },
+    {
+      "title": "Methods 3 — Write mergePatch(target, patch): RFC 7396",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "JSON Merge Patch",
+        "recursion"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>LabFlow’s PATCH uses JSON Merge Patch (RFC 7396). Write <code>mergePatch(target, patch)</code> that returns the NEW document, following the algorithm of RFC 7396 §2:</p><ul>\n<li>If <code>patch</code> is not a plain object (a string, number, boolean, <code>null</code> or an <b>array</b>) ⇒ the result is <code>patch</code> itself.</li>\n<li>Otherwise start from a copy of <code>target</code> (or <code>{}</code> if <code>target</code> is not a plain object). For each member of the patch: value <code>null</code> ⇒ remove that member; any other value ⇒ set it to <code>mergePatch(old value, value)</code>.</li>\n<li>Arrays are replaced as a whole, never merged. Do not modify <code>target</code> or <code>patch</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>PATCH của LabFlow dùng JSON Merge Patch (RFC 7396). Viết <code>mergePatch(target, patch)</code> trả về tài liệu MỚI, theo thuật toán ở RFC 7396 §2:</p><ul>\n<li>Nếu <code>patch</code> không phải object thường (chuỗi, số, boolean, <code>null</code> hoặc <b>mảng</b>) ⇒ kết quả là chính <code>patch</code>.</li>\n<li>Ngược lại, bắt đầu từ bản sao của <code>target</code> (hoặc <code>{}</code> nếu <code>target</code> không phải object thường). Với mỗi trường của bản vá: giá trị <code>null</code> ⇒ xoá trường đó; giá trị khác ⇒ đặt bằng <code>mergePatch(giá trị cũ, giá trị mới)</code>.</li>\n<li>Mảng bị thay nguyên, không bao giờ gộp. Không sửa <code>target</code> hay <code>patch</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "target, patch — any JSON values.|||target, patch — giá trị JSON bất kỳ.",
+      "outputSpec": "The patched JSON value.|||Giá trị JSON sau khi vá.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "mergePatch({\"id\":\"dev_3\",\"labId\":\"lab_2\",\"name\":\"Raspberry Pi 5\",\"type\":\"BOARD\",\"serialNo\":\"RPI5-00421\",\"status\":\"AVAILABLE\",\"note\":\"Thiếu thẻ nhớ\"}, {\"status\":\"MAINTENANCE\"})",
+          "output": "{\"id\":\"dev_3\",\"labId\":\"lab_2\",\"name\":\"Raspberry Pi 5\",\"type\":\"BOARD\",\"serialNo\":\"RPI5-00421\",\"status\":\"MAINTENANCE\",\"note\":\"Thiếu thẻ nhớ\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Write it recursively — it is almost a line-by-line copy of the RFC’s pseudo-code.|||Viết đệ quy — gần như chép từng dòng mã giả trong RFC.",
+        "Array.isArray must be checked before typeof === \"object\".|||Phải kiểm Array.isArray trước typeof === \"object\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** RFC 7396: mergePatch(target, patch) ⇒ new document */\nfunction mergePatch(target, patch) {\n  // Write your solution here\n  return Object.assign({}, target, patch);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction mergePatch(target, patch) {\n  if (patch === null || typeof patch !== 'object' || Array.isArray(patch)) return patch; // not an object ⇒ replace\n  var base = target !== null && typeof target === 'object' && !Array.isArray(target) ? target : {};\n  var out = {};\n  Object.keys(base).forEach(function (k) { out[k] = base[k]; });\n  Object.keys(patch).forEach(function (k) {\n    if (patch[k] === null) delete out[k];             // null ⇒ remove the member\n    else out[k] = mergePatch(out[k], patch[k]);       // recurse into objects\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 7396 trades power for simplicity: you cannot set a member to null or edit one array element (JSON Patch, RFC 6902, can), but a client just sends the fields it wants changed. Applying the patch to a copy also makes PATCH easy to validate before anything is saved.</p>",
+      "solutionExplanationHtmlVi": "<p>RFC 7396 đổi sức mạnh lấy sự đơn giản: không đặt được một trường thành null hay sửa một phần tử mảng (JSON Patch, RFC 6902, làm được), nhưng client chỉ cần gửi các trường muốn đổi. Vá trên bản sao còn giúp kiểm hợp lệ trước khi lưu bất cứ thứ gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Change one field of dev_3",
+              "vi": "Đổi một trường của dev_3"
+            },
+            "goi": "mergePatch({\"id\":\"dev_3\",\"labId\":\"lab_2\",\"name\":\"Raspberry Pi 5\",\"type\":\"BOARD\",\"serialNo\":\"RPI5-00421\",\"status\":\"AVAILABLE\",\"note\":\"Thiếu thẻ nhớ\"}, {\"status\":\"MAINTENANCE\"})",
+            "mongDoi": {
+              "id": "dev_3",
+              "labId": "lab_2",
+              "name": "Raspberry Pi 5",
+              "type": "BOARD",
+              "serialNo": "RPI5-00421",
+              "status": "MAINTENANCE",
+              "note": "Thiếu thẻ nhớ"
+            }
+          },
+          {
+            "moTa": {
+              "en": "null removes note",
+              "vi": "null xoá note"
+            },
+            "goi": "mergePatch({\"id\":\"dev_3\",\"labId\":\"lab_2\",\"name\":\"Raspberry Pi 5\",\"type\":\"BOARD\",\"serialNo\":\"RPI5-00421\",\"status\":\"AVAILABLE\",\"note\":\"Thiếu thẻ nhớ\"}, {\"note\":null})",
+            "mongDoi": {
+              "id": "dev_3",
+              "labId": "lab_2",
+              "name": "Raspberry Pi 5",
+              "type": "BOARD",
+              "serialNo": "RPI5-00421",
+              "status": "AVAILABLE"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: mergePatch({\"a\":\"b\",\"c\":{\"d\":\"e\",\"f\":\"g\"}}, {\"a\":\"z\",\"c\":{\"f\":null}})",
+              "vi": "Ca 3"
+            },
+            "goi": "mergePatch({\"a\":\"b\",\"c\":{\"d\":\"e\",\"f\":\"g\"}}, {\"a\":\"z\",\"c\":{\"f\":null}})",
+            "mongDoi": {
+              "a": "z",
+              "c": {
+                "d": "e"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "mergePatch({\"a\":[{\"b\":\"c\"}]}, {\"a\":[1]})",
+            "mongDoi": {
+              "a": [
+                1
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "mergePatch({\"e\":null}, {\"a\":1})",
+            "mongDoi": {
+              "e": null,
+              "a": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "mergePatch([\"a\",\"b\"], [\"c\",\"d\"])",
+            "mongDoi": [
+              "c",
+              "d"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "mergePatch({\"a\":\"b\"}, [\"c\"])",
+            "mongDoi": [
+              "c"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "mergePatch({\"a\":\"foo\"}, null)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "mergePatch([1,2], {\"a\":\"b\",\"c\":null})",
+            "mongDoi": {
+              "a": "b"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "mergePatch({}, {\"a\":{\"bb\":{\"ccc\":null}}})",
+            "mongDoi": {
+              "a": {
+                "bb": {}
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "mergePatch({\"title\":\"Hello!\",\"author\":{\"givenName\":\"John\",\"familyName\":\"Doe\"},\"tags\":[\"example\",\"sample\"],\"content\":\"This will be unchanged\"}, {\"title\":\"Hello!\",\"phoneNumber\":\"+01-123-456-7890\",\"author\":{\"familyName\":null},\"tags\":[\"example\"]})",
+            "mongDoi": {
+              "title": "Hello!",
+              "author": {
+                "givenName": "John"
+              },
+              "tags": [
+                "example"
+              ],
+              "content": "This will be unchanged",
+              "phoneNumber": "+01-123-456-7890"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Arguments are not modified",
+              "vi": "Không sửa đối số"
+            },
+            "goi": "(function () { var t = { a: { b: 1 } }; var p = { a: { b: null } }; mergePatch(t, p); return [t, p]; })()",
+            "mongDoi": [
+              {
+                "a": {
+                  "b": 1
+                }
+              },
+              {
+                "a": {
+                  "b": null
+                }
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Object.assign({}, target, patch) — shallow, and it stores null instead of removing.|||Object.assign({}, target, patch) — nông, và lưu null thay vì xoá."
+        },
+        {
+          "loi": "Merging arrays element by element: RFC 7396 replaces them.|||Gộp mảng từng phần tử: RFC 7396 thay nguyên mảng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "recursive",
+          "vi": "đệ quy"
+        },
+        {
+          "en": "shallow copy",
+          "vi": "sao chép nông"
+        }
+      ]
+    }
+  ]
+}

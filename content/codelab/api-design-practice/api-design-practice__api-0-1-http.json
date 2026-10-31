@@ -1,0 +1,728 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-0-1-http",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-0-1-http"
+  },
+  "exercises": [
+    {
+      "title": "HTTP 1 — Read a real curl -v line by line",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "curl -v",
+        "HTTP message"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Real output of <code>curl -sv 'http://localhost:4000/labs?building=Alpha'</code> against LabFlow:<pre>* Host localhost:4000 was resolved.\n* IPv6: ::1\n* IPv4: 127.0.0.1\n*   Trying [::1]:4000...\n* Connected to localhost (::1) port 4000\n&gt; GET /labs?building=Alpha HTTP/1.1\n&gt; Host: localhost:4000\n&gt; User-Agent: curl/8.7.1\n&gt; Accept: */*\n&gt;\n* Request completely sent off\n&lt; HTTP/1.1 200 OK\n&lt; Content-Type: application/json; charset=utf-8\n&lt; Content-Length: 308\n&lt; ETag: W/\"134-Yp3inAv3GH9X3NU/ZH2dIcGxQbI\"\n&lt; Date: Sat, 31 Oct 2026 17:22:30 GMT\n&lt; Connection: keep-alive\n&lt; Keep-Alive: timeout=5\n&lt;\n{ [308 bytes data]\n* Connection #0 to host localhost left intact</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật của <code>curl -sv 'http://localhost:4000/labs?building=Alpha'</code> gọi vào LabFlow:<pre>* Host localhost:4000 was resolved.\n* IPv6: ::1\n* IPv4: 127.0.0.1\n*   Trying [::1]:4000...\n* Connected to localhost (::1) port 4000\n&gt; GET /labs?building=Alpha HTTP/1.1\n&gt; Host: localhost:4000\n&gt; User-Agent: curl/8.7.1\n&gt; Accept: */*\n&gt;\n* Request completely sent off\n&lt; HTTP/1.1 200 OK\n&lt; Content-Type: application/json; charset=utf-8\n&lt; Content-Length: 308\n&lt; ETag: W/\"134-Yp3inAv3GH9X3NU/ZH2dIcGxQbI\"\n&lt; Date: Sat, 31 Oct 2026 17:22:30 GMT\n&lt; Connection: keep-alive\n&lt; Keep-Alive: timeout=5\n&lt;\n{ [308 bytes data]\n* Connection #0 to host localhost left intact</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read top to bottom: connect, request, empty line, response, empty line, body.|||Đọc từ trên xuống: kết nối, request, dòng trống, response, dòng trống, body.",
+        "Look at the first character of every line.|||Nhìn ký tự đầu tiên của mỗi dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP 1 — Read a real curl -v line by line\n\nAnswer in the answer panel (no code needed).\n\n1. Which lines are exactly what curl SENT to the server?Những dòng nào chính xác là thứ curl đã GỬI tới server?\n2. What does the line “>” with nothing after it mean?Dòng \">\" không có gì phía sau nghĩa là gì?\n3. Which part of the URL never appears on the request line?Phần nào của URL không bao giờ xuất hiện trên dòng request?\n4. Content-Length: 308 counts …Content-Length: 308 đếm …\n5. curl connected to ::1 first, not 127.0.0.1. Is something wrong?curl kết nối tới ::1 trước chứ không phải 127.0.0.1. Có gì sai không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP 1 — Read a real curl -v line by line — answer key\n\n1. Which lines are exactly what curl SENT to the server?Những dòng nào chính xác là thứ curl đã GỬI tới server?\n   Answer: d) The lines starting with >\n   > = sent, < = received, * = curl narrating what it does (DNS, connect, done).VI: > = đã gửi, < = đã nhận, * = curl kể việc nó đang làm (tra tên, kết nối, xong).\n\n2. What does the line “>” with nothing after it mean?Dòng \">\" không có gì phía sau nghĩa là gì?\n   Answer: b) The empty line that ends the request headers\n   Every HTTP/1.1 message has headers, then one empty line, then the optional body. GET has no body, so the request ends there.VI: Mọi thông điệp HTTP/1.1 có header, rồi một dòng trống, rồi body tuỳ chọn. GET không có body nên request kết thúc ở đó.\n\n3. Which part of the URL never appears on the request line?Phần nào của URL không bao giờ xuất hiện trên dòng request?\n   Answer: a) The scheme, host and port (the host is repeated in the Host header)\n   The request line carries only the target (/labs?building=Alpha). Host and port picked the machine and program; the Host header repeats the name for servers that host several sites.VI: Dòng request chỉ chở đích (/labs?building=Alpha). Host và cổng dùng để chọn máy và chương trình; header Host nhắc lại tên cho server chạy nhiều site.\n\n4. Content-Length: 308 counts …Content-Length: 308 đếm …\n   Answer: d) bytes of the body only — Vietnamese letters take more than one byte\n   It is the body size in bytes (curl confirms “308 bytes data”). In UTF-8 “ò” is 2 bytes, so bytes ≠ characters.VI: Đó là kích thước body tính bằng byte (curl xác nhận \"308 bytes data\"). Trong UTF-8 \"ò\" chiếm 2 byte, nên byte ≠ ký tự.\n\n5. curl connected to ::1 first, not 127.0.0.1. Is something wrong?curl kết nối tới ::1 trước chứ không phải 127.0.0.1. Có gì sai không?\n   Answer: a) No — localhost resolves to both; ::1 is the IPv6 loopback, same machine\n   Both addresses mean “this machine”. curl tries IPv6 first when it is available.VI: Cả hai địa chỉ đều nghĩa là \"chính máy này\". curl thử IPv6 trước khi có thể.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The lines starting with ></p><p>> = sent, < = received, * = curl narrating what it does (DNS, connect, done).</p><p><i>VI: > = đã gửi, < = đã nhận, * = curl kể việc nó đang làm (tra tên, kết nối, xong).</i></p></li><li><p><b>b)</b> The empty line that ends the request headers</p><p>Every HTTP/1.1 message has headers, then one empty line, then the optional body. GET has no body, so the request ends there.</p><p><i>VI: Mọi thông điệp HTTP/1.1 có header, rồi một dòng trống, rồi body tuỳ chọn. GET không có body nên request kết thúc ở đó.</i></p></li><li><p><b>a)</b> The scheme, host and port (the host is repeated in the Host header)</p><p>The request line carries only the target (/labs?building=Alpha). Host and port picked the machine and program; the Host header repeats the name for servers that host several sites.</p><p><i>VI: Dòng request chỉ chở đích (/labs?building=Alpha). Host và cổng dùng để chọn máy và chương trình; header Host nhắc lại tên cho server chạy nhiều site.</i></p></li><li><p><b>d)</b> bytes of the body only — Vietnamese letters take more than one byte</p><p>It is the body size in bytes (curl confirms “308 bytes data”). In UTF-8 “ò” is 2 bytes, so bytes ≠ characters.</p><p><i>VI: Đó là kích thước body tính bằng byte (curl xác nhận \"308 bytes data\"). Trong UTF-8 \"ò\" chiếm 2 byte, nên byte ≠ ký tự.</i></p></li><li><p><b>a)</b> No — localhost resolves to both; ::1 is the IPv6 loopback, same machine</p><p>Both addresses mean “this machine”. curl tries IPv6 first when it is available.</p><p><i>VI: Cả hai địa chỉ đều nghĩa là \"chính máy này\". curl thử IPv6 trước khi có thể.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which lines are exactly what curl SENT to the server?</p><p style=\"opacity:.75;font-size:.92em\"><i>Những dòng nào chính xác là thứ curl đã GỬI tới server?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the line GET /labs?building=Alpha HTTP/1.1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The lines starting with <"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The lines starting with *"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The lines starting with >"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>> = sent, < = received, * = curl narrating what it does (DNS, connect, done).</p><p><i>VI: > = đã gửi, < = đã nhận, * = curl kể việc nó đang làm (tra tên, kết nối, xong).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What does the line “>” with nothing after it mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dòng \">\" không có gì phía sau nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl lost part of the request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The empty line that ends the request headers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An empty header that the server will reject"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The start of the request body"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Every HTTP/1.1 message has headers, then one empty line, then the optional body. GET has no body, so the request ends there.</p><p><i>VI: Mọi thông điệp HTTP/1.1 có header, rồi một dòng trống, rồi body tuỳ chọn. GET không có body nên request kết thúc ở đó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which part of the URL never appears on the request line?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phần nào của URL không bao giờ xuất hiện trên dòng request?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The scheme, host and port (the host is repeated in the Host header)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The HTTP version, which only appears in the response"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The query string ?building=Alpha, which is sent separately in the body"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The path /labs, because curl only sends the query"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The request line carries only the target (/labs?building=Alpha). Host and port picked the machine and program; the Host header repeats the name for servers that host several sites.</p><p><i>VI: Dòng request chỉ chở đích (/labs?building=Alpha). Host và cổng dùng để chọn máy và chương trình; header Host nhắc lại tên cho server chạy nhiều site.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Content-Length: 308 counts …</p><p style=\"opacity:.75;font-size:.92em\"><i>Content-Length: 308 đếm …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "characters of the whole response including headers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "milliseconds the server took"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of labs in the list"
+              },
+              {
+                "ma": "d",
+                "noiDung": "bytes of the body only — Vietnamese letters take more than one byte"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>It is the body size in bytes (curl confirms “308 bytes data”). In UTF-8 “ò” is 2 bytes, so bytes ≠ characters.</p><p><i>VI: Đó là kích thước body tính bằng byte (curl xác nhận \"308 bytes data\"). Trong UTF-8 \"ò\" chiếm 2 byte, nên byte ≠ ký tự.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>curl connected to ::1 first, not 127.0.0.1. Is something wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl kết nối tới ::1 trước chứ không phải 127.0.0.1. Có gì sai không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — localhost resolves to both; ::1 is the IPv6 loopback, same machine"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — the server is listening on the wrong network card"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — IPv6 is not allowed for HTTP/1.1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — ::1 is the router of the local network"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Both addresses mean “this machine”. curl tries IPv6 first when it is available.</p><p><i>VI: Cả hai địa chỉ đều nghĩa là \"chính máy này\". curl thử IPv6 trước khi có thể.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the full URL is sent on the first line.|||Nghĩ cả URL được gửi trên dòng đầu."
+        },
+        {
+          "loi": "Reading Content-Length as a number of characters.|||Đọc Content-Length thành số ký tự."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "request line",
+          "vi": "dòng yêu cầu",
+          "giaiThich": "METHOD target HTTP/version."
+        },
+        {
+          "en": "status line",
+          "vi": "dòng trạng thái"
+        },
+        {
+          "en": "loopback",
+          "vi": "địa chỉ vòng lặp",
+          "giaiThich": "127.0.0.1 / ::1 — chính máy mình."
+        }
+      ]
+    },
+    {
+      "title": "HTTP 2 — Write parseStatusLine(line)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "status line"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The first line of every response is the status line, e.g. <code>HTTP/1.1 404 Not Found</code>. Write <code>parseStatusLine(line)</code> ⇒ <code>{ version, status, reason }</code>:</p><ul>\n<li><code>version</code> — the text after <code>HTTP/</code> (<code>'1.1'</code>, <code>'1.0'</code>, <code>'2'</code>); <code>status</code> — a number with exactly 3 digits.</li>\n<li><code>reason</code> — everything after the code (it may contain spaces), or <code>''</code> when missing: HTTP/2 has no reason phrase, curl prints <code>HTTP/2 200</code>.</li>\n<li>Ignore spaces/newline around the line. Anything else (not starting with <code>HTTP/</code>, code not 3 digits) ⇒ <code>null</code>.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dòng đầu của mọi response là dòng trạng thái, ví dụ <code>HTTP/1.1 404 Not Found</code>. Viết <code>parseStatusLine(line)</code> ⇒ <code>{ version, status, reason }</code>:</p><ul>\n<li><code>version</code> — phần sau <code>HTTP/</code> (<code>'1.1'</code>, <code>'1.0'</code>, <code>'2'</code>); <code>status</code> — một số đúng 3 chữ số.</li>\n<li><code>reason</code> — mọi thứ sau mã (có thể chứa dấu cách), hoặc <code>''</code> khi không có: HTTP/2 không có reason phrase, curl in <code>HTTP/2 200</code>.</li>\n<li>Bỏ qua dấu cách/xuống dòng quanh dòng. Còn lại (không bắt đầu bằng <code>HTTP/</code>, mã không đủ 3 chữ số) ⇒ <code>null</code>.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "line — one string.|||line — một chuỗi.",
+      "outputSpec": "{ version: string, status: number, reason: string } or null|||{ version: chuỗi, status: số, reason: chuỗi } hoặc null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseStatusLine(\"HTTP/1.1 200 OK\")",
+          "output": "{\"version\":\"1.1\",\"status\":200,\"reason\":\"OK\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A regular expression with three groups is the shortest way.|||Một biểu thức chính quy ba nhóm là cách ngắn nhất.",
+        "Make the reason group optional: (?: (.*))?|||Cho nhóm reason là tuỳ chọn: (?: (.*))?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"HTTP/1.1 404 Not Found\" ⇒ { version: '1.1', status: 404, reason: 'Not Found' } | null */\nfunction parseStatusLine(line) {\n  // Write your solution here\n  var parts = line.split(' ');\n  return { version: parts[0].slice(5), status: Number(parts[1]), reason: parts[2] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseStatusLine(line) {\n  var m = /^HTTP\\/(\\d(?:\\.\\d)?) (\\d{3})(?: (.*))?$/.exec(String(line).trim());\n  if (!m) return null;\n  return { version: m[1], status: Number(m[2]), reason: m[3] || '' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 9112 §4: status-line = HTTP-version SP status-code SP [reason-phrase]. Clients must not depend on the reason phrase — it is for humans, and HTTP/2 dropped it — so the number is what you branch on.</p>",
+      "solutionExplanationHtmlVi": "<p>RFC 9112 §4: status-line = HTTP-version SP status-code SP [reason-phrase]. Client không được phụ thuộc vào reason phrase — nó dành cho người đọc, và HTTP/2 đã bỏ nó — nên thứ để rẽ nhánh là con số.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: parseStatusLine(\"HTTP/1.1 200 OK\")",
+              "vi": "Ca 1"
+            },
+            "goi": "parseStatusLine(\"HTTP/1.1 200 OK\")",
+            "mongDoi": {
+              "version": "1.1",
+              "status": 200,
+              "reason": "OK"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseStatusLine(\"HTTP/1.1 405 Method Not Allowed\")",
+              "vi": "Ca 2"
+            },
+            "goi": "parseStatusLine(\"HTTP/1.1 405 Method Not Allowed\")",
+            "mongDoi": {
+              "version": "1.1",
+              "status": 405,
+              "reason": "Method Not Allowed"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: parseStatusLine(\"HTTP/2 200\")",
+              "vi": "Ca 3"
+            },
+            "goi": "parseStatusLine(\"HTTP/2 200\")",
+            "mongDoi": {
+              "version": "2",
+              "status": 200,
+              "reason": ""
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseStatusLine(\"HTTP/1.1 422 Unprocessable Entity\\r\\n\")",
+            "mongDoi": {
+              "version": "1.1",
+              "status": 422,
+              "reason": "Unprocessable Entity"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseStatusLine(\"HTTP/1.0 404 Not Found\")",
+            "mongDoi": {
+              "version": "1.0",
+              "status": 404,
+              "reason": "Not Found"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseStatusLine(\"HTTP/1.1 20 OK\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseStatusLine(\"Content-Type: application/json\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "parseStatusLine(\"HTTP/1.1 201 Created\")",
+            "mongDoi": {
+              "version": "1.1",
+              "status": 201,
+              "reason": "Created"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "line.split(\" \") — “Method Not Allowed” becomes three pieces.|||line.split(\" \") — \"Method Not Allowed\" thành ba mảnh."
+        },
+        {
+          "loi": "Returning status as the string \"404\".|||Trả status dạng chuỗi \"404\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reason phrase",
+          "vi": "cụm lý do",
+          "giaiThich": "Chữ sau mã, chỉ để người đọc."
+        }
+      ]
+    },
+    {
+      "title": "HTTP 3 — Write parseHeaders(text) from a real curl -i",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "headers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Write <code>parseHeaders(text)</code> that takes the output of <code>curl -i</code> (status line, headers, empty line, body) and returns the headers as an object:</p><ul>\n<li>Skip the first line (the status line). Stop at the first empty line — the body is not headers, even if it contains a colon.</li>\n<li>Names are <b>case-insensitive</b> (RFC 9110 §5.1) ⇒ store them lower-case. Values: trimmed; only the FIRST colon separates name and value (<code>Date: Sat, 31 Oct 2026 17:22:36 GMT</code>).</li>\n<li>A header repeated on several lines ⇒ join the values with <code>', '</code>. Lines may end with <code>\\r\\n</code>.</li></ul>Real response from LabFlow:<pre>HTTP/1.1 405 Method Not Allowed\nAllow: GET, HEAD\nContent-Type: application/json; charset=utf-8\nContent-Length: 91\nETag: W/\"5b-aa9kTS6ZkiCz5Zgdn/iyIMBEVks\"\nDate: Sat, 31 Oct 2026 17:22:36 GMT\nConnection: keep-alive\nKeep-Alive: timeout=5\n\n{\n  \"error\": \"METHOD_NOT_ALLOWED\",\n  \"message\": \"DELETE không dùng được ở /labs/\"\n}</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>parseHeaders(text)</code> nhận output của <code>curl -i</code> (dòng trạng thái, header, dòng trống, body) và trả các header thành object:</p><ul>\n<li>Bỏ dòng đầu (dòng trạng thái). Dừng ở dòng trống đầu tiên — body không phải header, dù có chứa dấu hai chấm.</li>\n<li>Tên header <b>không phân biệt hoa thường</b> (RFC 9110 §5.1) ⇒ lưu chữ thường. Giá trị: cắt khoảng trắng; chỉ dấu hai chấm ĐẦU TIÊN tách tên và giá trị (<code>Date: Sat, 31 Oct 2026 17:22:36 GMT</code>).</li>\n<li>Header lặp trên nhiều dòng ⇒ nối giá trị bằng <code>', '</code>. Dòng có thể kết thúc bằng <code>\\r\\n</code>.</li></ul>Response thật từ LabFlow:<pre>HTTP/1.1 405 Method Not Allowed\nAllow: GET, HEAD\nContent-Type: application/json; charset=utf-8\nContent-Length: 91\nETag: W/\"5b-aa9kTS6ZkiCz5Zgdn/iyIMBEVks\"\nDate: Sat, 31 Oct 2026 17:22:36 GMT\nConnection: keep-alive\nKeep-Alive: timeout=5\n\n{\n  \"error\": \"METHOD_NOT_ALLOWED\",\n  \"message\": \"DELETE không dùng được ở /labs/\"\n}</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — a full curl -i output.|||text — nguyên output của curl -i.",
+      "outputSpec": "{ [lower-case name]: value }|||{ [tên chữ thường]: giá trị }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseHeaders(\"HTTP/1.1 405 Method Not Allowed\\nAllow: GET, HEAD\\nContent-Type: application/json; charset=utf-8\\nContent-Length: 91\\nETag: W/\\\"5b-aa9kTS6ZkiCz5Zgdn/iyIMBEVks\\\"\\nDate: Sat, 31 Oct 2026 17:22:36 GMT\\nConnection: keep-alive\\nKeep-Alive: timeout=5\\n\\n{\\n  \\\"error\\\": \\\"METHOD_NOT_ALLOWED\\\",\\n  \\\"message\\\": \\\"DELETE không dùng được ở /labs/\\\"\\n}\")",
+          "output": "{\"allow\":\"GET, HEAD\",\"content-type\":\"application/json; charset=utf-8\",\"content-length\":\"91\",\"etag\":\"W/\\\"5b-aa9kTS6ZkiCz5Zgdn/iyIMBEVks\\\"\",\"date\":\"Sat, 31 Oct 2026 17:22:36 GMT\",\"connection\":\"keep-alive\",\"keep-alive\":\"timeout=5\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "split(/\\r?\\n/) handles both line endings.|||split(/\\r?\\n/) xử lý cả hai kiểu xuống dòng.",
+        "indexOf(\":\") finds the first colon; slice around it.|||indexOf(\":\") tìm dấu hai chấm đầu; cắt hai bên nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** curl -i output ⇒ { name: value } (names lower-case) */\nfunction parseHeaders(text) {\n  // Write your solution here\n  var out = {};\n  text.split('\\n').forEach(function (line) {\n    var p = line.split(':');\n    if (p.length > 1) out[p[0]] = p[1].trim();\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseHeaders(text) {\n  var out = {};\n  var lines = String(text).split(/\\r?\\n/);\n  for (var i = 1; i < lines.length; i++) {        // line 0 is the status line\n    var line = lines[i];\n    if (line.trim() === '') break;                // empty line = end of headers\n    var k = line.indexOf(':');\n    if (k < 1) continue;\n    var name = line.slice(0, k).trim().toLowerCase(); // header names are case-insensitive\n    var value = line.slice(k + 1).trim();\n    out[name] = name in out ? out[name] + ', ' + value : value;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An HTTP/1.1 message is start-line, header lines, CRLF, body (RFC 9112 §2.1). Lower-casing names is what Node does too (req.headers keys are lower-case), and combining repeated fields with “, ” is allowed by RFC 9110 §5.3 for list-valued headers.</p>",
+      "solutionExplanationHtmlVi": "<p>Một thông điệp HTTP/1.1 là dòng đầu, các dòng header, CRLF, body (RFC 9112 §2.1). Node cũng hạ chữ thường tên header (khoá của req.headers là chữ thường), và gộp header lặp bằng \", \" được RFC 9110 §5.3 cho phép với header dạng danh sách.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Real 405 from LabFlow",
+              "vi": "405 thật từ LabFlow"
+            },
+            "goi": "parseHeaders(\"HTTP/1.1 405 Method Not Allowed\\nAllow: GET, HEAD\\nContent-Type: application/json; charset=utf-8\\nContent-Length: 91\\nETag: W/\\\"5b-aa9kTS6ZkiCz5Zgdn/iyIMBEVks\\\"\\nDate: Sat, 31 Oct 2026 17:22:36 GMT\\nConnection: keep-alive\\nKeep-Alive: timeout=5\\n\\n{\\n  \\\"error\\\": \\\"METHOD_NOT_ALLOWED\\\",\\n  \\\"message\\\": \\\"DELETE không dùng được ở /labs/\\\"\\n}\")",
+            "mongDoi": {
+              "allow": "GET, HEAD",
+              "content-type": "application/json; charset=utf-8",
+              "content-length": "91",
+              "etag": "W/\"5b-aa9kTS6ZkiCz5Zgdn/iyIMBEVks\"",
+              "date": "Sat, 31 Oct 2026 17:22:36 GMT",
+              "connection": "keep-alive",
+              "keep-alive": "timeout=5"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseHeaders(\"HTTP/1.1 204 No Content\\nAllow: GET, HEAD, POST\\n\\n\")",
+              "vi": "Ca 2"
+            },
+            "goi": "parseHeaders(\"HTTP/1.1 204 No Content\\nAllow: GET, HEAD, POST\\n\\n\")",
+            "mongDoi": {
+              "allow": "GET, HEAD, POST"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseHeaders(\"HTTP/1.1 404 Not Found\\nContent-Type: application/json; charset=utf-8\\nContent-Length: 74\\nETag: W/\\\"4a-lXLsqA33DrufMdXbcY1kiV4Dmbs\\\"\\nDate: Sat, 31 Oct 2026 17:22:36 GMT\\nConnection: keep-alive\\nKeep-Alive: timeout=5\\n\\n{\\n  \\\"error\\\": \\\"LAB_NOT_FOUND\\\",\\n  \\\"message\\\": \\\"Không có phòng lab lab_9\\\"\\n}\")",
+            "mongDoi": {
+              "content-type": "application/json; charset=utf-8",
+              "content-length": "74",
+              "etag": "W/\"4a-lXLsqA33DrufMdXbcY1kiV4Dmbs\"",
+              "date": "Sat, 31 Oct 2026 17:22:36 GMT",
+              "connection": "keep-alive",
+              "keep-alive": "timeout=5"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseHeaders(\"HTTP/1.1 404 Not Found\\r\\nContent-Type: application/json; charset=utf-8\\r\\nContent-Length: 74\\r\\nETag: W/\\\"4a-lXLsqA33DrufMdXbcY1kiV4Dmbs\\\"\\r\\nDate: Sat, 31 Oct 2026 17:22:36 GMT\\r\\nConnection: keep-alive\\r\\nKeep-Alive: timeout=5\\r\\n\\r\\n{\\r\\n  \\\"error\\\": \\\"LAB_NOT_FOUND\\\",\\r\\n  \\\"message\\\": \\\"Không có phòng lab lab_9\\\"\\r\\n}\")",
+            "mongDoi": {
+              "content-type": "application/json; charset=utf-8",
+              "content-length": "74",
+              "etag": "W/\"4a-lXLsqA33DrufMdXbcY1kiV4Dmbs\"",
+              "date": "Sat, 31 Oct 2026 17:22:36 GMT",
+              "connection": "keep-alive",
+              "keep-alive": "timeout=5"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseHeaders(\"HTTP/1.1 200 OK\\nVary: Accept\\nCACHE-CONTROL: no-store\\nvary: Accept-Language\\n\\n{\\\"a\\\": \\\"b: c\\\"}\")",
+            "mongDoi": {
+              "vary": "Accept, Accept-Language",
+              "cache-control": "no-store"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseHeaders(\"HTTP/1.1 201 Created\\nLocation: /bookings/bk_1\\nContent-Type: application/json; charset=utf-8\\n\\n{\\n  \\\"id\\\": \\\"bk_1\\\"\\n}\")",
+            "mongDoi": {
+              "location": "/bookings/bk_1",
+              "content-type": "application/json; charset=utf-8"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "line.split(\":\") — the Date and ETag values lose their pieces.|||line.split(\":\") — giá trị Date và ETag mất mảnh."
+        },
+        {
+          "loi": "Reading the JSON body lines (\"error\": …) as headers.|||Đọc các dòng JSON của body (\"error\": …) thành header."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "header field",
+          "vi": "trường header"
+        },
+        {
+          "en": "case-insensitive",
+          "vi": "không phân biệt hoa thường"
+        }
+      ]
+    },
+    {
+      "title": "HTTP 4 — Write parseTarget(target): path and query",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "URL",
+        "query string"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The request line carries a <b>target</b> such as <code>/labs?building=Alpha&amp;minCapacity=25</code>. The path names the resource; the query carries options. Write <code>parseTarget(target)</code> ⇒ <code>{ path, query }</code>:</p><ul>\n<li>Split at the first <code>?</code>. Pairs are joined by <code>&amp;</code>; key and value split at the first <code>=</code>; a key without <code>=</code> gets <code>''</code>; skip empty pairs.</li>\n<li>Decode both key and value: <code>+</code> means space, then <code>decodeURIComponent</code> (<code>%C3%B2</code> ⇒ <code>ò</code>).</li>\n<li>Every value stays a <b>string</b> — HTTP has no numbers in a query. A key that appears again ⇒ an array of its values in order.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dòng request chở một <b>đích</b> như <code>/labs?building=Alpha&amp;minCapacity=25</code>. Path gọi tên tài nguyên; query chở tuỳ chọn. Viết <code>parseTarget(target)</code> ⇒ <code>{ path, query }</code>:</p><ul>\n<li>Tách ở dấu <code>?</code> đầu tiên. Các cặp nối bằng <code>&amp;</code>; khoá và giá trị tách ở dấu <code>=</code> đầu; khoá không có <code>=</code> nhận <code>''</code>; bỏ cặp rỗng.</li>\n<li>Giải mã cả khoá lẫn giá trị: <code>+</code> nghĩa là dấu cách, rồi <code>decodeURIComponent</code> (<code>%C3%B2</code> ⇒ <code>ò</code>).</li>\n<li>Mọi giá trị giữ là <b>chuỗi</b> — query của HTTP không có kiểu số. Khoá xuất hiện lại ⇒ mảng các giá trị theo thứ tự.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "target — the path and optional query, as on the request line.|||target — path và query tuỳ chọn, như trên dòng request.",
+      "outputSpec": "{ path: string, query: { key: string | string[] } }|||{ path: chuỗi, query: { khoá: chuỗi | mảng chuỗi } }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseTarget(\"/labs?building=Alpha\")",
+          "output": "{\"path\":\"/labs\",\"query\":{\"building\":\"Alpha\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "indexOf(\"?\") then split(\"&\"), then indexOf(\"=\") per pair.|||indexOf(\"?\") rồi split(\"&\"), rồi indexOf(\"=\") cho từng cặp.",
+        "Replace + before decoding, not after: %2B must stay a real plus.|||Đổi + trước khi giải mã, không phải sau: %2B phải còn là dấu cộng thật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"/labs?building=Alpha\" ⇒ { path: '/labs', query: { building: 'Alpha' } } */\nfunction parseTarget(target) {\n  // Write your solution here\n  var parts = target.split('?');\n  var query = {};\n  (parts[1] || '').split('&').forEach(function (p) { var kv = p.split('='); query[kv[0]] = kv[1]; });\n  return { path: parts[0], query: query };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseTarget(target) {\n  var q = target.indexOf('?');\n  var path = q < 0 ? target : target.slice(0, q);\n  var query = {};\n  if (q >= 0) {\n    target.slice(q + 1).split('&').forEach(function (pair) {\n      if (!pair) return;\n      var e = pair.indexOf('=');\n      var dec = function (s) { return decodeURIComponent(s.replace(/\\+/g, ' ')); };\n      var k = dec(e < 0 ? pair : pair.slice(0, e));\n      var v = e < 0 ? '' : dec(pair.slice(e + 1));\n      if (!(k in query)) query[k] = v;\n      else if (Array.isArray(query[k])) query[k].push(v);\n      else query[k] = [query[k], v];\n    });\n  }\n  return { path: path, query: query };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is exactly what Express’ query parser hands you in req.query: strings, and arrays for repeated keys. Knowing that is why LabFlow validates minCapacity itself instead of trusting it to be a number.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây chính là thứ bộ phân tích query của Express trao cho bạn trong req.query: chuỗi, và mảng cho khoá lặp. Biết vậy nên LabFlow tự kiểm minCapacity thay vì tin nó là số.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: parseTarget(\"/labs?building=Alpha\")",
+              "vi": "Ca 1"
+            },
+            "goi": "parseTarget(\"/labs?building=Alpha\")",
+            "mongDoi": {
+              "path": "/labs",
+              "query": {
+                "building": "Alpha"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseTarget(\"/labs/lab_1\")",
+              "vi": "Ca 2"
+            },
+            "goi": "parseTarget(\"/labs/lab_1\")",
+            "mongDoi": {
+              "path": "/labs/lab_1",
+              "query": {}
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: parseTarget(\"/labs?building=Alpha&minCapacity=25&sort=-capacity\")",
+              "vi": "Ca 3"
+            },
+            "goi": "parseTarget(\"/labs?building=Alpha&minCapacity=25&sort=-capacity\")",
+            "mongDoi": {
+              "path": "/labs",
+              "query": {
+                "building": "Alpha",
+                "minCapacity": "25",
+                "sort": "-capacity"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseTarget(\"/search?q=Ph%C3%B2ng+Lab+IoT\")",
+            "mongDoi": {
+              "path": "/search",
+              "query": {
+                "q": "Phòng Lab IoT"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseTarget(\"/devices?status=AVAILABLE&status=IN_USE&status=BROKEN\")",
+            "mongDoi": {
+              "path": "/devices",
+              "query": {
+                "status": [
+                  "AVAILABLE",
+                  "IN_USE",
+                  "BROKEN"
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseTarget(\"/labs?debug&&page=2\")",
+            "mongDoi": {
+              "path": "/labs",
+              "query": {
+                "debug": "",
+                "page": "2"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "parseTarget(\"/calc?expr=1%2B1%3D2\")",
+            "mongDoi": {
+              "path": "/calc",
+              "query": {
+                "expr": "1+1=2"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Converting \"25\" to a number — the API decides types when it validates (Chapter 2).|||Đổi \"25\" sang số — API mới quyết định kiểu khi kiểm dữ liệu (Chương 2)."
+        },
+        {
+          "loi": "Keeping only the last value of a repeated key.|||Chỉ giữ giá trị cuối của khoá lặp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "query string",
+          "vi": "chuỗi truy vấn"
+        },
+        {
+          "en": "percent-encoding",
+          "vi": "mã hoá phần trăm",
+          "giaiThich": "%C3%B2 = byte UTF-8 của \"ò\"."
+        }
+      ]
+    }
+  ]
+}

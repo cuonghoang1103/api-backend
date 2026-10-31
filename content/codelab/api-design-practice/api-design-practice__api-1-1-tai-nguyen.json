@@ -1,0 +1,563 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-1-1-tai-nguyen",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-1-1-tai-nguyen"
+  },
+  "exercises": [
+    {
+      "title": "Resources 1 — From user story to endpoint",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "resource modelling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Underline the nouns, circle the verbs. For each LabFlow user story choose the endpoint designed in lesson 1.1.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gạch chân danh từ, khoanh động từ. Với mỗi user story của LabFlow, chọn endpoint đã thiết kế trong bài 1.1.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Behind most verbs there is a record the business keeps.|||Sau hầu hết động từ là một bản ghi mà nghiệp vụ muốn lưu.",
+        "A “detail screen of one lab” reads naturally as a nested collection.|||\"Màn chi tiết của một phòng\" đọc tự nhiên thành bộ sưu tập lồng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Resources 1 — From user story to endpoint\n\nAnswer in the answer panel (no code needed).\n\n1. Story → endpointStory → endpoint\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Resources 1 — From user story to endpoint — answer key\n\n1. Story → endpointStory → endpoint\n   - r1.e: GET /labs\n   - r2.e: POST /bookings\n   - r3.e: GET /labs/{labId}/devices\n   - r4.e: PATCH /devices/{deviceId}\n   - r5.e: POST /bookings/{bookingId}/cancel\n   - r6.e: GET /bookings/{bookingId}\n   “Book” creates a booking (POST to the collection). “Mark under repair” is not a new thing — it changes the device’s status field (PATCH). “Cancel” carries its own rules (only the owner, not twice), so it becomes an explicit action resource.VI: \"Đặt\" tạo ra một booking (POST vào bộ sưu tập). \"Đánh dấu đang sửa\" không phải thứ mới — nó đổi trường status của thiết bị (PATCH). \"Huỷ\" có luật riêng (chỉ chủ, không huỷ hai lần) nên thành một tài nguyên hành động rõ ràng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>“Book” creates a booking (POST to the collection). “Mark under repair” is not a new thing — it changes the device’s status field (PATCH). “Cancel” carries its own rules (only the owner, not twice), so it becomes an explicit action resource.</p><p><i>VI: \"Đặt\" tạo ra một booking (POST vào bộ sưu tập). \"Đánh dấu đang sửa\" không phải thứ mới — nó đổi trường status của thiết bị (PATCH). \"Huỷ\" có luật riêng (chỉ chủ, không huỷ hai lần) nên thành một tài nguyên hành động rõ ràng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Story → endpoint</p><p style=\"opacity:.75;font-size:.92em\"><i>Story → endpoint</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "User story"
+              },
+              {
+                "ma": "e",
+                "ten": "Endpoint",
+                "luaChon": [
+                  "GET /labs",
+                  "POST /bookings",
+                  "GET /labs/{labId}/devices",
+                  "PATCH /devices/{deviceId}",
+                  "POST /bookings/{bookingId}/cancel",
+                  "GET /bookings/{bookingId}"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "As a student, I see which labs exist and where they are"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "As a student, I book a lab for Monday 8–10h"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "As a student, I see the devices in lab_1 on its detail screen"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "As a lab manager, I mark a device as under repair"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "As a student, I cancel my booking"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "As a student, I open the booking I made yesterday"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.e": "GET /labs",
+              "r2.e": "POST /bookings",
+              "r3.e": "GET /labs/{labId}/devices",
+              "r4.e": "PATCH /devices/{deviceId}",
+              "r5.e": "POST /bookings/{bookingId}/cancel",
+              "r6.e": "GET /bookings/{bookingId}"
+            },
+            "giaiThich": "<p>“Book” creates a booking (POST to the collection). “Mark under repair” is not a new thing — it changes the device’s status field (PATCH). “Cancel” carries its own rules (only the owner, not twice), so it becomes an explicit action resource.</p><p><i>VI: \"Đặt\" tạo ra một booking (POST vào bộ sưu tập). \"Đánh dấu đang sửa\" không phải thứ mới — nó đổi trường status của thiết bị (PATCH). \"Huỷ\" có luật riêng (chỉ chủ, không huỷ hai lần) nên thành một tài nguyên hành động rõ ràng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Inventing POST /devices/{id}/repair for a plain field change.|||Bịa ra POST /devices/{id}/repair cho một thay đổi trường bình thường."
+        },
+        {
+          "loi": "Using DELETE /bookings/{id} for cancel — the booking must stay in history.|||Dùng DELETE /bookings/{id} để huỷ — booking phải còn trong lịch sử."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "collection",
+          "vi": "bộ sưu tập"
+        },
+        {
+          "en": "item",
+          "vi": "phần tử"
+        },
+        {
+          "en": "action resource",
+          "vi": "tài nguyên hành động"
+        }
+      ]
+    },
+    {
+      "title": "Resources 2 — Smells, nesting and filters",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "URL design"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Questions from a design review of LabFlow. Real facts from the lesson: GET /labs/lab_9/devices ⇒ 404 LAB_NOT_FOUND, GET /devices?labId=lab_9 ⇒ 200 {\"data\": []}.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu hỏi từ một buổi review thiết kế LabFlow. Sự thật từ bài học: GET /labs/lab_9/devices ⇒ 404 LAB_NOT_FOUND, GET /devices?labId=lab_9 ⇒ 200 {\"data\": []}.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what the client must know before it can call the URL.|||Hỏi client phải biết gì trước khi gọi được URL.",
+        "Safe methods may be called by machines without asking anyone.|||Phương thức an toàn có thể bị máy gọi mà không hỏi ai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Resources 2 — Smells, nesting and filters\n\nAnswer in the answer panel (no code needed).\n\n1. Why is GET /deleteDevice?id=dev_3 the most dangerous row of the RPC table?Vì sao GET /deleteDevice?id=dev_3 là dòng nguy hiểm nhất của bảng RPC?\n2. A wrong lab id gives 404 on the nested URL but 200 [] on the filter. Is that a bug?Id phòng sai cho 404 ở URL lồng nhưng 200 [] ở bộ lọc. Đó có phải bug?\n3. A teammate proposes /buildings/alpha/labs/lab_1/devices/dev_1/issues/iss_3. Main problem?Một bạn đề xuất /buildings/alpha/labs/lab_1/devices/dev_1/issues/iss_3. Vấn đề chính?\n4. Which URL follows LabFlow’s URL rules?URL nào theo đúng luật URL của LabFlow?\n5. Why is cancel POST /bookings/{id}/cancel and not PATCH {\"status\": \"CANCELLED\"}?Vì sao huỷ là POST /bookings/{id}/cancel chứ không phải PATCH {\"status\": \"CANCELLED\"}?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Resources 2 — Smells, nesting and filters — answer key\n\n1. Why is GET /deleteDevice?id=dev_3 the most dangerous row of the RPC table?Vì sao GET /deleteDevice?id=dev_3 là dòng nguy hiểm nhất của bảng RPC?\n   Answer: d) Prefetchers, crawlers and monitors call GET URLs freely and will delete data\n   GET is promised to be safe. Tools that rely on that promise will trigger the deletion without any user deciding to.VI: GET được hứa là an toàn. Công cụ dựa vào lời hứa đó sẽ kích hoạt việc xoá mà không người dùng nào quyết định.\n\n2. A wrong lab id gives 404 on the nested URL but 200 [] on the filter. Is that a bug?Id phòng sai cho 404 ở URL lồng nhưng 200 [] ở bộ lọc. Đó có phải bug?\n   Answer: b) No — nested checks the parent exists; an empty filter result is a success\n   “The devices of lab_9” presumes lab_9 exists. “Devices whose labId is lab_9” is a search, and an empty search is a success.VI: \"Thiết bị của lab_9\" mặc định lab_9 tồn tại. \"Thiết bị có labId là lab_9\" là một phép tìm, và tìm không ra vẫn là thành công.\n\n3. A teammate proposes /buildings/alpha/labs/lab_1/devices/dev_1/issues/iss_3. Main problem?Một bạn đề xuất /buildings/alpha/labs/lab_1/devices/dev_1/issues/iss_3. Vấn đề chính?\n   Answer: c) Clients need every parent id, and moving a device changes its issues’ URLs\n   Stop at one level of nesting. iss_3 is unique on its own, so /issues/iss_3 is enough; /devices/{id}/issues serves the device screen.VI: Dừng ở một cấp lồng. iss_3 tự nó đã duy nhất nên /issues/iss_3 là đủ; /devices/{id}/issues phục vụ màn thiết bị.\n\n4. Which URL follows LabFlow’s URL rules?URL nào theo đúng luật URL của LabFlow?\n   Answer: a) /lab-rooms?building=Alpha\n   Plural, lowercase, words joined by hyphens, no extension, no trailing slash, options in the query.VI: Số nhiều, chữ thường, nối từ bằng gạch ngang, không đuôi tệp, không gạch chéo cuối, tuỳ chọn ở query.\n\n5. Why is cancel POST /bookings/{id}/cancel and not PATCH {\"status\": \"CANCELLED\"}?Vì sao huỷ là POST /bookings/{id}/cancel chứ không phải PATCH {\"status\": \"CANCELLED\"}?\n   Answer: c) It has its own rules (owner only, not twice); an explicit action enforces them\n   A generic PATCH would let clients set any status (even APPROVED). The action has one meaning and its own errors (409 ALREADY_CANCELLED).VI: PATCH chung chung cho client đặt status bất kỳ (kể cả APPROVED). Hành động có một nghĩa duy nhất và lỗi riêng (409 ALREADY_CANCELLED).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Prefetchers, crawlers and monitors call GET URLs freely and will delete data</p><p>GET is promised to be safe. Tools that rely on that promise will trigger the deletion without any user deciding to.</p><p><i>VI: GET được hứa là an toàn. Công cụ dựa vào lời hứa đó sẽ kích hoạt việc xoá mà không người dùng nào quyết định.</i></p></li><li><p><b>b)</b> No — nested checks the parent exists; an empty filter result is a success</p><p>“The devices of lab_9” presumes lab_9 exists. “Devices whose labId is lab_9” is a search, and an empty search is a success.</p><p><i>VI: \"Thiết bị của lab_9\" mặc định lab_9 tồn tại. \"Thiết bị có labId là lab_9\" là một phép tìm, và tìm không ra vẫn là thành công.</i></p></li><li><p><b>c)</b> Clients need every parent id, and moving a device changes its issues’ URLs</p><p>Stop at one level of nesting. iss_3 is unique on its own, so /issues/iss_3 is enough; /devices/{id}/issues serves the device screen.</p><p><i>VI: Dừng ở một cấp lồng. iss_3 tự nó đã duy nhất nên /issues/iss_3 là đủ; /devices/{id}/issues phục vụ màn thiết bị.</i></p></li><li><p><b>a)</b> /lab-rooms?building=Alpha</p><p>Plural, lowercase, words joined by hyphens, no extension, no trailing slash, options in the query.</p><p><i>VI: Số nhiều, chữ thường, nối từ bằng gạch ngang, không đuôi tệp, không gạch chéo cuối, tuỳ chọn ở query.</i></p></li><li><p><b>c)</b> It has its own rules (owner only, not twice); an explicit action enforces them</p><p>A generic PATCH would let clients set any status (even APPROVED). The action has one meaning and its own errors (409 ALREADY_CANCELLED).</p><p><i>VI: PATCH chung chung cho client đặt status bất kỳ (kể cả APPROVED). Hành động có một nghĩa duy nhất và lỗi riêng (409 ALREADY_CANCELLED).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is GET /deleteDevice?id=dev_3 the most dangerous row of the RPC table?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao GET /deleteDevice?id=dev_3 là dòng nguy hiểm nhất của bảng RPC?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The URL is too long for some proxies and gets cut before the id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "GET requests cannot carry a query string, so the id never reaches the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It returns 200 instead of 204, so clients think nothing was deleted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Prefetchers, crawlers and monitors call GET URLs freely and will delete data"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>GET is promised to be safe. Tools that rely on that promise will trigger the deletion without any user deciding to.</p><p><i>VI: GET được hứa là an toàn. Công cụ dựa vào lời hứa đó sẽ kích hoạt việc xoá mà không người dùng nào quyết định.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A wrong lab id gives 404 on the nested URL but 200 [] on the filter. Is that a bug?</p><p style=\"opacity:.75;font-size:.92em\"><i>Id phòng sai cho 404 ở URL lồng nhưng 200 [] ở bộ lọc. Đó có phải bug?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — both endpoints must return 404 LAB_NOT_FOUND for an unknown lab"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — nested checks the parent exists; an empty filter result is a success"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — but only because lab_9 was retired, so the two answers differ"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — both endpoints must return 200 with an empty data list"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>“The devices of lab_9” presumes lab_9 exists. “Devices whose labId is lab_9” is a search, and an empty search is a success.</p><p><i>VI: \"Thiết bị của lab_9\" mặc định lab_9 tồn tại. \"Thiết bị có labId là lab_9\" là một phép tìm, và tìm không ra vẫn là thành công.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A teammate proposes /buildings/alpha/labs/lab_1/devices/dev_1/issues/iss_3. Main problem?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bạn đề xuất /buildings/alpha/labs/lab_1/devices/dev_1/issues/iss_3. Vấn đề chính?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Issues are events, so they cannot be modelled as resources at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "URLs longer than 50 characters are invalid according to RFC 9110"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Clients need every parent id, and moving a device changes its issues’ URLs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express cannot route a path with more than three segments in it"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Stop at one level of nesting. iss_3 is unique on its own, so /issues/iss_3 is enough; /devices/{id}/issues serves the device screen.</p><p><i>VI: Dừng ở một cấp lồng. iss_3 tự nó đã duy nhất nên /issues/iss_3 là đủ; /devices/{id}/issues phục vụ màn thiết bị.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which URL follows LabFlow’s URL rules?</p><p style=\"opacity:.75;font-size:.92em\"><i>URL nào theo đúng luật URL của LabFlow?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "/lab-rooms?building=Alpha"
+              },
+              {
+                "ma": "b",
+                "noiDung": "/lab_rooms.json?building=Alpha"
+              },
+              {
+                "ma": "c",
+                "noiDung": "/LabRooms/?building=Alpha"
+              },
+              {
+                "ma": "d",
+                "noiDung": "/labRooms?building=Alpha"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Plural, lowercase, words joined by hyphens, no extension, no trailing slash, options in the query.</p><p><i>VI: Số nhiều, chữ thường, nối từ bằng gạch ngang, không đuôi tệp, không gạch chéo cuối, tuỳ chọn ở query.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why is cancel POST /bookings/{id}/cancel and not PATCH {\"status\": \"CANCELLED\"}?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao huỷ là POST /bookings/{id}/cancel chứ không phải PATCH {\"status\": \"CANCELLED\"}?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express does not support PATCH on routes that end with an id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PATCH is not allowed to change a field called status on any resource"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It has its own rules (owner only, not twice); an explicit action enforces them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "POST is processed faster than PATCH by Node’s HTTP parser"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A generic PATCH would let clients set any status (even APPROVED). The action has one meaning and its own errors (409 ALREADY_CANCELLED).</p><p><i>VI: PATCH chung chung cho client đặt status bất kỳ (kể cả APPROVED). Hành động có một nghĩa duy nhất và lỗi riêng (409 ALREADY_CANCELLED).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a filter that matches nothing as “not found”.|||Coi bộ lọc không khớp gì là \"không tìm thấy\"."
+        },
+        {
+          "loi": "Mirroring the whole real-world hierarchy in the URL.|||Sao chép cả cây phân cấp ngoài đời vào URL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RPC style",
+          "vi": "kiểu gọi thủ tục"
+        },
+        {
+          "en": "nested resource",
+          "vi": "tài nguyên lồng"
+        },
+        {
+          "en": "filter",
+          "vi": "bộ lọc"
+        }
+      ]
+    },
+    {
+      "title": "Resources 3 — Write lintResourcePath(path): review URLs automatically",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "URL rules",
+        "API linting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Teams enforce URL rules with a linter in CI instead of arguing in every review. Write <code>lintResourcePath(path)</code> for a documented path template like <code>/labs/{labId}/devices</code>. Placeholders are <code>{name}</code> (letters only); every other non-empty segment is a <b>literal</b>. Return the codes that apply, <b>in this order</b>, each at most once (<code>[]</code> = clean):</p><ol>\n<li><code>TRAILING_SLASH</code> — the path is longer than <code>/</code> and ends with <code>/</code>.</li>\n<li><code>FILE_EXTENSION</code> — a literal ends with <code>.letters</code> (<code>labs.json</code>). Strip the extension before the next checks.</li>\n<li><code>VERB</code> — a literal starts with get, create, update, delete, add, remove, fetch or list (any case) followed by an upper-case letter, <code>-</code>, <code>_</code> or the end: <code>getLabs</code>, <code>delete-device</code>, <code>list</code>. (<code>cancel</code> after an id is an allowed action; <code>listings</code> is a noun.)</li>\n<li><code>NOT_LOWER_KEBAB</code> — a literal is not lowercase letters/digits joined by single hyphens.</li>\n<li><code>SINGULAR_COLLECTION</code> — a literal directly followed by a placeholder does not end with <code>s</code> (<code>/lab/{labId}</code>).</li>\n<li><code>TOO_DEEP</code> — more than one placeholder (stop at one level of nesting).</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các nhóm ép luật URL bằng một linter trong CI thay vì cãi nhau ở mỗi buổi review. Viết <code>lintResourcePath(path)</code> cho một mẫu path trong tài liệu như <code>/labs/{labId}/devices</code>. Chỗ giữ là <code>{tên}</code> (chỉ chữ cái); mọi đoạn khác không rỗng là <b>chữ cố định</b>. Trả về các mã vi phạm, <b>theo đúng thứ tự này</b>, mỗi mã tối đa một lần (<code>[]</code> = sạch):</p><ol>\n<li><code>TRAILING_SLASH</code> — path dài hơn <code>/</code> và kết thúc bằng <code>/</code>.</li>\n<li><code>FILE_EXTENSION</code> — một chữ cố định kết thúc bằng <code>.chữ</code> (<code>labs.json</code>). Bỏ đuôi đó trước khi kiểm tiếp.</li>\n<li><code>VERB</code> — chữ cố định bắt đầu bằng get, create, update, delete, add, remove, fetch hoặc list (hoa thường bất kỳ) theo sau là chữ HOA, <code>-</code>, <code>_</code> hoặc hết chuỗi: <code>getLabs</code>, <code>delete-device</code>, <code>list</code>. (<code>cancel</code> sau một id là hành động được phép; <code>listings</code> là danh từ.)</li>\n<li><code>NOT_LOWER_KEBAB</code> — chữ cố định không phải chữ thường/số nối bằng một gạch ngang.</li>\n<li><code>SINGULAR_COLLECTION</code> — chữ cố định đứng ngay trước một chỗ giữ mà không tận cùng bằng <code>s</code> (<code>/lab/{labId}</code>).</li>\n<li><code>TOO_DEEP</code> — nhiều hơn một chỗ giữ (dừng ở một cấp lồng).</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "path — a path template starting with /.|||path — một mẫu path bắt đầu bằng /.",
+      "outputSpec": "An array of codes in the fixed order.|||Mảng mã theo thứ tự cố định.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "lintResourcePath(\"/labs/{labId}/devices\")",
+          "output": "[]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Collect findings in an object, then filter a fixed list of codes — order and uniqueness come for free.|||Gom vi phạm vào một object rồi lọc một danh sách mã cố định — thứ tự và tính duy nhất tự có.",
+        "split(\"/\") then filter out empty strings; look at segs[i + 1] for the singular check.|||split(\"/\") rồi bỏ chuỗi rỗng; nhìn segs[i + 1] để kiểm số ít."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"/labs/{labId}/devices\" ⇒ [] ; \"/getLabs/\" ⇒ ['TRAILING_SLASH', 'VERB', 'NOT_LOWER_KEBAB'] */\nfunction lintResourcePath(path) {\n  // Write your solution here\n  var out = [];\n  if (path.endsWith('/')) out.push('TRAILING_SLASH');\n  if (path.indexOf('get') >= 0) out.push('VERB');\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction lintResourcePath(path) {\n  var found = {};\n  if (path.length > 1 && path.endsWith('/')) found.TRAILING_SLASH = true;\n  var segs = path.split('/').filter(function (s) { return s !== ''; });\n  var isParam = function (s) { return /^\\{[A-Za-z]+\\}$/.test(s); };\n  var params = 0;\n  segs.forEach(function (s, i) {\n    if (isParam(s)) { params++; return; }\n    var word = s;\n    if (/\\.[A-Za-z]+$/.test(word)) { found.FILE_EXTENSION = true; word = word.replace(/\\.[A-Za-z]+$/, ''); }\n    if (/^(get|create|update|delete|add|remove|fetch|list)([A-Z_-]|$)/i.test(word)) found.VERB = true;\n    if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(word)) found.NOT_LOWER_KEBAB = true;\n    var next = segs[i + 1];\n    if (next && isParam(next) && !/s$/.test(word)) found.SINGULAR_COLLECTION = true;\n  });\n  if (params > 1) found.TOO_DEEP = true;\n  return ['TRAILING_SLASH', 'FILE_EXTENSION', 'VERB', 'NOT_LOWER_KEBAB', 'SINGULAR_COLLECTION', 'TOO_DEEP'].filter(function (c) { return found[c]; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each code is one rule from lesson 1.1, made mechanical. Real linters (Spectral with an OpenAPI ruleset, Zalando’s Zally) do exactly this on the API description file, so URL style is decided once and checked forever.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi mã là một luật của bài 1.1 được máy hoá. Linter thật (Spectral với bộ luật OpenAPI, Zally của Zalando) làm đúng việc này trên tệp mô tả API, nên phong cách URL được quyết một lần và kiểm mãi mãi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: lintResourcePath(\"/labs/{labId}/devices\")",
+              "vi": "Ca 1"
+            },
+            "goi": "lintResourcePath(\"/labs/{labId}/devices\")",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Case 2: lintResourcePath(\"/getLabs/\")",
+              "vi": "Ca 2"
+            },
+            "goi": "lintResourcePath(\"/getLabs/\")",
+            "mongDoi": [
+              "TRAILING_SLASH",
+              "VERB",
+              "NOT_LOWER_KEBAB"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: lintResourcePath(\"/lab/{labId}\")",
+              "vi": "Ca 3"
+            },
+            "goi": "lintResourcePath(\"/lab/{labId}\")",
+            "mongDoi": [
+              "SINGULAR_COLLECTION"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "lintResourcePath(\"/bookings/{bookingId}/cancel\")",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "lintResourcePath(\"/labs.json\")",
+            "mongDoi": [
+              "FILE_EXTENSION"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "lintResourcePath(\"/buildings/{buildingId}/labs/{labId}/devices\")",
+            "mongDoi": [
+              "TOO_DEEP"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "lintResourcePath(\"/lab_rooms/{roomId}\")",
+            "mongDoi": [
+              "NOT_LOWER_KEBAB"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "lintResourcePath(\"/delete-device\")",
+            "mongDoi": [
+              "VERB"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "lintResourcePath(\"/listings\")",
+            "mongDoi": [
+              "VERB"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "lintResourcePath(\"/\")",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "lintResourcePath(\"/Device/{deviceId}/updateStatus.php\")",
+            "mongDoi": [
+              "FILE_EXTENSION",
+              "VERB",
+              "NOT_LOWER_KEBAB",
+              "SINGULAR_COLLECTION"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking the case of placeholders: {labId} is camelCase on purpose.|||Kiểm hoa thường của chỗ giữ: {labId} cố ý là camelCase."
+        },
+        {
+          "loi": "Matching “list” anywhere: listings is a noun, not a verb.|||Khớp \"list\" ở bất kỳ đâu: listings là danh từ, không phải động từ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "linter",
+          "vi": "công cụ soát luật"
+        },
+        {
+          "en": "placeholder",
+          "vi": "chỗ giữ chỗ"
+        },
+        {
+          "en": "kebab-case",
+          "vi": "chữ thường nối gạch ngang"
+        }
+      ]
+    }
+  ]
+}

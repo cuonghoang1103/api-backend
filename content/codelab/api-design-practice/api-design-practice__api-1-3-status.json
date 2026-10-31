@@ -1,0 +1,752 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-1-3-status",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-1-3-status"
+  },
+  "exercises": [
+    {
+      "title": "Status 1 — Situation to status code (real LabFlow runs)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "status codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Every row is a request that was really sent to LabFlow in lesson 1.3. Choose the status code it returned.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng là một request đã thật sự gửi tới LabFlow trong bài 1.3. Chọn mã trạng thái nó trả về.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask in order: can I read it? do I know who you are? may you? does it exist? does it make sense? does it clash?|||Hỏi theo thứ tự: đọc được không? biết bạn là ai không? bạn có được phép? nó có tồn tại? có hợp lý? có đụng độ?",
+        "201 always comes with a Location header pointing to the new resource.|||201 luôn đi kèm header Location trỏ tới tài nguyên mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Status 1 — Situation to status code (real LabFlow runs)\n\nAnswer in the answer panel (no code needed).\n\n1. What LabFlow answeredLabFlow đã trả lời gì\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Status 1 — Situation to status code (real LabFlow runs) — answer key\n\n1. What LabFlow answeredLabFlow đã trả lời gì\n   - r1.c: 401\n   - r2.c: 201\n   - r3.c: 400\n   - r4.c: 400\n   - r5.c: 422\n   - r6.c: 409\n   - r7.c: 403\n   - r8.c: 410\n   - r9.c: 404\n   - r10.c: 405\n   - r11.c: 204\n   400 = the request cannot be read as intended (syntax, shape); 422 = well-formed but meaningless for the business; 409 = valid but clashes with the current state. 401 = who are you?; 403 = I know you, and no. 404 = no such thing; 410 = it existed and is gone for good.VI: 400 = không đọc được request như ý (cú pháp, hình dạng); 422 = đúng hình dạng nhưng vô nghĩa với nghiệp vụ; 409 = hợp lệ nhưng đụng trạng thái hiện tại. 401 = bạn là ai?; 403 = biết bạn rồi, và không. 404 = không có; 410 = từng có và đã mất hẳn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>400 = the request cannot be read as intended (syntax, shape); 422 = well-formed but meaningless for the business; 409 = valid but clashes with the current state. 401 = who are you?; 403 = I know you, and no. 404 = no such thing; 410 = it existed and is gone for good.</p><p><i>VI: 400 = không đọc được request như ý (cú pháp, hình dạng); 422 = đúng hình dạng nhưng vô nghĩa với nghiệp vụ; 409 = hợp lệ nhưng đụng trạng thái hiện tại. 401 = bạn là ai?; 403 = biết bạn rồi, và không. 404 = không có; 410 = từng có và đã mất hẳn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>What LabFlow answered</p><p style=\"opacity:.75;font-size:.92em\"><i>LabFlow đã trả lời gì</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request / situation"
+              },
+              {
+                "ma": "c",
+                "ten": "Status",
+                "luaChon": [
+                  "200",
+                  "201",
+                  "204",
+                  "400",
+                  "401",
+                  "403",
+                  "404",
+                  "405",
+                  "409",
+                  "410",
+                  "422"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "POST /bookings with no Authorization header"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "POST /bookings, valid token, new booking stored (Location: /bookings/bk_1)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "POST /bookings with body {\"labId\": \"lab_1\",} (trailing comma)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "POST /bookings with startAt \"02/11/2026 8:00\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "POST /bookings with endAt before startAt"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "POST /bookings for lab_1 at a time already booked"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Bình (tok_bin) reads An’s booking GET /bookings/bk_1"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "GET /labs/lab_4 — a lab retired since 2026-09-01"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "x": "GET /labs/lab_9 — never existed"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "x": "DELETE /labs/lab_1 — the route exists, the method does not"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "x": "DELETE /devices/dev_2 succeeded, nothing to return"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "401",
+              "r2.c": "201",
+              "r3.c": "400",
+              "r4.c": "400",
+              "r5.c": "422",
+              "r6.c": "409",
+              "r7.c": "403",
+              "r8.c": "410",
+              "r9.c": "404",
+              "r10.c": "405",
+              "r11.c": "204"
+            },
+            "giaiThich": "<p>400 = the request cannot be read as intended (syntax, shape); 422 = well-formed but meaningless for the business; 409 = valid but clashes with the current state. 401 = who are you?; 403 = I know you, and no. 404 = no such thing; 410 = it existed and is gone for good.</p><p><i>VI: 400 = không đọc được request như ý (cú pháp, hình dạng); 422 = đúng hình dạng nhưng vô nghĩa với nghiệp vụ; 409 = hợp lệ nhưng đụng trạng thái hiện tại. 401 = bạn là ai?; 403 = biết bạn rồi, và không. 404 = không có; 410 = từng có và đã mất hẳn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "401 for “not your booking” — the user is authenticated, so it is 403.|||401 cho \"không phải booking của bạn\" — người dùng đã xác thực, nên là 403."
+        },
+        {
+          "loi": "400 for end-before-start: the JSON is well-formed, the meaning is wrong (422).|||400 cho kết thúc trước bắt đầu: JSON đúng dạng, ý nghĩa mới sai (422)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "401 Unauthorized",
+          "vi": "chưa xác thực"
+        },
+        {
+          "en": "403 Forbidden",
+          "vi": "không có quyền"
+        },
+        {
+          "en": "422 Unprocessable Content",
+          "vi": "không xử lý được nội dung"
+        },
+        {
+          "en": "410 Gone",
+          "vi": "đã mất hẳn"
+        }
+      ]
+    },
+    {
+      "title": "Status 2 — The hard calls",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "status codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Design questions where two codes both look plausible.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những câu hỏi thiết kế mà hai mã đều có vẻ hợp lý.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what the status code tells the CLIENT to do next.|||Hỏi mã trạng thái bảo CLIENT làm gì tiếp theo.",
+        "4xx = change your request; 5xx = not your fault.|||4xx = sửa request; 5xx = không phải lỗi của bạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Status 2 — The hard calls\n\nAnswer in the answer panel (no code needed).\n\n1. A student asks for another student’s booking. Some APIs answer 404 instead of 403. Why?Một sinh viên hỏi booking của người khác. Có API trả 404 thay vì 403. Vì sao?\n2. Why does a 401 from LabFlow carry WWW-Authenticate: Bearer realm=\"labflow\"?Vì sao 401 của LabFlow kèm WWW-Authenticate: Bearer realm=\"labflow\"?\n3. In lesson 1.3 a route crashed in an app WITHOUT our error handler. Express 5 answered …Trong bài 1.3, một route bị crash trong app KHÔNG có bộ xử lý lỗi của ta. Express 5 trả về …\n4. Cancelling a booking that is already cancelled should return …Huỷ một booking đã huỷ rồi nên trả về …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Status 2 — The hard calls — answer key\n\n1. A student asks for another student’s booking. Some APIs answer 404 instead of 403. Why?Một sinh viên hỏi booking của người khác. Có API trả 404 thay vì 403. Vì sao?\n   Answer: c) 403 confirms the booking exists; 404 hides even that from someone who may not know\n   RFC 9110 allows an origin server to answer 404 to hide a forbidden resource. LabFlow answers 403 because booking ids are not secret — a documented choice.VI: RFC 9110 cho phép server trả 404 để giấu một tài nguyên bị cấm. LabFlow trả 403 vì id booking không bí mật — một lựa chọn có ghi rõ.\n\n2. Why does a 401 from LabFlow carry WWW-Authenticate: Bearer realm=\"labflow\"?Vì sao 401 của LabFlow kèm WWW-Authenticate: Bearer realm=\"labflow\"?\n   Answer: d) RFC 9110 requires it: it tells the client which scheme to use\n   A server generating 401 MUST send WWW-Authenticate with at least one challenge (RFC 9110 §15.5.2).VI: Server tạo 401 PHẢI gửi WWW-Authenticate với ít nhất một thách thức (RFC 9110 §15.5.2).\n\n3. In lesson 1.3 a route crashed in an app WITHOUT our error handler. Express 5 answered …Trong bài 1.3, một route bị crash trong app KHÔNG có bộ xử lý lỗi của ta. Express 5 trả về …\n   Answer: a) 500 as text/html with the whole stack trace and server file paths — a leak, and not JSON\n   That is the real output (Content-Type: text/html, Content-Length: 2066, “TypeError … at file:///…”). LabFlow’s four-argument handler answers 500 JSON INTERNAL with a generic message and keeps the stack in the server log.VI: Đó là output thật (Content-Type: text/html, Content-Length: 2066, \"TypeError … at file:///…\"). Bộ xử lý bốn tham số của LabFlow trả 500 JSON INTERNAL với câu chung chung và giữ stack trong log server.\n\n4. Cancelling a booking that is already cancelled should return …Huỷ một booking đã huỷ rồi nên trả về …\n   Answer: a) 409 ALREADY_CANCELLED — the request is valid, the current state prevents it\n   The booking still exists (history), the action is valid in general, but not in this state: 409 Conflict.VI: Booking vẫn tồn tại (lịch sử), hành động hợp lệ nói chung, nhưng không ở trạng thái này: 409 Conflict.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 403 confirms the booking exists; 404 hides even that from someone who may not know</p><p>RFC 9110 allows an origin server to answer 404 to hide a forbidden resource. LabFlow answers 403 because booking ids are not secret — a documented choice.</p><p><i>VI: RFC 9110 cho phép server trả 404 để giấu một tài nguyên bị cấm. LabFlow trả 403 vì id booking không bí mật — một lựa chọn có ghi rõ.</i></p></li><li><p><b>d)</b> RFC 9110 requires it: it tells the client which scheme to use</p><p>A server generating 401 MUST send WWW-Authenticate with at least one challenge (RFC 9110 §15.5.2).</p><p><i>VI: Server tạo 401 PHẢI gửi WWW-Authenticate với ít nhất một thách thức (RFC 9110 §15.5.2).</i></p></li><li><p><b>a)</b> 500 as text/html with the whole stack trace and server file paths — a leak, and not JSON</p><p>That is the real output (Content-Type: text/html, Content-Length: 2066, “TypeError … at file:///…”). LabFlow’s four-argument handler answers 500 JSON INTERNAL with a generic message and keeps the stack in the server log.</p><p><i>VI: Đó là output thật (Content-Type: text/html, Content-Length: 2066, \"TypeError … at file:///…\"). Bộ xử lý bốn tham số của LabFlow trả 500 JSON INTERNAL với câu chung chung và giữ stack trong log server.</i></p></li><li><p><b>a)</b> 409 ALREADY_CANCELLED — the request is valid, the current state prevents it</p><p>The booking still exists (history), the action is valid in general, but not in this state: 409 Conflict.</p><p><i>VI: Booking vẫn tồn tại (lịch sử), hành động hợp lệ nói chung, nhưng không ở trạng thái này: 409 Conflict.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A student asks for another student’s booking. Some APIs answer 404 instead of 403. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một sinh viên hỏi booking của người khác. Có API trả 404 thay vì 403. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because 404 is cached and 403 is not"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because 403 is deprecated in RFC 9110"
+              },
+              {
+                "ma": "c",
+                "noiDung": "403 confirms the booking exists; 404 hides even that from someone who may not know"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because 403 requires a WWW-Authenticate header"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>RFC 9110 allows an origin server to answer 404 to hide a forbidden resource. LabFlow answers 403 because booking ids are not secret — a documented choice.</p><p><i>VI: RFC 9110 cho phép server trả 404 để giấu một tài nguyên bị cấm. LabFlow trả 403 vì id booking không bí mật — một lựa chọn có ghi rõ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why does a 401 from LabFlow carry WWW-Authenticate: Bearer realm=\"labflow\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao 401 của LabFlow kèm WWW-Authenticate: Bearer realm=\"labflow\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It carries the correct token back to the client"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is only for debugging and may be removed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It makes browsers show a login page for JSON APIs"
+              },
+              {
+                "ma": "d",
+                "noiDung": "RFC 9110 requires it: it tells the client which scheme to use"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A server generating 401 MUST send WWW-Authenticate with at least one challenge (RFC 9110 §15.5.2).</p><p><i>VI: Server tạo 401 PHẢI gửi WWW-Authenticate với ít nhất một thách thức (RFC 9110 §15.5.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In lesson 1.3 a route crashed in an app WITHOUT our error handler. Express 5 answered …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bài 1.3, một route bị crash trong app KHÔNG có bộ xử lý lỗi của ta. Express 5 trả về …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "500 as text/html with the whole stack trace and server file paths — a leak, and not JSON"
+              },
+              {
+                "ma": "b",
+                "noiDung": "400, because the client caused the crash"
+              },
+              {
+                "ma": "c",
+                "noiDung": "500 JSON {\"error\": \"INTERNAL\"} automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nothing — the process exited and the connection was reset"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>That is the real output (Content-Type: text/html, Content-Length: 2066, “TypeError … at file:///…”). LabFlow’s four-argument handler answers 500 JSON INTERNAL with a generic message and keeps the stack in the server log.</p><p><i>VI: Đó là output thật (Content-Type: text/html, Content-Length: 2066, \"TypeError … at file:///…\"). Bộ xử lý bốn tham số của LabFlow trả 500 JSON INTERNAL với câu chung chung và giữ stack trong log server.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Cancelling a booking that is already cancelled should return …</p><p style=\"opacity:.75;font-size:.92em\"><i>Huỷ một booking đã huỷ rồi nên trả về …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "409 ALREADY_CANCELLED — the request is valid, the current state prevents it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "422, because the JSON is wrong"
+              },
+              {
+                "ma": "c",
+                "noiDung": "204, because DELETE-like actions are idempotent"
+              },
+              {
+                "ma": "d",
+                "noiDung": "404, because the booking no longer exists"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The booking still exists (history), the action is valid in general, but not in this state: 409 Conflict.</p><p><i>VI: Booking vẫn tồn tại (lịch sử), hành động hợp lệ nói chung, nhưng không ở trạng thái này: 409 Conflict.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning stack traces “to help debugging”.|||Trả stack trace \"để dễ gỡ lỗi\"."
+        },
+        {
+          "loi": "Using 404 for an existing resource in the wrong state.|||Dùng 404 cho tài nguyên có tồn tại nhưng sai trạng thái."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "challenge",
+          "vi": "thách thức xác thực"
+        },
+        {
+          "en": "information leak",
+          "vi": "lộ thông tin"
+        }
+      ]
+    },
+    {
+      "title": "Status 3 — Write overlaps(a, b): the 409 rule",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "time intervals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>LabFlow answers 409 when a new booking overlaps an existing one. Write <code>overlaps(a, b)</code> for two bookings <code>{ startAt, endAt }</code> (ISO 8601 strings <b>with offsets</b>, possibly different ones). Intervals are <b>half-open</b>: a booking 08:00–10:00 and another 10:00–12:00 do NOT overlap — the room is free at exactly 10:00.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow trả 409 khi một booking mới chồng lên booking có sẵn. Viết <code>overlaps(a, b)</code> cho hai booking <code>{ startAt, endAt }</code> (chuỗi ISO 8601 <b>có độ lệch</b>, có thể khác nhau). Khoảng thời gian là <b>nửa mở</b>: booking 08:00–10:00 và booking 10:00–12:00 KHÔNG chồng nhau — đúng 10:00 phòng đã trống.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "a, b — { startAt, endAt } with start < end.|||a, b — { startAt, endAt } với start < end.",
+      "outputSpec": "true / false",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "overlaps({\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, {\"startAt\":\"2026-11-02T09:00:00+07:00\",\"endAt\":\"2026-11-02T11:00:00+07:00\"})",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare instants, not strings: \"08:00+07:00\" and \"01:00Z\" are the same moment.|||So thời điểm, không so chuỗi: \"08:00+07:00\" và \"01:00Z\" là cùng một lúc.",
+        "Two intervals overlap exactly when each starts before the other ends.|||Hai khoảng chồng nhau khi và chỉ khi mỗi khoảng bắt đầu trước khi khoảng kia kết thúc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** a, b: { startAt, endAt } ⇒ do they overlap? (half-open) */\nfunction overlaps(a, b) {\n  // Write your solution here\n  return a.startAt >= b.startAt && a.startAt <= b.endAt;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction overlaps(a, b) {\n  var as = Date.parse(a.startAt), ae = Date.parse(a.endAt);\n  var bs = Date.parse(b.startAt), be = Date.parse(b.endAt);\n  return as < be && bs < ae;   // half-open [start, end): touching ends do not overlap\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>as < be && bs < ae covers every case (partial, inside, covering) in one line. Date.parse turns each string with an offset into milliseconds since 1970 UTC, so mixed offsets compare correctly.</p>",
+      "solutionExplanationHtmlVi": "<p>as < be && bs < ae phủ mọi trường hợp (chồng một phần, nằm trong, bao trùm) trong một dòng. Date.parse đổi mỗi chuỗi có độ lệch thành mili giây từ 1970 UTC, nên độ lệch khác nhau vẫn so đúng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: overlaps({\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, {...",
+              "vi": "Ca 1"
+            },
+            "goi": "overlaps({\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, {\"startAt\":\"2026-11-02T09:00:00+07:00\",\"endAt\":\"2026-11-02T11:00:00+07:00\"})",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 2: overlaps({\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, {...",
+              "vi": "Ca 2"
+            },
+            "goi": "overlaps({\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, {\"startAt\":\"2026-11-02T10:00:00+07:00\",\"endAt\":\"2026-11-02T12:00:00+07:00\"})",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "overlaps({\"startAt\":\"2026-11-02T07:00:00+07:00\",\"endAt\":\"2026-11-02T12:00:00+07:00\"}, {\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "overlaps({\"startAt\":\"2026-11-02T01:30:00Z\",\"endAt\":\"2026-11-02T02:00:00Z\"}, {\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "overlaps({\"startAt\":\"2026-11-02T03:00:00Z\",\"endAt\":\"2026-11-02T04:00:00Z\"}, {\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "overlaps({\"startAt\":\"2026-11-02T10:00:00+07:00\",\"endAt\":\"2026-11-02T12:00:00+07:00\"}, {\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "overlaps({\"startAt\":\"2026-11-02T08:30:00+07:00\",\"endAt\":\"2026-11-02T09:00:00+07:00\"}, {\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"})",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using <= — back-to-back bookings would be refused.|||Dùng <= — các booking nối tiếp nhau sẽ bị từ chối."
+        },
+        {
+          "loi": "Only checking whether a’s start lies inside b — misses a booking that covers b entirely.|||Chỉ kiểm điểm đầu của a có nằm trong b — bỏ sót booking bao trùm b."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "half-open interval",
+          "vi": "khoảng nửa mở",
+          "giaiThich": "[bắt đầu, kết thúc): gồm điểm đầu, không gồm điểm cuối."
+        }
+      ]
+    },
+    {
+      "title": "Status 4 — Write validateBooking(): 400, then 422, then 409",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "validation order",
+        "400 vs 422 vs 409"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Re-create the decision of <code>POST /bookings</code> from lesson 1.3 as a pure function <code>validateBooking(body, labs, bookings)</code>. Checks run in this order and the first failing step decides:</p><ol>\n<li><b>Shape ⇒ 400</b> <code>{ status: 400, error: 'VALIDATION_FAILED', details }</code>, listing EVERY bad field in the order labId, startAt, endAt: <code>labId</code> not a string ⇒ <code>{ field: 'labId', issue: 'required' }</code>; <code>startAt</code>/<code>endAt</code> not matching<br><code>/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,3})?)?(Z|[+-]\\d{2}:\\d{2})$/</code> ⇒ <code>issue: 'must be ISO 8601 with timezone'</code>. A missing body counts as <code>{}</code>.</li>\n<li><b>Meaning ⇒ 422</b>: end not after start ⇒ <code>{ status: 422, error: 'INVALID_TIME_RANGE' }</code>; then a lab that does not exist or has <code>retiredAt</code> ⇒ <code>{ status: 422, error: 'UNKNOWN_LAB' }</code>.</li>\n<li><b>State ⇒ 409</b>: the first booking of the same lab, not <code>CANCELLED</code>, that overlaps (half-open) ⇒ <code>{ status: 409, error: 'BOOKING_CONFLICT', conflictWith: id }</code>.</li>\n<li>Otherwise <code>{ status: 201 }</code>.</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại quyết định của <code>POST /bookings</code> trong bài 1.3 thành hàm thuần <code>validateBooking(body, labs, bookings)</code>. Các bước kiểm chạy theo thứ tự này và bước đầu tiên trượt quyết định kết quả:</p><ol>\n<li><b>Hình dạng ⇒ 400</b> <code>{ status: 400, error: 'VALIDATION_FAILED', details }</code>, liệt kê MỌI trường sai theo thứ tự labId, startAt, endAt: <code>labId</code> không phải chuỗi ⇒ <code>{ field: 'labId', issue: 'required' }</code>; <code>startAt</code>/<code>endAt</code> không khớp<br><code>/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,3})?)?(Z|[+-]\\d{2}:\\d{2})$/</code> ⇒ <code>issue: 'must be ISO 8601 with timezone'</code>. Không có body thì coi như <code>{}</code>.</li>\n<li><b>Ý nghĩa ⇒ 422</b>: kết thúc không sau bắt đầu ⇒ <code>{ status: 422, error: 'INVALID_TIME_RANGE' }</code>; rồi phòng không tồn tại hoặc có <code>retiredAt</code> ⇒ <code>{ status: 422, error: 'UNKNOWN_LAB' }</code>.</li>\n<li><b>Trạng thái ⇒ 409</b>: booking đầu tiên cùng phòng, không <code>CANCELLED</code>, chồng giờ (nửa mở) ⇒ <code>{ status: 409, error: 'BOOKING_CONFLICT', conflictWith: id }</code>.</li>\n<li>Còn lại <code>{ status: 201 }</code>.</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "body — the request JSON (may be undefined); labs; bookings (times stored in UTC).|||body — JSON của request (có thể undefined); labs; bookings (giờ lưu bằng UTC).",
+      "outputSpec": "{ status, error?, details?, conflictWith? }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "validateBooking({\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T10:00:00+07:00\",\"endAt\":\"2026-11-02T11:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+          "output": "{\"status\":201}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Return as soon as a step fails — but inside step 1 collect all fields before returning.|||Trả về ngay khi một bước trượt — nhưng trong bước 1 phải gom đủ mọi trường rồi mới trả.",
+        "Cancelled bookings free the room: skip them in the overlap search.|||Booking đã huỷ trả phòng lại: bỏ qua chúng khi tìm chồng giờ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** body, labs, bookings ⇒ { status, error?, details?, conflictWith? } */\nfunction validateBooking(body, labs, bookings) {\n  // Write your solution here\n  if (!body.labId) return { status: 400, error: 'VALIDATION_FAILED', details: [{ field: 'labId', issue: 'required' }] };\n  return { status: 201 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction validateBooking(body, labs, bookings) {\n  var ISO = /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}(:\\d{2}(\\.\\d{1,3})?)?(Z|[+-]\\d{2}:\\d{2})$/;\n  var b = body || {};\n  // 1) shape ⇒ 400, every field at once\n  var details = [];\n  if (typeof b.labId !== 'string') details.push({ field: 'labId', issue: 'required' });\n  if (!ISO.test(b.startAt || '')) details.push({ field: 'startAt', issue: 'must be ISO 8601 with timezone' });\n  if (!ISO.test(b.endAt || '')) details.push({ field: 'endAt', issue: 'must be ISO 8601 with timezone' });\n  if (details.length) return { status: 400, error: 'VALIDATION_FAILED', details: details };\n  // 2) meaning ⇒ 422\n  var start = Date.parse(b.startAt), end = Date.parse(b.endAt);\n  if (end <= start) return { status: 422, error: 'INVALID_TIME_RANGE' };\n  var lab = labs.find(function (l) { return l.id === b.labId && !l.retiredAt; });\n  if (!lab) return { status: 422, error: 'UNKNOWN_LAB' };\n  // 3) current state ⇒ 409\n  var clash = bookings.find(function (x) {\n    return x.labId === b.labId && x.status !== 'CANCELLED' && start < Date.parse(x.endAt) && Date.parse(x.startAt) < end;\n  });\n  if (clash) return { status: 409, error: 'BOOKING_CONFLICT', conflictWith: clash.id };\n  return { status: 201 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order mirrors cost and meaning: first “can I even read this?” (cheap, no database), then “does it make sense?”, and only then the query against existing bookings. Reporting all shape errors at once saves the client round trips; Chapter 2 turns this result into an RFC 9457 problem document.</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ tự đi theo chi phí và ý nghĩa: trước là \"đọc được không?\" (rẻ, không cần cơ sở dữ liệu), rồi \"có hợp lý không?\", và chỉ sau đó mới truy vấn các booking có sẵn. Báo mọi lỗi hình dạng một lần giúp client bớt lượt gọi; Chương 2 biến kết quả này thành tài liệu lỗi RFC 9457.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A free slot ⇒ 201",
+              "vi": "Khung giờ trống ⇒ 201"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T10:00:00+07:00\",\"endAt\":\"2026-11-02T11:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 201
+            }
+          },
+          {
+            "moTa": {
+              "en": "The real 400 of lesson 1.3",
+              "vi": "400 thật của bài 1.3"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_1\",\"startAt\":\"02/11/2026 8:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 400,
+              "error": "VALIDATION_FAILED",
+              "details": [
+                {
+                  "field": "startAt",
+                  "issue": "must be ISO 8601 with timezone"
+                },
+                {
+                  "field": "endAt",
+                  "issue": "must be ISO 8601 with timezone"
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Same slot as bk_1 ⇒ 409",
+              "vi": "Trùng giờ bk_1 ⇒ 409"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 409,
+              "error": "BOOKING_CONFLICT",
+              "conflictWith": "bk_1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T10:00:00+07:00\",\"endAt\":\"2026-11-02T08:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 422,
+              "error": "INVALID_TIME_RANGE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_4\",\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 422,
+              "error": "UNKNOWN_LAB"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_9\",\"startAt\":\"2026-11-02T10:00:00+07:00\",\"endAt\":\"2026-11-02T08:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 422,
+              "error": "INVALID_TIME_RANGE"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No body at all",
+              "vi": "Không có body"
+            },
+            "goi": "validateBooking(undefined, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 400,
+              "error": "VALIDATION_FAILED",
+              "details": [
+                {
+                  "field": "labId",
+                  "issue": "required"
+                },
+                {
+                  "field": "startAt",
+                  "issue": "must be ISO 8601 with timezone"
+                },
+                {
+                  "field": "endAt",
+                  "issue": "must be ISO 8601 with timezone"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "validateBooking({\"labId\":7,\"startAt\":\"2026-11-02T08:00:00\",\"endAt\":\"2026-11-02T10:00:00Z\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 400,
+              "error": "VALIDATION_FAILED",
+              "details": [
+                {
+                  "field": "labId",
+                  "issue": "required"
+                },
+                {
+                  "field": "startAt",
+                  "issue": "must be ISO 8601 with timezone"
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Overlaps only a CANCELLED booking ⇒ 201",
+              "vi": "Chỉ chồng booking đã huỷ ⇒ 201"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T12:00:00+07:00\",\"endAt\":\"2026-11-02T13:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 201
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T03:00:00Z\",\"endAt\":\"2026-11-02T04:00:00Z\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 201
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "validateBooking({\"labId\":\"lab_2\",\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}, [{\"id\":\"lab_1\",\"building\":\"Alpha\"},{\"id\":\"lab_2\",\"building\":\"Alpha\"},{\"id\":\"lab_4\",\"building\":\"Beta\",\"retiredAt\":\"2026-09-01T00:00:00.000Z\"}], [{\"id\":\"bk_1\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T01:00:00.000Z\",\"endAt\":\"2026-11-02T03:00:00.000Z\",\"status\":\"PENDING\"},{\"id\":\"bk_2\",\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T05:00:00.000Z\",\"endAt\":\"2026-11-02T07:00:00.000Z\",\"status\":\"CANCELLED\"}])",
+            "mongDoi": {
+              "status": 201
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping at the first bad field — the client then fixes one error per round trip.|||Dừng ở trường sai đầu tiên — client phải sửa từng lỗi một qua mỗi lượt gọi."
+        },
+        {
+          "loi": "Checking the lab before the time range: the order in the spec is part of the contract.|||Kiểm phòng trước khoảng giờ: thứ tự trong đặc tả là một phần hợp đồng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "validation",
+          "vi": "kiểm tra dữ liệu"
+        },
+        {
+          "en": "round trip",
+          "vi": "một lượt gọi đi-về"
+        }
+      ]
+    }
+  ]
+}

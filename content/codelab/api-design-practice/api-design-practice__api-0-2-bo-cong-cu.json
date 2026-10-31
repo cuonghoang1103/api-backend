@@ -1,0 +1,540 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-0-2-bo-cong-cu",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-0-2-bo-cong-cu"
+  },
+  "exercises": [
+    {
+      "title": "Tools 1 — The ten curl flags",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "curl"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lesson 0.2 says ten curl flags are enough for the whole course. Match each task to the flag.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 0.2 nói mười cờ curl là đủ cho cả khoá. Ghép mỗi việc với cờ tương ứng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lower-case -i and upper-case -I are different flags.|||-i thường và -I hoa là hai cờ khác nhau.",
+        "-o /dev/null + -w \"%{http_code}\" is the smoke-test pattern.|||-o /dev/null + -w \"%{http_code}\" là mẫu smoke test."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 1 — The ten curl flags\n\nAnswer in the answer panel (no code needed).\n\n1. Task → flagViệc → cờ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 1 — The ten curl flags — answer key\n\n1. Task → flagViệc → cờ\n   - r1.f: -i\n   - r2.f: -v\n   - r3.f: -X\n   - r4.f: -H\n   - r5.f: --json\n   - r6.f: -I\n   - r7.f: -s\n   - r8.f: -w\n   - r9.f: -L\n   - r10.f: -o\n   -i vs -v: -i shows the response headers, -v also shows what you sent. -I (capital) is a different request (HEAD). --json needs curl ≥ 7.82 and replaces -H Content-Type + -H Accept + -d.VI: -i và -v: -i hiện header của response, -v hiện thêm cả thứ bạn gửi. -I (hoa) là một request khác (HEAD). --json cần curl ≥ 7.82 và thay cho -H Content-Type + -H Accept + -d.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>-i vs -v: -i shows the response headers, -v also shows what you sent. -I (capital) is a different request (HEAD). --json needs curl ≥ 7.82 and replaces -H Content-Type + -H Accept + -d.</p><p><i>VI: -i và -v: -i hiện header của response, -v hiện thêm cả thứ bạn gửi. -I (hoa) là một request khác (HEAD). --json cần curl ≥ 7.82 và thay cho -H Content-Type + -H Accept + -d.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Task → flag</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc → cờ</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Task"
+              },
+              {
+                "ma": "f",
+                "ten": "Flag",
+                "luaChon": [
+                  "-i",
+                  "-v",
+                  "-X",
+                  "-H",
+                  "--json",
+                  "-I",
+                  "-s",
+                  "-w",
+                  "-L",
+                  "-o"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "include response headers"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "show the full exchange, both directions"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "choose the method"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "add a header (repeatable)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "send JSON + set Content-Type and Accept"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "HEAD: status and headers only"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "silent: no progress meter"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "print chosen facts after the transfer"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "x": "follow redirects (3xx)"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "x": "write the body to a file"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.f": "-i",
+              "r2.f": "-v",
+              "r3.f": "-X",
+              "r4.f": "-H",
+              "r5.f": "--json",
+              "r6.f": "-I",
+              "r7.f": "-s",
+              "r8.f": "-w",
+              "r9.f": "-L",
+              "r10.f": "-o"
+            },
+            "giaiThich": "<p>-i vs -v: -i shows the response headers, -v also shows what you sent. -I (capital) is a different request (HEAD). --json needs curl ≥ 7.82 and replaces -H Content-Type + -H Accept + -d.</p><p><i>VI: -i và -v: -i hiện header của response, -v hiện thêm cả thứ bạn gửi. -I (hoa) là một request khác (HEAD). --json cần curl ≥ 7.82 và thay cho -H Content-Type + -H Accept + -d.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using -I when you wanted to see headers of a GET: -I changes the method to HEAD.|||Dùng -I khi muốn xem header của GET: -I đổi phương thức sang HEAD."
+        },
+        {
+          "loi": "Writing -H \"Content-Type: application/json\" and forgetting the body flag.|||Viết -H \"Content-Type: application/json\" mà quên cờ body."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "flag",
+          "vi": "cờ (tuỳ chọn dòng lệnh)"
+        },
+        {
+          "en": "smoke test",
+          "vi": "kiểm tra nhanh còn sống"
+        }
+      ]
+    },
+    {
+      "title": "Tools 2 — Traps in real terminals",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "shell",
+        "API clients"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Each situation happened while students followed the lessons. Choose the real cause.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi tình huống đã xảy ra khi sinh viên làm theo bài. Chọn nguyên nhân thật.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "When output looks impossible, suspect the shell before the server.|||Khi output trông vô lý, hãy nghi shell trước server.",
+        "Use the mirror server (echo.mjs) to see what really arrived.|||Dùng máy gương (echo.mjs) để xem thật sự cái gì tới nơi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 2 — Traps in real terminals\n\nAnswer in the answer panel (no code needed).\n\n1. On Windows PowerShell 5.1, curl -i http://localhost:4000/labs complains about a parameter “i”. Why?Trên Windows PowerShell 5.1, curl -i http://localhost:4000/labs báo lỗi tham số \"i\". Vì sao?\n2. In zsh: curl --json \"{\"labId\":\"lab_1\"}\" … — the mirror server shows body {labId:lab_1}. Cause?Trong zsh: curl --json \"{\"labId\":\"lab_1\"}\" … — máy gương hiện body {labId:lab_1}. Nguyên nhân?\n3. curl http://localhost:4000/labs?building=Alpha&minCapacity=25 (no quotes) prints a job number and the filter is ignored. Why?curl http://localhost:4000/labs?building=Alpha&minCapacity=25 (không có nháy) in ra số job và bộ lọc bị bỏ qua. Vì sao?\n4. You need the team to share requests through git and review them in pull requests. Which tool fits best?Nhóm cần chia sẻ request qua git và review trong pull request. Công cụ nào hợp nhất?\n5. HTTPie shows headers in a different order from curl -i for the same response. Which output reflects the bytes on the wire?HTTPie hiện header khác thứ tự với curl -i cho cùng response. Output nào phản ánh đúng byte trên đường truyền?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tools 2 — Traps in real terminals — answer key\n\n1. On Windows PowerShell 5.1, curl -i http://localhost:4000/labs complains about a parameter “i”. Why?Trên Windows PowerShell 5.1, curl -i http://localhost:4000/labs báo lỗi tham số \"i\". Vì sao?\n   Answer: a) curl there is an alias of Invoke-WebRequest; type curl.exe for the real curl\n   Microsoft documents curl, wget and iwr as aliases of Invoke-WebRequest in PowerShell 5.1. curl.exe ships with Windows 10/11. PowerShell 7 removed the alias.VI: Microsoft ghi rõ curl, wget và iwr là bí danh của Invoke-WebRequest trong PowerShell 5.1. curl.exe có sẵn trên Windows 10/11. PowerShell 7 đã bỏ bí danh này.\n\n2. In zsh: curl --json \"{\"labId\":\"lab_1\"}\" … — the mirror server shows body {labId:lab_1}. Cause?Trong zsh: curl --json \"{\"labId\":\"lab_1\"}\" … — máy gương hiện body {labId:lab_1}. Nguyên nhân?\n   Answer: b) The shell ate the inner double quotes; use single quotes outside\n   Each inner \" closes/opens a shell string, so it is removed before curl sees it. Single quotes outside, double inside — or @file.VI: Mỗi dấu \" bên trong đóng/mở một chuỗi shell nên bị bỏ trước khi curl thấy. Nháy đơn bên ngoài, nháy kép bên trong — hoặc dùng @file.\n\n3. curl http://localhost:4000/labs?building=Alpha&minCapacity=25 (no quotes) prints a job number and the filter is ignored. Why?curl http://localhost:4000/labs?building=Alpha&minCapacity=25 (không có nháy) in ra số job và bộ lọc bị bỏ qua. Vì sao?\n   Answer: a) & sent curl to the background and cut the URL; quote the whole URL\n   In the shell, & means “run in background” and ? is a glob character. Always quote URLs with a query.VI: Trong shell, & nghĩa là \"chạy nền\" và ? là ký tự glob. Luôn đặt URL có query trong nháy.\n\n4. You need the team to share requests through git and review them in pull requests. Which tool fits best?Nhóm cần chia sẻ request qua git và review trong pull request. Công cụ nào hợp nhất?\n   Answer: a) Bruno — collections are plain files in the repo\n   Bruno stores each request as a text file next to your code, so git diff and review work. Postman syncs to its cloud workspace instead.VI: Bruno lưu mỗi request thành một tệp chữ cạnh code, nên git diff và review dùng được. Postman thì đồng bộ lên workspace đám mây.\n\n5. HTTPie shows headers in a different order from curl -i for the same response. Which output reflects the bytes on the wire?HTTPie hiện header khác thứ tự với curl -i cho cùng response. Output nào phản ánh đúng byte trên đường truyền?\n   Answer: a) curl -i — HTTPie formats and re-sorts what it prints\n   HTTPie pretty-prints for humans. When the exact message matters (debugging, a bug report), use curl -i or -v.VI: HTTPie trình bày đẹp cho người đọc. Khi cần chính xác thông điệp (gỡ lỗi, báo lỗi), dùng curl -i hoặc -v.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> curl there is an alias of Invoke-WebRequest; type curl.exe for the real curl</p><p>Microsoft documents curl, wget and iwr as aliases of Invoke-WebRequest in PowerShell 5.1. curl.exe ships with Windows 10/11. PowerShell 7 removed the alias.</p><p><i>VI: Microsoft ghi rõ curl, wget và iwr là bí danh của Invoke-WebRequest trong PowerShell 5.1. curl.exe có sẵn trên Windows 10/11. PowerShell 7 đã bỏ bí danh này.</i></p></li><li><p><b>b)</b> The shell ate the inner double quotes; use single quotes outside</p><p>Each inner \" closes/opens a shell string, so it is removed before curl sees it. Single quotes outside, double inside — or @file.</p><p><i>VI: Mỗi dấu \" bên trong đóng/mở một chuỗi shell nên bị bỏ trước khi curl thấy. Nháy đơn bên ngoài, nháy kép bên trong — hoặc dùng @file.</i></p></li><li><p><b>a)</b> & sent curl to the background and cut the URL; quote the whole URL</p><p>In the shell, & means “run in background” and ? is a glob character. Always quote URLs with a query.</p><p><i>VI: Trong shell, & nghĩa là \"chạy nền\" và ? là ký tự glob. Luôn đặt URL có query trong nháy.</i></p></li><li><p><b>a)</b> Bruno — collections are plain files in the repo</p><p>Bruno stores each request as a text file next to your code, so git diff and review work. Postman syncs to its cloud workspace instead.</p><p><i>VI: Bruno lưu mỗi request thành một tệp chữ cạnh code, nên git diff và review dùng được. Postman thì đồng bộ lên workspace đám mây.</i></p></li><li><p><b>a)</b> curl -i — HTTPie formats and re-sorts what it prints</p><p>HTTPie pretty-prints for humans. When the exact message matters (debugging, a bug report), use curl -i or -v.</p><p><i>VI: HTTPie trình bày đẹp cho người đọc. Khi cần chính xác thông điệp (gỡ lỗi, báo lỗi), dùng curl -i hoặc -v.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>On Windows PowerShell 5.1, curl -i http://localhost:4000/labs complains about a parameter “i”. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên Windows PowerShell 5.1, curl -i http://localhost:4000/labs báo lỗi tham số \"i\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl there is an alias of Invoke-WebRequest; type curl.exe for the real curl"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The LabFlow server rejected the -i flag"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PowerShell needs administrator rights to open port 4000"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Windows does not support HTTP/1.1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Microsoft documents curl, wget and iwr as aliases of Invoke-WebRequest in PowerShell 5.1. curl.exe ships with Windows 10/11. PowerShell 7 removed the alias.</p><p><i>VI: Microsoft ghi rõ curl, wget và iwr là bí danh của Invoke-WebRequest trong PowerShell 5.1. curl.exe có sẵn trên Windows 10/11. PowerShell 7 đã bỏ bí danh này.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>In zsh: curl --json \"{\"labId\":\"lab_1\"}\" … — the mirror server shows body {labId:lab_1}. Cause?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong zsh: curl --json \"{\"labId\":\"lab_1\"}\" … — máy gương hiện body {labId:lab_1}. Nguyên nhân?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl strips quotes from JSON on purpose"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The shell ate the inner double quotes; use single quotes outside"
+              },
+              {
+                "ma": "c",
+                "noiDung": "zsh cannot send JSON at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express removed the quotes when parsing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each inner \" closes/opens a shell string, so it is removed before curl sees it. Single quotes outside, double inside — or @file.</p><p><i>VI: Mỗi dấu \" bên trong đóng/mở một chuỗi shell nên bị bỏ trước khi curl thấy. Nháy đơn bên ngoài, nháy kép bên trong — hoặc dùng @file.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>curl http://localhost:4000/labs?building=Alpha&minCapacity=25 (no quotes) prints a job number and the filter is ignored. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl http://localhost:4000/labs?building=Alpha&minCapacity=25 (không có nháy) in ra số job và bộ lọc bị bỏ qua. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "& sent curl to the background and cut the URL; quote the whole URL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "minCapacity must be written in upper case"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server only accepts one query parameter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "curl does not support query strings"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>In the shell, & means “run in background” and ? is a glob character. Always quote URLs with a query.</p><p><i>VI: Trong shell, & nghĩa là \"chạy nền\" và ? là ký tự glob. Luôn đặt URL có query trong nháy.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>You need the team to share requests through git and review them in pull requests. Which tool fits best?</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhóm cần chia sẻ request qua git và review trong pull request. Công cụ nào hợp nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Bruno — collections are plain files in the repo"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Postman — collections live in a cloud workspace"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The browser address bar"
+              },
+              {
+                "ma": "d",
+                "noiDung": "HTTPie — it re-sorts headers in its output"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Bruno stores each request as a text file next to your code, so git diff and review work. Postman syncs to its cloud workspace instead.</p><p><i>VI: Bruno lưu mỗi request thành một tệp chữ cạnh code, nên git diff và review dùng được. Postman thì đồng bộ lên workspace đám mây.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>HTTPie shows headers in a different order from curl -i for the same response. Which output reflects the bytes on the wire?</p><p style=\"opacity:.75;font-size:.92em\"><i>HTTPie hiện header khác thứ tự với curl -i cho cùng response. Output nào phản ánh đúng byte trên đường truyền?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl -i — HTTPie formats and re-sorts what it prints"
+              },
+              {
+                "ma": "b",
+                "noiDung": "HTTPie — curl re-sorts headers alphabetically"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both — the server sends two orders"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither — HTTP has no header order"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>HTTPie pretty-prints for humans. When the exact message matters (debugging, a bug report), use curl -i or -v.</p><p><i>VI: HTTPie trình bày đẹp cho người đọc. Khi cần chính xác thông điệp (gỡ lỗi, báo lỗi), dùng curl -i hoặc -v.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming the API for a 400 that the shell caused.|||Đổ lỗi cho API về một lỗi 400 do shell gây ra."
+        },
+        {
+          "loi": "Using Invoke-WebRequest output to read status lines.|||Đọc dòng trạng thái từ output của Invoke-WebRequest."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "alias",
+          "vi": "bí danh"
+        },
+        {
+          "en": "quoting",
+          "vi": "đặt trong dấu nháy"
+        },
+        {
+          "en": "collection",
+          "vi": "bộ sưu tập request"
+        }
+      ]
+    },
+    {
+      "title": "Tools 3 — Write buildCurl(req): a copy-pasteable command",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "curl",
+        "shell quoting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Bug reports and API docs need one line anyone can paste. Write <code>buildCurl(req)</code> for <code>req = { method?, url, headers?, json? }</code> that returns a curl command for bash/zsh, in exactly this order:</p><ol>\n<li><code>curl -i</code></li>\n<li><code>-X METHOD</code> only when needed: the default is <code>POST</code> when there is a <code>json</code> body, otherwise <code>GET</code>. Method is upper-cased.</li>\n<li>one <code>-H 'Name: value'</code> per header, in object order</li>\n<li><code>--json '…'</code> with <code>JSON.stringify(json)</code> when <code>json</code> is present (even <code>null</code> or <code>false</code>)</li>\n<li>the URL in single quotes (it may contain <code>?</code> and <code>&amp;</code>)</li></ol>\n<p>Every quoted piece must survive a single quote inside it: write <code>'</code> as <code>'\\''</code> (close, escaped quote, reopen) — e.g. a purpose like <code>Cường's lab</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Báo lỗi và tài liệu API cần một dòng ai cũng dán được. Viết <code>buildCurl(req)</code> với <code>req = { method?, url, headers?, json? }</code>, trả về lệnh curl cho bash/zsh, đúng thứ tự:</p><ol>\n<li><code>curl -i</code></li>\n<li><code>-X METHOD</code> chỉ khi cần: mặc định là <code>POST</code> khi có body <code>json</code>, ngược lại <code>GET</code>. Phương thức viết hoa.</li>\n<li>mỗi header một <code>-H 'Name: value'</code>, theo thứ tự trong object</li>\n<li><code>--json '…'</code> với <code>JSON.stringify(json)</code> khi có <code>json</code> (kể cả <code>null</code> hay <code>false</code>)</li>\n<li>URL trong nháy đơn (có thể chứa <code>?</code> và <code>&amp;</code>)</li></ol>\n<p>Mọi phần trong nháy phải chịu được dấu nháy đơn bên trong: viết <code>'</code> thành <code>'\\''</code> (đóng, nháy thoát, mở lại) — ví dụ mục đích <code>Cường's lab</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "req — { method?, url, headers?, json? }",
+      "outputSpec": "One command string, parts separated by one space.|||Một chuỗi lệnh, các phần cách nhau một dấu cách.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "buildCurl({\"url\":\"http://localhost:4000/labs/lab_1\"})",
+          "output": "\"curl -i 'http://localhost:4000/labs/lab_1'\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Collect the parts in an array and join(\" \") at the end.|||Gom các phần vào một mảng rồi join(\" \") ở cuối.",
+        "Test for a body with req.json !== undefined — null is a valid JSON body.|||Kiểm có body bằng req.json !== undefined — null là body JSON hợp lệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** { method?, url, headers?, json? } ⇒ \"curl -i …\" */\nfunction buildCurl(req) {\n  // Write your solution here\n  var cmd = 'curl -i -X ' + (req.method || 'GET');\n  if (req.json) cmd += \" --json '\" + JSON.stringify(req.json) + \"'\";\n  return cmd + ' ' + req.url;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction buildCurl(req) {\n  var q = function (s) { return \"'\" + String(s).replace(/'/g, \"'\\\\''\") + \"'\"; }; // safe single quotes for bash/zsh\n  var parts = ['curl', '-i'];\n  var hasBody = req.json !== undefined;\n  var method = (req.method || (hasBody ? 'POST' : 'GET')).toUpperCase();\n  if (method !== (hasBody ? 'POST' : 'GET')) parts.push('-X', method);\n  Object.keys(req.headers || {}).forEach(function (k) { parts.push('-H', q(k + ': ' + req.headers[k])); });\n  if (hasBody) parts.push('--json', q(JSON.stringify(req.json)));\n  parts.push(q(req.url));\n  return parts.join(' ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>--json already implies POST, so -X appears only for PUT/PATCH/DELETE or a GET-with-body edge case. Single quotes stop the shell from touching anything inside; the only character they cannot contain is the single quote itself, hence the '\\'' trick.</p>",
+      "solutionExplanationHtmlVi": "<p>--json đã ngầm là POST, nên -X chỉ xuất hiện với PUT/PATCH/DELETE hoặc trường hợp hiếm GET có body. Nháy đơn chặn shell đụng vào mọi thứ bên trong; ký tự duy nhất nó không chứa được là chính dấu nháy đơn, nên mới có mẹo '\\''.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: buildCurl({\"url\":\"http://localhost:4000/labs/lab_1\"})",
+              "vi": "Ca 1"
+            },
+            "goi": "buildCurl({\"url\":\"http://localhost:4000/labs/lab_1\"})",
+            "mongDoi": "curl -i 'http://localhost:4000/labs/lab_1'"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: buildCurl({\"url\":\"http://localhost:4000/bookings\",\"headers\":{\"Authorization\":\"Bearer to...",
+              "vi": "Ca 2"
+            },
+            "goi": "buildCurl({\"url\":\"http://localhost:4000/bookings\",\"headers\":{\"Authorization\":\"Bearer tok_an\"},\"json\":{\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}})",
+            "mongDoi": "curl -i -H 'Authorization: Bearer tok_an' --json '{\"labId\":\"lab_1\",\"startAt\":\"2026-11-02T08:00:00+07:00\",\"endAt\":\"2026-11-02T10:00:00+07:00\"}' 'http://localhost:4000/bookings'"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: buildCurl({\"method\":\"delete\",\"url\":\"http://localhost:4000/labs/lab_3\",\"headers\":{\"Autho...",
+              "vi": "Ca 3"
+            },
+            "goi": "buildCurl({\"method\":\"delete\",\"url\":\"http://localhost:4000/labs/lab_3\",\"headers\":{\"Authorization\":\"Bearer tok_lan\"}})",
+            "mongDoi": "curl -i -X DELETE -H 'Authorization: Bearer tok_lan' 'http://localhost:4000/labs/lab_3'"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "buildCurl({\"method\":\"PATCH\",\"url\":\"http://localhost:4000/labs/lab_1\",\"json\":{\"capacity\":32}})",
+            "mongDoi": "curl -i -X PATCH --json '{\"capacity\":32}' 'http://localhost:4000/labs/lab_1'",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "buildCurl({\"url\":\"http://localhost:4000/labs?building=Alpha&minCapacity=25\"})",
+            "mongDoi": "curl -i 'http://localhost:4000/labs?building=Alpha&minCapacity=25'",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "buildCurl({\"url\":\"http://localhost:4000/bookings\",\"json\":{\"purpose\":\"Cường's lab\"}})",
+            "mongDoi": "curl -i --json '{\"purpose\":\"Cường'\\''s lab\"}' 'http://localhost:4000/bookings'",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "buildCurl({\"method\":\"post\",\"url\":\"http://localhost:4000/bookings/bk_1/cancel\",\"headers\":{\"Authorization\":\"Bearer tok_an\",\"Accept-Language\":\"en\"}})",
+            "mongDoi": "curl -i -X POST -H 'Authorization: Bearer tok_an' -H 'Accept-Language: en' 'http://localhost:4000/bookings/bk_1/cancel'",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "buildCurl({\"method\":\"PUT\",\"url\":\"http://localhost:4000/x\",\"json\":null})",
+            "mongDoi": "curl -i -X PUT --json 'null' 'http://localhost:4000/x'",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Always writing -X POST together with --json: harmless but noisy, and the task says “only when needed”.|||Luôn viết -X POST kèm --json: vô hại nhưng thừa, và đề nói \"chỉ khi cần\"."
+        },
+        {
+          "loi": "Using double quotes: $ and ! inside the body get expanded by the shell.|||Dùng nháy kép: $ và ! trong body bị shell khai triển."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "escape",
+          "vi": "thoát ký tự"
+        },
+        {
+          "en": "reproducible",
+          "vi": "tái hiện được"
+        }
+      ]
+    }
+  ]
+}

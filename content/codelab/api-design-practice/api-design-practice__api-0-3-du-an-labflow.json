@@ -1,0 +1,541 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-0-3-du-an-labflow",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-0-3-du-an-labflow"
+  },
+  "exercises": [
+    {
+      "title": "Skeleton 1 — Build the project in the right order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "project setup"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Lesson 0.3 builds LabFlow from an empty folder. Put the steps in the order that works on the first try.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 0.3 dựng LabFlow từ một thư mục trống. Sắp các bước theo thứ tự chạy được ngay lần đầu.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "You cannot install a package before package.json exists.|||Không cài gói được trước khi có package.json.",
+        "Two terminals: one runs the server, one sends requests.|||Hai terminal: một chạy server, một gửi request."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Skeleton 1 — Build the project in the right order\n\nAnswer in the answer panel (no code needed).\n\n1. From an empty folder to curl -i /labsTừ thư mục trống tới curl -i /labs\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Skeleton 1 — Build the project in the right order — answer key\n\n1. From an empty folder to curl -i /labsTừ thư mục trống tới curl -i /labs\n   Answer: m5) node -v prints v22.x (install with nvm if not)  →  m1) mkdir labflow-api && cd labflow-api && npm init -y  →  m7) npm install express@5, then npm ls express to see the real version  →  m2) Add \"type\": \"module\" and the dev script \"node --watch src/server.js\" to package.json  →  m6) Write src/db.js, src/app.js and src/server.js  →  m3) npm run dev in terminal 1  →  m4) curl -i http://localhost:4000/labs in terminal 2\n   Check the runtime first, then the package, then the config that makes import work, then code, then run, then call. Running before \"type\": \"module\" gives the ES-module warning/error.VI: Kiểm môi trường chạy trước, rồi gói, rồi cấu hình để import chạy được, rồi code, rồi chạy, rồi gọi. Chạy trước khi có \"type\": \"module\" sẽ gặp cảnh báo/lỗi ES module.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Check the runtime first, then the package, then the config that makes import work, then code, then run, then call. Running before \"type\": \"module\" gives the ES-module warning/error.</p><p><i>VI: Kiểm môi trường chạy trước, rồi gói, rồi cấu hình để import chạy được, rồi code, rồi chạy, rồi gọi. Chạy trước khi có \"type\": \"module\" sẽ gặp cảnh báo/lỗi ES module.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From an empty folder to curl -i /labs</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ thư mục trống tới curl -i /labs</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "mkdir labflow-api && cd labflow-api && npm init -y"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Add \"type\": \"module\" and the dev script \"node --watch src/server.js\" to package.json"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "npm run dev in terminal 1"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "curl -i http://localhost:4000/labs in terminal 2"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "node -v prints v22.x (install with nvm if not)"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Write src/db.js, src/app.js and src/server.js"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "npm install express@5, then npm ls express to see the real version"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m1",
+              "m7",
+              "m2",
+              "m6",
+              "m3",
+              "m4"
+            ],
+            "giaiThich": "<p>Check the runtime first, then the package, then the config that makes import work, then code, then run, then call. Running before \"type\": \"module\" gives the ES-module warning/error.</p><p><i>VI: Kiểm môi trường chạy trước, rồi gói, rồi cấu hình để import chạy được, rồi code, rồi chạy, rồi gọi. Chạy trước khi có \"type\": \"module\" sẽ gặp cảnh báo/lỗi ES module.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running the server before adding \"type\": \"module\".|||Chạy server trước khi thêm \"type\": \"module\"."
+        },
+        {
+          "loi": "Assuming npm install express gives Express 5 — always check with npm ls.|||Cho rằng npm install express cho ra Express 5 — luôn kiểm bằng npm ls."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "package.json",
+          "vi": "tệp mô tả dự án npm"
+        },
+        {
+          "en": "ES module",
+          "vi": "mô-đun ES",
+          "giaiThich": "Dùng import/export."
+        }
+      ]
+    },
+    {
+      "title": "Skeleton 2 — Always answer JSON",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Express",
+        "error contract"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The skeleton answers JSON even for a route that does not exist (real output, shortened):<pre>$ curl -i http://localhost:4000/rooms\nHTTP/1.1 404 Not Found\nContent-Type: application/json; charset=utf-8\nContent-Length: 70\n\n{\n  \"error\": \"ROUTE_NOT_FOUND\",\n  \"message\": \"Không có GET /rooms\"\n}</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ khung trả JSON kể cả với route không tồn tại (output thật, rút gọn):<pre>$ curl -i http://localhost:4000/rooms\nHTTP/1.1 404 Not Found\nContent-Type: application/json; charset=utf-8\nContent-Length: 70\n\n{\n  \"error\": \"ROUTE_NOT_FOUND\",\n  \"message\": \"Không có GET /rooms\"\n}</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Express is a list of handlers tried top to bottom.|||Express là một danh sách handler được thử từ trên xuống.",
+        "Ask what a program (not a person) needs from an error.|||Hỏi một chương trình (không phải con người) cần gì từ một lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Skeleton 2 — Always answer JSON\n\nAnswer in the answer panel (no code needed).\n\n1. Where must app.use((req, res) => res.status(404).json(…)) go?app.use((req, res) => res.status(404).json(…)) phải đặt ở đâu?\n2. What makes Express treat a function as an error handler?Điều gì khiến Express coi một hàm là bộ xử lý lỗi?\n3. Without the error handler, a bug that throws in a route returns …Không có bộ xử lý lỗi, một bug ném lỗi trong route sẽ trả về …\n4. Why does every error body have both error and message?Vì sao body lỗi nào cũng có cả error và message?\n5. In GET /labs/:labId the 404 line is written “return res.status(404).json(…)”. What does return prevent?Trong GET /labs/:labId dòng 404 viết \"return res.status(404).json(…)\". return ngăn điều gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Skeleton 2 — Always answer JSON — answer key\n\n1. Where must app.use((req, res) => res.status(404).json(…)) go?app.use((req, res) => res.status(404).json(…)) phải đặt ở đâu?\n   Answer: a) After every route — Express tries handlers in registration order\n   A middleware without a path matches everything. Placed first, it would answer 404 for /labs too.VI: Middleware không có path khớp mọi thứ. Đặt đầu tiên thì /labs cũng bị trả 404.\n\n2. What makes Express treat a function as an error handler?Điều gì khiến Express coi một hàm là bộ xử lý lỗi?\n   Answer: d) It declares exactly four parameters (err, req, res, next)\n   Express checks the function’s length. Four parameters = error handler; it runs when a route throws, and it also goes last.VI: Express kiểm số tham số của hàm. Bốn tham số = bộ xử lý lỗi; nó chạy khi một route ném lỗi, và cũng đặt cuối cùng.\n\n3. Without the error handler, a bug that throws in a route returns …Không có bộ xử lý lỗi, một bug ném lỗi trong route sẽ trả về …\n   Answer: a) 500 with Express’s default HTML page — a client calling JSON.parse breaks\n   Express’s fallback handler writes HTML (and the stack trace outside production). The contract says “always JSON”, so we add our own handler.VI: Bộ xử lý mặc định của Express viết HTML (kèm stack trace khi không ở production). Hợp đồng nói \"luôn JSON\", nên ta tự thêm bộ xử lý.\n\n4. Why does every error body have both error and message?Vì sao body lỗi nào cũng có cả error và message?\n   Answer: a) error is a stable code for programs; message is text for people and may change\n   Clients branch on LAB_NOT_FOUND, never on the sentence, so the sentence can be reworded or translated freely (Chapter 2 turns this into RFC 9457).VI: Client rẽ nhánh theo LAB_NOT_FOUND, không bao giờ theo câu chữ, nên câu chữ có thể sửa hay dịch thoải mái (Chương 2 nâng thành RFC 9457).\n\n5. In GET /labs/:labId the 404 line is written “return res.status(404).json(…)”. What does return prevent?Trong GET /labs/:labId dòng 404 viết \"return res.status(404).json(…)\". return ngăn điều gì?\n   Answer: c) Running on to res.json(lab) and sending a second response\n   Without return the code continues. If the second res.json has a real body, Node throws ERR_HTTP_HEADERS_SENT (measured in lesson 0.3).VI: Thiếu return thì code chạy tiếp. Nếu res.json thứ hai có body thật, Node ném ERR_HTTP_HEADERS_SENT (đã đo trong bài 0.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> After every route — Express tries handlers in registration order</p><p>A middleware without a path matches everything. Placed first, it would answer 404 for /labs too.</p><p><i>VI: Middleware không có path khớp mọi thứ. Đặt đầu tiên thì /labs cũng bị trả 404.</i></p></li><li><p><b>d)</b> It declares exactly four parameters (err, req, res, next)</p><p>Express checks the function’s length. Four parameters = error handler; it runs when a route throws, and it also goes last.</p><p><i>VI: Express kiểm số tham số của hàm. Bốn tham số = bộ xử lý lỗi; nó chạy khi một route ném lỗi, và cũng đặt cuối cùng.</i></p></li><li><p><b>a)</b> 500 with Express’s default HTML page — a client calling JSON.parse breaks</p><p>Express’s fallback handler writes HTML (and the stack trace outside production). The contract says “always JSON”, so we add our own handler.</p><p><i>VI: Bộ xử lý mặc định của Express viết HTML (kèm stack trace khi không ở production). Hợp đồng nói \"luôn JSON\", nên ta tự thêm bộ xử lý.</i></p></li><li><p><b>a)</b> error is a stable code for programs; message is text for people and may change</p><p>Clients branch on LAB_NOT_FOUND, never on the sentence, so the sentence can be reworded or translated freely (Chapter 2 turns this into RFC 9457).</p><p><i>VI: Client rẽ nhánh theo LAB_NOT_FOUND, không bao giờ theo câu chữ, nên câu chữ có thể sửa hay dịch thoải mái (Chương 2 nâng thành RFC 9457).</i></p></li><li><p><b>c)</b> Running on to res.json(lab) and sending a second response</p><p>Without return the code continues. If the second res.json has a real body, Node throws ERR_HTTP_HEADERS_SENT (measured in lesson 0.3).</p><p><i>VI: Thiếu return thì code chạy tiếp. Nếu res.json thứ hai có body thật, Node ném ERR_HTTP_HEADERS_SENT (đã đo trong bài 0.3).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Where must app.use((req, res) => res.status(404).json(…)) go?</p><p style=\"opacity:.75;font-size:.92em\"><i>app.use((req, res) => res.status(404).json(…)) phải đặt ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "After every route — Express tries handlers in registration order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Inside server.js, after app.listen()"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Before every route, so unknown paths are caught early"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Anywhere — Express sorts handlers by specificity"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A middleware without a path matches everything. Placed first, it would answer 404 for /labs too.</p><p><i>VI: Middleware không có path khớp mọi thứ. Đặt đầu tiên thì /labs cũng bị trả 404.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What makes Express treat a function as an error handler?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì khiến Express coi một hàm là bộ xử lý lỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is registered with app.error()"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Its name ends with “Error”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It returns a status code of 500"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It declares exactly four parameters (err, req, res, next)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Express checks the function’s length. Four parameters = error handler; it runs when a route throws, and it also goes last.</p><p><i>VI: Express kiểm số tham số của hàm. Bốn tham số = bộ xử lý lỗi; nó chạy khi một route ném lỗi, và cũng đặt cuối cùng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Without the error handler, a bug that throws in a route returns …</p><p style=\"opacity:.75;font-size:.92em\"><i>Không có bộ xử lý lỗi, một bug ném lỗi trong route sẽ trả về …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "500 with Express’s default HTML page — a client calling JSON.parse breaks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing — the request hangs forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 with an empty body"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a 500 JSON body {error: \"INTERNAL\"} automatically"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Express’s fallback handler writes HTML (and the stack trace outside production). The contract says “always JSON”, so we add our own handler.</p><p><i>VI: Bộ xử lý mặc định của Express viết HTML (kèm stack trace khi không ở production). Hợp đồng nói \"luôn JSON\", nên ta tự thêm bộ xử lý.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does every error body have both error and message?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao body lỗi nào cũng có cả error và message?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "error is a stable code for programs; message is text for people and may change"
+              },
+              {
+                "ma": "b",
+                "noiDung": "message is required by RFC 9110, error is optional"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two fields make the JSON valid; one field would not be"
+              },
+              {
+                "ma": "d",
+                "noiDung": "error is for English users, message for Vietnamese users"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Clients branch on LAB_NOT_FOUND, never on the sentence, so the sentence can be reworded or translated freely (Chapter 2 turns this into RFC 9457).</p><p><i>VI: Client rẽ nhánh theo LAB_NOT_FOUND, không bao giờ theo câu chữ, nên câu chữ có thể sửa hay dịch thoải mái (Chương 2 nâng thành RFC 9457).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In GET /labs/:labId the 404 line is written “return res.status(404).json(…)”. What does return prevent?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong GET /labs/:labId dòng 404 viết \"return res.status(404).json(…)\". return ngăn điều gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The JSON being sent without Content-Type"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server process from stopping"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Running on to res.json(lab) and sending a second response"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express sending the 404 twice to the client"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Without return the code continues. If the second res.json has a real body, Node throws ERR_HTTP_HEADERS_SENT (measured in lesson 0.3).</p><p><i>VI: Thiếu return thì code chạy tiếp. Nếu res.json thứ hai có body thật, Node ném ERR_HTTP_HEADERS_SENT (đã đo trong bài 0.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the 404 catch-all before the routes.|||Đặt lưới hứng 404 trước các route."
+        },
+        {
+          "loi": "Writing the error handler with three parameters — it then becomes normal middleware.|||Viết bộ xử lý lỗi với ba tham số — khi đó nó thành middleware thường."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware",
+          "vi": "phần mềm trung gian"
+        },
+        {
+          "en": "catch-all",
+          "vi": "lưới hứng mọi thứ"
+        },
+        {
+          "en": "error handler",
+          "vi": "bộ xử lý lỗi"
+        }
+      ]
+    },
+    {
+      "title": "Skeleton 3 — Write route(labs, method, path): the skeleton without Express",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "routing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>To see that Express is “just” a list of rules tried in order, write the LabFlow skeleton as a pure function <code>route(labs, method, path)</code> ⇒ <code>{ status, body }</code>, matching the real responses of lesson 0.3:</p><ul>\n<li><code>GET /health</code> ⇒ 200 <code>{ status: 'ok' }</code>; <code>GET /labs</code> ⇒ 200 <code>{ data: labs }</code></li>\n<li><code>GET /labs/&lt;id&gt;</code> (exactly one segment after /labs/) ⇒ 200 with that lab, or 404 <code>{ error: 'LAB_NOT_FOUND', message: 'Không có phòng lab &lt;id&gt;' }</code></li>\n<li>Anything else — another method, another path, <code>/labs/lab_1/devices</code> — ⇒ 404 <code>{ error: 'ROUTE_NOT_FOUND', message: 'Không có &lt;METHOD&gt; &lt;path&gt;' }</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Để thấy Express \"chỉ là\" một danh sách luật được thử theo thứ tự, hãy viết bộ khung LabFlow thành hàm thuần <code>route(labs, method, path)</code> ⇒ <code>{ status, body }</code>, khớp các response thật của bài 0.3:</p><ul>\n<li><code>GET /health</code> ⇒ 200 <code>{ status: 'ok' }</code>; <code>GET /labs</code> ⇒ 200 <code>{ data: labs }</code></li>\n<li><code>GET /labs/&lt;id&gt;</code> (đúng một đoạn sau /labs/) ⇒ 200 với phòng đó, hoặc 404 <code>{ error: 'LAB_NOT_FOUND', message: 'Không có phòng lab &lt;id&gt;' }</code></li>\n<li>Còn lại — phương thức khác, path khác, <code>/labs/lab_1/devices</code> — ⇒ 404 <code>{ error: 'ROUTE_NOT_FOUND', message: 'Không có &lt;METHOD&gt; &lt;path&gt;' }</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "labs — array of labs; method — \"GET\", \"POST\"…; path — without query.|||labs — mảng phòng; method — \"GET\", \"POST\"…; path — không có query.",
+      "outputSpec": "{ status: number, body: object }|||{ status: số, body: object }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"GET\", \"/labs/lab_2\")",
+          "output": "{\"status\":200,\"body\":{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check the most specific rules first and end with the catch-all.|||Kiểm luật cụ thể nhất trước và kết thúc bằng lưới hứng.",
+        "/^\\/labs\\/([^/]+)$/ matches one segment only.|||/^\\/labs\\/([^/]+)$/ chỉ khớp đúng một đoạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** labs, method, path ⇒ { status, body } — like the LabFlow skeleton */\nfunction route(labs, method, path) {\n  // Write your solution here\n  if (path === '/labs') return { status: 200, body: { data: labs } };\n  var id = path.split('/')[2];\n  return { status: 200, body: labs.find(function (l) { return l.id === id; }) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction route(labs, method, path) {\n  if (method === 'GET' && path === '/health') return { status: 200, body: { status: 'ok' } };\n  if (method === 'GET' && path === '/labs') return { status: 200, body: { data: labs } };\n  var m = /^\\/labs\\/([^/]+)$/.exec(path);\n  if (method === 'GET' && m) {\n    var lab = labs.find(function (l) { return l.id === m[1]; });\n    if (!lab) return { status: 404, body: { error: 'LAB_NOT_FOUND', message: 'Không có phòng lab ' + m[1] } };\n    return { status: 200, body: lab };\n  }\n  return { status: 404, body: { error: 'ROUTE_NOT_FOUND', message: 'Không có ' + method + ' ' + path } }; // the catch-all, last\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A route is method + path pattern. Express keeps them in a list and stops at the first match, so the order of rules — and a catch-all at the end — is the whole design.</p>",
+      "solutionExplanationHtmlVi": "<p>Một route là phương thức + mẫu path. Express giữ chúng trong một danh sách và dừng ở cái khớp đầu tiên, nên thứ tự luật — và lưới hứng ở cuối — là toàn bộ thiết kế.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha...",
+              "vi": "Ca 1"
+            },
+            "goi": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"GET\", \"/labs/lab_2\")",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "id": "lab_2",
+                "code": "AL-305",
+                "name": "Phòng Lab IoT",
+                "building": "Alpha",
+                "capacity": 24
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha...",
+              "vi": "Ca 2"
+            },
+            "goi": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"GET\", \"/rooms\")",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "ROUTE_NOT_FOUND",
+                "message": "Không có GET /rooms"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha...",
+              "vi": "Ca 3"
+            },
+            "goi": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"GET\", \"/health\")",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "status": "ok"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"GET\", \"/labs/lab_9\")",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "LAB_NOT_FOUND",
+                "message": "Không có phòng lab lab_9"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"POST\", \"/labs\")",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "ROUTE_NOT_FOUND",
+                "message": "Không có POST /labs"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"GET\", \"/labs/lab_1/devices\")",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "ROUTE_NOT_FOUND",
+                "message": "Không có GET /labs/lab_1/devices"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "route([{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"GET\", \"/labs\")",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "data": [
+                  {
+                    "id": "lab_3",
+                    "code": "BE-102",
+                    "name": "Phòng Lab Phần mềm",
+                    "building": "Beta",
+                    "capacity": 40
+                  }
+                ]
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "route([{\"id\":\"lab_1\",\"code\":\"AL-201\",\"name\":\"Phòng Lab Mạng máy tính\",\"building\":\"Alpha\",\"capacity\":30},{\"id\":\"lab_2\",\"code\":\"AL-305\",\"name\":\"Phòng Lab IoT\",\"building\":\"Alpha\",\"capacity\":24},{\"id\":\"lab_3\",\"code\":\"BE-102\",\"name\":\"Phòng Lab Phần mềm\",\"building\":\"Beta\",\"capacity\":40}], \"DELETE\", \"/labs/lab_1\")",
+            "mongDoi": {
+              "status": 404,
+              "body": {
+                "error": "ROUTE_NOT_FOUND",
+                "message": "Không có DELETE /labs/lab_1"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "path.startsWith(\"/labs/\") — /labs/lab_1/devices would be treated as a lab id.|||path.startsWith(\"/labs/\") — /labs/lab_1/devices bị coi là id phòng."
+        },
+        {
+          "loi": "Answering POST /labs with the list because the path matches.|||Trả danh sách cho POST /labs chỉ vì path khớp."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "route parameter",
+          "vi": "tham số đường dẫn",
+          "giaiThich": ":labId trong /labs/:labId."
+        },
+        {
+          "en": "pure function",
+          "vi": "hàm thuần"
+        }
+      ]
+    }
+  ]
+}

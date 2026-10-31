@@ -509,9 +509,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            0
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Coalesced hashing combines chaining with the array itself: the chain/linked-list pointers live inside the hash table&#39;s own array slots (no external nodes), and when a collision happens the colliding key is stored in the first available (empty) slot found in the table, which is then linked into the chain of its home bucket. Option B is wrong (list is inside, not outside, the table). Option D is wrong (first available slot, not last). Option C is wrong (search follows the chain pointers, it is not a sequential scan). Answer: A.</p></div><div class=\"ml-vi\"><p>Coalesced hashing kết hợp móc nối với chính mảng bảng băm: con trỏ của danh sách liên kết nằm ngay bên trong các ô của bảng băm (không có node ngoài), và khi có đụng độ, khoá đụng độ được lưu vào ô trống đầu tiên tìm được trong bảng, rồi ô đó được nối vào chuỗi của bucket gốc. Phương án B sai (danh sách nằm bên trong chứ không phải bên ngoài bảng). Phương án D sai (là vị trí trống đầu tiên, không phải cuối cùng). Phương án C sai (tìm kiếm đi theo con trỏ chuỗi, không phải quét tuần tự). Đáp án: A.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Coalesced hashing combines linear probing with chaining: the linked list lives inside the table (so B is wrong), and a search follows the next links instead of scanning sequentially (so C is wrong). According to the CSD201 slide, a colliding key goes to the <strong>last available position</strong>: a pointer starts after the bottom of the table and moves up, as in the slide example B5→9, A9→8, B2→7. So D is correct; A says the first available position, which does not match the course slide.</p></div><div class=\"ml-vi\"><p>Coalesced hashing kết hợp dò tuyến tính với móc nối: danh sách liên kết nằm ngay trong bảng (nên B sai), tìm kiếm đi theo liên kết next chứ không quét tuần tự (nên C sai). Theo slide môn CSD201, khoá đụng độ được đặt vào <strong>ô trống cuối cùng</strong> của bảng: con trỏ đi từ đáy bảng lên, như ví dụ trên slide B5→9, A9→8, B2→7. Vậy D đúng; A nói ô trống đầu tiên, không khớp slide của môn.</p></div>"
         },
         {
           "kind": "MCQ",

@@ -602,7 +602,7 @@ export default {
           "correctIndexes": [
             3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Insert sequentially into an empty BST: 16 becomes root. 7 &lt; 16 -&gt; left of 16. 3 &lt; 16, &lt; 7 -&gt; left of 7. 1 &lt; 16, &lt; 7, &lt; 3 -&gt; left of 3. 12 &lt; 16, &lt; 7, but &gt; 3 -&gt; right of 3. 20 &gt; 16 -&gt; right of 16. 17 &gt; 16, &lt; 20 -&gt; left of 20. Resulting tree: 16(L=7(L=3(L=1,R=12)), R=20(L=17)). Level-order (BFS): level0 16; level1 7,20; level2 3,12,17; level3 1. So the traversal is 16, 7, 20, 3, 12, 17, 1.</p></div><div class=\"ml-vi\"><p>Chèn tuần tự vào BST rỗng: 16 làm gốc. 7 &lt; 16 -&gt; con trái của 16. 3 &lt; 16, &lt; 7 -&gt; con trái của 7. 1 &lt; 16, &lt; 7, &lt; 3 -&gt; con trái của 3. 12 &lt; 16, &lt; 7, nhưng &gt; 3 -&gt; con phải của 3. 20 &gt; 16 -&gt; con phải của 16. 17 &gt; 16, &lt; 20 -&gt; con trái của 20. Cây kết quả: 16(trái=7(trái=3(trái=1,phải=12)), phải=20(trái=17)). Duyệt theo mức (BFS): mức0 16; mức1 7,20; mức2 3,12,17; mức3 1. Vậy kết quả duyệt là 16, 7, 20, 3, 12, 17, 1.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Insert sequentially into an empty BST: 16 becomes root. 7 &lt; 16 -&gt; left of 16. 3 &lt; 16, &lt; 7 -&gt; left of 7. 1 &lt; 16, &lt; 7, &lt; 3 -&gt; left of 3. 12 &lt; 16, &gt; 7 -&gt; right of 7. 20 &gt; 16 -&gt; right of 16. 17 &gt; 16, &lt; 20 -&gt; left of 20. Resulting tree: 16(L=7(L=3(L=1),R=12), R=20(L=17)). Level-order (BFS): level0 16; level1 7,20; level2 3,12,17; level3 1. So the traversal is 16, 7, 20, 3, 12, 17, 1.</p></div><div class=\"ml-vi\"><p>Chèn tuần tự vào BST rỗng: 16 làm gốc. 7 &lt; 16 -&gt; con trái của 16. 3 &lt; 16, &lt; 7 -&gt; con trái của 7. 1 &lt; 16, &lt; 7, &lt; 3 -&gt; con trái của 3. 12 &lt; 16, &gt; 7 -&gt; con phải của 7. 20 &gt; 16 -&gt; con phải của 16. 17 &gt; 16, &lt; 20 -&gt; con trái của 20. Cây kết quả: 16(trái=7(trái=3(trái=1),phải=12), phải=20(trái=17)). Duyệt theo mức (BFS): mức0 16; mức1 7,20; mức2 3,12,17; mức3 1. Vậy kết quả duyệt là 16, 7, 20, 3, 12, 17, 1.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -650,7 +650,7 @@ export default {
           "correctIndexes": [
             1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Deletion &quot;by copying&quot; the root 30: find its in-order predecessor (the maximum / rightmost node of the left subtree), copy that value into the root, then remove the predecessor node from where it was. Left subtree root is 15 (15 -&gt; L=5(L=10), R=25(L=20)). Rightmost node: from 15 go right to 25; 25 has no right child, so 25 is the predecessor (value 25). Copy 25 into the root, then delete the original node 25 — it has only a left child (20), so 20 takes its place as 15&#39;s right child. New tree: 25(L=15(L=5(L=10), R=20), R=40(L=35)). BFS: level0 25; level1 15,40; level2 5,20,35; level3 10. Traversal: 25, 15, 40, 5, 20, 35, 10.</p></div><div class=\"ml-vi\"><p>Xóa &quot;bằng copying&quot; nút gốc 30: tìm nút liền trước (in-order predecessor) — chính là giá trị lớn nhất / nút cực phải của cây con trái — chép giá trị đó lên gốc, rồi xóa nút predecessor ở vị trí cũ. Cây con trái có gốc là 15 (15 -&gt; trái=5(trái=10), phải=25(trái=20)). Nút cực phải: từ 15 đi phải đến 25; 25 không có con phải nên 25 chính là predecessor (giá trị 25). Chép 25 lên gốc, rồi xóa nút 25 gốc — nó chỉ có con trái (20), nên 20 thế chỗ làm con phải của 15. Cây mới: 25(trái=15(trái=5(trái=10), phải=20), phải=40(trái=35)). BFS: mức0 25; mức1 15,40; mức2 5,20,35; mức3 10. Kết quả duyệt: 25, 15, 40, 5, 20, 35, 10.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Deletion &quot;by copying&quot; the root 30: find its in-order predecessor (the maximum / rightmost node of the left subtree), copy that value into the root, then remove the predecessor node from where it was. Left subtree root is 15 (15 -&gt; L=5(R=10), R=25(L=20)). Rightmost node: from 15 go right to 25; 25 has no right child, so 25 is the predecessor (value 25). Copy 25 into the root, then delete the original node 25 — it has only a left child (20), so 20 takes its place as 15&#39;s right child. New tree: 25(L=15(L=5(R=10), R=20), R=40(L=35)). BFS: level0 25; level1 15,40; level2 5,20,35; level3 10. Traversal: 25, 15, 40, 5, 20, 35, 10.</p></div><div class=\"ml-vi\"><p>Xóa &quot;bằng copying&quot; nút gốc 30: tìm nút liền trước (in-order predecessor) — chính là giá trị lớn nhất / nút cực phải của cây con trái — chép giá trị đó lên gốc, rồi xóa nút predecessor ở vị trí cũ. Cây con trái có gốc là 15 (15 -&gt; trái=5(phải=10), phải=25(trái=20)). Nút cực phải: từ 15 đi phải đến 25; 25 không có con phải nên 25 chính là predecessor (giá trị 25). Chép 25 lên gốc, rồi xóa nút 25 gốc — nó chỉ có con trái (20), nên 20 thế chỗ làm con phải của 15. Cây mới: 25(trái=15(trái=5(phải=10), phải=20), phải=40(trái=35)). BFS: mức0 25; mức1 15,40; mức2 5,20,35; mức3 10. Kết quả duyệt: 25, 15, 40, 5, 20, 35, 10.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -775,26 +775,26 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>Select the statement that is most correct.<br/>Basically, the complexity of counting the number of items in a doubly-linked list is</p></div><div class=\"ml-vi\"><p>Chọn phát biểu đúng nhất.<br/>Về cơ bản, độ phức tạp của việc đếm số phần tử trong một danh sách liên kết đôi (doubly-linked list) là</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>__________ is a connected graph without any simple circuit.</p></div><div class=\"ml-vi\"><p>__________ là một đồ thị liên thông không chứa chu trình đơn (simple circuit) nào.</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/CSD201/D2/q32.png",
           "options": [
             {
-              "text": "O(n)|||O(n)"
+              "text": "Kn|||Kn (đồ thị đầy đủ n đỉnh)"
             },
             {
-              "text": "O(n^2)|||O(n^2)"
+              "text": "Tree|||Cây (Tree)"
             },
             {
-              "text": "O(nlogn)|||O(nlogn)"
+              "text": "Simple graph|||Đồ thị đơn (Simple graph)"
             },
             {
-              "text": "O(1)|||O(1)"
+              "text": "Pseudo graph|||Đa đồ thị (Pseudo graph)"
             }
           ],
           "correctIndexes": [
-            0
+            1
           ],
-          "explanation": "<div class=\"ml-en\"><p>Counting the items of a doubly-linked list (without a maintained size field) requires walking every node once from head to tail, which is $O(n)$ — you cannot skip nodes or jump to the count directly.</p></div><div class=\"ml-vi\"><p>Đếm số phần tử của một danh sách liên kết đôi (khi không có sẵn biến lưu kích thước) đòi hỏi phải duyệt qua từng nút một lần từ đầu đến cuối, tức $O(n)$ — không thể bỏ qua nút nào hay suy ra số lượng trực tiếp.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is the standard graph-theory definition of a tree: a connected, acyclic (circuit-free) graph.</p></div><div class=\"ml-vi\"><p>Đây là định nghĩa chuẩn trong lý thuyết đồ thị của cây (tree): một đồ thị liên thông và không có chu trình (acyclic).</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1035,9 +1035,9 @@ export default {
             }
           ],
           "correctIndexes": [
-            0
+            3
           ],
-          "explanation": "<div class=\"ml-en\"><p>Coalesced hashing stores its chains inside the same array as the table itself, unlike separate chaining where each chain is a list of nodes living outside the table (so option B is wrong). When a new key collides with an occupied slot, it is written into an empty cell found elsewhere in the array and linked onto the existing chain — i.e. it goes into the first free slot located, not necessarily the very last cell of the table (so D reverses the nuance and is a distractor). Lookups follow the chain pointers starting from the home slot rather than scanning the whole table in array order, so C&#39;s claim of pure sequential search is also wrong. That leaves A as the accurate description.</p></div><div class=\"ml-vi\"><p>Coalesced hashing lưu các chuỗi (chain) ngay bên trong mảng của chính bảng băm, khác với separate chaining — nơi mỗi chuỗi là danh sách các nút nằm ngoài bảng (nên B sai). Khi một khoá mới đụng độ với vị trí đã có phần tử, nó được ghi vào một ô trống tìm thấy ở nơi khác trong mảng rồi nối vào chuỗi hiện có — tức đặt vào vị trí trống đầu tiên tìm được, chứ không nhất thiết luôn là ô cuối cùng của bảng (nên D diễn đạt ngược và là phương án gây nhiễu). Việc tìm kiếm đi theo con trỏ của chuỗi bắt đầu từ vị trí băm gốc, chứ không quét tuần tự toàn bảng (nên C cũng sai). Do đó A là phát biểu đúng.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>Coalesced hashing combines linear probing with chaining: the linked list lives inside the table (so B is wrong), and a search follows the next links instead of scanning sequentially (so C is wrong). According to the CSD201 slide, a colliding key goes to the <strong>last available position</strong>: a pointer starts after the bottom of the table and moves up, as in the slide example B5→9, A9→8, B2→7. So D is correct; A says the first available position, which does not match the course slide.</p></div><div class=\"ml-vi\"><p>Coalesced hashing kết hợp dò tuyến tính với móc nối: danh sách liên kết nằm ngay trong bảng (nên B sai), tìm kiếm đi theo liên kết next chứ không quét tuần tự (nên C sai). Theo slide môn CSD201, khoá đụng độ được đặt vào <strong>ô trống cuối cùng</strong> của bảng: con trỏ đi từ đáy bảng lên, như ví dụ trên slide B5→9, A9→8, B2→7. Vậy D đúng; A nói ô trống đầu tiên, không khớp slide của môn.</p></div>"
         },
         {
           "kind": "MCQ",
@@ -1213,7 +1213,7 @@ export default {
         {
           "kind": "MCQ",
           "points": 0.2,
-          "prompt": "<div class=\"ml-en\"><p>SOURCE CROP TRUNCATED — image &quot;q50.png&quot; does not contain a question 50; it is a mis-cropped duplicate showing only the top of a different, earlier question (labelled &quot;Câu 1&quot; in the source deck), cut off after 2 of its options. Transcribed as-is below; only options A and B were visible in the crop, C/D (if any) are missing.<br/>The elements of an array are stored successively in memory cells because</p></div><div class=\"ml-vi\"><p>ẢNH NGUỒN BỊ CẮT THIẾU — file &quot;q50.png&quot; không chứa câu hỏi số 50; đây là bản crop nhầm, trùng với phần đầu của một câu hỏi khác trước đó (trong đề gốc được đánh nhãn &quot;Câu 1&quot;), bị cắt sau khi mới hiện 2 đáp án. Ghi lại đúng như ảnh; chỉ thấy được đáp án A và B trong crop, C/D (nếu có) không có trong ảnh.<br/>Các phần tử của một mảng được lưu liên tiếp trong các ô nhớ vì</p></div>",
+          "prompt": "<div class=\"ml-en\"><p>The elements of an array are stored successively in memory cells because</p></div><div class=\"ml-vi\"><p>Các phần tử của một mảng được lưu liên tiếp trong các ô nhớ vì</p></div>",
           "imageUrl": "https://media.cuongthai.com/images/exam-questions/CSD201/D2/q50.png",
           "options": [
             {
@@ -1226,7 +1226,7 @@ export default {
           "correctIndexes": [
             0
           ],
-          "explanation": "<div class=\"ml-en\"><p>This is the standard textbook justification for contiguous array storage: because elements sit at consecutive addresses, the address of element i can be computed as base_address + i * element_size, so the runtime only needs to remember the base address (not one address per element). Option B is factually wrong — memory hardware has no such restriction; contiguous storage is a design choice for O(1) indexing, not a hardware limitation. NOTE: this crop is truncated/mis-labelled (see q_en) — please re-crop the real question 50 from the source deck if this slot needs a genuine, complete question.</p></div><div class=\"ml-vi\"><p>Đây là lý giải kinh điển cho việc lưu mảng liên tiếp trong bộ nhớ: vì các phần tử nằm ở các địa chỉ liên tiếp, địa chỉ của phần tử thứ i có thể tính bằng base_address + i * kích_thước_phần_tử, nên chương trình chỉ cần nhớ địa chỉ gốc (không cần lưu địa chỉ riêng cho từng phần tử). Đáp án B sai về bản chất — phần cứng bộ nhớ không có giới hạn như vậy; lưu liên tiếp là lựa chọn thiết kế để truy cập chỉ số O(1), không phải giới hạn phần cứng. LƯU Ý: ảnh nguồn của câu này bị cắt thiếu/gán nhầm nhãn (xem q_en) — cần crop lại đúng câu hỏi số 50 thật từ đề gốc nếu ô này cần một câu hỏi đầy đủ, chính xác.</p></div>"
+          "explanation": "<div class=\"ml-en\"><p>This is the standard textbook justification for contiguous array storage: because elements sit at consecutive addresses, the address of element i can be computed as base_address + i * element_size, so the runtime only needs to remember the base address (not one address per element). Option B is factually wrong — memory hardware has no such restriction; contiguous storage is a design choice for O(1) indexing, not a hardware limitation.</p></div><div class=\"ml-vi\"><p>Đây là lý giải kinh điển cho việc lưu mảng liên tiếp trong bộ nhớ: vì các phần tử nằm ở các địa chỉ liên tiếp, địa chỉ của phần tử thứ i có thể tính bằng base_address + i * kích_thước_phần_tử, nên chương trình chỉ cần nhớ địa chỉ gốc (không cần lưu địa chỉ riêng cho từng phần tử). Đáp án B sai về bản chất — phần cứng bộ nhớ không có giới hạn như vậy; lưu liên tiếp là lựa chọn thiết kế để truy cập chỉ số O(1), không phải giới hạn phần cứng.</p></div>"
         }
       ]
     }

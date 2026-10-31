@@ -1,0 +1,4 @@
+# Lab 1 · R6 — trên máy api: sửa — gắn 0.0.0.0
+$ ss -tlnp 'sport = :4999'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                        
+LISTEN 0      511          0.0.0.0:4999      0.0.0.0:*    users:(("node",pid=164,fd=18))

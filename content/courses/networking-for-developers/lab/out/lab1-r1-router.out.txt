@@ -1,0 +1,14 @@
+# Lab 1 · R1 — bản đồ phòng lab: chạy trên TỪNG máy (ở đây: router)
+$ hostname
+router
+$ ip -br addr | grep -E '^eth'
+eth0@if2187      UP             10.10.2.254/24 
+eth1@if2188      UP             10.10.1.254/24 
+$ ip -br link | grep -E '^eth'
+eth0@if2187      UP             02:00:0a:0a:02:fe <BROADCAST,MULTICAST,UP,LOWER_UP> 
+eth1@if2188      UP             02:00:0a:0a:01:fe <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ sysctl net.ipv4.ip_forward
+net.ipv4.ip_forward = 1
+$ ss -tlnp
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+LISTEN 0      4096      127.0.0.11:40629      0.0.0.0:*          

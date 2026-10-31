@@ -1,0 +1,42 @@
+# Ch1 · 1.4 Ethernet & ARP — máy client
+$ ip -br link show eth0
+eth0@if2129      UP             02:00:0a:0a:01:0a <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ ip neigh show
+10.10.1.254 dev eth0 lladdr 02:00:0a:0a:01:fe REACHABLE 
+$ ip neigh flush all
+$ ip neigh show
+$ ping -c 1 10.10.1.11
+PING 10.10.1.11 (10.10.1.11) 56(84) bytes of data.
+64 bytes from 10.10.1.11: icmp_seq=1 ttl=64 time=0.098 ms
+
+--- 10.10.1.11 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.098/0.098/0.098/0.000 ms
+$ ping -c 1 10.10.2.10
+PING 10.10.2.10 (10.10.2.10) 56(84) bytes of data.
+64 bytes from 10.10.2.10: icmp_seq=1 ttl=63 time=0.069 ms
+
+--- 10.10.2.10 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, time 0ms
+rtt min/avg/max/mdev = 0.069/0.069/0.069/0.000 ms
+$ tcpdump -e -n -r /tmp/a.pcap
+reading from file /tmp/a.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+22:25:27.773670 02:00:0a:0a:01:0a > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.10.1.11 tell 10.10.1.10, length 28
+22:25:27.773692 02:00:0a:0a:01:0a > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.10.1.11 tell 10.10.1.10, length 28
+22:25:27.773696 02:00:0a:0a:01:0b > 02:00:0a:0a:01:0a, ethertype ARP (0x0806), length 42: Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b, length 28
+22:25:27.773697 02:00:0a:0a:01:0a > 02:00:0a:0a:01:0b, ethertype IPv4 (0x0800), length 98: 10.10.1.10 > 10.10.1.11: ICMP echo request, id 51900, seq 1, length 64
+22:25:27.773736 02:00:0a:0a:01:0b > 02:00:0a:0a:01:0a, ethertype IPv4 (0x0800), length 98: 10.10.1.11 > 10.10.1.10: ICMP echo reply, id 51900, seq 1, length 64
+22:25:27.776018 02:00:0a:0a:01:0a > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.10.1.254 tell 10.10.1.10, length 28
+22:25:27.776023 02:00:0a:0a:01:0a > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.10.1.254 tell 10.10.1.10, length 28
+22:25:27.776030 02:00:0a:0a:01:fe > 02:00:0a:0a:01:0a, ethertype ARP (0x0806), length 42: Reply 10.10.1.254 is-at 02:00:0a:0a:01:fe, length 28
+22:25:27.776031 02:00:0a:0a:01:0a > 02:00:0a:0a:01:fe, ethertype IPv4 (0x0800), length 98: 10.10.1.10 > 10.10.2.10: ICMP echo request, id 51901, seq 1, length 64
+22:25:27.776070 02:00:0a:0a:01:fe > 02:00:0a:0a:01:0a, ethertype IPv4 (0x0800), length 98: 10.10.2.10 > 10.10.1.10: ICMP echo reply, id 51901, seq 1, length 64
+$ ip neigh show
+10.10.1.254 dev eth0 lladdr 02:00:0a:0a:01:fe REACHABLE 
+10.10.1.11 dev eth0 lladdr 02:00:0a:0a:01:0b REACHABLE 
+$ ip route get 10.10.1.11
+10.10.1.11 dev eth0 src 10.10.1.10 uid 0 
+    cache 
+$ ip route get 10.10.2.10
+10.10.2.10 via 10.10.1.254 dev eth0 src 10.10.1.10 uid 0 
+    cache 

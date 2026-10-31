@@ -1,0 +1,4 @@
+# Lab 1 · R6 — trên máy api: dựng dịch vụ cho đường /hong/ của nginx (cổng 4999), lần đầu gắn NHẦM 127.0.0.1
+$ ss -tlnp 'sport = :4999'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                        
+LISTEN 0      511        127.0.0.1:4999      0.0.0.0:*    users:(("node",pid=140,fd=18))

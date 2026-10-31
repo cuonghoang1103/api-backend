@@ -1,0 +1,941 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-1-1-osi-tcpip",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-1-1-osi-tcpip"
+  },
+  "exercises": [
+    {
+      "title": "Layers 1 — Put each protocol on its layer",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "OSI",
+        "TCP/IP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>For each protocol choose its TCP/IP layer (the four layers real systems run) and its OSI number (the vocabulary L2, L3, L4, L7). Where real protocols do not fit neatly, more than one OSI number is accepted — the explanation says why.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi giao thức, chọn tầng TCP/IP (bốn tầng hệ thống thật chạy) và số OSI (từ vựng L2, L3, L4, L7). Chỗ giao thức thật không khớp gọn, chấp nhận hơn một số OSI — phần giải thích nói lý do.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what the protocol needs: a program (port) ⇒ transport; a machine anywhere (IP) ⇒ internet; the next device on this cable ⇒ link.|||Hỏi giao thức cần gì: một chương trình (cổng) ⇒ giao vận; một máy ở bất cứ đâu (IP) ⇒ internet; thiết bị kế tiếp trên dây này ⇒ link.",
+        "Application, Transport, Internet, Link ⇔ OSI 7 (+6, 5), 4, 3, 2 (+1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 1 — Put each protocol on its layer\n\nAnswer in the answer panel (no code needed).\n\n1. Protocol → layerGiao thức → tầng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 1 — Put each protocol on its layer — answer key\n\n1. Protocol → layerGiao thức → tầng\n   - r1.t: Application\n   - r1.s: 7\n   - r2.t: Application\n   - r2.s: 7\n   - r3.t: Application\n   - r3.s: 7\n   - r4.t: Application\n   - r4.s: 5 / 6 / 7\n   - r5.t: Transport\n   - r5.s: 4\n   - r6.t: Transport\n   - r6.s: 4\n   - r7.t: Transport\n   - r7.s: 4\n   - r8.t: Internet\n   - r8.s: 3\n   - r9.t: Internet\n   - r9.s: 3\n   - r10.t: Link\n   - r10.s: 2 / 3\n   - r11.t: Link\n   - r11.s: 2\n   - r12.t: Link\n   - r12.s: 2 / 1\n   The TCP/IP model puts TLS with the application (it is a library inside your process, between TCP and HTTP) — so OSI 5, 6 or 7 are all accepted; arguing which one is trivia. QUIC does transport work (retransmission, ordering) on top of UDP, so it is transport. ARP lives between layers 2 and 3: it maps an IP address to a MAC but never leaves the link — the lesson's table lists it under Link. Wi-Fi covers both the radio (1) and the frames (2). ICMP rides inside IP packets but is part of the internet layer.VI: Mô hình TCP/IP xếp TLS cùng ứng dụng (nó là thư viện trong tiến trình của bạn, nằm giữa TCP và HTTP) — nên OSI 5, 6 hay 7 đều chấp nhận; tranh cãi số nào chỉ là đố mẹo. QUIC làm việc của tầng giao vận (gửi lại, sắp thứ tự) trên UDP, nên nó là giao vận. ARP nằm giữa tầng 2 và 3: ánh xạ IP sang MAC nhưng không bao giờ rời đường truyền — bảng trong bài xếp nó vào Link. Wi-Fi gồm cả sóng radio (1) lẫn frame (2). ICMP đi trong gói IP nhưng thuộc tầng internet.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The TCP/IP model puts TLS with the application (it is a library inside your process, between TCP and HTTP) — so OSI 5, 6 or 7 are all accepted; arguing which one is trivia. QUIC does transport work (retransmission, ordering) on top of UDP, so it is transport. ARP lives between layers 2 and 3: it maps an IP address to a MAC but never leaves the link — the lesson's table lists it under Link. Wi-Fi covers both the radio (1) and the frames (2). ICMP rides inside IP packets but is part of the internet layer.</p><p><i>VI: Mô hình TCP/IP xếp TLS cùng ứng dụng (nó là thư viện trong tiến trình của bạn, nằm giữa TCP và HTTP) — nên OSI 5, 6 hay 7 đều chấp nhận; tranh cãi số nào chỉ là đố mẹo. QUIC làm việc của tầng giao vận (gửi lại, sắp thứ tự) trên UDP, nên nó là giao vận. ARP nằm giữa tầng 2 và 3: ánh xạ IP sang MAC nhưng không bao giờ rời đường truyền — bảng trong bài xếp nó vào Link. Wi-Fi gồm cả sóng radio (1) lẫn frame (2). ICMP đi trong gói IP nhưng thuộc tầng internet.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Protocol → layer</p><p style=\"opacity:.75;font-size:.92em\"><i>Giao thức → tầng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Protocol"
+              },
+              {
+                "ma": "t",
+                "ten": "TCP/IP layer",
+                "luaChon": [
+                  "Application",
+                  "Transport",
+                  "Internet",
+                  "Link"
+                ]
+              },
+              {
+                "ma": "s",
+                "ten": "OSI number",
+                "luaChon": [
+                  "7",
+                  "6",
+                  "5",
+                  "4",
+                  "3",
+                  "2",
+                  "1"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "HTTP"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "DNS"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "SSH"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "TLS"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "TCP"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "UDP"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "QUIC"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "IPv4 / IPv6"
+                }
+              },
+              {
+                "ma": "r9",
+                "o": {
+                  "x": "ICMP (ping)"
+                }
+              },
+              {
+                "ma": "r10",
+                "o": {
+                  "x": "ARP"
+                }
+              },
+              {
+                "ma": "r11",
+                "o": {
+                  "x": "Ethernet"
+                }
+              },
+              {
+                "ma": "r12",
+                "o": {
+                  "x": "Wi-Fi"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.t": "Application",
+              "r1.s": "7",
+              "r2.t": "Application",
+              "r2.s": "7",
+              "r3.t": "Application",
+              "r3.s": "7",
+              "r4.t": "Application",
+              "r4.s": [
+                "5",
+                "6",
+                "7"
+              ],
+              "r5.t": "Transport",
+              "r5.s": "4",
+              "r6.t": "Transport",
+              "r6.s": "4",
+              "r7.t": "Transport",
+              "r7.s": "4",
+              "r8.t": "Internet",
+              "r8.s": "3",
+              "r9.t": "Internet",
+              "r9.s": "3",
+              "r10.t": "Link",
+              "r10.s": [
+                "2",
+                "3"
+              ],
+              "r11.t": "Link",
+              "r11.s": "2",
+              "r12.t": "Link",
+              "r12.s": [
+                "2",
+                "1"
+              ]
+            },
+            "giaiThich": "<p>The TCP/IP model puts TLS with the application (it is a library inside your process, between TCP and HTTP) — so OSI 5, 6 or 7 are all accepted; arguing which one is trivia. QUIC does transport work (retransmission, ordering) on top of UDP, so it is transport. ARP lives between layers 2 and 3: it maps an IP address to a MAC but never leaves the link — the lesson's table lists it under Link. Wi-Fi covers both the radio (1) and the frames (2). ICMP rides inside IP packets but is part of the internet layer.</p><p><i>VI: Mô hình TCP/IP xếp TLS cùng ứng dụng (nó là thư viện trong tiến trình của bạn, nằm giữa TCP và HTTP) — nên OSI 5, 6 hay 7 đều chấp nhận; tranh cãi số nào chỉ là đố mẹo. QUIC làm việc của tầng giao vận (gửi lại, sắp thứ tự) trên UDP, nên nó là giao vận. ARP nằm giữa tầng 2 và 3: ánh xạ IP sang MAC nhưng không bao giờ rời đường truyền — bảng trong bài xếp nó vào Link. Wi-Fi gồm cả sóng radio (1) lẫn frame (2). ICMP đi trong gói IP nhưng thuộc tầng internet.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting DNS in the transport layer because it usually runs over UDP.|||Xếp DNS vào tầng giao vận vì nó thường chạy trên UDP."
+        },
+        {
+          "loi": "Putting ICMP in the transport layer because ping \"talks to\" another machine.|||Xếp ICMP vào tầng giao vận vì ping \"nói chuyện\" với máy khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "OSI model",
+          "vi": "mô hình OSI",
+          "giaiThich": "Mô hình tham chiếu 7 tầng (1984), nguồn của từ L1–L7."
+        },
+        {
+          "en": "TCP/IP model",
+          "vi": "mô hình TCP/IP",
+          "giaiThich": "Bốn tầng hệ thống thật cài đặt."
+        },
+        {
+          "en": "protocol stack",
+          "vi": "chồng giao thức"
+        }
+      ]
+    },
+    {
+      "title": "Layers 2 — How deep does each box read?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "L2/L3/L4/L7 devices"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>A box can only act on what it reads. For each box choose the highest layer it reads, and whether it can send /admin to a different server than /.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một thiết bị chỉ hành động được trên thứ nó đọc. Với mỗi thiết bị, chọn tầng cao nhất nó đọc, và liệu nó có gửi /admin tới server khác với / được không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A path like /admin lives in the HTTP request line — layer 7.|||Đường dẫn như /admin nằm trong dòng request HTTP — tầng 7.",
+        "\"Network\" in the product name (NLB) is a hint: it balances connections, not requests.|||Chữ \"Network\" trong tên sản phẩm (NLB) là gợi ý: nó cân bằng kết nối, không phải request."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 2 — How deep does each box read?\n\nAnswer in the answer panel (no code needed).\n\n1. Box → layerThiết bị → tầng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 2 — How deep does each box read? — answer key\n\n1. Box → layerThiết bị → tầng\n   - r1.l: L2 — MAC addresses\n   - r1.u: no\n   - r2.l: L3 — IP addresses\n   - r2.u: no\n   - r3.l: L3 — IP addresses\n   - r3.u: no\n   - r4.l: L4 — addresses and ports\n   - r4.u: no\n   - r5.l: L4 — addresses and ports\n   - r5.u: no\n   - r6.l: L7 — HTTP paths and headers\n   - r6.u: yes\n   - r7.l: L7 — HTTP paths and headers\n   - r7.u: yes\n   - r8.l: L7 — HTTP paths and headers\n   - r8.u: yes\n   A switch reads only the Ethernet header; a router reads up to the IP header and never sees your URL; an L4 balancer sees addresses and ports — the path is inside the HTTP bytes it does not parse (and with HTTPS they are encrypted anyway). Only an L7 proxy (nginx, Cloudflare, ALB) reads the request line, so only it can split /admin from /. That is exactly what the lab's nginx does with location /api/.VI: Switch chỉ đọc header Ethernet; router đọc tới header IP và không bao giờ thấy URL; bộ cân bằng L4 thấy địa chỉ và cổng — đường dẫn nằm trong các byte HTTP mà nó không phân tích (với HTTPS thì còn bị mã hoá). Chỉ proxy L7 (nginx, Cloudflare, ALB) đọc dòng request, nên chỉ nó tách được /admin khỏi /. Đó đúng là việc nginx trong lab làm với location /api/.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A switch reads only the Ethernet header; a router reads up to the IP header and never sees your URL; an L4 balancer sees addresses and ports — the path is inside the HTTP bytes it does not parse (and with HTTPS they are encrypted anyway). Only an L7 proxy (nginx, Cloudflare, ALB) reads the request line, so only it can split /admin from /. That is exactly what the lab's nginx does with location /api/.</p><p><i>VI: Switch chỉ đọc header Ethernet; router đọc tới header IP và không bao giờ thấy URL; bộ cân bằng L4 thấy địa chỉ và cổng — đường dẫn nằm trong các byte HTTP mà nó không phân tích (với HTTPS thì còn bị mã hoá). Chỉ proxy L7 (nginx, Cloudflare, ALB) đọc dòng request, nên chỉ nó tách được /admin khỏi /. Đó đúng là việc nginx trong lab làm với location /api/.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Box → layer</p><p style=\"opacity:.75;font-size:.92em\"><i>Thiết bị → tầng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Box"
+              },
+              {
+                "ma": "l",
+                "ten": "Highest layer it reads",
+                "luaChon": [
+                  "L2 — MAC addresses",
+                  "L3 — IP addresses",
+                  "L4 — addresses and ports",
+                  "L7 — HTTP paths and headers"
+                ]
+              },
+              {
+                "ma": "u",
+                "ten": "Can route /admin elsewhere?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "The Docker bridge nfd-lan (a virtual switch)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "The lab router container (ip_forward = 1)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Your home Wi-Fi box, forwarding to the Internet"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "AWS Network Load Balancer"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "HAProxy in TCP mode"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "nginx with location /api/ blocks"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Cloudflare in front of a website"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "AWS Application Load Balancer"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.l": "L2 — MAC addresses",
+              "r1.u": "no",
+              "r2.l": "L3 — IP addresses",
+              "r2.u": "no",
+              "r3.l": "L3 — IP addresses",
+              "r3.u": "no",
+              "r4.l": "L4 — addresses and ports",
+              "r4.u": "no",
+              "r5.l": "L4 — addresses and ports",
+              "r5.u": "no",
+              "r6.l": "L7 — HTTP paths and headers",
+              "r6.u": "yes",
+              "r7.l": "L7 — HTTP paths and headers",
+              "r7.u": "yes",
+              "r8.l": "L7 — HTTP paths and headers",
+              "r8.u": "yes"
+            },
+            "giaiThich": "<p>A switch reads only the Ethernet header; a router reads up to the IP header and never sees your URL; an L4 balancer sees addresses and ports — the path is inside the HTTP bytes it does not parse (and with HTTPS they are encrypted anyway). Only an L7 proxy (nginx, Cloudflare, ALB) reads the request line, so only it can split /admin from /. That is exactly what the lab's nginx does with location /api/.</p><p><i>VI: Switch chỉ đọc header Ethernet; router đọc tới header IP và không bao giờ thấy URL; bộ cân bằng L4 thấy địa chỉ và cổng — đường dẫn nằm trong các byte HTTP mà nó không phân tích (với HTTPS thì còn bị mã hoá). Chỉ proxy L7 (nginx, Cloudflare, ALB) đọc dòng request, nên chỉ nó tách được /admin khỏi /. Đó đúng là việc nginx trong lab làm với location /api/.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a router can route by URL because it \"routes\".|||Tin rằng router định tuyến được theo URL vì nó \"định tuyến\"."
+        },
+        {
+          "loi": "Expecting an L4 load balancer to read cookies or paths.|||Mong bộ cân bằng tải L4 đọc được cookie hay đường dẫn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "load balancer",
+          "vi": "bộ cân bằng tải"
+        },
+        {
+          "en": "reverse proxy",
+          "vi": "proxy ngược",
+          "giaiThich": "Đứng trước server, nhận request thay nó — như nginx."
+        },
+        {
+          "en": "L4 / L7",
+          "vi": "tầng giao vận / tầng ứng dụng"
+        }
+      ]
+    },
+    {
+      "title": "Layers 3 — Order the headers, then the unwrapping",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "encapsulation",
+        "tshark"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>tshark -V printed the top-level headings of the request packet (lab/out/c11-tang). Put them back in the order tshark prints them, outermost first. Then order what the receiving machine does with the frame.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>tshark -V đã in các dòng tiêu đề cấp cao nhất của gói request (lab/out/c11-tang). Sắp lại theo thứ tự tshark in, lớp ngoài cùng trước. Rồi sắp những việc máy nhận làm với frame.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Outermost = the header that was added LAST at the sender and is read FIRST at the receiver.|||Ngoài cùng = header được thêm SAU CÙNG ở bên gửi và được đọc ĐẦU TIÊN ở bên nhận.",
+        "Frame → link → internet → transport → application.|||Frame → link → internet → giao vận → ứng dụng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 3 — Order the headers, then the unwrapping\n\nAnswer in the answer panel (no code needed).\n\n1. tshark -V headings of one packetCác tiêu đề tshark -V của một gói\n2. On the web server, from the wire to nginxTrên web server, từ dây tới nginx\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 3 — Order the headers, then the unwrapping — answer key\n\n1. tshark -V headings of one packetCác tiêu đề tshark -V của một gói\n   Answer: m4) Frame 4: Packet, 149 bytes on wire (1192 bits), 149 bytes captured (1192 bits)  →  m3) Ethernet II, Src: 02:00:0a:0a:01:0a (02:00:0a:0a:01:0a), Dst: 02:00:0a:0a:01:fe (02:00:0a:0a:01:fe)  →  m5) Internet Protocol Version 4, Src: 10.10.1.10, Dst: 10.10.2.10  →  m1) Transmission Control Protocol, Src Port: 53122, Dst Port: 80, Seq: 1, Ack: 1, Len: 83  →  m2) Hypertext Transfer Protocol\n   Frame (what was captured) → Ethernet II (link) → Internet Protocol Version 4 (internet) → Transmission Control Protocol (transport) → Hypertext Transfer Protocol (application). Each header wraps the next one, so the outermost is printed first. Note the Ethernet destination: the router's card 02:00:0a:0a:01:fe, not the web server — the next hop only.VI: Frame (thứ được bắt) → Ethernet II (link) → Internet Protocol Version 4 (internet) → Transmission Control Protocol (giao vận) → Hypertext Transfer Protocol (ứng dụng). Mỗi header bọc header kế tiếp, nên lớp ngoài cùng in trước. Để ý đích Ethernet: card của router 02:00:0a:0a:01:fe, không phải web server — chỉ là chặng kế.\n\n2. On the web server, from the wire to nginxTrên web server, từ dây tới nginx\n   Answer: m5) The network chip receives the frame and copies it into RAM  →  m2) EtherType 0x0800 says an IPv4 packet is inside  →  m1) IP protocol 6 says a TCP segment is inside  →  m4) TCP destination port 80 picks nginx's socket  →  m3) nginx reads the HTTP text GET /api/hello\n   Each layer uses a number in its own header to decide who gets the payload next: EtherType → IP protocol → TCP port → the program. The kernel does the middle three; the program reads only the last.VI: Mỗi tầng dùng một con số trong header của chính nó để quyết định ai nhận phần tải kế tiếp: EtherType → IP protocol → cổng TCP → chương trình. Kernel làm ba bước giữa; chương trình chỉ đọc bước cuối.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Frame (what was captured) → Ethernet II (link) → Internet Protocol Version 4 (internet) → Transmission Control Protocol (transport) → Hypertext Transfer Protocol (application). Each header wraps the next one, so the outermost is printed first. Note the Ethernet destination: the router's card 02:00:0a:0a:01:fe, not the web server — the next hop only.</p><p><i>VI: Frame (thứ được bắt) → Ethernet II (link) → Internet Protocol Version 4 (internet) → Transmission Control Protocol (giao vận) → Hypertext Transfer Protocol (ứng dụng). Mỗi header bọc header kế tiếp, nên lớp ngoài cùng in trước. Để ý đích Ethernet: card của router 02:00:0a:0a:01:fe, không phải web server — chỉ là chặng kế.</i></p><p>Each layer uses a number in its own header to decide who gets the payload next: EtherType → IP protocol → TCP port → the program. The kernel does the middle three; the program reads only the last.</p><p><i>VI: Mỗi tầng dùng một con số trong header của chính nó để quyết định ai nhận phần tải kế tiếp: EtherType → IP protocol → cổng TCP → chương trình. Kernel làm ba bước giữa; chương trình chỉ đọc bước cuối.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>tshark -V headings of one packet</p><p style=\"opacity:.75;font-size:.92em\"><i>Các tiêu đề tshark -V của một gói</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Transmission Control Protocol, Src Port: 53122, Dst Port: 80, Seq: 1, Ack: 1, Len: 83"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Hypertext Transfer Protocol"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Ethernet II, Src: 02:00:0a:0a:01:0a (02:00:0a:0a:01:0a), Dst: 02:00:0a:0a:01:fe (02:00:0a:0a:01:fe)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Frame 4: Packet, 149 bytes on wire (1192 bits), 149 bytes captured (1192 bits)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Internet Protocol Version 4, Src: 10.10.1.10, Dst: 10.10.2.10"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m3",
+              "m5",
+              "m1",
+              "m2"
+            ],
+            "giaiThich": "<p>Frame (what was captured) → Ethernet II (link) → Internet Protocol Version 4 (internet) → Transmission Control Protocol (transport) → Hypertext Transfer Protocol (application). Each header wraps the next one, so the outermost is printed first. Note the Ethernet destination: the router's card 02:00:0a:0a:01:fe, not the web server — the next hop only.</p><p><i>VI: Frame (thứ được bắt) → Ethernet II (link) → Internet Protocol Version 4 (internet) → Transmission Control Protocol (giao vận) → Hypertext Transfer Protocol (ứng dụng). Mỗi header bọc header kế tiếp, nên lớp ngoài cùng in trước. Để ý đích Ethernet: card của router 02:00:0a:0a:01:fe, không phải web server — chỉ là chặng kế.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>On the web server, from the wire to nginx</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên web server, từ dây tới nginx</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "IP protocol 6 says a TCP segment is inside"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "EtherType 0x0800 says an IPv4 packet is inside"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "nginx reads the HTTP text GET /api/hello"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "TCP destination port 80 picks nginx's socket"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The network chip receives the frame and copies it into RAM"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m2",
+              "m1",
+              "m4",
+              "m3"
+            ],
+            "giaiThich": "<p>Each layer uses a number in its own header to decide who gets the payload next: EtherType → IP protocol → TCP port → the program. The kernel does the middle three; the program reads only the last.</p><p><i>VI: Mỗi tầng dùng một con số trong header của chính nó để quyết định ai nhận phần tải kế tiếp: EtherType → IP protocol → cổng TCP → chương trình. Kernel làm ba bước giữa; chương trình chỉ đọc bước cuối.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Starting with HTTP because \"it is the most important\".|||Bắt đầu bằng HTTP vì \"nó quan trọng nhất\"."
+        },
+        {
+          "loi": "Letting the port decide before the IP protocol number.|||Để cổng quyết định trước số protocol của IP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "header",
+          "vi": "phần đầu",
+          "giaiThich": "Thông tin điều khiển một tầng ghi phía trước dữ liệu."
+        },
+        {
+          "en": "EtherType",
+          "vi": "loại gói bên trong frame"
+        },
+        {
+          "en": "decapsulation",
+          "vi": "mở gói"
+        }
+      ]
+    },
+    {
+      "title": "Layers 4 — Where each layer runs, and what your code controls",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "layers in a computer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Questions about where the layers live in a real computer and how that shapes debugging.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi về nơi các tầng nằm trong một máy tính thật và điều đó ảnh hưởng tới việc gỡ lỗi thế nào.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "User space = your process (application); kernel = transport and internet; driver + chip = link.|||User space = tiến trình của bạn (ứng dụng); kernel = giao vận và internet; driver + chip = link.",
+        "An error message tells you which layers already worked.|||Một thông báo lỗi cho biết những tầng nào đã chạy được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 4 — Where each layer runs, and what your code controls\n\nAnswer in the answer panel (no code needed).\n\n1. Your Node API moves from Wi-Fi to a cable and from IPv4 to IPv6. How much of your code changes?API Node của bạn chuyển từ Wi-Fi sang cáp và từ IPv4 sang IPv6. Code của bạn phải đổi bao nhiêu?\n2. Which of these does your program normally control directly?Điều nào sau đây chương trình của bạn thường điều khiển trực tiếp?\n3. ip route get 10.10.2.10 printed \"via 10.10.1.254 dev eth0 src 10.10.1.10\". Which layer made that decision?ip route get 10.10.2.10 in \"via 10.10.1.254 dev eth0 src 10.10.1.10\". Tầng nào ra quyết định đó?\n4. curl reports \"Connection refused\". Which layer do you check first, with which tool?curl báo \"Connection refused\". Bạn kiểm tầng nào trước, bằng công cụ nào?\n5. A classmate says \"TLS is definitely layer 6\". The useful answer is …Một bạn nói \"TLS chắc chắn là tầng 6\". Câu trả lời hữu ích là …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 4 — Where each layer runs, and what your code controls — answer key\n\n1. Your Node API moves from Wi-Fi to a cable and from IPv4 to IPv6. How much of your code changes?API Node của bạn chuyển từ Wi-Fi sang cáp và từ IPv4 sang IPv6. Code của bạn phải đổi bao nhiêu?\n   Answer: d) None — each layer reads only its own header\n   That is the point of layering: HTTP has no idea what a MAC address is, so the lower layers can change underneath it.VI: Đó chính là ý nghĩa của phân tầng: HTTP không biết MAC là gì, nên các tầng dưới đổi bên dưới nó mà không ảnh hưởng.\n\n2. Which of these does your program normally control directly?Điều nào sau đây chương trình của bạn thường điều khiển trực tiếp?\n   Answer: b) Timeouts, keep-alive and the port it connects to\n   Your process owns the application layer and chooses a few socket options; the kernel runs TCP (sequence numbers, retransmission) and IP (routing); the driver and chip run the link.VI: Tiến trình của bạn sở hữu tầng ứng dụng và chọn vài tuỳ chọn socket; kernel chạy TCP (số thứ tự, gửi lại) và IP (định tuyến); driver và chip lo tầng link.\n\n3. ip route get 10.10.2.10 printed \"via 10.10.1.254 dev eth0 src 10.10.1.10\". Which layer made that decision?ip route get 10.10.2.10 in \"via 10.10.1.254 dev eth0 src 10.10.1.10\". Tầng nào ra quyết định đó?\n   Answer: d) The internet layer, in the kernel\n   curl never decided how to reach 10.10.2.10. The kernel's IP layer looked up the routing table and chose the router as next hop.VI: curl không bao giờ quyết định cách tới 10.10.2.10. Tầng IP trong kernel tra bảng định tuyến và chọn router làm chặng kế.\n\n4. curl reports \"Connection refused\". Which layer do you check first, with which tool?curl báo \"Connection refused\". Bạn kiểm tầng nào trước, bằng công cụ nào?\n   Answer: c) Transport — ss -tlnp on the server\n   Refused = a TCP RST: the machine was reached (so routing and link worked) but nothing listens on that port. ss -tlnp on the server shows who listens where.VI: Refused = TCP RST: đã tới được máy (nên định tuyến và link đều ổn) nhưng không ai nghe cổng đó. ss -tlnp trên server cho biết ai nghe ở đâu.\n\n5. A classmate says \"TLS is definitely layer 6\". The useful answer is …Một bạn nói \"TLS chắc chắn là tầng 6\". Câu trả lời hữu ích là …\n   Answer: b) it sits between TCP and HTTP; the number matters less than that\n   Real protocols do not fit OSI neatly. Use layers to ask \"which header does this box read?\" and \"which stage failed?\" — TLS failing means TCP worked and HTTP never started.VI: Giao thức thật không khớp gọn với OSI. Dùng tầng để hỏi \"thiết bị này đọc header nào?\" và \"chặng nào hỏng?\" — TLS hỏng nghĩa là TCP đã thông và HTTP chưa bắt đầu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> None — each layer reads only its own header</p><p>That is the point of layering: HTTP has no idea what a MAC address is, so the lower layers can change underneath it.</p><p><i>VI: Đó chính là ý nghĩa của phân tầng: HTTP không biết MAC là gì, nên các tầng dưới đổi bên dưới nó mà không ảnh hưởng.</i></p></li><li><p><b>b)</b> Timeouts, keep-alive and the port it connects to</p><p>Your process owns the application layer and chooses a few socket options; the kernel runs TCP (sequence numbers, retransmission) and IP (routing); the driver and chip run the link.</p><p><i>VI: Tiến trình của bạn sở hữu tầng ứng dụng và chọn vài tuỳ chọn socket; kernel chạy TCP (số thứ tự, gửi lại) và IP (định tuyến); driver và chip lo tầng link.</i></p></li><li><p><b>d)</b> The internet layer, in the kernel</p><p>curl never decided how to reach 10.10.2.10. The kernel's IP layer looked up the routing table and chose the router as next hop.</p><p><i>VI: curl không bao giờ quyết định cách tới 10.10.2.10. Tầng IP trong kernel tra bảng định tuyến và chọn router làm chặng kế.</i></p></li><li><p><b>c)</b> Transport — ss -tlnp on the server</p><p>Refused = a TCP RST: the machine was reached (so routing and link worked) but nothing listens on that port. ss -tlnp on the server shows who listens where.</p><p><i>VI: Refused = TCP RST: đã tới được máy (nên định tuyến và link đều ổn) nhưng không ai nghe cổng đó. ss -tlnp trên server cho biết ai nghe ở đâu.</i></p></li><li><p><b>b)</b> it sits between TCP and HTTP; the number matters less than that</p><p>Real protocols do not fit OSI neatly. Use layers to ask \"which header does this box read?\" and \"which stage failed?\" — TLS failing means TCP worked and HTTP never started.</p><p><i>VI: Giao thức thật không khớp gọn với OSI. Dùng tầng để hỏi \"thiết bị này đọc header nào?\" và \"chặng nào hỏng?\" — TLS hỏng nghĩa là TCP đã thông và HTTP chưa bắt đầu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Your Node API moves from Wi-Fi to a cable and from IPv4 to IPv6. How much of your code changes?</p><p style=\"opacity:.75;font-size:.92em\"><i>API Node của bạn chuyển từ Wi-Fi sang cáp và từ IPv4 sang IPv6. Code của bạn phải đổi bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the code that computes the MAC address"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All the code that builds the HTTP headers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the code that opens the TCP sockets"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None — each layer reads only its own header"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>That is the point of layering: HTTP has no idea what a MAC address is, so the lower layers can change underneath it.</p><p><i>VI: Đó chính là ý nghĩa của phân tầng: HTTP không biết MAC là gì, nên các tầng dưới đổi bên dưới nó mà không ảnh hưởng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which of these does your program normally control directly?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều nào sau đây chương trình của bạn thường điều khiển trực tiếp?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The routing table and the choice of next hop"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Timeouts, keep-alive and the port it connects to"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Sequence numbers and retransmission of segments"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The MAC address written into each frame"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Your process owns the application layer and chooses a few socket options; the kernel runs TCP (sequence numbers, retransmission) and IP (routing); the driver and chip run the link.</p><p><i>VI: Tiến trình của bạn sở hữu tầng ứng dụng và chọn vài tuỳ chọn socket; kernel chạy TCP (số thứ tự, gửi lại) và IP (định tuyến); driver và chip lo tầng link.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>ip route get 10.10.2.10 printed \"via 10.10.1.254 dev eth0 src 10.10.1.10\". Which layer made that decision?</p><p style=\"opacity:.75;font-size:.92em\"><i>ip route get 10.10.2.10 in \"via 10.10.1.254 dev eth0 src 10.10.1.10\". Tầng nào ra quyết định đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The application layer, inside curl"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The link layer, inside the switch"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The transport layer, inside TCP"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The internet layer, in the kernel"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>curl never decided how to reach 10.10.2.10. The kernel's IP layer looked up the routing table and chose the router as next hop.</p><p><i>VI: curl không bao giờ quyết định cách tới 10.10.2.10. Tầng IP trong kernel tra bảng định tuyến và chọn router làm chặng kế.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>curl reports \"Connection refused\". Which layer do you check first, with which tool?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl báo \"Connection refused\". Bạn kiểm tầng nào trước, bằng công cụ nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Internet — ip route on the client"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Link — ip neigh on the client"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Transport — ss -tlnp on the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Application — the nginx access log"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Refused = a TCP RST: the machine was reached (so routing and link worked) but nothing listens on that port. ss -tlnp on the server shows who listens where.</p><p><i>VI: Refused = TCP RST: đã tới được máy (nên định tuyến và link đều ổn) nhưng không ai nghe cổng đó. ss -tlnp trên server cho biết ai nghe ở đâu.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A classmate says \"TLS is definitely layer 6\". The useful answer is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bạn nói \"TLS chắc chắn là tầng 6\". Câu trả lời hữu ích là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it is layer 2, because it protects every frame"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it sits between TCP and HTTP; the number matters less than that"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it is layer 4, because it encrypts the TCP segments"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is not a layer, because it is only a library"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Real protocols do not fit OSI neatly. Use layers to ask \"which header does this box read?\" and \"which stage failed?\" — TLS failing means TCP worked and HTTP never started.</p><p><i>VI: Giao thức thật không khớp gọn với OSI. Dùng tầng để hỏi \"thiết bị này đọc header nào?\" và \"chặng nào hỏng?\" — TLS hỏng nghĩa là TCP đã thông và HTTP chưa bắt đầu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Debugging a refused connection by looking at DNS or routes.|||Gỡ lỗi kết nối bị từ chối bằng cách xem DNS hay bảng định tuyến."
+        },
+        {
+          "loi": "Treating the OSI numbers as a law of nature.|||Coi các số OSI như định luật tự nhiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "user space",
+          "vi": "không gian người dùng"
+        },
+        {
+          "en": "kernel",
+          "vi": "nhân hệ điều hành"
+        },
+        {
+          "en": "socket option",
+          "vi": "tuỳ chọn socket",
+          "giaiThich": "Vd timeout, keep-alive, TCP_NODELAY."
+        }
+      ]
+    },
+    {
+      "title": "Layers 5 — Label every line of a real curl -v",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "curl -v",
+        "L4 vs L7"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>This is the real verbose output of one request in the lab (lab/out/c11-tang):<pre>*   Trying 10.10.2.10:80...\n* Established connection to 10.10.2.10 (10.10.2.10 port 80) from 10.10.1.10 port 53110 \n* using HTTP/1.x\n&gt; GET /api/hello HTTP/1.1\r\n&gt; Host: 10.10.2.10\r\n&gt; User-Agent: curl/8.18.0\r\n&gt; Accept: */*\r\n&gt; \r\n* Request completely sent off\n&lt; HTTP/1.1 200 OK\r\n&lt; Server: nginx/1.28.3\r\n&lt; Date: Sat, 31 Oct 2026 16:00:15 GMT\r\n&lt; Content-Type: application/json\r\n&lt; Transfer-Encoding: chunked\r\n&lt; Connection: keep-alive\r\n&lt; \r\n{ [142 bytes data]\n* Connection #0 to host 10.10.2.10:80 left intact</pre>For each line choose its layer (L4 = the TCP connection, L7 = the HTTP conversation) and who produced it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đây là output chi tiết thật của một request trong lab (lab/out/c11-tang):<pre>*   Trying 10.10.2.10:80...\n* Established connection to 10.10.2.10 (10.10.2.10 port 80) from 10.10.1.10 port 53110 \n* using HTTP/1.x\n&gt; GET /api/hello HTTP/1.1\r\n&gt; Host: 10.10.2.10\r\n&gt; User-Agent: curl/8.18.0\r\n&gt; Accept: */*\r\n&gt; \r\n* Request completely sent off\n&lt; HTTP/1.1 200 OK\r\n&lt; Server: nginx/1.28.3\r\n&lt; Date: Sat, 31 Oct 2026 16:00:15 GMT\r\n&lt; Content-Type: application/json\r\n&lt; Transfer-Encoding: chunked\r\n&lt; Connection: keep-alive\r\n&lt; \r\n{ [142 bytes data]\n* Connection #0 to host 10.10.2.10:80 left intact</pre>Với mỗi dòng, chọn tầng (L4 = kết nối TCP, L7 = cuộc hội thoại HTTP) và ai tạo ra nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The first character tells who produced the line: * curl, > sent, < received.|||Ký tự đầu cho biết ai tạo dòng: * curl, > gửi đi, < nhận về.",
+        "Anything with an IP:port and \"connection\" in curl's own words is L4; HTTP text is L7 even when it mentions the connection.|||Dòng có IP:cổng và chữ \"connection\" do chính curl nói là L4; chữ HTTP là L7 kể cả khi nó nhắc tới kết nối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 5 — Label every line of a real curl -v\n\nAnswer in the answer panel (no code needed).\n\n1. curl -v, line by linecurl -v, từng dòng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Layers 5 — Label every line of a real curl -v — answer key\n\n1. curl -v, line by linecurl -v, từng dòng\n   - r1.l: L4 — the TCP connection\n   - r1.a: curl's own status line (*)\n   - r2.l: L4 — the TCP connection\n   - r2.a: curl's own status line (*)\n   - r3.l: L7 — HTTP\n   - r3.a: sent by curl (>)\n   - r4.l: L7 — HTTP\n   - r4.a: sent by curl (>)\n   - r5.l: L7 — HTTP\n   - r5.a: received from the server (<)\n   - r6.l: L7 — HTTP\n   - r6.a: received from the server (<)\n   - r7.l: L7 — HTTP\n   - r7.a: body data\n   - r8.l: L4 — the TCP connection\n   - r8.a: curl's own status line (*)\n   \"Trying 10.10.2.10:80\", \"Established connection … from 10.10.1.10 port 53110\" and \"Connection #0 … left intact\" are curl telling you about the TCP connection: a well-known port 80 on the server and a temporary port the kernel picked for the client. Every > line was sent and every < line was received as HTTP text. The trap is \"< Connection: keep-alive\": it talks about the connection, but it is an HTTP header the server wrote — layer 7 asking layer 4 to stay open.VI: \"Trying 10.10.2.10:80\", \"Established connection … from 10.10.1.10 port 53110\" và \"Connection #0 … left intact\" là curl kể về kết nối TCP: cổng quen thuộc 80 ở server và một cổng tạm kernel chọn cho client. Mọi dòng > được gửi đi và mọi dòng < được nhận về dưới dạng chữ HTTP. Cái bẫy là \"< Connection: keep-alive\": nó nói về kết nối, nhưng là một header HTTP do server viết — tầng 7 nhờ tầng 4 giữ kết nối mở.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Trying 10.10.2.10:80\", \"Established connection … from 10.10.1.10 port 53110\" and \"Connection #0 … left intact\" are curl telling you about the TCP connection: a well-known port 80 on the server and a temporary port the kernel picked for the client. Every > line was sent and every < line was received as HTTP text. The trap is \"< Connection: keep-alive\": it talks about the connection, but it is an HTTP header the server wrote — layer 7 asking layer 4 to stay open.</p><p><i>VI: \"Trying 10.10.2.10:80\", \"Established connection … from 10.10.1.10 port 53110\" và \"Connection #0 … left intact\" là curl kể về kết nối TCP: cổng quen thuộc 80 ở server và một cổng tạm kernel chọn cho client. Mọi dòng > được gửi đi và mọi dòng < được nhận về dưới dạng chữ HTTP. Cái bẫy là \"< Connection: keep-alive\": nó nói về kết nối, nhưng là một header HTTP do server viết — tầng 7 nhờ tầng 4 giữ kết nối mở.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>curl -v, line by line</p><p style=\"opacity:.75;font-size:.92em\"><i>curl -v, từng dòng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Line"
+              },
+              {
+                "ma": "l",
+                "ten": "Layer",
+                "luaChon": [
+                  "L4 — the TCP connection",
+                  "L7 — HTTP"
+                ]
+              },
+              {
+                "ma": "a",
+                "ten": "Produced by",
+                "luaChon": [
+                  "curl's own status line (*)",
+                  "sent by curl (>)",
+                  "received from the server (<)",
+                  "body data"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "*   Trying 10.10.2.10:80..."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "* Established connection to 10.10.2.10 (10.10.2.10 port 80) from 10.10.1.10 port 53110"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "> GET /api/hello HTTP/1.1"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "> Host: 10.10.2.10"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "< HTTP/1.1 200 OK"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "< Connection: keep-alive"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "{ [142 bytes data]"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "x": "* Connection #0 to host 10.10.2.10:80 left intact"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.l": "L4 — the TCP connection",
+              "r1.a": "curl's own status line (*)",
+              "r2.l": "L4 — the TCP connection",
+              "r2.a": "curl's own status line (*)",
+              "r3.l": "L7 — HTTP",
+              "r3.a": "sent by curl (>)",
+              "r4.l": "L7 — HTTP",
+              "r4.a": "sent by curl (>)",
+              "r5.l": "L7 — HTTP",
+              "r5.a": "received from the server (<)",
+              "r6.l": "L7 — HTTP",
+              "r6.a": "received from the server (<)",
+              "r7.l": "L7 — HTTP",
+              "r7.a": "body data",
+              "r8.l": "L4 — the TCP connection",
+              "r8.a": "curl's own status line (*)"
+            },
+            "giaiThich": "<p>\"Trying 10.10.2.10:80\", \"Established connection … from 10.10.1.10 port 53110\" and \"Connection #0 … left intact\" are curl telling you about the TCP connection: a well-known port 80 on the server and a temporary port the kernel picked for the client. Every > line was sent and every < line was received as HTTP text. The trap is \"< Connection: keep-alive\": it talks about the connection, but it is an HTTP header the server wrote — layer 7 asking layer 4 to stay open.</p><p><i>VI: \"Trying 10.10.2.10:80\", \"Established connection … from 10.10.1.10 port 53110\" và \"Connection #0 … left intact\" là curl kể về kết nối TCP: cổng quen thuộc 80 ở server và một cổng tạm kernel chọn cho client. Mọi dòng > được gửi đi và mọi dòng < được nhận về dưới dạng chữ HTTP. Cái bẫy là \"< Connection: keep-alive\": nó nói về kết nối, nhưng là một header HTTP do server viết — tầng 7 nhờ tầng 4 giữ kết nối mở.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Labelling \"Connection: keep-alive\" as L4 because of the word \"Connection\".|||Gắn \"Connection: keep-alive\" là L4 vì có chữ \"Connection\"."
+        },
+        {
+          "loi": "Thinking curl's * lines travel on the network — they are only printed locally.|||Nghĩ các dòng * của curl đi trên mạng — chúng chỉ được in ra tại máy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "verbose",
+          "vi": "chế độ chi tiết"
+        },
+        {
+          "en": "well-known port",
+          "vi": "cổng quen thuộc",
+          "giaiThich": "Cổng 0–1023 như 80, 443."
+        },
+        {
+          "en": "ephemeral port",
+          "vi": "cổng tạm",
+          "giaiThich": "Cổng nguồn kernel cấp cho client, vd 53110."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+# Ch1 · 1.4 — cùng MỘT request, nhìn ở phía LAN (máy client). Máy web bắt gói cùng lúc (xem c13-hop-web).
+$ curl -s -o /dev/null http://10.10.2.10/api/hello
+$ tshark -r /tmp/h.pcap -Y http.request -T fields -E header=y -e eth.src -e eth.dst -e ip.src -e ip.dst -e ip.ttl -e ip.checksum -e tcp.srcport -e tcp.dstport 2>/dev/null
+eth.src	eth.dst	ip.src	ip.dst	ip.ttl	ip.checksum	tcp.srcport	tcp.dstport
+02:00:0a:0a:01:0a	02:00:0a:0a:01:fe	10.10.1.10	10.10.2.10	64	0xd864	37070	80
+$ tshark -r /tmp/h.pcap -Y http.request -x 2>/dev/null
+0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.
+0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......
+0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..
+0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d
+0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello
+0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:
+0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use
+0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.
+0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */
+0090  2a 0d 0a 0d 0a                                    *....
+

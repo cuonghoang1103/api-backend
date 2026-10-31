@@ -317,7 +317,8 @@ describe('khopTuyenWeb', () => {
     // 21/10/2026: +2 Bảng tin nhóm (/work/:ws/feed, /work/:ws/:key/feed).
     // 27/10/2026: +1 chọn repo sau khi cài GitHub App CT Work (/work/github-app/done).
     // 28/10/2026: +3 phòng lab mô phỏng (/cpu-lab, /cpu-lab/3d, /os-lab).
-    expect(thay.size).toBe(188);
+    // 31/10/2026: +1 phòng lab mạng (/net-lab).
+    expect(thay.size).toBe(189);
   });
 });
 

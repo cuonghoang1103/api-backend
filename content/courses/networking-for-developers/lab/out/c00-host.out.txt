@@ -1,0 +1,26 @@
+# Mục 0 · bài 0.1 — nhìn từ MÁY CỦA BẠN (ngoài container), trong thư mục lab/
+$ docker compose -f moi-truong/compose.yml -p nfd ps --format 'table {{.Name}}\t{{.Image}}\t{{.Status}}'
+NAME          IMAGE     STATUS
+nfd-api       net-lab   Up 2 minutes
+nfd-client    net-lab   Up 2 minutes
+nfd-client2   net-lab   Up 2 minutes
+nfd-router    net-lab   Up 2 minutes
+nfd-web       net-lab   Up 2 minutes
+$ docker network ls --filter label=netlab=1 --format 'table {{.Name}}\t{{.Driver}}'
+NAME      DRIVER
+nfd-dmz   bridge
+nfd-lan   bridge
+$ docker network inspect nfd-lan --format '{{range .IPAM.Config}}{{.Subnet}} gateway {{.Gateway}}{{end}}'
+10.10.1.0/24 gateway 10.10.1.1
+$ docker run --rm net-lab tcpdump -i eth0 -c 1 -n
+22:45:42.949056 IP6 :: > ff02::16: HBH ICMP6, multicast listener report v2, 2 group record(s), length 48
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+1 packet captured
+4 packets received by filter
+0 packets dropped by kernel
+$ docker run --rm net-lab ip route add 10.9.9.0/24 dev eth0
+RTNETLINK answers: Operation not permitted
+$ docker run --rm --cap-add NET_ADMIN net-lab ip route add 10.9.9.0/24 dev eth0
+$ docker exec nfd-client whoami
+root

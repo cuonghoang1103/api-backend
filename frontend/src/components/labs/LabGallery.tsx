@@ -29,7 +29,7 @@ export interface GalleryCopy {
   numbered?: boolean;
 }
 
-const OTHER: Record<LabNs, [string, string]> = { 'os-lab': ['Operating systems lab', 'Phòng lab hệ điều hành'], 'cpu-lab': ['Computer from zero lab', 'Phòng lab máy tính từ số 0'] };
+const OTHER: Record<LabNs, [string, string]> = { 'os-lab': ['Operating systems lab', 'Phòng lab hệ điều hành'], 'cpu-lab': ['Computer from zero lab', 'Phòng lab máy tính từ số 0'], 'net-lab': ['Network lab', 'Phòng lab mạng'] };
 const cx = (...a: Array<string | false | null | undefined>) => a.filter(Boolean).join(' ');
 
 /** Thứ bấm được ngay ở phần mở đầu /cpu-lab: một byte bằng 8 bóng LED. */
@@ -89,6 +89,45 @@ function HeroCores({ lang }: { lang: Lang }) {
       <div className={g.queue}>
         <i>{t('ready queue', 'hàng sẵn sàng')}</i>
         {[4, 5, 6, 7].map((k) => { const p = (k + tick * 3) % PROCS.length; return <span key={k} style={{ borderColor: COL[p], color: COL[p] }}>{PROCS[p]}</span>; })}
+      </div>
+    </div>
+  );
+}
+
+/** Thứ chuyển động ở phần mở đầu /net-lab: một gói nhảy client → router → web; MAC đổi ở mỗi chặng, IP thì không. */
+function HeroHops({ lang }: { lang: Lang }) {
+  const NODES = [['💻 client', '10.10.1.10'], ['🔀 router', '10.10.1.254'], ['🖥️ web', '10.10.2.10']];
+  const HOP = [
+    { dst: '02:00:0a:0a:01:fe', src: '02:00:0a:0a:01:0a', ttl: 64 },
+    { dst: '02:00:0a:0a:02:0a', src: '02:00:0a:0a:02:fe', ttl: 63 },
+    { dst: '02:00:0a:0a:02:0a', src: '02:00:0a:0a:02:fe', ttl: 63 },
+  ];
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    const id = window.setInterval(() => setTick((x) => x + 1), 1300);
+    return () => window.clearInterval(id);
+  }, []);
+  const at = tick % 3;
+  const h = HOP[at];
+  const t = (en: string, vi: string) => (lang === 'vi' ? vi : en);
+  return (
+    <div className={g.heroToy}>
+      <div className={g.heroToyLabel}>{t('One packet, three machines — the MAC changes at every hop, the IP never does', 'Một gói, ba máy — MAC đổi ở mỗi chặng, IP thì không bao giờ')}</div>
+      <div className={g.cores} style={{ gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
+        {NODES.map(([name, ip], k) => (
+          <div key={name} className={g.core}>
+            <span className={g.coreName}>{name}</span>
+            <span className={g.coreName} style={{ opacity: 0.75 }}>{ip}</span>
+            {k === at ? <span key={`p${tick}`} className={g.coreProc} style={{ background: '#d97706' }}>GET /api/hello</span> : <span className={g.coreProc} style={{ background: 'rgba(0,0,0,.25)', color: '#6b7f73' }}>·</span>}
+          </div>
+        ))}
+      </div>
+      <div className={g.queue}>
+        <i>{t('on the wire now', 'đang trên dây')}</i>
+        <span style={{ borderColor: '#c4a1ff', color: '#c4a1ff' }}>dst {h.dst}</span>
+        <span style={{ borderColor: '#5fd4e6', color: '#5fd4e6' }}>10.10.1.10 → 10.10.2.10</span>
+        <span style={{ borderColor: '#fbbf5a', color: '#fbbf5a' }}>TTL {h.ttl}</span>
       </div>
     </div>
   );
@@ -183,7 +222,7 @@ export default function LabGallery({ ns, copy }: { ns: LabNs; copy: GalleryCopy 
           </div>
         </div>
         <div className={g.heroSide}>
-          {ns === 'cpu-lab' ? <HeroByte lang={lang} /> : <HeroCores lang={lang} />}
+          {ns === 'cpu-lab' ? <HeroByte lang={lang} /> : ns === 'net-lab' ? <HeroHops lang={lang} /> : <HeroCores lang={lang} />}
           <div className={g.heroNote}><ChipGuide size={30} /><span>{t('Every simulation has a step-by-step guide. Sound is optional — toggle it anywhere.', 'Mô phỏng nào cũng có hướng dẫn từng bước. Âm thanh bật tắt được ở mọi nơi.')}</span><SoundTogglePlain lang={lang} /></div>
         </div>
       </section>

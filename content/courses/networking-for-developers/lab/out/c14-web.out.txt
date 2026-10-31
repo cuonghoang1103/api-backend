@@ -1,0 +1,13 @@
+# Ch1 · 1.5 cổng & socket — máy web (nginx) trong lúc client và client2 đang giữ 3 kết nối
+$ ss -tlnp
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                      
+LISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:(("nginx",pid=6,fd=4))
+LISTEN 0      4096      127.0.0.11:33409      0.0.0.0:*                                
+$ ss -tanp '( sport = :80 )'
+State  Recv-Q Send-Q Local Address:Port Peer Address:Port Process                      
+LISTEN 0      511          0.0.0.0:80        0.0.0.0:*     users:(("nginx",pid=6,fd=4))
+ESTAB  0      0         10.10.2.10:80     10.10.1.11:38458                             
+ESTAB  0      0         10.10.2.10:80     10.10.1.10:40042                             
+ESTAB  0      0         10.10.2.10:80     10.10.1.10:40034                             
+$ ss -Htan state established '( sport = :80 )' | wc -l
+3

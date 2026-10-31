@@ -1,0 +1,1111 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-0-1-cai-dat",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-0-1-cai-dat"
+  },
+  "exercises": [
+    {
+      "title": "Setup 1 — Which tool answers this question?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Every tool in the course exists to answer one question. Pick the tool you would reach for first.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi công cụ trong khoá tồn tại để trả lời một câu hỏi. Chọn công cụ bạn sẽ dùng đầu tiên.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the question for its noun: a name, a socket, a timing, a packet, a path, a raw connection.|||Đọc danh từ trong câu hỏi: một tên, một socket, một mốc giờ, một gói, một đường đi, một kết nối trần.",
+        "curl speaks HTTP; nc speaks nothing on top of TCP.|||curl nói HTTP; nc không nói gì phía trên TCP."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 1 — Which tool answers this question?\n\nAnswer in the answer panel (no code needed).\n\n1. What address does api.labflow.dev point to, and which server answered?api.labflow.dev trỏ tới địa chỉ nào, và server nào đã trả lời?\n2. Which program on this server is listening on port 3000, if any?Chương trình nào trên server này đang nghe cổng 3000, nếu có?\n3. How long does each stage (DNS, TCP, TLS, first byte) of one HTTPS request take?Mỗi chặng (DNS, TCP, TLS, byte đầu) của một request HTTPS mất bao lâu?\n4. Which packets really crossed the wire during one request?Những gói nào đã thật sự đi trên dây trong một request?\n5. Is there a path to 10.10.2.10, how long is one round trip, and where are packets lost?Có đường tới 10.10.2.10 không, một vòng đi-về bao lâu, và gói bị mất ở đâu?\n6. Can I open a raw TCP connection to port 5432 without any HTTP on top?Tôi có mở được kết nối TCP trần tới cổng 5432 mà không có HTTP phía trên không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 1 — Which tool answers this question? — answer key\n\n1. What address does api.labflow.dev point to, and which server answered?api.labflow.dev trỏ tới địa chỉ nào, và server nào đã trả lời?\n   Answer: a) dig\n   dig asks DNS and shows the answer and who gave it (lesson 0.2, Chapter 3).VI: dig hỏi DNS và cho thấy câu trả lời lẫn ai đưa ra nó (bài 0.2, Chương 3).\n\n2. Which program on this server is listening on port 3000, if any?Chương trình nào trên server này đang nghe cổng 3000, nếu có?\n   Answer: d) ss -tlnp\n   ss lists the machine's sockets; -t TCP, -l listening, -n numbers, -p process (lesson 1.5).VI: ss liệt kê các socket của máy; -t TCP, -l đang nghe, -n hiện số, -p tiến trình (bài 1.5).\n\n3. How long does each stage (DNS, TCP, TLS, first byte) of one HTTPS request take?Mỗi chặng (DNS, TCP, TLS, byte đầu) của một request HTTPS mất bao lâu?\n   Answer: d) curl -w\n   curl -w (\"write out\") prints a timestamp for each stage of the transfer.VI: curl -w (\"write out\") in mốc thời gian của từng chặng.\n\n4. Which packets really crossed the wire during one request?Những gói nào đã thật sự đi trên dây trong một request?\n   Answer: c) tcpdump / tshark\n   Only a capture shows the packets themselves; tcpdump and tshark record them, Wireshark shows them in panes.VI: Chỉ bắt gói mới cho thấy chính các gói; tcpdump và tshark ghi lại, Wireshark hiện chúng thành các khung.\n\n5. Is there a path to 10.10.2.10, how long is one round trip, and where are packets lost?Có đường tới 10.10.2.10 không, một vòng đi-về bao lâu, và gói bị mất ở đâu?\n   Answer: a) ping / mtr\n   ping measures the round trip; mtr repeats it hop by hop to show where loss starts.VI: ping đo vòng đi-về; mtr lặp lại theo từng chặng để chỉ ra chỗ bắt đầu mất gói.\n\n6. Can I open a raw TCP connection to port 5432 without any HTTP on top?Tôi có mở được kết nối TCP trần tới cổng 5432 mà không có HTTP phía trên không?\n   Answer: d) nc -v\n   nc (netcat) opens a plain TCP connection — perfect to test a database or any non-HTTP port.VI: nc (netcat) mở kết nối TCP thuần — hợp để thử cơ sở dữ liệu hay mọi cổng không phải HTTP.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> dig</p><p>dig asks DNS and shows the answer and who gave it (lesson 0.2, Chapter 3).</p><p><i>VI: dig hỏi DNS và cho thấy câu trả lời lẫn ai đưa ra nó (bài 0.2, Chương 3).</i></p></li><li><p><b>d)</b> ss -tlnp</p><p>ss lists the machine's sockets; -t TCP, -l listening, -n numbers, -p process (lesson 1.5).</p><p><i>VI: ss liệt kê các socket của máy; -t TCP, -l đang nghe, -n hiện số, -p tiến trình (bài 1.5).</i></p></li><li><p><b>d)</b> curl -w</p><p>curl -w (\"write out\") prints a timestamp for each stage of the transfer.</p><p><i>VI: curl -w (\"write out\") in mốc thời gian của từng chặng.</i></p></li><li><p><b>c)</b> tcpdump / tshark</p><p>Only a capture shows the packets themselves; tcpdump and tshark record them, Wireshark shows them in panes.</p><p><i>VI: Chỉ bắt gói mới cho thấy chính các gói; tcpdump và tshark ghi lại, Wireshark hiện chúng thành các khung.</i></p></li><li><p><b>a)</b> ping / mtr</p><p>ping measures the round trip; mtr repeats it hop by hop to show where loss starts.</p><p><i>VI: ping đo vòng đi-về; mtr lặp lại theo từng chặng để chỉ ra chỗ bắt đầu mất gói.</i></p></li><li><p><b>d)</b> nc -v</p><p>nc (netcat) opens a plain TCP connection — perfect to test a database or any non-HTTP port.</p><p><i>VI: nc (netcat) mở kết nối TCP thuần — hợp để thử cơ sở dữ liệu hay mọi cổng không phải HTTP.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What address does api.labflow.dev point to, and which server answered?</p><p style=\"opacity:.75;font-size:.92em\"><i>api.labflow.dev trỏ tới địa chỉ nào, và server nào đã trả lời?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "dig"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ss"
+              },
+              {
+                "ma": "c",
+                "noiDung": "tcpdump"
+              },
+              {
+                "ma": "d",
+                "noiDung": "openssl"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>dig asks DNS and shows the answer and who gave it (lesson 0.2, Chapter 3).</p><p><i>VI: dig hỏi DNS và cho thấy câu trả lời lẫn ai đưa ra nó (bài 0.2, Chương 3).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which program on this server is listening on port 3000, if any?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chương trình nào trên server này đang nghe cổng 3000, nếu có?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl -v"
+              },
+              {
+                "ma": "b",
+                "noiDung": "dig"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ping"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ss -tlnp"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>ss lists the machine's sockets; -t TCP, -l listening, -n numbers, -p process (lesson 1.5).</p><p><i>VI: ss liệt kê các socket của máy; -t TCP, -l đang nghe, -n hiện số, -p tiến trình (bài 1.5).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How long does each stage (DNS, TCP, TLS, first byte) of one HTTPS request take?</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi chặng (DNS, TCP, TLS, byte đầu) của một request HTTPS mất bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "mtr"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nc -v"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ip route"
+              },
+              {
+                "ma": "d",
+                "noiDung": "curl -w"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>curl -w (\"write out\") prints a timestamp for each stage of the transfer.</p><p><i>VI: curl -w (\"write out\") in mốc thời gian của từng chặng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which packets really crossed the wire during one request?</p><p style=\"opacity:.75;font-size:.92em\"><i>Những gói nào đã thật sự đi trên dây trong một request?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ss"
+              },
+              {
+                "ma": "b",
+                "noiDung": "dig"
+              },
+              {
+                "ma": "c",
+                "noiDung": "tcpdump / tshark"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ip neigh"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Only a capture shows the packets themselves; tcpdump and tshark record them, Wireshark shows them in panes.</p><p><i>VI: Chỉ bắt gói mới cho thấy chính các gói; tcpdump và tshark ghi lại, Wireshark hiện chúng thành các khung.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Is there a path to 10.10.2.10, how long is one round trip, and where are packets lost?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có đường tới 10.10.2.10 không, một vòng đi-về bao lâu, và gói bị mất ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "ping / mtr"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ss -tlnp"
+              },
+              {
+                "ma": "c",
+                "noiDung": "openssl"
+              },
+              {
+                "ma": "d",
+                "noiDung": "curl -w"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>ping measures the round trip; mtr repeats it hop by hop to show where loss starts.</p><p><i>VI: ping đo vòng đi-về; mtr lặp lại theo từng chặng để chỉ ra chỗ bắt đầu mất gói.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Can I open a raw TCP connection to port 5432 without any HTTP on top?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tôi có mở được kết nối TCP trần tới cổng 5432 mà không có HTTP phía trên không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "tshark"
+              },
+              {
+                "ma": "b",
+                "noiDung": "dig"
+              },
+              {
+                "ma": "c",
+                "noiDung": "curl"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nc -v"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>nc (netcat) opens a plain TCP connection — perfect to test a database or any non-HTTP port.</p><p><i>VI: nc (netcat) mở kết nối TCP thuần — hợp để thử cơ sở dữ liệu hay mọi cổng không phải HTTP.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using ping to check whether a web server process is running — ping only proves the machine answers ICMP.|||Dùng ping để kiểm tiến trình web server có chạy không — ping chỉ chứng tỏ máy trả lời ICMP."
+        },
+        {
+          "loi": "Using curl to test a database port; curl will speak HTTP to it.|||Dùng curl thử cổng cơ sở dữ liệu; curl sẽ nói HTTP với nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "socket",
+          "vi": "đầu nối mạng",
+          "giaiThich": "Đối tượng trong kernel mà chương trình dùng để gửi/nhận qua mạng."
+        },
+        {
+          "en": "packet capture",
+          "vi": "bắt gói tin"
+        },
+        {
+          "en": "round trip",
+          "vi": "vòng đi-về"
+        }
+      ]
+    },
+    {
+      "title": "Setup 2 — Read the lab map: networks and MAC addresses",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "lab topology",
+        "hexadecimal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The lab has two networks: LAN 10.10.1.0/24 and DMZ 10.10.2.0/24. Every MAC address is fixed and readable: <code>02</code> (locally administered) followed by the four bytes of the IP address in hexadecimal — 10.10.1.10 → <code>02:00:0a:0a:01:0a</code>. Fill in the network and the MAC address of each card (lower-case hex, colons).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phòng lab có hai mạng: LAN 10.10.1.0/24 và DMZ 10.10.2.0/24. Mọi địa chỉ MAC được đặt cố định và dễ đọc: <code>02</code> (do quản trị đặt) rồi bốn byte của địa chỉ IP viết hệ mười sáu — 10.10.1.10 → <code>02:00:0a:0a:01:0a</code>. Điền mạng và địa chỉ MAC của mỗi card (hex chữ thường, có dấu hai chấm).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Third octet 1 = LAN, 2 = DMZ.|||Octet thứ ba 1 = LAN, 2 = DMZ.",
+        "Hex digits go 0–9 then a–f: 16 = 10, 20 = 14, 254 = fe.|||Chữ số hex đi 0–9 rồi a–f: 16 = 10, 20 = 14, 254 = fe."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 2 — Read the lab map: networks and MAC addresses\n\nAnswer in the answer panel (no code needed).\n\n1. Lab cardsCác card mạng của lab\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 2 — Read the lab map: networks and MAC addresses — answer key\n\n1. Lab cardsCác card mạng của lab\n   - r1.n: LAN\n   - r1.m: 02:00:0a:0a:01:0a\n   - r2.n: LAN\n   - r2.m: 02:00:0a:0a:01:0b\n   - r3.n: LAN\n   - r3.m: 02:00:0a:0a:01:fe\n   - r4.n: DMZ\n   - r4.m: 02:00:0a:0a:02:fe\n   - r5.n: DMZ\n   - r5.m: 02:00:0a:0a:02:0a\n   - r6.n: DMZ\n   - r6.m: 02:00:0a:0a:02:14\n   Convert each byte: 10 = 0a, 1 = 01, 2 = 02, 11 = 0b, 20 = 14, 254 = fe. The router has two cards, one in each network — that is what makes it a router. The values for client, client2, router and web appear in the real captures of lessons 1.3–1.4 (e.g. 02:00:0a:0a:01:fe and 02:00:0a:0a:02:fe). The tempting mistake is api = …:02:20: 20 in decimal is 14 in hex.VI: Đổi từng byte: 10 = 0a, 1 = 01, 2 = 02, 11 = 0b, 20 = 14, 254 = fe. Router có hai card, mỗi mạng một — chính điều đó làm nó thành router. Giá trị của client, client2, router và web xuất hiện trong các bản bắt gói thật ở bài 1.3–1.4 (vd 02:00:0a:0a:01:fe và 02:00:0a:0a:02:fe). Lỗi dễ mắc là api = …:02:20: 20 thập phân là 14 hệ mười sáu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Convert each byte: 10 = 0a, 1 = 01, 2 = 02, 11 = 0b, 20 = 14, 254 = fe. The router has two cards, one in each network — that is what makes it a router. The values for client, client2, router and web appear in the real captures of lessons 1.3–1.4 (e.g. 02:00:0a:0a:01:fe and 02:00:0a:0a:02:fe). The tempting mistake is api = …:02:20: 20 in decimal is 14 in hex.</p><p><i>VI: Đổi từng byte: 10 = 0a, 1 = 01, 2 = 02, 11 = 0b, 20 = 14, 254 = fe. Router có hai card, mỗi mạng một — chính điều đó làm nó thành router. Giá trị của client, client2, router và web xuất hiện trong các bản bắt gói thật ở bài 1.3–1.4 (vd 02:00:0a:0a:01:fe và 02:00:0a:0a:02:fe). Lỗi dễ mắc là api = …:02:20: 20 thập phân là 14 hệ mười sáu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Lab cards</p><p style=\"opacity:.75;font-size:.92em\"><i>Các card mạng của lab</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Machine and address"
+              },
+              {
+                "ma": "n",
+                "ten": "Network",
+                "luaChon": [
+                  "LAN",
+                  "DMZ"
+                ]
+              },
+              {
+                "ma": "m",
+                "ten": "MAC address"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "client 10.10.1.10"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "client2 10.10.1.11"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "router, LAN leg 10.10.1.254"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "router, DMZ leg 10.10.2.254"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "web (nginx) 10.10.2.10"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "api (Node) 10.10.2.20"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.n": "LAN",
+              "r1.m": "02:00:0a:0a:01:0a",
+              "r2.n": "LAN",
+              "r2.m": "02:00:0a:0a:01:0b",
+              "r3.n": "LAN",
+              "r3.m": "02:00:0a:0a:01:fe",
+              "r4.n": "DMZ",
+              "r4.m": "02:00:0a:0a:02:fe",
+              "r5.n": "DMZ",
+              "r5.m": "02:00:0a:0a:02:0a",
+              "r6.n": "DMZ",
+              "r6.m": "02:00:0a:0a:02:14"
+            },
+            "giaiThich": "<p>Convert each byte: 10 = 0a, 1 = 01, 2 = 02, 11 = 0b, 20 = 14, 254 = fe. The router has two cards, one in each network — that is what makes it a router. The values for client, client2, router and web appear in the real captures of lessons 1.3–1.4 (e.g. 02:00:0a:0a:01:fe and 02:00:0a:0a:02:fe). The tempting mistake is api = …:02:20: 20 in decimal is 14 in hex.</p><p><i>VI: Đổi từng byte: 10 = 0a, 1 = 01, 2 = 02, 11 = 0b, 20 = 14, 254 = fe. Router có hai card, mỗi mạng một — chính điều đó làm nó thành router. Giá trị của client, client2, router và web xuất hiện trong các bản bắt gói thật ở bài 1.3–1.4 (vd 02:00:0a:0a:01:fe và 02:00:0a:0a:02:fe). Lỗi dễ mắc là api = …:02:20: 20 thập phân là 14 hệ mười sáu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the decimal number into the MAC (…:02:20 instead of …:02:14).|||Viết số thập phân vào MAC (…:02:20 thay vì …:02:14)."
+        },
+        {
+          "loi": "Giving the router only one network.|||Cho router chỉ một mạng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "locally administered",
+          "vi": "do quản trị đặt",
+          "giaiThich": "Bit thứ hai của byte đầu MAC = 1: địa chỉ do phần mềm chọn, không phải nhà sản xuất."
+        },
+        {
+          "en": "DMZ",
+          "vi": "vùng phi quân sự",
+          "giaiThich": "Mạng đặt các máy phục vụ ra ngoài (nginx, API)."
+        },
+        {
+          "en": "LAN",
+          "vi": "mạng cục bộ"
+        }
+      ]
+    },
+    {
+      "title": "Setup 3 — The safe capture recipe, in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "packet capture"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>You want to capture exactly one HTTP request from the lab client into a file and read it back. Put the steps of the recipe from the lesson in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn muốn bắt đúng một request HTTP từ máy client vào tệp rồi đọc lại. Sắp các bước của công thức trong bài theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The capture must be running BEFORE the request starts and must be stopped AFTER it ends.|||Bắt gói phải chạy TRƯỚC khi request bắt đầu và dừng SAU khi nó kết thúc.",
+        "-w writes, -r reads; kill -INT is the Ctrl-C of a background job.|||-w ghi, -r đọc; kill -INT là Ctrl-C của một tác vụ nền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 3 — The safe capture recipe, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Capture one requestBắt một request\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 3 — The safe capture recipe, in order — answer key\n\n1. Capture one requestBắt một request\n   Answer: m2) tcpdump -i eth0 -n -U -w /tmp/my.pcap 'tcp port 80' &  →  m1) sleep 2  →  m4) curl -s -o /dev/null http://10.10.2.10/  →  m5) sleep 1  →  m3) kill -INT %1  →  m6) tcpdump -n -r /tmp/my.pcap\n   Start tcpdump in the background writing to a file (-w, -U flushes each packet), wait 2 s so it is really listening, make the request, wait 1 s for the last packets, stop it with SIGINT so it closes the file cleanly, then read the file (-r). Without the first sleep, tcpdump may not be listening yet and you capture nothing — the trap hit while writing the lesson.VI: Chạy tcpdump nền ghi ra tệp (-w, -U đẩy từng gói ngay), chờ 2 s cho nó thật sự nghe, gửi request, chờ 1 s cho các gói cuối, dừng bằng SIGINT để nó đóng tệp gọn, rồi đọc tệp (-r). Thiếu lần sleep đầu, tcpdump có thể chưa nghe kịp và bạn không bắt được gì — cái bẫy gặp khi soạn bài.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Start tcpdump in the background writing to a file (-w, -U flushes each packet), wait 2 s so it is really listening, make the request, wait 1 s for the last packets, stop it with SIGINT so it closes the file cleanly, then read the file (-r). Without the first sleep, tcpdump may not be listening yet and you capture nothing — the trap hit while writing the lesson.</p><p><i>VI: Chạy tcpdump nền ghi ra tệp (-w, -U đẩy từng gói ngay), chờ 2 s cho nó thật sự nghe, gửi request, chờ 1 s cho các gói cuối, dừng bằng SIGINT để nó đóng tệp gọn, rồi đọc tệp (-r). Thiếu lần sleep đầu, tcpdump có thể chưa nghe kịp và bạn không bắt được gì — cái bẫy gặp khi soạn bài.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Capture one request</p><p style=\"opacity:.75;font-size:.92em\"><i>Bắt một request</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "sleep 2"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "tcpdump -i eth0 -n -U -w /tmp/my.pcap 'tcp port 80' &"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "kill -INT %1"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "curl -s -o /dev/null http://10.10.2.10/"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "sleep 1"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "tcpdump -n -r /tmp/my.pcap"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m4",
+              "m5",
+              "m3",
+              "m6"
+            ],
+            "giaiThich": "<p>Start tcpdump in the background writing to a file (-w, -U flushes each packet), wait 2 s so it is really listening, make the request, wait 1 s for the last packets, stop it with SIGINT so it closes the file cleanly, then read the file (-r). Without the first sleep, tcpdump may not be listening yet and you capture nothing — the trap hit while writing the lesson.</p><p><i>VI: Chạy tcpdump nền ghi ra tệp (-w, -U đẩy từng gói ngay), chờ 2 s cho nó thật sự nghe, gửi request, chờ 1 s cho các gói cuối, dừng bằng SIGINT để nó đóng tệp gọn, rồi đọc tệp (-r). Thiếu lần sleep đầu, tcpdump có thể chưa nghe kịp và bạn không bắt được gì — cái bẫy gặp khi soạn bài.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running curl right after starting tcpdump, before it listens.|||Chạy curl ngay sau khi bật tcpdump, trước khi nó kịp nghe."
+        },
+        {
+          "loi": "Stopping tcpdump with kill -9: the file may be cut off.|||Dừng tcpdump bằng kill -9: tệp có thể bị cụt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SIGINT",
+          "vi": "tín hiệu ngắt",
+          "giaiThich": "Tín hiệu Ctrl-C gửi tới tiến trình; tcpdump nhận nó thì đóng tệp gọn gàng."
+        },
+        {
+          "en": "background job",
+          "vi": "tác vụ chạy nền",
+          "giaiThich": "Lệnh kết thúc bằng &; %1 là tác vụ nền thứ nhất."
+        },
+        {
+          "en": "pcap",
+          "vi": "tệp bắt gói"
+        }
+      ]
+    },
+    {
+      "title": "Setup 4 — Which route does the client use?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "routing table",
+        "most specific route"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>This is the real routing table of the lab client 10.10.1.10:<pre>$ ip route\ndefault via 10.10.1.1 dev eth0 \n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \n10.10.2.0/24 via 10.10.1.254 dev eth0 </pre>For each destination choose the line the kernel uses and the next hop the frame is sent to. The kernel picks the <b>most specific</b> matching line; \"default\" matches everything but is the least specific.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đây là bảng định tuyến thật của máy client 10.10.1.10:<pre>$ ip route\ndefault via 10.10.1.1 dev eth0 \n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \n10.10.2.0/24 via 10.10.1.254 dev eth0 </pre>Với mỗi đích, chọn dòng kernel dùng và chặng kế mà frame được gửi tới. Kernel chọn dòng khớp <b>cụ thể nhất</b>; \"default\" khớp mọi thứ nhưng kém cụ thể nhất.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Test the /24 lines first: does the destination start with 10.10.1. or 10.10.2.?|||Thử các dòng /24 trước: đích có bắt đầu bằng 10.10.1. hay 10.10.2. không?",
+        "\"via X\" means the next hop is X; a line without \"via\" means the destination is on the link.|||\"via X\" nghĩa là chặng kế là X; dòng không có \"via\" nghĩa là đích nằm trên cùng đường truyền."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 4 — Which route does the client use?\n\nAnswer in the answer panel (no code needed).\n\n1. Route lookupTra tuyến\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 4 — Which route does the client use? — answer key\n\n1. Route lookupTra tuyến\n   - r1.r: 10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10\n   - r1.h: the destination itself (on-link)\n   - r2.r: 10.10.2.0/24 via 10.10.1.254 dev eth0\n   - r2.h: 10.10.1.254 (the lab router)\n   - r3.r: 10.10.2.0/24 via 10.10.1.254 dev eth0\n   - r3.h: 10.10.1.254 (the lab router)\n   - r4.r: default via 10.10.1.1 dev eth0\n   - r4.h: 10.10.1.1 (Docker's gateway)\n   - r5.r: 10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10\n   - r5.h: the destination itself (on-link)\n   - r6.r: default via 10.10.1.1 dev eth0\n   - r6.h: 10.10.1.1 (Docker's gateway)\n   10.10.1.x is on the client's own /24, so it goes straight out of eth0 — even the router's LAN address 10.10.1.254 is reached directly. 10.10.2.x matches the /24 added at start-up (ip route add 10.10.2.0/24 via 10.10.1.254). Everything else falls to the default route through Docker's gateway 10.10.1.1 — that is how the lab reached cuongthai.com through Docker's NAT. The tempting mistake: sending 10.10.2.10 to the default route because \"default\" is listed first; order in the listing does not matter, specificity does.VI: 10.10.1.x nằm trong /24 của chính client nên đi thẳng ra eth0 — kể cả địa chỉ LAN 10.10.1.254 của router cũng tới trực tiếp. 10.10.2.x khớp dòng /24 thêm lúc khởi động (ip route add 10.10.2.0/24 via 10.10.1.254). Mọi thứ khác rơi vào tuyến default qua cổng 10.10.1.1 của Docker — đó là cách lab ra cuongthai.com qua NAT của Docker. Lỗi dễ mắc: gửi 10.10.2.10 theo default vì \"default\" in đầu tiên; thứ tự in không quan trọng, độ cụ thể mới quan trọng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>10.10.1.x is on the client's own /24, so it goes straight out of eth0 — even the router's LAN address 10.10.1.254 is reached directly. 10.10.2.x matches the /24 added at start-up (ip route add 10.10.2.0/24 via 10.10.1.254). Everything else falls to the default route through Docker's gateway 10.10.1.1 — that is how the lab reached cuongthai.com through Docker's NAT. The tempting mistake: sending 10.10.2.10 to the default route because \"default\" is listed first; order in the listing does not matter, specificity does.</p><p><i>VI: 10.10.1.x nằm trong /24 của chính client nên đi thẳng ra eth0 — kể cả địa chỉ LAN 10.10.1.254 của router cũng tới trực tiếp. 10.10.2.x khớp dòng /24 thêm lúc khởi động (ip route add 10.10.2.0/24 via 10.10.1.254). Mọi thứ khác rơi vào tuyến default qua cổng 10.10.1.1 của Docker — đó là cách lab ra cuongthai.com qua NAT của Docker. Lỗi dễ mắc: gửi 10.10.2.10 theo default vì \"default\" in đầu tiên; thứ tự in không quan trọng, độ cụ thể mới quan trọng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Route lookup</p><p style=\"opacity:.75;font-size:.92em\"><i>Tra tuyến</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Destination"
+              },
+              {
+                "ma": "r",
+                "ten": "Line used",
+                "luaChon": [
+                  "default via 10.10.1.1 dev eth0",
+                  "10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10",
+                  "10.10.2.0/24 via 10.10.1.254 dev eth0"
+                ]
+              },
+              {
+                "ma": "h",
+                "ten": "Next hop",
+                "luaChon": [
+                  "the destination itself (on-link)",
+                  "10.10.1.254 (the lab router)",
+                  "10.10.1.1 (Docker's gateway)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "10.10.1.11 (client2)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "10.10.2.10 (web)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "10.10.2.20 (api)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "8.8.8.8 (a public DNS server)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "10.10.1.254 (the router itself)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "160.187.1.208 (cuongthai.com)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10",
+              "r1.h": "the destination itself (on-link)",
+              "r2.r": "10.10.2.0/24 via 10.10.1.254 dev eth0",
+              "r2.h": "10.10.1.254 (the lab router)",
+              "r3.r": "10.10.2.0/24 via 10.10.1.254 dev eth0",
+              "r3.h": "10.10.1.254 (the lab router)",
+              "r4.r": "default via 10.10.1.1 dev eth0",
+              "r4.h": "10.10.1.1 (Docker's gateway)",
+              "r5.r": "10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10",
+              "r5.h": "the destination itself (on-link)",
+              "r6.r": "default via 10.10.1.1 dev eth0",
+              "r6.h": "10.10.1.1 (Docker's gateway)"
+            },
+            "giaiThich": "<p>10.10.1.x is on the client's own /24, so it goes straight out of eth0 — even the router's LAN address 10.10.1.254 is reached directly. 10.10.2.x matches the /24 added at start-up (ip route add 10.10.2.0/24 via 10.10.1.254). Everything else falls to the default route through Docker's gateway 10.10.1.1 — that is how the lab reached cuongthai.com through Docker's NAT. The tempting mistake: sending 10.10.2.10 to the default route because \"default\" is listed first; order in the listing does not matter, specificity does.</p><p><i>VI: 10.10.1.x nằm trong /24 của chính client nên đi thẳng ra eth0 — kể cả địa chỉ LAN 10.10.1.254 của router cũng tới trực tiếp. 10.10.2.x khớp dòng /24 thêm lúc khởi động (ip route add 10.10.2.0/24 via 10.10.1.254). Mọi thứ khác rơi vào tuyến default qua cổng 10.10.1.1 của Docker — đó là cách lab ra cuongthai.com qua NAT của Docker. Lỗi dễ mắc: gửi 10.10.2.10 theo default vì \"default\" in đầu tiên; thứ tự in không quan trọng, độ cụ thể mới quan trọng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing the first line of the listing because it comes first.|||Chọn dòng đầu của danh sách vì nó đứng đầu."
+        },
+        {
+          "loi": "Thinking the router's own LAN address needs the router as next hop.|||Nghĩ rằng chính địa chỉ LAN của router cần router làm chặng kế."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "routing table",
+          "vi": "bảng định tuyến"
+        },
+        {
+          "en": "default route",
+          "vi": "tuyến mặc định",
+          "giaiThich": "Dòng khớp mọi đích, chỉ dùng khi không dòng nào cụ thể hơn khớp."
+        },
+        {
+          "en": "on-link",
+          "vi": "cùng đường truyền",
+          "giaiThich": "Đích nằm trong mạng gắn trực tiếp — gửi thẳng, không qua router."
+        }
+      ]
+    },
+    {
+      "title": "Setup 5 — Permissions, the hidden VM, and two connections",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "Linux capabilities",
+        "reverse proxy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output from your own machine (outside the containers):<pre>$ docker run --rm net-lab ip route add 10.9.9.0/24 dev eth0\nRTNETLINK answers: Operation not permitted\n$ docker run --rm --cap-add NET_ADMIN net-lab ip route add 10.9.9.0/24 dev eth0\n(no output: it worked)</pre>And from the client: <code>curl -s http://10.10.2.10/api/hello</code> returned <code>{\"seenFrom\":\"10.10.2.10:48492\", \"forwardedFor\":\"10.10.1.10\", …}</code>.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật trên chính máy của bạn (ngoài container):<pre>$ docker run --rm net-lab ip route add 10.9.9.0/24 dev eth0\nRTNETLINK answers: Operation not permitted\n$ docker run --rm --cap-add NET_ADMIN net-lab ip route add 10.9.9.0/24 dev eth0\n(không in gì: đã chạy được)</pre>Và từ client: <code>curl -s http://10.10.2.10/api/hello</code> trả <code>{\"seenFrom\":\"10.10.2.10:48492\", \"forwardedFor\":\"10.10.1.10\", …}</code>.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Capture = read packets (raw); configure = change the network (admin).|||Bắt gói = đọc gói (raw); cấu hình = đổi mạng (admin).",
+        "Count the TCP connections in client → nginx → API.|||Đếm số kết nối TCP trong client → nginx → API."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 5 — Permissions, the hidden VM, and two connections\n\nAnswer in the answer panel (no code needed).\n\n1. tcpdump works in a plain container, but adding a route fails until --cap-add NET_ADMIN. Why?tcpdump chạy được trong container thường, nhưng thêm tuyến thì lỗi cho tới khi có --cap-add NET_ADMIN. Vì sao?\n2. A classmate fixes \"Operation not permitted\" with --privileged. What is the problem?Một bạn sửa \"Operation not permitted\" bằng --privileged. Vấn đề là gì?\n3. On a Mac, sudo tcpdump on the laptop sees none of the lab traffic. Why?Trên Mac, sudo tcpdump trên laptop không thấy gì của lưu lượng lab. Vì sao?\n4. The API says seenFrom 10.10.2.10 although curl ran on 10.10.1.10. Why?API báo seenFrom 10.10.2.10 dù curl chạy trên 10.10.1.10. Vì sao?\n5. What single setting turns the router container into a router?Một thiết lập duy nhất nào biến container router thành router?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Setup 5 — Permissions, the hidden VM, and two connections — answer key\n\n1. tcpdump works in a plain container, but adding a route fails until --cap-add NET_ADMIN. Why?tcpdump chạy được trong container thường, nhưng thêm tuyến thì lỗi cho tới khi có --cap-add NET_ADMIN. Vì sao?\n   Answer: b) Capturing needs NET_RAW, which Docker grants by default; routes need NET_ADMIN\n   Linux capabilities split root's powers. Docker gives containers NET_RAW (read/send raw packets) but not NET_ADMIN (change interfaces, routes, firewall). Grant exactly the one you need.VI: Capability của Linux chia nhỏ quyền root. Docker cho container NET_RAW (đọc/gửi gói thô) nhưng không cho NET_ADMIN (đổi card mạng, tuyến, tường lửa). Cấp đúng thứ bạn cần.\n\n2. A classmate fixes \"Operation not permitted\" with --privileged. What is the problem?Một bạn sửa \"Operation not permitted\" bằng --privileged. Vấn đề là gì?\n   Answer: c) It gives the container almost full control of the host\n   --privileged turns off nearly all isolation. The real fix is the single capability: --cap-add NET_ADMIN.VI: --privileged tắt gần hết sự cô lập. Cách sửa đúng là đúng một capability: --cap-add NET_ADMIN.\n\n3. On a Mac, sudo tcpdump on the laptop sees none of the lab traffic. Why?Trên Mac, sudo tcpdump trên laptop không thấy gì của lưu lượng lab. Vì sao?\n   Answer: c) The lab runs inside Docker Desktop's hidden Linux VM\n   The containers and the two bridges (nfd-lan, nfd-dmz) live inside the VM; the Mac's own cards never see those frames. Always capture inside a container.VI: Các container và hai bridge (nfd-lan, nfd-dmz) sống trong máy ảo; card của chính máy Mac không bao giờ thấy các frame đó. Luôn bắt gói bên trong container.\n\n4. The API says seenFrom 10.10.2.10 although curl ran on 10.10.1.10. Why?API báo seenFrom 10.10.2.10 dù curl chạy trên 10.10.1.10. Vì sao?\n   Answer: d) nginx opened its own second connection to the API\n   One request, two TCP connections: client → nginx and nginx → API. The API's TCP peer is nginx; the original client travels in the X-Forwarded-For header that nginx adds. The router never changes IP addresses (lesson 1.4).VI: Một request, hai kết nối TCP: client → nginx và nginx → API. Đầu bên kia của API là nginx; client gốc đi trong header X-Forwarded-For do nginx thêm vào. Router không bao giờ đổi địa chỉ IP (bài 1.4).\n\n5. What single setting turns the router container into a router?Một thiết lập duy nhất nào biến container router thành router?\n   Answer: a) net.ipv4.ip_forward = 1\n   ip_forward=1 tells Linux to pass a packet that arrives on one card for an address that is not its own out of the other card.VI: ip_forward=1 bảo Linux chuyển gói đến trên một card mà đích không phải của nó sang card kia.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Capturing needs NET_RAW, which Docker grants by default; routes need NET_ADMIN</p><p>Linux capabilities split root's powers. Docker gives containers NET_RAW (read/send raw packets) but not NET_ADMIN (change interfaces, routes, firewall). Grant exactly the one you need.</p><p><i>VI: Capability của Linux chia nhỏ quyền root. Docker cho container NET_RAW (đọc/gửi gói thô) nhưng không cho NET_ADMIN (đổi card mạng, tuyến, tường lửa). Cấp đúng thứ bạn cần.</i></p></li><li><p><b>c)</b> It gives the container almost full control of the host</p><p>--privileged turns off nearly all isolation. The real fix is the single capability: --cap-add NET_ADMIN.</p><p><i>VI: --privileged tắt gần hết sự cô lập. Cách sửa đúng là đúng một capability: --cap-add NET_ADMIN.</i></p></li><li><p><b>c)</b> The lab runs inside Docker Desktop's hidden Linux VM</p><p>The containers and the two bridges (nfd-lan, nfd-dmz) live inside the VM; the Mac's own cards never see those frames. Always capture inside a container.</p><p><i>VI: Các container và hai bridge (nfd-lan, nfd-dmz) sống trong máy ảo; card của chính máy Mac không bao giờ thấy các frame đó. Luôn bắt gói bên trong container.</i></p></li><li><p><b>d)</b> nginx opened its own second connection to the API</p><p>One request, two TCP connections: client → nginx and nginx → API. The API's TCP peer is nginx; the original client travels in the X-Forwarded-For header that nginx adds. The router never changes IP addresses (lesson 1.4).</p><p><i>VI: Một request, hai kết nối TCP: client → nginx và nginx → API. Đầu bên kia của API là nginx; client gốc đi trong header X-Forwarded-For do nginx thêm vào. Router không bao giờ đổi địa chỉ IP (bài 1.4).</i></p></li><li><p><b>a)</b> net.ipv4.ip_forward = 1</p><p>ip_forward=1 tells Linux to pass a packet that arrives on one card for an address that is not its own out of the other card.</p><p><i>VI: ip_forward=1 bảo Linux chuyển gói đến trên một card mà đích không phải của nó sang card kia.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>tcpdump works in a plain container, but adding a route fails until --cap-add NET_ADMIN. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>tcpdump chạy được trong container thường, nhưng thêm tuyến thì lỗi cho tới khi có --cap-add NET_ADMIN. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both need --privileged, but tcpdump ignores the missing permission"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Capturing needs NET_RAW, which Docker grants by default; routes need NET_ADMIN"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Routes can only be changed from the host, never inside a container"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Capturing needs NET_ADMIN, which Docker grants by default; routes need NET_RAW"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Linux capabilities split root's powers. Docker gives containers NET_RAW (read/send raw packets) but not NET_ADMIN (change interfaces, routes, firewall). Grant exactly the one you need.</p><p><i>VI: Capability của Linux chia nhỏ quyền root. Docker cho container NET_RAW (đọc/gửi gói thô) nhưng không cho NET_ADMIN (đổi card mạng, tuyến, tường lửa). Cấp đúng thứ bạn cần.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A classmate fixes \"Operation not permitted\" with --privileged. What is the problem?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bạn sửa \"Operation not permitted\" bằng --privileged. Vấn đề là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It makes the container lose its network card entirely"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It disables tcpdump inside the container afterwards"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It gives the container almost full control of the host"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It only works on Linux laptops, never on Docker Desktop"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>--privileged turns off nearly all isolation. The real fix is the single capability: --cap-add NET_ADMIN.</p><p><i>VI: --privileged tắt gần hết sự cô lập. Cách sửa đúng là đúng một capability: --cap-add NET_ADMIN.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>On a Mac, sudo tcpdump on the laptop sees none of the lab traffic. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên Mac, sudo tcpdump trên laptop không thấy gì của lưu lượng lab. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "macOS encrypts all traffic between containers by default"
+              },
+              {
+                "ma": "b",
+                "noiDung": "tcpdump on macOS cannot read any Ethernet frames at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The lab runs inside Docker Desktop's hidden Linux VM"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The containers talk over Wi-Fi, not over a network card"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The containers and the two bridges (nfd-lan, nfd-dmz) live inside the VM; the Mac's own cards never see those frames. Always capture inside a container.</p><p><i>VI: Các container và hai bridge (nfd-lan, nfd-dmz) sống trong máy ảo; card của chính máy Mac không bao giờ thấy các frame đó. Luôn bắt gói bên trong container.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The API says seenFrom 10.10.2.10 although curl ran on 10.10.1.10. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>API báo seenFrom 10.10.2.10 dù curl chạy trên 10.10.1.10. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The API reads the address of its own default gateway"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DNS translated the client address into the nginx one"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The router rewrote the source IP address of the packet"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nginx opened its own second connection to the API"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One request, two TCP connections: client → nginx and nginx → API. The API's TCP peer is nginx; the original client travels in the X-Forwarded-For header that nginx adds. The router never changes IP addresses (lesson 1.4).</p><p><i>VI: Một request, hai kết nối TCP: client → nginx và nginx → API. Đầu bên kia của API là nginx; client gốc đi trong header X-Forwarded-For do nginx thêm vào. Router không bao giờ đổi địa chỉ IP (bài 1.4).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>What single setting turns the router container into a router?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một thiết lập duy nhất nào biến container router thành router?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "net.ipv4.ip_forward = 1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ip link set eth0 promisc on"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ip route add default dev eth1"
+              },
+              {
+                "ma": "d",
+                "noiDung": "net.ipv4.tcp_syncookies = 1"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>ip_forward=1 tells Linux to pass a packet that arrives on one card for an address that is not its own out of the other card.</p><p><i>VI: ip_forward=1 bảo Linux chuyển gói đến trên một card mà đích không phải của nó sang card kia.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reaching for --privileged at the first permission error.|||Dùng --privileged ngay ở lỗi quyền đầu tiên."
+        },
+        {
+          "loi": "Believing the router changed the source IP.|||Tin rằng router đã đổi IP nguồn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "capability",
+          "vi": "năng lực (quyền nhỏ của root)"
+        },
+        {
+          "en": "NET_RAW / NET_ADMIN",
+          "vi": "quyền gói thô / quyền quản trị mạng"
+        },
+        {
+          "en": "X-Forwarded-For",
+          "vi": "header IP client gốc",
+          "giaiThich": "Header proxy thêm vào để báo địa chỉ client ban đầu."
+        }
+      ]
+    },
+    {
+      "title": "Setup 6 — Write lookupRoute(text, dst) from the ip route output",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "longest prefix match",
+        "parsing command output"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Write <code>lookupRoute(text, dst)</code> that does what the kernel does with <code>ip route get</code>: <code>text</code> is the output of <code>ip route</code> (one route per line), <code>dst</code> is an IPv4 address. Return the route used as <code>{ route, via, dev }</code>, or <code>null</code> if no line matches.</p>\n<ul>\n<li>The first word of a line is the destination: <code>default</code> (matches everything, prefix length 0), <code>a.b.c.d/len</code>, or a bare address <code>a.b.c.d</code> (a host route, length 32).</li>\n<li>A line matches when the first <code>len</code> bits of <code>dst</code> equal those of the route. Among matching lines choose the <b>longest prefix</b>; on a tie, the first line in the text.</li>\n<li><code>route</code> = that first word exactly as written; <code>via</code> = the word after <code>via</code>, or <code>null</code> when the destination is on-link; <code>dev</code> = the word after <code>dev</code>.</li>\n<li>Ignore every other word (<code>proto</code>, <code>scope</code>, <code>src</code>, <code>metric</code>…) and blank lines.</li>\n</ul>\n<p>The visible cases use the real table of the lab client:</p><pre>$ ip route\ndefault via 10.10.1.1 dev eth0 \n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \n10.10.2.0/24 via 10.10.1.254 dev eth0 </pre><p>The hidden cases use a second table constructed for this exercise (a laptop with Wi-Fi, Docker and a WireGuard VPN), including a /25 inside a /24 and a /32 host route.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>lookupRoute(text, dst)</code> làm đúng việc kernel làm với <code>ip route get</code>: <code>text</code> là output của <code>ip route</code> (mỗi dòng một tuyến), <code>dst</code> là địa chỉ IPv4. Trả về tuyến được dùng dạng <code>{ route, via, dev }</code>, hoặc <code>null</code> nếu không dòng nào khớp.</p>\n<ul>\n<li>Từ đầu tiên của dòng là đích: <code>default</code> (khớp mọi thứ, độ dài tiền tố 0), <code>a.b.c.d/len</code>, hoặc địa chỉ trần <code>a.b.c.d</code> (tuyến tới một máy, độ dài 32).</li>\n<li>Một dòng khớp khi <code>len</code> bit đầu của <code>dst</code> bằng của tuyến. Trong các dòng khớp chọn <b>tiền tố dài nhất</b>; bằng nhau thì lấy dòng đứng trước.</li>\n<li><code>route</code> = đúng từ đầu tiên như được viết; <code>via</code> = từ sau <code>via</code>, hoặc <code>null</code> khi đích nằm trên cùng đường truyền; <code>dev</code> = từ sau <code>dev</code>.</li>\n<li>Bỏ qua mọi từ khác (<code>proto</code>, <code>scope</code>, <code>src</code>, <code>metric</code>…) và dòng trống.</li>\n</ul>\n<p>Các ca hiện dùng bảng thật của máy client trong lab:</p><pre>$ ip route\ndefault via 10.10.1.1 dev eth0 \n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \n10.10.2.0/24 via 10.10.1.254 dev eth0 </pre><p>Các ca ẩn dùng một bảng thứ hai dựng cho bài này (laptop có Wi-Fi, Docker và VPN WireGuard), có /25 nằm trong /24 và một tuyến /32 tới một máy.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — the ip route output (string with \\n between lines); dst — dotted IPv4 string.|||text — output ip route (chuỗi, các dòng cách nhau bởi \\n); dst — chuỗi IPv4 dạng chấm.",
+      "outputSpec": "{ route, via, dev } or null.|||{ route, via, dev } hoặc null.",
+      "constraints": "0 ≤ len ≤ 32. Lines may have trailing spaces.|||0 ≤ len ≤ 32. Dòng có thể có khoảng trắng cuối.",
+      "examplesJson": [
+        {
+          "input": "lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \\n10.10.2.0/24 via 10.10.1.254 dev eth0 \", \"10.10.2.10\")",
+          "output": "{\"route\":\"10.10.2.0/24\",\"via\":\"10.10.1.254\",\"dev\":\"eth0\"}",
+          "explanation": "10.10.2.10 matches both the default route and 10.10.2.0/24; the /24 is longer, so the packet goes via the lab router.|||10.10.2.10 khớp cả tuyến default lẫn 10.10.2.0/24; /24 dài hơn nên gói đi qua router của lab."
+        }
+      ],
+      "hintsJson": [
+        "Write toNum(ip) first: \"10.10.2.10\" ⇒ 10·256³ + 10·256² + 2·256 + 10. Then a route matches if both numbers have the same first len bits.|||Viết toNum(ip) trước: \"10.10.2.10\" ⇒ 10·256³ + 10·256² + 2·256 + 10. Rồi một tuyến khớp nếu hai số có cùng len bit đầu.",
+        "\"Same first len bits\" = same result of Math.floor(x / 2^(32 − len)). This also works for len 0 (everything matches) and len 32.|||\"Cùng len bit đầu\" = cùng kết quả Math.floor(x / 2^(32 − len)). Cách này cũng đúng với len 0 (mọi thứ khớp) và len 32.",
+        "Keep the best match while scanning lines; replace it only when the new prefix is strictly longer.|||Giữ tuyến khớp tốt nhất khi duyệt các dòng; chỉ thay khi tiền tố mới dài hơn hẳn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * text: the output of \"ip route\"; dst: \"10.10.2.10\".\n * Return { route, via, dev } of the most specific matching line, or null.\n */\nfunction lookupRoute(text, dst) {\n  // Write your solution here\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction lookupRoute(text, dst) {\n  // Turn a dotted IPv4 address into a 32-bit unsigned number.\n  function toNum(ip) {\n    return ip.split('.').reduce(function (n, part) { return n * 256 + Number(part); }, 0);\n  }\n  var d = toNum(dst);\n  var best = null;\n  text.split('\\n').forEach(function (line) {\n    var w = line.trim().split(/\\s+/);\n    if (!w[0]) return;\n    var net, len;\n    if (w[0] === 'default') { net = 0; len = 0; }\n    else {\n      var p = w[0].split('/');\n      net = toNum(p[0]);\n      len = p.length > 1 ? Number(p[1]) : 32; // a bare address is a /32 host route\n    }\n    // Compare the first len bits. Division by 2^(32-len) avoids the 32-bit trap of (x << 32) in JavaScript.\n    var size = Math.pow(2, 32 - len);\n    if (Math.floor(d / size) !== Math.floor(net / size)) return;\n    if (best && best.len >= len) return; // keep the most specific match (the first one on a tie)\n    var via = w.indexOf('via');\n    var dev = w.indexOf('dev');\n    best = { len: len, route: w[0], via: via >= 0 ? w[via + 1] : null, dev: dev >= 0 ? w[dev + 1] : null };\n  });\n  if (!best) return null;\n  return { route: best.route, via: best.via, dev: best.dev };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Routing is \"longest prefix match\": every line that covers the destination is a candidate and the most specific wins, whatever the order of the listing. Comparing Math.floor(x / 2^(32−len)) keeps all arithmetic in exact non-negative numbers (JavaScript numbers are exact up to 2^53), so /0 and /32 need no special case — unlike 32-bit shifts, which wrap. The same rule explains the YouTube incident of 2008: a /25 beats a /24.</p>",
+      "solutionExplanationHtmlVi": "<p>Định tuyến là \"khớp tiền tố dài nhất\": mọi dòng phủ được đích đều là ứng viên và dòng cụ thể nhất thắng, bất kể thứ tự in. So sánh Math.floor(x / 2^(32−len)) giữ mọi phép tính là số không âm chính xác (số JavaScript chính xác tới 2^53), nên /0 và /32 không cần xử lý riêng — khác với phép dịch 32 bit vốn bị quay vòng. Cùng quy tắc giải thích sự cố YouTube năm 2008: /25 thắng /24.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope ...",
+              "vi": "Ca 1"
+            },
+            "goi": "lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \\n10.10.2.0/24 via 10.10.1.254 dev eth0 \", \"10.10.2.10\")",
+            "mongDoi": {
+              "route": "10.10.2.0/24",
+              "via": "10.10.1.254",
+              "dev": "eth0"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope ...",
+              "vi": "Ca 2"
+            },
+            "goi": "lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \\n10.10.2.0/24 via 10.10.1.254 dev eth0 \", \"10.10.1.11\")",
+            "mongDoi": {
+              "route": "10.10.1.0/24",
+              "via": null,
+              "dev": "eth0"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope ...",
+              "vi": "Ca 3"
+            },
+            "goi": "lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \\n10.10.2.0/24 via 10.10.1.254 dev eth0 \", \"8.8.8.8\")",
+            "mongDoi": {
+              "route": "default",
+              "via": "10.10.1.1",
+              "dev": "eth0"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 4: lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope ...",
+              "vi": "Ca 4"
+            },
+            "goi": "lookupRoute(\"default via 10.10.1.1 dev eth0 \\n10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 \\n10.10.2.0/24 via 10.10.1.254 dev eth0 \", \"10.10.1.254\")",
+            "mongDoi": {
+              "route": "10.10.1.0/24",
+              "via": null,
+              "dev": "eth0"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "lookupRoute(\"default via 192.168.1.1 dev wlan0 proto dhcp metric 600\\n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1\\n192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.23\\n192.168.1.128/25 via 192.168.1.250 dev wlan0\\n10.8.0.0/16 via 10.8.0.1 dev wg0\\n10.8.5.7 dev wg0 scope link\", \"192.168.1.200\")",
+            "mongDoi": {
+              "route": "192.168.1.128/25",
+              "via": "192.168.1.250",
+              "dev": "wlan0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "lookupRoute(\"default via 192.168.1.1 dev wlan0 proto dhcp metric 600\\n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1\\n192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.23\\n192.168.1.128/25 via 192.168.1.250 dev wlan0\\n10.8.0.0/16 via 10.8.0.1 dev wg0\\n10.8.5.7 dev wg0 scope link\", \"192.168.1.100\")",
+            "mongDoi": {
+              "route": "192.168.1.0/24",
+              "via": null,
+              "dev": "wlan0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "lookupRoute(\"default via 192.168.1.1 dev wlan0 proto dhcp metric 600\\n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1\\n192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.23\\n192.168.1.128/25 via 192.168.1.250 dev wlan0\\n10.8.0.0/16 via 10.8.0.1 dev wg0\\n10.8.5.7 dev wg0 scope link\", \"10.8.5.7\")",
+            "mongDoi": {
+              "route": "10.8.5.7",
+              "via": null,
+              "dev": "wg0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "lookupRoute(\"default via 192.168.1.1 dev wlan0 proto dhcp metric 600\\n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1\\n192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.23\\n192.168.1.128/25 via 192.168.1.250 dev wlan0\\n10.8.0.0/16 via 10.8.0.1 dev wg0\\n10.8.5.7 dev wg0 scope link\", \"10.8.5.8\")",
+            "mongDoi": {
+              "route": "10.8.0.0/16",
+              "via": "10.8.0.1",
+              "dev": "wg0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "lookupRoute(\"default via 192.168.1.1 dev wlan0 proto dhcp metric 600\\n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1\\n192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.23\\n192.168.1.128/25 via 192.168.1.250 dev wlan0\\n10.8.0.0/16 via 10.8.0.1 dev wg0\\n10.8.5.7 dev wg0 scope link\", \"172.17.0.5\")",
+            "mongDoi": {
+              "route": "172.17.0.0/16",
+              "via": null,
+              "dev": "docker0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "lookupRoute(\"default via 192.168.1.1 dev wlan0 proto dhcp metric 600\\n172.17.0.0/16 dev docker0 proto kernel scope link src 172.17.0.1\\n192.168.1.0/24 dev wlan0 proto kernel scope link src 192.168.1.23\\n192.168.1.128/25 via 192.168.1.250 dev wlan0\\n10.8.0.0/16 via 10.8.0.1 dev wg0\\n10.8.5.7 dev wg0 scope link\", \"1.1.1.1\")",
+            "mongDoi": {
+              "route": "default",
+              "via": "192.168.1.1",
+              "dev": "wlan0"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "lookupRoute(\"10.0.0.0/8 dev eth0\", \"11.0.0.1\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the bitwise mask (0xffffffff << (32 - len)): in JavaScript a shift by 32 is a shift by 0, so the default route stops matching, and results are signed numbers.|||Dùng mặt nạ bit (0xffffffff << (32 - len)): trong JavaScript dịch 32 bit là dịch 0 bit, nên tuyến default hết khớp, và kết quả là số có dấu."
+        },
+        {
+          "loi": "Returning the first matching line instead of the longest prefix: 192.168.1.200 then goes to the /24 instead of the /25.|||Trả dòng khớp đầu tiên thay vì tiền tố dài nhất: 192.168.1.200 khi đó đi theo /24 thay vì /25."
+        },
+        {
+          "loi": "Comparing strings (\"10.10.2.\" startsWith) — works for /24 by luck, fails for /16, /25 and /32.|||So chuỗi (startsWith \"10.10.2.\") — tình cờ đúng với /24, sai với /16, /25 và /32."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prefix length",
+          "vi": "độ dài tiền tố",
+          "giaiThich": "Số bit đầu của địa chỉ dùng để so — /24 nghĩa là 24 bit."
+        },
+        {
+          "en": "host route",
+          "vi": "tuyến tới một máy",
+          "giaiThich": "Tuyến /32, chỉ khớp đúng một địa chỉ."
+        },
+        {
+          "en": "longest prefix match",
+          "vi": "khớp tiền tố dài nhất"
+        }
+      ]
+    }
+  ]
+}

@@ -120,6 +120,7 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/cpu-lab/3d', nap: () => import('@/app/cpu-lab/3d/page') },
   { mau: '/cpu-lab', nap: () => import('@/app/cpu-lab/page') },
   { mau: '/os-lab', nap: () => import('@/app/os-lab/page') },
+  { mau: '/net-lab', nap: () => import('@/app/net-lab/page') },
   { mau: '/code-lab', nap: () => import('@/app/code-lab/page') },
   { mau: '/code-lab/search', nap: () => import('@/app/code-lab/search/page') },
   { mau: '/code-lab/phong-lab', nap: () => import('@/app/code-lab/phong-lab/page') },

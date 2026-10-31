@@ -1,0 +1,35 @@
+# Mục 0 · bài 0.1 — chạy trong máy client của lab (docker exec nfd-client …)
+$ dig -v
+DiG 9.20.24-1ubuntu0.4-Ubuntu
+$ curl --version | head -1
+curl 8.18.0 (aarch64-unknown-linux-gnu) libcurl/8.18.0 OpenSSL/3.5.5 zlib/1.3.1 brotli/1.2.0 zstd/1.5.7 libidn2/2.3.8 libpsl/0.21.2 libssh2/1.11.1 nghttp2/1.68.0 librtmp/2.3 mit-krb5/1.22.1 OpenLDAP/2.6.10
+$ tcpdump --version | head -1
+tcpdump version 4.99.6
+$ tshark --version 2>/dev/null | head -1
+TShark (Wireshark) 4.6.4.
+$ openssl version
+OpenSSL 3.5.5 27 Jan 2026 (Library: OpenSSL 3.5.5 27 Jan 2026)
+$ ip -br addr show eth0
+eth0@if2170      UP             10.10.1.10/24 
+$ ip route
+default via 10.10.1.1 dev eth0 
+10.10.1.0/24 dev eth0 proto kernel scope link src 10.10.1.10 
+10.10.2.0/24 via 10.10.1.254 dev eth0 
+$ curl -s http://10.10.2.10/
+<h1>LabFlow lab</h1>
+$ curl -s http://10.10.2.10/api/hello
+{"service":"labflow-api","path":"/api/hello","seenFrom":"10.10.2.10:48492","seenOn":"10.10.2.20:3000","forwardedFor":"10.10.1.10"}
+$ curl -s -o /dev/null -w 'HTTP %{http_code}, %{size_download} bytes\n' http://10.10.2.10/
+HTTP 200, 21 bytes
+$ tcpdump -n -r /tmp/dau.pcap
+reading from file /tmp/dau.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+23:00:21.530884 IP 10.10.1.10.53142 > 10.10.2.10.80: Flags [S], seq 4169172723, win 64240, options [mss 1460,sackOK,TS val 2099662575 ecr 0,nop,wscale 10], length 0
+23:00:21.531025 IP 10.10.2.10.80 > 10.10.1.10.53142: Flags [S.], seq 645412402, ack 4169172724, win 65160, options [mss 1460,sackOK,TS val 1728986107 ecr 2099662575,nop,wscale 10], length 0
+23:00:21.531038 IP 10.10.1.10.53142 > 10.10.2.10.80: Flags [.], ack 1, win 63, options [nop,nop,TS val 2099662575 ecr 1728986107], length 0
+23:00:21.531104 IP 10.10.1.10.53142 > 10.10.2.10.80: Flags [P.], seq 1:75, ack 1, win 63, options [nop,nop,TS val 2099662576 ecr 1728986107], length 74: HTTP: GET / HTTP/1.1
+23:00:21.531120 IP 10.10.2.10.80 > 10.10.1.10.53142: Flags [.], ack 75, win 64, options [nop,nop,TS val 1728986108 ecr 2099662576], length 0
+23:00:21.531255 IP 10.10.2.10.80 > 10.10.1.10.53142: Flags [P.], seq 1:169, ack 75, win 64, options [nop,nop,TS val 1728986108 ecr 2099662576], length 168: HTTP: HTTP/1.1 200 OK
+23:00:21.531274 IP 10.10.1.10.53142 > 10.10.2.10.80: Flags [.], ack 169, win 63, options [nop,nop,TS val 2099662576 ecr 1728986108], length 0
+23:00:21.531447 IP 10.10.1.10.53142 > 10.10.2.10.80: Flags [F.], seq 75, ack 169, win 63, options [nop,nop,TS val 2099662576 ecr 1728986108], length 0
+23:00:21.531516 IP 10.10.2.10.80 > 10.10.1.10.53142: Flags [F.], seq 169, ack 76, win 64, options [nop,nop,TS val 1728986108 ecr 2099662576], length 0
+23:00:21.531521 IP 10.10.1.10.53142 > 10.10.2.10.80: Flags [.], ack 170, win 63, options [nop,nop,TS val 2099662576 ecr 1728986108], length 0

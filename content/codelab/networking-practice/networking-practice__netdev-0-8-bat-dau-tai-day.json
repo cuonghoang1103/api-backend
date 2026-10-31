@@ -1,0 +1,957 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-0-8-bat-dau-tai-day",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-0-8-bat-dau-tai-day"
+  },
+  "exercises": [
+    {
+      "title": "Start 1 — The post-office picture, word by word",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "network basics"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The lesson explains a network as sending a book by post. Match every piece of the post-office picture to the network word it stands for.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài học giải thích mạng bằng hình ảnh gửi một cuốn sách qua bưu điện. Ghép mỗi mảnh của bức tranh bưu điện với từ mạng mà nó đại diện.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask of each piece: does it pick a machine, pick a program, move things one step, or translate a name?|||Hỏi mỗi mảnh: nó chọn máy, chọn chương trình, chuyển hộp một bước, hay dịch tên?",
+        "Two \"forwarding\" pieces exist: one works between networks (by IP), one inside a single network (by MAC).|||Có hai mảnh \"chuyển tiếp\": một cái làm việc giữa các mạng (theo IP), một cái bên trong một mạng (theo MAC)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 1 — The post-office picture, word by word\n\nAnswer in the answer panel (no code needed).\n\n1. Post office → networkBưu điện → mạng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 1 — The post-office picture, word by word — answer key\n\n1. Post office → networkBưu điện → mạng\n   - r1.w: packet\n   - r2.w: IP address\n   - r3.w: port\n   - r4.w: router\n   - r5.w: link\n   - r6.w: DNS\n   - r7.w: switch\n   Packet = data + header (the label). The IP address picks the machine anywhere in the world, the port picks the program on it (443 for HTTPS, 80 for HTTP). Routers forward between networks without opening the box; links only carry bits; DNS turns cuongthai.com into 160.187.1.208. A switch only moves frames between machines of ONE local network — that is why it is the neighbours' letterboxes, not a sorting centre between cities.VI: Packet = dữ liệu + header (nhãn). Địa chỉ IP chọn máy ở bất cứ đâu, cổng (port) chọn chương trình trên máy đó (443 cho HTTPS, 80 cho HTTP). Router chuyển giữa các mạng mà không mở hộp; đường truyền chỉ chở bit; DNS đổi cuongthai.com thành 160.187.1.208. Switch chỉ chuyển frame giữa các máy trong MỘT mạng nội bộ — nên nó là hộp thư giữa hàng xóm, không phải trung tâm phân loại giữa các thành phố.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Packet = data + header (the label). The IP address picks the machine anywhere in the world, the port picks the program on it (443 for HTTPS, 80 for HTTP). Routers forward between networks without opening the box; links only carry bits; DNS turns cuongthai.com into 160.187.1.208. A switch only moves frames between machines of ONE local network — that is why it is the neighbours' letterboxes, not a sorting centre between cities.</p><p><i>VI: Packet = dữ liệu + header (nhãn). Địa chỉ IP chọn máy ở bất cứ đâu, cổng (port) chọn chương trình trên máy đó (443 cho HTTPS, 80 cho HTTP). Router chuyển giữa các mạng mà không mở hộp; đường truyền chỉ chở bit; DNS đổi cuongthai.com thành 160.187.1.208. Switch chỉ chuyển frame giữa các máy trong MỘT mạng nội bộ — nên nó là hộp thư giữa hàng xóm, không phải trung tâm phân loại giữa các thành phố.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Post office → network</p><p style=\"opacity:.75;font-size:.92em\"><i>Bưu điện → mạng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "In the post-office picture"
+              },
+              {
+                "ma": "w",
+                "ten": "Network word",
+                "luaChon": [
+                  "packet",
+                  "IP address",
+                  "port",
+                  "router",
+                  "link",
+                  "DNS",
+                  "switch"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "A chunk of your data in a box, with a label written on the outside"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "The street address of the building, valid anywhere in the world"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "The flat number inside the apartment building"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "A sorting centre that reads only the address and passes the box one step on"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "The roads and trucks that carry boxes and know nothing else"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "The phone book that turns a name into a street address"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "The letterboxes inside one building, where boxes move between neighbours only"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.w": "packet",
+              "r2.w": "IP address",
+              "r3.w": "port",
+              "r4.w": "router",
+              "r5.w": "link",
+              "r6.w": "DNS",
+              "r7.w": "switch"
+            },
+            "giaiThich": "<p>Packet = data + header (the label). The IP address picks the machine anywhere in the world, the port picks the program on it (443 for HTTPS, 80 for HTTP). Routers forward between networks without opening the box; links only carry bits; DNS turns cuongthai.com into 160.187.1.208. A switch only moves frames between machines of ONE local network — that is why it is the neighbours' letterboxes, not a sorting centre between cities.</p><p><i>VI: Packet = dữ liệu + header (nhãn). Địa chỉ IP chọn máy ở bất cứ đâu, cổng (port) chọn chương trình trên máy đó (443 cho HTTPS, 80 cho HTTP). Router chuyển giữa các mạng mà không mở hộp; đường truyền chỉ chở bit; DNS đổi cuongthai.com thành 160.187.1.208. Switch chỉ chuyển frame giữa các máy trong MỘT mạng nội bộ — nên nó là hộp thư giữa hàng xóm, không phải trung tâm phân loại giữa các thành phố.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing up the IP address (which machine) and the port (which program on that machine).|||Nhầm địa chỉ IP (máy nào) với cổng (chương trình nào trên máy đó)."
+        },
+        {
+          "loi": "Calling a switch a router: a switch never connects two different networks.|||Gọi switch là router: switch không bao giờ nối hai mạng khác nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "packet",
+          "vi": "gói tin",
+          "giaiThich": "Một mẩu dữ liệu có header phía trước."
+        },
+        {
+          "en": "port",
+          "vi": "cổng",
+          "giaiThich": "Số chọn chương trình trên một máy, ví dụ 443."
+        },
+        {
+          "en": "link",
+          "vi": "đường truyền",
+          "giaiThich": "Cáp đồng, cáp quang, Wi-Fi, 4G/5G — chỉ chở bit."
+        }
+      ]
+    },
+    {
+      "title": "Start 2 — The six pairs everybody confuses",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Internet vs Web",
+        "IP vs MAC",
+        "TCP vs HTTP",
+        "bandwidth vs latency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Each question is a small situation from a developer's week. Pick the word of the pair that explains it.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi câu là một tình huống nhỏ trong tuần làm việc của lập trình viên. Chọn từ trong cặp giải thích được nó.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For each pair, ask: which word is the bigger thing, which is one part of it?|||Với mỗi cặp, hỏi: từ nào là thứ lớn hơn, từ nào chỉ là một phần của nó?",
+        "IP/MAC: journey vs one hop. TCP/HTTP: delivery vs language. Bandwidth/latency: how much vs how long.|||IP/MAC: cả hành trình vs một chặng. TCP/HTTP: chuyển phát vs ngôn ngữ. Băng thông/độ trễ: bao nhiêu vs bao lâu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 2 — The six pairs everybody confuses\n\nAnswer in the answer panel (no code needed).\n\n1. Email and SSH to the server still work, but no web page loads. Which one is broken?Email và SSH tới server vẫn chạy, nhưng không trang web nào mở được. Cái nào hỏng?\n2. A packet goes laptop → router → server. Which address is rewritten at every router?Gói đi laptop → router → server. Địa chỉ nào bị viết lại ở mỗi router?\n3. curl prints \"404 Not Found\". Did the TCP connection work?curl in \"404 Not Found\". Kết nối TCP có thành công không?\n4. You moved the website to a new server. Why do some users still reach the old one for a while?Bạn chuyển website sang server mới. Vì sao vài người dùng vẫn tới server cũ một lúc?\n5. A 1 Gbit/s line to a server on another continent still makes small API calls slow. Why?Đường 1 Gbit/s tới server ở châu lục khác vẫn làm các lệnh gọi API nhỏ bị chậm. Vì sao?\n6. Two laptops on the same Wi-Fi talk directly; a laptop and a cloud server talk through another device. Which one?Hai laptop cùng Wi-Fi nói chuyện trực tiếp; laptop và server trên cloud phải qua một thiết bị khác. Thiết bị nào?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 2 — The six pairs everybody confuses — answer key\n\n1. Email and SSH to the server still work, but no web page loads. Which one is broken?Email và SSH tới server vẫn chạy, nhưng không trang web nào mở được. Cái nào hỏng?\n   Answer: a) The Web — one service that runs on the Internet\n   Email and SSH use the Internet too, so the Internet works; only the Web service (HTTP) has a problem. \"The site is down\" and \"the network is down\" are different bugs.VI: Email và SSH cũng dùng Internet, nên Internet vẫn chạy; chỉ dịch vụ Web (HTTP) có vấn đề. \"Trang web sập\" và \"mạng sập\" là hai lỗi khác nhau.\n\n2. A packet goes laptop → router → server. Which address is rewritten at every router?Gói đi laptop → router → server. Địa chỉ nào bị viết lại ở mỗi router?\n   Answer: b) The MAC address — it is valid on one hop only\n   The IP address is for the whole journey and stays the same (lesson 1.4 captures it on both sides of the router). The MAC address names a network card on one link, so each router builds a new frame with new MACs.VI: Địa chỉ IP dùng cho cả hành trình và giữ nguyên (bài 1.4 bắt gói ở hai phía router). MAC đặt tên card mạng trên một liên kết, nên mỗi router dựng frame mới với MAC mới.\n\n3. curl prints \"404 Not Found\". Did the TCP connection work?curl in \"404 Not Found\". Kết nối TCP có thành công không?\n   Answer: c) Yes — 404 is an HTTP answer sent over a working connection\n   TCP delivers the bytes; HTTP is the language written in them. Only a working connection can carry an HTTP answer like 404. \"Connection refused\" is the TCP-level failure.VI: TCP chở byte; HTTP là ngôn ngữ viết trong đó. Chỉ kết nối đã thông mới chở được câu trả lời HTTP như 404. \"Connection refused\" mới là lỗi tầng TCP.\n\n4. You moved the website to a new server. Why do some users still reach the old one for a while?Bạn chuyển website sang server mới. Vì sao vài người dùng vẫn tới server cũ một lúc?\n   Answer: b) DNS answers (name → address) are cached for a while\n   The name stays, the address behind it changed. Resolvers and browsers cache the old name → address answer until it expires (its TTL) — Chapter 3.VI: Tên giữ nguyên, địa chỉ phía sau đã đổi. Máy phân giải và trình duyệt lưu đệm câu trả lời tên → địa chỉ cũ tới khi hết hạn (TTL) — Chương 3.\n\n5. A 1 Gbit/s line to a server on another continent still makes small API calls slow. Why?Đường 1 Gbit/s tới server ở châu lục khác vẫn làm các lệnh gọi API nhỏ bị chậm. Vì sao?\n   Answer: c) Latency: every round trip still costs 150–250 ms\n   Bandwidth is how much data per second; latency is how long one trip takes. A small request is not limited by bandwidth at all — it waits for round trips, and distance makes each one long.VI: Băng thông là lượng dữ liệu mỗi giây; độ trễ là thời gian một chuyến đi. Request nhỏ không bị băng thông giới hạn — nó chờ các chuyến đi-về, và khoảng cách làm mỗi chuyến dài ra.\n\n6. Two laptops on the same Wi-Fi talk directly; a laptop and a cloud server talk through another device. Which one?Hai laptop cùng Wi-Fi nói chuyện trực tiếp; laptop và server trên cloud phải qua một thiết bị khác. Thiết bị nào?\n   Answer: a) A router — it joins different networks by IP\n   \"Same network or not?\" decides it. Inside one network a switch forwards frames by MAC; to reach another network the packet must go through a router, which forwards by IP.VI: \"Cùng mạng hay không?\" quyết định. Trong một mạng, switch chuyển frame theo MAC; muốn tới mạng khác, gói phải qua router, router chuyển theo IP.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The Web — one service that runs on the Internet</p><p>Email and SSH use the Internet too, so the Internet works; only the Web service (HTTP) has a problem. \"The site is down\" and \"the network is down\" are different bugs.</p><p><i>VI: Email và SSH cũng dùng Internet, nên Internet vẫn chạy; chỉ dịch vụ Web (HTTP) có vấn đề. \"Trang web sập\" và \"mạng sập\" là hai lỗi khác nhau.</i></p></li><li><p><b>b)</b> The MAC address — it is valid on one hop only</p><p>The IP address is for the whole journey and stays the same (lesson 1.4 captures it on both sides of the router). The MAC address names a network card on one link, so each router builds a new frame with new MACs.</p><p><i>VI: Địa chỉ IP dùng cho cả hành trình và giữ nguyên (bài 1.4 bắt gói ở hai phía router). MAC đặt tên card mạng trên một liên kết, nên mỗi router dựng frame mới với MAC mới.</i></p></li><li><p><b>c)</b> Yes — 404 is an HTTP answer sent over a working connection</p><p>TCP delivers the bytes; HTTP is the language written in them. Only a working connection can carry an HTTP answer like 404. \"Connection refused\" is the TCP-level failure.</p><p><i>VI: TCP chở byte; HTTP là ngôn ngữ viết trong đó. Chỉ kết nối đã thông mới chở được câu trả lời HTTP như 404. \"Connection refused\" mới là lỗi tầng TCP.</i></p></li><li><p><b>b)</b> DNS answers (name → address) are cached for a while</p><p>The name stays, the address behind it changed. Resolvers and browsers cache the old name → address answer until it expires (its TTL) — Chapter 3.</p><p><i>VI: Tên giữ nguyên, địa chỉ phía sau đã đổi. Máy phân giải và trình duyệt lưu đệm câu trả lời tên → địa chỉ cũ tới khi hết hạn (TTL) — Chương 3.</i></p></li><li><p><b>c)</b> Latency: every round trip still costs 150–250 ms</p><p>Bandwidth is how much data per second; latency is how long one trip takes. A small request is not limited by bandwidth at all — it waits for round trips, and distance makes each one long.</p><p><i>VI: Băng thông là lượng dữ liệu mỗi giây; độ trễ là thời gian một chuyến đi. Request nhỏ không bị băng thông giới hạn — nó chờ các chuyến đi-về, và khoảng cách làm mỗi chuyến dài ra.</i></p></li><li><p><b>a)</b> A router — it joins different networks by IP</p><p>\"Same network or not?\" decides it. Inside one network a switch forwards frames by MAC; to reach another network the packet must go through a router, which forwards by IP.</p><p><i>VI: \"Cùng mạng hay không?\" quyết định. Trong một mạng, switch chuyển frame theo MAC; muốn tới mạng khác, gói phải qua router, router chuyển theo IP.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Email and SSH to the server still work, but no web page loads. Which one is broken?</p><p style=\"opacity:.75;font-size:.92em\"><i>Email và SSH tới server vẫn chạy, nhưng không trang web nào mở được. Cái nào hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The Web — one service that runs on the Internet"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The Internet — the network of all networks"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The cable between your laptop and the router"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The IP address of your own laptop"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Email and SSH use the Internet too, so the Internet works; only the Web service (HTTP) has a problem. \"The site is down\" and \"the network is down\" are different bugs.</p><p><i>VI: Email và SSH cũng dùng Internet, nên Internet vẫn chạy; chỉ dịch vụ Web (HTTP) có vấn đề. \"Trang web sập\" và \"mạng sập\" là hai lỗi khác nhau.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A packet goes laptop → router → server. Which address is rewritten at every router?</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói đi laptop → router → server. Địa chỉ nào bị viết lại ở mỗi router?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The IP address — it is valid on one hop only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The MAC address — it is valid on one hop only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The port number — it changes at every router"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The domain name — DNS changes it at each hop"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The IP address is for the whole journey and stays the same (lesson 1.4 captures it on both sides of the router). The MAC address names a network card on one link, so each router builds a new frame with new MACs.</p><p><i>VI: Địa chỉ IP dùng cho cả hành trình và giữ nguyên (bài 1.4 bắt gói ở hai phía router). MAC đặt tên card mạng trên một liên kết, nên mỗi router dựng frame mới với MAC mới.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>curl prints \"404 Not Found\". Did the TCP connection work?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl in \"404 Not Found\". Kết nối TCP có thành công không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — 404 means TCP could not reach the server at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — 404 means the DNS lookup of the name failed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — 404 is an HTTP answer sent over a working connection"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — but 404 means the TLS certificate has expired"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>TCP delivers the bytes; HTTP is the language written in them. Only a working connection can carry an HTTP answer like 404. \"Connection refused\" is the TCP-level failure.</p><p><i>VI: TCP chở byte; HTTP là ngôn ngữ viết trong đó. Chỉ kết nối đã thông mới chở được câu trả lời HTTP như 404. \"Connection refused\" mới là lỗi tầng TCP.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>You moved the website to a new server. Why do some users still reach the old one for a while?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn chuyển website sang server mới. Vì sao vài người dùng vẫn tới server cũ một lúc?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The old server keeps the domain name inside its RAM"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DNS answers (name → address) are cached for a while"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Routers remember every website by its name forever"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Browsers always ignore DNS and keep the first address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The name stays, the address behind it changed. Resolvers and browsers cache the old name → address answer until it expires (its TTL) — Chapter 3.</p><p><i>VI: Tên giữ nguyên, địa chỉ phía sau đã đổi. Máy phân giải và trình duyệt lưu đệm câu trả lời tên → địa chỉ cũ tới khi hết hạn (TTL) — Chương 3.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A 1 Gbit/s line to a server on another continent still makes small API calls slow. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường 1 Gbit/s tới server ở châu lục khác vẫn làm các lệnh gọi API nhỏ bị chậm. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Bandwidth: 1 Gbit/s is too little for small calls"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The switch in the office is too slow for the line"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Latency: every round trip still costs 150–250 ms"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The MAC address must be resolved again each time"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Bandwidth is how much data per second; latency is how long one trip takes. A small request is not limited by bandwidth at all — it waits for round trips, and distance makes each one long.</p><p><i>VI: Băng thông là lượng dữ liệu mỗi giây; độ trễ là thời gian một chuyến đi. Request nhỏ không bị băng thông giới hạn — nó chờ các chuyến đi-về, và khoảng cách làm mỗi chuyến dài ra.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Two laptops on the same Wi-Fi talk directly; a laptop and a cloud server talk through another device. Which one?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai laptop cùng Wi-Fi nói chuyện trực tiếp; laptop và server trên cloud phải qua một thiết bị khác. Thiết bị nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A router — it joins different networks by IP"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A DNS server — it carries every packet out"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A load balancer — it is needed for every packet"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A switch — it joins different networks by MAC"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>\"Same network or not?\" decides it. Inside one network a switch forwards frames by MAC; to reach another network the packet must go through a router, which forwards by IP.</p><p><i>VI: \"Cùng mạng hay không?\" quyết định. Trong một mạng, switch chuyển frame theo MAC; muốn tới mạng khác, gói phải qua router, router chuyển theo IP.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading \"404\" as a network failure — the network delivered the answer perfectly.|||Đọc \"404\" thành lỗi mạng — mạng đã chở câu trả lời hoàn hảo."
+        },
+        {
+          "loi": "Buying more bandwidth to fix latency on small requests.|||Mua thêm băng thông để chữa độ trễ của các request nhỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "latency",
+          "vi": "độ trễ",
+          "giaiThich": "Thời gian một chuyến đi (hoặc đi-về)."
+        },
+        {
+          "en": "bandwidth",
+          "vi": "băng thông",
+          "giaiThich": "Lượng dữ liệu tối đa mỗi giây."
+        },
+        {
+          "en": "MAC address",
+          "vi": "địa chỉ MAC",
+          "giaiThich": "Địa chỉ phần cứng của card mạng, chỉ có giá trị trên một chặng."
+        }
+      ]
+    },
+    {
+      "title": "Start 3 — Put the history of the Internet in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "Internet history"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The lesson lists the dates that explain why the Internet works the way it does. Put the events in the order they happened (oldest first). The second question orders the newer web protocols.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài học liệt kê các mốc giải thích vì sao Internet hoạt động như hiện nay. Sắp các sự kiện theo thứ tự xảy ra (cũ nhất trước). Câu thứ hai sắp các giao thức web mới hơn.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The network came first, then the common protocol, then the names, then the Web.|||Mạng có trước, rồi giao thức chung, rồi tên miền, rồi mới tới Web.",
+        "A protocol built \"on top of\" another must come after it.|||Giao thức xây \"trên\" giao thức khác thì phải ra đời sau nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 3 — Put the history of the Internet in order\n\nAnswer in the answer panel (no code needed).\n\n1. From ARPANET to the WebTừ ARPANET tới Web\n2. Newer protocols you will measure in this courseCác giao thức mới hơn bạn sẽ đo trong khoá\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 3 — Put the history of the Internet in order — answer key\n\n1. From ARPANET to the WebTừ ARPANET tới Web\n   Answer: m5) First host-to-host connection on the ARPANET, UCLA → SRI  →  m3) Vint Cerf and Bob Kahn design TCP to join different packet networks  →  m2) Flag day: every ARPANET host switches from NCP to TCP/IP  →  m1) Tim Berners-Lee proposes the World Wide Web at CERN  →  m4) The first public website, info.cern.ch, appears\n   29 October 1969 → 1973–1974 → 1 January 1983 → March 1989 → August 1991. The Web arrived about twenty years after the network it runs on. (DNS was also invented in 1983, by Paul Mockapetris.)VI: 29/10/1969 → 1973–1974 → 1/1/1983 → 3/1989 → 8/1991. Web ra đời khoảng hai mươi năm sau mạng mà nó chạy trên đó. (DNS cũng ra đời năm 1983, do Paul Mockapetris.)\n\n2. Newer protocols you will measure in this courseCác giao thức mới hơn bạn sẽ đo trong khoá\n   Answer: m2) HTTP/2 — many requests share one connection (RFC 7540)  →  m3) TLS 1.3 — encryption set up in one round trip (RFC 8446)  →  m1) QUIC — a new transport built on UDP (RFC 9000)  →  m4) HTTP/3 — HTTP carried over QUIC (RFC 9114)\n   2015 → 2018 → 2021 → 2022. HTTP/3 cannot come before QUIC: it is HTTP running on top of QUIC.VI: 2015 → 2018 → 2021 → 2022. HTTP/3 không thể có trước QUIC: nó là HTTP chạy trên QUIC.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>29 October 1969 → 1973–1974 → 1 January 1983 → March 1989 → August 1991. The Web arrived about twenty years after the network it runs on. (DNS was also invented in 1983, by Paul Mockapetris.)</p><p><i>VI: 29/10/1969 → 1973–1974 → 1/1/1983 → 3/1989 → 8/1991. Web ra đời khoảng hai mươi năm sau mạng mà nó chạy trên đó. (DNS cũng ra đời năm 1983, do Paul Mockapetris.)</i></p><p>2015 → 2018 → 2021 → 2022. HTTP/3 cannot come before QUIC: it is HTTP running on top of QUIC.</p><p><i>VI: 2015 → 2018 → 2021 → 2022. HTTP/3 không thể có trước QUIC: nó là HTTP chạy trên QUIC.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From ARPANET to the Web</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ ARPANET tới Web</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Tim Berners-Lee proposes the World Wide Web at CERN"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Flag day: every ARPANET host switches from NCP to TCP/IP"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Vint Cerf and Bob Kahn design TCP to join different packet networks"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "The first public website, info.cern.ch, appears"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "First host-to-host connection on the ARPANET, UCLA → SRI"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m3",
+              "m2",
+              "m1",
+              "m4"
+            ],
+            "giaiThich": "<p>29 October 1969 → 1973–1974 → 1 January 1983 → March 1989 → August 1991. The Web arrived about twenty years after the network it runs on. (DNS was also invented in 1983, by Paul Mockapetris.)</p><p><i>VI: 29/10/1969 → 1973–1974 → 1/1/1983 → 3/1989 → 8/1991. Web ra đời khoảng hai mươi năm sau mạng mà nó chạy trên đó. (DNS cũng ra đời năm 1983, do Paul Mockapetris.)</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>Newer protocols you will measure in this course</p><p style=\"opacity:.75;font-size:.92em\"><i>Các giao thức mới hơn bạn sẽ đo trong khoá</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "QUIC — a new transport built on UDP (RFC 9000)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "HTTP/2 — many requests share one connection (RFC 7540)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "TLS 1.3 — encryption set up in one round trip (RFC 8446)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "HTTP/3 — HTTP carried over QUIC (RFC 9114)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m3",
+              "m1",
+              "m4"
+            ],
+            "giaiThich": "<p>2015 → 2018 → 2021 → 2022. HTTP/3 cannot come before QUIC: it is HTTP running on top of QUIC.</p><p><i>VI: 2015 → 2018 → 2021 → 2022. HTTP/3 không thể có trước QUIC: nó là HTTP chạy trên QUIC.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the Web and the Internet were born together.|||Nghĩ Web và Internet ra đời cùng lúc."
+        },
+        {
+          "loi": "Putting HTTP/3 before QUIC.|||Đặt HTTP/3 trước QUIC."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ARPANET",
+          "vi": "mạng ARPANET",
+          "giaiThich": "Mạng nghiên cứu của Mỹ năm 1969, tổ tiên của Internet."
+        },
+        {
+          "en": "flag day",
+          "vi": "ngày chuyển đổi đồng loạt",
+          "giaiThich": "1/1/1983: mọi máy chuyển sang TCP/IP cùng lúc."
+        },
+        {
+          "en": "RFC",
+          "vi": "tài liệu chuẩn Internet",
+          "giaiThich": "Request for Comments — văn bản định nghĩa giao thức."
+        }
+      ]
+    },
+    {
+      "title": "Start 4 — Real outages: which layer broke?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "outages",
+        "layers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Seven real incidents from the two \"Start here\" lessons. For each one choose the layer that broke and the part of the course that explains it. In every case except the last, the servers themselves were running.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảy sự cố thật trong hai bài \"Bắt đầu tại đây\". Với mỗi sự cố, chọn tầng bị hỏng và phần của khoá giải thích nó. Trừ trường hợp cuối, ở mọi sự cố các server vẫn đang chạy.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask \"what could users not do?\": find the address (DNS), reach the address (routing), trust the server (TLS), or get a valid answer (application).|||Hỏi \"người dùng không làm được gì?\": tìm địa chỉ (DNS), tới được địa chỉ (định tuyến), tin server (TLS), hay nhận câu trả lời hợp lệ (ứng dụng).",
+        "BGP is the protocol networks use to announce \"send traffic for these addresses to me\" — a wrong or missing announcement is a routing failure.|||BGP là giao thức các mạng dùng để thông báo \"gửi lưu lượng của các địa chỉ này cho tôi\" — thông báo sai hoặc mất là lỗi định tuyến."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 4 — Real outages: which layer broke?\n\nAnswer in the answer panel (no code needed).\n\n1. Outage → layerSự cố → tầng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 4 — Real outages: which layer broke? — answer key\n\n1. Outage → layerSự cố → tầng\n   - r1.l: Routing (BGP) + DNS\n   - r1.h: Lesson 2.5 + Chapter 3\n   - r2.l: DNS\n   - r2.h: Chapter 3\n   - r3.l: Routing (BGP)\n   - r3.h: Lesson 2.2\n   - r4.l: TLS certificates\n   - r4.h: Chapter 7\n   - r5.l: DNS\n   - r5.h: Chapter 3\n   - r6.l: DNS\n   - r6.h: Chapter 3\n   - r7.l: Application behind a proxy\n   - r7.h: Chapter 10\n   Two routing, four DNS (Facebook counts in both), one TLS, one application behind a proxy. Facebook is the tempting one: its DNS servers were healthy, but BGP routes to them were withdrawn, so DNS failed as a consequence — both layers. YouTube was pure routing: \"the most specific route wins\" (lesson 2.2). The cable was never the culprit.VI: Hai định tuyến, bốn DNS (Facebook tính cả hai), một TLS, một ứng dụng sau proxy. Facebook là câu dễ nhầm: máy chủ DNS vẫn khoẻ nhưng tuyến BGP tới chúng bị rút, nên DNS hỏng theo — cả hai tầng. YouTube là định tuyến thuần: \"tuyến cụ thể nhất thắng\" (bài 2.2). Không lần nào thủ phạm là sợi cáp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two routing, four DNS (Facebook counts in both), one TLS, one application behind a proxy. Facebook is the tempting one: its DNS servers were healthy, but BGP routes to them were withdrawn, so DNS failed as a consequence — both layers. YouTube was pure routing: \"the most specific route wins\" (lesson 2.2). The cable was never the culprit.</p><p><i>VI: Hai định tuyến, bốn DNS (Facebook tính cả hai), một TLS, một ứng dụng sau proxy. Facebook là câu dễ nhầm: máy chủ DNS vẫn khoẻ nhưng tuyến BGP tới chúng bị rút, nên DNS hỏng theo — cả hai tầng. YouTube là định tuyến thuần: \"tuyến cụ thể nhất thắng\" (bài 2.2). Không lần nào thủ phạm là sợi cáp.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Outage → layer</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự cố → tầng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Incident"
+              },
+              {
+                "ma": "l",
+                "ten": "Layer that broke",
+                "luaChon": [
+                  "Routing (BGP)",
+                  "Routing (BGP) + DNS",
+                  "DNS",
+                  "TLS certificates",
+                  "Application behind a proxy"
+                ]
+              },
+              {
+                "ma": "h",
+                "ten": "Where the course explains it",
+                "luaChon": [
+                  "Lesson 2.5 + Chapter 3",
+                  "Lesson 2.2",
+                  "Chapter 3",
+                  "Chapter 7",
+                  "Chapter 10"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Facebook, 4 Oct 2021 — the backbone went down, DNS servers stopped announcing their routes, nobody could look up facebook.com for about 6 hours"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Dyn, 21 Oct 2016 — a Mirai botnet flooded a DNS provider; Twitter, GitHub, Netflix were up but their names did not resolve"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "YouTube, 24 Feb 2008 — Pakistan Telecom announced 208.65.153.0/24 and the more specific route won worldwide"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Let's Encrypt, 30 Sep 2021 — the old root DST Root CA X3 expired; valid sites failed on old devices"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Slack, 30 Sep 2021 — a DNSSEC change; rolling back made it worse because resolvers had cached part of it"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "AWS us-east-1, 19–20 Oct 2025 — the DynamoDB endpoint was left with an empty DNS record"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "cuongthai.com, 18 Aug 2026 — a broken API image crash-looped; nginx in front answered 502 for seven minutes"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.l": "Routing (BGP) + DNS",
+              "r1.h": "Lesson 2.5 + Chapter 3",
+              "r2.l": "DNS",
+              "r2.h": "Chapter 3",
+              "r3.l": "Routing (BGP)",
+              "r3.h": "Lesson 2.2",
+              "r4.l": "TLS certificates",
+              "r4.h": "Chapter 7",
+              "r5.l": "DNS",
+              "r5.h": "Chapter 3",
+              "r6.l": "DNS",
+              "r6.h": "Chapter 3",
+              "r7.l": "Application behind a proxy",
+              "r7.h": "Chapter 10"
+            },
+            "giaiThich": "<p>Two routing, four DNS (Facebook counts in both), one TLS, one application behind a proxy. Facebook is the tempting one: its DNS servers were healthy, but BGP routes to them were withdrawn, so DNS failed as a consequence — both layers. YouTube was pure routing: \"the most specific route wins\" (lesson 2.2). The cable was never the culprit.</p><p><i>VI: Hai định tuyến, bốn DNS (Facebook tính cả hai), một TLS, một ứng dụng sau proxy. Facebook là câu dễ nhầm: máy chủ DNS vẫn khoẻ nhưng tuyến BGP tới chúng bị rút, nên DNS hỏng theo — cả hai tầng. YouTube là định tuyến thuần: \"tuyến cụ thể nhất thắng\" (bài 2.2). Không lần nào thủ phạm là sợi cáp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering \"DNS\" alone for Facebook: the DNS servers were running, their routes disappeared.|||Chỉ trả lời \"DNS\" cho Facebook: máy chủ DNS vẫn chạy, tuyến tới chúng mới biến mất."
+        },
+        {
+          "loi": "Calling the 502 a network failure — the proxy answered; the app behind it was dead.|||Gọi 502 là lỗi mạng — proxy đã trả lời; ứng dụng phía sau mới chết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "outage",
+          "vi": "sự cố, mất dịch vụ"
+        },
+        {
+          "en": "BGP",
+          "vi": "giao thức định tuyến giữa các mạng",
+          "giaiThich": "Các mạng dùng nó để báo cho nhau mình giao được địa chỉ nào."
+        },
+        {
+          "en": "root certificate",
+          "vi": "chứng chỉ gốc"
+        }
+      ]
+    },
+    {
+      "title": "Start 5 — Best effort, reliable ends, and two real numbers",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "best effort",
+        "end-to-end principle",
+        "timeouts"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>These questions are about the design decisions behind the Internet and the real measurements from the lab (31 October 2026):<pre>64 bytes from 160.187.1.208: icmp_seq=1 ttl=63 time=7.76 ms\n64 bytes from 160.187.1.208: icmp_seq=2 ttl=63 time=9.81 ms\n64 bytes from 160.187.1.208: icmp_seq=3 ttl=63 time=6.91 ms\n\ndns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738</pre></p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các câu này về những quyết định thiết kế của Internet và số đo thật trong phòng lab (31/10/2026):<pre>64 bytes from 160.187.1.208: icmp_seq=1 ttl=63 time=7.76 ms\n64 bytes from 160.187.1.208: icmp_seq=2 ttl=63 time=9.81 ms\n64 bytes from 160.187.1.208: icmp_seq=3 ttl=63 time=6.91 ms\n\ndns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738</pre></p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count round trips: DNS, TCP, TLS, request — then add the server's own work.|||Đếm số vòng đi-về: DNS, TCP, TLS, request — rồi cộng thời gian server tự làm.",
+        "curl -w values are cumulative: subtract the previous value to get a stage.|||Giá trị curl -w là cộng dồn: trừ giá trị trước đó để được một chặng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 5 — Best effort, reliable ends, and two real numbers\n\nAnswer in the answer panel (no code needed).\n\n1. A ping round trip took 7–10 ms, but the whole HTTPS request took 102.7 ms. The main reason is …Một vòng ping mất 7–10 ms, nhưng cả request HTTPS mất 102,7 ms. Lý do chính là …\n2. Routers in the middle of the Internet are \"best effort\". This means they …Router ở giữa Internet là \"best effort\" (cố hết sức). Nghĩa là chúng …\n3. Your API calls another service with fetch(url) and no timeout. What can happen?API của bạn gọi dịch vụ khác bằng fetch(url) không có timeout. Điều gì có thể xảy ra?\n4. Why did packet switching (instead of the telephone's reserved circuits) suit the ARPANET's goals?Vì sao chuyển mạch gói (thay vì kênh dành riêng của điện thoại) hợp với mục tiêu của ARPANET?\n5. In the curl line above, how long did the TLS handshake itself take?Trong dòng curl ở trên, riêng bắt tay TLS mất bao lâu?\n6. The ITU estimate for 2025 quoted in the lesson is about …Ước tính năm 2025 của ITU mà bài học trích là khoảng …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Start 5 — Best effort, reliable ends, and two real numbers — answer key\n\n1. A ping round trip took 7–10 ms, but the whole HTTPS request took 102.7 ms. The main reason is …Một vòng ping mất 7–10 ms, nhưng cả request HTTPS mất 102,7 ms. Lý do chính là …\n   Answer: d) a web request needs several round trips plus server work\n   Same server, same path. A web request needs DNS, a TCP handshake, a TLS handshake, the request itself and the server's work — several round trips plus computing time; a ping is one round trip.VI: Cùng server, cùng đường đi. Một request web cần DNS, bắt tay TCP, bắt tay TLS, chính request và thời gian server xử lý — nhiều vòng đi-về cộng thời gian tính; ping chỉ là một vòng.\n\n2. Routers in the middle of the Internet are \"best effort\". This means they …Router ở giữa Internet là \"best effort\" (cố hết sức). Nghĩa là chúng …\n   Answer: d) may drop, delay or reorder packets and will not tell you\n   The middle is kept simple: it forwards and may lose packets silently. Reliability (retransmission, ordering) lives at the two ends — TCP in the kernel, and timeouts/retries in your code.VI: Phần giữa được giữ đơn giản: chỉ chuyển tiếp và có thể làm mất gói trong im lặng. Độ tin cậy (gửi lại, sắp thứ tự) nằm ở hai đầu — TCP trong kernel, và timeout/thử lại trong code của bạn.\n\n3. Your API calls another service with fetch(url) and no timeout. What can happen?API của bạn gọi dịch vụ khác bằng fetch(url) không có timeout. Điều gì có thể xảy ra?\n   Answer: a) The call can hang for minutes and freeze your API\n   \"The network is reliable\" is the first fallacy of distributed computing. A dropped packet or a server that accepted the connection and froze gives you silence, not an error — only a timeout you set limits the wait.VI: \"Mạng thì tin cậy\" là ngộ nhận đầu tiên của tính toán phân tán. Gói bị rớt hoặc server nhận kết nối rồi treo cho bạn sự im lặng, không phải lỗi — chỉ timeout do bạn đặt mới giới hạn thời gian chờ.\n\n4. Why did packet switching (instead of the telephone's reserved circuits) suit the ARPANET's goals?Vì sao chuyển mạch gói (thay vì kênh dành riêng của điện thoại) hợp với mục tiêu của ARPANET?\n   Answer: a) Packets share links and can take any path that still works\n   A cut wire kills a telephone call because its circuit is reserved. Independent packets share every link and route around the break — surviving broken links was one of the two design needs (the other: sharing costly computers).VI: Đứt dây là cuộc gọi chết vì kênh của nó được dành riêng. Các gói độc lập dùng chung mọi liên kết và đi vòng qua chỗ đứt — sống sót khi liên kết hỏng là một trong hai nhu cầu thiết kế (cái kia: dùng chung máy tính đắt tiền).\n\n5. In the curl line above, how long did the TLS handshake itself take?Trong dòng curl ở trên, riêng bắt tay TLS mất bao lâu?\n   Answer: a) 14.1 ms (26.0 − 11.9)\n   curl -w prints moments measured from the start, not durations: TLS ended 26.0 ms after the start and began when TCP finished at 11.9 ms, so it took 14.1 ms. Lesson 0.2 is about this trap.VI: curl -w in các THỜI ĐIỂM tính từ lúc bắt đầu, không phải độ dài: TLS kết thúc ở 26,0 ms và bắt đầu khi TCP xong ở 11,9 ms, nên nó mất 14,1 ms. Bài 0.2 nói về cái bẫy này.\n\n6. The ITU estimate for 2025 quoted in the lesson is about …Ước tính năm 2025 của ITU mà bài học trích là khoảng …\n   Answer: c) 6 billion people online, 74% of the world\n   Facts and Figures 2025: about 6 billion people (74%) online and about 2.2 billion not yet online. Every one of them reaches your software through DNS, TCP, TLS and HTTP.VI: Facts and Figures 2025: khoảng 6 tỷ người (74%) dùng Internet và khoảng 2,2 tỷ người chưa. Mỗi người trong số đó tới phần mềm của bạn qua DNS, TCP, TLS và HTTP.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> a web request needs several round trips plus server work</p><p>Same server, same path. A web request needs DNS, a TCP handshake, a TLS handshake, the request itself and the server's work — several round trips plus computing time; a ping is one round trip.</p><p><i>VI: Cùng server, cùng đường đi. Một request web cần DNS, bắt tay TCP, bắt tay TLS, chính request và thời gian server xử lý — nhiều vòng đi-về cộng thời gian tính; ping chỉ là một vòng.</i></p></li><li><p><b>d)</b> may drop, delay or reorder packets and will not tell you</p><p>The middle is kept simple: it forwards and may lose packets silently. Reliability (retransmission, ordering) lives at the two ends — TCP in the kernel, and timeouts/retries in your code.</p><p><i>VI: Phần giữa được giữ đơn giản: chỉ chuyển tiếp và có thể làm mất gói trong im lặng. Độ tin cậy (gửi lại, sắp thứ tự) nằm ở hai đầu — TCP trong kernel, và timeout/thử lại trong code của bạn.</i></p></li><li><p><b>a)</b> The call can hang for minutes and freeze your API</p><p>\"The network is reliable\" is the first fallacy of distributed computing. A dropped packet or a server that accepted the connection and froze gives you silence, not an error — only a timeout you set limits the wait.</p><p><i>VI: \"Mạng thì tin cậy\" là ngộ nhận đầu tiên của tính toán phân tán. Gói bị rớt hoặc server nhận kết nối rồi treo cho bạn sự im lặng, không phải lỗi — chỉ timeout do bạn đặt mới giới hạn thời gian chờ.</i></p></li><li><p><b>a)</b> Packets share links and can take any path that still works</p><p>A cut wire kills a telephone call because its circuit is reserved. Independent packets share every link and route around the break — surviving broken links was one of the two design needs (the other: sharing costly computers).</p><p><i>VI: Đứt dây là cuộc gọi chết vì kênh của nó được dành riêng. Các gói độc lập dùng chung mọi liên kết và đi vòng qua chỗ đứt — sống sót khi liên kết hỏng là một trong hai nhu cầu thiết kế (cái kia: dùng chung máy tính đắt tiền).</i></p></li><li><p><b>a)</b> 14.1 ms (26.0 − 11.9)</p><p>curl -w prints moments measured from the start, not durations: TLS ended 26.0 ms after the start and began when TCP finished at 11.9 ms, so it took 14.1 ms. Lesson 0.2 is about this trap.</p><p><i>VI: curl -w in các THỜI ĐIỂM tính từ lúc bắt đầu, không phải độ dài: TLS kết thúc ở 26,0 ms và bắt đầu khi TCP xong ở 11,9 ms, nên nó mất 14,1 ms. Bài 0.2 nói về cái bẫy này.</i></p></li><li><p><b>c)</b> 6 billion people online, 74% of the world</p><p>Facts and Figures 2025: about 6 billion people (74%) online and about 2.2 billion not yet online. Every one of them reaches your software through DNS, TCP, TLS and HTTP.</p><p><i>VI: Facts and Figures 2025: khoảng 6 tỷ người (74%) dùng Internet và khoảng 2,2 tỷ người chưa. Mỗi người trong số đó tới phần mềm của bạn qua DNS, TCP, TLS và HTTP.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A ping round trip took 7–10 ms, but the whole HTTPS request took 102.7 ms. The main reason is …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một vòng ping mất 7–10 ms, nhưng cả request HTTPS mất 102,7 ms. Lý do chính là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the HTTPS request went to a different, farther server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ping packets travel on a faster cable than HTTPS ones"
+              },
+              {
+                "ma": "c",
+                "noiDung": "curl measures in a slower unit than ping measures in"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a web request needs several round trips plus server work"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Same server, same path. A web request needs DNS, a TCP handshake, a TLS handshake, the request itself and the server's work — several round trips plus computing time; a ping is one round trip.</p><p><i>VI: Cùng server, cùng đường đi. Một request web cần DNS, bắt tay TCP, bắt tay TLS, chính request và thời gian server xử lý — nhiều vòng đi-về cộng thời gian tính; ping chỉ là một vòng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Routers in the middle of the Internet are \"best effort\". This means they …</p><p style=\"opacity:.75;font-size:.92em\"><i>Router ở giữa Internet là \"best effort\" (cố hết sức). Nghĩa là chúng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "resend every lost packet until the server receives it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reserve a fixed line for every conversation in advance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "open each packet to check that the data inside is right"
+              },
+              {
+                "ma": "d",
+                "noiDung": "may drop, delay or reorder packets and will not tell you"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The middle is kept simple: it forwards and may lose packets silently. Reliability (retransmission, ordering) lives at the two ends — TCP in the kernel, and timeouts/retries in your code.</p><p><i>VI: Phần giữa được giữ đơn giản: chỉ chuyển tiếp và có thể làm mất gói trong im lặng. Độ tin cậy (gửi lại, sắp thứ tự) nằm ở hai đầu — TCP trong kernel, và timeout/thử lại trong code của bạn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Your API calls another service with fetch(url) and no timeout. What can happen?</p><p style=\"opacity:.75;font-size:.92em\"><i>API của bạn gọi dịch vụ khác bằng fetch(url) không có timeout. Điều gì có thể xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The call can hang for minutes and freeze your API"
+              },
+              {
+                "ma": "b",
+                "noiDung": "TCP returns an error at once when a packet is lost"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The router warns your code when it drops a packet"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The browser adds a two-second timeout to every call"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>\"The network is reliable\" is the first fallacy of distributed computing. A dropped packet or a server that accepted the connection and froze gives you silence, not an error — only a timeout you set limits the wait.</p><p><i>VI: \"Mạng thì tin cậy\" là ngộ nhận đầu tiên của tính toán phân tán. Gói bị rớt hoặc server nhận kết nối rồi treo cho bạn sự im lặng, không phải lỗi — chỉ timeout do bạn đặt mới giới hạn thời gian chờ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why did packet switching (instead of the telephone's reserved circuits) suit the ARPANET's goals?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao chuyển mạch gói (thay vì kênh dành riêng của điện thoại) hợp với mục tiêu của ARPANET?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Packets share links and can take any path that still works"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Packets are encrypted, so a broken link cannot read them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Packets always travel on one fixed path, so none are lost"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Packets need no addresses, so routers are not required"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A cut wire kills a telephone call because its circuit is reserved. Independent packets share every link and route around the break — surviving broken links was one of the two design needs (the other: sharing costly computers).</p><p><i>VI: Đứt dây là cuộc gọi chết vì kênh của nó được dành riêng. Các gói độc lập dùng chung mọi liên kết và đi vòng qua chỗ đứt — sống sót khi liên kết hỏng là một trong hai nhu cầu thiết kế (cái kia: dùng chung máy tính đắt tiền).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In the curl line above, how long did the TLS handshake itself take?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong dòng curl ở trên, riêng bắt tay TLS mất bao lâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "14.1 ms (26.0 − 11.9)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3.3 ms (the DNS part)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "26.0 ms (as printed)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "37.9 ms (26.0 + 11.9)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>curl -w prints moments measured from the start, not durations: TLS ended 26.0 ms after the start and began when TCP finished at 11.9 ms, so it took 14.1 ms. Lesson 0.2 is about this trap.</p><p><i>VI: curl -w in các THỜI ĐIỂM tính từ lúc bắt đầu, không phải độ dài: TLS kết thúc ở 26,0 ms và bắt đầu khi TCP xong ở 11,9 ms, nên nó mất 14,1 ms. Bài 0.2 nói về cái bẫy này.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>The ITU estimate for 2025 quoted in the lesson is about …</p><p style=\"opacity:.75;font-size:.92em\"><i>Ước tính năm 2025 của ITU mà bài học trích là khoảng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6 billion devices online, 74% of them phones"
+              },
+              {
+                "ma": "b",
+                "noiDung": "8 billion people online, 99% of the world"
+              },
+              {
+                "ma": "c",
+                "noiDung": "6 billion people online, 74% of the world"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2.2 billion people online, 26% of the world"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Facts and Figures 2025: about 6 billion people (74%) online and about 2.2 billion not yet online. Every one of them reaches your software through DNS, TCP, TLS and HTTP.</p><p><i>VI: Facts and Figures 2025: khoảng 6 tỷ người (74%) dùng Internet và khoảng 2,2 tỷ người chưa. Mỗi người trong số đó tới phần mềm của bạn qua DNS, TCP, TLS và HTTP.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a lost packet always produces a quick error.|||Tin rằng gói bị mất luôn sinh ra lỗi ngay."
+        },
+        {
+          "loi": "Reading time_appconnect as \"TLS took 26 ms\".|||Đọc time_appconnect thành \"TLS mất 26 ms\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "best effort",
+          "vi": "cố gắng hết sức, không bảo đảm",
+          "giaiThich": "Mạng chuyển gói nhưng không hứa không mất, không chậm, không đảo thứ tự."
+        },
+        {
+          "en": "packet switching",
+          "vi": "chuyển mạch gói"
+        },
+        {
+          "en": "round trip time (RTT)",
+          "vi": "thời gian đi-về"
+        }
+      ]
+    }
+  ]
+}

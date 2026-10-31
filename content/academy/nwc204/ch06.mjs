@@ -16,6 +16,7 @@
  * ⚠️ File này CHỈ chứa chương 6. Đừng sửa NWC204.mjs ở đây.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch06', {
   code: 'NWC204',
@@ -645,6 +646,7 @@ ageing_time 30000                       -> 300 giây, đúng bằng mặc địn
 </ul>
 <p>Rồi khép lại bằng cuộc đánh đổi: tranh chấp tối ưu cho trường hợp trung bình và xuống cấp khi tải nặng; truy cập có điều khiển tối ưu cho trường hợp xấu nhất và phí năng lực khi vắng. Công nghệ LAN chọn tranh chấp rồi dùng chuyển mạch để triệt tiêu luôn sự tranh chấp; công nghệ WAN thì phần lớn chọn điểm-tới-điểm và chưa từng có vấn đề đó.</p>`,
     ),
+    sauHon({ bai: 'netdev-1-3-ethernet-arp', so: '1.4', ten: ['Ethernet, MAC addresses and ARP', 'Ethernet, địa chỉ MAC và ARP'], them: ['the MAC table of a real Linux bridge read with bridge fdb, and MAC rewriting measured on both sides of a router', 'bảng MAC của một bridge Linux thật đọc bằng bridge fdb, và việc MAC bị viết lại đo ở hai phía router'] }),
   ].join('\n'),
 };
 

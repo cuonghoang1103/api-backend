@@ -1,0 +1,7 @@
+# Ch1 · 1.4 — gói ARP thứ hai là gì? chỉ bắt chiều VÀO (-Q in) — máy client
+$ ip neigh flush all
+$ ping -c 1 10.10.1.11 > /dev/null
+$ tcpdump -e -n -r /tmp/q.pcap
+reading from file /tmp/q.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+22:25:30.930735 02:00:0a:0a:01:0a > ff:ff:ff:ff:ff:ff, ethertype ARP (0x0806), length 42: Request who-has 10.10.1.11 tell 10.10.1.10, length 28
+22:25:30.930752 02:00:0a:0a:01:0b > 02:00:0a:0a:01:0a, ethertype ARP (0x0806), length 42: Reply 10.10.1.11 is-at 02:00:0a:0a:01:0b, length 28

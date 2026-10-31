@@ -1,0 +1,6 @@
+# Ch1 · 1.4 — máy client2 bị thay bằng máy mới: cùng IP 10.10.1.11, MAC mới
+ip -br link show eth0
+ip link set eth0 down
+ip link set eth0 address 02:00:0a:0a:01:bb
+ip link set eth0 up
+ip -br link show eth0

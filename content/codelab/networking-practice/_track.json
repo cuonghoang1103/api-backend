@@ -1,0 +1,73 @@
+{
+  "groupSlug": "cuongthai",
+  "slug": "networking-practice",
+  "name": "Networking for Developers — Luyện tập",
+  "language": "javascript",
+  "color": "#7c3aed",
+  "docsUrl": "https://hpbn.co/",
+  "status": "PUBLISHED",
+  "level": "BEGINNER",
+  "description": "Bộ luyện đi kèm khoá Networking for Developers (mạng máy tính cho lập trình viên, học từ số 0): mỗi bài học một bộ đề riêng từ dễ đến khó, đề tiếng Anh có bản tiếng Việt, dữ liệu lấy từ output CHẠY THẬT trong phòng lab Docker của khoá (curl -w, tcpdump, tshark -x, ip neigh, ss). Trắc nghiệm, sắp thứ tự, điền bảng để nắm khái niệm; bài khó là tự viết hàm từ gốc chạy thật trong trình duyệt — phân loại lỗi curl, tính thời gian từng chặng của một request, đếm byte UTF-8, đọc một frame Ethernet byte theo byte, mô phỏng switch học MAC, chọn socket nhận gói; Lab chương 1 mổ xẻ trọn một request của LabFlow ở hai phía router.",
+  "modules": [
+    {
+      "slug": "netdev-0-8-bat-dau-tai-day",
+      "name": "Start here 1/2 — The network in everyday words",
+      "level": "BEGINNER",
+      "description": "Luyện: Start 1 — The post-office picture, word by word · Start 2 — The six pairs everybody confuses · Start 3 — Put the history of the Internet in order · Start 4 — Real outages: which layer broke? · Start 5 — Best effort, reliable ends, and two real numbers"
+    },
+    {
+      "slug": "netdev-0-9-bat-dau-hoc-xong",
+      "name": "Start here 2/2 — Real outages and reading errors",
+      "level": "BEGINNER",
+      "description": "Luyện: Errors 1 — Read the message, name the layer · Errors 2 — An answer or silence? · Errors 3 — The reachability chain, in order · Errors 4 — What the outages teach a developer · Errors 5 — Write classifyCurlError(text)"
+    },
+    {
+      "slug": "netdev-0-1-cai-dat",
+      "name": "0.1 Your networking lab: tools and a test server",
+      "level": "BEGINNER",
+      "description": "Luyện: Setup 1 — Which tool answers this question? · Setup 2 — Read the lab map: networks and MAC addresses · Setup 3 — The safe capture recipe, in order · Setup 4 — Which route does the client use? · Setup 5 — Permissions, the hidden VM, and two connections · Setup 6 — Write lookupRoute(text, dst) from the ip route output"
+    },
+    {
+      "slug": "netdev-0-2-go-dia-chi",
+      "name": "0.2 What happens when you type a URL",
+      "level": "BEGINNER",
+      "description": "Luyện: URL 1 — The seven stages of one page load · URL 2 — Which machine does each stage, and where inside it? · URL 3 — Reading curl, round trips and reuse · URL 4 — Subtract! Stage durations from curl -w · URL 5 — Write ttfbModel(o): time to first byte in your head · URL 6 — Write stageDurations(line) from a real curl -w line"
+    },
+    {
+      "slug": "netdev-1-0-bit-byte",
+      "name": "1.1 Bits, bytes, hex and signals",
+      "level": "BEGINNER",
+      "description": "Luyện: Bytes 1 — Decimal, binary and hex of one byte · Bytes 2 — Bits per second, bytes per second · Bytes 3 — Write toHex(bytes) like xxd and tshark print them · Bytes 4 — Which bytes go on the wire? · Bytes 5 — Write utf8Length(str) without TextEncoder · Bytes 6 — Write u16be, readU16 and htonsLE"
+    },
+    {
+      "slug": "netdev-1-1-osi-tcpip",
+      "name": "1.2 OSI vs TCP/IP: the model that is actually used",
+      "level": "BEGINNER",
+      "description": "Luyện: Layers 1 — Put each protocol on its layer · Layers 2 — How deep does each box read? · Layers 3 — Order the headers, then the unwrapping · Layers 4 — Where each layer runs, and what your code controls · Layers 5 — Label every line of a real curl -v"
+    },
+    {
+      "slug": "netdev-1-2-dong-goi",
+      "name": "1.3 Encapsulation: reading one frame byte by byte",
+      "level": "BEGINNER",
+      "description": "Luyện: Encapsulation 1 — Segment, packet, frame · Encapsulation 2 — Decode the real frame by hand · Encapsulation 3 — How much of each frame is useful? · Encapsulation 4 — MTU, MSS, and the packet that is too big · Encapsulation 5 — Write segments() and frameSizes() · Encapsulation 6 — Write parseFrame(text): read a frame byte by byte"
+    },
+    {
+      "slug": "netdev-1-3-ethernet-arp",
+      "name": "1.4 Ethernet, MAC addresses and ARP",
+      "level": "BEGINNER",
+      "description": "Luyện: ARP 1 — MAC addresses and the reach of a frame · ARP 2 — Read the real tcpdump -e capture · ARP 3 — Stale caches, neighbour states and gratuitous ARP · ARP 4 — Write whoToArp(dstIp, myIp, prefixLen, gateway) · ARP 5 — Write switchSim(frames): a learning switch · ARP 6 — Write changedFields(textA, textB) for the two router-side captures"
+    },
+    {
+      "slug": "netdev-1-4-cong-socket",
+      "name": "1.5 Ports and sockets",
+      "level": "BEGINNER",
+      "description": "Luyện: Sockets 1 — Ports, ranges and the five values · Sockets 2 — Read ss -tanp on both ends · Sockets 3 — \"Works on my machine\", EADDRINUSE and docker -p · Sockets 4 — Write maxNewConnPerSec(o): the ephemeral-port ceiling · Sockets 5 — Write parseSsListen(text) from real ss -tlnp output · Sockets 6 — Write demux(seg, sockets): which socket gets this segment?"
+    },
+    {
+      "slug": "netdev-1-6-lab-giai-phau-request",
+      "name": "Lab 1 — Dissect one request of LabFlow",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 1 — Dissect one request of LabFlow"
+    }
+  ]
+}

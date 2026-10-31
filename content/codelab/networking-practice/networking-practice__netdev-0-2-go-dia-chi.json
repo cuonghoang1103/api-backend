@@ -1,0 +1,1063 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-0-2-go-dia-chi",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-0-2-go-dia-chi"
+  },
+  "exercises": [
+    {
+      "title": "URL 1 — The seven stages of one page load",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "what happens when you type a URL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>You type https://cuongthai.com/ and press Enter. Put the stages in the order they happen.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn gõ https://cuongthai.com/ rồi bấm Enter. Sắp các chặng theo thứ tự xảy ra.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each stage needs the result of the one before it.|||Mỗi chặng cần kết quả của chặng trước.",
+        "TLS runs over a TCP connection that already exists.|||TLS chạy trên một kết nối TCP đã có sẵn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 1 — The seven stages of one page load\n\nAnswer in the answer panel (no code needed).\n\n1. One page loadMột lần tải trang\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 1 — The seven stages of one page load — answer key\n\n1. One page loadMột lần tải trang\n   Answer: m6) Parse the URL: scheme https (port 443), host, path  →  m3) DNS: find the IP address of cuongthai.com  →  m1) TCP: SYN, SYN-ACK, ACK — open a connection  →  m7) TLS: agree on keys and check the certificate  →  m5) Send the HTTP request: GET / with Host: cuongthai.com  →  m4) Server work: nginx passes it to the app, maybe a database  →  m2) Download the HTML, then fetch the files it lists and render\n   You need the host before asking DNS, the address before TCP, a connection before TLS, encryption before sending the request over HTTPS, and the request before the server can work. The HTML then triggers more requests — often on the same connection.VI: Cần tên máy trước khi hỏi DNS, địa chỉ trước TCP, kết nối trước TLS, mã hoá trước khi gửi request qua HTTPS, và request trước khi server làm việc. HTML sau đó kéo theo nhiều request nữa — thường trên cùng kết nối.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>You need the host before asking DNS, the address before TCP, a connection before TLS, encryption before sending the request over HTTPS, and the request before the server can work. The HTML then triggers more requests — often on the same connection.</p><p><i>VI: Cần tên máy trước khi hỏi DNS, địa chỉ trước TCP, kết nối trước TLS, mã hoá trước khi gửi request qua HTTPS, và request trước khi server làm việc. HTML sau đó kéo theo nhiều request nữa — thường trên cùng kết nối.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>One page load</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lần tải trang</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "TCP: SYN, SYN-ACK, ACK — open a connection"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Download the HTML, then fetch the files it lists and render"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "DNS: find the IP address of cuongthai.com"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Server work: nginx passes it to the app, maybe a database"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Send the HTTP request: GET / with Host: cuongthai.com"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Parse the URL: scheme https (port 443), host, path"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "TLS: agree on keys and check the certificate"
+              }
+            ],
+            "dapAn": [
+              "m6",
+              "m3",
+              "m1",
+              "m7",
+              "m5",
+              "m4",
+              "m2"
+            ],
+            "giaiThich": "<p>You need the host before asking DNS, the address before TCP, a connection before TLS, encryption before sending the request over HTTPS, and the request before the server can work. The HTML then triggers more requests — often on the same connection.</p><p><i>VI: Cần tên máy trước khi hỏi DNS, địa chỉ trước TCP, kết nối trước TLS, mã hoá trước khi gửi request qua HTTPS, và request trước khi server làm việc. HTML sau đó kéo theo nhiều request nữa — thường trên cùng kết nối.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting TLS before TCP.|||Đặt TLS trước TCP."
+        },
+        {
+          "loi": "Forgetting that DNS comes before any connection.|||Quên rằng DNS đến trước mọi kết nối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scheme",
+          "vi": "giao thức trong URL",
+          "giaiThich": "https, http… — quyết định cổng mặc định 443/80."
+        },
+        {
+          "en": "handshake",
+          "vi": "bắt tay"
+        },
+        {
+          "en": "render",
+          "vi": "hiển thị trang"
+        }
+      ]
+    },
+    {
+      "title": "URL 2 — Which machine does each stage, and where inside it?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "request stages"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>When a request is slow or broken, the first question is always: which stage, on which machine? Fill in the table from the lesson.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi request chậm hay hỏng, câu hỏi đầu tiên luôn là: chặng nào, trên máy nào? Điền bảng theo bài học.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two stages happen only on your laptop; one only on the server side.|||Hai chặng chỉ xảy ra trên laptop; một chặng chỉ ở phía server.",
+        "Kernel = TCP/IP; library inside the app = TLS.|||Kernel = TCP/IP; thư viện trong ứng dụng = TLS."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 2 — Which machine does each stage, and where inside it?\n\nAnswer in the answer panel (no code needed).\n\n1. Who does whatAi làm gì\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 2 — Which machine does each stage, and where inside it? — answer key\n\n1. Who does whatAi làm gì\n   - r1.m: your laptop\n   - r1.w: an ordinary program (browser or curl) on a CPU core\n   - r2.m: laptop → resolver\n   - r2.w: an OS cache first, then a question over the network\n   - r3.m: laptop ⇄ server\n   - r3.w: the kernels of both machines, via the network chip\n   - r4.m: laptop ⇄ server\n   - r4.w: a crypto library inside the application, plus one round trip\n   - r5.m: the server and its database\n   - r5.w: nginx and app processes; RAM and disk of the database\n   - r6.m: your laptop\n   - r6.w: the browser's layout and JavaScript engines\n   TCP lives in the kernel of both machines — your program only asks for a connection. TLS, by contrast, is a library inside the application (OpenSSL in curl, BoringSSL in Chrome): pure CPU work plus one round trip. That is why \"TLS in the kernel\" is the tempting wrong answer.VI: TCP nằm trong kernel của cả hai máy — chương trình chỉ xin một kết nối. TLS thì ngược lại, là thư viện bên trong ứng dụng (OpenSSL trong curl, BoringSSL trong Chrome): thuần CPU cộng một vòng đi-về. Vì thế \"TLS trong kernel\" là đáp án sai dễ chọn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>TCP lives in the kernel of both machines — your program only asks for a connection. TLS, by contrast, is a library inside the application (OpenSSL in curl, BoringSSL in Chrome): pure CPU work plus one round trip. That is why \"TLS in the kernel\" is the tempting wrong answer.</p><p><i>VI: TCP nằm trong kernel của cả hai máy — chương trình chỉ xin một kết nối. TLS thì ngược lại, là thư viện bên trong ứng dụng (OpenSSL trong curl, BoringSSL trong Chrome): thuần CPU cộng một vòng đi-về. Vì thế \"TLS trong kernel\" là đáp án sai dễ chọn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Who does what</p><p style=\"opacity:.75;font-size:.92em\"><i>Ai làm gì</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Stage"
+              },
+              {
+                "ma": "m",
+                "ten": "Which machine",
+                "luaChon": [
+                  "your laptop",
+                  "laptop → resolver",
+                  "laptop ⇄ server",
+                  "the server and its database"
+                ]
+              },
+              {
+                "ma": "w",
+                "ten": "Where inside it",
+                "luaChon": [
+                  "an ordinary program (browser or curl) on a CPU core",
+                  "an OS cache first, then a question over the network",
+                  "the kernels of both machines, via the network chip",
+                  "a crypto library inside the application, plus one round trip",
+                  "nginx and app processes; RAM and disk of the database",
+                  "the browser's layout and JavaScript engines"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Parse the URL, build the HTTP request"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "DNS"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "TCP handshake"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "TLS handshake"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Server work"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Render the page"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "your laptop",
+              "r1.w": "an ordinary program (browser or curl) on a CPU core",
+              "r2.m": "laptop → resolver",
+              "r2.w": "an OS cache first, then a question over the network",
+              "r3.m": "laptop ⇄ server",
+              "r3.w": "the kernels of both machines, via the network chip",
+              "r4.m": "laptop ⇄ server",
+              "r4.w": "a crypto library inside the application, plus one round trip",
+              "r5.m": "the server and its database",
+              "r5.w": "nginx and app processes; RAM and disk of the database",
+              "r6.m": "your laptop",
+              "r6.w": "the browser's layout and JavaScript engines"
+            },
+            "giaiThich": "<p>TCP lives in the kernel of both machines — your program only asks for a connection. TLS, by contrast, is a library inside the application (OpenSSL in curl, BoringSSL in Chrome): pure CPU work plus one round trip. That is why \"TLS in the kernel\" is the tempting wrong answer.</p><p><i>VI: TCP nằm trong kernel của cả hai máy — chương trình chỉ xin một kết nối. TLS thì ngược lại, là thư viện bên trong ứng dụng (OpenSSL trong curl, BoringSSL trong Chrome): thuần CPU cộng một vòng đi-về. Vì thế \"TLS trong kernel\" là đáp án sai dễ chọn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Saying the router does DNS — it only forwards the question.|||Nói router làm DNS — nó chỉ chuyển câu hỏi đi."
+        },
+        {
+          "loi": "Putting TLS in the kernel together with TCP.|||Đặt TLS trong kernel cùng với TCP."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "kernel",
+          "vi": "nhân hệ điều hành"
+        },
+        {
+          "en": "resolver",
+          "vi": "máy phân giải DNS"
+        },
+        {
+          "en": "user space",
+          "vi": "không gian người dùng",
+          "giaiThich": "Nơi chương trình bình thường chạy, ngoài kernel."
+        }
+      ]
+    },
+    {
+      "title": "URL 3 — Reading curl, round trips and reuse",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "keep-alive",
+        "RTT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output from the lab (lab/out/c00-internet):<pre>$ curl -s -o /dev/null -o /dev/null -w 'url=… dns=… connect=… tls=… ttfb=… total=…\\n' https://cuongthai.com/ https://cuongthai.com/about\nurl=https://cuongthai.com/ dns=0.002108 connect=0.008297 tls=0.020146 ttfb=0.041292 total=0.085199\nurl=https://cuongthai.com/about dns=0.000000 connect=0.000000 tls=0.000000 ttfb=0.046141 total=0.206101</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật trong lab (lab/out/c00-internet):<pre>$ curl -s -o /dev/null -o /dev/null -w 'url=… dns=… connect=… tls=… ttfb=… total=…\\n' https://cuongthai.com/ https://cuongthai.com/about\nurl=https://cuongthai.com/ dns=0.002108 connect=0.008297 tls=0.020146 ttfb=0.041292 total=0.085199\nurl=https://cuongthai.com/about dns=0.000000 connect=0.000000 tls=0.000000 ttfb=0.046141 total=0.206101</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A zero in curl -w for a stage means that stage did not happen for this request.|||Số 0 trong curl -w ở một chặng nghĩa là chặng đó không xảy ra với request này.",
+        "Compare stage durations with the ping RTT: about 1 RTT each for TCP and TLS 1.3.|||So độ dài các chặng với RTT của ping: TCP và TLS 1.3 mỗi cái khoảng 1 RTT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 3 — Reading curl, round trips and reuse\n\nAnswer in the answer panel (no code needed).\n\n1. For the second URL, dns, connect and tls are all 0. Why?Với URL thứ hai, dns, connect và tls đều bằng 0. Vì sao?\n2. A service creates a new HTTP client for every call to another HTTPS API. What does it pay each time?Một dịch vụ tạo HTTP client mới cho mỗi lần gọi một API HTTPS khác. Mỗi lần nó trả giá gì?\n3. ping to cuongthai.com shows about 7–10 ms. The TCP stage of the first run took 8.7 ms. That is …ping tới cuongthai.com khoảng 7–10 ms. Chặng TCP của lượt đầu mất 8,7 ms. Đó là …\n4. ALPN: server accepted h2 appears inside the TLS lines of curl -v. It means …ALPN: server accepted h2 xuất hiện trong các dòng TLS của curl -v. Nghĩa là …\n5. Distance from Asia to the US raises the round trip to about 180 ms. Which change helps a small API call the most?Khoảng cách châu Á – Mỹ đẩy vòng đi-về lên khoảng 180 ms. Thay đổi nào giúp một lệnh gọi API nhỏ nhiều nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 3 — Reading curl, round trips and reuse — answer key\n\n1. For the second URL, dns, connect and tls are all 0. Why?Với URL thứ hai, dns, connect và tls đều bằng 0. Vì sao?\n   Answer: a) curl reused the connection it already had (keep-alive)\n   Same host ⇒ curl keeps the connection open after the first response and sends the second request on it: no DNS, no TCP, no TLS. In code this is connection pooling.VI: Cùng máy chủ ⇒ curl giữ kết nối sau phản hồi đầu và gửi request thứ hai trên đó: không DNS, không TCP, không TLS. Trong code, đây là connection pooling.\n\n2. A service creates a new HTTP client for every call to another HTTPS API. What does it pay each time?Một dịch vụ tạo HTTP client mới cho mỗi lần gọi một API HTTPS khác. Mỗi lần nó trả giá gì?\n   Answer: a) A TCP handshake and a TLS handshake on every request\n   A new client has no open connection to reuse, so every call pays the setup again — at least 2 round trips before the request. Reusing one client (one pool) removes them.VI: Client mới không có kết nối mở để dùng lại, nên mỗi lần gọi lại trả chi phí dựng kết nối — ít nhất 2 vòng đi-về trước khi gửi request. Dùng lại một client (một pool) bỏ được chúng.\n\n3. ping to cuongthai.com shows about 7–10 ms. The TCP stage of the first run took 8.7 ms. That is …ping tới cuongthai.com khoảng 7–10 ms. Chặng TCP của lượt đầu mất 8,7 ms. Đó là …\n   Answer: b) about one round trip: SYN out, SYN-ACK back\n   curl counts the connection as open when the SYN-ACK arrives; the third packet (ACK) travels together with the request. So the TCP handshake costs one RTT.VI: curl coi kết nối đã mở khi SYN-ACK về; gói thứ ba (ACK) đi cùng request. Nên bắt tay TCP tốn một RTT.\n\n4. ALPN: server accepted h2 appears inside the TLS lines of curl -v. It means …ALPN: server accepted h2 xuất hiện trong các dòng TLS của curl -v. Nghĩa là …\n   Answer: b) client and server agreed to speak HTTP/2 on this connection\n   ALPN is the part of the TLS handshake where both sides choose the HTTP version — so no extra round trip is needed to pick it.VI: ALPN là phần của bắt tay TLS nơi hai bên chọn phiên bản HTTP — nên không tốn thêm vòng đi-về để chọn.\n\n5. Distance from Asia to the US raises the round trip to about 180 ms. Which change helps a small API call the most?Khoảng cách châu Á – Mỹ đẩy vòng đi-về lên khoảng 180 ms. Thay đổi nào giúp một lệnh gọi API nhỏ nhiều nhất?\n   Answer: d) Reuse connections, or serve it from a nearby CDN\n   A small call is limited by round trips, not bandwidth or CPU. Fewer round trips (reuse, TLS resumption, HTTP/3) or shorter ones (a nearby CDN) are the only real fixes. Light in fibre covers about 200 km per ms.VI: Lệnh gọi nhỏ bị giới hạn bởi số vòng đi-về, không phải băng thông hay CPU. Ít vòng hơn (dùng lại kết nối, TLS resumption, HTTP/3) hoặc vòng ngắn hơn (CDN gần) mới là cách sửa thật. Ánh sáng trong cáp quang đi khoảng 200 km mỗi ms.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> curl reused the connection it already had (keep-alive)</p><p>Same host ⇒ curl keeps the connection open after the first response and sends the second request on it: no DNS, no TCP, no TLS. In code this is connection pooling.</p><p><i>VI: Cùng máy chủ ⇒ curl giữ kết nối sau phản hồi đầu và gửi request thứ hai trên đó: không DNS, không TCP, không TLS. Trong code, đây là connection pooling.</i></p></li><li><p><b>a)</b> A TCP handshake and a TLS handshake on every request</p><p>A new client has no open connection to reuse, so every call pays the setup again — at least 2 round trips before the request. Reusing one client (one pool) removes them.</p><p><i>VI: Client mới không có kết nối mở để dùng lại, nên mỗi lần gọi lại trả chi phí dựng kết nối — ít nhất 2 vòng đi-về trước khi gửi request. Dùng lại một client (một pool) bỏ được chúng.</i></p></li><li><p><b>b)</b> about one round trip: SYN out, SYN-ACK back</p><p>curl counts the connection as open when the SYN-ACK arrives; the third packet (ACK) travels together with the request. So the TCP handshake costs one RTT.</p><p><i>VI: curl coi kết nối đã mở khi SYN-ACK về; gói thứ ba (ACK) đi cùng request. Nên bắt tay TCP tốn một RTT.</i></p></li><li><p><b>b)</b> client and server agreed to speak HTTP/2 on this connection</p><p>ALPN is the part of the TLS handshake where both sides choose the HTTP version — so no extra round trip is needed to pick it.</p><p><i>VI: ALPN là phần của bắt tay TLS nơi hai bên chọn phiên bản HTTP — nên không tốn thêm vòng đi-về để chọn.</i></p></li><li><p><b>d)</b> Reuse connections, or serve it from a nearby CDN</p><p>A small call is limited by round trips, not bandwidth or CPU. Fewer round trips (reuse, TLS resumption, HTTP/3) or shorter ones (a nearby CDN) are the only real fixes. Light in fibre covers about 200 km per ms.</p><p><i>VI: Lệnh gọi nhỏ bị giới hạn bởi số vòng đi-về, không phải băng thông hay CPU. Ít vòng hơn (dùng lại kết nối, TLS resumption, HTTP/3) hoặc vòng ngắn hơn (CDN gần) mới là cách sửa thật. Ánh sáng trong cáp quang đi khoảng 200 km mỗi ms.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>For the second URL, dns, connect and tls are all 0. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với URL thứ hai, dns, connect và tls đều bằng 0. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl reused the connection it already had (keep-alive)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the second page was served from the browser's cache"
+              },
+              {
+                "ma": "c",
+                "noiDung": "curl skipped DNS because /about is on another server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the measurement failed and curl printed zeros instead"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Same host ⇒ curl keeps the connection open after the first response and sends the second request on it: no DNS, no TCP, no TLS. In code this is connection pooling.</p><p><i>VI: Cùng máy chủ ⇒ curl giữ kết nối sau phản hồi đầu và gửi request thứ hai trên đó: không DNS, không TCP, không TLS. Trong code, đây là connection pooling.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A service creates a new HTTP client for every call to another HTTPS API. What does it pay each time?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một dịch vụ tạo HTTP client mới cho mỗi lần gọi một API HTTPS khác. Mỗi lần nó trả giá gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A TCP handshake and a TLS handshake on every request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only one extra DNS lookup, because names are not cached"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Nothing — the operating system pools connections itself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A slower download, because bandwidth is shared per client"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A new client has no open connection to reuse, so every call pays the setup again — at least 2 round trips before the request. Reusing one client (one pool) removes them.</p><p><i>VI: Client mới không có kết nối mở để dùng lại, nên mỗi lần gọi lại trả chi phí dựng kết nối — ít nhất 2 vòng đi-về trước khi gửi request. Dùng lại một client (một pool) bỏ được chúng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>ping to cuongthai.com shows about 7–10 ms. The TCP stage of the first run took 8.7 ms. That is …</p><p style=\"opacity:.75;font-size:.92em\"><i>ping tới cuongthai.com khoảng 7–10 ms. Chặng TCP của lượt đầu mất 8,7 ms. Đó là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "unrelated: TCP time depends on the page size"
+              },
+              {
+                "ma": "b",
+                "noiDung": "about one round trip: SYN out, SYN-ACK back"
+              },
+              {
+                "ma": "c",
+                "noiDung": "about half a round trip: only the SYN is timed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "about three round trips: SYN, SYN-ACK and ACK"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>curl counts the connection as open when the SYN-ACK arrives; the third packet (ACK) travels together with the request. So the TCP handshake costs one RTT.</p><p><i>VI: curl coi kết nối đã mở khi SYN-ACK về; gói thứ ba (ACK) đi cùng request. Nên bắt tay TCP tốn một RTT.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>ALPN: server accepted h2 appears inside the TLS lines of curl -v. It means …</p><p style=\"opacity:.75;font-size:.92em\"><i>ALPN: server accepted h2 xuất hiện trong các dòng TLS của curl -v. Nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the server will compress the page with the h2 method"
+              },
+              {
+                "ma": "b",
+                "noiDung": "client and server agreed to speak HTTP/2 on this connection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the server accepted a second TCP connection from curl"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the certificate is valid for two different host names"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>ALPN is the part of the TLS handshake where both sides choose the HTTP version — so no extra round trip is needed to pick it.</p><p><i>VI: ALPN là phần của bắt tay TLS nơi hai bên chọn phiên bản HTTP — nên không tốn thêm vòng đi-về để chọn.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Distance from Asia to the US raises the round trip to about 180 ms. Which change helps a small API call the most?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoảng cách châu Á – Mỹ đẩy vòng đi-về lên khoảng 180 ms. Thay đổi nào giúp một lệnh gọi API nhỏ nhiều nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Compress the request headers with gzip first"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Upgrade the user's plan from 100 to 300 Mbps"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Buy a server with a faster CPU and more RAM"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reuse connections, or serve it from a nearby CDN"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A small call is limited by round trips, not bandwidth or CPU. Fewer round trips (reuse, TLS resumption, HTTP/3) or shorter ones (a nearby CDN) are the only real fixes. Light in fibre covers about 200 km per ms.</p><p><i>VI: Lệnh gọi nhỏ bị giới hạn bởi số vòng đi-về, không phải băng thông hay CPU. Ít vòng hơn (dùng lại kết nối, TLS resumption, HTTP/3) hoặc vòng ngắn hơn (CDN gần) mới là cách sửa thật. Ánh sáng trong cáp quang đi khoảng 200 km mỗi ms.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Fixing latency with bandwidth or CPU.|||Chữa độ trễ bằng băng thông hay CPU."
+        },
+        {
+          "loi": "Creating a new HTTP client or database connection for every call.|||Tạo HTTP client hay kết nối cơ sở dữ liệu mới cho mỗi lần gọi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "keep-alive",
+          "vi": "giữ kết nối",
+          "giaiThich": "Kết nối không đóng sau phản hồi, request sau dùng lại."
+        },
+        {
+          "en": "connection pooling",
+          "vi": "bể kết nối",
+          "giaiThich": "Giữ sẵn vài kết nối mở và dùng lại."
+        },
+        {
+          "en": "ALPN",
+          "vi": "chọn giao thức trong bắt tay TLS"
+        }
+      ]
+    },
+    {
+      "title": "URL 4 — Subtract! Stage durations from curl -w",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "curl -w",
+        "stage durations"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>curl -w prints <b>moments measured from the start</b>, not durations. Turn these real lines into the duration of each stage, in milliseconds rounded to 0.1. The lesson did the first cuongthai.com run for you; here are the third run, a site far away, and a run inside the lab (plain HTTP: tls=0 means there was no TLS stage).<pre>dns=0.002481 connect=0.008675 tls=0.047172 ttfb=0.067011 total=0.115606\ndns=0.045943 connect=0.073069 tls=0.132290 ttfb=0.186303 total=0.186428 ip=172.66.147.243\ndns=0.000010 connect=0.000369 tls=0.000000 ttfb=0.001612 total=0.001637</pre></p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>curl -w in các <b>thời điểm tính từ lúc bắt đầu</b>, không phải độ dài. Đổi các dòng thật này thành độ dài từng chặng, đơn vị mili giây làm tròn 0,1. Bài học đã làm lượt cuongthai.com đầu tiên; đây là lượt thứ ba, một trang ở xa, và một lượt trong lab (HTTP thường: tls=0 nghĩa là không có chặng TLS).<pre>dns=0.002481 connect=0.008675 tls=0.047172 ttfb=0.067011 total=0.115606\ndns=0.045943 connect=0.073069 tls=0.132290 ttfb=0.186303 total=0.186428 ip=172.66.147.243\ndns=0.000010 connect=0.000369 tls=0.000000 ttfb=0.001612 total=0.001637</pre></p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Multiply seconds by 1000 to get milliseconds: 0.008675 s = 8.675 ms.|||Nhân giây với 1000 để ra mili giây: 0,008675 s = 8,675 ms.",
+        "Each stage = this moment − the previous moment. When tls is 0, the previous moment for the server stage is connect.|||Mỗi chặng = thời điểm này − thời điểm trước. Khi tls bằng 0, thời điểm trước của chặng server là connect."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 4 — Subtract! Stage durations from curl -w\n\nAnswer in the answer panel (no code needed).\n\n1. Durations in msĐộ dài (ms)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# URL 4 — Subtract! Stage durations from curl -w — answer key\n\n1. Durations in msĐộ dài (ms)\n   - r1.d: 2.5 / 2,5\n   - r1.c: 6.2 / 6,2\n   - r1.t: 38.5 / 38,5\n   - r1.s: 19.8 / 19,8\n   - r1.b: 48.6 / 48,6\n   - r2.d: 45.9 / 45,9\n   - r2.c: 27.1 / 27,1\n   - r2.t: 59.2 / 59,2\n   - r2.s: 54.0 / 54 / 54,0\n   - r2.b: 0.1 / 0,1\n   - r3.d: 0.0 / 0 / 0,0\n   - r3.c: 0.4 / 0,4\n   - r3.t: 0.0 / 0 / 0,0\n   - r3.s: 1.2 / 1,2\n   - r3.b: 0.0 / 0 / 0,0\n   DNS = dns; TCP = connect − dns; TLS = tls − connect; request + server = ttfb − tls; download = total − ttfb. For the lab line there is no TLS, so the server stage starts at connect: ttfb − connect, not ttfb − 0. Run 3 of cuongthai.com is interesting: TLS took 38.5 ms, much more than in run 1 (14.1 ms) — networks are noisy, so always measure more than once.VI: DNS = dns; TCP = connect − dns; TLS = tls − connect; request + server = ttfb − tls; tải về = total − ttfb. Dòng trong lab không có TLS nên chặng server bắt đầu từ connect: ttfb − connect, không phải ttfb − 0. Lượt 3 của cuongthai.com đáng chú ý: TLS mất 38,5 ms, nhiều hơn hẳn lượt 1 (14,1 ms) — mạng luôn nhiễu, nên luôn đo nhiều lần.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>DNS = dns; TCP = connect − dns; TLS = tls − connect; request + server = ttfb − tls; download = total − ttfb. For the lab line there is no TLS, so the server stage starts at connect: ttfb − connect, not ttfb − 0. Run 3 of cuongthai.com is interesting: TLS took 38.5 ms, much more than in run 1 (14.1 ms) — networks are noisy, so always measure more than once.</p><p><i>VI: DNS = dns; TCP = connect − dns; TLS = tls − connect; request + server = ttfb − tls; tải về = total − ttfb. Dòng trong lab không có TLS nên chặng server bắt đầu từ connect: ttfb − connect, không phải ttfb − 0. Lượt 3 của cuongthai.com đáng chú ý: TLS mất 38,5 ms, nhiều hơn hẳn lượt 1 (14,1 ms) — mạng luôn nhiễu, nên luôn đo nhiều lần.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Durations in ms</p><p style=\"opacity:.75;font-size:.92em\"><i>Độ dài (ms)</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Line"
+              },
+              {
+                "ma": "d",
+                "ten": "DNS (ms)"
+              },
+              {
+                "ma": "c",
+                "ten": "TCP (ms)"
+              },
+              {
+                "ma": "t",
+                "ten": "TLS (ms)"
+              },
+              {
+                "ma": "s",
+                "ten": "Request + server (ms)"
+              },
+              {
+                "ma": "b",
+                "ten": "Download (ms)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "cuongthai.com, run 3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "example.com"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "lab, http://10.10.2.10/api/hello, run 2"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.d": [
+                "2.5",
+                "2,5"
+              ],
+              "r1.c": [
+                "6.2",
+                "6,2"
+              ],
+              "r1.t": [
+                "38.5",
+                "38,5"
+              ],
+              "r1.s": [
+                "19.8",
+                "19,8"
+              ],
+              "r1.b": [
+                "48.6",
+                "48,6"
+              ],
+              "r2.d": [
+                "45.9",
+                "45,9"
+              ],
+              "r2.c": [
+                "27.1",
+                "27,1"
+              ],
+              "r2.t": [
+                "59.2",
+                "59,2"
+              ],
+              "r2.s": [
+                "54.0",
+                "54",
+                "54,0"
+              ],
+              "r2.b": [
+                "0.1",
+                "0,1"
+              ],
+              "r3.d": [
+                "0.0",
+                "0",
+                "0,0"
+              ],
+              "r3.c": [
+                "0.4",
+                "0,4"
+              ],
+              "r3.t": [
+                "0.0",
+                "0",
+                "0,0"
+              ],
+              "r3.s": [
+                "1.2",
+                "1,2"
+              ],
+              "r3.b": [
+                "0.0",
+                "0",
+                "0,0"
+              ]
+            },
+            "giaiThich": "<p>DNS = dns; TCP = connect − dns; TLS = tls − connect; request + server = ttfb − tls; download = total − ttfb. For the lab line there is no TLS, so the server stage starts at connect: ttfb − connect, not ttfb − 0. Run 3 of cuongthai.com is interesting: TLS took 38.5 ms, much more than in run 1 (14.1 ms) — networks are noisy, so always measure more than once.</p><p><i>VI: DNS = dns; TCP = connect − dns; TLS = tls − connect; request + server = ttfb − tls; tải về = total − ttfb. Dòng trong lab không có TLS nên chặng server bắt đầu từ connect: ttfb − connect, không phải ttfb − 0. Lượt 3 của cuongthai.com đáng chú ý: TLS mất 38,5 ms, nhiều hơn hẳn lượt 1 (14,1 ms) — mạng luôn nhiễu, nên luôn đo nhiều lần.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading tls=0.047172 as \"TLS took 47 ms\".|||Đọc tls=0.047172 thành \"TLS mất 47 ms\"."
+        },
+        {
+          "loi": "For plain HTTP, computing ttfb − tls = ttfb − 0 and giving the TCP time to the server.|||Với HTTP thường, tính ttfb − tls = ttfb − 0 rồi đổ thời gian TCP cho server."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cumulative",
+          "vi": "cộng dồn"
+        },
+        {
+          "en": "TTFB",
+          "vi": "thời gian tới byte đầu tiên"
+        },
+        {
+          "en": "time_appconnect",
+          "vi": "mốc TLS xong",
+          "giaiThich": "Thời điểm (tính từ đầu) bắt tay TLS hoàn tất; 0 khi không có TLS."
+        }
+      ]
+    },
+    {
+      "title": "URL 5 — Write ttfbModel(o): time to first byte in your head",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "latency model",
+        "keep-alive"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>The lesson gives a rough model you can use in your head:</p><p><b>time to first byte ≈ DNS + 1 RTT (TCP) + 1 RTT (TLS 1.3) + 1 RTT + server time</b></p>\n<p>Write <code>ttfbModel(o)</code> with <code>o = { rttMs, dnsMs, serverMs, reused, https }</code>:</p>\n<ul>\n<li>A new connection: <code>dnsMs + rttMs + rttMs + rttMs + serverMs</code> — but for plain HTTP (<code>https: false</code>) there is no TLS round trip.</li>\n<li>A reused connection (<code>reused: true</code>): DNS, TCP and TLS are skipped; only <code>rttMs + serverMs</code> remains.</li>\n<li><code>https</code> may be missing: then it is <code>true</code>.</li>\n<li>Return milliseconds rounded to 0.1 (<code>Math.round(x * 10) / 10</code>).</li>\n</ul>\n<p>Check it against reality: with the cuongthai.com numbers (RTT ≈ 8 ms, DNS 3.3 ms, server 43.5 ms) the model gives about 70.8 ms; curl measured ttfb = 69.5 ms in the first run.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài học cho một mô hình thô để nhẩm trong đầu:</p><p><b>thời gian tới byte đầu ≈ DNS + 1 RTT (TCP) + 1 RTT (TLS 1.3) + 1 RTT + thời gian server</b></p>\n<p>Viết <code>ttfbModel(o)</code> với <code>o = { rttMs, dnsMs, serverMs, reused, https }</code>:</p>\n<ul>\n<li>Kết nối mới: <code>dnsMs + rttMs + rttMs + rttMs + serverMs</code> — nhưng với HTTP thường (<code>https: false</code>) không có vòng TLS.</li>\n<li>Kết nối dùng lại (<code>reused: true</code>): bỏ DNS, TCP và TLS; chỉ còn <code>rttMs + serverMs</code>.</li>\n<li><code>https</code> có thể vắng: khi đó coi là <code>true</code>.</li>\n<li>Trả mili giây làm tròn 0,1 (<code>Math.round(x * 10) / 10</code>).</li>\n</ul>\n<p>Đối chiếu với thực tế: với số của cuongthai.com (RTT ≈ 8 ms, DNS 3,3 ms, server 43,5 ms) mô hình cho khoảng 70,8 ms; curl đo được ttfb = 69,5 ms ở lượt đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "o — { rttMs, dnsMs, serverMs, reused, https? } (numbers in ms, booleans).|||o — { rttMs, dnsMs, serverMs, reused, https? } (số tính bằng ms, boolean).",
+      "outputSpec": "A number of milliseconds, rounded to 0.1.|||Một số mili giây, làm tròn 0,1.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ttfbModel({\"rttMs\":8,\"dnsMs\":3.3,\"serverMs\":43.5,\"reused\":false})",
+          "output": "70.8",
+          "explanation": "3.3 + 8 + 8 + 8 + 43.5 = 70.8 ms — close to the 69.5 ms curl measured.|||3,3 + 8 + 8 + 8 + 43,5 = 70,8 ms — gần 69,5 ms curl đo được."
+        }
+      ],
+      "hintsJson": [
+        "Handle reused first: it is the shortest branch.|||Xử lý reused trước: đó là nhánh ngắn nhất.",
+        "o.https !== false is true both when https is true and when it is missing.|||o.https !== false là true cả khi https là true lẫn khi nó vắng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * o = { rttMs, dnsMs, serverMs, reused, https }  (https missing ⇒ true)\n * Return the estimated time to first byte in ms, rounded to 0.1.\n */\nfunction ttfbModel(o) {\n  // Write your solution here\n  return o.dnsMs + o.rttMs + o.serverMs;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ttfbModel(o) {\n  var https = o.https !== false;            // HTTPS unless told otherwise\n  var t;\n  if (o.reused) {\n    t = o.rttMs + o.serverMs;               // the connection is already open: just the request round trip\n  } else {\n    t = o.dnsMs + o.rttMs                   // DNS, then the TCP handshake (1 RTT)\n      + (https ? o.rttMs : 0)               // TLS 1.3 handshake (1 RTT), only for HTTPS\n      + o.rttMs + o.serverMs;               // the request itself (1 RTT) and the server's work\n  }\n  return Math.round(t * 10) / 10;           // 0.1 ms, avoids 70.80000000000001\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each handshake is a question and an answer, so each costs one round trip; the request is one more. Distance multiplies every one of them, which is why with an 8 ms RTT the setup is about 24 ms but with 180 ms it is more than half a second before the server even starts. Reuse removes three of the four terms — the cheapest speed-up you have.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi lần bắt tay là một câu hỏi và một câu trả lời nên tốn một vòng đi-về; request là thêm một vòng. Khoảng cách nhân lên từng vòng, vì thế với RTT 8 ms phần dựng kết nối chỉ khoảng 24 ms nhưng với 180 ms thì đã hơn nửa giây trước khi server bắt đầu làm. Dùng lại kết nối bỏ được ba trong bốn số hạng — cách tăng tốc rẻ nhất bạn có.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: ttfbModel({\"rttMs\":8,\"dnsMs\":3.3,\"serverMs\":43.5,\"reused\":false})",
+              "vi": "Ca 1"
+            },
+            "goi": "ttfbModel({\"rttMs\":8,\"dnsMs\":3.3,\"serverMs\":43.5,\"reused\":false})",
+            "mongDoi": 70.8
+          },
+          {
+            "moTa": {
+              "en": "Case 2: ttfbModel({\"rttMs\":8,\"dnsMs\":3.3,\"serverMs\":43.5,\"reused\":true})",
+              "vi": "Ca 2"
+            },
+            "goi": "ttfbModel({\"rttMs\":8,\"dnsMs\":3.3,\"serverMs\":43.5,\"reused\":true})",
+            "mongDoi": 51.5
+          },
+          {
+            "moTa": {
+              "en": "Case 3: ttfbModel({\"rttMs\":180,\"dnsMs\":45.9,\"serverMs\":43.5,\"reused\":false,\"https\":true})",
+              "vi": "Ca 3"
+            },
+            "goi": "ttfbModel({\"rttMs\":180,\"dnsMs\":45.9,\"serverMs\":43.5,\"reused\":false,\"https\":true})",
+            "mongDoi": 629.4
+          },
+          {
+            "moTa": {
+              "en": "Case 4: ttfbModel({\"rttMs\":0.3,\"dnsMs\":0,\"serverMs\":1.1,\"reused\":false,\"https\":false})",
+              "vi": "Ca 4"
+            },
+            "goi": "ttfbModel({\"rttMs\":0.3,\"dnsMs\":0,\"serverMs\":1.1,\"reused\":false,\"https\":false})",
+            "mongDoi": 1.7
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ttfbModel({\"rttMs\":27.1,\"dnsMs\":45.9,\"serverMs\":54,\"reused\":false})",
+            "mongDoi": 181.2,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ttfbModel({\"rttMs\":250,\"dnsMs\":0,\"serverMs\":20,\"reused\":true,\"https\":false})",
+            "mongDoi": 270,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "ttfbModel({\"rttMs\":0.1,\"dnsMs\":0.2,\"serverMs\":0.3,\"reused\":false})",
+            "mongDoi": 0.8,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "ttfbModel({\"rttMs\":150,\"dnsMs\":12.5,\"serverMs\":300,\"reused\":false,\"https\":false})",
+            "mongDoi": 612.5,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing if (!o.https) — a missing https then counts as plain HTTP.|||Viết if (!o.https) — https vắng khi đó bị coi là HTTP thường."
+        },
+        {
+          "loi": "Keeping DNS for a reused connection: the address is already known.|||Vẫn tính DNS cho kết nối dùng lại: địa chỉ đã biết rồi."
+        },
+        {
+          "loi": "Not rounding: 3.3 + 24 + 43.5 is 70.80000000000001 in JavaScript.|||Không làm tròn: 3.3 + 24 + 43.5 trong JavaScript là 70.80000000000001."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RTT",
+          "vi": "thời gian đi-về"
+        },
+        {
+          "en": "TTFB",
+          "vi": "thời gian tới byte đầu tiên"
+        },
+        {
+          "en": "model",
+          "vi": "mô hình ước lượng",
+          "giaiThich": "Công thức gần đúng để nhẩm, không phải số đo."
+        }
+      ]
+    },
+    {
+      "title": "URL 6 — Write stageDurations(line) from a real curl -w line",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "curl -w",
+        "parsing",
+        "floating point"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Dashboards often show <code>time_appconnect</code> as \"TLS time\" — and optimise the wrong stage. Write <code>stageDurations(line)</code> that takes one line printed by</p><pre>curl -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\\n'</pre><p>and returns the <b>duration</b> of each stage in milliseconds, rounded to 0.1: <code>{ dns, tcp, tls, server, download }</code>.</p>\n<ul>\n<li>Every value in the line is a moment in seconds measured from the start: <code>dns</code> = DNS done, <code>connect</code> = TCP connected, <code>tls</code> = TLS done, <code>ttfb</code> = first byte arrived, <code>total</code> = everything arrived.</li>\n<li><code>tls=0.000000</code> means there was no TLS stage (plain HTTP, or a reused connection): then <code>tls</code> duration is 0 and the server stage starts at <code>connect</code>.</li>\n<li>A reused connection prints <code>dns</code>, <code>connect</code> and <code>tls</code> as 0: the server stage then starts at 0.</li>\n<li>The line may contain other <code>key=value</code> words (<code>url=https://…</code> at the start, <code>ip=…</code> at the end): ignore them.</li>\n</ul>\n<p>Every case — visible and hidden — is a real line from the lab (lab/out/c00-internet and c00-url-lab): cuongthai.com, example.com, a reused connection, and plain HTTP inside the lab. (The first lab run, total − ttfb = exactly 50 µs, is left out: it sits right on a rounding boundary.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dashboard hay hiện <code>time_appconnect</code> là \"thời gian TLS\" — rồi tối ưu nhầm chặng. Viết <code>stageDurations(line)</code> nhận một dòng do lệnh sau in ra</p><pre>curl -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\\n'</pre><p>và trả <b>độ dài</b> của từng chặng tính bằng mili giây, làm tròn 0,1: <code>{ dns, tcp, tls, server, download }</code>.</p>\n<ul>\n<li>Mỗi giá trị trong dòng là một thời điểm (giây) tính từ lúc bắt đầu: <code>dns</code> = xong DNS, <code>connect</code> = đã kết nối TCP, <code>tls</code> = xong TLS, <code>ttfb</code> = byte đầu tới, <code>total</code> = tới hết.</li>\n<li><code>tls=0.000000</code> nghĩa là không có chặng TLS (HTTP thường, hoặc kết nối dùng lại): khi đó độ dài <code>tls</code> là 0 và chặng server bắt đầu từ <code>connect</code>.</li>\n<li>Kết nối dùng lại in <code>dns</code>, <code>connect</code> và <code>tls</code> bằng 0: chặng server khi đó bắt đầu từ 0.</li>\n<li>Dòng có thể chứa các từ <code>key=value</code> khác (<code>url=https://…</code> ở đầu, <code>ip=…</code> ở cuối): bỏ qua chúng.</li>\n</ul>\n<p>Mọi ca — hiện và ẩn — đều là dòng thật trong lab (lab/out/c00-internet và c00-url-lab): cuongthai.com, example.com, một kết nối dùng lại, và HTTP thường trong lab. (Lượt lab đầu tiên, total − ttfb = đúng 50 µs, được bỏ ra vì nằm ngay ranh giới làm tròn.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "line — one curl -w line (string).|||line — một dòng curl -w (chuỗi).",
+      "outputSpec": "{ dns, tcp, tls, server, download } — numbers of milliseconds rounded to 0.1.|||{ dns, tcp, tls, server, download } — số mili giây làm tròn 0,1.",
+      "constraints": "Values have 6 decimals (microseconds). No value is negative.|||Giá trị có 6 chữ số thập phân (micro giây). Không có giá trị âm.",
+      "examplesJson": [
+        {
+          "input": "stageDurations(\"dns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738\")",
+          "output": "{\"dns\":3.3,\"tcp\":8.7,\"tls\":14.1,\"server\":43.5,\"download\":33.2}",
+          "explanation": "The first real run: DNS 3.3, TCP 8.7, TLS 14.1, server 43.5, download 33.2 ms — the table of lesson 0.2.|||Lượt thật đầu tiên: DNS 3,3, TCP 8,7, TLS 14,1, server 43,5, tải về 33,2 ms — đúng bảng của bài 0.2."
+        }
+      ],
+      "hintsJson": [
+        "Parse first: split on spaces, then split each word at the first \"=\" (indexOf, slice). Store the strings in an object.|||Tách trước: tách theo khoảng trắng, rồi tách mỗi từ ở dấu \"=\" đầu tiên (indexOf, slice). Lưu chuỗi vào một object.",
+        "Work in whole microseconds: Math.round(Number(s) * 1e6). 11939 − 3260 = 8679 µs is exact; 0.011939 − 0.003260 in floating point is not.|||Làm việc bằng micro giây nguyên: Math.round(Number(s) * 1e6). 11939 − 3260 = 8679 µs là chính xác; 0.011939 − 0.003260 với số thực thì không.",
+        "Decide where TLS ends: tls > 0 ? tls : connect. Then every stage is \"this moment − the moment before\".|||Xác định TLS kết thúc ở đâu: tls > 0 ? tls : connect. Rồi mỗi chặng là \"thời điểm này − thời điểm trước\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * line: \"dns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738\"\n * Return { dns, tcp, tls, server, download } — DURATIONS in ms, rounded to 0.1.\n */\nfunction stageDurations(line) {\n  // Write your solution here\n  return { dns: 0, tcp: 0, tls: 0, server: 0, download: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction stageDurations(line) {\n  // 1. \"dns=0.003260 connect=0.011939 …\" ⇒ { dns: '0.003260', connect: '0.011939', … }.\n  //    Split each pair at the FIRST \"=\" only (url=https://… contains more text), and ignore keys we do not need.\n  var t = {};\n  line.trim().split(/\\s+/).forEach(function (pair) {\n    var i = pair.indexOf('=');\n    if (i > 0) t[pair.slice(0, i)] = pair.slice(i + 1);\n  });\n  // 2. Seconds with 6 decimals ⇒ whole microseconds, so every subtraction is exact.\n  function us(name) { return Math.round(Number(t[name]) * 1e6); }\n  var dns = us('dns'), connect = us('connect'), tls = us('tls'), ttfb = us('ttfb'), total = us('total');\n  // 3. tls = 0 means \"no TLS stage\" (plain HTTP or a reused connection): TLS then ends when TCP ended.\n  var tlsEnd = tls > 0 ? tls : connect;\n  // 4. Microseconds ⇒ milliseconds rounded to 0.1.\n  function ms(x) { return Math.round(x / 100) / 10; }\n  return { dns: ms(dns), tcp: ms(connect - dns), tls: ms(tlsEnd - connect), server: ms(ttfb - tlsEnd), download: ms(total - ttfb) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>curl documents each variable as \"the time from the start until…\", so a stage is always the difference of two consecutive moments. The only subtle part is the missing stage: when there is no TLS, curl prints 0, not the connect time, so the \"previous moment\" of the server stage must fall back to connect. Converting to integer microseconds first keeps every subtraction exact, so rounding to 0.1 ms gives the same answer as doing it by hand.</p>",
+      "solutionExplanationHtmlVi": "<p>curl mô tả mỗi biến là \"thời gian từ lúc bắt đầu tới khi…\", nên một chặng luôn là hiệu của hai thời điểm liên tiếp. Chỗ tinh tế duy nhất là chặng vắng mặt: khi không có TLS, curl in 0 chứ không in thời điểm connect, nên \"thời điểm trước\" của chặng server phải lùi về connect. Đổi sang micro giây nguyên trước giữ mọi phép trừ chính xác, nên làm tròn 0,1 ms cho cùng kết quả như tính tay.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: stageDurations(\"dns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738\")",
+              "vi": "Ca 1"
+            },
+            "goi": "stageDurations(\"dns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738\")",
+            "mongDoi": {
+              "dns": 3.3,
+              "tcp": 8.7,
+              "tls": 14.1,
+              "server": 43.5,
+              "download": 33.2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: stageDurations(\"dns=0.000010 connect=0.000369 tls=0.000000 ttfb=0.001612 total=0.001637\")",
+              "vi": "Ca 2"
+            },
+            "goi": "stageDurations(\"dns=0.000010 connect=0.000369 tls=0.000000 ttfb=0.001612 total=0.001637\")",
+            "mongDoi": {
+              "dns": 0,
+              "tcp": 0.4,
+              "tls": 0,
+              "server": 1.2,
+              "download": 0
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 3: stageDurations(\"url=https://cuongthai.com/about dns=0.000000 connect=0.000000 tls=0.000...",
+              "vi": "Ca 3"
+            },
+            "goi": "stageDurations(\"url=https://cuongthai.com/about dns=0.000000 connect=0.000000 tls=0.000000 ttfb=0.046141 total=0.206101\")",
+            "mongDoi": {
+              "dns": 0,
+              "tcp": 0,
+              "tls": 0,
+              "server": 46.1,
+              "download": 160
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "stageDurations(\"dns=0.003020 connect=0.011069 tls=0.022489 ttfb=0.046296 total=0.102054\")",
+            "mongDoi": {
+              "dns": 3,
+              "tcp": 8,
+              "tls": 11.4,
+              "server": 23.8,
+              "download": 55.8
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "stageDurations(\"dns=0.002481 connect=0.008675 tls=0.047172 ttfb=0.067011 total=0.115606\")",
+            "mongDoi": {
+              "dns": 2.5,
+              "tcp": 6.2,
+              "tls": 38.5,
+              "server": 19.8,
+              "download": 48.6
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "stageDurations(\"url=https://cuongthai.com/ dns=0.002108 connect=0.008297 tls=0.020146 ttfb=0.041292 total=0.085199\")",
+            "mongDoi": {
+              "dns": 2.1,
+              "tcp": 6.2,
+              "tls": 11.8,
+              "server": 21.1,
+              "download": 43.9
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "stageDurations(\"dns=0.045943 connect=0.073069 tls=0.132290 ttfb=0.186303 total=0.186428 ip=172.66.147.243\")",
+            "mongDoi": {
+              "dns": 45.9,
+              "tcp": 27.1,
+              "tls": 59.2,
+              "server": 54,
+              "download": 0.1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "stageDurations(\"dns=0.000011 connect=0.000275 tls=0.000000 ttfb=0.001382 total=0.001406\")",
+            "mongDoi": {
+              "dns": 0,
+              "tcp": 0.3,
+              "tls": 0,
+              "server": 1.1,
+              "download": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the moments themselves (tls: 26.0) instead of durations (tls: 14.1).|||Trả chính các thời điểm (tls: 26.0) thay vì độ dài (tls: 14.1)."
+        },
+        {
+          "loi": "For plain HTTP computing tls − connect = 0 − 0.797 (a negative TLS stage) and ttfb − 0 for the server.|||Với HTTP thường tính tls − connect = 0 − 0,797 (chặng TLS âm) và ttfb − 0 cho server."
+        },
+        {
+          "loi": "Splitting \"url=https://cuongthai.com/about\" with split(\"=\") and a fixed index, or reading values by position: the url= and ip= words shift everything.|||Tách \"url=https://cuongthai.com/about\" bằng split(\"=\") với chỉ số cố định, hoặc đọc giá trị theo vị trí: từ url= và ip= làm lệch hết."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "time_namelookup / time_connect",
+          "vi": "mốc xong DNS / mốc kết nối TCP"
+        },
+        {
+          "en": "time_starttransfer",
+          "vi": "mốc byte đầu tiên",
+          "giaiThich": "Chính là TTFB."
+        },
+        {
+          "en": "floating point",
+          "vi": "số thực dấu phẩy động",
+          "giaiThich": "Số thực trong máy tính, phép trừ có thể lệch rất nhỏ."
+        }
+      ]
+    }
+  ]
+}

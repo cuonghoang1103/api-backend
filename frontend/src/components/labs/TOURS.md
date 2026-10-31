@@ -18,7 +18,7 @@
    lượng rồi tự "làm giúp", chờ điều kiện đạt, nghỉ thêm 25%. Cuối tour: câu hỏi hiện 2,6 s rồi tự chọn đáp án đúng, giữ tới 7 s.
 
 Thời lượng danh nghĩa một bước = 1,2 s + 62 ms × số ký tự (tiêu đề + lời), kẹp 3,5–11 s; khoảng nghỉ giữa hai hành động 120 ms; câu hỏi 7 s.
-Số đo thật: 2026-10-28 (record=1, rate=1, viewport 1280×800, lang=vi).
+Số đo thật: 2026-10-31 (record=1, rate=1, viewport 1280×800, lang=vi).
 
 ## Mục lục
 
@@ -78,6 +78,14 @@ Số đo thật: 2026-10-28 (record=1, rate=1, viewport 1280×800, lang=vi).
 | [flamegraph-traps](#flamegraph-traps) | os-lab | flamegraph | 6 | 52.0 s | 52.0 s | `/os-lab?record=1&tour=flamegraph-traps&lang=vi` |
 | [coordinated-omission-loops](#coordinated-omission-loops) | os-lab | coordinated-omission | 9 | 83.2 s | 83.2 s | `/os-lab?record=1&tour=coordinated-omission-loops&lang=vi` |
 | [osmap-compare](#osmap-compare) | os-lab | osmap | 8 | 69.1 s | 69.2 s | `/os-lab?record=1&tour=osmap-compare&lang=vi` |
+| [encap-layers](#encap-layers) | net-lab | encap | 7 | 74.8 s | 83.2 s | `/net-lab?record=1&tour=encap-layers&lang=vi` |
+| [encap-hop](#encap-hop) | net-lab | encap | 6 | 62.0 s | 71.1 s | `/net-lab?record=1&tour=encap-hop&lang=vi` |
+| [encap-mtu](#encap-mtu) | net-lab | encap | 6 | 55.3 s | 66.7 s | `/net-lab?record=1&tour=encap-mtu&lang=vi` |
+| [arp-lan](#arp-lan) | net-lab | arp | 6 | 62.2 s | 64.0 s | `/net-lab?record=1&tour=arp-lan&lang=vi` |
+| [arp-gateway](#arp-gateway) | net-lab | arp | 6 | 59.5 s | 70.7 s | `/net-lab?record=1&tour=arp-gateway&lang=vi` |
+| [socket-demux](#socket-demux) | net-lab | socket | 6 | 60.8 s | 81.7 s | `/net-lab?record=1&tour=socket-demux&lang=vi` |
+| [socket-bind](#socket-bind) | net-lab | socket | 6 | 54.9 s | 75.7 s | `/net-lab?record=1&tour=socket-bind&lang=vi` |
+| [waterfall-phases](#waterfall-phases) | net-lab | waterfall | 6 | 52.0 s | 55.1 s | `/net-lab?record=1&tour=waterfall-phases&lang=vi` |
 | [process-start](#process-start) | os-lab | process | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=process-start&lang=vi` |
 | [scheduler-start](#scheduler-start) | os-lab | scheduler | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=scheduler-start&lang=vi` |
 | [race-start](#race-start) | os-lab | race | 5 | 54.6 s | 54.7 s | `/os-lab?record=1&tour=race-start&lang=vi` |
@@ -114,6 +122,10 @@ Số đo thật: 2026-10-28 (record=1, rate=1, viewport 1280×800, lang=vi).
 | [cpu-start](#cpu-start) | cpu-lab | cpu | 5 | 57.4 s | 57.4 s | `/cpu-lab?record=1&tour=cpu-start&lang=vi` |
 | [pipeline-start](#pipeline-start) | cpu-lab | pipeline | 5 | 57.4 s | 57.4 s | `/cpu-lab?record=1&tour=pipeline-start&lang=vi` |
 | [cache-start](#cache-start) | cpu-lab | cache | 5 | 57.4 s | 57.4 s | `/cpu-lab?record=1&tour=cache-start&lang=vi` |
+| [encap-start](#encap-start) | net-lab | encap | 5 | 57.4 s | 58.7 s | `/net-lab?record=1&tour=encap-start&lang=vi` |
+| [arp-start](#arp-start) | net-lab | arp | 5 | 57.4 s | 58.0 s | `/net-lab?record=1&tour=arp-start&lang=vi` |
+| [socket-start](#socket-start) | net-lab | socket | 5 | 57.4 s | 57.4 s | `/net-lab?record=1&tour=socket-start&lang=vi` |
+| [waterfall-start](#waterfall-start) | net-lab | waterfall | 5 | 57.4 s | 57.7 s | `/net-lab?record=1&tour=waterfall-start&lang=vi` |
 
 ## bits-basics
 
@@ -1137,6 +1149,151 @@ Lật giữa Linux, macOS và Windows trên cùng các khái niệm và tìm nh�
 
 Tiếng (đo thật): 9.1 s start · 9.1 s whoosh · 22.6 s blip-exec · 22.6 s step-ok · 26.8 s whoosh · 26.8 s step-ok · 42.5 s pop · 42.9 s blip-exec · 42.9 s step-ok · 57.9 s blip-exec · 57.9 s step-ok · 72.9 s right · 77.3 s done
 
+## encap-layers
+
+**Một request, bốn lớp phong bì** / One request, four envelopes — net-lab · `encap` · preset mặc định của: http
+
+Theo request thật GET /api/hello 149 byte từ curl, đi xuống qua TCP, IP, Ethernet, qua router rồi lên tới nginx.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `en-stack` | Ba máy, mỗi máy một chồng tầng | encap.mode("http"), player.reset |  |
+| 2 | 11.9 s | 8.1 s (en 8.1 s) | 11.9 s | `en-env` | Đến lượt bạn: để TCP bọc nó | — | Bấm Bước tới khi phong bì TCP màu cam hiện ra. → player.step ×≤2 +650ms |
+| 3 | 20.0 s | 7.6 s (en 7.6 s) | 20.5 s | `en-hex` | Đến lượt bạn: đọc một byte thật | — | Bấm Bước một lần, rồi bấm byte 22 (giá trị 40). → player.seek(3) +300ms, encap.pick("ip.ttl") +500ms |
+| 4 | 27.6 s | 11.0 s (en 11.0 s) | 35.5 s | `en-field` | 0x40 = 64 = TTL | — |  |
+| 5 | 38.6 s | 11.0 s (en 11.0 s) | 46.5 s | `en-ruler` | 14 + 20 + 32 + 83 = 149 | player.seek(4), encap.pick("eth.dst") +300ms |  |
+| 6 | 49.6 s | 7.1 s (en 7.1 s) | 57.5 s | `controls` | Đến lượt bạn: theo nó tới nginx | — | Đi tới bước cuối. → player.end +400ms |
+| 7 | 56.8 s | 11.0 s (en 11.0 s) | 65.2 s | `where` | Ở đâu trong máy? | — |  |
+| ✓ | 76.2 s | 7.0 s | 76.2 s | — | Câu hỏi: Frame rời client được gửi (MAC đích) tới… | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 2.1 s tap · 17.3 s blip-fetch · 18.6 s blip-fetch · 18.6 s step-ok · 25.6 s blip-fetch · 33.5 s tap · 33.5 s step-ok · 47.4 s blip-fetch · 47.9 s tap · 62.7 s right · 62.7 s step-ok · 79.7 s right · 84.1 s done
+
+## encap-hop
+
+**Router đổi những gì?** / What does a router change? — net-lab · `encap` · preset mặc định của: hop
+
+Đoán trường nào đổi giữa hai phía router, rồi so với capture thật ở cả hai phía.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `en-stack` | Cùng một gói, bắt hai lần | encap.mode("hop") |  |
+| 2 | 11.9 s | 7.1 s (en 7.1 s) | 11.9 s | `en-hop` | Đến lượt bạn: đoán từng dòng | — | Trả lời đủ 10 dòng. → encap.predictAll +400ms |
+| 3 | 19.0 s | 8.1 s (en 8.1 s) | 27.5 s | `controls` | Đến lượt bạn: đi qua router | — | Bấm Bước tới phía bên kia. → player.step ×≤2 +650ms |
+| 4 | 27.2 s | 5.8 s (en 6.4 s) | 36.1 s | `en-reveal` | Đến lượt bạn: mở đáp án | — | Mở đáp án. → encap.reveal +400ms |
+| 5 | 33.0 s | 11.0 s (en 11.0 s) | 42.0 s | `en-hex` | 15 byte viết lại, 134 byte nguyên vẹn | encap.side("web") |  |
+| 6 | 44.0 s | 11.0 s (en 11.0 s) | 53.0 s | `en-score` | Vì sao checksum đổi | — |  |
+| ✓ | 64.1 s | 7.0 s | 64.1 s | — | Câu hỏi: Trường nào MỌI router trên đường đều đổi? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 2.1 s tap · 25.4 s tap · 25.4 s step-ok · 32.9 s blip-exec · 34.0 s whoosh · 34.0 s step-ok · 40.6 s right · 40.6 s step-ok · 67.6 s right · 72.0 s done
+
+## encap-mtu
+
+**Câu trả lời lớn: MTU, MSS và “gói” 4057 byte** / Big responses: MTU, MSS and the 4057-byte “packet” — net-lab · `encap` · preset mặc định của: mtu
+
+Cắt câu trả lời thật 3991 byte thành các đoạn, thấy vì sao 1448 chứ không phải 1460, và vì sao capture có thể thấy gói lớn hơn MTU.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `en-mtu` | 1500 − 20 − 20 − 12 = 1448 | encap.mode("mtu"), encap.mtu(1500), encap.offload(false) |  |
+| 2 | 11.9 s | 6.5 s (en 6.8 s) | 11.9 s | `en-segs` | Đến lượt bạn: gửi câu trả lời | — | Gửi hết các đoạn. → player.step ×≤3 +650ms |
+| 3 | 18.4 s | 11.0 s (en 11.0 s) | 25.7 s | `en-real` | Capture thật khớp | — |  |
+| 4 | 29.4 s | 4.6 s (en 4.8 s) | 36.7 s | `en-offload` | Đến lượt bạn: cài đặt mặc định | — | Bật offload. → encap.offload(true) +300ms |
+| 5 | 34.0 s | 7.4 s (en 7.4 s) | 43.0 s | `en-segs` | Đến lượt bạn: một gói khổng lồ? | — | Bấm Bước một lần. → player.step ×≤1 +650ms |
+| 6 | 41.3 s | 7.0 s (en 7.0 s) | 50.7 s | `en-mtu` | Đến lượt bạn: bên trong VPN | — | Chọn MTU 1420. → encap.mtu(1420) +300ms |
+| ✓ | 58.8 s | 7.0 s | 58.8 s | — | Câu hỏi: Một đoạn TCP đầy ở đây chở 1448 byte chứ không phải MSS 1460. Vì sao? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 16.6 s start · 16.6 s tap · 17.8 s tap · 17.9 s off · 33.3 s whoosh · 34.3 s whoosh · 39.5 s hit · 39.5 s step-ok · 55.2 s on · 55.2 s step-ok · 63.4 s whoosh · 63.4 s step-ok · 71.2 s tap · 71.4 s step-ok · 77.7 s right · 82.5 s done
+
+## arp-lan
+
+**ARP: hỏi cả mạng** / ARP: asking the whole network — net-lab · `arp` · preset mặc định của: lan
+
+Bộ đệm trống, một câu hỏi phát rộng, một câu trả lời gửi thẳng và công tắc học cổng — trên dòng tcpdump thật.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `arp-topo` | Ba máy, một công tắc | arp.preset("lan") |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `arp-route` | Cùng mạng ⇒ tự giao | player.seek(1) |  |
+| 3 | 22.9 s | 7.0 s (en 7.4 s) | 22.9 s | `arp-topo` | Đến lượt bạn: hỏi mọi người | — | Gửi câu hỏi ARP. → player.step ×≤1 +650ms |
+| 4 | 29.9 s | 11.0 s (en 11.0 s) | 30.1 s | `arp-tcpdump` | Capture thật | — |  |
+| 5 | 40.9 s | 8.1 s (en 8.1 s) | 41.1 s | `arp-fdb` | Đến lượt bạn: công tắc học | — | Bấm Bước tới khi câu trả lời được gửi. → player.step ×≤2 +650ms |
+| 6 | 49.0 s | 6.2 s (en 6.4 s) | 49.7 s | `arp-caches` | Đến lượt bạn: hoàn tất ping | — | Đi tới bước cuối. → player.end +400ms |
+| ✓ | 57.0 s | 7.0 s | 57.0 s | — | Câu hỏi: Câu TRẢ LỜI ARP được gửi thế nào? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 16.7 s start · 16.7 s tap · 27.8 s blip-decode · 43.0 s whoosh · 43.0 s step-ok · 61.4 s pop · 62.5 s hit · 62.5 s step-ok · 70.0 s right · 70.0 s step-ok · 75.4 s right · 79.8 s done
+
+## arp-gateway
+
+**Mạng khác? ARP hỏi router** / Another network? ARP for the router — net-lab · `arp` · preset mặc định của: gateway
+
+Ping một máy sau router và thấy ARP hỏi MAC của ROUTER, trong khi IP vẫn ghi máy web.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 10.6 s (en 11.0 s) | 0.9 s | `arp-topo` | Máy web không ở trên dây này | arp.preset("gateway") |  |
+| 2 | 11.5 s | 10.7 s (en 11.0 s) | 11.5 s | `arp-route` | Bảng định tuyến quyết định trước | player.seek(1) |  |
+| 3 | 22.3 s | 6.8 s (en 7.1 s) | 29.2 s | `arp-tcpdump` | Đến lượt bạn: who-has 10.10.1.254 | — | Gửi câu hỏi ARP. → player.step ×≤1 +650ms |
+| 4 | 29.0 s | 5.4 s (en 5.8 s) | 36.0 s | `arp-frame` | Đến lượt bạn: frame ping | — | Bấm Bước tới frame ICMP. → player.step ×≤2 +650ms |
+| 5 | 34.4 s | 11.0 s (en 11.0 s) | 41.6 s | `arp-frame` | MAC = chặng kế, IP = đích | — |  |
+| 6 | 45.4 s | 7.1 s (en 7.1 s) | 52.6 s | `arp-caches` | Đến lượt bạn: tới cuối | — | Đi tới bước cuối. → player.end +400ms |
+| ✓ | 63.6 s | 7.0 s | 63.6 s | — | Câu hỏi: Để ping 10.10.2.10 (mạng khác), client gửi câu hỏi ARP cho… | đáp án đúng: A | — |
+
+Tiếng (đo thật): 15.5 s start · 15.5 s tap · 26.1 s blip-decode · 47.9 s whoosh · 47.9 s step-ok · 53.6 s hit · 54.3 s right · 54.3 s step-ok · 71.4 s right · 71.4 s step-ok · 80.8 s right · 85.3 s done
+
+## socket-demux
+
+**Nhiều kết nối, một cổng 80** / Many connections, one port 80 — net-lab · `socket` · preset mặc định của: demux
+
+Xem nhân đưa mỗi đoạn tới đúng socket bằng bốn con số, kèm bảng ss sống — rồi tự gửi một đoạn.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `sk-ss` | Một socket nghe | sock.mode("demux") |  |
+| 2 | 11.9 s | 7.4 s (en 7.4 s) | 33.9 s | `sk-match` | Đến lượt bạn: một khách gõ cửa | — | Bấm Bước một lần. → player.step ×≤1 +650ms |
+| 3 | 19.3 s | 8.1 s (en 8.1 s) | 41.3 s | `sk-ss` | Đến lượt bạn: accept() | — | Bấm Bước tới khi nginx accept. → player.step ×≤2 +650ms |
+| 4 | 27.4 s | 14.0 s (en 14.0 s) | 49.5 s | `sk-match` | Đến lượt bạn: tab thứ hai | — | Bấm Bước tới dữ liệu từ :50230. → player.step ×≤12 +500ms |
+| 5 | 41.5 s | 5.3 s (en 5.5 s) | 62.3 s | `sk-try` | Đến lượt bạn: tự gửi một đoạn | — | Gửi dữ liệu từ 10.10.1.11:51000 tới cổng 80. → sock.probe("10.10.1.11:51000\|DATA\|80") +400ms |
+| 6 | 46.7 s | 7.1 s (en 7.0 s) | 67.5 s | `sk-try` | Đến lượt bạn: một cánh cửa đóng | — | Gửi SYN tới cổng 81. → sock.probe("10.10.1.11:51000\|SYN\|81") +400ms |
+| ✓ | 74.7 s | 7.0 s | 74.7 s | — | Câu hỏi: Hai tab của một trình duyệt nói chuyện với cùng máy chủ ở cổng 80. Điều gì phân biệt socket của chúng? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 2.0 s start · 2.0 s tap · 39.5 s whoosh · 39.5 s step-ok · 46.9 s pop · 47.7 s blip-exec · 47.7 s step-ok · 54.9 s hit · 55.5 s blip-exec · 56.2 s pop · 56.8 s whoosh · 57.4 s pop · 58.0 s blip-exec · 58.7 s whoosh · 59.3 s pop · 59.9 s blip-exec · 60.5 s right · 60.5 s step-ok · 66.6 s hit · 66.6 s step-ok · 72.9 s oops · 72.9 s step-ok · 78.4 s right · 82.8 s done
+
+## socket-bind
+
+**“Chạy trên máy tôi mà”: 127.0.0.1 hay 0.0.0.0** / “Works on my machine”: 127.0.0.1 vs 0.0.0.0 — net-lab · `socket` · preset mặc định của: bind
+
+Xem ai với tới được một API nghe ở 127.0.0.1 bên trong Docker, rồi sửa.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `sk-bind` | app.listen(3000, '127.0.0.1') | sock.mode("bind"), sock.bind("127.0.0.1") |  |
+| 2 | 11.9 s | 5.6 s (en 5.7 s) | 31.8 s | `sk-callers` | Đến lượt bạn: bốn nơi gọi | — | Đi tới bước cuối. → player.end +400ms |
+| 3 | 17.5 s | 11.0 s (en 11.0 s) | 37.5 s | `sk-host` | Lỗi Docker kinh điển | — |  |
+| 4 | 28.5 s | 4.1 s (en 4.4 s) | 48.5 s | `sk-bind` | Đến lượt bạn: sửa nó | — | Nghe ở 0.0.0.0. → sock.bind("0.0.0.0") +300ms |
+| 5 | 32.6 s | 4.3 s (en 4.1 s) | 52.8 s | `sk-callers` | Đến lượt bạn: thử lại | — | Đi tới bước cuối. → player.end +400ms |
+| 6 | 36.9 s | 11.0 s (en 11.0 s) | 57.7 s | `sk-ifaces` | Hai cửa, một socket | — |  |
+| ✓ | 68.7 s | 7.0 s | 68.7 s | — | Câu hỏi: API chạy được với `node server.js` nhưng `docker run -p 3000:3000` báo “connection reset”. Cách sửa khả dĩ nhất? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 2.2 s start · 2.2 s tap · 2.3 s tap · 36.4 s oops · 36.4 s step-ok · 52.2 s tap · 52.2 s step-ok · 57.0 s hit · 57.0 s step-ok · 72.6 s right · 77.0 s done
+
+## waterfall-phases
+
+**Bấm Enter: năm chặng** / Press Enter: five phases — net-lab · `waterfall` · preset mặc định của: cold
+
+Mở dần DNS, TCP, TLS, chờ và tải về từ một lần chạy curl thật, tránh bẫy số cộng dồn, và thấy khoảng cách làm gì.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 9.6 s (en 9.8 s) | 0.9 s | `wf-preset` | Một lần đo thật | wf.preset("cold"), wf.run(0), wf.cum(false) |  |
+| 2 | 10.5 s | 8.7 s (en 9.7 s) | 10.6 s | `wf-chart` | Đến lượt bạn: mở từng chặng | — | Mở đủ năm chặng. → player.step ×≤5 +500ms |
+| 3 | 19.2 s | 7.0 s (en 7.0 s) | 21.0 s | `wf-cum` | Đến lượt bạn: cái bẫy | — | Hiện số curl nói. → wf.cum(true) +300ms |
+| 4 | 26.2 s | 4.6 s (en 5.1 s) | 28.3 s | `wf-preset` | Đến lượt bạn: kết nối dùng lại | — | Mở lần chạy dùng lại kết nối. → wf.preset("warm") +300ms |
+| 5 | 30.9 s | 7.1 s (en 7.1 s) | 33.4 s | `wf-chart` | Đến lượt bạn: ba chặng biến mất | — | Đi tới chặng cuối. → player.end +400ms |
+| 6 | 38.0 s | 7.0 s (en 7.0 s) | 40.9 s | `wf-rtt` | Đến lượt bạn: dời máy chủ ra xa | — | Đặt RTT từ 150 ms trở lên. → wf.rtt(150) +300ms |
+| ✓ | 48.1 s | 7.0 s | 48.1 s | — | Câu hỏi: curl in time_connect = 0.039891 và time_appconnect = 0.056536. Bắt tay TLS mất bao lâu? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 33.4 s start · 33.5 s tap · 35.7 s tap · 35.8 s off · 46.8 s blip-exec · 47.5 s blip-exec · 48.4 s blip-exec · 49.6 s blip-exec · 50.7 s done · 50.7 s step-ok · 57.8 s on · 57.8 s step-ok · 63.6 s tap · 63.6 s step-ok · 70.4 s done · 70.4 s step-ok · 77.7 s step-ok · 83.2 s right · 87.6 s done
+
 ## process-start
 
 **Cách dùng phòng lab này** / How to use this lab — os-lab · `process` · tour làm quen (mọi preset chưa có tour riêng)
@@ -1747,3 +1904,71 @@ Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó r
 | ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
 
 Tiếng (đo thật): 1.8 s start · 26.9 s miss · 27.6 s step-ok · 27.6 s miss · 53.9 s right · 58.3 s done
+
+## encap-start
+
+**Cách dùng phòng lab này** / How to use this lab — net-lab · `encap` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Đóng gói: một request, bốn lớp phong bì | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 24.2 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 29.8 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 40.7 s | — | Giờ tự khám phá | — |  |
+| ✓ | 51.7 s | 7.0 s | 51.7 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 1.8 s start · 28.2 s blip-fetch · 28.9 s step-ok · 28.9 s blip-fetch · 55.2 s right · 59.6 s done
+
+## arp-start
+
+**Cách dùng phòng lab này** / How to use this lab — net-lab · `arp` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | ARP: từ IP ra MAC | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 12.0 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 23.0 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 29.1 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 40.0 s | — | Giờ tự khám phá | — |  |
+| ✓ | 51.0 s | 7.0 s | 51.0 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 11.6 s start · 36.7 s blip-decode · 37.5 s step-ok · 37.5 s whoosh · 64.3 s right · 68.7 s done
+
+## socket-start
+
+**Cách dùng phòng lab này** / How to use this lab — net-lab · `socket` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Socket & cổng: gói này của ai? | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.5 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.4 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.4 s | 7.0 s | 50.4 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 18.5 s start · 43.6 s whoosh · 44.3 s step-ok · 44.3 s pop · 70.6 s right · 75.0 s done
+
+## waterfall-start
+
+**Cách dùng phòng lab này** / How to use this lab — net-lab · `waterfall` · tour làm quen (mọi preset chưa có tour riêng)
+
+Một phút làm quen: mô phỏng này cho thấy gì và điều khiển nó ra sao.
+
+| # | bắt đầu (vi) | dài (vi) | bắt đầu đo thật | vùng tô sáng | tiêu đề | tour tự làm | việc của người học → lời giải |
+|---|---|---|---|---|---|---|---|
+| 1 | 0.9 s | 11.0 s (en 11.0 s) | 0.9 s | `head` | Gõ URL, bấm Enter: biểu đồ thác thời gian | — |  |
+| 2 | 11.9 s | 11.0 s (en 11.0 s) | 11.9 s | `controls` | Thanh điều khiển | — |  |
+| 3 | 22.9 s | 5.6 s (en 5.4 s) | 22.9 s | `step` | Đến lượt bạn: hai bước | — | Bấm Bước hai lần. → player.step ×≤2 +600ms |
+| 4 | 28.5 s | 10.9 s (en 11.0 s) | 28.8 s | `explain` | Đọc ô giải thích | — |  |
+| 5 | 39.4 s | 11.0 s (en 11.0 s) | 39.6 s | — | Giờ tự khám phá | — |  |
+| ✓ | 50.7 s | 7.0 s | 50.7 s | — | Câu hỏi: Ô có viền màu bên trái cho bạn biết gì? | đáp án đúng: A | — |
+
+Tiếng (đo thật): 16.4 s start · 41.5 s blip-exec · 42.3 s step-ok · 42.3 s blip-exec · 68.7 s right · 73.2 s done

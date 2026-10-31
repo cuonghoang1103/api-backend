@@ -1,0 +1,1170 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-1-4-cong-socket",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-1-4-cong-socket"
+  },
+  "exercises": [
+    {
+      "title": "Sockets 1 — Ports, ranges and the five values",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "ports",
+        "sockets"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Real output from the lab:<pre>$ sysctl net.ipv4.ip_local_port_range\nnet.ipv4.ip_local_port_range = 32768\t60999\n\n# on the web server\n$ ss -tlnp\nState  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                      \nLISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:((\"nginx\",pid=6,fd=4))\nLISTEN 0      4096      127.0.0.11:33409      0.0.0.0:*                                </pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật trong lab:<pre>$ sysctl net.ipv4.ip_local_port_range\nnet.ipv4.ip_local_port_range = 32768\t60999\n\n# trên web server\n$ ss -tlnp\nState  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                      \nLISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:((\"nginx\",pid=6,fd=4))\nLISTEN 0      4096      127.0.0.11:33409      0.0.0.0:*                                </pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Well-known 0–1023, registered 1024–49151, ephemeral (Linux) 32768–60999.|||Quen thuộc 0–1023, đăng ký 1024–49151, tạm (Linux) 32768–60999.",
+        "A listener's remote side is a wildcard; a connection has both sides known.|||Phía bên kia của socket nghe là ký tự đại diện; kết nối thì biết cả hai phía."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sockets 1 — Ports, ranges and the five values\n\nAnswer in the answer panel (no code needed).\n\n1. The IP address picks the machine. The port picks …Địa chỉ IP chọn máy. Cổng chọn …\n2. curl's source port is \"random\" — where does it come from on Linux?Cổng nguồn của curl \"ngẫu nhiên\" — trên Linux nó lấy từ đâu?\n3. A connected TCP socket is identified by …Một socket TCP đã kết nối được nhận diện bởi …\n4. nginx listens on 0.0.0.0:80 with Send-Q 511. For a listening socket that 511 is …nginx nghe 0.0.0.0:80 với Send-Q 511. Với socket đang nghe, 511 là …\n5. What is the second listener, 127.0.0.11:33409, with no process shown?Socket nghe thứ hai, 127.0.0.11:33409, không hiện tiến trình, là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sockets 1 — Ports, ranges and the five values — answer key\n\n1. The IP address picks the machine. The port picks …Địa chỉ IP chọn máy. Cổng chọn …\n   Answer: b) the program on that machine\n   A port is a 16-bit number (0–65535) in the TCP/UDP header; the kernel uses it to hand the data to the right program.VI: Cổng là số 16 bit (0–65535) trong header TCP/UDP; kernel dùng nó để giao dữ liệu cho đúng chương trình.\n\n2. curl's source port is \"random\" — where does it come from on Linux?Cổng nguồn của curl \"ngẫu nhiên\" — trên Linux nó lấy từ đâu?\n   Answer: a) The ephemeral range 32768–60999 set by ip_local_port_range\n   The kernel picks a free port from net.ipv4.ip_local_port_range for each new connection: 60999 − 32768 + 1 = 28 232 ports.VI: Kernel chọn một cổng trống trong net.ipv4.ip_local_port_range cho mỗi kết nối mới: 60999 − 32768 + 1 = 28 232 cổng.\n\n3. A connected TCP socket is identified by …Một socket TCP đã kết nối được nhận diện bởi …\n   Answer: d) protocol + local IP:port + remote IP:port\n   Five values. That is how nginx holds thousands of connections all on local port 80: the remote side differs.VI: Năm giá trị. Nhờ thế nginx giữ hàng nghìn kết nối cùng cổng cục bộ 80: phía bên kia khác nhau.\n\n4. nginx listens on 0.0.0.0:80 with Send-Q 511. For a listening socket that 511 is …nginx nghe 0.0.0.0:80 với Send-Q 511. Với socket đang nghe, 511 là …\n   Answer: a) the backlog: finished handshakes that may wait for accept()\n   For a listener ss shows the backlog in Send-Q; for a connected socket Recv-Q/Send-Q are bytes waiting in its buffers.VI: Với socket đang nghe, ss hiện backlog ở cột Send-Q; với socket đã kết nối, Recv-Q/Send-Q là số byte chờ trong bộ đệm.\n\n5. What is the second listener, 127.0.0.11:33409, with no process shown?Socket nghe thứ hai, 127.0.0.11:33409, không hiện tiến trình, là gì?\n   Answer: d) Docker's built-in DNS server that resolves container names\n   Docker puts a small DNS resolver at 127.0.0.11 inside every container on a user-defined network. Reading ss always teaches you something about the machine.VI: Docker đặt một máy phân giải DNS nhỏ ở 127.0.0.11 trong mọi container thuộc mạng tự định nghĩa. Đọc ss luôn cho bạn biết thêm về máy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> the program on that machine</p><p>A port is a 16-bit number (0–65535) in the TCP/UDP header; the kernel uses it to hand the data to the right program.</p><p><i>VI: Cổng là số 16 bit (0–65535) trong header TCP/UDP; kernel dùng nó để giao dữ liệu cho đúng chương trình.</i></p></li><li><p><b>a)</b> The ephemeral range 32768–60999 set by ip_local_port_range</p><p>The kernel picks a free port from net.ipv4.ip_local_port_range for each new connection: 60999 − 32768 + 1 = 28 232 ports.</p><p><i>VI: Kernel chọn một cổng trống trong net.ipv4.ip_local_port_range cho mỗi kết nối mới: 60999 − 32768 + 1 = 28 232 cổng.</i></p></li><li><p><b>d)</b> protocol + local IP:port + remote IP:port</p><p>Five values. That is how nginx holds thousands of connections all on local port 80: the remote side differs.</p><p><i>VI: Năm giá trị. Nhờ thế nginx giữ hàng nghìn kết nối cùng cổng cục bộ 80: phía bên kia khác nhau.</i></p></li><li><p><b>a)</b> the backlog: finished handshakes that may wait for accept()</p><p>For a listener ss shows the backlog in Send-Q; for a connected socket Recv-Q/Send-Q are bytes waiting in its buffers.</p><p><i>VI: Với socket đang nghe, ss hiện backlog ở cột Send-Q; với socket đã kết nối, Recv-Q/Send-Q là số byte chờ trong bộ đệm.</i></p></li><li><p><b>d)</b> Docker's built-in DNS server that resolves container names</p><p>Docker puts a small DNS resolver at 127.0.0.11 inside every container on a user-defined network. Reading ss always teaches you something about the machine.</p><p><i>VI: Docker đặt một máy phân giải DNS nhỏ ở 127.0.0.11 trong mọi container thuộc mạng tự định nghĩa. Đọc ss luôn cho bạn biết thêm về máy.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The IP address picks the machine. The port picks …</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ IP chọn máy. Cổng chọn …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the user logged in on it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the program on that machine"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the router on the way there"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the network card of the machine"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A port is a 16-bit number (0–65535) in the TCP/UDP header; the kernel uses it to hand the data to the right program.</p><p><i>VI: Cổng là số 16 bit (0–65535) trong header TCP/UDP; kernel dùng nó để giao dữ liệu cho đúng chương trình.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>curl's source port is \"random\" — where does it come from on Linux?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cổng nguồn của curl \"ngẫu nhiên\" — trên Linux nó lấy từ đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ephemeral range 32768–60999 set by ip_local_port_range"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The well-known range 0–1023 reserved for system services"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The registered range 1024–49151 listed by IANA"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The port the server tells the client in its first answer"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The kernel picks a free port from net.ipv4.ip_local_port_range for each new connection: 60999 − 32768 + 1 = 28 232 ports.</p><p><i>VI: Kernel chọn một cổng trống trong net.ipv4.ip_local_port_range cho mỗi kết nối mới: 60999 − 32768 + 1 = 28 232 cổng.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A connected TCP socket is identified by …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một socket TCP đã kết nối được nhận diện bởi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the MAC addresses of the two network cards"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the process id of the program that opened it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the local port alone, which is unique on the machine"
+              },
+              {
+                "ma": "d",
+                "noiDung": "protocol + local IP:port + remote IP:port"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Five values. That is how nginx holds thousands of connections all on local port 80: the remote side differs.</p><p><i>VI: Năm giá trị. Nhờ thế nginx giữ hàng nghìn kết nối cùng cổng cục bộ 80: phía bên kia khác nhau.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>nginx listens on 0.0.0.0:80 with Send-Q 511. For a listening socket that 511 is …</p><p style=\"opacity:.75;font-size:.92em\"><i>nginx nghe 0.0.0.0:80 với Send-Q 511. Với socket đang nghe, 511 là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the backlog: finished handshakes that may wait for accept()"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the maximum size in KB of one HTTP response"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the number of clients connected to nginx right now"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the number of bytes waiting to be sent to the clients"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>For a listener ss shows the backlog in Send-Q; for a connected socket Recv-Q/Send-Q are bytes waiting in its buffers.</p><p><i>VI: Với socket đang nghe, ss hiện backlog ở cột Send-Q; với socket đã kết nối, Recv-Q/Send-Q là số byte chờ trong bộ đệm.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>What is the second listener, 127.0.0.11:33409, with no process shown?</p><p style=\"opacity:.75;font-size:.92em\"><i>Socket nghe thứ hai, 127.0.0.11:33409, không hiện tiến trình, là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A TIME-WAIT socket left over from an old connection"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A hidden backdoor that nginx opened on a random port"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The router container forwarding packets to the web server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Docker's built-in DNS server that resolves container names"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Docker puts a small DNS resolver at 127.0.0.11 inside every container on a user-defined network. Reading ss always teaches you something about the machine.</p><p><i>VI: Docker đặt một máy phân giải DNS nhỏ ở 127.0.0.11 trong mọi container thuộc mạng tự định nghĩa. Đọc ss luôn cho bạn biết thêm về máy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing one port can only carry one connection.|||Tin rằng một cổng chỉ chở được một kết nối."
+        },
+        {
+          "loi": "Reading Send-Q of a listener as bytes waiting to be sent.|||Đọc Send-Q của socket nghe thành số byte chờ gửi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ephemeral port",
+          "vi": "cổng tạm"
+        },
+        {
+          "en": "listening socket",
+          "vi": "socket đang nghe"
+        },
+        {
+          "en": "backlog",
+          "vi": "hàng chờ accept"
+        }
+      ]
+    },
+    {
+      "title": "Sockets 2 — Read ss -tanp on both ends",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "ss",
+        "sockets"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>While client held two idle connections and client2 one, ss printed this on the web server and on the client (lab/out/c14-web, c14-client):<pre># web\nState  Recv-Q Send-Q Local Address:Port Peer Address:Port Process                      \nLISTEN 0      511          0.0.0.0:80        0.0.0.0:*     users:((\"nginx\",pid=6,fd=4))\nESTAB  0      0         10.10.2.10:80     10.10.1.11:38458                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40042                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40034                             \n\n# client (first lines)\nState     Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                        \nTIME-WAIT 0      0         10.10.1.10:40030   10.10.2.10:80                                 \nESTAB     0      0         10.10.1.10:40034   10.10.2.10:80   users:((\"sleep\",pid=283,fd=3))\nESTAB     0      0         10.10.1.10:40042   10.10.2.10:80   users:((\"sleep\",pid=289,fd=3))\nTIME-WAIT 0      0         10.10.1.10:40454   10.10.2.10:80                                 </pre>For each line: what kind of socket, who is on the other side, and which LOCAL port it uses.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong lúc client giữ hai kết nối rảnh và client2 giữ một, ss in ra thế này trên web server và trên client (lab/out/c14-web, c14-client):<pre># web\nState  Recv-Q Send-Q Local Address:Port Peer Address:Port Process                      \nLISTEN 0      511          0.0.0.0:80        0.0.0.0:*     users:((\"nginx\",pid=6,fd=4))\nESTAB  0      0         10.10.2.10:80     10.10.1.11:38458                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40042                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40034                             \n\n# client (vài dòng đầu)\nState     Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                        \nTIME-WAIT 0      0         10.10.1.10:40030   10.10.2.10:80                                 \nESTAB     0      0         10.10.1.10:40034   10.10.2.10:80   users:((\"sleep\",pid=283,fd=3))\nESTAB     0      0         10.10.1.10:40042   10.10.2.10:80   users:((\"sleep\",pid=289,fd=3))\nTIME-WAIT 0      0         10.10.1.10:40454   10.10.2.10:80                                 </pre>Với mỗi dòng: loại socket nào, ai ở đầu bên kia, và nó dùng cổng CỤC BỘ nào.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "\"Local Address:Port\" is this machine; \"Peer Address:Port\" is the other side.|||\"Local Address:Port\" là máy này; \"Peer Address:Port\" là phía bên kia.",
+        "The number after the LAST colon of the local column is the local port.|||Số sau dấu hai chấm CUỐI CÙNG của cột local là cổng cục bộ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sockets 2 — Read ss -tanp on both ends\n\nAnswer in the answer panel (no code needed).\n\n1. Socket by socketTừng socket\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sockets 2 — Read ss -tanp on both ends — answer key\n\n1. Socket by socketTừng socket\n   - r1.k: listening socket\n   - r1.r: any client (*)\n   - r1.p: 80\n   - r2.k: connected (ESTAB)\n   - r2.r: client2 10.10.1.11\n   - r2.p: 80\n   - r3.k: connected (ESTAB)\n   - r3.r: client 10.10.1.10\n   - r3.p: 80\n   - r4.k: connected (ESTAB)\n   - r4.r: web 10.10.2.10\n   - r4.p: 40042\n   - r5.k: closed, remembered (TIME-WAIT)\n   - r5.r: web 10.10.2.10\n   - r5.p: 40030\n   On the web server every socket has local port 80 — one listener plus one connected socket per conversation; they differ only by the remote side. On the client the same connection appears mirrored: local 10.10.1.10:40042, peer 10.10.2.10:80 — the same four values. TIME-WAIT lines are connections already closed that the kernel remembers for 60 s (Chapter 4). The trap: thinking the client's local port is 80.VI: Trên web server, socket nào cũng có cổng cục bộ 80 — một socket nghe cộng một socket kết nối cho mỗi cuộc hội thoại; chúng chỉ khác phía bên kia. Trên client, cùng kết nối đó hiện ra đối xứng: cục bộ 10.10.1.10:40042, đầu kia 10.10.2.10:80 — cùng bốn giá trị. Dòng TIME-WAIT là kết nối đã đóng mà kernel còn nhớ 60 s (Chương 4). Cái bẫy: nghĩ cổng cục bộ của client là 80.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>On the web server every socket has local port 80 — one listener plus one connected socket per conversation; they differ only by the remote side. On the client the same connection appears mirrored: local 10.10.1.10:40042, peer 10.10.2.10:80 — the same four values. TIME-WAIT lines are connections already closed that the kernel remembers for 60 s (Chapter 4). The trap: thinking the client's local port is 80.</p><p><i>VI: Trên web server, socket nào cũng có cổng cục bộ 80 — một socket nghe cộng một socket kết nối cho mỗi cuộc hội thoại; chúng chỉ khác phía bên kia. Trên client, cùng kết nối đó hiện ra đối xứng: cục bộ 10.10.1.10:40042, đầu kia 10.10.2.10:80 — cùng bốn giá trị. Dòng TIME-WAIT là kết nối đã đóng mà kernel còn nhớ 60 s (Chương 4). Cái bẫy: nghĩ cổng cục bộ của client là 80.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Socket by socket</p><p style=\"opacity:.75;font-size:.92em\"><i>Từng socket</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Line"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "listening socket",
+                  "connected (ESTAB)",
+                  "closed, remembered (TIME-WAIT)"
+                ]
+              },
+              {
+                "ma": "r",
+                "ten": "Other side",
+                "luaChon": [
+                  "client 10.10.1.10",
+                  "client2 10.10.1.11",
+                  "any client (*)",
+                  "web 10.10.2.10"
+                ]
+              },
+              {
+                "ma": "p",
+                "ten": "Local port"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "LISTEN 0      511          0.0.0.0:80        0.0.0.0:*     users:((\"nginx\",pid=6,fd=4))"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "ESTAB  0      0         10.10.2.10:80     10.10.1.11:38458"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "ESTAB  0      0         10.10.2.10:80     10.10.1.10:40042"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "ESTAB     0      0         10.10.1.10:40042   10.10.2.10:80   users:((\"sleep\",pid=289,fd=3))"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "TIME-WAIT 0      0         10.10.1.10:40030   10.10.2.10:80"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "listening socket",
+              "r1.r": "any client (*)",
+              "r1.p": [
+                "80"
+              ],
+              "r2.k": "connected (ESTAB)",
+              "r2.r": "client2 10.10.1.11",
+              "r2.p": [
+                "80"
+              ],
+              "r3.k": "connected (ESTAB)",
+              "r3.r": "client 10.10.1.10",
+              "r3.p": [
+                "80"
+              ],
+              "r4.k": "connected (ESTAB)",
+              "r4.r": "web 10.10.2.10",
+              "r4.p": [
+                "40042"
+              ],
+              "r5.k": "closed, remembered (TIME-WAIT)",
+              "r5.r": "web 10.10.2.10",
+              "r5.p": [
+                "40030"
+              ]
+            },
+            "giaiThich": "<p>On the web server every socket has local port 80 — one listener plus one connected socket per conversation; they differ only by the remote side. On the client the same connection appears mirrored: local 10.10.1.10:40042, peer 10.10.2.10:80 — the same four values. TIME-WAIT lines are connections already closed that the kernel remembers for 60 s (Chapter 4). The trap: thinking the client's local port is 80.</p><p><i>VI: Trên web server, socket nào cũng có cổng cục bộ 80 — một socket nghe cộng một socket kết nối cho mỗi cuộc hội thoại; chúng chỉ khác phía bên kia. Trên client, cùng kết nối đó hiện ra đối xứng: cục bộ 10.10.1.10:40042, đầu kia 10.10.2.10:80 — cùng bốn giá trị. Dòng TIME-WAIT là kết nối đã đóng mà kernel còn nhớ 60 s (Chương 4). Cái bẫy: nghĩ cổng cục bộ của client là 80.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the peer column as the local one.|||Đọc cột peer thành cột local."
+        },
+        {
+          "loi": "Treating TIME-WAIT lines as live connections.|||Coi dòng TIME-WAIT là kết nối còn sống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ESTAB",
+          "vi": "đã thiết lập",
+          "giaiThich": "Kết nối đang mở, chở dữ liệu được."
+        },
+        {
+          "en": "TIME-WAIT",
+          "vi": "chờ sau khi đóng"
+        },
+        {
+          "en": "peer",
+          "vi": "đầu bên kia"
+        }
+      ]
+    },
+    {
+      "title": "Sockets 3 — \"Works on my machine\", EADDRINUSE and docker -p",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "bind address",
+        "docker -p"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>On the API machine one server listens on 127.0.0.1:4000 and one on 0.0.0.0:4001 (lab/out/c14-bind-api, c14-bind-client):<pre># api\n$ ss -tlnp\nState  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                       \nLISTEN 0      4096      127.0.0.11:41639      0.0.0.0:*                                 \nLISTEN 0      511        127.0.0.1:4000       0.0.0.0:*    users:((\"node\",pid=23,fd=18))\nLISTEN 0      511          0.0.0.0:4001       0.0.0.0:*    users:((\"node\",pid=33,fd=18))\nLISTEN 0      511          0.0.0.0:3000       0.0.0.0:*    users:((\"node\",pid=6,fd=18)) \n\n# client\n$ nc -w 1 -v 10.10.2.20 4000\nnc: connect to 10.10.2.20 port 4000 (tcp) failed: Connection refused\n$ nc -w 1 10.10.2.20 4001\nhi from 0.0.0.0:4001\n\n# api again\n$ node -e \"require('net').createServer().listen(4001,'0.0.0.0').on('error',e=&gt;console.log(e.code, e.message))\"\nEADDRINUSE listen EADDRINUSE: address already in use 0.0.0.0:4001</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên máy API, một server nghe 127.0.0.1:4000 và một server nghe 0.0.0.0:4001 (lab/out/c14-bind-api, c14-bind-client):<pre># api\n$ ss -tlnp\nState  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                       \nLISTEN 0      4096      127.0.0.11:41639      0.0.0.0:*                                 \nLISTEN 0      511        127.0.0.1:4000       0.0.0.0:*    users:((\"node\",pid=23,fd=18))\nLISTEN 0      511          0.0.0.0:4001       0.0.0.0:*    users:((\"node\",pid=33,fd=18))\nLISTEN 0      511          0.0.0.0:3000       0.0.0.0:*    users:((\"node\",pid=6,fd=18)) \n\n# client\n$ nc -w 1 -v 10.10.2.20 4000\nnc: connect to 10.10.2.20 port 4000 (tcp) failed: Connection refused\n$ nc -w 1 10.10.2.20 4001\nhi from 0.0.0.0:4001\n\n# lại máy api\n$ node -e \"require('net').createServer().listen(4001,'0.0.0.0').on('error',e=&gt;console.log(e.code, e.message))\"\nEADDRINUSE listen EADDRINUSE: address already in use 0.0.0.0:4001</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask which address the listener is bound to, and which card the connection arrives on.|||Hỏi socket nghe gắn vào địa chỉ nào, và kết nối đến qua card nào.",
+        "A changing source port means a new connection each time.|||Cổng nguồn đổi nghĩa là mỗi lần một kết nối mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sockets 3 — \"Works on my machine\", EADDRINUSE and docker -p\n\nAnswer in the answer panel (no code needed).\n\n1. Why is 4000 refused from the client while 4001 answers?Vì sao cổng 4000 bị từ chối từ client còn 4001 trả lời?\n2. The second node listen on 4001 failed with EADDRINUSE. Most likely in real life …Lệnh node listen thứ hai trên 4001 lỗi EADDRINUSE. Ngoài đời, khả năng cao nhất là …\n3. Inside a container your app listens on 127.0.0.1:3000 and you run docker run -p 3000:3000. From the host, curl localhost:3000 …Trong container, app nghe 127.0.0.1:3000 và bạn chạy docker run -p 3000:3000. Từ máy host, curl localhost:3000 …\n4. On a VPS, PostgreSQL started with -p 5432:5432. Who can reach it?Trên VPS, PostgreSQL chạy với -p 5432:5432. Ai tới được nó?\n5. The client ran curl /api/hello three times; the API saw seenFrom ports 59748, 59764, 59774. What does that show?Client chạy curl /api/hello ba lần; API thấy seenFrom các cổng 59748, 59764, 59774. Điều đó cho thấy gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sockets 3 — \"Works on my machine\", EADDRINUSE and docker -p — answer key\n\n1. Why is 4000 refused from the client while 4001 answers?Vì sao cổng 4000 bị từ chối từ client còn 4001 trả lời?\n   Answer: a) 127.0.0.1 is loopback: only programs on the same machine can connect\n   A socket bound to 127.0.0.1 listens on the loopback card only; a SYN arriving on eth0 for 10.10.2.20:4000 finds no listener, so the kernel answers RST ⇒ refused.VI: Socket gắn 127.0.0.1 chỉ nghe trên card loopback; SYN đến eth0 cho 10.10.2.20:4000 không thấy ai nghe, nên kernel trả RST ⇒ refused.\n\n2. The second node listen on 4001 failed with EADDRINUSE. Most likely in real life …Lệnh node listen thứ hai trên 4001 lỗi EADDRINUSE. Ngoài đời, khả năng cao nhất là …\n   Answer: d) an old process (a second npm run dev, a container) still holds the port\n   One listener per address and port. Find the owner with ss -tlnp 'sport = :4001' and stop it. (127.0.0.1:4000 and 10.10.2.20:4000 could be two listeners: different addresses are allowed.)VI: Mỗi địa chỉ và cổng một socket nghe. Tìm chủ bằng ss -tlnp 'sport = :4001' rồi dừng nó. (127.0.0.1:4000 và 10.10.2.20:4000 có thể là hai socket nghe: khác địa chỉ thì được.)\n\n3. Inside a container your app listens on 127.0.0.1:3000 and you run docker run -p 3000:3000. From the host, curl localhost:3000 …Trong container, app nghe 127.0.0.1:3000 và bạn chạy docker run -p 3000:3000. Từ máy host, curl localhost:3000 …\n   Answer: d) fails: -p forwards to the container's card, where nothing listens\n   -p forwards traffic to the container's network card. An app on the container's loopback only hears the container itself — another \"works inside, refused outside\" bug. Listen on 0.0.0.0 inside containers.VI: -p chuyển lưu lượng tới card mạng của container. App nghe loopback của container chỉ nghe được chính container — thêm một lỗi \"bên trong chạy, bên ngoài bị từ chối\". Trong container hãy nghe 0.0.0.0.\n\n4. On a VPS, PostgreSQL started with -p 5432:5432. Who can reach it?Trên VPS, PostgreSQL chạy với -p 5432:5432. Ai tới được nó?\n   Answer: c) Anyone on the Internet who can reach the server\n   -p without an address publishes on all host addresses, and Docker's rules sit in front of firewall front-ends such as ufw. Use -p 127.0.0.1:5432:5432 when only the host needs it.VI: -p không có địa chỉ là mở trên mọi địa chỉ của host, và luật của Docker đứng trước các giao diện tường lửa như ufw. Dùng -p 127.0.0.1:5432:5432 khi chỉ host cần.\n\n5. The client ran curl /api/hello three times; the API saw seenFrom ports 59748, 59764, 59774. What does that show?Client chạy curl /api/hello ba lần; API thấy seenFrom các cổng 59748, 59764, 59774. Điều đó cho thấy gì?\n   Answer: d) nginx opened a new connection to the API for every request\n   A new source port = a new connection: no keep-alive between nginx and the API in this lab (nginx before 1.29.7 — our lab runs 1.28.3 — proxies with HTTP/1.0 and Connection: close; reuse needs an upstream block with keepalive in any version). Each one costs a handshake and leaves a TIME-WAIT behind.VI: Cổng nguồn mới = kết nối mới: giữa nginx và API trong lab không có keep-alive (nginx trước 1.29.7 — lab chạy 1.28.3 — proxy bằng HTTP/1.0 và Connection: close; muốn dùng lại kết nối thì phiên bản nào cũng cần khối upstream có keepalive). Mỗi lần tốn một lần bắt tay và để lại một TIME-WAIT.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> 127.0.0.1 is loopback: only programs on the same machine can connect</p><p>A socket bound to 127.0.0.1 listens on the loopback card only; a SYN arriving on eth0 for 10.10.2.20:4000 finds no listener, so the kernel answers RST ⇒ refused.</p><p><i>VI: Socket gắn 127.0.0.1 chỉ nghe trên card loopback; SYN đến eth0 cho 10.10.2.20:4000 không thấy ai nghe, nên kernel trả RST ⇒ refused.</i></p></li><li><p><b>d)</b> an old process (a second npm run dev, a container) still holds the port</p><p>One listener per address and port. Find the owner with ss -tlnp 'sport = :4001' and stop it. (127.0.0.1:4000 and 10.10.2.20:4000 could be two listeners: different addresses are allowed.)</p><p><i>VI: Mỗi địa chỉ và cổng một socket nghe. Tìm chủ bằng ss -tlnp 'sport = :4001' rồi dừng nó. (127.0.0.1:4000 và 10.10.2.20:4000 có thể là hai socket nghe: khác địa chỉ thì được.)</i></p></li><li><p><b>d)</b> fails: -p forwards to the container's card, where nothing listens</p><p>-p forwards traffic to the container's network card. An app on the container's loopback only hears the container itself — another \"works inside, refused outside\" bug. Listen on 0.0.0.0 inside containers.</p><p><i>VI: -p chuyển lưu lượng tới card mạng của container. App nghe loopback của container chỉ nghe được chính container — thêm một lỗi \"bên trong chạy, bên ngoài bị từ chối\". Trong container hãy nghe 0.0.0.0.</i></p></li><li><p><b>c)</b> Anyone on the Internet who can reach the server</p><p>-p without an address publishes on all host addresses, and Docker's rules sit in front of firewall front-ends such as ufw. Use -p 127.0.0.1:5432:5432 when only the host needs it.</p><p><i>VI: -p không có địa chỉ là mở trên mọi địa chỉ của host, và luật của Docker đứng trước các giao diện tường lửa như ufw. Dùng -p 127.0.0.1:5432:5432 khi chỉ host cần.</i></p></li><li><p><b>d)</b> nginx opened a new connection to the API for every request</p><p>A new source port = a new connection: no keep-alive between nginx and the API in this lab (nginx before 1.29.7 — our lab runs 1.28.3 — proxies with HTTP/1.0 and Connection: close; reuse needs an upstream block with keepalive in any version). Each one costs a handshake and leaves a TIME-WAIT behind.</p><p><i>VI: Cổng nguồn mới = kết nối mới: giữa nginx và API trong lab không có keep-alive (nginx trước 1.29.7 — lab chạy 1.28.3 — proxy bằng HTTP/1.0 và Connection: close; muốn dùng lại kết nối thì phiên bản nào cũng cần khối upstream có keepalive). Mỗi lần tốn một lần bắt tay và để lại một TIME-WAIT.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is 4000 refused from the client while 4001 answers?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cổng 4000 bị từ chối từ client còn 4001 trả lời?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "127.0.0.1 is loopback: only programs on the same machine can connect"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Port 4000 is reserved by the kernel for the root user only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "127.0.0.1 is blocked by the router between the two networks"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nc can only open connections to ports above 4000"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A socket bound to 127.0.0.1 listens on the loopback card only; a SYN arriving on eth0 for 10.10.2.20:4000 finds no listener, so the kernel answers RST ⇒ refused.</p><p><i>VI: Socket gắn 127.0.0.1 chỉ nghe trên card loopback; SYN đến eth0 cho 10.10.2.20:4000 không thấy ai nghe, nên kernel trả RST ⇒ refused.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The second node listen on 4001 failed with EADDRINUSE. Most likely in real life …</p><p style=\"opacity:.75;font-size:.92em\"><i>Lệnh node listen thứ hai trên 4001 lỗi EADDRINUSE. Ngoài đời, khả năng cao nhất là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the kernel ran out of ephemeral ports for new listeners"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the port is in TIME-WAIT because the client closed a connection"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the firewall blocks port 4001 for new programs on this machine"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an old process (a second npm run dev, a container) still holds the port"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One listener per address and port. Find the owner with ss -tlnp 'sport = :4001' and stop it. (127.0.0.1:4000 and 10.10.2.20:4000 could be two listeners: different addresses are allowed.)</p><p><i>VI: Mỗi địa chỉ và cổng một socket nghe. Tìm chủ bằng ss -tlnp 'sport = :4001' rồi dừng nó. (127.0.0.1:4000 và 10.10.2.20:4000 có thể là hai socket nghe: khác địa chỉ thì được.)</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Inside a container your app listens on 127.0.0.1:3000 and you run docker run -p 3000:3000. From the host, curl localhost:3000 …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong container, app nghe 127.0.0.1:3000 và bạn chạy docker run -p 3000:3000. Từ máy host, curl localhost:3000 …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "works only after you also open port 3000 in the host firewall"
+              },
+              {
+                "ma": "b",
+                "noiDung": "fails because port 3000 is reserved on the host for Node"
+              },
+              {
+                "ma": "c",
+                "noiDung": "works: -p copies the 127.0.0.1 socket onto the host as well"
+              },
+              {
+                "ma": "d",
+                "noiDung": "fails: -p forwards to the container's card, where nothing listens"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>-p forwards traffic to the container's network card. An app on the container's loopback only hears the container itself — another \"works inside, refused outside\" bug. Listen on 0.0.0.0 inside containers.</p><p><i>VI: -p chuyển lưu lượng tới card mạng của container. App nghe loopback của container chỉ nghe được chính container — thêm một lỗi \"bên trong chạy, bên ngoài bị từ chối\". Trong container hãy nghe 0.0.0.0.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>On a VPS, PostgreSQL started with -p 5432:5432. Who can reach it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên VPS, PostgreSQL chạy với -p 5432:5432. Ai tới được nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only other containers on the same Docker network"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nobody until ufw is told to allow port 5432"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Anyone on the Internet who can reach the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only programs running on the VPS itself"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>-p without an address publishes on all host addresses, and Docker's rules sit in front of firewall front-ends such as ufw. Use -p 127.0.0.1:5432:5432 when only the host needs it.</p><p><i>VI: -p không có địa chỉ là mở trên mọi địa chỉ của host, và luật của Docker đứng trước các giao diện tường lửa như ufw. Dùng -p 127.0.0.1:5432:5432 khi chỉ host cần.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The client ran curl /api/hello three times; the API saw seenFrom ports 59748, 59764, 59774. What does that show?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client chạy curl /api/hello ba lần; API thấy seenFrom các cổng 59748, 59764, 59774. Điều đó cho thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the client reused one connection for all three requests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the API changed its own listening port after each request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the router rewrote the source port of every packet"
+              },
+              {
+                "ma": "d",
+                "noiDung": "nginx opened a new connection to the API for every request"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A new source port = a new connection: no keep-alive between nginx and the API in this lab (nginx before 1.29.7 — our lab runs 1.28.3 — proxies with HTTP/1.0 and Connection: close; reuse needs an upstream block with keepalive in any version). Each one costs a handshake and leaves a TIME-WAIT behind.</p><p><i>VI: Cổng nguồn mới = kết nối mới: giữa nginx và API trong lab không có keep-alive (nginx trước 1.29.7 — lab chạy 1.28.3 — proxy bằng HTTP/1.0 và Connection: close; muốn dùng lại kết nối thì phiên bản nào cũng cần khối upstream có keepalive). Mỗi lần tốn một lần bắt tay và để lại một TIME-WAIT.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Opening the firewall to fix a server bound to 127.0.0.1.|||Mở tường lửa để sửa một server gắn vào 127.0.0.1."
+        },
+        {
+          "loi": "Publishing a database with -p 5432:5432 on a public server.|||Mở cơ sở dữ liệu bằng -p 5432:5432 trên server công khai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bind",
+          "vi": "gắn vào địa chỉ"
+        },
+        {
+          "en": "EADDRINUSE",
+          "vi": "địa chỉ đang được dùng"
+        },
+        {
+          "en": "publish (-p)",
+          "vi": "mở cổng container ra host"
+        }
+      ]
+    },
+    {
+      "title": "Sockets 4 — Write maxNewConnPerSec(o): the ephemeral-port ceiling",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "ephemeral ports",
+        "TIME-WAIT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Every new connection from one client machine to the same server IP and port needs a free ephemeral port, and a closed connection keeps its port in TIME-WAIT for a while (60 s on Linux). So there is a ceiling on new connections per second — the reason connection reuse matters for a busy service that calls another one.</p><pre>$ sysctl net.ipv4.ip_local_port_range\nnet.ipv4.ip_local_port_range = 32768\t60999</pre><p>Write <code>maxNewConnPerSec({ lo, hi, timeWaitS })</code> = the number of usable ports in the range (both ends included) divided by <code>timeWaitS</code>, rounded <b>down</b> to a whole number. With the lab's range and 60 s it is <b>470</b>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi kết nối mới từ một máy client tới cùng IP và cổng server cần một cổng tạm còn trống, và kết nối đã đóng giữ cổng của nó ở TIME-WAIT một lúc (60 s trên Linux). Nên có một trần số kết nối mới mỗi giây — lý do việc dùng lại kết nối quan trọng với một dịch vụ bận gọi sang dịch vụ khác.</p><pre>$ sysctl net.ipv4.ip_local_port_range\nnet.ipv4.ip_local_port_range = 32768\t60999</pre><p>Viết <code>maxNewConnPerSec({ lo, hi, timeWaitS })</code> = số cổng dùng được trong khoảng (tính cả hai đầu) chia cho <code>timeWaitS</code>, làm tròn <b>xuống</b> thành số nguyên. Với khoảng của lab và 60 s, kết quả là <b>470</b>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "o — { lo, hi, timeWaitS } (integers, lo ≤ hi, timeWaitS ≥ 1).|||o — { lo, hi, timeWaitS } (số nguyên, lo ≤ hi, timeWaitS ≥ 1).",
+      "outputSpec": "A whole number of connections per second.|||Một số nguyên kết nối mỗi giây.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "maxNewConnPerSec({\"lo\":32768,\"hi\":60999,\"timeWaitS\":60})",
+          "output": "470",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "How many integers are there from 3 to 5? Not 5 − 3.|||Từ 3 tới 5 có bao nhiêu số nguyên? Không phải 5 − 3.",
+        "Math.floor, not Math.round: 470.53 connections per second means 470 complete ones.|||Math.floor, không phải Math.round: 470,53 kết nối mỗi giây nghĩa là 470 kết nối trọn vẹn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** o = { lo, hi, timeWaitS } ⇒ max new connections per second (a whole number) */\nfunction maxNewConnPerSec(o) {\n  // Write your solution here\n  return (o.hi - o.lo) / o.timeWaitS;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction maxNewConnPerSec(o) {\n  var ports = o.hi - o.lo + 1;              // both ends of the range are usable: 60999 − 32768 + 1 = 28232\n  return Math.floor(ports / o.timeWaitS);   // each closed connection keeps its port busy for timeWaitS seconds\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A port is free again only after its TIME-WAIT ends, so in steady state at most (number of ports ÷ TIME-WAIT seconds) new connections can start every second towards one destination IP and port. 28 232 ÷ 60 = 470.5 ⇒ 470. That is why services reuse connections (pools, keep-alive) instead of opening one per request — and why \"Cannot assign requested address\" appears under load when they do not.</p>",
+      "solutionExplanationHtmlVi": "<p>Một cổng chỉ trống lại sau khi TIME-WAIT kết thúc, nên ở trạng thái ổn định mỗi giây chỉ mở được tối đa (số cổng ÷ số giây TIME-WAIT) kết nối mới tới một IP và cổng đích. 28 232 ÷ 60 = 470,5 ⇒ 470. Vì thế các dịch vụ dùng lại kết nối (pool, keep-alive) thay vì mở một kết nối cho mỗi request — và vì thế lỗi \"Cannot assign requested address\" xuất hiện khi tải cao mà không làm vậy.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: maxNewConnPerSec({\"lo\":32768,\"hi\":60999,\"timeWaitS\":60})",
+              "vi": "Ca 1"
+            },
+            "goi": "maxNewConnPerSec({\"lo\":32768,\"hi\":60999,\"timeWaitS\":60})",
+            "mongDoi": 470
+          },
+          {
+            "moTa": {
+              "en": "Case 2: maxNewConnPerSec({\"lo\":32768,\"hi\":60999,\"timeWaitS\":30})",
+              "vi": "Ca 2"
+            },
+            "goi": "maxNewConnPerSec({\"lo\":32768,\"hi\":60999,\"timeWaitS\":30})",
+            "mongDoi": 941
+          },
+          {
+            "moTa": {
+              "en": "Case 3: maxNewConnPerSec({\"lo\":1024,\"hi\":65535,\"timeWaitS\":60})",
+              "vi": "Ca 3"
+            },
+            "goi": "maxNewConnPerSec({\"lo\":1024,\"hi\":65535,\"timeWaitS\":60})",
+            "mongDoi": 1075
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "maxNewConnPerSec({\"lo\":32768,\"hi\":60999,\"timeWaitS\":4})",
+            "mongDoi": 7058,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "maxNewConnPerSec({\"lo\":49152,\"hi\":65535,\"timeWaitS\":120})",
+            "mongDoi": 136,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "maxNewConnPerSec({\"lo\":60000,\"hi\":60000,\"timeWaitS\":60})",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "maxNewConnPerSec({\"lo\":40000,\"hi\":40009,\"timeWaitS\":1})",
+            "mongDoi": 10,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the + 1: the result looks right for 60 s (470) but is wrong for other values.|||Quên + 1: kết quả trông đúng với 60 s (470) nhưng sai với giá trị khác."
+        },
+        {
+          "loi": "Rounding to the nearest instead of down.|||Làm tròn gần nhất thay vì làm tròn xuống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TIME-WAIT",
+          "vi": "trạng thái chờ sau khi đóng",
+          "giaiThich": "Kernel nhớ kết nối đã đóng để gói trễ không lẫn vào kết nối mới."
+        },
+        {
+          "en": "port exhaustion",
+          "vi": "cạn cổng tạm"
+        }
+      ]
+    },
+    {
+      "title": "Sockets 5 — Write parseSsListen(text) from real ss -tlnp output",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "ss",
+        "parsing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>\"Who listens where?\" is the first question when something is refused. Write <code>parseSsListen(text)</code> that turns the output of <code>ss -tlnp</code> into <code>[{ addr, port, process }]</code>, in the order of the lines. Real output from the API machine (lab/out/c14-bind-api):</p><pre>$ ss -tlnp\nState  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                       \nLISTEN 0      4096      127.0.0.11:41639      0.0.0.0:*                                 \nLISTEN 0      511        127.0.0.1:4000       0.0.0.0:*    users:((\"node\",pid=23,fd=18))\nLISTEN 0      511          0.0.0.0:4001       0.0.0.0:*    users:((\"node\",pid=33,fd=18))\nLISTEN 0      511          0.0.0.0:3000       0.0.0.0:*    users:((\"node\",pid=6,fd=18)) </pre><ul>\n<li>Use only lines whose state is <code>LISTEN</code> (skip the header).</li>\n<li><code>addr</code> = the local address exactly as printed, without the port (<code>'127.0.0.1'</code>, <code>'0.0.0.0'</code>, <code>'[::]'</code>, <code>'*'</code>…); <code>port</code> = a number.</li>\n<li><code>process</code> = the name inside the first <code>users:((\"…\"</code>, or <code>null</code> when the column is empty (Docker's DNS server has none).</li>\n</ul><p>Hidden cases: the real web server and router outputs, and a <b>constructed</b> listing of a typical VPS (IPv6 <code>[::]:80</code>, <code>[::1]:5432</code>, <code>*:22</code>, nginx with two worker processes, <code>127.0.0.53%lo</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Ai đang nghe ở đâu?\" là câu hỏi đầu tiên khi bị từ chối kết nối. Viết <code>parseSsListen(text)</code> đổi output của <code>ss -tlnp</code> thành <code>[{ addr, port, process }]</code>, theo thứ tự các dòng. Output thật trên máy API (lab/out/c14-bind-api):</p><pre>$ ss -tlnp\nState  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                       \nLISTEN 0      4096      127.0.0.11:41639      0.0.0.0:*                                 \nLISTEN 0      511        127.0.0.1:4000       0.0.0.0:*    users:((\"node\",pid=23,fd=18))\nLISTEN 0      511          0.0.0.0:4001       0.0.0.0:*    users:((\"node\",pid=33,fd=18))\nLISTEN 0      511          0.0.0.0:3000       0.0.0.0:*    users:((\"node\",pid=6,fd=18)) </pre><ul>\n<li>Chỉ dùng dòng có trạng thái <code>LISTEN</code> (bỏ dòng tiêu đề).</li>\n<li><code>addr</code> = địa chỉ cục bộ đúng như in ra, bỏ phần cổng (<code>'127.0.0.1'</code>, <code>'0.0.0.0'</code>, <code>'[::]'</code>, <code>'*'</code>…); <code>port</code> = một số.</li>\n<li><code>process</code> = tên bên trong <code>users:((\"…\"</code> đầu tiên, hoặc <code>null</code> khi cột đó trống (máy chủ DNS của Docker không có).</li>\n</ul><p>Ca ẩn: output thật của web server và router, và một danh sách <b>dựng</b> của một VPS điển hình (IPv6 <code>[::]:80</code>, <code>[::1]:5432</code>, <code>*:22</code>, nginx có hai tiến trình worker, <code>127.0.0.53%lo</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — the ss -tlnp output (lines separated by \\n).|||text — output ss -tlnp (các dòng cách nhau bởi \\n).",
+      "outputSpec": "[{ addr: string, port: number, process: string | null }]|||[{ addr: chuỗi, port: số, process: chuỗi | null }]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "parseSsListen(\"State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                       \\nLISTEN 0      4096      127.0.0.11:41639      0.0.0.0:*                                 \\nLISTEN 0      511        127.0.0.1:4000       0.0.0.0:*    users:((\\\"node\\\",pid=23,fd=18))\\nLISTEN 0      511          0.0.0.0:4001       0.0.0.0:*    users:((\\\"node\\\",pid=33,fd=18))\\nLISTEN 0      511          0.0.0.0:3000       0.0.0.0:*    users:((\\\"node\\\",pid=6,fd=18)) \")",
+          "output": "[{\"addr\":\"127.0.0.11\",\"port\":41639,\"process\":null},{\"addr\":\"127.0.0.1\",\"port\":4000,\"process\":\"node\"},{\"addr\":\"0.0.0.0\",\"port\":4001,\"process\":\"node\"},{\"addr\":\"0.0.0.0\",\"port\":3000,\"process\":\"node\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split each line on runs of spaces: the 4th word is \"address:port\".|||Tách mỗi dòng theo cụm dấu cách: từ thứ 4 là \"địa chỉ:cổng\".",
+        "Split at the LAST colon (lastIndexOf) — \"[::]:80\" has three. For the process use a regular expression on the whole line: /users:\\(\\(\"([^\"]+)\"/.|||Tách ở dấu hai chấm CUỐI (lastIndexOf) — \"[::]:80\" có ba dấu. Với tiến trình, dùng biểu thức chính quy trên cả dòng: /users:\\(\\(\"([^\"]+)\"/."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** text: output of \"ss -tlnp\" ⇒ [{ addr, port, process }] */\nfunction parseSsListen(text) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction parseSsListen(text) {\n  var out = [];\n  text.split('\\n').forEach(function (line) {\n    var w = line.trim().split(/\\s+/);\n    if (w[0] !== 'LISTEN') return;                 // skip the header and anything else\n    var local = w[3];                              // State Recv-Q Send-Q Local Peer [Process]\n    var i = local.lastIndexOf(':');                // the LAST colon: IPv6 addresses contain colons too\n    var m = /users:\\(\\(\"([^\"]+)\"/.exec(line);      // the first process name, if ss could show one\n    out.push({ addr: local.slice(0, i), port: Number(local.slice(i + 1)), process: m ? m[1] : null });\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>ss aligns columns with spaces, so splitting on runs of whitespace gives the fields; the header \"Peer Address:PortProcess\" is skipped because it does not start with LISTEN. The last colon separates the port in every address family, and the process is matched by its own pattern rather than by position, because ss leaves that column empty when it cannot see the owner. The output answers the demo-day question at once: 127.0.0.1:4000 is local-only, 0.0.0.0:4001 is reachable.</p>",
+      "solutionExplanationHtmlVi": "<p>ss căn cột bằng dấu cách, nên tách theo cụm khoảng trắng là ra các trường; dòng tiêu đề \"Peer Address:PortProcess\" bị bỏ vì không bắt đầu bằng LISTEN. Dấu hai chấm cuối cùng tách cổng ở mọi họ địa chỉ, còn tiến trình được khớp bằng mẫu riêng chứ không theo vị trí, vì ss để trống cột đó khi không thấy chủ. Kết quả trả lời ngay câu hỏi ngày demo: 127.0.0.1:4000 chỉ nội bộ, 0.0.0.0:4001 thì tới được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The real API machine (lab/out/c14-bind-api)",
+              "vi": "Máy API thật (lab/out/c14-bind-api)"
+            },
+            "goi": "parseSsListen(\"State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                       \\nLISTEN 0      4096      127.0.0.11:41639      0.0.0.0:*                                 \\nLISTEN 0      511        127.0.0.1:4000       0.0.0.0:*    users:((\\\"node\\\",pid=23,fd=18))\\nLISTEN 0      511          0.0.0.0:4001       0.0.0.0:*    users:((\\\"node\\\",pid=33,fd=18))\\nLISTEN 0      511          0.0.0.0:3000       0.0.0.0:*    users:((\\\"node\\\",pid=6,fd=18)) \")",
+            "mongDoi": [
+              {
+                "addr": "127.0.0.11",
+                "port": 41639,
+                "process": null
+              },
+              {
+                "addr": "127.0.0.1",
+                "port": 4000,
+                "process": "node"
+              },
+              {
+                "addr": "0.0.0.0",
+                "port": 4001,
+                "process": "node"
+              },
+              {
+                "addr": "0.0.0.0",
+                "port": 3000,
+                "process": "node"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: parseSsListen(\"State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\\nLISTEN...",
+              "vi": "Ca 2"
+            },
+            "goi": "parseSsListen(\"State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess\\nLISTEN 0      511          0.0.0.0:3000      0.0.0.0:*    users:((\\\"node\\\",pid=6,fd=18))\")",
+            "mongDoi": [
+              {
+                "addr": "0.0.0.0",
+                "port": 3000,
+                "process": "node"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "parseSsListen(\"State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                      \\nLISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:((\\\"nginx\\\",pid=6,fd=4))\\nLISTEN 0      4096      127.0.0.11:33409      0.0.0.0:*                                \")",
+            "mongDoi": [
+              {
+                "addr": "0.0.0.0",
+                "port": 80,
+                "process": "nginx"
+              },
+              {
+                "addr": "127.0.0.11",
+                "port": 33409,
+                "process": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "parseSsListen(\"State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\\nLISTEN 0      4096      127.0.0.11:40629      0.0.0.0:*          \")",
+            "mongDoi": [
+              {
+                "addr": "127.0.0.11",
+                "port": 40629,
+                "process": null
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "parseSsListen(\"State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess\\nLISTEN 0      511          0.0.0.0:80         0.0.0.0:*    users:((\\\"nginx\\\",pid=7,fd=6),(\\\"nginx\\\",pid=6,fd=6))\\nLISTEN 0      511             [::]:80            [::]:*    users:((\\\"nginx\\\",pid=7,fd=7),(\\\"nginx\\\",pid=6,fd=7))\\nLISTEN 0      128                *:22               *:*    users:((\\\"sshd\\\",pid=1,fd=3))\\nLISTEN 0      244            [::1]:5432          [::]:*    users:((\\\"postgres\\\",pid=88,fd=6))\\nLISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*    users:((\\\"systemd-resolve\\\",pid=401,fd=14))\")",
+            "mongDoi": [
+              {
+                "addr": "0.0.0.0",
+                "port": 80,
+                "process": "nginx"
+              },
+              {
+                "addr": "[::]",
+                "port": 80,
+                "process": "nginx"
+              },
+              {
+                "addr": "*",
+                "port": 22,
+                "process": "sshd"
+              },
+              {
+                "addr": "[::1]",
+                "port": 5432,
+                "process": "postgres"
+              },
+              {
+                "addr": "127.0.0.53%lo",
+                "port": 53,
+                "process": "systemd-resolve"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "parseSsListen(\"State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                        \\nLISTEN 0      511        127.0.0.1:4999      0.0.0.0:*    users:((\\\"node\\\",pid=140,fd=18))\")",
+            "mongDoi": [
+              {
+                "addr": "127.0.0.1",
+                "port": 4999,
+                "process": "node"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "local.split(\":\") — breaks every IPv6 address.|||local.split(\":\") — làm hỏng mọi địa chỉ IPv6."
+        },
+        {
+          "loi": "Reading the process by column position: the Process column is missing on some lines, so the position shifts.|||Đọc tiến trình theo vị trí cột: cột Process vắng ở vài dòng nên vị trí bị lệch."
+        },
+        {
+          "loi": "Returning the port as a string (\"80\").|||Trả cổng dạng chuỗi (\"80\")."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ss",
+          "vi": "công cụ liệt kê socket"
+        },
+        {
+          "en": "wildcard address",
+          "vi": "địa chỉ đại diện",
+          "giaiThich": "0.0.0.0, [::] hoặc * — mọi địa chỉ của máy."
+        },
+        {
+          "en": "worker process",
+          "vi": "tiến trình làm việc",
+          "giaiThich": "nginx có một tiến trình chủ và nhiều worker dùng chung socket nghe."
+        }
+      ]
+    },
+    {
+      "title": "Sockets 6 — Write demux(seg, sockets): which socket gets this segment?",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "demultiplexing",
+        "sockets",
+        "RST"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>One port, many conversations. The web server's sockets while three connections were open (lab/out/c14-web):</p><pre>State  Recv-Q Send-Q Local Address:Port Peer Address:Port Process                      \nLISTEN 0      511          0.0.0.0:80        0.0.0.0:*     users:((\"nginx\",pid=6,fd=4))\nESTAB  0      0         10.10.2.10:80     10.10.1.11:38458                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40042                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40034                             </pre><p>Write <code>demux(seg, sockets)</code> that does what the kernel does for an arriving TCP segment. <code>seg = { src, sport, dst, dport, syn }</code>; each socket is <code>{ id, state: 'LISTEN' | 'ESTAB', local: 'ip:port', remote: 'ip:port' }</code> written as ss prints them. Return the <code>id</code> of the socket that receives the segment, or <code>'RST'</code>:</p>\n<ol>\n<li>An <code>ESTAB</code> socket whose <code>local</code> is <code>dst:dport</code> and whose <code>remote</code> is <code>src:sport</code> ⇒ that socket (the data goes into its buffer).</li>\n<li>Otherwise, if the segment is a <b>SYN</b>: a <code>LISTEN</code> socket on exactly <code>dst:dport</code> ⇒ that one; else a <code>LISTEN</code> socket on <code>0.0.0.0:dport</code> ⇒ that one (the handshake is completed and queued for <code>accept()</code>).</li>\n<li>Otherwise ⇒ <code>'RST'</code> (for a SYN the client reports \"connection refused\"). A segment that is not a SYN can never be taken by a listener.</li>\n</ol>\n<p>Visible cases use the web server above. Hidden cases use the real API machine (127.0.0.1:4000 vs 0.0.0.0:4001 — the refused connection of the lesson) and a <b>constructed</b> table with two listeners on the same port, the wildcard one listed first.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một cổng, nhiều cuộc hội thoại. Các socket của web server khi có ba kết nối đang mở (lab/out/c14-web):</p><pre>State  Recv-Q Send-Q Local Address:Port Peer Address:Port Process                      \nLISTEN 0      511          0.0.0.0:80        0.0.0.0:*     users:((\"nginx\",pid=6,fd=4))\nESTAB  0      0         10.10.2.10:80     10.10.1.11:38458                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40042                             \nESTAB  0      0         10.10.2.10:80     10.10.1.10:40034                             </pre><p>Viết <code>demux(seg, sockets)</code> làm đúng việc kernel làm với một segment TCP vừa đến. <code>seg = { src, sport, dst, dport, syn }</code>; mỗi socket là <code>{ id, state: 'LISTEN' | 'ESTAB', local: 'ip:port', remote: 'ip:port' }</code> viết như ss in. Trả <code>id</code> của socket nhận segment, hoặc <code>'RST'</code>:</p>\n<ol>\n<li>Socket <code>ESTAB</code> có <code>local</code> là <code>dst:dport</code> và <code>remote</code> là <code>src:sport</code> ⇒ socket đó (dữ liệu vào bộ đệm của nó).</li>\n<li>Ngược lại, nếu segment là <b>SYN</b>: socket <code>LISTEN</code> đúng trên <code>dst:dport</code> ⇒ socket đó; không thì socket <code>LISTEN</code> trên <code>0.0.0.0:dport</code> ⇒ socket đó (bắt tay hoàn tất và xếp hàng chờ <code>accept()</code>).</li>\n<li>Còn lại ⇒ <code>'RST'</code> (với SYN thì client báo \"connection refused\"). Segment không phải SYN không bao giờ được socket nghe nhận.</li>\n</ol>\n<p>Ca hiện dùng web server ở trên. Ca ẩn dùng máy API thật (127.0.0.1:4000 vs 0.0.0.0:4001 — kết nối bị từ chối trong bài) và một bảng <b>dựng</b> có hai socket nghe cùng cổng, socket đại diện in trước.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "seg — { src, sport, dst, dport, syn }; sockets — an array of { id, state, local, remote }.|||seg — { src, sport, dst, dport, syn }; sockets — mảng { id, state, local, remote }.",
+      "outputSpec": "A socket id (string) or 'RST'.|||Một id socket (chuỗi) hoặc 'RST'.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "demux({\"src\":\"10.10.1.10\",\"sport\":40042,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+          "output": "\"E2\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build the two strings first: dst + \":\" + dport and src + \":\" + sport; then compare with ===.|||Dựng hai chuỗi trước: dst + \":\" + dport và src + \":\" + sport; rồi so bằng ===.",
+        "Do the exact-connection loop over ALL sockets before looking at listeners. Among listeners, remember the 0.0.0.0 one but keep looking for an exact address.|||Chạy vòng tìm kết nối khớp đúng trên TẤT CẢ socket trước khi xét socket nghe. Trong các socket nghe, nhớ cái 0.0.0.0 nhưng tiếp tục tìm cái đúng địa chỉ.",
+        "Check syn before giving anything to a listener.|||Kiểm syn trước khi giao bất cứ thứ gì cho socket nghe."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * seg = { src, sport, dst, dport, syn }\n * sockets = [{ id, state: 'LISTEN' | 'ESTAB', local: 'ip:port', remote: 'ip:port' }]\n * Return the id of the socket that receives seg, or 'RST'.\n */\nfunction demux(seg, sockets) {\n  // Write your solution here\n  return 'RST';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction demux(seg, sockets) {\n  var dst = seg.dst + ':' + seg.dport;\n  var src = seg.src + ':' + seg.sport;\n  // 1. A connected socket whose four values match exactly.\n  for (var i = 0; i < sockets.length; i++) {\n    var s = sockets[i];\n    if (s.state === 'ESTAB' && s.local === dst && s.remote === src) return s.id;\n  }\n  // 2. No connection: only a SYN may start one. A listener on the exact address wins over 0.0.0.0.\n  if (seg.syn) {\n    var wild = null;\n    for (var j = 0; j < sockets.length; j++) {\n      var l = sockets[j];\n      if (l.state !== 'LISTEN') continue;\n      if (l.local === dst) return l.id;\n      if (l.local === '0.0.0.0:' + seg.dport && !wild) wild = l.id;\n    }\n    if (wild) return wild;\n  }\n  // 3. Nobody owns this segment: the kernel answers with a reset ⇒ \"connection refused\" for a SYN.\n  return 'RST';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The kernel keeps conversations apart by all four addresses and ports, so an existing connection is always found first, whatever the order of the table. Only a SYN is allowed to create a new connection, and the most specific listener wins — which is how 127.0.0.1:4000 and 10.10.2.20:4000 can coexist. A SYN to 10.10.2.20:4000 matches neither 127.0.0.1:4000 nor a wildcard, so the answer is a reset: exactly the \"Connection refused\" that nc printed from the client.</p>",
+      "solutionExplanationHtmlVi": "<p>Kernel tách các cuộc hội thoại bằng đủ bốn địa chỉ và cổng, nên kết nối đã có luôn được tìm ra trước, bất kể thứ tự trong bảng. Chỉ SYN được tạo kết nối mới, và socket nghe cụ thể nhất thắng — nhờ thế 127.0.0.1:4000 và 10.10.2.20:4000 có thể cùng tồn tại. SYN tới 10.10.2.20:4000 không khớp 127.0.0.1:4000 lẫn socket đại diện nào, nên câu trả lời là reset: đúng cái \"Connection refused\" mà nc in ra ở client.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: demux({\"src\":\"10.10.1.10\",\"sport\":40042,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"...",
+              "vi": "Ca 1"
+            },
+            "goi": "demux({\"src\":\"10.10.1.10\",\"sport\":40042,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "E2"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: demux({\"src\":\"10.10.1.11\",\"sport\":38458,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"...",
+              "vi": "Ca 2"
+            },
+            "goi": "demux({\"src\":\"10.10.1.11\",\"sport\":38458,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "E1"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: demux({\"src\":\"10.10.1.10\",\"sport\":41182,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":true}, [{\"i...",
+              "vi": "Ca 3"
+            },
+            "goi": "demux({\"src\":\"10.10.1.10\",\"sport\":41182,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":true}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "L80"
+          },
+          {
+            "moTa": {
+              "en": "Case 4: demux({\"src\":\"10.10.1.10\",\"sport\":41182,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"...",
+              "vi": "Ca 4"
+            },
+            "goi": "demux({\"src\":\"10.10.1.10\",\"sport\":41182,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "RST"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "demux({\"src\":\"10.10.1.10\",\"sport\":40034,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "E3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "demux({\"src\":\"10.10.1.11\",\"sport\":40042,\"dst\":\"10.10.2.10\",\"dport\":80,\"syn\":false}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "RST",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "demux({\"src\":\"10.10.1.10\",\"sport\":41190,\"dst\":\"10.10.2.10\",\"dport\":443,\"syn\":true}, [{\"id\":\"L80\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:80\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"E1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.11:38458\"},{\"id\":\"E2\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40042\"},{\"id\":\"E3\",\"state\":\"ESTAB\",\"local\":\"10.10.2.10:80\",\"remote\":\"10.10.1.10:40034\"},{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:33409\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "RST",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "demux({\"src\":\"10.10.2.10\",\"sport\":45000,\"dst\":\"10.10.2.20\",\"dport\":4000,\"syn\":true}, [{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:41639\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4000\",\"state\":\"LISTEN\",\"local\":\"127.0.0.1:4000\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4001\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:4001\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L3000\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:3000\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "RST",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "demux({\"src\":\"127.0.0.1\",\"sport\":45001,\"dst\":\"127.0.0.1\",\"dport\":4000,\"syn\":true}, [{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:41639\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4000\",\"state\":\"LISTEN\",\"local\":\"127.0.0.1:4000\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4001\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:4001\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L3000\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:3000\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "L4000",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "demux({\"src\":\"10.10.2.10\",\"sport\":45002,\"dst\":\"10.10.2.20\",\"dport\":4001,\"syn\":true}, [{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:41639\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4000\",\"state\":\"LISTEN\",\"local\":\"127.0.0.1:4000\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4001\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:4001\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L3000\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:3000\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "L4001",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "demux({\"src\":\"10.10.2.10\",\"sport\":34220,\"dst\":\"10.10.2.20\",\"dport\":3000,\"syn\":true}, [{\"id\":\"DNS\",\"state\":\"LISTEN\",\"local\":\"127.0.0.11:41639\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4000\",\"state\":\"LISTEN\",\"local\":\"127.0.0.1:4000\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L4001\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:4001\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"L3000\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:3000\",\"remote\":\"0.0.0.0:*\"}])",
+            "mongDoi": "L3000",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "demux({\"src\":\"10.10.2.10\",\"sport\":50000,\"dst\":\"10.10.2.20\",\"dport\":8080,\"syn\":true}, [{\"id\":\"W8080\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:8080\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"X8080\",\"state\":\"LISTEN\",\"local\":\"10.10.2.20:8080\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"C1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.20:8080\",\"remote\":\"10.10.2.10:51515\"}])",
+            "mongDoi": "X8080",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "demux({\"src\":\"127.0.0.1\",\"sport\":50001,\"dst\":\"127.0.0.1\",\"dport\":8080,\"syn\":true}, [{\"id\":\"W8080\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:8080\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"X8080\",\"state\":\"LISTEN\",\"local\":\"10.10.2.20:8080\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"C1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.20:8080\",\"remote\":\"10.10.2.10:51515\"}])",
+            "mongDoi": "W8080",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 14",
+              "vi": "Ca ẩn 14"
+            },
+            "goi": "demux({\"src\":\"10.10.2.10\",\"sport\":51515,\"dst\":\"10.10.2.20\",\"dport\":8080,\"syn\":false}, [{\"id\":\"W8080\",\"state\":\"LISTEN\",\"local\":\"0.0.0.0:8080\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"X8080\",\"state\":\"LISTEN\",\"local\":\"10.10.2.20:8080\",\"remote\":\"0.0.0.0:*\"},{\"id\":\"C1\",\"state\":\"ESTAB\",\"local\":\"10.10.2.20:8080\",\"remote\":\"10.10.2.10:51515\"}])",
+            "mongDoi": "C1",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Matching by local port only: every segment for :80 goes to the first socket in the list.|||Chỉ khớp theo cổng cục bộ: mọi segment cho :80 đều vào socket đầu danh sách."
+        },
+        {
+          "loi": "Returning the listener for a non-SYN segment of an unknown connection (the kernel resets it).|||Trả socket nghe cho segment không phải SYN của một kết nối lạ (kernel sẽ reset nó)."
+        },
+        {
+          "loi": "Taking the first listener found: 0.0.0.0:8080 then beats 10.10.2.20:8080 just because it is listed first.|||Lấy socket nghe gặp đầu tiên: 0.0.0.0:8080 khi đó thắng 10.10.2.20:8080 chỉ vì in trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "demultiplexing",
+          "vi": "phân kênh",
+          "giaiThich": "Chọn đúng socket cho dữ liệu vừa đến."
+        },
+        {
+          "en": "4-tuple",
+          "vi": "bộ bốn",
+          "giaiThich": "IP và cổng của cả hai đầu."
+        },
+        {
+          "en": "SYN",
+          "vi": "gói mở kết nối"
+        },
+        {
+          "en": "RST",
+          "vi": "gói đặt lại kết nối"
+        }
+      ]
+    }
+  ]
+}

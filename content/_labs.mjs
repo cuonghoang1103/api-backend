@@ -10,7 +10,7 @@
  * Trang học (LearnPageClient — Academy dùng chung trang này) thấy khối thì gắn component React tương ứng
  * (frontend/src/components/labs/). Trình xem không chạy JS (app cũ, RSS…) vẫn có chú thích + link mở trang phòng lab.
  *
- * ⚠️ Danh sách dưới đây PHẢI khớp frontend/src/components/{os-lab,cpu-lab}/registry.ts — kiểm bằng
+ * ⚠️ Danh sách dưới đây PHẢI khớp frontend/src/components/{os-lab,cpu-lab,net-lab}/registry.ts — kiểm bằng
  *    npx tsx --test frontend/src/components/labs/registry.test.ts
  * Danh sách os-lab lấy THẲNG từ _lab.mjs của khoá OS (một nguồn, không chép).
  *
@@ -41,9 +41,24 @@ export const CPU_TOURS = {
   cache: ['cache-basics', 'cache-mapping', 'cache-start'],
 };
 
+/** Phòng lab mạng — khoá Networking for Developers (31/10/2026). PHẢI khớp frontend/src/components/net-lab/registry.ts. */
+export const NET_SIMS = {
+  encap: ['http', 'hop', 'mtu'],
+  arp: ['lan', 'gateway', 'stale'],
+  socket: ['demux', 'bind', 'ephemeral'],
+  waterfall: ['cold', 'warm', 'far'],
+};
+export const NET_TOURS = {
+  encap: ['encap-layers', 'encap-hop', 'encap-mtu', 'encap-start'],
+  arp: ['arp-lan', 'arp-gateway', 'arp-start'],
+  socket: ['socket-demux', 'socket-bind', 'socket-start'],
+  waterfall: ['waterfall-phases', 'waterfall-start'],
+};
+
 export const LAB_NS = {
   'os-lab': { sims: OS_SIMS, tours: OS_TOURS, gallery: '/os-lab', vi: 'Phòng lab hệ điều hành', en: 'OS lab' },
   'cpu-lab': { sims: CPU_SIMS, tours: CPU_TOURS, gallery: '/cpu-lab', vi: 'Phòng lab máy tính', en: 'Computer lab' },
+  'net-lab': { sims: NET_SIMS, tours: NET_TOURS, gallery: '/net-lab', vi: 'Phòng lab mạng', en: 'Network lab' },
 };
 
 /** @param {{ tour?: string }} [opts] */

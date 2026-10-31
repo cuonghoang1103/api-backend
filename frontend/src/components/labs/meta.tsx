@@ -8,6 +8,7 @@ import {
   Network, Route, ScanSearch, ShieldAlert, Shuffle, Timer, Type, Workflow, Zap,
   ArrowDownUp, KeyRound, Container, Layers3, RadioTower, Table2, AlarmClock, Hourglass,
   ChartGantt, Disc3, Split, TrendingUp, Grid3x3, Flame, Waypoints, MonitorSmartphone,
+  Package, Router, Plug, ChartNoAxesGantt,
 } from 'lucide-react';
 import type { L } from './tour/types';
 import type { LabNs } from './selector';
@@ -20,6 +21,7 @@ export const SIM_ICON: Record<LabNs, Record<string, ComponentType<{ className?: 
     syscall: ArrowDownUp, perm: KeyRound, fdtable: Table2, nslayers: Container, overlay: Layers3, epoll: RadioTower, eintr: AlarmClock, nagle: Hourglass,
     'gantt-exam': ChartGantt, 'disk-arm': Disc3, 'addr-split': Split, amdahl: TrendingUp, cacheline: Grid3x3, flamegraph: Flame, 'coordinated-omission': Waypoints, osmap: MonitorSmartphone,
   },
+  'net-lab': { encap: Package, arp: Router, socket: Plug, waterfall: ChartNoAxesGantt },
 };
 export const FALLBACK_ICON = ScanSearch;
 export const NET_ICON = Network;
@@ -64,5 +66,11 @@ export const SIM_HINT: Record<LabNs, Record<string, L>> = {
     flamegraph: ['A real profile: each box is a function, wider = more CPU time. Tap a box to see its SELF and TOTAL, tap again to zoom in.', 'Một hồ sơ thật: mỗi hộp là một hàm, càng rộng càng tốn CPU. Chạm một hộp để xem SELF và TOTAL, chạm tiếp để phóng to.'],
     'coordinated-omission': ['The same frozen server measured two ways. Press Play and compare the p99 the two load testers report.', 'Cùng một máy chủ bị đứng hình, đo theo hai cách. Bấm Chạy và so p99 mà hai công cụ tải báo ra.'],
     osmap: ['Flip the switch at the top between Linux, macOS and Windows: every card changes to that system\'s name, command and output.', 'Bật công tắc phía trên giữa Linux, macOS và Windows: mỗi thẻ đổi sang tên, lệnh và output của hệ đó.'],
+  },
+  'net-lab': {
+    encap: ['One real request (149 bytes) wrapped in four envelopes. Press Step and watch each layer add its header — then click any coloured byte in the hex dump to see what it means.', 'Một request thật (149 byte) bọc trong bốn lớp phong bì. Bấm Bước và xem từng tầng thêm header của nó — rồi bấm vào byte màu bất kỳ trong hex dump để xem nó nghĩa là gì.'],
+    arp: ['Three machines on one switch. Press Step: the moving frame shows who it is sent to, and each machine’s “IP → MAC” table fills in below.', 'Ba máy cắm chung một công tắc. Bấm Bước: frame đang chạy cho thấy nó gửi tới ai, và bảng “IP → MAC” của từng máy được điền dần bên dưới.'],
+    socket: ['One web server, many connections, all on port 80. Press Step and watch the ss table: each arriving packet is matched to exactly one socket by four numbers.', 'Một máy web, nhiều kết nối, tất cả ở cổng 80. Bấm Bước và xem bảng ss: mỗi gói tới được ghép đúng một socket bằng bốn con số.'],
+    waterfall: ['Where the time goes between pressing Enter and seeing the page — real curl numbers. Press Step to reveal one phase at a time, then drag the distance slider.', 'Thời gian đi đâu từ lúc bấm Enter tới lúc thấy trang — số curl thật. Bấm Bước để mở từng chặng, rồi kéo thanh khoảng cách.'],
   },
 };

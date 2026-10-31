@@ -1,0 +1,14 @@
+# Ch1 · 1.5 — máy api: một server nghe 127.0.0.1:4000, một server nghe 0.0.0.0:4001, rồi thử nghe trùng cổng
+$ ss -tlnp
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                       
+LISTEN 0      4096      127.0.0.11:41639      0.0.0.0:*                                 
+LISTEN 0      511        127.0.0.1:4000       0.0.0.0:*    users:(("node",pid=23,fd=18))
+LISTEN 0      511          0.0.0.0:4001       0.0.0.0:*    users:(("node",pid=33,fd=18))
+LISTEN 0      511          0.0.0.0:3000       0.0.0.0:*    users:(("node",pid=6,fd=18)) 
+$ nc -w 1 127.0.0.1 4000
+hi from 127.0.0.1:4000
+$ nc -w 1 10.10.2.20 4000
+$ nc -w 1 10.10.2.20 4001
+hi from 0.0.0.0:4001
+$ node -e "require('net').createServer().listen(4001,'0.0.0.0').on('error',e=>console.log(e.code, e.message))"
+EADDRINUSE listen EADDRINUSE: address already in use 0.0.0.0:4001

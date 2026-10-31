@@ -1,0 +1,5 @@
+# Ch1 · 1.4 — máy client2 (MAC mới) tự thông báo: gratuitous ARP
+$ arping -U -c 1 -I eth0 10.10.1.11
+ARPING 10.10.1.11 from 10.10.1.11 eth0
+Sent 1 probes (1 broadcast(s))
+Received 0 response(s)

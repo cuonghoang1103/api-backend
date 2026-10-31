@@ -1,0 +1,7 @@
+# Ch1 · 1.4 — nhìn VÀO cái switch ảo: bảng MAC của bridge nfd-lan (chạy trong không gian mạng của máy ảo Docker, CHỈ ĐỌC)
+$ ip -br link show type bridge | grep -E "^$BR "
+br-5045e7881ef6  UP             16:70:39:41:2f:d0 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+$ bridge fdb show br $BR | grep -v permanent
+02:00:0a:0a:01:fe dev veth789efee master br-5045e7881ef6 
+02:00:0a:0a:01:0a dev veth38bd416 master br-5045e7881ef6 
+02:00:0a:0a:01:0b dev veth440528e master br-5045e7881ef6 

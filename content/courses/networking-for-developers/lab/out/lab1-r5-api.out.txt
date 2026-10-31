@@ -1,0 +1,9 @@
+# Lab 1 · R5 — trên máy api: request mà nginx chuyển tiếp tới (kết nối THỨ HAI của cùng một lần gọi)
+$ tshark -r /tmp/r5.pcap -Y http.request -T fields -E header=y -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.request.uri -e http.x_forwarded_for 2>/dev/null
+ip.src	tcp.srcport	ip.dst	tcp.dstport	http.request.uri	http.x_forwarded_for
+10.10.2.10	34220	10.10.2.20	3000	/api/lab1	10.10.1.10
+$ tshark -r /tmp/r5.pcap -Y http.request -O http 2>/dev/null | grep -E '^    (GET|Host|X-Forwarded-For|Connection)'
+    GET /api/lab1 HTTP/1.0\r\n
+    X-Forwarded-For: 10.10.1.10\r\n
+    Host: 10.10.2.20:3000\r\n
+    Connection: close\r\n

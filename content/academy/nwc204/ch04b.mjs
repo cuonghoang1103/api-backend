@@ -13,6 +13,7 @@
  * ⚠️ MỌI phép tính trong file này đã được kiểm lại bằng python3 (114 phép kiểm).
  */
 import { registerDeck, walk, walkHead, bi } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch04b', {
   code: 'NWC204',
@@ -582,6 +583,7 @@ print(' '.join(format(0xFE80,'016b')[i:i+4] for i in range(0,16,4)))
 "</code></pre>
 </details>`,
     ),
+    sauHon({ bai: 'netdev-1-0-bit-byte', so: '1.1', ten: ['Bits, bytes, hex and signals', 'Bit, byte, hex và tín hiệu'], them: ['UTF-8 lengths, network byte order and htons, bits vs bytes per second measured with iperf3', 'độ dài UTF-8, thứ tự byte của mạng và htons, bit/s và byte/s đo bằng iperf3'] }),
   ].join('\n'),
 };
 

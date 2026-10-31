@@ -1,0 +1,4 @@
+# Ch1 · 1.4 — client2 đổi MAC lần nữa, lần này KHÔNG báo ai
+$ ip link set eth0 down
+$ ip link set eth0 address 02:00:0a:0a:01:cc
+$ ip link set eth0 up

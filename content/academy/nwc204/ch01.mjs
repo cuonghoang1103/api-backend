@@ -13,6 +13,7 @@
  * ⚠️ lesson.content là String; KHÔNG backtick lồng, KHÔNG ${ } trong chuỗi.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch01', {
   code: 'NWC204 Ch.1',
@@ -395,6 +396,7 @@ default via 192.168.1.1 dev eth0</code></pre>
 <p><strong>CQ1.1.</strong> Đừng nói "một mạng to" — hãy nói <em>mạng của các mạng</em>: rất nhiều WAN và LAN thuộc sở hữu độc lập đã thống nhất một cách đánh địa chỉ (IP) và một cách trao lưu lượng cho nhau (BGP). Không ai sở hữu nó, vì thế không ai tắt được nó và cũng không ai bảo đảm được nó.</p>
 <p><strong>CQ1.2.</strong> Ba thứ, thiếu một là hỏng: mỗi máy có một <em>địa chỉ</em>, chúng dùng chung một <em>môi trường truyền</em>, và chúng tuân theo một bộ <em>quy tắc</em> đã thống nhất (giao thức). Bỏ đi bất kỳ thứ nào là truyền thông dừng — và đó đúng là bố cục của Module 3.</p></div>`,
     ),
+    sauHon({ bai: 'netdev-0-8-bat-dau-tai-day', so: '0.A', ten: ['What a network is, where the Internet came from, and why it matters to you', 'Mạng là gì, Internet ra đời thế nào, và vì sao nó quan trọng với bạn'], them: ['the confusing pairs, seven dated milestones, and what a developer does with networking every week', 'các cặp thuật ngữ dễ nhầm, bảy mốc lịch sử có nguồn, và lập trình viên dùng mạng vào việc gì mỗi tuần'] }),
   ].join('\n'),
 };
 

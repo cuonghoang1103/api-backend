@@ -1,0 +1,63 @@
+# Phòng lab mạng của khoá Networking for Developers — "LabFlow thu nhỏ" chạy trên máy bạn.
+#
+#   lan 10.10.1.0/24                 router                 dmz 10.10.2.0/24
+#   client  10.10.1.10 ─┐                                ┌─ web (nginx)  10.10.2.10 :80  ──► api :3000
+#   client2 10.10.1.11 ─┴── 10.10.1.254 [router] 10.10.2.254 ──┤
+#                                                         └─ api (Node)   10.10.2.20 :3000
+#
+#   docker compose -f compose.yml -p nfd up -d          # dựng
+#   docker exec -it nfd-client bash                      # vào máy khách
+#   docker compose -f compose.yml -p nfd down            # dọn (xoá cả hai mạng)
+# Mọi container gắn nhãn netlab=1 ⇒ dọn sót: docker rm -f $(docker ps -aq --filter label=netlab=1)
+# MAC cố định (02:00:0a:0a:<mạng>:<máy> — 02 = địa chỉ "tự quản", phần sau là chính IP viết hex) ⇒ output mọi bài khớp nhau.
+# Bắt gói (tcpdump) chỉ cần NET_RAW — Docker cho sẵn; sửa route/ethtool/đổi MAC cần thêm NET_ADMIN. Không --privileged.
+name: nfd
+x-lab: &lab
+  image: net-lab
+  init: true
+  cap_add: [NET_ADMIN, NET_RAW]
+  labels: { netlab: "1" }
+  volumes: ["../:/lab/k:ro"]   # cả thư mục lab (moi-truong + code) chỉ-đọc ở /lab/k
+services:
+  router:
+    <<: *lab
+    container_name: nfd-router
+    hostname: router
+    sysctls: { net.ipv4.ip_forward: "1" }
+    networks:
+      lan: { ipv4_address: 10.10.1.254, mac_address: "02:00:0a:0a:01:fe" }
+      dmz: { ipv4_address: 10.10.2.254, mac_address: "02:00:0a:0a:02:fe" }
+    command: ["sleep", "infinity"]
+  client:
+    <<: *lab
+    container_name: nfd-client
+    hostname: client
+    networks: { lan: { ipv4_address: 10.10.1.10, mac_address: "02:00:0a:0a:01:0a" } }
+    command: ["sh", "-c", "ip route add 10.10.2.0/24 via 10.10.1.254 && exec sleep infinity"]
+  client2:
+    <<: *lab
+    container_name: nfd-client2
+    hostname: client2
+    networks: { lan: { ipv4_address: 10.10.1.11, mac_address: "02:00:0a:0a:01:0b" } }
+    command: ["sh", "-c", "ip route add 10.10.2.0/24 via 10.10.1.254 && exec sleep infinity"]
+  web:
+    <<: *lab
+    container_name: nfd-web
+    hostname: web
+    networks: { dmz: { ipv4_address: 10.10.2.10, mac_address: "02:00:0a:0a:02:0a" } }
+    command: ["sh", "-c", "ip route add 10.10.1.0/24 via 10.10.2.254 && cp /lab/k/moi-truong/nginx.conf /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"]
+  api:
+    <<: *lab
+    container_name: nfd-api
+    hostname: api
+    networks: { dmz: { ipv4_address: 10.10.2.20, mac_address: "02:00:0a:0a:02:14" } }
+    command: ["sh", "-c", "ip route add 10.10.1.0/24 via 10.10.2.254 && exec node /lab/k/moi-truong/api.js"]
+networks:
+  lan:
+    name: nfd-lan
+    labels: { netlab: "1" }
+    ipam: { config: [{ subnet: 10.10.1.0/24, gateway: 10.10.1.1 }] }
+  dmz:
+    name: nfd-dmz
+    labels: { netlab: "1" }
+    ipam: { config: [{ subnet: 10.10.2.0/24, gateway: 10.10.2.1 }] }

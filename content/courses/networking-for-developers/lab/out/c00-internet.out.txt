@@ -1,0 +1,34 @@
+# Mục 0 · container net-lab rời, ra Internet thật qua NAT của Docker (hostname netlab)
+$ dig +short cuongthai.com
+160.187.1.208
+$ curl -sv -o /dev/null https://cuongthai.com/ 2>&1 | grep -E '^\* (Host|IPv4|  Trying|Connected to|SSL connection|ALPN: server)|TLS handshake, (Client|Server) hello|^> (GET|Host)|^< (HTTP|server|content-type)'
+* Host cuongthai.com:443 was resolved.
+* IPv4: 160.187.1.208
+*   Trying 160.187.1.208:443...
+* TLSv1.3 (OUT), TLS handshake, Client hello (1):
+* TLSv1.3 (IN), TLS handshake, Server hello (2):
+* SSL connection using TLSv1.3 / TLS_AES_256_GCM_SHA384 / x25519 / id-ecPublicKey
+* ALPN: server accepted h2
+> GET / HTTP/2
+> Host: cuongthai.com
+< HTTP/2 200 
+< server: nginx/1.27.5
+< content-type: text/html; charset=utf-8
+$ for i in 1 2 3; do curl -s -o /dev/null -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\n' https://cuongthai.com/; done
+dns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738
+dns=0.003020 connect=0.011069 tls=0.022489 ttfb=0.046296 total=0.102054
+dns=0.002481 connect=0.008675 tls=0.047172 ttfb=0.067011 total=0.115606
+$ curl -s -o /dev/null -o /dev/null -w 'url=%{url} dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\n' https://cuongthai.com/ https://cuongthai.com/about
+url=https://cuongthai.com/ dns=0.002108 connect=0.008297 tls=0.020146 ttfb=0.041292 total=0.085199
+url=https://cuongthai.com/about dns=0.000000 connect=0.000000 tls=0.000000 ttfb=0.046141 total=0.206101
+$ curl -s -o /dev/null -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total} ip=%{remote_ip}\n' https://example.com/
+dns=0.045943 connect=0.073069 tls=0.132290 ttfb=0.186303 total=0.186428 ip=172.66.147.243
+$ ping -c 3 cuongthai.com
+PING cuongthai.com (160.187.1.208) 56(84) bytes of data.
+64 bytes from 160.187.1.208: icmp_seq=1 ttl=63 time=7.76 ms
+64 bytes from 160.187.1.208: icmp_seq=2 ttl=63 time=9.81 ms
+64 bytes from 160.187.1.208: icmp_seq=3 ttl=63 time=6.91 ms
+
+--- cuongthai.com ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2008ms
+rtt min/avg/max/mdev = 6.913/8.159/9.811/1.217 ms

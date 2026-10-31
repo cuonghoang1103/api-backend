@@ -34,6 +34,7 @@
  * ⚠️ Mỗi khối content PHẢI kết thúc bằng `].join('\n'),`.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch13', {
   code: 'NWC204',
@@ -353,6 +354,7 @@ B)  nc: connect to server port 5432 (tcp) failed: Operation timed out</code></pr
       ['CQ14.2', 'How to test network connectivity using ICMP? <em>— content belongs to Chapter 12; answered in full in Lesson 12.2 (the five-step ping ladder, reading TTL and jitter, traceroute via the TTL trick, and what a failed ping does and does not prove).</em>',
         'How to test network connectivity using ICMP? <em>— nội dung thuộc Chương 12; đã trả lời đầy đủ ở bài 12.2 (thang ping năm bậc, đọc TTL và độ giật, traceroute bằng mẹo TTL, và một cú ping hỏng chứng minh được gì và không chứng minh được gì).</em>'],
     ]),
+    sauHon({ bai: 'netdev-1-4-cong-socket', so: '1.5', ten: ['Ports and sockets', 'Cổng và socket'], them: ['ss on a real server, kernel demultiplexing, 127.0.0.1 vs 0.0.0.0, EADDRINUSE and docker -p', 'ss trên máy chủ thật, cách nhân phân phối gói, 127.0.0.1 khác 0.0.0.0, EADDRINUSE và docker -p'] }),
   ].join('\n'),
 };
 

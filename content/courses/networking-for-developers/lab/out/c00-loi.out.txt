@@ -1,0 +1,13 @@
+# Mục 0 · sáu thông báo lỗi trông na ná nhau nhưng chỉ tới những tầng khác nhau — máy client
+$ curl -sS http://labflow.invalid/
+curl: (6) Could not resolve host: labflow.invalid
+$ curl -sS http://10.10.2.20:4999/
+curl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Could not connect to server
+$ curl -sS --max-time 3 http://10.10.9.9/
+curl: (28) Connection timed out after 3002 milliseconds
+$ nc -v -w 1 10.10.2.20 4999
+nc: connect to 10.10.2.20 port 4999 (tcp) failed: Connection refused
+$ curl -sS -o /dev/null -w 'HTTP %{http_code}\n' http://10.10.2.10/hong/
+HTTP 502
+$ curl -sS -o /dev/null -w 'HTTP %{http_code} after %{time_total}s\n' http://10.10.2.10/cham/api/slow
+HTTP 504 after 1.001188s

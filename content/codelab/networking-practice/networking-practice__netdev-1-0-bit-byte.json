@@ -1,0 +1,1145 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-1-0-bit-byte",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-1-0-bit-byte"
+  },
+  "exercises": [
+    {
+      "title": "Bytes 1 — Decimal, binary and hex of one byte",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "binary",
+        "hexadecimal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>One byte has 8 bit positions with weights 128, 64, 32, 16, 8, 4, 2, 1; four bits are exactly one hex digit. Write each byte as 8 binary digits and as 2 hex digits (lower case). Every value appears in a real capture of this course.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một byte có 8 vị trí bit với trọng số 128, 64, 32, 16, 8, 4, 2, 1; bốn bit đúng bằng một chữ số hex. Viết mỗi byte thành 8 chữ số nhị phân và 2 chữ số hex (chữ thường). Mọi giá trị đều có trong một bản bắt gói thật của khoá.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Subtract the largest weight that fits, repeatedly: 71 = 64 + 4 + 2 + 1.|||Trừ dần trọng số lớn nhất còn vừa: 71 = 64 + 4 + 2 + 1.",
+        "Hex digits: 10 = a, 11 = b, 12 = c, 13 = d, 14 = e, 15 = f.|||Chữ số hex: 10 = a, 11 = b, 12 = c, 13 = d, 14 = e, 15 = f."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bytes 1 — Decimal, binary and hex of one byte\n\nAnswer in the answer panel (no code needed).\n\n1. Convert the byteĐổi byte\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bytes 1 — Decimal, binary and hex of one byte — answer key\n\n1. Convert the byteĐổi byte\n   - r1.b: 01000111 / 0100 0111\n   - r1.h: 47 / 0x47\n   - r2.b: 01010000 / 0101 0000\n   - r2.h: 50 / 0x50\n   - r3.b: 10111011 / 1011 1011\n   - r3.h: bb / 0xbb\n   - r4.b: 00001010 / 0000 1010\n   - r4.h: 0a / 0x0a\n   - r5.b: 01000000 / 0100 0000\n   - r5.h: 40 / 0x40\n   - r6.b: 10100000 / 1010 0000\n   - r6.h: a0 / 0xa0\n   Split the binary into two groups of four and read each group as one hex digit: 0100 0111 = 4 7 ⇒ 0x47 = \"G\"; 1011 1011 = b b ⇒ 0xbb = 187; 1010 0000 = a 0 ⇒ 0xa0. The classic slip is writing 10 as \"a\": one byte is ALWAYS two hex digits, so 10 is 0a — exactly how it appears in 0a 0a 02 0a.VI: Tách số nhị phân thành hai nhóm bốn bit và đọc mỗi nhóm thành một chữ số hex: 0100 0111 = 4 7 ⇒ 0x47 = \"G\"; 1011 1011 = b b ⇒ 0xbb = 187; 1010 0000 = a 0 ⇒ 0xa0. Lỗi kinh điển là viết 10 thành \"a\": một byte LUÔN có hai chữ số hex, nên 10 là 0a — đúng như trong 0a 0a 02 0a.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Split the binary into two groups of four and read each group as one hex digit: 0100 0111 = 4 7 ⇒ 0x47 = \"G\"; 1011 1011 = b b ⇒ 0xbb = 187; 1010 0000 = a 0 ⇒ 0xa0. The classic slip is writing 10 as \"a\": one byte is ALWAYS two hex digits, so 10 is 0a — exactly how it appears in 0a 0a 02 0a.</p><p><i>VI: Tách số nhị phân thành hai nhóm bốn bit và đọc mỗi nhóm thành một chữ số hex: 0100 0111 = 4 7 ⇒ 0x47 = \"G\"; 1011 1011 = b b ⇒ 0xbb = 187; 1010 0000 = a 0 ⇒ 0xa0. Lỗi kinh điển là viết 10 thành \"a\": một byte LUÔN có hai chữ số hex, nên 10 là 0a — đúng như trong 0a 0a 02 0a.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Convert the byte</p><p style=\"opacity:.75;font-size:.92em\"><i>Đổi byte</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Decimal"
+              },
+              {
+                "ma": "b",
+                "ten": "Binary (8 digits)"
+              },
+              {
+                "ma": "h",
+                "ten": "Hex (2 digits)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "71 (the letter G)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "80 (the low byte of port 80)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "187 (the low byte of port 443)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "10 (each 10 in 10.10.2.10)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "64 (the TTL of the client's packets)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "160 (the second byte of à)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.b": [
+                "01000111",
+                "0100 0111"
+              ],
+              "r1.h": [
+                "47",
+                "0x47"
+              ],
+              "r2.b": [
+                "01010000",
+                "0101 0000"
+              ],
+              "r2.h": [
+                "50",
+                "0x50"
+              ],
+              "r3.b": [
+                "10111011",
+                "1011 1011"
+              ],
+              "r3.h": [
+                "bb",
+                "0xbb"
+              ],
+              "r4.b": [
+                "00001010",
+                "0000 1010"
+              ],
+              "r4.h": [
+                "0a",
+                "0x0a"
+              ],
+              "r5.b": [
+                "01000000",
+                "0100 0000"
+              ],
+              "r5.h": [
+                "40",
+                "0x40"
+              ],
+              "r6.b": [
+                "10100000",
+                "1010 0000"
+              ],
+              "r6.h": [
+                "a0",
+                "0xa0"
+              ]
+            },
+            "giaiThich": "<p>Split the binary into two groups of four and read each group as one hex digit: 0100 0111 = 4 7 ⇒ 0x47 = \"G\"; 1011 1011 = b b ⇒ 0xbb = 187; 1010 0000 = a 0 ⇒ 0xa0. The classic slip is writing 10 as \"a\": one byte is ALWAYS two hex digits, so 10 is 0a — exactly how it appears in 0a 0a 02 0a.</p><p><i>VI: Tách số nhị phân thành hai nhóm bốn bit và đọc mỗi nhóm thành một chữ số hex: 0100 0111 = 4 7 ⇒ 0x47 = \"G\"; 1011 1011 = b b ⇒ 0xbb = 187; 1010 0000 = a 0 ⇒ 0xa0. Lỗi kinh điển là viết 10 thành \"a\": một byte LUÔN có hai chữ số hex, nên 10 là 0a — đúng như trong 0a 0a 02 0a.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping leading zeros (1010 instead of 00001010, a instead of 0a).|||Bỏ số 0 đầu (1010 thay vì 00001010, a thay vì 0a)."
+        },
+        {
+          "loi": "Reading 0x40 as forty: it is 4 × 16 = 64.|||Đọc 0x40 là bốn mươi: nó là 4 × 16 = 64."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bit",
+          "vi": "bit",
+          "giaiThich": "Một số 0 hoặc 1."
+        },
+        {
+          "en": "byte / octet",
+          "vi": "byte (8 bit)"
+        },
+        {
+          "en": "hexadecimal",
+          "vi": "hệ mười sáu"
+        }
+      ]
+    },
+    {
+      "title": "Bytes 2 — Bits per second, bytes per second",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "bits vs bytes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Network speeds are in bits per second, file sizes in bytes. Real output from the lab:<pre>$ ethtool eth0 | grep -E 'Speed|Duplex'\n\tSpeed: 10000Mb/s\n\tDuplex: Full\n$ iperf3 -c 10.10.2.10 -t 2 -f m | grep -E 'sender|receiver'\n[  5]   0.00-2.00   sec  10.9 GBytes  46815 Mbits/sec    0            sender\n[  5]   0.00-2.00   sec  10.9 GBytes  46813 Mbits/sec                  receiver</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tốc độ mạng tính bằng bit mỗi giây, kích thước tệp tính bằng byte. Output thật trong lab:<pre>$ ethtool eth0 | grep -E 'Speed|Duplex'\n\tSpeed: 10000Mb/s\n\tDuplex: Full\n$ iperf3 -c 10.10.2.10 -t 2 -f m | grep -E 'sender|receiver'\n[  5]   0.00-2.00   sec  10.9 GBytes  46815 Mbits/sec    0            sender\n[  5]   0.00-2.00   sec  10.9 GBytes  46813 Mbits/sec                  receiver</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Lower-case b = bit, upper-case B = byte; 1 B = 8 b.|||b thường = bit, B hoa = byte; 1 B = 8 b.",
+        "Divide a speed in bits by 8 before comparing it with a size in bytes.|||Chia tốc độ tính bằng bit cho 8 trước khi so với kích thước tính bằng byte."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bytes 2 — Bits per second, bytes per second\n\nAnswer in the answer panel (no code needed).\n\n1. Your plan says 100 Mbps. What is the best possible download speed?Gói cước ghi 100 Mbps. Tốc độ tải tốt nhất có thể là bao nhiêu?\n2. A 300 Mbps plan downloads a 750 MB file. At the very best it takes about …Gói 300 Mbps tải một tệp 750 MB. Tốt nhất mất khoảng …\n3. The virtual card says 10000 Mb/s but iperf3 measured 46815 Mbit/s. Why can it be faster?Card ảo ghi 10000 Mb/s nhưng iperf3 đo được 46815 Mbit/s. Vì sao có thể nhanh hơn?\n4. A MAC address has 48 bits. How many bytes, and how many hex digits are printed?Địa chỉ MAC có 48 bit. Bao nhiêu byte, và in ra bao nhiêu chữ số hex?\n5. Why do RFCs say \"octet\" instead of \"byte\"?Vì sao RFC dùng chữ \"octet\" thay cho \"byte\"?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bytes 2 — Bits per second, bytes per second — answer key\n\n1. Your plan says 100 Mbps. What is the best possible download speed?Gói cước ghi 100 Mbps. Tốc độ tải tốt nhất có thể là bao nhiêu?\n   Answer: c) 12.5 MB/s\n   Divide by 8: 100 000 000 bits/s ÷ 8 = 12 500 000 bytes/s, before any header overhead.VI: Chia 8: 100 000 000 bit/s ÷ 8 = 12 500 000 byte/s, chưa trừ phần header.\n\n2. A 300 Mbps plan downloads a 750 MB file. At the very best it takes about …Gói 300 Mbps tải một tệp 750 MB. Tốt nhất mất khoảng …\n   Answer: c) 20 seconds\n   300 Mbps ÷ 8 = 37.5 MB/s; 750 ÷ 37.5 = 20 s — and in practice longer, because every packet also carries headers.VI: 300 Mbps ÷ 8 = 37,5 MB/s; 750 ÷ 37,5 = 20 s — thực tế lâu hơn vì mỗi gói còn mang header.\n\n3. The virtual card says 10000 Mb/s but iperf3 measured 46815 Mbit/s. Why can it be faster?Card ảo ghi 10000 Mb/s nhưng iperf3 đo được 46815 Mbit/s. Vì sao có thể nhanh hơn?\n   Answer: b) Both containers share one computer; the \"cable\" is a memory copy\n   Between two containers on the same machine, data is copied between kernel buffers, limited only by CPU. On real hardware the advertised speed is a ceiling and you get less.VI: Giữa hai container trên cùng máy, dữ liệu chỉ được chép giữa các bộ đệm trong kernel, chỉ bị CPU giới hạn. Trên phần cứng thật, tốc độ quảng cáo là trần và bạn được ít hơn.\n\n4. A MAC address has 48 bits. How many bytes, and how many hex digits are printed?Địa chỉ MAC có 48 bit. Bao nhiêu byte, và in ra bao nhiêu chữ số hex?\n   Answer: a) 6 bytes, 12 hex digits\n   48 ÷ 8 = 6 bytes, two hex digits each: 02:00:0a:0a:01:0a.VI: 48 ÷ 8 = 6 byte, mỗi byte hai chữ số hex: 02:00:0a:0a:01:0a.\n\n5. Why do RFCs say \"octet\" instead of \"byte\"?Vì sao RFC dùng chữ \"octet\" thay cho \"byte\"?\n   Answer: b) An octet is always exactly 8 bits; old machines had other byte sizes\n   Some historical computers used bytes of 6, 7 or 9 bits; \"octet\" removes all doubt. Today byte and octet mean the same 8 bits.VI: Vài máy tính thời xưa dùng byte 6, 7 hay 9 bit; \"octet\" xoá mọi nghi ngờ. Ngày nay byte và octet cùng là 8 bit.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> 12.5 MB/s</p><p>Divide by 8: 100 000 000 bits/s ÷ 8 = 12 500 000 bytes/s, before any header overhead.</p><p><i>VI: Chia 8: 100 000 000 bit/s ÷ 8 = 12 500 000 byte/s, chưa trừ phần header.</i></p></li><li><p><b>c)</b> 20 seconds</p><p>300 Mbps ÷ 8 = 37.5 MB/s; 750 ÷ 37.5 = 20 s — and in practice longer, because every packet also carries headers.</p><p><i>VI: 300 Mbps ÷ 8 = 37,5 MB/s; 750 ÷ 37,5 = 20 s — thực tế lâu hơn vì mỗi gói còn mang header.</i></p></li><li><p><b>b)</b> Both containers share one computer; the \"cable\" is a memory copy</p><p>Between two containers on the same machine, data is copied between kernel buffers, limited only by CPU. On real hardware the advertised speed is a ceiling and you get less.</p><p><i>VI: Giữa hai container trên cùng máy, dữ liệu chỉ được chép giữa các bộ đệm trong kernel, chỉ bị CPU giới hạn. Trên phần cứng thật, tốc độ quảng cáo là trần và bạn được ít hơn.</i></p></li><li><p><b>a)</b> 6 bytes, 12 hex digits</p><p>48 ÷ 8 = 6 bytes, two hex digits each: 02:00:0a:0a:01:0a.</p><p><i>VI: 48 ÷ 8 = 6 byte, mỗi byte hai chữ số hex: 02:00:0a:0a:01:0a.</i></p></li><li><p><b>b)</b> An octet is always exactly 8 bits; old machines had other byte sizes</p><p>Some historical computers used bytes of 6, 7 or 9 bits; \"octet\" removes all doubt. Today byte and octet mean the same 8 bits.</p><p><i>VI: Vài máy tính thời xưa dùng byte 6, 7 hay 9 bit; \"octet\" xoá mọi nghi ngờ. Ngày nay byte và octet cùng là 8 bit.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Your plan says 100 Mbps. What is the best possible download speed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói cước ghi 100 Mbps. Tốc độ tải tốt nhất có thể là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "100 MB/s"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1.25 MB/s"
+              },
+              {
+                "ma": "c",
+                "noiDung": "12.5 MB/s"
+              },
+              {
+                "ma": "d",
+                "noiDung": "800 MB/s"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Divide by 8: 100 000 000 bits/s ÷ 8 = 12 500 000 bytes/s, before any header overhead.</p><p><i>VI: Chia 8: 100 000 000 bit/s ÷ 8 = 12 500 000 byte/s, chưa trừ phần header.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 300 Mbps plan downloads a 750 MB file. At the very best it takes about …</p><p style=\"opacity:.75;font-size:.92em\"><i>Gói 300 Mbps tải một tệp 750 MB. Tốt nhất mất khoảng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2.5 seconds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "160 seconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "20 seconds"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0.4 seconds"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>300 Mbps ÷ 8 = 37.5 MB/s; 750 ÷ 37.5 = 20 s — and in practice longer, because every packet also carries headers.</p><p><i>VI: 300 Mbps ÷ 8 = 37,5 MB/s; 750 ÷ 37,5 = 20 s — thực tế lâu hơn vì mỗi gói còn mang header.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The virtual card says 10000 Mb/s but iperf3 measured 46815 Mbit/s. Why can it be faster?</p><p style=\"opacity:.75;font-size:.92em\"><i>Card ảo ghi 10000 Mb/s nhưng iperf3 đo được 46815 Mbit/s. Vì sao có thể nhanh hơn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "iperf3 counts bytes while ethtool counts bits, so they differ"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both containers share one computer; the \"cable\" is a memory copy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The card compresses the data, so it carries more than its speed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The two runs used different cards with different speeds"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Between two containers on the same machine, data is copied between kernel buffers, limited only by CPU. On real hardware the advertised speed is a ceiling and you get less.</p><p><i>VI: Giữa hai container trên cùng máy, dữ liệu chỉ được chép giữa các bộ đệm trong kernel, chỉ bị CPU giới hạn. Trên phần cứng thật, tốc độ quảng cáo là trần và bạn được ít hơn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A MAC address has 48 bits. How many bytes, and how many hex digits are printed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Địa chỉ MAC có 48 bit. Bao nhiêu byte, và in ra bao nhiêu chữ số hex?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "6 bytes, 12 hex digits"
+              },
+              {
+                "ma": "b",
+                "noiDung": "6 bytes, 6 hex digits"
+              },
+              {
+                "ma": "c",
+                "noiDung": "12 bytes, 24 hex digits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "48 bytes, 96 hex digits"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>48 ÷ 8 = 6 bytes, two hex digits each: 02:00:0a:0a:01:0a.</p><p><i>VI: 48 ÷ 8 = 6 byte, mỗi byte hai chữ số hex: 02:00:0a:0a:01:0a.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why do RFCs say \"octet\" instead of \"byte\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao RFC dùng chữ \"octet\" thay cho \"byte\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An octet is 16 bits, so it fits a whole port number in it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An octet is always exactly 8 bits; old machines had other byte sizes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "An octet is the hex form of a byte with two digits"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An octet is a byte that is sent in network byte order"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Some historical computers used bytes of 6, 7 or 9 bits; \"octet\" removes all doubt. Today byte and octet mean the same 8 bits.</p><p><i>VI: Vài máy tính thời xưa dùng byte 6, 7 hay 9 bit; \"octet\" xoá mọi nghi ngờ. Ngày nay byte và octet cùng là 8 bit.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting a 100 Mbps plan to download 100 MB per second.|||Mong gói 100 Mbps tải 100 MB mỗi giây."
+        },
+        {
+          "loi": "Trusting the advertised link speed as the real throughput.|||Tin tốc độ quảng cáo của đường truyền là thông lượng thật."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Mbps",
+          "vi": "triệu bit mỗi giây"
+        },
+        {
+          "en": "MB/s",
+          "vi": "triệu byte mỗi giây"
+        },
+        {
+          "en": "throughput",
+          "vi": "thông lượng",
+          "giaiThich": "Lượng dữ liệu thật sự đi được mỗi giây."
+        }
+      ]
+    },
+    {
+      "title": "Bytes 3 — Write toHex(bytes) like xxd and tshark print them",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "hexadecimal",
+        "hex dump"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Every packet tool prints bytes as pairs of hex digits. Write <code>toHex(bytes)</code>: <code>bytes</code> is an array of numbers 0–255; return them as two lower-case hex digits each, separated by one space.</p><pre>$ printf 'GET' | xxd\n00000000: 4745 54                                  GET</pre><p>So <code>toHex([71, 69, 84])</code> must return <code>'47 45 54'</code> and <code>toHex([10, 10, 2, 10])</code> must return <code>'0a 0a 02 0a'</code> — the address 10.10.2.10 inside a real frame. An empty array gives an empty string.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi công cụ xem gói in byte thành từng cặp chữ số hex. Viết <code>toHex(bytes)</code>: <code>bytes</code> là mảng số 0–255; trả về mỗi byte thành hai chữ số hex chữ thường, cách nhau một dấu cách.</p><pre>$ printf 'GET' | xxd\n00000000: 4745 54                                  GET</pre><p>Vậy <code>toHex([71, 69, 84])</code> phải trả <code>'47 45 54'</code> và <code>toHex([10, 10, 2, 10])</code> phải trả <code>'0a 0a 02 0a'</code> — địa chỉ 10.10.2.10 trong một frame thật. Mảng rỗng cho chuỗi rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "bytes — an array of integers 0–255.|||bytes — mảng số nguyên 0–255.",
+      "outputSpec": "A string like '47 45 54'.|||Một chuỗi như '47 45 54'.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toHex([71,69,84])",
+          "output": "\"47 45 54\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "n.toString(16) converts to hex — but 10 becomes \"a\", only one digit.|||n.toString(16) đổi sang hex — nhưng 10 thành \"a\", chỉ một chữ số.",
+        "Pad to two digits: (n < 16 ? \"0\" : \"\") + …, or .padStart(2, \"0\"). Then join(\" \").|||Đệm cho đủ hai chữ số: (n < 16 ? \"0\" : \"\") + …, hoặc .padStart(2, \"0\"). Rồi join(\" \")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** bytes: [71, 69, 84] ⇒ '47 45 54' */\nfunction toHex(bytes) {\n  // Write your solution here\n  return bytes.map(function (b) { return b.toString(16); }).join(' ');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction toHex(bytes) {\n  // Each byte ⇒ exactly two lower-case hex digits (10 ⇒ \"0a\", never \"a\"), joined by one space.\n  return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(' ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A byte has 256 values and one hex digit has 16, so exactly two digits are always needed; the leading zero is what keeps the columns of xxd and tshark aligned and the bytes unambiguous (\"a a\" could be one byte or two). The hidden case prints the first 14 bytes of the real 149-byte frame of lesson 1.3 — the Ethernet header.</p>",
+      "solutionExplanationHtmlVi": "<p>Một byte có 256 giá trị, một chữ số hex có 16, nên luôn cần đúng hai chữ số; số 0 đầu giữ cho các cột của xxd và tshark thẳng hàng và byte không bị nhập nhằng (\"a a\" là một hay hai byte?). Ca ẩn in 14 byte đầu của frame thật 149 byte ở bài 1.3 — header Ethernet.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: toHex([71,69,84])",
+              "vi": "Ca 1"
+            },
+            "goi": "toHex([71,69,84])",
+            "mongDoi": "47 45 54"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: toHex([10,10,2,10])",
+              "vi": "Ca 2"
+            },
+            "goi": "toHex([10,10,2,10])",
+            "mongDoi": "0a 0a 02 0a"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: toHex([0,80])",
+              "vi": "Ca 3"
+            },
+            "goi": "toHex([0,80])",
+            "mongDoi": "00 50"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "toHex([])",
+            "mongDoi": "",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "toHex([255,0,15,16,160])",
+            "mongDoi": "ff 00 0f 10 a0",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "toHex([2,0,10,10,1,254,2,0,10,10,1,10,8,0])",
+            "mongDoi": "02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "toHex([195,160])",
+            "mongDoi": "c3 a0",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the leading zero: \"a a 2 a\" instead of \"0a 0a 02 0a\".|||Quên số 0 đầu: \"a a 2 a\" thay vì \"0a 0a 02 0a\"."
+        },
+        {
+          "loi": "Using toUpperCase or adding a trailing space.|||Dùng toUpperCase hoặc thừa dấu cách cuối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hex dump",
+          "vi": "bản in hex",
+          "giaiThich": "Dữ liệu in thành các cặp chữ số hex, như xxd hay tshark -x."
+        },
+        {
+          "en": "padding",
+          "vi": "đệm thêm",
+          "giaiThich": "Thêm số 0 phía trước cho đủ độ dài."
+        }
+      ]
+    },
+    {
+      "title": "Bytes 4 — Which bytes go on the wire?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "network byte order",
+        "UTF-8"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Internet protocols send multi-byte numbers <b>big-endian</b> (most significant byte first). Text is sent as UTF-8. Write the bytes in hex, separated by spaces (e.g. <code>00 50</code>). Check yourself against the lab:<pre>$ python3 -c \"print((80).to_bytes(2, 'big').hex(), (443).to_bytes(2, 'big').hex(), (50228).to_bytes(2, 'big').hex())\"\n0050 01bb c434\n$ printf 'Xin chào' | xxd\n00000000: 5869 6e20 6368 c3a0 6f                   Xin ch..o</pre></p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giao thức Internet gửi số nhiều byte theo <b>big-endian</b> (byte nặng nhất đi trước). Chữ được gửi theo UTF-8. Viết các byte bằng hex, cách nhau dấu cách (vd <code>00 50</code>). Tự đối chiếu với lab:<pre>$ python3 -c \"print((80).to_bytes(2, 'big').hex(), (443).to_bytes(2, 'big').hex(), (50228).to_bytes(2, 'big').hex())\"\n0050 01bb c434\n$ printf 'Xin chào' | xxd\n00000000: 5869 6e20 6368 c3a0 6f                   Xin ch..o</pre></p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "High byte = Math.floor(n / 256), low byte = n % 256; the high byte goes first.|||Byte cao = Math.floor(n / 256), byte thấp = n % 256; byte cao đi trước.",
+        "Vietnamese letters with marks are 2 or 3 bytes in UTF-8.|||Chữ tiếng Việt có dấu chiếm 2 hoặc 3 byte trong UTF-8."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bytes 4 — Which bytes go on the wire?\n\nAnswer in the answer panel (no code needed).\n\n1. Bytes in hexByte dạng hex\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Bytes 4 — Which bytes go on the wire? — answer key\n\n1. Bytes in hexByte dạng hex\n   - r1.h: 00 16 / 0016 / 00:16\n   - r2.h: 0b b8 / 0bb8 / 0b:b8\n   - r3.h: 15 38 / 1538 / 15:38\n   - r4.h: 01 bb / 01bb / 01:bb\n   - r5.h: 0a 0a 01 0a / 0a0a010a / 0a:0a:01:0a\n   - r6.h: c3 a0 / c3a0 / c3:a0\n   - r7.h: e1 bb 85 / e1bb85 / e1:bb:85\n   Ports: divide by 256 — 3000 = 11 × 256 + 184 ⇒ 0b b8; 5432 = 21 × 256 + 56 ⇒ 15 38; 443 = 1 × 256 + 187 ⇒ 01 bb. An IPv4 address is its four numbers, one byte each. à takes two UTF-8 bytes (c3 a0) and ễ three (e1 bb 85) — the lesson's practice found them with printf | xxd. The tempting mistake is the little-endian order of your CPU (b8 0b for 3000).VI: Cổng: chia cho 256 — 3000 = 11 × 256 + 184 ⇒ 0b b8; 5432 = 21 × 256 + 56 ⇒ 15 38; 443 = 1 × 256 + 187 ⇒ 01 bb. Địa chỉ IPv4 là bốn con số, mỗi số một byte. à chiếm hai byte UTF-8 (c3 a0) còn ễ ba byte (e1 bb 85) — phần thực hành của bài tìm ra chúng bằng printf | xxd. Lỗi dễ mắc là thứ tự little-endian của CPU (b8 0b cho 3000).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ports: divide by 256 — 3000 = 11 × 256 + 184 ⇒ 0b b8; 5432 = 21 × 256 + 56 ⇒ 15 38; 443 = 1 × 256 + 187 ⇒ 01 bb. An IPv4 address is its four numbers, one byte each. à takes two UTF-8 bytes (c3 a0) and ễ three (e1 bb 85) — the lesson's practice found them with printf | xxd. The tempting mistake is the little-endian order of your CPU (b8 0b for 3000).</p><p><i>VI: Cổng: chia cho 256 — 3000 = 11 × 256 + 184 ⇒ 0b b8; 5432 = 21 × 256 + 56 ⇒ 15 38; 443 = 1 × 256 + 187 ⇒ 01 bb. Địa chỉ IPv4 là bốn con số, mỗi số một byte. à chiếm hai byte UTF-8 (c3 a0) còn ễ ba byte (e1 bb 85) — phần thực hành của bài tìm ra chúng bằng printf | xxd. Lỗi dễ mắc là thứ tự little-endian của CPU (b8 0b cho 3000).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Bytes in hex</p><p style=\"opacity:.75;font-size:.92em\"><i>Byte dạng hex</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Value"
+              },
+              {
+                "ma": "h",
+                "ten": "Bytes on the wire (hex)"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "port 22 (SSH)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "port 3000 (Node dev server)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "port 5432 (PostgreSQL)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "port 443 (HTTPS)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "IPv4 address 10.10.1.10"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "the letter à in UTF-8"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "the letter ễ in UTF-8"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.h": [
+                "00 16",
+                "0016",
+                "00:16"
+              ],
+              "r2.h": [
+                "0b b8",
+                "0bb8",
+                "0b:b8"
+              ],
+              "r3.h": [
+                "15 38",
+                "1538",
+                "15:38"
+              ],
+              "r4.h": [
+                "01 bb",
+                "01bb",
+                "01:bb"
+              ],
+              "r5.h": [
+                "0a 0a 01 0a",
+                "0a0a010a",
+                "0a:0a:01:0a"
+              ],
+              "r6.h": [
+                "c3 a0",
+                "c3a0",
+                "c3:a0"
+              ],
+              "r7.h": [
+                "e1 bb 85",
+                "e1bb85",
+                "e1:bb:85"
+              ]
+            },
+            "giaiThich": "<p>Ports: divide by 256 — 3000 = 11 × 256 + 184 ⇒ 0b b8; 5432 = 21 × 256 + 56 ⇒ 15 38; 443 = 1 × 256 + 187 ⇒ 01 bb. An IPv4 address is its four numbers, one byte each. à takes two UTF-8 bytes (c3 a0) and ễ three (e1 bb 85) — the lesson's practice found them with printf | xxd. The tempting mistake is the little-endian order of your CPU (b8 0b for 3000).</p><p><i>VI: Cổng: chia cho 256 — 3000 = 11 × 256 + 184 ⇒ 0b b8; 5432 = 21 × 256 + 56 ⇒ 15 38; 443 = 1 × 256 + 187 ⇒ 01 bb. Địa chỉ IPv4 là bốn con số, mỗi số một byte. à chiếm hai byte UTF-8 (c3 a0) còn ễ ba byte (e1 bb 85) — phần thực hành của bài tìm ra chúng bằng printf | xxd. Lỗi dễ mắc là thứ tự little-endian của CPU (b8 0b cho 3000).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the low byte first, as the CPU stores it.|||Viết byte thấp trước, như CPU lưu."
+        },
+        {
+          "loi": "Writing a port with one byte (16 instead of 00 16).|||Viết cổng bằng một byte (16 thay vì 00 16)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "big-endian",
+          "vi": "byte nặng trước",
+          "giaiThich": "Còn gọi là network byte order."
+        },
+        {
+          "en": "UTF-8",
+          "vi": "bảng mã UTF-8",
+          "giaiThich": "Mã hoá chữ của web: 1 byte cho chữ ASCII, 2–4 byte cho chữ khác."
+        }
+      ]
+    },
+    {
+      "title": "Bytes 5 — Write utf8Length(str) without TextEncoder",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "UTF-8",
+        "Content-Length"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>HTTP's <code>Content-Length</code> counts <b>bytes</b>. A hand-written server that sets <code>Content-Length: body.length</code> is correct for English and breaks on the first Vietnamese name — the client stops reading early and gets broken JSON. Real output from the lab:</p><pre>$ python3 -c \"print(len('Xin chào'), 'characters,', len('Xin chào'.encode()), 'bytes')\"\n8 characters, 9 bytes</pre><p>Write <code>utf8Length(str)</code> that returns how many bytes UTF-8 uses for <code>str</code>, computed <b>yourself</b> from the code points — <code>TextEncoder</code>, <code>Buffer</code>, <code>Blob</code>, <code>encodeURIComponent</code> and <code>unescape</code> are not allowed (a check reads your code).</p><table><thead><tr><th>Code point</th><th>UTF-8 bytes</th><th>Examples</th></tr></thead><tbody><tr><td>U+0000 – U+007F</td><td>1</td><td>G, e, space</td></tr><tr><td>U+0080 – U+07FF</td><td>2</td><td>à (U+00E0), é</td></tr><tr><td>U+0800 – U+FFFF</td><td>3</td><td>ễ (U+1EC5), ệ, 中</td></tr><tr><td>U+10000 – U+10FFFF</td><td>4</td><td>👋, 🇻 (each half of a flag)</td></tr></tbody></table><p>\"Nguyễn\" has 6 characters and 8 bytes; \"Xin chào\" has 8 characters and 9 bytes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>Content-Length</code> của HTTP đếm <b>byte</b>. Một server viết tay đặt <code>Content-Length: body.length</code> đúng với tiếng Anh và hỏng ở cái tên tiếng Việt đầu tiên — client dừng đọc sớm và nhận JSON vỡ. Output thật trong lab:</p><pre>$ python3 -c \"print(len('Xin chào'), 'characters,', len('Xin chào'.encode()), 'bytes')\"\n8 characters, 9 bytes</pre><p>Viết <code>utf8Length(str)</code> trả số byte UTF-8 dùng cho <code>str</code>, <b>tự tính</b> từ các code point — không được dùng <code>TextEncoder</code>, <code>Buffer</code>, <code>Blob</code>, <code>encodeURIComponent</code> và <code>unescape</code> (có một kiểm đọc mã của bạn).</p><table><thead><tr><th>Code point</th><th>Số byte UTF-8</th><th>Ví dụ</th></tr></thead><tbody><tr><td>U+0000 – U+007F</td><td>1</td><td>G, e, dấu cách</td></tr><tr><td>U+0080 – U+07FF</td><td>2</td><td>à (U+00E0), é</td></tr><tr><td>U+0800 – U+FFFF</td><td>3</td><td>ễ (U+1EC5), ệ, 中</td></tr><tr><td>U+10000 – U+10FFFF</td><td>4</td><td>👋, 🇻 (mỗi nửa lá cờ)</td></tr></tbody></table><p>\"Nguyễn\" có 6 ký tự và 8 byte; \"Xin chào\" có 8 ký tự và 9 byte.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "str — any JavaScript string (well-formed, written in NFC as typed on a keyboard).|||str — chuỗi JavaScript bất kỳ (hợp lệ, dạng NFC như gõ từ bàn phím).",
+      "outputSpec": "The number of UTF-8 bytes.|||Số byte UTF-8.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "utf8Length(\"GET\")",
+          "output": "3",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "str.length counts UTF-16 code units, not characters and not bytes — that is the bug you are fixing.|||str.length đếm đơn vị UTF-16, không phải ký tự cũng không phải byte — đó chính là lỗi bạn đang sửa.",
+        "for (const ch of str) gives one code point per step; ch.codePointAt(0) is its number. Compare it with 0x7F, 0x7FF and 0xFFFF.|||for (const ch of str) cho mỗi bước một code point; ch.codePointAt(0) là số của nó. So với 0x7F, 0x7FF và 0xFFFF."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** \"Xin chào\" ⇒ 9, \"Nguyễn\" ⇒ 8 — without TextEncoder / Buffer. */\nfunction utf8Length(str) {\n  // Write your solution here\n  return str.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction utf8Length(str) {\n  var n = 0;\n  // for…of walks CODE POINTS: an emoji such as 👋 (two UTF-16 units, str.length 2) is one step.\n  for (var ch of str) {\n    var cp = ch.codePointAt(0);\n    if (cp <= 0x7f) n += 1;          // ASCII: 0xxxxxxx\n    else if (cp <= 0x7ff) n += 2;    // 110xxxxx 10xxxxxx — e.g. à (U+00E0)\n    else if (cp <= 0xffff) n += 3;   // 1110xxxx + 2 bytes — e.g. ễ (U+1EC5), 中\n    else n += 4;                     // 11110xxx + 3 bytes — emoji and other symbols beyond U+FFFF\n  }\n  return n;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>UTF-8 stores each code point in 1–4 bytes depending on its size, with the ranges in the table. Walking the string with for…of yields code points (it joins the two UTF-16 halves of an emoji), so each one is counted once with the right size. This is exactly what Buffer.byteLength(body) computes in Node — the value Content-Length must carry.</p>",
+      "solutionExplanationHtmlVi": "<p>UTF-8 lưu mỗi code point bằng 1–4 byte tuỳ độ lớn, theo các khoảng trong bảng. Duyệt chuỗi bằng for…of cho ra code point (nó ghép hai nửa UTF-16 của emoji), nên mỗi cái được đếm một lần với đúng kích thước. Đây đúng là thứ Buffer.byteLength(body) tính trong Node — giá trị Content-Length phải mang.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: utf8Length(\"GET\")",
+              "vi": "Ca 1"
+            },
+            "goi": "utf8Length(\"GET\")",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Case 2: utf8Length(\"Xin chào\")",
+              "vi": "Ca 2"
+            },
+            "goi": "utf8Length(\"Xin chào\")",
+            "mongDoi": 9
+          },
+          {
+            "moTa": {
+              "en": "Case 3: utf8Length(\"Nguyễn\")",
+              "vi": "Ca 3"
+            },
+            "goi": "utf8Length(\"Nguyễn\")",
+            "mongDoi": 8
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "utf8Length(\"\")",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "utf8Length(\"👋\")",
+            "mongDoi": 4,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "utf8Length(\"Việt Nam 🇻🇳\")",
+            "mongDoi": 19,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "utf8Length(\"{\\\"name\\\":\\\"Trần Thị Ngọc Ánh\\\",\\\"city\\\":\\\"Đà Nẵng\\\"}\")",
+            "mongDoi": 56,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "utf8Length(\"中文 OK\")",
+            "mongDoi": 9,
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "Computes it yourself (no TextEncoder, Buffer, Blob, encodeURIComponent, unescape)",
+              "vi": "Tự tính (không TextEncoder, Buffer, Blob, encodeURIComponent, unescape)"
+            },
+            "tep": "answer.js",
+            "khop": "TextEncoder|Buffer|Blob|encodeURI|unescape",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning str.length: \"Nguyễn\" gives 6 instead of 8.|||Trả str.length: \"Nguyễn\" cho 6 thay vì 8."
+        },
+        {
+          "loi": "Looping with for (let i = 0; i < str.length; i++) and charCodeAt: an emoji is seen as two \"characters\" of 3 bytes each = 6 instead of 4.|||Lặp bằng for (let i = 0; i < str.length; i++) và charCodeAt: một emoji bị thấy thành hai \"ký tự\" 3 byte = 6 thay vì 4."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "code point",
+          "vi": "điểm mã",
+          "giaiThich": "Số hiệu của một ký tự trong Unicode, vd U+1EC5 = ễ."
+        },
+        {
+          "en": "UTF-16 code unit",
+          "vi": "đơn vị UTF-16",
+          "giaiThich": "Thứ mà str.length của JavaScript đếm."
+        },
+        {
+          "en": "Content-Length",
+          "vi": "độ dài nội dung (byte)"
+        }
+      ]
+    },
+    {
+      "title": "Bytes 6 — Write u16be, readU16 and htonsLE",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "network byte order",
+        "endianness",
+        "htons"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Binary headers (TCP, IP, DNS, TLS) carry 16-bit numbers as two bytes, most significant first. Your laptop's CPU is little-endian, which is why C code calls <code>htons()</code>. Real output from the lab client:</p><pre>$ python3 -c \"import sys; print(sys.byteorder)\"\nlittle\n$ python3 -c \"import socket; print(socket.htons(80), hex(socket.htons(80)))\"\n20480 0x5000</pre><p>Write three functions in one file:</p>\n<ol>\n<li><code>u16be(n)</code> ⇒ <code>[high, low]</code>, the two bytes of <code>n</code> in network order: <code>u16be(443)</code> = <code>[1, 187]</code>.</li>\n<li><code>readU16(bytes, offset)</code> ⇒ the big-endian number stored at <code>bytes[offset]</code> and <code>bytes[offset + 1]</code>. With the 149 bytes of the real frame of lesson 1.3, <code>readU16(frame, 36)</code> is the destination port 80 and <code>readU16(frame, 16)</code> is the IP total length 135.</li>\n<li><code>htonsLE(n)</code> ⇒ what <code>htons(n)</code> returns on a little-endian machine (the two bytes swapped): <code>htonsLE(80)</code> = <code>20480</code>.</li>\n</ol>\n<p><code>u16be</code> and <code>htonsLE</code> must throw a <code>RangeError</code> when <code>n</code> is not an integer from 0 to 65535; <code>readU16</code> must throw a <code>RangeError</code> when the two bytes are not inside the array. Hidden cases read another real frame (the web side of the router, lesson 1.4).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return values; do not print them.</li>\n  <li>Throw RangeError (not return null) for invalid input.</li>\n</ul>",
+      "problemHtmlVi": "<p>Header nhị phân (TCP, IP, DNS, TLS) chở số 16 bit bằng hai byte, byte nặng trước. CPU laptop của bạn là little-endian, vì thế code C phải gọi <code>htons()</code>. Output thật trên máy client của lab:</p><pre>$ python3 -c \"import sys; print(sys.byteorder)\"\nlittle\n$ python3 -c \"import socket; print(socket.htons(80), hex(socket.htons(80)))\"\n20480 0x5000</pre><p>Viết ba hàm trong một tệp:</p>\n<ol>\n<li><code>u16be(n)</code> ⇒ <code>[cao, thấp]</code>, hai byte của <code>n</code> theo thứ tự mạng: <code>u16be(443)</code> = <code>[1, 187]</code>.</li>\n<li><code>readU16(bytes, offset)</code> ⇒ số big-endian lưu ở <code>bytes[offset]</code> và <code>bytes[offset + 1]</code>. Với 149 byte của frame thật ở bài 1.3, <code>readU16(frame, 36)</code> là cổng đích 80 và <code>readU16(frame, 16)</code> là tổng độ dài IP 135.</li>\n<li><code>htonsLE(n)</code> ⇒ giá trị <code>htons(n)</code> trả về trên máy little-endian (đổi chỗ hai byte): <code>htonsLE(80)</code> = <code>20480</code>.</li>\n</ol>\n<p><code>u16be</code> và <code>htonsLE</code> phải ném <code>RangeError</code> khi <code>n</code> không phải số nguyên từ 0 tới 65535; <code>readU16</code> phải ném <code>RangeError</code> khi hai byte không nằm trong mảng. Ca ẩn đọc một frame thật khác (phía web của router, bài 1.4).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in.</li>\n  <li>Ném RangeError (không trả null) khi đầu vào sai.</li>\n</ul>",
+      "inputSpec": "n — a number; bytes — an array of 0–255; offset — an index.|||n — một số; bytes — mảng 0–255; offset — chỉ số.",
+      "outputSpec": "u16be ⇒ [high, low]; readU16 ⇒ a number 0–65535; htonsLE ⇒ a number 0–65535.|||u16be ⇒ [cao, thấp]; readU16 ⇒ số 0–65535; htonsLE ⇒ số 0–65535.",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "u16be(80)",
+          "output": "[0,80]",
+          "explanation": "80 = 0 × 256 + 80 ⇒ the bytes 00 50, exactly what Python printed.|||80 = 0 × 256 + 80 ⇒ hai byte 00 50, đúng như Python in ra."
+        }
+      ],
+      "hintsJson": [
+        "high = Math.floor(n / 256), low = n % 256 (or n >> 8 and n & 0xff).|||cao = Math.floor(n / 256), thấp = n % 256 (hoặc n >> 8 và n & 0xff).",
+        "readU16 is the reverse: bytes[offset] × 256 + bytes[offset + 1]. The last valid offset is bytes.length − 2.|||readU16 là chiều ngược: bytes[offset] × 256 + bytes[offset + 1]. offset hợp lệ cuối cùng là bytes.length − 2.",
+        "htonsLE(n) = low × 256 + high — reuse u16be, which already checks the range.|||htonsLE(n) = thấp × 256 + cao — dùng lại u16be, hàm đó đã kiểm khoảng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function u16be(n) {\n  // Write your solution here\n}\n\nfunction readU16(bytes, offset) {\n  // Write your solution here\n}\n\nfunction htonsLE(n) {\n  // Write your solution here\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction u16be(n) {\n  if (!Number.isInteger(n) || n < 0 || n > 65535) throw new RangeError('not a 16-bit unsigned number: ' + n);\n  return [Math.floor(n / 256), n % 256];           // [high byte, low byte] — the order on the wire\n}\n\nfunction readU16(bytes, offset) {\n  if (!Number.isInteger(offset) || offset < 0 || offset + 1 >= bytes.length) throw new RangeError('offset out of range: ' + offset);\n  return bytes[offset] * 256 + bytes[offset + 1];  // big-endian: the first byte is the heavy one\n}\n\nfunction htonsLE(n) {\n  // On a little-endian CPU, memory holds the LOW byte first. htons() swaps the two bytes so that,\n  // stored that way, the bytes in memory are [high, low] = network order. 80 = 0x0050 ⇒ 0x5000 = 20480.\n  var b = u16be(n);\n  return b[1] * 256 + b[0];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A 16-bit number is high × 256 + low. Network order sends high first, so u16be and readU16 are each other's inverse. A little-endian CPU keeps low first in memory; htons swaps the two bytes so that memory then holds high, low — the wire order. That is why Python printed 20480 = 0x5000 for htons(80). Checking the range and the offset turns silent corruption (NaN, truncated ports) into a loud error.</p>",
+      "solutionExplanationHtmlVi": "<p>Số 16 bit là cao × 256 + thấp. Thứ tự mạng gửi byte cao trước, nên u16be và readU16 là nghịch đảo của nhau. CPU little-endian giữ byte thấp trước trong bộ nhớ; htons đổi chỗ hai byte để bộ nhớ chứa cao, thấp — đúng thứ tự trên dây. Vì thế Python in 20480 = 0x5000 cho htons(80). Kiểm khoảng và offset biến lỗi âm thầm (NaN, cổng bị cắt) thành lỗi rõ ràng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: u16be(80)",
+              "vi": "Ca 1"
+            },
+            "goi": "u16be(80)",
+            "mongDoi": [
+              0,
+              80
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: u16be(443)",
+              "vi": "Ca 2"
+            },
+            "goi": "u16be(443)",
+            "mongDoi": [
+              1,
+              187
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 3: u16be(50228)",
+              "vi": "Ca 3"
+            },
+            "goi": "u16be(50228)",
+            "mongDoi": [
+              196,
+              52
+            ]
+          },
+          {
+            "moTa": {
+              "en": "readU16(frame of lesson 1.3, 36) — destination port",
+              "vi": "readU16(frame bài 1.3, 36) — cổng đích"
+            },
+            "goi": "readU16([2,0,10,10,1,254,2,0,10,10,1,10,8,0,69,0,0,135,48,184,64,0,64,6,242,145,10,10,1,10,10,10,2,10,158,6,0,80,24,56,94,129,170,7,123,30,128,24,0,63,23,161,0,0,1,1,8,10,214,53,42,172,104,167,207,211,71,69,84,32,47,97,112,105,47,104,101,108,108,111,32,72,84,84,80,47,49,46,49,13,10,72,111,115,116,58,32,49,48,46,49,48,46,50,46,49,48,13,10,85,115,101,114,45,65,103,101,110,116,58,32,99,117,114,108,47,56,46,49,56,46,48,13,10,65,99,99,101,112,116,58,32,42,47,42,13,10,13,10], 36)",
+            "mongDoi": 80
+          },
+          {
+            "moTa": {
+              "en": "readU16(frame of lesson 1.3, 16) — IP total length",
+              "vi": "readU16(frame bài 1.3, 16) — tổng độ dài IP"
+            },
+            "goi": "readU16([2,0,10,10,1,254,2,0,10,10,1,10,8,0,69,0,0,135,48,184,64,0,64,6,242,145,10,10,1,10,10,10,2,10,158,6,0,80,24,56,94,129,170,7,123,30,128,24,0,63,23,161,0,0,1,1,8,10,214,53,42,172,104,167,207,211,71,69,84,32,47,97,112,105,47,104,101,108,108,111,32,72,84,84,80,47,49,46,49,13,10,72,111,115,116,58,32,49,48,46,49,48,46,50,46,49,48,13,10,85,115,101,114,45,65,103,101,110,116,58,32,99,117,114,108,47,56,46,49,56,46,48,13,10,65,99,99,101,112,116,58,32,42,47,42,13,10,13,10], 16)",
+            "mongDoi": 135
+          },
+          {
+            "moTa": {
+              "en": "Case 6: htonsLE(80)",
+              "vi": "Ca 6"
+            },
+            "goi": "htonsLE(80)",
+            "mongDoi": 20480
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "htonsLE(443)",
+            "mongDoi": 47873,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "htonsLE(50228)",
+            "mongDoi": 13508,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "u16be(0)",
+            "mongDoi": [
+              0,
+              0
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "u16be(65535)",
+            "mongDoi": [
+              255,
+              255
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "readU16([2,0,10,10,2,10,2,0,10,10,2,254,8,0,69,0,0,135,74,229,64,0,63,6,217,100,10,10,1,10,10,10,2,10,144,206,0,80,106,66,89,225,217,104,131,83,128,24,0,63,23,161,0,0,1,1,8,10,116,241,141,224,235,100,6,244,71,69,84,32,47,97,112,105,47,104,101,108,108,111,32,72,84,84,80,47,49,46,49,13,10,72,111,115,116,58,32,49,48,46,49,48,46,50,46,49,48,13,10,85,115,101,114,45,65,103,101,110,116,58,32,99,117,114,108,47,56,46,49,56,46,48,13,10,65,99,99,101,112,116,58,32,42,47,42,13,10,13,10], 34)",
+            "mongDoi": 37070,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "readU16([2,0,10,10,2,10,2,0,10,10,2,254,8,0,69,0,0,135,74,229,64,0,63,6,217,100,10,10,1,10,10,10,2,10,144,206,0,80,106,66,89,225,217,104,131,83,128,24,0,63,23,161,0,0,1,1,8,10,116,241,141,224,235,100,6,244,71,69,84,32,47,97,112,105,47,104,101,108,108,111,32,72,84,84,80,47,49,46,49,13,10,72,111,115,116,58,32,49,48,46,49,48,46,50,46,49,48,13,10,85,115,101,114,45,65,103,101,110,116,58,32,99,117,114,108,47,56,46,49,56,46,48,13,10,65,99,99,101,112,116,58,32,42,47,42,13,10,13,10], 24)",
+            "mongDoi": 55652,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "readU16([1, 187], 0)",
+            "mongDoi": 443,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 14",
+              "vi": "Ca ẩn 14"
+            },
+            "goi": "u16be(65536)",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 15",
+              "vi": "Ca ẩn 15"
+            },
+            "goi": "htonsLE(80.5)",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 16",
+              "vi": "Ca ẩn 16"
+            },
+            "goi": "u16be(-1)",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 17",
+              "vi": "Ca ẩn 17"
+            },
+            "goi": "readU16([1, 187], 1)",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the two bytes in CPU order: 0x00 0x50 becomes 0x5000 = 20480 — the bug htons exists to prevent.|||Đọc hai byte theo thứ tự CPU: 0x00 0x50 thành 0x5000 = 20480 — đúng lỗi mà htons sinh ra để chặn."
+        },
+        {
+          "loi": "Allowing offset = bytes.length − 1: bytes[offset + 1] is undefined and the result is NaN.|||Cho phép offset = bytes.length − 1: bytes[offset + 1] là undefined và kết quả là NaN."
+        },
+        {
+          "loi": "Accepting 65536 or 80.5: they do not fit in 16 bits; real code would silently truncate them.|||Chấp nhận 65536 hay 80.5: chúng không vừa 16 bit; code thật sẽ âm thầm cắt bớt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "big-endian",
+          "vi": "byte nặng trước"
+        },
+        {
+          "en": "little-endian",
+          "vi": "byte nhẹ trước",
+          "giaiThich": "Cách CPU x86 và ARM lưu số."
+        },
+        {
+          "en": "htons",
+          "vi": "host to network short",
+          "giaiThich": "Đổi số 16 bit từ thứ tự máy sang thứ tự mạng."
+        },
+        {
+          "en": "RangeError",
+          "vi": "lỗi ngoài khoảng"
+        }
+      ]
+    }
+  ]
+}

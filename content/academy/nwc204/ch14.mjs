@@ -31,6 +31,7 @@
  *    lesson.content là ARRAY và academy-ra-soat.mjs đổ ở dòng 52.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch14', {
   code: 'NWC204',
@@ -886,6 +887,7 @@ write memory</code></pre>
 </ul>
 <p>Vậy là trong phạm vi một chương bạn nhìn thấy cả độ trôi lẫn chỗ nó tự chỉnh lại. Quy luật này được nêu lần đầu ở buổi 19 và ở đây được trích nguyên văn, không sửa.</p></div>`,
     ),
+    sauHon({ bai: 'netdev-0-2-go-dia-chi', so: '0.2', ten: ['What happens when you type a URL and press Enter', 'Chuyện gì xảy ra khi bạn gõ một địa chỉ rồi Enter'], them: ['every stage of one request timed on a real site with curl -w, and why distance dominates', 'từng chặng của một request bấm giờ trên trang thật bằng curl -w, và vì sao khoảng cách quyết định'] }),
   ].join('\n'),
 };
 

@@ -1,0 +1,7 @@
+# Ch1 · 1.5 — máy client gọi sang máy api
+$ nc -w 1 10.10.2.20 4000; echo "exit code $?"
+exit code 1
+$ nc -w 1 -v 10.10.2.20 4000
+nc: connect to 10.10.2.20 port 4000 (tcp) failed: Connection refused
+$ nc -w 1 10.10.2.20 4001
+hi from 0.0.0.0:4001

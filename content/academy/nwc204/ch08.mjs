@@ -18,6 +18,7 @@
  * ⚠️ File này CHỈ chứa chương 8. Đừng sửa NWC204.mjs ở đây.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch08', {
   code: 'NWC204',
@@ -680,6 +681,7 @@ ip -6 addr show | grep -E 'tentative|dadfailed'</code></pre>
       ['CQ9.1', 'How can ARP enable communication on a network? <em>— this one does match the chapter. Answer it with the broadcast question / unicast answer exchange, the cache and its states, and the fact that a host resolves the gateway rather than the far destination when the target is remote.</em>',
         'How can ARP enable communication on a network? <em>— câu này khớp đúng chương. Hãy trả lời bằng cuộc trao đổi hỏi-quảng-bá / đáp-unicast, bằng bộ đệm cùng các trạng thái của nó, và bằng việc máy trạm phân giải CỔNG RA chứ không phải máy đích ở xa khi đích nằm ngoài mạng.</em>'],
     ]),
+    sauHon({ bai: 'netdev-1-3-ethernet-arp', so: '1.4', ten: ['Ethernet, MAC addresses and ARP', 'Ethernet, địa chỉ MAC và ARP'], them: ['ARP captured live, the stale-cache failover bug with real timings, and gratuitous ARP', 'ARP bắt trực tiếp, lỗi cache cũ khi chuyển dự phòng với thời gian đo thật, và gratuitous ARP'] }),
   ].join('\n'),
 };
 

@@ -1,0 +1,1021 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-0-9-bat-dau-hoc-xong",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-0-9-bat-dau-hoc-xong"
+  },
+  "exercises": [
+    {
+      "title": "Errors 1 — Read the message, name the layer",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "reading errors"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Every line below was produced for real on the lab client (lab/out/c00-loi), except the certificate line, which is curl's standard wording for an expired certificate. For each message choose what it means and the first command you would run.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mọi dòng dưới đây được tạo thật trên máy client của phòng lab (lab/out/c00-loi), trừ dòng chứng chỉ là câu chữ chuẩn của curl khi chứng chỉ hết hạn. Với mỗi thông báo, chọn ý nghĩa và lệnh đầu tiên bạn sẽ chạy.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The curl exit code in brackets already names the layer: 6, 7, 28.|||Mã thoát của curl trong ngoặc đã gọi tên tầng: 6, 7, 28.",
+        "A status code (502, 504) means somebody answered in HTTP — the network path to that somebody worked.|||Có mã trạng thái (502, 504) nghĩa là có ai đó trả lời bằng HTTP — đường mạng tới người đó đã thông."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 1 — Read the message, name the layer\n\nAnswer in the answer panel (no code needed).\n\n1. Message → meaning → first toolThông báo → ý nghĩa → công cụ đầu tiên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 1 — Read the message, name the layer — answer key\n\n1. Message → meaning → first toolThông báo → ý nghĩa → công cụ đầu tiên\n   - r1.l: DNS — the name did not become an address\n   - r1.t: dig <name>\n   - r2.l: Nothing listens on that port (an answer: refused)\n   - r2.t: ss -tlnp on the server\n   - r3.l: No answer at all (firewall, route, machine off)\n   - r3.t: ping / mtr / firewall rules\n   - r4.l: Nothing listens on that port (an answer: refused)\n   - r4.t: ss -tlnp on the server\n   - r5.l: TLS — certificate dates or chain\n   - r5.t: openssl s_client\n   - r6.l: HTTP from a proxy — the app behind it\n   - r6.t: proxy and application logs\n   - r7.l: HTTP from a proxy — the app behind it\n   - r7.t: proxy and application logs\n   Exit 6 = DNS; exit 7 and nc's \"Connection refused\" = the machine answered but nothing listens on 4999 (curl 8 now says \"Could not connect to server\", nc still prints the classic words); exit 28 = silence until the 3-second limit; a certificate problem = TLS; 502/504 come from nginx, which is alive — the app behind it is dead/wrong (502) or slower than nginx waits (504, after exactly 1 s).VI: Mã 6 = DNS; mã 7 và \"Connection refused\" của nc = máy có trả lời nhưng không chương trình nào nghe cổng 4999 (curl 8 nay ghi \"Could not connect to server\", nc vẫn in câu cổ điển); mã 28 = im lặng tới hết giới hạn 3 giây; lỗi chứng chỉ = TLS; 502/504 do nginx trả — nginx còn sống, ứng dụng phía sau chết/sai (502) hoặc chậm hơn thời gian nginx chờ (504, sau đúng 1 s).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exit 6 = DNS; exit 7 and nc's \"Connection refused\" = the machine answered but nothing listens on 4999 (curl 8 now says \"Could not connect to server\", nc still prints the classic words); exit 28 = silence until the 3-second limit; a certificate problem = TLS; 502/504 come from nginx, which is alive — the app behind it is dead/wrong (502) or slower than nginx waits (504, after exactly 1 s).</p><p><i>VI: Mã 6 = DNS; mã 7 và \"Connection refused\" của nc = máy có trả lời nhưng không chương trình nào nghe cổng 4999 (curl 8 nay ghi \"Could not connect to server\", nc vẫn in câu cổ điển); mã 28 = im lặng tới hết giới hạn 3 giây; lỗi chứng chỉ = TLS; 502/504 do nginx trả — nginx còn sống, ứng dụng phía sau chết/sai (502) hoặc chậm hơn thời gian nginx chờ (504, sau đúng 1 s).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Message → meaning → first tool</p><p style=\"opacity:.75;font-size:.92em\"><i>Thông báo → ý nghĩa → công cụ đầu tiên</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Message"
+              },
+              {
+                "ma": "l",
+                "ten": "What it means",
+                "luaChon": [
+                  "DNS — the name did not become an address",
+                  "Nothing listens on that port (an answer: refused)",
+                  "No answer at all (firewall, route, machine off)",
+                  "TLS — certificate dates or chain",
+                  "HTTP from a proxy — the app behind it"
+                ]
+              },
+              {
+                "ma": "t",
+                "ten": "First thing to run",
+                "luaChon": [
+                  "dig <name>",
+                  "ss -tlnp on the server",
+                  "ping / mtr / firewall rules",
+                  "openssl s_client",
+                  "proxy and application logs"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "curl: (6) Could not resolve host: labflow.invalid"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "curl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Could not connect to server"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "curl: (28) Connection timed out after 3002 milliseconds"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "nc: connect to 10.10.2.20 port 4999 (tcp) failed: Connection refused"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "curl: (60) SSL certificate problem: certificate has expired"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "HTTP 502 (from nginx, for /hong/)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "HTTP 504 after 1.001188s (from nginx, for /cham/api/slow)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.l": "DNS — the name did not become an address",
+              "r1.t": "dig <name>",
+              "r2.l": "Nothing listens on that port (an answer: refused)",
+              "r2.t": "ss -tlnp on the server",
+              "r3.l": "No answer at all (firewall, route, machine off)",
+              "r3.t": "ping / mtr / firewall rules",
+              "r4.l": "Nothing listens on that port (an answer: refused)",
+              "r4.t": "ss -tlnp on the server",
+              "r5.l": "TLS — certificate dates or chain",
+              "r5.t": "openssl s_client",
+              "r6.l": "HTTP from a proxy — the app behind it",
+              "r6.t": "proxy and application logs",
+              "r7.l": "HTTP from a proxy — the app behind it",
+              "r7.t": "proxy and application logs"
+            },
+            "giaiThich": "<p>Exit 6 = DNS; exit 7 and nc's \"Connection refused\" = the machine answered but nothing listens on 4999 (curl 8 now says \"Could not connect to server\", nc still prints the classic words); exit 28 = silence until the 3-second limit; a certificate problem = TLS; 502/504 come from nginx, which is alive — the app behind it is dead/wrong (502) or slower than nginx waits (504, after exactly 1 s).</p><p><i>VI: Mã 6 = DNS; mã 7 và \"Connection refused\" của nc = máy có trả lời nhưng không chương trình nào nghe cổng 4999 (curl 8 nay ghi \"Could not connect to server\", nc vẫn in câu cổ điển); mã 28 = im lặng tới hết giới hạn 3 giây; lỗi chứng chỉ = TLS; 502/504 do nginx trả — nginx còn sống, ứng dụng phía sau chết/sai (502) hoặc chậm hơn thời gian nginx chờ (504, sau đúng 1 s).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating \"refused\" and \"timed out\" as the same problem.|||Coi \"refused\" và \"timed out\" là cùng một vấn đề."
+        },
+        {
+          "loi": "Restarting nginx on a 502 when the dead process is the app behind it.|||Khởi động lại nginx khi gặp 502 trong khi tiến trình chết là ứng dụng phía sau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exit code",
+          "vi": "mã thoát",
+          "giaiThich": "Số chương trình trả về khi kết thúc; curl dùng nó để báo loại lỗi."
+        },
+        {
+          "en": "connection refused",
+          "vi": "bị từ chối kết nối"
+        },
+        {
+          "en": "timed out",
+          "vi": "hết giờ chờ"
+        },
+        {
+          "en": "502 Bad Gateway",
+          "vi": "cổng nối hỏng",
+          "giaiThich": "Proxy còn sống nhưng server phía sau trả lời sai hoặc không trả lời."
+        }
+      ]
+    },
+    {
+      "title": "Errors 2 — An answer or silence?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "refused vs timeout",
+        "502 vs 504"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Use the real output of the lab client to answer.<pre>$ curl -sS http://10.10.2.20:4999/\ncurl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Could not connect to server\n$ curl -sS --max-time 3 http://10.10.9.9/\ncurl: (28) Connection timed out after 3002 milliseconds\n$ curl -sS -o /dev/null -w 'HTTP %{http_code} after %{time_total}s\\n' http://10.10.2.10/cham/api/slow\nHTTP 504 after 1.001188s</pre></p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng output thật của máy client trong phòng lab để trả lời.<pre>$ curl -sS http://10.10.2.20:4999/\ncurl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Could not connect to server\n$ curl -sS --max-time 3 http://10.10.9.9/\ncurl: (28) Connection timed out after 3002 milliseconds\n$ curl -sS -o /dev/null -w 'HTTP %{http_code} after %{time_total}s\\n' http://10.10.2.10/cham/api/slow\nHTTP 504 after 1.001188s</pre></p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask first: did ANYTHING answer? An answer comes back fast; silence costs the whole wait.|||Hỏi trước: có AI trả lời không? Câu trả lời về nhanh; im lặng tốn trọn thời gian chờ.",
+        "A status code always comes from someone who is alive; 502 vs 504 is \"wrong answer\" vs \"too slow\".|||Mã trạng thái luôn đến từ ai đó còn sống; 502 vs 504 là \"trả lời sai\" vs \"quá chậm\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 2 — An answer or silence?\n\nAnswer in the answer panel (no code needed).\n\n1. The refusal came back \"after 0 ms\" while the timeout took 3002 ms. Why?Lời từ chối về \"sau 0 ms\" còn timeout mất 3002 ms. Vì sao?\n2. Is the machine 10.10.2.20 switched on?Máy 10.10.2.20 có đang bật không?\n3. nginx answered 504 after 1.001 s for /cham/. What does that tell you?nginx trả 504 sau 1,001 s cho /cham/. Điều đó cho biết gì?\n4. ssh to your cloud server times out from the school network but works at home. The most likely cause is …ssh tới server cloud bị timeout ở mạng trường nhưng ở nhà chạy được. Nguyên nhân khả dĩ nhất là …\n5. Demo day: the back end runs app.listen(3000, '127.0.0.1'); the projector laptop calls it and gets \"connection refused\". Why?Ngày demo: back end chạy app.listen(3000, '127.0.0.1'); laptop máy chiếu gọi tới và bị \"connection refused\". Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 2 — An answer or silence? — answer key\n\n1. The refusal came back \"after 0 ms\" while the timeout took 3002 ms. Why?Lời từ chối về \"sau 0 ms\" còn timeout mất 3002 ms. Vì sao?\n   Answer: c) A refusal is an answer; a timeout is silence until the limit\n   10.10.2.20 is up and its kernel immediately answers \"nobody listens on 4999\". 10.10.9.9 never answers, so curl waits the whole --max-time of 3 s. That difference is the most useful clue in network debugging.VI: 10.10.2.20 đang chạy và kernel của nó trả lời ngay \"không ai nghe cổng 4999\". 10.10.9.9 không bao giờ trả lời nên curl chờ đủ --max-time 3 s. Khác biệt đó là manh mối hữu ích nhất khi gỡ lỗi mạng.\n\n2. Is the machine 10.10.2.20 switched on?Máy 10.10.2.20 có đang bật không?\n   Answer: c) Yes — something on it answered the connection attempt\n   To refuse, a kernel must be running and must send a reply (a TCP RST). A switched-off machine produces silence, i.e. a timeout. Curl 8 words it \"Could not connect to server\"; nc still prints \"Connection refused\".VI: Muốn từ chối thì kernel phải đang chạy và gửi trả lời (TCP RST). Máy tắt chỉ cho im lặng, tức timeout. curl 8 ghi \"Could not connect to server\"; nc vẫn in \"Connection refused\".\n\n3. nginx answered 504 after 1.001 s for /cham/. What does that tell you?nginx trả 504 sau 1,001 s cho /cham/. Điều đó cho biết gì?\n   Answer: a) The app behind nginx was slower than nginx agreed to wait\n   The lab endpoint takes 3 seconds while nginx waits only 1 — so nginx gives up and answers 504 Gateway Timeout itself. A crashed or wrong app gives 502 instead (/hong/ points at a port with no listener).VI: Endpoint trong lab mất 3 giây trong khi nginx chỉ chờ 1 giây — nên nginx bỏ cuộc và tự trả 504 Gateway Timeout. Ứng dụng chết hoặc sai cho 502 (/hong/ trỏ vào cổng không ai nghe).\n\n4. ssh to your cloud server times out from the school network but works at home. The most likely cause is …ssh tới server cloud bị timeout ở mạng trường nhưng ở nhà chạy được. Nguyên nhân khả dĩ nhất là …\n   Answer: a) the school firewall silently drops outgoing port 22\n   Silence (timeout), not a refusal: a firewall in the middle drops the packets without answering. A refusal would come from the server itself and would also happen at home. This is the real story from the lesson (September 2026).VI: Im lặng (timeout), không phải từ chối: tường lửa ở giữa vứt gói mà không trả lời. Từ chối sẽ đến từ chính server và ở nhà cũng bị. Đây là chuyện thật trong bài (tháng 9/2026).\n\n5. Demo day: the back end runs app.listen(3000, '127.0.0.1'); the projector laptop calls it and gets \"connection refused\". Why?Ngày demo: back end chạy app.listen(3000, '127.0.0.1'); laptop máy chiếu gọi tới và bị \"connection refused\". Vì sao?\n   Answer: d) 127.0.0.1 means \"only this machine\" may connect\n   A server bound to 127.0.0.1 listens only on the loopback interface; packets arriving on the Wi-Fi card find no listener on port 3000, so the kernel refuses. Fix: listen on 0.0.0.0 and open the firewall (lesson 1.5).VI: Server gắn vào 127.0.0.1 chỉ nghe trên giao diện loopback; gói đến qua card Wi-Fi không thấy ai nghe cổng 3000 nên kernel từ chối. Cách sửa: nghe trên 0.0.0.0 và mở tường lửa (bài 1.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A refusal is an answer; a timeout is silence until the limit</p><p>10.10.2.20 is up and its kernel immediately answers \"nobody listens on 4999\". 10.10.9.9 never answers, so curl waits the whole --max-time of 3 s. That difference is the most useful clue in network debugging.</p><p><i>VI: 10.10.2.20 đang chạy và kernel của nó trả lời ngay \"không ai nghe cổng 4999\". 10.10.9.9 không bao giờ trả lời nên curl chờ đủ --max-time 3 s. Khác biệt đó là manh mối hữu ích nhất khi gỡ lỗi mạng.</i></p></li><li><p><b>c)</b> Yes — something on it answered the connection attempt</p><p>To refuse, a kernel must be running and must send a reply (a TCP RST). A switched-off machine produces silence, i.e. a timeout. Curl 8 words it \"Could not connect to server\"; nc still prints \"Connection refused\".</p><p><i>VI: Muốn từ chối thì kernel phải đang chạy và gửi trả lời (TCP RST). Máy tắt chỉ cho im lặng, tức timeout. curl 8 ghi \"Could not connect to server\"; nc vẫn in \"Connection refused\".</i></p></li><li><p><b>a)</b> The app behind nginx was slower than nginx agreed to wait</p><p>The lab endpoint takes 3 seconds while nginx waits only 1 — so nginx gives up and answers 504 Gateway Timeout itself. A crashed or wrong app gives 502 instead (/hong/ points at a port with no listener).</p><p><i>VI: Endpoint trong lab mất 3 giây trong khi nginx chỉ chờ 1 giây — nên nginx bỏ cuộc và tự trả 504 Gateway Timeout. Ứng dụng chết hoặc sai cho 502 (/hong/ trỏ vào cổng không ai nghe).</i></p></li><li><p><b>a)</b> the school firewall silently drops outgoing port 22</p><p>Silence (timeout), not a refusal: a firewall in the middle drops the packets without answering. A refusal would come from the server itself and would also happen at home. This is the real story from the lesson (September 2026).</p><p><i>VI: Im lặng (timeout), không phải từ chối: tường lửa ở giữa vứt gói mà không trả lời. Từ chối sẽ đến từ chính server và ở nhà cũng bị. Đây là chuyện thật trong bài (tháng 9/2026).</i></p></li><li><p><b>d)</b> 127.0.0.1 means \"only this machine\" may connect</p><p>A server bound to 127.0.0.1 listens only on the loopback interface; packets arriving on the Wi-Fi card find no listener on port 3000, so the kernel refuses. Fix: listen on 0.0.0.0 and open the firewall (lesson 1.5).</p><p><i>VI: Server gắn vào 127.0.0.1 chỉ nghe trên giao diện loopback; gói đến qua card Wi-Fi không thấy ai nghe cổng 3000 nên kernel từ chối. Cách sửa: nghe trên 0.0.0.0 và mở tường lửa (bài 1.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The refusal came back \"after 0 ms\" while the timeout took 3002 ms. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lời từ chối về \"sau 0 ms\" còn timeout mất 3002 ms. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The refused machine is closer than the silent machine"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The timeout machine was busy sending a very large reply"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A refusal is an answer; a timeout is silence until the limit"
+              },
+              {
+                "ma": "d",
+                "noiDung": "curl retries a refused connection many times very fast"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>10.10.2.20 is up and its kernel immediately answers \"nobody listens on 4999\". 10.10.9.9 never answers, so curl waits the whole --max-time of 3 s. That difference is the most useful clue in network debugging.</p><p><i>VI: 10.10.2.20 đang chạy và kernel của nó trả lời ngay \"không ai nghe cổng 4999\". 10.10.9.9 không bao giờ trả lời nên curl chờ đủ --max-time 3 s. Khác biệt đó là manh mối hữu ích nhất khi gỡ lỗi mạng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Is the machine 10.10.2.20 switched on?</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy 10.10.2.20 có đang bật không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — DNS could not find the machine by its name"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — \"Could not connect\" means the machine is off"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — something on it answered the connection attempt"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Unknown — curl never contacted that machine at all"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>To refuse, a kernel must be running and must send a reply (a TCP RST). A switched-off machine produces silence, i.e. a timeout. Curl 8 words it \"Could not connect to server\"; nc still prints \"Connection refused\".</p><p><i>VI: Muốn từ chối thì kernel phải đang chạy và gửi trả lời (TCP RST). Máy tắt chỉ cho im lặng, tức timeout. curl 8 ghi \"Could not connect to server\"; nc vẫn in \"Connection refused\".</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>nginx answered 504 after 1.001 s for /cham/. What does that tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>nginx trả 504 sau 1,001 s cho /cham/. Điều đó cho biết gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The app behind nginx was slower than nginx agreed to wait"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The DNS lookup of 10.10.2.10 failed after one second"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The client network dropped the reply for one second"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The app behind nginx crashed before it received anything"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The lab endpoint takes 3 seconds while nginx waits only 1 — so nginx gives up and answers 504 Gateway Timeout itself. A crashed or wrong app gives 502 instead (/hong/ points at a port with no listener).</p><p><i>VI: Endpoint trong lab mất 3 giây trong khi nginx chỉ chờ 1 giây — nên nginx bỏ cuộc và tự trả 504 Gateway Timeout. Ứng dụng chết hoặc sai cho 502 (/hong/ trỏ vào cổng không ai nghe).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>ssh to your cloud server times out from the school network but works at home. The most likely cause is …</p><p style=\"opacity:.75;font-size:.92em\"><i>ssh tới server cloud bị timeout ở mạng trường nhưng ở nhà chạy được. Nguyên nhân khả dĩ nhất là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the school firewall silently drops outgoing port 22"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the school DNS gives the wrong address for the server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the server refuses connections from school addresses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the server certificate is not trusted on school Wi-Fi"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Silence (timeout), not a refusal: a firewall in the middle drops the packets without answering. A refusal would come from the server itself and would also happen at home. This is the real story from the lesson (September 2026).</p><p><i>VI: Im lặng (timeout), không phải từ chối: tường lửa ở giữa vứt gói mà không trả lời. Từ chối sẽ đến từ chính server và ở nhà cũng bị. Đây là chuyện thật trong bài (tháng 9/2026).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Demo day: the back end runs app.listen(3000, '127.0.0.1'); the projector laptop calls it and gets \"connection refused\". Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngày demo: back end chạy app.listen(3000, '127.0.0.1'); laptop máy chiếu gọi tới và bị \"connection refused\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "127.0.0.1 is a public address that the school blocks"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The projector laptop has no route to any 127 address"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Port 3000 is reserved, so no program may listen on it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "127.0.0.1 means \"only this machine\" may connect"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A server bound to 127.0.0.1 listens only on the loopback interface; packets arriving on the Wi-Fi card find no listener on port 3000, so the kernel refuses. Fix: listen on 0.0.0.0 and open the firewall (lesson 1.5).</p><p><i>VI: Server gắn vào 127.0.0.1 chỉ nghe trên giao diện loopback; gói đến qua card Wi-Fi không thấy ai nghe cổng 3000 nên kernel từ chối. Cách sửa: nghe trên 0.0.0.0 và mở tường lửa (bài 1.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding \"the server is down\" from a refusal — a refusal proves the machine is up.|||Kết luận \"server chết\" từ một lời từ chối — từ chối chứng tỏ máy đang chạy."
+        },
+        {
+          "loi": "Raising the client timeout to \"fix\" a 504 that nginx produced itself.|||Tăng timeout phía client để \"sửa\" lỗi 504 mà chính nginx sinh ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RST (reset)",
+          "vi": "gói đặt lại kết nối",
+          "giaiThich": "Gói TCP kernel gửi khi không ai nghe cổng — người gọi thấy \"refused\"."
+        },
+        {
+          "en": "firewall",
+          "vi": "tường lửa"
+        },
+        {
+          "en": "loopback",
+          "vi": "giao diện vòng lặp",
+          "giaiThich": "127.0.0.1 — chỉ chính máy này."
+        }
+      ]
+    },
+    {
+      "title": "Errors 3 — The reachability chain, in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "troubleshooting order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>A user only sees the first broken link of a chain. Put the links in the order a request needs them, then put the real YouTube incident of 24 February 2008 (times in UTC) in order.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người dùng chỉ thấy mắt xích hỏng đầu tiên của một chuỗi. Sắp các mắt xích theo thứ tự một request cần chúng, rồi sắp sự cố YouTube thật ngày 24/02/2008 (giờ UTC).</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "You cannot open a connection before you know the address, and you cannot check a certificate before there is a connection.|||Không thể mở kết nối khi chưa biết địa chỉ, và không thể kiểm chứng chỉ khi chưa có kết nối.",
+        "For YouTube: the fix that finally worked was the most specific route.|||Với YouTube: cách sửa cuối cùng có tác dụng là tuyến cụ thể nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 3 — The reachability chain, in order\n\nAnswer in the answer panel (no code needed).\n\n1. Reachability is a chainKhả năng tới được là một chuỗi\n2. YouTube, 24 February 2008YouTube, 24/02/2008\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 3 — The reachability chain, in order — answer key\n\n1. Reachability is a chainKhả năng tới được là một chuỗi\n   Answer: m1) Name → address (DNS)  →  m2) A route to that address (routing)  →  m4) A connection to the port (TCP)  →  m3) A certificate the client trusts (TLS)  →  m5) A valid answer from the application (HTTP)\n   name → route → connection → certificate → application. Check the links in this order before blaming anyone; Chapter 11 turns it into a checklist.VI: tên → tuyến → kết nối → chứng chỉ → ứng dụng. Kiểm từng mắt xích theo thứ tự này trước khi đổ lỗi cho ai; Chương 11 biến nó thành danh sách kiểm.\n\n2. YouTube, 24 February 2008YouTube, 24/02/2008\n   Answer: m1) 18:47 — Pakistan Telecom's route for 208.65.153.0/24 leaks to the Internet  →  m4) 20:07 — YouTube announces the same /24 itself  →  m2) 20:18 — YouTube announces two more specific /25 routes, which win  →  m3) 21:01 — the bad route is withdrawn\n   The /24 from YouTube only tied with the hijacked /24; the two /25 routes were more specific than anything Pakistan Telecom announced, so routers everywhere preferred them — \"the most specific route wins\" (lesson 2.2).VI: /24 do YouTube thông báo chỉ hoà với /24 bị chiếm; hai tuyến /25 cụ thể hơn mọi tuyến Pakistan Telecom thông báo, nên router khắp nơi chọn chúng — \"tuyến cụ thể nhất thắng\" (bài 2.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>name → route → connection → certificate → application. Check the links in this order before blaming anyone; Chapter 11 turns it into a checklist.</p><p><i>VI: tên → tuyến → kết nối → chứng chỉ → ứng dụng. Kiểm từng mắt xích theo thứ tự này trước khi đổ lỗi cho ai; Chương 11 biến nó thành danh sách kiểm.</i></p><p>The /24 from YouTube only tied with the hijacked /24; the two /25 routes were more specific than anything Pakistan Telecom announced, so routers everywhere preferred them — \"the most specific route wins\" (lesson 2.2).</p><p><i>VI: /24 do YouTube thông báo chỉ hoà với /24 bị chiếm; hai tuyến /25 cụ thể hơn mọi tuyến Pakistan Telecom thông báo, nên router khắp nơi chọn chúng — \"tuyến cụ thể nhất thắng\" (bài 2.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Reachability is a chain</p><p style=\"opacity:.75;font-size:.92em\"><i>Khả năng tới được là một chuỗi</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Name → address (DNS)"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "A route to that address (routing)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "A certificate the client trusts (TLS)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "A connection to the port (TCP)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "A valid answer from the application (HTTP)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m2",
+              "m4",
+              "m3",
+              "m5"
+            ],
+            "giaiThich": "<p>name → route → connection → certificate → application. Check the links in this order before blaming anyone; Chapter 11 turns it into a checklist.</p><p><i>VI: tên → tuyến → kết nối → chứng chỉ → ứng dụng. Kiểm từng mắt xích theo thứ tự này trước khi đổ lỗi cho ai; Chương 11 biến nó thành danh sách kiểm.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>YouTube, 24 February 2008</p><p style=\"opacity:.75;font-size:.92em\"><i>YouTube, 24/02/2008</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "18:47 — Pakistan Telecom's route for 208.65.153.0/24 leaks to the Internet"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "20:18 — YouTube announces two more specific /25 routes, which win"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "21:01 — the bad route is withdrawn"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "20:07 — YouTube announces the same /24 itself"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m2",
+              "m3"
+            ],
+            "giaiThich": "<p>The /24 from YouTube only tied with the hijacked /24; the two /25 routes were more specific than anything Pakistan Telecom announced, so routers everywhere preferred them — \"the most specific route wins\" (lesson 2.2).</p><p><i>VI: /24 do YouTube thông báo chỉ hoà với /24 bị chiếm; hai tuyến /25 cụ thể hơn mọi tuyến Pakistan Telecom thông báo, nên router khắp nơi chọn chúng — \"tuyến cụ thể nhất thắng\" (bài 2.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting TLS before TCP: TLS runs over an existing TCP connection.|||Đặt TLS trước TCP: TLS chạy trên một kết nối TCP đã có."
+        },
+        {
+          "loi": "Thinking the /24 announcement alone fixed YouTube.|||Nghĩ riêng thông báo /24 đã cứu được YouTube."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "route",
+          "vi": "tuyến đường"
+        },
+        {
+          "en": "more specific route",
+          "vi": "tuyến cụ thể hơn",
+          "giaiThich": "Tiền tố dài hơn, vd /25 cụ thể hơn /24."
+        },
+        {
+          "en": "reachability",
+          "vi": "khả năng tới được"
+        }
+      ]
+    },
+    {
+      "title": "Errors 4 — What the outages teach a developer",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "outages",
+        "caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>Reason about the incidents in the lesson. Every wrong option is something people really say during outages.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Suy luận về các sự cố trong bài. Mọi phương án sai đều là câu người ta thật sự nói khi có sự cố.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask which link of the chain broke, and whether a cache could keep the problem alive.|||Hỏi mắt xích nào gãy, và bộ đệm có thể giữ vấn đề sống lâu hơn không.",
+        "A status code from a proxy means every link up to the proxy worked.|||Mã trạng thái từ proxy nghĩa là mọi mắt xích tới proxy đều thông."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 4 — What the outages teach a developer\n\nAnswer in the answer panel (no code needed).\n\n1. Slack rolled back its DNSSEC change and things got worse. Why?Slack rút lại thay đổi DNSSEC và tình hình còn tệ hơn. Vì sao?\n2. During the Facebook outage public resolvers got about 30 times their usual queries. Why?Trong sự cố Facebook, máy phân giải công cộng nhận khoảng 30 lần số truy vấn thường ngày. Vì sao?\n3. After the seven incidents, which statement matches the lesson's pattern?Sau bảy sự cố, câu nào khớp với quy luật của bài?\n4. The AWS us-east-1 DynamoDB endpoint got an empty DNS record. Clients could not …Endpoint DynamoDB ở us-east-1 của AWS bị một bản ghi DNS rỗng. Client không thể …\n5. On 18 August 2026 cuongthai.com returned 502 for seven minutes. Which check would have found the culprit fastest?Ngày 18/08/2026 cuongthai.com trả 502 suốt bảy phút. Phép kiểm nào tìm ra thủ phạm nhanh nhất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Errors 4 — What the outages teach a developer — answer key\n\n1. Slack rolled back its DNSSEC change and things got worse. Why?Slack rút lại thay đổi DNSSEC và tình hình còn tệ hơn. Vì sao?\n   Answer: d) Resolvers had already cached part of the new configuration\n   DNS answers are cached, sometimes for hours. Part of the new setup was already in resolvers' caches, so the rollback produced a mix that failed. A DNS change is not instantly reversible (lesson 3.3).VI: Câu trả lời DNS được lưu đệm, đôi khi hàng giờ. Một phần cấu hình mới đã nằm trong bộ đệm của máy phân giải, nên rút lại tạo ra hỗn hợp hỏng. Thay đổi DNS không đảo ngược tức thì được (bài 3.3).\n\n2. During the Facebook outage public resolvers got about 30 times their usual queries. Why?Trong sự cố Facebook, máy phân giải công cộng nhận khoảng 30 lần số truy vấn thường ngày. Vì sao?\n   Answer: b) Every app and browser kept retrying the failed lookups\n   Failed lookups are not cached for long, and clients retry: billions of devices asking again and again. Retries without back-off multiply load during an outage — a lesson for your own retry code.VI: Tra cứu thất bại không được lưu lâu, và client thử lại: hàng tỷ thiết bị hỏi đi hỏi lại. Thử lại không giãn cách làm tải tăng gấp bội khi có sự cố — bài học cho code thử lại của chính bạn.\n\n3. After the seven incidents, which statement matches the lesson's pattern?Sau bảy sự cố, câu nào khớp với quy luật của bài?\n   Answer: b) Problems usually live in routing, DNS, TLS or the app\n   Two routing, four DNS, one TLS, one app behind a proxy — never the cable. And in almost every case the servers were up; what failed was a link of the chain in front of them.VI: Hai định tuyến, bốn DNS, một TLS, một ứng dụng sau proxy — không lần nào là cáp. Và gần như mọi lần server vẫn chạy; thứ hỏng là một mắt xích phía trước chúng.\n\n4. The AWS us-east-1 DynamoDB endpoint got an empty DNS record. Clients could not …Endpoint DynamoDB ở us-east-1 của AWS bị một bản ghi DNS rỗng. Client không thể …\n   Answer: a) turn the endpoint name into an address to connect to\n   With no address in the answer, the very first link (name → address) breaks; nothing after it can start. Many services that depend on DynamoDB failed with it.VI: Câu trả lời không có địa chỉ thì mắt xích đầu tiên (tên → địa chỉ) gãy; không gì phía sau bắt đầu được. Nhiều dịch vụ phụ thuộc DynamoDB hỏng theo.\n\n5. On 18 August 2026 cuongthai.com returned 502 for seven minutes. Which check would have found the culprit fastest?Ngày 18/08/2026 cuongthai.com trả 502 suốt bảy phút. Phép kiểm nào tìm ra thủ phạm nhanh nhất?\n   Answer: d) The API container's status and logs behind nginx\n   502 = the proxy is alive and the name, route, connection and certificate all worked — so look behind the proxy. The API container was crash-looping because of a wrong base image.VI: 502 = proxy còn sống, tên, tuyến, kết nối và chứng chỉ đều ổn — nên nhìn phía sau proxy. Container API đang khởi động lại liên tục vì sai ảnh nền.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Resolvers had already cached part of the new configuration</p><p>DNS answers are cached, sometimes for hours. Part of the new setup was already in resolvers' caches, so the rollback produced a mix that failed. A DNS change is not instantly reversible (lesson 3.3).</p><p><i>VI: Câu trả lời DNS được lưu đệm, đôi khi hàng giờ. Một phần cấu hình mới đã nằm trong bộ đệm của máy phân giải, nên rút lại tạo ra hỗn hợp hỏng. Thay đổi DNS không đảo ngược tức thì được (bài 3.3).</i></p></li><li><p><b>b)</b> Every app and browser kept retrying the failed lookups</p><p>Failed lookups are not cached for long, and clients retry: billions of devices asking again and again. Retries without back-off multiply load during an outage — a lesson for your own retry code.</p><p><i>VI: Tra cứu thất bại không được lưu lâu, và client thử lại: hàng tỷ thiết bị hỏi đi hỏi lại. Thử lại không giãn cách làm tải tăng gấp bội khi có sự cố — bài học cho code thử lại của chính bạn.</i></p></li><li><p><b>b)</b> Problems usually live in routing, DNS, TLS or the app</p><p>Two routing, four DNS, one TLS, one app behind a proxy — never the cable. And in almost every case the servers were up; what failed was a link of the chain in front of them.</p><p><i>VI: Hai định tuyến, bốn DNS, một TLS, một ứng dụng sau proxy — không lần nào là cáp. Và gần như mọi lần server vẫn chạy; thứ hỏng là một mắt xích phía trước chúng.</i></p></li><li><p><b>a)</b> turn the endpoint name into an address to connect to</p><p>With no address in the answer, the very first link (name → address) breaks; nothing after it can start. Many services that depend on DynamoDB failed with it.</p><p><i>VI: Câu trả lời không có địa chỉ thì mắt xích đầu tiên (tên → địa chỉ) gãy; không gì phía sau bắt đầu được. Nhiều dịch vụ phụ thuộc DynamoDB hỏng theo.</i></p></li><li><p><b>d)</b> The API container's status and logs behind nginx</p><p>502 = the proxy is alive and the name, route, connection and certificate all worked — so look behind the proxy. The API container was crash-looping because of a wrong base image.</p><p><i>VI: 502 = proxy còn sống, tên, tuyến, kết nối và chứng chỉ đều ổn — nên nhìn phía sau proxy. Container API đang khởi động lại liên tục vì sai ảnh nền.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Slack rolled back its DNSSEC change and things got worse. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Slack rút lại thay đổi DNSSEC và tình hình còn tệ hơn. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The old configuration had expired certificates inside"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Routers kept the new DNS records in their own tables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Rolling back DNS always deletes the domain for a day"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Resolvers had already cached part of the new configuration"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>DNS answers are cached, sometimes for hours. Part of the new setup was already in resolvers' caches, so the rollback produced a mix that failed. A DNS change is not instantly reversible (lesson 3.3).</p><p><i>VI: Câu trả lời DNS được lưu đệm, đôi khi hàng giờ. Một phần cấu hình mới đã nằm trong bộ đệm của máy phân giải, nên rút lại tạo ra hỗn hợp hỏng. Thay đổi DNS không đảo ngược tức thì được (bài 3.3).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>During the Facebook outage public resolvers got about 30 times their usual queries. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong sự cố Facebook, máy phân giải công cộng nhận khoảng 30 lần số truy vấn thường ngày. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Facebook moved all its DNS to the public resolvers"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every app and browser kept retrying the failed lookups"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Users switched to other sites that were slower"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Attackers used the outage to flood the resolvers"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Failed lookups are not cached for long, and clients retry: billions of devices asking again and again. Retries without back-off multiply load during an outage — a lesson for your own retry code.</p><p><i>VI: Tra cứu thất bại không được lưu lâu, và client thử lại: hàng tỷ thiết bị hỏi đi hỏi lại. Thử lại không giãn cách làm tải tăng gấp bội khi có sự cố — bài học cho code thử lại của chính bạn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After the seven incidents, which statement matches the lesson's pattern?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau bảy sự cố, câu nào khớp với quy luật của bài?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Problems usually come from the servers being down"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Problems usually live in routing, DNS, TLS or the app"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Problems usually live in cables and Wi-Fi hardware"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Problems usually come from the users' own laptops"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Two routing, four DNS, one TLS, one app behind a proxy — never the cable. And in almost every case the servers were up; what failed was a link of the chain in front of them.</p><p><i>VI: Hai định tuyến, bốn DNS, một TLS, một ứng dụng sau proxy — không lần nào là cáp. Và gần như mọi lần server vẫn chạy; thứ hỏng là một mắt xích phía trước chúng.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The AWS us-east-1 DynamoDB endpoint got an empty DNS record. Clients could not …</p><p style=\"opacity:.75;font-size:.92em\"><i>Endpoint DynamoDB ở us-east-1 của AWS bị một bản ghi DNS rỗng. Client không thể …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "turn the endpoint name into an address to connect to"
+              },
+              {
+                "ma": "b",
+                "noiDung": "verify the endpoint certificate after connecting"
+              },
+              {
+                "ma": "c",
+                "noiDung": "send more than one request per TCP connection"
+              },
+              {
+                "ma": "d",
+                "noiDung": "reach the Internet through their own provider"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>With no address in the answer, the very first link (name → address) breaks; nothing after it can start. Many services that depend on DynamoDB failed with it.</p><p><i>VI: Câu trả lời không có địa chỉ thì mắt xích đầu tiên (tên → địa chỉ) gãy; không gì phía sau bắt đầu được. Nhiều dịch vụ phụ thuộc DynamoDB hỏng theo.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>On 18 August 2026 cuongthai.com returned 502 for seven minutes. Which check would have found the culprit fastest?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngày 18/08/2026 cuongthai.com trả 502 suốt bảy phút. Phép kiểm nào tìm ra thủ phạm nhanh nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A new TLS certificate for the cuongthai.com name"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A ping to the VPS from the developer's laptop"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A DNS lookup of cuongthai.com from a laptop"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The API container's status and logs behind nginx"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>502 = the proxy is alive and the name, route, connection and certificate all worked — so look behind the proxy. The API container was crash-looping because of a wrong base image.</p><p><i>VI: 502 = proxy còn sống, tên, tuyến, kết nối và chứng chỉ đều ổn — nên nhìn phía sau proxy. Container API đang khởi động lại liên tục vì sai ảnh nền.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"The server is up, so it must be the user's network.\"|||\"Server còn chạy, vậy chắc là mạng của người dùng.\""
+        },
+        {
+          "loi": "Assuming a DNS rollback is instant.|||Cho rằng rút lại thay đổi DNS là tức thì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DNSSEC",
+          "vi": "chữ ký số cho DNS"
+        },
+        {
+          "en": "resolver",
+          "vi": "máy phân giải DNS"
+        },
+        {
+          "en": "back-off",
+          "vi": "giãn cách thử lại",
+          "giaiThich": "Mỗi lần thử lại chờ lâu hơn lần trước."
+        }
+      ]
+    },
+    {
+      "title": "Errors 5 — Write classifyCurlError(text)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "error classification",
+        "regular expressions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<p>On-call, the first minute is reading the error. Write <code>classifyCurlError(text)</code> that takes ONE line printed by curl, nc, ssh or a Node.js program and returns which link of the chain failed:</p>\n<p><code>'dns'</code> · <code>'refused'</code> · <code>'timeout'</code> · <code>'tls'</code> · <code>'http-proxy'</code> · <code>'unknown'</code></p>\n<p>Apply the rules <b>in this order</b> — the first rule that matches decides:</p>\n<ol>\n<li><b>Proxy status.</b> An HTTP status 502 or 504 — written <code>HTTP 502</code>, <code>HTTP/1.1 504 …</code>, <code>HTTP/2 502</code>, <code>… returned error: 502</code> — or the reason phrases <code>Bad Gateway</code>, <code>Gateway Time-out</code>, <code>Gateway Timeout</code> ⇒ <code>'http-proxy'</code>.</li>\n<li><b>curl exit code.</b> The line contains <code>curl: (N)</code>: 6 ⇒ <code>'dns'</code>, 7 ⇒ <code>'refused'</code>, 28 ⇒ <code>'timeout'</code>, 35 or 60 ⇒ <code>'tls'</code>, any other N ⇒ <code>'unknown'</code>.</li>\n<li><b>Keywords</b> (ignore upper/lower case), checked in this order: <code>could not resolve</code>, <code>ENOTFOUND</code>, <code>Name or service not known</code>, <code>Temporary failure in name resolution</code> ⇒ <code>'dns'</code>; <code>certificate</code>, <code>SSL</code>, <code>TLS</code> ⇒ <code>'tls'</code>; <code>timed out</code>, <code>ETIMEDOUT</code>, <code>timeout</code> ⇒ <code>'timeout'</code>; <code>refused</code>, <code>ECONNREFUSED</code>, <code>could not connect</code>, <code>couldn't connect</code> ⇒ <code>'refused'</code>.</li>\n<li>Anything else (an HTTP 200 or 404, an empty reply…) ⇒ <code>'unknown'</code> — the network path worked or the clue is not in the line.</li>\n</ol>\n<p>The visible cases are the six real lines from the lab (lab/out/c00-loi):</p><pre>curl: (6) Could not resolve host: labflow.invalid\ncurl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Could not connect to server\ncurl: (28) Connection timed out after 3002 milliseconds\nnc: connect to 10.10.2.20 port 4999 (tcp) failed: Connection refused\nHTTP 502\nHTTP 504 after 1.001188s</pre><p>The hidden cases use the standard wording of older curl versions, <code>curl -f</code>, an nginx error page, nc, ssh and Node.js — the messages you will meet at work.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi trực sự cố, phút đầu tiên là đọc lỗi. Viết <code>classifyCurlError(text)</code> nhận MỘT dòng do curl, nc, ssh hoặc một chương trình Node.js in ra và trả về mắt xích nào hỏng:</p>\n<p><code>'dns'</code> · <code>'refused'</code> · <code>'timeout'</code> · <code>'tls'</code> · <code>'http-proxy'</code> · <code>'unknown'</code></p>\n<p>Áp các luật <b>theo đúng thứ tự này</b> — luật đầu tiên khớp sẽ quyết định:</p>\n<ol>\n<li><b>Mã trạng thái của proxy.</b> Mã HTTP 502 hoặc 504 — dạng <code>HTTP 502</code>, <code>HTTP/1.1 504 …</code>, <code>HTTP/2 502</code>, <code>… returned error: 502</code> — hoặc cụm <code>Bad Gateway</code>, <code>Gateway Time-out</code>, <code>Gateway Timeout</code> ⇒ <code>'http-proxy'</code>.</li>\n<li><b>Mã thoát của curl.</b> Dòng chứa <code>curl: (N)</code>: 6 ⇒ <code>'dns'</code>, 7 ⇒ <code>'refused'</code>, 28 ⇒ <code>'timeout'</code>, 35 hoặc 60 ⇒ <code>'tls'</code>, N khác ⇒ <code>'unknown'</code>.</li>\n<li><b>Từ khoá</b> (không phân biệt hoa thường), xét theo thứ tự: <code>could not resolve</code>, <code>ENOTFOUND</code>, <code>Name or service not known</code>, <code>Temporary failure in name resolution</code> ⇒ <code>'dns'</code>; <code>certificate</code>, <code>SSL</code>, <code>TLS</code> ⇒ <code>'tls'</code>; <code>timed out</code>, <code>ETIMEDOUT</code>, <code>timeout</code> ⇒ <code>'timeout'</code>; <code>refused</code>, <code>ECONNREFUSED</code>, <code>could not connect</code>, <code>couldn't connect</code> ⇒ <code>'refused'</code>.</li>\n<li>Còn lại (HTTP 200 hay 404, trả lời rỗng…) ⇒ <code>'unknown'</code> — đường mạng đã thông hoặc manh mối không nằm trong dòng này.</li>\n</ol>\n<p>Các ca hiện là sáu dòng thật trong phòng lab (lab/out/c00-loi):</p><pre>curl: (6) Could not resolve host: labflow.invalid\ncurl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Could not connect to server\ncurl: (28) Connection timed out after 3002 milliseconds\nnc: connect to 10.10.2.20 port 4999 (tcp) failed: Connection refused\nHTTP 502\nHTTP 504 after 1.001188s</pre><p>Các ca ẩn dùng câu chữ chuẩn của curl bản cũ, <code>curl -f</code>, trang lỗi của nginx, nc, ssh và Node.js — những thông báo bạn sẽ gặp khi đi làm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "text — one line of output (a string).|||text — một dòng output (chuỗi).",
+      "outputSpec": "One of the six strings 'dns', 'refused', 'timeout', 'tls', 'http-proxy', 'unknown'.|||Một trong sáu chuỗi 'dns', 'refused', 'timeout', 'tls', 'http-proxy', 'unknown'.",
+      "constraints": "The rules are applied in the order given; the first match wins.\nA port number such as 504 inside \"port 504\" is NOT an HTTP status.|||Áp luật theo thứ tự đã cho; luật khớp đầu tiên thắng.\nSố cổng như 504 trong \"port 504\" KHÔNG phải mã trạng thái HTTP.",
+      "examplesJson": [
+        {
+          "input": "classifyCurlError(\"curl: (6) Could not resolve host: labflow.invalid\")",
+          "output": "\"dns\"",
+          "explanation": "curl exit code 6 = the name did not become an address.|||Mã thoát 6 của curl = tên không đổi được thành địa chỉ."
+        }
+      ],
+      "hintsJson": [
+        "Start with rule 2 (a regular expression /curl: \\((\\d+)\\)/ and a small lookup object); it already solves the first three lab lines.|||Bắt đầu với luật 2 (biểu thức chính quy /curl: \\((\\d+)\\)/ và một object tra cứu nhỏ); nó đã giải được ba dòng lab đầu tiên.",
+        "Then rule 1. Why must it come before the keywords? Look at \"504 Gateway Time-out\": it contains \"time\".|||Rồi tới luật 1. Vì sao nó phải đứng trước từ khoá? Nhìn \"504 Gateway Time-out\": nó chứa chữ \"time\".",
+        "For the status, require the word HTTP (or \"returned error:\") right before 502/504, so that \"port 504\" does not match. Lower-case the text once for the keyword rules.|||Với mã trạng thái, đòi chữ HTTP (hoặc \"returned error:\") đứng ngay trước 502/504, để \"port 504\" không khớp. Chuyển chữ thường một lần cho các luật từ khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * Return 'dns' | 'refused' | 'timeout' | 'tls' | 'http-proxy' | 'unknown'.\n * Rules, in order: 1) HTTP 502/504 from a proxy  2) curl exit code  3) keywords  4) 'unknown'.\n */\nfunction classifyCurlError(text) {\n  // Write your solution here\n  return 'unknown';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction classifyCurlError(text) {\n  var t = String(text);\n  // 1. A 502/504 from a proxy. Checked FIRST, because \"504 Gateway Time-out\" contains \"time\" and would\n  //    otherwise look like a network timeout. Accepted forms: \"HTTP 502\", \"HTTP/1.1 504 ...\", \"returned error: 502\",\n  //    or the reason phrases \"Bad Gateway\" / \"Gateway Time-out\" / \"Gateway Timeout\".\n  if (/HTTP(\\/[\\d.]+)?\\s+50[24]\\b/i.test(t) || /returned error:\\s*50[24]\\b/i.test(t) || /bad gateway|gateway time-?out/i.test(t)) return 'http-proxy';\n  // 2. curl names the failure with its exit code: \"curl: (N) ...\".\n  var m = /curl: \\((\\d+)\\)/.exec(t);\n  if (m) {\n    var byCode = { 6: 'dns', 7: 'refused', 28: 'timeout', 35: 'tls', 60: 'tls' };\n    return byCode[Number(m[1])] || 'unknown';\n  }\n  // 3. Other tools (nc, ssh, Node.js): keywords, in this order.\n  var low = t.toLowerCase();\n  if (/could not resolve|enotfound|name or service not known|temporary failure in name resolution/.test(low)) return 'dns';\n  if (/certificate|ssl|tls/.test(low)) return 'tls';\n  if (/timed out|etimedout|timeout/.test(low)) return 'timeout';\n  if (/refused|econnrefused|could not connect|couldn't connect/.test(low)) return 'refused';\n  return 'unknown';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order of the rules encodes what is most certain. A status code proves somebody answered in HTTP, so it beats every word in the line. A curl exit code is curl's own verdict, so it beats any wording (which changes between curl versions — \"Couldn't connect\" vs \"Could not connect\"). Keywords are the fallback for tools without codes, and their order matters too: a TLS message may contain \"connect\", and many timeouts contain \"connection\". The regular expression for the status requires \"HTTP\" or \"returned error:\" in front of the number, which is why the nc line about port 504 stays 'refused'.</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ tự luật mã hoá điều chắc chắn nhất. Mã trạng thái chứng tỏ có ai đó trả lời bằng HTTP, nên nó thắng mọi chữ trong dòng. Mã thoát của curl là phán quyết của chính curl, nên nó thắng mọi câu chữ (vốn đổi giữa các bản curl — \"Couldn't connect\" vs \"Could not connect\"). Từ khoá là phương án dự phòng cho công cụ không có mã, và thứ tự của chúng cũng quan trọng: thông báo TLS có thể chứa \"connect\", nhiều timeout chứa \"connection\". Biểu thức cho mã trạng thái đòi \"HTTP\" hoặc \"returned error:\" đứng trước con số, vì thế dòng nc về cổng 504 vẫn là 'refused'.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: classifyCurlError(\"curl: (6) Could not resolve host: labflow.invalid\")",
+              "vi": "Ca 1"
+            },
+            "goi": "classifyCurlError(\"curl: (6) Could not resolve host: labflow.invalid\")",
+            "mongDoi": "dns"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: classifyCurlError(\"curl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Coul...",
+              "vi": "Ca 2"
+            },
+            "goi": "classifyCurlError(\"curl: (7) Failed to connect to 10.10.2.20 port 4999 after 0 ms: Could not connect to server\")",
+            "mongDoi": "refused"
+          },
+          {
+            "moTa": {
+              "en": "Case 3: classifyCurlError(\"curl: (28) Connection timed out after 3002 milliseconds\")",
+              "vi": "Ca 3"
+            },
+            "goi": "classifyCurlError(\"curl: (28) Connection timed out after 3002 milliseconds\")",
+            "mongDoi": "timeout"
+          },
+          {
+            "moTa": {
+              "en": "Case 4: classifyCurlError(\"nc: connect to 10.10.2.20 port 4999 (tcp) failed: Connection refused\")",
+              "vi": "Ca 4"
+            },
+            "goi": "classifyCurlError(\"nc: connect to 10.10.2.20 port 4999 (tcp) failed: Connection refused\")",
+            "mongDoi": "refused"
+          },
+          {
+            "moTa": {
+              "en": "Case 5: classifyCurlError(\"HTTP 502\")",
+              "vi": "Ca 5"
+            },
+            "goi": "classifyCurlError(\"HTTP 502\")",
+            "mongDoi": "http-proxy"
+          },
+          {
+            "moTa": {
+              "en": "Case 6: classifyCurlError(\"HTTP 504 after 1.001188s\")",
+              "vi": "Ca 6"
+            },
+            "goi": "classifyCurlError(\"HTTP 504 after 1.001188s\")",
+            "mongDoi": "http-proxy"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "classifyCurlError(\"curl: (7) Failed to connect to localhost port 3000 after 0 ms: Couldn't connect to server\")",
+            "mongDoi": "refused",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "classifyCurlError(\"curl: (22) The requested URL returned error: 502\")",
+            "mongDoi": "http-proxy",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "classifyCurlError(\"<html><head><title>504 Gateway Time-out</title></head>\")",
+            "mongDoi": "http-proxy",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 10",
+              "vi": "Ca ẩn 10"
+            },
+            "goi": "classifyCurlError(\"curl: (60) SSL certificate problem: unable to get local issuer certificate\")",
+            "mongDoi": "tls",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 11",
+              "vi": "Ca ẩn 11"
+            },
+            "goi": "classifyCurlError(\"curl: (35) OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to cuongthai.com:443\")",
+            "mongDoi": "tls",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 12",
+              "vi": "Ca ẩn 12"
+            },
+            "goi": "classifyCurlError(\"nc: connect to 10.10.9.9 port 80 (tcp) timed out: Operation now in progress\")",
+            "mongDoi": "timeout",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 13",
+              "vi": "Ca ẩn 13"
+            },
+            "goi": "classifyCurlError(\"nc: connect to 10.10.2.20 port 504 (tcp) failed: Connection refused\")",
+            "mongDoi": "refused",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 14",
+              "vi": "Ca ẩn 14"
+            },
+            "goi": "classifyCurlError(\"ssh: connect to host 160.187.1.208 port 22: Connection timed out\")",
+            "mongDoi": "timeout",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 15",
+              "vi": "Ca ẩn 15"
+            },
+            "goi": "classifyCurlError(\"ssh: Could not resolve hostname vps: Name or service not known\")",
+            "mongDoi": "dns",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 16",
+              "vi": "Ca ẩn 16"
+            },
+            "goi": "classifyCurlError(\"Error: getaddrinfo ENOTFOUND labflow.invalid\")",
+            "mongDoi": "dns",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 17",
+              "vi": "Ca ẩn 17"
+            },
+            "goi": "classifyCurlError(\"Error: connect ECONNREFUSED 127.0.0.1:5432\")",
+            "mongDoi": "refused",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 18",
+              "vi": "Ca ẩn 18"
+            },
+            "goi": "classifyCurlError(\"Error: connect ETIMEDOUT 10.10.9.9:80\")",
+            "mongDoi": "timeout",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 19",
+              "vi": "Ca ẩn 19"
+            },
+            "goi": "classifyCurlError(\"Error: certificate has expired\")",
+            "mongDoi": "tls",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 20",
+              "vi": "Ca ẩn 20"
+            },
+            "goi": "classifyCurlError(\"HTTP/1.1 404 Not Found\")",
+            "mongDoi": "unknown",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 21",
+              "vi": "Ca ẩn 21"
+            },
+            "goi": "classifyCurlError(\"curl: (52) Empty reply from server\")",
+            "mongDoi": "unknown",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking for \"time\" or \"timeout\" before the HTTP status: \"504 Gateway Time-out\" becomes 'timeout', yet the network worked and nginx answered.|||Tìm \"time\" hay \"timeout\" trước mã HTTP: \"504 Gateway Time-out\" thành 'timeout', trong khi mạng vẫn thông và nginx đã trả lời."
+        },
+        {
+          "loi": "Searching for a bare \"504\" anywhere: \"port 504 … Connection refused\" is then misread as a proxy error.|||Tìm \"504\" trần ở mọi chỗ: \"port 504 … Connection refused\" bị đọc nhầm thành lỗi proxy."
+        },
+        {
+          "loi": "Matching \"connect\" for refused: \"connect ETIMEDOUT\" and \"Connection timed out\" both contain it.|||Khớp chữ \"connect\" cho refused: cả \"connect ETIMEDOUT\" lẫn \"Connection timed out\" đều chứa nó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "exit code",
+          "vi": "mã thoát"
+        },
+        {
+          "en": "regular expression",
+          "vi": "biểu thức chính quy"
+        },
+        {
+          "en": "reason phrase",
+          "vi": "cụm lý do",
+          "giaiThich": "Chữ đi sau mã HTTP, vd \"Bad Gateway\"."
+        },
+        {
+          "en": "on-call",
+          "vi": "trực sự cố"
+        }
+      ]
+    }
+  ]
+}

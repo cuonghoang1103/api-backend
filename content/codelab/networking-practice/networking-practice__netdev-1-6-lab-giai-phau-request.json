@@ -1,0 +1,760 @@
+{
+  "trackSlug": "networking-practice",
+  "moduleSlug": "netdev-1-6-lab-giai-phau-request",
+  "lesson": {
+    "course": "networking-for-developers",
+    "slug": "netdev-1-6-lab-giai-phau-request"
+  },
+  "exercises": [
+    {
+      "title": "Lab 1 — Dissect one request of LabFlow",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 120,
+      "points": 60,
+      "concepts": [
+        "packet dissection",
+        "hop-by-hop rewriting",
+        "evidence-based debugging"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "networking"
+      ],
+      "problemHtml": "<h1>Lab 1 — Dissect one request of LabFlow</h1>\n<p class=\"bi-phu\">Chapter 1 lab · course project part 1 · JavaScript, graded in the browser · 10 marks</p>\n<h2>1. Overview</h2>\n<p><b>Situation.</b> At Monday's stand-up a teammate says: <i>\"Our router rewrites the client's IP address — that's why the API sees 10.10.2.10.\"</i> Your lead wants evidence, not opinions. You captured the same request <code>curl -s http://10.10.2.10/api/hello</code> at the same moment on both sides of the router (lesson 1.4): on the client (LAN) and on the web server (DMZ). In the lesson lab (R2, R3) you read those captures by hand; here you write the code that does it from the raw bytes, so the next argument can be settled in one call.</p>\n<p>tshark's own summary of the two frames, for reference:</p><pre># LAN side\neth.src\teth.dst\tip.src\tip.dst\tip.ttl\tip.checksum\ttcp.srcport\ttcp.dstport\n02:00:0a:0a:01:0a\t02:00:0a:0a:01:fe\t10.10.1.10\t10.10.2.10\t64\t0xd864\t37070\t80\n\n# DMZ side\neth.src\teth.dst\tip.src\tip.dst\tip.ttl\tip.checksum\ttcp.srcport\ttcp.dstport\n02:00:0a:0a:02:fe\t02:00:0a:0a:02:0a\t10.10.1.10\t10.10.2.10\t63\t0xd964\t37070\t80</pre>\n<p>Your program must reach the same conclusion from the bytes alone — and must still give the right answer for captures it has never seen (hidden cases: another real request, frames built for this lab with IP options, padding, two routers, a NAT router, a corrupted checksum).</p>\n<h3>Main features</h3>\n<ul>\n  <li><code>hexToBytes(text)</code> — the tshark -x text ⇒ an array of byte values.</li>\n  <li><code>parseLayers(bytes)</code> — the bytes ⇒ a list of layers with their byte ranges and fields.</li>\n  <li><code>compareFrames(layersA, layersB)</code> — which fields stayed the same, which changed.</li>\n  <li><code>dissect(textA, textB)</code> — the full report with the number of routers and a verdict.</li>\n</ul>\n<h3>General requirements</h3>\n<ul>\n  <li>One file, <code>answer.js</code>, with the four functions at top level (the grader calls each one directly).</li>\n  <li>Plain JavaScript, no libraries, no TextDecoder/Buffer needed. Return values, do not print.</li>\n  <li>Never use fixed offsets past byte 14: every later position comes from a length field in the packet.</li>\n  <li>Each function is graded on its own inputs, so a mistake in one does not cost the others.</li>\n</ul>\n<h2>2. Files</h2>\n<pre>answer.js        hexToBytes · parseLayers · compareFrames · dissect</pre>\n<h2>3. Data model</h2>\n<p><b>Layer (one element of the parseLayers result)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>layer</code></td><td>string</td><td>\"Ethernet\", \"IPv4\", \"TCP\" or \"HTTP\" — in this order; \"HTTP\" only when the packet carries data</td></tr><tr><td><code>start, end</code></td><td>number</td><td>first and last byte offset of the layer, both included (Ethernet 0–13)</td></tr><tr><td><code>fields (Ethernet)</code></td><td>object</td><td>{ dst, src, type } — MACs lower-case with colons, type \"0x0800\"</td></tr><tr><td><code>fields (IPv4)</code></td><td>object</td><td>{ headerLen, totalLen, id, ttl, protocol, checksum, checksumOk, src, dst } — id and checksum as \"0x\" + 4 hex digits; checksumOk = the header checksum verifies</td></tr><tr><td><code>fields (TCP)</code></td><td>object</td><td>{ srcPort, dstPort, seq, ack, headerLen, flags } — seq/ack raw 32-bit numbers; flags as in exercise 1.3 (FIN, SYN, RST, PSH, ACK, URG, ECE, CWR from bit 0 up)</td></tr><tr><td><code>fields (HTTP)</code></td><td>object</td><td>{ requestLine, host, bytes } — the text before the first CRLF; the value of the first Host header (any case), or null; the number of data bytes</td></tr></tbody></table>\n<p><b>Report (the dissect result)</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>layers</code></td><td>Layer[]</td><td>parseLayers of the FIRST capture</td></tr><tr><td><code>sameFields, changedFields</code></td><td>string[]</td><td>the 15 compared fields, split in two, each list in the order of the table in feature 3</td></tr><tr><td><code>hops</code></td><td>number</td><td>TTL of capture A − TTL of capture B (routers between the two capture points)</td></tr><tr><td><code>verdict</code></td><td>string</td><td>\"different-packet\" | \"nat\" | \"routed\" | \"same-link\" — rules in feature 4</td></tr></tbody></table>\n<h3>Sample data</h3>\n<pre># A — LAN side, lab/out/c13-hop-client (real)\n0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\n0090  2a 0d 0a 0d 0a                                    *....\n\n# B — DMZ side, lab/out/c13-hop-web (real)\n0000  02 00 0a 0a 02 0a 02 00 0a 0a 02 fe 08 00 45 00   ..............E.\n0010  00 87 4a e5 40 00 3f 06 d9 64 0a 0a 01 0a 0a 0a   ..J.@.?..d......\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\n0090  2a 0d 0a 0d 0a                                    *....</pre>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. hexToBytes(text) <span class=\"bi-diem\">1.5 marks</span></h3>\n<p>Turn the text printed by <code>tshark -x</code> into an array of numbers 0–255.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Use only lines that start with four hex digits and two spaces; take characters 6–52 (the 16 hex columns) and ignore the ASCII column, which can contain anything — even text like \"ab cd ef\".</li>\n  <li>The two sample captures give 149 bytes each; the last line holds only 5 bytes.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>hexToBytes(A).length            ⇒ 149\nhexToBytes(A).slice(12, 16)     ⇒ [8, 0, 69, 0]</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. parseLayers(bytes) <span class=\"bi-diem\">3 marks</span></h3>\n<p>Split the frame into its layers, following the length fields — this is R2 of the lesson lab.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Ethernet is bytes 0–13. IPv4 starts at 14 and is <code>(byte14 &amp; 15) × 4</code> long; TCP starts right after it and is <code>(TCP byte 12 &gt;&gt; 4) × 4</code> long.</li>\n  <li>The data runs from the end of the TCP header to <code>14 + totalLen − 1</code>; bytes after that are Ethernet padding. No data ⇒ no \"HTTP\" layer.</li>\n  <li><code>checksumOk</code>: add the header as 16-bit big-endian words, fold the carries back in (while sum &gt; 0xffff: sum = low 16 bits + the rest); a correct header gives 0xffff.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>parseLayers(hexToBytes(A)).map(l =&gt; l.layer + \" \" + l.start + \"-\" + l.end)\n⇒ [\"Ethernet 0-13\", \"IPv4 14-33\", \"TCP 34-65\", \"HTTP 66-148\"]</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. compareFrames(layersA, layersB) <span class=\"bi-diem\">2.5 marks</span></h3>\n<p>Compare two parseLayers results field by field — this is R3 of the lesson lab. The 15 fields, in this order:<br><code>eth.dst eth.src ip.len ip.id ip.ttl ip.checksum ip.src ip.dst tcp.srcport tcp.dstport tcp.seq tcp.ack tcp.flags http.request_line http.host</code></p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>They map to Ethernet dst/src, IPv4 totalLen/id/ttl/checksum/src/dst, TCP srcPort/dstPort/seq/ack/flags and HTTP requestLine/host.</li>\n  <li>A field of a missing layer (no HTTP data) counts as null; flags compare as lists. Return <code>{ sameFields, changedFields }</code>, both in the order above.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>compareFrames(L(A), L(B)).changedFields\n⇒ [\"eth.dst\", \"eth.src\", \"ip.ttl\", \"ip.checksum\"]</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. dissect(textA, textB) and the verdict <span class=\"bi-diem\">3 marks</span></h3>\n<p>Put it together: <code>{ layers, sameFields, changedFields, hops, verdict }</code> where <code>layers</code> is the dissection of capture A and <code>hops</code> = TTL A − TTL B.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li><code>\"different-packet\"</code> if ip.id, tcp.seq or http.request_line changed — the two captures are not the same packet, nothing can be concluded.</li>\n  <li>Otherwise <code>\"nat\"</code> if ip.src, ip.dst, tcp.srcport or tcp.dstport changed — the claim would be true (Chapter 2).</li>\n  <li>Otherwise <code>\"routed\"</code> if hops &gt; 0 — the packet crossed routers that rewrote only the frame, the TTL and the checksum.</li>\n  <li>Otherwise <code>\"same-link\"</code>.</li>\n</ul>\n<p><b>Example:</b></p>\n<pre>dissect(A, B).hops    ⇒ 1\ndissect(A, B).verdict ⇒ \"routed\"   (the teammate's claim is false)</pre>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>hexToBytes(text)</td><td>1.5</td></tr><tr><td>2</td><td>parseLayers(bytes)</td><td>3</td></tr><tr><td>3</td><td>compareFrames(layersA, layersB)</td><td>2.5</td></tr><tr><td>4</td><td>dissect(textA, textB) and the verdict</td><td>3</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Fixed offsets (TCP at 34, data at 66): the hidden frame with IP options breaks.</li>\n  <li>Data length from the frame size: the padded ACK then \"carries\" 6 bytes.</li>\n  <li>Verdict \"nat\" because ip.checksum changed: the checksum changes whenever the TTL does.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Press Submit. Every feature is graded by its own checks (visible ones on Run, hidden ones on Submit); the rubric above shows the marks per feature. Then write the verdict for your lead in two sentences, quoting changedFields as the evidence.</p>",
+      "problemHtmlVi": "<h1>Lab 1 — Mổ xẻ một request của LabFlow</h1>\n<p class=\"bi-phu\">Lab chương 1 · phần 1 của dự án khoá · JavaScript, chấm trong trình duyệt · 10 điểm</p>\n<h2>1. Tổng quan</h2>\n<p><b>Tình huống.</b> Trong buổi stand-up sáng thứ Hai, một bạn nói: <i>\"Router của mình viết lại IP của client — vì thế API thấy 10.10.2.10.\"</i> Trưởng nhóm cần bằng chứng, không cần ý kiến. Bạn đã bắt cùng một request <code>curl -s http://10.10.2.10/api/hello</code> vào cùng một lúc ở hai phía router (bài 1.4): trên client (LAN) và trên web server (DMZ). Trong lab của bài (R2, R3) bạn đọc tay hai bản bắt đó; ở đây bạn viết code làm việc ấy từ byte thô, để lần tranh cãi sau được phân xử bằng một lần gọi hàm.</p>\n<p>Bản tóm tắt của chính tshark cho hai frame, để tham khảo:</p><pre># phía LAN\neth.src\teth.dst\tip.src\tip.dst\tip.ttl\tip.checksum\ttcp.srcport\ttcp.dstport\n02:00:0a:0a:01:0a\t02:00:0a:0a:01:fe\t10.10.1.10\t10.10.2.10\t64\t0xd864\t37070\t80\n\n# phía DMZ\neth.src\teth.dst\tip.src\tip.dst\tip.ttl\tip.checksum\ttcp.srcport\ttcp.dstport\n02:00:0a:0a:02:fe\t02:00:0a:0a:02:0a\t10.10.1.10\t10.10.2.10\t63\t0xd964\t37070\t80</pre>\n<p>Chương trình của bạn phải ra cùng kết luận chỉ từ các byte — và vẫn phải đúng với bản bắt nó chưa từng thấy (ca ẩn: một request thật khác, các frame dựng cho lab này có option IP, byte đệm, hai router, router NAT, checksum hỏng).</p>\n<h3>Chức năng chính</h3>\n<ul>\n  <li><code>hexToBytes(text)</code> — chữ tshark -x ⇒ mảng giá trị byte.</li>\n  <li><code>parseLayers(bytes)</code> — các byte ⇒ danh sách tầng kèm khoảng byte và các trường.</li>\n  <li><code>compareFrames(layersA, layersB)</code> — trường nào giữ nguyên, trường nào đổi.</li>\n  <li><code>dissect(textA, textB)</code> — báo cáo đầy đủ với số router đã qua và kết luận.</li>\n</ul>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Một tệp <code>answer.js</code>, bốn hàm ở cấp cao nhất (máy chấm gọi trực tiếp từng hàm).</li>\n  <li>JavaScript thuần, không thư viện, không cần TextDecoder/Buffer. Trả về giá trị, đừng in.</li>\n  <li>Không dùng offset cố định sau byte 14: mọi vị trí phía sau đều lấy từ một trường độ dài trong gói.</li>\n  <li>Mỗi hàm được chấm bằng đầu vào riêng, nên lỗi ở hàm này không làm mất điểm hàm khác.</li>\n</ul>\n<h2>2. Tệp</h2>\n<pre>answer.js        hexToBytes · parseLayers · compareFrames · dissect</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Layer (one element of the parseLayers result)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>layer</code></td><td>string</td><td>\"Ethernet\", \"IPv4\", \"TCP\" hoặc \"HTTP\" — theo thứ tự này; chỉ có \"HTTP\" khi gói chở dữ liệu</td></tr><tr><td><code>start, end</code></td><td>number</td><td>offset byte đầu và cuối của tầng, tính cả hai (Ethernet 0–13)</td></tr><tr><td><code>fields (Ethernet)</code></td><td>object</td><td>{ dst, src, type } — MAC chữ thường có dấu hai chấm, type \"0x0800\"</td></tr><tr><td><code>fields (IPv4)</code></td><td>object</td><td>{ headerLen, totalLen, id, ttl, protocol, checksum, checksumOk, src, dst } — id và checksum dạng \"0x\" + 4 chữ số hex; checksumOk = checksum header kiểm lại đúng</td></tr><tr><td><code>fields (TCP)</code></td><td>object</td><td>{ srcPort, dstPort, seq, ack, headerLen, flags } — seq/ack là số 32 bit thô; flags như bài 1.3 (FIN, SYN, RST, PSH, ACK, URG, ECE, CWR từ bit 0 lên)</td></tr><tr><td><code>fields (HTTP)</code></td><td>object</td><td>{ requestLine, host, bytes } — chữ trước CRLF đầu tiên; giá trị header Host đầu tiên (hoa thường đều được), hoặc null; số byte dữ liệu</td></tr></tbody></table>\n<p><b>Report (the dissect result)</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>layers</code></td><td>Layer[]</td><td>parseLayers của bản bắt THỨ NHẤT</td></tr><tr><td><code>sameFields, changedFields</code></td><td>string[]</td><td>15 trường được so, chia làm hai, mỗi danh sách theo thứ tự bảng ở chức năng 3</td></tr><tr><td><code>hops</code></td><td>number</td><td>TTL bản A − TTL bản B (số router giữa hai điểm bắt)</td></tr><tr><td><code>verdict</code></td><td>string</td><td>\"different-packet\" | \"nat\" | \"routed\" | \"same-link\" — luật ở chức năng 4</td></tr></tbody></table>\n<h3>Dữ liệu mẫu</h3>\n<pre># A — LAN side, lab/out/c13-hop-client (real)\n0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\n0090  2a 0d 0a 0d 0a                                    *....\n\n# B — DMZ side, lab/out/c13-hop-web (real)\n0000  02 00 0a 0a 02 0a 02 00 0a 0a 02 fe 08 00 45 00   ..............E.\n0010  00 87 4a e5 40 00 3f 06 d9 64 0a 0a 01 0a 0a 0a   ..J.@.?..d......\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\n0090  2a 0d 0a 0d 0a                                    *....</pre>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. hexToBytes(text) <span class=\"bi-diem\">1.5 điểm</span></h3>\n<p>Đổi chữ do <code>tshark -x</code> in ra thành mảng số 0–255.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chỉ dùng dòng bắt đầu bằng bốn chữ số hex và hai dấu cách; lấy ký tự 6–52 (16 cột hex) và bỏ cột ASCII, vốn có thể chứa bất cứ gì — kể cả chữ như \"ab cd ef\".</li>\n  <li>Hai bản bắt mẫu cho mỗi bản 149 byte; dòng cuối chỉ có 5 byte.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>hexToBytes(A).length            ⇒ 149\nhexToBytes(A).slice(12, 16)     ⇒ [8, 0, 69, 0]</pre>\n</div>\n<div class=\"bi-cn\"><h3>2. parseLayers(bytes) <span class=\"bi-diem\">3 điểm</span></h3>\n<p>Tách frame thành các tầng, đi theo các trường độ dài — đây là R2 của lab trong bài.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Ethernet là byte 0–13. IPv4 bắt đầu ở 14 và dài <code>(byte14 &amp; 15) × 4</code>; TCP bắt đầu ngay sau và dài <code>(byte 12 của TCP &gt;&gt; 4) × 4</code>.</li>\n  <li>Dữ liệu chạy từ cuối header TCP tới <code>14 + totalLen − 1</code>; byte sau đó là đệm Ethernet. Không có dữ liệu ⇒ không có tầng \"HTTP\".</li>\n  <li><code>checksumOk</code>: cộng header thành các từ 16 bit big-endian, gập phần nhớ vào (khi sum &gt; 0xffff: sum = 16 bit thấp + phần còn lại); header đúng cho 0xffff.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>parseLayers(hexToBytes(A)).map(l =&gt; l.layer + \" \" + l.start + \"-\" + l.end)\n⇒ [\"Ethernet 0-13\", \"IPv4 14-33\", \"TCP 34-65\", \"HTTP 66-148\"]</pre>\n</div>\n<div class=\"bi-cn\"><h3>3. compareFrames(layersA, layersB) <span class=\"bi-diem\">2.5 điểm</span></h3>\n<p>So hai kết quả parseLayers theo từng trường — đây là R3 của lab trong bài. 15 trường, theo thứ tự:<br><code>eth.dst eth.src ip.len ip.id ip.ttl ip.checksum ip.src ip.dst tcp.srcport tcp.dstport tcp.seq tcp.ack tcp.flags http.request_line http.host</code></p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Chúng ứng với Ethernet dst/src, IPv4 totalLen/id/ttl/checksum/src/dst, TCP srcPort/dstPort/seq/ack/flags và HTTP requestLine/host.</li>\n  <li>Trường của tầng vắng (không có dữ liệu HTTP) tính là null; flags so như danh sách. Trả <code>{ sameFields, changedFields }</code>, cả hai theo thứ tự trên.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>compareFrames(L(A), L(B)).changedFields\n⇒ [\"eth.dst\", \"eth.src\", \"ip.ttl\", \"ip.checksum\"]</pre>\n</div>\n<div class=\"bi-cn\"><h3>4. dissect(textA, textB) và kết luận <span class=\"bi-diem\">3 điểm</span></h3>\n<p>Ghép lại: <code>{ layers, sameFields, changedFields, hops, verdict }</code> với <code>layers</code> là kết quả mổ xẻ bản A và <code>hops</code> = TTL A − TTL B.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li><code>\"different-packet\"</code> nếu ip.id, tcp.seq hoặc http.request_line đổi — hai bản bắt không phải cùng một gói, không kết luận được gì.</li>\n  <li>Ngược lại <code>\"nat\"</code> nếu ip.src, ip.dst, tcp.srcport hoặc tcp.dstport đổi — khi đó lời khẳng định đúng (Chương 2).</li>\n  <li>Ngược lại <code>\"routed\"</code> nếu hops &gt; 0 — gói đi qua router và chỉ frame, TTL và checksum bị viết lại.</li>\n  <li>Còn lại <code>\"same-link\"</code>.</li>\n</ul>\n<p><b>Ví dụ:</b></p>\n<pre>dissect(A, B).hops    ⇒ 1\ndissect(A, B).verdict ⇒ \"routed\"   (the teammate's claim is false)</pre>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>hexToBytes(text)</td><td>1.5</td></tr><tr><td>2</td><td>parseLayers(bytes)</td><td>3</td></tr><tr><td>3</td><td>compareFrames(layersA, layersB)</td><td>2.5</td></tr><tr><td>4</td><td>dissect(textA, textB) và kết luận</td><td>3</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Offset cố định (TCP ở 34, dữ liệu ở 66): frame ẩn có option IP sẽ hỏng.</li>\n  <li>Độ dài dữ liệu tính từ kích thước frame: ACK được đệm khi đó \"chở\" 6 byte.</li>\n  <li>Kết luận \"nat\" vì ip.checksum đổi: checksum đổi mỗi khi TTL đổi.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Bấm Nộp. Mỗi chức năng được chấm bằng các kiểm riêng (kiểm hiện khi Chạy thử, kiểm ẩn khi Nộp); thang điểm ở trên cho điểm từng chức năng. Sau đó viết kết luận cho trưởng nhóm trong hai câu, trích changedFields làm bằng chứng.</p>",
+      "inputSpec": "A React project — see the brief (folder structure, data model, features).|||Một dự án React — xem đề (cây thư mục, mô hình dữ liệu, chức năng).",
+      "outputSpec": "A working app that passes every check of every feature in the rubric.|||Ứng dụng chạy đúng, đạt mọi kiểm của từng chức năng trong thang điểm.",
+      "constraints": "One file, <code>answer.js</code>, with the four functions at top level (the grader calls each one directly).|||Một tệp <code>answer.js</code>, bốn hàm ở cấp cao nhất (máy chấm gọi trực tiếp từng hàm).\nPlain JavaScript, no libraries, no TextDecoder/Buffer needed. Return values, do not print.|||JavaScript thuần, không thư viện, không cần TextDecoder/Buffer. Trả về giá trị, đừng in.\nNever use fixed offsets past byte 14: every later position comes from a length field in the packet.|||Không dùng offset cố định sau byte 14: mọi vị trí phía sau đều lấy từ một trường độ dài trong gói.\nEach function is graded on its own inputs, so a mistake in one does not cost the others.|||Mỗi hàm được chấm bằng đầu vào riêng, nên lỗi ở hàm này không làm mất điểm hàm khác.",
+      "examplesJson": [
+        {
+          "input": "dissect(A, B)   // A, B = the two real captures in the brief|||dissect(A, B)   // A, B = hai bản bắt thật trong đề",
+          "output": "{\"hops\":1,\"verdict\":\"routed\",\"changedFields\":[\"eth.dst\",\"eth.src\",\"ip.ttl\",\"ip.checksum\"]}",
+          "explanation": "Only the frame, the TTL and the checksum changed: the router did not touch the IP addresses.|||Chỉ frame, TTL và checksum đổi: router không đụng tới địa chỉ IP."
+        }
+      ],
+      "hintsJson": [
+        "Hint 1 (after 15 minutes): do hexToBytes first and check the length is 149. Then write tiny helpers u16(i), u32(i), mac(i), ip(i) — every field is one of them.|||Gợi ý 1 (sau 15 phút): làm hexToBytes trước và kiểm độ dài là 149. Rồi viết các hàm nhỏ u16(i), u32(i), mac(i), ip(i) — trường nào cũng là một trong số đó.",
+        "Hint 2 (after 30 minutes): compute positions, never hard-code them: I = 14, T = I + ihl, D = T + thl, end = I + totalLen. u32 must stay positive: multiply by 256 instead of shifting by 24.|||Gợi ý 2 (sau 30 phút): tính vị trí, đừng bao giờ gán cứng: I = 14, T = I + ihl, D = T + thl, end = I + totalLen. u32 phải luôn dương: nhân 256 thay vì dịch 24 bit.",
+        "Hint 3 (after 45 minutes): for compareFrames write value(layers, layerName, fieldName) that returns null for a missing layer and joins arrays; then one loop over the 15-field table. For the verdict, check the rules in the order given — \"different-packet\" first.|||Gợi ý 3 (sau 45 phút): với compareFrames viết value(layers, tênTầng, tênTrường) trả null cho tầng vắng và nối mảng; rồi một vòng lặp qua bảng 15 trường. Với kết luận, xét luật theo đúng thứ tự — \"different-packet\" trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/**\n * Lab 1 — Dissect one request of LabFlow. Four functions, graded separately (see the brief).\n */\nfunction hexToBytes(text) {\n  // tshark -x text ⇒ [2, 0, 10, 10, 1, 254, …]\n  return [];\n}\n\nfunction parseLayers(bytes) {\n  // ⇒ [{ layer: 'Ethernet', start: 0, end: 13, fields: { dst, src, type } }, { layer: 'IPv4', … }, { layer: 'TCP', … }, { layer: 'HTTP', … }]\n  return [];\n}\n\nfunction compareFrames(layersA, layersB) {\n  // ⇒ { sameFields: [...], changedFields: [...] } over the 15 fields, in the order of the brief\n  return { sameFields: [], changedFields: [] };\n}\n\nfunction dissect(textA, textB) {\n  // ⇒ { layers, sameFields, changedFields, hops, verdict }\n  return { layers: [], sameFields: [], changedFields: [], hops: 0, verdict: 'same-link' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction hexToBytes(text) {\n  // Only the hex columns (characters 6–52) of lines that start with a 4-digit offset; the ASCII column is ignored.\n  var bytes = [];\n  text.split('\\n').forEach(function (line) {\n    if (!/^[0-9a-f]{4}  /.test(line)) return;\n    line.slice(6, 53).trim().split(/\\s+/).forEach(function (x) { if (x) bytes.push(parseInt(x, 16)); });\n  });\n  return bytes;\n}\n\nfunction parseLayers(b) {\n  function hex(n, digits) { var s = n.toString(16); while (s.length < digits) s = '0' + s; return s; }\n  function mac(i) { return b.slice(i, i + 6).map(function (x) { return hex(x, 2); }).join(':'); }\n  function u16(i) { return b[i] * 256 + b[i + 1]; }\n  function u32(i) { return ((b[i] * 256 + b[i + 1]) * 256 + b[i + 2]) * 256 + b[i + 3]; }\n  function ip(i) { return b.slice(i, i + 4).join('.'); }\n  var layers = [{ layer: 'Ethernet', start: 0, end: 13, fields: { dst: mac(0), src: mac(6), type: '0x' + hex(u16(12), 4) } }];\n  // IPv4 at 14. Its header length is the low 4 bits of byte 14 (× 4 bytes).\n  var I = 14, ihl = (b[I] & 15) * 4;\n  // Checksum check: the one's-complement sum of all 16-bit words of a correct header is 0xffff.\n  var sum = 0;\n  for (var k = I; k < I + ihl; k += 2) sum += u16(k);\n  while (sum > 0xffff) sum = (sum & 0xffff) + Math.floor(sum / 65536);\n  var totalLen = u16(I + 2);\n  layers.push({ layer: 'IPv4', start: I, end: I + ihl - 1, fields: {\n    headerLen: ihl, totalLen: totalLen, id: '0x' + hex(u16(I + 4), 4), ttl: b[I + 8], protocol: b[I + 9],\n    checksum: '0x' + hex(u16(I + 10), 4), checksumOk: sum === 0xffff, src: ip(I + 12), dst: ip(I + 16),\n  } });\n  // TCP right after the IP header. Its header length is the high 4 bits of TCP byte 12 (× 4 bytes).\n  var T = I + ihl, thl = (b[T + 12] >> 4) * 4;\n  var names = ['FIN', 'SYN', 'RST', 'PSH', 'ACK', 'URG', 'ECE', 'CWR'];\n  layers.push({ layer: 'TCP', start: T, end: T + thl - 1, fields: {\n    srcPort: u16(T), dstPort: u16(T + 2), seq: u32(T + 4), ack: u32(T + 8), headerLen: thl,\n    flags: names.filter(function (_, i) { return (b[T + 13] >> i) & 1; }),\n  } });\n  // The data ends where the IP packet ends (I + totalLen), not where the frame ends: short frames carry padding.\n  var D = T + thl, end = I + totalLen;\n  if (end > D) {\n    var text = b.slice(D, end).map(function (x) { return String.fromCharCode(x); }).join('');\n    var lines = text.split('\\r\\n');\n    var host = null;\n    lines.slice(1).forEach(function (l) { var m = /^host:\\s*(.*)$/i.exec(l); if (m && host === null) host = m[1]; });\n    layers.push({ layer: 'HTTP', start: D, end: end - 1, fields: { requestLine: lines[0], host: host, bytes: end - D } });\n  }\n  return layers;\n}\n\nvar COMPARE = [\n  [\"eth.dst\",\"Ethernet\",\"dst\"],\n  [\"eth.src\",\"Ethernet\",\"src\"],\n  [\"ip.len\",\"IPv4\",\"totalLen\"],\n  [\"ip.id\",\"IPv4\",\"id\"],\n  [\"ip.ttl\",\"IPv4\",\"ttl\"],\n  [\"ip.checksum\",\"IPv4\",\"checksum\"],\n  [\"ip.src\",\"IPv4\",\"src\"],\n  [\"ip.dst\",\"IPv4\",\"dst\"],\n  [\"tcp.srcport\",\"TCP\",\"srcPort\"],\n  [\"tcp.dstport\",\"TCP\",\"dstPort\"],\n  [\"tcp.seq\",\"TCP\",\"seq\"],\n  [\"tcp.ack\",\"TCP\",\"ack\"],\n  [\"tcp.flags\",\"TCP\",\"flags\"],\n  [\"http.request_line\",\"HTTP\",\"requestLine\"],\n  [\"http.host\",\"HTTP\",\"host\"],\n];\n\nfunction compareFrames(a, b) {\n  // Value of one field in a layer list; a missing layer (no HTTP data) counts as null. Arrays (flags) compare as text.\n  function value(layers, name, field) {\n    var l = layers.filter(function (x) { return x.layer === name; })[0];\n    var v = l ? l.fields[field] : null;\n    return Array.isArray(v) ? v.join(',') : (v === undefined ? null : v);\n  }\n  var sameFields = [], changedFields = [];\n  COMPARE.forEach(function (c) {\n    (value(a, c[1], c[2]) === value(b, c[1], c[2]) ? sameFields : changedFields).push(c[0]);\n  });\n  return { sameFields: sameFields, changedFields: changedFields };\n}\n\nfunction dissect(textA, textB) {\n  var a = parseLayers(hexToBytes(textA)), b = parseLayers(hexToBytes(textB));\n  var cmp = compareFrames(a, b);\n  function has(f) { return cmp.changedFields.indexOf(f) >= 0; }\n  var hops = a[1].fields.ttl - b[1].fields.ttl;\n  var verdict;\n  if (has('ip.id') || has('tcp.seq') || has('http.request_line')) verdict = 'different-packet';\n  else if (has('ip.src') || has('ip.dst') || has('tcp.srcport') || has('tcp.dstport')) verdict = 'nat';\n  else if (hops > 0) verdict = 'routed';\n  else verdict = 'same-link';\n  return { layers: a, sameFields: cmp.sameFields, changedFields: cmp.changedFields, hops: hops, verdict: verdict };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The packet describes itself: every header carries the length that tells you where the next one starts, and the IP total length tells you where the data ends, so the same code reads a 149-byte request, a padded ACK and a frame with IP options. On the two real captures exactly four fields change — both MACs (a new frame for the DMZ link), the TTL (64 → 63, so hops = 1) and the IP checksum (recomputed because the TTL changed) — while the IP addresses, the ports, the sequence numbers and the HTTP request line are identical: verdict \"routed\", the claim is false. The API sees 10.10.2.10 because nginx opened a second connection to it (R5 of the lesson lab; nginx before 1.29.7 — the lab runs 1.28.3 — proxies with HTTP/1.0 and Connection: close). Only a NAT router really rewrites ip.src, which the constructed NAT pair shows.</p>",
+      "solutionExplanationHtmlVi": "<p>Gói tự mô tả chính nó: mỗi header mang độ dài cho biết header kế tiếp bắt đầu ở đâu, và tổng độ dài IP cho biết dữ liệu kết thúc ở đâu, nên cùng một đoạn code đọc được request 149 byte, ACK có đệm và frame có option IP. Ở hai bản bắt thật đúng bốn trường đổi — hai MAC (frame mới cho đường DMZ), TTL (64 → 63, nên hops = 1) và checksum IP (tính lại vì TTL đổi) — còn địa chỉ IP, cổng, số thứ tự và dòng request HTTP giống hệt: kết luận \"routed\", lời khẳng định sai. API thấy 10.10.2.10 vì nginx mở kết nối thứ hai tới nó (R5 của lab trong bài; nginx trước 1.29.7 — lab chạy 1.28.3 — proxy bằng HTTP/1.0 và Connection: close). Chỉ router NAT mới thật sự viết lại ip.src, như cặp NAT dựng cho thấy.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "hexToBytes(A).length — the real LAN-side capture",
+              "vi": "hexToBytes(A).length — bản bắt thật phía LAN"
+            },
+            "goi": "hexToBytes(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\").length",
+            "mongDoi": 149,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "hexToBytes(B).slice(0, 16) — the first line of the DMZ capture",
+              "vi": "hexToBytes(B).slice(0, 16) — dòng đầu của bản bắt DMZ"
+            },
+            "goi": "hexToBytes(\"0000  02 00 0a 0a 02 0a 02 00 0a 0a 02 fe 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 3f 06 d9 64 0a 0a 01 0a 0a 0a   ..J.@.?..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\").slice(0, 16)",
+            "mongDoi": [
+              2,
+              0,
+              10,
+              10,
+              2,
+              10,
+              2,
+              0,
+              10,
+              10,
+              2,
+              254,
+              8,
+              0,
+              69,
+              0
+            ],
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the short last line of another real capture",
+              "vi": "Ẩn: dòng cuối ngắn của một bản bắt thật khác"
+            },
+            "goi": "hexToBytes(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 30 b8 40 00 40 06 f2 91 0a 0a 01 0a 0a 0a   ..0.@.@.........\\n0020  02 0a 9e 06 00 50 18 38 5e 81 aa 07 7b 1e 80 18   .....P.8^...{...\\n0030  00 3f 17 a1 00 00 01 01 08 0a d6 35 2a ac 68 a7   .?.........5*.h.\\n0040  cf d3 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\").slice(144)",
+            "mongDoi": [
+              42,
+              13,
+              10,
+              13,
+              10
+            ],
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: an ASCII column that looks like hex (constructed frame)",
+              "vi": "Ẩn: cột ASCII trông như hex (frame dựng)"
+            },
+            "goi": "hexToBytes(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0b 08 00 46 00   ..............F.\\n0010  00 7f 7a 01 40 00 40 06 14 41 0a 0a 01 0b 0a 0a   ..z.@.@..A......\\n0020  02 14 94 04 00 00 c7 38 0b b8 6a 42 59 e1 d9 68   .......8..jBY..h\\n0030  83 53 80 18 00 3f d5 44 00 00 01 01 08 0a 74 f1   .S...?.D......t.\\n0040  8d e0 eb 64 06 f4 47 45 54 20 2f 61 70 69 2f 6c   ...d..GET /api/l\\n0050  61 62 31 20 48 54 54 50 2f 31 2e 31 0d 0a 68 6f   ab1 HTTP/1.1..ho\\n0060  73 74 3a 20 31 30 2e 31 30 2e 32 2e 32 30 3a 33   st: 10.10.2.20:3\\n0070  30 30 30 0d 0a 58 2d 54 72 61 63 65 3a 20 61 62   000..X-Trace: ab\\n0080  20 63 64 20 65 66 20 30 31 0d 0a 0d 0a             cd ef 01....\").length",
+            "mongDoi": 141,
+            "an": true,
+            "nhom": "f1"
+          },
+          {
+            "moTa": {
+              "en": "parseLayers(bytes of A) — the real LAN-side frame",
+              "vi": "parseLayers(byte của A) — frame thật phía LAN"
+            },
+            "goi": "parseLayers([2,0,10,10,1,254,2,0,10,10,1,10,8,0,69,0,0,135,74,229,64,0,64,6,216,100,10,10,1,10,10,10,2,10,144,206,0,80,106,66,89,225,217,104,131,83,128,24,0,63,23,161,0,0,1,1,8,10,116,241,141,224,235,100,6,244,71,69,84,32,47,97,112,105,47,104,101,108,108,111,32,72,84,84,80,47,49,46,49,13,10,72,111,115,116,58,32,49,48,46,49,48,46,50,46,49,48,13,10,85,115,101,114,45,65,103,101,110,116,58,32,99,117,114,108,47,56,46,49,56,46,48,13,10,65,99,99,101,112,116,58,32,42,47,42,13,10,13,10])",
+            "mongDoi": [
+              {
+                "layer": "Ethernet",
+                "start": 0,
+                "end": 13,
+                "fields": {
+                  "dst": "02:00:0a:0a:01:fe",
+                  "src": "02:00:0a:0a:01:0a",
+                  "type": "0x0800"
+                }
+              },
+              {
+                "layer": "IPv4",
+                "start": 14,
+                "end": 33,
+                "fields": {
+                  "headerLen": 20,
+                  "totalLen": 135,
+                  "id": "0x4ae5",
+                  "ttl": 64,
+                  "protocol": 6,
+                  "checksum": "0xd864",
+                  "checksumOk": true,
+                  "src": "10.10.1.10",
+                  "dst": "10.10.2.10"
+                }
+              },
+              {
+                "layer": "TCP",
+                "start": 34,
+                "end": 65,
+                "fields": {
+                  "srcPort": 37070,
+                  "dstPort": 80,
+                  "seq": 1782733281,
+                  "ack": 3647505235,
+                  "headerLen": 32,
+                  "flags": [
+                    "PSH",
+                    "ACK"
+                  ]
+                }
+              },
+              {
+                "layer": "HTTP",
+                "start": 66,
+                "end": 148,
+                "fields": {
+                  "requestLine": "GET /api/hello HTTP/1.1",
+                  "host": "10.10.2.10",
+                  "bytes": 83
+                }
+              }
+            ],
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the real DMZ-side frame",
+              "vi": "Ẩn: frame thật phía DMZ"
+            },
+            "goi": "parseLayers([2,0,10,10,2,10,2,0,10,10,2,254,8,0,69,0,0,135,74,229,64,0,63,6,217,100,10,10,1,10,10,10,2,10,144,206,0,80,106,66,89,225,217,104,131,83,128,24,0,63,23,161,0,0,1,1,8,10,116,241,141,224,235,100,6,244,71,69,84,32,47,97,112,105,47,104,101,108,108,111,32,72,84,84,80,47,49,46,49,13,10,72,111,115,116,58,32,49,48,46,49,48,46,50,46,49,48,13,10,85,115,101,114,45,65,103,101,110,116,58,32,99,117,114,108,47,56,46,49,56,46,48,13,10,65,99,99,101,112,116,58,32,42,47,42,13,10,13,10])",
+            "mongDoi": [
+              {
+                "layer": "Ethernet",
+                "start": 0,
+                "end": 13,
+                "fields": {
+                  "dst": "02:00:0a:0a:02:0a",
+                  "src": "02:00:0a:0a:02:fe",
+                  "type": "0x0800"
+                }
+              },
+              {
+                "layer": "IPv4",
+                "start": 14,
+                "end": 33,
+                "fields": {
+                  "headerLen": 20,
+                  "totalLen": 135,
+                  "id": "0x4ae5",
+                  "ttl": 63,
+                  "protocol": 6,
+                  "checksum": "0xd964",
+                  "checksumOk": true,
+                  "src": "10.10.1.10",
+                  "dst": "10.10.2.10"
+                }
+              },
+              {
+                "layer": "TCP",
+                "start": 34,
+                "end": 65,
+                "fields": {
+                  "srcPort": 37070,
+                  "dstPort": 80,
+                  "seq": 1782733281,
+                  "ack": 3647505235,
+                  "headerLen": 32,
+                  "flags": [
+                    "PSH",
+                    "ACK"
+                  ]
+                }
+              },
+              {
+                "layer": "HTTP",
+                "start": 66,
+                "end": 148,
+                "fields": {
+                  "requestLine": "GET /api/hello HTTP/1.1",
+                  "host": "10.10.2.10",
+                  "bytes": 83
+                }
+              }
+            ],
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: constructed request with IP options and a lower-case host header",
+              "vi": "Ẩn: request dựng có option IP và header host chữ thường"
+            },
+            "goi": "parseLayers([2,0,10,10,1,254,2,0,10,10,1,11,8,0,70,0,0,127,122,1,64,0,64,6,20,65,10,10,1,11,10,10,2,20,148,4,0,0,199,56,11,184,106,66,89,225,217,104,131,83,128,24,0,63,213,68,0,0,1,1,8,10,116,241,141,224,235,100,6,244,71,69,84,32,47,97,112,105,47,108,97,98,49,32,72,84,84,80,47,49,46,49,13,10,104,111,115,116,58,32,49,48,46,49,48,46,50,46,50,48,58,51,48,48,48,13,10,88,45,84,114,97,99,101,58,32,97,98,32,99,100,32,101,102,32,48,49,13,10,13,10])",
+            "mongDoi": [
+              {
+                "layer": "Ethernet",
+                "start": 0,
+                "end": 13,
+                "fields": {
+                  "dst": "02:00:0a:0a:01:fe",
+                  "src": "02:00:0a:0a:01:0b",
+                  "type": "0x0800"
+                }
+              },
+              {
+                "layer": "IPv4",
+                "start": 14,
+                "end": 37,
+                "fields": {
+                  "headerLen": 24,
+                  "totalLen": 127,
+                  "id": "0x7a01",
+                  "ttl": 64,
+                  "protocol": 6,
+                  "checksum": "0x1441",
+                  "checksumOk": true,
+                  "src": "10.10.1.11",
+                  "dst": "10.10.2.20"
+                }
+              },
+              {
+                "layer": "TCP",
+                "start": 38,
+                "end": 69,
+                "fields": {
+                  "srcPort": 51000,
+                  "dstPort": 3000,
+                  "seq": 1782733281,
+                  "ack": 3647505235,
+                  "headerLen": 32,
+                  "flags": [
+                    "PSH",
+                    "ACK"
+                  ]
+                }
+              },
+              {
+                "layer": "HTTP",
+                "start": 70,
+                "end": 140,
+                "fields": {
+                  "requestLine": "GET /api/lab1 HTTP/1.1",
+                  "host": "10.10.2.20:3000",
+                  "bytes": 71
+                }
+              }
+            ],
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: constructed bare ACK padded to 60 bytes (no HTTP layer)",
+              "vi": "Ẩn: ACK trần dựng, đệm tới 60 byte (không có tầng HTTP)"
+            },
+            "goi": "parseLayers([2,0,10,10,2,10,2,0,10,10,2,254,8,0,69,0,0,40,1,2,64,0,63,6,35,166,10,10,1,11,10,10,2,10,150,58,0,80,0,0,1,244,0,0,3,132,80,16,1,246,250,179,0,0,0,0,0,0,0,0])",
+            "mongDoi": [
+              {
+                "layer": "Ethernet",
+                "start": 0,
+                "end": 13,
+                "fields": {
+                  "dst": "02:00:0a:0a:02:0a",
+                  "src": "02:00:0a:0a:02:fe",
+                  "type": "0x0800"
+                }
+              },
+              {
+                "layer": "IPv4",
+                "start": 14,
+                "end": 33,
+                "fields": {
+                  "headerLen": 20,
+                  "totalLen": 40,
+                  "id": "0x0102",
+                  "ttl": 63,
+                  "protocol": 6,
+                  "checksum": "0x23a6",
+                  "checksumOk": true,
+                  "src": "10.10.1.11",
+                  "dst": "10.10.2.10"
+                }
+              },
+              {
+                "layer": "TCP",
+                "start": 34,
+                "end": 53,
+                "fields": {
+                  "srcPort": 38458,
+                  "dstPort": 80,
+                  "seq": 500,
+                  "ack": 900,
+                  "headerLen": 20,
+                  "flags": [
+                    "ACK"
+                  ]
+                }
+              }
+            ],
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: TTL changed without a new checksum ⇒ checksumOk false",
+              "vi": "Ẩn: TTL đổi mà không tính lại checksum ⇒ checksumOk false"
+            },
+            "goi": "parseLayers([2,0,10,10,1,254,2,0,10,10,1,10,8,0,69,0,0,135,74,229,64,0,62,6,216,100,10,10,1,10,10,10,2,10,144,206,0,80,106,66,89,225,217,104,131,83,128,24,0,63,23,161,0,0,1,1,8,10,116,241,141,224,235,100,6,244,71,69,84,32,47,97,112,105,47,104,101,108,108,111,32,72,84,84,80,47,49,46,49,13,10,72,111,115,116,58,32,49,48,46,49,48,46,50,46,49,48,13,10,85,115,101,114,45,65,103,101,110,116,58,32,99,117,114,108,47,56,46,49,56,46,48,13,10,65,99,99,101,112,116,58,32,42,47,42,13,10,13,10])[1].fields.checksumOk",
+            "mongDoi": false,
+            "an": true,
+            "nhom": "f2"
+          },
+          {
+            "moTa": {
+              "en": "compareFrames(A, B) — the two real captures",
+              "vi": "compareFrames(A, B) — hai bản bắt thật"
+            },
+            "goi": "compareFrames([{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:01:fe\",\"src\":\"02:00:0a:0a:01:0a\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":135,\"id\":\"0x4ae5\",\"ttl\":64,\"protocol\":6,\"checksum\":\"0xd864\",\"checksumOk\":true,\"src\":\"10.10.1.10\",\"dst\":\"10.10.2.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":65,\"fields\":{\"srcPort\":37070,\"dstPort\":80,\"seq\":1782733281,\"ack\":3647505235,\"headerLen\":32,\"flags\":[\"PSH\",\"ACK\"]}},{\"layer\":\"HTTP\",\"start\":66,\"end\":148,\"fields\":{\"requestLine\":\"GET /api/hello HTTP/1.1\",\"host\":\"10.10.2.10\",\"bytes\":83}}], [{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:02:0a\",\"src\":\"02:00:0a:0a:02:fe\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":135,\"id\":\"0x4ae5\",\"ttl\":63,\"protocol\":6,\"checksum\":\"0xd964\",\"checksumOk\":true,\"src\":\"10.10.1.10\",\"dst\":\"10.10.2.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":65,\"fields\":{\"srcPort\":37070,\"dstPort\":80,\"seq\":1782733281,\"ack\":3647505235,\"headerLen\":32,\"flags\":[\"PSH\",\"ACK\"]}},{\"layer\":\"HTTP\",\"start\":66,\"end\":148,\"fields\":{\"requestLine\":\"GET /api/hello HTTP/1.1\",\"host\":\"10.10.2.10\",\"bytes\":83}}])",
+            "mongDoi": {
+              "sameFields": [
+                "ip.len",
+                "ip.id",
+                "ip.src",
+                "ip.dst",
+                "tcp.srcport",
+                "tcp.dstport",
+                "tcp.seq",
+                "tcp.ack",
+                "tcp.flags",
+                "http.request_line",
+                "http.host"
+              ],
+              "changedFields": [
+                "eth.dst",
+                "eth.src",
+                "ip.ttl",
+                "ip.checksum"
+              ]
+            },
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: constructed NAT pair",
+              "vi": "Ẩn: cặp NAT dựng"
+            },
+            "goi": "compareFrames([{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:01:fe\",\"src\":\"02:00:0a:0a:01:0a\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":90,\"id\":\"0x5c01\",\"ttl\":64,\"protocol\":6,\"checksum\":\"0x977e\",\"checksumOk\":true,\"src\":\"10.10.1.10\",\"dst\":\"203.0.113.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":65,\"fields\":{\"srcPort\":41000,\"dstPort\":80,\"seq\":1000,\"ack\":2000,\"headerLen\":32,\"flags\":[\"PSH\",\"ACK\"]}},{\"layer\":\"HTTP\",\"start\":66,\"end\":103,\"fields\":{\"requestLine\":\"GET / HTTP/1.1\",\"host\":\"shop.example\",\"bytes\":38}}], [{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:09:01\",\"src\":\"02:00:0a:0a:09:fe\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":90,\"id\":\"0x5c01\",\"ttl\":63,\"protocol\":6,\"checksum\":\"0x7957\",\"checksumOk\":true,\"src\":\"198.51.100.7\",\"dst\":\"203.0.113.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":65,\"fields\":{\"srcPort\":61001,\"dstPort\":80,\"seq\":1000,\"ack\":2000,\"headerLen\":32,\"flags\":[\"PSH\",\"ACK\"]}},{\"layer\":\"HTTP\",\"start\":66,\"end\":103,\"fields\":{\"requestLine\":\"GET / HTTP/1.1\",\"host\":\"shop.example\",\"bytes\":38}}])",
+            "mongDoi": {
+              "sameFields": [
+                "ip.len",
+                "ip.id",
+                "ip.dst",
+                "tcp.dstport",
+                "tcp.seq",
+                "tcp.ack",
+                "tcp.flags",
+                "http.request_line",
+                "http.host"
+              ],
+              "changedFields": [
+                "eth.dst",
+                "eth.src",
+                "ip.ttl",
+                "ip.checksum",
+                "ip.src",
+                "tcp.srcport"
+              ]
+            },
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: two constructed ACKs without HTTP data",
+              "vi": "Ẩn: hai ACK dựng không có dữ liệu HTTP"
+            },
+            "goi": "compareFrames([{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:01:fe\",\"src\":\"02:00:0a:0a:01:0b\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":40,\"id\":\"0x0102\",\"ttl\":64,\"protocol\":6,\"checksum\":\"0x22a6\",\"checksumOk\":true,\"src\":\"10.10.1.11\",\"dst\":\"10.10.2.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":53,\"fields\":{\"srcPort\":38458,\"dstPort\":80,\"seq\":500,\"ack\":900,\"headerLen\":20,\"flags\":[\"ACK\"]}}], [{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:02:0a\",\"src\":\"02:00:0a:0a:02:fe\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":40,\"id\":\"0x0102\",\"ttl\":63,\"protocol\":6,\"checksum\":\"0x23a6\",\"checksumOk\":true,\"src\":\"10.10.1.11\",\"dst\":\"10.10.2.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":53,\"fields\":{\"srcPort\":38458,\"dstPort\":80,\"seq\":500,\"ack\":900,\"headerLen\":20,\"flags\":[\"ACK\"]}}])",
+            "mongDoi": {
+              "sameFields": [
+                "ip.len",
+                "ip.id",
+                "ip.src",
+                "ip.dst",
+                "tcp.srcport",
+                "tcp.dstport",
+                "tcp.seq",
+                "tcp.ack",
+                "tcp.flags",
+                "http.request_line",
+                "http.host"
+              ],
+              "changedFields": [
+                "eth.dst",
+                "eth.src",
+                "ip.ttl",
+                "ip.checksum"
+              ]
+            },
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: two different real requests",
+              "vi": "Ẩn: hai request thật khác nhau"
+            },
+            "goi": "compareFrames([{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:01:fe\",\"src\":\"02:00:0a:0a:01:0a\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":135,\"id\":\"0x30b8\",\"ttl\":64,\"protocol\":6,\"checksum\":\"0xf291\",\"checksumOk\":true,\"src\":\"10.10.1.10\",\"dst\":\"10.10.2.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":65,\"fields\":{\"srcPort\":40454,\"dstPort\":80,\"seq\":406347393,\"ack\":2852616990,\"headerLen\":32,\"flags\":[\"PSH\",\"ACK\"]}},{\"layer\":\"HTTP\",\"start\":66,\"end\":148,\"fields\":{\"requestLine\":\"GET /api/hello HTTP/1.1\",\"host\":\"10.10.2.10\",\"bytes\":83}}], [{\"layer\":\"Ethernet\",\"start\":0,\"end\":13,\"fields\":{\"dst\":\"02:00:0a:0a:02:0a\",\"src\":\"02:00:0a:0a:02:fe\",\"type\":\"0x0800\"}},{\"layer\":\"IPv4\",\"start\":14,\"end\":33,\"fields\":{\"headerLen\":20,\"totalLen\":135,\"id\":\"0x4ae5\",\"ttl\":63,\"protocol\":6,\"checksum\":\"0xd964\",\"checksumOk\":true,\"src\":\"10.10.1.10\",\"dst\":\"10.10.2.10\"}},{\"layer\":\"TCP\",\"start\":34,\"end\":65,\"fields\":{\"srcPort\":37070,\"dstPort\":80,\"seq\":1782733281,\"ack\":3647505235,\"headerLen\":32,\"flags\":[\"PSH\",\"ACK\"]}},{\"layer\":\"HTTP\",\"start\":66,\"end\":148,\"fields\":{\"requestLine\":\"GET /api/hello HTTP/1.1\",\"host\":\"10.10.2.10\",\"bytes\":83}}])",
+            "mongDoi": {
+              "sameFields": [
+                "ip.len",
+                "ip.src",
+                "ip.dst",
+                "tcp.dstport",
+                "tcp.flags",
+                "http.request_line",
+                "http.host"
+              ],
+              "changedFields": [
+                "eth.dst",
+                "eth.src",
+                "ip.id",
+                "ip.ttl",
+                "ip.checksum",
+                "tcp.srcport",
+                "tcp.seq",
+                "tcp.ack"
+              ]
+            },
+            "an": true,
+            "nhom": "f3"
+          },
+          {
+            "moTa": {
+              "en": "dissect(A, B) — the two real captures",
+              "vi": "dissect(A, B) — hai bản bắt thật"
+            },
+            "goi": "dissect(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\", \"0000  02 00 0a 0a 02 0a 02 00 0a 0a 02 fe 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 3f 06 d9 64 0a 0a 01 0a 0a 0a   ..J.@.?..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\")",
+            "mongDoi": {
+              "layers": [
+                {
+                  "layer": "Ethernet",
+                  "start": 0,
+                  "end": 13,
+                  "fields": {
+                    "dst": "02:00:0a:0a:01:fe",
+                    "src": "02:00:0a:0a:01:0a",
+                    "type": "0x0800"
+                  }
+                },
+                {
+                  "layer": "IPv4",
+                  "start": 14,
+                  "end": 33,
+                  "fields": {
+                    "headerLen": 20,
+                    "totalLen": 135,
+                    "id": "0x4ae5",
+                    "ttl": 64,
+                    "protocol": 6,
+                    "checksum": "0xd864",
+                    "checksumOk": true,
+                    "src": "10.10.1.10",
+                    "dst": "10.10.2.10"
+                  }
+                },
+                {
+                  "layer": "TCP",
+                  "start": 34,
+                  "end": 65,
+                  "fields": {
+                    "srcPort": 37070,
+                    "dstPort": 80,
+                    "seq": 1782733281,
+                    "ack": 3647505235,
+                    "headerLen": 32,
+                    "flags": [
+                      "PSH",
+                      "ACK"
+                    ]
+                  }
+                },
+                {
+                  "layer": "HTTP",
+                  "start": 66,
+                  "end": 148,
+                  "fields": {
+                    "requestLine": "GET /api/hello HTTP/1.1",
+                    "host": "10.10.2.10",
+                    "bytes": 83
+                  }
+                }
+              ],
+              "sameFields": [
+                "ip.len",
+                "ip.id",
+                "ip.src",
+                "ip.dst",
+                "tcp.srcport",
+                "tcp.dstport",
+                "tcp.seq",
+                "tcp.ack",
+                "tcp.flags",
+                "http.request_line",
+                "http.host"
+              ],
+              "changedFields": [
+                "eth.dst",
+                "eth.src",
+                "ip.ttl",
+                "ip.checksum"
+              ],
+              "hops": 1,
+              "verdict": "routed"
+            },
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the same request after two routers (constructed)",
+              "vi": "Ẩn: cùng request sau hai router (dựng)"
+            },
+            "goi": "dissect(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\", \"0000  02 00 0a 0a 03 0a 02 00 0a 0a 03 fe 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 3e 06 da 64 0a 0a 01 0a 0a 0a   ..J.@.>..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f ef 1c 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\").verdict + \" \" + dissect(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\", \"0000  02 00 0a 0a 03 0a 02 00 0a 0a 03 fe 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 3e 06 da 64 0a 0a 01 0a 0a 0a   ..J.@.>..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f ef 1c 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\").hops",
+            "mongDoi": "routed 2",
+            "an": true,
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: a NAT router (constructed)",
+              "vi": "Ẩn: router NAT (dựng)"
+            },
+            "goi": "dissect(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 5a 5c 01 40 00 40 06 97 7e 0a 0a 01 0a cb 00   .Z\\\\.@.@..~......\\n0020  71 0a a0 28 00 50 00 00 03 e8 00 00 07 d0 80 18   q..(.P..........\\n0030  00 3f 12 e5 00 00 01 01 08 0a 00 00 13 88 00 00   .?..............\\n0040  17 70 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 31   .pGET / HTTP/1.1\\n0050  0d 0a 48 6f 73 74 3a 20 73 68 6f 70 2e 65 78 61   ..Host: shop.exa\\n0060  6d 70 6c 65 0d 0a 0d 0a                           mple....\", \"0000  02 00 0a 0a 09 01 02 00 0a 0a 09 fe 08 00 45 00   ..............E.\\n0010  00 5a 5c 01 40 00 3f 06 79 57 c6 33 64 07 cb 00   .Z\\\\.@.?.yW.3d...\\n0020  71 0a ee 49 00 50 00 00 03 e8 00 00 07 d0 80 18   q..I.P..........\\n0030  00 3f a5 9c 00 00 01 01 08 0a 00 00 13 88 00 00   .?..............\\n0040  17 70 47 45 54 20 2f 20 48 54 54 50 2f 31 2e 31   .pGET / HTTP/1.1\\n0050  0d 0a 48 6f 73 74 3a 20 73 68 6f 70 2e 65 78 61   ..Host: shop.exa\\n0060  6d 70 6c 65 0d 0a 0d 0a                           mple....\").verdict",
+            "mongDoi": "nat",
+            "an": true,
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: two different real requests",
+              "vi": "Ẩn: hai request thật khác nhau"
+            },
+            "goi": "dissect(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 30 b8 40 00 40 06 f2 91 0a 0a 01 0a 0a 0a   ..0.@.@.........\\n0020  02 0a 9e 06 00 50 18 38 5e 81 aa 07 7b 1e 80 18   .....P.8^...{...\\n0030  00 3f 17 a1 00 00 01 01 08 0a d6 35 2a ac 68 a7   .?.........5*.h.\\n0040  cf d3 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\", \"0000  02 00 0a 0a 02 0a 02 00 0a 0a 02 fe 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 3f 06 d9 64 0a 0a 01 0a 0a 0a   ..J.@.?..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\").verdict",
+            "mongDoi": "different-packet",
+            "an": true,
+            "nhom": "f4"
+          },
+          {
+            "moTa": {
+              "en": "Hidden: the same capture twice",
+              "vi": "Ẩn: cùng một bản bắt hai lần"
+            },
+            "goi": "dissect(\"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\", \"0000  02 00 0a 0a 01 fe 02 00 0a 0a 01 0a 08 00 45 00   ..............E.\\n0010  00 87 4a e5 40 00 40 06 d8 64 0a 0a 01 0a 0a 0a   ..J.@.@..d......\\n0020  02 0a 90 ce 00 50 6a 42 59 e1 d9 68 83 53 80 18   .....PjBY..h.S..\\n0030  00 3f 17 a1 00 00 01 01 08 0a 74 f1 8d e0 eb 64   .?........t....d\\n0040  06 f4 47 45 54 20 2f 61 70 69 2f 68 65 6c 6c 6f   ..GET /api/hello\\n0050  20 48 54 54 50 2f 31 2e 31 0d 0a 48 6f 73 74 3a    HTTP/1.1..Host:\\n0060  20 31 30 2e 31 30 2e 32 2e 31 30 0d 0a 55 73 65    10.10.2.10..Use\\n0070  72 2d 41 67 65 6e 74 3a 20 63 75 72 6c 2f 38 2e   r-Agent: curl/8.\\n0080  31 38 2e 30 0d 0a 41 63 63 65 70 74 3a 20 2a 2f   18.0..Accept: */\\n0090  2a 0d 0a 0d 0a                                    *....\")",
+            "mongDoi": {
+              "layers": [
+                {
+                  "layer": "Ethernet",
+                  "start": 0,
+                  "end": 13,
+                  "fields": {
+                    "dst": "02:00:0a:0a:01:fe",
+                    "src": "02:00:0a:0a:01:0a",
+                    "type": "0x0800"
+                  }
+                },
+                {
+                  "layer": "IPv4",
+                  "start": 14,
+                  "end": 33,
+                  "fields": {
+                    "headerLen": 20,
+                    "totalLen": 135,
+                    "id": "0x4ae5",
+                    "ttl": 64,
+                    "protocol": 6,
+                    "checksum": "0xd864",
+                    "checksumOk": true,
+                    "src": "10.10.1.10",
+                    "dst": "10.10.2.10"
+                  }
+                },
+                {
+                  "layer": "TCP",
+                  "start": 34,
+                  "end": 65,
+                  "fields": {
+                    "srcPort": 37070,
+                    "dstPort": 80,
+                    "seq": 1782733281,
+                    "ack": 3647505235,
+                    "headerLen": 32,
+                    "flags": [
+                      "PSH",
+                      "ACK"
+                    ]
+                  }
+                },
+                {
+                  "layer": "HTTP",
+                  "start": 66,
+                  "end": 148,
+                  "fields": {
+                    "requestLine": "GET /api/hello HTTP/1.1",
+                    "host": "10.10.2.10",
+                    "bytes": 83
+                  }
+                }
+              ],
+              "sameFields": [
+                "eth.dst",
+                "eth.src",
+                "ip.len",
+                "ip.id",
+                "ip.ttl",
+                "ip.checksum",
+                "ip.src",
+                "ip.dst",
+                "tcp.srcport",
+                "tcp.dstport",
+                "tcp.seq",
+                "tcp.ack",
+                "tcp.flags",
+                "http.request_line",
+                "http.host"
+              ],
+              "changedFields": [],
+              "hops": 0,
+              "verdict": "same-link"
+            },
+            "an": true,
+            "nhom": "f4"
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. hexToBytes(text)",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. parseLayers(bytes)",
+            "diem": 3
+          },
+          {
+            "ma": "f3",
+            "ten": "3. compareFrames(layersA, layersB)",
+            "diem": 2.5
+          },
+          {
+            "ma": "f4",
+            "ten": "4. dissect(textA, textB) and the verdict",
+            "diem": 3
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Parsing the ASCII column as hex: the request with \"X-Trace: ab cd ef 01\" then has extra bytes and every later field shifts.|||Đọc cột ASCII như hex: request có \"X-Trace: ab cd ef 01\" khi đó thừa byte và mọi trường phía sau bị lệch."
+        },
+        {
+          "loi": "Computing seq with (b[i] << 24): for bytes ≥ 0x80 the result is negative in JavaScript.|||Tính seq bằng (b[i] << 24): với byte ≥ 0x80 kết quả bị âm trong JavaScript."
+        },
+        {
+          "loi": "Concluding \"the router changed the IP\" because ip.checksum is in changedFields — it is recomputed because the TTL changed.|||Kết luận \"router đổi IP\" vì ip.checksum nằm trong changedFields — nó được tính lại vì TTL đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dissect",
+          "vi": "mổ xẻ (phân tích từng lớp)"
+        },
+        {
+          "en": "evidence",
+          "vi": "bằng chứng",
+          "giaiThich": "Một lệnh và output thật ủng hộ một khẳng định."
+        },
+        {
+          "en": "one's complement sum",
+          "vi": "tổng bù một",
+          "giaiThich": "Cách tính checksum của IP: cộng 16 bit, gập phần nhớ."
+        },
+        {
+          "en": "NAT",
+          "vi": "dịch địa chỉ mạng"
+        },
+        {
+          "en": "padding",
+          "vi": "byte đệm"
+        }
+      ]
+    }
+  ]
+}

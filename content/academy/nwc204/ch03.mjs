@@ -9,6 +9,7 @@
  * NWC204.mjs ở đây.
  */
 import { registerDeck, walk, walkHead, bi, cq } from './_slides.mjs';
+import { sauHon } from './_lien-ket-courses.mjs';
 
 const D = registerDeck('nwc204-ch03', {
   code: 'NWC204',
@@ -651,6 +652,7 @@ LISTEN 0 511 0.0.0.0:3000     -> nó có nghe công khai; giờ mới nghi tư�
 <p><strong>3.</strong> (a) Tầng Application — phân giải tên, tức DNS; tầng 3 đã được chứng minh là tốt. (b) Transport — bị từ chối tức thì là một gói TCP RST, nghĩa là gói đã tới nơi và không ai nghe ở cổng đó. Nếu tường lửa vứt gói thì sẽ treo chứ không trả lời ngay. (c) Physical/Data Link — lỗi và nhấp nháy là chuyện cáp, đầu nối hoặc duplex. (d) Theo OSI là tầng Presentation — các byte đã tới nguyên vẹn (TCP đã kiểm), nên lỗi nằm ở cách diễn giải hoặc chuyển mã, không phải ở khâu vận chuyển.</p>
 </details>`,
     ),
+    sauHon({ bai: 'netdev-1-2-dong-goi', so: '1.3', ten: ['Encapsulation: reading one frame byte by byte', 'Đóng gói: đọc một frame từng byte'], them: ['a real 149-byte frame decoded byte by byte, MTU/MSS/1448 measured, and the segmentation-offload trap', 'một frame thật 149 byte giải mã từng byte, MTU/MSS/1448 đo thật, và bẫy segmentation offload'] }),
   ].join('\n'),
 };
 
@@ -867,6 +869,7 @@ chỉ thấy lưu lượng của chính mình  -> đúng: switch không gửi ch
 <p><strong>3.</strong> (a) Không trường nào cả. Khung không chứa số hiệu cổng của switch; bạn phải đọc bảng địa chỉ MAC của switch (chương 6) rồi ánh xạ MAC nguồn sang cổng. (b) Cổng đích của TCP, nằm trong tiêu đề Transmission Control Protocol. (c) Đọc trường <strong>TTL</strong> của IP rồi lấy giá trị khởi tạo thông thường của bên gửi trừ đi (64 trên Linux/macOS, 128 trên Windows); hiệu số là số chặng đã đi — chỉ là ước lượng, không phải bảo đảm, vì giá trị khởi tạo chỉ là quy ước.</p>
 </details>`,
     ),
+    sauHon({ bai: 'netdev-0-1-cai-dat', so: '0.1', ten: ['Your networking lab: tools and a test server', 'Phòng lab mạng: công cụ và một máy chủ thử'], them: ['a reproducible Docker lab (client, router, nginx, API) and your first capture inside a container', 'một phòng lab Docker dựng lại được (client, router, nginx, API) và lần bắt gói đầu tiên bên trong container'] }),
   ].join('\n'),
 };
 

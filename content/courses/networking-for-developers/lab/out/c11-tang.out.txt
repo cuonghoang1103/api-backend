@@ -1,0 +1,42 @@
+# Ch1 · 1.2 các tầng — máy client
+$ curl -sv http://10.10.2.10/api/hello 2>&1
+*   Trying 10.10.2.10:80...
+* Established connection to 10.10.2.10 (10.10.2.10 port 80) from 10.10.1.10 port 53110 
+* using HTTP/1.x
+> GET /api/hello HTTP/1.1
+> Host: 10.10.2.10
+> User-Agent: curl/8.18.0
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 200 OK
+< Server: nginx/1.28.3
+< Date: Sat, 31 Oct 2026 16:00:15 GMT
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< 
+{ [142 bytes data]
+* Connection #0 to host 10.10.2.10:80 left intact
+{"service":"labflow-api","path":"/api/hello","seenFrom":"10.10.2.10:48478","seenOn":"10.10.2.20:3000","forwardedFor":"10.10.1.10"}
+$ ip route get 10.10.2.10
+10.10.2.10 via 10.10.1.254 dev eth0 src 10.10.1.10 uid 0 
+    cache 
+$ curl -s -o /dev/null http://10.10.2.10/api/hello
+$ tshark -r /tmp/t.pcap 2>/dev/null
+    1   0.000000   10.10.1.10 → 10.10.2.10   TCP 74 53122 → 80 [SYN] Seq=0 Win=64240 Len=0 MSS=1460 SACK_PERM TSval=2329728674 TSecr=0 WS=1024
+    2   0.000133   10.10.2.10 → 10.10.1.10   TCP 74 80 → 53122 [SYN, ACK] Seq=0 Ack=1 Win=65160 Len=0 MSS=1460 SACK_PERM TSval=519887975 TSecr=2329728674 WS=1024
+    3   0.000142   10.10.1.10 → 10.10.2.10   TCP 66 53122 → 80 [ACK] Seq=1 Ack=1 Win=64512 Len=0 TSval=2329728675 TSecr=519887975
+    4   0.000188   10.10.1.10 → 10.10.2.10   HTTP 149 GET /api/hello HTTP/1.1 
+    5   0.000200   10.10.2.10 → 10.10.1.10   TCP 66 80 → 53122 [ACK] Seq=1 Ack=84 Win=65536 Len=0 TSval=519887975 TSecr=2329728675
+    6   0.002267   10.10.2.10 → 10.10.1.10   HTTP/JSON 370 HTTP/1.1 200 OK , JSON (application/json)
+    7   0.002278   10.10.1.10 → 10.10.2.10   TCP 66 53122 → 80 [ACK] Seq=84 Ack=305 Win=64512 Len=0 TSval=2329728677 TSecr=519887977
+    8   0.002390   10.10.1.10 → 10.10.2.10   TCP 66 53122 → 80 [FIN, ACK] Seq=84 Ack=305 Win=64512 Len=0 TSval=2329728677 TSecr=519887977
+    9   0.002458   10.10.2.10 → 10.10.1.10   TCP 66 80 → 53122 [FIN, ACK] Seq=305 Ack=85 Win=65536 Len=0 TSval=519887977 TSecr=2329728677
+   10   0.002483   10.10.1.10 → 10.10.2.10   TCP 66 53122 → 80 [ACK] Seq=85 Ack=306 Win=64512 Len=0 TSval=2329728677 TSecr=519887977
+$ tshark -r /tmp/t.pcap -Y http.request -V 2>/dev/null | grep -E '^[A-Z]'
+Frame 4: Packet, 149 bytes on wire (1192 bits), 149 bytes captured (1192 bits)
+Ethernet II, Src: 02:00:0a:0a:01:0a (02:00:0a:0a:01:0a), Dst: 02:00:0a:0a:01:fe (02:00:0a:0a:01:fe)
+Internet Protocol Version 4, Src: 10.10.1.10, Dst: 10.10.2.10
+Transmission Control Protocol, Src Port: 53122, Dst Port: 80, Seq: 1, Ack: 1, Len: 83
+Hypertext Transfer Protocol

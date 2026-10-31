@@ -7,8 +7,17 @@
  * NAT, port forwarding, CGNAT, VLAN, DDNS), nginx Ch6/Ch9 (cấu hình TLS/HTTP2, cân bằng tải trong nginx),
  * web-foundations Ch6 (HTTP nhập môn). Khoá này dạy CƠ CHẾ giao thức bên dưới — mỗi chỗ chạm có bài "Nếu đã học …".
  * Không trùng network-security (Nhóm A — tường lửa, VPN, Zero Trust, tấn công mạng): ở đây chỉ nhắc và trỏ sang.
+ *
+ * TRẠNG THÁI 31/10/2026: Mục 0 + Chương 1 SOẠN TRỌN (slide NFD/v1 · bài EN/VI · phòng lab mạng /net-lab · lab chương ·
+ * quiz · Code Lab track networking-practice). Hợp đồng soạn các chương sau: ./networking-for-developers/_HOP-DONG.md.
+ * Phòng lab Docker + mọi output thật: ./networking-for-developers/lab (bash lab/code/dung-output.sh).
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './networking-for-developers/s00-gioi-thieu.mjs';
+import s01 from './networking-for-developers/s01-tang-goi-tin.mjs';
+
+/** Mục 0 và Chương 1 đã soạn trọn (31/10/2026) ghi đè hai section khung — giữ nguyên title chương + slug bài cũ. */
+const ghiDe = (secs) => { secs[0] = s00; secs[1] = s01; return secs; };
 
 export default {
   category: { slug: 'cs-fundamentals', name: 'Nền tảng khoa học máy tính', icon: 'Cpu', sortOrder: 9 },
@@ -27,7 +36,7 @@ export default {
     requirements: 'Biết dùng terminal cơ bản và đã viết một API web đơn giản. Nên học trước Nền tảng Web (web-foundations) và Linux & Bash; không cần kiến thức mạng trước.',
     documentsNote: 'Tài liệu chính: "Computer Networking: A Top-Down Approach" (Kurose & Ross) • "High Performance Browser Networking" (Ilya Grigorik, hpbn.co) • RFC 9293 (TCP), RFC 8446 (TLS 1.3), RFC 9000 (QUIC), RFC 9110/9113/9114 (HTTP) tại rfc-editor.org • developer.mozilla.org/docs/Web/HTTP • wireshark.org/docs • blog.cloudflare.com • Julia Evans — wizardzines.com (Networking!, DNS).',
   },
-  sections: khung('netdev', [
+  sections: ghiDe(khung('netdev', [
     ['Section 0 — Why developers need networking', 'Mục 0 — Vì sao lập trình viên cần hiểu mạng', 'Mạng là gì bằng lời đời thường, nó từ đâu ra, và dựng phòng lab để đo mọi thứ.', [
       ['bat-dau-tai-day', 'Start here (1/2) — The network in everyday words, its history, and the outages that made headlines', 'Bắt đầu tại đây (1/2) — Mạng bằng lời đời thường, lịch sử, và những sự cố lên báo', 'Gói tin như bưu kiện, địa chỉ như số nhà · ARPANET 1969 → chuyển sang TCP/IP ngày 01/01/1983 → DNS 1983 → Web 1989–1991 · Sự cố Facebook 04/10/2021: rút tuyến BGP làm DNS của chính họ biến mất · Tấn công DDoS vào Dyn 21/10/2016 (botnet Mirai) làm nhiều trang lớn không phân giải được tên · Vì sao lỗi "mạng" thường là lỗi DNS, timeout hoặc chứng chỉ'],
       ['bat-dau-hoc-xong', 'Start here (2/2) — What you can do after this course, and how to study it', 'Bắt đầu tại đây (2/2) — Học xong làm được gì, và học thế nào', 'Tự chẩn đoán 502/504/524, DNS sai, chứng chỉ hết hạn thay vì đoán · Viết code mạng đúng: timeout, keep-alive, pool, retry · Nền cho backend, DevOps/SRE, bảo mật mạng · Khoá nên học trước/sau: web-foundations, linux-bash, nginx, network-security · Cách học: mỗi bài đều đo bằng lệnh thật, không học thuộc tầng OSI suông'],
@@ -115,5 +124,5 @@ export default {
       ['co-y-lam-hong', 'Break it on purpose and diagnose', 'Cố tình làm hỏng rồi chẩn đoán', 'Sai bản ghi DNS · Chứng chỉ thiếu intermediate · Upstream chậm → 504 · Chặn UDP 443 · Viết báo cáo sự cố'],
       ['tong-ket', 'Review and interview story', 'Tổng kết và câu chuyện phỏng vấn', 'Checklist cả khoá · Kể dự án tối ưu đường đi request trong phỏng vấn'],
     ]],
-  ]),
+  ])),
 };

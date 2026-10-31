@@ -1,0 +1,14 @@
+# Mục 0 · bài 0.2 — cùng phép đo curl -w nhưng trong phòng lab (không DNS, không TLS, đường ngắn) — máy client
+$ for i in 1 2 3; do curl -s -o /dev/null -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\n' http://10.10.2.10/api/hello; done
+dns=0.000029 connect=0.000797 tls=0.000000 ttfb=0.009649 total=0.009699
+dns=0.000010 connect=0.000369 tls=0.000000 ttfb=0.001612 total=0.001637
+dns=0.000011 connect=0.000275 tls=0.000000 ttfb=0.001382 total=0.001406
+$ ping -c 3 10.10.2.10
+PING 10.10.2.10 (10.10.2.10) 56(84) bytes of data.
+64 bytes from 10.10.2.10: icmp_seq=1 ttl=63 time=1.10 ms
+64 bytes from 10.10.2.10: icmp_seq=2 ttl=63 time=0.816 ms
+64 bytes from 10.10.2.10: icmp_seq=3 ttl=63 time=0.242 ms
+
+--- 10.10.2.10 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2033ms
+rtt min/avg/max/mdev = 0.242/0.717/1.095/0.355 ms

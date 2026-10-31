@@ -152,10 +152,18 @@ const FINAL: Record<string, (s: Record<string, Record<string, unknown> | undefin
   'flamegraph-traps': (s) => s.fg?.quizOk === true,
   'osmap-compare': (s) => s.om?.view === 'compare' && s.om?.card === 'case',
   'coordinated-omission-loops': (s) => s.co?.conns === 50 && s.co?.atEnd === true && (s.co?.openP99S as number) > 150,
+  'encap-layers': (s) => s.encap?.mode === 'http' && s.encap?.atEnd === true && s.encap?.layers === 1,
+  'encap-hop': (s) => s.encap?.mode === 'hop' && s.encap?.revealed === true && s.encap?.correct === 10 && s.encap?.side === 'web',
+  'encap-mtu': (s) => s.encap?.mode === 'mtu' && s.encap?.mtu === 1420 && s.encap?.offload === true,
+  'arp-lan': (s) => s.arp?.preset === 'lan' && s.arp?.atEnd === true && s.arp?.state === 'REACHABLE' && s.arp?.mac === '02:00:0a:0a:01:0b',
+  'arp-gateway': (s) => s.arp?.preset === 'gateway' && s.arp?.atEnd === true && s.arp?.state === 'REACHABLE' && s.arp?.mac === '02:00:0a:0a:01:fe',
+  'socket-demux': (s) => s.sock?.probeVia === 'rst' && s.sock?.probePort === 81,
+  'socket-bind': (s) => s.sock?.bind === '0.0.0.0' && s.sock?.atEnd === true && s.sock?.okCount === 4,
+  'waterfall-phases': (s) => s.wf?.preset === 'warm' && s.wf?.atEnd === true && (s.wf?.rtt as number) >= 150 && s.wf?.cum === true,
 };
 
 describe('tours — run on the real simulations', () => {
-  for (const ns of ['cpu-lab', 'os-lab'] as const) {
+  for (const ns of ['cpu-lab', 'os-lab', 'net-lab'] as const) {
     it(`${ns}: every tour reaches every target and every task`, async () => {
       const failures: string[] = [];
       for (const tour of index.TOURS.filter((t) => t.ns === ns)) {

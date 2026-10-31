@@ -15,7 +15,7 @@ describe('lab registries', () => {
   it('every namespace is known on both sides', () => {
     assert.deepEqual([...LAB_NAMESPACES].sort(), Object.keys(LAB_NS).sort());
     assert.deepEqual(Object.keys(LABS).sort(), Object.keys(LAB_NS).sort());
-    assert.equal(LAB_SELECTOR, 'div.os-lab, div.cpu-lab');
+    assert.equal(LAB_SELECTOR, 'div.os-lab, div.cpu-lab, div.net-lab');
   });
   for (const ns of LAB_NAMESPACES) {
     it(`${ns}: same sims and presets as content`, () => {

@@ -1,0 +1,19 @@
+# Ch1 · 1.5 — máy client: phía khách của cùng các kết nối
+$ ss -tanp '( dport = :80 )'
+State     Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                        
+TIME-WAIT 0      0         10.10.1.10:40030   10.10.2.10:80                                 
+ESTAB     0      0         10.10.1.10:40034   10.10.2.10:80   users:(("sleep",pid=283,fd=3))
+ESTAB     0      0         10.10.1.10:40042   10.10.2.10:80   users:(("sleep",pid=289,fd=3))
+TIME-WAIT 0      0         10.10.1.10:40454   10.10.2.10:80                                 
+TIME-WAIT 0      0         10.10.1.10:40456   10.10.2.10:80                                 
+TIME-WAIT 0      0         10.10.1.10:41182   10.10.2.10:80                                 
+TIME-WAIT 0      0         10.10.1.10:41190   10.10.2.10:80                                 
+TIME-WAIT 0      0         10.10.1.10:41192   10.10.2.10:80                                 
+TIME-WAIT 0      0         10.10.1.10:41918   10.10.2.10:80                                 
+TIME-WAIT 0      0         10.10.1.10:41924   10.10.2.10:80                                 
+$ sysctl net.ipv4.ip_local_port_range
+net.ipv4.ip_local_port_range = 32768	60999
+$ for i in 1 2 3; do curl -s http://10.10.2.10/api/hello; done
+{"service":"labflow-api","path":"/api/hello","seenFrom":"10.10.2.10:59748","seenOn":"10.10.2.20:3000","forwardedFor":"10.10.1.10"}
+{"service":"labflow-api","path":"/api/hello","seenFrom":"10.10.2.10:59764","seenOn":"10.10.2.20:3000","forwardedFor":"10.10.1.10"}
+{"service":"labflow-api","path":"/api/hello","seenFrom":"10.10.2.10:59774","seenOn":"10.10.2.20:3000","forwardedFor":"10.10.1.10"}

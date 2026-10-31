@@ -76,7 +76,7 @@ interface Dung {
   theoNgay: Array<{ ngay: string; hang: string; usd: number; luot: number }>;
 }
 
-const usd = (n: number | null | undefined, d = 2) => (n == null ? '∞' : `$${n.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: n > 0 && n < 0.01 ? 4 : 0 })}`);
+const usd = (n: number | null | undefined, d = 2) => (n == null ? '∞' : `$${n.toLocaleString('en-US', { maximumFractionDigits: n > 0 && n < 0.01 ? Math.max(d, 4) : d, minimumFractionDigits: n > 0 && n < 0.01 ? 4 : 0 })}`);
 const ngayVN = (s: string | null) => (s ? new Date(s).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) : '—');
 const TEN_TT: Record<TrangThai, { ten: string; cls: string }> = {
   hoatDong: { ten: 'Hoạt động', cls: 'border-green-500/50 text-green-400' },

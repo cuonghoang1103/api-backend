@@ -1,0 +1,510 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-4-2-chien-luoc",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-4-2-chien-luoc"
+  },
+  "exercises": [
+    {
+      "title": "Versions 1 — Where the version goes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "versioning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts and choices from lesson 4.2 (LabFlow /v1, /v2 and the LabFlow-Version header, real runs).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sự thật và lựa chọn từ bài 4.2 (LabFlow /v1, /v2 và header LabFlow-Version, chạy thật).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Remember: one router, versioned edges.|||Nhớ: một router, mép theo phiên bản.",
+        "Look at the real outputs of lesson 4.2.|||Xem lại output thật của bài 4.2."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Versions 1 — Where the version goes\n\nAnswer in the answer panel (no code needed).\n\n1. A booking created with POST /v2/bookings was then read with GET /v1/bookings/bk_9. LabFlow returned …Một lượt đặt tạo bằng POST /v2/bookings rồi đọc bằng GET /v1/bookings/bk_9. LabFlow trả …\n2. Why does LabFlow set Vary: LabFlow-Version on the unversioned paths?Vì sao LabFlow đặt Vary: LabFlow-Version trên các đường không số phiên bản?\n3. What is the main cost of Stripe’s date-based versions?Cái giá chính của phiên bản theo ngày kiểu Stripe là gì?\n4. When should LabFlow publish /v3?Khi nào LabFlow nên ra /v3?\n5. GET /bookings/bk_8 with LabFlow-Version: 3 returned …GET /bookings/bk_8 với LabFlow-Version: 3 trả …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Versions 1 — Where the version goes — answer key\n\n1. A booking created with POST /v2/bookings was then read with GET /v1/bookings/bk_9. LabFlow returned …Một lượt đặt tạo bằng POST /v2/bookings rồi đọc bằng GET /v1/bookings/bk_9. LabFlow trả …\n   Answer: a) the same booking in the v1 shape, with startAt and endAt\n   One database, one model; only the representation is versioned at the edge.VI: Một cơ sở dữ liệu, một mô hình; chỉ cách biểu diễn được đánh phiên bản ở mép.\n\n2. Why does LabFlow set Vary: LabFlow-Version on the unversioned paths?Vì sao LabFlow đặt Vary: LabFlow-Version trên các đường không số phiên bản?\n   Answer: a) The body depends on that request header, so caches must key on it\n   Without it a cache may serve the v1 body to a client that asked for v2.VI: Thiếu nó, cache có thể trả body v1 cho client xin v2.\n\n3. What is the main cost of Stripe’s date-based versions?Cái giá chính của phiên bản theo ngày kiểu Stripe là gì?\n   Answer: b) Every change needs a backwards transform, kept forever\n   The newest shape is transformed back for each pinned version — powerful, and a permanent maintenance load.VI: Hình dạng mới nhất được biến đổi ngược cho từng phiên bản được ghim — mạnh, và là gánh bảo trì vĩnh viễn.\n\n4. When should LabFlow publish /v3?Khi nào LabFlow nên ra /v3?\n   Answer: d) When breaking changes cannot be avoided, batched together\n   Additive changes stay in the current version; a major version is rare and batches breaking changes.VI: Thay đổi chỉ-thêm ở lại phiên bản hiện tại; phiên bản lớn là hiếm và gom các thay đổi phá vỡ.\n\n5. GET /bookings/bk_8 with LabFlow-Version: 3 returned …GET /bookings/bk_8 với LabFlow-Version: 3 trả …\n   Answer: b) 400 UNKNOWN_VERSION, listing versions 1, 2\n   An unknown version is a client error with a helpful list; silently falling back hides the mistake.VI: Phiên bản lạ là lỗi phía client kèm danh sách hữu ích; lặng lẽ lùi về bản khác che mất sai lầm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> the same booking in the v1 shape, with startAt and endAt</p><p>One database, one model; only the representation is versioned at the edge.</p><p><i>VI: Một cơ sở dữ liệu, một mô hình; chỉ cách biểu diễn được đánh phiên bản ở mép.</i></p></li><li><p><b>a)</b> The body depends on that request header, so caches must key on it</p><p>Without it a cache may serve the v1 body to a client that asked for v2.</p><p><i>VI: Thiếu nó, cache có thể trả body v1 cho client xin v2.</i></p></li><li><p><b>b)</b> Every change needs a backwards transform, kept forever</p><p>The newest shape is transformed back for each pinned version — powerful, and a permanent maintenance load.</p><p><i>VI: Hình dạng mới nhất được biến đổi ngược cho từng phiên bản được ghim — mạnh, và là gánh bảo trì vĩnh viễn.</i></p></li><li><p><b>d)</b> When breaking changes cannot be avoided, batched together</p><p>Additive changes stay in the current version; a major version is rare and batches breaking changes.</p><p><i>VI: Thay đổi chỉ-thêm ở lại phiên bản hiện tại; phiên bản lớn là hiếm và gom các thay đổi phá vỡ.</i></p></li><li><p><b>b)</b> 400 UNKNOWN_VERSION, listing versions 1, 2</p><p>An unknown version is a client error with a helpful list; silently falling back hides the mistake.</p><p><i>VI: Phiên bản lạ là lỗi phía client kèm danh sách hữu ích; lặng lẽ lùi về bản khác che mất sai lầm.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A booking created with POST /v2/bookings was then read with GET /v1/bookings/bk_9. LabFlow returned …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một lượt đặt tạo bằng POST /v2/bookings rồi đọc bằng GET /v1/bookings/bk_9. LabFlow trả …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the same booking in the v1 shape, with startAt and endAt"
+              },
+              {
+                "ma": "b",
+                "noiDung": "410 — the booking belongs to a newer version"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the v2 shape, because it was created in v2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "404 — v1 cannot see bookings created in v2"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One database, one model; only the representation is versioned at the edge.</p><p><i>VI: Một cơ sở dữ liệu, một mô hình; chỉ cách biểu diễn được đánh phiên bản ở mép.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why does LabFlow set Vary: LabFlow-Version on the unversioned paths?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow đặt Vary: LabFlow-Version trên các đường không số phiên bản?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The body depends on that request header, so caches must key on it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It tells the client which version to upgrade to"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Vary makes the response smaller"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Browsers require Vary on every JSON response"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without it a cache may serve the v1 body to a client that asked for v2.</p><p><i>VI: Thiếu nó, cache có thể trả body v1 cho client xin v2.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What is the main cost of Stripe’s date-based versions?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái giá chính của phiên bản theo ngày kiểu Stripe là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Clients must change their URLs every month"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Every change needs a backwards transform, kept forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only one version can exist at a time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Responses cannot be cached at all"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The newest shape is transformed back for each pinned version — powerful, and a permanent maintenance load.</p><p><i>VI: Hình dạng mới nhất được biến đổi ngược cho từng phiên bản được ghim — mạnh, và là gánh bảo trì vĩnh viễn.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>When should LabFlow publish /v3?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào LabFlow nên ra /v3?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "For every new endpoint the team adds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Whenever a new optional member is added"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every semester, so the API looks current"
+              },
+              {
+                "ma": "d",
+                "noiDung": "When breaking changes cannot be avoided, batched together"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Additive changes stay in the current version; a major version is rare and batches breaking changes.</p><p><i>VI: Thay đổi chỉ-thêm ở lại phiên bản hiện tại; phiên bản lớn là hiếm và gom các thay đổi phá vỡ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>GET /bookings/bk_8 with LabFlow-Version: 3 returned …</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /bookings/bk_8 với LabFlow-Version: 3 trả …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "200 in version 1, ignoring the header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "400 UNKNOWN_VERSION, listing versions 1, 2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "404 ROUTE_NOT_FOUND"
+              },
+              {
+                "ma": "d",
+                "noiDung": "200 in the newest version"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>An unknown version is a client error with a helpful list; silently falling back hides the mistake.</p><p><i>VI: Phiên bản lạ là lỗi phía client kèm danh sách hữu ích; lặng lẽ lùi về bản khác che mất sai lầm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A new major version for every change.|||Mỗi thay đổi một phiên bản lớn."
+        },
+        {
+          "loi": "Header versioning without Vary.|||Phiên bản bằng header mà thiếu Vary."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "major version",
+          "vi": "phiên bản lớn"
+        },
+        {
+          "en": "version pinning",
+          "vi": "ghim phiên bản"
+        }
+      ]
+    },
+    {
+      "title": "Versions 2 — Write pickVersion(path, headers)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "versioning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Decide which version serves a request, as LabFlow does (known versions: 1 and 2). <code>headers</code> has lower-case names.</p><ul>\n<li>Path starts with <code>/v&lt;n&gt;/</code>: known ⇒ <code>{ version: n, path: &lt;rest&gt; }</code> (e.g. <code>/v2/bookings</code> ⇒ <code>/bookings</code>); unknown ⇒ <code>{ error: 'ROUTE_NOT_FOUND' }</code> (it is just a path that does not exist)</li>\n<li>Otherwise read <code>labflow-version</code>: absent ⇒ version 1; <code>\"1\"</code>/<code>\"2\"</code> ⇒ that version; anything else ⇒ <code>{ error: 'UNKNOWN_VERSION' }</code>. The path stays as it is.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định phiên bản nào phục vụ một request, như LabFlow (phiên bản đã biết: 1 và 2). Tên trong <code>headers</code> là chữ thường.</p><ul>\n<li>Đường dẫn bắt đầu bằng <code>/v&lt;n&gt;/</code>: đã biết ⇒ <code>{ version: n, path: &lt;phần còn lại&gt; }</code> (ví dụ <code>/v2/bookings</code> ⇒ <code>/bookings</code>); không biết ⇒ <code>{ error: 'ROUTE_NOT_FOUND' }</code> (chỉ là một đường không tồn tại)</li>\n<li>Ngược lại đọc <code>labflow-version</code>: vắng ⇒ phiên bản 1; <code>\"1\"</code>/<code>\"2\"</code> ⇒ phiên bản đó; giá trị khác ⇒ <code>{ error: 'UNKNOWN_VERSION' }</code>. Đường dẫn giữ nguyên.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "path — string; headers — { name: value } with lower-case names|||path — chuỗi; headers — { tên: giá trị } tên chữ thường",
+      "outputSpec": "{ version, path } | { error }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pickVersion(\"/v2/bookings/bk_8\", {})",
+          "output": "{\"version\":2,\"path\":\"/bookings/bk_8\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "/^\\/v(\\d+)(\\/.*)$/ captures the number and the rest.|||/^\\/v(\\d+)(\\/.*)$/ bắt con số và phần còn lại.",
+        "The URL wins over the header when both exist.|||URL thắng header khi có cả hai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** request path + headers ⇒ which version serves it */\nfunction pickVersion(path, headers) {\n  // Write your solution here\n  const m = /^\\/v(\\d+)/.exec(path);\n  return m ? { version: Number(m[1]), path } : { version: Number(headers['labflow-version'] || 1), path };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pickVersion(path, headers) {\n  const known = [1, 2];\n  const m = /^\\/v(\\d+)(\\/.*)$/.exec(path);\n  if (m) {\n    const v = Number(m[1]);\n    return known.includes(v) ? { version: v, path: m[2] } : { error: 'ROUTE_NOT_FOUND' };\n  }\n  const h = headers['labflow-version'];\n  if (h === undefined) return { version: 1, path };\n  return known.map(String).includes(h) ? { version: Number(h), path } : { error: 'UNKNOWN_VERSION' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>inVersion and fromHeader of lesson 4.2 in one function: the URL is explicit; the header is only read on the old unversioned paths, defaulting to 1 so existing clients keep working.</p>",
+      "solutionExplanationHtmlVi": "<p>inVersion và fromHeader của bài 4.2 trong một hàm: URL là rõ ràng; header chỉ được đọc ở các đường cũ không số phiên bản, mặc định 1 để client đang có vẫn chạy.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "/v2 in the URL",
+              "vi": "/v2 trong URL"
+            },
+            "goi": "pickVersion(\"/v2/bookings/bk_8\", {})",
+            "mongDoi": {
+              "version": 2,
+              "path": "/bookings/bk_8"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Old path + header",
+              "vi": "Đường cũ + header"
+            },
+            "goi": "pickVersion(\"/bookings/bk_8\", {\"labflow-version\":\"2\"})",
+            "mongDoi": {
+              "version": 2,
+              "path": "/bookings/bk_8"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "pickVersion(\"/bookings/bk_8\", {})",
+            "mongDoi": {
+              "version": 1,
+              "path": "/bookings/bk_8"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pickVersion(\"/bookings/bk_8\", {\"labflow-version\":\"3\"})",
+            "mongDoi": {
+              "error": "UNKNOWN_VERSION"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pickVersion(\"/v3/bookings\", {})",
+            "mongDoi": {
+              "error": "ROUTE_NOT_FOUND"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The URL wins",
+              "vi": "URL thắng"
+            },
+            "goi": "pickVersion(\"/v1/labs\", {\"labflow-version\":\"2\"})",
+            "mongDoi": {
+              "version": 1,
+              "path": "/labs"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating /v3/bookings as UNKNOWN_VERSION — in LabFlow it is a 404.|||Coi /v3/bookings là UNKNOWN_VERSION — ở LabFlow nó là 404."
+        },
+        {
+          "loi": "Falling back to version 1 for LabFlow-Version: 3.|||Lùi về phiên bản 1 khi LabFlow-Version: 3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "URL versioning",
+          "vi": "phiên bản trong URL"
+        },
+        {
+          "en": "header versioning",
+          "vi": "phiên bản bằng header"
+        }
+      ]
+    },
+    {
+      "title": "Versions 3 — Write renderFor(booking, version): Stripe-style transforms",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "versioning",
+        "Stripe"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The code knows only the <b>newest</b> booking shape. Versions are dates (<code>\"2026-11-01\"</code>); a client pinned to an older date must get the older shape. Two changes happened:</p><ul>\n<li><b>2026-11-01</b>: <code>startAt</code>/<code>endAt</code> became <code>period: { start, end }</code></li>\n<li><b>2026-06-01</b>: the status spelling <code>CANCELED</code> became <code>CANCELLED</code></li></ul>\n<p>For every change whose date is <b>later</b> than the requested version, apply its backwards transform, newest change first. Return a new object; do not modify the input. (ISO dates compare correctly as strings.)</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Code chỉ biết hình dạng lượt đặt <b>mới nhất</b>. Phiên bản là ngày (<code>\"2026-11-01\"</code>); client ghim vào một ngày cũ hơn phải nhận hình dạng cũ hơn. Đã có hai thay đổi:</p><ul>\n<li><b>2026-11-01</b>: <code>startAt</code>/<code>endAt</code> thành <code>period: { start, end }</code></li>\n<li><b>2026-06-01</b>: cách viết trạng thái <code>CANCELED</code> thành <code>CANCELLED</code></li></ul>\n<p>Với mọi thay đổi có ngày <b>muộn hơn</b> phiên bản được xin, áp phép biến đổi ngược của nó, thay đổi mới nhất trước. Trả object mới; không sửa đầu vào. (Ngày ISO so như chuỗi là đúng.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "booking — newest shape; version — \"YYYY-MM-DD\"|||booking — hình dạng mới nhất; version — \"YYYY-MM-DD\"",
+      "outputSpec": "the booking in that version’s shape|||lượt đặt theo hình dạng của phiên bản đó",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "renderFor({\"id\":\"bk_8\",\"period\":{\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\"},\"status\":\"CANCELLED\"}, \"2026-11-01\")",
+          "output": "{\"id\":\"bk_8\",\"period\":{\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\"},\"status\":\"CANCELLED\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep the changes in an array, newest first, each with date and down(b).|||Giữ các thay đổi trong một mảng, mới nhất trước, mỗi cái có date và down(b).",
+        "version &lt; change.date ⇒ the client predates that change ⇒ undo it.|||version &lt; change.date ⇒ client có trước thay đổi đó ⇒ đảo ngược nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** newest booking + pinned date version ⇒ that version's shape */\nfunction renderFor(booking, version) {\n  // Write your solution here\n  if (version < '2026-11-01') return { ...booking, startAt: booking.period.start, endAt: booking.period.end };\n  return booking;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction renderFor(booking, version) {\n  // Newest first: each change knows how to turn its version's shape into the previous one\n  const CHANGES = [\n    { date: '2026-11-01', down: (b) => { const { period, ...r } = b; return { ...r, startAt: period.start, endAt: period.end }; } },\n    { date: '2026-06-01', down: (b) => ({ ...b, status: b.status === 'CANCELLED' ? 'CANCELED' : b.status }) },\n  ];\n  let b = { ...booking };\n  for (const c of CHANGES) if (version < c.date) b = c.down(b);\n  return b;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the mechanism behind date-based versions: one current model, and a small reversible step per change. It also shows the cost: every future change adds a step that must live as long as any client is pinned before it.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là cơ chế phía sau phiên bản theo ngày: một mô hình hiện tại, và mỗi thay đổi một bước nhỏ đảo ngược được. Nó cũng cho thấy cái giá: mỗi thay đổi tương lai thêm một bước phải sống chừng nào còn client ghim trước nó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Pinned to the newest version",
+              "vi": "Ghim vào phiên bản mới nhất"
+            },
+            "goi": "renderFor({\"id\":\"bk_8\",\"period\":{\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\"},\"status\":\"CANCELLED\"}, \"2026-11-01\")",
+            "mongDoi": {
+              "id": "bk_8",
+              "period": {
+                "start": "2026-11-02T04:00:00.000Z",
+                "end": "2026-11-02T06:00:00.000Z"
+              },
+              "status": "CANCELLED"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Before period",
+              "vi": "Trước khi có period"
+            },
+            "goi": "renderFor({\"id\":\"bk_8\",\"period\":{\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\"},\"status\":\"CANCELLED\"}, \"2026-08-15\")",
+            "mongDoi": {
+              "id": "bk_8",
+              "status": "CANCELLED",
+              "startAt": "2026-11-02T04:00:00.000Z",
+              "endAt": "2026-11-02T06:00:00.000Z"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Before both changes",
+              "vi": "Trước cả hai thay đổi"
+            },
+            "goi": "renderFor({\"id\":\"bk_8\",\"period\":{\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\"},\"status\":\"CANCELLED\"}, \"2026-01-10\")",
+            "mongDoi": {
+              "id": "bk_8",
+              "status": "CANCELED",
+              "startAt": "2026-11-02T04:00:00.000Z",
+              "endAt": "2026-11-02T06:00:00.000Z"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "renderFor({\"id\":\"bk_8\",\"period\":{\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\"},\"status\":\"PENDING\"}, \"2025-12-31\")",
+            "mongDoi": {
+              "id": "bk_8",
+              "status": "PENDING",
+              "startAt": "2026-11-02T04:00:00.000Z",
+              "endAt": "2026-11-02T06:00:00.000Z"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The input is not modified",
+              "vi": "Đầu vào không bị sửa"
+            },
+            "goi": "(function () { var b = {\"id\":\"bk_8\",\"period\":{\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\"},\"status\":\"CANCELLED\"}; renderFor(b, '2026-01-01'); return b; })()",
+            "mongDoi": {
+              "id": "bk_8",
+              "period": {
+                "start": "2026-11-02T04:00:00.000Z",
+                "end": "2026-11-02T06:00:00.000Z"
+              },
+              "status": "CANCELLED"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying the transforms oldest first — later transforms expect the newer shape.|||Áp các phép biến đổi từ cũ tới mới — phép sau mong hình dạng mới hơn."
+        },
+        {
+          "loi": "Using ≤ — a client pinned exactly to 2026-11-01 already has period.|||Dùng ≤ — client ghim đúng 2026-11-01 đã có period."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "version change",
+          "vi": "một bước thay đổi phiên bản"
+        },
+        {
+          "en": "backwards transform",
+          "vi": "phép biến đổi ngược"
+        }
+      ]
+    }
+  ]
+}

@@ -128,6 +128,36 @@
       "name": "Lab 3 — The maintenance list",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 3 · 1 — Part A: the answers before the code · Lab 3 · 2 — Write issuesPage(issues, query): filter, rank, page · Lab 3 · 3 — Write walkAll(fetchPage): the walk.mjs check"
+    },
+    {
+      "slug": "api-4-1-thay-doi",
+      "name": "4.1 Breaking vs non-breaking changes",
+      "level": "BEGINNER",
+      "description": "Luyện: Changes 1 — What the old client did · Changes 2 — Breaking or not? · Changes 3 — Write contractDiff(oldShape, newShape): find the breaking parts · Changes 4 — Write readBooking(b): a client that does not break"
+    },
+    {
+      "slug": "api-4-2-chien-luoc",
+      "name": "4.2 Versioning strategies",
+      "level": "BEGINNER",
+      "description": "Luyện: Versions 1 — Where the version goes · Versions 2 — Write pickVersion(path, headers) · Versions 3 — Write renderFor(booking, version): Stripe-style transforms"
+    },
+    {
+      "slug": "api-4-3-deprecation",
+      "name": "4.3 Deprecation and sunset",
+      "level": "BEGINNER",
+      "description": "Luyện: Deprecation 1 — Headers and dates · Deprecation 2 — Write deprecationHeaders(plan) · Deprecation 3 — Write usageReport(log): who still calls? · Deprecation 4 — A retirement plan in order"
+    },
+    {
+      "slug": "api-4-4-app-di-dong",
+      "name": "4.4 Mobile and desktop clients that never update",
+      "level": "BEGINNER",
+      "description": "Luyện: Apps 1 — Clients that never update · Apps 2 — Write appDecision(header, cfg): block, suggest or ok · Apps 3 — Write bookingForVersion(b, version): hide new values from v1"
+    },
+    {
+      "slug": "api-4-5-lab",
+      "name": "Lab 4 — Devices, version 2",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 4 · 1 — Part A: the answers before the code · Lab 4 · 2 — Write shapeProblems(obj, contract): the heart of the contract test · Lab 4 · 3 — Write deviceBodyToInternal(body, version)"
     }
   ]
 }

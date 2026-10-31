@@ -12,8 +12,10 @@ Deep link: `/courses/<slug-khoá>/learn?lessonSlug=<slug-bài>`. Academy: SDN302
 | `sdn302-2-2-middleware` | `api-2-1-problem-details` | middleware xử lý lỗi bốn tham số đặt sau mọi route | định dạng lỗi chuẩn RFC 9457 (problem+json, type/title/detail/instance), lỗi từng trường kèm JSON Pointer, bug 413 thành 500 của bộ xử lý tự chế (đợt Ch2, 01/11/2026) |
 | `sdn302-8-2-production` | `api-2-2-validation` | validation mạnh bằng Zod/Joi, kiểm ở cửa trước tầng service | tấn công API thật đo sáu request lọt, object strict chống mass assignment, 415/413 ở cửa, bẫy ép kiểu, siết luật sau phát hành là thay đổi phá vỡ (đợt Ch2) |
 | `prj301-pagination` | `api-3-1-offset` | OFFSET/FETCH, ORDER BY ổn định, COUNT cho thanh phân trang | API JSON thay vì JSP, dòng trùng khi dữ liệu đổi, trang sâu 0,05 → 78 ms trên 1 triệu dòng, giá của total, rồi con trỏ keyset 0,064 ms (bài 3.2) (đợt Ch3, 01/11/2026) |
+| `swr302-7-1-change-control` | `api-4-1-thay-doi` | baseline, mọi thay đổi qua kiểm soát + phân tích tác động | áp cho API đang chạy: một client cũ trên năm thay đổi thật (Invalid Date lặng lẽ, sập, 0243040, 400), tolerant reader, định luật Hyrum; rồi phiên bản, Deprecation/Sunset, test hợp đồng (đợt Ch4, 01/11/2026) |
 
 Không cặp (đợt này): `api-0-8-bat-dau-tai-day`, `api-0-9-bat-dau-khi-khong-co` (giới thiệu khoá), `api-0-2-bo-cong-cu` (SDN302 không dạy curl/HTTPie/Bruno), `api-0-3-du-an-labflow` (dựng dự án riêng), `api-1-4-dat-ten` (ngày giờ/tiền/id — SDN302/PRJ301 không có bài tương ứng), lab và quiz.
 Không cặp (Ch2): `api-2-3-envelope`, `api-2-4-i18n` (SDN302/PRJ301/SWR302 không có bài tương ứng), lab và quiz.
+Không cặp (Ch4): `api-4-2-chien-luoc`, `api-4-3-deprecation`, `api-4-4-app-di-dong` (SDN302/PRJ301/SWR302 không có bài về phiên bản API, khai tử hay app di động), lab và quiz.
 Không cặp (Ch3): `api-3-2-cursor`, `api-3-3-loc`, `api-3-4-sap-xep` (SDN302/PRJ301 không dạy con trỏ, bộ lọc gắn con trỏ hay N+1 — 3.2–3.4 nối tiếp từ 3.1), lab và quiz.
-Ứng viên cho các chương sau: SDN302 `sdn302-5-2-jwt-cors` ↔ Ch6; `sdn302-8-2-production` (rate limit) ↔ Ch5 (validate đã cặp với 2.2); SWR302 `swr302-7-1-change-control` ↔ Ch4.
+Ứng viên cho các chương sau: SDN302 `sdn302-5-2-jwt-cors` ↔ Ch6; `sdn302-8-2-production` (rate limit) ↔ Ch5 (validate đã cặp với 2.2).

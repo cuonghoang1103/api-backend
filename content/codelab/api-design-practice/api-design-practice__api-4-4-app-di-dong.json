@@ -1,0 +1,500 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-4-4-app-di-dong",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-4-4-app-di-dong"
+  },
+  "exercises": [
+    {
+      "title": "Apps 1 — Clients that never update",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "mobile clients"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 4.4 (LabFlow /app-config, the version guard and check-in, real runs).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 4.4 (LabFlow /app-config, chốt phiên bản và check-in, chạy thật).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer was printed in lesson 4.4.|||Mọi đáp án đã được in trong bài 4.4.",
+        "Think about which door must always stay open.|||Nghĩ xem cánh cửa nào phải luôn mở."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 1 — Clients that never update\n\nAnswer in the answer panel (no code needed).\n\n1. Why is GET /app-config registered BEFORE appVersionGuard?Vì sao GET /app-config được đăng ký TRƯỚC appVersionGuard?\n2. A request without the LabFlow-Client header reached /v2/bookings. The guard …Một request không có header LabFlow-Client tới /v2/bookings. Chốt chặn …\n3. Why not 426 Upgrade Required for a too-old app?Vì sao không dùng 426 Upgrade Required cho app quá cũ?\n4. After checking in bk_8, GET /v1/bookings/bk_8 showed status …Sau khi check-in bk_8, GET /v1/bookings/bk_8 hiện status …\n5. App 1.4.0 was written before check-in existed. Why did it not crash on CHECKED_IN?App 1.4.0 viết trước khi có check-in. Vì sao nó không sập khi gặp CHECKED_IN?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Apps 1 — Clients that never update — answer key\n\n1. Why is GET /app-config registered BEFORE appVersionGuard?Vì sao GET /app-config được đăng ký TRƯỚC appVersionGuard?\n   Answer: b) A too-old app must still read it to learn that it must update\n   App 1.2.0 read minVersion 1.3.0 and showed the update screen; behind the guard it would only get 400s.VI: App 1.2.0 đọc minVersion 1.3.0 và hiện màn hình cập nhật; nằm sau chốt thì nó chỉ nhận 400.\n\n2. A request without the LabFlow-Client header reached /v2/bookings. The guard …Một request không có header LabFlow-Client tới /v2/bookings. Chốt chặn …\n   Answer: b) let it through — only known-bad app builds are blocked\n   curl, scripts and the web do not send the header; blocking them would break everything for no gain.VI: curl, script và web không gửi header này; chặn chúng là làm hỏng mọi thứ mà chẳng được gì.\n\n3. Why not 426 Upgrade Required for a too-old app?Vì sao không dùng 426 Upgrade Required cho app quá cũ?\n   Answer: a) 426 means switching to another protocol and requires an Upgrade header\n   The build is the problem, not the protocol; LabFlow uses 400 with a specific code, minVersion and updateUrl.VI: Vấn đề nằm ở bản build, không ở giao thức; LabFlow dùng 400 với mã riêng, minVersion và updateUrl.\n\n4. After checking in bk_8, GET /v1/bookings/bk_8 showed status …Sau khi check-in bk_8, GET /v1/bookings/bk_8 hiện status …\n   Answer: c) PENDING — v1 maps the new value to the nearest old meaning\n   New enum values only appear in the version that knows them; the v1 filter uses the same mapping.VI: Giá trị enum mới chỉ xuất hiện ở phiên bản biết nó; bộ lọc v1 dùng cùng phép ánh xạ.\n\n5. App 1.4.0 was written before check-in existed. Why did it not crash on CHECKED_IN?App 1.4.0 viết trước khi có check-in. Vì sao nó không sập khi gặp CHECKED_IN?\n   Answer: c) It reads tolerantly: an unknown status gets “Trạng thái khác (…)”\n   LABEL[s] ?? fallback — the rule from lesson 4.1, applied in the app.VI: LABEL[s] ?? phương án dự phòng — luật của bài 4.1, áp vào app.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> A too-old app must still read it to learn that it must update</p><p>App 1.2.0 read minVersion 1.3.0 and showed the update screen; behind the guard it would only get 400s.</p><p><i>VI: App 1.2.0 đọc minVersion 1.3.0 và hiện màn hình cập nhật; nằm sau chốt thì nó chỉ nhận 400.</i></p></li><li><p><b>b)</b> let it through — only known-bad app builds are blocked</p><p>curl, scripts and the web do not send the header; blocking them would break everything for no gain.</p><p><i>VI: curl, script và web không gửi header này; chặn chúng là làm hỏng mọi thứ mà chẳng được gì.</i></p></li><li><p><b>a)</b> 426 means switching to another protocol and requires an Upgrade header</p><p>The build is the problem, not the protocol; LabFlow uses 400 with a specific code, minVersion and updateUrl.</p><p><i>VI: Vấn đề nằm ở bản build, không ở giao thức; LabFlow dùng 400 với mã riêng, minVersion và updateUrl.</i></p></li><li><p><b>c)</b> PENDING — v1 maps the new value to the nearest old meaning</p><p>New enum values only appear in the version that knows them; the v1 filter uses the same mapping.</p><p><i>VI: Giá trị enum mới chỉ xuất hiện ở phiên bản biết nó; bộ lọc v1 dùng cùng phép ánh xạ.</i></p></li><li><p><b>c)</b> It reads tolerantly: an unknown status gets “Trạng thái khác (…)”</p><p>LABEL[s] ?? fallback — the rule from lesson 4.1, applied in the app.</p><p><i>VI: LABEL[s] ?? phương án dự phòng — luật của bài 4.1, áp vào app.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is GET /app-config registered BEFORE appVersionGuard?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao GET /app-config được đăng ký TRƯỚC appVersionGuard?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Config responses are larger and slower"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A too-old app must still read it to learn that it must update"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express runs the last middleware first"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So that the config can use the guard’s cache"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>App 1.2.0 read minVersion 1.3.0 and showed the update screen; behind the guard it would only get 400s.</p><p><i>VI: App 1.2.0 đọc minVersion 1.3.0 và hiện màn hình cập nhật; nằm sau chốt thì nó chỉ nhận 400.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A request without the LabFlow-Client header reached /v2/bookings. The guard …</p><p style=\"opacity:.75;font-size:.92em\"><i>Một request không có header LabFlow-Client tới /v2/bookings. Chốt chặn …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "answered 400 APP_VERSION_UNSUPPORTED"
+              },
+              {
+                "ma": "b",
+                "noiDung": "let it through — only known-bad app builds are blocked"
+              },
+              {
+                "ma": "c",
+                "noiDung": "redirected it to /app-config"
+              },
+              {
+                "ma": "d",
+                "noiDung": "answered 401 Unauthorized"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>curl, scripts and the web do not send the header; blocking them would break everything for no gain.</p><p><i>VI: curl, script và web không gửi header này; chặn chúng là làm hỏng mọi thứ mà chẳng được gì.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why not 426 Upgrade Required for a too-old app?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao không dùng 426 Upgrade Required cho app quá cũ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "426 means switching to another protocol and requires an Upgrade header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "426 responses are not allowed to carry a body"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Mobile HTTP libraries cannot read 4xx statuses"
+              },
+              {
+                "ma": "d",
+                "noiDung": "426 is not a status code defined by HTTP at all"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The build is the problem, not the protocol; LabFlow uses 400 with a specific code, minVersion and updateUrl.</p><p><i>VI: Vấn đề nằm ở bản build, không ở giao thức; LabFlow dùng 400 với mã riêng, minVersion và updateUrl.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>After checking in bk_8, GET /v1/bookings/bk_8 showed status …</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi check-in bk_8, GET /v1/bookings/bk_8 hiện status …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CHECKED_IN — the same value v2 shows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "null — v1 has no value for check-in"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PENDING — v1 maps the new value to the nearest old meaning"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a 409 NOT_PENDING error from the v1 route"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>New enum values only appear in the version that knows them; the v1 filter uses the same mapping.</p><p><i>VI: Giá trị enum mới chỉ xuất hiện ở phiên bản biết nó; bộ lọc v1 dùng cùng phép ánh xạ.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>App 1.4.0 was written before check-in existed. Why did it not crash on CHECKED_IN?</p><p style=\"opacity:.75;font-size:.92em\"><i>App 1.4.0 viết trước khi có check-in. Vì sao nó không sập khi gặp CHECKED_IN?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Its minVersion forced an update first"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server hid CHECKED_IN from v2 as well"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It reads tolerantly: an unknown status gets “Trạng thái khác (…)”"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It caught the exception and restarted"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>LABEL[s] ?? fallback — the rule from lesson 4.1, applied in the app.</p><p><i>VI: LABEL[s] ?? phương án dự phòng — luật của bài 4.1, áp vào app.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Guarding the config endpoint.|||Chặn cả endpoint cấu hình."
+        },
+        {
+          "loi": "Showing new enum values to old clients.|||Cho client cũ thấy giá trị enum mới."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "remote config",
+          "vi": "cấu hình từ xa"
+        },
+        {
+          "en": "forced update",
+          "vi": "ép cập nhật"
+        }
+      ]
+    },
+    {
+      "title": "Apps 2 — Write appDecision(header, cfg): block, suggest or ok",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "semantic versioning",
+        "mobile clients"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Given the <code>LabFlow-Client</code> header (e.g. <code>\"android/1.4.0\"</code>) and the config, return:</p><ul>\n<li><code>\"block\"</code> — version below <code>cfg.minVersion[platform]</code></li>\n<li><code>\"suggest\"</code> — not blocked, but below <code>cfg.latestVersion[platform]</code></li>\n<li><code>\"ok\"</code> — otherwise, and also for a missing or malformed header and for <code>web/…</code> (never block what you cannot identify)</li></ul>\n<p>Compare versions <b>number by number</b>: <code>1.10.0</code> is newer than <code>1.9.0</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho header <code>LabFlow-Client</code> (ví dụ <code>\"android/1.4.0\"</code>) và cấu hình, trả:</p><ul>\n<li><code>\"block\"</code> — phiên bản dưới <code>cfg.minVersion[nền tảng]</code></li>\n<li><code>\"suggest\"</code> — không bị chặn, nhưng dưới <code>cfg.latestVersion[nền tảng]</code></li>\n<li><code>\"ok\"</code> — còn lại, và cả khi header thiếu hay sai dạng, và với <code>web/…</code> (không bao giờ chặn thứ không nhận diện được)</li></ul>\n<p>So phiên bản <b>từng con số</b>: <code>1.10.0</code> mới hơn <code>1.9.0</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "header — string | undefined; cfg — { minVersion, latestVersion }|||header — chuỗi | undefined; cfg — { minVersion, latestVersion }",
+      "outputSpec": "\"block\" | \"suggest\" | \"ok\"",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "appDecision(\"android/1.2.0\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+          "output": "\"block\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Parse with /^(android|ios|web)\\/(\\d+)\\.(\\d+)\\.(\\d+)$/.|||Đọc bằng /^(android|ios|web)\\/(\\d+)\\.(\\d+)\\.(\\d+)$/.",
+        "a[0] - b[0] || a[1] - b[1] || a[2] - b[2] compares two versions.|||a[0] - b[0] || a[1] - b[1] || a[2] - b[2] so hai phiên bản."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** client header + config ⇒ \"block\" | \"suggest\" | \"ok\" */\nfunction appDecision(header, cfg) {\n  // Write your solution here\n  const [platform, version] = header.split('/');\n  if (version < cfg.minVersion[platform]) return 'block';\n  if (version < cfg.latestVersion[platform]) return 'suggest';\n  return 'ok';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction appDecision(header, cfg) {\n  const m = /^(android|ios|web)\\/(\\d+)\\.(\\d+)\\.(\\d+)$/.exec(header ?? '');\n  if (!m || m[1] === 'web') return 'ok';\n  const v = [Number(m[2]), Number(m[3]), Number(m[4])];\n  const older = (min) => {\n    const w = min.split('.').map(Number);\n    return (v[0] - w[0] || v[1] - w[1] || v[2] - w[2]) < 0;\n  };\n  if (older(cfg.minVersion[m[1]])) return 'block';\n  if (older(cfg.latestVersion[m[1]])) return 'suggest';\n  return 'ok';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The decision app.mjs and appVersionGuard make together in lesson 4.4: the app shows a blocking screen or a hint from the config, and the server blocks only known-bad builds.</p>",
+      "solutionExplanationHtmlVi": "<p>Quyết định mà app.mjs và appVersionGuard cùng đưa ra ở bài 4.4: app hiện màn hình chặn hay lời gợi ý từ cấu hình, còn server chỉ chặn bản build đã biết là hỏng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "App 1.2.0 (lesson 4.4)",
+              "vi": "App 1.2.0 (bài 4.4)"
+            },
+            "goi": "appDecision(\"android/1.2.0\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "block"
+          },
+          {
+            "moTa": {
+              "en": "App 1.4.0",
+              "vi": "App 1.4.0"
+            },
+            "goi": "appDecision(\"android/1.4.0\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "suggest"
+          },
+          {
+            "moTa": {
+              "en": "No header (curl, scripts)",
+              "vi": "Không có header (curl, script)"
+            },
+            "goi": "appDecision(undefined, {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "ok"
+          },
+          {
+            "moTa": {
+              "en": "1.9.0 vs latest 1.10.0",
+              "vi": "1.9.0 so với bản mới nhất 1.10.0"
+            },
+            "goi": "appDecision(\"ios/1.9.0\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "suggest",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "appDecision(\"ios/1.10.0\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "ok",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "appDecision(\"android/1.3.0\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "suggest",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "appDecision(\"web/0.1.0\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "ok",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "appDecision(\"android/1.2\", {\"minVersion\":{\"android\":\"1.3.0\",\"ios\":\"1.3.0\"},\"latestVersion\":{\"android\":\"1.5.0\",\"ios\":\"1.10.0\"}})",
+            "mongDoi": "ok",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing \"1.10.0\" &lt; \"1.9.0\" as strings — true, and wrong.|||So \"1.10.0\" &lt; \"1.9.0\" như chuỗi — ra true, và sai."
+        },
+        {
+          "loi": "Blocking requests without the header.|||Chặn request không có header."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "semver",
+          "vi": "phiên bản ngữ nghĩa MAJOR.MINOR.PATCH"
+        },
+        {
+          "en": "minimum supported version",
+          "vi": "phiên bản tối thiểu được hỗ trợ"
+        }
+      ]
+    },
+    {
+      "title": "Apps 3 — Write bookingForVersion(b, version): hide new values from v1",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "versioning",
+        "enums"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Internally a booking may be <code>PENDING</code>, <code>CHECKED_IN</code> or <code>CANCELLED</code> and may have <code>checkedInAt</code>. Return a new object:</p><ul>\n<li><b>version 2</b> (or later): everything as it is, with <code>checkedInAt</code> always present (<code>null</code> when missing)</li>\n<li><b>version 1</b>: no <code>checkedInAt</code> member at all; <code>CHECKED_IN</code> becomes <code>PENDING</code>; any other unknown status also becomes <code>PENDING</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bên trong, lượt đặt có thể là <code>PENDING</code>, <code>CHECKED_IN</code> hay <code>CANCELLED</code> và có thể có <code>checkedInAt</code>. Trả một object mới:</p><ul>\n<li><b>phiên bản 2</b> (trở lên): giữ nguyên mọi thứ, <code>checkedInAt</code> luôn có mặt (<code>null</code> nếu thiếu)</li>\n<li><b>phiên bản 1</b>: không có trường <code>checkedInAt</code>; <code>CHECKED_IN</code> thành <code>PENDING</code>; trạng thái lạ khác cũng thành <code>PENDING</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "b — internal booking; version — 1 | 2|||b — lượt đặt nội bộ; version — 1 | 2",
+      "outputSpec": "the booking as that version shows it|||lượt đặt như phiên bản đó hiển thị",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "bookingForVersion({\"id\":\"bk_8\",\"status\":\"CHECKED_IN\",\"checkedInAt\":\"2026-10-31T20:05:03.456Z\"}, 2)",
+          "output": "{\"id\":\"bk_8\",\"status\":\"CHECKED_IN\",\"checkedInAt\":\"2026-10-31T20:05:03.456Z\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Destructuring removes a member: const { checkedInAt, ...rest } = b.|||Phân rã object bỏ được một trường: const { checkedInAt, ...rest } = b.",
+        "A small map does the status translation.|||Một bảng nhỏ lo việc dịch trạng thái."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** internal booking ⇒ what version 1 or 2 shows */\nfunction bookingForVersion(b, version) {\n  // Write your solution here\n  return { ...b, checkedInAt: b.checkedInAt ?? null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction bookingForVersion(b, version) {\n  if (version >= 2) return { ...b, checkedInAt: b.checkedInAt ?? null };\n  const { checkedInAt, ...rest } = b;\n  void checkedInAt;\n  const V1 = { PENDING: 'PENDING', CANCELLED: 'CANCELLED', CHECKED_IN: 'PENDING' };\n  return { ...rest, status: V1[b.status] ?? 'PENDING' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>LabFlow’s v1Status + toBookingV2 in one function: v1 keeps its frozen contract, v2 grows additively.</p>",
+      "solutionExplanationHtmlVi": "<p>v1Status + toBookingV2 của LabFlow trong một hàm: v1 giữ hợp đồng đã đóng băng, v2 lớn lên theo kiểu chỉ-thêm.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "v2 sees CHECKED_IN",
+              "vi": "v2 thấy CHECKED_IN"
+            },
+            "goi": "bookingForVersion({\"id\":\"bk_8\",\"status\":\"CHECKED_IN\",\"checkedInAt\":\"2026-10-31T20:05:03.456Z\"}, 2)",
+            "mongDoi": {
+              "id": "bk_8",
+              "status": "CHECKED_IN",
+              "checkedInAt": "2026-10-31T20:05:03.456Z"
+            }
+          },
+          {
+            "moTa": {
+              "en": "v1 sees PENDING",
+              "vi": "v1 thấy PENDING"
+            },
+            "goi": "bookingForVersion({\"id\":\"bk_8\",\"status\":\"CHECKED_IN\",\"checkedInAt\":\"2026-10-31T20:05:03.456Z\"}, 1)",
+            "mongDoi": {
+              "id": "bk_8",
+              "status": "PENDING"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "bookingForVersion({\"id\":\"bk_7\",\"status\":\"CANCELLED\"}, 2)",
+            "mongDoi": {
+              "id": "bk_7",
+              "status": "CANCELLED",
+              "checkedInAt": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "bookingForVersion({\"id\":\"bk_7\",\"status\":\"CANCELLED\"}, 1)",
+            "mongDoi": {
+              "id": "bk_7",
+              "status": "CANCELLED"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "bookingForVersion({\"id\":\"bk_9\",\"status\":\"NO_SHOW\",\"checkedInAt\":null}, 1)",
+            "mongDoi": {
+              "id": "bk_9",
+              "status": "PENDING"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending checkedInAt: null to v1 — an added member v1 never had.|||Gửi checkedInAt: null cho v1 — một trường v1 chưa từng có."
+        },
+        {
+          "loi": "Passing CHECKED_IN through to v1 — the 4.1 crash.|||Để CHECKED_IN lọt sang v1 — cú sập của 4.1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "enum value",
+          "vi": "giá trị liệt kê"
+        },
+        {
+          "en": "frozen contract",
+          "vi": "hợp đồng đã đóng băng"
+        }
+      ]
+    }
+  ]
+}

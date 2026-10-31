@@ -1,0 +1,633 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-4-3-deprecation",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-4-3-deprecation"
+  },
+  "exercises": [
+    {
+      "title": "Deprecation 1 — Headers and dates",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "deprecation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 4.3 (LabFlow’s old paths, real runs; RFC 9745 and RFC 8594).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 4.3 (các đường cũ của LabFlow, chạy thật; RFC 9745 và RFC 8594).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Deprecated = still works; sunset = stops.|||Deprecated = vẫn chạy; sunset = ngừng.",
+        "Check the formats: @seconds vs HTTP-date.|||Kiểm định dạng: @giây và HTTP-date."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deprecation 1 — Headers and dates\n\nAnswer in the answer panel (no code needed).\n\n1. Deprecation: @1793491200 means …Deprecation: @1793491200 nghĩa là …\n2. Which pair breaks the rule of RFC 9745?Cặp nào vi phạm luật của RFC 9745?\n3. On 2 May 2027 GET /bookings (old path) answered 410. Why not 404?Ngày 2/5/2027 GET /bookings (đường cũ) trả 410. Sao không phải 404?\n4. The usage report showed android/1.2.0 and node on the old paths. What is it for?Báo cáo mức dùng hiện android/1.2.0 và node trên đường cũ. Nó để làm gì?\n5. After the sunset, the unchanged client-v1.mjs crashed with “page.data is not iterable”. What does that teach?Sau sunset, client-v1.mjs không sửa sập với “page.data is not iterable”. Điều đó dạy gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deprecation 1 — Headers and dates — answer key\n\n1. Deprecation: @1793491200 means …Deprecation: @1793491200 nghĩa là …\n   Answer: d) deprecated since 2026-11-01T00:00:00Z (Unix seconds)\n   RFC 9745: a structured-field Date, @ followed by Unix seconds. Stopping is what Sunset announces.VI: RFC 9745: kiểu Date của structured field, @ rồi số giây Unix. Ngừng hẳn là việc của Sunset.\n\n2. Which pair breaks the rule of RFC 9745?Cặp nào vi phạm luật của RFC 9745?\n   Answer: d) Deprecation 1 May 2027, Sunset 1 Nov 2026\n   The Sunset time must not be earlier than the Deprecation time; equal is allowed, and Deprecation may lie in the future.VI: Thời điểm Sunset không được sớm hơn Deprecation; bằng nhau thì được, và Deprecation có thể nằm ở tương lai.\n\n3. On 2 May 2027 GET /bookings (old path) answered 410. Why not 404?Ngày 2/5/2027 GET /bookings (đường cũ) trả 410. Sao không phải 404?\n   Answer: d) 410 says it was removed on purpose; the problem names the successor\n   404 looks like a typo in the URL; 410 + successor tells the developer exactly what to do.VI: 404 trông như gõ sai URL; 410 + đường thay thế nói rõ lập trình viên phải làm gì.\n\n4. The usage report showed android/1.2.0 and node on the old paths. What is it for?Báo cáo mức dùng hiện android/1.2.0 và node trên đường cũ. Nó để làm gì?\n   Answer: b) To contact the owners of those clients before the sunset date\n   Retiring an API is about people: you email the owners of Android 1.2.0, months ahead.VI: Khai tử API là chuyện con người: bạn email cho chủ của Android 1.2.0, trước nhiều tháng.\n\n5. After the sunset, the unchanged client-v1.mjs crashed with “page.data is not iterable”. What does that teach?Sau sunset, client-v1.mjs không sửa sập với “page.data is not iterable”. Điều đó dạy gì?\n   Answer: d) No header saves a client that never checks res.ok — communicate early\n   Headers inform developers and tools; only months of communication reach clients that ignore responses.VI: Header báo cho lập trình viên và công cụ; chỉ những tháng truyền đạt mới tới được client bỏ qua response.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> deprecated since 2026-11-01T00:00:00Z (Unix seconds)</p><p>RFC 9745: a structured-field Date, @ followed by Unix seconds. Stopping is what Sunset announces.</p><p><i>VI: RFC 9745: kiểu Date của structured field, @ rồi số giây Unix. Ngừng hẳn là việc của Sunset.</i></p></li><li><p><b>d)</b> Deprecation 1 May 2027, Sunset 1 Nov 2026</p><p>The Sunset time must not be earlier than the Deprecation time; equal is allowed, and Deprecation may lie in the future.</p><p><i>VI: Thời điểm Sunset không được sớm hơn Deprecation; bằng nhau thì được, và Deprecation có thể nằm ở tương lai.</i></p></li><li><p><b>d)</b> 410 says it was removed on purpose; the problem names the successor</p><p>404 looks like a typo in the URL; 410 + successor tells the developer exactly what to do.</p><p><i>VI: 404 trông như gõ sai URL; 410 + đường thay thế nói rõ lập trình viên phải làm gì.</i></p></li><li><p><b>b)</b> To contact the owners of those clients before the sunset date</p><p>Retiring an API is about people: you email the owners of Android 1.2.0, months ahead.</p><p><i>VI: Khai tử API là chuyện con người: bạn email cho chủ của Android 1.2.0, trước nhiều tháng.</i></p></li><li><p><b>d)</b> No header saves a client that never checks res.ok — communicate early</p><p>Headers inform developers and tools; only months of communication reach clients that ignore responses.</p><p><i>VI: Header báo cho lập trình viên và công cụ; chỉ những tháng truyền đạt mới tới được client bỏ qua response.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Deprecation: @1793491200 means …</p><p style=\"opacity:.75;font-size:.92em\"><i>Deprecation: @1793491200 nghĩa là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "version 1793491200 of the API"
+              },
+              {
+                "ma": "b",
+                "noiDung": "deprecated for 1 793 491 200 milliseconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the endpoint stops responding at that moment"
+              },
+              {
+                "ma": "d",
+                "noiDung": "deprecated since 2026-11-01T00:00:00Z (Unix seconds)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>RFC 9745: a structured-field Date, @ followed by Unix seconds. Stopping is what Sunset announces.</p><p><i>VI: RFC 9745: kiểu Date của structured field, @ rồi số giây Unix. Ngừng hẳn là việc của Sunset.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which pair breaks the rule of RFC 9745?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cặp nào vi phạm luật của RFC 9745?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Deprecation 1 Nov 2026, Sunset 1 Nov 2026"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Deprecation 1 Nov 2026, Sunset 1 May 2027"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deprecation in the future, Sunset later still"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Deprecation 1 May 2027, Sunset 1 Nov 2026"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The Sunset time must not be earlier than the Deprecation time; equal is allowed, and Deprecation may lie in the future.</p><p><i>VI: Thời điểm Sunset không được sớm hơn Deprecation; bằng nhau thì được, và Deprecation có thể nằm ở tương lai.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>On 2 May 2027 GET /bookings (old path) answered 410. Why not 404?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngày 2/5/2027 GET /bookings (đường cũ) trả 410. Sao không phải 404?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "404 is reserved for databases"
+              },
+              {
+                "ma": "b",
+                "noiDung": "410 is cached by browsers, 404 is not"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express cannot send 404 for known paths"
+              },
+              {
+                "ma": "d",
+                "noiDung": "410 says it was removed on purpose; the problem names the successor"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>404 looks like a typo in the URL; 410 + successor tells the developer exactly what to do.</p><p><i>VI: 404 trông như gõ sai URL; 410 + đường thay thế nói rõ lập trình viên phải làm gì.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>The usage report showed android/1.2.0 and node on the old paths. What is it for?</p><p style=\"opacity:.75;font-size:.92em\"><i>Báo cáo mức dùng hiện android/1.2.0 và node trên đường cũ. Nó để làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To decide which version number comes next"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To contact the owners of those clients before the sunset date"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To bill clients per request"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To block those clients immediately"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Retiring an API is about people: you email the owners of Android 1.2.0, months ahead.</p><p><i>VI: Khai tử API là chuyện con người: bạn email cho chủ của Android 1.2.0, trước nhiều tháng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>After the sunset, the unchanged client-v1.mjs crashed with “page.data is not iterable”. What does that teach?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau sunset, client-v1.mjs không sửa sập với “page.data is not iterable”. Điều đó dạy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The Sunset header was formatted wrongly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server should keep answering 200 forever"
+              },
+              {
+                "ma": "c",
+                "noiDung": "410 responses must contain a data array"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No header saves a client that never checks res.ok — communicate early"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Headers inform developers and tools; only months of communication reach clients that ignore responses.</p><p><i>VI: Header báo cho lập trình viên và công cụ; chỉ những tháng truyền đạt mới tới được client bỏ qua response.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mixing up the two dates.|||Lẫn hai ngày với nhau."
+        },
+        {
+          "loi": "Answering 404 after removal.|||Trả 404 sau khi gỡ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Deprecation",
+          "vi": "header khai tử (RFC 9745)"
+        },
+        {
+          "en": "Sunset",
+          "vi": "header ngày ngừng (RFC 8594)"
+        }
+      ]
+    },
+    {
+      "title": "Deprecation 2 — Write deprecationHeaders(plan)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "deprecation",
+        "HTTP headers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Build the three headers LabFlow sends on a deprecated path, from <code>{ since, sunset, docs, successor }</code> (ISO strings and URLs):</p><ul>\n<li><code>Deprecation</code>: <code>@</code> + whole Unix <b>seconds</b> of <code>since</code> (RFC 9745)</li>\n<li><code>Sunset</code>: the HTTP-date of <code>sunset</code> — <code>Date.prototype.toUTCString()</code> gives it (RFC 8594)</li>\n<li><code>Link</code>: <code>&lt;docs&gt;; rel=\"deprecation\", &lt;successor&gt;; rel=\"successor-version\"</code></li></ul>\n<p>If a date does not parse, or <code>sunset</code> is earlier than <code>since</code>, throw a <code>RangeError</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng ba header LabFlow gửi trên một đường bị khai tử, từ <code>{ since, sunset, docs, successor }</code> (chuỗi ISO và URL):</p><ul>\n<li><code>Deprecation</code>: <code>@</code> + số <b>giây</b> Unix nguyên của <code>since</code> (RFC 9745)</li>\n<li><code>Sunset</code>: HTTP-date của <code>sunset</code> — <code>Date.prototype.toUTCString()</code> cho ra nó (RFC 8594)</li>\n<li><code>Link</code>: <code>&lt;docs&gt;; rel=\"deprecation\", &lt;successor&gt;; rel=\"successor-version\"</code></li></ul>\n<p>Nếu một ngày không đọc được, hoặc <code>sunset</code> sớm hơn <code>since</code>, ném <code>RangeError</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "{ since, sunset, docs, successor }",
+      "outputSpec": "{ Deprecation, Sunset, Link } or a RangeError|||{ Deprecation, Sunset, Link } hoặc RangeError",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "deprecationHeaders({\"since\":\"2026-11-01T00:00:00Z\",\"sunset\":\"2027-05-01T00:00:00Z\",\"docs\":\"https://labflow.example/docs/migrate-to-v1\",\"successor\":\"/v1/bookings\"})",
+          "output": "{\"Deprecation\":\"@1793491200\",\"Sunset\":\"Sat, 01 May 2027 00:00:00 GMT\",\"Link\":\"<https://labflow.example/docs/migrate-to-v1>; rel=\\\"deprecation\\\", </v1/bookings>; rel=\\\"successor-version\\\"\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Date.parse gives milliseconds — divide by 1000 and floor.|||Date.parse cho mili giây — chia 1000 rồi lấy phần nguyên.",
+        "Check the order before building anything.|||Kiểm thứ tự trước khi dựng gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** retirement plan ⇒ the three headers */\nfunction deprecationHeaders({ since, sunset, docs, successor }) {\n  // Write your solution here\n  return { Deprecation: '@' + Date.parse(since), Sunset: sunset, Link: '<' + successor + '>; rel=\"successor-version\"' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction deprecationHeaders({ since, sunset, docs, successor }) {\n  const a = Date.parse(since), b = Date.parse(sunset);\n  if (Number.isNaN(a) || Number.isNaN(b) || b < a) throw new RangeError('Sunset must not be earlier than Deprecation');\n  return {\n    Deprecation: `@${Math.floor(a / 1000)}`,\n    Sunset: new Date(b).toUTCString(),\n    Link: `<${docs}>; rel=\"deprecation\", <${successor}>; rel=\"successor-version\"`,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exactly the headers of lesson 4.3: Deprecation @1793491200, Sunset Sat, 01 May 2027 00:00:00 GMT, and a Link with both relations. The RangeError is the check Lab 4’s contract test makes.</p>",
+      "solutionExplanationHtmlVi": "<p>Đúng các header của bài 4.3: Deprecation @1793491200, Sunset Sat, 01 May 2027 00:00:00 GMT, và một Link có cả hai quan hệ. RangeError chính là phép kiểm mà test hợp đồng của Lab 4 làm.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "LabFlow’s old paths",
+              "vi": "Các đường cũ của LabFlow"
+            },
+            "goi": "deprecationHeaders({\"since\":\"2026-11-01T00:00:00Z\",\"sunset\":\"2027-05-01T00:00:00Z\",\"docs\":\"https://labflow.example/docs/migrate-to-v1\",\"successor\":\"/v1/bookings\"})",
+            "mongDoi": {
+              "Deprecation": "@1793491200",
+              "Sunset": "Sat, 01 May 2027 00:00:00 GMT",
+              "Link": "<https://labflow.example/docs/migrate-to-v1>; rel=\"deprecation\", </v1/bookings>; rel=\"successor-version\""
+            }
+          },
+          {
+            "moTa": {
+              "en": "Sunset before Deprecation",
+              "vi": "Sunset trước Deprecation"
+            },
+            "goi": "deprecationHeaders({\"since\":\"2026-11-01T00:00:00Z\",\"sunset\":\"2026-10-01T00:00:00Z\",\"docs\":\"https://labflow.example/docs/migrate-to-v1\",\"successor\":\"/v1/bookings\"})",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Lab 4: /v1/devices",
+              "vi": "Lab 4: /v1/devices"
+            },
+            "goi": "deprecationHeaders({\"since\":\"2026-11-15T00:00:00Z\",\"sunset\":\"2027-06-01T00:00:00Z\",\"docs\":\"https://labflow.example/docs/devices-v2\",\"successor\":\"/v2/devices/dev_1\"})",
+            "mongDoi": {
+              "Deprecation": "@1794700800",
+              "Sunset": "Tue, 01 Jun 2027 00:00:00 GMT",
+              "Link": "<https://labflow.example/docs/devices-v2>; rel=\"deprecation\", </v2/devices/dev_1>; rel=\"successor-version\""
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Same instant, two notations",
+              "vi": "Cùng thời điểm, hai cách viết"
+            },
+            "goi": "deprecationHeaders({\"since\":\"2026-11-01T07:00:00+07:00\",\"sunset\":\"2026-11-01T00:00:00Z\",\"docs\":\"https://labflow.example/docs/migrate-to-v1\",\"successor\":\"/v1/bookings\"})",
+            "mongDoi": {
+              "Deprecation": "@1793491200",
+              "Sunset": "Sun, 01 Nov 2026 00:00:00 GMT",
+              "Link": "<https://labflow.example/docs/migrate-to-v1>; rel=\"deprecation\", </v1/bookings>; rel=\"successor-version\""
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "deprecationHeaders({\"since\":\"2026-11-01T00:00:00Z\",\"sunset\":\"next semester\",\"docs\":\"https://labflow.example/docs/migrate-to-v1\",\"successor\":\"/v1/bookings\"})",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deprecation: @1793491200000 — milliseconds instead of seconds.|||Deprecation: @1793491200000 — mili giây thay vì giây."
+        },
+        {
+          "loi": "Sunset in ISO format — RFC 8594 uses an HTTP-date.|||Sunset dạng ISO — RFC 8594 dùng HTTP-date."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "HTTP-date",
+          "vi": "định dạng ngày của HTTP"
+        },
+        {
+          "en": "successor-version",
+          "vi": "quan hệ liên kết tới bản thay thế"
+        }
+      ]
+    },
+    {
+      "title": "Deprecation 3 — Write usageReport(log): who still calls?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "deprecation",
+        "observability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Each call to a deprecated route was logged as <code>{ route, client, at }</code> (<code>at</code> = ISO time in UTC). Return one row per (route, client): <code>{ route, client, count, lastSeen }</code>, where <code>lastSeen</code> is the latest <code>at</code>. Order: most calls first; ties by route, then client, alphabetically. The log is not sorted.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi lần gọi một route bị khai tử được ghi thành <code>{ route, client, at }</code> (<code>at</code> = giờ ISO theo UTC). Trả mỗi cặp (route, client) một dòng: <code>{ route, client, count, lastSeen }</code>, với <code>lastSeen</code> là <code>at</code> muộn nhất. Thứ tự: nhiều lượt gọi nhất trước; bằng nhau thì theo route, rồi client, theo bảng chữ cái. Nhật ký chưa được sắp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "log — [{ route, client, at }]",
+      "outputSpec": "[{ route, client, count, lastSeen }]",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "usageReport([{\"route\":\"GET /labs\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.484Z\"},{\"route\":\"GET /bookings\",\"client\":\"curl/8.7.1\",\"at\":\"2026-10-31T20:03:18.408Z\"},{\"route\":\"GET /bookings\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.497Z\"},{\"route\":\"GET /bookings\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.512Z\"},{\"route\":\"GET /bookings\",\"client\":\"node\",\"at\":\"2026-10-31T20:03:18.582Z\"},{\"route\":\"POST /bookings\",\"client\":\"node\",\"at\":\"2026-10-31T20:03:18.604Z\"}])",
+          "output": "[{\"route\":\"GET /bookings\",\"client\":\"android/1.2.0\",\"count\":2,\"lastSeen\":\"2026-10-31T20:03:18.512Z\"},{\"route\":\"GET /bookings\",\"client\":\"curl/8.7.1\",\"count\":1,\"lastSeen\":\"2026-10-31T20:03:18.408Z\"},{\"route\":\"GET /bookings\",\"client\":\"node\",\"count\":1,\"lastSeen\":\"2026-10-31T20:03:18.582Z\"},{\"route\":\"GET /labs\",\"client\":\"android/1.2.0\",\"count\":1,\"lastSeen\":\"2026-10-31T20:03:18.484Z\"},{\"route\":\"POST /bookings\",\"client\":\"node\",\"count\":1,\"lastSeen\":\"2026-10-31T20:03:18.604Z\"}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A Map keyed by route + client collects the rows.|||Một Map có khoá là route + client gom các dòng.",
+        "UTC ISO strings compare correctly as text.|||Chuỗi ISO cùng UTC so như chữ là đúng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** call log ⇒ one row per route and client */\nfunction usageReport(log) {\n  // Write your solution here\n  const m = {};\n  for (const e of log) m[e.route] = { route: e.route, client: e.client, count: (m[e.route]?.count || 0) + 1, lastSeen: e.at };\n  return Object.values(m);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction usageReport(log) {\n  const m = new Map();\n  for (const e of log) {\n    const k = `${e.route} · ${e.client}`;\n    const u = m.get(k) ?? { route: e.route, client: e.client, count: 0, lastSeen: '' };\n    u.count++;\n    if (e.at > u.lastSeen) u.lastSeen = e.at;\n    m.set(k, u);\n  }\n  return [...m.values()].sort((a, b) => b.count - a.count || a.route.localeCompare(b.route) || a.client.localeCompare(b.client));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is LabFlow’s GET /v1/admin/deprecations. With names on every row, the sunset decision becomes a list of people to contact.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là GET /v1/admin/deprecations của LabFlow. Có tên ở mỗi dòng, quyết định sunset thành danh sách người cần liên hệ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The calls of lesson 4.3",
+              "vi": "Các lượt gọi của bài 4.3"
+            },
+            "goi": "usageReport([{\"route\":\"GET /labs\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.484Z\"},{\"route\":\"GET /bookings\",\"client\":\"curl/8.7.1\",\"at\":\"2026-10-31T20:03:18.408Z\"},{\"route\":\"GET /bookings\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.497Z\"},{\"route\":\"GET /bookings\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.512Z\"},{\"route\":\"GET /bookings\",\"client\":\"node\",\"at\":\"2026-10-31T20:03:18.582Z\"},{\"route\":\"POST /bookings\",\"client\":\"node\",\"at\":\"2026-10-31T20:03:18.604Z\"}])",
+            "mongDoi": [
+              {
+                "route": "GET /bookings",
+                "client": "android/1.2.0",
+                "count": 2,
+                "lastSeen": "2026-10-31T20:03:18.512Z"
+              },
+              {
+                "route": "GET /bookings",
+                "client": "curl/8.7.1",
+                "count": 1,
+                "lastSeen": "2026-10-31T20:03:18.408Z"
+              },
+              {
+                "route": "GET /bookings",
+                "client": "node",
+                "count": 1,
+                "lastSeen": "2026-10-31T20:03:18.582Z"
+              },
+              {
+                "route": "GET /labs",
+                "client": "android/1.2.0",
+                "count": 1,
+                "lastSeen": "2026-10-31T20:03:18.484Z"
+              },
+              {
+                "route": "POST /bookings",
+                "client": "node",
+                "count": 1,
+                "lastSeen": "2026-10-31T20:03:18.604Z"
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: usageReport([])",
+              "vi": "Ca 2"
+            },
+            "goi": "usageReport([])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "usageReport([{\"route\":\"GET /labs\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.484Z\"},{\"route\":\"GET /bookings\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.497Z\"},{\"route\":\"GET /bookings\",\"client\":\"android/1.2.0\",\"at\":\"2026-10-31T20:03:18.512Z\"}])",
+            "mongDoi": [
+              {
+                "route": "GET /bookings",
+                "client": "android/1.2.0",
+                "count": 2,
+                "lastSeen": "2026-10-31T20:03:18.512Z"
+              },
+              {
+                "route": "GET /labs",
+                "client": "android/1.2.0",
+                "count": 1,
+                "lastSeen": "2026-10-31T20:03:18.484Z"
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "usageReport([{\"route\":\"GET /v1/devices\",\"client\":\"ios/1.4.0\",\"at\":\"2027-01-02T00:00:00.000Z\"},{\"route\":\"GET /v1/devices\",\"client\":\"ios/1.4.0\",\"at\":\"2026-12-01T00:00:00.000Z\"},{\"route\":\"GET /v1/devices\",\"client\":\"android/1.4.0\",\"at\":\"2026-12-05T00:00:00.000Z\"},{\"route\":\"GET /v1/devices\",\"client\":\"android/1.4.0\",\"at\":\"2026-12-04T00:00:00.000Z\"}])",
+            "mongDoi": [
+              {
+                "route": "GET /v1/devices",
+                "client": "android/1.4.0",
+                "count": 2,
+                "lastSeen": "2026-12-05T00:00:00.000Z"
+              },
+              {
+                "route": "GET /v1/devices",
+                "client": "ios/1.4.0",
+                "count": 2,
+                "lastSeen": "2027-01-02T00:00:00.000Z"
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the last entry in the log as lastSeen — the log is not sorted.|||Lấy mục cuối nhật ký làm lastSeen — nhật ký chưa sắp."
+        },
+        {
+          "loi": "Grouping by route only — the decision needs the client.|||Chỉ gom theo route — quyết định cần biết client."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "usage report",
+          "vi": "báo cáo mức dùng"
+        },
+        {
+          "en": "last seen",
+          "vi": "lần cuối thấy"
+        }
+      ]
+    },
+    {
+      "title": "Deprecation 4 — A retirement plan in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "deprecation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Put the steps for retiring LabFlow’s unversioned paths in the right order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước khai tử những đường không số phiên bản của LabFlow theo đúng thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nobody can migrate before the successor exists.|||Không ai chuyển được khi chưa có bản thay thế.",
+        "Removal is the very last step.|||Gỡ hẳn là bước cuối cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deprecation 4 — A retirement plan in order\n\nAnswer in the answer panel (no code needed).\n\n1. Order the stepsSắp các bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deprecation 4 — A retirement plan in order — answer key\n\n1. Order the stepsSắp các bước\n   Answer: m2) Ship /v1 and the migration guide  →  m3) Send Deprecation + Link and a Sunset one semester away  →  m6) Announce in the changelog and email every client in the usage report  →  m5) Watch the report shrink; run short planned brownouts  →  m1) On the sunset date answer 410 with the successor  →  m4) Later, remove the route entirely\n   Replacement first, then signals, then people, then evidence, then 410 — and only after the 410 has done its job, removal.VI: Bản thay thế trước, rồi tín hiệu, rồi con người, rồi bằng chứng, rồi 410 — và chỉ khi 410 đã làm xong việc mới gỡ hẳn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Replacement first, then signals, then people, then evidence, then 410 — and only after the 410 has done its job, removal.</p><p><i>VI: Bản thay thế trước, rồi tín hiệu, rồi con người, rồi bằng chứng, rồi 410 — và chỉ khi 410 đã làm xong việc mới gỡ hẳn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Order the steps</p><p style=\"opacity:.75;font-size:.92em\"><i>Sắp các bước</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "On the sunset date answer 410 with the successor"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Ship /v1 and the migration guide"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Send Deprecation + Link and a Sunset one semester away"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Later, remove the route entirely"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Watch the report shrink; run short planned brownouts"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Announce in the changelog and email every client in the usage report"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m3",
+              "m6",
+              "m5",
+              "m1",
+              "m4"
+            ],
+            "giaiThich": "<p>Replacement first, then signals, then people, then evidence, then 410 — and only after the 410 has done its job, removal.</p><p><i>VI: Bản thay thế trước, rồi tín hiệu, rồi con người, rồi bằng chứng, rồi 410 — và chỉ khi 410 đã làm xong việc mới gỡ hẳn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Announcing a date before /v1 exists.|||Báo ngày khi /v1 chưa có."
+        },
+        {
+          "loi": "Removing the route on the sunset date (404 instead of 410).|||Gỡ route đúng ngày sunset (404 thay vì 410)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "brownout",
+          "vi": "cố ý tắt ngắn theo lịch"
+        },
+        {
+          "en": "migration guide",
+          "vi": "hướng dẫn chuyển đổi"
+        }
+      ]
+    }
+  ]
+}

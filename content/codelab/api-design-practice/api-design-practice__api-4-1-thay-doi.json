@@ -1,0 +1,630 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-4-1-thay-doi",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-4-1-thay-doi"
+  },
+  "exercises": [
+    {
+      "title": "Changes 1 — What the old client did",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "breaking changes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 4.1: client-v1.mjs (never updated) against five server changes, real runs.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 4.1: client-v1.mjs (không bao giờ cập nhật) chạy trên năm thay đổi ở server, chạy thật.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer was printed in lesson 4.1.|||Mọi đáp án đã được in trong bài 4.1.",
+        "Ask: did it throw, or did it show something wrong?|||Hỏi: nó ném lỗi, hay hiện ra thứ sai?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Changes 1 — What the old client did\n\nAnswer in the answer panel (no code needed).\n\n1. CHANGE=add (new members floor, checkedInAt). client-v1.mjs printed …CHANGE=add (thêm trường floor, checkedInAt). client-v1.mjs in ra …\n2. CHANGE=rename (startAt → start). What did users see, and what did the error tracker see?CHANGE=rename (startAt → start). Người dùng thấy gì, hệ thống báo lỗi thấy gì?\n3. CHANGE=type: capacity became the string \"30\". The sum of three labs printed …CHANGE=type: capacity thành chuỗi \"30\". Tổng ba phòng in ra …\n4. client-strict.mjs (strictObject on GET /labs/lab_1) failed with CHANGE=add. What is the lesson?client-strict.mjs (strictObject cho GET /labs/lab_1) hỏng với CHANGE=add. Bài học là gì?\n5. Why is changing the default limit from 20 to 10 a breaking change?Vì sao đổi limit mặc định từ 20 xuống 10 là thay đổi phá vỡ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Changes 1 — What the old client did — answer key\n\n1. CHANGE=add (new members floor, checkedInAt). client-v1.mjs printed …CHANGE=add (thêm trường floor, checkedInAt). client-v1.mjs in ra …\n   Answer: c) exactly the baseline output — it never reads the new members\n   A client that reads only what it knows is unaffected by additions — the tolerant-reader behaviour.VI: Client chỉ đọc thứ nó biết thì không bị ảnh hưởng bởi trường thêm — đúng hành vi người đọc khoan dung.\n\n2. CHANGE=rename (startAt → start). What did users see, and what did the error tracker see?CHANGE=rename (startAt → start). Người dùng thấy gì, hệ thống báo lỗi thấy gì?\n   Answer: d) Users: Invalid Date–Invalid Date; tracker: nothing, no exception\n   new Date(undefined) is an Invalid Date, not an exception — a silent break.VI: new Date(undefined) là Invalid Date chứ không phải ngoại lệ — vỡ lặng lẽ.\n\n3. CHANGE=type: capacity became the string \"30\". The sum of three labs printed …CHANGE=type: capacity thành chuỗi \"30\". Tổng ba phòng in ra …\n   Answer: b) 0243040\n   0 + \"24\" = \"024\", then every + concatenates: \"0\" + \"24\" + \"30\" + \"40\".VI: 0 + \"24\" = \"024\", rồi mọi dấu + đều nối chuỗi: \"0\" + \"24\" + \"30\" + \"40\".\n\n4. client-strict.mjs (strictObject on GET /labs/lab_1) failed with CHANGE=add. What is the lesson?client-strict.mjs (strictObject cho GET /labs/lab_1) hỏng với CHANGE=add. Bài học là gì?\n   Answer: c) “Adding is non-breaking” holds only if the contract tells clients to ignore unknown members\n   Document the tolerant-reader rule; strict validation belongs on the server’s input.VI: Ghi rõ luật tolerant reader; kiểm chặt thuộc về dữ liệu vào của server.\n\n5. Why is changing the default limit from 20 to 10 a breaking change?Vì sao đổi limit mặc định từ 20 xuống 10 là thay đổi phá vỡ?\n   Answer: b) Clients rely on observable behaviour, documented or not (Hyrum’s law)\n   A client that assumed one page of 20 now silently shows half the list.VI: Client vốn coi một trang là 20 giờ lặng lẽ chỉ hiện một nửa danh sách.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> exactly the baseline output — it never reads the new members</p><p>A client that reads only what it knows is unaffected by additions — the tolerant-reader behaviour.</p><p><i>VI: Client chỉ đọc thứ nó biết thì không bị ảnh hưởng bởi trường thêm — đúng hành vi người đọc khoan dung.</i></p></li><li><p><b>d)</b> Users: Invalid Date–Invalid Date; tracker: nothing, no exception</p><p>new Date(undefined) is an Invalid Date, not an exception — a silent break.</p><p><i>VI: new Date(undefined) là Invalid Date chứ không phải ngoại lệ — vỡ lặng lẽ.</i></p></li><li><p><b>b)</b> 0243040</p><p>0 + \"24\" = \"024\", then every + concatenates: \"0\" + \"24\" + \"30\" + \"40\".</p><p><i>VI: 0 + \"24\" = \"024\", rồi mọi dấu + đều nối chuỗi: \"0\" + \"24\" + \"30\" + \"40\".</i></p></li><li><p><b>c)</b> “Adding is non-breaking” holds only if the contract tells clients to ignore unknown members</p><p>Document the tolerant-reader rule; strict validation belongs on the server’s input.</p><p><i>VI: Ghi rõ luật tolerant reader; kiểm chặt thuộc về dữ liệu vào của server.</i></p></li><li><p><b>b)</b> Clients rely on observable behaviour, documented or not (Hyrum’s law)</p><p>A client that assumed one page of 20 now silently shows half the list.</p><p><i>VI: Client vốn coi một trang là 20 giờ lặng lẽ chỉ hiện một nửa danh sách.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>CHANGE=add (new members floor, checkedInAt). client-v1.mjs printed …</p><p style=\"opacity:.75;font-size:.92em\"><i>CHANGE=add (thêm trường floor, checkedInAt). client-v1.mjs in ra …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing, because the response was rejected"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an error “unknown member floor”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "exactly the baseline output — it never reads the new members"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Invalid Date for every booking"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A client that reads only what it knows is unaffected by additions — the tolerant-reader behaviour.</p><p><i>VI: Client chỉ đọc thứ nó biết thì không bị ảnh hưởng bởi trường thêm — đúng hành vi người đọc khoan dung.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>CHANGE=rename (startAt → start). What did users see, and what did the error tracker see?</p><p style=\"opacity:.75;font-size:.92em\"><i>CHANGE=rename (startAt → start). Người dùng thấy gì, hệ thống báo lỗi thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Users: the old times from cache; tracker: a warning"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Users: a crash screen; tracker: TypeError"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Users: 400; tracker: VALIDATION_FAILED"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Users: Invalid Date–Invalid Date; tracker: nothing, no exception"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>new Date(undefined) is an Invalid Date, not an exception — a silent break.</p><p><i>VI: new Date(undefined) là Invalid Date chứ không phải ngoại lệ — vỡ lặng lẽ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>CHANGE=type: capacity became the string \"30\". The sum of three labs printed …</p><p style=\"opacity:.75;font-size:.92em\"><i>CHANGE=type: capacity thành chuỗi \"30\". Tổng ba phòng in ra …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "94"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0243040"
+              },
+              {
+                "ma": "c",
+                "noiDung": "NaN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "303030"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>0 + \"24\" = \"024\", then every + concatenates: \"0\" + \"24\" + \"30\" + \"40\".</p><p><i>VI: 0 + \"24\" = \"024\", rồi mọi dấu + đều nối chuỗi: \"0\" + \"24\" + \"30\" + \"40\".</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>client-strict.mjs (strictObject on GET /labs/lab_1) failed with CHANGE=add. What is the lesson?</p><p style=\"opacity:.75;font-size:.92em\"><i>client-strict.mjs (strictObject cho GET /labs/lab_1) hỏng với CHANGE=add. Bài học là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never add members to an existing API, whatever the docs say"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Clients should validate every response strictly to be safe"
+              },
+              {
+                "ma": "c",
+                "noiDung": "“Adding is non-breaking” holds only if the contract tells clients to ignore unknown members"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The server should send floor only to clients that ask for it"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Document the tolerant-reader rule; strict validation belongs on the server’s input.</p><p><i>VI: Ghi rõ luật tolerant reader; kiểm chặt thuộc về dữ liệu vào của server.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Why is changing the default limit from 20 to 10 a breaking change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đổi limit mặc định từ 20 xuống 10 là thay đổi phá vỡ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because 10 is below the documented maximum of 100"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Clients rely on observable behaviour, documented or not (Hyrum’s law)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is not — defaults are never part of a contract"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because limit is a required parameter"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A client that assumed one page of 20 now silently shows half the list.</p><p><i>VI: Client vốn coi một trang là 20 giờ lặng lẽ chỉ hiện một nửa danh sách.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming every break is loud.|||Cho rằng mọi lần vỡ đều ồn ào."
+        },
+        {
+          "loi": "Treating defaults as free to change.|||Coi giá trị mặc định là đổi thoải mái."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "silent break",
+          "vi": "vỡ lặng lẽ"
+        },
+        {
+          "en": "tolerant reader",
+          "vi": "người đọc khoan dung"
+        }
+      ]
+    },
+    {
+      "title": "Changes 2 — Breaking or not?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "breaking changes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Classify each change to LabFlow (clients follow the tolerant-reader rule).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng thay đổi của LabFlow (client tuân luật tolerant reader).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Would a correct existing client stop working correctly?|||Một client đang đúng có ngừng chạy đúng không?",
+        "Clients branch on status and code.|||Client rẽ nhánh theo status và code."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Changes 2 — Breaking or not?\n\nAnswer in the answer panel (no code needed).\n\n1. Change → kindThay đổi → loại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Changes 2 — Breaking or not? — answer key\n\n1. Change → kindThay đổi → loại\n   - r1.k: non-breaking\n   - r2.k: non-breaking\n   - r3.k: breaking\n   - r4.k: breaking\n   - r5.k: breaking\n   - r6.k: non-breaking\n   - r7.k: breaking\n   New endpoints, looser input and optional members are additive. Status codes, error codes, required inputs and formats are observable contract.VI: Endpoint mới, nới dữ liệu vào và trường tuỳ chọn là chỉ-thêm. Mã trạng thái, mã lỗi, dữ liệu bắt buộc và định dạng là hợp đồng quan sát được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>New endpoints, looser input and optional members are additive. Status codes, error codes, required inputs and formats are observable contract.</p><p><i>VI: Endpoint mới, nới dữ liệu vào và trường tuỳ chọn là chỉ-thêm. Mã trạng thái, mã lỗi, dữ liệu bắt buộc và định dạng là hợp đồng quan sát được.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Change → kind</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi → loại</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Change"
+              },
+              {
+                "ma": "k",
+                "ten": "Kind",
+                "luaChon": [
+                  "breaking",
+                  "non-breaking"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Add GET /labs/{id}/schedule"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Accept purpose up to 500 characters instead of 200"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Return 422 instead of 400 for an invalid time range"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Rename the error code BOOKING_CONFLICT to SLOT_TAKEN"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Make purpose required in POST /bookings"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Add an optional member note to every lab"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Send createdAt as Unix seconds instead of ISO 8601"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": "non-breaking",
+              "r2.k": "non-breaking",
+              "r3.k": "breaking",
+              "r4.k": "breaking",
+              "r5.k": "breaking",
+              "r6.k": "non-breaking",
+              "r7.k": "breaking"
+            },
+            "giaiThich": "<p>New endpoints, looser input and optional members are additive. Status codes, error codes, required inputs and formats are observable contract.</p><p><i>VI: Endpoint mới, nới dữ liệu vào và trường tuỳ chọn là chỉ-thêm. Mã trạng thái, mã lỗi, dữ liệu bắt buộc và định dạng là hợp đồng quan sát được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a status-code change “just a fix”.|||Gọi việc đổi mã trạng thái là “chỉ sửa lỗi”."
+        },
+        {
+          "loi": "Thinking looser validation can break anyone.|||Nghĩ rằng nới kiểm dữ liệu có thể làm hỏng ai đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "additive change",
+          "vi": "thay đổi chỉ-thêm"
+        },
+        {
+          "en": "contract",
+          "vi": "hợp đồng"
+        }
+      ]
+    },
+    {
+      "title": "Changes 3 — Write contractDiff(oldShape, newShape): find the breaking parts",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "contract testing",
+        "breaking changes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A shape maps each member of a response to its type, e.g. <code>{ id: 'string', capacity: 'number' }</code>. Under the tolerant-reader rule, <b>added</b> members are safe; what breaks old readers is a member that disappeared or changed type. Return a list, in alphabetical order of the old member names:</p><ul>\n<li><code>\"removed:&lt;name&gt;\"</code> — in the old shape, not in the new one (a rename shows up as a removal)</li>\n<li><code>\"type:&lt;name&gt;:&lt;old&gt;-&gt;&lt;new&gt;\"</code> — in both, different type</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một hình dạng ánh xạ mỗi trường của response tới kiểu của nó, ví dụ <code>{ id: 'string', capacity: 'number' }</code>. Theo luật tolerant reader, trường <b>thêm</b> là an toàn; thứ làm vỡ người đọc cũ là trường biến mất hoặc đổi kiểu. Trả một danh sách, theo thứ tự chữ cái của tên trường cũ:</p><ul>\n<li><code>\"removed:&lt;tên&gt;\"</code> — có ở hình dạng cũ, không có ở hình dạng mới (đổi tên hiện ra như một lần xoá)</li>\n<li><code>\"type:&lt;tên&gt;:&lt;cũ&gt;-&gt;&lt;mới&gt;\"</code> — có ở cả hai, khác kiểu</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "oldShape, newShape — { member: type }|||oldShape, newShape — { trường: kiểu }",
+      "outputSpec": "string[] — empty when nothing breaks|||mảng chuỗi — rỗng khi không có gì phá vỡ",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "contractDiff({\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\",\"floor\":\"number\",\"checkedInAt\":\"null\"})",
+          "output": "[]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Loop over the OLD keys only — new keys never break a tolerant reader.|||Chỉ duyệt các khoá CŨ — khoá mới không bao giờ làm vỡ người đọc khoan dung.",
+        "Sort the old keys first, then push in that order.|||Sắp các khoá cũ trước rồi đẩy theo thứ tự đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** old and new response shapes ⇒ breaking differences */\nfunction contractDiff(oldShape, newShape) {\n  // Write your solution here\n  return Object.keys(newShape).filter((k) => !(k in oldShape)).map((k) => 'added:' + k);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction contractDiff(oldShape, newShape) {\n  const out = [];\n  for (const k of Object.keys(oldShape).sort()) {\n    if (!(k in newShape)) out.push(`removed:${k}`);\n    else if (oldShape[k] !== newShape[k]) out.push(`type:${k}:${oldShape[k]}->${newShape[k]}`);\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the automatic version of 4.1’s table for responses: rename ⇒ removed:startAt, removed:endAt; type ⇒ type:capacity:number->string; add ⇒ nothing.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là phiên bản tự động của bảng 4.1 cho response: rename ⇒ removed:startAt, removed:endAt; type ⇒ type:capacity:number->string; add ⇒ không có gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "CHANGE=add",
+              "vi": "CHANGE=add"
+            },
+            "goi": "contractDiff({\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\",\"floor\":\"number\",\"checkedInAt\":\"null\"})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "CHANGE=rename",
+              "vi": "CHANGE=rename"
+            },
+            "goi": "contractDiff({\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"start\":\"string\",\"end\":\"string\",\"status\":\"string\",\"capacity\":\"number\"})",
+            "mongDoi": [
+              "removed:endAt",
+              "removed:startAt"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "CHANGE=type",
+              "vi": "CHANGE=type"
+            },
+            "goi": "contractDiff({\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"string\"})",
+            "mongDoi": [
+              "type:capacity:number->string"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "contractDiff({\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\"}, {\"id\":\"string\",\"labId\":\"string\",\"startAt\":\"string\",\"endAt\":\"string\",\"status\":\"string\",\"capacity\":\"number\"})",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "contractDiff({\"b\":\"number\",\"a\":\"string\",\"c\":\"boolean\"}, {\"c\":\"string\",\"d\":\"number\"})",
+            "mongDoi": [
+              "removed:a",
+              "removed:b",
+              "type:c:boolean->string"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reporting added members as breaking.|||Báo trường thêm là phá vỡ."
+        },
+        {
+          "loi": "Missing renames — they look like one removal plus one addition.|||Bỏ sót đổi tên — nó trông như một lần xoá cộng một lần thêm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shape",
+          "vi": "hình dạng (trường và kiểu)"
+        },
+        {
+          "en": "rename",
+          "vi": "đổi tên = xoá + thêm"
+        }
+      ]
+    },
+    {
+      "title": "Changes 4 — Write readBooking(b): a client that does not break",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tolerant reader"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Write the client side the 4.1 app should have had. Return <code>{ id, time, label }</code>:</p><ul>\n<li><code>time</code> = <code>\"HH:MM–HH:MM\"</code> taken from the <code>T..:..</code> part of <code>startAt</code> and <code>endAt</code> (UTC, no conversion); a missing or non-string value becomes <code>\"—\"</code> instead of <i>Invalid Date</i></li>\n<li><code>label</code>: <code>PENDING</code> → <code>\"Chờ duyệt\"</code>, <code>CANCELLED</code> → <code>\"Đã huỷ\"</code>, anything else → <code>\"Trạng thái khác (&lt;value&gt;)\"</code> — never throw</li>\n<li>unknown members are ignored</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết phần client mà app ở bài 4.1 lẽ ra phải có. Trả <code>{ id, time, label }</code>:</p><ul>\n<li><code>time</code> = <code>\"HH:MM–HH:MM\"</code> lấy từ phần <code>T..:..</code> của <code>startAt</code> và <code>endAt</code> (UTC, không đổi múi giờ); giá trị thiếu hay không phải chuỗi thành <code>\"—\"</code> thay vì <i>Invalid Date</i></li>\n<li><code>label</code>: <code>PENDING</code> → <code>\"Chờ duyệt\"</code>, <code>CANCELLED</code> → <code>\"Đã huỷ\"</code>, giá trị khác → <code>\"Trạng thái khác (&lt;giá trị&gt;)\"</code> — không bao giờ ném lỗi</li>\n<li>trường lạ thì bỏ qua</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "b — a booking as the server sent it (any version)|||b — lượt đặt như server gửi (phiên bản nào cũng được)",
+      "outputSpec": "{ id, time, label }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "readBooking({\"id\":\"bk_8\",\"labId\":\"lab_2\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T06:00:00.000Z\",\"status\":\"PENDING\"})",
+          "output": "{\"id\":\"bk_8\",\"time\":\"04:00–06:00\",\"label\":\"Chờ duyệt\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A regular expression /T(\\d{2}:\\d{2})/ finds the time part.|||Biểu thức chính quy /T(\\d{2}:\\d{2})/ tìm ra phần giờ.",
+        "LABEL[s] ?? fallback gives unknown values a label instead of an exception.|||LABEL[s] ?? phương án dự phòng cho giá trị lạ một nhãn thay vì ngoại lệ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** server booking ⇒ what the screen shows */\nfunction readBooking(b) {\n  // Write your solution here\n  const LABEL = { PENDING: 'Chờ duyệt', CANCELLED: 'Đã huỷ' };\n  if (!(b.status in LABEL)) throw new Error('trạng thái lạ: ' + b.status);\n  return { id: b.id, time: b.startAt.slice(11, 16) + '–' + b.endAt.slice(11, 16), label: LABEL[b.status] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction readBooking(b) {\n  const LABEL = { PENDING: 'Chờ duyệt', CANCELLED: 'Đã huỷ' };\n  const hhmm = (iso) => (typeof iso === 'string' && /T(\\d{2}:\\d{2})/.test(iso) ? iso.match(/T(\\d{2}:\\d{2})/)[1] : '—');\n  return {\n    id: b.id,\n    time: `${hhmm(b.startAt)}–${hhmm(b.endAt)}`,\n    label: LABEL[b.status] ?? `Trạng thái khác (${b.status})`,\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A tolerant reader degrades gracefully: the renamed server shows “—” instead of Invalid Date, CHECKED_IN gets a generic label, extra members are ignored. Exactly how app 1.4.0 in lesson 4.4 survived check-in.</p>",
+      "solutionExplanationHtmlVi": "<p>Người đọc khoan dung xuống cấp nhẹ nhàng: server đổi tên thì hiện “—” thay vì Invalid Date, CHECKED_IN nhận nhãn chung, trường thừa bị bỏ qua. Đúng cách app 1.4.0 ở bài 4.4 sống sót qua check-in.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A v1 booking",
+              "vi": "Một lượt đặt v1"
+            },
+            "goi": "readBooking({\"id\":\"bk_8\",\"labId\":\"lab_2\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T06:00:00.000Z\",\"status\":\"PENDING\"})",
+            "mongDoi": {
+              "id": "bk_8",
+              "time": "04:00–06:00",
+              "label": "Chờ duyệt"
+            }
+          },
+          {
+            "moTa": {
+              "en": "CHANGE=rename",
+              "vi": "CHANGE=rename"
+            },
+            "goi": "readBooking({\"id\":\"bk_8\",\"start\":\"2026-11-02T04:00:00.000Z\",\"end\":\"2026-11-02T06:00:00.000Z\",\"status\":\"PENDING\"})",
+            "mongDoi": {
+              "id": "bk_8",
+              "time": "—–—",
+              "label": "Chờ duyệt"
+            }
+          },
+          {
+            "moTa": {
+              "en": "A new status",
+              "vi": "Một trạng thái mới"
+            },
+            "goi": "readBooking({\"id\":\"bk_8\",\"labId\":\"lab_2\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T06:00:00.000Z\",\"status\":\"CHECKED_IN\",\"checkedInAt\":\"2026-10-31T20:05:03.456Z\"})",
+            "mongDoi": {
+              "id": "bk_8",
+              "time": "04:00–06:00",
+              "label": "Trạng thái khác (CHECKED_IN)"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "readBooking({\"id\":\"bk_8\",\"labId\":\"lab_2\",\"startAt\":\"2026-11-02T04:00:00.000Z\",\"endAt\":\"2026-11-02T06:00:00.000Z\",\"status\":\"CANCELLED\",\"floor\":3})",
+            "mongDoi": {
+              "id": "bk_8",
+              "time": "04:00–06:00",
+              "label": "Đã huỷ"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "readBooking({\"id\":\"bk_1\",\"startAt\":1793491200,\"endAt\":null,\"status\":\"PENDING\"})",
+            "mongDoi": {
+              "id": "bk_1",
+              "time": "—–—",
+              "label": "Chờ duyệt"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "throw on an unknown status — the 4.1 crash.|||Ném lỗi khi gặp trạng thái lạ — cú sập của 4.1."
+        },
+        {
+          "loi": "new Date(undefined) — prints Invalid Date.|||new Date(undefined) — in ra Invalid Date."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fallback",
+          "vi": "phương án dự phòng"
+        },
+        {
+          "en": "graceful degradation",
+          "vi": "xuống cấp nhẹ nhàng"
+        }
+      ]
+    }
+  ]
+}

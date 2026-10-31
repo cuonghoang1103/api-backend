@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 4 "Thiết bị, phiên bản 2" (deck api-lab-4, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-lab-4', 'Lab 4 — Devices, version 2', 'Lab 4 — Thiết bị, phiên bản 2', [
+  [1, 'Cover',
+    `<p>In Lab 4, serialNo becomes serialNumber — and no v1 client notices.</p>`,
+    `<p>Ở Lab 4, serialNo thành serialNumber — và không client v1 nào nhận ra.</p>`],
+  [2, 'The request',
+    `<p>v2 uses serialNumber in responses and in every body, and refuses serialNo. v1 must not change at all, because the lab managers’ script reads serialNo. The same rules apply in both versions. /v1/devices is deprecated from 15 November 2026 and gone on 1 June 2027, with a successor. And the team wants to see who still uses it. Budget: 15 minutes design, 60 to 90 build, 20 proof.</p>`,
+    `<p>v2 dùng serialNumber trong response và mọi body, và từ chối serialNo. v1 không được đổi gì, vì script của các quản lý lab đọc serialNo. Cùng một bộ luật cho cả hai phiên bản. /v1/devices bị khai tử từ 15/11/2026 và ngừng hẳn ngày 1/6/2027, kèm đường thay thế. Và nhóm muốn biết ai còn dùng nó. Thời gian: 15 phút thiết kế, 60 tới 90 phút xây, 20 phút chứng minh.</p>`],
+  [3, 'Part A',
+    `<p>Decide whether the rename breaks and how; where the record keeps the serial and why only one field; the exact deprecation headers; what answers on 2 June 2027; and write the v1 contract as data. Hint: readers get undefined silently, writers get a loud 400; and Sunset must not be earlier than Deprecation.</p>`,
+    `<p>Quyết định đổi tên có phá không và phá kiểu gì; bản ghi giữ số serial ở đâu và vì sao chỉ một trường; header khai tử chính xác; ngày 2/6/2027 trả gì; và viết hợp đồng v1 thành dữ liệu. Gợi ý: bên đọc nhận undefined một cách lặng lẽ, bên ghi nhận 400 ồn ào; và Sunset không được sớm hơn Deprecation.</p>`],
+  [4, 'Part B',
+    `<p>Six rules: a new toDeviceV2 while toDevice stays untouched; v2 schemas built from the same field rules; one function that turns a v2 body into the internal form; deprecate only on /v1/devices; a node:test contract test run by npm test; and proof that the test turns red when v1 is broken on purpose.</p>`,
+    `<p>Sáu luật: toDeviceV2 mới trong khi toDevice giữ nguyên; lược đồ v2 dựng từ chính các luật trường; một hàm biến body v2 thành dạng nội bộ; deprecate chỉ trên /v1/devices; một test hợp đồng node:test chạy bằng npm test; và bằng chứng test chuyển đỏ khi cố ý làm vỡ v1.</p>`],
+  [5, 'Reference solution: edges',
+    `<p>The record keeps serialNo; toDeviceV2 renames it on the way out. The v2 schema reuses the serialNo rule under the new name. internal turns serialNumber back into serialNo in one place, so checkRules and the duplicate check are shared. And /v1/devices gets its own deprecate, mounted before /v1, with the successor in /v2.</p>`,
+    `<p>Bản ghi giữ serialNo; toDeviceV2 đổi tên nó lúc đi ra. Lược đồ v2 dùng lại luật của serialNo dưới tên mới. internal đổi serialNumber về serialNo ở một chỗ, nên checkRules và luật trùng serial dùng chung. Còn /v1/devices có deprecate riêng, gắn trước /v1, đường thay thế ở /v2.</p>`],
+  [6, 'Reference solution: the test',
+    `<p>The v1 contract is a small JSON file of members and types. assertShape compares the exact member set and every type; null is allowed only where the contract says so. The test is deliberately strict: v1 is frozen, so even an added member fails. Further tests check the list, a v1 POST, the deprecation headers and that v1 and v2 agree.</p>`,
+    `<p>Hợp đồng v1 là một tệp JSON nhỏ gồm trường và kiểu. assertShape so đúng tập trường và từng kiểu; null chỉ được ở chỗ hợp đồng cho phép. Test cố ý khắt khe: v1 đã đóng băng, nên kể cả trường thêm cũng là lỗi. Các test khác kiểm danh sách, một lần POST v1, header khai tử và việc v1 với v2 khớp nhau.</p>`],
+  [7, 'Transcript 1',
+    `<p>/v1/devices/dev_1 answers with the three deprecation signals and serialNo; /v2 shows serialNumber with the same value. A device created through v2 gets Location /v2/devices/dev_4 and reads through v1 with serialNo. serialNo in a v2 body is refused, naming both members.</p>`,
+    `<p>/v1/devices/dev_1 trả về kèm ba tín hiệu khai tử và serialNo; /v2 hiện serialNumber cùng giá trị. Thiết bị tạo qua v2 nhận Location /v2/devices/dev_4 và đọc qua v1 với serialNo. serialNo trong body v2 bị từ chối, nêu tên cả hai trường.</p>`],
+  [8, 'Transcript 2',
+    `<p>A duplicate serial is the same 409 through v2 and v1. The usage report shows who still calls /v1/devices. npm test is green with five tests. Then the classic mistake — renaming inside toDevice — turns four of five tests red, with the exact member named: the edit that silently produced Invalid Date in 4.1 is now caught before any user sees it.</p>`,
+    `<p>Trùng serial là cùng một lỗi 409 qua v2 và v1. Báo cáo mức dùng cho thấy ai còn gọi /v1/devices. npm test xanh với năm test. Rồi lỗi kinh điển — đổi tên ngay trong toDevice — làm bốn trên năm test đỏ, nêu đúng tên trường: cái sửa từng lặng lẽ sinh ra Invalid Date ở 4.1 giờ bị bắt trước khi người dùng nào thấy.</p>`],
+  [9, 'Rubric',
+    `<p>Ten points, pass at seven: two for serialNumber everywhere in v2, two for an unchanged v1 with one internal field and shared rules, two for correct headers, two for a contract test that is green now and red when v1 breaks, one for the usage report and one for an honest transcript. Stretch goals: run the test in CI, add a v2 contract, freeze the v1 file from a real response.</p>`,
+    `<p>Mười điểm, đạt ở bảy: hai cho serialNumber ở mọi nơi trong v2, hai cho v1 giữ nguyên với một trường nội bộ và luật dùng chung, hai cho header đúng, hai cho test hợp đồng xanh lúc này và đỏ khi v1 vỡ, một cho báo cáo mức dùng và một cho transcript trung thực. Nâng cao: chạy test trong CI, thêm hợp đồng v2, đóng băng tệp v1 từ một response thật.</p>`],
+]);

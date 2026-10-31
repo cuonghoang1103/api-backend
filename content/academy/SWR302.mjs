@@ -1315,6 +1315,11 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
 <br><b>External:</b> new third-party gateway, legal/compliance review, accounting.
 <br><b>Verdict:</b> not "small" at all — CCB should defer to a proper mini-project, or reject for this release. Impact analysis turned a one-line request into a visible, informed decision.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Configuration management &amp; the "requirements creep" metric.</b> Mature teams track <b>requirements volatility</b> — the rate of change requests per baseline — as a health signal. A little change is healthy (you're learning); a flood signals the requirements were never really understood, or the scope isn't fenced. Tools like Jira link a requirement to its commits, tests and CRs so every change is auditable. The professional mindset: change is welcome, but every change is <em>recorded, analyzed and traceable</em> — never silent.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-4-1-thay-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 4.1: Breaking vs non-breaking changes</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: once a version is agreed, every change needs an impact analysis and a controlled process. Different: Courses does it for a running API, where the people affected are other programs. It also adds: one old client run against five real server changes (silent Invalid Date, a crash, 0243040), the tolerant-reader rule, Hyrum’s law, then versions, Deprecation/Sunset headers and contract tests in the rest of Chapter 4.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -1340,6 +1345,11 @@ Then  &lt;một kết quả quan sát được&gt;</pre>
 <br><b>Bên ngoài:</b> cổng bên thứ ba mới, rà soát pháp lý/tuân thủ, kế toán.
 <br><b>Phán quyết:</b> hoàn toàn không "nhỏ" — CCB nên hoãn thành một tiểu dự án đàng hoàng, hoặc từ chối cho bản phát hành này. Phân tích tác động đã biến một yêu cầu một dòng thành một quyết định nhìn thấy được, có cơ sở.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Quản lý cấu hình &amp; chỉ số "độ biến động yêu cầu".</b> Đội trưởng thành theo dõi <b>requirements volatility</b> — tỉ lệ change request trên mỗi baseline — như một tín hiệu sức khoẻ. Thay đổi ít là lành mạnh (bạn đang học); một cơn lũ báo hiệu yêu cầu chưa từng được hiểu thật, hoặc phạm vi chưa được rào. Công cụ như Jira nối một yêu cầu với các commit, test và CR của nó để mọi thay đổi kiểm toán được. Tư duy chuyên nghiệp: hoan nghênh thay đổi, nhưng mọi thay đổi đều được <em>ghi lại, phân tích và truy vết</em> — không bao giờ âm thầm.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-4-1-thay-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 4.1: Thay đổi phá vỡ và không phá vỡ</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: một khi phiên bản đã thống nhất, mọi thay đổi cần phân tích tác động và một quy trình có kiểm soát. Khác: Courses làm việc đó cho một API đang chạy, nơi người bị ảnh hưởng là chương trình của người khác. Ở đó có thêm: một client cũ chạy trên năm thay đổi thật ở server (Invalid Date lặng lẽ, sập, 0243040), luật tolerant reader, định luật Hyrum, rồi phiên bản, header Deprecation/Sunset và test hợp đồng ở phần còn lại của Chương 4.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },

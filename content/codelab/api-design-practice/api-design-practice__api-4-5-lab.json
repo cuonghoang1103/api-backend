@@ -1,0 +1,429 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-4-5-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-4-5-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 4 · 1 — Part A: the answers before the code",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "versioning",
+        "deprecation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Fill Part A of Lab 4 for /v1/devices (deprecated 15 Nov 2026, sunset 1 Jun 2027).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điền Phần A của Lab 4 cho /v1/devices (khai tử 15/11/2026, ngừng 1/6/2027).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Readers get undefined; writers get a strict-schema error.|||Bên đọc nhận undefined; bên ghi nhận lỗi của lược đồ strict.",
+        "1794700800 = 2026-11-15T00:00:00Z."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 4 · 1 — Part A: the answers before the code\n\nAnswer in the answer panel (no code needed).\n\n1. Question → answerCâu hỏi → trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 4 · 1 — Part A: the answers before the code — answer key\n\n1. Question → answerCâu hỏi → trả lời\n   - r1.a: breaking: silent for readers, loud for writers\n   - r2.a: serialNo only — two names only at the edge\n   - r3.a: @1794700800\n   - r4.a: Tue, 01 Jun 2027 00:00:00 GMT\n   - r5.a: 410 API_SUNSET with successor /v2/devices/dev_1\n   - r6.a: 400 — serialNo is an unknown field in v2\n   Real values from the reference run: Deprecation @1794700800 (2026-11-15T00:00:00Z), Sunset Tue, 01 Jun 2027 00:00:00 GMT, and the v2 errors list both #/serialNumber and #/serialNo.VI: Giá trị thật từ lần chạy tham khảo: Deprecation @1794700800 (2026-11-15T00:00:00Z), Sunset Tue, 01 Jun 2027 00:00:00 GMT, và lỗi v2 liệt kê cả #/serialNumber lẫn #/serialNo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Real values from the reference run: Deprecation @1794700800 (2026-11-15T00:00:00Z), Sunset Tue, 01 Jun 2027 00:00:00 GMT, and the v2 errors list both #/serialNumber and #/serialNo.</p><p><i>VI: Giá trị thật từ lần chạy tham khảo: Deprecation @1794700800 (2026-11-15T00:00:00Z), Sunset Tue, 01 Jun 2027 00:00:00 GMT, và lỗi v2 liệt kê cả #/serialNumber lẫn #/serialNo.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Question → answer</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu hỏi → trả lời</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Question"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer",
+                "luaChon": [
+                  "breaking: silent for readers, loud for writers",
+                  "serialNo only — two names only at the edge",
+                  "@1794700800",
+                  "Tue, 01 Jun 2027 00:00:00 GMT",
+                  "410 API_SUNSET with successor /v2/devices/dev_1",
+                  "400 — serialNo is an unknown field in v2"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Is renaming serialNo to serialNumber breaking?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Which field does the internal record keep?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Deprecation header value"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Sunset header value"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "GET /v1/devices/dev_1 on 2 June 2027"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "POST /v2/devices with serialNo"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "breaking: silent for readers, loud for writers",
+              "r2.a": "serialNo only — two names only at the edge",
+              "r3.a": "@1794700800",
+              "r4.a": "Tue, 01 Jun 2027 00:00:00 GMT",
+              "r5.a": "410 API_SUNSET with successor /v2/devices/dev_1",
+              "r6.a": "400 — serialNo is an unknown field in v2"
+            },
+            "giaiThich": "<p>Real values from the reference run: Deprecation @1794700800 (2026-11-15T00:00:00Z), Sunset Tue, 01 Jun 2027 00:00:00 GMT, and the v2 errors list both #/serialNumber and #/serialNo.</p><p><i>VI: Giá trị thật từ lần chạy tham khảo: Deprecation @1794700800 (2026-11-15T00:00:00Z), Sunset Tue, 01 Jun 2027 00:00:00 GMT, và lỗi v2 liệt kê cả #/serialNumber lẫn #/serialNo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Storing both serialNo and serialNumber in the record.|||Lưu cả serialNo lẫn serialNumber trong bản ghi."
+        },
+        {
+          "loi": "A 404 on the day after the sunset.|||Trả 404 vào ngày sau sunset."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "successor",
+          "vi": "bản thay thế"
+        },
+        {
+          "en": "internal record",
+          "vi": "bản ghi nội bộ"
+        }
+      ]
+    },
+    {
+      "title": "Lab 4 · 2 — Write shapeProblems(obj, contract): the heart of the contract test",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "contract testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The v1 contract is <code>{ member: \"type\" }</code>, where a type may list alternatives with <code>|</code> (<code>\"string|null\"</code>). Types are <code>null</code>, <code>array</code>, or <code>typeof</code>. Return every problem — an empty list means the response honours the frozen contract:</p><ul>\n<li><code>\"missing:&lt;k&gt;\"</code> and <code>\"type:&lt;k&gt;:&lt;actual&gt;\"</code> for contract members, in alphabetical order</li>\n<li>then <code>\"extra:&lt;k&gt;\"</code> for members not in the contract, alphabetically (v1 is frozen: additions fail too)</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hợp đồng v1 là <code>{ trường: \"kiểu\" }</code>, kiểu có thể liệt kê nhiều lựa chọn bằng <code>|</code> (<code>\"string|null\"</code>). Kiểu là <code>null</code>, <code>array</code>, hoặc <code>typeof</code>. Trả mọi vấn đề — danh sách rỗng nghĩa là response giữ đúng hợp đồng đã đóng băng:</p><ul>\n<li><code>\"missing:&lt;k&gt;\"</code> và <code>\"type:&lt;k&gt;:&lt;thực tế&gt;\"</code> cho các trường của hợp đồng, theo bảng chữ cái</li>\n<li>rồi <code>\"extra:&lt;k&gt;\"</code> cho trường không có trong hợp đồng, theo bảng chữ cái (v1 đã đóng băng: thêm cũng là lỗi)</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "obj — a response body; contract — { member: \"type|type\" }|||obj — body của response; contract — { trường: \"kiểu|kiểu\" }",
+      "outputSpec": "string[] of problems|||mảng chuỗi các vấn đề",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "shapeProblems({\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\",\"note\":null}, {\"id\":\"string\",\"labId\":\"string\",\"name\":\"string\",\"type\":\"string\",\"serialNo\":\"string\",\"status\":\"string\",\"note\":\"string|null\"})",
+          "output": "[]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "typeof null is \"object\" and typeof [] is \"object\" — handle both first.|||typeof null là \"object\" và typeof [] cũng là \"object\" — xử lý cả hai trước.",
+        "Two loops: contract keys, then object keys.|||Hai vòng lặp: khoá của hợp đồng, rồi khoá của object."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** response + contract ⇒ list of problems */\nfunction shapeProblems(obj, contract) {\n  // Write your solution here\n  return Object.keys(contract).filter((k) => typeof obj[k] !== contract[k]).map((k) => 'type:' + k);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction shapeProblems(obj, contract) {\n  const typeOf = (v) => (v === null ? 'null' : Array.isArray(v) ? 'array' : typeof v);\n  const out = [];\n  for (const k of Object.keys(contract).sort()) {\n    if (!(k in obj)) out.push(`missing:${k}`);\n    else if (!contract[k].split('|').includes(typeOf(obj[k]))) out.push(`type:${k}:${typeOf(obj[k])}`);\n  }\n  for (const k of Object.keys(obj).sort()) if (!(k in contract)) out.push(`extra:${k}`);\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The careless rename of Lab 4 (serialNo → serialNumber in toDevice) gives [\"missing:serialNo\", \"extra:serialNumber\"] — the same diff node:test printed in red.</p>",
+      "solutionExplanationHtmlVi": "<p>Lần đổi tên cẩu thả của Lab 4 (serialNo → serialNumber trong toDevice) cho [\"missing:serialNo\", \"extra:serialNumber\"] — đúng khác biệt mà node:test in màu đỏ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET /v1/devices/dev_1 (real)",
+              "vi": "GET /v1/devices/dev_1 (thật)"
+            },
+            "goi": "shapeProblems({\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\",\"note\":null}, {\"id\":\"string\",\"labId\":\"string\",\"name\":\"string\",\"type\":\"string\",\"serialNo\":\"string\",\"status\":\"string\",\"note\":\"string|null\"})",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "The careless rename",
+              "vi": "Lần đổi tên cẩu thả"
+            },
+            "goi": "shapeProblems({\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNumber\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\",\"note\":null}, {\"id\":\"string\",\"labId\":\"string\",\"name\":\"string\",\"type\":\"string\",\"serialNo\":\"string\",\"status\":\"string\",\"note\":\"string|null\"})",
+            "mongDoi": [
+              "missing:serialNo",
+              "extra:serialNumber"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "shapeProblems({\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":\"AVAILABLE\",\"note\":\"Thiếu thẻ nhớ\"}, {\"id\":\"string\",\"labId\":\"string\",\"name\":\"string\",\"type\":\"string\",\"serialNo\":\"string\",\"status\":\"string\",\"note\":\"string|null\"})",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "shapeProblems({\"id\":\"dev_1\",\"labId\":\"lab_1\",\"name\":\"Cisco Router 2901\",\"type\":\"ROUTER\",\"serialNo\":\"FTX1840ALBQ\",\"status\":2,\"note\":[],\"floor\":3}, {\"id\":\"string\",\"labId\":\"string\",\"name\":\"string\",\"type\":\"string\",\"serialNo\":\"string\",\"status\":\"string\",\"note\":\"string|null\"})",
+            "mongDoi": [
+              "type:note:array",
+              "type:status:number",
+              "extra:floor"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "shapeProblems({}, {\"id\":\"string\"})",
+            "mongDoi": [
+              "missing:id"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating note: null as a type error although the contract allows null.|||Coi note: null là lỗi kiểu dù hợp đồng cho phép null."
+        },
+        {
+          "loi": "Ignoring extra members — the careless rename then shows only half the problem.|||Bỏ qua trường thừa — lần đổi tên cẩu thả khi đó chỉ lộ một nửa vấn đề."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "contract test",
+          "vi": "kiểm thử hợp đồng"
+        },
+        {
+          "en": "frozen",
+          "vi": "đã đóng băng"
+        }
+      ]
+    },
+    {
+      "title": "Lab 4 · 3 — Write deviceBodyToInternal(body, version)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "versioning"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The one place where a request body becomes the internal form (which always uses <code>serialNo</code>):</p><ul>\n<li><b>v1</b>: <code>serialNumber</code> is unknown ⇒ throw <code>RangeError</code>; otherwise a copy of the body</li>\n<li><b>v2</b>: <code>serialNo</code> is unknown ⇒ throw <code>RangeError</code>; <code>serialNumber</code> is renamed to <code>serialNo</code>; a PATCH body without it is copied unchanged</li></ul>\n<p>Never modify the input.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chỗ duy nhất nơi body của request biến thành dạng nội bộ (luôn dùng <code>serialNo</code>):</p><ul>\n<li><b>v1</b>: <code>serialNumber</code> là trường lạ ⇒ ném <code>RangeError</code>; còn lại trả bản sao body</li>\n<li><b>v2</b>: <code>serialNo</code> là trường lạ ⇒ ném <code>RangeError</code>; <code>serialNumber</code> được đổi tên thành <code>serialNo</code>; body PATCH không có nó thì sao chép nguyên</li></ul>\n<p>Không bao giờ sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "body — validated request body; version — 1 | 2|||body — body đã kiểm; version — 1 | 2",
+      "outputSpec": "the internal form, or a RangeError|||dạng nội bộ, hoặc RangeError",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "deviceBodyToInternal({\"labId\":\"lab_2\",\"name\":\"ESP32 DevKit\",\"type\":\"BOARD\",\"serialNumber\":\"ESP32-7781\",\"status\":\"AVAILABLE\"}, 2)",
+          "output": "{\"labId\":\"lab_2\",\"name\":\"ESP32 DevKit\",\"type\":\"BOARD\",\"status\":\"AVAILABLE\",\"serialNo\":\"ESP32-7781\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "const { serialNumber, ...rest } = body renames without touching body.|||const { serialNumber, ...rest } = body đổi tên mà không đụng tới body.",
+        "\"in\" tells whether a member is present, even if its value is null.|||\"in\" cho biết một trường có mặt hay không, kể cả khi giá trị là null."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** request body (v1 or v2) ⇒ internal form */\nfunction deviceBodyToInternal(body, version) {\n  // Write your solution here\n  body.serialNo = body.serialNumber;\n  return body;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction deviceBodyToInternal(body, version) {\n  if (version === 1) {\n    if ('serialNumber' in body) throw new RangeError('unknown field serialNumber');\n    return { ...body };\n  }\n  if ('serialNo' in body) throw new RangeError('unknown field serialNo');\n  if (!('serialNumber' in body)) return { ...body };\n  const { serialNumber, ...rest } = body;\n  return { ...rest, serialNo: serialNumber };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In LabFlow the strict Zod schema already rejects the wrong name with 400; this function is the internal() step that follows, so checkRules and the duplicate-serial 409 are shared by both versions.</p>",
+      "solutionExplanationHtmlVi": "<p>Ở LabFlow, lược đồ Zod strict đã từ chối tên sai bằng 400; hàm này là bước internal() theo sau, để checkRules và lỗi 409 trùng serial dùng chung cho cả hai phiên bản.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "POST /v2/devices (Lab 4)",
+              "vi": "POST /v2/devices (Lab 4)"
+            },
+            "goi": "deviceBodyToInternal({\"labId\":\"lab_2\",\"name\":\"ESP32 DevKit\",\"type\":\"BOARD\",\"serialNumber\":\"ESP32-7781\",\"status\":\"AVAILABLE\"}, 2)",
+            "mongDoi": {
+              "labId": "lab_2",
+              "name": "ESP32 DevKit",
+              "type": "BOARD",
+              "status": "AVAILABLE",
+              "serialNo": "ESP32-7781"
+            }
+          },
+          {
+            "moTa": {
+              "en": "serialNo in v2",
+              "vi": "serialNo ở v2"
+            },
+            "goi": "deviceBodyToInternal({\"serialNo\":\"ESP32-7782\"}, 2)",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "deviceBodyToInternal({\"serialNo\":\"FTX1840ALBQ\"}, 1)",
+            "mongDoi": {
+              "serialNo": "FTX1840ALBQ"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "PATCH without the serial",
+              "vi": "PATCH không có serial"
+            },
+            "goi": "deviceBodyToInternal({\"note\":null}, 2)",
+            "mongDoi": {
+              "note": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "deviceBodyToInternal({\"serialNumber\":\"X-1\"}, 1)",
+            "mongDoi": {
+              "loi": "RangeError"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The input is not modified",
+              "vi": "Đầu vào không bị sửa"
+            },
+            "goi": "(function () { var b = { serialNumber: 'ESP32-7781' }; deviceBodyToInternal(b, 2); return b; })()",
+            "mongDoi": {
+              "serialNumber": "ESP32-7781"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "body.serialNo = body.serialNumber — modifies the caller’s object.|||body.serialNo = body.serialNumber — sửa object của người gọi."
+        },
+        {
+          "loi": "Accepting both names in v2 — the contract says serialNo is an error there.|||Nhận cả hai tên ở v2 — hợp đồng nói serialNo là lỗi ở đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "internal form",
+          "vi": "dạng nội bộ"
+        },
+        {
+          "en": "edge translation",
+          "vi": "dịch ở mép"
+        }
+      ]
+    }
+  ]
+}

@@ -609,6 +609,11 @@ ${LINK('https://react.dev/learn/render-and-commit', '📄', 'react.dev — Rende
 ${LINK('https://react.dev/learn/state-as-a-snapshot', '📄', 'react.dev — State as a Snapshot', 'Why setting state does not change the variable you already have.')}
 ${LINK('https://react.dev/learn/queueing-a-series-of-state-updates', '📄', 'react.dev — Queueing a Series of State Updates', 'Batching, updater functions, and mixing replace/update in one queue.')}
 ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useState reference', 'Caveats: Object.is bail-out, StrictMode double calls, lazy initializer, troubleshooting.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-2-state-class-vs-function" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 5.2: State: class vs function components</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: useState and why a functional update avoids the "+2" trap. Different: Academy sets it beside the old class version; Courses explains it with the "state is a snapshot" model. In this lesson we add: what "render" really means, state as a snapshot, batching many sets into one render, the rules of hooks. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -769,6 +774,11 @@ ${LINK('https://react.dev/learn/render-and-commit', '📄', 'react.dev — Rende
 ${LINK('https://react.dev/learn/state-as-a-snapshot', '📄', 'react.dev — State as a Snapshot', 'Vì sao đặt state không đổi biến bạn đang cầm.')}
 ${LINK('https://react.dev/learn/queueing-a-series-of-state-updates', '📄', 'react.dev — Queueing a Series of State Updates', 'Batching, hàm cập nhật, trộn "thay" và "cập nhật" trong một hàng đợi.')}
 ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useState (tham khảo)', 'Lưu ý: bỏ qua theo Object.is, StrictMode gọi hai lần, khởi tạo lười, xử lý sự cố.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-2-state-class-vs-function" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 5.2: State: class và function component</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: useState và vì sao cập nhật theo hàm tránh được bẫy "+2". Khác: Academy đặt cạnh bản class cũ; Courses giải thích bằng mô hình "state là ảnh chụp". Ở bài này mình học thêm: "render" thật sự là gì, state là ảnh chụp, batching nhiều lần set một lần render, luật của hook. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },
@@ -921,6 +931,11 @@ ${LINK('https://react.dev/learn/responding-to-events', '📄', 'react.dev — Re
 ${LINK('https://react.dev/reference/react-dom/components/common', '📄', 'react.dev — Common components (event handlers)', 'Every event prop and the fields of the React event object.')}
 ${LINK('https://react.dev/reference/react-dom/components/form', '📄', 'react.dev — &lt;form&gt;', 'Form submission in React 19, including the action prop you will meet in Chapter 12.')}
 ${LINK('https://react.dev/reference/react-dom/components/input', '📄', 'react.dev — &lt;input&gt;', 'Controlled inputs and why onChange fires on every keystroke.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-6-1-events-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 6.1: Event handlers, synthetic events &amp; forms</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: passing handlers, passing parameters, preventDefault. Different: Courses adds event types in TypeScript and bubbling. In this lesson we add: give React a function — do not call it, three ways to write a handler, event bubbling, the form reloading the page. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -1062,6 +1077,11 @@ ${LINK('https://react.dev/learn/responding-to-events', '📄', 'react.dev — Re
 ${LINK('https://react.dev/reference/react-dom/components/common', '📄', 'react.dev — Common components (event handler)', 'Mọi prop sự kiện và các trường của đối tượng sự kiện React.')}
 ${LINK('https://react.dev/reference/react-dom/components/form', '📄', 'react.dev — &lt;form&gt;', 'Gửi form trong React 19, gồm cả prop action bạn sẽ gặp ở Chương 12.')}
 ${LINK('https://react.dev/reference/react-dom/components/input', '📄', 'react.dev — &lt;input&gt;', 'Input được kiểm soát và vì sao onChange chạy mỗi lần gõ phím.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-6-1-events-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 6.1: Sự kiện, synthetic event &amp; form</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: truyền hàm xử lý, truyền tham số, preventDefault. Khác: Courses thêm kiểu sự kiện trong TypeScript và chuyện nổi bọt. Ở bài này mình học thêm: đưa cho React một hàm — đừng gọi nó, ba cách viết handler, sự kiện nổi bọt, form tải lại trang. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },

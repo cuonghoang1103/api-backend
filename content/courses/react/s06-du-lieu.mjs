@@ -590,6 +590,11 @@ ${LINK('https://react.dev/learn/you-might-not-need-an-effect#fetching-data', '�
 ${LINK('https://react.dev/reference/react/useEffect#what-are-good-alternatives-to-data-fetching-in-effects', '📄', 'react.dev — Alternatives to data fetching in Effects', 'Why frameworks and client-side caches such as TanStack Query exist.')}
 ${LINK('https://mswjs.io/docs/quick-start', '📄', 'MSW — Quick start', 'Handlers, setupWorker for the browser, setupServer for Node.')}
 ${LINK('https://developer.mozilla.org/en-US/docs/Web/API/AbortController', '📄', 'MDN — AbortController', 'signal, abort(), and the AbortError it produces.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-1-fetch-async" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 11.1: Fetch, promises &amp; async/await</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: fetch inside useEffect, then store in state. Different: Courses shows where this pattern breaks in real use. In this lesson we add: fetch does not throw on 404, a race between two requests measured in real Chromium, AbortController, a fake API with MSW. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -759,6 +764,11 @@ ${LINK('https://react.dev/learn/you-might-not-need-an-effect#fetching-data', '�
 ${LINK('https://react.dev/reference/react/useEffect#what-are-good-alternatives-to-data-fetching-in-effects', '📄', 'react.dev — Lựa chọn thay cho fetch trong effect', 'Vì sao có framework và cache phía client như TanStack Query.')}
 ${LINK('https://mswjs.io/docs/quick-start', '📄', 'MSW — Quick start', 'Handler, setupWorker cho trình duyệt, setupServer cho Node.')}
 ${LINK('https://developer.mozilla.org/en-US/docs/Web/API/AbortController', '📄', 'MDN — AbortController', 'signal, abort(), và lỗi AbortError nó sinh ra.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-1-fetch-async" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 11.1: Fetch, promise &amp; async/await</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: fetch trong useEffect rồi lưu vào state. Khác: Courses chỉ ra mẫu này sai ở đâu khi chạy thật. Ở bài này mình học thêm: fetch không ném lỗi với 404, cuộc đua giữa hai request đo trong Chromium thật, AbortController, API giả bằng MSW. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
 };
@@ -929,6 +939,11 @@ ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/query-keys
 ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/queries', '📄', 'TanStack Query — Queries', 'status, fetchStatus and the states a query can be in.')}
 ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation', '📄', 'TanStack Query — Query Cancellation', 'The signal, and when a query is cancelled.')}
 ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/testing', '📄', 'TanStack Query — Testing', 'A fresh QueryClient per test, retry: false.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-2-axios-json-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 11.2: Axios &amp; json-server</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: same topic: getting server data into components. Different: Academy uses Axios + json-server; Courses hands caching, refetching and loading state to a library. In this lesson we add: useQuery, query keys as cache addresses, staleTime/gcTime, status vs fetchStatus; next come mutations and optimistic updates. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1089,6 +1104,11 @@ ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/query-keys
 ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/queries', '📄', 'TanStack Query — Queries', 'status, fetchStatus và các trạng thái của một query.')}
 ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/query-cancellation', '📄', 'TanStack Query — Query Cancellation', 'signal, và khi nào một query bị huỷ.')}
 ${LINK('https://tanstack.com/query/latest/docs/framework/react/guides/testing', '📄', 'TanStack Query — Testing', 'Mỗi test một QueryClient mới, retry: false.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-11-2-axios-json-server" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 11.2: Axios &amp; json-server</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: cùng chủ đề: lấy dữ liệu từ máy chủ về cho component. Khác: Academy dùng Axios + json-server; Courses giao việc cache, tải lại, trạng thái loading cho một thư viện. Ở bài này mình học thêm: useQuery, query key là địa chỉ trong cache, staleTime/gcTime, status khác fetchStatus; tiếp theo là mutation và cập nhật lạc quan. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
 };

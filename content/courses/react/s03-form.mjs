@@ -585,6 +585,11 @@ ${LINK('https://react.dev/reference/react-dom/components/select', '📄', 'react
 ${LINK('https://react.dev/reference/react/useRef', '📄', 'react.dev — useRef', 'Refs that survive renders; do not read or write ref.current during rendering.')}
 ${LINK('https://react.dev/learn/manipulating-the-dom-with-refs', '📄', 'react.dev — Manipulating the DOM with Refs', 'Focus, scroll and measure: the jobs refs are for.')}
 ${LINK('https://react.dev/reference/react-dom/components/form', '📄', 'react.dev — &lt;form&gt;', 'The action prop, FormData, and automatic reset of uncontrolled fields in React 19.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-6-1-events-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 6.1: Event handlers, synthetic events &amp; forms</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: controlled input: value + onChange. Different: Courses compares it with uncontrolled inputs and when to use which. In this lesson we add: useRef, reading FormData on submit, the two warnings React throws, many fields with one object and one handler. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -764,6 +769,11 @@ ${LINK('https://react.dev/reference/react-dom/components/select', '📄', 'react
 ${LINK('https://react.dev/reference/react/useRef', '📄', 'react.dev — useRef', 'Ref sống qua các lần render; không đọc/ghi ref.current trong lúc render.')}
 ${LINK('https://react.dev/learn/manipulating-the-dom-with-refs', '📄', 'react.dev — Manipulating the DOM with Refs', 'Focus, cuộn, đo: những việc ref sinh ra để làm.')}
 ${LINK('https://react.dev/reference/react-dom/components/form', '📄', 'react.dev — &lt;form&gt;', 'Prop action, FormData, và tự đặt lại ô không kiểm soát trong React 19.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-6-1-events-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 6.1: Sự kiện, synthetic event &amp; form</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: controlled input: value + onChange. Khác: Courses so sánh với ô không kiểm soát và khi nào dùng cái nào. Ở bài này mình học thêm: useRef, đọc FormData lúc gửi, hai cảnh báo React hay ném ra, nhiều ô một object một handler. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },

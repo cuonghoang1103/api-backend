@@ -1225,6 +1225,11 @@ ${LINK('https://reactrouter.com/start/data/route-object', '🧭', 'React Router 
 ${LINK('https://vite.dev/guide/build', '⚡', 'Vite — Building for production', 'Chunks, modulepreload, build output.')}
 ${LINK('https://web.dev/articles/browser-level-image-lazy-loading', '🖼', 'web.dev — Browser-level image lazy loading', 'loading="lazy", distance thresholds, dimensions.')}
 ${LINK('https://web.dev/articles/cls', '📏', 'web.dev — Cumulative Layout Shift', 'What CLS measures and the 0.1 / 0.25 thresholds.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-10-1-lazy-suspense" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 10.1: Lazy() &amp; Suspense</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: React.lazy, Suspense and splitting by route. Different: Courses measures before splitting: what is in the bundle, which file loads when. In this lesson we add: the barrel-file trap that pulls a library back into the first chunk, what lazy routes change in tests, lazy images, when not to split. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.3</span>
@@ -1387,6 +1392,11 @@ ${LINK('https://reactrouter.com/start/data/route-object', '🧭', 'React Router 
 ${LINK('https://vite.dev/guide/build', '⚡', 'Vite — Building for production', 'Chunk, modulepreload, output của build.')}
 ${LINK('https://web.dev/articles/browser-level-image-lazy-loading', '🖼', 'web.dev — Browser-level image lazy loading', 'loading="lazy", ngưỡng khoảng cách, kích thước ảnh.')}
 ${LINK('https://web.dev/articles/cls', '📏', 'web.dev — Cumulative Layout Shift', 'CLS đo gì, ngưỡng 0,1 / 0,25.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-10-1-lazy-suspense" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 10.1: Lazy() &amp; Suspense</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: React.lazy, Suspense và chia theo route. Khác: Courses đo trước khi chia: bundle có gì, file nào tải lúc nào. Ở bài này mình học thêm: cái bẫy barrel file kéo thư viện về lại file đầu, route lười đổi gì trong test, tải lười ảnh, khi nào không nên chia. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
 };

@@ -402,6 +402,11 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <span class="lc-body"><span class="lc-title">Build your first counter</span><span class="lc-sub">Type &amp; run the Like button on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-8-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — Start here (1/2): What React is, where it came from, why companies still hire for it</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: both open with "what problem does React solve". Different: Academy follows the FPTU syllabus; Courses starts from the history and the job market. It also adds: twelve verifiable milestones, React compared with Vue/Angular/Svelte, and why companies still pick React.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -435,6 +440,11 @@ btn.<span class="tok-function">addEventListener</span>(<span class="tok-string">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Dựng counter đầu tiên</span><span class="lc-sub">Gõ &amp; chạy nút Like trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-8-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — Bắt đầu tại đây (1/2): React là gì, ra đời thế nào, vì sao công ty vẫn tuyển</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: cả hai mở đầu bằng câu hỏi "React giải quyết vấn đề gì". Khác: Academy bám đúng syllabus FPTU; Courses đi từ mốc lịch sử và thị trường tuyển dụng. Ở đó có thêm: mười hai mốc ra đời kiểm được, so sánh React với Vue/Angular/Svelte và lý do công ty vẫn chọn React.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -589,6 +599,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Drill ES6 syntax</span><span class="lc-sub">Arrow functions, template literals &amp; more on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-3-js-cho-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 0.3: The JavaScript you need for React</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: variables, arrow functions and template literals. Different: Academy teaches ES6 syntax per the syllabus; Courses picks the JS that React code uses every day. It also adds: comparison by reference, map/filter/find/reduce, truthy/falsy, ?. and ??, closures, Promises and async/await — run on a doctor list.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -625,6 +640,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện cú pháp ES6</span><span class="lc-sub">Arrow function, template literal &amp; hơn nữa trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-3-js-cho-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 0.3: JavaScript cần cho React</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: biến, hàm mũi tên và template literal. Khác: Academy dạy cú pháp ES6 theo giáo trình; Courses chọn đúng phần JS mà code React dùng hằng ngày. Ở đó có thêm: so sánh theo tham chiếu, map/filter/find/reduce, truthy/falsy, ?. và ??, closure, Promise và async/await — chạy trên danh sách bác sĩ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -675,6 +695,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Practice destructuring &amp; spread</span><span class="lc-sub">Hands-on ES6 exercises on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-3-js-cho-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 0.3: The JavaScript you need for React</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: destructuring, spread and import/export. Different: Courses explains that a spread "copy" is shallow, and ties it straight to updating state. It also adds: what copy-then-edit with spread really means, same value vs same object, closures, async/await.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -715,6 +740,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện destructuring &amp; spread</span><span class="lc-sub">Bài tập ES6 thực hành trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-3-js-cho-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 0.3: JavaScript cần cho React</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: destructuring, spread và import/export. Khác: Courses giải thích "chép" bằng spread thật ra là chép nông và nối thẳng vào chuyện cập nhật state. Ở đó có thêm: spread chép rồi sửa nghĩa là gì, cùng giá trị hay cùng object, closure, async/await.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -803,6 +833,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Write your first JSX</span><span class="lc-sub">Render lists and expressions on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 0.2: JSX, really explained</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: embedding expressions with { }, conditions, rendering lists. Different: Courses opens the box: what JSX compiles to, and that an element is just an object. It also adds: four JSX rules with the errors you will see, three conditional-rendering patterns, reading Vite's error overlay.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -855,6 +890,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Viết JSX đầu tiên</span><span class="lc-sub">Render danh sách và biểu thức trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-0-2-jsx" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 0.2: JSX giải thích thật sự</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: nhúng biểu thức bằng { }, điều kiện, render danh sách. Khác: Courses mở hộp: JSX biên dịch ra lời gọi hàm gì và một phần tử thật ra chỉ là một object. Ở đó có thêm: bốn luật JSX kèm lỗi sẽ gặp, ba mẫu render có điều kiện, đọc lớp phủ lỗi của Vite.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1145,6 +1185,16 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Build reusable components</span><span class="lc-sub">Practice props &amp; composition on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-1-component" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 1.1: Components are functions: naming, one file each, staying pure</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: function components and composing them. Different: Courses stresses purity and the Render phase, measured with Strict Mode. It also adds: why you never define a component inside another one, React may call your function many times, and reading legacy class components.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 1.2: Props and their TypeScript types</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: read-only props and passing data from parent to child. Different: Academy validates props with PropTypes; Courses checks them with TypeScript types at compile time. It also adds: interfaces and defaults, children, the 0 that shows up on screen, .sort() reordering the parent's array.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1185,6 +1235,16 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Dựng component tái dùng</span><span class="lc-sub">Luyện props &amp; composition trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-1-component" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 1.1: Component là hàm: đặt tên, một file một component, thuần khiết</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: function component và cách ghép component. Khác: Courses nhấn vào luật thuần khiết và pha Render, đo bằng Strict Mode. Ở đó có thêm: vì sao không định nghĩa component bên trong component khác, React có thể gọi hàm nhiều lần, và đọc được class component cũ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-1-2-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 1.2: Props và kiểu TypeScript của props</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: props chỉ đọc và truyền dữ liệu từ cha xuống con. Khác: Academy kiểm props bằng PropTypes; Courses kiểm bằng kiểu TypeScript ngay lúc biên dịch. Ở đó có thêm: interface và giá trị mặc định, children, số 0 hiện lên màn hình, .sort() đảo luôn mảng của cha.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1239,6 +1299,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Practice state &amp; the setter</span><span class="lc-sub">Build counters and toggles on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-1-use-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 2.1: UseState and re-rendering</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: useState and why a functional update avoids the "+2" trap. Different: Academy sets it beside the old class version; Courses explains it with the "state is a snapshot" model. It also adds: what "render" really means, state as a snapshot, batching many sets into one render, the rules of hooks.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1283,6 +1348,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện state &amp; setter</span><span class="lc-sub">Dựng counter và toggle trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-1-use-state" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 2.1: UseState và render lại</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: useState và vì sao cập nhật theo hàm tránh được bẫy "+2". Khác: Academy đặt cạnh bản class cũ; Courses giải thích bằng mô hình "state là ảnh chụp". Ở đó có thêm: "render" thật sự là gì, state là ảnh chụp, batching nhiều lần set một lần render, luật của hook.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1363,6 +1433,16 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Build a controlled form</span><span class="lc-sub">Practice onChange &amp; onSubmit on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-2-su-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 2.2: Handling events</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: passing handlers, passing parameters, preventDefault. Different: Courses adds event types in TypeScript and bubbling. It also adds: give React a function — do not call it, three ways to write a handler, event bubbling, the form reloading the page.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-3-1-controlled" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 3.1: Controlled and uncontrolled inputs</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: controlled input: value + onChange. Different: Courses compares it with uncontrolled inputs and when to use which. It also adds: useRef, reading FormData on submit, the two warnings React throws, many fields with one object and one handler.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -1407,6 +1487,16 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Dựng form controlled</span><span class="lc-sub">Luyện onChange &amp; onSubmit trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-2-2-su-kien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 2.2: Xử lý sự kiện</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: truyền hàm xử lý, truyền tham số, preventDefault. Khác: Courses thêm kiểu sự kiện trong TypeScript và chuyện nổi bọt. Ở đó có thêm: đưa cho React một hàm — đừng gọi nó, ba cách viết handler, sự kiện nổi bọt, form tải lại trang.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-3-1-controlled" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 3.1: Ô nhập kiểm soát và không kiểm soát</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: controlled input: value + onChange. Khác: Courses so sánh với ô không kiểm soát và khi nào dùng cái nào. Ở đó có thêm: useRef, đọc FormData lúc gửi, hai cảnh báo React hay ném ra, nhiều ô một object một handler.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1481,6 +1571,11 @@ count = 1;              <span class="tok-comment">// ok</span>
 }</code></pre>
 <p>Any component in the tree calls <code>useContext(AuthContext)</code> to get the logged-in user — no matter how deep. This is the standard pattern for user/session data.</p>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Context is not a state manager — and re-render cost.</b> Context <em>distributes</em> a value; it doesn't manage updates efficiently. When a provider's <code>value</code> changes, <b>every</b> consumer re-renders, even ones using an unchanged part of the object. For large, frequently-updated global state this is why teams reach for Redux/Zustand instead. Common fix: split contexts (a stable "dispatch" context + a changing "state" context), or memoise the <code>value</code> object so it only changes when it must.</div>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-1-context" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 5.1: Context without re-render storms</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: prop drilling and Context in three steps: create, provide, read. Different: Courses measures which components Context re-renders. It also adds: a measured re-render storm, splitting frequently-changing context from stable context, when Context is enough.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -1520,6 +1615,11 @@ count = 1;              <span class="tok-comment">// ok</span>
 }</code></pre>
 <p>Bất kỳ component nào trong cây gọi <code>useContext(AuthContext)</code> để lấy người dùng đã đăng nhập — dù sâu tới đâu. Đây là mẫu chuẩn cho dữ liệu người dùng/phiên.</p>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Context không phải trình quản lý state — và chi phí render lại.</b> Context <em>phân phối</em> một giá trị; nó không quản lý cập nhật hiệu quả. Khi <code>value</code> của provider đổi, <b>mọi</b> consumer render lại, kể cả cái dùng phần không đổi của object. Với state toàn cục lớn, cập nhật thường xuyên, đây là lý do các đội chọn Redux/Zustand. Cách sửa phổ biến: tách context (một context "dispatch" ổn định + một context "state" thay đổi), hoặc memo hoá object <code>value</code> để nó chỉ đổi khi cần.</div>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-1-context" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 5.1: Context không gây bão render</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: prop drilling và Context ba bước: tạo, cung cấp, đọc. Khác: Courses đo xem Context làm component nào render lại. Ở đó có thêm: cơn bão render đo thật, tách context đổi thường xuyên khỏi context ít đổi, khi nào Context là đủ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -1570,6 +1670,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Practice reusable patterns</span><span class="lc-sub">children &amp; render props on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-13-1-compound-headless" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 13.1: Compound components, headless hooks</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: same goal: reusable components without adding a prop for every wish. Different: Academy stops at children and render props; Courses goes on to the patterns UI libraries use. It also adds: compound components, headless hooks (behaviour without UI), keyboard and ARIA for tabs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.2</span>
@@ -1611,6 +1716,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện mẫu tái dùng</span><span class="lc-sub">children &amp; render props trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-13-1-compound-headless" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 13.1: Compound component, headless hook</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: cùng mục tiêu: component dùng lại được mà không phải thêm một prop cho mỗi mong muốn. Khác: Academy dừng ở children và render props; Courses đi tiếp tới các mẫu thiết kế người ta dùng trong thư viện UI. Ở đó có thêm: compound component, headless hook (hành vi không kèm giao diện), bàn phím và ARIA cho tab.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1688,6 +1798,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Practice useState &amp; useEffect</span><span class="lc-sub">Build a clock and a fetcher on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-4-1-use-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 4.1: UseEffect, dependencies and cleanup</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: effects run after render, and the dependency array. Different: Courses measures the real order with logs and explains cleanup. It also adds: three shapes of dependency array, cleanup running before the next setup, why Strict Mode runs effects twice; later lessons cover "you might not need an effect", infinite loops and stale closures.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
@@ -1729,6 +1844,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện useState &amp; useEffect</span><span class="lc-sub">Dựng đồng hồ và bộ fetch trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-4-1-use-effect" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 4.1: UseEffect, dependency và cleanup</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: effect chạy sau render và mảng dependency. Khác: Courses đo thứ tự chạy thật bằng log và giải thích cleanup. Ở đó có thêm: ba dạng mảng dependency, cleanup chạy trước lần setup kế tiếp, vì sao Strict Mode chạy effect hai lần; các bài sau còn "bạn có thể không cần effect", vòng lặp vô hạn, stale closure.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1779,6 +1899,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Practice useReducer</span><span class="lc-sub">Build a reducer-driven counter on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-2-reducer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 5.2: UseReducer for complex state</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: reducers, actions and useState vs useReducer. Different: Courses writes the reducer in TypeScript and tests it without React. It also adds: action unions, a pure reducer, a four-step booking flow, "count the rules, not the variables"; next come Zustand and URL state.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2</span>
@@ -1819,6 +1944,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện useReducer</span><span class="lc-sub">Dựng counter dùng reducer trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-5-2-reducer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 5.2: UseReducer cho state phức tạp</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: reducer, action và so sánh useState với useReducer. Khác: Courses viết reducer bằng TypeScript và test nó không cần React. Ở đó có thêm: union hành động, reducer thuần, luồng đặt lịch bốn bước, "đếm luật chứ đừng đếm số biến"; tiếp theo là Zustand và state trên URL.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1929,6 +2059,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Build a multi-page SPA</span><span class="lc-sub">Routes, links &amp; params on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-7-1-router" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 7.1: React Router basics and what changed since v6</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: declaring routes, route params, Link and navigating from code. Different: Courses is updated for the current React Router. It also adds: testing routes without a browser, F5 on a child page (the server must know the fallback); next come layouts, nested routes, login-gated pages, project structure and the path to Next.js.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 9 · Bài 9.1</span>
@@ -1975,6 +2110,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Dựng SPA nhiều trang</span><span class="lc-sub">Route, link &amp; param trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-7-1-router" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 7.1: React Router cơ bản và thay đổi từ v6</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: khai báo route, tham số route, Link và điều hướng bằng code. Khác: Courses cập nhật theo phiên bản mới của React Router. Ở đó có thêm: test route không cần trình duyệt, F5 ở trang con (máy chủ phải biết đường lui); tiếp theo là layout, route lồng nhau, trang cần đăng nhập, cấu trúc dự án và đường sang Next.js.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -2047,6 +2187,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Practice lazy loading</span><span class="lc-sub">Split a route with lazy &amp; Suspense on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-3-lazy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 8.3: Code splitting and lazy loading</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: React.lazy, Suspense and splitting by route. Different: Courses measures before splitting: what is in the bundle, which file loads when. It also adds: the barrel-file trap that pulls a library back into the first chunk, what lazy routes change in tests, lazy images, when not to split.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 10 · Bài 10.1</span>
@@ -2083,6 +2228,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện lazy loading</span><span class="lc-sub">Chia một route với lazy &amp; Suspense trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-8-3-lazy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 8.3: Chia nhỏ code và tải lười</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: React.lazy, Suspense và chia theo route. Khác: Courses đo trước khi chia: bundle có gì, file nào tải lúc nào. Ở đó có thêm: cái bẫy barrel file kéo thư viện về lại file đầu, route lười đổi gì trong test, tải lười ảnh, khi nào không nên chia.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -2165,6 +2315,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-body"><span class="lc-title">Practice promises &amp; async/await</span><span class="lc-sub">Async JavaScript drills on Code Lab.</span></span>
   <span class="lc-cta">PRACTICE →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-1-fetch" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 6.1: Fetching in effects and why it hurts</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: fetch inside useEffect, then store in state. Different: Courses shows where this pattern breaks in real use. It also adds: fetch does not throw on 404, a race between two requests measured in real Chromium, AbortController, a fake API with MSW.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.1</span>
@@ -2211,6 +2366,11 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện promise &amp; async/await</span><span class="lc-sub">Bài tập JavaScript bất đồng bộ trên Code Lab.</span></span>
   <span class="lc-cta">LUYỆN TẬP →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-1-fetch" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 6.1: Gọi API trong effect và vì sao đau</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: fetch trong useEffect rồi lưu vào state. Khác: Courses chỉ ra mẫu này sai ở đâu khi chạy thật. Ở đó có thêm: fetch không ném lỗi với 404, cuộc đua giữa hai request đo trong Chromium thật, AbortController, API giả bằng MSW.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -2264,6 +2424,11 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   <span class="lc-body"><span class="lc-title">Axios &amp; json-server setup</span><span class="lc-sub">Recipes and snippets — on Exp Hub.</span></span>
   <span class="lc-cta">EXP HUB →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-2-tanstack" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the React course (Courses) — lesson 6.2: TanStack Query</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the React course on Courses. Same as this lesson: same topic: getting server data into components. Different: Academy uses Axios + json-server; Courses hands caching, refetching and loading state to a library. It also adds: useQuery, query keys as cache addresses, staleTime/gcTime, status vs fetchStatus; next come mutations and optimistic updates.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 11 · Bài 11.2</span>
@@ -2307,6 +2472,11 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Cài đặt Axios &amp; json-server</span><span class="lc-sub">Công thức và snippet — trên Exp Hub.</span></span>
   <span class="lc-cta">EXP HUB →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/react/learn?lessonSlug=rx-6-2-tanstack" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 6.2: TanStack Query</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: cùng chủ đề: lấy dữ liệu từ máy chủ về cho component. Khác: Academy dùng Axios + json-server; Courses giao việc cache, tải lại, trạng thái loading cho một thư viện. Ở đó có thêm: useQuery, query key là địa chỉ trong cache, staleTime/gcTime, status khác fetchStatus; tiếp theo là mutation và cập nhật lạc quan.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,

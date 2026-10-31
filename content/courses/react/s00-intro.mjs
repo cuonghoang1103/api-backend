@@ -358,6 +358,11 @@ ${slide('rx-00', 7, 'Lộ trình khoá: Mục 0 → Chương 14')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — CHANGELOG.md</span><span class="lc-sub">github.com/facebook/react/blob/main/CHANGELOG.md — release dates from 0.3.0 (29/05/2013) to 19.3.0 (09/09/2026).</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Legacy React blog — Our First 50,000 Stars</span><span class="lc-sub">legacy.reactjs.org/blog/2016/09/28/our-first-50000-stars.html — FaxJS, FBolt and how JSX was designed, told by the React team.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Web Foundations — HTML, CSS and JavaScript first</span><span class="lc-sub">/courses/web-foundations/learn${REF} — if the DOM and JavaScript functions still feel new, spend a week there first.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-1-1-fullstack-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 1.1: Full-stack big picture &amp; why React</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: both open with "what problem does React solve". Different: Academy follows the FPTU syllabus; Courses starts from the history and the job market. In this lesson we add: twelve verifiable milestones, React compared with Vue/Angular/Svelte, and why companies still pick React. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -505,6 +510,11 @@ ${slide('rx-00', 7, 'Lộ trình khoá: Mục 0 → Chương 14')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — CHANGELOG.md</span><span class="lc-sub">github.com/facebook/react/blob/main/CHANGELOG.md — ngày phát hành từ 0.3.0 (29/05/2013) tới 19.3.0 (09/09/2026).</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Blog React cũ — Our First 50,000 Stars</span><span class="lc-sub">legacy.reactjs.org/blog/2016/09/28/our-first-50000-stars.html — FaxJS, FBolt và JSX được thiết kế thế nào, do chính đội React kể.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Web Foundations — HTML, CSS và JavaScript trước</span><span class="lc-sub">/courses/web-foundations/learn${REF} — nếu DOM và hàm JavaScript còn lạ, dành một tuần ở đó trước.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-1-1-fullstack-react" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 1.1: Bức tranh full-stack &amp; vì sao React</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: cả hai mở đầu bằng câu hỏi "React giải quyết vấn đề gì". Khác: Academy bám đúng syllabus FPTU; Courses đi từ mốc lịch sử và thị trường tuyển dụng. Ở bài này mình học thêm: mười hai mốc ra đời kiểm được, so sánh React với Vue/Angular/Svelte và lý do công ty vẫn chọn React. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },
@@ -1192,6 +1202,11 @@ The first import adds matchers such as <code>toBeInTheDocument()</code>. The <co
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — &lt;StrictMode&gt;</span><span class="lc-sub">react.dev/reference/react/StrictMode — what the development-only double render and double effect are for.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Vite — Getting Started</span><span class="lc-sub">vite.dev/guide — templates, <code>npm create vite</code>, and why Vite serves native ES modules in development.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">TypeScript — the type checker you just met</span><span class="lc-sub">/courses/typescript/learn${REF} — what <code>tsc</code> checks, strict mode, and reading TS error messages.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-1-ex2-first-app" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — Exercise 2: Your first React app</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: same goal: a React project running on your machine. Different: the FER202 exercise scaffolds with Create React App; Courses uses Vite + TypeScript, how most projects start today. In this lesson we add: a measured comparison with Create React App, reading the project layout, vite build vs tsc -b, cleaning the template and adding Vitest. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1455,6 +1470,11 @@ Dòng import đầu thêm các phép so như <code>toBeInTheDocument()</code>. D
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — &lt;StrictMode&gt;</span><span class="lc-sub">react.dev/reference/react/StrictMode — render hai lần và effect hai lần khi dev để làm gì.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Vite — Getting Started</span><span class="lc-sub">vite.dev/guide — các template, <code>npm create vite</code>, và vì sao Vite phục vụ ES module gốc khi dev.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">TypeScript — bộ kiểm kiểu bạn vừa gặp</span><span class="lc-sub">/courses/typescript/learn${REF} — <code>tsc</code> kiểm gì, chế độ strict, và cách đọc thông báo lỗi TS.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-1-ex2-first-app" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — Bài tập 2: Ứng dụng React đầu tiên</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: cùng mục tiêu: có một dự án React chạy được trên máy. Khác: bài tập FER202 tạo app bằng Create React App; Courses dùng Vite + TypeScript, cách đa số dự án hiện nay khởi tạo. Ở bài này mình học thêm: đo thật so với Create React App, đọc cấu trúc dự án, sự khác nhau giữa vite build và tsc -b, dọn template và thêm Vitest. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },
@@ -1723,6 +1743,11 @@ ${slide('rx-00', 22, 'Lớp phủ lỗi của Vite — ảnh chụp thật')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Conditional Rendering</span><span class="lc-sub">react.dev/learn/conditional-rendering — <code>if</code>, <code>? :</code>, <code>&amp;&amp;</code>, and the "don&#39;t put numbers on the left side of &amp;&amp;" warning.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — &lt;Fragment&gt;</span><span class="lc-sub">react.dev/reference/react/Fragment — the short and long syntax, and fragments with keys.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Web Foundations — HTML you will convert to JSX</span><span class="lc-sub">/courses/web-foundations/learn${REF} — semantic HTML (tables, headings, lists) that Lesson 0.2 turns into components.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 3.1: JSX: HTML inside JavaScript</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: embedding expressions with { }, conditions, rendering lists. Different: Courses opens the box: what JSX compiles to, and that an element is just an object. In this lesson we add: four JSX rules with the errors you will see, three conditional-rendering patterns, reading Vite's error overlay. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1981,6 +2006,11 @@ ${slide('rx-00', 22, 'Lớp phủ lỗi của Vite — ảnh chụp thật')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Conditional Rendering</span><span class="lc-sub">react.dev/learn/conditional-rendering — <code>if</code>, <code>? :</code>, <code>&amp;&amp;</code>, và cảnh báo "đừng đặt số ở vế trái của &amp;&amp;".</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — &lt;Fragment&gt;</span><span class="lc-sub">react.dev/reference/react/Fragment — cú pháp ngắn và dài, và fragment có key.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Web Foundations — HTML bạn sẽ chuyển sang JSX</span><span class="lc-sub">/courses/web-foundations/learn${REF} — HTML có ngữ nghĩa (bảng, tiêu đề, danh sách) mà Bài 0.2 biến thành component.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-3-1-jsx-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 3.1: JSX: HTML trong JavaScript</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: nhúng biểu thức bằng { }, điều kiện, render danh sách. Khác: Courses mở hộp: JSX biên dịch ra lời gọi hàm gì và một phần tử thật ra chỉ là một object. Ở bài này mình học thêm: bốn luật JSX kèm lỗi sẽ gặp, ba mẫu render có điều kiện, đọc lớp phủ lỗi của Vite. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },
@@ -2606,6 +2636,16 @@ dist/assets/index-CcUL7llf.js   222.07 kB │ gzip: 69.86 kB
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Updating Arrays in State</span><span class="lc-sub">react.dev/learn/updating-arrays-in-state — the table of mutating vs non-mutating array methods (avoid <code>sort</code>, prefer copies).</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Using TypeScript</span><span class="lc-sub">react.dev/learn/typescript — typing props and hooks, where this lesson&#39;s minimum TypeScript leads.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">TypeScript — beyond the minimum</span><span class="lc-sub">/courses/typescript/learn${REF} — unions, interfaces, generics and strict mode in depth.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-2-1-es6-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 2.1: Let/const, arrow functions, template literals</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: variables, arrow functions and template literals. Different: Academy teaches ES6 syntax per the syllabus; Courses picks the JS that React code uses every day. In this lesson we add: comparison by reference, map/filter/find/reduce, truthy/falsy, ?. and ??, closures, Promises and async/await — run on a doctor list. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-2-2-destructuring-spread-modules" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 2.2: Destructuring, spread &amp; modules</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: destructuring, spread and import/export. Different: Courses explains that a spread "copy" is shallow, and ties it straight to updating state. In this lesson we add: what copy-then-edit with spread really means, same value vs same object, closures, async/await. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -3221,6 +3261,16 @@ dist/assets/index-CcUL7llf.js   222.07 kB │ gzip: 69.86 kB
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Updating Arrays in State</span><span class="lc-sub">react.dev/learn/updating-arrays-in-state — bảng các hàm mảng sửa gốc và không sửa gốc (tránh <code>sort</code>, dùng bản chép).</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Using TypeScript</span><span class="lc-sub">react.dev/learn/typescript — gõ kiểu cho props và hook, nơi phần TypeScript tối thiểu của bài này dẫn tới.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">TypeScript — vượt qua mức tối thiểu</span><span class="lc-sub">/courses/typescript/learn${REF} — union, interface, generic và chế độ strict, đi sâu.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-2-1-es6-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 2.1: Let/const, arrow function, template literal</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: biến, hàm mũi tên và template literal. Khác: Academy dạy cú pháp ES6 theo giáo trình; Courses chọn đúng phần JS mà code React dùng hằng ngày. Ở bài này mình học thêm: so sánh theo tham chiếu, map/filter/find/reduce, truthy/falsy, ?. và ??, closure, Promise và async/await — chạy trên danh sách bác sĩ. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-2-2-destructuring-spread-modules" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 2.2: Destructuring, spread &amp; module</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: destructuring, spread và import/export. Khác: Courses giải thích "chép" bằng spread thật ra là chép nông và nối thẳng vào chuyện cập nhật state. Ở bài này mình học thêm: spread chép rồi sửa nghĩa là gì, cùng giá trị hay cùng object, closure, async/await. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },

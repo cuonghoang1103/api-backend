@@ -579,6 +579,11 @@ sau khi gỡ, thêm 3 giây: thiếu cleanup đã tích 12 lần · có cleanup 
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — useEffect reference</span><span class="lc-sub">react.dev/reference/react/useEffect — parameters, caveats, and examples: connecting to a system, controlling a non-React widget, timers.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — Lifecycle of Reactive Effects</span><span class="lc-sub">react.dev/learn/lifecycle-of-reactive-effects — why an effect "starts and stops synchronising" rather than following the component&#39;s lifecycle.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — StrictMode</span><span class="lc-sub">react.dev/reference/react/StrictMode — the development-only checks, including re-running effects.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-8-1-usestate-useeffect" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 8.1: UseState &amp; useEffect</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: effects run after render, and the dependency array. Different: Courses measures the real order with logs and explains cleanup. In this lesson we add: three shapes of dependency array, cleanup running before the next setup, why Strict Mode runs effects twice; later lessons cover "you might not need an effect", infinite loops and stale closures. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -847,6 +852,11 @@ sau khi gỡ, thêm 3 giây: thiếu cleanup đã tích 12 lần · có cleanup 
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — useEffect reference</span><span class="lc-sub">react.dev/reference/react/useEffect — tham số, lưu ý, và ví dụ: kết nối một hệ thống, điều khiển widget không phải React, bộ hẹn giờ.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — Lifecycle of Reactive Effects</span><span class="lc-sub">react.dev/learn/lifecycle-of-reactive-effects — vì sao effect "bắt đầu và ngừng đồng bộ" thay vì đi theo vòng đời component.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — StrictMode</span><span class="lc-sub">react.dev/reference/react/StrictMode — các phép kiểm chỉ có lúc phát triển, trong đó có chạy lại effect.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-8-1-usestate-useeffect" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 8.1: UseState &amp; useEffect</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: effect chạy sau render và mảng dependency. Khác: Courses đo thứ tự chạy thật bằng log và giải thích cleanup. Ở bài này mình học thêm: ba dạng mảng dependency, cleanup chạy trước lần setup kế tiếp, vì sao Strict Mode chạy effect hai lần; các bài sau còn "bạn có thể không cần effect", vòng lặp vô hạn, stale closure. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },

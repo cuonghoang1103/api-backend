@@ -706,6 +706,11 @@ ${LINK('https://reactrouter.com/start/modes', '📄', 'React Router — Picking 
 ${LINK('https://reactrouter.com/start/data/routing', '📄', 'React Router — Routing (Data Mode)', 'Route objects, nested routes, dynamic segments, optional segments and splats.')}
 ${LINK('https://reactrouter.com/upgrading/v7', '📄', 'React Router — Upgrading from v7', 'What v8 removed, including the react-router-dom package.')}
 ${LINK('https://react.dev/learn/build-a-react-app-from-scratch#routing', '📄', 'react.dev — Build a React app from scratch: Routing', 'Why an SPA needs a router, and which routers the React team lists.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-9-1-router" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 9.1: Routes, params &amp; links</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: declaring routes, route params, Link and navigating from code. Different: Courses is updated for the current React Router. In this lesson we add: testing routes without a browser, F5 on a child page (the server must know the fallback); next come layouts, nested routes, login-gated pages, project structure and the path to Next.js. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.1</span>
@@ -896,6 +901,11 @@ ${LINK('https://reactrouter.com/start/modes', '📄', 'React Router — Picking 
 ${LINK('https://reactrouter.com/start/data/routing', '📄', 'React Router — Routing (Data Mode)', 'Route object, route lồng, đoạn động, đoạn tuỳ chọn và splat.')}
 ${LINK('https://reactrouter.com/upgrading/v7', '📄', 'React Router — Upgrading from v7', 'Những gì bản 8 đã gỡ, gồm cả gói react-router-dom.')}
 ${LINK('https://react.dev/learn/build-a-react-app-from-scratch#routing', '📄', 'react.dev — Build a React app from scratch: Routing', 'Vì sao SPA cần router, và các router nhóm React liệt kê.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-9-1-router" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 9.1: Route, tham số &amp; link</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: khai báo route, tham số route, Link và điều hướng bằng code. Khác: Courses cập nhật theo phiên bản mới của React Router. Ở bài này mình học thêm: test route không cần trình duyệt, F5 ở trang con (máy chủ phải biết đường lui); tiếp theo là layout, route lồng nhau, trang cần đăng nhập, cấu trúc dự án và đường sang Next.js. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },

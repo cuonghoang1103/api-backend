@@ -556,6 +556,11 @@ function: &lt;h1&gt;Phòng khám An Tâm&lt;/h1&gt;
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — Keeping Components Pure</span><span class="lc-sub">react.dev/learn/keeping-components-pure — purity, local mutation, where side effects belong, and the "Guest #2, #4, #6" behaviour under Strict Mode.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — &lt;StrictMode&gt; and Component (reference)</span><span class="lc-sub">react.dev/reference/react/StrictMode · react.dev/reference/react/Component — double rendering in development; class components are supported but not recommended for new code.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React blog — Sunsetting Create React App (14 Feb 2025)</span><span class="lc-sub">react.dev/blog/2025/02/14/sunsetting-create-react-app — why new projects start from Vite or a framework.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 5.1: Components &amp; props</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: function components and composing them. Different: Courses stresses purity and the Render phase, measured with Strict Mode. In this lesson we add: why you never define a component inside another one, React may call your function many times, and reading legacy class components. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -836,6 +841,11 @@ function: &lt;h1&gt;Phòng khám An Tâm&lt;/h1&gt;
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — Keeping Components Pure</span><span class="lc-sub">react.dev/learn/keeping-components-pure — tính thuần, sửa biến cục bộ, tác dụng phụ đặt ở đâu, và hiện tượng "Guest #2, #4, #6" dưới Strict Mode.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — &lt;StrictMode&gt; và Component (tham chiếu)</span><span class="lc-sub">react.dev/reference/react/StrictMode · react.dev/reference/react/Component — render hai lần khi dev; class component vẫn được hỗ trợ nhưng không khuyên dùng cho code mới.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Blog React — Sunsetting Create React App (14/02/2025)</span><span class="lc-sub">react.dev/blog/2025/02/14/sunsetting-create-react-app — vì sao dự án mới khởi đầu từ Vite hoặc một framework.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 5.1: Component &amp; props</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: function component và cách ghép component. Khác: Courses nhấn vào luật thuần khiết và pha Render, đo bằng Strict Mode. Ở bài này mình học thêm: vì sao không định nghĩa component bên trong component khác, React có thể gọi hàm nhiều lần, và đọc được class component cũ. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },
@@ -1098,6 +1108,11 @@ ${SD.sortEn}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — Conditional Rendering</span><span class="lc-sub">react.dev/learn/conditional-rendering — <code>&amp;&amp;</code> and the ternary, and the "don&#39;t put numbers on the left side of &amp;&amp;" pitfall.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React 19 Upgrade Guide</span><span class="lc-sub">react.dev/blog/2024/04/25/react-19-upgrade-guide — "Removed: propTypes and defaultProps for functions", with the codemod to TypeScript.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">TypeScript course on this site</span><span class="lc-sub">/courses/typescript — interfaces, unions, <code>Record</code> and type-only imports in depth.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 5.1: Components &amp; props</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: read-only props and passing data from parent to child. Different: Academy validates props with PropTypes; Courses checks them with TypeScript types at compile time. In this lesson we add: interfaces and defaults, children, the 0 that shows up on screen, .sort() reordering the parent's array. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -1349,6 +1364,11 @@ ${SD.sortVi}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — Conditional Rendering</span><span class="lc-sub">react.dev/learn/conditional-rendering — <code>&amp;&amp;</code> và toán tử ba ngôi, cùng lưu ý "đừng đặt số ở vế trái của &amp;&amp;".</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React 19 Upgrade Guide</span><span class="lc-sub">react.dev/blog/2024/04/25/react-19-upgrade-guide — "Removed: propTypes and defaultProps for functions", kèm codemod sang TypeScript.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Khoá TypeScript trên trang này</span><span class="lc-sub">/courses/typescript — interface, union, <code>Record</code> và import chỉ-kiểu, đào sâu.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-5-1-components-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 5.1: Component &amp; props</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: props chỉ đọc và truyền dữ liệu từ cha xuống con. Khác: Academy kiểm props bằng PropTypes; Courses kiểm bằng kiểu TypeScript ngay lúc biên dịch. Ở bài này mình học thêm: interface và giá trị mặc định, children, số 0 hiện lên màn hình, .sort() đảo luôn mảng của cha. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
     },

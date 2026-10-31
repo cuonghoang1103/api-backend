@@ -602,6 +602,11 @@ ${LINK('https://react.dev/reference/react/cloneElement', '📕', 'react.dev — 
 ${LINK('https://www.w3.org/WAI/ARIA/apg/patterns/tabs/', '♿', 'WAI-ARIA APG — Tabs pattern', 'Keyboard and roles for tabs.')}
 ${LINK('https://www.w3.org/WAI/ARIA/apg/patterns/combobox/', '♿', 'WAI-ARIA APG — Combobox pattern', 'aria-activedescendant, listbox, keys.')}
 ${LINK_TRONG('/courses/typescript', '🔷', 'Course — TypeScript', 'Generics, Omit and keyof behind the polymorphic type.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-7-2-render-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 7.2: Reusable components: children &amp; render props</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: same goal: reusable components without adding a prop for every wish. Different: Academy stops at children and render props; Courses goes on to the patterns UI libraries use. In this lesson we add: compound components, headless hooks (behaviour without UI), keyboard and ARIA for tabs. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -789,6 +794,11 @@ ${LINK('https://react.dev/reference/react/cloneElement', '📕', 'react.dev — 
 ${LINK('https://www.w3.org/WAI/ARIA/apg/patterns/tabs/', '♿', 'WAI-ARIA APG — Tabs pattern', 'Bàn phím và vai trò cho tab.')}
 ${LINK('https://www.w3.org/WAI/ARIA/apg/patterns/combobox/', '♿', 'WAI-ARIA APG — Combobox pattern', 'aria-activedescendant, listbox, phím.')}
 ${LINK_TRONG('/courses/typescript', '🔷', 'Khoá — TypeScript', 'Generic, Omit và keyof đứng sau kiểu đa hình.')}
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-7-2-render-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 7.2: Component tái sử dụng: children &amp; render props</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: cùng mục tiêu: component dùng lại được mà không phải thêm một prop cho mỗi mong muốn. Khác: Academy dừng ở children và render props; Courses đi tiếp tới các mẫu thiết kế người ta dùng trong thư viện UI. Ở bài này mình học thêm: compound component, headless hook (hành vi không kèm giao diện), bàn phím và ARIA cho tab. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
 };

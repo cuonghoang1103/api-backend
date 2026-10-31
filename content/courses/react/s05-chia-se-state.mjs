@@ -698,6 +698,11 @@ ${SD.tachEn}
 <a class="link-card" href="https://react.dev/reference/react/createContext" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — createContext</span><span class="lc-sub">The default value, and rendering the context itself as a provider.</span></span></a>
 <a class="link-card" href="https://react.dev/reference/react/use" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — use</span><span class="lc-sub">Reading context with use(), which may be called conditionally.</span></span></a>
 <a class="link-card" href="https://react.dev/blog/2024/12/05/react-19" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — React v19</span><span class="lc-sub">The release note for &lt;Context&gt; as a provider.</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-7-1-context" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 7.1: Prop drilling &amp; the Context API</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: prop drilling and Context in three steps: create, provide, read. Different: Courses measures which components Context re-renders. In this lesson we add: a measured re-render storm, splitting frequently-changing context from stable context, when Context is enough. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1012,6 +1017,11 @@ ${SD.tachVi}
 <a class="link-card" href="https://react.dev/reference/react/createContext" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — createContext</span><span class="lc-sub">Giá trị mặc định, và render chính context làm provider.</span></span></a>
 <a class="link-card" href="https://react.dev/reference/react/use" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — use</span><span class="lc-sub">Đọc context bằng use(), gọi được cả trong điều kiện.</span></span></a>
 <a class="link-card" href="https://react.dev/blog/2024/12/05/react-19" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — React v19</span><span class="lc-sub">Ghi chú phát hành cho &lt;Context&gt; làm provider.</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-7-1-context" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 7.1: Prop drilling &amp; Context API</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: prop drilling và Context ba bước: tạo, cung cấp, đọc. Khác: Courses đo xem Context làm component nào render lại. Ở bài này mình học thêm: cơn bão render đo thật, tách context đổi thường xuyên khỏi context ít đổi, khi nào Context là đủ. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
   },
@@ -1394,6 +1404,11 @@ ${SD.chonEn}
 <a class="link-card" href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — useReducer</span><span class="lc-sub">Reference, including "My reducer or initializer function runs twice".</span></span></a>
 <a class="link-card" href="https://react.dev/learn/scaling-up-with-reducer-and-context" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Scaling Up with Reducer and Context</span><span class="lc-sub">Putting state and dispatch into two contexts.</span></span></a>
 <a class="link-card" href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — Narrowing</span><span class="lc-sub">Discriminated unions and exhaustiveness checking with never.</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-8-2-usecontext-usereducer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 8.2: UseContext &amp; useReducer</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: reducers, actions and useState vs useReducer. Different: Courses writes the reducer in TypeScript and tests it without React. In this lesson we add: action unions, a pure reducer, a four-step booking flow, "count the rules, not the variables"; next come Zustand and URL state. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN FER202 LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1767,6 +1782,11 @@ ${SD.chonVi}
 <a class="link-card" href="https://react.dev/reference/react/useReducer" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — useReducer</span><span class="lc-sub">Tài liệu tra cứu, có mục "My reducer or initializer function runs twice".</span></span></a>
 <a class="link-card" href="https://react.dev/learn/scaling-up-with-reducer-and-context" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">react.dev — Scaling Up with Reducer and Context</span><span class="lc-sub">Đưa state và dispatch vào hai context.</span></span></a>
 <a class="link-card" href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html" target="_blank" rel="noopener"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">TypeScript Handbook — Narrowing</span><span class="lc-sub">Union phân biệt và kiểm đủ case bằng never.</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/front-end-web-development-with-react/learn?lessonSlug=fer202-8-2-usecontext-usereducer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 8.2: UseContext &amp; useReducer</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: reducer, action và so sánh useState với useReducer. Khác: Courses viết reducer bằng TypeScript và test nó không cần React. Ở bài này mình học thêm: union hành động, reducer thuần, luồng đặt lịch bốn bước, "đếm luật chứ đừng đếm số biến"; tiếp theo là Zustand và state trên URL. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
 </div>
 `,
   },

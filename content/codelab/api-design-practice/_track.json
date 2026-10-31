@@ -218,6 +218,42 @@
       "name": "Lab 6 — Security review",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 6 · 1 — A reviewer’s order of work · Lab 6 · 2 — Vulnerable vs fixed: predict the status"
+    },
+    {
+      "slug": "api-7-1-openapi",
+      "name": "7.1 Writing OpenAPI 3.1",
+      "level": "BEGINNER",
+      "description": "Luyện: OpenAPI 1 — What lint and YAML did to LabFlow’s document · OpenAPI 2 — Write toOas31(schema): turn 3.0 “nullable” into 3.1 types · OpenAPI 3 — Write undeclaredParams(path, parameters): the path-parameters-defined rule"
+    },
+    {
+      "slug": "api-7-1-kiem-hop-dong",
+      "name": "7.2 Contract checks against the running server",
+      "level": "BEGINNER",
+      "description": "Luyện: Contract checks 1 — What the first run found · Contract checks 2 — Write hasBody(headers): the fix for the 415 bug · Contract checks 3 — Write matchTemplate(templates, path): find the documented path"
+    },
+    {
+      "slug": "api-7-2-sinh-code",
+      "name": "7.3 Generating docs, clients and validators",
+      "level": "BEGINNER",
+      "description": "Luyện: Generation 1 — Which layer catches it first? · Generation 2 — Write tsType(schema): a tiny openapi-typescript"
+    },
+    {
+      "slug": "api-7-3-design-first",
+      "name": "7.4 Design-first vs code-first",
+      "level": "BEGINNER",
+      "description": "Luyện: Design-first 1 — What the mock and the tools did · Design-first 2 — Classify the change · Design-first 3 — Write propChanges(old, new, dir): the core of the diff gate"
+    },
+    {
+      "slug": "api-7-4-khac",
+      "name": "7.5 GraphQL and gRPC",
+      "level": "BEGINNER",
+      "description": "Luyện: GraphQL & gRPC 1 — What the measurements showed · GraphQL & gRPC 2 — Write queryDepth(query): reject expensive GraphQL queries · GraphQL & gRPC 3 — Write varint(n): how Protobuf writes a number"
+    },
+    {
+      "slug": "api-7-6-lab",
+      "name": "Lab 7 — Design-first waitlist",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 7 · 1 — The design-first order of work · Lab 7 · 2 — Predict the waitlist answers"
     }
   ]
 }

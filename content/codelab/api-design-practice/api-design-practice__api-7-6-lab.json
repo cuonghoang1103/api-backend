@@ -1,0 +1,277 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-7-6-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-7-6-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 7 · 1 — The design-first order of work",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "design-first"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Order the steps of Lab 7 as in the reference solution.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước của Lab 7 như lời giải tham khảo.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The gate needs a baseline to compare with.|||Cổng cần một bản mốc để so.",
+        "The client should not change when the server arrives.|||Client không phải sửa khi server xuất hiện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 7 · 1 — The design-first order of work\n\nAnswer in the answer panel (no code needed).\n\n1. From first to lastTừ đầu tới cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 7 · 1 — The design-first order of work — answer key\n\n1. From first to lastTừ đầu tới cuối\n   Answer: m4) Copy the document to openapi-v2.0.0.yaml (the baseline)  →  m7) Add the three waitlist operations, errors and examples; version 2.1.0  →  m3) npm run api:lint (0 errors) and npm run api:diff (no breaking change)  →  m6) Start the Prism mock and regenerate the client types  →  m2) Write client/waitlist.ts and run it against the mock  →  m5) Implement the routes and extend check-drift.mjs  →  m1) Run the same client against the real server; check-drift all ✓\n   Contract first, gates before anyone builds on it, the client against the mock, then the server — and the contract check decides when you are done.VI: Hợp đồng trước, qua các cổng trước khi ai dựa vào nó, client làm với mock, rồi mới tới server — và bộ kiểm hợp đồng quyết định khi nào xong.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Contract first, gates before anyone builds on it, the client against the mock, then the server — and the contract check decides when you are done.</p><p><i>VI: Hợp đồng trước, qua các cổng trước khi ai dựa vào nó, client làm với mock, rồi mới tới server — và bộ kiểm hợp đồng quyết định khi nào xong.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From first to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ đầu tới cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Run the same client against the real server; check-drift all ✓"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Write client/waitlist.ts and run it against the mock"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "npm run api:lint (0 errors) and npm run api:diff (no breaking change)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Copy the document to openapi-v2.0.0.yaml (the baseline)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Implement the routes and extend check-drift.mjs"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Start the Prism mock and regenerate the client types"
+              },
+              {
+                "ma": "m7",
+                "noiDung": "Add the three waitlist operations, errors and examples; version 2.1.0"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m7",
+              "m3",
+              "m6",
+              "m2",
+              "m5",
+              "m1"
+            ],
+            "giaiThich": "<p>Contract first, gates before anyone builds on it, the client against the mock, then the server — and the contract check decides when you are done.</p><p><i>VI: Hợp đồng trước, qua các cổng trước khi ai dựa vào nó, client làm với mock, rồi mới tới server — và bộ kiểm hợp đồng quyết định khi nào xong.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the server first, then documenting it (that is code-first).|||Viết server trước rồi mới ghi tài liệu (đó là code-first)."
+        },
+        {
+          "loi": "Skipping the baseline copy — the gate has nothing to compare.|||Bỏ bước chép bản mốc — cổng không có gì để so."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "baseline",
+          "vi": "bản mốc để so sánh"
+        },
+        {
+          "en": "mock-first",
+          "vi": "làm với mock trước khi có server"
+        }
+      ]
+    },
+    {
+      "title": "Lab 7 · 2 — Predict the waitlist answers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "design-first"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Bin works with the waitlist of lab_2 on 9 March 08:00–10:00. Predict each answer of the reference solution, in order.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bình dùng hàng chờ của lab_2 ngày 9/3, 08:00–10:00. Dự đoán từng câu trả lời của lời giải tham khảo, theo thứ tự.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which check comes first in the handler: lab, time range, slot, duplicate?|||Handler kiểm gì trước: phòng, khoảng thời gian, khung giờ, trùng?",
+        "Hidden records answer like missing ones.|||Bản ghi bị ẩn trả lời như không tồn tại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 7 · 2 — Predict the waitlist answers\n\nAnswer in the answer panel (no code needed).\n\n1. Request → answerRequest → câu trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 7 · 2 — Predict the waitlist answers — answer key\n\n1. Request → answerRequest → câu trả lời\n   - r1.a: 409 SLOT_AVAILABLE\n   - r2.a: 201 + Location\n   - r3.a: 409 ALREADY_WAITING\n   - r4.a: 400\n   - r5.a: 422\n   - r6.a: 404\n   - r7.a: 204\n   Real runs (check-drift, 27 ✓): free slot ⇒ 409 SLOT_AVAILABLE; booked ⇒ 201 at position 1; twice ⇒ 409; strict body ⇒ 400; end ≤ start ⇒ 422; someone else’s entry ⇒ 404 (6.2); own ⇒ 204.VI: Lần chạy thật (check-drift, 27 ✓): khung trống ⇒ 409 SLOT_AVAILABLE; đã có người đặt ⇒ 201 ở vị trí 1; lần hai ⇒ 409; body chặt ⇒ 400; end ≤ start ⇒ 422; lượt chờ của người khác ⇒ 404 (6.2); của mình ⇒ 204.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Real runs (check-drift, 27 ✓): free slot ⇒ 409 SLOT_AVAILABLE; booked ⇒ 201 at position 1; twice ⇒ 409; strict body ⇒ 400; end ≤ start ⇒ 422; someone else’s entry ⇒ 404 (6.2); own ⇒ 204.</p><p><i>VI: Lần chạy thật (check-drift, 27 ✓): khung trống ⇒ 409 SLOT_AVAILABLE; đã có người đặt ⇒ 201 ở vị trí 1; lần hai ⇒ 409; body chặt ⇒ 400; end ≤ start ⇒ 422; lượt chờ của người khác ⇒ 404 (6.2); của mình ⇒ 204.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → answer</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → câu trả lời</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer",
+                "luaChon": [
+                  "201 + Location",
+                  "204",
+                  "400",
+                  "404",
+                  "409 SLOT_AVAILABLE",
+                  "409 ALREADY_WAITING",
+                  "422"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Bin joins — nobody has booked the slot yet"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "An books the slot; Bin joins again"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Bin joins the same slot a second time"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Bin joins with an extra field seats: 3"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Bin joins with end before start (slot booked)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "An deletes Bin’s entry wl_1"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Bin deletes his own entry wl_1"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "409 SLOT_AVAILABLE",
+              "r2.a": "201 + Location",
+              "r3.a": "409 ALREADY_WAITING",
+              "r4.a": "400",
+              "r5.a": "422",
+              "r6.a": "404",
+              "r7.a": "204"
+            },
+            "giaiThich": "<p>Real runs (check-drift, 27 ✓): free slot ⇒ 409 SLOT_AVAILABLE; booked ⇒ 201 at position 1; twice ⇒ 409; strict body ⇒ 400; end ≤ start ⇒ 422; someone else’s entry ⇒ 404 (6.2); own ⇒ 204.</p><p><i>VI: Lần chạy thật (check-drift, 27 ✓): khung trống ⇒ 409 SLOT_AVAILABLE; đã có người đặt ⇒ 201 ở vị trí 1; lần hai ⇒ 409; body chặt ⇒ 400; end ≤ start ⇒ 422; lượt chờ của người khác ⇒ 404 (6.2); của mình ⇒ 204.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting 403 when An deletes Bin’s entry — LabFlow hides it (404).|||Chờ 403 khi An xoá lượt chờ của Bình — LabFlow ẩn nó (404)."
+        },
+        {
+          "loi": "Expecting 201 for a free slot — the waitlist is only for booked slots.|||Chờ 201 cho khung giờ trống — hàng chờ chỉ dành cho khung đã có người đặt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "waitlist",
+          "vi": "hàng chờ"
+        },
+        {
+          "en": "position",
+          "vi": "vị trí trong hàng (tính, không lưu)"
+        }
+      ]
+    }
+  ]
+}

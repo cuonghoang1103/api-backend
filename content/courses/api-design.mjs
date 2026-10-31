@@ -13,6 +13,7 @@ import s03 from './api-design/s03-danh-sach.mjs';
 import s04 from './api-design/s04-phien-ban.mjs';
 import s05 from './api-design/s05-tin-cay.mjs';
 import s06 from './api-design/s06-bao-mat.mjs';
+import s07 from './api-design/s07-hop-dong.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -31,7 +32,7 @@ export default {
     requirements: 'JavaScript cơ bản (biến, hàm, object, mảng) và quen gõ lệnh trên terminal; máy chạy được Node.js 22. Không cần biết Express trước — bài 0.3 dựng dự án LabFlow API từ số 0. Không cần cơ sở dữ liệu cho tới dự án cuối khoá. Đã học SDN302 hoặc khoá Node.js thì sẽ thấy quen và đi nhanh hơn.',
     documentsNote: 'Tài liệu chính: RFC 9110 (HTTP semantics) • RFC 9457 (Problem Details) • spec.openapis.org • Google AIP (aip.dev) • Microsoft REST API Guidelines • System Design Primer (github.com/donnemartin/system-design-primer).',
   },
-  sections: [s00, s01, s02, s03, s04, s05, s06, ...khung('api', [
+  sections: [s00, s01, s02, s03, s04, s05, s06, s07, ...khung('api', [
     ['Section 0 — Why API design matters', 'Mục 0 — Vì sao thiết kế API quan trọng', 'API là hợp đồng; system design là vòng phỏng vấn hay gặp.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What API and system design are, and why interviews test them', 'Bắt đầu tại đây (1/2) — Thiết kế API và system design là gì, vì sao phỏng vấn hay hỏi', 'API là hợp đồng giữa các đội · Lịch sử: RPC, SOAP, REST của Roy Fielding 2000, GraphQL, gRPC · Vòng system design trong phỏng vấn · Khoá đưa bạn tới đâu'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Bad APIs in the wild, and how to study this course', 'Bắt đầu tại đây (2/2) — API tệ ngoài đời thật, và cách học khoá này', 'Sự cố do API thiết kế kém (có nguồn) · Đổi API làm vỡ app di động · Lộ trình học'],
@@ -110,5 +111,5 @@ export default {
       ['mo-rong', 'Making it scale', 'Làm nó chịu tải', 'Cache · Hàng đợi thông báo · Đo tải'],
       ['tong-ket', 'Review, documentation and interview story', 'Rà soát, tài liệu và câu chuyện kể khi phỏng vấn', 'Checklist · Kể dự án theo STAR'],
     ]],
-  ]).slice(7)],
+  ]).slice(8)],
 };

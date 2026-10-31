@@ -1,6 +1,6 @@
-# Liên kết chéo Academy (SDN302 · PRJ301 · SWR302) ↔ API Design
+# Liên kết chéo Academy (SDN302 · PRJ301 · SWR302 · SWD392) ↔ API Design
 
-Deep link: `/courses/<slug-khoá>/learn?lessonSlug=<slug-bài>`. Academy: SDN302 = `server-side-development-nodejs-express-mongodb`, PRJ301 = `java-web-application-development`, SWR302 = `software-requirements`. Courses: `api-design`. Khối `<a class="link-card lien-ket-cheo">` cuối `ml-en` và `ml-vi`, HAI CHIỀU (thẻ ở cả bài Academy lẫn bài Courses). Đợt mẫu 31/10/2026: chỉ Mục 0 + Chương 1 của api-design.
+Deep link: `/courses/<slug-khoá>/learn?lessonSlug=<slug-bài>`. Academy: SDN302 = `server-side-development-nodejs-express-mongodb`, PRJ301 = `java-web-application-development`, SWR302 = `software-requirements`, SWD392 = `software-architecture-and-design`. Courses: `api-design`. Khối `<a class="link-card lien-ket-cheo">` cuối `ml-en` và `ml-vi`, HAI CHIỀU (thẻ ở cả bài Academy lẫn bài Courses). Bài Academy dạng mảng `content: [bi(…), …].join('\n')` (prj301/, swd392/…): thêm MỘT phần tử `bi(thẻ EN, thẻ VI)` ở cuối mảng của đúng bài. Đợt mẫu 31/10/2026: chỉ Mục 0 + Chương 1 của api-design.
 
 | Academy | Courses (api-design) | Giống | Courses sâu thêm |
 |---|---|---|---|
@@ -16,6 +16,8 @@ Deep link: `/courses/<slug-khoá>/learn?lessonSlug=<slug-bài>`. Academy: SDN302
 | `sdn302-8-2-production` | `api-5-3-rate-limit` | giới hạn tần suất (rate limiting) bằng middleware, trả 429 | tự dựng xô token, header RateLimit/RateLimit-Policy (draft-11), theo người dùng và theo IP, Retry-After, bẫy trust proxy đo qua proxy thật (đợt Ch5, 01/11/2026) |
 | `sdn302-5-1-passwords-sessions` | `api-6-1-xac-thuc` | băm mật khẩu bằng hàm chậm có muối, không lưu mật khẩu | scrypt của node:crypto + JWT HS256 tự dựng (thay session/Passport), tự giả token và alg none ⇒ 401, giới hạn đăng nhập theo IP+email (lần 6 ⇒ 429), API key hiện một lần lưu dạng hash, production thiếu bí mật thì không chạy (đợt Ch6, 01/11/2026) |
 | `sdn302-5-2-jwt-cors` | `api-6-4-cors` | bật CORS cho front-end, chỉ origin của mình chứ không `*` | tự viết middleware CORS (allow-list, Vary: Origin, Expose-Headers, preflight), đo trong Chromium thật: GET của người lạ vẫn tới server, POST JSON dừng ở preflight; lỗi phản chiếu origin kèm credentials; CSRF so với token bearer (đợt Ch6) |
+| `prj301-slide-cs5-2` | `api-7-3-design-first` | một tài liệu OpenAPI làm hợp đồng, tài liệu sinh tự động có thể sai (springdoc, code-first) | design-first: viết tài liệu trước, mock Prism (422 thay 400, Accept biến 409 thành 201), luật Spectral, cổng chặn thay đổi phá vỡ tự viết (openapi-diff 0.24 không đọc 3.1), Zod xuất JSON Schema đánh rơi trim (đợt Ch7, 01/11/2026) |
+| `swd392-slide-swd21-1` | `api-7-4-khac` | dịch vụ mô tả bằng hợp đồng máy đọc được (WSDL/SOAP), dịch vụ mới dùng REST+OpenAPI hoặc gRPC | dựng REST, GraphQL, gRPC trên cùng dữ liệu LabFlow và đo: 1 vs 7 lượt đi-về, N+1 7→3 với DataLoader, query sâu 385 KB, Protobuf 53% JSON, streaming (đợt Ch7) |
 
 Không cặp (đợt này): `api-0-8-bat-dau-tai-day`, `api-0-9-bat-dau-khi-khong-co` (giới thiệu khoá), `api-0-2-bo-cong-cu` (SDN302 không dạy curl/HTTPie/Bruno), `api-0-3-du-an-labflow` (dựng dự án riêng), `api-1-4-dat-ten` (ngày giờ/tiền/id — SDN302/PRJ301 không có bài tương ứng), lab và quiz.
 Không cặp (Ch2): `api-2-3-envelope`, `api-2-4-i18n` (SDN302/PRJ301/SWR302 không có bài tương ứng), lab và quiz.
@@ -23,3 +25,4 @@ Không cặp (Ch5): `api-5-1-idempotency`, `api-5-2-retry`, `api-5-4-dong-thoi` 
 Không cặp (Ch4): `api-4-2-chien-luoc`, `api-4-3-deprecation`, `api-4-4-app-di-dong` (SDN302/PRJ301/SWR302 không có bài về phiên bản API, khai tử hay app di động), lab và quiz.
 Không cặp (Ch3): `api-3-2-cursor`, `api-3-3-loc`, `api-3-4-sap-xep` (SDN302/PRJ301 không dạy con trỏ, bộ lọc gắn con trỏ hay N+1 — 3.2–3.4 nối tiếp từ 3.1), lab và quiz.
 Không cặp (Ch6): `api-6-2-phan-quyen` (BOLA, bảng chính sách, ma trận phân quyền), `api-6-3-owasp-api` (OWASP API Top 10, SSRF, bộ kiểm tự động) — SDN302/PRJ301/SWR302 không có bài tương ứng; lab và quiz.
+Không cặp (Ch7): `api-7-1-openapi`, `api-7-1-kiem-hop-dong`, `api-7-2-sinh-code` (SDN302/PRJ301/SWR302 không có bài viết tay OpenAPI 3.1, kiểm hợp đồng hay sinh client có kiểu — PRJ301 CS.5 chỉ sinh tài liệu bằng springdoc, đã nối với 7.4), lab và quiz.

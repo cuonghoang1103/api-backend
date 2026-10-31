@@ -1,0 +1,282 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-7-2-sinh-code",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-7-2-sinh-code"
+  },
+  "exercises": [
+    {
+      "title": "Generation 1 — Which layer catches it first?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "OpenAPI",
+        "validation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>For each mistake, choose the FIRST layer that catches it in LabFlow (a client built with the generated types, then the request validated by the document’s schema, then Zod, then the handler).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi lỗi, chọn lớp ĐẦU TIÊN bắt được nó ở LabFlow (client dùng kiểu sinh ra, rồi request được kiểm theo schema của tài liệu, rồi Zod, rồi handler).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does the mistake live in client code, in the shape, in normalisation, or in a business rule?|||Lỗi nằm ở code client, ở hình dạng, ở chuẩn hoá, hay ở luật nghiệp vụ?",
+        "curl has no compiler.|||curl không có trình biên dịch."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Generation 1 — Which layer catches it first?\n\nAnswer in the answer panel (no code needed).\n\n1. Mistake → first layerLỗi → lớp đầu tiên\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Generation 1 — Which layer catches it first? — answer key\n\n1. Mistake → first layerLỗi → lớp đầu tiên\n   - r1.a: tsc (typed client)\n   - r2.a: Zod only (400)\n   - r3.a: handler (422/409)\n   - r4.a: document schema (400)\n   - r5.a: tsc (typed client)\n   - r6.a: handler (422/409)\n   Types catch client code mistakes at compile time; curl users skip them. The document’s schema checks shape and formats; Zod adds trimming; business rules (time range, conflicts) live in the handler — measured in 7.3.VI: Kiểu bắt lỗi trong code client lúc biên dịch; người dùng curl bỏ qua lớp đó. Schema của tài liệu kiểm hình dạng và format; Zod thêm trim; luật nghiệp vụ (khoảng thời gian, trùng lịch) nằm ở handler — đã đo ở 7.3.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Types catch client code mistakes at compile time; curl users skip them. The document’s schema checks shape and formats; Zod adds trimming; business rules (time range, conflicts) live in the handler — measured in 7.3.</p><p><i>VI: Kiểu bắt lỗi trong code client lúc biên dịch; người dùng curl bỏ qua lớp đó. Schema của tài liệu kiểm hình dạng và format; Zod thêm trim; luật nghiệp vụ (khoảng thời gian, trùng lịch) nằm ở handler — đã đo ở 7.3.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Mistake → first layer</p><p style=\"opacity:.75;font-size:.92em\"><i>Lỗi → lớp đầu tiên</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Mistake"
+              },
+              {
+                "ma": "a",
+                "ten": "Layer",
+                "luaChon": [
+                  "tsc (typed client)",
+                  "document schema (400)",
+                  "Zod only (400)",
+                  "handler (422/409)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "A typed client writes labID instead of labId"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "A curl user sends purpose \"   \" (three spaces)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "A curl user sends end before start"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "A curl user sends start without a time zone"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "A typed client compares status with \"CONFIRMED\""
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "A curl user books a slot already taken"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "tsc (typed client)",
+              "r2.a": "Zod only (400)",
+              "r3.a": "handler (422/409)",
+              "r4.a": "document schema (400)",
+              "r5.a": "tsc (typed client)",
+              "r6.a": "handler (422/409)"
+            },
+            "giaiThich": "<p>Types catch client code mistakes at compile time; curl users skip them. The document’s schema checks shape and formats; Zod adds trimming; business rules (time range, conflicts) live in the handler — measured in 7.3.</p><p><i>VI: Kiểu bắt lỗi trong code client lúc biên dịch; người dùng curl bỏ qua lớp đó. Schema của tài liệu kiểm hình dạng và format; Zod thêm trim; luật nghiệp vụ (khoảng thời gian, trùng lịch) nằm ở handler — đã đo ở 7.3.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting JSON Schema to trim strings.|||Tưởng JSON Schema tự trim chuỗi."
+        },
+        {
+          "loi": "Expecting the schema to know about time ranges.|||Tưởng schema biết về khoảng thời gian."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "compile time",
+          "vi": "lúc biên dịch, trước khi chạy"
+        },
+        {
+          "en": "normalisation",
+          "vi": "chuẩn hoá đầu vào"
+        }
+      ]
+    },
+    {
+      "title": "Generation 2 — Write tsType(schema): a tiny openapi-typescript",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "OpenAPI",
+        "TypeScript"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Turn a JSON Schema into a TypeScript type string, the way openapi-typescript does (simplified):</p><ul>\n<li><code>enum</code> ⇒ the values as JSON joined by <code> | </code> (<code>\"PENDING\" | \"CANCELLED\"</code>)</li>\n<li><code>type</code> may be a string or an array; each type maps and they are joined by <code> | </code>: <code>integer</code>/<code>number</code> ⇒ <code>number</code>; <code>string</code>, <code>boolean</code>, <code>null</code> ⇒ themselves; <code>array</code> ⇒ <code>T[]</code> from <code>items</code>; <code>object</code> ⇒ <code>{ a: T; b?: U }</code> in property order, <code>?</code> when not in <code>required</code></li>\n<li>anything else (or no schema) ⇒ <code>unknown</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Biến một JSON Schema thành chuỗi kiểu TypeScript, như openapi-typescript làm (bản rút gọn):</p><ul>\n<li><code>enum</code> ⇒ các giá trị dạng JSON nối bằng <code> | </code> (<code>\"PENDING\" | \"CANCELLED\"</code>)</li>\n<li><code>type</code> có thể là chuỗi hoặc mảng; mỗi kiểu được đổi rồi nối bằng <code> | </code>: <code>integer</code>/<code>number</code> ⇒ <code>number</code>; <code>string</code>, <code>boolean</code>, <code>null</code> ⇒ giữ nguyên; <code>array</code> ⇒ <code>T[]</code> theo <code>items</code>; <code>object</code> ⇒ <code>{ a: T; b?: U }</code> theo thứ tự thuộc tính, có <code>?</code> khi không nằm trong <code>required</code></li>\n<li>còn lại (hoặc không có schema) ⇒ <code>unknown</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "schema — JSON Schema (no $ref)|||schema — JSON Schema (không có $ref)",
+      "outputSpec": "a TypeScript type as a string|||một kiểu TypeScript dạng chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tsType({\"type\":[\"string\",\"null\"]})",
+          "output": "\"string | null\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Handle enum before type.|||Xử lý enum trước type.",
+        "Recurse for items and properties.|||Đệ quy cho items và properties."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** JSON Schema ⇒ TypeScript type string */\nfunction tsType(schema) {\n  // Write your solution here\n  return schema.type;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction tsType(schema) {\n  if (!schema) return 'unknown';\n  if (schema.enum) return schema.enum.map((v) => JSON.stringify(v)).join(' | ');\n  const types = [].concat(schema.type ?? 'unknown');\n  const one = (t) => {\n    if (t === 'integer' || t === 'number') return 'number';\n    if (t === 'string' || t === 'boolean' || t === 'null') return t;\n    if (t === 'array') return `${tsType(schema.items)}[]`;\n    if (t === 'object') {\n      const req = new Set(schema.required ?? []);\n      const props = Object.entries(schema.properties ?? {}).map(([k, v]) => `${k}${req.has(k) ? '' : '?'}: ${tsType(v)}`);\n      return `{ ${props.join('; ')} }`;\n    }\n    return 'unknown';\n  };\n  return types.map(one).join(' | ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Booking.purpose { type: [string, null] } ⇒ \"string | null\" — why tsc said “possibly null” in lesson 7.3.</p>",
+      "solutionExplanationHtmlVi": "<p>Booking.purpose { type: [string, null] } ⇒ \"string | null\" — lý do tsc báo “possibly null” ở bài 7.3.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Booking.purpose",
+              "vi": "Booking.purpose"
+            },
+            "goi": "tsType({\"type\":[\"string\",\"null\"]})",
+            "mongDoi": "string | null"
+          },
+          {
+            "moTa": {
+              "en": "Booking.status",
+              "vi": "Booking.status"
+            },
+            "goi": "tsType({\"type\":\"string\",\"enum\":[\"PENDING\",\"CHECKED_IN\",\"CANCELLED\"]})",
+            "mongDoi": "\"PENDING\" | \"CHECKED_IN\" | \"CANCELLED\""
+          },
+          {
+            "moTa": {
+              "en": "Period",
+              "vi": "Period"
+            },
+            "goi": "tsType({\"type\":\"object\",\"required\":[\"start\",\"end\"],\"properties\":{\"start\":{\"type\":\"string\"},\"end\":{\"type\":\"string\"}}})",
+            "mongDoi": "{ start: string; end: string }",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A list of labs",
+              "vi": "Danh sách phòng"
+            },
+            "goi": "tsType({\"type\":\"object\",\"required\":[\"data\"],\"properties\":{\"data\":{\"type\":\"array\",\"items\":{\"type\":\"object\",\"required\":[\"id\"],\"properties\":{\"id\":{\"type\":\"string\"},\"capacity\":{\"type\":\"integer\"}}}}}})",
+            "mongDoi": "{ data: { id: string; capacity?: number }[] }",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "tsType({\"type\":[\"integer\",\"null\"],\"minimum\":1})",
+            "mongDoi": "number | null",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "tsType({})",
+            "mongDoi": "unknown",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mapping integer to \"integer\" — TypeScript has only number.|||Đổi integer thành \"integer\" — TypeScript chỉ có number."
+        },
+        {
+          "loi": "Marking required fields with ? (inverted).|||Gắn ? cho trường bắt buộc (ngược)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "union type",
+          "vi": "kiểu hợp A | B"
+        },
+        {
+          "en": "code generation",
+          "vi": "sinh code tự động"
+        }
+      ]
+    }
+  ]
+}

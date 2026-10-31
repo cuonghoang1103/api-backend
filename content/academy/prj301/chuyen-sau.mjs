@@ -21310,6 +21310,15 @@ ENV ..&gt; CO : env variables
       ['rfc9110', '§9.2.2 "Idempotent Methods" and §15 "Status Codes" (201 Created with Location, 204, 409, 413, 415)', '§9.2.2 "Idempotent Methods" và §15 "Status Codes" (201 Created kèm Location, 204, 409, 413, 415)'],
       ['springData', '"Paging, Iterating Large Results, Sorting" (Page vs Slice) and web support (Pageable resolution, max page size)', '"Paging, Iterating Large Results, Sorting" (Page so với Slice) và hỗ trợ web (giải Pageable, kích thước trang tối đa)'],
     ]),
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-3-design-first" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 7.4: Design-first vs code-first</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: one OpenAPI document as the API contract, and the warning that generated docs can be wrong. Different: here springdoc generates the document from Java code (code-first); Courses writes the document first and makes the code match it. It also adds: a Prism mock for the front-end, a Spectral style guide, a gate that blocks breaking changes, and a contract check that found a real bug.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-3-design-first" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 7.4: Thiết kế trước hay code trước</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: một tài liệu OpenAPI làm hợp đồng API, và lời cảnh báo rằng tài liệu sinh tự động có thể sai. Khác: ở đây springdoc sinh tài liệu từ code Java (code-first); Courses viết tài liệu trước rồi bắt code khớp nó. Ở đó có thêm: mock Prism cho front-end, bộ luật phong cách Spectral, cổng chặn thay đổi phá vỡ, và bộ kiểm hợp đồng đã bắt được một lỗi thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

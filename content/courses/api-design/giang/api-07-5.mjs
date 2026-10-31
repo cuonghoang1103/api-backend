@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 7.5 "GraphQL và gRPC" (deck api-07-5, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-07-5', "GraphQL and gRPC", "GraphQL và gRPC", [
+  [1, "Cover",
+    `<p>Lesson 7.5 serves the same LabFlow data three ways and measures instead of arguing.</p>`,
+    `<p>Bài 7.5 phục vụ cùng dữ liệu LabFlow theo ba cách và đo thay vì tranh luận.</p>`],
+  [2, "Three ways",
+    `<p>REST lets the server shape the data, GraphQL lets the client choose fields and depth, gRPC uses methods and binary messages.</p>`,
+    `<p>REST để server quyết định hình dạng dữ liệu, GraphQL để client chọn trường và độ sâu, gRPC dùng phương thức và thông điệp nhị phân.</p>`],
+  [3, "One request for the dashboard",
+    `<p>GraphQL fetched the dashboard in one request of 838 bytes; REST needed seven requests and four times the bytes.</p>`,
+    `<p>GraphQL lấy dữ liệu bảng điều khiển trong một request 838 byte; REST cần bảy request và gấp bốn lần số byte.</p>`],
+  [4, "The prices of GraphQL",
+    `<p>Seven database calls become three with DataLoader, but a deep query still built 385 KB; not found is 200, and HTTP caching per URL no longer applies.</p>`,
+    `<p>Bảy lần hỏi CSDL còn ba nhờ DataLoader, nhưng một query sâu vẫn dựng 385 KB; không tìm thấy là 200, và cache HTTP theo URL không còn dùng được.</p>`],
+  [5, "gRPC",
+    `<p>A proto file defines methods and numbered fields; the numbers are the contract, enum zero is unspecified, and the server can stream messages.</p>`,
+    `<p>Tệp proto định nghĩa phương thức và các trường có số; số mới là hợp đồng, enum 0 là không xác định, và server có thể gửi luồng thông điệp.</p>`],
+  [6, "Is it faster",
+    `<p>Protobuf was 53 percent of JSON but nearly equal after gzip; calls were 0.32 against 0.44 ms while REST did more work. gRPC buys strict contracts and streaming.</p>`,
+    `<p>Protobuf bằng 53 phần trăm JSON nhưng gần ngang sau gzip; mỗi lời gọi 0,32 so với 0,44 ms trong khi REST làm nhiều việc hơn. gRPC đáng giá ở hợp đồng chặt và streaming.</p>`],
+  [7, "Choosing",
+    `<p>REST for public APIs and browsers, GraphQL for many shapes of linked data, gRPC between services. LabFlow stays REST plus OpenAPI.</p>`,
+    `<p>REST cho API công khai và trình duyệt, GraphQL cho nhiều hình dạng dữ liệu liên kết, gRPC giữa các dịch vụ. LabFlow giữ REST cộng OpenAPI.</p>`],
+  [8, "Traps",
+    `<p>GraphQL needs limits, and speed alone is rarely a reason for gRPC. Proto3’s rules are Chapter 4’s rules.</p>`,
+    `<p>GraphQL cần giới hạn, và chỉ vì tốc độ thì hiếm khi đủ lý do chọn gRPC. Luật của proto3 chính là luật Chương 4.</p>`],
+  [9, "Summary",
+    `<p>Every style wins something and pays somewhere else. Next: Lab 7.</p>`,
+    `<p>Kiểu nào cũng thắng một thứ và trả giá ở chỗ khác. Tiếp theo: Lab 7.</p>`],
+]);

@@ -1,0 +1,452 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-7-3-design-first",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-7-3-design-first"
+  },
+  "exercises": [
+    {
+      "title": "Design-first 1 — What the mock and the tools did",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "design-first"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 7.4 (Prism 5.14 mock, Spectral style guide, Zod export, openapi-diff 0.24).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 7.4 (mock Prism 5.14, bộ luật Spectral, Zod xuất schema, openapi-diff 0.24).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Who decides each answer — the document or the tool’s own rules?|||Ai quyết định từng câu trả lời — tài liệu hay luật riêng của công cụ?",
+        "What does JSON Schema have no keyword for?|||JSON Schema không có từ khoá cho thứ gì?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Design-first 1 — What the mock and the tools did\n\nAnswer in the answer panel (no code needed).\n\n1. A wrong body sent to the Prism mock got 422; the real LabFlow answers 400. Why?Body sai gửi tới mock Prism nhận 422; LabFlow thật trả 400. Vì sao?\n2. What did Zod’s z.toJSONSchema() lose from LabFlow’s BookingCreateV2?z.toJSONSchema() của Zod đánh rơi gì của BookingCreateV2?\n3. Why did LabFlow write its own diff gate?Vì sao LabFlow tự viết cổng so phiên bản?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Design-first 1 — What the mock and the tools did — answer key\n\n1. A wrong body sent to the Prism mock got 422; the real LabFlow answers 400. Why?Body sai gửi tới mock Prism nhận 422; LabFlow thật trả 400. Vì sao?\n   Answer: b) Prism prefers a documented 422 over 400 for invalid requests\n   Prism’s order for invalid requests: 401, 415, 422, 400, default. The mock follows the document plus its own rules — run the contract check against the real server.VI: Thứ tự của Prism cho request sai: 401, 415, 422, 400, default. Mock theo tài liệu cộng luật riêng — hãy chạy kiểm hợp đồng với server thật.\n\n2. What did Zod’s z.toJSONSchema() lose from LabFlow’s BookingCreateV2?z.toJSONSchema() của Zod đánh rơi gì của BookingCreateV2?\n   Answer: d) The .trim() normalisation — JSON Schema has no keyword for it\n   Measured: required and additionalProperties were exported; date-time became a 288-character pattern; trim vanished without a warning.VI: Đo được: required và additionalProperties vẫn xuất ra; date-time thành pattern 288 ký tự; trim biến mất không một lời cảnh báo.\n\n3. Why did LabFlow write its own diff gate?Vì sao LabFlow tự viết cổng so phiên bản?\n   Answer: b) openapi-diff 0.24 refused OpenAPI 3.1: “Unsupported OpenAPI version: 3.1.0”\n   Measure tools on your real document. LabFlow’s 100-line gate applies Chapter 4’s table and exits 1 on breaking changes.VI: Hãy đo công cụ bằng tài liệu thật của bạn. Cổng 100 dòng của LabFlow áp bảng của Chương 4 và thoát mã 1 khi phá vỡ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Prism prefers a documented 422 over 400 for invalid requests</p><p>Prism’s order for invalid requests: 401, 415, 422, 400, default. The mock follows the document plus its own rules — run the contract check against the real server.</p><p><i>VI: Thứ tự của Prism cho request sai: 401, 415, 422, 400, default. Mock theo tài liệu cộng luật riêng — hãy chạy kiểm hợp đồng với server thật.</i></p></li><li><p><b>d)</b> The .trim() normalisation — JSON Schema has no keyword for it</p><p>Measured: required and additionalProperties were exported; date-time became a 288-character pattern; trim vanished without a warning.</p><p><i>VI: Đo được: required và additionalProperties vẫn xuất ra; date-time thành pattern 288 ký tự; trim biến mất không một lời cảnh báo.</i></p></li><li><p><b>b)</b> openapi-diff 0.24 refused OpenAPI 3.1: “Unsupported OpenAPI version: 3.1.0”</p><p>Measure tools on your real document. LabFlow’s 100-line gate applies Chapter 4’s table and exits 1 on breaking changes.</p><p><i>VI: Hãy đo công cụ bằng tài liệu thật của bạn. Cổng 100 dòng của LabFlow áp bảng của Chương 4 và thoát mã 1 khi phá vỡ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A wrong body sent to the Prism mock got 422; the real LabFlow answers 400. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Body sai gửi tới mock Prism nhận 422; LabFlow thật trả 400. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "LabFlow has a bug: an invalid body should always be 422 by RFC 9110"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Prism prefers a documented 422 over 400 for invalid requests"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Prism converts every 4xx it generates into 422 by default"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The mock was started with an older document that had no 400 response"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Prism’s order for invalid requests: 401, 415, 422, 400, default. The mock follows the document plus its own rules — run the contract check against the real server.</p><p><i>VI: Thứ tự của Prism cho request sai: 401, 415, 422, 400, default. Mock theo tài liệu cộng luật riêng — hãy chạy kiểm hợp đồng với server thật.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What did Zod’s z.toJSONSchema() lose from LabFlow’s BookingCreateV2?</p><p style=\"opacity:.75;font-size:.92em\"><i>z.toJSONSchema() của Zod đánh rơi gì của BookingCreateV2?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "additionalProperties: false, because strictObject is Zod-only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The required list, because Zod fields are optional by default"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The date-time format, replaced by a plain string type"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The .trim() normalisation — JSON Schema has no keyword for it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Measured: required and additionalProperties were exported; date-time became a 288-character pattern; trim vanished without a warning.</p><p><i>VI: Đo được: required và additionalProperties vẫn xuất ra; date-time thành pattern 288 ký tự; trim biến mất không một lời cảnh báo.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why did LabFlow write its own diff gate?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow tự viết cổng so phiên bản?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To get colourful output in the terminal during the lessons"
+              },
+              {
+                "ma": "b",
+                "noiDung": "openapi-diff 0.24 refused OpenAPI 3.1: “Unsupported OpenAPI version: 3.1.0”"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because breaking-change detection cannot be automated with existing tools"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because Spectral already detects breaking changes between versions"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Measure tools on your real document. LabFlow’s 100-line gate applies Chapter 4’s table and exits 1 on breaking changes.</p><p><i>VI: Hãy đo công cụ bằng tài liệu thật của bạn. Cổng 100 dòng của LabFlow áp bảng của Chương 4 và thoát mã 1 khi phá vỡ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating the mock as the server.|||Coi mock là server."
+        },
+        {
+          "loi": "Assuming a popular tool supports your OpenAPI version.|||Tưởng công cụ nổi tiếng thì hỗ trợ phiên bản OpenAPI của bạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mock server",
+          "vi": "API giả sinh từ tài liệu"
+        },
+        {
+          "en": "diff gate",
+          "vi": "cổng so hai phiên bản tài liệu"
+        }
+      ]
+    },
+    {
+      "title": "Design-first 2 — Classify the change",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "versioning",
+        "design-first"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Classify each change to LabFlow’s v2 document as LabFlow’s diff gate does (rules of Chapter 4 and lesson 7.4).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng thay đổi trên tài liệu v2 của LabFlow như cổng so phiên bản của LabFlow (luật của Chương 4 và bài 7.4).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Is it something old clients SEND or RECEIVE?|||Đó là thứ client cũ GỬI hay NHẬN?",
+        "A rename = remove + add.|||Đổi tên = bỏ + thêm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Design-first 2 — Classify the change\n\nAnswer in the answer panel (no code needed).\n\n1. Change → verdictThay đổi → phán quyết\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Design-first 2 — Classify the change — answer key\n\n1. Change → verdictThay đổi → phán quyết\n   - r1.a: breaking\n   - r2.a: safe\n   - r3.a: breaking\n   - r4.a: warning\n   - r5.a: safe\n   - r6.a: safe\n   - r7.a: breaking\n   Requests: a new required field or a removed accepted field breaks old clients. Responses: a removed field or a type change breaks; a new enum value warns (clients that crash on unknown values, 4.1); additions are safe.VI: Request: trường bắt buộc mới hay bỏ trường đang nhận làm gãy client cũ. Response: bỏ trường hay đổi kiểu là phá vỡ; giá trị enum mới là cảnh báo (client sập khi gặp giá trị lạ, 4.1); thêm là an toàn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Requests: a new required field or a removed accepted field breaks old clients. Responses: a removed field or a type change breaks; a new enum value warns (clients that crash on unknown values, 4.1); additions are safe.</p><p><i>VI: Request: trường bắt buộc mới hay bỏ trường đang nhận làm gãy client cũ. Response: bỏ trường hay đổi kiểu là phá vỡ; giá trị enum mới là cảnh báo (client sập khi gặp giá trị lạ, 4.1); thêm là an toàn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Change → verdict</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi → phán quyết</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Change"
+              },
+              {
+                "ma": "a",
+                "ten": "Verdict",
+                "luaChon": [
+                  "breaking",
+                  "warning",
+                  "safe"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "BookingCreate: purpose becomes required"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Booking (response): new field seats"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Booking (response): period renamed to slot"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Booking.status (response): new value NO_SHOW"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "New operation GET /me/waitlist"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "BookingCreate: new optional field seats"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Lab.capacity (response): integer becomes string"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "breaking",
+              "r2.a": "safe",
+              "r3.a": "breaking",
+              "r4.a": "warning",
+              "r5.a": "safe",
+              "r6.a": "safe",
+              "r7.a": "breaking"
+            },
+            "giaiThich": "<p>Requests: a new required field or a removed accepted field breaks old clients. Responses: a removed field or a type change breaks; a new enum value warns (clients that crash on unknown values, 4.1); additions are safe.</p><p><i>VI: Request: trường bắt buộc mới hay bỏ trường đang nhận làm gãy client cũ. Response: bỏ trường hay đổi kiểu là phá vỡ; giá trị enum mới là cảnh báo (client sập khi gặp giá trị lạ, 4.1); thêm là an toàn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a rename “safe because the data is the same”.|||Gọi đổi tên là “an toàn vì dữ liệu vẫn vậy”."
+        },
+        {
+          "loi": "Blocking every new enum value — it is a warning.|||Chặn mọi giá trị enum mới — đó là cảnh báo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "breaking change",
+          "vi": "thay đổi phá vỡ"
+        },
+        {
+          "en": "additive change",
+          "vi": "thay đổi chỉ thêm"
+        }
+      ]
+    },
+    {
+      "title": "Design-first 3 — Write propChanges(old, new, dir): the core of the diff gate",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "versioning",
+        "design-first"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Compare two object schemas (one level, no <code>$ref</code>). <code>dir</code> is <code>'req'</code> (what clients send) or <code>'res'</code> (what they receive). Return strings, in this order:</p><ol>\n<li>for each OLD property: removed ⇒ <code>'break K removed'</code> if <code>res</code>, <code>'warn K removed'</code> if <code>req</code>; still there but <code>type</code> differs (compare as JSON) ⇒ <code>'break K type'</code></li>\n<li>for each NEW property not in old: required in a <code>req</code> ⇒ <code>'break K new required'</code>, otherwise <code>'ok K added'</code></li>\n<li><code>req</code>: a property in both that becomes required ⇒ <code>'break K now required'</code> (order of the new <code>required</code> list)</li>\n<li><code>res</code>: a property in both that is no longer required ⇒ <code>'break K may be absent'</code> (order of the old <code>required</code> list)</li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>So hai schema object (một tầng, không có <code>$ref</code>). <code>dir</code> là <code>'req'</code> (thứ client gửi) hoặc <code>'res'</code> (thứ client nhận). Trả về các chuỗi, theo thứ tự:</p><ol>\n<li>với mỗi thuộc tính CŨ: bị bỏ ⇒ <code>'break K removed'</code> nếu <code>res</code>, <code>'warn K removed'</code> nếu <code>req</code>; còn nhưng <code>type</code> khác (so dạng JSON) ⇒ <code>'break K type'</code></li>\n<li>với mỗi thuộc tính MỚI chưa có: bắt buộc trong <code>req</code> ⇒ <code>'break K new required'</code>, còn lại <code>'ok K added'</code></li>\n<li><code>req</code>: thuộc tính có ở cả hai mà thành bắt buộc ⇒ <code>'break K now required'</code> (theo thứ tự danh sách <code>required</code> mới)</li>\n<li><code>res</code>: thuộc tính có ở cả hai mà không còn bắt buộc ⇒ <code>'break K may be absent'</code> (theo thứ tự <code>required</code> cũ)</li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "oldS, newS — object schemas; dir — \"req\" | \"res\"|||oldS, newS — schema object; dir — \"req\" | \"res\"",
+      "outputSpec": "array of strings|||mảng chuỗi",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "propChanges({\"type\":\"object\",\"required\":[\"labId\",\"period\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"}}}, {\"type\":\"object\",\"required\":[\"labId\",\"period\",\"purpose\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"}}}, \"req\")",
+          "output": "[\"break purpose now required\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build Sets from the two required lists first.|||Dựng Set từ hai danh sách required trước.",
+        "The same change has opposite verdicts for req and res.|||Cùng một thay đổi có phán quyết ngược nhau cho req và res."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** breaking-change rules for one object schema */\nfunction propChanges(oldS, newS, dir) {\n  // Write your solution here\n  return Object.keys(newS.properties).filter((k) => !(k in oldS.properties)).map((k) => 'ok ' + k + ' added');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction propChanges(oldS, newS, dir) {\n  const out = [];\n  const po = oldS.properties ?? {}, pn = newS.properties ?? {};\n  const ro = new Set(oldS.required ?? []), rn = new Set(newS.required ?? []);\n  for (const k of Object.keys(po)) {\n    if (!(k in pn)) out.push(`${dir === 'res' ? 'break' : 'warn'} ${k} removed`);\n    else if (JSON.stringify(po[k].type) !== JSON.stringify(pn[k].type)) out.push(`break ${k} type`);\n  }\n  for (const k of Object.keys(pn)) {\n    if (k in po) continue;\n    out.push(dir === 'req' && rn.has(k) ? `break ${k} new required` : `ok ${k} added`);\n  }\n  for (const k of rn) if (dir === 'req' && k in po && !ro.has(k)) out.push(`break ${k} now required`);\n  for (const k of ro) if (dir === 'res' && k in pn && !rn.has(k)) out.push(`break ${k} may be absent`);\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>purpose made required in BookingCreate ⇒ [\"break purpose now required\"]: exactly the gate’s exit-1 case in lesson 7.4.</p>",
+      "solutionExplanationHtmlVi": "<p>Bắt buộc purpose trong BookingCreate ⇒ [\"break purpose now required\"]: đúng ca làm cổng thoát mã 1 ở bài 7.4.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "purpose becomes required (lesson 7.4)",
+              "vi": "purpose thành bắt buộc (bài 7.4)"
+            },
+            "goi": "propChanges({\"type\":\"object\",\"required\":[\"labId\",\"period\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"}}}, {\"type\":\"object\",\"required\":[\"labId\",\"period\",\"purpose\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"}}}, \"req\")",
+            "mongDoi": [
+              "break purpose now required"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "period renamed to slot",
+              "vi": "đổi period thành slot"
+            },
+            "goi": "propChanges({\"type\":\"object\",\"required\":[\"id\",\"period\",\"purpose\"],\"properties\":{\"id\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":[\"string\",\"null\"]}}}, {\"type\":\"object\",\"required\":[\"id\",\"slot\",\"purpose\"],\"properties\":{\"id\":{\"type\":\"string\"},\"slot\":{\"type\":\"object\"},\"purpose\":{\"type\":[\"string\",\"null\"]}}}, \"res\")",
+            "mongDoi": [
+              "break period removed",
+              "ok slot added"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "New optional seats",
+              "vi": "Thêm seats tuỳ chọn"
+            },
+            "goi": "propChanges({\"type\":\"object\",\"required\":[\"labId\",\"period\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"}}}, {\"type\":\"object\",\"required\":[\"labId\",\"period\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"},\"seats\":{\"type\":\"integer\"}}}, \"req\")",
+            "mongDoi": [
+              "ok seats added"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "purpose may now be absent",
+              "vi": "purpose giờ có thể vắng"
+            },
+            "goi": "propChanges({\"type\":\"object\",\"required\":[\"id\",\"period\",\"purpose\"],\"properties\":{\"id\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":[\"string\",\"null\"]}}}, {\"type\":\"object\",\"required\":[\"id\",\"period\"],\"properties\":{\"id\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":[\"string\",\"null\"]}}}, \"res\")",
+            "mongDoi": [
+              "break purpose may be absent"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Type change",
+              "vi": "Đổi kiểu"
+            },
+            "goi": "propChanges({\"type\":\"object\",\"required\":[\"id\",\"period\",\"purpose\"],\"properties\":{\"id\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":[\"string\",\"null\"]}}}, {\"type\":\"object\",\"required\":[\"id\",\"period\",\"purpose\"],\"properties\":{\"id\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"}}}, \"res\")",
+            "mongDoi": [
+              "break purpose type"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "propChanges({\"type\":\"object\",\"required\":[\"labId\",\"period\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"},\"purpose\":{\"type\":\"string\"}}}, {\"type\":\"object\",\"required\":[\"labId\",\"period\"],\"properties\":{\"labId\":{\"type\":\"string\"},\"period\":{\"type\":\"object\"}}}, \"req\")",
+            "mongDoi": [
+              "warn purpose removed"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating a new required RESPONSE field as breaking — clients just get more.|||Coi trường bắt buộc mới trong RESPONSE là phá vỡ — client chỉ nhận thêm."
+        },
+        {
+          "loi": "Comparing type arrays with === (always false for arrays).|||So mảng type bằng === (với mảng luôn false)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "request schema",
+          "vi": "schema của thứ client gửi"
+        },
+        {
+          "en": "response schema",
+          "vi": "schema của thứ client nhận"
+        }
+      ]
+    }
+  ]
+}

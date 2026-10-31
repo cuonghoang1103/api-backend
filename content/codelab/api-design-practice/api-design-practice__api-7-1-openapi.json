@@ -1,0 +1,486 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-7-1-openapi",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-7-1-openapi"
+  },
+  "exercises": [
+    {
+      "title": "OpenAPI 1 — What lint and YAML did to LabFlow’s document",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "OpenAPI"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 7.1 (LabFlow v2 written as openapi.yaml, linted with Redocly CLI 2.72).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 7.1 (LabFlow v2 viết thành openapi.yaml, lint bằng Redocly CLI 2.72).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which errors parse and which only lint can see?|||Lỗi nào làm hỏng việc đọc tệp, lỗi nào chỉ lint mới thấy?",
+        "3.1 = JSON Schema 2020-12."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OpenAPI 1 — What lint and YAML did to LabFlow’s document\n\nAnswer in the answer panel (no code needed).\n\n1. A first draft had an example with startAt/endAt while the schema required period. What did Redocly report?Bản nháp đầu có ví dụ dùng startAt/endAt trong khi schema bắt buộc period. Redocly báo gì?\n2. Inside { … }, “description: Search in the name, accent-insensitive” produced …Trong { … }, “description: Search in the name, accent-insensitive” tạo ra …\n3. In OpenAPI 3.1, how do you say “purpose is always present but may be null”?Trong OpenAPI 3.1, nói “purpose luôn có mặt nhưng có thể null” thế nào?\n4. Why does LabFlow raise operation-operationId from warning to error?Vì sao LabFlow nâng operation-operationId từ warning lên error?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# OpenAPI 1 — What lint and YAML did to LabFlow’s document — answer key\n\n1. A first draft had an example with startAt/endAt while the schema required period. What did Redocly report?Bản nháp đầu có ví dụ dùng startAt/endAt trong khi schema bắt buộc period. Redocly báo gì?\n   Answer: a) no-invalid-media-type-examples: the example must conform to the schema\n   The example was copied from v1; Chapter 4 renamed the fields to period. A wrong example misleads every reader and every mock.VI: Ví dụ chép từ v1; Chương 4 đã đổi thành period. Ví dụ sai đánh lừa mọi người đọc và mọi mock.\n\n2. Inside { … }, “description: Search in the name, accent-insensitive” produced …Trong { … }, “description: Search in the name, accent-insensitive” tạo ra …\n   Answer: a) a valid file with an extra key accent-insensitive — caught only by the OpenAPI struct rule\n   The comma split the flow mapping. The bracket case [from, to) was the one that failed to parse.VI: Dấu phẩy tách mapping kiểu flow. Trường hợp ngoặc vuông [from, to) mới là cái không đọc được.\n\n3. In OpenAPI 3.1, how do you say “purpose is always present but may be null”?Trong OpenAPI 3.1, nói “purpose luôn có mặt nhưng có thể null” thế nào?\n   Answer: d) required: [purpose] and type: [string, 'null']\n   3.1 schemas are JSON Schema 2020-12: null is a type; nullable belongs to 3.0. Required means present — LabFlow’s rule from 2.3.VI: Schema 3.1 là JSON Schema 2020-12: null là một kiểu; nullable thuộc về 3.0. Required nghĩa là có mặt — luật LabFlow từ 2.3.\n\n4. Why does LabFlow raise operation-operationId from warning to error?Vì sao LabFlow nâng operation-operationId từ warning lên error?\n   Answer: a) Generated clients use operationId as function names — without it 7.3 has nothing to call\n   Redocly’s recommended set reports it only as a warning. Teams that generate code make it an error.VI: Bộ recommended của Redocly chỉ báo warning. Đội nào sinh code từ tài liệu thì nâng thành error.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> no-invalid-media-type-examples: the example must conform to the schema</p><p>The example was copied from v1; Chapter 4 renamed the fields to period. A wrong example misleads every reader and every mock.</p><p><i>VI: Ví dụ chép từ v1; Chương 4 đã đổi thành period. Ví dụ sai đánh lừa mọi người đọc và mọi mock.</i></p></li><li><p><b>a)</b> a valid file with an extra key accent-insensitive — caught only by the OpenAPI struct rule</p><p>The comma split the flow mapping. The bracket case [from, to) was the one that failed to parse.</p><p><i>VI: Dấu phẩy tách mapping kiểu flow. Trường hợp ngoặc vuông [from, to) mới là cái không đọc được.</i></p></li><li><p><b>d)</b> required: [purpose] and type: [string, 'null']</p><p>3.1 schemas are JSON Schema 2020-12: null is a type; nullable belongs to 3.0. Required means present — LabFlow’s rule from 2.3.</p><p><i>VI: Schema 3.1 là JSON Schema 2020-12: null là một kiểu; nullable thuộc về 3.0. Required nghĩa là có mặt — luật LabFlow từ 2.3.</i></p></li><li><p><b>a)</b> Generated clients use operationId as function names — without it 7.3 has nothing to call</p><p>Redocly’s recommended set reports it only as a warning. Teams that generate code make it an error.</p><p><i>VI: Bộ recommended của Redocly chỉ báo warning. Đội nào sinh code từ tài liệu thì nâng thành error.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A first draft had an example with startAt/endAt while the schema required period. What did Redocly report?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản nháp đầu có ví dụ dùng startAt/endAt trong khi schema bắt buộc period. Redocly báo gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "no-invalid-media-type-examples: the example must conform to the schema"
+              },
+              {
+                "ma": "b",
+                "noiDung": "operation-operationId, because examples need an operation id first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A YAML parse error, because startAt is not a valid key in OpenAPI"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing: examples are documentation and are never checked by linters"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The example was copied from v1; Chapter 4 renamed the fields to period. A wrong example misleads every reader and every mock.</p><p><i>VI: Ví dụ chép từ v1; Chương 4 đã đổi thành period. Ví dụ sai đánh lừa mọi người đọc và mọi mock.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Inside { … }, “description: Search in the name, accent-insensitive” produced …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong { … }, “description: Search in the name, accent-insensitive” tạo ra …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a valid file with an extra key accent-insensitive — caught only by the OpenAPI struct rule"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a YAML parse error that stopped every tool at the first comma it saw"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the description text exactly as written, since commas are allowed here"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a runtime 400 from LabFlow for every request to GET /labs"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The comma split the flow mapping. The bracket case [from, to) was the one that failed to parse.</p><p><i>VI: Dấu phẩy tách mapping kiểu flow. Trường hợp ngoặc vuông [from, to) mới là cái không đọc được.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In OpenAPI 3.1, how do you say “purpose is always present but may be null”?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong OpenAPI 3.1, nói “purpose luôn có mặt nhưng có thể null” thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "required: [purpose] and default: null on the field"
+              },
+              {
+                "ma": "b",
+                "noiDung": "type: string and example: null on the property"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nullable: true and leave purpose out of required"
+              },
+              {
+                "ma": "d",
+                "noiDung": "required: [purpose] and type: [string, 'null']"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>3.1 schemas are JSON Schema 2020-12: null is a type; nullable belongs to 3.0. Required means present — LabFlow’s rule from 2.3.</p><p><i>VI: Schema 3.1 là JSON Schema 2020-12: null là một kiểu; nullable thuộc về 3.0. Required nghĩa là có mặt — luật LabFlow từ 2.3.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does LabFlow raise operation-operationId from warning to error?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow nâng operation-operationId từ warning lên error?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Generated clients use operationId as function names — without it 7.3 has nothing to call"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because operationId is required by HTTP and RFC 9110 for every request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because Redocly refuses to build docs for operations that have no id at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To make the lint output shorter by turning warnings into errors"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Redocly’s recommended set reports it only as a warning. Teams that generate code make it an error.</p><p><i>VI: Bộ recommended của Redocly chỉ báo warning. Đội nào sinh code từ tài liệu thì nâng thành error.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Following 3.0 tutorials (nullable).|||Làm theo hướng dẫn 3.0 (nullable)."
+        },
+        {
+          "loi": "Trusting a file because it parses.|||Tin tệp chỉ vì nó đọc được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "operationId",
+          "vi": "tên duy nhất của một thao tác"
+        },
+        {
+          "en": "flow style",
+          "vi": "kiểu YAML viết gọn trong { } và [ ]"
+        }
+      ]
+    },
+    {
+      "title": "OpenAPI 2 — Write toOas31(schema): turn 3.0 “nullable” into 3.1 types",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "OpenAPI",
+        "JSON Schema"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Old documents (OpenAPI 3.0) say <code>nullable: true</code>; 3.1 writes null as a type. Return a <strong>new</strong> schema where every <code>nullable: true</code> is removed and <code>'null'</code> is added to <code>type</code> (as an array: <code>type: 'string'</code> ⇒ <code>['string', 'null']</code>; an array type keeps its order and gets <code>'null'</code> at the end unless already there). <code>nullable: false</code> is simply removed. Recurse into <code>properties</code> and <code>items</code>; keep every other key as it is. Do not modify the argument.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tài liệu cũ (OpenAPI 3.0) ghi <code>nullable: true</code>; 3.1 viết null thành một kiểu. Trả về một schema <strong>mới</strong> trong đó mọi <code>nullable: true</code> bị bỏ và <code>'null'</code> được thêm vào <code>type</code> (dạng mảng: <code>type: 'string'</code> ⇒ <code>['string', 'null']</code>; type đã là mảng thì giữ thứ tự và thêm <code>'null'</code> ở cuối nếu chưa có). <code>nullable: false</code> chỉ cần bỏ. Đệ quy vào <code>properties</code> và <code>items</code>; mọi khoá khác giữ nguyên. Không sửa đối số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "schema — an OpenAPI 3.0 Schema Object|||schema — một Schema Object của OpenAPI 3.0",
+      "outputSpec": "the 3.1 equivalent (new object)|||bản tương đương 3.1 (object mới)",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "toOas31({\"type\":\"string\",\"nullable\":true})",
+          "output": "{\"type\":[\"string\",\"null\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Copy keys one by one, skipping nullable.|||Chép từng khoá, bỏ qua nullable.",
+        "[].concat(type) turns a string or an array into an array.|||[].concat(type) biến chuỗi hoặc mảng thành mảng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** OpenAPI 3.0 schema ⇒ 3.1 */\nfunction toOas31(schema) {\n  // Write your solution here\n  if (schema.nullable) { delete schema.nullable; schema.type = [schema.type, 'null']; }\n  return schema;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction toOas31(schema) {\n  if (Array.isArray(schema)) return schema.map(toOas31);\n  if (!schema || typeof schema !== 'object') return schema;\n  const out = {};\n  for (const [k, v] of Object.entries(schema)) {\n    if (k === 'nullable') continue;\n    if (k === 'properties') out.properties = Object.fromEntries(Object.entries(v).map(([p, s]) => [p, toOas31(s)]));\n    else if (k === 'items') out.items = toOas31(v);\n    else out[k] = v;\n  }\n  if (schema.nullable === true && schema.type) {\n    const types = [].concat(schema.type);\n    out.type = types.includes('null') ? types : [...types, 'null'];\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>LabFlow’s Booking.purpose: { type: string, nullable: true } becomes { type: [string, null] } — exactly what lesson 7.1 wrote by hand.</p>",
+      "solutionExplanationHtmlVi": "<p>Booking.purpose của LabFlow: { type: string, nullable: true } thành { type: [string, null] } — đúng như bài 7.1 viết tay.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Booking.purpose",
+              "vi": "Booking.purpose"
+            },
+            "goi": "toOas31({\"type\":\"string\",\"nullable\":true})",
+            "mongDoi": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Nested property",
+              "vi": "Thuộc tính lồng"
+            },
+            "goi": "toOas31({\"type\":\"object\",\"properties\":{\"purpose\":{\"type\":\"string\",\"nullable\":true},\"id\":{\"type\":\"string\"}}})",
+            "mongDoi": {
+              "type": "object",
+              "properties": {
+                "purpose": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Array items",
+              "vi": "Phần tử mảng"
+            },
+            "goi": "toOas31({\"type\":\"array\",\"items\":{\"type\":\"integer\",\"nullable\":true,\"minimum\":1}})",
+            "mongDoi": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "toOas31({\"type\":[\"string\",\"integer\"],\"nullable\":true})",
+            "mongDoi": {
+              "type": [
+                "string",
+                "integer",
+                "null"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "toOas31({\"type\":\"string\",\"nullable\":false,\"format\":\"date-time\"})",
+            "mongDoi": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The argument is not modified",
+              "vi": "Đối số không bị sửa"
+            },
+            "goi": "(function () { var s = { type: 'string', nullable: true }; toOas31(s); return s; })()",
+            "mongDoi": {
+              "type": "string",
+              "nullable": true
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Changing the argument in place.|||Sửa thẳng đối số."
+        },
+        {
+          "loi": "Forgetting nested properties and array items.|||Quên các properties lồng nhau và items của mảng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "nullable",
+          "vi": "từ khoá của OpenAPI 3.0 (bỏ ở 3.1)"
+        },
+        {
+          "en": "migration",
+          "vi": "chuyển đổi lên phiên bản mới"
+        }
+      ]
+    },
+    {
+      "title": "OpenAPI 3 — Write undeclaredParams(path, parameters): the path-parameters-defined rule",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "OpenAPI"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Return the names of the <code>{placeholders}</code> in <code>path</code> that have no parameter with <code>in: 'path'</code> and the same <code>name</code>, in the order they appear in the path. A query parameter with the same name does not count.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về tên các <code>{chỗ trống}</code> trong <code>path</code> chưa có tham số nào <code>in: 'path'</code> cùng <code>name</code>, theo thứ tự xuất hiện trong path. Tham số query trùng tên không được tính.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "path — e.g. \"/labs/{labId}/devices/{id}\"; parameters — [{ name, in }]|||path — vd. \"/labs/{labId}/devices/{id}\"; parameters — [{ name, in }]",
+      "outputSpec": "array of names|||mảng tên",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "undeclaredParams(\"/bookings/{id}\", [])",
+          "output": "[\"id\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A regular expression finds every {name}.|||Một biểu thức chính quy tìm mọi {tên}.",
+        "Filter parameters by in === \"path\" first.|||Lọc tham số theo in === \"path\" trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** placeholders in the path that no path parameter declares */\nfunction undeclaredParams(path, parameters) {\n  // Write your solution here\n  return parameters.length ? [] : ['id'];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction undeclaredParams(path, parameters) {\n  const inPath = [...path.matchAll(/\\{([^}]+)\\}/g)].map((m) => m[1]);\n  const declared = new Set(parameters.filter((p) => p.in === 'path').map((p) => p.name));\n  return inPath.filter((n) => !declared.has(n));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The first draft’s GET /bookings/{id} had no parameters ⇒ [\"id\"] — Redocly’s path-parameters-defined error in lesson 7.1.</p>",
+      "solutionExplanationHtmlVi": "<p>GET /bookings/{id} của bản nháp đầu không có tham số ⇒ [\"id\"] — lỗi path-parameters-defined của Redocly ở bài 7.1.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The first draft (lesson 7.1)",
+              "vi": "Bản nháp đầu (bài 7.1)"
+            },
+            "goi": "undeclaredParams(\"/bookings/{id}\", [])",
+            "mongDoi": [
+              "id"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Declared",
+              "vi": "Đã khai"
+            },
+            "goi": "undeclaredParams(\"/labs/{labId}/waitlist\", [{\"name\":\"labId\",\"in\":\"path\"}])",
+            "mongDoi": []
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "undeclaredParams(\"/labs/{labId}/devices/{id}\", [{\"name\":\"id\",\"in\":\"query\"}])",
+            "mongDoi": [
+              "labId",
+              "id"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "undeclaredParams(\"/labs\", [{\"name\":\"q\",\"in\":\"query\"}])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "undeclaredParams(\"/a/{x}/b/{y}/c/{z}\", [{\"name\":\"y\",\"in\":\"path\"}])",
+            "mongDoi": [
+              "x",
+              "z"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting query parameters with the same name.|||Tính cả tham số query trùng tên."
+        },
+        {
+          "loi": "Returning names with the braces.|||Trả tên kèm dấu ngoặc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "path parameter",
+          "vi": "tham số nằm trong đường dẫn"
+        },
+        {
+          "en": "lint rule",
+          "vi": "luật kiểm tự động"
+        }
+      ]
+    }
+  ]
+}

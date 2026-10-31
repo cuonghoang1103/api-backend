@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 7.2 "Kiểm hợp đồng" (deck api-07-2, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-07-2', "Contract checks", "Kiểm hợp đồng", [
+  [1, "Cover",
+    `<p>Lint says valid; only real requests can say correct.</p>`,
+    `<p>Lint nói hợp lệ; chỉ request thật mới nói được là đúng.</p>`],
+  [2, "What you will get",
+    `<p>Why documents drift, a short checker, a real bug it found, and four layers of checks.</p>`,
+    `<p>Vì sao tài liệu lệch, một bộ kiểm ngắn, một lỗi thật nó tìm ra, và bốn lớp kiểm.</p>`],
+  [3, "Why documents drift",
+    `<p>The code changes, the document is forgotten, and a client trusts it. The fix is a test against the running server.</p>`,
+    `<p>Code đổi, tài liệu bị quên, và client tin nó. Cách chữa là một bài test với server đang chạy.</p>`],
+  [4, "The checker",
+    `<p>Ajv’s 2020 class validates each real answer against the documented response for its status code, as three different users, including failing requests.</p>`,
+    `<p>Lớp Ajv 2020 kiểm từng câu trả lời thật theo câu trả lời được ghi cho mã trạng thái đó, bằng ba người dùng, kể cả request hỏng.</p>`],
+  [5, "First run",
+    `<p>An undocumented check-in, and a real bug: fetch sends Content-Length zero on an empty POST and LabFlow answered 415.</p>`,
+    `<p>Một check-in chưa ghi tài liệu, và một lỗi thật: fetch gửi Content-Length bằng 0 khi POST rỗng và LabFlow trả 415.</p>`],
+  [6, "The fix",
+    `<p>A body exists only if its length is above zero; the document gains check-in and 415. All 19 checks pass.</p>`,
+    `<p>Chỉ coi là có body khi độ dài lớn hơn 0; tài liệu thêm check-in và 415. Cả 19 phép kiểm đạt.</p>`],
+  [7, "What lint cannot see",
+    `<p>A wrong type in the document passes lint and fails four contract checks. Each layer answers a different question.</p>`,
+    `<p>Một kiểu sai trong tài liệu qua lint nhưng trượt bốn phép kiểm hợp đồng. Mỗi lớp trả lời một câu hỏi khác nhau.</p>`],
+  [8, "Traps and interviews",
+    `<p>Do not write the document once at the end, and do not test only the happy path; put the check in CI.</p>`,
+    `<p>Đừng viết tài liệu một lần vào cuối, đừng chỉ kiểm đường vui; đưa bộ kiểm vào CI.</p>`],
+  [9, "Summary",
+    `<p>Contract checks prove the document matches the server. Next: generate docs and clients from it.</p>`,
+    `<p>Kiểm hợp đồng chứng minh tài liệu khớp server. Bài sau: sinh docs và client từ nó.</p>`],
+]);

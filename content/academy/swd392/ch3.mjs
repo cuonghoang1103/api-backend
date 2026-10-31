@@ -13928,6 +13928,15 @@ W --&gt; DB
       ['plantuml', '"Deployment Diagram" (node, cloud, database) and "Sequence Diagram" (== separators ==, notes)', 'mục "Deployment Diagram" (node, cloud, database) và "Sequence Diagram" (dải phân cách ==, ghi chú)'],
       ['fuSlides', 'deck "Ch16 - Designing Service-Oriented Architectures", slides 1–14', 'bộ "Ch16 - Designing Service-Oriented Architectures", slide 1–14'],
     ]),
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-4-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 7.5: GraphQL and gRPC</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: a service is described by a machine-readable contract (WSDL here, OpenAPI or .proto there). Different: this lesson is the architecture view of SOA and SOAP; Courses builds REST, GraphQL and gRPC on the same LabFlow data and measures them. It also adds: round trips and bytes, the N+1 problem and DataLoader, Protobuf vs JSON size, streaming, and when each style is the right choice.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-4-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 7.5: GraphQL và gRPC</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: dịch vụ được mô tả bằng một hợp đồng máy đọc được (ở đây là WSDL, ở đó là OpenAPI hay .proto). Khác: bài này là góc nhìn kiến trúc về SOA và SOAP; Courses dựng REST, GraphQL và gRPC trên cùng dữ liệu LabFlow rồi đo chúng. Ở đó có thêm: số lượt đi-về và byte, vấn đề N+1 và DataLoader, kích thước Protobuf so với JSON, streaming, và khi nào chọn kiểu nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

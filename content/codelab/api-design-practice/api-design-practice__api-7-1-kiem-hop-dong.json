@@ -1,0 +1,422 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-7-1-kiem-hop-dong",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-7-1-kiem-hop-dong"
+  },
+  "exercises": [
+    {
+      "title": "Contract checks 1 — What the first run found",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "contract testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 7.2 (check-drift.mjs against LabFlow, Node fetch and Chromium probed).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 7.2 (check-drift.mjs chạy với LabFlow, dò Node fetch và Chromium).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What does each tool actually look at?|||Mỗi công cụ thật sự nhìn vào cái gì?",
+        "Which client sends which headers?|||Client nào gửi header nào?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Contract checks 1 — What the first run found\n\nAnswer in the answer panel (no code needed).\n\n1. Why had six chapters of curl never hit the 415 on POST …/cancel?Vì sao sáu chương gõ curl chưa từng gặp 415 ở POST …/cancel?\n2. The document said capacity is a string. Which tool noticed?Tài liệu ghi capacity là string. Công cụ nào nhận ra?\n3. Why does check-drift log in as An, Bin and Lan?Vì sao check-drift đăng nhập bằng An, Bình và cô Lan?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Contract checks 1 — What the first run found — answer key\n\n1. Why had six chapters of curl never hit the 415 on POST …/cancel?Vì sao sáu chương gõ curl chưa từng gặp 415 ở POST …/cancel?\n   Answer: b) curl sends no Content-Length on an empty POST; fetch sends Content-Length: 0\n   Measured with hdr-probe.mjs: Node fetch and Chromium both sent content-length=0. LabFlow treated any length header as a body.VI: Đo bằng hdr-probe.mjs: fetch của Node và Chromium đều gửi content-length=0. LabFlow coi có header độ dài là có body.\n\n2. The document said capacity is a string. Which tool noticed?Tài liệu ghi capacity là string. Công cụ nào nhận ra?\n   Answer: b) Only the contract check — lint saw a valid document\n   Lint checks the document’s structure; it cannot know what the server sends. 4 checks failed with “must be string”.VI: Lint kiểm cấu trúc tài liệu; nó không thể biết server gửi gì. 4 phép kiểm trượt với “must be string”.\n\n3. Why does check-drift log in as An, Bin and Lan?Vì sao check-drift đăng nhập bằng An, Bình và cô Lan?\n   Answer: d) One account exercises one branch of each policy; 403/404 answers need another user\n   Bin reading bk_1 gives 403 (old endpoint) and 404 (receipt) — documented answers you only see as someone else.VI: Bình đọc bk_1 ra 403 (endpoint cũ) và 404 (biên nhận) — những câu trả lời chỉ thấy khi là người khác.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> curl sends no Content-Length on an empty POST; fetch sends Content-Length: 0</p><p>Measured with hdr-probe.mjs: Node fetch and Chromium both sent content-length=0. LabFlow treated any length header as a body.</p><p><i>VI: Đo bằng hdr-probe.mjs: fetch của Node và Chromium đều gửi content-length=0. LabFlow coi có header độ dài là có body.</i></p></li><li><p><b>b)</b> Only the contract check — lint saw a valid document</p><p>Lint checks the document’s structure; it cannot know what the server sends. 4 checks failed with “must be string”.</p><p><i>VI: Lint kiểm cấu trúc tài liệu; nó không thể biết server gửi gì. 4 phép kiểm trượt với “must be string”.</i></p></li><li><p><b>d)</b> One account exercises one branch of each policy; 403/404 answers need another user</p><p>Bin reading bk_1 gives 403 (old endpoint) and 404 (receipt) — documented answers you only see as someone else.</p><p><i>VI: Bình đọc bk_1 ra 403 (endpoint cũ) và 404 (biên nhận) — những câu trả lời chỉ thấy khi là người khác.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why had six chapters of curl never hit the 415 on POST …/cancel?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao sáu chương gõ curl chưa từng gặp 415 ở POST …/cancel?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "curl always adds Content-Type: application/json to every request it sends"
+              },
+              {
+                "ma": "b",
+                "noiDung": "curl sends no Content-Length on an empty POST; fetch sends Content-Length: 0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "curl retries a 415 automatically, so the error never reached the screen"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The bug only happens over HTTPS, and the lessons used plain HTTP"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Measured with hdr-probe.mjs: Node fetch and Chromium both sent content-length=0. LabFlow treated any length header as a body.</p><p><i>VI: Đo bằng hdr-probe.mjs: fetch của Node và Chromium đều gửi content-length=0. LabFlow coi có header độ dài là có body.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The document said capacity is a string. Which tool noticed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tài liệu ghi capacity là string. Công cụ nào nhận ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Both, because they read the same openapi.yaml file"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the contract check — lint saw a valid document"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only Redocly lint, through its struct rule for schemas"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Neither, because JSON numbers are valid strings"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Lint checks the document’s structure; it cannot know what the server sends. 4 checks failed with “must be string”.</p><p><i>VI: Lint kiểm cấu trúc tài liệu; nó không thể biết server gửi gì. 4 phép kiểm trượt với “must be string”.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does check-drift log in as An, Bin and Lan?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao check-drift đăng nhập bằng An, Bình và cô Lan?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because the server limits each account to five requests per minute"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because Ajv needs three tokens to compile the components schema"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To spread the load evenly across three database connections"
+              },
+              {
+                "ma": "d",
+                "noiDung": "One account exercises one branch of each policy; 403/404 answers need another user"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Bin reading bk_1 gives 403 (old endpoint) and 404 (receipt) — documented answers you only see as someone else.</p><p><i>VI: Bình đọc bk_1 ra 403 (endpoint cũ) và 404 (biên nhận) — những câu trả lời chỉ thấy khi là người khác.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking lint proves the document matches the server.|||Nghĩ rằng lint chứng minh tài liệu khớp server."
+        },
+        {
+          "loi": "Testing only with curl and one account.|||Chỉ thử bằng curl và một tài khoản."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "drift",
+          "vi": "tài liệu và server lệch nhau"
+        },
+        {
+          "en": "contract check",
+          "vi": "kiểm câu trả lời thật theo tài liệu"
+        }
+      ]
+    },
+    {
+      "title": "Contract checks 2 — Write hasBody(headers): the fix for the 415 bug",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "HTTP"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Header names may come in any case. A request has a body when it has a <code>Transfer-Encoding</code> header (any value), or a <code>Content-Length</code> that is a number greater than 0. <code>Content-Length: 0</code>, a missing header, or a value that is not a number ⇒ no body.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tên header có thể viết hoa thường bất kỳ. Request có body khi có header <code>Transfer-Encoding</code> (giá trị bất kỳ), hoặc <code>Content-Length</code> là một số lớn hơn 0. <code>Content-Length: 0</code>, thiếu header, hoặc giá trị không phải số ⇒ không có body.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "headers — object of header name ⇒ string|||headers — object tên header ⇒ chuỗi",
+      "outputSpec": "true | false",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hasBody({\"content-length\":\"0\"})",
+          "output": "false",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Lower-case the names first.|||Hạ chữ thường tên header trước.",
+        "Number(\"abc\") is NaN, and NaN > 0 is false.|||Number(\"abc\") là NaN, và NaN > 0 là false."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** does this request carry a body? */\nfunction hasBody(headers) {\n  // Write your solution here\n  return headers['content-length'] !== undefined;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction hasBody(headers) {\n  const h = Object.fromEntries(Object.entries(headers).map(([k, v]) => [k.toLowerCase(), v]));\n  if (h['transfer-encoding'] !== undefined) return true;\n  const n = Number(h['content-length'] ?? 0);\n  return Number.isFinite(n) && n > 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>fetch() and Chromium send content-length 0 for an empty POST: false, so the 415 gate no longer fires (lesson 7.2).</p>",
+      "solutionExplanationHtmlVi": "<p>fetch() và Chromium gửi content-length 0 cho POST rỗng: false, nên cổng 415 không còn bắn nhầm (bài 7.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "fetch() POST without a body",
+              "vi": "fetch() POST không body"
+            },
+            "goi": "hasBody({\"content-length\":\"0\"})",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "A JSON body",
+              "vi": "Một body JSON"
+            },
+            "goi": "hasBody({\"content-length\":\"57\",\"content-type\":\"application/json\"})",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "curl POST without a body",
+              "vi": "curl POST không body"
+            },
+            "goi": "hasBody({})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "hasBody({\"Transfer-Encoding\":\"chunked\"})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "hasBody({\"Content-Length\":\"abc\"})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "hasBody({\"CONTENT-LENGTH\":\"12\"})",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking only whether Content-Length exists — the original LabFlow bug.|||Chỉ kiểm Content-Length có tồn tại — chính lỗi gốc của LabFlow."
+        },
+        {
+          "loi": "Forgetting chunked bodies (Transfer-Encoding).|||Quên body gửi theo khúc (Transfer-Encoding)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Content-Length",
+          "vi": "độ dài body tính bằng byte"
+        },
+        {
+          "en": "Transfer-Encoding: chunked",
+          "vi": "gửi body thành nhiều khúc, không biết trước độ dài"
+        }
+      ]
+    },
+    {
+      "title": "Contract checks 3 — Write matchTemplate(templates, path): find the documented path",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "contract testing",
+        "routing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The contract check must find which documented path a real URL belongs to. Ignore the query string. A template fits when it has the same number of <code>/</code>-segments and every segment is either equal or a <code>{placeholder}</code>. If several fit, the one with the most literal (non-placeholder) segments wins — <code>/me/waitlist</code> beats <code>/me/{x}</code>. No fit ⇒ <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ kiểm hợp đồng phải biết một URL thật thuộc path nào trong tài liệu. Bỏ phần query. Một path mẫu khớp khi có cùng số đoạn <code>/</code> và mỗi đoạn hoặc bằng nhau hoặc là <code>{chỗ trống}</code>. Nhiều mẫu cùng khớp thì mẫu có nhiều đoạn chữ cố định nhất thắng — <code>/me/waitlist</code> thắng <code>/me/{x}</code>. Không khớp ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "templates — string[]; path — a real path, maybe with ?query|||templates — string[]; path — đường dẫn thật, có thể kèm ?query",
+      "outputSpec": "the matching template or null|||path mẫu khớp hoặc null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "matchTemplate([\"/labs\",\"/labs/{labId}\",\"/labs/{labId}/waitlist\",\"/bookings\",\"/bookings/{id}\",\"/bookings/{id}/cancel\",\"/me\",\"/me/waitlist\",\"/waitlist/{id}\"], \"/bookings/bk_1/cancel\")",
+          "output": "\"/bookings/{id}/cancel\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare segment by segment after split(\"/\").|||So từng đoạn sau split(\"/\").",
+        "Sort the candidates by number of literal segments.|||Sắp các ứng viên theo số đoạn chữ cố định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** which documented path does this real path belong to? */\nfunction matchTemplate(templates, path) {\n  // Write your solution here\n  return templates.find((t) => path.startsWith(t.split('{')[0])) ?? null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction matchTemplate(templates, path) {\n  const segs = path.split('?')[0].split('/');\n  const fits = templates.filter((t) => {\n    const ts = t.split('/');\n    return ts.length === segs.length && ts.every((x, i) => /^\\{.+\\}$/.test(x) || x === segs[i]);\n  });\n  const literal = (t) => t.split('/').filter((x) => !/^\\{.+\\}$/.test(x)).length;\n  fits.sort((a, b) => literal(b) - literal(a));\n  return fits[0] ?? null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>check-drift.mjs needs exactly this to find op = spec.paths[template][method] for POST /bookings/bk_1/cancel.</p>",
+      "solutionExplanationHtmlVi": "<p>check-drift.mjs cần đúng việc này để tìm op = spec.paths[template][method] cho POST /bookings/bk_1/cancel.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The cancel request of lesson 7.2",
+              "vi": "Request huỷ của bài 7.2"
+            },
+            "goi": "matchTemplate([\"/labs\",\"/labs/{labId}\",\"/labs/{labId}/waitlist\",\"/bookings\",\"/bookings/{id}\",\"/bookings/{id}/cancel\",\"/me\",\"/me/waitlist\",\"/waitlist/{id}\"], \"/bookings/bk_1/cancel\")",
+            "mongDoi": "/bookings/{id}/cancel"
+          },
+          {
+            "moTa": {
+              "en": "Query string ignored",
+              "vi": "Bỏ qua query"
+            },
+            "goi": "matchTemplate([\"/labs\",\"/labs/{labId}\",\"/labs/{labId}/waitlist\",\"/bookings\",\"/bookings/{id}\",\"/bookings/{id}/cancel\",\"/me\",\"/me/waitlist\",\"/waitlist/{id}\"], \"/bookings?limit=1\")",
+            "mongDoi": "/bookings"
+          },
+          {
+            "moTa": {
+              "en": "Literal beats placeholder",
+              "vi": "Chữ cố định thắng chỗ trống"
+            },
+            "goi": "matchTemplate([\"/labs\",\"/labs/{labId}\",\"/labs/{labId}/waitlist\",\"/bookings\",\"/bookings/{id}\",\"/bookings/{id}/cancel\",\"/me\",\"/me/waitlist\",\"/waitlist/{id}\",\"/me/{x}\"], \"/me/waitlist\")",
+            "mongDoi": "/me/waitlist",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Undocumented",
+              "vi": "Chưa có trong tài liệu"
+            },
+            "goi": "matchTemplate([\"/labs\",\"/labs/{labId}\",\"/labs/{labId}/waitlist\",\"/bookings\",\"/bookings/{id}\",\"/bookings/{id}/cancel\",\"/me\",\"/me/waitlist\",\"/waitlist/{id}\"], \"/bookings/bk_1/check-in\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "matchTemplate([\"/labs\",\"/labs/{labId}\",\"/labs/{labId}/waitlist\",\"/bookings\",\"/bookings/{id}\",\"/bookings/{id}/cancel\",\"/me\",\"/me/waitlist\",\"/waitlist/{id}\"], \"/labs/lab_2/waitlist\")",
+            "mongDoi": "/labs/{labId}/waitlist",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "matchTemplate([\"/labs\",\"/labs/{labId}\",\"/labs/{labId}/waitlist\",\"/bookings\",\"/bookings/{id}\",\"/bookings/{id}/cancel\",\"/me\",\"/me/waitlist\",\"/waitlist/{id}\"], \"/waitlist/wl_1/extra\")",
+            "mongDoi": null,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Letting {id} match several segments.|||Để {id} khớp nhiều đoạn."
+        },
+        {
+          "loi": "Forgetting the query string — /bookings?limit=1 must still match /bookings.|||Quên phần query — /bookings?limit=1 vẫn phải khớp /bookings."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "path template",
+          "vi": "path mẫu có chỗ trống như {id}"
+        },
+        {
+          "en": "specificity",
+          "vi": "độ cụ thể khi nhiều mẫu cùng khớp"
+        }
+      ]
+    }
+  ]
+}

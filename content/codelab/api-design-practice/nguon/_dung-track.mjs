@@ -14,7 +14,14 @@ const rank = (m) => {
   const chuong = Number(ch); const bai = Number(b);
   return [chuong, loai ? 1 : 0, chuong === 0 ? (THU_TU_MUC0[bai] ?? bai) : bai];
 };
-mods.sort((a, b) => { const x = rank(a), y = rank(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2]; });
+// Thứ tự trong khoá (manifest) thắng thứ tự đoán từ slug: từ Ch7 có bài chèn giữa (api-7-1-kiem-hop-dong là bài 7.2)
+const course = (await import(pathToFileURL(path.join(NGUON, '..', '..', '..', 'courses', 'api-design.mjs')).href)).default;
+const ORDER = new Map(course.sections.flatMap((s) => s.lessons.map((l) => l.slug)).map((slug, i) => [slug, i]));
+const pos = (m) => ORDER.get(m.baiHoc ?? m.slug);
+mods.sort((a, b) => {
+  if (pos(a) !== undefined && pos(b) !== undefined) return pos(a) - pos(b);
+  const x = rank(a), y = rank(b); return x[0] - y[0] || x[1] - y[1] || x[2] - y[2];
+});
 const en = (t) => (typeof t === 'string' ? t : t.en);
 const track = {
   groupSlug: 'cuongthai',

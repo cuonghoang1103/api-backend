@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 7.1 "Viết OpenAPI 3.1" (deck api-07-1, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-07-1', "Writing OpenAPI 3.1", "Viết OpenAPI 3.1", [
+  [1, "Cover",
+    `<p>Lesson 7.1 writes the rules of six chapters into one file that machines can check.</p>`,
+    `<p>Bài 7.1 viết luật của sáu chương vào một tệp mà máy kiểm được.</p>`],
+  [2, "After Chapter 7",
+    `<p>The chapter goal: a linted OpenAPI document, proof it matches the server, generated docs and clients, a design-first workflow, and measured answers about GraphQL and gRPC. The contract is what two people agree on before writing code.</p>`,
+    `<p>Mục tiêu chương: tài liệu OpenAPI lint sạch, bằng chứng nó khớp server, docs và client sinh tự động, quy trình thiết kế trước, và câu trả lời có số đo về GraphQL và gRPC. Hợp đồng là thứ hai người thống nhất trước khi viết code.</p>`],
+  [3, "OpenAPI in one picture",
+    `<p>Write the document, lint it, generate from it, and check the server against it. Version 3.1 uses JSON Schema 2020-12; LabFlow’s document has 12 operations and 16 schemas.</p>`,
+    `<p>Viết tài liệu, lint, sinh từ nó, và đối chiếu server với nó. Bản 3.1 dùng JSON Schema 2020-12; tài liệu LabFlow có 12 thao tác và 16 schema.</p>`],
+  [4, "One operation",
+    `<p>POST /bookings: an operationId that becomes a client function name, a reusable Idempotency-Key parameter, the body schema, 201 with Location, and every error the handler can return, each by reference.</p>`,
+    `<p>POST /bookings: operationId thành tên hàm của client, tham số Idempotency-Key dùng lại, schema của body, 201 kèm Location, và mọi lỗi handler có thể trả, đều trỏ bằng $ref.</p>`],
+  [5, "Schemas",
+    `<p>Null is a type in 3.1, examples are arrays, and additionalProperties false means the same as a strict Zod object. LabFlow’s rule “always present, null when empty” becomes required plus a null type.</p>`,
+    `<p>Ở 3.1 null là một kiểu, examples là mảng, và additionalProperties false có nghĩa như object Zod chặt. Luật “luôn có mặt, rỗng thì null” của LabFlow thành required cộng kiểu null.</p>`],
+  [6, "Lint a first draft",
+    `<p>A typical first draft gave 9 errors and 4 warnings: an example still in v1 shape, an undeclared path parameter, no error responses. LabFlow’s config raises several warnings to errors.</p>`,
+    `<p>Một bản nháp đầu điển hình cho 9 error và 4 warning: ví dụ vẫn theo dạng v1, tham số đường dẫn chưa khai, không có câu trả lời lỗi. Cấu hình của LabFlow nâng vài warning thành error.</p>`],
+  [7, "Two YAML traps",
+    `<p>Inside curly braces a square bracket starts a list and the file does not parse; a comma silently creates a new key and only the linter notices. Quote any text with special characters.</p>`,
+    `<p>Trong ngoặc nhọn, ngoặc vuông mở một danh sách và tệp không đọc được; dấu phẩy lặng lẽ tạo khoá mới và chỉ bộ lint nhận ra. Chữ nào có ký tự đặc biệt thì đặt trong nháy.</p>`],
+  [8, "Traps",
+    `<p>Parsing is not correctness, 3.0 tutorials mislead, and a huge first draft gives a huge list of findings. Tools accepted a 3.2 version line, but stay on 3.1 until they support its features.</p>`,
+    `<p>Đọc được không có nghĩa là đúng, hướng dẫn 3.0 dễ làm sai, và bản nháp khổng lồ cho danh sách lỗi khổng lồ. Công cụ đã nhận dòng phiên bản 3.2, nhưng cứ ở 3.1 tới khi chúng hỗ trợ tính năng của nó.</p>`],
+  [9, "Summary",
+    `<p>A clean 3.1 document and two traps learned. Next: a valid document can still lie about the server.</p>`,
+    `<p>Một tài liệu 3.1 sạch và hai cái bẫy đã biết. Bài sau: tài liệu hợp lệ vẫn có thể nói sai về server.</p>`],
+]);

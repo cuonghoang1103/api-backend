@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.2 (deck tst-06-2, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-06-2', 'User events, forms and async UI', 'Sự kiện người dùng, form và giao diện bất đồng bộ', [
+  [1, 'User events, forms and async UI',
+    `<p>Now the form is used: typed into, submitted, waited on. Every test answers two questions — what did the component send, and what did the user see afterwards?</p>`,
+    `<p>Giờ form được dùng thật: gõ vào, gửi đi, chờ kết quả. Mỗi test trả lời hai câu hỏi — component đã gửi gì, và sau đó người dùng thấy gì?</p>`],
+  [2, 'What you will take away from this lesson',
+    `<p>Typing and clicking with user-event, checking data and text together, error messages tied to fields, waiting for screens that change later, and a held promise for the busy state.</p>`,
+    `<p>Gõ và bấm bằng user-event, kiểm cả dữ liệu lẫn chữ hiển thị, thông báo lỗi gắn với trường, chờ màn hình thay đổi muộn, và một promise được giữ lại để test trạng thái đang bận.</p>`],
+  [3, 'user-event, not fireEvent',
+    `<p><code>fireEvent</code> dispatches one event; a real person produces a whole sequence — focus, key presses, input. user-event plays that sequence, so a field that only reacts to typing still works in the test. Each call is asynchronous: await it.</p>`,
+    `<p><code>fireEvent</code> phát một sự kiện; người thật tạo ra cả một chuỗi — focus, nhấn phím, input. user-event phát lại chuỗi đó, nên một ô chỉ phản ứng khi được gõ vẫn chạy đúng trong test. Mỗi lệnh đều bất đồng bộ: hãy await.</p>`],
+  [4, 'Type, click, then check both sides',
+    `<p>The mock records the exact object the form sent — seats as a number, not the string typed. Then <code>findByRole('status')</code> waits for the success message, which appears only after the mocked promise resolves.</p>`,
+    `<p>Mock ghi lại đúng object form đã gửi — số chỗ là số, không phải chuỗi vừa gõ. Rồi <code>findByRole('status')</code> chờ thông báo thành công, thứ chỉ xuất hiện sau khi promise của mock hoàn tất.</p>`],
+  [5, 'Errors the user can find',
+    `<p>A wrong lab code and zero seats are caught in the browser. The test checks the message is the field’s accessible description and the field is marked invalid — what a screen-reader user hears — and that no request was sent.</p>`,
+    `<p>Mã phòng sai và số chỗ bằng 0 bị chặn ngay trên trình duyệt. Test kiểm thông báo là mô tả truy cập được của trường và trường bị đánh dấu không hợp lệ — thứ người dùng trình đọc màn hình nghe thấy — và không request nào được gửi.</p>`],
+  [6, 'Three interaction tests, all green',
+    `<p>Three tests, including Enter as a way to submit. <code>findBy</code> retries a query until it succeeds or a second passes. Forgetting <code>await</code> is the classic mistake: the test ends before the assertion runs.</p>`,
+    `<p>Ba test, gồm cả Enter như một cách gửi form. <code>findBy</code> thử lại truy vấn tới khi thành công hoặc hết một giây. Quên <code>await</code> là lỗi kinh điển: test kết thúc trước khi khẳng định kịp chạy.</p>`],
+  [7, 'Hold the promise: test the busy state',
+    `<p>A mock that answers immediately skips “Booking…”. A deferred promise keeps the request open, so the test can see the disabled button, click it again, confirm only one request went out, and then let the answer arrive.</p>`,
+    `<p>Mock trả lời ngay sẽ bỏ qua “Booking…”. Một promise hoãn giữ request mở, nên test thấy được nút bị khoá, bấm lại lần nữa, xác nhận chỉ một request được gửi, rồi mới cho câu trả lời tới.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>The busy state and a server-side validation error shown on its field. The solution’s output is on the slide; write yours before reading it.</p>`,
+    `<p>Trạng thái bận và một lỗi kiểm dữ liệu từ phía máy chủ hiện đúng ở trường của nó. Output lời giải có trên slide; hãy tự viết trước khi đọc.</p>`],
+  [9, 'Summary',
+    `<p>Set up user-event, await every interaction, check what was sent and what is shown, and hold a promise when the in-between state matters.</p>`,
+    `<p>Khởi tạo user-event, await mọi tương tác, kiểm thứ đã gửi và thứ hiển thị, và giữ promise lại khi trạng thái ở giữa là điều quan trọng.</p>`],
+]);

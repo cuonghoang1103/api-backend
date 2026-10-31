@@ -15,7 +15,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/TST';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'tst-01-1': 'v2' }. */
-const VER = { 'tst-lab-1': 'v3', 'tst-lab-2': 'v3', 'tst-02-2': 'v2', 'tst-lab-3': 'v2', 'tst-lab-4': 'v2', 'tst-04-1': 'v2', 'tst-04-2': 'v2', 'tst-04-3': 'v2' }; // 01/11: nhãn Lab, slide 6 Lab 2, lệnh npm run test:unit
+const VER = { 'tst-lab-1': 'v3', 'tst-lab-2': 'v3', 'tst-02-2': 'v2', 'tst-lab-3': 'v2', 'tst-lab-4': 'v2', 'tst-04-1': 'v2', 'tst-04-2': 'v2', 'tst-04-3': 'v2', 'tst-05-1': 'v2' }; // 01/11: nhãn Lab, slide 6 Lab 2, lệnh npm run test:unit
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

@@ -57,7 +57,7 @@ export const slides = lamDeck({ chuong: 'Chapter 5 — Testing HTTP APIs', bai: 
     <li>Separating the app from ${c('listen()')} — the trick that makes API tests fast</li>
     <li>Supertest: status, headers and body in one chain</li>
     <li>Why a status-only test is not enough — measured</li>
-    <li>A fresh app per test: no shared data, no port</li></ul>` },
+    <li>A fresh app per test: no shared data, no fixed port</li></ul>` },
   { t: 'Build the app, do not start it', body: js(APP, { sm: true, hl: [9, 12] }) + two(box('createApp', 'Returns an Express app with its dependencies passed in (lesson 3.4). Tests build a fresh one per test.', 'lam'), box('main.js', `Only the real entry point calls ${c('app.listen(port)')}. Tests never import it.`, 'lam')) },
   { t: 'The real server, for comparison', body: vt(MAIN, { title: 'terminal', fs: 15 }) + two(box('Supertest does the same request for you', `${c('request(app)')} binds the app to a random port for one request: no port to choose, no server to start and stop, nothing left running.`, 'xanh'), box('Notice X-Powered-By', 'Express announces itself by default — production apps usually turn it off (app.disable("x-powered-by")). Harmless for tests.', 'lam')) },
   { t: 'Status, headers, body — and follow the Location', body: js(TEST, { sm: true, hl: [5, 6, 7] }) + box('Read it as a client', '201 Created must tell the client where the new resource lives. The test follows that Location exactly as a browser or app would.', 'lam') },

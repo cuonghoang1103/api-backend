@@ -2899,6 +2899,11 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   <span class="lc-body"><span class="lc-title">Set up Jest &amp; RTL</span><span class="lc-sub">Config and first tests — on Exp Hub.</span></span>
   <span class="lc-cta">EXP HUB →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-6-1-testing-library" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — Chapter 6: testing React components</span><span class="lc-sub">Same: render, screen and the query priority (getByRole first), user-event. Different: Vitest instead of Jest, a real booking form and admin list, MSW for screens that fetch, the cleanup and jsdom/happy-dom pitfalls measured, Next.js route handlers and server components, and a lab that plants 8 bugs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Nâng cao A2 · Bài A2.1</span>
@@ -2931,6 +2936,11 @@ axios.interceptors.request.<span class="tok-function">use</span>(config =&gt; {
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Cài đặt Jest &amp; RTL</span><span class="lc-sub">Cấu hình và test đầu tiên — trên Exp Hub.</span></span>
   <span class="lc-cta">EXP HUB →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-6-1-testing-library" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — Chương 6: test component React</span><span class="lc-sub">Giống: render, screen và thứ tự ưu tiên truy vấn (getByRole trước), user-event. Khác: Vitest thay Jest, một form đặt phòng và danh sách admin thật, MSW cho màn hình gọi API, đo thật bẫy dọn dẹp và jsdom/happy-dom, route handler và server component của Next.js, và một lab cài 8 bug.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,

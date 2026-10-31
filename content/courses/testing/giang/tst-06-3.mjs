@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.3 (deck tst-06-3, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-06-3', 'Components that fetch data', 'Component có gọi API', [
+  [1, 'Components that fetch data',
+    `<p>The admin list loads bookings from the API. A screen like this has more states than its happy table, and users see every one of them sooner or later.</p>`,
+    `<p>Danh sách cho admin tải lượt đặt từ API. Một màn hình như vậy có nhiều trạng thái hơn cái bảng đẹp đẽ, và sớm muộn người dùng sẽ gặp từng cái.</p>`],
+  [2, 'What you will take away from this lesson',
+    `<p>An API client designed to be faked, the four states of a fetching screen, MSW in front of the real client, retry and network failure, and a URL trap measured in Node.</p>`,
+    `<p>Một API client thiết kế để giả được, bốn trạng thái của màn hình gọi API, MSW đứng trước client thật, thử lại và mất mạng, và một cái bẫy URL đo được trong Node.</p>`],
+  [3, 'The client: fetch and base URL are parameters',
+    `<p>The client receives <code>fetch</code> and the base URL instead of reaching for globals — the same move as the clock in Chapter 2. Tests can pass a tiny stub client or keep the real one and fake the network.</p>`,
+    `<p>Client nhận <code>fetch</code> và base URL thay vì tự lấy biến toàn cục — cùng một nước đi như đồng hồ ở Chương 2. Test có thể truyền một client stub nhỏ, hoặc giữ client thật và giả phần mạng.</p>`],
+  [4, 'One screen, four states',
+    `<p>Loading, forbidden or failed, empty, and the table. Each state has a role a screen reader announces: <code>status</code> politely, <code>alert</code> at once. Tests locate each state through that role.</p>`,
+    `<p>Đang tải, bị cấm hoặc lỗi, rỗng, và bảng. Mỗi trạng thái có một role mà trình đọc màn hình đọc lên: <code>status</code> thì nhẹ nhàng, <code>alert</code> thì ngay lập tức. Test tìm từng trạng thái qua role đó.</p>`],
+  [5, 'MSW answers the real request',
+    `<p>MSW intercepts the request the real client makes, so URL building, headers and JSON parsing all run. Each test overrides the default answer with <code>server.use</code>; <code>resetHandlers</code> restores it afterwards.</p>`,
+    `<p>MSW chặn đúng request mà client thật gửi, nên phần dựng URL, header và phân tích JSON đều chạy. Mỗi test đè câu trả lời mặc định bằng <code>server.use</code>; <code>resetHandlers</code> trả lại như cũ sau đó.</p>`],
+  [6, 'Five tests, all green',
+    `<p>The table, the empty list, 403, a 500 followed by a successful retry, and a dropped connection. A handler with <code>once</code> answers a single request, which is exactly what a retry needs.</p>`,
+    `<p>Bảng, danh sách rỗng, 403, một lỗi 500 rồi thử lại thành công, và mất kết nối. Handler có <code>once</code> chỉ trả lời một request, đúng thứ cần cho việc thử lại.</p>`],
+  [7, 'A relative URL, measured',
+    `<p>In the browser a path like <code>/api/admin/bookings</code> is resolved against the page. In tests the fetch is Node’s, which has no page, and it throws. The screen showed its error state — honest, but the request never left. Use an absolute base URL in tests.</p>`,
+    `<p>Trên trình duyệt, đường dẫn như <code>/api/admin/bookings</code> được ghép với địa chỉ trang. Trong test, fetch là của Node, không có trang nào, và nó ném lỗi. Màn hình hiện trạng thái lỗi — trung thực, nhưng request chưa từng rời đi. Trong test hãy dùng base URL tuyệt đối.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>Connect the booking form to the real client and let MSW return a conflict, then a dropped connection. The form never knows HTTP is involved.</p>`,
+    `<p>Nối form đặt phòng với client thật và để MSW trả về xung đột, rồi mất kết nối. Form không hề biết có HTTP phía sau.</p>`],
+  [9, 'Summary',
+    `<p>Parameters instead of globals, every visible state tested, MSW in front of real code, unknown requests as failures, and absolute URLs in Node.</p>`,
+    `<p>Tham số thay cho biến toàn cục, test mọi trạng thái nhìn thấy được, MSW đứng trước code thật, request lạ là lỗi, và URL tuyệt đối trong Node.</p>`],
+]);

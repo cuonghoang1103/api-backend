@@ -1,7 +1,7 @@
 # Hợp đồng soạn khoá "Testing" (/courses/testing)
 
 > Đọc HẾT file này trước khi soạn một chương mới. Viết 01/11/2026 sau Mục 0 + Chương 1 (đợt mẫu, `bdd965397`) và Chương 2
-> (`73346c69c`); cập nhật khi xong Chương 3–4. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
+> (`73346c69c`); cập nhật khi xong Chương 3–4, 5–6. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
 > deck `tst-03-*`, `tst-04-*`, `tst-lab-3/4`. Chỗ nào file này không nói, bắt chước đúng các file đó.
 
 ## 0. Khoá này là gì, dạy ai
@@ -60,9 +60,10 @@
 ```bash
 cp -r content/courses/testing/_labflow-lite <SCRATCH>/lab/labflow-lite
 cd <SCRATCH>/lab/labflow-lite && npm ci            # Node 22 (chuẩn: 22.23.3), Vitest 5.0.5, fast-check 4, Express 5, Supertest 7
-npm run test:unit                                   # = vitest run src/ · 85 passed (cuối Ch5) — đây là “unit suite”
+npm run test:unit                                   # = vitest run src/ · 85 passed (cuối Ch6) — đây là “unit suite”
+npm run test:web                                    # = vitest run --config vitest.web.config.js web/ · 16 passed (Ch6, jsdom)
 npm run test:int -- test/integration                # 11 passed — cần Docker (Testcontainers, postgres:17)
-for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5; do node scripts/$s.mjs | tail -1; done   # 5 × 8/8
+for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5 dot-bien-6; do node scripts/$s.mjs | tail -1; done   # 6 × 8/8
 ```
 - ⚠️ `npm test` = `vitest run` chạy CẢ `demo*/` (có test cố ý đỏ) ⇒ bài/slide/lab luôn ghi **`npm run test:unit`** (script `"test:unit": "vitest run src/"`,
   giới thiệu ở phần Setup của Lab 1, dùng nhất quán Ch1–Ch5 từ 01/11 theo yêu cầu điều phối). Không viết “npm test xanh”.
@@ -70,6 +71,15 @@ for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5; do node scripts/$
   KHÔNG import main.js), `test/support/api.js` (`makeApi({ now })` ⇒ app + repo + `bearer(id, role)`, `body()`), `test/support/contract.js`
   (Ajv2020 + formats, `contractErrors(method, path, res)`), `openapi.json` (3.1). Supertest TỰ mở/đóng một cổng tạm — đừng viết “không mở cổng”.
   Test hết hạn token: đồng hồ cố định ở 2030 (`makeApi({ now: () => clock })`); jose coi đúng mốc `exp` là đã hết hạn.
+- Ch6: React 19.3.1 + `@testing-library/react` 16.3.3 / `dom` 10.4.2 / `user-event` 14.6.8 / `jest-dom` 7.0.1, jsdom 30.1.3 (happy-dom 21.0.3 chỉ để
+  đo). `web/` (api.js `createClient({ token, baseUrl, fetch })`, BookingForm.jsx, AdminBookings.jsx, support.jsx `fillBooking`/`deferred`/`ROW`,
+  test-setup.js `afterEach(cleanup)` + jest-dom), `web/next/` (lib/slots.js thuần, lib/bookings.js gọi API bằng `LABFLOW_API_URL`,
+  app/api/slots/route.js, app/bookings/[id]/page.jsx — KHÔNG cài next). `vitest.web.config.js` (jsdom, include `web/**` + `demo6/**`);
+  `vitest.config.js` loại `web/**`, `demo6/**`. Test chạy phía server: dòng đầu `// @vitest-environment node`. JSX chạy không cần plugin.
+  Đo được: không có globals ⇒ Testing Library KHÔNG tự cleanup; happy-dom gửi preflight OPTIONS khi khác origin + Authorization (MSW
+  `onUnhandledFrame: 'error'` chặn); fetch của Node không nhận URL tương đối (test dùng `baseUrl: 'http://api.test'`);
+  `render(<AsyncPage />)` ⇒ “is an async Client Component”, `render(await Page(props))` chạy (chỉ tầng ngoài).
+  Output lỗi của Testing Library có mã màu ANSI ⇒ `perl -pi -e 's/\e\[[0-9;]*m//g' <out>/*.txt` trước khi sinh `_ma`.
 - Ch4: `vitest.integration.config.js` (include `test/integration/**`, `demo4/**/*.int.test.js`; `globalSetup`; `fileParallelism: false`),
   `vitest.config.js` loại `test/integration/**` và `demo4/**`. `TEST_DATABASE_URL` có ⇒ dùng CSDL đó (compose `compose.test.yml`, cổng 54329);
   không ⇒ Testcontainers. `TST_SCHEMA` đổi file schema (demo). Test tích hợp nhận URL bằng `inject('databaseUrl')` (`test/support/db.js`).
@@ -123,7 +133,8 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - **Upload** (chủ ý chạm bucket R2 thật): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/final --prefix TST/v1 --decks <deck,…>`
   ⇒ `images/academy/TST/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy** (Cloudflare cache luôn cái 404).
   Deck đã đẩy mà phải dựng lại ⇒ đẩy sang `TST/v2` (v3…) và ghi `VER = { '<deck>': 'v2' }` trong `_slides.mjs` — đừng ghi đè v1.
-  Hiện (01/11): `tst-lab-1`, `tst-lab-2` = v3; `tst-02-2`, `tst-lab-3`, `tst-lab-4`, `tst-04-1/2/3` = v2 (đổi sang `npm run test:unit`); còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+  Hiện (01/11): `tst-lab-1`, `tst-lab-2` = v3; `tst-02-2`, `tst-lab-3`, `tst-lab-4`, `tst-04-1/2/3` = v2 (đổi sang `npm run test:unit`);
+  `tst-05-1` = v2 (sửa “no port” → Supertest tự mở cổng tạm); còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 
 ## 5. Lời giảng dưới slide (`giang/<deck>.mjs`)
 - Đúng **một dòng/slide**, đủ 1..N (walkTst ném lỗi nếu thiếu/trùng). EN 50–90 từ, VI tương đương, giải thích **vì sao**, không đọc lại slide.
@@ -155,7 +166,7 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - Deck lab 9 slide: cover · mission · code under test · 8 bugs · first attempt · reference · rubric · hints · checklist.
 
 ### 7.2 Đề Code Lab kiểu `mutation` (chờ máy chấm)
-`testing/_de-codelab-mutation.json` — 24 đề, 132 đột biến + 6 thay đổi vô hại, **đã kiểm 138/138 đạt** trên một bản sao mới của
+`testing/_de-codelab-mutation.json` — 29 đề, 163 đột biến + 11 thay đổi vô hại, **đã kiểm 174/174 đạt** trên một bản sao mới của
 `_labflow-lite` (`npm ci`, Docker bật) bằng
 `node scripts/tst/kiem-de-mutation.mjs <SCRATCH>/lab/labflow-lite content/courses/testing/_de-codelab-mutation.json [id…]` (01/11/2026).
 Trường thêm: `config` (Ch4: `vitest.integration.config.js`, cần Docker) · `voHai[{file, from, to, label}]` = thay đổi VÔ HẠI mà test
@@ -190,6 +201,11 @@ Máy chấm sau này: chạy file test của người học trên code đúng (p
 | tst-cl-5-3 | tst-5-3-validation | BookingInput, middleware lỗi | khoá lạ lọt · trần 201 chỗ · nhận 2.5 chỗ · ngày không tồn tại · giờ 24–29 · JSON hỏng → 500 · TOO_LONG → 500 · **vô hại:** đổi lời thông báo |
 | tst-cl-5-4 | tst-5-4-hop-dong | contractErrors + cả API | lộ userId/role · start→startTime · minutes thành chuỗi · lỗi mất vỏ `{ error }` · 415 chưa ghi · **vô hại:** đổi thứ tự trường |
 | tst-cl-lab-5 | tst-5-5-lab-api | (8 đột biến của `dot-bien-5.mjs`) | **vô hại:** đặt Location trước status |
+| tst-cl-6-1 | tst-6-1-testing-library | BookingForm (markup), AdminBookings (config web) | label tách khỏi input · sai tên form · ô Lab rỗng · đang tải không có role status · đổi tên cột · **vô hại:** đổi tiền tố id |
+| tst-cl-6-2 | tst-6-2-tuong-tac | BookingForm (handleSubmit, validate) | seats thành chuỗi · lỗi không gắn trường · bấm đúp · mất nhãn “Booking…” · mất lỗi 400 · dữ liệu sai vẫn gửi · **vô hại:** đổi lời OFF_GRID |
+| tst-cl-6-3 | tst-6-3-api-gia | createClient, AdminBookings, BookingForm | sai đường dẫn · rỗng thành bảng rỗng · 403 thành lỗi chung · nút thử lại chết · mất mạng thành lỗi máy chủ · mọi lỗi luật một câu · **vô hại:** template string |
+| tst-cl-6-4 | tst-6-4-nextjs | freeSlots, GET /api/slots, listBookings | khung sau lượt đặt bị chiếm · khung trước bị chiếm · thêm 21:00 · thiếu ngày không bị chặn · 502→500 · phòng khác chặn khung · **vô hại:** find thay some |
+| tst-cl-lab-6 | tst-6-5-lab-react | (8 đột biến của `dot-bien-6.mjs`) | **vô hại:** đổi tiền tố id |
 
 Chương mới ⇒ thêm 1 đề/bài dạy (3–8 đột biến, mỗi con là một bug THẬT có nghĩa với người dùng, không đột biến tương đương), chạy
 `kiem-de-mutation.mjs` tới khi `N/N`, rồi cập nhật bảng này. Đột biến phải giữ cú pháp hợp lệ: xoá `lab = $1 AND` làm `$1` thừa ⇒ cả câu

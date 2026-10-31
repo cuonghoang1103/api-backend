@@ -1250,6 +1250,324 @@
           "label": "refactor: set Location before the status (same response)"
         }
       ]
+    },
+    {
+      "id": "tst-cl-6-1",
+      "bai": "tst-6-1-testing-library",
+      "config": "vitest.web.config.js",
+      "tieuDe": "Find the form and the list the way users do|||Tìm form và danh sách theo cách người dùng tìm",
+      "ham": "BookingForm (markup), AdminBookings (loading, table)",
+      "fileDung": [
+        "web/BookingForm.jsx",
+        "web/AdminBookings.jsx"
+      ],
+      "testThamKhao": [
+        "demo6/truy-van.test.jsx",
+        "demo6/th61.test.jsx"
+      ],
+      "yeuCau": "Query only by role, label or visible text — no querySelector, no test id; check the form name, every field, the loading state and the column headers|||Chỉ truy vấn theo role, label hoặc chữ hiển thị — không querySelector, không test id; kiểm tên form, mọi trường, trạng thái đang tải và tiêu đề cột",
+      "dotBien": [
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "<label htmlFor={id}>",
+          "to": "<label htmlFor={name}>",
+          "label": "labels no longer point at their inputs"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "aria-label=\"Book a lab\"",
+          "to": "aria-label=\"Booking\"",
+          "label": "the form has the wrong accessible name"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "defaultValue=\"BE-201\"",
+          "to": "defaultValue=\"\"",
+          "label": "the lab field starts empty"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "<p role=\"status\">Loading bookings…</p>",
+          "to": "<p>Loading bookings…</p>",
+          "label": "loading is not announced"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "<th>Seats</th>",
+          "to": "<th>Places</th>",
+          "label": "a column header renamed"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "const id = 'booking-' + name;",
+          "to": "const id = 'bk-' + name;",
+          "label": "refactor: shorter ids (labels still linked)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-6-2",
+      "bai": "tst-6-2-tuong-tac",
+      "config": "vitest.web.config.js",
+      "tieuDe": "Type, submit, wait: the booking form in use|||Gõ, gửi, chờ: form đặt phòng khi được dùng",
+      "ham": "BookingForm (handleSubmit, validate)",
+      "fileDung": [
+        "web/BookingForm.jsx",
+        "web/support.jsx"
+      ],
+      "testThamKhao": [
+        "demo6/tuong-tac.test.jsx",
+        "demo6/th62.test.jsx"
+      ],
+      "yeuCau": "user-event with await; check the exact object sent and the text shown; errors as accessible descriptions; the busy state with a deferred promise|||user-event có await; kiểm đúng object đã gửi và chữ hiển thị; lỗi là mô tả truy cập được; trạng thái bận bằng promise hoãn",
+      "dotBien": [
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "seats: Number(form.get('seats'))",
+          "to": "seats: form.get('seats')",
+          "label": "seats sent as a string"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "aria-describedby={error ? id + '-error' : undefined}",
+          "to": "aria-describedby={undefined}",
+          "label": "errors are not linked to their field"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "disabled={busy}",
+          "to": "disabled={false}",
+          "label": "a double click books twice"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "{busy ? 'Booking…' : 'Book'}",
+          "to": "{'Book'}",
+          "label": "no busy label"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "setErrors(Object.fromEntries(res.data.error.details.map((d) => [d.path, d.message])));",
+          "to": "setErrors({});",
+          "label": "server field errors are dropped"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "if (Object.keys(found).length > 0) return;",
+          "to": "",
+          "label": "invalid input is sent anyway"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "'Times must be on the half hour (08:00, 08:30 …).'",
+          "to": "'Times must be on a 30-minute grid.'",
+          "label": "reworded message these tests do not cover"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-6-3",
+      "bai": "tst-6-3-api-gia",
+      "config": "vitest.web.config.js",
+      "tieuDe": "A screen that fetches: every state through MSW|||Màn hình gọi API: mọi trạng thái qua MSW",
+      "ham": "createClient, AdminBookings, BookingForm (errors)",
+      "fileDung": [
+        "web/api.js",
+        "web/AdminBookings.jsx",
+        "web/BookingForm.jsx"
+      ],
+      "testThamKhao": [
+        "demo6/api-gia.test.jsx",
+        "demo6/th63.test.jsx"
+      ],
+      "yeuCau": "MSW with onUnhandledFrame error in front of the real client; loading, table, empty, 403, 500 then retry, network down; the form wired to the real client|||MSW với onUnhandledFrame error đứng trước client thật; đang tải, bảng, rỗng, 403, 500 rồi thử lại, mất mạng; form nối với client thật",
+      "dotBien": [
+        {
+          "file": "web/api.js",
+          "from": "'/api/admin/bookings'",
+          "to": "'/api/bookings'",
+          "label": "the list calls the wrong path"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "state.bookings.length === 0",
+          "to": "state.bookings.length < 0",
+          "label": "an empty list shows an empty table"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "if (res.status === 403)",
+          "to": "if (res.status === 401)",
+          "label": "403 shown as a generic failure"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "onClick={load}",
+          "to": "onClick={undefined}",
+          "label": "Try again does nothing"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "'Cannot reach the server. Check your connection.'",
+          "to": "'Something went wrong. Try again.'",
+          "label": "a lost connection looks like a server error"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "MESSAGES[res.data.error.code] ??",
+          "to": "MESSAGES.OFF_GRID ??",
+          "label": "every rule error shows the grid message"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/api.js",
+          "from": "'Bearer ' + token",
+          "to": "`Bearer ${token}`",
+          "label": "refactor: template string, same header"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-6-4",
+      "bai": "tst-6-4-nextjs",
+      "config": "vitest.web.config.js",
+      "tieuDe": "Next.js: free slots, a route handler and its data|||Next.js: khung trống, một route handler và dữ liệu của nó",
+      "ham": "freeSlots, GET /api/slots, listBookings",
+      "fileDung": [
+        "web/next/lib/slots.js",
+        "web/next/app/api/slots/route.js",
+        "web/next/lib/bookings.js"
+      ],
+      "testThamKhao": [
+        "demo6/route.test.js",
+        "demo6/th64.test.js"
+      ],
+      "yeuCau": "freeSlots at its edges (empty day, touching bookings); the route called with a real Request in the node environment, MSW as the LabFlow API; 400 and 502|||freeSlots tại các biên (ngày trống, lượt đặt chạm nhau); route gọi với Request thật trong môi trường node, MSW đóng vai API LabFlow; 400 và 502",
+      "dotBien": [
+        {
+          "file": "web/next/lib/slots.js",
+          "from": "t < end && t + STEP > start",
+          "to": "t <= end && t + STEP > start",
+          "label": "the slot right after a booking counts as taken"
+        },
+        {
+          "file": "web/next/lib/slots.js",
+          "from": "t < end && t + STEP > start",
+          "to": "t < end && t + STEP >= start",
+          "label": "the slot right before a booking counts as taken"
+        },
+        {
+          "file": "web/next/lib/slots.js",
+          "from": "t < CLOSE; t += STEP",
+          "to": "t <= CLOSE; t += STEP",
+          "label": "a 21:00 slot after closing time"
+        },
+        {
+          "file": "web/next/app/api/slots/route.js",
+          "from": "if (!lab || !date)",
+          "to": "if (!lab)",
+          "label": "a missing date is not refused"
+        },
+        {
+          "file": "web/next/app/api/slots/route.js",
+          "from": "{ status: 502 }",
+          "to": "{ status: 500 }",
+          "label": "upstream failure answered as 500"
+        },
+        {
+          "file": "web/next/lib/bookings.js",
+          "from": "b.lab === lab && b.date === date",
+          "to": "b.date === date",
+          "label": "other labs' bookings block this lab"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/next/lib/slots.js",
+          "from": "taken.some(",
+          "to": "taken.find(",
+          "label": "refactor: find instead of some (same truthiness)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-6",
+      "bai": "tst-6-5-lab-react",
+      "config": "vitest.web.config.js",
+      "tieuDe": "Lab 6 — the booking form and the admin list: kill 8 mutants|||Lab 6 — form đặt phòng và danh sách admin: diệt 8 đột biến",
+      "ham": "BookingForm, AdminBookings",
+      "fileDung": [
+        "web/BookingForm.jsx",
+        "web/AdminBookings.jsx",
+        "web/support.jsx"
+      ],
+      "testThamKhao": [
+        "web/"
+      ],
+      "yeuCau": "Role and label queries only; alerts vs status; a held promise and a second click; seats 0/1/200/201; 400, 409, 422, 500, 403, empty and retry|||Chỉ truy vấn theo role và label; alert so với status; promise được giữ và lần bấm thứ hai; số chỗ 0/1/200/201; 400, 409, 422, 500, 403, rỗng và thử lại",
+      "dotBien": [
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "role={result.ok ? 'status' : 'alert'}",
+          "to": "role=\"status\"",
+          "label": "errors are not announced as alerts"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "<label htmlFor={id}>",
+          "to": "<label htmlFor={name}>",
+          "label": "labels no longer point at their inputs"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "disabled={busy}",
+          "to": "disabled={false}",
+          "label": "a double click books twice"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "input.seats > 200",
+          "to": "input.seats > 201",
+          "label": "201 seats allowed in the browser"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "setErrors(Object.fromEntries(res.data.error.details.map((d) => [d.path, d.message])));",
+          "to": "setErrors({});",
+          "label": "server field errors are dropped"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "res.data.status === 'PENDING' ?",
+          "to": "res.data.status !== 'PENDING' ?",
+          "label": "pending and confirmed messages swapped"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "if (res.status === 403)",
+          "to": "if (res.status === 401)",
+          "label": "403 shown as a generic failure"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "onClick={load}",
+          "to": "onClick={undefined}",
+          "label": "Try again does nothing"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "const id = 'booking-' + name;",
+          "to": "const id = 'bk-' + name;",
+          "label": "refactor: shorter ids (labels still linked)"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.4 (deck tst-06-4, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-06-4', 'Testing in Next.js: client, server, route', 'Test trong Next.js: client, server, route', [
+  [1, 'Testing in Next.js: client, server, route',
+    `<p>LabFlow’s web app is built with Next.js. Some of its code runs in the browser, some on the server, and some only exists when Next.js assembles the page. Each kind has its own way to test.</p>`,
+    `<p>Web app của LabFlow dựng bằng Next.js. Một phần code chạy trên trình duyệt, một phần trên máy chủ, và một phần chỉ tồn tại khi Next.js ráp trang lại. Mỗi loại có cách test riêng.</p>`],
+  [2, 'What you will take away from this lesson',
+    `<p>Where client components, route handlers and server components stand; what a unit test reaches; and what is left for Playwright in Chapter 7.</p>`,
+    `<p>Client component, route handler và server component nằm ở đâu; unit test với tới đâu; và phần nào để dành cho Playwright ở Chương 7.</p>`],
+  [3, 'Three kinds of code in a Next.js app',
+    `<p>Client components are what lessons 6.1 to 6.3 tested. Route handlers and synchronous server components are functions you can call. Async server components work only one level deep. Routing, middleware and streaming belong to Next.js and need a real browser.</p>`,
+    `<p>Client component là thứ bài 6.1 tới 6.3 đã test. Route handler và server component đồng bộ là hàm gọi được. Server component bất đồng bộ chỉ test được một tầng. Định tuyến, middleware và streaming thuộc về Next.js và cần trình duyệt thật.</p>`],
+  [4, 'A route handler is a function',
+    `<p>A route handler takes a standard <code>Request</code> and returns a standard <code>Response</code>. This one only reads parameters and maps errors; the free-slot calculation is a pure function and the API call lives in a small data module.</p>`,
+    `<p>Route handler nhận một <code>Request</code> chuẩn và trả về một <code>Response</code> chuẩn. Handler này chỉ đọc tham số và đổi lỗi; phần tính khung giờ trống là một hàm thuần, còn lời gọi API nằm trong một module dữ liệu nhỏ.</p>`],
+  [5, 'Call it with a real Request',
+    `<p>The test file declares the node environment, because this code runs on the server. It builds a Request, calls GET, and reads the Response. MSW plays the LabFlow API; <code>vi.stubEnv</code> sets its address.</p>`,
+    `<p>File test khai báo môi trường node, vì code này chạy trên máy chủ. Nó dựng một Request, gọi GET, rồi đọc Response. MSW đóng vai API LabFlow; <code>vi.stubEnv</code> đặt địa chỉ của nó.</p>`],
+  [6, 'Async Server Components: await, then render',
+    `<p>An async server component is a function returning a promise of markup. Await it and render the result, and the test passes. Render it as a normal element and React treats it as an async client component and refuses — the red test shows React’s exact message.</p>`,
+    `<p>Server component bất đồng bộ là một hàm trả về promise của phần giao diện. Await nó rồi render kết quả, test qua. Render nó như một phần tử bình thường thì React coi nó là client component bất đồng bộ và từ chối — test đỏ cho thấy đúng thông báo của React.</p>`],
+  [7, 'Where the limit is',
+    `<p>The await trick covers only the outer component; an async child inside the returned tree fails the same way. <code>notFound()</code>, redirects and layouts need the framework. Keep pages thin and test the assembled page in a real browser.</p>`,
+    `<p>Mẹo await chỉ phủ component ngoài cùng; một component con bất đồng bộ bên trong cây trả về hỏng y như vậy. <code>notFound()</code>, chuyển hướng và layout cần tới framework. Giữ trang mỏng và test trang đã ráp trong trình duyệt thật.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>Unit-test the pure free-slot function at its edges, including touching bookings, and the route’s validation. No DOM is needed for any of it.</p>`,
+    `<p>Unit test hàm thuần tính khung trống ngay tại các biên, kể cả các lượt đặt chạm nhau, và phần kiểm dữ liệu của route. Không cần DOM cho phần nào.</p>`],
+  [9, 'Summary',
+    `<p>Test each kind of code at the level where it lives, push logic into pure functions, and leave the assembled app to end-to-end tests.</p>`,
+    `<p>Test mỗi loại code ở đúng cấp nơi nó sống, đẩy logic vào hàm thuần, và để ứng dụng đã ráp hoàn chỉnh cho test đầu-cuối.</p>`],
+]);

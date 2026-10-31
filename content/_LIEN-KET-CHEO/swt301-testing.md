@@ -37,4 +37,13 @@ Một chiều sang khoá Node.js (Courses): `tst-3-4` → `nodejs-14-2-unit-test
 Một chiều sang khoá API Design (phiên khác soạn — KHÔNG sửa file của nó): `tst-5-3` → `api-2-2-validation`.
 
 Không cặp (đợt mẫu): `tst-1-2-matcher` (SWT301 không dạy matcher JS; phần `assertThrows` đã nằm trong bảng JUnit ↔ Vitest của 1.1), Lab 1 (kiểm thử đột biến — SWT301 chưa có bài tương ứng; Chương 8 Courses sẽ nối với SWT301 Ch.5 coverage).
-Không cặp Chương 2: `tst-2-1-async`, `tst-2-4-ngau-nhien`, Lab 2, quiz (SWT301 không dạy promise, fake timers hay seed). Không cặp Chương 3–4: 3.2 (vi.mock/MSW), 3.3, 4.2–4.4, các Lab và quiz. Không cặp Chương 5: 5.1, 5.3, 5.4 (SWT301 không dạy test API/contract), Lab 5, quiz. Chương 6–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch8 coverage ↔ `swt301-whitebox-coverage`; Ch10 TDD ↔ `swt301-tdd-bdd`).
+Không cặp Chương 2: `tst-2-1-async`, `tst-2-4-ngau-nhien`, Lab 2, quiz (SWT301 không dạy promise, fake timers hay seed). Không cặp Chương 3–4: 3.2 (vi.mock/MSW), 3.3, 4.2–4.4, các Lab và quiz. Không cặp Chương 5: 5.1, 5.3, 5.4 (SWT301 không dạy test API/contract), Lab 5, quiz. Không cặp SWT301 ở Chương 6 (SWT301 không dạy test giao diện tự động). Chương 7–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch8 coverage ↔ `swt301-whitebox-coverage`; Ch10 TDD ↔ `swt301-tdd-bdd`).
+
+FER202 (Academy, slug `front-end-web-development-with-react`) ↔ Testing — hai chiều (01/11, Chương 6):
+
+| FER202 | Courses testing | Giống | Courses sâu thêm |
+|---|---|---|---|
+| `fer202-a2-1-testing` (A2.1) | `tst-6-1-testing-library` | render, screen, ưu tiên getByRole, user-event (Jest + RTL) | Vitest + jsdom, form/danh sách LabFlow thật, MSW cho màn hình gọi API, đo bẫy cleanup + jsdom/happy-dom (CORS preflight), Next.js route handler/Server Component, Lab 6 cài 8 bug (2 bug trợ năng) |
+
+Một chiều sang Courses khác (Chương 6): `tst-6-1` → `react` `rx-9-1-testing-library`; `tst-6-2` → `rx-9-2-async`; `tst-6-3` → `rx-6-1-fetch`;
+`tst-6-4` → `nextjs` `nextjs-19-2-unit-test-vitest`, `nextjs-11-3-route-handlers`.

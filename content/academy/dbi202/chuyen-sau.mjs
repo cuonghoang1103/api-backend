@@ -22866,10 +22866,10 @@ const L_cs7_1 = {
 <pre><code class="language-sql">CREATE TABLE dbo.TaiKhoan (taiKhoan NVARCHAR(50) NOT NULL PRIMARY KEY, matKhau NVARCHAR(50) NOT NULL);
 INSERT INTO dbo.TaiKhoan VALUES (N'admin', N'Abc123'), (N'cuong', N'MatKhau1');
 GO
--- app ghép chuỗi trực tiếp người dùng nhập vào câu lệnh
-DECLARE @dauVao NVARCHAR(100) = N''' OR 1=1 -- ';   -- người dùng gõ vào ô "tên đăng nhập"
+-- the app concatenates raw user input into the statement
+DECLARE @dauVao NVARCHAR(100) = N''' OR 1=1 --';   -- what the user typed into the "username" box
 DECLARE @cauLenh NVARCHAR(500) = N'SELECT taiKhoan FROM dbo.TaiKhoan WHERE taiKhoan = ''' + @dauVao + N'''';
-PRINT @cauLenh;                                     -- câu lệnh THẬT SỰ được gửi tới SQL Server
+PRINT @cauLenh;                                     -- the statement that ACTUALLY reaches SQL Server
 EXEC(@cauLenh);</code></pre>
 <div class="out">(2 rows affected)<br>
 (1 row affected)<br>
@@ -22889,12 +22889,12 @@ INSERT INTO taikhoan VALUES ('admin', 'Abc123'), ('cuong', 'MatKhau1');
 
 CREATE OR REPLACE FUNCTION timTaiKhoan_loi(dauVao text) RETURNS TABLE(taikhoan text) AS $$
 BEGIN
-  -- ghép chuỗi trực tiếp bên trong EXECUTE, giống lỗi thường gặp khi tự dựng SQL động
+  -- string concatenation inside EXECUTE, the same mistake as hand-built dynamic SQL
   RETURN QUERY EXECUTE 'SELECT taikhoan FROM taikhoan WHERE taikhoan = ''' || dauVao || '''';
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM timTaiKhoan_loi('''  OR 1=1 -- ');   -- người dùng gõ vào ô "tên đăng nhập"</code></pre>
+SELECT * FROM timTaiKhoan_loi('''  OR 1=1 --');   -- what the user typed into the "username" box</code></pre>
 <div class="out">INSERT 0 2</div>
 <table>
 <thead><tr><th>taikhoan</th></tr></thead>
@@ -22910,10 +22910,10 @@ Same outcome — both accounts, from one crafted input.</div>
 <pre><code class="language-sql">CREATE TABLE dbo.TaiKhoan (taiKhoan NVARCHAR(50) NOT NULL PRIMARY KEY, matKhau NVARCHAR(50) NOT NULL);
 INSERT INTO dbo.TaiKhoan VALUES (N'admin', N'Abc123'), (N'cuong', N'MatKhau1');
 GO
--- the app concatenates raw user input into the statement
-DECLARE @dauVao NVARCHAR(100) = N''' OR 1=1 -- what the user typed into the "username" box
+-- app ghép chuỗi trực tiếp người dùng nhập vào câu lệnh
+DECLARE @dauVao NVARCHAR(100) = N''' OR 1=1 --';   -- người dùng gõ vào ô "tên đăng nhập"
 DECLARE @cauLenh NVARCHAR(500) = N'SELECT taiKhoan FROM dbo.TaiKhoan WHERE taiKhoan = ''' + @dauVao + N'''';
-PRINT @cauLenh;                                     -- the statement that ACTUALLY reaches SQL Server
+PRINT @cauLenh;                                     -- câu lệnh THẬT SỰ được gửi tới SQL Server
 EXEC(@cauLenh);</code></pre>
 <div class="out">(2 rows affected)<br>
 (1 row affected)<br>
@@ -22933,12 +22933,12 @@ INSERT INTO taikhoan VALUES ('admin', 'Abc123'), ('cuong', 'MatKhau1');
 
 CREATE OR REPLACE FUNCTION timTaiKhoan_loi(dauVao text) RETURNS TABLE(taikhoan text) AS $$
 BEGIN
-  -- string concatenation inside EXECUTE, the same mistake as hand-built dynamic SQL
+  -- ghép chuỗi trực tiếp bên trong EXECUTE, giống lỗi thường gặp khi tự dựng SQL động
   RETURN QUERY EXECUTE 'SELECT taikhoan FROM taikhoan WHERE taikhoan = ''' || dauVao || '''';
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT * FROM timTaiKhoan_loi('''  OR 1=1 -- what the user typed into the "username" box</code></pre>
+SELECT * FROM timTaiKhoan_loi('''  OR 1=1 --');   -- người dùng gõ vào ô "tên đăng nhập"</code></pre>
 <div class="out">INSERT 0 2</div>
 <table>
 <thead><tr><th>taikhoan</th></tr></thead>
@@ -22954,7 +22954,7 @@ Kết quả giống hệt — cả hai tài khoản, từ một input được c
 <pre><code class="language-sql">CREATE TABLE dbo.TaiKhoan (taiKhoan NVARCHAR(50) NOT NULL PRIMARY KEY, matKhau NVARCHAR(50) NOT NULL);
 INSERT INTO dbo.TaiKhoan VALUES (N'admin', N'Abc123'), (N'cuong', N'MatKhau1');
 GO
--- cùng đầu vào, nhưng đi qua THAM SỐ chứ không ghép chuỗi
+-- same input, but passed as a PARAMETER instead of being concatenated
 DECLARE @dauVao NVARCHAR(100) = N''' OR 1=1 --';
 EXEC sp_executesql N'SELECT taiKhoan FROM dbo.TaiKhoan WHERE taiKhoan = @tk',
                     N'@tk NVARCHAR(100)', @tk = @dauVao;</code></pre>
@@ -22975,7 +22975,7 @@ EXEC sp_executesql N'SELECT taiKhoan FROM dbo.TaiKhoan WHERE taiKhoan = @tk',
 <pre><code class="language-sql">CREATE TABLE dbo.TaiKhoan (taiKhoan NVARCHAR(50) NOT NULL PRIMARY KEY, matKhau NVARCHAR(50) NOT NULL);
 INSERT INTO dbo.TaiKhoan VALUES (N'admin', N'Abc123'), (N'cuong', N'MatKhau1');
 GO
--- same input, but passed as a PARAMETER instead of being concatenated
+-- cùng đầu vào, nhưng đi qua THAM SỐ chứ không ghép chuỗi
 DECLARE @dauVao NVARCHAR(100) = N''' OR 1=1 --';
 EXEC sp_executesql N'SELECT taiKhoan FROM dbo.TaiKhoan WHERE taiKhoan = @tk',
                     N'@tk NVARCHAR(100)', @tk = @dauVao;</code></pre>
@@ -22999,14 +22999,14 @@ INSERT INTO taikhoan VALUES ('admin', 'Abc123'), ('cuong', 'MatKhau1');
 
 CREATE OR REPLACE FUNCTION timTaiKhoan_using(dauVao text) RETURNS TABLE(taikhoan text) AS $$
 BEGIN
-  -- USING truyền tham số ra ngoài chuỗi lệnh, không ghép chữ
+  -- USING passes the parameter outside the command text, no string splicing
   RETURN QUERY EXECUTE 'SELECT taikhoan FROM taikhoan WHERE taikhoan = $1' USING dauVao;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION timTaiKhoan_format(dauVao text) RETURNS TABLE(taikhoan text) AS $$
 BEGIN
-  -- format(...,'%L') tự thêm dấu nháy và thoát ký tự đúng cách
+  -- format(...,'%L') adds the quotes and escaping correctly by itself
   RETURN QUERY EXECUTE format('SELECT taikhoan FROM taikhoan WHERE taikhoan = %L', dauVao);
 END;
 $$ LANGUAGE plpgsql;
@@ -23030,7 +23030,7 @@ SELECT * FROM timTaiKhoan_format('''  OR 1=1 --');</code></pre>
 <li><code>EXECUTE … USING value</code> passes the parameter <strong>outside</strong> the command text — the safest form, directly comparable to <code>sp_executesql</code>.</li>
 <li><code>format('…= %L', value)</code> builds the string but has <code>format</code> add the quoting/escaping correctly — useful when you must build the string yourself (e.g. a dynamic column name with <code>%I</code>).</li>
 </ul>
-<div class="callout">🐘 Compare with the vulnerable version on the previous slide: exact same crafted input, string concatenation gives 2 rows, both <code>USING</code> and <code>format(%L)</code> give 0. Review: <a href="/courses/postgresql/learn?lessonSlug=postgresql-7-1-subquery">PostgreSQL 7.1 — building queries safely</a>.</div>
+<div class="callout">🐘 Compare with the vulnerable version on the previous slide: exact same crafted input, string concatenation gives 2 rows, both <code>USING</code> and <code>format(%L)</code> give 0. Review: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-9-capstone-node-prisma-ct-shop">PostgreSQL Lab 9 — parameters from a Node app (Prisma $queryRaw vs $queryRawUnsafe)</a>.</div>
 <p class="meo">🧠 Never use plain <code>format('…%s', value)</code> for a value that goes inside quotes — <code>%s</code> does not quote or escape; only <code>%L</code> (literal) and <code>%I</code> (identifier) do.</p>`,
         `<p class="y-chinh">🎯 SQL động của PostgreSQL (<code>EXECUTE</code> trong PL/pgSQL) có đúng cái bẫy đó và đúng cách sửa đó, chỉ khác cách viết.</p>
 <pre><code class="language-sql">CREATE TABLE taikhoan (taikhoan text NOT NULL PRIMARY KEY, matkhau text NOT NULL);
@@ -23038,14 +23038,14 @@ INSERT INTO taikhoan VALUES ('admin', 'Abc123'), ('cuong', 'MatKhau1');
 
 CREATE OR REPLACE FUNCTION timTaiKhoan_using(dauVao text) RETURNS TABLE(taikhoan text) AS $$
 BEGIN
-  -- USING passes the parameter outside the command text, no string splicing
+  -- USING truyền tham số ra ngoài chuỗi lệnh, không ghép chữ
   RETURN QUERY EXECUTE 'SELECT taikhoan FROM taikhoan WHERE taikhoan = $1' USING dauVao;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION timTaiKhoan_format(dauVao text) RETURNS TABLE(taikhoan text) AS $$
 BEGIN
-  -- format(...,'%L') adds the quotes and escaping correctly by itself
+  -- format(...,'%L') tự thêm dấu nháy và thoát ký tự đúng cách
   RETURN QUERY EXECUTE format('SELECT taikhoan FROM taikhoan WHERE taikhoan = %L', dauVao);
 END;
 $$ LANGUAGE plpgsql;
@@ -23069,7 +23069,7 @@ SELECT * FROM timTaiKhoan_format('''  OR 1=1 --');</code></pre>
 <li><code>EXECUTE … USING value</code> đưa tham số ra <strong>ngoài</strong> văn bản câu lệnh — dạng an toàn nhất, tương đương trực tiếp với <code>sp_executesql</code>.</li>
 <li><code>format('…= %L', value)</code> vẫn dựng chuỗi nhưng để <code>format</code> tự thêm dấu nháy/thoát ký tự đúng cách — hữu ích khi buộc phải tự dựng chuỗi (ví dụ tên cột động, dùng <code>%I</code>).</li>
 </ul>
-<div class="callout">🐘 So với bản dễ bị khai thác ở slide trước: cùng input cố tình dựng sẵn, ghép chuỗi cho 2 dòng, cả <code>USING</code> lẫn <code>format(%L)</code> đều cho 0 dòng. Ôn lại: <a href="/courses/postgresql/learn?lessonSlug=postgresql-7-1-subquery">PostgreSQL 7.1 — dựng truy vấn an toàn</a>.</div>
+<div class="callout">🐘 So với bản dễ bị khai thác ở slide trước: cùng input cố tình dựng sẵn, ghép chuỗi cho 2 dòng, cả <code>USING</code> lẫn <code>format(%L)</code> đều cho 0 dòng. Ôn lại: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-9-capstone-node-prisma-ct-shop">PostgreSQL Lab 9 — tham số hoá từ app Node (Prisma $queryRaw vs $queryRawUnsafe)</a>.</div>
 <p class="meo">🧠 Đừng dùng <code>format('…%s', value)</code> trơn cho giá trị nằm trong dấu nháy — <code>%s</code> không thêm dấu nháy/thoát ký tự; chỉ <code>%L</code> (literal) và <code>%I</code> (identifier) mới làm việc đó.</p>`],
       [7, 'Tầng ứng dụng: tham số hoá ở mọi driver',
         `<p class="y-chinh">🎯 Every mainstream driver supports parameters — the fix from slides 5–6 has a direct equivalent in Node.js, Java, and Prisma.</p>
@@ -23367,7 +23367,7 @@ SELECT * FROM doanhso ORDER BY id;   -- chủ sở hữu (postgres) mặc địn
 </tbody>
 </table>
 <p>The table has 2 rows (HN, HCM). Role <code>nhanvien_hn</code> was granted plain <code>SELECT</code> — yet it sees only 1 row. Not because it lacks a permission, but because the <strong>policy adds a WHERE it never wrote</strong> to every query that role runs, including queries that were never written with this policy in mind.</p>
-<div class="callout">🐘 The table's owner (and any superuser) <strong>bypasses RLS by default</strong> — still sees every row. Course lesson: <a href="/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap">PostgreSQL 11.3 — isolation and session-level guarantees</a>.</div>
+<div class="callout">🐘 The table's owner (and any superuser) <strong>bypasses RLS by default</strong> — still sees every row. Course lesson: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-8-sao-luu-nhan-ban-ct-shop">PostgreSQL Lab 8 — a read-only role with GRANT</a>.</div>
 <p class="meo">🧠 RLS is "hidden API": application code never has to remember an extra condition — the database filters for every query on its own.</p>`,
         `<p class="y-chinh">🎯 Một policy Row-Level Security lặng lẽ thêm một điều kiện vào MỌI câu truy vấn mà một role chạy trên bảng đó — role không cần biết điều kiện đó tồn tại.</p>
 <pre><code class="language-sql">CREATE TABLE doanhso (id int PRIMARY KEY, mien text, tien int);
@@ -23398,7 +23398,7 @@ SELECT * FROM doanhso ORDER BY id;   -- chủ sở hữu (postgres) mặc địn
 </tbody>
 </table>
 <p>Bảng có 2 dòng (HN, HCM). Role <code>nhanvien_hn</code> chỉ được cấp <code>SELECT</code> trơn — vậy mà CHỈ THẤY 1 dòng. Không phải vì thiếu quyền, mà vì <strong>policy tự thêm một WHERE mà nó chưa từng viết</strong> vào mọi câu truy vấn của role đó, kể cả những câu chưa từng biết tới policy này.</p>
-<div class="callout">🐘 Chủ bảng (và mọi superuser) mặc định <strong>BYPASS RLS</strong> — vẫn thấy đủ mọi dòng. Bài trong khoá: <a href="/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap">PostgreSQL 11.3 — mức cô lập và bảo đảm theo phiên</a>.</div>
+<div class="callout">🐘 Chủ bảng (và mọi superuser) mặc định <strong>BYPASS RLS</strong> — vẫn thấy đủ mọi dòng. Bài trong khoá: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-8-sao-luu-nhan-ban-ct-shop">PostgreSQL Lab 8 — tài khoản chỉ đọc bằng role + GRANT</a>.</div>
 <p class="meo">🧠 RLS đúng nghĩa "ẩn API": code tầng ứng dụng không cần nhớ thêm điều kiện — CSDL tự lọc cho mọi câu truy vấn.</p>`],
       [15, 'Row-Level Security — SQL Server (Security Policy)',
         `<p class="y-chinh">🎯 SQL Server reaches the same result through a named predicate function bound to a Security Policy — same idea, different vocabulary, and it really works on Azure SQL Edge.</p>
@@ -23494,7 +23494,7 @@ SELECT * FROM dbo.DoanhSo ORDER BY id;   -- chủ CSDL (ở đây là sa) đi qu
 <div class="pitfall">PostgreSQL cộng đồng KHÔNG có TDE dựng sẵn — mã hoá đĩa thường làm ở tầng hệ điều hành/ổ đĩa (LUKS, mã hoá đĩa của nhà cung cấp cloud) hoặc bằng bản trả phí.</div>`],
       [17, 'KHÔNG lưu mật khẩu thô — băm đúng cách',
         `<p class="y-chinh">🎯 A fast hash (SHA-256, MD5) with no salt gives the SAME password the SAME hash every time — that is exactly why it is unsafe for passwords, and bcrypt/argon2 fix it with a per-hash salt.</p>
-<pre><code class="language-sql">-- SQL Server KHÔNG có hàm băm bcrypt/argon2 sẵn — chỉ có băm nhanh (SHA-2, MD5)
+<pre><code class="language-sql">-- SQL Server has NO built-in bcrypt/argon2 — only fast hashes (SHA-2, MD5)
 SELECT CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', N'MatKhau1'), 2) AS bam_sha256_1,
        CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', N'MatKhau1'), 2) AS bam_sha256_2;  -- CÙNG một chuỗi ⇒ CÙNG một mã băm, luôn luôn</code></pre>
 <table>
@@ -23506,8 +23506,8 @@ SELECT CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', N'MatKhau1'), 2) AS bam_sha256
 <p>Two users with the password <code>MatKhau1</code> get the <strong>identical</strong> SHA-256 hash — that instantly reveals that they share a password, and a precomputed "rainbow table" can crack both at once.</p>
 <div class="callout">🐘 <strong>On PostgreSQL</strong>, <code>pgcrypto</code>'s <code>crypt()</code> with <code>gen_salt('bf')</code> gives bcrypt — each hash carries its own random salt, so identical passwords produce different-looking hashes:
 <pre><code class="language-sql">CREATE EXTENSION IF NOT EXISTS pgcrypto;
--- PostgreSQL CÓ bcrypt qua extension pgcrypto (salt cố định dưới đây CHỈ để bài học ra kết quả tất định —
--- thực tế luôn dùng gen_salt('bf'), sinh salt NGẪU NHIÊN mỗi lần)
+-- PostgreSQL DOES have bcrypt via the pgcrypto extension (the fixed salt below is ONLY so the lesson gives a deterministic result —
+-- in real code always use gen_salt('bf'), which generates a RANDOM salt every time)
 SELECT crypt('MatKhau1', '$2a$08$C6UzMDM.H6dfI/f/IKcEe.') AS bam_co_dinh,
        crypt('MatKhau1', '$2a$08$C6UzMDM.H6dfI/f/IKcEe.') = crypt('MatKhau1', '$2a$08$C6UzMDM.H6dfI/f/IKcEe.') AS khop_lai_dung;</code></pre>
 <table>
@@ -23519,7 +23519,7 @@ SELECT crypt('MatKhau1', '$2a$08$C6UzMDM.H6dfI/f/IKcEe.') AS bam_co_dinh,
 (the salt here is fixed only so the lesson's output is reproducible; real code always uses <code>gen_salt('bf')</code> for a random one.)</div>
 <div class="pitfall">Password hashing belongs in the <strong>application layer</strong> (Node <code>bcrypt</code>, Java <code>BCrypt</code>), not in a SQL statement — SQL Server has no built-in bcrypt/argon2 at all, only fast hashes meant for integrity checks, not secrets.</div>`,
         `<p class="y-chinh">🎯 Băm nhanh (SHA-256, MD5) không salt cho CÙNG một mật khẩu ra CÙNG một mã băm, mọi lần — đó chính là lý do nó không an toàn cho mật khẩu, và bcrypt/argon2 sửa bằng salt riêng cho mỗi lần băm.</p>
-<pre><code class="language-sql">-- SQL Server has NO built-in bcrypt/argon2 — only fast hashes (SHA-2, MD5)
+<pre><code class="language-sql">-- SQL Server KHÔNG có hàm băm bcrypt/argon2 sẵn — chỉ có băm nhanh (SHA-2, MD5)
 SELECT CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', N'MatKhau1'), 2) AS bam_sha256_1,
        CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', N'MatKhau1'), 2) AS bam_sha256_2;  -- CÙNG một chuỗi ⇒ CÙNG một mã băm, luôn luôn</code></pre>
 <table>
@@ -23531,8 +23531,8 @@ SELECT CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', N'MatKhau1'), 2) AS bam_sha256
 <p>Hai người dùng cùng mật khẩu <code>MatKhau1</code> ra mã băm SHA-256 <strong>giống hệt</strong> — điều đó lộ ra ngay là họ dùng chung mật khẩu, và một "bảng cầu vồng" (rainbow table) tính sẵn có thể dò trúng cả hai cùng lúc.</p>
 <div class="callout">🐘 <strong>Trên PostgreSQL</strong>, <code>crypt()</code> của <code>pgcrypto</code> với <code>gen_salt('bf')</code> cho bcrypt — mỗi mã băm mang một salt ngẫu nhiên riêng, nên mật khẩu giống nhau vẫn ra mã băm khác nhau:
 <pre><code class="language-sql">CREATE EXTENSION IF NOT EXISTS pgcrypto;
--- PostgreSQL DOES have bcrypt via the pgcrypto extension (the fixed salt below is ONLY so the lesson gives a deterministic result —
--- in real code always use gen_salt('bf'), which generates a RANDOM salt every time)
+-- PostgreSQL CÓ bcrypt qua extension pgcrypto (salt cố định dưới đây CHỈ để bài học ra kết quả tất định —
+-- thực tế luôn dùng gen_salt('bf'), sinh salt NGẪU NHIÊN mỗi lần)
 SELECT crypt('MatKhau1', '$2a$08$C6UzMDM.H6dfI/f/IKcEe.') AS bam_co_dinh,
        crypt('MatKhau1', '$2a$08$C6UzMDM.H6dfI/f/IKcEe.') = crypt('MatKhau1', '$2a$08$C6UzMDM.H6dfI/f/IKcEe.') AS khop_lai_dung;</code></pre>
 <table>
@@ -23571,7 +23571,7 @@ SELECT * FROM dbo.KhachHang;   -- sa: thấy dữ liệu thật, không bị che
 </table>
 <p><code>cskh</code> was granted <code>SELECT</code> but never <code>UNMASK</code> — it sees masked <code>email</code>/<code>soCCCD</code>. The owner sees the real values.</p>
 <div class="callout">🐘 <strong>PostgreSQL has no built-in DDM</strong> — the usual workaround is a masking VIEW plus granting only on the view, never on the base table:
-<pre><code class="language-sql">-- PostgreSQL KHÔNG có Dynamic Data Masking dựng sẵn — cách thay thế thường dùng: VIEW che dữ liệu + chỉ cấp quyền trên VIEW
+<pre><code class="language-sql">-- PostgreSQL has NO built-in Dynamic Data Masking — the usual workaround: a masking VIEW + grant only on the VIEW
 CREATE TABLE khachhang (id int PRIMARY KEY, email text, soCCCD text);
 INSERT INTO khachhang VALUES (1, 'quang@fpt.edu.vn', '123-45-6789');
 CREATE VIEW khachhang_che AS
@@ -23629,7 +23629,7 @@ SELECT * FROM dbo.KhachHang;   -- sa: thấy dữ liệu thật, không bị che
 </table>
 <p><code>cskh</code> được cấp <code>SELECT</code> nhưng chưa từng có <code>UNMASK</code> — nó thấy <code>email</code>/<code>soCCCD</code> đã che. Chủ bảng thấy giá trị thật.</p>
 <div class="callout">🐘 <strong>PostgreSQL không có DDM dựng sẵn</strong> — cách thường dùng là một VIEW che dữ liệu và chỉ GRANT trên view, không bao giờ GRANT bảng gốc:
-<pre><code class="language-sql">-- PostgreSQL has NO built-in Dynamic Data Masking — the usual workaround: a masking VIEW + grant only on the VIEW
+<pre><code class="language-sql">-- PostgreSQL KHÔNG có Dynamic Data Masking dựng sẵn — cách thay thế thường dùng: VIEW che dữ liệu + chỉ cấp quyền trên VIEW
 CREATE TABLE khachhang (id int PRIMARY KEY, email text, soCCCD text);
 INSERT INTO khachhang VALUES (1, 'quang@fpt.edu.vn', '123-45-6789');
 CREATE VIEW khachhang_che AS
@@ -23769,9 +23769,9 @@ CREATE TABLE donhang_2026_09 PARTITION OF donhang FOR VALUES FROM ('2026-09-01')
 CREATE TABLE donhang_2026_10 PARTITION OF donhang FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
 INSERT INTO donhang VALUES (1, '2026-09-05', 100), (2, '2026-10-12', 200);
 
--- mỗi dòng tự "rơi" đúng phân vùng theo ngay
+-- every row lands in the right partition on its own, by ngay
 SELECT tableoid::regclass AS phan_vung, * FROM donhang ORDER BY id;
--- kế hoạch truy vấn CHỈ quét phân vùng tháng 10 — partition pruning
+-- the plan scans ONLY the October partition — partition pruning
 EXPLAIN (COSTS OFF) SELECT * FROM donhang WHERE ngay = '2026-10-12';</code></pre>
 <div class="out">INSERT 0 2</div>
 <table>
@@ -23798,7 +23798,7 @@ CREATE TABLE dbo.DonHang (id INT, ngay DATE, tien INT)
     ON ps_theoThang(ngay);
 INSERT INTO dbo.DonHang VALUES (1, '2026-09-05', 100), (2, '2026-10-12', 200);
 GO
--- $PARTITION cho biết dòng đang ở phân vùng số mấy
+-- $PARTITION reports which partition number a row is in
 SELECT id, ngay, tien, $PARTITION.pf_theoThang(ngay) AS so_phan_vung
 FROM dbo.DonHang ORDER BY id;
 SELECT $PARTITION.pf_theoThang('2026-10-12') AS phan_vung_thang10;</code></pre>
@@ -23824,9 +23824,9 @@ CREATE TABLE donhang_2026_09 PARTITION OF donhang FOR VALUES FROM ('2026-09-01')
 CREATE TABLE donhang_2026_10 PARTITION OF donhang FOR VALUES FROM ('2026-10-01') TO ('2026-11-01');
 INSERT INTO donhang VALUES (1, '2026-09-05', 100), (2, '2026-10-12', 200);
 
--- every row lands in the right partition on its own, by ngay
+-- mỗi dòng tự "rơi" đúng phân vùng theo ngay
 SELECT tableoid::regclass AS phan_vung, * FROM donhang ORDER BY id;
--- the plan scans ONLY the October partition — partition pruning
+-- kế hoạch truy vấn CHỈ quét phân vùng tháng 10 — partition pruning
 EXPLAIN (COSTS OFF) SELECT * FROM donhang WHERE ngay = '2026-10-12';</code></pre>
 <div class="out">INSERT 0 2</div>
 <table>
@@ -23853,7 +23853,7 @@ CREATE TABLE dbo.DonHang (id INT, ngay DATE, tien INT)
     ON ps_theoThang(ngay);
 INSERT INTO dbo.DonHang VALUES (1, '2026-09-05', 100), (2, '2026-10-12', 200);
 GO
--- $PARTITION reports which partition number a row is in
+-- $PARTITION cho biết dòng đang ở phân vùng số mấy
 SELECT id, ngay, tien, $PARTITION.pf_theoThang(ngay) AS so_phan_vung
 FROM dbo.DonHang ORDER BY id;
 SELECT $PARTITION.pf_theoThang('2026-10-12') AS phan_vung_thang10;</code></pre>
@@ -23905,107 +23905,6 @@ default_pool_size = 20</code></pre>
 <pre><code class="language-sql">CREATE TABLE dbo.SanPham (id INT PRIMARY KEY, ten NVARCHAR(50));
 INSERT INTO dbo.SanPham VALUES (1, N'Bút'), (2, N'Vở');
 GO
--- câu này tốn bao nhiêu "đọc" trang (logical reads) — dấu hiệu đầu tiên của truy vấn chậm
-SET STATISTICS IO ON;
-SELECT * FROM dbo.SanPham WHERE ten = N'Vở';
-SET STATISTICS IO OFF;
-GO
--- khoá mà GIAO DỊCH CỦA CHÍNH PHIÊN NÀY đang giữ
-BEGIN TRAN;
-UPDATE dbo.SanPham SET ten = N'Bút bi' WHERE id = 1;
-SELECT resource_type, request_mode, request_status
-FROM sys.dm_tran_locks
-WHERE request_session_id = @@SPID AND resource_type = 'OBJECT';
-COMMIT;
-GO
--- dung lượng CSDL đang dùng
-EXEC sp_spaceused;</code></pre>
-<div class="out">(2 rows affected)</div>
-<table>
-<thead><tr><th>id</th><th>ten</th></tr></thead>
-<tbody>
-<tr><td>2</td><td>Vở</td></tr>
-</tbody>
-</table>
-<div class="out">Table 'SanPham'. Scan count 1, logical reads 2, physical reads 0, page server reads 0, read-ahead reads 0, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.<br>
-(1 row affected)</div>
-<table>
-<thead><tr><th>resource_type</th><th>request_mode</th><th>request_status</th></tr></thead>
-<tbody>
-<tr><td>OBJECT</td><td>IX</td><td>GRANT</td></tr>
-</tbody>
-</table>
-<div class="out">(1 row affected)<br>
-(1 row affected)</div>
-<table>
-<thead><tr><th>database_name</th><th>database_size</th><th>unallocated space</th></tr></thead>
-<tbody>
-<tr><td>DBI202</td><td>16.00 MB</td><td>5.55 MB</td></tr>
-</tbody>
-</table>
-<table>
-<thead><tr><th>reserved</th><th>data</th><th>index_size</th><th>unused</th></tr></thead>
-<tbody>
-<tr><td>2504 KB</td><td>976 KB</td><td>1248 KB</td><td>280 KB</td></tr>
-</tbody>
-</table>
-<p><code>SET STATISTICS IO ON</code> reports the exact number of logical page reads a statement costs — the same query dropped from 13 reads to 2 after adding an index (see the exercises). The session's own locks show up in <code>sys.dm_tran_locks</code> filtered to <code>@@SPID</code>; <code>sp_spaceused</code> reports database and table size.</p>
-<div class="callout">🐘 <strong>On PostgreSQL</strong>, the equivalents need no extension for the first two: <code>EXPLAIN (ANALYZE, …)</code> for cost, <code>pg_locks</code> filtered to <code>pg_backend_pid()</code> for the session's own locks, <code>pg_size_pretty(pg_total_relation_size(...))</code> for size:
-<pre><code class="language-sql">CREATE TABLE sanpham (id int PRIMARY KEY, ten text);
-INSERT INTO sanpham VALUES (1, 'But'), (2, 'Vo');
-
--- không cần cài gì thêm: quét bao nhiêu dòng cho một câu (bỏ thời gian/chi phí để kết quả tất định)
-BEGIN;
-EXPLAIN (ANALYZE, TIMING OFF, COSTS OFF, SUMMARY OFF) SELECT * FROM sanpham WHERE ten = 'Vo';
-COMMIT;
--- khoá mà GIAO DỊCH CỦA CHÍNH PHIÊN NÀY đang giữ
-BEGIN;
-UPDATE sanpham SET ten = 'But bi' WHERE id = 1;
-SELECT locktype, mode, granted FROM pg_locks WHERE pid = pg_backend_pid() AND relation = 'sanpham'::regclass;
-COMMIT;
--- dung lượng bảng đang dùng
-SELECT pg_size_pretty(pg_total_relation_size('sanpham')) AS dung_luong;</code></pre>
-<div class="out">INSERT 0 2</div>
-<table>
-<thead><tr><th>QUERY PLAN</th></tr></thead>
-<tbody>
-<tr><td>Seq Scan on sanpham (actual rows=1 loops=1)</td></tr>
-<tr><td>  Filter: (ten = 'Vo'::text)</td></tr>
-<tr><td>  Rows Removed by Filter: 1</td></tr>
-</tbody>
-</table>
-<div class="out">UPDATE 1</div>
-<table>
-<thead><tr><th>locktype</th><th>mode</th><th>granted</th></tr></thead>
-<tbody>
-<tr><td>relation</td><td>RowExclusiveLock</td><td>t</td></tr>
-</tbody>
-</table>
-<table>
-<thead><tr><th>dung_luong</th></tr></thead>
-<tbody>
-<tr><td>32 kB</td></tr>
-</tbody>
-</table>
-For finding slow queries across the whole instance, <code>pg_stat_statements</code> is the standard tool — but installing it is not the same as it working:
-<pre><code class="language-sql">CREATE EXTENSION IF NOT EXISTS pg_stat_statements;   -- CÀI được — không báo lỗi
--- nhưng CHƯA được nạp qua shared_preload_libraries (cần sửa postgresql.conf + khởi động lại) ⇒ lỗi thật khi truy vấn
-SELECT query, calls FROM pg_stat_statements LIMIT 3;</code></pre>
-<div class="out"><b>ERROR:  pg_stat_statements must be loaded via shared_preload_libraries</b></div>
-The extension installs cleanly, yet querying it fails until it is also loaded via <code>shared_preload_libraries</code> in <code>postgresql.conf</code>, which needs a server restart.</div>
-<table>
-<thead><tr><th>Need</th><th>SQL Server</th><th>PostgreSQL</th></tr></thead>
-<tbody>
-<tr><td>Expensive queries</td><td>SET STATISTICS IO / sys.dm_exec_query_stats</td><td>EXPLAIN ANALYZE / pg_stat_statements (needs shared_preload_libraries)</td></tr>
-<tr><td>Locks held/waiting</td><td>sys.dm_tran_locks</td><td>pg_locks</td></tr>
-<tr><td>Size</td><td>sp_spaceused</td><td>pg_size_pretty(pg_total_relation_size(...))</td></tr>
-</tbody>
-</table>
-<div class="callout"><strong>Minimum checklist for a school project:</strong> are statements parameterized? does the app use its own account, never the database owner's? are passwords hashed with bcrypt/argon2 in the application layer? is there a backup schedule AND has it actually been restore-tested? are there indexes for the columns used in WHERE/JOIN?</div>`,
-        `<p class="y-chinh">🎯 Tìm một truy vấn chậm, một dòng đang bị khoá, và dung lượng một bảng đang dùng không cần công cụ đặc biệt ở cả hai hệ — và ngay cả một extension thật cũng có thể cài xong mà chưa chạy được.</p>
-<pre><code class="language-sql">CREATE TABLE dbo.SanPham (id INT PRIMARY KEY, ten NVARCHAR(50));
-INSERT INTO dbo.SanPham VALUES (1, N'Bút'), (2, N'Vở');
-GO
 -- how many page "reads" this statement costs — the first sign of a slow query
 SET STATISTICS IO ON;
 SELECT * FROM dbo.SanPham WHERE ten = N'Vở';
@@ -24050,8 +23949,8 @@ EXEC sp_spaceused;</code></pre>
 <tr><td>2504 KB</td><td>976 KB</td><td>1248 KB</td><td>280 KB</td></tr>
 </tbody>
 </table>
-<p><code>SET STATISTICS IO ON</code> báo đúng số trang được đọc (logical reads) cho một câu lệnh — cùng câu truy vấn giảm từ 13 xuống 2 lần đọc sau khi thêm chỉ mục (xem bài tập). Khoá của chính phiên này hiện trong <code>sys.dm_tran_locks</code> lọc theo <code>@@SPID</code>; <code>sp_spaceused</code> báo dung lượng CSDL và bảng.</p>
-<div class="callout">🐘 <strong>Trên PostgreSQL</strong>, hai việc đầu không cần extension: <code>EXPLAIN (ANALYZE, …)</code> cho chi phí, <code>pg_locks</code> lọc theo <code>pg_backend_pid()</code> cho khoá của chính phiên này, <code>pg_size_pretty(pg_total_relation_size(...))</code> cho dung lượng:
+<p><code>SET STATISTICS IO ON</code> reports the exact number of logical page reads a statement costs — the same query dropped from 13 reads to 2 after adding an index (see the exercises). The session's own locks show up in <code>sys.dm_tran_locks</code> filtered to <code>@@SPID</code>; <code>sp_spaceused</code> reports database and table size.</p>
+<div class="callout">🐘 <strong>On PostgreSQL</strong>, the equivalents need no extension for the first two: <code>EXPLAIN (ANALYZE, …)</code> for cost, <code>pg_locks</code> filtered to <code>pg_backend_pid()</code> for the session's own locks, <code>pg_size_pretty(pg_total_relation_size(...))</code> for size:
 <pre><code class="language-sql">CREATE TABLE sanpham (id int PRIMARY KEY, ten text);
 INSERT INTO sanpham VALUES (1, 'But'), (2, 'Vo');
 
@@ -24088,9 +23987,110 @@ SELECT pg_size_pretty(pg_total_relation_size('sanpham')) AS dung_luong;</code></
 <tr><td>32 kB</td></tr>
 </tbody>
 </table>
-Muốn tìm truy vấn chậm trên cả instance, <code>pg_stat_statements</code> là công cụ chuẩn — nhưng cài xong KHÔNG có nghĩa là dùng được:
+For finding slow queries across the whole instance, <code>pg_stat_statements</code> is the standard tool — but installing it is not the same as it working:
 <pre><code class="language-sql">CREATE EXTENSION IF NOT EXISTS pg_stat_statements;   -- CÀI được — không báo lỗi
 -- but NOT loaded via shared_preload_libraries (needs postgresql.conf + a restart) ⇒ a real error on query
+SELECT query, calls FROM pg_stat_statements LIMIT 3;</code></pre>
+<div class="out"><b>ERROR:  pg_stat_statements must be loaded via shared_preload_libraries</b></div>
+The extension installs cleanly, yet querying it fails until it is also loaded via <code>shared_preload_libraries</code> in <code>postgresql.conf</code>, which needs a server restart.</div>
+<table>
+<thead><tr><th>Need</th><th>SQL Server</th><th>PostgreSQL</th></tr></thead>
+<tbody>
+<tr><td>Expensive queries</td><td>SET STATISTICS IO / sys.dm_exec_query_stats</td><td>EXPLAIN ANALYZE / pg_stat_statements (needs shared_preload_libraries)</td></tr>
+<tr><td>Locks held/waiting</td><td>sys.dm_tran_locks</td><td>pg_locks</td></tr>
+<tr><td>Size</td><td>sp_spaceused</td><td>pg_size_pretty(pg_total_relation_size(...))</td></tr>
+</tbody>
+</table>
+<div class="callout"><strong>Minimum checklist for a school project:</strong> are statements parameterized? does the app use its own account, never the database owner's? are passwords hashed with bcrypt/argon2 in the application layer? is there a backup schedule AND has it actually been restore-tested? are there indexes for the columns used in WHERE/JOIN?</div>`,
+        `<p class="y-chinh">🎯 Tìm một truy vấn chậm, một dòng đang bị khoá, và dung lượng một bảng đang dùng không cần công cụ đặc biệt ở cả hai hệ — và ngay cả một extension thật cũng có thể cài xong mà chưa chạy được.</p>
+<pre><code class="language-sql">CREATE TABLE dbo.SanPham (id INT PRIMARY KEY, ten NVARCHAR(50));
+INSERT INTO dbo.SanPham VALUES (1, N'Bút'), (2, N'Vở');
+GO
+-- câu này tốn bao nhiêu "đọc" trang (logical reads) — dấu hiệu đầu tiên của truy vấn chậm
+SET STATISTICS IO ON;
+SELECT * FROM dbo.SanPham WHERE ten = N'Vở';
+SET STATISTICS IO OFF;
+GO
+-- khoá mà GIAO DỊCH CỦA CHÍNH PHIÊN NÀY đang giữ
+BEGIN TRAN;
+UPDATE dbo.SanPham SET ten = N'Bút bi' WHERE id = 1;
+SELECT resource_type, request_mode, request_status
+FROM sys.dm_tran_locks
+WHERE request_session_id = @@SPID AND resource_type = 'OBJECT';
+COMMIT;
+GO
+-- dung lượng CSDL đang dùng
+EXEC sp_spaceused;</code></pre>
+<div class="out">(2 rows affected)</div>
+<table>
+<thead><tr><th>id</th><th>ten</th></tr></thead>
+<tbody>
+<tr><td>2</td><td>Vở</td></tr>
+</tbody>
+</table>
+<div class="out">Table 'SanPham'. Scan count 1, logical reads 2, physical reads 0, page server reads 0, read-ahead reads 0, page server read-ahead reads 0, lob logical reads 0, lob physical reads 0, lob page server reads 0, lob read-ahead reads 0, lob page server read-ahead reads 0.<br>
+(1 row affected)</div>
+<table>
+<thead><tr><th>resource_type</th><th>request_mode</th><th>request_status</th></tr></thead>
+<tbody>
+<tr><td>OBJECT</td><td>IX</td><td>GRANT</td></tr>
+</tbody>
+</table>
+<div class="out">(1 row affected)<br>
+(1 row affected)</div>
+<table>
+<thead><tr><th>database_name</th><th>database_size</th><th>unallocated space</th></tr></thead>
+<tbody>
+<tr><td>DBI202</td><td>16.00 MB</td><td>5.55 MB</td></tr>
+</tbody>
+</table>
+<table>
+<thead><tr><th>reserved</th><th>data</th><th>index_size</th><th>unused</th></tr></thead>
+<tbody>
+<tr><td>2504 KB</td><td>976 KB</td><td>1248 KB</td><td>280 KB</td></tr>
+</tbody>
+</table>
+<p><code>SET STATISTICS IO ON</code> báo đúng số trang được đọc (logical reads) cho một câu lệnh — cùng câu truy vấn giảm từ 13 xuống 2 lần đọc sau khi thêm chỉ mục (xem bài tập). Khoá của chính phiên này hiện trong <code>sys.dm_tran_locks</code> lọc theo <code>@@SPID</code>; <code>sp_spaceused</code> báo dung lượng CSDL và bảng.</p>
+<div class="callout">🐘 <strong>Trên PostgreSQL</strong>, hai việc đầu không cần extension: <code>EXPLAIN (ANALYZE, …)</code> cho chi phí, <code>pg_locks</code> lọc theo <code>pg_backend_pid()</code> cho khoá của chính phiên này, <code>pg_size_pretty(pg_total_relation_size(...))</code> cho dung lượng:
+<pre><code class="language-sql">CREATE TABLE sanpham (id int PRIMARY KEY, ten text);
+INSERT INTO sanpham VALUES (1, 'But'), (2, 'Vo');
+
+-- không cần cài gì thêm: quét bao nhiêu dòng cho một câu (bỏ thời gian/chi phí để kết quả tất định)
+BEGIN;
+EXPLAIN (ANALYZE, TIMING OFF, COSTS OFF, SUMMARY OFF) SELECT * FROM sanpham WHERE ten = 'Vo';
+COMMIT;
+-- khoá mà GIAO DỊCH CỦA CHÍNH PHIÊN NÀY đang giữ
+BEGIN;
+UPDATE sanpham SET ten = 'But bi' WHERE id = 1;
+SELECT locktype, mode, granted FROM pg_locks WHERE pid = pg_backend_pid() AND relation = 'sanpham'::regclass;
+COMMIT;
+-- dung lượng bảng đang dùng
+SELECT pg_size_pretty(pg_total_relation_size('sanpham')) AS dung_luong;</code></pre>
+<div class="out">INSERT 0 2</div>
+<table>
+<thead><tr><th>QUERY PLAN</th></tr></thead>
+<tbody>
+<tr><td>Seq Scan on sanpham (actual rows=1 loops=1)</td></tr>
+<tr><td>  Filter: (ten = 'Vo'::text)</td></tr>
+<tr><td>  Rows Removed by Filter: 1</td></tr>
+</tbody>
+</table>
+<div class="out">UPDATE 1</div>
+<table>
+<thead><tr><th>locktype</th><th>mode</th><th>granted</th></tr></thead>
+<tbody>
+<tr><td>relation</td><td>RowExclusiveLock</td><td>t</td></tr>
+</tbody>
+</table>
+<table>
+<thead><tr><th>dung_luong</th></tr></thead>
+<tbody>
+<tr><td>32 kB</td></tr>
+</tbody>
+</table>
+Muốn tìm truy vấn chậm trên cả instance, <code>pg_stat_statements</code> là công cụ chuẩn — nhưng cài xong KHÔNG có nghĩa là dùng được:
+<pre><code class="language-sql">CREATE EXTENSION IF NOT EXISTS pg_stat_statements;   -- CÀI được — không báo lỗi
+-- nhưng CHƯA được nạp qua shared_preload_libraries (cần sửa postgresql.conf + khởi động lại) ⇒ lỗi thật khi truy vấn
 SELECT query, calls FROM pg_stat_statements LIMIT 3;</code></pre>
 <div class="out"><b>ERROR:  pg_stat_statements must be loaded via shared_preload_libraries</b></div>
 Extension cài sạch sẽ, nhưng truy vấn nó báo lỗi cho tới khi được nạp thêm qua <code>shared_preload_libraries</code> trong <code>postgresql.conf</code>, việc này cần khởi động lại server.</div>
@@ -24145,7 +24145,7 @@ const L_x_cs7_on = {
 <pre><code class="language-sql">CREATE TABLE dbo.SanPham (id INT PRIMARY KEY, ten NVARCHAR(50), gia INT);
 INSERT INTO dbo.SanPham VALUES (1, N'Bút bi', 5000), (2, N'Vở', 12000), (3, N'Thước kẻ', 3000);
 GO
--- ô tìm kiếm trên web: người dùng gõ "Vở"
+-- the web search box: the user types "Vo"
 DECLARE @tuKhoa NVARCHAR(100) = N'Vở%'' UNION SELECT id, ten, 999999 FROM dbo.SanPham --';
 DECLARE @cauLenh NVARCHAR(500) = N'SELECT id, ten, gia FROM dbo.SanPham WHERE ten LIKE N''' + @tuKhoa + N'''';
 EXEC(@cauLenh);   -- kẻ tấn công đổi GIÁ hiển thị của MỌI sản phẩm thành 999999
@@ -24210,7 +24210,7 @@ SELECT * FROM timKiem_fix('Vo%'' UNION SELECT id, ten, 999999 FROM sanpham --');
 <tr><td>(0 rows)</td><td></td><td></td></tr>
 </tbody>
 </table>
-Review: <a href="/courses/postgresql/learn?lessonSlug=postgresql-7-1-subquery">PostgreSQL 7.1 — building queries safely</a>.</div>
+Review: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-9-capstone-node-prisma-ct-shop">PostgreSQL Lab 9 — parameters from a Node app (Prisma $queryRaw vs $queryRawUnsafe)</a>.</div>
 <div class="pitfall">A <code>UNION</code>-based attack needs the injected <code>SELECT</code> to return the <strong>same number of columns</strong>, in compatible types, as the original query — this is exactly why attackers often first probe with <code>UNION SELECT NULL</code>, <code>UNION SELECT NULL, NULL</code>, … to find the right count before crafting the real payload.</div>`,
     `<h3>🧪 Bài 1 — Sửa lỗi injection trong ô tìm kiếm sản phẩm (~15 phút)</h3>
 <p class="nhan">Đề bài</p>
@@ -24221,7 +24221,7 @@ Review: <a href="/courses/postgresql/learn?lessonSlug=postgresql-7-1-subquery">P
 <pre><code class="language-sql">CREATE TABLE dbo.SanPham (id INT PRIMARY KEY, ten NVARCHAR(50), gia INT);
 INSERT INTO dbo.SanPham VALUES (1, N'Bút bi', 5000), (2, N'Vở', 12000), (3, N'Thước kẻ', 3000);
 GO
--- the web search box: the user types "Vo"
+-- ô tìm kiếm trên web: người dùng gõ "Vở"
 DECLARE @tuKhoa NVARCHAR(100) = N'Vở%'' UNION SELECT id, ten, 999999 FROM dbo.SanPham --';
 DECLARE @cauLenh NVARCHAR(500) = N'SELECT id, ten, gia FROM dbo.SanPham WHERE ten LIKE N''' + @tuKhoa + N'''';
 EXEC(@cauLenh);   -- kẻ tấn công đổi GIÁ hiển thị của MỌI sản phẩm thành 999999
@@ -24286,7 +24286,7 @@ SELECT * FROM timKiem_fix('Vo%'' UNION SELECT id, ten, 999999 FROM sanpham --');
 <tr><td>(0 dòng)</td><td></td><td></td></tr>
 </tbody>
 </table>
-Ôn lại: <a href="/courses/postgresql/learn?lessonSlug=postgresql-7-1-subquery">PostgreSQL 7.1 — dựng truy vấn an toàn</a>.</div>
+Ôn lại: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-9-capstone-node-prisma-ct-shop">PostgreSQL Lab 9 — tham số hoá từ app Node (Prisma $queryRaw vs $queryRawUnsafe)</a>.</div>
 <div class="pitfall">Tấn công kiểu <code>UNION</code> cần <code>SELECT</code> chèn vào trả về <strong>đúng số cột</strong>, kiểu tương thích, với câu truy vấn gốc — đây chính là lý do kẻ tấn công hay dò trước bằng <code>UNION SELECT NULL</code>, <code>UNION SELECT NULL, NULL</code>, … để tìm đúng số cột trước khi dựng payload thật.</div>`),
     bi(`<h3>🧪 Exercise 2 — Least-privilege account for a report (~10 min)</h3>
 <p class="nhan">Task</p>
@@ -24347,7 +24347,7 @@ SELECT * FROM khachhang;    -- có quyền
 SELECT * FROM nhanvien;     -- KHÔNG có quyền ⇒ lỗi thật, không phải 0 dòng
 RESET ROLE;</code></pre>
 <div class="out"><b>ERROR:  permission denied for table nhanvien</b></div>
-Review: <a href="/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap">PostgreSQL 11.3 — isolation and session-level guarantees</a>.</div>
+Review: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-8-sao-luu-nhan-ban-ct-shop">PostgreSQL Lab 8 — a read-only role with GRANT</a>.</div>
 <div class="pitfall">Notice PostgreSQL shows <strong>only the error</strong>, not the two earlier successful selects: a multi-statement script sent as one command runs inside one implicit transaction, so failing partway rolls the whole thing back and only the error reaches the client — a real difference from SQL Server's per-statement streaming, worth knowing when reading a batch script's output on either engine.</div>`,
     `<h3>🧪 Bài 2 — Tài khoản quyền tối thiểu cho báo cáo (~10 phút)</h3>
 <p class="nhan">Đề bài</p>
@@ -24408,7 +24408,7 @@ SELECT * FROM khachhang;    -- có quyền
 SELECT * FROM nhanvien;     -- KHÔNG có quyền ⇒ lỗi thật, không phải 0 dòng
 RESET ROLE;</code></pre>
 <div class="out"><b>ERROR:  permission denied for table nhanvien</b></div>
-Ôn lại: <a href="/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap">PostgreSQL 11.3 — mức cô lập và bảo đảm theo phiên</a>.</div>
+Ôn lại: <a href="/courses/postgresql/learn?lessonSlug=postgresql-lab-8-sao-luu-nhan-ban-ct-shop">PostgreSQL Lab 8 — tài khoản chỉ đọc bằng role + GRANT</a>.</div>
 <div class="pitfall">Để ý PostgreSQL CHỈ hiện lỗi, không hiện hai lượt SELECT thành công trước đó: một script nhiều câu lệnh gửi như một lệnh duy nhất chạy trong một giao dịch ngầm, nên lỗi giữa chừng làm rollback cả script và chỉ có lỗi tới được client — một khác biệt thật so với chạy luồng theo từng câu của SQL Server, đáng nhớ khi đọc output một script trên cả hai hệ.</div>`),
     bi(`<h3>🧪 Exercise 3 — Multi-tenant Row-Level Security (~15 min)</h3>
 <p class="nhan">Task</p>
@@ -24420,7 +24420,7 @@ DROP ROLE IF EXISTS app_congty1;
 CREATE ROLE app_congty1 NOLOGIN;
 GRANT SELECT ON ve TO app_congty1;
 ALTER TABLE ve ENABLE ROW LEVEL SECURITY;
--- current_setting đọc một biến phiên do app đặt ngay sau khi xác thực
+-- current_setting reads a session variable the app sets right after authentication
 CREATE POLICY ve_theo_congty ON ve
   USING (congtyid = current_setting('app.congty_id', true)::int);
 
@@ -24452,7 +24452,7 @@ INSERT INTO dbo.Ve VALUES (1, 1, N'Cường'), (2, 1, N'Hà'), (3, 2, N'An');
 CREATE USER app_congty1 WITHOUT LOGIN;
 GRANT SELECT ON dbo.Ve TO app_congty1;
 GO
--- hàm vị từ đọc SESSION_CONTEXT (công ty hiện tại được app đặt sau khi đăng nhập)
+-- a predicate function reading SESSION_CONTEXT (the current company, set by the app right after login)
 CREATE FUNCTION dbo.fn_locCongTy(@congTyId AS INT)
     RETURNS TABLE
     WITH SCHEMABINDING
@@ -24487,7 +24487,7 @@ DROP ROLE IF EXISTS app_congty1;
 CREATE ROLE app_congty1 NOLOGIN;
 GRANT SELECT ON ve TO app_congty1;
 ALTER TABLE ve ENABLE ROW LEVEL SECURITY;
--- current_setting reads a session variable the app sets right after authentication
+-- current_setting đọc một biến phiên do app đặt ngay sau khi xác thực
 CREATE POLICY ve_theo_congty ON ve
   USING (congtyid = current_setting('app.congty_id', true)::int);
 
@@ -24519,7 +24519,7 @@ INSERT INTO dbo.Ve VALUES (1, 1, N'Cường'), (2, 1, N'Hà'), (3, 2, N'An');
 CREATE USER app_congty1 WITHOUT LOGIN;
 GRANT SELECT ON dbo.Ve TO app_congty1;
 GO
--- a predicate function reading SESSION_CONTEXT (the current company, set by the app right after login)
+-- hàm vị từ đọc SESSION_CONTEXT (công ty hiện tại được app đặt sau khi đăng nhập)
 CREATE FUNCTION dbo.fn_locCongTy(@congTyId AS INT)
     RETURNS TABLE
     WITH SCHEMABINDING
@@ -24551,7 +24551,7 @@ REVERT;</code></pre>
 <pre><code class="language-sql">CREATE TABLE dbo.TK (ten NVARCHAR(20), matKhau NVARCHAR(20));
 INSERT INTO dbo.TK VALUES (N'an', N'MatKhau1'), (N'binh', N'MatKhau1');   -- hai người trùng mật khẩu
 GO
--- băm nhanh (SHA-2), KHÔNG salt ⇒ mật khẩu trùng thì mã băm trùng
+-- fast hash (SHA-2), no salt ⇒ same password, same hash
 SELECT ten, CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', matKhau), 2) AS bam
 FROM dbo.TK ORDER BY ten;</code></pre>
 <div class="out">(2 rows affected)</div>
@@ -24571,8 +24571,8 @@ FROM dbo.TK ORDER BY ten;</code></pre>
 CREATE TABLE tk (ten text, matkhau text);
 INSERT INTO tk VALUES ('an', 'MatKhau1'), ('binh', 'MatKhau1');   -- hai người trùng mật khẩu
 
--- bcrypt: mỗi lần băm tự sinh một salt NGẪU NHIÊN riêng ⇒ mật khẩu trùng vẫn ra mã băm KHÁC nhau
--- (hai salt cố định dưới đây CHỈ để bài học tất định; thực tế dùng gen_salt('bf'))
+-- bcrypt: each hash gets its own RANDOM salt ⇒ the same password still yields a DIFFERENT hash
+-- (the two fixed salts below are ONLY so the lesson is deterministic; real code uses gen_salt('bf'))
 SELECT ten,
        CASE ten WHEN 'an' THEN crypt(matkhau, '$2a$08$C6UzMDM.H6dfI/f/IKcEe.')
                 ELSE crypt(matkhau, '$2a$08$abcdefghijklmnopqrstuv') END AS bam
@@ -24594,7 +24594,7 @@ Real code always calls <code>gen_salt('bf')</code> to get a fresh random salt pe
 <pre><code class="language-sql">CREATE TABLE dbo.TK (ten NVARCHAR(20), matKhau NVARCHAR(20));
 INSERT INTO dbo.TK VALUES (N'an', N'MatKhau1'), (N'binh', N'MatKhau1');   -- hai người trùng mật khẩu
 GO
--- fast hash (SHA-2), no salt ⇒ same password, same hash
+-- băm nhanh (SHA-2), KHÔNG salt ⇒ mật khẩu trùng thì mã băm trùng
 SELECT ten, CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', matKhau), 2) AS bam
 FROM dbo.TK ORDER BY ten;</code></pre>
 <div class="out">(2 rows affected)</div>
@@ -24614,8 +24614,8 @@ FROM dbo.TK ORDER BY ten;</code></pre>
 CREATE TABLE tk (ten text, matkhau text);
 INSERT INTO tk VALUES ('an', 'MatKhau1'), ('binh', 'MatKhau1');   -- hai người trùng mật khẩu
 
--- bcrypt: each hash gets its own RANDOM salt ⇒ the same password still yields a DIFFERENT hash
--- (the two fixed salts below are ONLY so the lesson is deterministic; real code uses gen_salt('bf'))
+-- bcrypt: mỗi lần băm tự sinh một salt NGẪU NHIÊN riêng ⇒ mật khẩu trùng vẫn ra mã băm KHÁC nhau
+-- (hai salt cố định dưới đây CHỈ để bài học tất định; thực tế dùng gen_salt('bf'))
 SELECT ten,
        CASE ten WHEN 'an' THEN crypt(matkhau, '$2a$08$C6UzMDM.H6dfI/f/IKcEe.')
                 ELSE crypt(matkhau, '$2a$08$abcdefghijklmnopqrstuv') END AS bam
@@ -24641,9 +24641,9 @@ CREATE TABLE datphong_t11 PARTITION OF datphong FOR VALUES FROM ('2026-11-01') T
 INSERT INTO datphong VALUES (1, '2026-09-10', 'P101'), (2, '2026-10-05', 'P102'), (3, '2026-11-20', 'P103');
 
 SELECT tableoid::regclass AS phan_vung, * FROM datphong ORDER BY id;
--- báo cáo tháng 11: kế hoạch CHỈ quét đúng một phân vùng, không đụng tới tháng 9/10
+-- the November report: the plan scans exactly one partition, never touches September/October
 EXPLAIN (COSTS OFF) SELECT * FROM datphong WHERE ngayNhan &gt;= '2026-11-01' AND ngayNhan &lt; '2026-12-01';
--- xoá dữ liệu tháng 9 đã cũ: chỉ cần "thả" cả phân vùng, nhanh hơn DELETE hàng triệu dòng nhiều
+-- purging old September data: just DROP the whole partition, much faster than DELETEing millions of rows
 DROP TABLE datphong_t9;
 SELECT tableoid::regclass AS phan_vung, * FROM datphong ORDER BY id;</code></pre>
 <div class="out">INSERT 0 3</div>
@@ -24682,7 +24682,7 @@ INSERT INTO dbo.DatPhong VALUES (1, '2026-09-10', N'P101'), (2, '2026-10-05', N'
 GO
 SELECT id, ngayNhan, phong, $PARTITION.pf_thang(ngayNhan) AS phan_vung
 FROM dbo.DatPhong ORDER BY id;
--- xoá dữ liệu tháng 9 đã cũ: SWITCH cả phân vùng sang bảng khác (gần như tức thời, chỉ đổi siêu dữ liệu)
+-- purging old September data: SWITCH the whole partition into another table (near-instant, only metadata changes)
 CREATE TABLE dbo.DatPhong_Luutru (id INT, ngayNhan DATE, phong NVARCHAR(10)) ON ps_thang(ngayNhan);
 ALTER TABLE dbo.DatPhong SWITCH PARTITION 1 TO dbo.DatPhong_Luutru PARTITION 1;
 SELECT id, ngayNhan, phong FROM dbo.DatPhong ORDER BY id;         -- tháng 9 đã biến mất khỏi bảng chính
@@ -24723,9 +24723,9 @@ CREATE TABLE datphong_t11 PARTITION OF datphong FOR VALUES FROM ('2026-11-01') T
 INSERT INTO datphong VALUES (1, '2026-09-10', 'P101'), (2, '2026-10-05', 'P102'), (3, '2026-11-20', 'P103');
 
 SELECT tableoid::regclass AS phan_vung, * FROM datphong ORDER BY id;
--- the November report: the plan scans exactly one partition, never touches September/October
+-- báo cáo tháng 11: kế hoạch CHỈ quét đúng một phân vùng, không đụng tới tháng 9/10
 EXPLAIN (COSTS OFF) SELECT * FROM datphong WHERE ngayNhan &gt;= '2026-11-01' AND ngayNhan &lt; '2026-12-01';
--- purging old September data: just DROP the whole partition, much faster than DELETEing millions of rows
+-- xoá dữ liệu tháng 9 đã cũ: chỉ cần "thả" cả phân vùng, nhanh hơn DELETE hàng triệu dòng nhiều
 DROP TABLE datphong_t9;
 SELECT tableoid::regclass AS phan_vung, * FROM datphong ORDER BY id;</code></pre>
 <div class="out">INSERT 0 3</div>
@@ -24764,7 +24764,7 @@ INSERT INTO dbo.DatPhong VALUES (1, '2026-09-10', N'P101'), (2, '2026-10-05', N'
 GO
 SELECT id, ngayNhan, phong, $PARTITION.pf_thang(ngayNhan) AS phan_vung
 FROM dbo.DatPhong ORDER BY id;
--- purging old September data: SWITCH the whole partition into another table (near-instant, only metadata changes)
+-- xoá dữ liệu tháng 9 đã cũ: SWITCH cả phân vùng sang bảng khác (gần như tức thời, chỉ đổi siêu dữ liệu)
 CREATE TABLE dbo.DatPhong_Luutru (id INT, ngayNhan DATE, phong NVARCHAR(10)) ON ps_thang(ngayNhan);
 ALTER TABLE dbo.DatPhong SWITCH PARTITION 1 TO dbo.DatPhong_Luutru PARTITION 1;
 SELECT id, ngayNhan, phong FROM dbo.DatPhong ORDER BY id;         -- tháng 9 đã biến mất khỏi bảng chính

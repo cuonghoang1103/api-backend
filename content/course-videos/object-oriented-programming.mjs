@@ -99,8 +99,9 @@ export default {
     'pro192-lab211-p0070-ebank-login': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/09-lab211-thuc-chien/l211-05-p0070-ebank-login-tron-36ecf2cc.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-lab211-p0071-task-management': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/09-lab211-thuc-chien/l211-06-p0071-task-management-tron-185a0237.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-lab211-p0073-handy-expense': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/09-lab211-thuc-chien/l211-07-p0073-handy-expense-tron-27cc47c5.mp4' }, defaultVideoTrack: 'VI'},
-    'pro192-lab-8-collections': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/08-java-collections/08-51-lab-8-collections-tron-0f33897b.mp4' }, defaultVideoTrack: 'VI' },
-    'pro192-slide-cs5-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-1-jvm-tron-e4b5b4c1.mp4' }, defaultVideoTrack: 'VI' },
-    'pro192-luyen-pe-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-04-luyen-pe-2-tron-74d71835.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-lab-8-collections': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/08-java-collections/08-51-lab-8-collections-tron-0f33897b.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-slide-cs5-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-1-jvm-tron-e4b5b4c1.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-luyen-pe-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-04-luyen-pe-2-tron-74d71835.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-slide-cs5-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-2-jvm-tron-0cf30315.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

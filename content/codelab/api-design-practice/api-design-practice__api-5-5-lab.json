@@ -1,0 +1,264 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-5-5-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-5-5-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 5 · 1 — The middleware order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "reliability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Order the middleware on POST /v2/devices/:id/issues as in the reference solution.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các middleware trên POST /v2/devices/:id/issues như lời giải tham khảo.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keys and buckets need req.user.|||Khoá và xô cần req.user.",
+        "What must a replay never cost?|||Lần phát lại không bao giờ được tốn gì?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 5 · 1 — The middleware order\n\nAnswer in the answer panel (no code needed).\n\n1. From first to lastTừ đầu tới cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 5 · 1 — The middleware order — answer key\n\n1. From first to lastTừ đầu tới cuối\n   Answer: m3) requireAuth — who is calling (keys and limits are per user)  →  m2) idempotent() — a replay is answered here, before any cost  →  m1) reportLimit — 3 reports per minute per user  →  m6) loadDevice — 404 if the device does not exist  →  m5) validate(body, IssueCreate) — 400 for a bad body  →  m4) the handler — create the issue\n   Identity first; replays before the limiter so they are free; then the Lab 1 order 404 → 400; work last.VI: Danh tính trước; phát lại trước bộ giới hạn để miễn phí; rồi thứ tự 404 → 400 của Lab 1; việc thật cuối cùng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Identity first; replays before the limiter so they are free; then the Lab 1 order 404 → 400; work last.</p><p><i>VI: Danh tính trước; phát lại trước bộ giới hạn để miễn phí; rồi thứ tự 404 → 400 của Lab 1; việc thật cuối cùng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From first to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ đầu tới cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "reportLimit — 3 reports per minute per user"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "idempotent() — a replay is answered here, before any cost"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "requireAuth — who is calling (keys and limits are per user)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "the handler — create the issue"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "validate(body, IssueCreate) — 400 for a bad body"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "loadDevice — 404 if the device does not exist"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m2",
+              "m1",
+              "m6",
+              "m5",
+              "m4"
+            ],
+            "giaiThich": "<p>Identity first; replays before the limiter so they are free; then the Lab 1 order 404 → 400; work last.</p><p><i>VI: Danh tính trước; phát lại trước bộ giới hạn để miễn phí; rồi thứ tự 404 → 400 của Lab 1; việc thật cuối cùng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Limiter before idempotency — retries of one tap use up the quota.|||Đặt giới hạn trước idempotency — các lần thử lại của một lần bấm tiêu hết hạn mức."
+        },
+        {
+          "loi": "Validation before the device lookup — breaks the 404 → 400 order.|||Kiểm dữ liệu trước khi tìm thiết bị — phá thứ tự 404 → 400."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "middleware order",
+          "vi": "thứ tự middleware"
+        },
+        {
+          "en": "replay",
+          "vi": "phát lại"
+        }
+      ]
+    },
+    {
+      "title": "Lab 5 · 2 — Part A: predict the answers",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "reliability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Predict each answer of the Lab 5 transcript (one fresh report already sent by An).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dự đoán từng câu trả lời trong transcript của Lab 5 (An đã gửi một báo hỏng mới).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count tokens: the first report already used one.|||Đếm token: báo hỏng đầu đã dùng một.",
+        "Resolving changes the version.|||Xử lý làm đổi version."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 5 · 2 — Part A: predict the answers\n\nAnswer in the answer panel (no code needed).\n\n1. Request → answerRequest → câu trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 5 · 2 — Part A: predict the answers — answer key\n\n1. Request → answerRequest → câu trả lời\n   - r1.a: 201 with Idempotent-Replayed\n   - r2.a: 201, RateLimit r=0\n   - r3.a: 429 + Retry-After\n   - r4.a: 200, ETag \"iss_1-v2\"\n   - r5.a: 412 PRECONDITION_FAILED\n   - r6.a: 304 Not Modified\n   Real run: the lost report used one of three tokens (the replay was free), so the 2nd and 3rd reports were 201 r=1 and r=0, the 4th 429 with Retry-After 20; resolving bumps v1 → v2.VI: Lần chạy thật: báo hỏng bị mất dùng một trong ba token (lần phát lại miễn phí), nên báo hỏng thứ 2 và 3 là 201 r=1 và r=0, thứ 4 là 429 kèm Retry-After 20; xử lý làm v1 → v2.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Real run: the lost report used one of three tokens (the replay was free), so the 2nd and 3rd reports were 201 r=1 and r=0, the 4th 429 with Retry-After 20; resolving bumps v1 → v2.</p><p><i>VI: Lần chạy thật: báo hỏng bị mất dùng một trong ba token (lần phát lại miễn phí), nên báo hỏng thứ 2 và 3 là 201 r=1 và r=0, thứ 4 là 429 kèm Retry-After 20; xử lý làm v1 → v2.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → answer</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → câu trả lời</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer",
+                "luaChon": [
+                  "201 with Idempotent-Replayed",
+                  "201, RateLimit r=0",
+                  "429 + Retry-After",
+                  "200, ETag \"iss_1-v2\"",
+                  "412 PRECONDITION_FAILED",
+                  "304 Not Modified"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "report.mjs retry after the lost response"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "An’s 3rd report in the minute"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "An’s 4th report in the minute"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "resolve iss_1 with If-Match \"iss_1-v1\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "resolve iss_1 again with If-Match \"iss_1-v1\""
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "GET iss_1 with If-None-Match \"iss_1-v2\""
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "201 with Idempotent-Replayed",
+              "r2.a": "201, RateLimit r=0",
+              "r3.a": "429 + Retry-After",
+              "r4.a": "200, ETag \"iss_1-v2\"",
+              "r5.a": "412 PRECONDITION_FAILED",
+              "r6.a": "304 Not Modified"
+            },
+            "giaiThich": "<p>Real run: the lost report used one of three tokens (the replay was free), so the 2nd and 3rd reports were 201 r=1 and r=0, the 4th 429 with Retry-After 20; resolving bumps v1 → v2.</p><p><i>VI: Lần chạy thật: báo hỏng bị mất dùng một trong ba token (lần phát lại miễn phí), nên báo hỏng thứ 2 và 3 là 201 r=1 và r=0, thứ 4 là 429 kèm Retry-After 20; xử lý làm v1 → v2.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting the replay as a token.|||Tính lần phát lại là một token."
+        },
+        {
+          "loi": "Expecting 409 ALREADY_RESOLVED instead of 412 — If-Match is checked first.|||Chờ 409 ALREADY_RESOLVED thay vì 412 — If-Match được kiểm trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rubric",
+          "vi": "thang chấm"
+        },
+        {
+          "en": "transcript",
+          "vi": "bản ghi lần chạy thật"
+        }
+      ]
+    }
+  ]
+}

@@ -18,7 +18,7 @@
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/API';
 
 /** Deck nào đã phải dựng lại thì ghi phiên bản ở đây, vd { 'pg-05-1': 'v2' }. */
-const VER = { 'api-01-3': 'v2', 'api-02-3': 'v2', 'api-04-2': 'v2' };
+const VER = { 'api-01-3': 'v2', 'api-02-3': 'v2', 'api-04-2': 'v2', 'api-05-1': 'v2' };
 
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');

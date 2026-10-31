@@ -1,0 +1,479 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-5-3-rate-limit",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-5-3-rate-limit"
+  },
+  "exercises": [
+    {
+      "title": "Rate limits 1 — Buckets and proxies",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "rate limiting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 5.3 (LabFlow token bucket, real runs through a proxy that behaves like nginx).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 5.3 (xô token của LabFlow, chạy thật qua một proxy hành xử như nginx).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which key does each limiter use?|||Mỗi bộ giới hạn dùng khoá gì?",
+        "Who wrote each entry of X-Forwarded-For?|||Ai viết từng mục của X-Forwarded-For?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rate limits 1 — Buckets and proxies\n\nAnswer in the answer panel (no code needed).\n\n1. Lan’s 6th booking within a minute got 429 with Retry-After: 12. Bin then booked once and got …Lượt đặt thứ 6 trong một phút của cô Lan nhận 429 kèm Retry-After: 12. Ngay sau đó Bin đặt một lần và nhận …\n2. With trust proxy OFF behind the proxy, user B’s very first request got 429. Why?Tắt trust proxy khi đứng sau proxy, request đầu tiên của người B nhận 429. Vì sao?\n3. With trust proxy = true, the attacker sent a different fake X-Forwarded-For each time. Result?Với trust proxy = true, kẻ tấn công gửi X-Forwarded-For giả khác nhau mỗi lần. Kết quả?\n4. Why does LabFlow put idempotent() BEFORE bookingLimit?Vì sao LabFlow đặt idempotent() TRƯỚC bookingLimit?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Rate limits 1 — Buckets and proxies — answer key\n\n1. Lan’s 6th booking within a minute got 429 with Retry-After: 12. Bin then booked once and got …Lượt đặt thứ 6 trong một phút của cô Lan nhận 429 kèm Retry-After: 12. Ngay sau đó Bin đặt một lần và nhận …\n   Answer: d) 201 with RateLimit r=4 — his own bucket\n   bookingLimit keys on req.user.id; every user has a separate bucket.VI: bookingLimit dùng khoá req.user.id; mỗi người dùng có xô riêng.\n\n2. With trust proxy OFF behind the proxy, user B’s very first request got 429. Why?Tắt trust proxy khi đứng sau proxy, request đầu tiên của người B nhận 429. Vì sao?\n   Answer: a) The app saw every user as the proxy’s address, so all shared one bucket\n   req.ip was ::ffff:127.0.0.1 for everyone; A had used up that bucket.VI: req.ip là ::ffff:127.0.0.1 với mọi người; A đã dùng hết xô đó.\n\n3. With trust proxy = true, the attacker sent a different fake X-Forwarded-For each time. Result?Với trust proxy = true, kẻ tấn công gửi X-Forwarded-For giả khác nhau mỗi lần. Kết quả?\n   Answer: c) 8/8 requests passed — never limited\n   Express trusted the leftmost entry, written by the client; each fake address got a fresh bucket.VI: Express tin mục ngoài cùng bên trái, do client viết; mỗi địa chỉ giả có một xô mới.\n\n4. Why does LabFlow put idempotent() BEFORE bookingLimit?Vì sao LabFlow đặt idempotent() TRƯỚC bookingLimit?\n   Answer: c) A replay is answered before the limiter, so retries of the same intention cost no token\n   The lab transcript shows it: the lost report used one token, its replay none.VI: Transcript của lab cho thấy: báo hỏng bị mất dùng một token, lần phát lại thì không.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 201 with RateLimit r=4 — his own bucket</p><p>bookingLimit keys on req.user.id; every user has a separate bucket.</p><p><i>VI: bookingLimit dùng khoá req.user.id; mỗi người dùng có xô riêng.</i></p></li><li><p><b>a)</b> The app saw every user as the proxy’s address, so all shared one bucket</p><p>req.ip was ::ffff:127.0.0.1 for everyone; A had used up that bucket.</p><p><i>VI: req.ip là ::ffff:127.0.0.1 với mọi người; A đã dùng hết xô đó.</i></p></li><li><p><b>c)</b> 8/8 requests passed — never limited</p><p>Express trusted the leftmost entry, written by the client; each fake address got a fresh bucket.</p><p><i>VI: Express tin mục ngoài cùng bên trái, do client viết; mỗi địa chỉ giả có một xô mới.</i></p></li><li><p><b>c)</b> A replay is answered before the limiter, so retries of the same intention cost no token</p><p>The lab transcript shows it: the lost report used one token, its replay none.</p><p><i>VI: Transcript của lab cho thấy: báo hỏng bị mất dùng một token, lần phát lại thì không.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Lan’s 6th booking within a minute got 429 with Retry-After: 12. Bin then booked once and got …</p><p style=\"opacity:.75;font-size:.92em\"><i>Lượt đặt thứ 6 trong một phút của cô Lan nhận 429 kèm Retry-After: 12. Ngay sau đó Bin đặt một lần và nhận …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "503 — the server is overloaded"
+              },
+              {
+                "ma": "b",
+                "noiDung": "201 with RateLimit r=0"
+              },
+              {
+                "ma": "c",
+                "noiDung": "429 — the limit is global"
+              },
+              {
+                "ma": "d",
+                "noiDung": "201 with RateLimit r=4 — his own bucket"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>bookingLimit keys on req.user.id; every user has a separate bucket.</p><p><i>VI: bookingLimit dùng khoá req.user.id; mỗi người dùng có xô riêng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With trust proxy OFF behind the proxy, user B’s very first request got 429. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tắt trust proxy khi đứng sau proxy, request đầu tiên của người B nhận 429. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The app saw every user as the proxy’s address, so all shared one bucket"
+              },
+              {
+                "ma": "b",
+                "noiDung": "B had already sent too many requests a minute earlier"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Express blocks every unknown IP address by default"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The proxy itself returned 429 before reaching LabFlow"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>req.ip was ::ffff:127.0.0.1 for everyone; A had used up that bucket.</p><p><i>VI: req.ip là ::ffff:127.0.0.1 với mọi người; A đã dùng hết xô đó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>With trust proxy = true, the attacker sent a different fake X-Forwarded-For each time. Result?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với trust proxy = true, kẻ tấn công gửi X-Forwarded-For giả khác nhau mỗi lần. Kết quả?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The proxy removed the fake header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "All requests got 400"
+              },
+              {
+                "ma": "c",
+                "noiDung": "8/8 requests passed — never limited"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The 6th request got 429"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Express trusted the leftmost entry, written by the client; each fake address got a fresh bucket.</p><p><i>VI: Express tin mục ngoài cùng bên trái, do client viết; mỗi địa chỉ giả có một xô mới.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does LabFlow put idempotent() BEFORE bookingLimit?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow đặt idempotent() TRƯỚC bookingLimit?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because Express runs the middleware of a route from right to left"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because the limiter needs the stored response to compute its headers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A replay is answered before the limiter, so retries of the same intention cost no token"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So that every replay is counted twice and abusers are slowed down"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The lab transcript shows it: the lost report used one token, its replay none.</p><p><i>VI: Transcript của lab cho thấy: báo hỏng bị mất dùng một token, lần phát lại thì không.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "trust proxy: true “because we have a proxy”.|||trust proxy: true “vì chúng ta có proxy”."
+        },
+        {
+          "loi": "One global bucket for everyone.|||Một xô chung cho tất cả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "token bucket",
+          "vi": "xô token"
+        },
+        {
+          "en": "X-Forwarded-For",
+          "vi": "header chuỗi địa chỉ qua các proxy"
+        }
+      ]
+    },
+    {
+      "title": "Rate limits 2 — Write take(bucket, nowSec, capacity, windowSec): one token bucket step",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "rate limiting",
+        "token bucket"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>One request against a token bucket. <code>bucket = { tokens, at }</code> (tokens may be fractional; <code>at</code> in seconds). Refill <code>capacity / windowSec</code> tokens per second since <code>at</code>, never above <code>capacity</code>. Then:</p><ul>\n<li>at least 1 token ⇒ <code>{ allowed: true, remaining: floor(tokens − 1), retryAfter: 0, bucket: { tokens: tokens − 1, at: nowSec } }</code></li>\n<li>otherwise ⇒ <code>{ allowed: false, remaining: 0, retryAfter: ceil(seconds until one token), bucket: { tokens, at: nowSec } }</code></li></ul>\n<p>Return a new bucket; do not modify the argument. The tests replay LabFlow’s booking limit (5 per 60 s).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một request vào xô token. <code>bucket = { tokens, at }</code> (tokens có thể lẻ; <code>at</code> tính bằng giây). Rót thêm <code>capacity / windowSec</code> token mỗi giây kể từ <code>at</code>, không quá <code>capacity</code>. Rồi:</p><ul>\n<li>có ít nhất 1 token ⇒ <code>{ allowed: true, remaining: floor(tokens − 1), retryAfter: 0, bucket: { tokens: tokens − 1, at: nowSec } }</code></li>\n<li>ngược lại ⇒ <code>{ allowed: false, remaining: 0, retryAfter: ceil(số giây tới khi có một token), bucket: { tokens, at: nowSec } }</code></li></ul>\n<p>Trả xô mới; không sửa đối số. Các kiểm phát lại giới hạn đặt phòng của LabFlow (5 lần mỗi 60 giây).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "bucket { tokens, at }, nowSec, capacity, windowSec",
+      "outputSpec": "{ allowed, remaining, retryAfter, bucket }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var b = { tokens: 5, at: 0 }, out = []; [0,0,0,0,0,0].forEach(function (t) { var r = take(b, t, 5, 60); b = r.bucket; out.push(r.allowed ? 'ok r=' + r.remaining : '429 wait ' + r.retryAfter); }); return out; })()",
+          "output": "[\"ok r=4\",\"ok r=3\",\"ok r=2\",\"ok r=1\",\"ok r=0\",\"429 wait 12\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Refill first: tokens + (now − at) × perSec, capped.|||Rót trước: tokens + (now − at) × perSec, có trần.",
+        "Seconds until one token: (1 − tokens) / perSec, rounded up.|||Số giây tới khi có một token: (1 − tokens) / perSec, làm tròn lên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** one request against a token bucket */\nfunction take(bucket, nowSec, capacity, windowSec) {\n  // Write your solution here\n  if (bucket.tokens < 1) return { allowed: false, remaining: 0, retryAfter: windowSec, bucket };\n  bucket.tokens -= 1;\n  return { allowed: true, remaining: bucket.tokens, retryAfter: 0, bucket };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction take(bucket, nowSec, capacity, windowSec) {\n  const perSec = capacity / windowSec;\n  const tokens = Math.min(capacity, bucket.tokens + (nowSec - bucket.at) * perSec);\n  if (tokens < 1) {\n    return { allowed: false, remaining: 0, retryAfter: Math.ceil((1 - tokens) / perSec), bucket: { tokens, at: nowSec } };\n  }\n  return { allowed: true, remaining: Math.floor(tokens - 1), retryAfter: 0, bucket: { tokens: tokens - 1, at: nowSec } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Six bookings at t=0 give ok r=4 … ok r=0, then 429 wait 12 — exactly LabFlow’s headers in lesson 5.3.</p>",
+      "solutionExplanationHtmlVi": "<p>Sáu lượt đặt lúc t=0 cho ok r=4 … ok r=0, rồi 429 wait 12 — đúng các header của LabFlow ở bài 5.3.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Six bookings at once (lesson 5.3)",
+              "vi": "Sáu lượt đặt cùng lúc (bài 5.3)"
+            },
+            "goi": "(function () { var b = { tokens: 5, at: 0 }, out = []; [0,0,0,0,0,0].forEach(function (t) { var r = take(b, t, 5, 60); b = r.bucket; out.push(r.allowed ? 'ok r=' + r.remaining : '429 wait ' + r.retryAfter); }); return out; })()",
+            "mongDoi": [
+              "ok r=4",
+              "ok r=3",
+              "ok r=2",
+              "ok r=1",
+              "ok r=0",
+              "429 wait 12"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Twelve seconds later",
+              "vi": "Mười hai giây sau"
+            },
+            "goi": "(function () { var b = { tokens: 5, at: 0 }, out = []; [0,0,0,0,0,0,12,12].forEach(function (t) { var r = take(b, t, 5, 60); b = r.bucket; out.push(r.allowed ? 'ok r=' + r.remaining : '429 wait ' + r.retryAfter); }); return out; })()",
+            "mongDoi": [
+              "ok r=4",
+              "ok r=3",
+              "ok r=2",
+              "ok r=1",
+              "ok r=0",
+              "429 wait 12",
+              "ok r=0",
+              "429 wait 12"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "An hour later: still at most 5",
+              "vi": "Một giờ sau: vẫn tối đa 5"
+            },
+            "goi": "(function () { var b = { tokens: 5, at: 0 }, out = []; [0,0,0,0,0,3600,3600,3600,3600,3600,3600].forEach(function (t) { var r = take(b, t, 5, 60); b = r.bucket; out.push(r.allowed ? 'ok r=' + r.remaining : '429 wait ' + r.retryAfter); }); return out; })()",
+            "mongDoi": [
+              "ok r=4",
+              "ok r=3",
+              "ok r=2",
+              "ok r=1",
+              "ok r=0",
+              "ok r=4",
+              "ok r=3",
+              "ok r=2",
+              "ok r=1",
+              "ok r=0",
+              "429 wait 12"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The argument is not modified",
+              "vi": "Đối số không bị sửa"
+            },
+            "goi": "(function () { var b = { tokens: 1, at: 0 }; take(b, 0, 5, 60); return b; })()",
+            "mongDoi": {
+              "tokens": 1,
+              "at": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(function () { var b = { tokens: 5, at: 0 }, out = []; [0,0,0,0,0,6,30].forEach(function (t) { var r = take(b, t, 5, 60); b = r.bucket; out.push(r.allowed ? 'ok r=' + r.remaining : '429 wait ' + r.retryAfter); }); return out; })()",
+            "mongDoi": [
+              "ok r=4",
+              "ok r=3",
+              "ok r=2",
+              "ok r=1",
+              "ok r=0",
+              "429 wait 6",
+              "ok r=1"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the cap — a quiet hour gives a burst of 60.|||Quên mức trần — một giờ yên lặng cho một đợt dồn 60."
+        },
+        {
+          "loi": "Not updating at when refused — the refill is counted twice next time.|||Không cập nhật at khi từ chối — lần sau tính rót hai lần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "refill rate",
+          "vi": "tốc độ rót"
+        },
+        {
+          "en": "burst",
+          "vi": "đợt dồn"
+        }
+      ]
+    },
+    {
+      "title": "Rate limits 3 — Write clientIp(remote, xff, trust): what Express calls req.ip",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "proxies",
+        "rate limiting"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Build the address chain: the entries of <code>X-Forwarded-For</code> (comma-separated, trimmed, oldest first) followed by <code>remote</code> (the address of the connection itself). Then:</p><ul>\n<li><code>trust === false</code> ⇒ <code>remote</code></li>\n<li><code>trust === true</code> ⇒ the first (leftmost) entry of the chain — whatever the client wrote</li>\n<li><code>trust = n</code> (number of trusted proxy hops) ⇒ skip <code>n</code> entries from the right and return the next one; if the chain is shorter, return its first entry</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng chuỗi địa chỉ: các mục của <code>X-Forwarded-For</code> (cách nhau dấu phẩy, bỏ khoảng trắng, cũ nhất trước) rồi tới <code>remote</code> (địa chỉ của chính kết nối). Sau đó:</p><ul>\n<li><code>trust === false</code> ⇒ <code>remote</code></li>\n<li><code>trust === true</code> ⇒ mục đầu tiên (bên trái nhất) của chuỗi — bất kể client đã viết gì</li>\n<li><code>trust = n</code> (số chặng proxy được tin) ⇒ bỏ <code>n</code> mục từ bên phải và trả mục kế tiếp; nếu chuỗi ngắn hơn, trả mục đầu tiên</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "remote — string; xff — string | undefined; trust — false | true | number|||remote — chuỗi; xff — chuỗi | undefined; trust — false | true | số",
+      "outputSpec": "the client address (string)|||địa chỉ client (chuỗi)",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "clientIp(\"127.0.0.1\", \"6.6.6.6, 203.0.113.10\", 1)",
+          "output": "\"203.0.113.10\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Put remote at the END of the chain: it is the nearest hop.|||Đặt remote ở CUỐI chuỗi: nó là chặng gần nhất.",
+        "trust = 1 behind one nginx returns what nginx appended.|||trust = 1 sau một nginx trả đúng thứ nginx đã nối thêm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** the client address after trusting n proxy hops */\nfunction clientIp(remote, xff, trust) {\n  // Write your solution here\n  return xff ? xff.split(',')[0].trim() : remote;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction clientIp(remote, xff, trust) {\n  const chain = [...(xff ? xff.split(',').map((s) => s.trim()) : []), remote];   // nearest hop last\n  if (trust === false) return remote;\n  if (trust === true) return chain[0];\n  return chain[Math.max(0, chain.length - 1 - trust)];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The proxy experiment of 5.3: with \"6.6.6.6, 203.0.113.10\" from 127.0.0.1, false ⇒ 127.0.0.1, true ⇒ 6.6.6.6 (spoofed), 1 ⇒ 203.0.113.10 (correct).</p>",
+      "solutionExplanationHtmlVi": "<p>Thí nghiệm proxy của 5.3: với \"6.6.6.6, 203.0.113.10\" từ 127.0.0.1, false ⇒ 127.0.0.1, true ⇒ 6.6.6.6 (bị giả), 1 ⇒ 203.0.113.10 (đúng).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "trust proxy = 1 (lesson 5.3)",
+              "vi": "trust proxy = 1 (bài 5.3)"
+            },
+            "goi": "clientIp(\"127.0.0.1\", \"6.6.6.6, 203.0.113.10\", 1)",
+            "mongDoi": "203.0.113.10"
+          },
+          {
+            "moTa": {
+              "en": "trust proxy = true",
+              "vi": "trust proxy = true"
+            },
+            "goi": "clientIp(\"127.0.0.1\", \"6.6.6.6, 203.0.113.10\", true)",
+            "mongDoi": "6.6.6.6"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "clientIp(\"127.0.0.1\", \"203.0.113.10\", false)",
+            "mongDoi": "127.0.0.1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Load balancer + nginx",
+              "vi": "Load balancer + nginx"
+            },
+            "goi": "clientIp(\"10.0.0.2\", \"6.6.6.6, 198.51.100.7, 10.0.0.1\", 2)",
+            "mongDoi": "198.51.100.7",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "clientIp('127.0.0.1', undefined, 1)",
+            "mongDoi": "127.0.0.1",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "clientIp(\"127.0.0.1\", \"198.51.100.7\", 5)",
+            "mongDoi": "198.51.100.7",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking the leftmost entry with a hop count — spoofable.|||Lấy mục trái nhất khi có số chặng — giả được."
+        },
+        {
+          "loi": "Forgetting that remote is part of the chain.|||Quên rằng remote là một phần của chuỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "hop",
+          "vi": "chặng (một proxy)"
+        },
+        {
+          "en": "spoofing",
+          "vi": "giả mạo"
+        }
+      ]
+    }
+  ]
+}

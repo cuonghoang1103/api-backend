@@ -1,0 +1,480 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-5-1-idempotency",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-5-1-idempotency"
+  },
+  "exercises": [
+    {
+      "title": "Idempotency 1 — The lost response",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 5.1 (LabFlow with LABFLOW_DROP_FIRST=1, real runs).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 5.1 (LabFlow với LABFLOW_DROP_FIRST=1, chạy thật).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer was printed in lesson 5.1.|||Mọi đáp án đã được in trong bài 5.1.",
+        "Think about what the client can and cannot know.|||Nghĩ xem client biết được và không biết được gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Idempotency 1 — The lost response\n\nAnswer in the answer panel (no code needed).\n\n1. curl printed “(52) Empty reply from server” for the first POST. Was the booking created?curl in “(52) Empty reply from server” cho POST đầu. Lượt đặt đã được tạo chưa?\n2. Why must the key be scoped to the caller (usr_1:<key>)?Vì sao khoá phải gắn với người gọi (usr_1:<khoá>)?\n3. Why does LabFlow record the result when the connection CLOSES?Vì sao LabFlow ghi kết quả khi kết nối ĐÓNG?\n4. Two requests with the same key arrive 0.3 s apart while the first is still running. The second gets …Hai request cùng khoá tới cách nhau 0,3 s khi request đầu còn chạy. Request thứ hai nhận …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Idempotency 1 — The lost response — answer key\n\n1. curl printed “(52) Empty reply from server” for the first POST. Was the booking created?curl in “(52) Empty reply from server” cho POST đầu. Lượt đặt đã được tạo chưa?\n   Answer: b) Yes — the server finished the work and then cut the connection (bk_9 existed)\n   A missing response tells you nothing about the work. The list showed bk_9.VI: Không có response thì chẳng biết gì về việc đã làm. Danh sách cho thấy bk_9.\n\n2. Why must the key be scoped to the caller (usr_1:<key>)?Vì sao khoá phải gắn với người gọi (usr_1:<khoá>)?\n   Answer: a) So two users can never collide or read each other’s stored results\n   Without the scope, Bin sending An’s key would receive An’s booking as a replay.VI: Không có phạm vi, Bin gửi khoá của An sẽ nhận lượt đặt của An dưới dạng phát lại.\n\n3. Why does LabFlow record the result when the connection CLOSES?Vì sao LabFlow ghi kết quả khi kết nối ĐÓNG?\n   Answer: a) Because the lost-response case — client already gone — is exactly the one to remember\n   res.json captures the answer; close fires even when the socket was destroyed, so the next retry is a replay.VI: res.json bắt câu trả lời; sự kiện close vẫn xảy ra kể cả khi socket bị huỷ, nên lần thử sau là phát lại.\n\n4. Two requests with the same key arrive 0.3 s apart while the first is still running. The second gets …Hai request cùng khoá tới cách nhau 0,3 s khi request đầu còn chạy. Request thứ hai nhận …\n   Answer: b) 409 IDEMPOTENCY_IN_PROGRESS with Retry-After: 1\n   Draft-08 recommends 409 for a request with the same key still in progress; LabFlow adds Retry-After so 5.2’s client knows when to come back.VI: Draft-08 khuyên 409 cho request cùng khoá còn đang chạy; LabFlow thêm Retry-After để client của bài 5.2 biết lúc nào quay lại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Yes — the server finished the work and then cut the connection (bk_9 existed)</p><p>A missing response tells you nothing about the work. The list showed bk_9.</p><p><i>VI: Không có response thì chẳng biết gì về việc đã làm. Danh sách cho thấy bk_9.</i></p></li><li><p><b>a)</b> So two users can never collide or read each other’s stored results</p><p>Without the scope, Bin sending An’s key would receive An’s booking as a replay.</p><p><i>VI: Không có phạm vi, Bin gửi khoá của An sẽ nhận lượt đặt của An dưới dạng phát lại.</i></p></li><li><p><b>a)</b> Because the lost-response case — client already gone — is exactly the one to remember</p><p>res.json captures the answer; close fires even when the socket was destroyed, so the next retry is a replay.</p><p><i>VI: res.json bắt câu trả lời; sự kiện close vẫn xảy ra kể cả khi socket bị huỷ, nên lần thử sau là phát lại.</i></p></li><li><p><b>b)</b> 409 IDEMPOTENCY_IN_PROGRESS with Retry-After: 1</p><p>Draft-08 recommends 409 for a request with the same key still in progress; LabFlow adds Retry-After so 5.2’s client knows when to come back.</p><p><i>VI: Draft-08 khuyên 409 cho request cùng khoá còn đang chạy; LabFlow thêm Retry-After để client của bài 5.2 biết lúc nào quay lại.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>curl printed “(52) Empty reply from server” for the first POST. Was the booking created?</p><p style=\"opacity:.75;font-size:.92em\"><i>curl in “(52) Empty reply from server” cho POST đầu. Lượt đặt đã được tạo chưa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only half of it, the database was rolled back"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — the server finished the work and then cut the connection (bk_9 existed)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — without a 201 nothing can have been created"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It depends on the Content-Type of the request"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A missing response tells you nothing about the work. The list showed bk_9.</p><p><i>VI: Không có response thì chẳng biết gì về việc đã làm. Danh sách cho thấy bk_9.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why must the key be scoped to the caller (usr_1:&lt;key&gt;)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao khoá phải gắn với người gọi (usr_1:&lt;khoá&gt;)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So two users can never collide or read each other’s stored results"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because UUIDs are not unique enough"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So the server can rate-limit keys"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because keys must be shorter than 255 characters"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without the scope, Bin sending An’s key would receive An’s booking as a replay.</p><p><i>VI: Không có phạm vi, Bin gửi khoá của An sẽ nhận lượt đặt của An dưới dạng phát lại.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does LabFlow record the result when the connection CLOSES?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow ghi kết quả khi kết nối ĐÓNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because the lost-response case — client already gone — is exactly the one to remember"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because JSON can only be hashed after sending"
+              },
+              {
+                "ma": "c",
+                "noiDung": "To make the response faster"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because Express does not allow writing before close"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>res.json captures the answer; close fires even when the socket was destroyed, so the next retry is a replay.</p><p><i>VI: res.json bắt câu trả lời; sự kiện close vẫn xảy ra kể cả khi socket bị huỷ, nên lần thử sau là phát lại.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Two requests with the same key arrive 0.3 s apart while the first is still running. The second gets …</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai request cùng khoá tới cách nhau 0,3 s khi request đầu còn chạy. Request thứ hai nhận …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "429 Too Many Requests from the limiter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "409 IDEMPOTENCY_IN_PROGRESS with Retry-After: 1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "201 — both requests simply run in parallel"
+              },
+              {
+                "ma": "d",
+                "noiDung": "422 IDEMPOTENCY_KEY_REUSED for a second use"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Draft-08 recommends 409 for a request with the same key still in progress; LabFlow adds Retry-After so 5.2’s client knows when to come back.</p><p><i>VI: Draft-08 khuyên 409 cho request cùng khoá còn đang chạy; LabFlow thêm Retry-After để client của bài 5.2 biết lúc nào quay lại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming “no answer” means “not done”.|||Cho rằng “không có câu trả lời” nghĩa là “chưa làm”."
+        },
+        {
+          "loi": "Sharing keys between users.|||Dùng chung khoá giữa các người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lost response",
+          "vi": "mất response"
+        },
+        {
+          "en": "replay",
+          "vi": "phát lại"
+        }
+      ]
+    },
+    {
+      "title": "Idempotency 2 — Write decide(store, caller, key, fp, nowMs)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The decision at the top of LabFlow’s <code>idempotent()</code>. <code>store</code> maps <code>\"caller:key\"</code> to <code>{ fp, state: 'running' | 'done', status, at }</code> (<code>at</code> in ms). Return:</p><ul>\n<li>no key (<code>undefined</code>) ⇒ <code>{ action: 'execute' }</code></li>\n<li>key not 1–255 printable characters without spaces (surrounding double quotes allowed) ⇒ <code>{ action: 'reject', status: 400 }</code></li>\n<li>no entry, or entry older than 24 h ⇒ <code>{ action: 'execute', storeKey: \"caller:key\" }</code> (key without quotes)</li>\n<li>different fingerprint ⇒ reject 422; still running ⇒ reject 409; otherwise <code>{ action: 'replay', status }</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định ở đầu <code>idempotent()</code> của LabFlow. <code>store</code> ánh xạ <code>\"người_gọi:khoá\"</code> tới <code>{ fp, state: 'running' | 'done', status, at }</code> (<code>at</code> tính bằng ms). Trả:</p><ul>\n<li>không có khoá (<code>undefined</code>) ⇒ <code>{ action: 'execute' }</code></li>\n<li>khoá không phải 1–255 ký tự in được không có dấu cách (cho phép ngoặc kép bao ngoài) ⇒ <code>{ action: 'reject', status: 400 }</code></li>\n<li>không có mục, hoặc mục cũ hơn 24 giờ ⇒ <code>{ action: 'execute', storeKey: \"người_gọi:khoá\" }</code> (khoá bỏ ngoặc kép)</li>\n<li>dấu vân tay khác ⇒ reject 422; còn đang chạy ⇒ reject 409; còn lại <code>{ action: 'replay', status }</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "store, caller, key (string | undefined), fp, nowMs|||store, caller, key (chuỗi | undefined), fp, nowMs",
+      "outputSpec": "{ action, status?, storeKey? }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, \"usr_1\", \"\\\"k1\\\"\", \"aaa\", 18000000)",
+          "output": "{\"action\":\"replay\",\"status\":201}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Check in this order: missing, invalid, unknown/expired, fingerprint, running, replay.|||Kiểm theo thứ tự: thiếu, sai dạng, chưa có/hết hạn, dấu vân tay, đang chạy, phát lại.",
+        "The printable range without space and quote is [\\x21\\x23-\\x7e].|||Dải ký tự in được trừ dấu cách và ngoặc kép là [\\x21\\x23-\\x7e]."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** idempotency decision for one request */\nfunction decide(store, caller, key, fp, nowMs) {\n  // Write your solution here\n  if (store[caller + ':' + key]) return { action: 'replay', status: 201 };\n  return { action: 'execute' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction decide(store, caller, key, fp, nowMs) {\n  if (key === undefined) return { action: 'execute' };\n  if (!/^\"?[\\x21\\x23-\\x7e]{1,255}\"?$/.test(key)) return { action: 'reject', status: 400 };\n  const k = `${caller}:${key.replace(/^\"|\"$/g, '')}`;\n  const e = store[k];\n  if (!e || nowMs - e.at > 24 * 3600 * 1000) return { action: 'execute', storeKey: k };\n  if (e.fp !== fp) return { action: 'reject', status: 422 };\n  if (e.state === 'running') return { action: 'reject', status: 409 };\n  return { action: 'replay', status: e.status };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The same order as LabFlow’s middleware and draft-08’s codes: 400 malformed, 422 reused for other content, 409 in progress, otherwise replay.</p>",
+      "solutionExplanationHtmlVi": "<p>Đúng thứ tự middleware của LabFlow và các mã của draft-08: 400 sai dạng, 422 dùng lại cho nội dung khác, 409 đang chạy, còn lại phát lại.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Retry after a lost response",
+              "vi": "Thử lại sau khi mất response"
+            },
+            "goi": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, \"usr_1\", \"\\\"k1\\\"\", \"aaa\", 18000000)",
+            "mongDoi": {
+              "action": "replay",
+              "status": 201
+            }
+          },
+          {
+            "moTa": {
+              "en": "Same key, other body",
+              "vi": "Cùng khoá, body khác"
+            },
+            "goi": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, \"usr_1\", \"\\\"k1\\\"\", \"zzz\", 18000000)",
+            "mongDoi": {
+              "action": "reject",
+              "status": 422
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, 'usr_1', undefined, 'aaa', 0)",
+            "mongDoi": {
+              "action": "execute"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, \"usr_2\", \"\\\"k2\\\"\", \"bbb\", 3600000)",
+            "mongDoi": {
+              "action": "reject",
+              "status": 409
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Another user, same key",
+              "vi": "Người khác, cùng khoá"
+            },
+            "goi": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, \"usr_2\", \"\\\"k1\\\"\", \"aaa\", 3600000)",
+            "mongDoi": {
+              "action": "execute",
+              "storeKey": "usr_2:k1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Older than 24 h",
+              "vi": "Cũ hơn 24 giờ"
+            },
+            "goi": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, \"usr_1\", \"\\\"k1\\\"\", \"aaa\", 90000000)",
+            "mongDoi": {
+              "action": "execute",
+              "storeKey": "usr_1:k1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "decide({\"usr_1:k1\":{\"fp\":\"aaa\",\"state\":\"done\",\"status\":201,\"at\":0},\"usr_2:k2\":{\"fp\":\"bbb\",\"state\":\"running\",\"at\":0}}, \"usr_1\", \"\\\"xin chào\\\"\", \"aaa\", 0)",
+            "mongDoi": {
+              "action": "reject",
+              "status": 400
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Replaying when the fingerprint differs — the wrong result for the new request.|||Phát lại khi dấu vân tay khác — kết quả sai cho request mới."
+        },
+        {
+          "loi": "Forgetting the caller in the store key.|||Quên người gọi trong khoá lưu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fingerprint",
+          "vi": "dấu vân tay"
+        },
+        {
+          "en": "expiry",
+          "vi": "hết hạn"
+        }
+      ]
+    },
+    {
+      "title": "Idempotency 3 — Which answer?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "idempotency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>POST /v2/bookings on LabFlow after lesson 5.1. Choose the answer for each situation.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>POST /v2/bookings trên LabFlow sau bài 5.1. Chọn câu trả lời cho từng tình huống.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: same request or a different one?|||Hỏi: cùng một request hay request khác?",
+        "A missing optional key changes nothing.|||Thiếu khoá tuỳ chọn thì không đổi gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Idempotency 3 — Which answer?\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → answerTình huống → câu trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Idempotency 3 — Which answer? — answer key\n\n1. Situation → answerTình huống → câu trả lời\n   - r1.a: 201 replayed\n   - r2.a: 422\n   - r3.a: 409\n   - r4.a: 400\n   - r5.a: executes normally\n   The key is optional on existing endpoints (requiring it would be a breaking change); when present, draft-08’s codes apply.VI: Khoá là tuỳ chọn trên endpoint đang có (bắt buộc sẽ là thay đổi phá vỡ); khi có, áp các mã của draft-08.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The key is optional on existing endpoints (requiring it would be a breaking change); when present, draft-08’s codes apply.</p><p><i>VI: Khoá là tuỳ chọn trên endpoint đang có (bắt buộc sẽ là thay đổi phá vỡ); khi có, áp các mã của draft-08.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → answer</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → câu trả lời</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Situation"
+              },
+              {
+                "ma": "a",
+                "ten": "Answer",
+                "luaChon": [
+                  "201 replayed",
+                  "400",
+                  "409",
+                  "422",
+                  "executes normally"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Retry with the same key and body after a lost response"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Same key, different labId"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Same key while the first request is still running"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Idempotency-Key: \"xin chào\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "No Idempotency-Key header at all"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.a": "201 replayed",
+              "r2.a": "422",
+              "r3.a": "409",
+              "r4.a": "400",
+              "r5.a": "executes normally"
+            },
+            "giaiThich": "<p>The key is optional on existing endpoints (requiring it would be a breaking change); when present, draft-08’s codes apply.</p><p><i>VI: Khoá là tuỳ chọn trên endpoint đang có (bắt buộc sẽ là thay đổi phá vỡ); khi có, áp các mã của draft-08.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "422 and 409 swapped.|||Lẫn 422 với 409."
+        },
+        {
+          "loi": "Refusing requests without a key on an existing endpoint.|||Từ chối request không có khoá trên endpoint đang có."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Idempotency-Key",
+          "vi": "header khoá lặp-an-toàn"
+        },
+        {
+          "en": "Idempotent-Replayed",
+          "vi": "dấu hiệu phát lại của LabFlow"
+        }
+      ]
+    }
+  ]
+}

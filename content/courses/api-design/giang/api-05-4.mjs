@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.4 "Đồng thời: khoá lạc quan và ETag" (deck api-05-4, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-05-4', "Concurrency: optimistic locking and ETags", "Đồng thời: khoá lạc quan và ETag", [
+  [1, "Cover",
+    `<p>Lesson 5.4: Lan edits the same device on her laptop and her phone, and the second save wipes the first.</p>`,
+    `<p>Bài 5.4: cô Lan sửa cùng một thiết bị trên laptop và điện thoại, và lần lưu thứ hai xoá mất lần thứ nhất.</p>`],
+  [2, "What you will get",
+    `<p>The lost update reproduced, optimistic versus pessimistic locking, a strong ETag from a version with If-Match and 412, the 304 bonus, and why If-Match is not required yet.</p>`,
+    `<p>Mất cập nhật được tái hiện, khoá lạc quan so với bi quan, ETag mạnh từ version cùng If-Match và 412, phần thưởng 304, và vì sao chưa bắt buộc If-Match.</p>`],
+  [3, "The experiment",
+    `<p>The laptop saves the note “memory card replaced”, the phone saves maintenance with the old note: both answer 200 and the first change is gone without anyone being told.</p>`,
+    `<p>Laptop lưu ghi chú “đã thay thẻ nhớ”, điện thoại lưu trạng thái bảo trì với ghi chú cũ: cả hai trả 200 và thay đổi đầu tiên biến mất mà không ai được báo.</p>`],
+  [4, "Optimistic locking",
+    `<p>Each device gets a version, exposed as a strong ETag. checkIfMatch compares the tag the client sends with the current one and throws 412 with the current tag when they differ; bump increases the version after a write and sends the new tag. Everyone may edit; the check happens at save time.</p>`,
+    `<p>Mỗi thiết bị có một version, lộ ra thành ETag mạnh. checkIfMatch so nhãn client gửi với nhãn hiện tại và ném 412 kèm nhãn hiện tại khi lệch; bump tăng version sau mỗi lần ghi và gửi nhãn mới. Ai cũng được sửa; phép kiểm diễn ra lúc lưu.</p>`],
+  [5, "With If-Match",
+    `<p>The laptop saves with v1 and gets v2. The phone, still holding v1, gets 412 with currentETag v2 and the record keeps the laptop’s note. The phone reloads, merges and saves with v2, getting v3. The conflict became visible.</p>`,
+    `<p>Laptop lưu với v1 và nhận v2. Điện thoại vẫn cầm v1 nên nhận 412 kèm currentETag v2, và bản ghi giữ ghi chú của laptop. Điện thoại tải lại, gộp và lưu với v2, nhận v3. Xung đột đã hiện ra.</p>`],
+  [6, "304 and required",
+    `<p>If-None-Match with the current tag returns 304 without a body — free once the ETag header is set. RFC 6585 lets a server require conditional writes with 428, but requiring If-Match now would break existing v1 and v2 clients, so LabFlow keeps it optional; clients keep the tag next to the data and send it back.</p>`,
+    `<p>If-None-Match với nhãn hiện tại trả 304 không body — miễn phí khi đã đặt header ETag. RFC 6585 cho server đòi ghi có điều kiện bằng 428, nhưng bắt buộc If-Match bây giờ sẽ làm vỡ client v1, v2 đang có, nên LabFlow để tuỳ chọn; client giữ nhãn cạnh dữ liệu và gửi lại.</p>`],
+  [7, "Traps",
+    `<p>Weak ETags are wrong for If-Match, which compares strongly. Check and update must be one SQL statement guarded by the version, or another write slips in between. And “last write wins because it is simpler” lasts until someone loses an hour of notes.</p>`,
+    `<p>ETag yếu không dùng được cho If-Match, vốn so sánh mạnh. Kiểm và cập nhật phải là một câu SQL có điều kiện theo version, không thì lần ghi khác chen vào giữa. Và “người ghi sau thắng cho đơn giản” chỉ đúng tới khi có người mất một giờ ghi chú.</p>`],
+  [8, "Interviews",
+    `<p>Two users editing one record: without protection the last write wins silently; optimistic locking uses a version, an ETag, If-Match, 412 and a guarded update. Optimistic suits rare conflicts and long edits, pessimistic locks short hot sections. The ETag also gives cheap re-reads with 304.</p>`,
+    `<p>Hai người cùng sửa một bản ghi: không bảo vệ thì người ghi sau thắng lặng lẽ; khoá lạc quan dùng version, ETag, If-Match, 412 và câu cập nhật có điều kiện. Lạc quan hợp với xung đột hiếm và sửa lâu, bi quan cho đoạn ngắn và nóng. ETag còn cho đọc lại rẻ bằng 304.</p>`],
+  [9, "Summary",
+    `<p>Two unprotected PATCHes both returned 200 and the first change vanished. Version, strong ETag, If-Match and 412 make the conflict visible; the same tag gives 304. If-Match stays optional on existing endpoints. Next comes Lab 5.</p>`,
+    `<p>Hai PATCH không bảo vệ đều trả 200 và thay đổi đầu tiên biến mất. Version, ETag mạnh, If-Match và 412 làm xung đột hiện ra; cùng nhãn đó cho 304. If-Match vẫn tuỳ chọn trên endpoint đang có. Tiếp theo là Lab 5.</p>`],
+]);

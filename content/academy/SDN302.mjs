@@ -1904,6 +1904,11 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
   <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 2.2: Validating input at the edge</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: strong validation with Zod or Joi, at the edge, before the service layer. Different: Courses first attacks a real API and measures six bad requests that slip through. It also adds: strict objects against mass assignment, field errors as RFC 9457 JSON Pointers, 415 and 413 at the door, coercion traps, and why tightening rules after release is a breaking change.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-5-3-rate-limit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 5.3: Rate limiting and quotas</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: limit how often a client may call and answer 429. Different: Courses builds the token bucket itself instead of installing a middleware. It also adds: the RateLimit / RateLimit-Policy headers, per-user and per-IP keys, Retry-After, and the trust-proxy bug measured through a real proxy (off: everyone shares one bucket; true: spoofable; 1: correct).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2 · ★ Ngoài giáo trình</span>
@@ -1934,6 +1939,11 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-2-2-validation" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 2.2: Kiểm dữ liệu vào ngay cửa</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: kiểm dữ liệu chặt bằng Zod hoặc Joi, ở cửa, trước tầng service. Khác: Courses tấn công một API thật trước và đo sáu request sai lọt qua. Ở đó có thêm: object strict chặn mass assignment, lỗi từng trường dạng JSON Pointer của RFC 9457, 415 và 413 ở cửa, bẫy ép kiểu, và vì sao siết luật sau khi phát hành là thay đổi phá vỡ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-5-3-rate-limit" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 5.3: Giới hạn tần suất và hạn mức</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: giới hạn số lần một client được gọi và trả 429. Khác: Courses tự dựng xô token thay vì cài một middleware. Ở đó có thêm: header RateLimit / RateLimit-Policy, khoá theo người dùng và theo IP, Retry-After, và lỗi trust proxy đo qua một proxy thật (tắt: mọi người chung một xô; true: giả được; 1: đúng).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

@@ -158,6 +158,36 @@
       "name": "Lab 4 — Devices, version 2",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 4 · 1 — Part A: the answers before the code · Lab 4 · 2 — Write shapeProblems(obj, contract): the heart of the contract test · Lab 4 · 3 — Write deviceBodyToInternal(body, version)"
+    },
+    {
+      "slug": "api-5-1-idempotency",
+      "name": "5.1 Idempotency keys for POST",
+      "level": "BEGINNER",
+      "description": "Luyện: Idempotency 1 — The lost response · Idempotency 2 — Write decide(store, caller, key, fp, nowMs) · Idempotency 3 — Which answer?"
+    },
+    {
+      "slug": "api-5-2-retry",
+      "name": "5.2 Retries, backoff and timeouts",
+      "level": "BEGINNER",
+      "description": "Luyện: Retries 1 — What the herd showed · Retries 2 — Write shouldRetry(method, outcome, hasKey, retryAfter) · Retries 3 — Write retryDelay(attempt, opt, rand, retryAfterSec)"
+    },
+    {
+      "slug": "api-5-3-rate-limit",
+      "name": "5.3 Rate limiting and quotas",
+      "level": "BEGINNER",
+      "description": "Luyện: Rate limits 1 — Buckets and proxies · Rate limits 2 — Write take(bucket, nowSec, capacity, windowSec): one token bucket step · Rate limits 3 — Write clientIp(remote, xff, trust): what Express calls req.ip"
+    },
+    {
+      "slug": "api-5-4-dong-thoi",
+      "name": "5.4 Concurrency: optimistic locking and ETags",
+      "level": "BEGINNER",
+      "description": "Luyện: Concurrency 1 — The lost update · Concurrency 2 — Write ifMatch(header, current) · Concurrency 3 — Write guardedUpdate(rows, id, expectedVersion, patch)"
+    },
+    {
+      "slug": "api-5-5-lab",
+      "name": "Lab 5 — Reporting that survives the basement",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 5 · 1 — The middleware order · Lab 5 · 2 — Part A: predict the answers"
     }
   ]
 }

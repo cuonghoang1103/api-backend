@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.3 "Giới hạn tần suất và hạn mức" (deck api-05-3, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-05-3', "Rate limiting and quotas", "Giới hạn tần suất và hạn mức", [
+  [1, "Cover",
+    `<p>Lesson 5.3: not every client is polite — and most rate limiters break behind a proxy.</p>`,
+    `<p>Bài 5.3: không phải client nào cũng lịch sự — và phần lớn bộ giới hạn hỏng khi đứng sau proxy.</p>`],
+  [2, "What you will get",
+    `<p>The token bucket, the RateLimit headers and 429, limits per user and per IP, the proxy trap measured three ways, and where buckets must live with several instances.</p>`,
+    `<p>Xô token, header RateLimit và mã 429, giới hạn theo người dùng và theo IP, bẫy proxy đo bằng ba cách, và chỗ phải lưu xô khi có nhiều instance.</p>`],
+  [3, "The token bucket",
+    `<p>A bucket of five tokens gets one back every twelve seconds; each request takes one and an empty bucket means wait — no fixed-window edge. The headers follow draft-11 of May 2026: RateLimit-Policy describes the quota, RateLimit the state, and a 429 carries Retry-After, which takes precedence.</p>`,
+    `<p>Một xô năm token được rót lại một token mỗi mười hai giây; mỗi request lấy một và xô rỗng nghĩa là chờ — không có cái mép của cửa sổ cố định. Header theo draft-11 tháng 5/2026: RateLimit-Policy mô tả hạn mức, RateLimit mô tả hiện trạng, và 429 kèm Retry-After, header được ưu tiên.</p>`],
+  [4, "Per user",
+    `<p>Lan books six times: five 201s with r counting down, then a 429 with Retry-After twelve and a problem document. Bin books once and gets his own bucket. Replays of idempotent requests are answered before the limiter and cost nothing.</p>`,
+    `<p>Cô Lan đặt sáu lần: năm lần 201 với r đếm ngược, rồi 429 kèm Retry-After mười hai và một problem document. Bin đặt một lần và có xô riêng. Lần phát lại của request idempotent được trả trước bộ giới hạn nên không tốn gì.</p>`],
+  [5, "The proxy trap",
+    `<p>Behind nginx every connection comes from the proxy; the client address arrives in X-Forwarded-For, which the proxy appends to. Express’s trust proxy setting decides how far to believe it. A small Node proxy behaves like nginx and pretends two users on documentation addresses; the public list is limited to five requests per ten seconds per IP.</p>`,
+    `<p>Sau nginx mọi kết nối đến từ proxy; địa chỉ client tới qua X-Forwarded-For, header mà proxy nối thêm. Thiết lập trust proxy của Express quyết định tin nó tới đâu. Một proxy Node nhỏ làm như nginx và giả làm hai người dùng ở địa chỉ dành cho tài liệu; danh sách công khai bị giới hạn năm request mỗi mười giây mỗi IP.</p>`],
+  [6, "Measured",
+    `<p>With trust proxy off the app sees only the proxy, so user B is refused although he never sent anything. With true it believes the client-written entry: eight spoofed requests all pass. With one hop it takes the address our proxy appended: A is limited after five, B is not. Count your hops.</p>`,
+    `<p>Tắt trust proxy thì app chỉ thấy proxy, nên người B bị từ chối dù chưa gửi gì. Đặt true thì nó tin mục do client viết: tám request giả đều lọt. Đặt một chặng thì nó lấy địa chỉ proxy của ta nối thêm: A bị chặn sau năm lần, B thì không. Hãy đếm số chặng.</p>`],
+  [7, "Traps",
+    `<p>trust proxy true copied from a tutorial makes every IP rule spoofable. Buckets in one process give each instance the full quota. A 429 without Retry-After makes clients guess.</p>`,
+    `<p>trust proxy true chép từ hướng dẫn làm mọi luật theo IP đều giả được. Xô trong một tiến trình cho mỗi instance cả hạn mức. Lỗi 429 thiếu Retry-After bắt client phải đoán.</p>`],
+  [8, "Interviews",
+    `<p>Designing a rate limiter: the key, the algorithm, shared storage, headers, 429 with Retry-After and correct client IPs. Per user for writes, per IP for anonymous reads. A token bucket allows short bursts with cheap state; a sliding window is smoother but needs more state.</p>`,
+    `<p>Thiết kế bộ giới hạn: khoá, thuật toán, nơi lưu dùng chung, header, 429 kèm Retry-After và địa chỉ client đúng. Theo người dùng cho thao tác ghi, theo IP cho đọc ẩn danh. Xô token cho phép dồn ngắn với trạng thái rẻ; cửa sổ trượt mượt hơn nhưng cần nhiều trạng thái hơn.</p>`],
+  [9, "Summary",
+    `<p>Token bucket of five bookings per user per minute; RateLimit headers and 429 with Retry-After; behind a proxy only the right hop count is correct; replays are free; several instances need shared buckets. Next, lesson 5.4: two people edit the same device.</p>`,
+    `<p>Xô token năm lượt đặt mỗi người mỗi phút; header RateLimit và 429 kèm Retry-After; sau proxy chỉ số chặng đúng mới cho kết quả đúng; phát lại miễn phí; nhiều instance cần xô dùng chung. Tiếp theo, bài 5.4: hai người cùng sửa một thiết bị.</p>`],
+]);

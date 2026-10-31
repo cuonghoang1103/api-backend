@@ -1,0 +1,491 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-5-4-dong-thoi",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-5-4-dong-thoi"
+  },
+  "exercises": [
+    {
+      "title": "Concurrency 1 — The lost update",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 5.4 (dev_3 edited from a laptop and a phone, real runs).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 5.4 (dev_3 được sửa từ laptop và điện thoại, chạy thật).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look at the real outputs of lesson 5.4.|||Xem lại output thật của bài 5.4.",
+        "412 means the precondition you sent is false.|||412 nghĩa là điều kiện bạn gửi là sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Concurrency 1 — The lost update\n\nAnswer in the answer panel (no code needed).\n\n1. Without If-Match, both PATCHes returned 200. What happened to the laptop’s note?Không có If-Match, cả hai PATCH đều trả 200. Ghi chú của laptop ra sao?\n2. The phone sent If-Match: \"dev_3-v1\" after the laptop had saved v2. The answer was …Điện thoại gửi If-Match: \"dev_3-v1\" sau khi laptop đã lưu v2. Câu trả lời là …\n3. Why are Express’s automatic ETags not used for If-Match?Vì sao không dùng ETag tự động của Express cho If-Match?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Concurrency 1 — The lost update — answer key\n\n1. Without If-Match, both PATCHes returned 200. What happened to the laptop’s note?Không có If-Match, cả hai PATCH đều trả 200. Ghi chú của laptop ra sao?\n   Answer: b) It was silently overwritten by the phone’s old note\n   Last write wins — the lost update. Nobody was told.VI: Người ghi sau thắng — mất cập nhật. Không ai được báo.\n\n2. The phone sent If-Match: \"dev_3-v1\" after the laptop had saved v2. The answer was …Điện thoại gửi If-Match: \"dev_3-v1\" sau khi laptop đã lưu v2. Câu trả lời là …\n   Answer: b) 412 with currentETag \"dev_3-v2\", nothing changed\n   The precondition was false, so the write was refused; the client reloads and merges.VI: Điều kiện sai nên lần ghi bị từ chối; client tải lại rồi gộp.\n\n3. Why are Express’s automatic ETags not used for If-Match?Vì sao không dùng ETag tự động của Express cho If-Match?\n   Answer: b) They are weak (W/\"…\") and If-Match uses strong comparison\n   RFC 9110: If-Match compares strongly; LabFlow sets its own strong tag from the version.VI: RFC 9110: If-Match so sánh mạnh; LabFlow tự đặt nhãn mạnh từ version.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It was silently overwritten by the phone’s old note</p><p>Last write wins — the lost update. Nobody was told.</p><p><i>VI: Người ghi sau thắng — mất cập nhật. Không ai được báo.</i></p></li><li><p><b>b)</b> 412 with currentETag \"dev_3-v2\", nothing changed</p><p>The precondition was false, so the write was refused; the client reloads and merges.</p><p><i>VI: Điều kiện sai nên lần ghi bị từ chối; client tải lại rồi gộp.</i></p></li><li><p><b>b)</b> They are weak (W/\"…\") and If-Match uses strong comparison</p><p>RFC 9110: If-Match compares strongly; LabFlow sets its own strong tag from the version.</p><p><i>VI: RFC 9110: If-Match so sánh mạnh; LabFlow tự đặt nhãn mạnh từ version.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Without If-Match, both PATCHes returned 200. What happened to the laptop’s note?</p><p style=\"opacity:.75;font-size:.92em\"><i>Không có If-Match, cả hai PATCH đều trả 200. Ghi chú của laptop ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The second PATCH failed with 409"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It was silently overwritten by the phone’s old note"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It was merged with the phone’s note"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Both notes were kept in a history list"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Last write wins — the lost update. Nobody was told.</p><p><i>VI: Người ghi sau thắng — mất cập nhật. Không ai được báo.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The phone sent If-Match: \"dev_3-v1\" after the laptop had saved v2. The answer was …</p><p style=\"opacity:.75;font-size:.92em\"><i>Điện thoại gửi If-Match: \"dev_3-v1\" sau khi laptop đã lưu v2. Câu trả lời là …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "428 Precondition Required, no body"
+              },
+              {
+                "ma": "b",
+                "noiDung": "412 with currentETag \"dev_3-v2\", nothing changed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "409 BOOKING_CONFLICT from the rules"
+              },
+              {
+                "ma": "d",
+                "noiDung": "200, and version v1 was restored"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The precondition was false, so the write was refused; the client reloads and merges.</p><p><i>VI: Điều kiện sai nên lần ghi bị từ chối; client tải lại rồi gộp.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why are Express’s automatic ETags not used for If-Match?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao không dùng ETag tự động của Express cho If-Match?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They are too long to send in a header"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are weak (W/\"…\") and If-Match uses strong comparison"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They change on every single request"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They are only sent with 304 responses"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>RFC 9110: If-Match compares strongly; LabFlow sets its own strong tag from the version.</p><p><i>VI: RFC 9110: If-Match so sánh mạnh; LabFlow tự đặt nhãn mạnh từ version.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking 200 means nothing went wrong.|||Nghĩ rằng 200 là không có gì sai."
+        },
+        {
+          "loi": "Mixing up 412 and 428.|||Lẫn 412 với 428."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lost update",
+          "vi": "mất cập nhật"
+        },
+        {
+          "en": "precondition",
+          "vi": "điều kiện tiên quyết"
+        }
+      ]
+    },
+    {
+      "title": "Concurrency 2 — Write ifMatch(header, current)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "ETag",
+        "conditional requests"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Evaluate an <code>If-Match</code> header against the current strong ETag (e.g. <code>\"dev_3-v2\"</code>, quotes included). Return <code>'ok'</code> or <code>'precondition-failed'</code>:</p><ul>\n<li>no header (<code>undefined</code>) ⇒ <code>'ok'</code> (optional in LabFlow)</li>\n<li>a comma-separated list of tags; <code>*</code> anywhere ⇒ <code>'ok'</code></li>\n<li>otherwise <code>'ok'</code> only if one tag equals <code>current</code> <b>strongly</b>: a weak tag (<code>W/\"…\"</code>) never matches</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đánh giá header <code>If-Match</code> so với ETag mạnh hiện tại (ví dụ <code>\"dev_3-v2\"</code>, gồm cả ngoặc kép). Trả <code>'ok'</code> hoặc <code>'precondition-failed'</code>:</p><ul>\n<li>không có header (<code>undefined</code>) ⇒ <code>'ok'</code> (tuỳ chọn ở LabFlow)</li>\n<li>danh sách nhãn cách nhau dấu phẩy; có <code>*</code> ở bất kỳ đâu ⇒ <code>'ok'</code></li>\n<li>còn lại chỉ <code>'ok'</code> khi có một nhãn bằng <code>current</code> theo kiểu <b>mạnh</b>: nhãn yếu (<code>W/\"…\"</code>) không bao giờ khớp</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "header — string | undefined; current — strong ETag string|||header — chuỗi | undefined; current — chuỗi ETag mạnh",
+      "outputSpec": "'ok' | 'precondition-failed'",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "ifMatch(\"\\\"dev_3-v1\\\"\", \"\\\"dev_3-v2\\\"\")",
+          "output": "\"precondition-failed\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split on commas and trim each tag.|||Tách theo dấu phẩy rồi bỏ khoảng trắng từng nhãn.",
+        "Strong comparison: exact string equality, and no W/ prefix.|||So sánh mạnh: chuỗi bằng hệt nhau, và không có tiền tố W/."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** If-Match header + current ETag ⇒ 'ok' | 'precondition-failed' */\nfunction ifMatch(header, current) {\n  // Write your solution here\n  return header === current ? 'ok' : 'precondition-failed';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction ifMatch(header, current) {\n  if (header === undefined) return 'ok';\n  const tags = header.split(',').map((s) => s.trim());\n  if (tags.includes('*')) return 'ok';\n  return tags.some((t) => !t.startsWith('W/') && t === current) ? 'ok' : 'precondition-failed';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is checkIfMatch of lesson 5.4 as a pure function: absent ⇒ allowed, * ⇒ any version, otherwise strong equality; anything else ⇒ 412.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là checkIfMatch của bài 5.4 dưới dạng hàm thuần: vắng ⇒ cho qua, * ⇒ mọi phiên bản, còn lại so mạnh; khác đi ⇒ 412.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The phone, still on v1",
+              "vi": "Điện thoại, vẫn ở v1"
+            },
+            "goi": "ifMatch(\"\\\"dev_3-v1\\\"\", \"\\\"dev_3-v2\\\"\")",
+            "mongDoi": "precondition-failed"
+          },
+          {
+            "moTa": {
+              "en": "No header",
+              "vi": "Không có header"
+            },
+            "goi": "ifMatch(undefined, '\"dev_3-v2\"')",
+            "mongDoi": "ok"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "ifMatch(\"\\\"dev_3-v1\\\", \\\"dev_3-v2\\\"\", \"\\\"dev_3-v2\\\"\")",
+            "mongDoi": "ok",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "ifMatch(\"*\", \"\\\"dev_3-v7\\\"\")",
+            "mongDoi": "ok",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "ifMatch(\"W/\\\"dev_3-v2\\\"\", \"\\\"dev_3-v2\\\"\")",
+            "mongDoi": "precondition-failed",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "ifMatch(\"dev_3-v2\", \"\\\"dev_3-v2\\\"\")",
+            "mongDoi": "precondition-failed",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating W/\"dev_3-v2\" as a match.|||Coi W/\"dev_3-v2\" là khớp."
+        },
+        {
+          "loi": "Comparing without the quotes.|||So mà bỏ ngoặc kép."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "strong comparison",
+          "vi": "so sánh mạnh"
+        },
+        {
+          "en": "weak ETag",
+          "vi": "ETag yếu"
+        }
+      ]
+    },
+    {
+      "title": "Concurrency 3 — Write guardedUpdate(rows, id, expectedVersion, patch)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "optimistic locking",
+        "SQL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Simulate the one SQL statement of lesson 5.4: <code>UPDATE devices SET …, version = version + 1 WHERE id = $1 AND version = $2</code>. Return <code>{ updated, rows }</code>: if a row has that <code>id</code> <b>and</b> that <code>version</code>, apply <code>patch</code>, increase its version and return <code>updated: 1</code> with a new array; otherwise <code>updated: 0</code> and the original rows. Never modify the arguments.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng câu SQL duy nhất của bài 5.4: <code>UPDATE devices SET …, version = version + 1 WHERE id = $1 AND version = $2</code>. Trả <code>{ updated, rows }</code>: nếu có dòng mang đúng <code>id</code> <b>và</b> đúng <code>version</code> thì áp <code>patch</code>, tăng version và trả <code>updated: 1</code> với mảng mới; ngược lại <code>updated: 0</code> và các dòng ban đầu. Không bao giờ sửa đối số.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "rows — [{ id, …, version }]; id; expectedVersion; patch — object",
+      "outputSpec": "{ updated: 0 | 1, rows }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "guardedUpdate([{\"id\":\"dev_3\",\"note\":\"Thiếu thẻ nhớ\",\"status\":\"AVAILABLE\",\"version\":1},{\"id\":\"dev_1\",\"note\":null,\"status\":\"AVAILABLE\",\"version\":4}], \"dev_3\", 1, {\"note\":\"Đã thay thẻ nhớ 32 GB\"})",
+          "output": "{\"updated\":1,\"rows\":[{\"id\":\"dev_3\",\"note\":\"Đã thay thẻ nhớ 32 GB\",\"status\":\"AVAILABLE\",\"version\":2},{\"id\":\"dev_1\",\"note\":null,\"status\":\"AVAILABLE\",\"version\":4}]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Find the row with BOTH conditions in one step.|||Tìm dòng thoả CẢ HAI điều kiện trong một bước.",
+        "rows.map with a spread creates the new array.|||rows.map kèm spread tạo mảng mới."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** UPDATE … WHERE id = $1 AND version = $2, simulated */\nfunction guardedUpdate(rows, id, expectedVersion, patch) {\n  // Write your solution here\n  const r = rows.find((x) => x.id === id);\n  Object.assign(r, patch);\n  return { updated: 1, rows };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction guardedUpdate(rows, id, expectedVersion, patch) {\n  const i = rows.findIndex((r) => r.id === id && r.version === expectedVersion);\n  if (i === -1) return { updated: 0, rows };\n  const next = rows.map((r, j) => (j === i ? { ...r, ...patch, version: r.version + 1 } : r));\n  return { updated: 1, rows: next };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>updated: 0 is how the database tells you somebody else won the race; the API turns it into 412.</p>",
+      "solutionExplanationHtmlVi": "<p>updated: 0 là cách cơ sở dữ liệu báo có người khác thắng cuộc đua; API biến nó thành 412.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The laptop, on v1",
+              "vi": "Laptop, ở v1"
+            },
+            "goi": "guardedUpdate([{\"id\":\"dev_3\",\"note\":\"Thiếu thẻ nhớ\",\"status\":\"AVAILABLE\",\"version\":1},{\"id\":\"dev_1\",\"note\":null,\"status\":\"AVAILABLE\",\"version\":4}], \"dev_3\", 1, {\"note\":\"Đã thay thẻ nhớ 32 GB\"})",
+            "mongDoi": {
+              "updated": 1,
+              "rows": [
+                {
+                  "id": "dev_3",
+                  "note": "Đã thay thẻ nhớ 32 GB",
+                  "status": "AVAILABLE",
+                  "version": 2
+                },
+                {
+                  "id": "dev_1",
+                  "note": null,
+                  "status": "AVAILABLE",
+                  "version": 4
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "The phone, still on v1",
+              "vi": "Điện thoại, vẫn ở v1"
+            },
+            "goi": "guardedUpdate([{\"id\":\"dev_3\",\"note\":\"Đã thay thẻ nhớ 32 GB\",\"status\":\"AVAILABLE\",\"version\":2},{\"id\":\"dev_1\",\"note\":null,\"status\":\"AVAILABLE\",\"version\":4}], \"dev_3\", 1, {\"status\":\"MAINTENANCE\"})",
+            "mongDoi": {
+              "updated": 0,
+              "rows": [
+                {
+                  "id": "dev_3",
+                  "note": "Đã thay thẻ nhớ 32 GB",
+                  "status": "AVAILABLE",
+                  "version": 2
+                },
+                {
+                  "id": "dev_1",
+                  "note": null,
+                  "status": "AVAILABLE",
+                  "version": 4
+                }
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "guardedUpdate([{\"id\":\"dev_3\",\"note\":\"Thiếu thẻ nhớ\",\"status\":\"AVAILABLE\",\"version\":1},{\"id\":\"dev_1\",\"note\":null,\"status\":\"AVAILABLE\",\"version\":4}], \"dev_9\", 1, {\"note\":\"x\"})",
+            "mongDoi": {
+              "updated": 0,
+              "rows": [
+                {
+                  "id": "dev_3",
+                  "note": "Thiếu thẻ nhớ",
+                  "status": "AVAILABLE",
+                  "version": 1
+                },
+                {
+                  "id": "dev_1",
+                  "note": null,
+                  "status": "AVAILABLE",
+                  "version": 4
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "guardedUpdate([{\"id\":\"dev_3\",\"note\":\"Thiếu thẻ nhớ\",\"status\":\"AVAILABLE\",\"version\":1},{\"id\":\"dev_1\",\"note\":null,\"status\":\"AVAILABLE\",\"version\":4}], \"dev_1\", 4, {\"status\":\"IN_USE\",\"version\":99})",
+            "mongDoi": {
+              "updated": 1,
+              "rows": [
+                {
+                  "id": "dev_3",
+                  "note": "Thiếu thẻ nhớ",
+                  "status": "AVAILABLE",
+                  "version": 1
+                },
+                {
+                  "id": "dev_1",
+                  "note": null,
+                  "status": "IN_USE",
+                  "version": 5
+                }
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The input is not modified",
+              "vi": "Đầu vào không bị sửa"
+            },
+            "goi": "(function () { var r = [{\"id\":\"dev_3\",\"note\":\"Thiếu thẻ nhớ\",\"status\":\"AVAILABLE\",\"version\":1},{\"id\":\"dev_1\",\"note\":null,\"status\":\"AVAILABLE\",\"version\":4}]; guardedUpdate(r, 'dev_3', 1, { note: 'x' }); return r; })()",
+            "mongDoi": [
+              {
+                "id": "dev_3",
+                "note": "Thiếu thẻ nhớ",
+                "status": "AVAILABLE",
+                "version": 1
+              },
+              {
+                "id": "dev_1",
+                "note": null,
+                "status": "AVAILABLE",
+                "version": 4
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking the version in one step and updating in another — the race is back.|||Kiểm version một bước rồi cập nhật bước khác — cuộc đua quay lại."
+        },
+        {
+          "loi": "Letting patch overwrite the version.|||Để patch ghi đè version."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "guarded update",
+          "vi": "cập nhật có điều kiện"
+        },
+        {
+          "en": "affected rows",
+          "vi": "số dòng bị ảnh hưởng"
+        }
+      ]
+    }
+  ]
+}

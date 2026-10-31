@@ -1,0 +1,457 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-5-2-retry",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-5-2-retry"
+  },
+  "exercises": [
+    {
+      "title": "Retries 1 — What the herd showed",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "retries"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 5.2 (50 clients after a 1-second outage, server capacity 10 requests per 100 ms, real runs).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 5.2 (50 client sau sự cố 1 giây, năng lực server 10 request mỗi 100 ms, chạy thật).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look at the three histograms again.|||Xem lại ba biểu đồ.",
+        "A timeout is a client-side decision.|||Timeout là quyết định phía client."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Retries 1 — What the herd showed\n\nAnswer in the answer panel (no code needed).\n\n1. Which policy took longest (16.3 s)?Chính sách nào mất lâu nhất (16,3 s)?\n2. What did jitter change in the histogram?Jitter thay đổi gì trong biểu đồ?\n3. book-nokey.mjs timed out and did not retry. What happened on the server?book-nokey.mjs hết giờ và không thử lại. Trên server chuyện gì đã xảy ra?\n4. Why does fetchWithRetry retry a 409 only when it carries Retry-After?Vì sao fetchWithRetry chỉ thử lại 409 khi có kèm Retry-After?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Retries 1 — What the herd showed — answer key\n\n1. Which policy took longest (16.3 s)?Chính sách nào mất lâu nhất (16,3 s)?\n   Answer: b) Exponential backoff without jitter\n   The clients stayed synchronised, so every wave of 50 hit the capacity limit again with ever longer gaps.VI: Các client vẫn đồng bộ nên đợt 50 nào cũng đụng trần, với khoảng trống ngày càng dài.\n\n2. What did jitter change in the histogram?Jitter thay đổi gì trong biểu đồ?\n   Answer: d) After the first burst, arrivals spread out (34, 18, 13 … per 100 ms)\n   A crowd that starts together still bursts once; jitter spreads the retries after it.VI: Đám đông bắt đầu cùng lúc vẫn tạo một đợt đầu; jitter rải các lần thử lại sau đó.\n\n3. book-nokey.mjs timed out and did not retry. What happened on the server?book-nokey.mjs hết giờ và không thử lại. Trên server chuyện gì đã xảy ra?\n   Answer: b) bk_9 was created anyway\n   A timeout only stops the client waiting; the server may have finished. That is why POST needs a key to be retried.VI: Timeout chỉ làm client thôi chờ; server có thể đã làm xong. Vì thế POST cần khoá mới được thử lại.\n\n4. Why does fetchWithRetry retry a 409 only when it carries Retry-After?Vì sao fetchWithRetry chỉ thử lại 409 khi có kèm Retry-After?\n   Answer: c) 409 + Retry-After means “still in progress, come back” (idempotency); other 409s are real conflicts\n   A BOOKING_CONFLICT will not go away by waiting; IDEMPOTENCY_IN_PROGRESS will.VI: BOOKING_CONFLICT không tự hết khi chờ; IDEMPOTENCY_IN_PROGRESS thì có.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Exponential backoff without jitter</p><p>The clients stayed synchronised, so every wave of 50 hit the capacity limit again with ever longer gaps.</p><p><i>VI: Các client vẫn đồng bộ nên đợt 50 nào cũng đụng trần, với khoảng trống ngày càng dài.</i></p></li><li><p><b>d)</b> After the first burst, arrivals spread out (34, 18, 13 … per 100 ms)</p><p>A crowd that starts together still bursts once; jitter spreads the retries after it.</p><p><i>VI: Đám đông bắt đầu cùng lúc vẫn tạo một đợt đầu; jitter rải các lần thử lại sau đó.</i></p></li><li><p><b>b)</b> bk_9 was created anyway</p><p>A timeout only stops the client waiting; the server may have finished. That is why POST needs a key to be retried.</p><p><i>VI: Timeout chỉ làm client thôi chờ; server có thể đã làm xong. Vì thế POST cần khoá mới được thử lại.</i></p></li><li><p><b>c)</b> 409 + Retry-After means “still in progress, come back” (idempotency); other 409s are real conflicts</p><p>A BOOKING_CONFLICT will not go away by waiting; IDEMPOTENCY_IN_PROGRESS will.</p><p><i>VI: BOOKING_CONFLICT không tự hết khi chờ; IDEMPOTENCY_IN_PROGRESS thì có.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which policy took longest (16.3 s)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Chính sách nào mất lâu nhất (16,3 s)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No retries at all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Exponential backoff without jitter"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Exponential backoff with full jitter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Fixed retries every 500 ms"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The clients stayed synchronised, so every wave of 50 hit the capacity limit again with ever longer gaps.</p><p><i>VI: Các client vẫn đồng bộ nên đợt 50 nào cũng đụng trần, với khoảng trống ngày càng dài.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What did jitter change in the histogram?</p><p style=\"opacity:.75;font-size:.92em\"><i>Jitter thay đổi gì trong biểu đồ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server answered every single request faster"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Fewer of the 50 clients succeeded in the end"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The first burst of 50 calls disappeared completely"
+              },
+              {
+                "ma": "d",
+                "noiDung": "After the first burst, arrivals spread out (34, 18, 13 … per 100 ms)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A crowd that starts together still bursts once; jitter spreads the retries after it.</p><p><i>VI: Đám đông bắt đầu cùng lúc vẫn tạo một đợt đầu; jitter rải các lần thử lại sau đó.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>book-nokey.mjs timed out and did not retry. What happened on the server?</p><p style=\"opacity:.75;font-size:.92em\"><i>book-nokey.mjs hết giờ và không thử lại. Trên server chuyện gì đã xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The booking was created twice"
+              },
+              {
+                "ma": "b",
+                "noiDung": "bk_9 was created anyway"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server returned 408"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — the request was cancelled"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A timeout only stops the client waiting; the server may have finished. That is why POST needs a key to be retried.</p><p><i>VI: Timeout chỉ làm client thôi chờ; server có thể đã làm xong. Vì thế POST cần khoá mới được thử lại.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why does fetchWithRetry retry a 409 only when it carries Retry-After?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao fetchWithRetry chỉ thử lại 409 khi có kèm Retry-After?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because 409 means exactly the same as 429 Too Many Requests"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because every 409 disappears on its own after a short wait"
+              },
+              {
+                "ma": "c",
+                "noiDung": "409 + Retry-After means “still in progress, come back” (idempotency); other 409s are real conflicts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because Retry-After is required on every 4xx response by HTTP"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A BOOKING_CONFLICT will not go away by waiting; IDEMPOTENCY_IN_PROGRESS will.</p><p><i>VI: BOOKING_CONFLICT không tự hết khi chờ; IDEMPOTENCY_IN_PROGRESS thì có.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking backoff alone fixes the herd.|||Nghĩ rằng chỉ lùi dần là chữa được bầy đàn."
+        },
+        {
+          "loi": "Assuming a timed-out POST did nothing.|||Cho rằng POST hết giờ là chưa làm gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "thundering herd",
+          "vi": "hiệu ứng bầy đàn"
+        },
+        {
+          "en": "full jitter",
+          "vi": "chờ ngẫu nhiên trong [0, mức lùi]"
+        }
+      ]
+    },
+    {
+      "title": "Retries 2 — Write shouldRetry(method, outcome, hasKey, retryAfter)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "retries"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Decide whether a failed attempt may be retried. <code>outcome</code> is a status number or the string <code>'timeout'</code> / <code>'network'</code>.</p><ul>\n<li>Only safe methods (GET, HEAD, PUT, DELETE, OPTIONS — any case) or a request with an Idempotency-Key (<code>hasKey</code>) may be retried at all</li>\n<li>Retry timeouts, network errors, 408, 429, 500, 502, 503, 504</li>\n<li>Retry 409 only when <code>retryAfter</code> is present (“still in progress”)</li>\n<li>Everything else: no</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định một lần thử hỏng có được thử lại không. <code>outcome</code> là số mã trạng thái hoặc chuỗi <code>'timeout'</code> / <code>'network'</code>.</p><ul>\n<li>Chỉ phương thức an toàn (GET, HEAD, PUT, DELETE, OPTIONS — không phân biệt hoa thường) hoặc request có Idempotency-Key (<code>hasKey</code>) mới được thử lại</li>\n<li>Thử lại khi hết giờ, lỗi mạng, 408, 429, 500, 502, 503, 504</li>\n<li>Thử lại 409 chỉ khi có <code>retryAfter</code> (“còn đang xử lý”)</li>\n<li>Còn lại: không</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "method, outcome (number | \"timeout\" | \"network\"), hasKey (boolean), retryAfter (string | undefined)|||method, outcome (số | \"timeout\" | \"network\"), hasKey (boolean), retryAfter (chuỗi | undefined)",
+      "outputSpec": "boolean",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "shouldRetry(\"GET\", 503, false)",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "First decide whether the request may be repeated at all.|||Trước hết quyết định request có được lặp lại hay không.",
+        "Then decide whether the failure is transient.|||Rồi quyết định lỗi có phải tạm thời không."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** may this failed attempt be retried? */\nfunction shouldRetry(method, outcome, hasKey, retryAfter) {\n  // Write your solution here\n  return outcome === 'timeout' || outcome >= 500;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction shouldRetry(method, outcome, hasKey, retryAfter) {\n  const safe = ['GET', 'HEAD', 'PUT', 'DELETE', 'OPTIONS'].includes(method.toUpperCase()) || hasKey;\n  if (!safe) return false;\n  if (outcome === 'timeout' || outcome === 'network') return true;\n  return [408, 429, 500, 502, 503, 504].includes(outcome) || (outcome === 409 && retryAfter !== undefined);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two questions in order: may I repeat it (idempotent method or key), and can waiting help (transient error). Both must be yes.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai câu hỏi theo thứ tự: tôi có được lặp lại nó không (phương thức idempotent hoặc có khoá), và chờ có giúp được không (lỗi tạm thời). Cả hai phải là có.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "GET /v2/labs during the outage",
+              "vi": "GET /v2/labs khi đang sự cố"
+            },
+            "goi": "shouldRetry(\"GET\", 503, false)",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "book-nokey.mjs",
+              "vi": "book-nokey.mjs"
+            },
+            "goi": "shouldRetry(\"POST\", \"timeout\", false)",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "shouldRetry(\"POST\", \"timeout\", true)",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "shouldRetry(\"post\", 409, true, \"1\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "shouldRetry(\"POST\", 409, true)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "shouldRetry(\"GET\", 422, false)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "shouldRetry(\"delete\", \"network\", false)",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "shouldRetry(\"PATCH\", 503, false)",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Retrying a POST without a key after a timeout — may book twice.|||Thử lại POST không khoá sau khi hết giờ — có thể đặt hai lần."
+        },
+        {
+          "loi": "Retrying 422 or 404.|||Thử lại 422 hay 404."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transient error",
+          "vi": "lỗi tạm thời"
+        },
+        {
+          "en": "safe to repeat",
+          "vi": "an toàn khi lặp lại"
+        }
+      ]
+    },
+    {
+      "title": "Retries 3 — Write retryDelay(attempt, opt, rand, retryAfterSec)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "backoff",
+        "jitter"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Compute how long to wait after attempt number <code>attempt</code> (1, 2, 3 …) failed. <code>opt = { baseMs, capMs, jitter }</code>; <code>rand</code> is a random number in [0, 1) supplied by the caller (so the result is testable).</p><ul>\n<li><code>exp = min(capMs, baseMs × 2<sup>attempt−1</sup>)</code></li>\n<li>with jitter: <code>Math.round(rand × exp)</code> (“full jitter”); without: <code>exp</code></li>\n<li>if <code>retryAfterSec</code> is given, wait <b>at least</b> that many seconds</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính thời gian chờ sau khi lần thử thứ <code>attempt</code> (1, 2, 3 …) hỏng. <code>opt = { baseMs, capMs, jitter }</code>; <code>rand</code> là số ngẫu nhiên trong [0, 1) do bên gọi đưa vào (để kết quả kiểm được).</p><ul>\n<li><code>exp = min(capMs, baseMs × 2<sup>attempt−1</sup>)</code></li>\n<li>có jitter: <code>Math.round(rand × exp)</code> (“full jitter”); không có: <code>exp</code></li>\n<li>nếu có <code>retryAfterSec</code>, chờ <b>ít nhất</b> chừng đó giây</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "attempt ≥ 1, opt, rand ∈ [0,1), retryAfterSec (number | undefined)|||attempt ≥ 1, opt, rand ∈ [0,1), retryAfterSec (số | undefined)",
+      "outputSpec": "milliseconds (number)|||mili giây (số)",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "retryDelay(1, {\"baseMs\":200,\"capMs\":5000,\"jitter\":false}, 0.5)",
+          "output": "200",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "2 ** (attempt - 1) doubles each time; Math.min applies the cap.|||2 ** (attempt - 1) gấp đôi mỗi lần; Math.min áp mức trần.",
+        "Retry-After is in seconds; your wait is in milliseconds.|||Retry-After tính bằng giây; thời gian chờ của bạn tính bằng mili giây."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** milliseconds to wait before the next attempt */\nfunction retryDelay(attempt, opt, rand, retryAfterSec) {\n  // Write your solution here\n  return opt.baseMs * 2 ** attempt;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction retryDelay(attempt, opt, rand, retryAfterSec) {\n  const exp = Math.min(opt.capMs, opt.baseMs * 2 ** (attempt - 1));\n  let wait = opt.jitter ? Math.round(rand * exp) : exp;\n  if (retryAfterSec !== undefined) wait = Math.max(wait, retryAfterSec * 1000);\n  return wait;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The formula of fetchWithRetry in lesson 5.2: the cap keeps waits bounded, jitter de-synchronises clients, Retry-After is a lower bound the server asked for.</p>",
+      "solutionExplanationHtmlVi": "<p>Công thức của fetchWithRetry ở bài 5.2: trần giữ thời gian chờ có giới hạn, jitter làm các client lệch nhịp, Retry-After là cận dưới mà server yêu cầu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First retry, no jitter",
+              "vi": "Lần thử lại đầu, không jitter"
+            },
+            "goi": "retryDelay(1, {\"baseMs\":200,\"capMs\":5000,\"jitter\":false}, 0.5)",
+            "mongDoi": 200
+          },
+          {
+            "moTa": {
+              "en": "Third attempt, rand 0.5",
+              "vi": "Lần thứ ba, rand 0,5"
+            },
+            "goi": "retryDelay(3, {\"baseMs\":200,\"capMs\":5000,\"jitter\":true}, 0.5)",
+            "mongDoi": 400
+          },
+          {
+            "moTa": {
+              "en": "The cap",
+              "vi": "Mức trần"
+            },
+            "goi": "retryDelay(9, {\"baseMs\":200,\"capMs\":5000,\"jitter\":false}, 0.9)",
+            "mongDoi": 5000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "429 with Retry-After: 12",
+              "vi": "429 kèm Retry-After: 12"
+            },
+            "goi": "retryDelay(2, {\"baseMs\":200,\"capMs\":5000,\"jitter\":true}, 0.1, 12)",
+            "mongDoi": 12000,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "retryDelay(6, {\"baseMs\":200,\"capMs\":5000,\"jitter\":true}, 0.99)",
+            "mongDoi": 4950,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "2 ** attempt — the first wait becomes 400 ms.|||2 ** attempt — lần chờ đầu thành 400 ms."
+        },
+        {
+          "loi": "Letting jitter shorten a Retry-After.|||Để jitter làm ngắn Retry-After."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cap",
+          "vi": "mức trần"
+        },
+        {
+          "en": "lower bound",
+          "vi": "cận dưới"
+        }
+      ]
+    }
+  ]
+}

@@ -240,8 +240,8 @@ new Worker('email', async (job) =&gt; {
 <p>Running the worker in its own process is not a style preference. A worker that shares the web process shares its event loop, so a heavy job adds latency to every HTTP request — chapter 2.4 measured a 2871ms block delaying the heartbeat by 2873ms. Separate processes also let you scale them independently: two web containers and six workers, or the reverse during a backlog.</p>
 
 <h3>Open the box: what a job actually is</h3>
-<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 storeá)
-   các storeá: wait, 1, events, meta, id, marker
+<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 khoá)
+   các khoá: wait, 1, events, meta, id, marker
    HGETALL bull:t2:1:
       name         = email
       data         = {"to":"an@x.vn","subject":"Chào bạn"}
@@ -333,8 +333,8 @@ new Worker('email', async (job) =&gt; {
 <p>Chạy worker trong tiến trình riêng của nó không phải một sở thích về phong cách. Một worker dùng chung tiến trình web thì dùng chung luôn event loop, nên một job nặng sẽ cộng thêm độ trễ vào MỌI request HTTP — bài 2.4 đã đo được một khối chặn 2871ms làm nhịp tim trễ đúng 2873ms. Tiến trình tách rời còn cho bạn co giãn hai bên độc lập: hai container web và sáu worker, hoặc ngược lại khi hàng đợi đang ùn.</p>
 
 <h3>Mở hộp ra: một job thật sự là cái gì</h3>
-<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 storeá)
-   các storeá: wait, 1, events, meta, id, marker
+<div class="out">   thêm 1 job → DBSIZE 5363 → 5369 (+6 khoá)
+   các khoá: wait, 1, events, meta, id, marker
    HGETALL bull:t2:1:
       name         = email
       data         = {"to":"an@x.vn","subject":"Chào bạn"}

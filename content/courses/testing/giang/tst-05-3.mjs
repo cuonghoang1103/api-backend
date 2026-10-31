@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.3 Kiểm dữ liệu vào và phản hồi lỗi (deck tst-05-3, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-05-3', 'Validation and error responses', 'Kiểm dữ liệu vào và phản hồi lỗi', [
+  [1, 'Validation and error responses',
+    `<p>A public API receives every kind of bad input. This lesson checks it at the door and gives every error the same shape.</p>`,
+    `<p>API công khai nhận đủ loại dữ liệu xấu. Bài này kiểm nó ngay ở cửa và cho mọi lỗi cùng một hình dạng.</p>`],
+  [2, 'What you will take away from this lesson',
+    `<p>Zod at the door, 400 versus 422, a table of bad inputs, broken JSON, and one error format.</p>`,
+    `<p>Zod ở cửa, 400 so với 422, một bảng dữ liệu xấu, JSON hỏng, và một định dạng lỗi duy nhất.</p>`],
+  [3, 'The input schema',
+    `<p>The schema states types and formats JSON cannot express. A strict object refuses unknown keys, so clients cannot choose the role or the status.</p>`,
+    `<p>Schema nêu các kiểu và định dạng mà JSON tự nó không diễn đạt được. Object nghiêm ngặt từ chối khoá lạ, nên client không chọn được vai trò hay trạng thái.</p>`],
+  [4, 'From Zod issues to a 400 response',
+    `<p>Each Zod issue becomes a detail with a path and a message, all in one response, so a form can mark every wrong field at once.</p>`,
+    `<p>Mỗi issue của Zod thành một chi tiết có path và message, gom trong một phản hồi, để form đánh dấu được mọi trường sai cùng lúc.</p>`],
+  [5, 'A table of bad inputs',
+    `<p>Each row is an equivalence class for one field — missing, wrong type, wrong format, out of range — and the test checks that the error points at that field.</p>`,
+    `<p>Mỗi dòng là một lớp tương đương cho một trường — thiếu, sai kiểu, sai định dạng, ngoài khoảng — và test kiểm lỗi trỏ đúng vào trường đó.</p>`],
+  [6, 'Ten checks, all green',
+    `<p>Six malformed bodies, broken JSON, and three rule violations that are well-formed but against BR-04.</p>`,
+    `<p>Sáu body sai định dạng, JSON hỏng, và ba vi phạm luật — đúng định dạng nhưng trái BR-04.</p>`],
+  [7, '400 or 422?',
+    `<p>400 for malformed requests, 422 for well-formed requests against a rule, 409 for a conflict with current data, 500 for our own bugs. Every error has the same shape.</p>`,
+    `<p>400 cho request sai định dạng, 422 cho request đúng định dạng nhưng trái luật, 409 cho xung đột với dữ liệu hiện có, 500 cho bug của chính ta. Lỗi nào cũng cùng một hình dạng.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>Test the seat limit at its boundary, 200 and 201, and an unknown status key.</p>`,
+    `<p>Test giới hạn số chỗ ngay tại biên, 200 và 201, và một khoá status lạ.</p>`],
+  [9, 'Summary',
+    `<p>Validate at the door, refuse unknown keys, use the right status, and keep one error format.</p>`,
+    `<p>Kiểm ở cửa, từ chối khoá lạ, dùng đúng mã trạng thái, và giữ một định dạng lỗi.</p>`],
+]);

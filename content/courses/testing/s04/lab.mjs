@@ -17,7 +17,7 @@ const RUBRIC_EN = `<table>
 <tr><td>Boundaries of the SQL and the constraint: touching slots in both directions, another lab, another day</td><td>2</td><td>read the table of cases</td></tr>
 <tr><td>Isolation: every test starts empty; any single test passes when run alone</td><td>2</td><td><code>-t</code> on single tests, any order</td></tr>
 <tr><td>Database errors asserted by SQLSTATE (<code>23P01</code>, <code>23514</code>) and mapped to <code>OVERLAP</code></td><td>1</td><td>read the tests</td></tr>
-<tr><td>Unit suite still separate and Docker-free; clear names</td><td>1</td><td><code>npx vitest run src/</code></td></tr>
+<tr><td>Unit suite still separate and Docker-free; clear names</td><td>1</td><td><code>npm run test:unit</code></td></tr>
 </tbody></table>`;
 const RUBRIC_VI = `<table>
 <thead><tr><th>Tiêu chí</th><th>Điểm</th><th>Cách kiểm</th></tr></thead>
@@ -26,7 +26,7 @@ const RUBRIC_VI = `<table>
 <tr><td>Biên của SQL và của ràng buộc: khung chạm nhau theo cả hai chiều, phòng khác, ngày khác</td><td>2</td><td>đọc bảng tình huống</td></tr>
 <tr><td>Cô lập: mọi test bắt đầu từ bảng rỗng; chạy riêng từng test vẫn đạt</td><td>2</td><td><code>-t</code> từng test, thứ tự bất kỳ</td></tr>
 <tr><td>Khẳng định lỗi cơ sở dữ liệu bằng SQLSTATE (<code>23P01</code>, <code>23514</code>) và đổi đúng sang <code>OVERLAP</code></td><td>1</td><td>đọc test</td></tr>
-<tr><td>Bộ unit test vẫn tách riêng, không cần Docker; tên rõ ràng</td><td>1</td><td><code>npx vitest run src/</code></td></tr>
+<tr><td>Bộ unit test vẫn tách riêng, không cần Docker; tên rõ ràng</td><td>1</td><td><code>npm run test:unit</code></td></tr>
 </tbody></table>`;
 
 export default {
@@ -51,7 +51,7 @@ ${ma('javascript', CODE.dotBien4)}</li>
 <p>Mutants #3 and #4 replace a filter with an always-true condition that still uses its parameter (<code>$1::text IS NOT NULL</code>). Simply deleting <code>lab = $1</code> would leave <code>$1</code> unused, and PostgreSQL would reject the whole query — a mutant every test kills for the wrong reason. Good mutants change behaviour, not syntax.</p>
 
 <h3>Your task</h3>
-<p>Write <code>test/integration/pgRepo.int.test.js</code> so that <code>npm run test:int -- test/integration</code> is green and <code>node scripts/dot-bien-4.mjs</code> prints <strong>8/8</strong>, with isolated tests (TRUNCATE or ROLLBACK). <code>npx vitest run src/</code> must stay green without Docker.</p>
+<p>Write <code>test/integration/pgRepo.int.test.js</code> so that <code>npm run test:int -- test/integration</code> is green and <code>node scripts/dot-bien-4.mjs</code> prints <strong>8/8</strong>, with isolated tests (TRUNCATE or ROLLBACK). <code>npm run test:unit</code> must stay green without Docker.</p>
 
 <h3>What a first attempt usually looks like</h3>
 ${ma('javascript', CODE.weak4)}
@@ -79,7 +79,7 @@ ${ra(UNIT)}
 
 <h3>Before you call it done</h3>
 <ul>
-<li><code>npm run test:int -- test/integration</code> green (<code>demo4/</code> keeps its red-on-purpose demos); <code>npx vitest run src/</code> green without Docker.</li>
+<li><code>npm run test:int -- test/integration</code> green (<code>demo4/</code> keeps its red-on-purpose demos); <code>npm run test:unit</code> green without Docker.</li>
 <li><code>node scripts/dot-bien-4.mjs</code> prints 8/8.</li>
 <li><code>git diff</code> shows only test files — the script restored the schema and the code.</li>
 <li>Commit: <code>test: PostgreSQL adapter and constraints (Lab 4, 8/8)</code>.</li>
@@ -107,7 +107,7 @@ ${ma('javascript', CODE.dotBien4)}</li>
 <p>Đột biến 3 và 4 thay một điều kiện lọc bằng một điều kiện luôn đúng mà vẫn dùng tham số của nó (<code>$1::text IS NOT NULL</code>). Nếu chỉ xoá <code>lab = $1</code>, tham số <code>$1</code> sẽ bị bỏ không và PostgreSQL từ chối cả câu truy vấn — một đột biến test nào cũng diệt, nhưng diệt vì lý do sai. Đột biến tốt thay đổi hành vi, không phá cú pháp.</p>
 
 <h3>Nhiệm vụ</h3>
-<p>Viết <code>test/integration/pgRepo.int.test.js</code> sao cho <code>npm run test:int -- test/integration</code> xanh và <code>node scripts/dot-bien-4.mjs</code> in <strong>8/8</strong>, với các test được cô lập (TRUNCATE hoặc ROLLBACK). <code>npx vitest run src/</code> phải vẫn xanh khi không có Docker.</p>
+<p>Viết <code>test/integration/pgRepo.int.test.js</code> sao cho <code>npm run test:int -- test/integration</code> xanh và <code>node scripts/dot-bien-4.mjs</code> in <strong>8/8</strong>, với các test được cô lập (TRUNCATE hoặc ROLLBACK). <code>npm run test:unit</code> phải vẫn xanh khi không có Docker.</p>
 
 <h3>Lần thử đầu thường trông thế nào</h3>
 ${ma('javascript', CODE.weak4)}
@@ -135,7 +135,7 @@ ${ra(UNIT)}
 
 <h3>Trước khi coi là xong</h3>
 <ul>
-<li><code>npm run test:int -- test/integration</code> xanh (<code>demo4/</code> vẫn giữ các demo cố ý đỏ); <code>npx vitest run src/</code> xanh khi không có Docker.</li>
+<li><code>npm run test:int -- test/integration</code> xanh (<code>demo4/</code> vẫn giữ các demo cố ý đỏ); <code>npm run test:unit</code> xanh khi không có Docker.</li>
 <li><code>node scripts/dot-bien-4.mjs</code> in 8/8.</li>
 <li><code>git diff</code> chỉ có file test — script đã trả lại schema và code.</li>
 <li>Commit: <code>test: PostgreSQL adapter and constraints (Lab 4, 8/8)</code>.</li>

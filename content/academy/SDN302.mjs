@@ -1427,6 +1427,11 @@ https.<span class="tok-function">createServer</span>({
   <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 10.1: Receiving files: multipart, base64 and the RAM cost</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: receiving uploads with Multer. Different: Courses measures the memory of each way of receiving files. It also adds: what multipart really looks like, base64 is not free, memoryStorage vs diskStorage measured by RSS, size limits; later lessons cover object storage, signed URLs and checking real file types.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-2-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 5.2: testing authentication and authorisation</span><span class="lc-sub">Same as this lesson: JWT bearer tokens protect Express routes. Different: Courses tests them — missing, forged and expired tokens (401), a student on an admin route (403), another student’s booking that must look missing (404), and a role smuggled in the request body.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1503,6 +1508,11 @@ https.<span class="tok-function">createServer</span>({
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-1-nhan-file-multipart" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 10.1: Nhận file: multipart, base64 và cái giá bằng RAM</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: nhận file upload bằng Multer. Khác: Courses đo bộ nhớ của từng cách nhận file. Ở đó có thêm: multipart thật ra trông thế nào, base64 không miễn phí, so memoryStorage với diskStorage bằng RSS, giới hạn kích cỡ; các bài sau còn object storage và URL ký sẵn, kiểm file thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-2-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 5.2: test xác thực và phân quyền</span><span class="lc-sub">Giống bài này: token JWT dạng Bearer bảo vệ các route Express. Khác: Courses viết test cho chúng — token thiếu, giả mạo, hết hạn (401), sinh viên vào route admin (403), lượt đặt của sinh viên khác phải trông như không tồn tại (404), và vai trò bị nhét lén vào body.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

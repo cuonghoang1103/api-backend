@@ -56,7 +56,7 @@ export const slides = lamDeck({ chuong: 'Chapter 4 — Integration tests with a 
     <tr><td>Boundaries of the SQL and the constraint (touching slots both ways, other lab, other day)</td><td>2</td><td>read the table</td></tr>
     <tr><td>Isolation: every test starts empty; no order dependence</td><td>2</td><td>run one file, one test, in any order</td></tr>
     <tr><td>Database errors asserted by code (${c('23P01')}, ${c('23514')}) and mapped to ${c('OVERLAP')}</td><td>1</td><td>read the tests</td></tr>
-    <tr><td>Unit suite still separate and green (${c('npx vitest run src/')}), names clear</td><td>1</td><td>${c('npx vitest run src/')}</td></tr></table>`, 1.02) },
+    <tr><td>Unit suite still separate and green (${c('npm run test:unit')}), names clear</td><td>1</td><td>${c('npm run test:unit')}</td></tr></table>`, 1.02) },
   { t: 'Hints, from gentle to strong', to: true, body: steps([
       'Put one booking 08:00–10:00 in BE-201, then ask findOverlap about six neighbours',
       `Call ${c('repo.insert')} directly to reach the constraint without ${c('findOverlap')}`,
@@ -64,7 +64,7 @@ export const slides = lamDeck({ chuong: 'Chapter 4 — Integration tests with a 
       `Check the error code PostgreSQL returns, not its message`,
     ]) },
   { t: 'Before you call it done', to: true, giua: true, body: `<ul>
-    <li>${c('npm run test:int -- test/integration')} green; ${c('npx vitest run src/')} green without Docker</li>
+    <li>${c('npm run test:int -- test/integration')} green; ${c('npm run test:unit')} green without Docker</li>
     <li>${c('node scripts/dot-bien-4.mjs')} prints <b>8/8 mutants killed</b></li>
     <li>${c('git diff')} shows only test files — the schema is restored</li>
     <li>Commit: ${c('test: PostgreSQL adapter and constraints (Lab 4, 8/8)')}</li></ul>` },

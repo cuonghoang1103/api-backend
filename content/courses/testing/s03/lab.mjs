@@ -50,7 +50,7 @@ ${ma('javascript', CODE.dotBien3)}</li>
 <p>The eight bugs: the confirmation goes to the approver; the subject loses the date; the approver mail loses the seat count; a failed e-mail fails the whole request; a failed e-mail is no longer logged; HTTP 429 is not recognised; the API key is sent without “Bearer ”; 4xx answers are treated as success.</p>
 
 <h3>Your task</h3>
-<p>Write <code>src/notify/notify.test.js</code> and <code>src/lib/mailer.test.js</code> so that <code>npx vitest run src/</code> is green and <code>node scripts/dot-bien-3.mjs</code> prints <strong>8/8</strong>. Rules: real business rules; the memory repository and the fake mailer for storage and e-mail; a stub to make the mailer fail; MSW for HTTP with unhandled requests failing; no <code>vi.mock</code> of LabFlow’s own modules.</p>
+<p>Write <code>src/notify/notify.test.js</code> and <code>src/lib/mailer.test.js</code> so that <code>npm run test:unit</code> is green and <code>node scripts/dot-bien-3.mjs</code> prints <strong>8/8</strong>. Rules: real business rules; the memory repository and the fake mailer for storage and e-mail; a stub to make the mailer fail; MSW for HTTP with unhandled requests failing; no <code>vi.mock</code> of LabFlow’s own modules.</p>
 
 <h3>What a first attempt usually looks like</h3>
 ${ma('javascript', CODE.weak3)}
@@ -79,7 +79,7 @@ ${ra(OUT['lab3-mut-strong'])}
 
 <h3>Before you call it done</h3>
 <ul>
-<li><code>npx vitest run src/</code> green, no real network, no <code>.only</code>/<code>.skip</code>.</li>
+<li><code>npm run test:unit</code> green, no real network, no <code>.only</code>/<code>.skip</code>.</li>
 <li><code>node scripts/dot-bien-3.mjs</code> prints 8/8; Labs 1 and 2 still 8/8.</li>
 <li><code>git diff src/</code> shows only test files.</li>
 <li>Commit: <code>test: e-mail flow with fakes and MSW (Lab 3, 8/8)</code>.</li>
@@ -107,7 +107,7 @@ ${ma('javascript', CODE.dotBien3)}</li>
 <p>Tám con bug: thư xác nhận gửi nhầm cho người duyệt; tiêu đề mất ngày; thư người duyệt mất số chỗ; gửi thư hỏng làm hỏng cả yêu cầu; gửi thư hỏng mà không còn ghi log; không nhận ra HTTP 429; khoá API gửi thiếu chữ “Bearer ”; coi câu trả lời 4xx là thành công.</p>
 
 <h3>Nhiệm vụ</h3>
-<p>Viết <code>src/notify/notify.test.js</code> và <code>src/lib/mailer.test.js</code> sao cho <code>npx vitest run src/</code> xanh và <code>node scripts/dot-bien-3.mjs</code> in <strong>8/8</strong>. Luật chơi: luật nghiệp vụ thật; repository bộ nhớ và mailer giả cho lưu trữ và thư; một stub để mailer hỏng; MSW cho HTTP với request lạ bị đánh hỏng; không <code>vi.mock</code> module của chính LabFlow.</p>
+<p>Viết <code>src/notify/notify.test.js</code> và <code>src/lib/mailer.test.js</code> sao cho <code>npm run test:unit</code> xanh và <code>node scripts/dot-bien-3.mjs</code> in <strong>8/8</strong>. Luật chơi: luật nghiệp vụ thật; repository bộ nhớ và mailer giả cho lưu trữ và thư; một stub để mailer hỏng; MSW cho HTTP với request lạ bị đánh hỏng; không <code>vi.mock</code> module của chính LabFlow.</p>
 
 <h3>Lần thử đầu thường trông thế nào</h3>
 ${ma('javascript', CODE.weak3)}
@@ -136,7 +136,7 @@ ${ra(OUT['lab3-mut-strong'])}
 
 <h3>Trước khi coi là xong</h3>
 <ul>
-<li><code>npx vitest run src/</code> xanh, không chạm mạng thật, không <code>.only</code>/<code>.skip</code>.</li>
+<li><code>npm run test:unit</code> xanh, không chạm mạng thật, không <code>.only</code>/<code>.skip</code>.</li>
 <li><code>node scripts/dot-bien-3.mjs</code> in 8/8; Lab 1 và Lab 2 vẫn 8/8.</li>
 <li><code>git diff src/</code> chỉ có file test.</li>
 <li>Commit: <code>test: e-mail flow with fakes and MSW (Lab 3, 8/8)</code>.</li>

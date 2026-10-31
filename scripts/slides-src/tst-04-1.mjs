@@ -71,7 +71,7 @@ export const slides = lamDeck({ chuong: 'Chapter 4 — Integration tests with a 
     <tr><td>CHECK / NOT NULL / UNIQUE</td><td>not modelled</td><td>23514, 23502, 23505</td></tr>
     <tr><td>Boundaries in SQL (&lt; vs &lt;=)</td><td>its own JS, not your SQL</td><td>exactly your query</td></tr></table>`, 1.08) },
   { t: 'What it costs, measured', body: zm(`<table class="t"><tr><th>Suite</th><th>Tests</th><th>Time (Vitest)</th></tr>
-    <tr><td>Unit (${c('npx vitest run src/')})</td><td>73</td><td>0.24 s</td></tr>
+    <tr><td>Unit (${c('npm run test:unit')})</td><td>73</td><td>0.24 s</td></tr>
     <tr><td>Integration, fresh PostgreSQL 17 per run</td><td>11</td><td>1.85 s (container ready in ≈ 1.2–2.1 s)</td></tr></table>`, 1.15) +
     box('So keep both', 'Rules and decisions in fast unit tests (Chapters 1–3); a smaller set of integration tests for SQL, constraints and transactions. That is the pyramid of lesson 0.2, now with real numbers.', 'xanh') },
   { t: 'Practice (15 minutes)', to: true, body: steps([

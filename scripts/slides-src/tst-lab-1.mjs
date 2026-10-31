@@ -57,7 +57,7 @@ export const slides = lamDeck({ chuong: 'Chapter 1 — Your first unit tests', b
     <tr><td>Boundary values for every limit (14 d, 30 seats, 07:00/21:00, 240 min)</td><td>2</td><td>read the tables</td></tr>
     <tr><td>Invalid input with the right error class (seats 0/2.5, bad times, non-integer days)</td><td>1</td><td>${c('toThrow(RangeError | TypeError)')}</td></tr>
     <tr><td>Names and structure: describe per function, it.each for tables, names state rule + result</td><td>2</td><td>read the report tree</td></tr>
-    <tr><td>Hygiene: green on real code, no ${c('.only')}/${c('.skip')}, every test asserts, under 1 s</td><td>1</td><td>${c('npm test')} with ${c('requireAssertions')}</td></tr></table>`, 1.05) +
+    <tr><td>Hygiene: green on real code, no ${c('.only')}/${c('.skip')}, every test asserts, under 1 s</td><td>1</td><td>${c('npm run test:unit')} with ${c('requireAssertions')}</td></tr></table>`, 1.05) +
     box('Pass mark', '7/10. Aim for 10: every point here is a habit you will use at work.', 'xanh') },
   { t: 'Hints, from gentle to strong', to: true, body: steps([
       'Write the rules as a list of sentences first; each sentence is a test name',
@@ -67,7 +67,7 @@ export const slides = lamDeck({ chuong: 'Chapter 1 — Your first unit tests', b
       'Still stuck: compare with the reference solution at the end of the lesson — after trying',
     ]) },
   { t: 'Before you call it done', to: true, giua: true, body: `<ul>
-    <li>${c('npm test')} green on the real code, no ${c('.only')} or ${c('.skip')}</li>
+    <li>${c('npm run test:unit')} green on the real code, no ${c('.only')} or ${c('.skip')}</li>
     <li>${c('node scripts/dot-bien.mjs')} prints <b>8/8 mutants killed</b></li>
     <li>${c('git diff src/rules/booking.js src/rules/time.js')} is empty — the script restored everything</li>
     <li>The report tree reads like the rules list</li>

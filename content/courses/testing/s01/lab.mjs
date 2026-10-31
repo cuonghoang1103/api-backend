@@ -13,7 +13,7 @@ const RUBRIC_EN = `<table>
 <tr><td>Boundary values for every limit: 14 days (−1 0 14 15), 30/31 seats, 07:00 and 21:00, 240/270 minutes, zero-length slot</td><td>2</td><td>Read the <code>it.each</code> tables</td></tr>
 <tr><td>Invalid input with the right error class: seats 0 / −5 / 2.5 → <code>RangeError</code>; “7:00”, “abc” → <code>TypeError</code>; “24:00”, “07:60” → <code>RangeError</code>; non-integer days → <code>false</code></td><td>1</td><td><code>toThrow(Class)</code> in the tests</td></tr>
 <tr><td>Names and structure: one <code>describe</code> per function, <code>it.each</code> for tables, every name states the rule and the expected result</td><td>2</td><td>Read the report tree</td></tr>
-<tr><td>Hygiene: green on the real code, no <code>.only</code>/<code>.skip</code>, every test asserts (<code>requireAssertions</code> on), whole suite under 1 second</td><td>1</td><td><code>npm test</code></td></tr>
+<tr><td>Hygiene: green on the real code, no <code>.only</code>/<code>.skip</code>, every test asserts (<code>requireAssertions</code> on), whole suite under 1 second</td><td>1</td><td><code>npm run test:unit</code></td></tr>
 </tbody>
 </table>`;
 const RUBRIC_VI = `<table>
@@ -23,7 +23,7 @@ const RUBRIC_VI = `<table>
 <tr><td>Giá trị biên cho mọi giới hạn: 14 ngày (−1 0 14 15), 30/31 chỗ, 07:00 và 21:00, 240/270 phút, khung dài 0 phút</td><td>2</td><td>Đọc các bảng <code>it.each</code></td></tr>
 <tr><td>Đầu vào không hợp lệ với đúng lớp lỗi: số chỗ 0 / −5 / 2.5 → <code>RangeError</code>; "7:00", "abc" → <code>TypeError</code>; "24:00", "07:60" → <code>RangeError</code>; số ngày không nguyên → <code>false</code></td><td>1</td><td><code>toThrow(Class)</code> trong test</td></tr>
 <tr><td>Tên và cấu trúc: mỗi hàm một <code>describe</code>, <code>it.each</code> cho bảng, tên nào cũng nói luật và kết quả mong đợi</td><td>2</td><td>Đọc cây báo cáo</td></tr>
-<tr><td>Vệ sinh: xanh trên code thật, không <code>.only</code>/<code>.skip</code>, test nào cũng có khẳng định (bật <code>requireAssertions</code>), cả bộ chạy dưới 1 giây</td><td>1</td><td><code>npm test</code></td></tr>
+<tr><td>Vệ sinh: xanh trên code thật, không <code>.only</code>/<code>.skip</code>, test nào cũng có khẳng định (bật <code>requireAssertions</code>), cả bộ chạy dưới 1 giây</td><td>1</td><td><code>npm run test:unit</code></td></tr>
 </tbody>
 </table>`;
 
@@ -44,6 +44,7 @@ ${G}
 <ol>
 <li>Use the <code>labflow-lite</code> project from lessons 0.3–1.4, with <code>src/rules/time.js</code> and <code>src/rules/booking.js</code> exactly as given in lessons 0.3 and 1.1. Do not change them — the script searches for exact lines.</li>
 <li>Install fast-check if you have not: <code>npm install --save-dev fast-check@4</code>.</li>
+<li>Add a script that runs only the real suite — <code>demo/</code> keeps tests that are red on purpose, so plain <code>npm test</code> (all folders) is not the one to judge: in <code>package.json</code>, <code>"test:unit": "vitest run src/"</code>. From now on “the suite is green” means <code>npm run test:unit</code> is green.</li>
 <li>Switch on <code>requireAssertions</code> in <code>vitest.config.js</code> (part of the hygiene point):
 ${ma('javascript', CODE.config)}</li>
 <li>Create <code>scripts/dot-bien.mjs</code> (“đột biến” = mutant):
@@ -54,7 +55,7 @@ ${ma('javascript', CODE.dotBien)}</li>
 <h3>Your task</h3>
 <p>Write <code>src/rules/booking.test.js</code> and extend <code>src/rules/time.test.js</code> so that:</p>
 <ol>
-<li><code>npm test</code> is green on the real code;</li>
+<li><code>npm run test:unit</code> is green on the real code;</li>
 <li><code>node scripts/dot-bien.mjs</code> prints <strong>8/8 mutants killed</strong>.</li>
 </ol>
 <p>Work rule-first: write the rules as sentences, turn each into test names, use the techniques of lesson 1.4 to pick values, and only then run the script. Reading the mutant list first and writing one test per mutant is “teaching to the test” — it gets 8/8 and still misses the next bug.</p>
@@ -93,7 +94,7 @@ ${ra(OUT['lab-mut-strong'])}
 
 <h3>Before you call it done</h3>
 <ul>
-<li><code>npm test</code> is green and contains no <code>.only</code> or <code>.skip</code>.</li>
+<li><code>npm run test:unit</code> is green and contains no <code>.only</code> or <code>.skip</code>.</li>
 <li><code>node scripts/dot-bien.mjs</code> prints <code>8/8 mutants killed</code>.</li>
 <li><code>git diff src/rules/booking.js src/rules/time.js</code> is empty — the script restored everything.</li>
 <li>The report tree reads like the rules list.</li>
@@ -128,6 +129,7 @@ ${ra(OUT['lab-mut-strong'])}
 <ol>
 <li>Dùng dự án <code>labflow-lite</code> từ bài 0.3–1.4, với <code>src/rules/time.js</code> và <code>src/rules/booking.js</code> đúng như ở bài 0.3 và 1.1. Đừng sửa chúng — script tìm đúng từng dòng.</li>
 <li>Cài fast-check nếu chưa có: <code>npm install --save-dev fast-check@4</code>.</li>
+<li>Thêm một script chỉ chạy bộ test thật — <code>demo/</code> giữ những test cố ý đỏ, nên <code>npm test</code> (chạy mọi thư mục) không phải lệnh để phán xanh/đỏ: trong <code>package.json</code>, <code>"test:unit": "vitest run src/"</code>. Từ giờ “bộ test xanh” nghĩa là <code>npm run test:unit</code> xanh.</li>
 <li>Bật <code>requireAssertions</code> trong <code>vitest.config.js</code> (thuộc điểm vệ sinh):
 ${ma('javascript', CODE.config)}</li>
 <li>Tạo <code>scripts/dot-bien.mjs</code> ("đột biến" = mutant):
@@ -138,7 +140,7 @@ ${ma('javascript', CODE.dotBien)}</li>
 <h3>Nhiệm vụ</h3>
 <p>Viết <code>src/rules/booking.test.js</code> và mở rộng <code>src/rules/time.test.js</code> sao cho:</p>
 <ol>
-<li><code>npm test</code> xanh trên code thật;</li>
+<li><code>npm run test:unit</code> xanh trên code thật;</li>
 <li><code>node scripts/dot-bien.mjs</code> in ra <strong>8/8 mutants killed</strong>.</li>
 </ol>
 <p>Làm theo luật trước: viết các luật thành câu, biến mỗi câu thành tên test, dùng kỹ thuật bài 1.4 để chọn giá trị, rồi mới chạy script. Đọc danh sách đột biến trước rồi viết mỗi con một test là "học tủ" — đạt 8/8 nhưng vẫn bỏ lọt con bug tiếp theo.</p>
@@ -177,7 +179,7 @@ ${ra(OUT['lab-mut-strong'])}
 
 <h3>Trước khi coi là xong</h3>
 <ul>
-<li><code>npm test</code> xanh và không còn <code>.only</code> hay <code>.skip</code>.</li>
+<li><code>npm run test:unit</code> xanh và không còn <code>.only</code> hay <code>.skip</code>.</li>
 <li><code>node scripts/dot-bien.mjs</code> in ra <code>8/8 mutants killed</code>.</li>
 <li><code>git diff src/rules/booking.js src/rules/time.js</code> trống — script đã trả mọi thứ về như cũ.</li>
 <li>Cây báo cáo đọc lên như danh sách luật.</li>

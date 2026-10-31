@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.1 Supertest (deck tst-05-1, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-05-1', 'Supertest: requests without a running server', 'Supertest: gửi request mà không cần bật server', [
+  [1, 'Supertest: requests without a running server',
+    `<p>Chapter 5 tests LabFlow Lite from the outside, the way a mobile app or a browser talks to it: through HTTP. Lesson 5.1 shows how to do that without starting a server.</p>`,
+    `<p>Chương 5 test LabFlow Lite từ bên ngoài, đúng cách một ứng dụng điện thoại hay trình duyệt nói chuyện với nó: qua HTTP. Bài 5.1 chỉ cách làm việc đó mà không cần bật server.</p>`],
+  [2, 'What you will take away from this lesson',
+    `<p>The API itself, the separation between building the app and listening on a port, Supertest assertions on status, headers and body, and a measured reason not to stop at the status.</p>`,
+    `<p>Bản thân API, việc tách “dựng app” khỏi “nghe trên một cổng”, các khẳng định của Supertest trên mã trạng thái, header và body, và một lý do đo được để không dừng ở mã trạng thái.</p>`],
+  [3, 'Build the app, do not start it',
+    `<p><code>createApp</code> builds the Express app with its dependencies passed in and returns it. Only <code>main.js</code> calls <code>listen</code>. That split is what lets every test build its own fresh app.</p>`,
+    `<p><code>createApp</code> dựng app Express với phụ thuộc truyền vào rồi trả về. Chỉ <code>main.js</code> gọi <code>listen</code>. Chính cách tách này cho mỗi test dựng một app mới của riêng nó.</p>`],
+  [4, 'The real server, for comparison',
+    `<p>Started for real and asked with curl, the API answers 200 with JSON. Supertest sends the same HTTP request through a temporary port it opens and closes itself: no port to choose, nothing to stop, nothing left running.</p>`,
+    `<p>Bật thật rồi hỏi bằng curl, API trả 200 kèm JSON. Supertest gửi đúng request HTTP đó qua một cổng tạm do nó tự mở và tự đóng: không phải chọn cổng, không phải tắt, không có gì chạy sót lại.</p>`],
+  [5, 'Status, headers, body — and follow the Location',
+    `<p>A created booking must answer 201 with a Location header. The test checks the status, the header and the whole body, then follows the Location like a real client would.</p>`,
+    `<p>Một lượt đặt vừa tạo phải trả 201 kèm header Location. Test kiểm mã trạng thái, header và toàn bộ body, rồi đi theo Location như một client thật.</p>`],
+  [6, 'Four API tests, all green',
+    `<p>Routing, JSON parsing, the error middleware and the real booking rules all run; only storage is the in-memory repository.</p>`,
+    `<p>Định tuyến, phân tích JSON, middleware lỗi và luật đặt phòng thật đều chạy; chỉ phần lưu trữ là repository trong bộ nhớ.</p>`],
+  [7, 'A status-only test, measured',
+    `<p>We removed the status field from the response. The test that only checks 201 stays green; the test that checks the body turns red. Clients read bodies, so tests must too.</p>`,
+    `<p>Ta bỏ trường status khỏi phản hồi. Test chỉ kiểm 201 vẫn xanh; test kiểm body chuyển đỏ. Client đọc body, nên test cũng phải đọc.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>Test a PENDING booking through the API and follow its Location; then check that a second booking gets id 2.</p>`,
+    `<p>Test một lượt PENDING qua API và đi theo Location của nó; rồi kiểm lượt thứ hai nhận id 2.</p>`],
+  [9, 'Summary',
+    `<p>Export the app, keep <code>listen</code> in one file, test through HTTP with Supertest, and assert status, headers and body.</p>`,
+    `<p>Xuất app ra, giữ <code>listen</code> trong đúng một file, test qua HTTP bằng Supertest, và khẳng định cả mã trạng thái, header lẫn body.</p>`],
+]);

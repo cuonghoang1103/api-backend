@@ -39,7 +39,7 @@ ${ma('javascript', CODE.globalSetup)}
 <p>If <code>TEST_DATABASE_URL</code> is set, it uses that database; otherwise it starts its own container (lesson 4.3). Either way it drops the table and applies <code>db/schema.sql</code> — the same file production uses — so a leftover table from yesterday can never make today’s run green. The URL is handed to the test files with <code>provide</code>.</p>
 ${ma('javascript', CODE.intConfig)}
 ${ma('javascript', CODE.config)}
-<p>Two commands from now on: <code>npx vitest run src/</code> — unit tests, no Docker, a quarter of a second; <code>npm run test:int</code> — integration tests against PostgreSQL. As with <code>demo/</code>–<code>demo3/</code>, <code>demo4/</code> contains demos that are red on purpose, so name the files you want: <code>npm run test:int -- test/integration</code>.</p>
+<p>Two commands from now on: <code>npm run test:unit</code> — unit tests, no Docker, a quarter of a second; <code>npm run test:int</code> — integration tests against PostgreSQL. As with <code>demo/</code>–<code>demo3/</code>, <code>demo4/</code> contains demos that are red on purpose, so name the files you want: <code>npm run test:int -- test/integration</code>.</p>
 ${ra(gon(OUT['42-int-compose']))}
 
 <h3>tmpfs or disk? Measure it</h3>
@@ -102,7 +102,7 @@ ${ma('javascript', CODE.globalSetup)}
 <p>Nếu có <code>TEST_DATABASE_URL</code>, nó dùng cơ sở dữ liệu đó; nếu không, nó tự bật container (bài 4.3). Cách nào thì nó cũng xoá bảng và áp <code>db/schema.sql</code> — đúng file production dùng — để một bảng sót lại từ hôm qua không thể làm lần chạy hôm nay xanh. URL được trao cho các file test bằng <code>provide</code>.</p>
 ${ma('javascript', CODE.intConfig)}
 ${ma('javascript', CODE.config)}
-<p>Từ giờ có hai lệnh: <code>npx vitest run src/</code> — unit test, không cần Docker, một phần tư giây; <code>npm run test:int</code> — test tích hợp với PostgreSQL. Giống <code>demo/</code>–<code>demo3/</code>, thư mục <code>demo4/</code> có những demo cố ý đỏ, nên hãy chỉ rõ file cần chạy: <code>npm run test:int -- test/integration</code>.</p>
+<p>Từ giờ có hai lệnh: <code>npm run test:unit</code> — unit test, không cần Docker, một phần tư giây; <code>npm run test:int</code> — test tích hợp với PostgreSQL. Giống <code>demo/</code>–<code>demo3/</code>, thư mục <code>demo4/</code> có những demo cố ý đỏ, nên hãy chỉ rõ file cần chạy: <code>npm run test:int -- test/integration</code>.</p>
 ${ra(gon(OUT['42-int-compose']))}
 
 <h3>tmpfs hay ổ đĩa? Hãy đo</h3>

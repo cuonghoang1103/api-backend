@@ -57,7 +57,7 @@ export const slides = lamDeck({ chuong: 'Chapter 4 — Integration tests with a 
   { t: 'Up and ready in 2 seconds', body: vt(UP, { title: 'terminal', sm: false }) + box('--wait + healthcheck', `Compose returns only when ${c('pg_isready')} says yes. Scripts that “sleep 5” are either slow or flaky; waiting for health is neither.`, 'xanh') },
   { t: 'A fresh schema before every run', body: js(SETUP, { hl: [2, 4, 5] }) + box('Why drop and recreate', `Every run starts from ${c('db/schema.sql')} — the same file production applies. A leftover table from yesterday cannot make today green.`, 'lam') },
   { t: 'Run the integration tests against it', body: vt(RUN, { title: 'terminal', sm: false }) +
-    box('Two configs', `${c('npx vitest run src/')} runs unit tests only (integration files are excluded). ${c('npm run test:int')} uses ${c('vitest.integration.config.js')} — slower, needs a database, runs fewer tests.`, 'lam') },
+    box('Two configs', `${c('npm run test:unit')} runs unit tests only (integration files are excluded). ${c('npm run test:int')} uses ${c('vitest.integration.config.js')} — slower, needs a database, runs fewer tests.`, 'lam') },
   { t: 'tmpfs vs disk, measured', body: vt(GHI, { title: 'terminal — node demo4/do-ghi.mjs (2000 inserts, each its own transaction)', fs: 16 }) +
     box('Our numbers: ≈ 0.67 s vs ≈ 0.85 s', 'About 20 % faster on this Mac (Docker Desktop). On slower disks the gap can be larger — measure on your own machine and CI before you trust anyone’s claim, including this one.', 'lam') },
   { t: 'Rules for a test database', body: zm(`<table class="t"><tr><th>Rule</th><th>Why</th></tr>

@@ -84,7 +84,7 @@ ${MUTANTS_EN}
 <h3>Your task</h3>
 <p>Write tests in <code>src/</code> — one file next to each module, e.g. <code>src/rules/cancel.test.js</code>, <code>src/auth/login-guard.test.js</code> — so that:</p>
 <ol>
-<li><code>npm test</code> is green on the real code, in under a second, under <code>TZ=UTC</code> as well;</li>
+<li><code>npm run test:unit</code> is green on the real code, in under a second, under <code>TZ=UTC</code> as well;</li>
 <li><code>node scripts/dot-bien-2.mjs</code> prints <strong>8/8 mutants killed</strong>;</li>
 <li><code>node scripts/dot-bien.mjs</code> (Lab 1) still prints 8/8.</li>
 </ol>
@@ -129,8 +129,8 @@ ${ra(OUT['lab2-mut-strong'])}
 
 <h3>Before you call it done</h3>
 <ul>
-<li><code>npm test</code> is green, under one second, with no <code>.only</code> or <code>.skip</code>.</li>
-<li><code>TZ=UTC npm test</code> is green too.</li>
+<li><code>npm run test:unit</code> is green, under one second, with no <code>.only</code> or <code>.skip</code>.</li>
+<li><code>TZ=UTC npm run test:unit</code> is green too.</li>
 <li><code>node scripts/dot-bien-2.mjs</code> prints <code>8/8 mutants killed</code>, and <code>node scripts/dot-bien.mjs</code> still prints 8/8.</li>
 <li><code>git diff src/</code> shows only new test files — the scripts restored every source file.</li>
 <li>Commit with a clear message, e.g. <code>test: async, time and error paths (Lab 2, 8/8 mutants)</code>.</li>
@@ -174,7 +174,7 @@ ${MUTANTS_VI}
 <h3>Nhiệm vụ</h3>
 <p>Viết test trong <code>src/</code> — mỗi module một file nằm cạnh, ví dụ <code>src/rules/cancel.test.js</code>, <code>src/auth/login-guard.test.js</code> — sao cho:</p>
 <ol>
-<li><code>npm test</code> xanh trên code thật, dưới một giây, và cả dưới <code>TZ=UTC</code>;</li>
+<li><code>npm run test:unit</code> xanh trên code thật, dưới một giây, và cả dưới <code>TZ=UTC</code>;</li>
 <li><code>node scripts/dot-bien-2.mjs</code> in <strong>8/8 mutants killed</strong>;</li>
 <li><code>node scripts/dot-bien.mjs</code> (Lab 1) vẫn in 8/8.</li>
 </ol>
@@ -219,8 +219,8 @@ ${ra(OUT['lab2-mut-strong'])}
 
 <h3>Trước khi coi là xong</h3>
 <ul>
-<li><code>npm test</code> xanh, dưới một giây, không có <code>.only</code> hay <code>.skip</code>.</li>
-<li><code>TZ=UTC npm test</code> cũng xanh.</li>
+<li><code>npm run test:unit</code> xanh, dưới một giây, không có <code>.only</code> hay <code>.skip</code>.</li>
+<li><code>TZ=UTC npm run test:unit</code> cũng xanh.</li>
 <li><code>node scripts/dot-bien-2.mjs</code> in <code>8/8 mutants killed</code>, và <code>node scripts/dot-bien.mjs</code> vẫn in 8/8.</li>
 <li><code>git diff src/</code> chỉ có các file test mới — script đã trả mọi file nguồn về như cũ.</li>
 <li>Commit với lời nhắn rõ ràng, ví dụ <code>test: async, time and error paths (Lab 2, 8/8 mutants)</code>.</li>

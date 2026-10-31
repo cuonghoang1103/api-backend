@@ -23,6 +23,14 @@ export function createMemoryRepo() {
       rows.push(row);
       return row;
     },
+    async findById(id) {
+      await latency();
+      return rows.find((b) => b.id === id) ?? null;
+    },
+    async list() {
+      await latency();
+      return [...rows];
+    },
     count: () => rows.length,
   };
 }

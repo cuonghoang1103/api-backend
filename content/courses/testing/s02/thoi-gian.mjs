@@ -86,7 +86,7 @@ ${TZ_EN}
 <p><code>setHours(0, 0, 0, 0)</code> means “midnight <em>in this machine’s time zone</em>”. Between 00:00 and 07:00 Viet Nam time a UTC server still lives in yesterday. At lunchtime both agree — which is exactly when people write tests, and why this bug ships. (A second subtlety: <code>new Date('2026-11-16')</code> with a date only is parsed as UTC midnight, while <code>new Date('2026-11-16T00:00')</code> is local midnight. Mixing the two is another common source of off-by-one days.)</p>
 <p><code>daysAheadVN</code> avoids both: it shifts “now” by seven hours, takes the date part of the ISO string — today’s date <em>in Viet Nam</em> — and compares two UTC midnights. It gives the same answer on any machine. Two habits from this:</p>
 <ul>
-<li>run your suite once with <code>TZ=UTC npm test</code> before pushing (Chapter 9 makes CI do it);</li>
+<li>run your suite once with <code>TZ=UTC npm run test:unit</code> before pushing (Chapter 9 makes CI do it);</li>
 <li>pick test times near midnight on purpose — that is where time-zone bugs live.</li>
 </ul>
 
@@ -199,7 +199,7 @@ ${TZ_VI}
 <p><code>setHours(0, 0, 0, 0)</code> nghĩa là “nửa đêm <em>theo múi giờ của máy này</em>”. Từ 00:00 tới 07:00 giờ Việt Nam, máy chủ UTC vẫn đang sống ở ngày hôm qua. Buổi trưa hai bên khớp nhau — mà đó đúng là lúc người ta viết test, nên bug này lọt ra ngoài. (Một điểm tinh tế nữa: <code>new Date('2026-11-16')</code> chỉ có ngày thì được hiểu là nửa đêm UTC, còn <code>new Date('2026-11-16T00:00')</code> là nửa đêm giờ máy. Trộn hai kiểu này là một nguồn lệch-một-ngày phổ biến khác.)</p>
 <p><code>daysAheadVN</code> tránh được cả hai: nó dời “bây giờ” thêm bảy giờ, lấy phần ngày của chuỗi ISO — tức ngày hôm nay <em>ở Việt Nam</em> — rồi so hai mốc nửa đêm UTC. Máy nào cũng cho cùng đáp số. Rút ra hai thói quen:</p>
 <ul>
-<li>chạy bộ test một lần với <code>TZ=UTC npm test</code> trước khi đẩy code (Chương 9 bắt CI làm việc này);</li>
+<li>chạy bộ test một lần với <code>TZ=UTC npm run test:unit</code> trước khi đẩy code (Chương 9 bắt CI làm việc này);</li>
 <li>cố ý chọn giờ test sát nửa đêm — đó là chỗ bug múi giờ sống.</li>
 </ul>
 

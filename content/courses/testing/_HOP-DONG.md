@@ -24,7 +24,7 @@
 | `testing/sNN/_ma.mjs` | `CODE` (mã nguồn) + `OUT` (output chạy thật) — **SINH TỰ ĐỘNG**, không sửa tay (mục 3.3). |
 | `testing/giang/<deck>.mjs` | Lời giảng EN/VI dưới từng slide: `walkTst(deck, tênEN, tênVI, [[n, 'Tiêu đề slide', '<p>EN</p>', '<p>VI</p>'], …])`. |
 | `testing/_slides.mjs` | `walkTst`, `ma(lang, src)`, `ra(output)`, `lienKet({...})`, `nguon(...)`, bảng **`VER`**. Chỉ sửa `VER`. |
-| `testing/_labflow-lite/` | **Ảnh chụp dự án LabFlow Lite** (không có node_modules) ở cuối Chương 2: `src/` (code + bộ test tham khảo), `demo/` (Ch1), `demo2/` (Ch2 — có test CỐ Ý hỏng), `test/` (Ch0), `scripts/dot-bien*.mjs`. |
+| `testing/_labflow-lite/` | **Ảnh chụp dự án LabFlow Lite** (không có node_modules) ở cuối chương mới nhất đã soạn: `src/` (code + bộ test tham khảo), `demo/`…`demoN/` (thí nghiệm từng chương — có test CỐ Ý hỏng), `test/` (support, integration), `scripts/dot-bien*.mjs`, `openapi.json` (Ch5). |
 | `testing/_de-codelab-mutation.json` | Đề Code Lab kiểu **mutation** dự kiến (mục 7). |
 | `scripts/slides-src/_tst-chung.mjs` | Khuôn slide (chép từ `_pg-chung.mjs`). Chỉ sửa khi thật cần, và nhớ: đổi khuôn ⇒ deck đã đẩy phải lên prefix mới. |
 | `scripts/slides-src/tst-NN-M.mjs`, `tst-lab-N.mjs` | Deck từng bài / lab chương. |
@@ -60,11 +60,16 @@
 ```bash
 cp -r content/courses/testing/_labflow-lite <SCRATCH>/lab/labflow-lite
 cd <SCRATCH>/lab/labflow-lite && npm ci            # Node 22 (chuẩn: 22.23.3), Vitest 5.0.5, fast-check 4, Express 5, Supertest 7
-npx vitest run src/                                 # 73 passed (cuối Ch4) — đây là “unit suite”
+npm run test:unit                                   # = vitest run src/ · 85 passed (cuối Ch5) — đây là “unit suite”
 npm run test:int -- test/integration                # 11 passed — cần Docker (Testcontainers, postgres:17)
-for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4; do node scripts/$s.mjs | tail -1; done   # 4 × 8/8
+for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5; do node scripts/$s.mjs | tail -1; done   # 5 × 8/8
 ```
-- ⚠️ `npm test` = `vitest run` chạy CẢ `demo*/` (có test cố ý đỏ) ⇒ khi nói “bộ unit xanh” hãy ghi `npx vitest run src/`.
+- ⚠️ `npm test` = `vitest run` chạy CẢ `demo*/` (có test cố ý đỏ) ⇒ bài/slide/lab luôn ghi **`npm run test:unit`** (script `"test:unit": "vitest run src/"`,
+  giới thiệu ở phần Setup của Lab 1, dùng nhất quán Ch1–Ch5 từ 01/11 theo yêu cầu điều phối). Không viết “npm test xanh”.
+- Ch5: `src/api/` (server.js `createApp({ repo, auth })`, auth.js jose HS256 + `now`, schemas.js Zod `strictObject`, main.js `listen` — test
+  KHÔNG import main.js), `test/support/api.js` (`makeApi({ now })` ⇒ app + repo + `bearer(id, role)`, `body()`), `test/support/contract.js`
+  (Ajv2020 + formats, `contractErrors(method, path, res)`), `openapi.json` (3.1). Supertest TỰ mở/đóng một cổng tạm — đừng viết “không mở cổng”.
+  Test hết hạn token: đồng hồ cố định ở 2030 (`makeApi({ now: () => clock })`); jose coi đúng mốc `exp` là đã hết hạn.
 - Ch4: `vitest.integration.config.js` (include `test/integration/**`, `demo4/**/*.int.test.js`; `globalSetup`; `fileParallelism: false`),
   `vitest.config.js` loại `test/integration/**` và `demo4/**`. `TEST_DATABASE_URL` có ⇒ dùng CSDL đó (compose `compose.test.yml`, cổng 54329);
   không ⇒ Testcontainers. `TST_SCHEMA` đổi file schema (demo). Test tích hợp nhận URL bằng `inject('databaseUrl')` (`test/support/db.js`).
@@ -118,7 +123,7 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - **Upload** (chủ ý chạm bucket R2 thật): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/final --prefix TST/v1 --decks <deck,…>`
   ⇒ `images/academy/TST/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy** (Cloudflare cache luôn cái 404).
   Deck đã đẩy mà phải dựng lại ⇒ đẩy sang `TST/v2` (v3…) và ghi `VER = { '<deck>': 'v2' }` trong `_slides.mjs` — đừng ghi đè v1.
-  Hiện: `tst-lab-1`, `tst-lab-2` = v2, còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+  Hiện (01/11): `tst-lab-1`, `tst-lab-2` = v3; `tst-02-2`, `tst-lab-3`, `tst-lab-4`, `tst-04-1/2/3` = v2 (đổi sang `npm run test:unit`); còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 
 ## 5. Lời giảng dưới slide (`giang/<deck>.mjs`)
 - Đúng **một dòng/slide**, đủ 1..N (walkTst ném lỗi nếu thiếu/trùng). EN 50–90 từ, VI tương đương, giải thích **vì sao**, không đọc lại slide.
@@ -150,7 +155,7 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - Deck lab 9 slide: cover · mission · code under test · 8 bugs · first attempt · reference · rubric · hints · checklist.
 
 ### 7.2 Đề Code Lab kiểu `mutation` (chờ máy chấm)
-`testing/_de-codelab-mutation.json` — 19 đề, 102 đột biến + 1 thay đổi vô hại, **đã kiểm 103/103 đạt** trên một bản sao mới của
+`testing/_de-codelab-mutation.json` — 24 đề, 132 đột biến + 6 thay đổi vô hại, **đã kiểm 138/138 đạt** trên một bản sao mới của
 `_labflow-lite` (`npm ci`, Docker bật) bằng
 `node scripts/tst/kiem-de-mutation.mjs <SCRATCH>/lab/labflow-lite content/courses/testing/_de-codelab-mutation.json [id…]` (01/11/2026).
 Trường thêm: `config` (Ch4: `vitest.integration.config.js`, cần Docker) · `voHai[{file, from, to, label}]` = thay đổi VÔ HẠI mà test
@@ -180,6 +185,11 @@ Máy chấm sau này: chạy file test của người học trên code đúng (p
 | tst-cl-4-23 | tst-4-2 + tst-4-3 | global setup, schema | test chạy PostgreSQL 16 · schema thiếu ràng buộc · thiếu btree_gist |
 | tst-cl-4-4 | tst-4-4-co-lap | bookLab, createPgRepo | 31 chỗ lưu CONFIRMED · độ dài luôn 60 · số chỗ luôn 20 |
 | tst-cl-lab-4 | tst-4-5-lab-tich-hop | (8 đột biến của `dot-bien-4.mjs`, mỗi lần một PostgreSQL mới) | |
+| tst-cl-5-1 | tst-5-1-supertest | createApp | 201→200 · mất trường status · thiếu Location · 409→400 · 422→400 · **vô hại:** đặt Location trước status |
+| tst-cl-5-2 | tst-5-2-xac-thuc | createAuth, requireUser/Role | hết hạn theo đồng hồ thật · token sống thừa 1 giây · IDOR · giảng viên qua cửa admin · 403→401 · **vô hại:** `slice('Bearer '.length)` |
+| tst-cl-5-3 | tst-5-3-validation | BookingInput, middleware lỗi | khoá lạ lọt · trần 201 chỗ · nhận 2.5 chỗ · ngày không tồn tại · giờ 24–29 · JSON hỏng → 500 · TOO_LONG → 500 · **vô hại:** đổi lời thông báo |
+| tst-cl-5-4 | tst-5-4-hop-dong | contractErrors + cả API | lộ userId/role · start→startTime · minutes thành chuỗi · lỗi mất vỏ `{ error }` · 415 chưa ghi · **vô hại:** đổi thứ tự trường |
+| tst-cl-lab-5 | tst-5-5-lab-api | (8 đột biến của `dot-bien-5.mjs`) | **vô hại:** đặt Location trước status |
 
 Chương mới ⇒ thêm 1 đề/bài dạy (3–8 đột biến, mỗi con là một bug THẬT có nghĩa với người dùng, không đột biến tương đương), chạy
 `kiem-de-mutation.mjs` tới khi `N/N`, rồi cập nhật bảng này. Đột biến phải giữ cú pháp hợp lệ: xoá `lab = $1 AND` làm `$1` thừa ⇒ cả câu

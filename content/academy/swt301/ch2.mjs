@@ -2624,6 +2624,16 @@ const L24 = {
       ['sp5', '§3.5 Test types (PDF 112): functional 113, non-functional 116, requirements- vs structure-based 118; §2.2.1 ISO 25010 (PDF 44)', '§3.5 Test types (PDF 112): chức năng 113, phi chức năng 116, dựa yêu cầu vs dựa cấu trúc 118; §2.2.1 ISO 25010 (PDF 44)'],
       ['sp4', '§3.7 "Generic Types of Testing" — pp.69–75 (PDF 84–90)', '§3.7 "Generic Types of Testing" — trang 69–75 (PDF 84–90)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 5)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-2-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 5.2: testing authentication and authorisation</span><span class="lc-sub">Same as this lesson: security testing checks authorisation and levels of access to information. Different: Courses turns them into automated API tests with real tokens — 401 for a forged or expired token, 403 for the wrong role, 404 when a student asks for someone else’s booking (IDOR, OWASP A01).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-2-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 5.2: test xác thực và phân quyền</span><span class="lc-sub">Giống bài này: security testing kiểm phân quyền và mức truy cập thông tin. Khác: Courses biến chúng thành test API tự động với token thật — 401 cho token giả hoặc hết hạn, 403 cho sai vai trò, 404 khi sinh viên hỏi lượt đặt của người khác (IDOR, OWASP A01).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

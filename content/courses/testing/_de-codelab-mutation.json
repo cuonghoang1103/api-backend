@@ -1,948 +1,1255 @@
 {
- "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH.",
- "de": [
-  {
-   "id": "tst-cl-1-1",
-   "bai": "tst-1-1-cau-truc",
-   "tieuDe": "Approval and booking status (BR-06, Lite-2)|||Duyệt và trạng thái lượt đặt (BR-06, Lite-2)",
-   "ham": "needsApproval, createBooking",
-   "fileDung": [
-    "src/rules/booking.js"
-   ],
-   "testThamKhao": [
-    "src/"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
-   "dotBien": [
+  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH.",
+  "de": [
     {
-     "file": "src/rules/booking.js",
-     "from": "return seats > APPROVAL_SEATS;",
-     "to": "return seats >= APPROVAL_SEATS;",
-     "label": "exactly 30 student seats needs approval"
+      "id": "tst-cl-1-1",
+      "bai": "tst-1-1-cau-truc",
+      "tieuDe": "Approval and booking status (BR-06, Lite-2)|||Duyệt và trạng thái lượt đặt (BR-06, Lite-2)",
+      "ham": "needsApproval, createBooking",
+      "fileDung": [
+        "src/rules/booking.js"
+      ],
+      "testThamKhao": [
+        "src/"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+      "dotBien": [
+        {
+          "file": "src/rules/booking.js",
+          "from": "return seats > APPROVAL_SEATS;",
+          "to": "return seats >= APPROVAL_SEATS;",
+          "label": "exactly 30 student seats needs approval"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "role === 'LECTURER' || role === 'ADMIN'",
+          "to": "role === 'LECTURER'",
+          "label": "ADMIN needs approval"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "? 'PENDING' : 'CONFIRMED'",
+          "to": "? 'CONFIRMED' : 'PENDING'",
+          "label": "statuses swapped"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "seats < 1",
+          "to": "seats < 0",
+          "label": "0 seats accepted"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "if (!slot.ok) throw new Error(slot.code);",
+          "to": "if (!slot.ok) return null;",
+          "label": "invalid slot returns null instead of throwing"
+        }
+      ]
     },
     {
-     "file": "src/rules/booking.js",
-     "from": "role === 'LECTURER' || role === 'ADMIN'",
-     "to": "role === 'LECTURER'",
-     "label": "ADMIN needs approval"
+      "id": "tst-cl-1-2",
+      "bai": "tst-1-2-matcher",
+      "tieuDe": "Time parsing, formatting and usage rate|||Đọc/ghi giờ và tỉ lệ sử dụng",
+      "ham": "parseTime, formatTime (+ usageRate in booking.js)",
+      "fileDung": [
+        "src/rules/time.js",
+        "src/rules/booking.js"
+      ],
+      "testThamKhao": [
+        "src/",
+        "demo/th12.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+      "dotBien": [
+        {
+          "file": "src/rules/time.js",
+          "from": "h > 23",
+          "to": "h > 24",
+          "label": "\"24:00\" accepted"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "min > 59",
+          "to": "min > 60",
+          "label": "\"07:60\" accepted"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "throw new TypeError(",
+          "to": "throw new RangeError(",
+          "label": "bad format throws the wrong error class"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "Math.floor(minutes / 60)",
+          "to": "Math.round(minutes / 60)",
+          "label": "formatTime rounds the hour"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "String(h).padStart(2, '0')",
+          "to": "String(h)",
+          "label": "\"7:00\" instead of \"07:00\""
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "rate += b.minutes / (CLOSE - OPEN)",
+          "to": "rate = b.minutes / (CLOSE - OPEN)",
+          "label": "usageRate counts only the last booking"
+        }
+      ]
     },
     {
-     "file": "src/rules/booking.js",
-     "from": "? 'PENDING' : 'CONFIRMED'",
-     "to": "? 'CONFIRMED' : 'PENDING'",
-     "label": "statuses swapped"
+      "id": "tst-cl-1-3",
+      "bai": "tst-1-3-ten-test",
+      "tieuDe": "checkSlot as an it.each table|||checkSlot thành bảng it.each",
+      "ham": "checkSlot",
+      "fileDung": [
+        "src/rules/booking.js"
+      ],
+      "testThamKhao": [
+        "src/"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+      "dotBien": [
+        {
+          "file": "src/rules/booking.js",
+          "from": "s % STEP !== 0 || e % STEP !== 0",
+          "to": "s % STEP !== 0",
+          "label": "end time off the 30-minute grid accepted"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "if (e <= s)",
+          "to": "if (e < s)",
+          "label": "zero-length slot accepted"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "s < OPEN",
+          "to": "s <= OPEN",
+          "label": "slot starting at 07:00 rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "e > CLOSE",
+          "to": "e >= CLOSE",
+          "label": "slot ending at 21:00 rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "code: 'OUTSIDE_HOURS'",
+          "to": "code: 'OFF_GRID'",
+          "label": "wrong rule code for opening hours"
+        }
+      ]
     },
     {
-     "file": "src/rules/booking.js",
-     "from": "seats < 1",
-     "to": "seats < 0",
-     "label": "0 seats accepted"
+      "id": "tst-cl-1-4",
+      "bai": "tst-1-4-ham-thuan",
+      "tieuDe": "Booking window and limits (EP, BVA)|||Khung đặt trước và các giới hạn (EP, BVA)",
+      "ham": "isWithinBookingWindow, checkSlot, needsApproval",
+      "fileDung": [
+        "src/rules/booking.js"
+      ],
+      "testThamKhao": [
+        "src/"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
+      "dotBien": [
+        {
+          "file": "src/rules/booking.js",
+          "from": "daysAhead <= MAX_DAYS_AHEAD",
+          "to": "daysAhead < MAX_DAYS_AHEAD",
+          "label": "14 days ahead rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "daysAhead >= 0",
+          "to": "daysAhead > 0",
+          "label": "booking for today rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "Number.isInteger(daysAhead) && ",
+          "to": "",
+          "label": "2.5 days accepted"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "e - s > MAX_MINUTES",
+          "to": "e - s >= MAX_MINUTES",
+          "label": "exactly 4 hours rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "!Number.isInteger(seats) || ",
+          "to": "",
+          "label": "2.5 seats accepted"
+        }
+      ]
     },
     {
-     "file": "src/rules/booking.js",
-     "from": "if (!slot.ok) throw new Error(slot.code);",
-     "to": "if (!slot.ok) return null;",
-     "label": "invalid slot returns null instead of throwing"
+      "id": "tst-cl-lab-1",
+      "bai": "tst-1-5-lab-quy-tac",
+      "tieuDe": "Lab 1 — rules suite, 8 mutants|||Lab 1 — bộ test luật, 8 đột biến",
+      "ham": "(lab)",
+      "fileDung": [
+        "src/rules/booking.js",
+        "src/rules/time.js"
+      ],
+      "testThamKhao": [
+        "src/"
+      ],
+      "yeuCau": "Same as the chapter lab: dot-bien.mjs prints 8/8|||Như lab của chương: dot-bien.mjs in 8/8",
+      "dotBien": [
+        {
+          "file": "src/rules/booking.js",
+          "from": "daysAhead <= MAX_DAYS_AHEAD",
+          "to": "daysAhead < MAX_DAYS_AHEAD",
+          "label": "BR-05: 14 days ahead rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "return seats > APPROVAL_SEATS;",
+          "to": "return seats >= APPROVAL_SEATS;",
+          "label": "BR-06: 30 seats needs approval"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "e > CLOSE",
+          "to": "e >= CLOSE",
+          "label": "slot ending at 21:00 rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "e - s > MAX_MINUTES",
+          "to": "e - s >= MAX_MINUTES",
+          "label": "exactly 4 hours rejected"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "if (e <= s)",
+          "to": "if (e < s)",
+          "label": "zero-length slot accepted"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "role === 'LECTURER' || role === 'ADMIN'",
+          "to": "role === 'LECTURER'",
+          "label": "ADMIN needs approval"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "h > 23",
+          "to": "h > 24",
+          "label": "\"24:00\" accepted"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "Math.floor(minutes / 60)",
+          "to": "Math.round(minutes / 60)",
+          "label": "formatTime rounds the hour"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-2-1",
+      "bai": "tst-2-1-async",
+      "tieuDe": "bookLab: async results and overlaps|||bookLab: kết quả bất đồng bộ và trùng lịch",
+      "ham": "bookLab, createMemoryRepo",
+      "fileDung": [
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "src/",
+        "demo2/async-dung.test.js",
+        "demo2/th21.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; async tests only; every promise awaited|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; test async, await mọi promise",
+      "dotBien": [
+        {
+          "file": "src/booking/service.js",
+          "from": "if (clash) throw new BookingError('OVERLAP');",
+          "to": "if (clash) return clash;",
+          "label": "overlap resolves with the old booking"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "b.start < end && start < b.end",
+          "to": "b.start <= end && start <= b.end",
+          "label": "back-to-back slot (10:00 after 08:00–10:00) rejected"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "b.lab === lab && ",
+          "to": "",
+          "label": "a booking in another lab blocks the slot"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "needsApproval(input) ? 'PENDING' : 'CONFIRMED'",
+          "to": "'CONFIRMED'",
+          "label": "31-seat student booking stored as CONFIRMED"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "if (!slot.ok) throw new BookingError(slot.code);",
+          "to": "if (!slot.ok) throw new Error(slot.code);",
+          "label": "rule violation is a plain Error, not a BookingError"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-2-2",
+      "bai": "tst-2-2-thoi-gian",
+      "tieuDe": "Time rules: cancel, lock-out, retry, Viet Nam days|||Luật thời gian: huỷ, khoá, retry, ngày theo giờ VN",
+      "ham": "canCancel, createLoginGuard, retry, daysAheadVN",
+      "fileDung": [
+        "src/rules/cancel.js",
+        "src/auth/login-guard.js",
+        "src/lib/retry.js",
+        "src/rules/days.js"
+      ],
+      "testThamKhao": [
+        "src/",
+        "demo2/th22.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no real waiting: injected clock or fake timers, restored in afterEach; green under TZ=UTC|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không chờ thật: tiêm đồng hồ hoặc fake timers, trả lại trong afterEach; xanh dưới TZ=UTC",
+      "dotBien": [
+        {
+          "file": "src/rules/cancel.js",
+          "from": "minutesLeft >= CANCEL_LIMIT_MINUTES",
+          "to": "minutesLeft > CANCEL_LIMIT_MINUTES",
+          "label": "cancel exactly 60 minutes before refused"
+        },
+        {
+          "file": "src/rules/cancel.js",
+          "from": "/ 60000",
+          "to": "/ 1000",
+          "label": "minutes computed as seconds"
+        },
+        {
+          "file": "src/auth/login-guard.js",
+          "from": "LOCK_MINUTES * 60000",
+          "to": "LOCK_MINUTES * 1000",
+          "label": "lock lasts 15 seconds, not 15 minutes"
+        },
+        {
+          "file": "src/auth/login-guard.js",
+          "from": "        s.failures = 0;\n",
+          "to": "",
+          "label": "counter not reset when the lock starts"
+        },
+        {
+          "file": "src/lib/retry.js",
+          "from": "delayMs * i",
+          "to": "delayMs",
+          "label": "no back-off"
+        },
+        {
+          "file": "src/rules/days.js",
+          "from": "now.getTime() + VN_OFFSET_MS",
+          "to": "now.getTime()",
+          "label": "days counted in UTC"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-2-3",
+      "bai": "tst-2-3-loi",
+      "tieuDe": "Failure paths of bookLab|||Các nhánh thất bại của bookLab",
+      "ham": "BookingError, bookLab",
+      "fileDung": [
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "src/"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; errors asserted by code/cause with rejects; no try/catch without a guard|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; khẳng định lỗi bằng code/cause với rejects; không try/catch thiếu chốt chặn",
+      "dotBien": [
+        {
+          "file": "src/booking/service.js",
+          "from": "throw new BookingError('STORAGE_DOWN', { cause: err });\n  }\n  if (clash)",
+          "to": "throw err;\n  }\n  if (clash)",
+          "label": "lookup failure leaks the raw error"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "return await repo.insert(",
+          "to": "return repo.insert(",
+          "label": "insert failure escapes the try/catch (missing await)"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "super(code, options);",
+          "to": "super(code);",
+          "label": "cause is lost"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "    this.code = code;\n",
+          "to": "",
+          "label": "error has no code"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "if (!slot.ok) throw new BookingError(slot.code);",
+          "to": "if (!slot.ok) throw new BookingError('INVALID');",
+          "label": "every rule violation gets the same code"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-2-4",
+      "bai": "tst-2-4-ngau-nhien",
+      "tieuDe": "Booking codes and records|||Mã đặt chỗ và bản ghi",
+      "ham": "makeBookingCode, seededRandom, newBookingRecord",
+      "fileDung": [
+        "src/rules/code.js"
+      ],
+      "testThamKhao": [
+        "demo2/ngau-nhien.test.js",
+        "demo2/th24.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; repeatable: injected or seeded randomness, spies restored|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; lặp lại được: tiêm hoặc seed ngẫu nhiên, spy được trả lại",
+      "dotBien": [
+        {
+          "file": "src/rules/code.js",
+          "from": "random() * ALPHABET.length",
+          "to": "random() * (ALPHABET.length - 1)",
+          "label": "last character of the alphabet never used"
+        },
+        {
+          "file": "src/rules/code.js",
+          "from": "return 'LF-' + code;",
+          "to": "return 'LF' + code;",
+          "label": "prefix without the dash"
+        },
+        {
+          "file": "src/rules/code.js",
+          "from": "i < length",
+          "to": "i < length - 1",
+          "label": "codes one character short"
+        },
+        {
+          "file": "src/rules/code.js",
+          "from": "createdAt: now().toISOString()",
+          "to": "createdAt: new Date().toISOString()",
+          "label": "injected clock ignored"
+        },
+        {
+          "file": "src/rules/code.js",
+          "from": "id: newId()",
+          "to": "id: crypto.randomUUID()",
+          "label": "injected id generator ignored"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-2",
+      "bai": "tst-2-5-lab-bat-dong-bo",
+      "tieuDe": "Lab 2 — async, time and errors, 8 mutants|||Lab 2 — bất đồng bộ, thời gian, lỗi, 8 đột biến",
+      "ham": "(lab)",
+      "fileDung": [
+        "src/rules/cancel.js",
+        "src/auth/login-guard.js",
+        "src/lib/retry.js",
+        "src/booking/service.js",
+        "src/rules/days.js"
+      ],
+      "testThamKhao": [
+        "src/"
+      ],
+      "yeuCau": "Same as the chapter lab: dot-bien-2.mjs prints 8/8|||Như lab của chương: dot-bien-2.mjs in 8/8",
+      "dotBien": [
+        {
+          "file": "src/rules/cancel.js",
+          "from": "minutesLeft >= CANCEL_LIMIT_MINUTES",
+          "to": "minutesLeft > CANCEL_LIMIT_MINUTES",
+          "label": "Lite-3: cancel exactly 60 min before refused"
+        },
+        {
+          "file": "src/auth/login-guard.js",
+          "from": "s.failures >= MAX_FAILURES",
+          "to": "s.failures > MAX_FAILURES",
+          "label": "BR-02: locks after 6 failures, not 5"
+        },
+        {
+          "file": "src/auth/login-guard.js",
+          "from": "s.lockedUntil > now()",
+          "to": "s.lockedUntil >= now()",
+          "label": "BR-02: still locked at exactly 15:00"
+        },
+        {
+          "file": "src/auth/login-guard.js",
+          "from": "state.delete(email);",
+          "to": "void email;",
+          "label": "success does not reset the counter"
+        },
+        {
+          "file": "src/lib/retry.js",
+          "from": "delayMs * i",
+          "to": "delayMs",
+          "label": "retry waits 1 s every time (no back-off)"
+        },
+        {
+          "file": "src/lib/retry.js",
+          "from": "i <= attempts",
+          "to": "i < attempts",
+          "label": "retry makes one attempt too few"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "throw new BookingError('STORAGE_DOWN', { cause: err });\n  }\n  if (clash)",
+          "to": "throw err;\n  }\n  if (clash)",
+          "label": "lookup failure leaks the raw error",
+          "ghiChu": "script dot-bien-2.mjs dùng String.replace (chỗ khớp ĐẦU TIÊN); ở đây ghi kèm ngữ cảnh để khớp đúng 1 chỗ"
+        },
+        {
+          "file": "src/rules/days.js",
+          "from": "now.getTime() + VN_OFFSET_MS",
+          "to": "now.getTime()",
+          "label": "days counted in UTC, not Viet Nam time"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-3-1",
+      "bai": "tst-3-1-phan-loai",
+      "tieuDe": "bookAndNotify with the right double for each job|||bookAndNotify với đúng loại đồ đóng thế",
+      "ham": "bookAndNotify",
+      "fileDung": [
+        "src/notify/notify.js"
+      ],
+      "testThamKhao": [
+        "demo3/doubles.test.js",
+        "demo3/th31.test.js",
+        "src/notify/notify.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; fakes for repo and mailer, a stub for failures, a spy only for the log warning|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; fake cho repo và mailer, stub cho lỗi, spy chỉ cho cảnh báo log",
+      "dotBien": [
+        {
+          "file": "src/notify/notify.js",
+          "from": "return { ...booking, notified: true };",
+          "to": "return booking;",
+          "label": "result without notified: true"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "return { ...booking, notified: false };",
+          "to": "return { ...booking, notified: true };",
+          "label": "failed e-mail reported as notified"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "await mailer.send(buildMail(booking, input.email));",
+          "to": "mailer.send(buildMail(booking, input.email));",
+          "label": "send not awaited: failure escapes the catch"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "buildMail(booking, input.email)",
+          "to": "buildMail(booking, APPROVER)",
+          "label": "confirmation addressed to the approver"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "'mail failed for booking ' + booking.id",
+          "to": "'mail failed for booking ' + booking.lab",
+          "label": "warning names the lab instead of the booking id"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-3-2",
+      "bai": "tst-3-2-mock-module",
+      "tieuDe": "HTTP mailer adapter with MSW (+ vi.mock for the reminder)|||Adapter gửi thư HTTP với MSW (+ vi.mock cho nhắc lịch)",
+      "ham": "createHttpMailer, sendReminder",
+      "fileDung": [
+        "src/lib/mailer.js",
+        "src/notify/reminder.js"
+      ],
+      "testThamKhao": [
+        "demo3/msw.test.js",
+        "demo3/th32.test.js",
+        "demo3/vi-mock.test.js",
+        "src/lib/mailer.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; MSW with onUnhandledFrame: 'error' for the adapter; vi.mock with vi.hoisted only for reminder.js|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; MSW với onUnhandledFrame: 'error' cho adapter; vi.mock với vi.hoisted chỉ cho reminder.js",
+      "dotBien": [
+        {
+          "file": "src/lib/mailer.js",
+          "from": "baseUrl + '/v1/messages'",
+          "to": "baseUrl + '/v1/message'",
+          "label": "wrong endpoint path"
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "method: 'POST'",
+          "to": "method: 'PUT'",
+          "label": "wrong HTTP method"
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "body: JSON.stringify({ to, subject })",
+          "to": "body: JSON.stringify({ to })",
+          "label": "subject missing from the JSON body"
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "return body.id;",
+          "to": "return body;",
+          "label": "returns the whole body instead of the id"
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "throw new MailError('RATE_LIMITED');",
+          "to": "throw new MailError('MAIL_FAILED');",
+          "label": "429 reported as a generic failure"
+        },
+        {
+          "file": "src/notify/reminder.js",
+          "from": "' tomorrow'",
+          "to": "''",
+          "label": "reminder subject loses “tomorrow”"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-3-3",
+      "bai": "tst-3-3-qua-da",
+      "tieuDe": "Tests that catch bugs and survive refactoring|||Test bắt được bug và sống qua refactor",
+      "ham": "bookAndNotify, bookLab",
+      "fileDung": [
+        "src/booking/service.js",
+        "src/notify/notify.js"
+      ],
+      "testThamKhao": [
+        "demo3/th33.test.js",
+        "demo3/qua-da-fake.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no vi.mock of service.js; assert outcomes, not calls; must stay green under the harmless change|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không vi.mock service.js; khẳng định kết quả, không kiểm lời gọi; phải vẫn xanh dưới thay đổi vô hại",
+      "dotBien": [
+        {
+          "file": "src/booking/service.js",
+          "from": "needsApproval(input) ? 'PENDING' : 'CONFIRMED'",
+          "to": "'CONFIRMED'",
+          "label": "every booking CONFIRMED (BR-06 lost)"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "minutes: slot.minutes",
+          "to": "minutes: 60",
+          "label": "stored length always 60 minutes"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "return { to: APPROVER, subject: 'Approval needed: '",
+          "to": "return { to: studentEmail, subject: 'Approval needed: '",
+          "label": "approval request sent to the student"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/booking/service.js",
+          "from": "minutes: slot.minutes, status });",
+          "to": "minutes: slot.minutes, status, source: 'web' });",
+          "label": "store one more column (no visible change)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-3-4",
+      "bai": "tst-3-4-thiet-ke",
+      "tieuDe": "Pure core and injected reminder|||Lõi thuần và nhắc lịch được tiêm",
+      "ham": "buildMail, createReminder",
+      "fileDung": [
+        "demo3/reminder-di.js",
+        "src/notify/notify.js"
+      ],
+      "testThamKhao": [
+        "demo3/th34.test.js"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no doubles for buildMail (it.each table); fake mailer for createReminder; no vi.mock|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không đồ đóng thế cho buildMail (bảng it.each); mailer giả cho createReminder; không vi.mock",
+      "dotBien": [
+        {
+          "file": "src/notify/notify.js",
+          "from": "subject: 'Booking confirmed: ' + when",
+          "to": "subject: 'Booking: ' + when",
+          "label": "confirmation subject loses “confirmed”"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "booking.seats + ' seats, '",
+          "to": "booking.seats + ' seat, '",
+          "label": "“31 seat” instead of “31 seats”"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "const when = booking.lab + ' on ' + booking.date + ' at ' + booking.start;",
+          "to": "const when = booking.lab + ' on ' + booking.date;",
+          "label": "subject loses the start time"
+        },
+        {
+          "file": "demo3/reminder-di.js",
+          "from": "' tomorrow'",
+          "to": "' today'",
+          "label": "reminder says “today”"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-3",
+      "bai": "tst-3-5-lab-test-double",
+      "tieuDe": "Lab 3 — e-mail flow, 8 mutants|||Lab 3 — luồng gửi thư, 8 đột biến",
+      "ham": "(lab)",
+      "fileDung": [
+        "src/lib/mailer.js",
+        "src/notify/notify.js"
+      ],
+      "testThamKhao": [
+        "src/"
+      ],
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; as in the lab: dot-bien-3.mjs prints 8/8|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; như lab: dot-bien-3.mjs in 8/8",
+      "dotBien": [
+        {
+          "file": "src/notify/notify.js",
+          "from": "return { to: studentEmail,",
+          "to": "return { to: APPROVER,",
+          "label": "confirmation goes to the approver"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "booking.lab + ' on ' + booking.date + ' at '",
+          "to": "booking.lab + ' at '",
+          "label": "e-mail subject without the date"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "booking.seats + ' seats, ' + ",
+          "to": "",
+          "label": "approver mail without the seat count"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "return { ...booking, notified: false };",
+          "to": "throw err;",
+          "label": "a failed e-mail fails the booking request"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "log.warn('mail failed",
+          "to": "void ('mail failed",
+          "label": "a failed e-mail is not logged"
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "res.status === 429",
+          "to": "res.status === 503",
+          "label": "rate limit not recognised"
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "'Bearer ' + apiKey",
+          "to": "apiKey",
+          "label": "API key sent without \"Bearer \""
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "if (!res.ok)",
+          "to": "if (res.status >= 500)",
+          "label": "4xx answers treated as success"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-4-1",
+      "bai": "tst-4-1-vi-sao",
+      "tieuDe": "PostgreSQL adapter: error mapping and the race|||Adapter PostgreSQL: đổi mã lỗi và lỗi tranh chấp",
+      "ham": "createPgRepo, bookLab",
+      "fileDung": [
+        "src/booking/pgRepo.js",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "test/integration",
+        "demo4/dua.int.test.js",
+        "demo4/th41.int.test.js"
+      ],
+      "config": "vitest.integration.config.js",
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; integration tests against PostgreSQL (npm run test:int); assert SQLSTATE codes|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; test tích hợp với PostgreSQL (npm run test:int); khẳng định mã SQLSTATE",
+      "dotBien": [
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "err.code === '23P01'",
+          "to": "err.code === '23505'",
+          "label": "exclusion violation not recognised"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "if (err instanceof BookingError) throw err;",
+          "to": "",
+          "label": "OVERLAP from the database becomes STORAGE_DOWN"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "throw new BookingError('OVERLAP', { cause: err });",
+          "to": "throw new BookingError('OVERLAP');",
+          "label": "OVERLAP loses the database cause"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "return { id: rows[0].id, ...b };",
+          "to": "return { ...b };",
+          "label": "stored booking returned without its id"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-4-23",
+      "bai": "tst-4-3-testcontainers",
+      "tieuDe": "The test database must match production|||CSDL test phải khớp production",
+      "ham": "global setup, db/schema.sql",
+      "fileDung": [
+        "db/schema.sql",
+        "test/integration/global-setup.js"
+      ],
+      "testThamKhao": [
+        "demo4/th43.int.test.js",
+        "test/integration"
+      ],
+      "config": "vitest.integration.config.js",
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; a test that checks the server version and the extension through inject('databaseUrl')|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; một test kiểm phiên bản máy chủ và extension qua inject('databaseUrl')",
+      "dotBien": [
+        {
+          "file": "test/integration/global-setup.js",
+          "from": "new PostgreSqlContainer('postgres:17')",
+          "to": "new PostgreSqlContainer('postgres:16')",
+          "label": "tests run on PostgreSQL 16, production on 17"
+        },
+        {
+          "file": "test/integration/global-setup.js",
+          "from": "process.env.TST_SCHEMA ?? 'db/schema.sql'",
+          "to": "process.env.TST_SCHEMA ?? 'demo4/schema-khong-rang-buoc.sql'",
+          "label": "setup applies a schema without the constraint"
+        },
+        {
+          "file": "db/schema.sql",
+          "from": "CREATE EXTENSION IF NOT EXISTS btree_gist;",
+          "to": "",
+          "label": "btree_gist missing: the schema cannot be applied"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-4-4",
+      "bai": "tst-4-4-co-lap",
+      "tieuDe": "What is really stored — read back with SQL, tests isolated|||Thứ thật sự được lưu — đọc lại bằng SQL, test được cô lập",
+      "ham": "bookLab, createPgRepo",
+      "fileDung": [
+        "src/booking/pgRepo.js",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "demo4/th44.int.test.js",
+        "test/integration"
+      ],
+      "config": "vitest.integration.config.js",
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; TRUNCATE or a rolled-back transaction per test; read rows back with SQL; makeBooking for data|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; TRUNCATE hoặc mỗi test một transaction rollback; đọc lại dòng bằng SQL; makeBooking cho dữ liệu",
+      "dotBien": [
+        {
+          "file": "src/booking/service.js",
+          "from": "needsApproval(input) ? 'PENDING' : 'CONFIRMED'",
+          "to": "'CONFIRMED'",
+          "label": "31-seat student booking stored as CONFIRMED"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "minutes: slot.minutes",
+          "to": "minutes: 60",
+          "label": "stored length always 60 minutes"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "[b.lab, b.date, b.start, b.end, b.seats,",
+          "to": "[b.lab, b.date, b.start, b.end, 20,",
+          "label": "seats always stored as 20"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-4",
+      "bai": "tst-4-5-lab-tich-hop",
+      "tieuDe": "Lab 4 — PostgreSQL adapter, 8 mutants|||Lab 4 — adapter PostgreSQL, 8 đột biến",
+      "ham": "(lab)",
+      "fileDung": [
+        "db/schema.sql",
+        "src/booking/pgRepo.js",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "test/integration"
+      ],
+      "config": "vitest.integration.config.js",
+      "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; as in the lab: dot-bien-4.mjs prints 8/8|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; như lab: dot-bien-4.mjs in 8/8",
+      "dotBien": [
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "start_time < $4",
+          "to": "start_time <= $4",
+          "label": "a booking ending at 10:00 blocks one starting at 10:00"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "$3 < end_time",
+          "to": "$3 <= end_time",
+          "label": "a booking starting at 10:00 blocks one ending at 10:00"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "lab = $1 AND",
+          "to": "$1::text IS NOT NULL AND",
+          "label": "a booking in any lab blocks the slot"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "date = $2 AND",
+          "to": "$2::date IS NOT NULL AND",
+          "label": "a booking on any day blocks the slot"
+        },
+        {
+          "file": "src/booking/pgRepo.js",
+          "from": "err.code === '23P01'",
+          "to": "err.code === '23505'",
+          "label": "constraint violation not recognised"
+        },
+        {
+          "file": "db/schema.sql",
+          "from": "'[)'",
+          "to": "'[]'",
+          "label": "constraint treats back-to-back bookings as overlapping"
+        },
+        {
+          "file": "db/schema.sql",
+          "from": "NOT NULL CHECK (seats > 0)",
+          "to": "NOT NULL",
+          "label": "database accepts 0 seats"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "if (err instanceof BookingError) throw err;",
+          "to": "",
+          "label": "OVERLAP from the database becomes STORAGE_DOWN"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-5-1",
+      "bai": "tst-5-1-supertest",
+      "tieuDe": "The booking API through HTTP: status, headers and the full body|||API đặt phòng qua HTTP: mã trạng thái, header và cả body",
+      "ham": "createApp (POST /api/bookings, GET /api/bookings/:id)",
+      "fileDung": [
+        "src/api/server.js",
+        "test/support/api.js"
+      ],
+      "testThamKhao": [
+        "demo5/supertest.test.js",
+        "demo5/th51.test.js"
+      ],
+      "yeuCau": "Write Supertest tests that are green on the correct API and red for every mutant: exact status, the Location header, the full body with toEqual, and GET via Location; a fresh makeApi() per test|||Viết test Supertest xanh trên API đúng và đỏ với mọi đột biến: đúng mã trạng thái, header Location, cả body bằng toEqual, và GET theo Location; mỗi test một makeApi() mới",
+      "dotBien": [
+        {
+          "file": "src/api/server.js",
+          "from": "res.status(201).location(",
+          "to": "res.status(200).location(",
+          "label": "created answered as 200"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "status: b.status, ",
+          "to": "",
+          "label": "the response loses its status field"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": ".location('/api/bookings/' + booking.id)",
+          "to": "",
+          "label": "no Location header"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 409, 'OVERLAP');",
+          "to": "return fail(res, 400, 'OVERLAP');",
+          "label": "taken slot answered as 400"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 422, err.code)",
+          "to": "return fail(res, 400, err.code)",
+          "label": "business-rule violation answered as 400"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/api/server.js",
+          "from": "res.status(201).location('/api/bookings/' + booking.id).json(toPublic(booking));",
+          "to": "res.location('/api/bookings/' + booking.id).status(201).json(toPublic(booking));",
+          "label": "refactor: set Location before the status (same response)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-5-2",
+      "bai": "tst-5-2-xac-thuc",
+      "tieuDe": "Who are you, and what may you see — 401, 403, 404 with real tokens|||Bạn là ai, được xem gì — 401, 403, 404 với token thật",
+      "ham": "createAuth, requireUser, requireRole, GET /api/bookings/:id",
+      "fileDung": [
+        "src/api/auth.js",
+        "src/api/server.js"
+      ],
+      "testThamKhao": [
+        "demo5/auth.test.js",
+        "demo5/th52.test.js"
+      ],
+      "yeuCau": "Real tokens signed with the test secret, no auth mocks; a fixed clock for expiry including the exact boundary; every role on the admin route; someone else’s booking must answer 404|||Token thật ký bằng khoá cho test, không mock xác thực; đồng hồ cố định cho hết hạn, kể cả đúng mốc biên; mọi vai trò ở route admin; lượt đặt của người khác phải trả 404",
+      "dotBien": [
+        {
+          "file": "src/api/auth.js",
+          "from": "{ algorithms: ['HS256'], currentDate: now() }",
+          "to": "{ algorithms: ['HS256'] }",
+          "label": "expiry checked against the real clock, not the given one"
+        },
+        {
+          "file": "src/api/auth.js",
+          "from": ".setExpirationTime(iat + ttlSeconds)",
+          "to": ".setExpirationTime(iat + ttlSeconds + 1)",
+          "label": "tokens live one second too long"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "if (!mine) return fail(res, 404, 'NOT_FOUND');",
+          "to": "if (!booking) return fail(res, 404, 'NOT_FOUND');",
+          "label": "anyone can read anyone's booking (IDOR)"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "(req.user.role === role ? next()",
+          "to": "(req.user.role !== 'STUDENT' ? next()",
+          "label": "lecturers pass the admin check"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "next() : fail(res, 403, 'FORBIDDEN')",
+          "to": "next() : fail(res, 401, 'FORBIDDEN')",
+          "label": "forbidden answered as 401"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/api/server.js",
+          "from": "header.slice(7)",
+          "to": "header.slice('Bearer '.length)",
+          "label": "refactor: no magic number for the prefix"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-5-3",
+      "bai": "tst-5-3-validation",
+      "tieuDe": "Validation at the door: 400 on the right field, 422 for rules|||Kiểm dữ liệu ở cửa: 400 đúng trường, 422 cho luật",
+      "ham": "BookingInput, error middleware",
+      "fileDung": [
+        "src/api/schemas.js",
+        "src/api/server.js"
+      ],
+      "testThamKhao": [
+        "demo5/validation.test.js",
+        "demo5/th53.test.js"
+      ],
+      "yeuCau": "A table of bad inputs (one equivalence class per row) asserting 400 and the field path; broken JSON; each business rule as 422 with its code; the seat limit at its boundary; unknown keys refused|||Một bảng dữ liệu xấu (mỗi dòng một lớp tương đương) khẳng định 400 và đường dẫn trường; JSON hỏng; mỗi luật nghiệp vụ là 422 kèm mã; giới hạn số chỗ tại biên; khoá lạ bị từ chối",
+      "dotBien": [
+        {
+          "file": "src/api/schemas.js",
+          "from": "z.strictObject({",
+          "to": "z.object({",
+          "label": "unknown keys silently accepted"
+        },
+        {
+          "file": "src/api/schemas.js",
+          "from": ".max(200)",
+          "to": ".max(201)",
+          "label": "seat limit off by one"
+        },
+        {
+          "file": "src/api/schemas.js",
+          "from": "z.number().int()",
+          "to": "z.number()",
+          "label": "2.5 seats accepted"
+        },
+        {
+          "file": "src/api/schemas.js",
+          "from": "date: z.iso.date(),",
+          "to": "date: z.string(),",
+          "label": "impossible dates reach the business rules"
+        },
+        {
+          "file": "src/api/schemas.js",
+          "from": "/^([01]\\d|2[0-3]):",
+          "to": "/^([0-2]\\d):",
+          "label": "hours 24–29 accepted"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "if (err.type === 'entity.parse.failed') return fail(res, 400, 'BAD_JSON');",
+          "to": "",
+          "label": "broken JSON answered as 500"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "'OUTSIDE_HOURS', 'TOO_LONG']",
+          "to": "'OUTSIDE_HOURS']",
+          "label": "TOO_LONG answered as 500"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/api/schemas.js",
+          "from": "'lab must look like BE-201'",
+          "to": "'lab code must be two capitals, a dash and three digits'",
+          "label": "reworded error message"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-5-4",
+      "bai": "tst-5-4-hop-dong",
+      "tieuDe": "Every real response against openapi.json|||Mọi phản hồi thật theo openapi.json",
+      "ham": "contractErrors + the whole API",
+      "fileDung": [
+        "src/api/server.js",
+        "openapi.json",
+        "test/support/contract.js"
+      ],
+      "testThamKhao": [
+        "demo5/hop-dong.test.js",
+        "demo5/th54.test.js"
+      ],
+      "yeuCau": "Check every documented response of every route — success and errors — with contractErrors; do not change openapi.json|||Kiểm mọi phản hồi đã ghi của mọi route — thành công lẫn lỗi — bằng contractErrors; không sửa openapi.json",
+      "dotBien": [
+        {
+          "file": "src/api/server.js",
+          "from": "res.json(toPublic(booking));",
+          "to": "res.json(booking);",
+          "label": "GET returns the stored row (userId, role leak)"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "start: b.start,",
+          "to": "startTime: b.start,",
+          "label": "start renamed to startTime"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "minutes: b.minutes })",
+          "to": "minutes: String(b.minutes) })",
+          "label": "minutes sent as a string"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "res.status(status).json({ error: { code, ...extra } })",
+          "to": "res.status(status).json({ code, ...extra })",
+          "label": "errors lose their { error } wrapper"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 400, 'BAD_JSON');",
+          "to": "return fail(res, 415, 'BAD_JSON');",
+          "label": "broken JSON answered with an undocumented 415"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/api/server.js",
+          "from": "id: b.id, lab: b.lab,",
+          "to": "lab: b.lab, id: b.id,",
+          "label": "field order changed (JSON objects are unordered)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-5",
+      "bai": "tst-5-5-lab-api",
+      "tieuDe": "Lab 5 — the LabFlow Lite HTTP API: kill 8 mutants|||Lab 5 — API HTTP của LabFlow Lite: diệt 8 đột biến",
+      "ham": "createApp, createAuth, BookingInput",
+      "fileDung": [
+        "src/api/server.js",
+        "src/api/auth.js",
+        "src/api/schemas.js",
+        "test/support/api.js"
+      ],
+      "testThamKhao": [
+        "src/api/server.test.js"
+      ],
+      "yeuCau": "Exact statuses, Location and bodies; access control as a table of roles × whose data; a role in the body → 400; an expired token with a fixed clock|||Đúng mã trạng thái, Location và body; phân quyền dạng bảng vai trò × dữ liệu của ai; vai trò trong body → 400; token hết hạn với đồng hồ cố định",
+      "dotBien": [
+        {
+          "file": "src/api/server.js",
+          "from": "booking.userId === req.user.id || req.user.role === 'ADMIN'",
+          "to": "booking.userId === req.user.id || req.user.role !== 'STUDENT'",
+          "label": "lecturers can read anyone's booking"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "if (!mine) return fail(res, 404, 'NOT_FOUND');",
+          "to": "if (!booking) return fail(res, 404, 'NOT_FOUND');",
+          "label": "anyone can read anyone's booking (IDOR)"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "next() : fail(res, 403, 'FORBIDDEN')",
+          "to": "next() : fail(res, 401, 'FORBIDDEN')",
+          "label": "forbidden answered as 401"
+        },
+        {
+          "file": "src/api/schemas.js",
+          "from": "z.strictObject({",
+          "to": "z.object({",
+          "label": "unknown fields (role) silently accepted"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "res.status(201).location(",
+          "to": "res.status(200).location(",
+          "label": "created answered as 200"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": ".location('/api/bookings/' + booking.id)",
+          "to": "",
+          "label": "no Location header"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 409, 'OVERLAP');",
+          "to": "return fail(res, 400, 'OVERLAP');",
+          "label": "taken slot answered as 400"
+        },
+        {
+          "file": "src/api/auth.js",
+          "from": "{ algorithms: ['HS256'], currentDate: now() }",
+          "to": "{ algorithms: ['HS256'] }",
+          "label": "expiry checked against the real clock, not the given one"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/api/server.js",
+          "from": "res.status(201).location('/api/bookings/' + booking.id).json(toPublic(booking));",
+          "to": "res.location('/api/bookings/' + booking.id).status(201).json(toPublic(booking));",
+          "label": "refactor: set Location before the status (same response)"
+        }
+      ]
     }
-   ]
-  },
-  {
-   "id": "tst-cl-1-2",
-   "bai": "tst-1-2-matcher",
-   "tieuDe": "Time parsing, formatting and usage rate|||Đọc/ghi giờ và tỉ lệ sử dụng",
-   "ham": "parseTime, formatTime (+ usageRate in booking.js)",
-   "fileDung": [
-    "src/rules/time.js",
-    "src/rules/booking.js"
-   ],
-   "testThamKhao": [
-    "src/",
-    "demo/th12.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
-   "dotBien": [
-    {
-     "file": "src/rules/time.js",
-     "from": "h > 23",
-     "to": "h > 24",
-     "label": "\"24:00\" accepted"
-    },
-    {
-     "file": "src/rules/time.js",
-     "from": "min > 59",
-     "to": "min > 60",
-     "label": "\"07:60\" accepted"
-    },
-    {
-     "file": "src/rules/time.js",
-     "from": "throw new TypeError(",
-     "to": "throw new RangeError(",
-     "label": "bad format throws the wrong error class"
-    },
-    {
-     "file": "src/rules/time.js",
-     "from": "Math.floor(minutes / 60)",
-     "to": "Math.round(minutes / 60)",
-     "label": "formatTime rounds the hour"
-    },
-    {
-     "file": "src/rules/time.js",
-     "from": "String(h).padStart(2, '0')",
-     "to": "String(h)",
-     "label": "\"7:00\" instead of \"07:00\""
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "rate += b.minutes / (CLOSE - OPEN)",
-     "to": "rate = b.minutes / (CLOSE - OPEN)",
-     "label": "usageRate counts only the last booking"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-1-3",
-   "bai": "tst-1-3-ten-test",
-   "tieuDe": "checkSlot as an it.each table|||checkSlot thành bảng it.each",
-   "ham": "checkSlot",
-   "fileDung": [
-    "src/rules/booking.js"
-   ],
-   "testThamKhao": [
-    "src/"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
-   "dotBien": [
-    {
-     "file": "src/rules/booking.js",
-     "from": "s % STEP !== 0 || e % STEP !== 0",
-     "to": "s % STEP !== 0",
-     "label": "end time off the 30-minute grid accepted"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "if (e <= s)",
-     "to": "if (e < s)",
-     "label": "zero-length slot accepted"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "s < OPEN",
-     "to": "s <= OPEN",
-     "label": "slot starting at 07:00 rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "e > CLOSE",
-     "to": "e >= CLOSE",
-     "label": "slot ending at 21:00 rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "code: 'OUTSIDE_HOURS'",
-     "to": "code: 'OFF_GRID'",
-     "label": "wrong rule code for opening hours"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-1-4",
-   "bai": "tst-1-4-ham-thuan",
-   "tieuDe": "Booking window and limits (EP, BVA)|||Khung đặt trước và các giới hạn (EP, BVA)",
-   "ham": "isWithinBookingWindow, checkSlot, needsApproval",
-   "fileDung": [
-    "src/rules/booking.js"
-   ],
-   "testThamKhao": [
-    "src/"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions",
-   "dotBien": [
-    {
-     "file": "src/rules/booking.js",
-     "from": "daysAhead <= MAX_DAYS_AHEAD",
-     "to": "daysAhead < MAX_DAYS_AHEAD",
-     "label": "14 days ahead rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "daysAhead >= 0",
-     "to": "daysAhead > 0",
-     "label": "booking for today rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "Number.isInteger(daysAhead) && ",
-     "to": "",
-     "label": "2.5 days accepted"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "e - s > MAX_MINUTES",
-     "to": "e - s >= MAX_MINUTES",
-     "label": "exactly 4 hours rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "!Number.isInteger(seats) || ",
-     "to": "",
-     "label": "2.5 seats accepted"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-lab-1",
-   "bai": "tst-1-5-lab-quy-tac",
-   "tieuDe": "Lab 1 — rules suite, 8 mutants|||Lab 1 — bộ test luật, 8 đột biến",
-   "ham": "(lab)",
-   "fileDung": [
-    "src/rules/booking.js",
-    "src/rules/time.js"
-   ],
-   "testThamKhao": [
-    "src/"
-   ],
-   "yeuCau": "Same as the chapter lab: dot-bien.mjs prints 8/8|||Như lab của chương: dot-bien.mjs in 8/8",
-   "dotBien": [
-    {
-     "file": "src/rules/booking.js",
-     "from": "daysAhead <= MAX_DAYS_AHEAD",
-     "to": "daysAhead < MAX_DAYS_AHEAD",
-     "label": "BR-05: 14 days ahead rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "return seats > APPROVAL_SEATS;",
-     "to": "return seats >= APPROVAL_SEATS;",
-     "label": "BR-06: 30 seats needs approval"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "e > CLOSE",
-     "to": "e >= CLOSE",
-     "label": "slot ending at 21:00 rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "e - s > MAX_MINUTES",
-     "to": "e - s >= MAX_MINUTES",
-     "label": "exactly 4 hours rejected"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "if (e <= s)",
-     "to": "if (e < s)",
-     "label": "zero-length slot accepted"
-    },
-    {
-     "file": "src/rules/booking.js",
-     "from": "role === 'LECTURER' || role === 'ADMIN'",
-     "to": "role === 'LECTURER'",
-     "label": "ADMIN needs approval"
-    },
-    {
-     "file": "src/rules/time.js",
-     "from": "h > 23",
-     "to": "h > 24",
-     "label": "\"24:00\" accepted"
-    },
-    {
-     "file": "src/rules/time.js",
-     "from": "Math.floor(minutes / 60)",
-     "to": "Math.round(minutes / 60)",
-     "label": "formatTime rounds the hour"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-2-1",
-   "bai": "tst-2-1-async",
-   "tieuDe": "bookLab: async results and overlaps|||bookLab: kết quả bất đồng bộ và trùng lịch",
-   "ham": "bookLab, createMemoryRepo",
-   "fileDung": [
-    "src/booking/service.js"
-   ],
-   "testThamKhao": [
-    "src/",
-    "demo2/async-dung.test.js",
-    "demo2/th21.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; async tests only; every promise awaited|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; test async, await mọi promise",
-   "dotBien": [
-    {
-     "file": "src/booking/service.js",
-     "from": "if (clash) throw new BookingError('OVERLAP');",
-     "to": "if (clash) return clash;",
-     "label": "overlap resolves with the old booking"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "b.start < end && start < b.end",
-     "to": "b.start <= end && start <= b.end",
-     "label": "back-to-back slot (10:00 after 08:00–10:00) rejected"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "b.lab === lab && ",
-     "to": "",
-     "label": "a booking in another lab blocks the slot"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "needsApproval(input) ? 'PENDING' : 'CONFIRMED'",
-     "to": "'CONFIRMED'",
-     "label": "31-seat student booking stored as CONFIRMED"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "if (!slot.ok) throw new BookingError(slot.code);",
-     "to": "if (!slot.ok) throw new Error(slot.code);",
-     "label": "rule violation is a plain Error, not a BookingError"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-2-2",
-   "bai": "tst-2-2-thoi-gian",
-   "tieuDe": "Time rules: cancel, lock-out, retry, Viet Nam days|||Luật thời gian: huỷ, khoá, retry, ngày theo giờ VN",
-   "ham": "canCancel, createLoginGuard, retry, daysAheadVN",
-   "fileDung": [
-    "src/rules/cancel.js",
-    "src/auth/login-guard.js",
-    "src/lib/retry.js",
-    "src/rules/days.js"
-   ],
-   "testThamKhao": [
-    "src/",
-    "demo2/th22.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no real waiting: injected clock or fake timers, restored in afterEach; green under TZ=UTC|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không chờ thật: tiêm đồng hồ hoặc fake timers, trả lại trong afterEach; xanh dưới TZ=UTC",
-   "dotBien": [
-    {
-     "file": "src/rules/cancel.js",
-     "from": "minutesLeft >= CANCEL_LIMIT_MINUTES",
-     "to": "minutesLeft > CANCEL_LIMIT_MINUTES",
-     "label": "cancel exactly 60 minutes before refused"
-    },
-    {
-     "file": "src/rules/cancel.js",
-     "from": "/ 60000",
-     "to": "/ 1000",
-     "label": "minutes computed as seconds"
-    },
-    {
-     "file": "src/auth/login-guard.js",
-     "from": "LOCK_MINUTES * 60000",
-     "to": "LOCK_MINUTES * 1000",
-     "label": "lock lasts 15 seconds, not 15 minutes"
-    },
-    {
-     "file": "src/auth/login-guard.js",
-     "from": "        s.failures = 0;\n",
-     "to": "",
-     "label": "counter not reset when the lock starts"
-    },
-    {
-     "file": "src/lib/retry.js",
-     "from": "delayMs * i",
-     "to": "delayMs",
-     "label": "no back-off"
-    },
-    {
-     "file": "src/rules/days.js",
-     "from": "now.getTime() + VN_OFFSET_MS",
-     "to": "now.getTime()",
-     "label": "days counted in UTC"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-2-3",
-   "bai": "tst-2-3-loi",
-   "tieuDe": "Failure paths of bookLab|||Các nhánh thất bại của bookLab",
-   "ham": "BookingError, bookLab",
-   "fileDung": [
-    "src/booking/service.js"
-   ],
-   "testThamKhao": [
-    "src/"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; errors asserted by code/cause with rejects; no try/catch without a guard|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; khẳng định lỗi bằng code/cause với rejects; không try/catch thiếu chốt chặn",
-   "dotBien": [
-    {
-     "file": "src/booking/service.js",
-     "from": "throw new BookingError('STORAGE_DOWN', { cause: err });\n  }\n  if (clash)",
-     "to": "throw err;\n  }\n  if (clash)",
-     "label": "lookup failure leaks the raw error"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "return await repo.insert(",
-     "to": "return repo.insert(",
-     "label": "insert failure escapes the try/catch (missing await)"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "super(code, options);",
-     "to": "super(code);",
-     "label": "cause is lost"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "    this.code = code;\n",
-     "to": "",
-     "label": "error has no code"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "if (!slot.ok) throw new BookingError(slot.code);",
-     "to": "if (!slot.ok) throw new BookingError('INVALID');",
-     "label": "every rule violation gets the same code"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-2-4",
-   "bai": "tst-2-4-ngau-nhien",
-   "tieuDe": "Booking codes and records|||Mã đặt chỗ và bản ghi",
-   "ham": "makeBookingCode, seededRandom, newBookingRecord",
-   "fileDung": [
-    "src/rules/code.js"
-   ],
-   "testThamKhao": [
-    "demo2/ngau-nhien.test.js",
-    "demo2/th24.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; repeatable: injected or seeded randomness, spies restored|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; lặp lại được: tiêm hoặc seed ngẫu nhiên, spy được trả lại",
-   "dotBien": [
-    {
-     "file": "src/rules/code.js",
-     "from": "random() * ALPHABET.length",
-     "to": "random() * (ALPHABET.length - 1)",
-     "label": "last character of the alphabet never used"
-    },
-    {
-     "file": "src/rules/code.js",
-     "from": "return 'LF-' + code;",
-     "to": "return 'LF' + code;",
-     "label": "prefix without the dash"
-    },
-    {
-     "file": "src/rules/code.js",
-     "from": "i < length",
-     "to": "i < length - 1",
-     "label": "codes one character short"
-    },
-    {
-     "file": "src/rules/code.js",
-     "from": "createdAt: now().toISOString()",
-     "to": "createdAt: new Date().toISOString()",
-     "label": "injected clock ignored"
-    },
-    {
-     "file": "src/rules/code.js",
-     "from": "id: newId()",
-     "to": "id: crypto.randomUUID()",
-     "label": "injected id generator ignored"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-lab-2",
-   "bai": "tst-2-5-lab-bat-dong-bo",
-   "tieuDe": "Lab 2 — async, time and errors, 8 mutants|||Lab 2 — bất đồng bộ, thời gian, lỗi, 8 đột biến",
-   "ham": "(lab)",
-   "fileDung": [
-    "src/rules/cancel.js",
-    "src/auth/login-guard.js",
-    "src/lib/retry.js",
-    "src/booking/service.js",
-    "src/rules/days.js"
-   ],
-   "testThamKhao": [
-    "src/"
-   ],
-   "yeuCau": "Same as the chapter lab: dot-bien-2.mjs prints 8/8|||Như lab của chương: dot-bien-2.mjs in 8/8",
-   "dotBien": [
-    {
-     "file": "src/rules/cancel.js",
-     "from": "minutesLeft >= CANCEL_LIMIT_MINUTES",
-     "to": "minutesLeft > CANCEL_LIMIT_MINUTES",
-     "label": "Lite-3: cancel exactly 60 min before refused"
-    },
-    {
-     "file": "src/auth/login-guard.js",
-     "from": "s.failures >= MAX_FAILURES",
-     "to": "s.failures > MAX_FAILURES",
-     "label": "BR-02: locks after 6 failures, not 5"
-    },
-    {
-     "file": "src/auth/login-guard.js",
-     "from": "s.lockedUntil > now()",
-     "to": "s.lockedUntil >= now()",
-     "label": "BR-02: still locked at exactly 15:00"
-    },
-    {
-     "file": "src/auth/login-guard.js",
-     "from": "state.delete(email);",
-     "to": "void email;",
-     "label": "success does not reset the counter"
-    },
-    {
-     "file": "src/lib/retry.js",
-     "from": "delayMs * i",
-     "to": "delayMs",
-     "label": "retry waits 1 s every time (no back-off)"
-    },
-    {
-     "file": "src/lib/retry.js",
-     "from": "i <= attempts",
-     "to": "i < attempts",
-     "label": "retry makes one attempt too few"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "throw new BookingError('STORAGE_DOWN', { cause: err });\n  }\n  if (clash)",
-     "to": "throw err;\n  }\n  if (clash)",
-     "label": "lookup failure leaks the raw error",
-     "ghiChu": "script dot-bien-2.mjs dùng String.replace (chỗ khớp ĐẦU TIÊN); ở đây ghi kèm ngữ cảnh để khớp đúng 1 chỗ"
-    },
-    {
-     "file": "src/rules/days.js",
-     "from": "now.getTime() + VN_OFFSET_MS",
-     "to": "now.getTime()",
-     "label": "days counted in UTC, not Viet Nam time"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-3-1",
-   "bai": "tst-3-1-phan-loai",
-   "tieuDe": "bookAndNotify with the right double for each job|||bookAndNotify với đúng loại đồ đóng thế",
-   "ham": "bookAndNotify",
-   "fileDung": [
-    "src/notify/notify.js"
-   ],
-   "testThamKhao": [
-    "demo3/doubles.test.js",
-    "demo3/th31.test.js",
-    "src/notify/notify.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; fakes for repo and mailer, a stub for failures, a spy only for the log warning|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; fake cho repo và mailer, stub cho lỗi, spy chỉ cho cảnh báo log",
-   "dotBien": [
-    {
-     "file": "src/notify/notify.js",
-     "from": "return { ...booking, notified: true };",
-     "to": "return booking;",
-     "label": "result without notified: true"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "return { ...booking, notified: false };",
-     "to": "return { ...booking, notified: true };",
-     "label": "failed e-mail reported as notified"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "await mailer.send(buildMail(booking, input.email));",
-     "to": "mailer.send(buildMail(booking, input.email));",
-     "label": "send not awaited: failure escapes the catch"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "buildMail(booking, input.email)",
-     "to": "buildMail(booking, APPROVER)",
-     "label": "confirmation addressed to the approver"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "'mail failed for booking ' + booking.id",
-     "to": "'mail failed for booking ' + booking.lab",
-     "label": "warning names the lab instead of the booking id"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-3-2",
-   "bai": "tst-3-2-mock-module",
-   "tieuDe": "HTTP mailer adapter with MSW (+ vi.mock for the reminder)|||Adapter gửi thư HTTP với MSW (+ vi.mock cho nhắc lịch)",
-   "ham": "createHttpMailer, sendReminder",
-   "fileDung": [
-    "src/lib/mailer.js",
-    "src/notify/reminder.js"
-   ],
-   "testThamKhao": [
-    "demo3/msw.test.js",
-    "demo3/th32.test.js",
-    "demo3/vi-mock.test.js",
-    "src/lib/mailer.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; MSW with onUnhandledFrame: 'error' for the adapter; vi.mock with vi.hoisted only for reminder.js|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; MSW với onUnhandledFrame: 'error' cho adapter; vi.mock với vi.hoisted chỉ cho reminder.js",
-   "dotBien": [
-    {
-     "file": "src/lib/mailer.js",
-     "from": "baseUrl + '/v1/messages'",
-     "to": "baseUrl + '/v1/message'",
-     "label": "wrong endpoint path"
-    },
-    {
-     "file": "src/lib/mailer.js",
-     "from": "method: 'POST'",
-     "to": "method: 'PUT'",
-     "label": "wrong HTTP method"
-    },
-    {
-     "file": "src/lib/mailer.js",
-     "from": "body: JSON.stringify({ to, subject })",
-     "to": "body: JSON.stringify({ to })",
-     "label": "subject missing from the JSON body"
-    },
-    {
-     "file": "src/lib/mailer.js",
-     "from": "return body.id;",
-     "to": "return body;",
-     "label": "returns the whole body instead of the id"
-    },
-    {
-     "file": "src/lib/mailer.js",
-     "from": "throw new MailError('RATE_LIMITED');",
-     "to": "throw new MailError('MAIL_FAILED');",
-     "label": "429 reported as a generic failure"
-    },
-    {
-     "file": "src/notify/reminder.js",
-     "from": "' tomorrow'",
-     "to": "''",
-     "label": "reminder subject loses “tomorrow”"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-3-3",
-   "bai": "tst-3-3-qua-da",
-   "tieuDe": "Tests that catch bugs and survive refactoring|||Test bắt được bug và sống qua refactor",
-   "ham": "bookAndNotify, bookLab",
-   "fileDung": [
-    "src/booking/service.js",
-    "src/notify/notify.js"
-   ],
-   "testThamKhao": [
-    "demo3/th33.test.js",
-    "demo3/qua-da-fake.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no vi.mock of service.js; assert outcomes, not calls; must stay green under the harmless change|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không vi.mock service.js; khẳng định kết quả, không kiểm lời gọi; phải vẫn xanh dưới thay đổi vô hại",
-   "dotBien": [
-    {
-     "file": "src/booking/service.js",
-     "from": "needsApproval(input) ? 'PENDING' : 'CONFIRMED'",
-     "to": "'CONFIRMED'",
-     "label": "every booking CONFIRMED (BR-06 lost)"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "minutes: slot.minutes",
-     "to": "minutes: 60",
-     "label": "stored length always 60 minutes"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "return { to: APPROVER, subject: 'Approval needed: '",
-     "to": "return { to: studentEmail, subject: 'Approval needed: '",
-     "label": "approval request sent to the student"
-    }
-   ],
-   "voHai": [
-    {
-     "file": "src/booking/service.js",
-     "from": "minutes: slot.minutes, status });",
-     "to": "minutes: slot.minutes, status, source: 'web' });",
-     "label": "store one more column (no visible change)"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-3-4",
-   "bai": "tst-3-4-thiet-ke",
-   "tieuDe": "Pure core and injected reminder|||Lõi thuần và nhắc lịch được tiêm",
-   "ham": "buildMail, createReminder",
-   "fileDung": [
-    "demo3/reminder-di.js",
-    "src/notify/notify.js"
-   ],
-   "testThamKhao": [
-    "demo3/th34.test.js"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; no doubles for buildMail (it.each table); fake mailer for createReminder; no vi.mock|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; không đồ đóng thế cho buildMail (bảng it.each); mailer giả cho createReminder; không vi.mock",
-   "dotBien": [
-    {
-     "file": "src/notify/notify.js",
-     "from": "subject: 'Booking confirmed: ' + when",
-     "to": "subject: 'Booking: ' + when",
-     "label": "confirmation subject loses “confirmed”"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "booking.seats + ' seats, '",
-     "to": "booking.seats + ' seat, '",
-     "label": "“31 seat” instead of “31 seats”"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "const when = booking.lab + ' on ' + booking.date + ' at ' + booking.start;",
-     "to": "const when = booking.lab + ' on ' + booking.date;",
-     "label": "subject loses the start time"
-    },
-    {
-     "file": "demo3/reminder-di.js",
-     "from": "' tomorrow'",
-     "to": "' today'",
-     "label": "reminder says “today”"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-lab-3",
-   "bai": "tst-3-5-lab-test-double",
-   "tieuDe": "Lab 3 — e-mail flow, 8 mutants|||Lab 3 — luồng gửi thư, 8 đột biến",
-   "ham": "(lab)",
-   "fileDung": [
-    "src/lib/mailer.js",
-    "src/notify/notify.js"
-   ],
-   "testThamKhao": [
-    "src/"
-   ],
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; as in the lab: dot-bien-3.mjs prints 8/8|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; như lab: dot-bien-3.mjs in 8/8",
-   "dotBien": [
-    {
-     "file": "src/notify/notify.js",
-     "from": "return { to: studentEmail,",
-     "to": "return { to: APPROVER,",
-     "label": "confirmation goes to the approver"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "booking.lab + ' on ' + booking.date + ' at '",
-     "to": "booking.lab + ' at '",
-     "label": "e-mail subject without the date"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "booking.seats + ' seats, ' + ",
-     "to": "",
-     "label": "approver mail without the seat count"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "return { ...booking, notified: false };",
-     "to": "throw err;",
-     "label": "a failed e-mail fails the booking request"
-    },
-    {
-     "file": "src/notify/notify.js",
-     "from": "log.warn('mail failed",
-     "to": "void ('mail failed",
-     "label": "a failed e-mail is not logged"
-    },
-    {
-     "file": "src/lib/mailer.js",
-     "from": "res.status === 429",
-     "to": "res.status === 503",
-     "label": "rate limit not recognised"
-    },
-    {
-     "file": "src/lib/mailer.js",
-     "from": "'Bearer ' + apiKey",
-     "to": "apiKey",
-     "label": "API key sent without \"Bearer \""
-    },
-    {
-     "file": "src/lib/mailer.js",
-     "from": "if (!res.ok)",
-     "to": "if (res.status >= 500)",
-     "label": "4xx answers treated as success"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-4-1",
-   "bai": "tst-4-1-vi-sao",
-   "tieuDe": "PostgreSQL adapter: error mapping and the race|||Adapter PostgreSQL: đổi mã lỗi và lỗi tranh chấp",
-   "ham": "createPgRepo, bookLab",
-   "fileDung": [
-    "src/booking/pgRepo.js",
-    "src/booking/service.js"
-   ],
-   "testThamKhao": [
-    "test/integration",
-    "demo4/dua.int.test.js",
-    "demo4/th41.int.test.js"
-   ],
-   "config": "vitest.integration.config.js",
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; integration tests against PostgreSQL (npm run test:int); assert SQLSTATE codes|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; test tích hợp với PostgreSQL (npm run test:int); khẳng định mã SQLSTATE",
-   "dotBien": [
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "err.code === '23P01'",
-     "to": "err.code === '23505'",
-     "label": "exclusion violation not recognised"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "if (err instanceof BookingError) throw err;",
-     "to": "",
-     "label": "OVERLAP from the database becomes STORAGE_DOWN"
-    },
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "throw new BookingError('OVERLAP', { cause: err });",
-     "to": "throw new BookingError('OVERLAP');",
-     "label": "OVERLAP loses the database cause"
-    },
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "return { id: rows[0].id, ...b };",
-     "to": "return { ...b };",
-     "label": "stored booking returned without its id"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-4-23",
-   "bai": "tst-4-3-testcontainers",
-   "tieuDe": "The test database must match production|||CSDL test phải khớp production",
-   "ham": "global setup, db/schema.sql",
-   "fileDung": [
-    "db/schema.sql",
-    "test/integration/global-setup.js"
-   ],
-   "testThamKhao": [
-    "demo4/th43.int.test.js",
-    "test/integration"
-   ],
-   "config": "vitest.integration.config.js",
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; a test that checks the server version and the extension through inject('databaseUrl')|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; một test kiểm phiên bản máy chủ và extension qua inject('databaseUrl')",
-   "dotBien": [
-    {
-     "file": "test/integration/global-setup.js",
-     "from": "new PostgreSqlContainer('postgres:17')",
-     "to": "new PostgreSqlContainer('postgres:16')",
-     "label": "tests run on PostgreSQL 16, production on 17"
-    },
-    {
-     "file": "test/integration/global-setup.js",
-     "from": "process.env.TST_SCHEMA ?? 'db/schema.sql'",
-     "to": "process.env.TST_SCHEMA ?? 'demo4/schema-khong-rang-buoc.sql'",
-     "label": "setup applies a schema without the constraint"
-    },
-    {
-     "file": "db/schema.sql",
-     "from": "CREATE EXTENSION IF NOT EXISTS btree_gist;",
-     "to": "",
-     "label": "btree_gist missing: the schema cannot be applied"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-4-4",
-   "bai": "tst-4-4-co-lap",
-   "tieuDe": "What is really stored — read back with SQL, tests isolated|||Thứ thật sự được lưu — đọc lại bằng SQL, test được cô lập",
-   "ham": "bookLab, createPgRepo",
-   "fileDung": [
-    "src/booking/pgRepo.js",
-    "src/booking/service.js"
-   ],
-   "testThamKhao": [
-    "demo4/th44.int.test.js",
-    "test/integration"
-   ],
-   "config": "vitest.integration.config.js",
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; TRUNCATE or a rolled-back transaction per test; read rows back with SQL; makeBooking for data|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; TRUNCATE hoặc mỗi test một transaction rollback; đọc lại dòng bằng SQL; makeBooking cho dữ liệu",
-   "dotBien": [
-    {
-     "file": "src/booking/service.js",
-     "from": "needsApproval(input) ? 'PENDING' : 'CONFIRMED'",
-     "to": "'CONFIRMED'",
-     "label": "31-seat student booking stored as CONFIRMED"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "minutes: slot.minutes",
-     "to": "minutes: 60",
-     "label": "stored length always 60 minutes"
-    },
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "[b.lab, b.date, b.start, b.end, b.seats,",
-     "to": "[b.lab, b.date, b.start, b.end, 20,",
-     "label": "seats always stored as 20"
-    }
-   ]
-  },
-  {
-   "id": "tst-cl-lab-4",
-   "bai": "tst-4-5-lab-tich-hop",
-   "tieuDe": "Lab 4 — PostgreSQL adapter, 8 mutants|||Lab 4 — adapter PostgreSQL, 8 đột biến",
-   "ham": "(lab)",
-   "fileDung": [
-    "db/schema.sql",
-    "src/booking/pgRepo.js",
-    "src/booking/service.js"
-   ],
-   "testThamKhao": [
-    "test/integration"
-   ],
-   "config": "vitest.integration.config.js",
-   "yeuCau": "Write a test file that is green on the correct code and red for every mutant; requireAssertions on; as in the lab: dot-bien-4.mjs prints 8/8|||Viết một file test xanh trên code đúng và đỏ với mọi đột biến; bật requireAssertions; như lab: dot-bien-4.mjs in 8/8",
-   "dotBien": [
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "start_time < $4",
-     "to": "start_time <= $4",
-     "label": "a booking ending at 10:00 blocks one starting at 10:00"
-    },
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "$3 < end_time",
-     "to": "$3 <= end_time",
-     "label": "a booking starting at 10:00 blocks one ending at 10:00"
-    },
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "lab = $1 AND",
-     "to": "$1::text IS NOT NULL AND",
-     "label": "a booking in any lab blocks the slot"
-    },
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "date = $2 AND",
-     "to": "$2::date IS NOT NULL AND",
-     "label": "a booking on any day blocks the slot"
-    },
-    {
-     "file": "src/booking/pgRepo.js",
-     "from": "err.code === '23P01'",
-     "to": "err.code === '23505'",
-     "label": "constraint violation not recognised"
-    },
-    {
-     "file": "db/schema.sql",
-     "from": "'[)'",
-     "to": "'[]'",
-     "label": "constraint treats back-to-back bookings as overlapping"
-    },
-    {
-     "file": "db/schema.sql",
-     "from": "NOT NULL CHECK (seats > 0)",
-     "to": "NOT NULL",
-     "label": "database accepts 0 seats"
-    },
-    {
-     "file": "src/booking/service.js",
-     "from": "if (err instanceof BookingError) throw err;",
-     "to": "",
-     "label": "OVERLAP from the database becomes STORAGE_DOWN"
-    }
-   ]
-  }
- ]
+  ]
 }

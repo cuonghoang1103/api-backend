@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 5.2 Test xác thực và phân quyền (deck tst-05-2, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-05-2', 'Testing authentication and authorisation', 'Test xác thực và phân quyền', [
+  [1, 'Testing authentication and authorisation',
+    `<p>Two questions protect every API: who are you, and what may you see? This lesson tests both with real tokens.</p>`,
+    `<p>Hai câu hỏi bảo vệ mọi API: bạn là ai, và bạn được xem gì? Bài này test cả hai bằng token thật.</p>`],
+  [2, 'What you will take away from this lesson',
+    `<p>Real tokens in tests, the difference between 401, 403 and 404, expired tokens with a controlled clock, a role that must never come from the body, and access control as a table.</p>`,
+    `<p>Token thật trong test, khác biệt giữa 401, 403 và 404, token hết hạn với đồng hồ được điều khiển, vai trò không bao giờ được lấy từ body, và phân quyền dưới dạng bảng.</p>`],
+  [3, 'Tokens: sign and verify, clock as a parameter',
+    `<p>The API signs HS256 tokens with jose. Tests use the same code with a test secret, so nothing about authentication is mocked. The clock is a parameter, exactly as in Chapter 2.</p>`,
+    `<p>API ký token HS256 bằng jose. Test dùng đúng code đó với một khoá bí mật cho test, nên không có gì về xác thực bị giả. Đồng hồ là tham số, y như Chương 2.</p>`],
+  [4, 'Two questions, two status codes',
+    `<p>401 means the server does not know who you are. 403 means it knows and says no. 404 hides data that is not yours.</p>`,
+    `<p>401 nghĩa là máy chủ không biết bạn là ai. 403 nghĩa là nó biết và từ chối. 404 che dữ liệu không phải của bạn.</p>`],
+  [5, 'Expired tokens, with a controlled clock',
+    `<p>A token valid for one hour is accepted at 09:00 and refused at 10:01, because the test moves the clock. A far-future date keeps any real clock out of the picture.</p>`,
+    `<p>Token có hạn một giờ được nhận lúc 09:00 và bị từ chối lúc 10:01, vì test dịch đồng hồ. Ngày ở xa trong tương lai giữ mọi đồng hồ thật ra ngoài cuộc.</p>`],
+  [6, 'Someone else’s booking looks missing',
+    `<p>Reading another person’s data by changing an id is called IDOR, part of broken access control — the top risk on the OWASP list. Answer 404 so the attacker learns nothing, and test every role.</p>`,
+    `<p>Đọc dữ liệu người khác bằng cách đổi id gọi là IDOR, thuộc nhóm lỗi phân quyền — rủi ro đứng đầu danh sách OWASP. Trả 404 để kẻ tấn công không biết thêm gì, và test mọi vai trò.</p>`],
+  [7, 'Eight auth tests, all green',
+    `<p>The real run, including a forged token and an attempt to become ADMIN through the request body, which the strict schema refuses.</p>`,
+    `<p>Lần chạy thật, kể cả một token giả mạo và một lần cố thành ADMIN qua body, bị schema nghiêm ngặt từ chối.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>A lecturer on the admin list, and the exact expiry boundary of a token: one second before, and on the limit.</p>`,
+    `<p>Giảng viên ở danh sách admin, và đúng biên hết hạn của token: trước một giây, và ngay trên giới hạn.</p>`],
+  [9, 'Summary',
+    `<p>Real tokens, the right status for each question, a controlled clock, and identity taken only from the token.</p>`,
+    `<p>Token thật, đúng mã trạng thái cho từng câu hỏi, đồng hồ được điều khiển, và danh tính chỉ lấy từ token.</p>`],
+]);

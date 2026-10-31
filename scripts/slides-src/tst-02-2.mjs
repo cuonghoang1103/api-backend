@@ -97,7 +97,7 @@ export const slides = lamDeck({ chuong: 'Chapter 2 — Async code, time and erro
     <tr><td>06:30, 2 Nov (VN)</td><td>2 Nov</td><td>1 Nov, 23:30</td><td>14 on laptop · <b>15</b> on server</td></tr>
     <tr><td>12:00, 2 Nov (VN)</td><td>2 Nov</td><td>2 Nov, 05:00</td><td>14 · 14</td></tr>
     <tr><td>00:00, 3 Nov (VN)</td><td>3 Nov</td><td>2 Nov, 17:00</td><td>13 on laptop · <b>14</b> on server</td></tr></table>`, 1.15) +
-    box('Habit', `Run the suite once with ${c('TZ=UTC npm test')} before pushing, and pick test times near midnight — that is where the bug lives.`, 'xanh') },
+    box('Habit', `Run the suite once with ${c('TZ=UTC npm run test:unit')} before pushing, and pick test times near midnight — that is where the bug lives.`, 'xanh') },
   { t: 'Fake timers: freeze “now”', body: js(FAKE, { hl: [2, 3, 6] }) + box('Always restore', `${c('vi.useRealTimers()')} in ${c('afterEach')}. Otherwise the next test in the same file still lives in your frozen time — measured below in practice step 4.`, 'do2') },
   { t: 'Boundaries in time: 61, 60, 59 minutes before', body: zm(vt(DONGHO, { title: 'terminal — npx vitest run demo2/dong-ho.test.js', sm: false }), 1.05) +
     box('Same technique as Chapter 1', 'A time limit is a boundary: test on it (08:00 — exactly 60 min before 09:00) and one minute either side.', 'lam') },

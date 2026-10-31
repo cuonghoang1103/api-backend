@@ -52,7 +52,7 @@ export const slides = lamDeck({ chuong: 'Chapter 3 — Test doubles without lyin
     <tr><td>8</td><td>mailer.js</td><td>${c('if (!res.ok)')}</td><td>${c('if (res.status >= 500)')}</td></tr></table>`, 1.05) },
   { t: 'A typical first attempt: 0 of 8', body: vt(WEAK_RUN, { title: 'terminal — 3 tests, all green', fs: 16 }) +
     two(vt(WEAK, { title: 'node scripts/dot-bien-3.mjs', fs: 13 }), box('Why nothing was caught', `${c('toHaveBeenCalled()')} without arguments, a mailer that never fails, and only the 200 answer from the provider. Every test is about “something happened”, none about <b>what</b>.`, 'do2'), 'r64') },
-  { t: 'The reference solution: 8 of 8', body: two(`<div>${vt(STRONG, { title: '11 tests: notify.test.js + mailer.test.js', fs: 13 })}${vt(FULL, { title: 'npx vitest run src/ — whole project', fs: 15 })}</div>`, box('What made the difference', `<ul style="font-size:19px"><li>exact mail (to + subject) for CONFIRMED and PENDING</li><li>a stub mailer that throws: booking kept, ${c('notified: false')}, warning text</li><li>MSW: Bearer header, JSON body, 429, 400, 503</li><li>a rejected booking sends no mail</li></ul>`, 'xanh'), 'r64') },
+  { t: 'The reference solution: 8 of 8', body: two(`<div>${vt(STRONG, { title: '11 tests: notify.test.js + mailer.test.js', fs: 13 })}${vt(FULL, { title: 'npm run test:unit — whole project', fs: 15 })}</div>`, box('What made the difference', `<ul style="font-size:19px"><li>exact mail (to + subject) for CONFIRMED and PENDING</li><li>a stub mailer that throws: booking kept, ${c('notified: false')}, warning text</li><li>MSW: Bearer header, JSON body, 429, 400, 503</li><li>a rejected booking sends no mail</li></ul>`, 'xanh'), 'r64') },
   { t: 'Rubric (10 points)', body: zm(`<table class="t"><tr><th>Criterion</th><th>Points</th><th>How it is checked</th></tr>
     <tr><td>Mutants killed</td><td>4 (0.5 each)</td><td>${c('node scripts/dot-bien-3.mjs')}</td></tr>
     <tr><td>Right double for each job: fakes for repo/mailer, stub for failures, MSW for HTTP; no ${c('vi.mock')} of own modules</td><td>2</td><td>read the tests</td></tr>
@@ -67,7 +67,7 @@ export const slides = lamDeck({ chuong: 'Chapter 3 — Test doubles without lyin
       'In MSW, record the request (header + JSON) and answer 429, 400 and 503 in separate tests',
     ]) },
   { t: 'Before you call it done', to: true, giua: true, body: `<ul>
-    <li>${c('npx vitest run src/')} green, no ${c('.only')} / ${c('.skip')}, no real network</li>
+    <li>${c('npm run test:unit')} green, no ${c('.only')} / ${c('.skip')}, no real network</li>
     <li>${c('node scripts/dot-bien-3.mjs')} prints <b>8/8 mutants killed</b></li>
     <li>Labs 1 and 2 still print 8/8</li>
     <li>${c('git diff src/')} shows only test files</li>

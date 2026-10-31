@@ -2713,6 +2713,11 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
 <div class="pitfall"><b>The injection that PreparedStatement does not stop.</b> <span class="badge">?</span> placeholders work for <em>values</em>, never for column or table names — you cannot write <span class="badge">ORDER BY ?</span>. So sorting must be handled by mapping the user's choice to a fixed string, exactly as the switch above does. Concatenating <span class="badge">"ORDER BY " + req.getParameter("sortBy")</span> is a real, exploitable injection point, and it is the one students leave open because "PreparedStatement protects me".</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Deep pagination is slow, and there is a better key.</b> <span class="badge">OFFSET 100000</span> asks the database to find and discard a hundred thousand rows before returning ten — the further you page, the slower it gets. Large systems use <b>keyset pagination</b> instead: remember the last row's key and query <span class="badge">WHERE id &lt; :lastId ORDER BY id DESC FETCH NEXT 10 ROWS ONLY</span>. Constant time at any depth, which is why infinite-scroll feeds work that way. The trade-off is that you can only go next/previous, not jump to page 500 — which is exactly why those feeds have no page numbers.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-3-1-offset" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 3.1: Offset pagination and its problems</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: OFFSET/FETCH paging, a stable ORDER BY, a COUNT for the pager. Different: Courses pages a JSON API instead of a JSP, and measures what OFFSET costs. It also adds: a duplicate row caught while data changes, deep pages from 0.05 to 78 ms on a million rows, the price of the total, then cursor (keyset) pagination at 0.064 ms in lesson 3.2.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.3</span>
@@ -2802,6 +2807,11 @@ req.<span class="tok-function">setAttribute</span>(<span class="tok-string">"key
 <div class="pitfall"><b>Kiểu injection mà PreparedStatement KHÔNG chặn.</b> Dấu <span class="badge">?</span> chỉ dùng được cho <em>giá trị</em>, không bao giờ cho tên cột hay tên bảng — bạn không viết được <span class="badge">ORDER BY ?</span>. Nên việc sắp xếp phải xử lý bằng cách ánh xạ lựa chọn của người dùng sang một chuỗi cố định, đúng như khối switch ở trên. Nối chuỗi <span class="badge">"ORDER BY " + req.getParameter("sortBy")</span> là một điểm injection có thật và khai thác được, và đó chính là chỗ sinh viên để hở vì nghĩ "đã có PreparedStatement bảo vệ rồi".</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Phân trang sâu thì chậm, và có một khoá tốt hơn.</b> <span class="badge">OFFSET 100000</span> bắt cơ sở dữ liệu tìm rồi vứt bỏ một trăm nghìn dòng trước khi trả về mười dòng — càng lật sâu càng chậm. Hệ thống lớn dùng <b>phân trang theo khoá (keyset pagination)</b>: nhớ khoá của dòng cuối rồi truy vấn <span class="badge">WHERE id &lt; :lastId ORDER BY id DESC FETCH NEXT 10 ROWS ONLY</span>. Thời gian không đổi ở mọi độ sâu, và đó là lý do các dòng tin cuộn vô tận hoạt động theo kiểu đó. Cái giá là bạn chỉ đi tiếp/lùi được chứ không nhảy thẳng tới trang 500 — mà đó đúng là lý do những dòng tin ấy không có số trang.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-3-1-offset" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 3.1: Phân trang offset và các vấn đề của nó</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: phân trang OFFSET/FETCH, ORDER BY ổn định, COUNT cho thanh phân trang. Khác: Courses phân trang một API JSON thay vì trang JSP, và đo cái giá của OFFSET. Ở đó có thêm: dòng trùng bắt được khi dữ liệu đổi, trang sâu từ 0,05 lên 78 ms trên một triệu dòng, cái giá của tổng số, rồi phân trang con trỏ (keyset) 0,064 ms ở bài 3.2.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },

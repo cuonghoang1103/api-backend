@@ -1,0 +1,628 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-3-3-loc",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-3-3-loc"
+  },
+  "exercises": [
+    {
+      "title": "Filters 1 — Rules and surprises",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "filtering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 3.3 (real LabFlow runs, PostgreSQL 18.4 with one million rows).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 3.3 (chạy thật trên LabFlow, PostgreSQL 18.4 với một triệu dòng).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer was printed in lesson 3.3.|||Mọi đáp án đã được in trong bài 3.3.",
+        "Think about what the browser actually sends.|||Nghĩ xem trình duyệt thật sự gửi gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Filters 1 — Rules and surprises\n\nAnswer in the answer panel (no code needed).\n\n1. from=07:00 and to=11:00 (Hanoi) returned the 07:00–09:00 and 09:00–11:00 slots. Which test does LabFlow apply?from=07:00 và to=11:00 (giờ Hà Nội) trả các ca 07:00–09:00 và 09:00–11:00. LabFlow áp phép thử nào?\n2. ?from=2026-11-03T07:00:00+07:00 (raw +) returned 400 “Invalid ISO datetime”. Why??from=2026-11-03T07:00:00+07:00 (dấu + trần) trả 400 \"Invalid ISO datetime\". Vì sao?\n3. ?status=PENDING,DONE&from=…04&to=…03&q=x listed errors for status and q, but none for to. Why??status=PENDING,DONE&from=…04&to=…03&q=x báo lỗi cho status và q, nhưng không có lỗi to. Vì sao?\n4. “lab_7, overlapping 10 November” took 36.183 ms, then 0.242 ms. What changed?\"lab_7, chồng lên ngày 10/11\" mất 36,183 ms, rồi 0,242 ms. Điều gì đã đổi?\n5. A student sends ?userId=usr_2. Why can she never see Bin’s bookings?Một sinh viên gửi ?userId=usr_2. Vì sao cô không bao giờ thấy lượt đặt của Bin?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Filters 1 — Rules and surprises — answer key\n\n1. from=07:00 and to=11:00 (Hanoi) returned the 07:00–09:00 and 09:00–11:00 slots. Which test does LabFlow apply?from=07:00 và to=11:00 (giờ Hà Nội) trả các ca 07:00–09:00 và 09:00–11:00. LabFlow áp phép thử nào?\n   Answer: c) endAt > from AND startAt < to (the booking overlaps the window)\n   “Who is in the lab between 7 and 11?” is an overlap question: each interval starts before the other ends.VI: \"Ai ở trong lab từ 7 tới 11?\" là câu hỏi chồng lên: mỗi khoảng bắt đầu trước khi khoảng kia kết thúc.\n\n2. ?from=2026-11-03T07:00:00+07:00 (raw +) returned 400 “Invalid ISO datetime”. Why??from=2026-11-03T07:00:00+07:00 (dấu + trần) trả 400 \"Invalid ISO datetime\". Vì sao?\n   Answer: b) A raw + in a query string means a space; send %2B\n   The server sees \"07:00:00 07:00\". Encode the plus as %2B, or send UTC with Z.VI: Server thấy \"07:00:00 07:00\". Mã hoá dấu cộng thành %2B, hoặc gửi giờ UTC với Z.\n\n3. ?status=PENDING,DONE&from=…04&to=…03&q=x listed errors for status and q, but none for to. Why??status=PENDING,DONE&from=…04&to=…03&q=x báo lỗi cho status và q, nhưng không có lỗi to. Vì sao?\n   Answer: d) After the failed status pipe, Zod skipped the object-level refine\n   Errors may come in two rounds; the second request (valid fields) showed “to must be after from”.VI: Lỗi có thể tới thành hai đợt; request thứ hai (các trường hợp lệ) mới hiện \"to must be after from\".\n\n4. “lab_7, overlapping 10 November” took 36.183 ms, then 0.242 ms. What changed?\"lab_7, chồng lên ngày 10/11\" mất 36,183 ms, rồi 0,242 ms. Điều gì đã đổi?\n   Answer: a) CREATE INDEX on (lab_id, start_at)\n   Without it PostgreSQL walked the newest-first index and removed ~1 million rows by filter; with it it read 324 candidates.VI: Không có nó PostgreSQL đi theo index mới-nhất-trước và loại ~1 triệu dòng bằng bộ lọc; có nó thì đọc 324 ứng viên.\n\n5. A student sends ?userId=usr_2. Why can she never see Bin’s bookings?Một sinh viên gửi ?userId=usr_2. Vì sao cô không bao giờ thấy lượt đặt của Bin?\n   Answer: a) The handler narrows to her own bookings BEFORE applying any filter\n   Access first, filters second — a filter can only narrow what the caller may see. (In LabFlow the strict schema also rejects userId as unknown.)VI: Quyền truy cập trước, bộ lọc sau — bộ lọc chỉ thu hẹp thứ người gọi được thấy. (Ở LabFlow schema strict còn từ chối userId vì là tham số lạ.)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> endAt &gt; from AND startAt &lt; to (the booking overlaps the window)</p><p>“Who is in the lab between 7 and 11?” is an overlap question: each interval starts before the other ends.</p><p><i>VI: \"Ai ở trong lab từ 7 tới 11?\" là câu hỏi chồng lên: mỗi khoảng bắt đầu trước khi khoảng kia kết thúc.</i></p></li><li><p><b>b)</b> A raw + in a query string means a space; send %2B</p><p>The server sees \"07:00:00 07:00\". Encode the plus as %2B, or send UTC with Z.</p><p><i>VI: Server thấy \"07:00:00 07:00\". Mã hoá dấu cộng thành %2B, hoặc gửi giờ UTC với Z.</i></p></li><li><p><b>d)</b> After the failed status pipe, Zod skipped the object-level refine</p><p>Errors may come in two rounds; the second request (valid fields) showed “to must be after from”.</p><p><i>VI: Lỗi có thể tới thành hai đợt; request thứ hai (các trường hợp lệ) mới hiện \"to must be after from\".</i></p></li><li><p><b>a)</b> CREATE INDEX on (lab_id, start_at)</p><p>Without it PostgreSQL walked the newest-first index and removed ~1 million rows by filter; with it it read 324 candidates.</p><p><i>VI: Không có nó PostgreSQL đi theo index mới-nhất-trước và loại ~1 triệu dòng bằng bộ lọc; có nó thì đọc 324 ứng viên.</i></p></li><li><p><b>a)</b> The handler narrows to her own bookings BEFORE applying any filter</p><p>Access first, filters second — a filter can only narrow what the caller may see. (In LabFlow the strict schema also rejects userId as unknown.)</p><p><i>VI: Quyền truy cập trước, bộ lọc sau — bộ lọc chỉ thu hẹp thứ người gọi được thấy. (Ở LabFlow schema strict còn từ chối userId vì là tham số lạ.)</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>from=07:00 and to=11:00 (Hanoi) returned the 07:00–09:00 and 09:00–11:00 slots. Which test does LabFlow apply?</p><p style=\"opacity:.75;font-size:.92em\"><i>from=07:00 và to=11:00 (giờ Hà Nội) trả các ca 07:00–09:00 và 09:00–11:00. LabFlow áp phép thử nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "startAt ≥ from AND startAt &lt; to (the booking starts in the window)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "startAt ≥ from AND endAt ≤ to (the booking lies fully inside)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "endAt &gt; from AND startAt &lt; to (the booking overlaps the window)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "createdAt between from and to"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>“Who is in the lab between 7 and 11?” is an overlap question: each interval starts before the other ends.</p><p><i>VI: \"Ai ở trong lab từ 7 tới 11?\" là câu hỏi chồng lên: mỗi khoảng bắt đầu trước khi khoảng kia kết thúc.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>?from=2026-11-03T07:00:00+07:00 (raw +) returned 400 “Invalid ISO datetime”. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>?from=2026-11-03T07:00:00+07:00 (dấu + trần) trả 400 \"Invalid ISO datetime\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Offsets are not allowed in query strings"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A raw + in a query string means a space; send %2B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Colons must be percent-encoded"
+              },
+              {
+                "ma": "d",
+                "noiDung": "from must always be in UTC"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The server sees \"07:00:00 07:00\". Encode the plus as %2B, or send UTC with Z.</p><p><i>VI: Server thấy \"07:00:00 07:00\". Mã hoá dấu cộng thành %2B, hoặc gửi giờ UTC với Z.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>?status=PENDING,DONE&from=…04&to=…03&q=x listed errors for status and q, but none for to. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>?status=PENDING,DONE&from=…04&to=…03&q=x báo lỗi cho status và q, nhưng không có lỗi to. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "q=x stops validation of the other fields"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Zod reports at most two errors"
+              },
+              {
+                "ma": "c",
+                "noiDung": "from after to is allowed in LabFlow"
+              },
+              {
+                "ma": "d",
+                "noiDung": "After the failed status pipe, Zod skipped the object-level refine"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Errors may come in two rounds; the second request (valid fields) showed “to must be after from”.</p><p><i>VI: Lỗi có thể tới thành hai đợt; request thứ hai (các trường hợp lệ) mới hiện \"to must be after from\".</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>“lab_7, overlapping 10 November” took 36.183 ms, then 0.242 ms. What changed?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"lab_7, chồng lên ngày 10/11\" mất 36,183 ms, rồi 0,242 ms. Điều gì đã đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CREATE INDEX on (lab_id, start_at)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The filter moved into JavaScript"
+              },
+              {
+                "ma": "c",
+                "noiDung": "LIMIT 20 was added"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The query result was cached"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Without it PostgreSQL walked the newest-first index and removed ~1 million rows by filter; with it it read 324 candidates.</p><p><i>VI: Không có nó PostgreSQL đi theo index mới-nhất-trước và loại ~1 triệu dòng bằng bộ lọc; có nó thì đọc 324 ứng viên.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A student sends ?userId=usr_2. Why can she never see Bin’s bookings?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một sinh viên gửi ?userId=usr_2. Vì sao cô không bao giờ thấy lượt đặt của Bin?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The handler narrows to her own bookings BEFORE applying any filter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "userId values are encrypted in the database, so they never match"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Zod removes other users’ data from the response automatically"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express drops every query parameter it does not recognise"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Access first, filters second — a filter can only narrow what the caller may see. (In LabFlow the strict schema also rejects userId as unknown.)</p><p><i>VI: Quyền truy cập trước, bộ lọc sau — bộ lọc chỉ thu hẹp thứ người gọi được thấy. (Ở LabFlow schema strict còn từ chối userId vì là tham số lạ.)</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using “starts in the window” for an occupancy question.|||Dùng \"bắt đầu trong khung\" cho câu hỏi về chiếm phòng."
+        },
+        {
+          "loi": "Publishing a filter without an index.|||Công bố bộ lọc mà không có index."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "overlap",
+          "vi": "chồng lên (hai khoảng thời gian)"
+        },
+        {
+          "en": "percent-encoding",
+          "vi": "mã hoá phần trăm"
+        }
+      ]
+    },
+    {
+      "title": "Filters 2 — Write matchBooking(b, f): AND, lists, overlap, search",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "filtering",
+        "time intervals"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Return <code>true</code> when booking <code>b</code> passes <b>every</b> filter present in <code>f</code> (absent filters are ignored):</p><ul>\n<li><code>labId</code> — equal</li><li><code>status</code> — an array; the booking’s status is one of them</li>\n<li><code>from</code>, <code>to</code> — ISO strings with offsets; the booking <b>overlaps</b> <code>[from, to)</code>: it ends after <code>from</code> and starts before <code>to</code></li>\n<li><code>q</code> — the folded <code>purpose</code> contains the folded <code>q</code> (a missing purpose is <code>\"\"</code>). <code>fold</code> (lesson 2.4: no accents, đ → d, lower case) is given.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> khi lượt đặt <code>b</code> qua <b>mọi</b> bộ lọc có mặt trong <code>f</code> (bộ lọc vắng mặt thì bỏ qua):</p><ul>\n<li><code>labId</code> — bằng nhau</li><li><code>status</code> — một mảng; trạng thái của lượt đặt là một trong số đó</li>\n<li><code>from</code>, <code>to</code> — chuỗi ISO có độ lệch múi giờ; lượt đặt <b>chồng lên</b> <code>[from, to)</code>: kết thúc sau <code>from</code> và bắt đầu trước <code>to</code></li>\n<li><code>q</code> — <code>purpose</code> đã gấp chứa <code>q</code> đã gấp (thiếu purpose thì là <code>\"\"</code>). Hàm <code>fold</code> (bài 2.4: bỏ dấu, đ → d, chữ thường) có sẵn.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "b — { labId, status, startAt, endAt, purpose? }; f — { labId?, status?, from?, to?, q? }",
+      "outputSpec": "boolean",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T02:00:00.000Z\",\"endAt\":\"2026-11-03T04:00:00.000Z\",\"purpose\":\"CLB IoT\"}, {\"labId\":\"lab_1\",\"status\":[\"PENDING\",\"CANCELLED\"]})",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare instants with Date.parse — \"07:00+07:00\" and \"00:00Z\" are the same moment but different strings.|||So thời điểm bằng Date.parse — \"07:00+07:00\" và \"00:00Z\" là cùng một lúc nhưng khác chuỗi.",
+        "Write each filter as (!f.x || test) and join them with &amp;&amp;.|||Viết mỗi bộ lọc dạng (!f.x || phép thử) rồi nối bằng &amp;&amp;."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "function fold(s) {\n  return s.normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();\n}\n\n/** booking + filters ⇒ does it pass all of them? */\nfunction matchBooking(b, f) {\n  // Write your solution here\n  return (!f.labId || b.labId === f.labId)\n    && (!f.status || f.status.includes(b.status))\n    && (!f.from || b.startAt >= f.from)\n    && (!f.to || b.startAt < f.to)\n    && (!f.q || (b.purpose || '').includes(f.q));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction fold(s) {\n  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase();\n}\n\nfunction matchBooking(b, f) {\n  return (!f.labId || b.labId === f.labId)\n    && (!f.status || f.status.includes(b.status))\n    && (!f.from || Date.parse(b.endAt) > Date.parse(f.from))\n    && (!f.to || Date.parse(b.startAt) < Date.parse(f.to))\n    && (!f.q || fold(b.purpose ?? '').includes(fold(f.q)));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The lesson’s handler: filters joined by AND, a status list, the overlap test shared with booking conflicts, and a search that ignores accents and case.</p>",
+      "solutionExplanationHtmlVi": "<p>Handler của bài: bộ lọc nối bằng AND, danh sách trạng thái, phép thử chồng lên dùng chung với xung đột lịch, và tìm kiếm bỏ qua dấu và hoa thường.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Lab and a status list",
+              "vi": "Phòng và danh sách trạng thái"
+            },
+            "goi": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T02:00:00.000Z\",\"endAt\":\"2026-11-03T04:00:00.000Z\",\"purpose\":\"CLB IoT\"}, {\"labId\":\"lab_1\",\"status\":[\"PENDING\",\"CANCELLED\"]})",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "06:00–08:00 Hanoi overlaps 07:00–11:00",
+              "vi": "06:00–08:00 giờ Hà Nội chồng lên 07:00–11:00"
+            },
+            "goi": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-02T23:00:00.000Z\",\"endAt\":\"2026-11-03T01:00:00.000Z\",\"purpose\":\"CLB IoT\"}, {\"from\":\"2026-11-03T07:00:00+07:00\",\"to\":\"2026-11-03T11:00:00+07:00\"})",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 3: matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T02:...",
+              "vi": "Ca 3"
+            },
+            "goi": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T02:00:00.000Z\",\"endAt\":\"2026-11-03T04:00:00.000Z\",\"purpose\":\"CLB IoT\"}, {\"q\":\"clb iot\"})",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Starts exactly at to ⇒ outside [from, to)",
+              "vi": "Bắt đầu đúng lúc to ⇒ ngoài [from, to)"
+            },
+            "goi": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T04:00:00.000Z\",\"endAt\":\"2026-11-03T06:00:00.000Z\",\"purpose\":\"CLB IoT\"}, {\"from\":\"2026-11-03T07:00:00+07:00\",\"to\":\"2026-11-03T11:00:00+07:00\"})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T02:00:00.000Z\",\"endAt\":\"2026-11-03T04:00:00.000Z\",\"purpose\":\"Ôn thi Đồ án\"}, {\"q\":\"do an\"})",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"CANCELLED\",\"startAt\":\"2026-11-03T02:00:00.000Z\",\"endAt\":\"2026-11-03T04:00:00.000Z\"}, {\"status\":[\"CANCELLED\"],\"q\":\"iot\"})",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "matchBooking({\"id\":\"bk_19\",\"labId\":\"lab_1\",\"status\":\"PENDING\",\"startAt\":\"2026-11-03T02:00:00.000Z\",\"endAt\":\"2026-11-03T04:00:00.000Z\",\"purpose\":\"CLB IoT\"}, {\"labId\":\"lab_2\",\"q\":\"iot\"})",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "startAt ≥ from — a 06:00–08:00 booking is missing from “who is in the lab at 07:00”.|||startAt ≥ from — lượt 06:00–08:00 vắng mặt ở câu \"ai đang ở lab lúc 07:00\"."
+        },
+        {
+          "loi": "Comparing ISO strings with different offsets as text.|||So chuỗi ISO khác độ lệch múi giờ như văn bản."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "overlap test",
+          "vi": "phép thử chồng lên"
+        },
+        {
+          "en": "fold",
+          "vi": "gấp chữ: bỏ dấu, đ → d, chữ thường"
+        }
+      ]
+    },
+    {
+      "title": "Filters 3 — Write canonicalQuery(params): what a cursor fingerprint hashes",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "canonicalization",
+        "cursor pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>LabFlow binds a cursor to its query by hashing the filters. The hash only works if the <b>same query always gives the same text</b>. Write <code>canonicalQuery(params)</code>:</p><ul>\n<li>drop <code>limit</code> and <code>cursor</code> (changing the page size between pages is allowed) and every value that is <code>undefined</code> or <code>null</code></li>\n<li>sort the remaining keys alphabetically</li>\n<li>arrays become comma-joined strings; encode key and value with <code>encodeURIComponent</code></li>\n<li>join as <code>key=value</code> pairs with <code>&amp;</code></li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow gắn con trỏ với truy vấn bằng cách băm bộ lọc. Phép băm chỉ đúng khi <b>cùng một truy vấn luôn cho cùng một chuỗi</b>. Viết <code>canonicalQuery(params)</code>:</p><ul>\n<li>bỏ <code>limit</code> và <code>cursor</code> (đổi cỡ trang giữa các trang là được phép) và mọi giá trị <code>undefined</code> hoặc <code>null</code></li>\n<li>sắp các khoá còn lại theo bảng chữ cái</li>\n<li>mảng thành chuỗi nối bằng dấu phẩy; mã hoá khoá và giá trị bằng <code>encodeURIComponent</code></li>\n<li>nối thành các cặp <code>khoá=giá_trị</code> bằng <code>&amp;</code></li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "params — an object of validated query values|||params — object các giá trị query đã kiểm",
+      "outputSpec": "string — e.g. \"labId=lab_1&status=PENDING%2CCANCELLED\"|||chuỗi — ví dụ \"labId=lab_1&status=PENDING%2CCANCELLED\"",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "canonicalQuery({\"limit\":2,\"labId\":\"lab_1\"})",
+          "output": "\"labId=lab_1\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Object.keys(params).filter(…).sort().map(…).join(\"&amp;\").",
+        "encodeURIComponent turns \",\" into %2C, \" \" into %20 and \"+\" into %2B.|||encodeURIComponent đổi \",\" thành %2C, \" \" thành %20 và \"+\" thành %2B."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** validated query ⇒ canonical text (to be hashed into the cursor) */\nfunction canonicalQuery(params) {\n  // Write your solution here\n  return Object.keys(params).map((k) => k + '=' + params[k]).join('&');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction canonicalQuery(params) {\n  return Object.keys(params)\n    .filter((k) => k !== 'limit' && k !== 'cursor' && params[k] !== undefined && params[k] !== null)\n    .sort()\n    .map((k) => `${encodeURIComponent(k)}=${encodeURIComponent(Array.isArray(params[k]) ? params[k].join(',') : params[k])}`)\n    .join('&');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A canonical form makes equal queries equal text. Hash it (sha256, first 8 hex characters in LabFlow) and store it in the cursor; another filter set gives other text ⇒ 400 CURSOR_MISMATCH.</p>",
+      "solutionExplanationHtmlVi": "<p>Dạng chuẩn tắc làm các truy vấn bằng nhau thành chuỗi bằng nhau. Băm nó (sha256, 8 ký tự hex đầu ở LabFlow) và cất vào con trỏ; bộ lọc khác cho chuỗi khác ⇒ 400 CURSOR_MISMATCH.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Lesson 3.3: labId=lab_1&limit=2",
+              "vi": "Bài 3.3: labId=lab_1&limit=2"
+            },
+            "goi": "canonicalQuery({\"limit\":2,\"labId\":\"lab_1\"})",
+            "mongDoi": "labId=lab_1"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: canonicalQuery({\"status\":[\"PENDING\",\"CANCELLED\"],\"labId\":\"lab_2\",\"q\":\"clb iot\"})",
+              "vi": "Ca 2"
+            },
+            "goi": "canonicalQuery({\"status\":[\"PENDING\",\"CANCELLED\"],\"labId\":\"lab_2\",\"q\":\"clb iot\"})",
+            "mongDoi": "labId=lab_2&q=clb%20iot&status=PENDING%2CCANCELLED"
+          },
+          {
+            "moTa": {
+              "en": "Same query, other order and page size",
+              "vi": "Cùng truy vấn, khác thứ tự và cỡ trang"
+            },
+            "goi": "canonicalQuery({\"q\":\"clb iot\",\"status\":[\"PENDING\",\"CANCELLED\"],\"labId\":\"lab_2\",\"limit\":50,\"cursor\":\"eyJ…\"})",
+            "mongDoi": "labId=lab_2&q=clb%20iot&status=PENDING%2CCANCELLED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "canonicalQuery({\"from\":\"2026-11-03T07:00:00+07:00\",\"labId\":null})",
+            "mongDoi": "from=2026-11-03T07%3A00%3A00%2B07%3A00",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "canonicalQuery({\"limit\":20})",
+            "mongDoi": "",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping limit — a client that changes the page size then gets CURSOR_MISMATCH.|||Giữ limit — client đổi cỡ trang khi đó bị CURSOR_MISMATCH."
+        },
+        {
+          "loi": "Not sorting — {a, b} and {b, a} give different fingerprints for the same query.|||Không sắp — {a, b} và {b, a} cho dấu vân tay khác nhau với cùng một truy vấn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "canonical form",
+          "vi": "dạng chuẩn tắc"
+        },
+        {
+          "en": "fingerprint",
+          "vi": "dấu vân tay (giá trị băm ngắn)"
+        }
+      ]
+    },
+    {
+      "title": "Filters 4 — Which answer, which code?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "error codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Each request goes to LabFlow at the end of lesson 3.3 (Lan’s token). Choose the status and the problem code (— for success).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi request gửi tới LabFlow ở cuối bài 3.3 (token của cô Lan). Chọn mã trạng thái và code của problem (— nếu thành công).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: is the cursor unreadable, or readable but for another query?|||Hỏi: con trỏ không đọc được, hay đọc được nhưng của truy vấn khác?",
+        "A raw + becomes a space before validation.|||Dấu + trần thành dấu cách trước khi kiểm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Filters 4 — Which answer, which code?\n\nAnswer in the answer panel (no code needed).\n\n1. Request → status + codeRequest → mã + code\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Filters 4 — Which answer, which code? — answer key\n\n1. Request → status + codeRequest → mã + code\n   - r1.s: 200\n   - r1.c: —\n   - r2.s: 400\n   - r2.c: INVALID_QUERY\n   - r3.s: 400\n   - r3.c: INVALID_QUERY\n   - r4.s: 400\n   - r4.c: INVALID_CURSOR\n   - r5.s: 400\n   - r5.c: CURSOR_MISMATCH\n   - r6.s: 200\n   - r6.c: —\n   Bad query values ⇒ INVALID_QUERY with every parameter listed; an unreadable cursor ⇒ INVALID_CURSOR; a readable cursor made for other filters ⇒ CURSOR_MISMATCH. limit is not part of the fingerprint.VI: Giá trị query sai ⇒ INVALID_QUERY kèm đủ mọi tham số; con trỏ không đọc được ⇒ INVALID_CURSOR; con trỏ đọc được nhưng làm cho bộ lọc khác ⇒ CURSOR_MISMATCH. limit không thuộc dấu vân tay.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bad query values ⇒ INVALID_QUERY with every parameter listed; an unreadable cursor ⇒ INVALID_CURSOR; a readable cursor made for other filters ⇒ CURSOR_MISMATCH. limit is not part of the fingerprint.</p><p><i>VI: Giá trị query sai ⇒ INVALID_QUERY kèm đủ mọi tham số; con trỏ không đọc được ⇒ INVALID_CURSOR; con trỏ đọc được nhưng làm cho bộ lọc khác ⇒ CURSOR_MISMATCH. limit không thuộc dấu vân tay.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Request → status + code</p><p style=\"opacity:.75;font-size:.92em\"><i>Request → mã + code</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "s",
+                "ten": "Status",
+                "luaChon": [
+                  "200",
+                  "400"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "code",
+                "luaChon": [
+                  "—",
+                  "INVALID_QUERY",
+                  "INVALID_CURSOR",
+                  "CURSOR_MISMATCH"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "?labId=lab_2&status=CANCELLED&limit=3"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "?status=PENDING,DONE"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "?from=2026-11-03T07:00:00+07:00 (raw +)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "?cursor=hello"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "?labId=lab_2&cursor=<page.next of a labId=lab_1 list>"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "?labId=lab_1&limit=5&cursor=<page.next of labId=lab_1&limit=2>"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "200",
+              "r1.c": "—",
+              "r2.s": "400",
+              "r2.c": "INVALID_QUERY",
+              "r3.s": "400",
+              "r3.c": "INVALID_QUERY",
+              "r4.s": "400",
+              "r4.c": "INVALID_CURSOR",
+              "r5.s": "400",
+              "r5.c": "CURSOR_MISMATCH",
+              "r6.s": "200",
+              "r6.c": "—"
+            },
+            "giaiThich": "<p>Bad query values ⇒ INVALID_QUERY with every parameter listed; an unreadable cursor ⇒ INVALID_CURSOR; a readable cursor made for other filters ⇒ CURSOR_MISMATCH. limit is not part of the fingerprint.</p><p><i>VI: Giá trị query sai ⇒ INVALID_QUERY kèm đủ mọi tham số; con trỏ không đọc được ⇒ INVALID_CURSOR; con trỏ đọc được nhưng làm cho bộ lọc khác ⇒ CURSOR_MISMATCH. limit không thuộc dấu vân tay.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 200 with page 1 for a mismatched cursor.|||Trả 200 với trang 1 cho con trỏ lệch."
+        },
+        {
+          "loi": "Treating a page-size change as a different query.|||Coi việc đổi cỡ trang là một truy vấn khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "INVALID_QUERY",
+          "vi": "query không hợp lệ"
+        },
+        {
+          "en": "CURSOR_MISMATCH",
+          "vi": "con trỏ không khớp bộ lọc"
+        }
+      ]
+    }
+  ]
+}

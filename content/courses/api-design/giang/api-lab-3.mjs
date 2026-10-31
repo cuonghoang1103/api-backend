@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 3 "Danh sách bảo trì" (deck api-lab-3, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-lab-3', 'Lab 3 — The maintenance list', 'Lab 3 — Danh sách bảo trì', [
+  [1, 'Cover',
+    `<p>Every Monday the lab managers go through broken devices. In Lab 3 you give them GET /issues: most severe first, a page at a time, and never a duplicate.</p>`,
+    `<p>Thứ Hai nào các quản lý phòng lab cũng rà thiết bị hỏng. Ở Lab 3 bạn đưa cho họ GET /issues: nặng nhất trước, từng trang một, và không bao giờ trùng.</p>`],
+  [2, 'The request',
+    `<p>Twenty-five issues at a time, never more than a hundred. Filters for status, severity and device. Newest first by default, oldest first on request, and most severe first for the meeting. The device’s name next to each issue. And a script that walks the whole list without missing or repeating, even while students report. Budget: 15 minutes of design, 60 to 90 of building, 20 of proof.</p>`,
+    `<p>Mỗi lần 25 báo hỏng, không bao giờ quá 100. Lọc theo status, severity và thiết bị. Mặc định mới nhất trước, cũ nhất trước khi được yêu cầu, và nặng nhất trước cho cuộc họp. Tên thiết bị cạnh mỗi báo hỏng. Và một script đi hết danh sách mà không sót, không lặp, kể cả khi sinh viên vẫn đang báo. Thời gian: 15 phút thiết kế, 60 tới 90 phút xây, 20 phút chứng minh.</p>`],
+  [3, 'Design first',
+    `<p>Write the full query contract; the order for each sort value with its tie-breaker — and why -severity cannot compare strings, since alphabetically HIGH comes before LOW before MEDIUM; what the cursor holds for -severity; and the status and code for limit 0, sort=title, an edited cursor and a cursor reused with another device.</p>`,
+    `<p>Viết đủ hợp đồng query; thứ tự cho từng giá trị sort kèm khoá phụ — và vì sao -severity không so chuỗi được, vì theo bảng chữ cái HIGH đứng trước LOW, LOW trước MEDIUM; con trỏ chứa gì với -severity; và status cùng code cho limit 0, sort=title, con trỏ bị sửa và con trỏ dùng lại với thiết bị khác.</p>`],
+  [4, 'Six rules',
+    `<p>A strict schema with limit 1 to 100, three sort values and include=device. Severity sorted by business rank, LOW 1, MEDIUM 2, HIGH 3, with the id as tie-breaker. Cursors with the helpers you already have — extend orderBy rather than writing a second comparator — a fingerprint over filters and sort, a Link header and next null at the end. One Map of devices per page. Bilingual problem documents. And walk.mjs, which follows page.next and reports duplicates.</p>`,
+    `<p>Một schema strict với limit 1 tới 100, ba giá trị sort và include=device. Severity sắp theo thứ hạng nghiệp vụ, LOW 1, MEDIUM 2, HIGH 3, với id làm khoá phụ. Con trỏ bằng các hàm đã có — mở rộng orderBy thay vì viết bộ so sánh thứ hai — dấu vân tay trên bộ lọc và sort, header Link và next null ở cuối. Một Map thiết bị cho mỗi trang. Problem document hai thứ tiếng. Và walk.mjs đi theo page.next và báo bản trùng.</p>`],
+  [5, 'Reference solution',
+    `<p>orderBy learns an optional ranks argument: for a ranked key it compares numbers, otherwise strings, and the id always breaks ties. The route calls it with the severity ranks and computes the fingerprint over status, severity, deviceId and sort. For -severity the cursor holds v HIGH, the id and the fingerprint. The seed, schema, full route and walk.mjs are in the lesson text.</p>`,
+    `<p>orderBy nhận thêm tham số ranks tuỳ chọn: với khoá có thứ hạng thì so số, không thì so chuỗi, và id luôn phân xử khi ngang nhau. Route gọi nó với thứ hạng severity và tính dấu vân tay trên status, severity, deviceId và sort. Với -severity, con trỏ chứa v là HIGH, id và dấu vân tay. Seed, schema, route đầy đủ và walk.mjs nằm trong phần bài viết.</p>`],
+  [6, 'Transcript 1',
+    `<p>The first page with -i shows iss_60, 59 and 58 and a Link header. Following next gives iss_57, 56, 55 — page two starts right after iss_58. sort=-severity with status OPEN gives five HIGH issues, newest first among equals.</p>`,
+    `<p>Trang đầu với -i cho iss_60, 59 và 58 cùng header Link. Đi theo next được iss_57, 56, 55 — trang hai bắt đầu ngay sau iss_58. sort=-severity với status OPEN cho năm báo hỏng HIGH, trong các báo hỏng ngang nhau thì mới nhất trước.</p>`],
+  [7, 'Transcript 2',
+    `<p>Filtering dev_3 and HIGH with include=device returns the issue with its device embedded. limit 0 and sort=title return both errors in one answer. The cursor of step one was made for “no filter”, so with deviceId dev_2 it is refused with CURSOR_MISMATCH instead of a silently wrong page. And walk.mjs reports two pages, 45 open issues, no duplicates.</p>`,
+    `<p>Lọc dev_3 và HIGH với include=device trả báo hỏng kèm thiết bị được nhúng. limit 0 và sort=title trả cả hai lỗi trong một câu trả lời. Con trỏ của bước một được tạo cho “không lọc”, nên với deviceId dev_2 nó bị từ chối bằng CURSOR_MISMATCH thay vì lặng lẽ trả một trang sai. Và walk.mjs báo hai trang, 45 báo hỏng đang mở, không trùng.</p>`],
+  [8, 'Rubric',
+    `<p>Ten points, pass at seven: two for the query contract, two for stable orders with severity by rank, two for the cursor, one for include without per-row lookups, two for walk.mjs seeing every open issue once — also with your own insert in the middle of the walk — and one for a complete, unedited transcript. Hand everything in as one commit.</p>`,
+    `<p>Mười điểm, đạt ở bảy: hai cho hợp đồng query, hai cho thứ tự ổn định với severity theo thứ hạng, hai cho con trỏ, một cho include không tra từng dòng, hai cho walk.mjs thấy mọi báo hỏng đang mở đúng một lần — kể cả khi bạn tự chèn một báo hỏng giữa lúc đi — và một cho transcript đầy đủ, không chỉnh sửa. Nộp tất cả trong một commit.</p>`],
+  [9, 'Stretch and next',
+    `<p>Stretch goals: a prev cursor to scroll back, an HMAC signature that rejects modified cursors, and fields for issues. Then the Chapter 3 quiz. And Chapter 4 asks the next question: your API now has clients — how do you change it without breaking them?</p>`,
+    `<p>Mục tiêu nâng cao: con trỏ prev để cuộn ngược, chữ ký HMAC để từ chối con trỏ bị sửa, và fields cho báo hỏng. Sau đó là bài trắc nghiệm Chương 3. Và Chương 4 đặt câu hỏi tiếp theo: API của bạn giờ đã có client — làm sao thay đổi nó mà không làm họ hỏng?</p>`],
+]);

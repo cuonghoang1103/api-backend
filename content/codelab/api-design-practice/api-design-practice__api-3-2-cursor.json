@@ -1,0 +1,625 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-3-2-cursor",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-3-2-cursor"
+  },
+  "exercises": [
+    {
+      "title": "Cursor 1 — Bookmarks, not page numbers",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "cursor pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 3.2 (real LabFlow runs and PostgreSQL 18.4 plans).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 3.2 (chạy thật trên LabFlow và kế hoạch PostgreSQL 18.4).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A cursor is the position of the LAST item you received.|||Con trỏ là vị trí của phần tử CUỐI bạn đã nhận.",
+        "Look at the measured plans again.|||Xem lại các kế hoạch đã đo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cursor 1 — Bookmarks, not page numbers\n\nAnswer in the answer panel (no code needed).\n\n1. Page 1 ends at bk_196, An inserts bk_201, the client sends page.next. Page 2 starts with …Trang 1 kết thúc ở bk_196, An chèn bk_201, client gửi page.next. Trang 2 bắt đầu bằng …\n2. Decoded, LabFlow’s 3.2 cursor is {\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}. Why is it documented as opaque?Giải mã ra, con trỏ 3.2 của LabFlow là {\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}. Vì sao tài liệu ghi nó là \"mờ\"?\n3. A cursor holding only createdAt fails when …Con trỏ chỉ chứa createdAt hỏng khi …\n4. Keyset at depth 900 000 took 0.064 ms; OFFSET took 78.316 ms. What does the keyset plan show?Keyset ở độ sâu 900 000 mất 0,064 ms; OFFSET mất 78,316 ms. Kế hoạch keyset cho thấy gì?\n5. After 3.2 a client still sends ?offset=5. LabFlow answers …Sau bài 3.2 một client vẫn gửi ?offset=5. LabFlow trả …\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cursor 1 — Bookmarks, not page numbers — answer key\n\n1. Page 1 ends at bk_196, An inserts bk_201, the client sends page.next. Page 2 starts with …Trang 1 kết thúc ở bk_196, An chèn bk_201, client gửi page.next. Trang 2 bắt đầu bằng …\n   Answer: c) bk_195 — the row right after the bookmark\n   The cursor says “after (createdAt, id) of bk_196”; inserts above that position do not move it.VI: Con trỏ nói \"sau (createdAt, id) của bk_196\"; dòng chèn phía trên vị trí đó không làm nó lệch.\n\n2. Decoded, LabFlow’s 3.2 cursor is {\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}. Why is it documented as opaque?Giải mã ra, con trỏ 3.2 của LabFlow là {\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}. Vì sao tài liệu ghi nó là \"mờ\"?\n   Answer: a) Once clients parse it, the server can never change its format\n   Nothing secret inside. “Opaque” is a contract: copy it back, never read or build it — so the server stays free to change it (lesson 3.4 does).VI: Bên trong chẳng có gì bí mật. \"Mờ\" là một hợp đồng: chép gửi lại, không đọc hay tự dựng — để server còn được đổi nó (bài 3.4 đã đổi).\n\n3. A cursor holding only createdAt fails when …Con trỏ chỉ chứa createdAt hỏng khi …\n   Answer: c) two rows share the same createdAt — “after this time” skips the twin\n   The position must be unique: every sort key plus a unique tie-breaker (the id).VI: Vị trí phải là duy nhất: mọi khoá sắp xếp cộng một khoá phụ duy nhất (id).\n\n4. Keyset at depth 900 000 took 0.064 ms; OFFSET took 78.316 ms. What does the keyset plan show?Keyset ở độ sâu 900 000 mất 0,064 ms; OFFSET mất 78,316 ms. Kế hoạch keyset cho thấy gì?\n   Answer: b) An Index Cond on (created_at, id) and rows=20\n   The row comparison lets the index seek straight to the bookmark — 20 rows read at any depth.VI: Phép so sánh cả hàng cho index tìm thẳng tới bookmark — đọc 20 dòng ở mọi độ sâu.\n\n5. After 3.2 a client still sends ?offset=5. LabFlow answers …Sau bài 3.2 một client vẫn gửi ?offset=5. LabFlow trả …\n   Answer: d) 400 — offset is now an unknown parameter of the strict schema\n   A breaking change. Fine before release; after release keep offset working for a while (Chapter 4).VI: Một thay đổi phá vỡ. Ổn trước khi phát hành; sau khi phát hành phải giữ offset chạy thêm một thời gian (Chương 4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> bk_195 — the row right after the bookmark</p><p>The cursor says “after (createdAt, id) of bk_196”; inserts above that position do not move it.</p><p><i>VI: Con trỏ nói \"sau (createdAt, id) của bk_196\"; dòng chèn phía trên vị trí đó không làm nó lệch.</i></p></li><li><p><b>a)</b> Once clients parse it, the server can never change its format</p><p>Nothing secret inside. “Opaque” is a contract: copy it back, never read or build it — so the server stays free to change it (lesson 3.4 does).</p><p><i>VI: Bên trong chẳng có gì bí mật. \"Mờ\" là một hợp đồng: chép gửi lại, không đọc hay tự dựng — để server còn được đổi nó (bài 3.4 đã đổi).</i></p></li><li><p><b>c)</b> two rows share the same createdAt — “after this time” skips the twin</p><p>The position must be unique: every sort key plus a unique tie-breaker (the id).</p><p><i>VI: Vị trí phải là duy nhất: mọi khoá sắp xếp cộng một khoá phụ duy nhất (id).</i></p></li><li><p><b>b)</b> An Index Cond on (created_at, id) and rows=20</p><p>The row comparison lets the index seek straight to the bookmark — 20 rows read at any depth.</p><p><i>VI: Phép so sánh cả hàng cho index tìm thẳng tới bookmark — đọc 20 dòng ở mọi độ sâu.</i></p></li><li><p><b>d)</b> 400 — offset is now an unknown parameter of the strict schema</p><p>A breaking change. Fine before release; after release keep offset working for a while (Chapter 4).</p><p><i>VI: Một thay đổi phá vỡ. Ổn trước khi phát hành; sau khi phát hành phải giữ offset chạy thêm một thời gian (Chương 4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Page 1 ends at bk_196, An inserts bk_201, the client sends page.next. Page 2 starts with …</p><p style=\"opacity:.75;font-size:.92em\"><i>Trang 1 kết thúc ở bk_196, An chèn bk_201, client gửi page.next. Trang 2 bắt đầu bằng …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "bk_196 — the new row pushed it down"
+              },
+              {
+                "ma": "b",
+                "noiDung": "bk_201 — new rows always come first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "bk_195 — the row right after the bookmark"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an INVALID_CURSOR error, because the list changed"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The cursor says “after (createdAt, id) of bk_196”; inserts above that position do not move it.</p><p><i>VI: Con trỏ nói \"sau (createdAt, id) của bk_196\"; dòng chèn phía trên vị trí đó không làm nó lệch.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Decoded, LabFlow’s 3.2 cursor is {\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}. Why is it documented as opaque?</p><p style=\"opacity:.75;font-size:.92em\"><i>Giải mã ra, con trỏ 3.2 của LabFlow là {\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}. Vì sao tài liệu ghi nó là \"mờ\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Once clients parse it, the server can never change its format"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because base64url cannot be decoded in browsers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because it contains secrets that clients must not see"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the HTTP standard forbids JSON in query strings"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Nothing secret inside. “Opaque” is a contract: copy it back, never read or build it — so the server stays free to change it (lesson 3.4 does).</p><p><i>VI: Bên trong chẳng có gì bí mật. \"Mờ\" là một hợp đồng: chép gửi lại, không đọc hay tự dựng — để server còn được đổi nó (bài 3.4 đã đổi).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A cursor holding only createdAt fails when …</p><p style=\"opacity:.75;font-size:.92em\"><i>Con trỏ chỉ chứa createdAt hỏng khi …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "createdAt is stored in UTC instead of Hanoi time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the client sends the same cursor twice in a row by accident"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two rows share the same createdAt — “after this time” skips the twin"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the list grows beyond 100 rows and the limit has to be raised"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The position must be unique: every sort key plus a unique tie-breaker (the id).</p><p><i>VI: Vị trí phải là duy nhất: mọi khoá sắp xếp cộng một khoá phụ duy nhất (id).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Keyset at depth 900 000 took 0.064 ms; OFFSET took 78.316 ms. What does the keyset plan show?</p><p style=\"opacity:.75;font-size:.92em\"><i>Keyset ở độ sâu 900 000 mất 0,064 ms; OFFSET mất 78,316 ms. Kế hoạch keyset cho thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A sort of one million rows in memory"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An Index Cond on (created_at, id) and rows=20"
+              },
+              {
+                "ma": "c",
+                "noiDung": "rows=900020, but read from cache"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A sequential scan of the whole table"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The row comparison lets the index seek straight to the bookmark — 20 rows read at any depth.</p><p><i>VI: Phép so sánh cả hàng cho index tìm thẳng tới bookmark — đọc 20 dòng ở mọi độ sâu.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>After 3.2 a client still sends ?offset=5. LabFlow answers …</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau bài 3.2 một client vẫn gửi ?offset=5. LabFlow trả …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "200, silently ignoring the unknown offset parameter"
+              },
+              {
+                "ma": "b",
+                "noiDung": "410 Gone, because offset pagination was retired"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 with page 2, because offset still works as before"
+              },
+              {
+                "ma": "d",
+                "noiDung": "400 — offset is now an unknown parameter of the strict schema"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A breaking change. Fine before release; after release keep offset working for a while (Chapter 4).</p><p><i>VI: Một thay đổi phá vỡ. Ổn trước khi phát hành; sau khi phát hành phải giữ offset chạy thêm một thời gian (Chương 4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the cursor must be secret.|||Nghĩ rằng con trỏ phải bí mật."
+        },
+        {
+          "loi": "Leaving the tie-breaker out of the cursor.|||Bỏ khoá phụ khỏi con trỏ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cursor",
+          "vi": "con trỏ phân trang"
+        },
+        {
+          "en": "keyset / seek pagination",
+          "vi": "phân trang theo khoá"
+        }
+      ]
+    },
+    {
+      "title": "Cursor 2 — Write afterCursor(rows, cursor, limit)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "cursor pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Sort <code>rows</code> newest first (createdAt, then the id’s number, both descending). If <code>cursor</code> (<code>{ createdAt, id }</code>) is given, keep only the rows that come <b>after</b> it in that order. Return <code>{ ids, next }</code>: the ids of the first <code>limit</code> rows, and <code>next</code> = <code>{ createdAt, id }</code> of the last returned row when more rows remain, otherwise <code>null</code>.</p><p>Use <b>the same comparator</b> for sorting and for “after” — then the two can never disagree.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp <code>rows</code> mới nhất trước (createdAt, rồi con số của id, cả hai giảm dần). Nếu có <code>cursor</code> (<code>{ createdAt, id }</code>), chỉ giữ các dòng đứng <b>sau</b> nó theo thứ tự đó. Trả <code>{ ids, next }</code>: id của <code>limit</code> dòng đầu, và <code>next</code> = <code>{ createdAt, id }</code> của dòng cuối được trả khi còn dòng, ngược lại <code>null</code>.</p><p>Dùng <b>cùng một bộ so sánh</b> cho việc sắp và cho \"sau\" — khi đó hai việc không bao giờ lệch nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "rows — [{ id, createdAt }]; cursor — { createdAt, id } | null; limit ≥ 1",
+      "outputSpec": "{ ids: string[], next: { createdAt, id } | null }|||{ ids: mảng chuỗi, next: { createdAt, id } | null }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "afterCursor([{\"id\":\"bk_196\",\"createdAt\":\"2026-10-01T03:16:00.000Z\"},{\"id\":\"bk_197\",\"createdAt\":\"2026-10-01T03:17:00.000Z\"},{\"id\":\"bk_198\",\"createdAt\":\"2026-10-01T03:18:00.000Z\"},{\"id\":\"bk_199\",\"createdAt\":\"2026-10-01T03:19:00.000Z\"},{\"id\":\"bk_200\",\"createdAt\":\"2026-10-01T03:20:00.000Z\"}], null, 2)",
+          "output": "{\"ids\":[\"bk_200\",\"bk_199\"],\"next\":{\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The cursor is shaped like a row, so newestFirst(cursor, r) &lt; 0 means “r comes after the cursor”.|||Con trỏ có dạng giống một dòng, nên newestFirst(cursor, r) &lt; 0 nghĩa là \"r đứng sau con trỏ\".",
+        "More rows remain ⇔ list.length &gt; limit — no total needed.|||Còn dòng ⇔ list.length &gt; limit — không cần total."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** rows ⇒ the page after the cursor + the next cursor */\nfunction afterCursor(rows, cursor, limit) {\n  // Write your solution here\n  let list = [...rows].sort((a, b) => b.createdAt.localeCompare(a.createdAt));\n  if (cursor) list = list.filter((r) => r.createdAt < cursor.createdAt);\n  const page = list.slice(0, limit), last = page[page.length - 1];\n  return { ids: page.map((r) => r.id), next: last ? { createdAt: last.createdAt, id: last.id } : null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction afterCursor(rows, cursor, limit) {\n  const idNum = (id) => Number(id.slice(id.indexOf('_') + 1));\n  const newestFirst = (a, b) => b.createdAt.localeCompare(a.createdAt) || idNum(b.id) - idNum(a.id);\n  let list = [...rows].sort(newestFirst);\n  if (cursor) list = list.filter((r) => newestFirst(cursor, r) < 0);\n  const page = list.slice(0, limit);\n  const last = page[page.length - 1];\n  return { ids: page.map((r) => r.id), next: list.length > limit ? { createdAt: last.createdAt, id: last.id } : null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is LabFlow’s handler from lesson 3.2. Twins (bk_9, bk_8, bk_7 at 03:05) page correctly only because the id is part of the position.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là handler của LabFlow ở bài 3.2. Các dòng sinh đôi (bk_9, bk_8, bk_7 lúc 03:05) chỉ phân trang đúng vì id là một phần của vị trí.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First page",
+              "vi": "Trang đầu"
+            },
+            "goi": "afterCursor([{\"id\":\"bk_196\",\"createdAt\":\"2026-10-01T03:16:00.000Z\"},{\"id\":\"bk_197\",\"createdAt\":\"2026-10-01T03:17:00.000Z\"},{\"id\":\"bk_198\",\"createdAt\":\"2026-10-01T03:18:00.000Z\"},{\"id\":\"bk_199\",\"createdAt\":\"2026-10-01T03:19:00.000Z\"},{\"id\":\"bk_200\",\"createdAt\":\"2026-10-01T03:20:00.000Z\"}], null, 2)",
+            "mongDoi": {
+              "ids": [
+                "bk_200",
+                "bk_199"
+              ],
+              "next": {
+                "createdAt": "2026-10-01T03:19:00.000Z",
+                "id": "bk_199"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "After bk_199",
+              "vi": "Sau bk_199"
+            },
+            "goi": "afterCursor([{\"id\":\"bk_196\",\"createdAt\":\"2026-10-01T03:16:00.000Z\"},{\"id\":\"bk_197\",\"createdAt\":\"2026-10-01T03:17:00.000Z\"},{\"id\":\"bk_198\",\"createdAt\":\"2026-10-01T03:18:00.000Z\"},{\"id\":\"bk_199\",\"createdAt\":\"2026-10-01T03:19:00.000Z\"},{\"id\":\"bk_200\",\"createdAt\":\"2026-10-01T03:20:00.000Z\"}], {\"createdAt\":\"2026-10-01T03:19:00.000Z\",\"id\":\"bk_199\"}, 2)",
+            "mongDoi": {
+              "ids": [
+                "bk_198",
+                "bk_197"
+              ],
+              "next": {
+                "createdAt": "2026-10-01T03:17:00.000Z",
+                "id": "bk_197"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Twins at 03:05",
+              "vi": "Các dòng sinh đôi lúc 03:05"
+            },
+            "goi": "afterCursor([{\"id\":\"bk_7\",\"createdAt\":\"2026-10-01T03:05:00.000Z\"},{\"id\":\"bk_8\",\"createdAt\":\"2026-10-01T03:05:00.000Z\"},{\"id\":\"bk_9\",\"createdAt\":\"2026-10-01T03:05:00.000Z\"},{\"id\":\"bk_6\",\"createdAt\":\"2026-10-01T03:04:00.000Z\"}], {\"createdAt\":\"2026-10-01T03:05:00.000Z\",\"id\":\"bk_9\"}, 2)",
+            "mongDoi": {
+              "ids": [
+                "bk_8",
+                "bk_7"
+              ],
+              "next": {
+                "createdAt": "2026-10-01T03:05:00.000Z",
+                "id": "bk_7"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The last page",
+              "vi": "Trang cuối"
+            },
+            "goi": "afterCursor([{\"id\":\"bk_196\",\"createdAt\":\"2026-10-01T03:16:00.000Z\"},{\"id\":\"bk_197\",\"createdAt\":\"2026-10-01T03:17:00.000Z\"},{\"id\":\"bk_198\",\"createdAt\":\"2026-10-01T03:18:00.000Z\"},{\"id\":\"bk_199\",\"createdAt\":\"2026-10-01T03:19:00.000Z\"},{\"id\":\"bk_200\",\"createdAt\":\"2026-10-01T03:20:00.000Z\"}], {\"createdAt\":\"2026-10-01T03:17:00.000Z\",\"id\":\"bk_197\"}, 5)",
+            "mongDoi": {
+              "ids": [
+                "bk_196"
+              ],
+              "next": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A row inserted at the top",
+              "vi": "Một dòng chèn lên đầu"
+            },
+            "goi": "afterCursor([{\"id\":\"bk_196\",\"createdAt\":\"2026-10-01T03:16:00.000Z\"},{\"id\":\"bk_197\",\"createdAt\":\"2026-10-01T03:17:00.000Z\"},{\"id\":\"bk_198\",\"createdAt\":\"2026-10-01T03:18:00.000Z\"},{\"id\":\"bk_199\",\"createdAt\":\"2026-10-01T03:19:00.000Z\"},{\"id\":\"bk_200\",\"createdAt\":\"2026-10-01T03:20:00.000Z\"},{\"id\":\"bk_201\",\"createdAt\":\"2026-10-31T19:20:34.129Z\"}], {\"createdAt\":\"2026-10-01T03:18:00.000Z\",\"id\":\"bk_198\"}, 3)",
+            "mongDoi": {
+              "ids": [
+                "bk_197",
+                "bk_196"
+              ],
+              "next": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Filtering by createdAt &lt; cursor.createdAt only — the twins with the same time disappear.|||Chỉ lọc createdAt &lt; cursor.createdAt — các dòng sinh đôi cùng thời điểm biến mất."
+        },
+        {
+          "loi": "Returning a next cursor on the last page.|||Trả con trỏ next ở trang cuối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "after",
+          "vi": "đứng sau (theo thứ tự sắp)"
+        },
+        {
+          "en": "next cursor",
+          "vi": "con trỏ trang sau"
+        }
+      ]
+    },
+    {
+      "title": "Cursor 3 — Write keysetSql(sort): the query behind a cursor",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "keyset pagination",
+        "SQL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>For a sort value like <code>-createdAt</code> or <code>startAt</code> (a leading <code>-</code> means descending), return the PostgreSQL text that fetches the page after a cursor:</p>\n<pre>WHERE (created_at, id) &lt; ($1, $2) ORDER BY created_at DESC, id DESC LIMIT $3</pre>\n<ul><li>column = the field in snake_case (<code>startAt</code> → <code>start_at</code>)</li>\n<li>descending ⇒ <code>&lt;</code> and <code>DESC</code>; ascending ⇒ <code>&gt;</code> and <code>ASC</code></li>\n<li>the id is always the second column, in the same direction</li></ul>\n<p>Values stay in <code>$1 $2 $3</code> placeholders — never glued into the text.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với một giá trị sort như <code>-createdAt</code> hay <code>startAt</code> (dấu <code>-</code> ở đầu nghĩa là giảm dần), trả đoạn PostgreSQL lấy trang sau một con trỏ:</p>\n<pre>WHERE (created_at, id) &lt; ($1, $2) ORDER BY created_at DESC, id DESC LIMIT $3</pre>\n<ul><li>cột = tên trường dạng snake_case (<code>startAt</code> → <code>start_at</code>)</li>\n<li>giảm dần ⇒ <code>&lt;</code> và <code>DESC</code>; tăng dần ⇒ <code>&gt;</code> và <code>ASC</code></li>\n<li>id luôn là cột thứ hai, cùng chiều</li></ul>\n<p>Giá trị nằm ở các chỗ giữ <code>$1 $2 $3</code> — không bao giờ dán thẳng vào chuỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "sort — \"-createdAt\" | \"createdAt\" | \"-startAt\" | \"startAt\" | …",
+      "outputSpec": "string — WHERE … ORDER BY … LIMIT $3|||chuỗi — WHERE … ORDER BY … LIMIT $3",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "keysetSql(\"-createdAt\")",
+          "output": "\"WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT $3\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "replace(/[A-Z]/g, (ch) =&gt; \"_\" + ch.toLowerCase()) turns camelCase into snake_case.|||replace(/[A-Z]/g, (ch) =&gt; \"_\" + ch.toLowerCase()) đổi camelCase sang snake_case.",
+        "Descending order ⇒ the next rows are SMALLER than the bookmark.|||Thứ tự giảm dần ⇒ các dòng tiếp theo NHỎ HƠN bookmark."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** sort ⇒ keyset SQL text */\nfunction keysetSql(sort) {\n  // Write your solution here\n  const col = sort.replace('-', '');\n  return `WHERE (${col}, id) < ($1, $2) ORDER BY ${col} DESC, id DESC LIMIT $3`;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction keysetSql(sort) {\n  const desc = sort.startsWith('-');\n  const col = sort.replace('-', '').replace(/[A-Z]/g, (ch) => '_' + ch.toLowerCase());\n  const dir = desc ? 'DESC' : 'ASC';\n  return `WHERE (${col}, id) ${desc ? '<' : '>'} ($1, $2) ORDER BY ${col} ${dir}, id ${dir} LIMIT $3`;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The row comparison and the ORDER BY must describe the same order, tie-breaker included; then an index on (column, id) lets PostgreSQL seek to the bookmark — the 0.064 ms plan of lesson 3.2.</p>",
+      "solutionExplanationHtmlVi": "<p>Phép so sánh cả hàng và ORDER BY phải mô tả cùng một thứ tự, kể cả khoá phụ; khi đó index trên (cột, id) cho PostgreSQL tìm thẳng tới bookmark — kế hoạch 0,064 ms của bài 3.2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Newest first (lesson 3.2)",
+              "vi": "Mới nhất trước (bài 3.2)"
+            },
+            "goi": "keysetSql(\"-createdAt\")",
+            "mongDoi": "WHERE (created_at, id) < ($1, $2) ORDER BY created_at DESC, id DESC LIMIT $3"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: keysetSql(\"startAt\")",
+              "vi": "Ca 2"
+            },
+            "goi": "keysetSql(\"startAt\")",
+            "mongDoi": "WHERE (start_at, id) > ($1, $2) ORDER BY start_at ASC, id ASC LIMIT $3"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "keysetSql(\"-startAt\")",
+            "mongDoi": "WHERE (start_at, id) < ($1, $2) ORDER BY start_at DESC, id DESC LIMIT $3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "keysetSql(\"createdAt\")",
+            "mongDoi": "WHERE (created_at, id) > ($1, $2) ORDER BY created_at ASC, id ASC LIMIT $3",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "keysetSql(\"-resolvedAt\")",
+            "mongDoi": "WHERE (resolved_at, id) < ($1, $2) ORDER BY resolved_at DESC, id DESC LIMIT $3",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Always using &lt; — an ascending list then goes backwards.|||Luôn dùng &lt; — danh sách tăng dần khi đó đi lùi."
+        },
+        {
+          "loi": "ORDER BY start_at only — without id the row comparison and the order disagree on ties.|||Chỉ ORDER BY start_at — thiếu id thì phép so sánh cả hàng và thứ tự lệch nhau khi bằng nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "row comparison",
+          "vi": "so sánh cả hàng (a, b) &lt; (x, y)"
+        },
+        {
+          "en": "placeholder",
+          "vi": "chỗ giữ tham số $1"
+        }
+      ]
+    },
+    {
+      "title": "Cursor 4 — Offset or cursor?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>For each screen or job, choose the pagination that fits — the decision table of lesson 3.2.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi màn hình hay công việc, chọn kiểu phân trang phù hợp — bảng quyết định của bài 3.2.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does the list change while someone reads it?|||Danh sách có đổi trong lúc có người đọc không?",
+        "Does the UI really need to jump to page N?|||Giao diện có thật sự cần nhảy tới trang N?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cursor 4 — Offset or cursor?\n\nAnswer in the answer panel (no code needed).\n\n1. Screen / job → paginationMàn hình / công việc → kiểu phân trang\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Cursor 4 — Offset or cursor? — answer key\n\n1. Screen / job → paginationMàn hình / công việc → kiểu phân trang\n   - r1.p: offset\n   - r2.p: cursor\n   - r3.p: cursor\n   - r4.p: cursor\n   - r5.p: offset\n   Offset: small, slow-changing lists where page numbers matter. Cursor: anything that changes while read, is long, or is read to the end.VI: Offset: danh sách nhỏ, ít đổi, cần số trang. Con trỏ: thứ thay đổi trong lúc đọc, dài, hoặc được đọc tới cuối.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Offset: small, slow-changing lists where page numbers matter. Cursor: anything that changes while read, is long, or is read to the end.</p><p><i>VI: Offset: danh sách nhỏ, ít đổi, cần số trang. Con trỏ: thứ thay đổi trong lúc đọc, dài, hoặc được đọc tới cuối.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Screen / job → pagination</p><p style=\"opacity:.75;font-size:.92em\"><i>Màn hình / công việc → kiểu phân trang</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Screen / job"
+              },
+              {
+                "ma": "p",
+                "ten": "Pagination",
+                "luaChon": [
+                  "offset",
+                  "cursor"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "Admin table of 4 labs with “page 1 of 1”"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Infinite-scroll feed of new bookings"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Nightly export of one million bookings"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Mobile app syncing issues changed since last time"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Class list of 30 students where the teacher jumps to page 3"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.p": "offset",
+              "r2.p": "cursor",
+              "r3.p": "cursor",
+              "r4.p": "cursor",
+              "r5.p": "offset"
+            },
+            "giaiThich": "<p>Offset: small, slow-changing lists where page numbers matter. Cursor: anything that changes while read, is long, or is read to the end.</p><p><i>VI: Offset: danh sách nhỏ, ít đổi, cần số trang. Con trỏ: thứ thay đổi trong lúc đọc, dài, hoặc được đọc tới cuối.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using offset for exports — rows are duplicated or lost.|||Dùng offset cho xuất dữ liệu — dòng bị trùng hoặc mất."
+        },
+        {
+          "loi": "Forcing cursors on a tiny admin table that needs page numbers.|||Ép dùng con trỏ cho bảng quản trị nhỏ cần số trang."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "infinite scroll",
+          "vi": "cuộn vô hạn"
+        },
+        {
+          "en": "export",
+          "vi": "xuất dữ liệu"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,678 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-3-1-offset",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-3-1-offset"
+  },
+  "exercises": [
+    {
+      "title": "Offset 1 — What lesson 3.1 measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 3.1 (LabFlow with SEED_BOOKINGS=200, PostgreSQL 18.4 with one million rows).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 3.1 (LabFlow với SEED_BOOKINGS=200, PostgreSQL 18.4 với một triệu dòng).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every answer is a number or output printed in lesson 3.1.|||Mọi đáp án là một con số hay output in trong bài 3.1.",
+        "Think of a position versus a person in a queue.|||Nghĩ tới vị trí so với một người trong hàng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Offset 1 — What lesson 3.1 measured\n\nAnswer in the answer panel (no code needed).\n\n1. Lan reads page 1 (limit=5): bk_200 … bk_196. An creates bk_201. Lan reads offset=5. What did she get?Cô Lan đọc trang 1 (limit=5): bk_200 … bk_196. An tạo bk_201. Cô Lan đọc offset=5. Cô nhận được gì?\n2. OFFSET 900000 LIMIT 20 took 78.316 ms. How many index entries did PostgreSQL read?OFFSET 900000 LIMIT 20 mất 78,316 ms. PostgreSQL đã đọc bao nhiêu mục index?\n3. Why does LabFlow compare the NUMBER of the id as tie-breaker, not the string?Vì sao LabFlow so CON SỐ của id làm khoá phụ, không so chuỗi?\n4. GET /bookings?limit=500 on LabFlow returns …GET /bookings?limit=500 trên LabFlow trả …\n5. SELECT count(*) on the million-row table took 25.178 ms. What is the lesson for page.total?SELECT count(*) trên bảng một triệu dòng mất 25,178 ms. Bài học cho page.total là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Offset 1 — What lesson 3.1 measured — answer key\n\n1. Lan reads page 1 (limit=5): bk_200 … bk_196. An creates bk_201. Lan reads offset=5. What did she get?Cô Lan đọc trang 1 (limit=5): bk_200 … bk_196. An tạo bk_201. Cô Lan đọc offset=5. Cô nhận được gì?\n   Answer: c) bk_196 again, then bk_195 … bk_192\n   The new row took position 1, everything moved down one place, and “skip 5” skipped one old row fewer — bk_196 repeated.VI: Dòng mới chiếm vị trí 1, mọi thứ tụt một bậc, và \"bỏ qua 5\" bỏ qua ít hơn một dòng cũ — bk_196 bị lặp.\n\n2. OFFSET 900000 LIMIT 20 took 78.316 ms. How many index entries did PostgreSQL read?OFFSET 900000 LIMIT 20 mất 78,316 ms. PostgreSQL đã đọc bao nhiêu mục index?\n   Answer: a) 900 020 — it walks every skipped row\n   rows=900020.00 in the plan. An index finds the start of an order, not the n-th position.VI: rows=900020.00 trong kế hoạch. Index tìm được điểm đầu của thứ tự, không phải vị trí thứ n.\n\n3. Why does LabFlow compare the NUMBER of the id as tie-breaker, not the string?Vì sao LabFlow so CON SỐ của id làm khoá phụ, không so chuỗi?\n   Answer: a) As strings \"bk_10\" sorts before \"bk_9\"\n   localeCompare puts \"bk_10\" before \"bk_9\" (character 1 < 9). idNum(\"bk_10\") = 10 fixes the order.VI: localeCompare đặt \"bk_10\" trước \"bk_9\" (ký tự 1 < 9). idNum(\"bk_10\") = 10 sửa thứ tự.\n\n4. GET /bookings?limit=500 on LabFlow returns …GET /bookings?limit=500 trên LabFlow trả …\n   Answer: b) 400 with a detail that the maximum is 100\n   A silent cut hides a bug in the client; 400 tells the developer at once. 413 is about request bodies.VI: Cắt lặng lẽ giấu lỗi của client; 400 báo cho lập trình viên ngay. 413 nói về body của request.\n\n5. SELECT count(*) on the million-row table took 25.178 ms. What is the lesson for page.total?SELECT count(*) trên bảng một triệu dòng mất 25,178 ms. Bài học cho page.total là gì?\n   Answer: d) An exact total costs a full count on every request — send it only where the UI needs it\n   About 500× the first page. Options: total only on page 1, an estimate, or only “is there a next page” (lesson 3.2).VI: Khoảng 500 lần trang đầu. Lựa chọn: total chỉ ở trang 1, số ước lượng, hoặc chỉ \"còn trang sau không\" (bài 3.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> bk_196 again, then bk_195 … bk_192</p><p>The new row took position 1, everything moved down one place, and “skip 5” skipped one old row fewer — bk_196 repeated.</p><p><i>VI: Dòng mới chiếm vị trí 1, mọi thứ tụt một bậc, và \"bỏ qua 5\" bỏ qua ít hơn một dòng cũ — bk_196 bị lặp.</i></p></li><li><p><b>a)</b> 900 020 — it walks every skipped row</p><p>rows=900020.00 in the plan. An index finds the start of an order, not the n-th position.</p><p><i>VI: rows=900020.00 trong kế hoạch. Index tìm được điểm đầu của thứ tự, không phải vị trí thứ n.</i></p></li><li><p><b>a)</b> As strings \"bk_10\" sorts before \"bk_9\"</p><p>localeCompare puts \"bk_10\" before \"bk_9\" (character 1 < 9). idNum(\"bk_10\") = 10 fixes the order.</p><p><i>VI: localeCompare đặt \"bk_10\" trước \"bk_9\" (ký tự 1 < 9). idNum(\"bk_10\") = 10 sửa thứ tự.</i></p></li><li><p><b>b)</b> 400 with a detail that the maximum is 100</p><p>A silent cut hides a bug in the client; 400 tells the developer at once. 413 is about request bodies.</p><p><i>VI: Cắt lặng lẽ giấu lỗi của client; 400 báo cho lập trình viên ngay. 413 nói về body của request.</i></p></li><li><p><b>d)</b> An exact total costs a full count on every request — send it only where the UI needs it</p><p>About 500× the first page. Options: total only on page 1, an estimate, or only “is there a next page” (lesson 3.2).</p><p><i>VI: Khoảng 500 lần trang đầu. Lựa chọn: total chỉ ở trang 1, số ước lượng, hoặc chỉ \"còn trang sau không\" (bài 3.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Lan reads page 1 (limit=5): bk_200 … bk_196. An creates bk_201. Lan reads offset=5. What did she get?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cô Lan đọc trang 1 (limit=5): bk_200 … bk_196. An tạo bk_201. Cô Lan đọc offset=5. Cô nhận được gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "bk_195 … bk_191, exactly the next five"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a 409, because the list changed while paging"
+              },
+              {
+                "ma": "c",
+                "noiDung": "bk_196 again, then bk_195 … bk_192"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an empty page, because the total changed"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The new row took position 1, everything moved down one place, and “skip 5” skipped one old row fewer — bk_196 repeated.</p><p><i>VI: Dòng mới chiếm vị trí 1, mọi thứ tụt một bậc, và \"bỏ qua 5\" bỏ qua ít hơn một dòng cũ — bk_196 bị lặp.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>OFFSET 900000 LIMIT 20 took 78.316 ms. How many index entries did PostgreSQL read?</p><p style=\"opacity:.75;font-size:.92em\"><i>OFFSET 900000 LIMIT 20 mất 78,316 ms. PostgreSQL đã đọc bao nhiêu mục index?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "900 020 — it walks every skipped row"
+              },
+              {
+                "ma": "b",
+                "noiDung": "20 — the index jumps to position 900 000"
+              },
+              {
+                "ma": "c",
+                "noiDung": "900 000 — the 20 returned rows are cached"
+              },
+              {
+                "ma": "d",
+                "noiDung": "1 000 000 — it always reads the whole table"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>rows=900020.00 in the plan. An index finds the start of an order, not the n-th position.</p><p><i>VI: rows=900020.00 trong kế hoạch. Index tìm được điểm đầu của thứ tự, không phải vị trí thứ n.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does LabFlow compare the NUMBER of the id as tie-breaker, not the string?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao LabFlow so CON SỐ của id làm khoá phụ, không so chuỗi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "As strings \"bk_10\" sorts before \"bk_9\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "Strings cannot be compared in JavaScript"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The database stores ids as numbers only"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Numbers sort faster than strings in V8"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>localeCompare puts \"bk_10\" before \"bk_9\" (character 1 < 9). idNum(\"bk_10\") = 10 fixes the order.</p><p><i>VI: localeCompare đặt \"bk_10\" trước \"bk_9\" (ký tự 1 < 9). idNum(\"bk_10\") = 10 sửa thứ tự.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>GET /bookings?limit=500 on LabFlow returns …</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /bookings?limit=500 trên LabFlow trả …</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "200 with the first 100 bookings, silently cut"
+              },
+              {
+                "ma": "b",
+                "noiDung": "400 with a detail that the maximum is 100"
+              },
+              {
+                "ma": "c",
+                "noiDung": "200 with all 200 bookings"
+              },
+              {
+                "ma": "d",
+                "noiDung": "413 Payload Too Large"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A silent cut hides a bug in the client; 400 tells the developer at once. 413 is about request bodies.</p><p><i>VI: Cắt lặng lẽ giấu lỗi của client; 400 báo cho lập trình viên ngay. 413 nói về body của request.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>SELECT count(*) on the million-row table took 25.178 ms. What is the lesson for page.total?</p><p style=\"opacity:.75;font-size:.92em\"><i>SELECT count(*) trên bảng một triệu dòng mất 25,178 ms. Bài học cho page.total là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Compute the total in JavaScript instead, which is free"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Never send any paging metadata"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Totals are free because PostgreSQL caches count(*)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An exact total costs a full count on every request — send it only where the UI needs it"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>About 500× the first page. Options: total only on page 1, an estimate, or only “is there a next page” (lesson 3.2).</p><p><i>VI: Khoảng 500 lần trang đầu. Lựa chọn: total chỉ ở trang 1, số ước lượng, hoặc chỉ \"còn trang sau không\" (bài 3.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing an index makes any OFFSET cheap.|||Tin rằng có index thì OFFSET nào cũng rẻ."
+        },
+        {
+          "loi": "Silently capping limit instead of answering 400.|||Lặng lẽ cắt limit thay vì trả 400."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "offset",
+          "vi": "số dòng bỏ qua"
+        },
+        {
+          "en": "tie-breaker",
+          "vi": "khoá phụ phân xử khi bằng nhau"
+        }
+      ]
+    },
+    {
+      "title": "Offset 2 — Write sortNewest(rows): a stable order",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "stable ordering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Return the <b>ids</b> of <code>rows</code> ordered newest first by <code>createdAt</code> (ISO strings), and — when two rows have the same <code>createdAt</code> — by the <b>number</b> in the id, highest first (<code>bk_10</code> before <code>bk_9</code>). Do not modify <code>rows</code>.</p><p>This is LabFlow’s <code>newestFirst</code>: without a unique tie-breaker two rows may swap places between calls and paging repeats or loses them.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <b>id</b> của <code>rows</code> theo thứ tự mới nhất trước theo <code>createdAt</code> (chuỗi ISO), và — khi hai dòng cùng <code>createdAt</code> — theo <b>con số</b> trong id, lớn trước (<code>bk_10</code> trước <code>bk_9</code>). Không sửa <code>rows</code>.</p><p>Đây là <code>newestFirst</code> của LabFlow: không có khoá phụ duy nhất thì hai dòng có thể đổi chỗ giữa các lần gọi và phân trang lặp hoặc mất chúng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "rows — [{ id, createdAt }]",
+      "outputSpec": "string[] — ids, newest first|||mảng chuỗi — id, mới nhất trước",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sortNewest([{\"id\":\"bk_198\",\"createdAt\":\"2026-10-01T03:18:00.000Z\"},{\"id\":\"bk_200\",\"createdAt\":\"2026-10-01T03:20:00.000Z\"},{\"id\":\"bk_199\",\"createdAt\":\"2026-10-01T03:19:00.000Z\"}])",
+          "output": "[\"bk_200\",\"bk_199\",\"bk_198\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "ISO strings in the same time zone compare correctly as text: b.createdAt.localeCompare(a.createdAt).|||Chuỗi ISO cùng múi giờ so như chữ là đúng: b.createdAt.localeCompare(a.createdAt).",
+        "a || b in a comparator: use the second rule only when the first gives 0.|||a || b trong bộ so sánh: chỉ dùng luật thứ hai khi luật đầu cho 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** rows ⇒ ids, newest first; ties by the id's number, highest first */\nfunction sortNewest(rows) {\n  // Write your solution here\n  return rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id)).map((r) => r.id);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sortNewest(rows) {\n  const idNum = (id) => Number(id.slice(id.indexOf('_') + 1));\n  return [...rows]\n    .sort((a, b) => b.createdAt.localeCompare(a.createdAt) || idNum(b.id) - idNum(a.id))\n    .map((r) => r.id);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>createdAt first, then the id’s number in the same direction: every row has exactly one position, on every call. The copy ([...rows]) keeps the database array untouched.</p>",
+      "solutionExplanationHtmlVi": "<p>createdAt trước, rồi con số của id cùng chiều: mỗi dòng có đúng một vị trí, ở mọi lần gọi. Bản sao ([...rows]) giữ nguyên mảng dữ liệu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Three seeded bookings",
+              "vi": "Ba lượt đặt mẫu"
+            },
+            "goi": "sortNewest([{\"id\":\"bk_198\",\"createdAt\":\"2026-10-01T03:18:00.000Z\"},{\"id\":\"bk_200\",\"createdAt\":\"2026-10-01T03:20:00.000Z\"},{\"id\":\"bk_199\",\"createdAt\":\"2026-10-01T03:19:00.000Z\"}])",
+            "mongDoi": [
+              "bk_200",
+              "bk_199",
+              "bk_198"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Same createdAt: bk_10 vs bk_9",
+              "vi": "Cùng createdAt: bk_10 với bk_9"
+            },
+            "goi": "sortNewest([{\"id\":\"bk_9\",\"createdAt\":\"2026-10-01T03:00:00.000Z\"},{\"id\":\"bk_10\",\"createdAt\":\"2026-10-01T03:00:00.000Z\"},{\"id\":\"bk_11\",\"createdAt\":\"2026-10-01T03:00:00.000Z\"}])",
+            "mongDoi": [
+              "bk_11",
+              "bk_10",
+              "bk_9"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "sortNewest([{\"id\":\"iss_2\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_100\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_3\",\"createdAt\":\"2026-10-08T00:00:00.000Z\"}])",
+            "mongDoi": [
+              "iss_3",
+              "iss_100",
+              "iss_2"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sortNewest([])",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The input array is not modified",
+              "vi": "Mảng đầu vào không bị sửa"
+            },
+            "goi": "(function () { var r = [{ id: 'bk_1', createdAt: '2026-10-01T03:01:00.000Z' }, { id: 'bk_2', createdAt: '2026-10-01T03:02:00.000Z' }]; sortNewest(r); return r.map(function (x) { return x.id; }); })()",
+            "mongDoi": [
+              "bk_1",
+              "bk_2"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing ids as strings: \"bk_9\" ends up before \"bk_10\".|||So id như chuỗi: \"bk_9\" đứng trước \"bk_10\"."
+        },
+        {
+          "loi": "rows.sort(…) without a copy — it modifies the caller’s array.|||rows.sort(…) không sao chép — nó sửa mảng của người gọi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "comparator",
+          "vi": "hàm so sánh"
+        },
+        {
+          "en": "stable order",
+          "vi": "thứ tự ổn định"
+        }
+      ]
+    },
+    {
+      "title": "Offset 3 — Write offsetPage(ids, limit, offset): data, page and next",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "offset pagination"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p><code>ids</code> is the already-sorted list. Return <code>{ data, page: { limit, offset, total }, next }</code>:</p><ul>\n<li><code>data</code> — the ids from position <code>offset</code>, at most <code>limit</code> of them</li>\n<li><code>total</code> — the length of the whole list</li>\n<li><code>next</code> — <code>\"/bookings?limit=L&amp;offset=O\"</code> for the next page, or <code>null</code> when there is none (exactly like LabFlow’s <code>Link: rel=\"next\"</code>)</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>ids</code> là danh sách đã sắp. Trả <code>{ data, page: { limit, offset, total }, next }</code>:</p><ul>\n<li><code>data</code> — các id từ vị trí <code>offset</code>, tối đa <code>limit</code> phần tử</li>\n<li><code>total</code> — độ dài cả danh sách</li>\n<li><code>next</code> — <code>\"/bookings?limit=L&amp;offset=O\"</code> cho trang sau, hoặc <code>null</code> khi hết (đúng như <code>Link: rel=\"next\"</code> của LabFlow)</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "ids — string[], limit ≥ 1, offset ≥ 0 (already validated)|||ids — mảng chuỗi, limit ≥ 1, offset ≥ 0 (đã được kiểm)",
+      "outputSpec": "{ data, page: { limit, offset, total }, next }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "offsetPage([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\",\"bk_190\",\"bk_189\"], 3, 0)",
+          "output": "{\"data\":[\"bk_200\",\"bk_199\",\"bk_198\"],\"page\":{\"limit\":3,\"offset\":0,\"total\":12},\"next\":\"/bookings?limit=3&offset=3\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "slice(offset, offset + limit) never throws, even past the end.|||slice(offset, offset + limit) không bao giờ ném lỗi, kể cả quá cuối.",
+        "There is a next page only if offset + limit &lt; total.|||Chỉ còn trang sau nếu offset + limit &lt; total."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** sorted ids ⇒ one page + where the next one is */\nfunction offsetPage(ids, limit, offset) {\n  // Write your solution here\n  return { data: ids.slice(offset, limit), page: { limit, offset, total: ids.length }, next: `/bookings?limit=${limit}&offset=${offset + limit}` };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction offsetPage(ids, limit, offset) {\n  const data = ids.slice(offset, offset + limit);\n  const next = offset + limit < ids.length ? `/bookings?limit=${limit}&offset=${offset + limit}` : null;\n  return { data, page: { limit, offset, total: ids.length }, next };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The lesson’s handler in miniature. A page that ends exactly at the end of the list has no next link; a page past the end is empty with no next.</p>",
+      "solutionExplanationHtmlVi": "<p>Handler của bài thu nhỏ. Trang kết thúc đúng cuối danh sách thì không có link sau; trang vượt quá cuối thì rỗng và không có link sau.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First page, limit=3",
+              "vi": "Trang đầu, limit=3"
+            },
+            "goi": "offsetPage([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\",\"bk_190\",\"bk_189\"], 3, 0)",
+            "mongDoi": {
+              "data": [
+                "bk_200",
+                "bk_199",
+                "bk_198"
+              ],
+              "page": {
+                "limit": 3,
+                "offset": 0,
+                "total": 12
+              },
+              "next": "/bookings?limit=3&offset=3"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Second page",
+              "vi": "Trang hai"
+            },
+            "goi": "offsetPage([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\",\"bk_190\",\"bk_189\"], 3, 3)",
+            "mongDoi": {
+              "data": [
+                "bk_197",
+                "bk_196",
+                "bk_195"
+              ],
+              "page": {
+                "limit": 3,
+                "offset": 3,
+                "total": 12
+              },
+              "next": "/bookings?limit=3&offset=6"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "offsetPage([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\",\"bk_190\",\"bk_189\"], 5, 10)",
+            "mongDoi": {
+              "data": [
+                "bk_190",
+                "bk_189"
+              ],
+              "page": {
+                "limit": 5,
+                "offset": 10,
+                "total": 12
+              },
+              "next": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "The last page ends exactly at the end",
+              "vi": "Trang cuối kết thúc đúng cuối danh sách"
+            },
+            "goi": "offsetPage([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\",\"bk_190\",\"bk_189\"], 4, 8)",
+            "mongDoi": {
+              "data": [
+                "bk_192",
+                "bk_191",
+                "bk_190",
+                "bk_189"
+              ],
+              "page": {
+                "limit": 4,
+                "offset": 8,
+                "total": 12
+              },
+              "next": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "offsetPage([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\",\"bk_190\",\"bk_189\"], 5, 40)",
+            "mongDoi": {
+              "data": [],
+              "page": {
+                "limit": 5,
+                "offset": 40,
+                "total": 12
+              },
+              "next": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "offset + limit &lt;= total — produces a link to an empty page.|||offset + limit &lt;= total — sinh link tới một trang rỗng."
+        },
+        {
+          "loi": "slice(offset, limit) — the second argument is an end position, not a count.|||slice(offset, limit) — đối số thứ hai là vị trí kết thúc, không phải số lượng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Link header",
+          "vi": "header Link (RFC 8288)"
+        },
+        {
+          "en": "total",
+          "vi": "tổng số phần tử"
+        }
+      ]
+    },
+    {
+      "title": "Offset 4 — Write pagingAudit(before, after, limit): duplicates and rows never shown",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "offset pagination",
+        "consistency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A client reads page 1 with offset 0 from the list <code>before</code>; then the data changes; then it reads page 2 with <code>offset=limit</code> from the list <code>after</code>. Return:</p><ul>\n<li><code>duplicates</code> — ids that appear on both pages (in page-1 order)</li>\n<li><code>notShown</code> — ids among the first <code>2 × limit</code> of <code>after</code> that the client saw on neither page (in <code>after</code> order)</li></ul>\n<p>Lesson 3.1’s real run: <code>before</code> = bk_200…bk_191, An inserts bk_201 at the top ⇒ bk_196 is a duplicate. Delete a row instead, and one row is never shown.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một client đọc trang 1 với offset 0 từ danh sách <code>before</code>; rồi dữ liệu đổi; rồi nó đọc trang 2 với <code>offset=limit</code> từ danh sách <code>after</code>. Trả:</p><ul>\n<li><code>duplicates</code> — các id xuất hiện ở cả hai trang (theo thứ tự trang 1)</li>\n<li><code>notShown</code> — các id trong <code>2 × limit</code> phần tử đầu của <code>after</code> mà client không thấy ở trang nào (theo thứ tự <code>after</code>)</li></ul>\n<p>Lần chạy thật của bài 3.1: <code>before</code> = bk_200…bk_191, An chèn bk_201 lên đầu ⇒ bk_196 bị trùng. Xoá một dòng thì ngược lại: có một dòng không bao giờ được hiện.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "before, after — string[] (sorted lists); limit ≥ 1|||before, after — mảng chuỗi (đã sắp); limit ≥ 1",
+      "outputSpec": "{ duplicates: string[], notShown: string[] }|||{ duplicates: mảng chuỗi, notShown: mảng chuỗi }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pagingAudit([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], [\"bk_201\",\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], 5)",
+          "output": "{\"duplicates\":[\"bk_196\"],\"notShown\":[\"bk_201\"]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Build page1 and page2 first, exactly as the server would.|||Dựng page1 và page2 trước, đúng như server sẽ làm.",
+        "includes() is enough for lists this small.|||includes() là đủ cho danh sách nhỏ thế này."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** page 1 from before, page 2 (offset = limit) from after ⇒ what went wrong */\nfunction pagingAudit(before, after, limit) {\n  // Write your solution here\n  const page1 = before.slice(0, limit), page2 = before.slice(limit, 2 * limit);\n  return { duplicates: page1.filter((id) => page2.includes(id)), notShown: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pagingAudit(before, after, limit) {\n  const page1 = before.slice(0, limit);\n  const page2 = after.slice(limit, 2 * limit);\n  const duplicates = page1.filter((id) => page2.includes(id));\n  const notShown = after.slice(0, 2 * limit).filter((id) => !page1.includes(id) && !page2.includes(id));\n  return { duplicates, notShown };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Insert above the client’s position ⇒ duplicates; delete above it ⇒ a row slides from page 2 onto page 1’s positions and is never shown. Neither depends on a bug — it is what “skip N” means on a moving list, and why lesson 3.2 uses cursors.</p>",
+      "solutionExplanationHtmlVi": "<p>Chèn phía trên vị trí của client ⇒ trùng; xoá phía trên ⇒ một dòng trượt từ trang 2 lên vị trí của trang 1 và không bao giờ được hiện. Cả hai không do bug nào — đó là nghĩa của \"bỏ qua N\" trên một danh sách đang chuyển động, và là lý do bài 3.2 dùng con trỏ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Lesson 3.1: An inserts bk_201",
+              "vi": "Bài 3.1: An chèn bk_201"
+            },
+            "goi": "pagingAudit([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], [\"bk_201\",\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], 5)",
+            "mongDoi": {
+              "duplicates": [
+                "bk_196"
+              ],
+              "notShown": [
+                "bk_201"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "bk_198 is deleted between the pages",
+              "vi": "bk_198 bị xoá giữa hai trang"
+            },
+            "goi": "pagingAudit([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], [\"bk_200\",\"bk_199\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], 5)",
+            "mongDoi": {
+              "duplicates": [],
+              "notShown": [
+                "bk_195"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Nothing changed",
+              "vi": "Không có gì thay đổi"
+            },
+            "goi": "pagingAudit([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], [\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], 5)",
+            "mongDoi": {
+              "duplicates": [],
+              "notShown": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pagingAudit([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], [\"bk_202\",\"bk_201\",\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], 3)",
+            "mongDoi": {
+              "duplicates": [
+                "bk_199",
+                "bk_198"
+              ],
+              "notShown": [
+                "bk_202",
+                "bk_201"
+              ]
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pagingAudit([\"bk_200\",\"bk_199\",\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], [\"bk_198\",\"bk_197\",\"bk_196\",\"bk_195\",\"bk_194\",\"bk_193\",\"bk_192\",\"bk_191\"], 4)",
+            "mongDoi": {
+              "duplicates": [],
+              "notShown": [
+                "bk_196",
+                "bk_195"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Taking page 2 from before — the client really gets it from the changed list.|||Lấy trang 2 từ before — client thật sự nhận nó từ danh sách đã đổi."
+        },
+        {
+          "loi": "Reporting a row as not shown although it is simply on page 3.|||Báo một dòng \"không được hiện\" trong khi nó chỉ nằm ở trang 3."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "duplicate",
+          "vi": "bản ghi lặp"
+        },
+        {
+          "en": "skipped row",
+          "vi": "dòng bị bỏ sót"
+        }
+      ]
+    }
+  ]
+}

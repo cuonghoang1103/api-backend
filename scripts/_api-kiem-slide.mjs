@@ -1,6 +1,7 @@
 /**
  * _api-kiem-slide.mjs — phép kiểm TỰ ĐỘNG cho deck khuôn .pg (_api-chung / _pg-chung): TRÀN dọc, TRÀN ngang (pre/table/code/.term),
- * TRỐNG (vùng nội dung < 70% khung), lấn phải. Chạy từ gốc repo:  node scripts/_api-kiem-slide.mjs scripts/slides-src/api-02-1.mjs
+ * TRỐNG (vùng nội dung < 70% khung), lấn phải, TRÀN DƯỚI (phần tử con vượt đáy khung — bắt cả .apireq bị cắt mà scrollHeight không thấy, vá 01/11/2026),
+ * phần tử overflow:hidden có nội dung bị cắt (scrollHeight > clientHeight). Chạy từ gốc repo:  node scripts/_api-kiem-slide.mjs scripts/slides-src/api-02-1.mjs
  * In "<deck>: N slide, K slide cần xem" — K phải bằng 0 trước khi upload (yêu cầu điều phối 31/10/2026).
  */
 import { chromium } from 'playwright';
@@ -18,13 +19,16 @@ for (const [i, s] of slides.entries()) {
     for (const e of nd.querySelectorAll('*')) {
       const q = e.getBoundingClientRect(); if (!q.width && !q.height) continue;
       maxB = Math.max(maxB, q.bottom); maxR = Math.max(maxR, q.right);
+      const cs = getComputedStyle(e);
+      if (cs.overflow === 'hidden' && e.scrollHeight > e.clientHeight + 8 && cs.display !== 'inline') cut.push(e.tagName.toLowerCase() + (e.className ? '.' + String(e.className).split(' ')[0] : '') + ' cắt dọc ' + (e.scrollHeight - e.clientHeight));
       if (['PRE','TABLE','TD','TH','CODE'].includes(e.tagName) || e.classList.contains('vs') || e.classList.contains('term') || e.classList.contains('apireq')) { if (e.scrollWidth > e.clientWidth + 2 && getComputedStyle(e).display !== 'inline') cut.push(e.tagName.toLowerCase() + ' ngang ' + (e.scrollWidth - e.clientWidth)); }
     }
-    return { over: nd.scrollHeight - nd.clientHeight, used: Math.round((maxB - box.top) / box.height * 100), right: Math.round(maxR), cut };
+    return { over: nd.scrollHeight - nd.clientHeight, below: Math.round(maxB - box.bottom), used: Math.round((maxB - box.top) / box.height * 100), right: Math.round(maxR), cut };
   });
   if (r.cover) continue;
   const issues = [];
   if (r.over > 2) issues.push(`TRÀN ${r.over}px`);
+  else if (r.below > 2) issues.push(`TRÀN DƯỚI ${r.below}px`);
   if (r.right > 1250) issues.push(`lấn phải ${r.right}`);
   if (r.used < 70) issues.push(`trống (dùng ${r.used}%)`);
   if (r.cut.length) issues.push(r.cut.join(','));

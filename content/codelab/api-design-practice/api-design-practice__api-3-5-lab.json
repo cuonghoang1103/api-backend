@@ -1,0 +1,579 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-3-5-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-3-5-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 3 · 1 — Part A: the answers before the code",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "error codes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Fill Part A of Lab 3: status and code for each request to GET /issues (— for success).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điền Phần A của Lab 3: mã trạng thái và code cho từng request tới GET /issues (— nếu thành công).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Query values ⇒ INVALID_QUERY; the cursor ⇒ one of the two cursor codes.|||Giá trị query ⇒ INVALID_QUERY; con trỏ ⇒ một trong hai mã con trỏ.",
+        "The step-1 cursor was made for “no filter”.|||Con trỏ bước 1 được làm cho \"không lọc\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 3 · 1 — Part A: the answers before the code\n\nAnswer in the answer panel (no code needed).\n\n1. GET /issues… → status + codeGET /issues… → mã + code\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 3 · 1 — Part A: the answers before the code — answer key\n\n1. GET /issues… → status + codeGET /issues… → mã + code\n   - r1.s: 400\n   - r1.c: INVALID_QUERY\n   - r2.s: 400\n   - r2.c: INVALID_QUERY\n   - r3.s: 400\n   - r3.c: INVALID_CURSOR / CURSOR_MISMATCH\n   - r4.s: 400\n   - r4.c: CURSOR_MISMATCH\n   - r5.s: 200\n   - r5.c: —\n   An edited cursor is either unreadable (INVALID_CURSOR) or decodes to another fingerprint (CURSOR_MISMATCH) — both are 400; the HMAC stretch goal makes it always INVALID_CURSOR. The real transcript: limit=0&sort=title listed both parameters; the step-1 cursor with deviceId=dev_2 gave CURSOR_MISMATCH.VI: Con trỏ bị sửa hoặc không đọc được (INVALID_CURSOR) hoặc giải ra dấu vân tay khác (CURSOR_MISMATCH) — cả hai đều 400; mục tiêu nâng cao HMAC làm nó luôn là INVALID_CURSOR. Transcript thật: limit=0&sort=title liệt kê cả hai tham số; con trỏ của bước 1 với deviceId=dev_2 cho CURSOR_MISMATCH.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>An edited cursor is either unreadable (INVALID_CURSOR) or decodes to another fingerprint (CURSOR_MISMATCH) — both are 400; the HMAC stretch goal makes it always INVALID_CURSOR. The real transcript: limit=0&sort=title listed both parameters; the step-1 cursor with deviceId=dev_2 gave CURSOR_MISMATCH.</p><p><i>VI: Con trỏ bị sửa hoặc không đọc được (INVALID_CURSOR) hoặc giải ra dấu vân tay khác (CURSOR_MISMATCH) — cả hai đều 400; mục tiêu nâng cao HMAC làm nó luôn là INVALID_CURSOR. Transcript thật: limit=0&sort=title liệt kê cả hai tham số; con trỏ của bước 1 với deviceId=dev_2 cho CURSOR_MISMATCH.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>GET /issues… → status + code</p><p style=\"opacity:.75;font-size:.92em\"><i>GET /issues… → mã + code</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Request"
+              },
+              {
+                "ma": "s",
+                "ten": "Status",
+                "luaChon": [
+                  "200",
+                  "400"
+                ]
+              },
+              {
+                "ma": "c",
+                "ten": "code",
+                "luaChon": [
+                  "—",
+                  "INVALID_QUERY",
+                  "INVALID_CURSOR",
+                  "CURSOR_MISMATCH"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "?limit=0"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "?sort=title"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "?cursor=<a page.next with one letter changed>"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "?deviceId=dev_2&cursor=<page.next of ?limit=3>"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "?sort=-severity&status=OPEN&limit=5"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "400",
+              "r1.c": "INVALID_QUERY",
+              "r2.s": "400",
+              "r2.c": "INVALID_QUERY",
+              "r3.s": "400",
+              "r3.c": [
+                "INVALID_CURSOR",
+                "CURSOR_MISMATCH"
+              ],
+              "r4.s": "400",
+              "r4.c": "CURSOR_MISMATCH",
+              "r5.s": "200",
+              "r5.c": "—"
+            },
+            "giaiThich": "<p>An edited cursor is either unreadable (INVALID_CURSOR) or decodes to another fingerprint (CURSOR_MISMATCH) — both are 400; the HMAC stretch goal makes it always INVALID_CURSOR. The real transcript: limit=0&sort=title listed both parameters; the step-1 cursor with deviceId=dev_2 gave CURSOR_MISMATCH.</p><p><i>VI: Con trỏ bị sửa hoặc không đọc được (INVALID_CURSOR) hoặc giải ra dấu vân tay khác (CURSOR_MISMATCH) — cả hai đều 400; mục tiêu nâng cao HMAC làm nó luôn là INVALID_CURSOR. Transcript thật: limit=0&sort=title liệt kê cả hai tham số; con trỏ của bước 1 với deviceId=dev_2 cho CURSOR_MISMATCH.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 200 with the first page when the cursor does not fit.|||Trả 200 với trang đầu khi con trỏ không khớp."
+        },
+        {
+          "loi": "Using 422 for a bad query parameter — LabFlow’s query errors are 400.|||Dùng 422 cho tham số query sai — lỗi query của LabFlow là 400."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "query contract",
+          "vi": "hợp đồng query"
+        },
+        {
+          "en": "fingerprint",
+          "vi": "dấu vân tay"
+        }
+      ]
+    },
+    {
+      "title": "Lab 3 · 2 — Write issuesPage(issues, query): filter, rank, page",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "cursor pagination",
+        "sorting",
+        "filtering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The core of <code>GET /issues</code> without HTTP. <code>query</code> is already validated: <code>{ limit, sort, status?, severity?, deviceId?, after? }</code> with <code>sort</code> ∈ <code>-createdAt</code>, <code>createdAt</code>, <code>-severity</code>, and <code>after</code> = a decoded cursor <code>{ v, id }</code> (the sort-key value and id of the last item seen) or <code>null</code>.</p><ol>\n<li>keep issues matching every filter present (AND)</li>\n<li>sort: severity by <b>business rank</b> LOW 1 · MEDIUM 2 · HIGH 3; createdAt as ISO text; ties by the id’s number, same direction</li>\n<li>if <code>after</code>: only issues that come after that position</li>\n<li>return <code>{ ids, next }</code> — <code>next = { v, id }</code> of the last returned issue (<code>v</code> = its value of the sort key) when more remain, else <code>null</code></li></ol>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lõi của <code>GET /issues</code> không có HTTP. <code>query</code> đã được kiểm: <code>{ limit, sort, status?, severity?, deviceId?, after? }</code> với <code>sort</code> ∈ <code>-createdAt</code>, <code>createdAt</code>, <code>-severity</code>, và <code>after</code> = con trỏ đã giải <code>{ v, id }</code> (giá trị khoá sắp và id của phần tử cuối đã thấy) hoặc <code>null</code>.</p><ol>\n<li>giữ các báo hỏng khớp mọi bộ lọc có mặt (AND)</li>\n<li>sắp: severity theo <b>thứ hạng nghiệp vụ</b> LOW 1 · MEDIUM 2 · HIGH 3; createdAt như chuỗi ISO; bằng nhau thì theo con số của id, cùng chiều</li>\n<li>nếu có <code>after</code>: chỉ các báo hỏng đứng sau vị trí đó</li>\n<li>trả <code>{ ids, next }</code> — <code>next = { v, id }</code> của báo hỏng cuối được trả (<code>v</code> = giá trị khoá sắp của nó) khi còn, ngược lại <code>null</code></li></ol>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "issues — [{ id, deviceId, severity, status, createdAt }]; query — see above|||issues — [{ id, deviceId, severity, status, createdAt }]; query — xem trên",
+      "outputSpec": "{ ids: string[], next: { v, id } | null }|||{ ids: mảng chuỗi, next: { v, id } | null }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "issuesPage([{\"id\":\"iss_49\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T01:00:00.000Z\"},{\"id\":\"iss_50\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T02:00:00.000Z\"},{\"id\":\"iss_51\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T03:00:00.000Z\"},{\"id\":\"iss_52\",\"deviceId\":\"dev_2\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T04:00:00.000Z\"},{\"id\":\"iss_53\",\"deviceId\":\"dev_3\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T05:00:00.000Z\"},{\"id\":\"iss_54\",\"deviceId\":\"dev_1\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T06:00:00.000Z\"},{\"id\":\"iss_55\",\"deviceId\":\"dev_2\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T07:00:00.000Z\"},{\"id\":\"iss_56\",\"deviceId\":\"dev_3\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T08:00:00.000Z\"},{\"id\":\"iss_57\",\"deviceId\":\"dev_1\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T09:00:00.000Z\"},{\"id\":\"iss_58\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_59\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T11:00:00.000Z\"},{\"id\":\"iss_60\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T12:00:00.000Z\"}], {\"limit\":3,\"sort\":\"-createdAt\",\"after\":null})",
+          "output": "{\"ids\":[\"iss_60\",\"iss_59\",\"iss_58\"],\"next\":{\"v\":\"2026-10-07T10:00:00.000Z\",\"id\":\"iss_58\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Turn the cursor back into a “fake row” { id, [key]: v } and compare it with the same comparator.|||Biến con trỏ thành \"dòng giả\" { id, [key]: v } rồi so bằng cùng hàm so sánh.",
+        "Filter first, sort second, cut after the cursor, slice last.|||Lọc trước, sắp sau, cắt sau con trỏ, slice cuối cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** validated query ⇒ one page of issues + next cursor */\nfunction issuesPage(issues, query) {\n  // Write your solution here\n  const key = query.sort.replace('-', ''), desc = query.sort.startsWith('-');\n  let rows = issues.filter((i) => !query.status || i.status === query.status);\n  rows.sort((a, b) => (desc ? -1 : 1) * String(a[key]).localeCompare(String(b[key])));\n  const page = rows.slice(0, query.limit), last = page[page.length - 1];\n  return { ids: page.map((i) => i.id), next: rows.length > query.limit ? { v: last[key], id: last.id } : null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction issuesPage(issues, query) {\n  const RANK = { LOW: 1, MEDIUM: 2, HIGH: 3 };\n  const idNum = (id) => Number(id.slice(id.indexOf('_') + 1));\n  const { limit, sort, status, severity, deviceId, after } = query;\n  const desc = sort.startsWith('-'), key = sort.replace('-', '');\n  const val = (r) => (key === 'severity' ? RANK[r.severity] : r[key]);\n  const cmp = (a, b) => {\n    const x = val(a), y = val(b);\n    return (desc ? -1 : 1) * ((typeof x === 'number' ? x - y : x.localeCompare(y)) || idNum(a.id) - idNum(b.id));\n  };\n  let rows = issues.filter((i) => (!status || i.status === status)\n    && (!severity || i.severity === severity) && (!deviceId || i.deviceId === deviceId));\n  rows.sort(cmp);\n  if (after) rows = rows.filter((i) => cmp({ id: after.id, [key]: after.v }, i) < 0);\n  const page = rows.slice(0, limit);\n  const last = page[page.length - 1];\n  return { ids: page.map((i) => i.id), next: rows.length > limit ? { v: last[key], id: last.id } : null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Exactly the reference route of Lab 3: one comparator built from the sort value and the ranks, used to sort and to decide “after”; the cursor carries the current key, so -severity pages stay correct across equal ranks.</p>",
+      "solutionExplanationHtmlVi": "<p>Đúng route tham chiếu của Lab 3: một hàm so sánh dựng từ giá trị sort và thứ hạng, dùng để sắp và để quyết định \"sau\"; con trỏ mang khoá hiện tại nên các trang -severity vẫn đúng qua những thứ hạng bằng nhau.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First page, newest first",
+              "vi": "Trang đầu, mới nhất trước"
+            },
+            "goi": "issuesPage([{\"id\":\"iss_49\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T01:00:00.000Z\"},{\"id\":\"iss_50\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T02:00:00.000Z\"},{\"id\":\"iss_51\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T03:00:00.000Z\"},{\"id\":\"iss_52\",\"deviceId\":\"dev_2\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T04:00:00.000Z\"},{\"id\":\"iss_53\",\"deviceId\":\"dev_3\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T05:00:00.000Z\"},{\"id\":\"iss_54\",\"deviceId\":\"dev_1\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T06:00:00.000Z\"},{\"id\":\"iss_55\",\"deviceId\":\"dev_2\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T07:00:00.000Z\"},{\"id\":\"iss_56\",\"deviceId\":\"dev_3\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T08:00:00.000Z\"},{\"id\":\"iss_57\",\"deviceId\":\"dev_1\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T09:00:00.000Z\"},{\"id\":\"iss_58\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_59\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T11:00:00.000Z\"},{\"id\":\"iss_60\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T12:00:00.000Z\"}], {\"limit\":3,\"sort\":\"-createdAt\",\"after\":null})",
+            "mongDoi": {
+              "ids": [
+                "iss_60",
+                "iss_59",
+                "iss_58"
+              ],
+              "next": {
+                "v": "2026-10-07T10:00:00.000Z",
+                "id": "iss_58"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "-severity, OPEN only",
+              "vi": "-severity, chỉ OPEN"
+            },
+            "goi": "issuesPage([{\"id\":\"iss_49\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T01:00:00.000Z\"},{\"id\":\"iss_50\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T02:00:00.000Z\"},{\"id\":\"iss_51\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T03:00:00.000Z\"},{\"id\":\"iss_52\",\"deviceId\":\"dev_2\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T04:00:00.000Z\"},{\"id\":\"iss_53\",\"deviceId\":\"dev_3\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T05:00:00.000Z\"},{\"id\":\"iss_54\",\"deviceId\":\"dev_1\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T06:00:00.000Z\"},{\"id\":\"iss_55\",\"deviceId\":\"dev_2\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T07:00:00.000Z\"},{\"id\":\"iss_56\",\"deviceId\":\"dev_3\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T08:00:00.000Z\"},{\"id\":\"iss_57\",\"deviceId\":\"dev_1\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T09:00:00.000Z\"},{\"id\":\"iss_58\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_59\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T11:00:00.000Z\"},{\"id\":\"iss_60\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T12:00:00.000Z\"}], {\"limit\":4,\"sort\":\"-severity\",\"status\":\"OPEN\",\"after\":null})",
+            "mongDoi": {
+              "ids": [
+                "iss_58",
+                "iss_51",
+                "iss_49",
+                "iss_57"
+              ],
+              "next": {
+                "v": "MEDIUM",
+                "id": "iss_57"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Page 2 of -severity across equal ranks",
+              "vi": "Trang 2 của -severity qua thứ hạng bằng nhau"
+            },
+            "goi": "issuesPage([{\"id\":\"iss_49\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T01:00:00.000Z\"},{\"id\":\"iss_50\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T02:00:00.000Z\"},{\"id\":\"iss_51\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T03:00:00.000Z\"},{\"id\":\"iss_52\",\"deviceId\":\"dev_2\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T04:00:00.000Z\"},{\"id\":\"iss_53\",\"deviceId\":\"dev_3\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T05:00:00.000Z\"},{\"id\":\"iss_54\",\"deviceId\":\"dev_1\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T06:00:00.000Z\"},{\"id\":\"iss_55\",\"deviceId\":\"dev_2\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T07:00:00.000Z\"},{\"id\":\"iss_56\",\"deviceId\":\"dev_3\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T08:00:00.000Z\"},{\"id\":\"iss_57\",\"deviceId\":\"dev_1\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T09:00:00.000Z\"},{\"id\":\"iss_58\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_59\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T11:00:00.000Z\"},{\"id\":\"iss_60\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T12:00:00.000Z\"}], {\"limit\":4,\"sort\":\"-severity\",\"status\":\"OPEN\",\"after\":{\"v\":\"HIGH\",\"id\":\"iss_50\"}})",
+            "mongDoi": {
+              "ids": [
+                "iss_49",
+                "iss_57",
+                "iss_55",
+                "iss_53"
+              ],
+              "next": {
+                "v": "MEDIUM",
+                "id": "iss_53"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "issuesPage([{\"id\":\"iss_49\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T01:00:00.000Z\"},{\"id\":\"iss_50\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T02:00:00.000Z\"},{\"id\":\"iss_51\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T03:00:00.000Z\"},{\"id\":\"iss_52\",\"deviceId\":\"dev_2\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T04:00:00.000Z\"},{\"id\":\"iss_53\",\"deviceId\":\"dev_3\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T05:00:00.000Z\"},{\"id\":\"iss_54\",\"deviceId\":\"dev_1\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T06:00:00.000Z\"},{\"id\":\"iss_55\",\"deviceId\":\"dev_2\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T07:00:00.000Z\"},{\"id\":\"iss_56\",\"deviceId\":\"dev_3\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T08:00:00.000Z\"},{\"id\":\"iss_57\",\"deviceId\":\"dev_1\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T09:00:00.000Z\"},{\"id\":\"iss_58\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_59\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T11:00:00.000Z\"},{\"id\":\"iss_60\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T12:00:00.000Z\"}], {\"limit\":5,\"sort\":\"createdAt\",\"deviceId\":\"dev_2\",\"after\":null})",
+            "mongDoi": {
+              "ids": [
+                "iss_49",
+                "iss_52",
+                "iss_55",
+                "iss_58"
+              ],
+              "next": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "issuesPage([{\"id\":\"iss_49\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T01:00:00.000Z\"},{\"id\":\"iss_50\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T02:00:00.000Z\"},{\"id\":\"iss_51\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T03:00:00.000Z\"},{\"id\":\"iss_52\",\"deviceId\":\"dev_2\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T04:00:00.000Z\"},{\"id\":\"iss_53\",\"deviceId\":\"dev_3\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T05:00:00.000Z\"},{\"id\":\"iss_54\",\"deviceId\":\"dev_1\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T06:00:00.000Z\"},{\"id\":\"iss_55\",\"deviceId\":\"dev_2\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T07:00:00.000Z\"},{\"id\":\"iss_56\",\"deviceId\":\"dev_3\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T08:00:00.000Z\"},{\"id\":\"iss_57\",\"deviceId\":\"dev_1\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T09:00:00.000Z\"},{\"id\":\"iss_58\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_59\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T11:00:00.000Z\"},{\"id\":\"iss_60\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T12:00:00.000Z\"}], {\"limit\":2,\"sort\":\"-createdAt\",\"severity\":\"HIGH\",\"deviceId\":\"dev_3\",\"after\":{\"v\":\"2026-10-07T06:00:00.000Z\",\"id\":\"iss_54\"}})",
+            "mongDoi": {
+              "ids": [],
+              "next": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Everything on one page ⇒ next null",
+              "vi": "Tất cả trên một trang ⇒ next null"
+            },
+            "goi": "issuesPage([{\"id\":\"iss_49\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T01:00:00.000Z\"},{\"id\":\"iss_50\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T02:00:00.000Z\"},{\"id\":\"iss_51\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T03:00:00.000Z\"},{\"id\":\"iss_52\",\"deviceId\":\"dev_2\",\"severity\":\"LOW\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T04:00:00.000Z\"},{\"id\":\"iss_53\",\"deviceId\":\"dev_3\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T05:00:00.000Z\"},{\"id\":\"iss_54\",\"deviceId\":\"dev_1\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T06:00:00.000Z\"},{\"id\":\"iss_55\",\"deviceId\":\"dev_2\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T07:00:00.000Z\"},{\"id\":\"iss_56\",\"deviceId\":\"dev_3\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T08:00:00.000Z\"},{\"id\":\"iss_57\",\"deviceId\":\"dev_1\",\"severity\":\"MEDIUM\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T09:00:00.000Z\"},{\"id\":\"iss_58\",\"deviceId\":\"dev_2\",\"severity\":\"HIGH\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T10:00:00.000Z\"},{\"id\":\"iss_59\",\"deviceId\":\"dev_3\",\"severity\":\"LOW\",\"status\":\"OPEN\",\"createdAt\":\"2026-10-07T11:00:00.000Z\"},{\"id\":\"iss_60\",\"deviceId\":\"dev_1\",\"severity\":\"HIGH\",\"status\":\"RESOLVED\",\"createdAt\":\"2026-10-07T12:00:00.000Z\"}], {\"limit\":20,\"sort\":\"-severity\",\"after\":null})",
+            "mongDoi": {
+              "ids": [
+                "iss_60",
+                "iss_58",
+                "iss_56",
+                "iss_51",
+                "iss_49",
+                "iss_57",
+                "iss_55",
+                "iss_53",
+                "iss_59",
+                "iss_54",
+                "iss_52",
+                "iss_50"
+              ],
+              "next": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing severities as strings: MEDIUM, LOW, HIGH.|||So severity như chuỗi: MEDIUM, LOW, HIGH."
+        },
+        {
+          "loi": "Putting createdAt into v for a severity list — the cursor must hold the current sort key.|||Đưa createdAt vào v cho danh sách sắp theo severity — con trỏ phải giữ khoá sắp hiện tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "business rank",
+          "vi": "thứ hạng nghiệp vụ"
+        },
+        {
+          "en": "decoded cursor",
+          "vi": "con trỏ đã giải mã"
+        }
+      ]
+    },
+    {
+      "title": "Lab 3 · 3 — Write walkAll(fetchPage): the walk.mjs check",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "cursor pagination",
+        "testing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p><code>fetchPage(cursor)</code> returns one page <code>{ data: [{ id }], next }</code> — call it with <code>null</code> first, then with each <code>next</code> until <code>next</code> is <code>null</code>. Return <code>{ pages, count, duplicates }</code>: how many pages were fetched, how many <b>distinct</b> ids were seen, and every id seen again (in the order the repeats occurred). Stop after 50 pages in any case, so a broken server cannot loop you forever.</p><p>Real Lab 3 output: <code>2 trang, 45 báo hỏng OPEN, không trùng</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>fetchPage(cursor)</code> trả một trang <code>{ data: [{ id }], next }</code> — gọi với <code>null</code> trước, rồi với từng <code>next</code> cho tới khi <code>next</code> là <code>null</code>. Trả <code>{ pages, count, duplicates }</code>: đã lấy bao nhiêu trang, thấy bao nhiêu id <b>khác nhau</b>, và mọi id bị thấy lại (theo thứ tự lần lặp xảy ra). Dừng sau 50 trang trong mọi trường hợp, để một server hỏng không bắt bạn lặp mãi.</p><p>Output thật của Lab 3: <code>2 trang, 45 báo hỏng OPEN, không trùng</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "fetchPage — (cursor | null) =&gt; { data: [{ id }], next: string | null }|||fetchPage — (cursor | null) =&gt; { data: [{ id }], next: chuỗi | null }",
+      "outputSpec": "{ pages, count, duplicates }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var P = {\"start\":{\"data\":[{\"id\":\"iss_60\"},{\"id\":\"iss_59\"}],\"next\":\"c1\"},\"c1\":{\"data\":[{\"id\":\"iss_58\"}],\"next\":null}}; return walkAll(function (c) { return P[c === null ? 'start' : c]; }); })()",
+          "output": "{\"pages\":2,\"count\":3,\"duplicates\":[]}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A Set remembers ids already seen.|||Một Set nhớ các id đã thấy.",
+        "do … while (cursor &amp;&amp; pages &lt; 50) fetches the first page unconditionally.|||do … while (cursor &amp;&amp; pages &lt; 50) lấy trang đầu vô điều kiện."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** follow next to the end ⇒ { pages, count, duplicates } */\nfunction walkAll(fetchPage) {\n  // Write your solution here\n  let cursor = null, pages = 0, count = 0;\n  while (true) {\n    const res = fetchPage(cursor);\n    pages++; count += res.data.length;\n    if (!res.next) break;\n    cursor = res.next;\n  }\n  return { pages, count, duplicates: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction walkAll(fetchPage) {\n  const seen = new Set();\n  const duplicates = [];\n  let cursor = null, pages = 0;\n  do {\n    const res = fetchPage(cursor);\n    pages++;\n    for (const item of res.data) {\n      if (seen.has(item.id)) duplicates.push(item.id);\n      else seen.add(item.id);\n    }\n    cursor = res.next;\n  } while (cursor && pages < 50);\n  return { pages, count: seen.size, duplicates };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the proof of rubric line 5: with cursor paging the walk sees every issue exactly once, also when someone reports in the middle. Run the same walk against an offset API with an insert halfway and duplicates appears.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là bằng chứng cho dòng 5 của rubric: với phân trang con trỏ, lượt đi thấy mọi báo hỏng đúng một lần, kể cả khi có người báo giữa chừng. Chạy cùng lượt đi với API offset có một lần chèn giữa chừng thì duplicates xuất hiện.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Two pages, no repeats",
+              "vi": "Hai trang, không lặp"
+            },
+            "goi": "(function () { var P = {\"start\":{\"data\":[{\"id\":\"iss_60\"},{\"id\":\"iss_59\"}],\"next\":\"c1\"},\"c1\":{\"data\":[{\"id\":\"iss_58\"}],\"next\":null}}; return walkAll(function (c) { return P[c === null ? 'start' : c]; }); })()",
+            "mongDoi": {
+              "pages": 2,
+              "count": 3,
+              "duplicates": []
+            }
+          },
+          {
+            "moTa": {
+              "en": "The offset walk of lesson 3.1",
+              "vi": "Lượt đi offset của bài 3.1"
+            },
+            "goi": "(function () { var P = {\"start\":{\"data\":[{\"id\":\"bk_200\"},{\"id\":\"bk_199\"},{\"id\":\"bk_198\"},{\"id\":\"bk_197\"},{\"id\":\"bk_196\"}],\"next\":\"o5\"},\"o5\":{\"data\":[{\"id\":\"bk_196\"},{\"id\":\"bk_195\"},{\"id\":\"bk_194\"},{\"id\":\"bk_193\"},{\"id\":\"bk_192\"}],\"next\":null}}; return walkAll(function (c) { return P[c === null ? 'start' : c]; }); })()",
+            "mongDoi": {
+              "pages": 2,
+              "count": 9,
+              "duplicates": [
+                "bk_196"
+              ]
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () { var P = {\"start\":{\"data\":[],\"next\":null}}; return walkAll(function (c) { return P[c === null ? 'start' : c]; }); })()",
+            "mongDoi": {
+              "pages": 1,
+              "count": 0,
+              "duplicates": []
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A broken server returns the same next forever",
+              "vi": "Server hỏng trả mãi cùng một next"
+            },
+            "goi": "(function () { var P = {\"start\":{\"data\":[{\"id\":\"a_1\"}],\"next\":\"x\"},\"x\":{\"data\":[{\"id\":\"a_1\"},{\"id\":\"a_2\"}],\"next\":\"x\"}}; return walkAll(function (c) { return P[c === null ? 'start' : c]; }); })()",
+            "mongDoi": {
+              "pages": 50,
+              "count": 2,
+              "duplicates": [
+                "a_1",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2",
+                "a_1",
+                "a_2"
+              ]
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting every item instead of distinct ids.|||Đếm mọi phần tử thay vì số id khác nhau."
+        },
+        {
+          "loi": "while (true) — a server that returns the same next forever hangs the script.|||while (true) — server trả mãi cùng một next làm script treo."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "walk",
+          "vi": "đi hết danh sách theo next"
+        },
+        {
+          "en": "guard",
+          "vi": "chốt chặn (giới hạn số vòng)"
+        }
+      ]
+    }
+  ]
+}

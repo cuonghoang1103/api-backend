@@ -98,6 +98,36 @@
       "name": "Lab 2 — Issue reports, version 2",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 2.1 — Part A: layer and code for each input · Lab 2.2 — Write reportIssueV2(db, req): the whole POST in one function · Lab 2.3 — Write resolveIssueV2(db, req): action + optional body + view"
+    },
+    {
+      "slug": "api-3-1-offset",
+      "name": "3.1 Offset pagination and its problems",
+      "level": "BEGINNER",
+      "description": "Luyện: Offset 1 — What lesson 3.1 measured · Offset 2 — Write sortNewest(rows): a stable order · Offset 3 — Write offsetPage(ids, limit, offset): data, page and next · Offset 4 — Write pagingAudit(before, after, limit): duplicates and rows never shown"
+    },
+    {
+      "slug": "api-3-2-cursor",
+      "name": "3.2 Cursor pagination done right",
+      "level": "BEGINNER",
+      "description": "Luyện: Cursor 1 — Bookmarks, not page numbers · Cursor 2 — Write afterCursor(rows, cursor, limit) · Cursor 3 — Write keysetSql(sort): the query behind a cursor · Cursor 4 — Offset or cursor?"
+    },
+    {
+      "slug": "api-3-3-loc",
+      "name": "3.3 Filtering and search parameters",
+      "level": "BEGINNER",
+      "description": "Luyện: Filters 1 — Rules and surprises · Filters 2 — Write matchBooking(b, f): AND, lists, overlap, search · Filters 3 — Write canonicalQuery(params): what a cursor fingerprint hashes · Filters 4 — Which answer, which code?"
+    },
+    {
+      "slug": "api-3-4-sap-xep",
+      "name": "3.4 Sorting, sparse fields and includes",
+      "level": "BEGINNER",
+      "description": "Luyện: Sort & fields 1 — What lesson 3.4 measured · Sort & fields 2 — Write orderBy(sort, ranks): one comparator for every order · Sort & fields 3 — Write pickFields(view, fields, allowed): a sparse fieldset · Sort & fields 4 — Write includeLab(page, labs) without N+1"
+    },
+    {
+      "slug": "api-3-5-lab",
+      "name": "Lab 3 — The maintenance list",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 3 · 1 — Part A: the answers before the code · Lab 3 · 2 — Write issuesPage(issues, query): filter, rank, page · Lab 3 · 3 — Write walkAll(fetchPage): the walk.mjs check"
     }
   ]
 }

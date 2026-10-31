@@ -964,7 +964,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <span class="tok-comment">// product.author is now { _id, name, email } not just an id</span></code></pre>
 <em>Populate cross-references documents — e.g., fill each comment with its user's info on query. This is a headline outcome the Project must demonstrate.</em></div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Select fields to avoid over-fetching and leaking data.</b> <code>.populate('author', 'name')</code> returns only the author's name — never the password hash. And <code>.select('-password')</code> on a user query excludes sensitive fields by default. Deciding exactly which fields cross the wire is both a performance and a security habit that the basic "use populate" instruction skips.</div>
-<div class="pitfall">Reading a Mongoose result before <code>await</code> gives you a pending Promise, not data. <code>const p = Product.find()</code> then <code>p.length</code> is a bug — you must <code>await Product.find()</code> first.</div>
+<div class="pitfall">Reading a Mongoose result before <code>await</code> gives you a <code>Query</code> object (it has <code>.then()</code>, but it is a plan for a request, not data). <code>const p = Product.find()</code> then <code>p.length</code> is a bug — you must <code>await Product.find()</code> first.</div>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.2</span>
@@ -994,7 +994,7 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <span class="tok-comment">// product.author gio la { _id, name, email } khong chi la id</span></code></pre>
 <em>Populate liên kết chéo các document — vd điền mỗi comment với info user của nó khi truy vấn. Đây là đầu ra tiêu điểm Project phải thể hiện.</em></div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Chọn field để tránh over-fetch và rò rỉ dữ liệu.</b> <code>.populate('author', 'name')</code> chỉ trả tên tác giả — không bao giờ trả password hash. Và <code>.select('-password')</code> trên truy vấn user loại field nhạy cảm mặc định. Quyết định chính xác field nào đi qua dây là thói quen cả về hiệu năng lẫn bảo mật mà chỉ dẫn "dùng populate" cơ bản bỏ qua.</div>
-<div class="pitfall">Đọc kết quả Mongoose trước <code>await</code> cho bạn một Promise đang chờ, không phải dữ liệu. <code>const p = Product.find()</code> rồi <code>p.length</code> là bug — bạn phải <code>await Product.find()</code> trước.</div>
+<div class="pitfall">Đọc kết quả Mongoose trước <code>await</code> cho bạn một đối tượng <code>Query</code> (có <code>.then()</code>, nhưng chỉ là kế hoạch truy vấn, chưa phải dữ liệu). <code>const p = Product.find()</code> rồi <code>p.length</code> là bug — bạn phải <code>await Product.find()</code> trước.</div>
 </div>`,
         },
         {

@@ -20,8 +20,23 @@ import { lamDeck as lamDeckPg, esc } from './_pg-chung.mjs';
 export const C = { link: '#7c3aed', ip: '#336791', tcp: '#2f7d4f', app: '#e06d10', phy: '#8a8a8a', br: '#b85a2b', or: '#e08a1e', red: '#c0392b', gy: '#8a8a8a' };
 export const LAYER = { link: 'Link (Ethernet)', ip: 'Internet (IP)', tcp: 'Transport (TCP)', app: 'Application (HTTP)' };
 
+/**
+ * TỰ LẤP KHUNG (31/10/2026, sau duyệt đợt mẫu: "không để 1/4 dưới trống", "không tràn mép phải"). Mỗi slide nội dung mang một
+ * đoạn script nhỏ chạy lúc render: gói nội dung .nd vào một khối rồi tìm hệ số phóng (CSS zoom) LỚN NHẤT trong [0,8; 1,5] sao cho
+ *   • không khối mã nào bị cắt ngang (pre.scrollWidth ≤ clientWidth) và .nd không tràn ngang;
+ *   • nội dung cao ≤ 96 % vùng .nd.
+ * ⇒ slide ít chữ tự to lên lấp khung, slide nhiều chữ tự co vừa. Hình SVG co giãn theo bề ngang (max-width:100%).
+ * Kiểm bằng scripts/_kiem-lap-day-slide.mjs (tràn ngang + vùng nội dung < 70 %). Tắt cho một slide: { tuLap: false }.
+ */
+const TU_LAP = `<style>.pg .nd svg{max-width:100%;height:auto}.pg .nd .hai>*,.pg .nd .ba>*,.pg .nd .vsd>*{min-width:0}</style><script>(function(){var nd=document.querySelector('.pg .nd');if(!nd||nd.dataset.lap)return;nd.dataset.lap='1';
+var cs=getComputedStyle(nd),w=document.createElement('div');w.className='nfd-lap';w.style.cssText='display:flex;flex-direction:column;min-width:0;gap:'+cs.rowGap;
+while(nd.firstChild)w.appendChild(nd.firstChild);nd.appendChild(w);var avail=nd.clientHeight-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom);
+function ok(z){w.style.zoom=z;if(nd.scrollWidth>nd.clientWidth+1)return false;var R=nd.getBoundingClientRect().right-parseFloat(cs.paddingRight)+2,E=w.querySelectorAll('pre,.term,table,svg,.o,.card,img');for(var j=0;j<E.length;j++)if(E[j].getBoundingClientRect().right>R)return false;var p=w.querySelectorAll('pre');for(var i=0;i<p.length;i++)if(p[i].scrollWidth>p[i].clientWidth+2)return false;return w.getBoundingClientRect().height<=avail*0.96;}
+var lo=0.8,hi=1.5;if(ok(1))lo=1;else hi=1;for(var k=0;k<12;k++){var m=(lo+hi)/2;if(ok(m))lo=m;else hi=m;}w.style.zoom=lo;nd.dataset.zoom=lo.toFixed(2);})();</script>`;
+
 export function lamDeck(meta, items) {
-  return lamDeckPg({ khoa: 'Networking for Developers', duong: 'courses/networking-for-developers', bieuTuong: '🌐', khau: 'from zero to production networks', ...meta }, items);
+  const out = lamDeckPg({ khoa: 'Networking for Developers', duong: 'courses/networking-for-developers', bieuTuong: '🌐', khau: 'from zero to production networks', ...meta }, items);
+  return out.map((s, i) => (items[i].cover || items[i].tuLap === false ? s : { ...s, body: s.body + TU_LAP }));
 }
 
 /* ── nguyên tố SVG ── */
@@ -164,6 +179,28 @@ export function bang(cols, rows, opts = {}) {
   return `<table class="t" style="font-size:${fs}px;line-height:1.32${w ? `;width:${w}px` : ''}"><tr>${cols.map((c) => `<th>${c}</th>`).join('')}</tr>${rows.map((r) => `<tr>${r.map((v) => `<td>${v}</td>`).join('')}</tr>`).join('')}</table>`;
 }
 
+/**
+ * Ngắt một dòng lệnh dài thành nhiều dòng nối bằng " \\" (như người gõ trong terminal). Chỉ ngắt ở khoảng trắng NGOÀI dấu
+ * nháy đơn (trong nháy đơn, "\\ + xuống dòng" bị giữ nguyên chữ nên lệnh sẽ khác); trong nháy kép bash bỏ "\\ + xuống dòng" nên
+ * vẫn đúng lệnh cũ. Dòng tiếp theo thụt 4 dấu cách.
+ */
+export function gayLenh(line, max = 104) {
+  if (line.length <= max) return [line];
+  const out = []; let cur = '', q = '', lastBreak = -1;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (q) { if (ch === q) q = ''; } else if (ch === "'" || ch === '"') q = ch;
+    cur += ch;
+    if (ch === ' ' && q !== "'") lastBreak = cur.length;
+    if (cur.length >= max && lastBreak > 8) {
+      out.push(cur.slice(0, lastBreak - 1) + ' \\');
+      cur = '    ' + cur.slice(lastBreak); lastBreak = -1;
+    }
+  }
+  out.push(cur);
+  return out;
+}
+
 /* ── output THẬT đọc thẳng từ content/courses/networking-for-developers/lab/out (cùng nguồn với bài đọc) ── */
 import fs from 'node:fs';
 const OUT = new URL('../../content/courses/networking-for-developers/lab/out/', import.meta.url);
@@ -183,6 +220,8 @@ export function ra(name, prefix, n = 1, opts = {}) {
   let seg = L.slice(i, j);
   while (seg.length && seg[seg.length - 1] === '') seg.pop();
   if (opts.drop) seg = seg.filter((l, k) => k === 0 || !opts.drop.test(l));
+  if (opts.boLenh) seg = seg.filter((l) => !l.startsWith('$ '));   // chỉ lấy OUTPUT (để tách số liệu theo dòng)
+  seg = seg.flatMap((l) => (l.startsWith('$ ') ? gayLenh(l, opts.gay ?? 104) : [l]));
   if (opts.cut) seg = seg.map((l) => (l.length > opts.cut ? l.slice(0, opts.cut - 1) + '…' : l));
   if (opts.max && seg.length > opts.max) seg = [...seg.slice(0, opts.max), '…'];
   return seg.join('\n');

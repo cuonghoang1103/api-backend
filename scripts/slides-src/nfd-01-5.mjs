@@ -81,8 +81,8 @@ ${term(ra('c14-client', 'for i in 1 2 3', 1, { cut: 112 }), { sm: true })}
 <p style="margin:0;font-size:19px">Two live connections plus many in <b>TIME-WAIT</b> — closed ones the kernel remembers for 60 s (Chapter 4). nginx also opened a <b>new</b> connection to the API for each request: see the port in <code class="i">seenFrom</code> grow.</p>` },
 
   { t: '127.0.0.1 vs 0.0.0.0: who may connect?', giua: true, body: `
-${two(term(ra('c14-bind-api', 'ss -tlnp', 1, { drop: /:3000|127\.0\.0\.11/ }) + '\n' + ra('c14-bind-api', 'nc -w 1 127.0.0.1 4000', 3), { sm: true, title: 'on the api machine itself' }),
-    term(ra('c14-bind-client', 'nc -w 1 -v', 2), { sm: true, title: 'from the client, across the network' }))}
+${term(ra('c14-bind-api', 'ss -tlnp', 1, { drop: /:3000|127\.0\.0\.11/ }) + '\n' + ra('c14-bind-api', 'nc -w 1 127.0.0.1 4000', 3), { sm: true, title: 'on the api machine itself' })}
+${term(ra('c14-bind-client', 'nc -w 1 -v', 2), { sm: true, title: 'from the client, across the network' })}
 ${vsd('<p style="margin:0;font-size:20px"><code class="i">listen(4000, "127.0.0.1")</code> — only programs on <b>this machine</b> can connect. From outside: <b>refused</b>.</p>',
     '<p style="margin:0;font-size:20px"><code class="i">listen(4001, "0.0.0.0")</code> — every network card of the machine accepts connections.</p>',
     'Loopback only', 'All interfaces')}` },

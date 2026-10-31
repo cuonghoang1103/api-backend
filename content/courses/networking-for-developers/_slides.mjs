@@ -15,7 +15,8 @@
  * rồi bài chèn `${G}` ở ĐẦU content. rows phải phủ đủ mọi slide của deck, đúng một lần mỗi số.
  */
 export const CDN_ROOT = 'https://media.cuongthai.com/images/academy/NFD';
-const VER = {};
+// v2 (01/11/2026): cả 10 deck dựng lại sau phép kiểm lấp đầy/tràn ngang (_kiem-lap-day-slide.mjs). Deck mới ⇒ ghi vào đây.
+const VER = Object.fromEntries(['nfd-00-a', 'nfd-00-b', 'nfd-00-1', 'nfd-00-2', 'nfd-01-1', 'nfd-01-2', 'nfd-01-3', 'nfd-01-4', 'nfd-01-5', 'nfd-lab-1'].map((d) => [d, 'v2']));
 const pad = (n) => String(n).padStart(3, '0');
 const attr = (s) => String(s).replace(/<[^>]+>/g, '').replace(/&/g, '&amp;').replace(/"/g, '&quot;');
 export const img = (deck, n) => `${CDN_ROOT}/${VER[deck] || 'v1'}/${deck}/${pad(n)}.webp`;

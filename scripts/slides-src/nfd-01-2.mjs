@@ -9,7 +9,7 @@ const term = (t, o = {}) => sh(t, o);
 
 /* Mỗi thiết bị đọc tới tầng nào */
 const reads = () => {
-  const w = 1110, h = 250, cols = [['switch', 2, C.link], ['router', 3, C.ip], ['L4 load balancer', 4, C.tcp], ['nginx (L7 proxy)', 7, C.app], ['your API', 7, C.app]];
+  const w = 1110, h = 300, cols = [['switch', 2, C.link], ['router', 3, C.ip], ['L4 load balancer', 4, C.tcp], ['nginx (L7 proxy)', 7, C.app], ['your API', 7, C.app]];
   const lay = [['7 HTTP', C.app], ['4 TCP', C.tcp], ['3 IP', C.ip], ['2 Ethernet', C.link]];
   let s = '';
   cols.forEach(([n, upTo, c], i) => {
@@ -17,8 +17,8 @@ const reads = () => {
     s += T(x + 95, 22, n, 18, { a: 'middle', w: 800, f: c });
     lay.forEach(([l, lc], j) => {
       const num = Number(l[0]), on = num <= upTo;
-      s += R(x, 36 + j * 50, 190, 42, on ? lc + '30' : '#f4f4f4', on ? lc : '#ddd', { rx: 6, sw: on ? 2.5 : 1 });
-      s += T(x + 95, 63 + j * 50, l, 17, { a: 'middle', w: on ? 700 : 400, f: on ? lc : '#bbb' });
+      s += R(x, 36 + j * 64, 190, 54, on ? lc + '30' : '#f4f4f4', on ? lc : '#ddd', { rx: 6, sw: on ? 2.5 : 1 });
+      s += T(x + 95, 70 + j * 64, l, 19, { a: 'middle', w: on ? 700 : 400, f: on ? lc : '#bbb' });
     });
   });
   return svg(w, h, s);

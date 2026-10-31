@@ -2,7 +2,7 @@
  * nfd-00-2 — Networking for Developers, bài 0.2 "Chuyện gì xảy ra khi bạn gõ một địa chỉ rồi Enter". Khuôn _nfd-chung.mjs.
  * Output = CHẠY THẬT: lab/out/c00-internet.out.txt (Internet thật, 31/10/2026), c00-url-lab.out.txt (trong lab).
  */
-import { lamDeck, sh, two, box, steps, kw, bang, vsd, svg, T, R, C } from './_nfd-chung.mjs';
+import { lamDeck, sh, two, box, cards, steps, kw, bang, vsd, svg, T, R, C } from './_nfd-chung.mjs';
 
 export const deck = { key: 'nfd-00-2', code: 'NFD 0.2', title: 'What happens when you type a URL and press Enter', sub: 'Networking for Developers · Section 0' };
 
@@ -80,7 +80,9 @@ ${term(`$ curl -s -o /dev/null https://cuongthai.com/ -w \\
 dns=0.003260 connect=0.011939 tls=0.026036 ttfb=0.069547 total=0.102738`, { sm: true })}
 ${vsd('<p style="margin:0;font-size:20px">“TLS took 26 ms, the server took 70 ms.”</p><p class="nho" style="margin:4px 0 0">Every value is a moment since the start, not a duration.</p>',
     '<p style="margin:0;font-size:20px">TCP = 11.9 − 3.3 = <b>8.7 ms</b> · TLS = 26.0 − 11.9 = <b>14.1 ms</b> · server = 69.5 − 26.0 = <b>43.5 ms</b> · body = 33.2 ms</p>',
-    '✗ Reading them as durations', '✓ Subtract the previous stage')}` },
+    '✗ Reading them as durations', '✓ Subtract the previous stage')}
+${bang(['Stage', 'DNS', 'TCP connect', 'TLS handshake', 'waiting for server', 'download'], [['duration (ms)', '3.3', '8.7', '14.1', '43.5', '33.2']], { fs: 24 })}
+<p class="nho" style="margin:0">curl’s own manual describes each variable as “the time, in seconds, it took from the start until …” — a moment, not a length.</p>` },
 
   { t: 'Drawn to scale: one request to cuongthai.com', giua: true, body: `
 ${fall([['cold request', P(3.26, 11.94, 26.04, 69.55, 102.74), 102.74]], 110)}
@@ -92,7 +94,12 @@ ${term(`$ curl -s -o /dev/null -o /dev/null -w 'url=%{url} dns=… connect=… t
     https://cuongthai.com/ https://cuongthai.com/about
 url=https://cuongthai.com/ dns=0.002108 connect=0.008297 tls=0.020146 ttfb=0.041292 total=0.085199
 url=https://cuongthai.com/about dns=0.000000 connect=0.000000 tls=0.000000 ttfb=0.046141 total=0.206101`, { sm: true })}
-${box('Why browsers and HTTP clients keep connections open', 'The second request rode the <b>same TCP + TLS connection</b>: DNS, TCP and TLS cost <b>zero</b>. This is keep-alive and connection pooling — the cheapest speed-up in web development (Chapters 4, 8, 13).', 'xanh')}` },
+${box('Why browsers and HTTP clients keep connections open', 'The second request rode the <b>same TCP + TLS connection</b>: DNS, TCP and TLS cost <b>zero</b>. This is keep-alive and connection pooling — the cheapest speed-up in web development (Chapters 4, 8, 13).', 'xanh')}
+${cards([
+    ['Browsers', 'Keep connections per host open; with HTTP/1.1 Chrome opens up to <b>6 per host</b>, with HTTP/2 usually <b>one</b> shared by all requests.'],
+    ['Node.js', '<code class="i">fetch</code> (undici) keeps connections alive by default — creating a new client per call throws that away.'],
+    ['Databases', 'Drivers keep a <b>pool</b>: Prisma, HikariCP and pg open a few connections and reuse them for every query.'],
+  ])}` },
 
   { t: 'Distance changes everything', giua: true, body: `
 ${fall([
@@ -100,7 +107,12 @@ ${fall([
     ['cuongthai.com', P(3.26, 11.94, 26.04, 69.55, 102.74), 102.74],
     ['example.com', P(45.94, 73.07, 132.29, 186.30, 186.43), 186.43],
   ], 200)}
-<p style="margin:0;font-size:20px">The lab answers in under 2 ms; a server in Vietnam in ~100 ms; a server far away spends <b>59 ms on TLS alone</b> — because each round trip is longer. Faster CPUs do not fix distance.</p>` },
+${bang(['Destination', 'TCP connect', 'TLS handshake', 'first byte after TLS', 'total'], [
+    ['lab (same computer)', '0.4 ms', '— (no TLS)', '1.2 ms', '1.6 ms'],
+    ['cuongthai.com (Vietnam)', '8.7 ms', '14.1 ms', '43.5 ms', '102.7 ms'],
+    ['example.com (far away)', '27.1 ms', '59.2 ms', '54.0 ms', '186.4 ms'],
+  ], { fs: 20 })}
+<p style="margin:0;font-size:20px">Each round trip is longer far away, so every network stage grows — <b>59 ms on TLS alone</b>. Faster CPUs do not fix distance.</p>` },
 
   { t: 'A simple model you can do in your head', to: true, giua: true, body: `
 ${box('time to first byte ≈', '<b>DNS</b> (0 if cached) + <b>1 RTT</b> (TCP) + <b>1 RTT</b> (TLS 1.3) + <b>1 RTT + server time</b> (the request)', 'lam')}

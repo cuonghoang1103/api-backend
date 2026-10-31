@@ -63,7 +63,11 @@ Mẫu: `bai/013-ethernet-arp.mjs`. Thoát ký tự: không backtick trong thân 
 `import { lamDeck, … , ra } from './_nfd-chung.mjs'` · `lamDeck({ chuong: 'Chapter N — …', bai: 'N.M' }, [...])` · slide EN, 12–15
 slide/bài, một ý một slide, lấp đều khung (`to`, `giua`), mã ≤ ~14 dòng, hình/sơ đồ ở chỗ khó, bảng chữ dùng `bang()` (to), bảng
 dữ liệu `tbl()`. Quy trình: `_kiem-tran-slide` → render → MỞ TỪNG ẢNH (ghép 2×2) sửa tới sạch → `upload-academy-slides.mjs --prefix NFD/v1`
-→ `giang/nfd-NN-X.mjs` (mỗi slide 1–2 đoạn EN + VI). Deck đã đẩy mà sửa ⇒ NFD/v2 + ghi `VER` trong `_slides.mjs`. KHÔNG GET ảnh
+→ `giang/nfd-NN-X.mjs` (mỗi slide 1–2 đoạn EN + VI).
+**Bắt buộc trước khi đẩy:** `node scripts/_kiem-lap-day-slide.mjs --decks 'scripts/slides-src/nfd-*.mjs'` = 0 lỗi (tràn ngang
+khối mã/bảng/hình, tràn dọc, nội dung < 70 % chiều cao). `lamDeck` của `_nfd-chung.mjs` tự gắn TU_LAP (thu/phóng `zoom` 0.8–1.5
+cho vừa khung) — slide vẫn trống thì THÊM nội dung có ích (bảng, bước, hình), đừng hạ ngưỡng. Output dài: `ra(…, { gay, cut,
+boLenh })` (lệnh dài tự gãy dòng ở dấu cách bằng ` \`; `boLenh` = chỉ output). Rồi ghép ảnh 3×3 và MỞ xem từng tấm. Deck đã đẩy mà sửa ⇒ prefix kế tiếp (đang là NFD/v2 cho cả 10 deck Mục 0–Ch1) + ghi `VER` trong `_slides.mjs`. KHÔNG GET ảnh
 media.cuongthai.com trước khi đẩy.
 
 ## 5. Mô phỏng `/net-lab`
@@ -83,6 +87,6 @@ nat-table, lb) ⇒ dựng theo cùng khuôn + tour + WhereBox, số tính ra ph�
 
 ## 7. Kiểm trước khi báo
 
-`node scripts/course-content-check.mjs ./content/courses/networking-for-developers.mjs` (0 lỗi) · nạp được mọi tệp ·
+`node scripts/course-content-check.mjs ./content/courses/networking-for-developers.mjs` (0 lỗi) · `_kiem-lap-day-slide` 0 lỗi · nạp được mọi tệp ·
 seed thử local 5434 (0 bài cũ mất) · `npx tsx --test frontend/src/components/labs/registry.test.ts` khi đụng mô phỏng ·
 `docker ps -a --filter label=netlab=1` sạch khi xong.

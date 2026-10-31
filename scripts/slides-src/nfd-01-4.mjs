@@ -77,8 +77,12 @@ ${seq('client 10.10.1.10', 'client2 10.10.1.11', [
 ${term(tcpd(ra('c13-arp', 'tcpdump -e -n -r', 1, { drop: /^reading/, max: 6 })), { sm: true, title: 'tcpdump -e (timestamps removed)' })}` },
 
   { t: 'Why is the request there twice?', to: true, body: `
-${term(tcpd(ra('c13-q-in', 'tcpdump -e -n -r', 1, { drop: /^reading/ })), { title: 'captured with -Q in: only frames ARRIVING at the client' })}
-${box('Measured, not guessed', 'Capturing only <b>incoming</b> frames shows one copy of our <b>own</b> broadcast coming back in: the Docker Desktop bridge reflects it. It is not a second request — a quirk of this virtual switch. Real lesson: when a capture looks odd, ask “in which direction?”', 'lam')}` },
+${term(tcpd(ra('c13-q-in', 'tcpdump -e -n -r', 1, { drop: /^reading/ })).replace(/, length 28$/gm, ''), { title: 'captured with -Q in: only frames ARRIVING at the client (trailing “, length 28” trimmed)' })}
+${box('Measured, not guessed', 'Capturing only <b>incoming</b> frames shows one copy of our <b>own</b> broadcast coming back in: the Docker Desktop bridge reflects it. It is not a second request — a quirk of this virtual switch. Real lesson: when a capture looks odd, ask “in which direction?”', 'lam')}
+${steps([
+    '<code class="i">tcpdump -Q in</code> / <code class="i">-Q out</code> — capture only one direction (Linux)',
+    'A classic .pcap file (what <code class="i">tcpdump -w</code> writes) does not record direction: decide it <b>while</b> capturing, or capture on both ends',
+  ])}` },
 
   { t: 'The ARP cache: remember, then forget', giua: true, body: `
 ${term(ra('c13-arp', 'ip neigh show', 1) + '\n' + ra('c13-arp', 'ip neigh flush all', 2) + '\n…  (two pings later)\n' + ra('c13-arp', 'ip neigh show', 1, { lan: 3 }), { sm: true })}
@@ -87,20 +91,27 @@ ${bang(['State', 'Means'], [
     ['STALE', 'not confirmed for a while — still used, re-checked on next use'],
     ['DELAY → PROBE', 'checking: wait 5 s, then unicast ARP probes'],
     ['FAILED', 'no answer — ask again by broadcast next time'],
-  ], { fs: 19 })}` },
+  ], { fs: 19 })}
+${box('Linux defaults, read from /proc/sys/net/ipv4/neigh/eth0', 'reachable time <b>30 s</b> (randomised 15–45 s) · wait before probing <b>5 s</b> · <b>3</b> unicast probes, <b>1 s</b> apart · <b>3</b> broadcast requests when the entry is new.', 'lam')}` },
 
   { t: 'Through the router: MAC changes, IP does not', giua: true, body: `
-${term(ra('c13-hop-client', 'tshark', 1).split('\n').slice(1).join('\n'), { sm: true, title: 'LAN side (captured on the client)' })}
-${term(ra('c13-hop-web', 'tshark', 1).split('\n').slice(1).join('\n'), { sm: true, title: 'DMZ side (captured on the web server) — the same request' })}
-<p style="margin:0;font-size:20px">Both <b>MACs</b> replaced · <b>IP addresses</b> and ports unchanged · <b>TTL</b> 64 → 63 · IP checksum recomputed.</p>` },
+${term(ra('c13-hop-client', 'tshark', 1, { boLenh: true }), { sm: true, title: 'LAN side (captured on the client)' })}
+${term(ra('c13-hop-web', 'tshark', 1, { boLenh: true }), { sm: true, title: 'DMZ side (captured on the web server) — the same request' })}
+${bang(['Field', 'LAN side → DMZ side', 'Why'], [
+    ['source / destination MAC', '<b>both replaced</b>', 'a new frame for the new link'],
+    ['source / destination IP', 'unchanged', 'the address of the whole journey (no NAT here)'],
+    ['TTL', '64 → <b>63</b>', 'every router lowers it by one'],
+    ['IP checksum', '<b>recomputed</b>', 'a header field (TTL) changed'],
+    ['ports, TCP, HTTP', 'unchanged', 'a router never reads above IP'],
+  ], { fs: 19 })}` },
 
   { t: 'Bug: the machine was replaced, the cache was not', body: `
-${two(term(ra('c13-stale-2', 'ip neigh', 2, { drop: /^$|statistics|PING/ }) , { sm: true, title: 'client2 now has MAC …:01:bb' }),
-    term(ra('c13-stale-garp', 'arping', 1) + '\n' + ra('c13-stale-3', 'ip neigh', 1), { sm: true, title: 'the new machine announces itself' }))}
+${term(ra('c13-stale-2', 'ip neigh', 2, { drop: /^$|statistics|PING/ }), { sm: true, title: 'client2 now has MAC …:01:bb — the client still uses the old one' })}
+${term(ra('c13-stale-garp', 'arping', 1) + '\n' + ra('c13-stale-3', 'ip neigh', 1), { sm: true, title: 'the new machine announces itself (gratuitous ARP)' })}
 ${box('What happened', 'The client still sent frames to the <b>old MAC</b> …:01:0b: 3 pings, 0 replies, while the cache said REACHABLE. A <b>gratuitous ARP</b> (“10.10.1.11 is at …:01:bb”) from the new machine updated every cache at once.', 'do2')}` },
 
   { t: 'Without the announcement: about 9 seconds of loss', giua: true, body: `
-${term(ra('c13-stale-cho', 'for i in', 1).replace(/^\$ .*/, '$ for i in $(seq 1 90); do ping -c1 -W1 10.10.1.11 …; print only when something changes; done'), { title: 'client2 changed its MAC again to …:01:cc, silently' })}
+${term(ra('c13-stale-cho', 'for i in', 1, { gay: 96 }), { sm: true, title: 'client2 changed its MAC again to …:01:cc, silently — one ping per second, a line only when something changes' })}
 ${steps([
     '<b>DELAY</b>: entry is old, traffic flows to the old MAC — lost — kernel waits 5 s',
     '<b>PROBE</b>: unicast ARP to the old MAC — no answer',
@@ -113,6 +124,7 @@ ${steps([
 <li>ARP frames are built by the kernel and sent by the <b>network chip</b>; your program never sees them</li>
 <li>The <b>switch table</b> lives in the switch — here, inside the Docker VM’s kernel (<code class="i">bridge fdb</code>)</li>
 <li>Failover tools (keepalived, cloud floating IPs) send gratuitous ARP on purpose when an IP moves</li>
+<li>IPv6 does the same job with <b>Neighbor Discovery</b> (ICMPv6) instead of ARP — Chapter 2</li>
 </ul>` },
 
   { t: 'Summary', to: true, giua: true, body: `

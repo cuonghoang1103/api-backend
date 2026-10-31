@@ -2,7 +2,7 @@
  * nfd-01-1 — Networking for Developers, bài 1.1 "Bit, byte, hex và tín hiệu: bảng chữ cái của mạng" (bài MỚI 31/10/2026,
  * slug netdev-1-0-bit-byte — dạy từ số 0 theo luật khoá tự đủ). Output = CHẠY THẬT (lab/out/c10-bit-byte.out.txt).
  */
-import { lamDeck, sh, two, box, cards, steps, kw, bang, vsd, svg, T, R, C } from './_nfd-chung.mjs';
+import { lamDeck, sh, two, box, cards, steps, kw, bang, vsd, svg, T, R, C, ra } from './_nfd-chung.mjs';
 
 export const deck = { key: 'nfd-01-1', code: 'NFD 1.1', title: 'Bits, bytes, hex and signals', sub: 'Networking for Developers · Chapter 1' };
 const term = (t, o = {}) => sh(t, o);
@@ -62,27 +62,18 @@ ${cards([
   ])}` },
 
   { t: 'Every packet tool prints bytes in hex', giua: true, body: `
-${term(`$ printf 'GET' | xxd
-00000000: 4745 54                                  GET
-$ printf 'GET' | xxd -b
-00000000: 01000111 01000101 01010100                             GET`)}
+${term(ra('c10-bit-byte', "printf 'GET' | xxd", 2))}
 ${two(box('Read it', '<b>47</b> = G · <b>45</b> = E · <b>54</b> = T. The left column is the <b>offset</b> (how many bytes from the start); the right column shows printable characters.', 'lam'),
     box('Why hex, not binary', 'One byte = exactly two hex digits. <code class="i">01000111</code> is hard to read; <code class="i">47</code> is not. tcpdump, Wireshark, xxd and MAC addresses all use hex.', 'xanh'))}` },
 
   { t: 'Text is bytes — and not one byte per letter', giua: true, body: `
-${term(`$ printf 'Xin chào' | xxd
-00000000: 5869 6e20 6368 c3a0 6f                   Xin ch..o
-$ python3 -c "print(len('Xin chào'), 'characters,', len('Xin chào'.encode()), 'bytes')"
-8 characters, 9 bytes`)}
+${term(ra('c10-bit-byte', "printf 'Xin chào' | xxd", 2, { gay: 80 }))}
 ${vsd('<p style="margin:0;font-size:20px">Content-Length = number of <b>characters</b> ⇒ the last byte of the body is cut off, the JSON is broken.</p>',
     '<p style="margin:0;font-size:20px">Content-Length = number of <b>bytes</b> in UTF-8: “à” is <code class="i">c3 a0</code> — two bytes.</p>',
     '✗ Counting letters', '✓ Counting bytes')}` },
 
   { t: 'Numbers are bytes too: big-endian on the wire', giua: true, body: `
-${term(`$ python3 -c "print((80).to_bytes(2, 'big').hex(), (443).to_bytes(2, 'big').hex(), (50228).to_bytes(2, 'big').hex())"
-0050 01bb c434
-$ python3 -c "print('10.10.2.10 =', bytes([10, 10, 2, 10]).hex(' '))"
-10.10.2.10 = 0a 0a 02 0a`, { sm: true })}
+${term(ra('c10-bit-byte', 'python3 -c "print((80)', 1, { gay: 80 }) + '\n' + ra('c10-bit-byte', "python3 -c \"print('10.10.2.10", 1))}
 ${bang(['Value', 'In a packet', 'Rule'], [
     ['port 80', '<code class="i">00 50</code>', '2 bytes, <b>most significant byte first</b>'],
     ['port 443', '<code class="i">01 bb</code>', '1 × 256 + 187 = 443'],
@@ -90,25 +81,16 @@ ${bang(['Value', 'In a packet', 'Rule'], [
   ], { fs: 20 })}` },
 
   { t: 'Your CPU stores numbers the other way round', to: true, body: `
-${term(`$ python3 -c "import sys; print(sys.byteorder)"
-little
-$ python3 -c "import socket; print(socket.htons(80), hex(socket.htons(80)))"
-20480 0x5000`)}
+${term(ra('c10-bit-byte', 'python3 -c "import sys', 2))}
 ${box('Network byte order = big-endian', 'x86 and ARM CPUs are <b>little-endian</b>: the low byte first. So code that writes binary headers must convert: <code class="i">htons()</code> = host-to-network short. Forget it and port 80 goes out as <b>0x5000 = 20480</b>. JSON and HTTP text never meet this problem; binary protocols always do.', 'do2')}` },
 
   { t: 'Bits per second vs bytes per second', giua: true, body: `
-${term(`$ iperf3 -c 10.10.2.10 -t 2 -f m | grep -E 'sender|receiver'
-[  5]   0.00-2.00   sec  10.9 GBytes  46815 Mbits/sec    0            sender
-[  5]   0.00-2.00   sec  10.9 GBytes  46813 Mbits/sec                  receiver
-$ iperf3 -c 10.10.2.10 -t 2 -f M | grep -E 'sender|receiver'
-[  5]   0.00-2.00   sec  9.48 GBytes  4853 MBytes/sec   94            sender`)}
+${term(ra('c10-bit-byte', 'iperf3 -c 10.10.2.10 -t 2 -f m', 2))}
 ${two(box('The rule', 'Network speeds are in <b>bits</b> per second (Mbit/s, Gbit/s). Files are in <b>bytes</b>. Divide by 8: a 100 Mbit/s line moves at most <b>12.5 MB/s</b>.', 'lam'),
     box('Two runs, two numbers', 'Each line is a separate 2-second test, so they differ: 4853 MB/s × 8 ≈ 38 800 Mbit/s vs 46 815. Always measure more than once.', ''))}` },
 
   { t: 'A virtual card’s “speed” is just a label', to: true, giua: true, body: `
-${term(`$ ethtool eth0 | grep -E 'Speed|Duplex'
-	Speed: 10000Mb/s
-	Duplex: Full`)}
+${term(ra('c10-bit-byte', 'ethtool eth0', 1))}
 <ul>
 <li>The lab card says <b>10 000 Mb/s</b>, yet iperf3 measured <b>~46 000 Mb/s</b></li>
 <li>Both containers are on one computer: the “cable” is a memory copy in the kernel, limited by CPU, not by a wire</li>

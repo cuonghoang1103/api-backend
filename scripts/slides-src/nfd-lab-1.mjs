@@ -42,9 +42,14 @@ ${bang(['Req.', 'Points', 'Full marks when…'], [
 
   { t: 'How to work', to: true, giua: true, body: `
 ${cards([
-    ['Capture first, think later', 'Start tcpdump with <code class="i">-w</code> before the request; wait 2 s; stop with Ctrl-C (SIGINT).'],
+    ['Capture first, think later', 'Start <code class="i" style="white-space:nowrap">tcpdump -w</code> before the request; wait 2 s; stop with Ctrl-C (SIGINT).'],
     ['One claim, one proof', 'Every sentence in the report points to an output you pasted.'],
     ['Hints by level', 'Open hint 1 only after 10 minutes stuck; hint 2 after 20. The solution is last.'],
+  ])}
+${steps([
+    'Start clean: <code class="i">docker compose -p nfd down</code> then <code class="i">up -d</code>',
+    'One terminal per machine you inspect — label each output with the machine name',
+    'Report skeleton: one heading per requirement R1–R6, each = command + output + one sentence',
   ])}` },
 
   { t: 'Going further', to: true, giua: true, body: `

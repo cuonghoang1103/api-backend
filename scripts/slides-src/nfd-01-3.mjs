@@ -8,9 +8,9 @@ export const deck = { key: 'nfd-01-3', code: 'NFD 1.3', title: 'Encapsulation: f
 const term = (t, o = {}) => sh(t, o);
 
 // hex dump thật của frame GET /api/hello (149 byte): 14 Ethernet | 20 IPv4 | 32 TCP | 83 HTTP
-const HEX = ra('c12-goi', 'tshark -r /tmp/g.pcap -Y http.request -x', 1).split('\n').slice(1).filter((l) => /^[0-9a-f]{4}\s/.test(l));
+const HEX = ra('c12-goi', 'tshark -r /tmp/g.pcap -Y http.request -x', 1, { boLenh: true }).split('\n').filter((l) => /^[0-9a-f]{4}\s/.test(l));
 const R4 = [[0, 13, 'link'], [14, 33, 'ip'], [34, 65, 'tcp'], [66, 148, 'app']];
-const F = ra('c12-goi', 'tshark -r /tmp/g.pcap -Y http.request -T fields', 1).split('\n')[1].split('\t');
+const F = ra('c12-goi', 'tshark -r /tmp/g.pcap -Y http.request -T fields', 1, { boLenh: true }).split('\n')[0].split('\t');
 const [flen, edst, esrc, etype, ihl, ilen, ttl, proto, thl, tlen] = F;
 const b = (i) => HEX.join(' ').match(/^[0-9a-f]{4}\s+(.*)$/gm);
 void b;
@@ -19,17 +19,17 @@ const hx = (a, n) => bytes.slice(a, a + n).join(' ');
 
 /* Đi xuống ở máy gửi, đi lên ở máy nhận */
 const downUp = () => {
-  const w = 1110, h = 310, L = [['HTTP text', C.app, '83 B · curl (user space)'], ['+ TCP header', C.tcp, '32 B · kernel'], ['+ IP header', C.ip, '20 B · kernel'], ['+ Ethernet header', C.link, '14 B · driver → NIC']];
+  const w = 1110, h = 400, L = [['HTTP text', C.app, '83 B · curl (user space)'], ['+ TCP header', C.tcp, '32 B · kernel'], ['+ IP header', C.ip, '20 B · kernel'], ['+ Ethernet header', C.link, '14 B · driver → NIC']];
   let s = T(170, 22, 'SENDER — wrap (encapsulate) ↓', 19, { a: 'middle', w: 800, f: C.br }) + T(940, 22, '↑ unwrap (decapsulate) — RECEIVER', 19, { a: 'middle', w: 800, f: C.br });
   const UP = ['port 80 → hand to the nginx socket', 'protocol 6 → TCP reads the ports', 'type 0x0800 → IP reads the addresses', 'dst MAC is mine → keep the frame'];
   L.forEach(([t, c, sub], i) => {
-    const y = 40 + i * 62;
-    s += R(10, y, 330, 52, c + '22', c, { rx: 8 }) + T(175, y + 24, t, 18, { a: 'middle', w: 800, f: c }) + T(175, y + 44, sub, 14, { a: 'middle', f: '#555' });
-    s += R(770, y, 330, 52, c + '22', c, { rx: 8 }) + T(935, y + 32, UP[i], 15, { a: 'middle', w: 700, f: c });
+    const y = 40 + i * 84;
+    s += R(10, y, 330, 70, c + '22', c, { rx: 8 }) + T(175, y + 31, t, 20, { a: 'middle', w: 800, f: c }) + T(175, y + 56, sub, 15, { a: 'middle', f: '#555' });
+    s += R(770, y, 330, 70, c + '22', c, { rx: 8 }) + T(935, y + 42, UP[i], 16, { a: 'middle', w: 700, f: c });
   });
-  s += R(380, 120, 350, 70, '#fff7ef', C.or, { rx: 10 }) + T(555, 150, '149 bytes on the wire', 20, { a: 'middle', w: 800, f: C.br }) + T(555, 174, 'cable / Wi-Fi / virtual bridge', 15, { a: 'middle', f: '#555' });
-  s += `<text x="350" y="166" font-size="30" fill="${C.br}">→</text><text x="742" y="166" font-size="30" fill="${C.br}">→</text>`;
-  s += T(555, 304, 'Reading upward: each step uses a number in the header below it — EtherType, IP protocol, TCP port.', 16, { a: 'middle', f: '#555', i: 1 });
+  s += R(380, 150, 350, 80, '#fff7ef', C.or, { rx: 10 }) + T(555, 185, '149 bytes on the wire', 21, { a: 'middle', w: 800, f: C.br }) + T(555, 212, 'cable / Wi-Fi / virtual bridge', 15, { a: 'middle', f: '#555' });
+  s += `<text x="350" y="200" font-size="30" fill="${C.br}">→</text><text x="742" y="200" font-size="30" fill="${C.br}">→</text>`;
+  s += T(555, 394, 'Reading upward: each step uses a number in the header below it — EtherType, IP protocol, TCP port.', 16, { a: 'middle', f: '#555', i: 1 });
   return svg(w, h, s);
 };
 
@@ -57,6 +57,11 @@ ${envelope([
   { t: 'Count the bytes: 14 + 20 + 32 + 83 = 149', giua: true, body: `
 ${bytebar([{ k: 'link', t: 'Ethernet', b: 14 }, { k: 'ip', t: 'IPv4', b: Number(ihl) }, { k: 'tcp', t: 'TCP', b: Number(thl) }, { k: 'app', t: 'HTTP data', b: Number(tlen) }])}
 ${term(ra('c12-goi', 'tshark -r /tmp/g.pcap -Y http.request -T fields', 1).replace(/ 2>\/dev\/null/, ''), { sm: true })}
+${bang(['tshark field', 'value', 'means'], [
+    ['frame.len', flen, 'the whole frame as captured'],
+    ['ip.hdr_len · ip.len', `${ihl} · ${ilen}`, 'IP header · IP packet = IP + TCP + data (149 − 14)'],
+    ['tcp.hdr_len · tcp.len', `${thl} · ${tlen}`, 'TCP header with options · the HTTP bytes it carries'],
+  ], { fs: 19 })}
 <p class="nho" style="margin:0">Also on a real cable, not in the capture: 8 bytes of preamble, a 4-byte checksum (FCS) and a 12-byte gap.</p>` },
 
   { t: 'The real frame, coloured by layer', giua: true, body: `
@@ -71,7 +76,7 @@ ${bang(['Bytes', 'Field', 'Value here', 'Means'], [
 ${box('Notice', 'The destination is <b>not</b> the web server (02:00:0a:0a:02:0a): an Ethernet frame only travels to the next device. Lesson 1.4 explains how the client learned the router’s MAC.', 'lam')}` },
 
   { t: 'Bytes 14–33: the IPv4 header', body: `
-${two(term(ra('c12-goi', 'tshark -r /tmp/g.pcap -Y http.request -O ip,tcp', 1).split('\n').slice(1, 11).join('\n'), { sm: true, title: 'tshark -O ip (lines trimmed)' }),
+${two(term(ra('c12-goi', 'tshark -r /tmp/g.pcap -Y http.request -O ip,tcp', 1, { boLenh: true }).split('\n').slice(0, 10).join('\n'), { sm: true, title: 'tshark -O ip (lines trimmed)' }),
     bang(['Bytes', 'Field'], [
       [`<code class="i">${hx(14, 1)}</code>`, 'version 4, header 5 × 4 = 20 B'],
       [`<code class="i">${hx(16, 2)}</code>`, `total length ${ilen}`],
@@ -96,6 +101,7 @@ ${box('Then bytes 66–148', 'The 83 bytes of HTTP text: <code class="i">47 45 5
 
   { t: 'MTU: the biggest packet a link will carry', to: true, giua: true, body: `
 ${term(ra('c12-goi', 'ip link show eth0', 1) + '\n' + ra('c12-goi', 'ping -c 1 -M do -s 1472', 2, { drop: /^$|statistics|rtt|transmitted/ }), { sm: true })}
+${bytebar([{ k: 'ip', t: 'IPv4', b: 20 }, { k: 'tcp', t: 'ICMP', b: 8 }, { k: 'app', t: 'ping data', b: 1472 }], { minW: 140 })}
 <p style="margin:0;font-size:21px"><b>MTU 1500</b> = the largest IP packet on this Ethernet. 1472 bytes of ping data + 8 (ICMP) + 20 (IP) = <b>1500</b> fits; 1473 does not, and with “don’t fragment” (<code class="i">-M do</code>) the kernel refuses to send it.</p>` },
 
   { t: 'From MTU to MSS to 1448', giua: true, body: `
@@ -107,12 +113,12 @@ ${steps([
   ])}` },
 
   { t: 'Measured: one response, three segments', giua: true, body: `
-${two(term(ra('c12-big-off', 'curl -s -o /dev/null', 2), { sm: true }),
-    box('Read it', 'Frame <b>1514</b> = 14 + 20 + 32 + <b>1448</b>. The last one carries the 1 095 bytes left. Headers plus body = 3 991 bytes — the 3 841-byte body plus 150 bytes of HTTP headers.', 'lam'), 'r64')}` },
+${term(ra('c12-big-off', 'curl -s -o /dev/null', 2), { sm: true })}
+${box('Read it', 'Frame <b>1514</b> = 14 + 20 + 32 + <b>1448</b>. The last one carries the 1 095 bytes left. Headers plus body = 3 991 bytes — the 3 841-byte body plus 150 bytes of HTTP headers.', 'lam')}` },
 
   { t: 'The trap: a 4057-byte “packet” in your capture', giua: true, body: `
-${two(term(ra('c12-big-on', 'tshark', 1).replace(/ 2>\/dev\/null/, ''), { sm: true, title: 'before: offload ON (default)' }),
-    term(ra('c12-tso-web', 'ethtool -K', 1) + '\n' + ra('c12-big-off', 'tshark -r /tmp/b2.pcap -Y', 1).replace(/ 2>\/dev\/null/, ''), { sm: true, title: 'after: TSO/GSO off on the web server' }))}
+${term(ra('c12-big-on', 'tshark', 1).replace(/ 2>\/dev\/null/, ''), { sm: true, title: 'before: offload ON (default) — captured on the client' })}
+${term(ra('c12-tso-web', 'ethtool -K', 1) + '\n' + ra('c12-big-off', 'tshark -r /tmp/b2.pcap -Y', 1).replace(/ 2>\/dev\/null/, ''), { sm: true, title: 'after: TSO/GSO switched off on the web server' })}
 ${box('TSO / GSO: segmentation offload', 'The kernel hands the card (or the driver) one big chunk and lets <b>it</b> cut the segments later. tcpdump captures before the cut, so you see 4 057 bytes — bigger than the MTU. It is not a bug and not what travels on the wire.', 'do2')}` },
 
   { t: 'Overhead: why small messages are expensive', to: true, giua: true, body: `

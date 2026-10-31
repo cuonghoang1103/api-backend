@@ -10,15 +10,15 @@ const term = (t, o = {}) => sh(t, { sm: false, ...o });
 
 /* Máy Mac → máy ảo Linux của Docker Desktop → hai switch ảo → năm container */
 const vmPic = () => {
-  const w = 1110, h = 250;
-  let s = R(4, 6, 1100, 238, '#f6f6f6', '#999', { rx: 14 }) + T(20, 34, '💻 Your Mac / Windows laptop — Terminal, browser, Wireshark app', 18, { w: 800, f: '#444' });
-  s += R(40, 50, 1040, 180, '#eef4fa', C.ip, { rx: 12, dash: 1 }) + T(58, 78, '🐧 Linux virtual machine run by Docker Desktop (on Linux: your own kernel)', 17, { w: 800, f: C.ip });
-  s += R(80, 96, 300, 52, '#f3eefe', C.link, { rx: 8 }) + T(230, 128, 'bridge nfd-lan (a switch)', 17, { a: 'middle', w: 700, f: C.link });
-  s += R(700, 96, 300, 52, '#f3eefe', C.link, { rx: 8 }) + T(850, 128, 'bridge nfd-dmz (a switch)', 17, { a: 'middle', w: 700, f: C.link });
+  const w = 1110, h = 300;
+  let s = R(4, 6, 1100, 288, '#f6f6f6', '#999', { rx: 14 }) + T(20, 34, '💻 Your Mac / Windows laptop — Terminal, browser, Wireshark app', 18, { w: 800, f: '#444' });
+  s += R(40, 50, 1040, 230, '#eef4fa', C.ip, { rx: 12, dash: 1 }) + T(58, 78, '🐧 Linux virtual machine run by Docker Desktop (on Linux: your own kernel)', 17, { w: 800, f: C.ip });
+  s += R(80, 100, 300, 60, '#f3eefe', C.link, { rx: 8 }) + T(230, 136, 'bridge nfd-lan (a switch)', 17, { a: 'middle', w: 700, f: C.link });
+  s += R(700, 100, 300, 60, '#f3eefe', C.link, { rx: 8 }) + T(850, 136, 'bridge nfd-dmz (a switch)', 17, { a: 'middle', w: 700, f: C.link });
   [['client', 80], ['client2', 230], ['router', 455], ['web', 700], ['api', 850]].forEach(([n, x]) => {
-    s += R(x, 168, 140, 44, '#fff', C.br, { rx: 8 }) + T(x + 70, 196, n, 17, { a: 'middle', w: 700, f: C.br });
+    s += R(x, 190, 140, 64, '#fff', C.br, { rx: 8 }) + T(x + 70, 228, n, 19, { a: 'middle', w: 700, f: C.br });
   });
-  s += T(560, 128, '⇄ router joins both', 15, { a: 'middle', f: '#666' });
+  s += T(560, 136, '⇄ router joins both', 15, { a: 'middle', f: '#666' });
   return svg(w, h, s);
 };
 
@@ -102,7 +102,7 @@ ${steps([
   ])}` },
 
   { t: 'First request, first captured packets', giua: true, body: `
-${term(ra('c00-lab', 'curl -s http://10.10.2.10/api/hello', 1, { cut: 112 }) + '\n' + ra('c00-lab', 'tcpdump -n -r', 1, { drop: /^reading/, cut: 112, max: 7 }), { sm: true, title: 'terminal — client (long lines cut at the right edge)' })}
+${term(ra('c00-lab', 'curl -s http://10.10.2.10/api/hello', 1, { cut: 92 }) + '\n' + ra('c00-lab', 'tcpdump -n -r', 1, { drop: /^reading/, cut: 92, max: 7 }), { sm: true, title: 'terminal — client (long lines cut at the right edge)' })}
 <p style="margin:0;font-size:21px">Ten packets for one tiny page: 3 to open the connection, 4 for the request and answer, 3 to close. You will name every one of them by Chapter 4.</p>` },
 
   { t: 'Where does this run? Not on your Mac directly', giua: true, body: `

@@ -466,9 +466,11 @@ nextTick đã chạy: 1000000 lần</div>
 h.<span class="tok-function">enable</span>();
 
 <span class="tok-function">setInterval</span>(() =&gt; {
-  <span class="tok-function">console.log</span>(<span class="tok-string">'loop lag p99 (ms):'</span>, (h.<span class="tok-function">percentile</span>(<span class="tok-number">99</span>) / <span class="tok-number">1e6</span>).<span class="tok-function">toFixed</span>(<span class="tok-number">1</span>));
+  <span class="tok-comment">// the histogram also counts the 20 ms sampling gap itself: subtract it</span>
+  <span class="tok-function">console.log</span>(<span class="tok-string">'loop lag p99 (ms):'</span>, (h.<span class="tok-function">percentile</span>(<span class="tok-number">99</span>) / <span class="tok-number">1e6</span> - <span class="tok-number">20</span>).<span class="tok-function">toFixed</span>(<span class="tok-number">1</span>));
   h.<span class="tok-function">reset</span>();
 }, <span class="tok-number">10000</span>);</code></pre>
+<p>One detail that fools almost everyone: the numbers include the <code>resolution</code> itself. Measured on Node 22, an idle loop with <code>resolution: 20</code> reports a p99 of about 21 ms — only about 1 ms of it is real delay. Subtract the resolution before you compare with the thresholds below.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">under 10 ms</span><span class="v">Healthy. The loop is keeping up.</span></div>
   <div class="kv"><span class="k">50–100 ms</span><span class="v">Something is doing real work on the main thread. Investigate.</span></div>
@@ -556,9 +558,11 @@ h.<span class="tok-function">enable</span>();
 h.<span class="tok-function">enable</span>();
 
 <span class="tok-function">setInterval</span>(() =&gt; {
-  <span class="tok-function">console.log</span>(<span class="tok-string">'độ trễ loop p99 (ms):'</span>, (h.<span class="tok-function">percentile</span>(<span class="tok-number">99</span>) / <span class="tok-number">1e6</span>).<span class="tok-function">toFixed</span>(<span class="tok-number">1</span>));
+  <span class="tok-comment">// biểu đồ tính luôn cả khoảng lấy mẫu 20 ms: trừ nó đi</span>
+  <span class="tok-function">console.log</span>(<span class="tok-string">'độ trễ loop p99 (ms):'</span>, (h.<span class="tok-function">percentile</span>(<span class="tok-number">99</span>) / <span class="tok-number">1e6</span> - <span class="tok-number">20</span>).<span class="tok-function">toFixed</span>(<span class="tok-number">1</span>));
   h.<span class="tok-function">reset</span>();
 }, <span class="tok-number">10000</span>);</code></pre>
+<p>Một chi tiết đánh lừa gần như tất cả mọi người: con số đo được tính luôn cả <code>resolution</code>. Đo thật trên Node 22, một vòng lặp đang rảnh với <code>resolution: 20</code> cho p99 khoảng 21 ms — trong đó chỉ khoảng 1 ms là độ trễ thật. Hãy trừ resolution đi trước khi so với các ngưỡng dưới đây.</p>
 <div class="kv-grid">
   <div class="kv"><span class="k">dưới 10 ms</span><span class="v">Khoẻ. Vòng lặp đang theo kịp.</span></div>
   <div class="kv"><span class="k">50–100 ms</span><span class="v">Có thứ gì đó đang làm việc thật trên luồng chính. Cần điều tra.</span></div>
@@ -630,13 +634,16 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 <pre><code class="language-javascript"><span class="tok-keyword">const</span> TOTAL = <span class="tok-number">3e9</span>, CHUNK = <span class="tok-number">3e7</span>;
 <span class="tok-keyword">let</span> i = <span class="tok-number">0</span>, s = <span class="tok-number">0</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">runChunk</span>() {
-  <span class="tok-keyword">const</span> end = Math.<span class="tok-function">min</span>(i + CHUNK, TOTAL);
-  <span class="tok-keyword">for</span> (; i &lt; end; i++) s += i;
+  <span class="tok-keyword">let</span> j = i, acc = s;                      <span class="tok-comment">// local copies: V8 keeps them in registers</span>
+  <span class="tok-keyword">const</span> end = Math.<span class="tok-function">min</span>(j + CHUNK, TOTAL);
+  <span class="tok-keyword">for</span> (; j &lt; end; j++) acc += j;
+  i = j; s = acc;                          <span class="tok-comment">// save progress for the next slice</span>
   <span class="tok-keyword">if</span> (i &lt; TOTAL) <span class="tok-function">setImmediate</span>(runChunk);   <span class="tok-comment">// yield to the loop</span>
 }
 <span class="tok-function">runChunk</span>();</code></pre>
-<div class="out">→ finished after 19580 ms · heartbeat late by up to: 194 ms</div>
-<div class="callout warn">Look at the honest trade-off: lag dropped from 2873 ms to 194 ms, but the job went from 2871 ms to <strong>19580 ms — about 6.8× slower</strong>. Yielding constantly costs real throughput. Chunking keeps a server responsive, but it is a compromise, not a free win. Prefer a worker when the work is genuinely heavy.</div>
+<div class="out">→ finished after 2903 ms · heartbeat late by up to: 23 ms</div>
+<p>Lag dropped from 2873 ms to 23 ms, and the job took about the same 2.9 s. Yielding a hundred times costs almost nothing.</p>
+<div class="callout warn">The trap is the loop variables. Written the obvious way — <code>for (; i &lt; end; i++) s += i</code> straight on the outer <code>i</code> and <code>s</code> — the same job took <strong>20408 ms</strong>, about 7× slower. It is not the yielding: the same slices run back-to-back with no <code>setImmediate</code> at all still took 19772 ms. Variables captured from an outer scope live in a heap object, so every read and write goes to memory instead of a register. Keep a hot loop on local variables. Chunking still has real costs: the work stays on the main thread (each slice blocks for one slice's worth of time, and the job finishes later when requests share the thread), the code is more complex, and it never uses a second core. Prefer a worker when the work is genuinely heavy.</div>
 
 <h3>Cure 3 — more processes (cluster)</h3>
 <p>One Node process uses one core. A machine with 4 cores can run 4 processes sharing the same port, each with its own event loop:</p>
@@ -654,7 +661,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 <h3>How to choose</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Work takes &gt; 50 ms of CPU</span><span class="v">Worker thread, or hand it to a background queue (chapter 13) if the user doesn't need the answer immediately.</span></div>
-  <div class="kv"><span class="k">Work is a big loop you control</span><span class="v">Chunk it with setImmediate — accepting the throughput cost.</span></div>
+  <div class="kv"><span class="k">Work is a big loop you control</span><span class="v">Chunk it with setImmediate — short slices, hot loop on local variables.</span></div>
   <div class="kv"><span class="k">You have spare cores</span><span class="v">Cluster (or several containers) to multiply capacity.</span></div>
   <div class="kv"><span class="k">Best of all</span><span class="v">Don't do the work during the request. Precompute it, cache it, or queue it.</span></div>
 </div>
@@ -703,13 +710,16 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 <pre><code class="language-javascript"><span class="tok-keyword">const</span> TOTAL = <span class="tok-number">3e9</span>, CHUNK = <span class="tok-number">3e7</span>;
 <span class="tok-keyword">let</span> i = <span class="tok-number">0</span>, s = <span class="tok-number">0</span>;
 <span class="tok-keyword">function</span> <span class="tok-function">runChunk</span>() {
-  <span class="tok-keyword">const</span> end = Math.<span class="tok-function">min</span>(i + CHUNK, TOTAL);
-  <span class="tok-keyword">for</span> (; i &lt; end; i++) s += i;
+  <span class="tok-keyword">let</span> j = i, acc = s;                      <span class="tok-comment">// bản sao cục bộ: V8 giữ chúng trong thanh ghi</span>
+  <span class="tok-keyword">const</span> end = Math.<span class="tok-function">min</span>(j + CHUNK, TOTAL);
+  <span class="tok-keyword">for</span> (; j &lt; end; j++) acc += j;
+  i = j; s = acc;                          <span class="tok-comment">// lưu tiến độ cho lát sau</span>
   <span class="tok-keyword">if</span> (i &lt; TOTAL) <span class="tok-function">setImmediate</span>(runChunk);   <span class="tok-comment">// nhường lượt cho vòng lặp</span>
 }
 <span class="tok-function">runChunk</span>();</code></pre>
-<div class="out">→ xong sau 19580 ms · nhịp tim trễ tối đa: 194 ms</div>
-<div class="callout warn">Hãy nhìn thẳng vào cái giá phải trả: độ trễ giảm từ 2873 ms xuống 194 ms, nhưng công việc kéo dài từ 2871 ms lên <strong>19580 ms — chậm khoảng 6,8 lần</strong>. Nhường lượt liên tục làm mất thông lượng thật. Chia lô giữ cho server còn phản hồi, nhưng đó là một sự thoả hiệp, không phải món hời miễn phí. Việc thật sự nặng thì nên ưu tiên worker.</div>
+<div class="out">→ xong sau 2903 ms · nhịp tim trễ tối đa: 23 ms</div>
+<p>Độ trễ giảm từ 2873 ms xuống 23 ms, còn công việc vẫn mất khoảng 2,9 giây như cũ. Nhường lượt một trăm lần gần như không tốn gì.</p>
+<div class="callout warn">Cái bẫy nằm ở biến của vòng lặp. Viết theo kiểu hiển nhiên — <code>for (; i &lt; end; i++) s += i</code> thẳng trên <code>i</code> và <code>s</code> ở ngoài hàm — cùng công việc đó mất <strong>20408 ms</strong>, chậm khoảng 7 lần. Thủ phạm không phải việc nhường lượt: chạy đúng các lát đó liền nhau, không có <code>setImmediate</code> nào, vẫn mất 19772 ms. Biến bắt từ phạm vi bên ngoài nằm trong một object trên heap, nên mỗi lần đọc ghi đều phải ra bộ nhớ thay vì nằm trong thanh ghi. Vòng lặp nóng thì hãy chạy trên biến cục bộ. Chia lô vẫn có cái giá thật: việc vẫn nằm trên luồng chính (mỗi lát chặn đúng bằng thời gian của lát đó, và công việc xong muộn hơn khi phải chia luồng với request), code phức tạp hơn, và không bao giờ dùng tới nhân CPU thứ hai. Việc thật sự nặng thì nên ưu tiên worker.</div>
 
 <h3>Thuốc 3 — nhiều tiến trình (cluster)</h3>
 <p>Một tiến trình Node dùng một nhân CPU. Máy 4 nhân có thể chạy 4 tiến trình cùng chia nhau một cổng, mỗi tiến trình có event loop riêng:</p>
@@ -727,7 +737,7 @@ w.<span class="tok-function">on</span>(<span class="tok-string">'message'</span>
 <h3>Chọn thế nào</h3>
 <div class="kv-grid">
   <div class="kv"><span class="k">Việc tốn &gt; 50 ms CPU</span><span class="v">Worker thread, hoặc đẩy sang hàng đợi nền (chương 13) nếu người dùng không cần câu trả lời ngay.</span></div>
-  <div class="kv"><span class="k">Việc là một vòng lặp lớn bạn kiểm soát được</span><span class="v">Chia lô bằng setImmediate — và chấp nhận cái giá về thông lượng.</span></div>
+  <div class="kv"><span class="k">Việc là một vòng lặp lớn bạn kiểm soát được</span><span class="v">Chia lô bằng setImmediate — lát ngắn, vòng lặp nóng chạy trên biến cục bộ.</span></div>
   <div class="kv"><span class="k">Bạn còn dư nhân CPU</span><span class="v">Cluster (hoặc nhiều container) để nhân năng lực phục vụ.</span></div>
   <div class="kv"><span class="k">Tốt nhất trong mọi cách</span><span class="v">Đừng làm việc đó ngay trong request. Hãy tính trước, cache lại, hoặc xếp vào hàng đợi.</span></div>
 </div>

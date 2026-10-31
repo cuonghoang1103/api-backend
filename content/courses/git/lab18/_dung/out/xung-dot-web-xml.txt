@@ -1,0 +1,117 @@
+════ TAI NAN: xung-dot-web-xml ════
+
+# An và Bình cùng rẽ nhánh từ main; mỗi người thêm một servlet và khai báo vào web.xml
+[An] $ git switch -c feature/dat-lich
+Switched to a new branch 'feature/dat-lich'
+[An] $ git add -A
+[An] $ git commit -m "Them DatLichServlet va khai bao web.xml"
+[feature/dat-lich cf533ac] Them DatLichServlet va khai bao web.xml
+ 2 files changed, 10 insertions(+)
+ create mode 100644 src/java/com/nhom/servlet/DatLichServlet.java
+[An] $ git push -u origin feature/dat-lich
+To <LAB>/github.git
+ * [new branch]      feature/dat-lich -> feature/dat-lich
+branch 'feature/dat-lich' set up to track 'origin/feature/dat-lich'.
+[Binh] $ git switch -c feature/tra-cuu
+Switched to a new branch 'feature/tra-cuu'
+[Binh] $ git add -A
+[Binh] $ git commit -m "Them TraCuuServlet va khai bao web.xml"
+[feature/tra-cuu 86db42b] Them TraCuuServlet va khai bao web.xml
+ 2 files changed, 10 insertions(+)
+ create mode 100644 src/java/com/nhom/servlet/TraCuuServlet.java
+[Binh] $ git push -u origin feature/tra-cuu
+To <LAB>/github.git
+ * [new branch]      feature/tra-cuu -> feature/tra-cuu
+branch 'feature/tra-cuu' set up to track 'origin/feature/tra-cuu'.
+
+# PR của An được duyệt và merge vào main (mô phỏng nút 'Merge pull request' bằng merge --no-ff ở clone của An)
+[An] $ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+[An] $ git merge --no-ff feature/dat-lich -m "Merge pull request #1 from an/dat-lich"
+Merge made by the 'ort' strategy.
+ src/java/com/nhom/servlet/DatLichServlet.java | 2 ++
+ web/WEB-INF/web.xml                           | 8 ++++++++
+ 2 files changed, 10 insertions(+)
+ create mode 100644 src/java/com/nhom/servlet/DatLichServlet.java
+[An] $ git push origin main
+To <LAB>/github.git
+   935c46b..78bd742  main -> main
+
+# PR của Bình nằm đó nhiều ngày. Trước khi hỏng, xem trước bằng merge-tree (không đụng cây làm việc):
+[Binh] $ git fetch origin
+From <LAB>/github
+ * [new branch]      feature/dat-lich -> origin/feature/dat-lich
+   935c46b..78bd742  main             -> origin/main
+[Binh] $ git rev-list --left-right --count feature/tra-cuu...origin/main
+1	2
+[Binh] $ git log --oneline feature/tra-cuu..origin/main -- web/WEB-INF/web.xml
+cf533ac Them DatLichServlet va khai bao web.xml
+[Binh] $ git diff --stat feature/tra-cuu...origin/main
+ src/java/com/nhom/servlet/DatLichServlet.java | 2 ++
+ web/WEB-INF/web.xml                           | 8 ++++++++
+ 2 files changed, 10 insertions(+)
+[Binh] $ git merge-tree --write-tree --name-only feature/tra-cuu origin/main
+1b7b5b5a34e6e8a599f31b2fbf3904a412d25916
+web/WEB-INF/web.xml
+
+Auto-merging web/WEB-INF/web.xml
+CONFLICT (content): Merge conflict in web/WEB-INF/web.xml
+
+# Bình cập nhật nhánh bằng cách merge main vào:
+[Binh] $ git merge origin/main
+Auto-merging web/WEB-INF/web.xml
+CONFLICT (content): Merge conflict in web/WEB-INF/web.xml
+Automatic merge failed; fix conflicts and then commit the result.
+[Binh] $ git status --short
+A  src/java/com/nhom/servlet/DatLichServlet.java
+UU web/WEB-INF/web.xml
+[Binh] $ git diff
+diff --cc web/WEB-INF/web.xml
+index c4ab960,019b86a..0000000
+--- a/web/WEB-INF/web.xml
++++ b/web/WEB-INF/web.xml
+@@@ -17,12 -17,12 +17,21 @@@
+          <url-pattern>/home</url-pattern>
+      </servlet-mapping>
+      <servlet>
+++<<<<<<< HEAD
+ +        <servlet-name>TraCuuServlet</servlet-name>
+ +        <servlet-class>com.nhom.servlet.TraCuuServlet</servlet-class>
+ +    </servlet>
+ +    <servlet-mapping>
+ +        <servlet-name>TraCuuServlet</servlet-name>
+ +        <url-pattern>/tra-cuu</url-pattern>
+++=======
++         <servlet-name>DatLichServlet</servlet-name>
++         <servlet-class>com.nhom.servlet.DatLichServlet</servlet-class>
++     </servlet>
++     <servlet-mapping>
++         <servlet-name>DatLichServlet</servlet-name>
++         <url-pattern>/dat-lich</url-pattern>
+++>>>>>>> origin/main
+      </servlet-mapping>
+      <session-config>
+          <session-timeout>30</session-timeout>
+
+# BẪY: cách 'xoá ba dòng dấu hiệu rồi giữ hết' — Git cắt vùng xung đột GIỮA một thẻ XML, nên kết quả hỏng
+[Binh] $ xmllint --noout web/WEB-INF/web.xml
+web/WEB-INF/web.xml:28: parser error : Opening and ending tag mismatch: servlet-mapping line 23 and servlet
+    </servlet>
+              ^
+
+# SỬA (Bình): lấy bản main làm gốc, thêm khối servlet của mình vào đúng chỗ, rồi kiểm tra bằng xmllint
+[Binh] $ grep -nE "^(<<<<<<<|=======|>>>>>>>)" web/WEB-INF/web.xml
+[Binh] $ xmllint --noout web/WEB-INF/web.xml
+[Binh] $ git add web/WEB-INF/web.xml
+[Binh] $ git commit -m "Merge main vao feature/tra-cuu: giu ca DatLich va TraCuu trong web.xml"
+[feature/tra-cuu dc8d160] Merge main vao feature/tra-cuu: giu ca DatLich va TraCuu trong web.xml
+[Binh] $ git push
+To <LAB>/github.git
+   86db42b..dc8d160  feature/tra-cuu -> feature/tra-cuu
+[Binh] $ git grep -n url-pattern -- web/WEB-INF/web.xml
+web/WEB-INF/web.xml:9:        <url-pattern>/login</url-pattern>
+web/WEB-INF/web.xml:17:        <url-pattern>/home</url-pattern>
+web/WEB-INF/web.xml:25:        <url-pattern>/dat-lich</url-pattern>
+web/WEB-INF/web.xml:33:        <url-pattern>/tra-cuu</url-pattern>
+

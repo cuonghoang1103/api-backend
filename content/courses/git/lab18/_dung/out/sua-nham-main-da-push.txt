@@ -1,0 +1,45 @@
+════ TAI NAN: sua-nham-main-da-push ════
+
+# Chi làm 2 commit trên main và PUSH luôn (main không có luật bảo vệ)
+[Chi] $ git commit -qam "Login bang email"
+[Chi] $ git commit -qam "index: nut dang nhap"
+[Chi] $ git push origin main
+To <LAB>/github.git
+   a9576f4..a6db29f  main -> main
+
+# An pull và nhận luôn việc dở dang của Chi
+[An] $ git pull -q
+[An] $ git log --oneline -3
+a6db29f index: nut dang nhap
+488dcf1 Login bang email
+a9576f4 Khoi tao du an NetBeans: Login, Home, web.xml
+
+# SỬA (Chi, ĐÃ push): giữ việc trên nhánh, rồi REVERT hai commit trên main — không viết lại lịch sử
+[Chi] $ git branch feature/dang-nhap-email
+[Chi] $ git revert --no-edit HEAD~2..HEAD
+[main e74c7ce] Revert "index: nut dang nhap"
+ Date: Sat Oct 31 21:54:43 2026 +0700
+ 1 file changed, 1 deletion(-)
+[main d76505a] Revert "Login bang email"
+ Date: Sat Oct 31 21:54:43 2026 +0700
+ 1 file changed, 1 deletion(-)
+[Chi] $ git push origin main
+To <LAB>/github.git
+   a6db29f..d76505a  main -> main
+[Chi] $ git log --oneline --graph --all --decorate
+* d76505a (HEAD -> main, origin/main, origin/HEAD) Revert "Login bang email"
+* e74c7ce Revert "index: nut dang nhap"
+* a6db29f (feature/dang-nhap-email) index: nut dang nhap
+* 488dcf1 Login bang email
+* a9576f4 Khoi tao du an NetBeans: Login, Home, web.xml
+
+# main trở về nội dung cũ; việc của Chi còn nguyên trên nhánh để mở PR đàng hoàng
+[Chi] $ git diff --stat origin/main~4 origin/main
+[An] $ git pull -q
+[An] $ git log --oneline -5
+d76505a Revert "Login bang email"
+e74c7ce Revert "index: nut dang nhap"
+a6db29f index: nut dang nhap
+488dcf1 Login bang email
+a9576f4 Khoi tao du an NetBeans: Login, Home, web.xml
+

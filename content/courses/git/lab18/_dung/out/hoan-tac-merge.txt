@@ -1,0 +1,106 @@
+════ TAI NAN: hoan-tac-merge ════
+
+# Bình tự merge nhánh của mình vào main, không ai xem. Nhánh có lỗi: trùng url-pattern /home
+[Binh] $ git switch -c feature/trang-chu-moi
+Switched to a new branch 'feature/trang-chu-moi'
+[Binh] $ git commit -qam "Them TrangChuServlet (map /home)"
+[Binh] $ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+[Binh] $ git merge --no-ff feature/trang-chu-moi -m "Merge nhanh trang-chu-moi (khong qua PR)"
+Merge made by the 'ort' strategy.
+ web/WEB-INF/web.xml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+[Binh] $ git push origin main
+To <LAB>/github.git
+   77fb638..5a123a1  main -> main
+
+# Cả nhóm thấy gì khi nhìn lịch sử main:
+[An] $ git pull
+From <LAB>/github
+   77fb638..5a123a1  main       -> origin/main
+Updating 77fb638..5a123a1
+Fast-forward
+ web/WEB-INF/web.xml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+[An] $ git log --first-parent --oneline -3
+5a123a1 Merge nhanh trang-chu-moi (khong qua PR)
+77fb638 Khoi tao du an NetBeans: Login, Home, web.xml
+[An] $ git log --merges --first-parent "--format=%h %an: %s" -3
+5a123a1 Binh Tran: Merge nhanh trang-chu-moi (khong qua PR)
+[An] $ grep -c "<url-pattern>/home</url-pattern>" web/WEB-INF/web.xml
+2
+
+# Một commit merge có HAI cha — cha số 1 là phía main, cha số 2 là phía nhánh
+[An] $ git log --merges -1 "--format=merge %h  parents: %p"
+merge 5a123a1  parents: 77fb638 a89b8c2
+[An] $ git show --no-patch "--format=parent 1 = %h %s" HEAD^1
+parent 1 = 77fb638 Khoi tao du an NetBeans: Login, Home, web.xml
+[An] $ git show --no-patch "--format=parent 2 = %h %s" HEAD^2
+parent 2 = a89b8c2 Them TrangChuServlet (map /home)
+
+# SỬA bước 1 — main đã push, không viết lại lịch sử: revert MERGE commit, chỉ rõ cha số 1 (main)
+[An] $ git revert -m 1 --no-edit HEAD
+[main 0e2418c] Revert "Merge nhanh trang-chu-moi (khong qua PR)"
+ Date: Sat Oct 31 21:54:46 2026 +0700
+ 1 file changed, 8 deletions(-)
+[An] $ git push origin main
+To <LAB>/github.git
+   5a123a1..0e2418c  main -> main
+[An] $ git log --oneline --graph --decorate -5
+* 0e2418c (HEAD -> main, origin/main, origin/HEAD) Revert "Merge nhanh trang-chu-moi (khong qua PR)"
+*   5a123a1 Merge nhanh trang-chu-moi (khong qua PR)
+|\  
+| * a89b8c2 Them TrangChuServlet (map /home)
+|/  
+* 77fb638 Khoi tao du an NetBeans: Login, Home, web.xml
+
+# Bình muốn đưa lại nhánh của mình — nhưng Git coi các commit của nó ĐÃ nằm trong main:
+[Binh] $ git pull -q
+[Binh] $ git switch main
+Already on 'main'
+Your branch is up to date with 'origin/main'.
+[Binh] $ git merge feature/trang-chu-moi
+Already up to date.
+
+# Bình sửa lỗi trên nhánh cũ rồi merge lại NGAY — sai: hai bên sửa chồng nhau
+[Binh] $ git switch feature/trang-chu-moi
+Switched to branch 'feature/trang-chu-moi'
+[Binh] $ git commit -qam "TrangChuServlet: doi url-pattern sang /trang-chu"
+[Binh] $ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+[Binh] $ git merge feature/trang-chu-moi
+Auto-merging web/WEB-INF/web.xml
+CONFLICT (content): Merge conflict in web/WEB-INF/web.xml
+Automatic merge failed; fix conflicts and then commit the result.
+[Binh] $ git merge --abort
+
+# SỬA bước 2 — hoàn tác CÁI REVERT (cục bộ, CHƯA push), rồi merge nhánh đã sửa
+[Binh] $ git revert --no-edit 0e2418c
+[main db94c00] Reapply "Merge nhanh trang-chu-moi (khong qua PR)"
+ Date: Sat Oct 31 21:54:46 2026 +0700
+ 1 file changed, 8 insertions(+)
+[Binh] $ git merge --no-ff feature/trang-chu-moi -m "Merge lai trang-chu-moi (da sua url-pattern)"
+Merge made by the 'ort' strategy.
+ web/WEB-INF/web.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+[Binh] $ git grep -n url-pattern -- web/WEB-INF/web.xml
+web/WEB-INF/web.xml:9:        <url-pattern>/login</url-pattern>
+web/WEB-INF/web.xml:17:        <url-pattern>/home</url-pattern>
+web/WEB-INF/web.xml:25:        <url-pattern>/trang-chu</url-pattern>
+[Binh] $ git push origin main
+To <LAB>/github.git
+   0e2418c..cd917a8  main -> main
+[Binh] $ git log --oneline --graph -8
+*   cd917a8 Merge lai trang-chu-moi (da sua url-pattern)
+|\  
+| * 0710bca TrangChuServlet: doi url-pattern sang /trang-chu
+* | db94c00 Reapply "Merge nhanh trang-chu-moi (khong qua PR)"
+* | 0e2418c Revert "Merge nhanh trang-chu-moi (khong qua PR)"
+* | 5a123a1 Merge nhanh trang-chu-moi (khong qua PR)
+|\| 
+| * a89b8c2 Them TrangChuServlet (map /home)
+|/  
+* 77fb638 Khoi tao du an NetBeans: Login, Home, web.xml
+

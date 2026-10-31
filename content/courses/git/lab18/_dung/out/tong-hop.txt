@@ -1,0 +1,110 @@
+════ TAI NAN: tong-hop ════
+
+# Đêm trước hạn nộp. An merge PR đặt lịch (có sửa web.xml) vào main và push
+[An] $ git switch -c feature/dat-lich
+Switched to a new branch 'feature/dat-lich'
+[An] $ git commit -qam "DatLichServlet + web.xml"
+[An] $ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+[An] $ git merge --no-ff feature/dat-lich -m "Merge pull request #1 from an/dat-lich"
+Merge made by the 'ort' strategy.
+ web/WEB-INF/web.xml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+[An] $ git push origin main
+To <LAB>/github.git
+   db9b833..31f81f7  main -> main
+
+# Chi quên rẽ nhánh: làm TraCuu ngay trên main, Build, rồi 'git add .'
+[Chi] $ git add .
+[Chi] $ git commit -qm "Them TraCuuServlet"
+
+# Chi push — bị từ chối; pull — xung đột:
+[Chi] $ git push origin main
+To <LAB>/github.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to '<LAB>/github.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+[Chi] $ git pull --no-rebase
+From <LAB>/github
+   db9b833..31f81f7  main       -> origin/main
+Auto-merging web/WEB-INF/web.xml
+CONFLICT (content): Merge conflict in web/WEB-INF/web.xml
+Automatic merge failed; fix conflicts and then commit the result.
+
+# CHẨN ĐOÁN trước khi sửa bất cứ thứ gì
+[Chi] $ git status -sb
+## main...origin/main [ahead 1, behind 2]
+UU web/WEB-INF/web.xml
+[Chi] $ git diff --name-only --diff-filter=U
+web/WEB-INF/web.xml
+[Chi] $ git log --oneline --graph --all
+* 8013b62 Them TraCuuServlet
+| * 31f81f7 Merge pull request #1 from an/dat-lich
+|/| 
+| * 5113888 DatLichServlet + web.xml
+|/  
+* db9b833 Khoi tao du an NetBeans: Login, Home, web.xml
+[Chi] $ git ls-files build dist nbproject/private
+build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+dist/QuanLyPhongKham.war
+nbproject/private/private.properties
+nbproject/private/private.xml
+
+# SỬA từng lớp, từ ngoài vào trong. Bước 1: lùi khỏi merge dở — chưa mất gì
+[Chi] $ git merge --abort
+[Chi] $ git status -sb
+## main...origin/main [ahead 1, behind 2]
+
+# Bước 2: cứu việc trên một nhánh, đưa main về giống remote
+[Chi] $ git branch feature/tra-cuu
+[Chi] $ git reset --hard origin/main
+HEAD is now at 31f81f7 Merge pull request #1 from an/dat-lich
+[Chi] $ git switch feature/tra-cuu
+Switched to branch 'feature/tra-cuu'
+
+# Bước 3: gỡ build/ khỏi nhánh của Chi
+[Chi] $ git rm -r --cached -q build dist nbproject/private
+[Chi] $ git add .gitignore
+[Chi] $ git commit -m "Ngung theo doi build/, dist/, nbproject/private/"
+[feature/tra-cuu 0deb337] Ngung theo doi build/, dist/, nbproject/private/
+ 6 files changed, 3 insertions(+), 10 deletions(-)
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+ delete mode 100644 dist/QuanLyPhongKham.war
+ delete mode 100644 nbproject/private/private.properties
+ delete mode 100644 nbproject/private/private.xml
+
+# Bước 4: đưa main vào nhánh, giải web.xml bằng cách dựng lại + kiểm hợp lệ
+[Chi] $ git merge origin/main
+Auto-merging web/WEB-INF/web.xml
+CONFLICT (content): Merge conflict in web/WEB-INF/web.xml
+Automatic merge failed; fix conflicts and then commit the result.
+[Chi] $ xmllint --noout web/WEB-INF/web.xml
+[Chi] $ git add web/WEB-INF/web.xml
+[Chi] $ git commit -m "Merge main vao feature/tra-cuu"
+[feature/tra-cuu 0bb1de2] Merge main vao feature/tra-cuu
+
+# Bước 5: push NHÁNH (không phải main), kiểm lại rồi mở PR
+[Chi] $ git push -u origin feature/tra-cuu
+To <LAB>/github.git
+ * [new branch]      feature/tra-cuu -> feature/tra-cuu
+branch 'feature/tra-cuu' set up to track 'origin/feature/tra-cuu'.
+[Chi] $ git ls-files build dist nbproject/private
+[Chi] $ git log --oneline --graph --all
+*   0bb1de2 Merge main vao feature/tra-cuu
+|\  
+| *   31f81f7 Merge pull request #1 from an/dat-lich
+| |\  
+| | * 5113888 DatLichServlet + web.xml
+| |/  
+* | 0deb337 Ngung theo doi build/, dist/, nbproject/private/
+* | 8013b62 Them TraCuuServlet
+|/  
+* db9b833 Khoi tao du an NetBeans: Login, Home, web.xml
+

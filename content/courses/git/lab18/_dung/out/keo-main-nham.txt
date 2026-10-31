@@ -1,0 +1,54 @@
+════ TAI NAN: keo-main-nham ════
+
+# An đẩy một thay đổi HomeServlet lên main
+[An] $ git commit -qam "HomeServlet: hien thi ten benh nhan"
+[An] $ git push origin main
+To <LAB>/github.git
+   9980178..e5ad696  main -> main
+
+# Chi đang sửa dở HomeServlet trên nhánh, chưa commit, và gõ 'git pull origin main'
+[Chi] $ git switch -c feature/trang-chu
+Switched to a new branch 'feature/trang-chu'
+[Chi] $ git pull origin main
+From <LAB>/github
+ * branch            main       -> FETCH_HEAD
+   9980178..e5ad696  main       -> origin/main
+error: Your local changes to the following files would be overwritten by merge:
+	src/java/com/nhom/servlet/HomeServlet.java
+Please commit your changes or stash them before you merge.
+Aborting
+Updating 9980178..e5ad696
+
+# Còn gõ 'git pull' trơn trên nhánh chưa từng push:
+[Chi] $ git pull
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> feature/trang-chu
+
+
+# SỬA (Chi): commit việc đang làm TRƯỚC, lấy main về bằng fetch, rồi merge main vào nhánh
+[Chi] $ git commit -qam "HomeServlet: banner khuyen mai"
+[Chi] $ git fetch origin
+[Chi] $ git log --oneline main..origin/main
+e5ad696 HomeServlet: hien thi ten benh nhan
+[Chi] $ git merge origin/main
+Auto-merging src/java/com/nhom/servlet/HomeServlet.java
+CONFLICT (content): Merge conflict in src/java/com/nhom/servlet/HomeServlet.java
+Automatic merge failed; fix conflicts and then commit the result.
+
+# Xung đột cùng chỗ cuối tệp — giữ cả hai dòng
+[Chi] $ git commit -qam "Merge main vao feature/trang-chu"
+[Chi] $ git log --oneline --graph
+*   d1c3686 Merge main vao feature/trang-chu
+|\  
+| * e5ad696 HomeServlet: hien thi ten benh nhan
+* | fc69f55 HomeServlet: banner khuyen mai
+|/  
+* 9980178 Khoi tao du an NetBeans: Login, Home, web.xml
+

@@ -1,0 +1,25 @@
+════ TAI NAN: hoan-tac-merge-chua-push ════
+
+# Bình merge nhánh có lỗi vào main nhưng CHƯA push
+[Binh] $ git switch -c feature/trang-chu-moi
+Switched to a new branch 'feature/trang-chu-moi'
+[Binh] $ git commit -qam "Them TrangChuServlet (map /home)"
+[Binh] $ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+[Binh] $ git merge --no-ff feature/trang-chu-moi -m "Merge nhanh trang-chu-moi"
+Merge made by the 'ort' strategy.
+ web/WEB-INF/web.xml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+[Binh] $ git status -sb
+## main...origin/main [ahead 2]
+
+# SỬA: chưa push thì đưa main về chỗ trước merge (ORIG_HEAD ghi nhớ chỗ đó)
+[Binh] $ git reset --hard ORIG_HEAD
+HEAD is now at 95bbff1 Khoi tao du an NetBeans: Login, Home, web.xml
+[Binh] $ git status -sb
+## main...origin/main
+[Binh] $ git log --oneline --graph --all
+* 16c88d6 Them TrangChuServlet (map /home)
+* 95bbff1 Khoi tao du an NetBeans: Login, Home, web.xml
+

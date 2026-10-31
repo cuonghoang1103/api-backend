@@ -1,0 +1,51 @@
+════ TAI NAN: tu-merge ════
+
+# Bình tự merge nhánh của mình vào main, không ai xem. Nhánh có lỗi: trùng url-pattern /home
+[Binh] $ git switch -c feature/trang-chu-moi
+Switched to a new branch 'feature/trang-chu-moi'
+[Binh] $ git commit -qam "Them TrangChuServlet (map /home)"
+[Binh] $ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+[Binh] $ git merge --no-ff feature/trang-chu-moi -m "Merge nhanh trang-chu-moi (khong qua PR)"
+Merge made by the 'ort' strategy.
+ web/WEB-INF/web.xml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+[Binh] $ git push origin main
+To <LAB>/github.git
+   4980995..4f830c9  main -> main
+
+# Cả nhóm thấy gì khi nhìn lịch sử main:
+[An] $ git pull
+From <LAB>/github
+   4980995..4f830c9  main       -> origin/main
+Updating 4980995..4f830c9
+Fast-forward
+ web/WEB-INF/web.xml | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+[An] $ git log --first-parent --oneline -3
+4f830c9 Merge nhanh trang-chu-moi (khong qua PR)
+4980995 Khoi tao du an NetBeans: Login, Home, web.xml
+[An] $ git log --merges --first-parent "--format=%h %an: %s" -3
+4f830c9 Binh Tran: Merge nhanh trang-chu-moi (khong qua PR)
+[An] $ grep -c "<url-pattern>/home</url-pattern>" web/WEB-INF/web.xml
+2
+
+# SỬA phần QUY TRÌNH — bật luật 'main chỉ nhận qua pull request' (ở đây là MÔ PHỎNG bằng hook của kho bare; trên GitHub là Ruleset/Branch protection)
+[An] $ git commit -qam "index.jsp: them footer"
+[An] $ git push origin main
+remote: MO PHONG luat bao ve nhanh: main chi nhan thay doi qua pull request.        
+To <LAB>/github.git
+ ! [remote rejected] main -> main (pre-receive hook declined)
+error: failed to push some refs to '<LAB>/github.git'
+
+# An làm đúng cách: nhánh riêng, đẩy nhánh, mở PR
+[An] $ git branch -f feature/footer HEAD
+[An] $ git reset -q --hard origin/main
+[An] $ git switch feature/footer
+Switched to branch 'feature/footer'
+[An] $ git push -u origin feature/footer
+To <LAB>/github.git
+ * [new branch]      feature/footer -> feature/footer
+branch 'feature/footer' set up to track 'origin/feature/footer'.
+

@@ -1,0 +1,168 @@
+════ TAI NAN: build ════
+
+# An thêm trang đặt lịch, bấm Build trong NetBeans rồi 'git add .'
+[An] $ git status --short
+?? build/
+?? dist/
+?? nbproject/private/
+?? src/java/com/nhom/servlet/DatLichServlet.java
+[An] $ git add .
+[An] $ git commit -m "Them DatLichServlet"
+[main d0decdb] Them DatLichServlet
+ 7 files changed, 17 insertions(+)
+ create mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+ create mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+ create mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+ create mode 100644 dist/QuanLyPhongKham.war
+ create mode 100644 nbproject/private/private.properties
+ create mode 100644 nbproject/private/private.xml
+ create mode 100644 src/java/com/nhom/servlet/DatLichServlet.java
+[An] $ git push origin main
+To <LAB>/github.git
+   3ed4562..d0decdb  main -> main
+
+# Bình pull, build trên máy mình (NetBeans viết lại private.properties theo máy Bình)
+[Binh] $ git pull
+From <LAB>/github
+   3ed4562..d0decdb  main       -> origin/main
+Updating 3ed4562..d0decdb
+Fast-forward
+ .../classes/com/nhom/servlet/DatLichServlet.class        | Bin 0 -> 29 bytes
+ .../WEB-INF/classes/com/nhom/servlet/HomeServlet.class   | Bin 0 -> 26 bytes
+ .../WEB-INF/classes/com/nhom/servlet/LoginServlet.class  | Bin 0 -> 27 bytes
+ dist/QuanLyPhongKham.war                                 | Bin 0 -> 2048 bytes
+ nbproject/private/private.properties                     |   5 +++++
+ nbproject/private/private.xml                            |   5 +++++
+ src/java/com/nhom/servlet/DatLichServlet.java            |   7 +++++++
+ 7 files changed, 17 insertions(+)
+ create mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+ create mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+ create mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+ create mode 100644 dist/QuanLyPhongKham.war
+ create mode 100644 nbproject/private/private.properties
+ create mode 100644 nbproject/private/private.xml
+ create mode 100644 src/java/com/nhom/servlet/DatLichServlet.java
+[Binh] $ git status --short
+ M build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+ M build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+ M build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+ M dist/QuanLyPhongKham.war
+ M nbproject/private/private.properties
+ M nbproject/private/private.xml
+
+# An sửa tiếp, build lại, add . rồi push lần nữa
+[An] $ git add .
+[An] $ git commit -m "DatLichServlet: kiem tra gio trong"
+[main 27d21c7] DatLichServlet: kiem tra gio trong
+ 5 files changed, 1 insertion(+)
+[An] $ git push origin main
+To <LAB>/github.git
+   d0decdb..27d21c7  main -> main
+
+# Bình pull — hỏng:
+[Binh] $ git pull
+From <LAB>/github
+   d0decdb..27d21c7  main       -> origin/main
+error: Your local changes to the following files would be overwritten by merge:
+	build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+	build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+	build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+	dist/QuanLyPhongKham.war
+Please commit your changes or stash them before you merge.
+Aborting
+Updating d0decdb..27d21c7
+
+# BẪY: thêm vào .gitignore khi tệp ĐÃ được theo dõi thì vô ích — Git vẫn theo dõi chúng
+[An] $ git status --short
+ M .gitignore
+ M build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+ M build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+ M build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+ M dist/QuanLyPhongKham.war
+[An] $ git check-ignore -v build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+[An] $ git check-ignore -v --no-index build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+.gitignore:3:build/	build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+
+# SỬA (An): rút khỏi index (tệp vẫn nằm trên đĩa), commit cùng .gitignore
+[An] $ git rm -r --cached -q build dist nbproject/private
+[An] $ git add .gitignore
+[An] $ git status --short
+M  .gitignore
+D  build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+D  build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+D  build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+D  dist/QuanLyPhongKham.war
+D  nbproject/private/private.properties
+D  nbproject/private/private.xml
+[An] $ git commit -m "Ngung theo doi build/, dist/, nbproject/private/ + bo sung .gitignore"
+[main 4493beb] Ngung theo doi build/, dist/, nbproject/private/ + bo sung .gitignore
+ 7 files changed, 3 insertions(+), 10 deletions(-)
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+ delete mode 100644 dist/QuanLyPhongKham.war
+ delete mode 100644 nbproject/private/private.properties
+ delete mode 100644 nbproject/private/private.xml
+[An] $ git push origin main
+To <LAB>/github.git
+   27d21c7..4493beb  main -> main
+[An] $ git status --short
+[An] $ git check-ignore -v build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+.gitignore:3:build/	build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+[An] $ git ls-files build dist nbproject
+nbproject/project.properties
+
+# Tệp cũ VẪN nằm trong lịch sử và trên remote:
+[An] $ git log --oneline --all -- nbproject/private/private.properties
+4493beb Ngung theo doi build/, dist/, nbproject/private/ + bo sung .gitignore
+d0decdb Them DatLichServlet
+[An] $ git log --all --oneline -S Tomcat@FPT2026
+4493beb Ngung theo doi build/, dist/, nbproject/private/ + bo sung .gitignore
+d0decdb Them DatLichServlet
+[An] $ git grep -n tomcat.manager.password HEAD~1 -- nbproject/private/private.properties
+HEAD~1:nbproject/private/private.properties:5:tomcat.manager.password=Tomcat@FPT2026
+
+# Bình: pull vẫn vướng thay đổi cục bộ — cất bản build của mình đi rồi pull
+[Binh] $ git stash push -q -- build dist nbproject/private
+[Binh] $ git pull
+From <LAB>/github
+   27d21c7..4493beb  main       -> origin/main
+Updating d0decdb..4493beb
+Fast-forward
+ .gitignore                                               |   3 +++
+ .../classes/com/nhom/servlet/DatLichServlet.class        | Bin 29 -> 0 bytes
+ .../WEB-INF/classes/com/nhom/servlet/HomeServlet.class   | Bin 26 -> 0 bytes
+ .../WEB-INF/classes/com/nhom/servlet/LoginServlet.class  | Bin 27 -> 0 bytes
+ dist/QuanLyPhongKham.war                                 | Bin 2048 -> 0 bytes
+ nbproject/private/private.properties                     |   5 -----
+ nbproject/private/private.xml                            |   5 -----
+ src/java/com/nhom/servlet/DatLichServlet.java            |   1 +
+ 8 files changed, 4 insertions(+), 10 deletions(-)
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/DatLichServlet.class
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/HomeServlet.class
+ delete mode 100644 build/web/WEB-INF/classes/com/nhom/servlet/LoginServlet.class
+ delete mode 100644 dist/QuanLyPhongKham.war
+ delete mode 100644 nbproject/private/private.properties
+ delete mode 100644 nbproject/private/private.xml
+[Binh] $ git stash drop
+Dropped refs/stash@{0} (dec4ab9c1dee76f63bd28589b1d42495928e2d00)
+[Binh] $ git status --short
+[Binh] $ ls
+build.xml
+nbproject
+src
+web
+[Binh] $ ls nbproject
+project.properties
+
+# Chi (chưa từng build): pull êm
+[Chi] $ git pull
+From <LAB>/github
+   3ed4562..4493beb  main       -> origin/main
+Updating 3ed4562..4493beb
+Fast-forward
+ .gitignore                                    | 3 +++
+ src/java/com/nhom/servlet/DatLichServlet.java | 8 ++++++++
+ 2 files changed, 11 insertions(+)
+ create mode 100644 src/java/com/nhom/servlet/DatLichServlet.java
+

@@ -1,0 +1,38 @@
+════ TAI NAN: sua-nham-main ════
+
+# Chi quên rẽ nhánh, làm 2 commit ngay trên main (chưa push)
+[Chi] $ git commit -qam "Login bang email"
+[Chi] $ git commit -qam "index: nut dang nhap"
+[Chi] $ git status -sb
+## main...origin/main [ahead 2]
+[Chi] $ git log --oneline -4
+182ad94 index: nut dang nhap
+a135628 Login bang email
+6994417 Khoi tao du an NetBeans: Login, Home, web.xml
+
+# SỬA (Chi, CHƯA push): đặt nhánh mới tại đây, đưa main về origin/main, sang nhánh mới
+[Chi] $ git branch feature/dang-nhap-email
+[Chi] $ git reset --hard origin/main
+HEAD is now at 6994417 Khoi tao du an NetBeans: Login, Home, web.xml
+[Chi] $ git switch feature/dang-nhap-email
+Switched to branch 'feature/dang-nhap-email'
+[Chi] $ git status -sb
+## feature/dang-nhap-email
+[Chi] $ git log --oneline --graph --all --decorate
+* 182ad94 (HEAD -> feature/dang-nhap-email) index: nut dang nhap
+* a135628 Login bang email
+* 6994417 (origin/main, origin/HEAD, main) Khoi tao du an NetBeans: Login, Home, web.xml
+
+# Lỡ tay reset quá đà? reflog còn giữ vị trí cũ của main
+[Chi] $ git reflog -5
+182ad94 HEAD@{0}: checkout: moving from main to feature/dang-nhap-email
+6994417 HEAD@{1}: reset: moving to origin/main
+182ad94 HEAD@{2}: commit: index: nut dang nhap
+a135628 HEAD@{3}: commit: Login bang email
+6994417 HEAD@{4}: clone: from <LAB>/github.git
+[Chi] $ git branch cuu-ho HEAD@{2}
+[Chi] $ git log --oneline -3 cuu-ho
+182ad94 index: nut dang nhap
+a135628 Login bang email
+6994417 Khoi tao du an NetBeans: Login, Home, web.xml
+

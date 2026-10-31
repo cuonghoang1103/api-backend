@@ -90,6 +90,13 @@ export function BanIn({ ex, lang, onPickLang }: { ex: CodeExercise; lang: 'en' |
     taiVe(taoZip(tep), `${ex.slug}-starter.zip`);
   };
 
+  // Dữ liệu mẫu của đề (database.json, db.json…) tải riêng để khỏi phải chép tay từ tờ đề.
+  const tepDuLieu = (ex.starterCodeJson ?? []).find((b) => /(^|\/)(database|db|data)\.json$/i.test(b.name));
+  const taiDuLieu = () => {
+    if (!tepDuLieu) return;
+    taiVe(new Blob([tepDuLieu.code], { type: 'application/json' }), tepDuLieu.name.split('/').pop() ?? 'database.json');
+  };
+
   useEffect(() => {
     if (demo !== 'mo') return;
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setDemo('dong'); };
@@ -113,6 +120,11 @@ export function BanIn({ ex, lang, onPickLang }: { ex: CodeExercise; lang: 'en' |
           <button type="button" className="cl-banin-btn" onClick={inPdf} title="In ra A4 hoặc chọn “Lưu thành PDF”">
             <Printer size={14} /> Tải đề PDF
           </button>
+          {tepDuLieu && (
+            <button type="button" className="cl-banin-btn" onClick={taiDuLieu} title="Tải tệp dữ liệu mẫu rồi đặt vào thư mục gốc của dự án">
+              <FileDown size={14} /> {tepDuLieu.name.split('/').pop()}
+            </button>
+          )}
           {(ex.starterCodeJson ?? []).length > 0 && (
             <button type="button" className="cl-banin-btn" onClick={taiStarter} title="Dự án khởi đầu đúng cây thư mục — làm trên máy rồi dán/nhập lại">
               <FileDown size={14} /> Starter (.zip)

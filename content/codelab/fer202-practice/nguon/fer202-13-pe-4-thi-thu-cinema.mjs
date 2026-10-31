@@ -712,7 +712,7 @@ const codeLab = (lang) => {
 <h3>${r('Checked by hand (the auto-grader cannot see these)', 'Tự kiểm bằng mắt (máy chấm không thấy được)')}</h3>
 <ul>
   <li>${r('Layout: Search Bar on top, Genres sidebar on the left, movie list on the right (compare with the screenshots).', 'Bố cục: thanh tìm kiếm trên cùng, Sidebar thể loại bên trái, danh sách phim bên phải (so với ảnh mẫu).')}</li>
-  <li>${r('The placeholder thumbnail is <code>movie_thumbnail.png</code> from the paper (put it in <code>public/</code>) — the grader only checks that each card has an image.', 'Ảnh thumbnail là <code>movie_thumbnail.png</code> của đề (đặt trong <code>public/</code>) — máy chấm chỉ kiểm mỗi card có ảnh.')}</li>
+  <li>${r('The placeholder thumbnail is <code>movie_thumbnail.png</code> from the paper (put it in <code>public/</code>). Practising at home without that file? Use any image — the grader only checks that each card has an image.', 'Ảnh thumbnail là <code>movie_thumbnail.png</code> của đề (đặt trong <code>public/</code>). Luyện ở nhà không có tệp đó thì dùng ảnh bất kỳ — máy chấm chỉ kiểm mỗi card có ảnh.')}</li>
   <li>${r('The alert messages (validation failures and success): the grader checks that nothing is POSTed when validation fails, not the wording of your alert.', 'Nội dung alert (lỗi kiểm tra và thành công): máy chấm chỉ kiểm khi không hợp lệ thì không POST gì, không chấm câu chữ alert.')}</li>
   <li>${r('<code>Promise.all</code> is checked in the source code; <code>bookedAt</code> (current ISO timestamp) is checked as a call to <code>toISOString()</code>.', '<code>Promise.all</code> được kiểm trong mã nguồn; <code>bookedAt</code> (thời điểm hiện tại dạng ISO) được kiểm bằng lời gọi <code>toISOString()</code>.')}</li>
 </ul>`;
@@ -791,7 +791,7 @@ export default doiDau({
       tests: { loai: 'react', phienBan: 1, tepChinh: 'src/index.js', thuVien: ['react-router-dom', 'react-bootstrap', 'bootstrap'], url: '/movies', jsonServer: { base: B, db: DB }, thangDiem: THANG_DIEM, kiem: KIEM, loiGiaiSauKhiDat: true },
       khoiDau: KHOI_DAU,
       loiGiai: LOI_GIAI,
-      demo: { tepChinh: 'src/index.js', url: '/movies' },
+      demo: { tepChinh: 'src/index.js', url: '/movies', thay: [['/movie_thumbnail.png', `data:image/png;base64,${fs.readFileSync(new URL('movie_thumbnail.png', TN_MUC)).toString('base64')}`]] },
       thamKhao: 'https://reactrouter.com/en/6.26.2/hooks/use-search-params',
     },
   ],

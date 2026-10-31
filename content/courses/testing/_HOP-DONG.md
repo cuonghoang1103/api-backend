@@ -1,7 +1,7 @@
 # Hợp đồng soạn khoá "Testing" (/courses/testing)
 
 > Đọc HẾT file này trước khi soạn một chương mới. Viết 01/11/2026 sau Mục 0 + Chương 1 (đợt mẫu, `bdd965397`) và Chương 2
-> (`73346c69c`); cập nhật khi xong Chương 3–4, 5–6. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
+> (`73346c69c`); cập nhật khi xong Chương 3–4, 5–6, 7. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
 > deck `tst-03-*`, `tst-04-*`, `tst-lab-3/4`. Chỗ nào file này không nói, bắt chước đúng các file đó.
 
 ## 0. Khoá này là gì, dạy ai
@@ -64,6 +64,9 @@ npm run test:unit                                   # = vitest run src/ · 85 pa
 npm run test:web                                    # = vitest run --config vitest.web.config.js web/ · 16 passed (Ch6, jsdom)
 npm run test:int -- test/integration                # 11 passed — cần Docker (Testcontainers, postgres:17)
 for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5 dot-bien-6; do node scripts/$s.mjs | tail -1; done   # 6 × 8/8
+npm run test:e2e                                    # = playwright test e2e/ --project=chromium · 9 passed (7 + 2 setup) — Ch7, cổng 4173 phải trống
+npm run test:e2e:all                                # 5 project · 37 passed
+node scripts/dot-bien-7.mjs | tail -1               # 8/8, ~1,5 phút (mỗi đột biến build + server + Chromium)
 ```
 - ⚠️ `npm test` = `vitest run` chạy CẢ `demo*/` (có test cố ý đỏ) ⇒ bài/slide/lab luôn ghi **`npm run test:unit`** (script `"test:unit": "vitest run src/"`,
   giới thiệu ở phần Setup của Lab 1, dùng nhất quán Ch1–Ch5 từ 01/11 theo yêu cầu điều phối). Không viết “npm test xanh”.
@@ -80,6 +83,16 @@ for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5 dot-bien-6; do nod
   `onUnhandledFrame: 'error'` chặn); fetch của Node không nhận URL tương đối (test dùng `baseUrl: 'http://api.test'`);
   `render(<AsyncPage />)` ⇒ “is an async Client Component”, `render(await Page(props))` chạy (chỉ tầng ngoài).
   Output lỗi của Testing Library có mã màu ANSI ⇒ `perl -pi -e 's/\e\[[0-9;]*m//g' <out>/*.txt` trước khi sinh `_ma`.
+- Ch7: `@playwright/test` 1.64.1 (Chromium/Firefox/WebKit — `npx playwright install chromium firefox webkit` lần đầu), Vite 8.3.5.
+  `web/app/` (App.jsx: phiên trong `localStorage['labflow.session']`, ADMIN ⇒ AdminBookings, còn lại ⇒ BookingForm; LoginForm.jsx), `vite.config.js`
+  (root `web/app` ⇒ `dist-web/`), `e2e/server.js` (API Ch5 + `POST /api/login` demo an/binh/thay/boss, mật khẩu `labflow-demo` + phục vụ `dist-web`,
+  cổng 4173, repo BỘ NHỚ — còn race kiểm-rồi-ghi của Ch2: hai POST cùng lúc ⇒ [201, 201], đo 01/11), `e2e/helpers.js` (`signIn`, `book`,
+  `freshLab(testInfo)` băm testId+repeat+retry ⇒ QA-100…999), `e2e/auth.setup.js` (storageState an/boss ⇒ `playwright/.auth/`, đã .gitignore),
+  `playwright.config.js` (webServer `npm run build:web && node e2e/server.js`, `reuseExistingServer: false` — máy chấm cần; setup project + 5 project).
+  `vitest.config.js` loại `e2e/**`, `demo7/**`. Thí nghiệm `demo7/*.spec.js` (có test CỐ Ý đỏ). `scripts/thu-loi-pw.mjs` = cài 1 thay đổi rồi chạy Playwright.
+  Đo được: `getByLabel('Lab')` khớp cả form "Book a lab" (strict mode); API trễ 1,5 s ⇒ chỉ assertion web-first xanh; storageState KHÔNG nhanh hơn
+  (đăng nhập demo gần như miễn phí); dữ liệu cố định + 2 project (firefox+webkit) ⇒ Firefox đỏ 3/3 vì WebKit đặt trước; ảnh gốc `-darwin.png`
+  KHÔNG đưa vào snapshot (`*-snapshots/` bị loại khi rsync) — lần chạy đầu tự ghi. Output Playwright có mã màu ⇒ `perl -pi -e 's/\e\[[0-9;]*m//g'`.
 - Ch4: `vitest.integration.config.js` (include `test/integration/**`, `demo4/**/*.int.test.js`; `globalSetup`; `fileParallelism: false`),
   `vitest.config.js` loại `test/integration/**` và `demo4/**`. `TEST_DATABASE_URL` có ⇒ dùng CSDL đó (compose `compose.test.yml`, cổng 54329);
   không ⇒ Testcontainers. `TST_SCHEMA` đổi file schema (demo). Test tích hợp nhận URL bằng `inject('databaseUrl')` (`test/support/db.js`).
@@ -134,7 +147,8 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
   ⇒ `images/academy/TST/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy** (Cloudflare cache luôn cái 404).
   Deck đã đẩy mà phải dựng lại ⇒ đẩy sang `TST/v2` (v3…) và ghi `VER = { '<deck>': 'v2' }` trong `_slides.mjs` — đừng ghi đè v1.
   Hiện (01/11): `tst-lab-1`, `tst-lab-2` = v3; `tst-02-2`, `tst-lab-3`, `tst-lab-4`, `tst-04-1/2/3` = v2 (đổi sang `npm run test:unit`);
-  `tst-05-1` = v2 (sửa “no port” → Supertest tự mở cổng tạm); còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+  `tst-05-1` = v2 (sửa “no port” → Supertest tự mở cổng tạm); `tst-07-4` = v2 (slide 8: chạy dau-tien trên firefox+webkit KHÔNG xanh hết;
+  slide 7 bớt chữ cho khỏi chạm chân trang); còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 
 ## 5. Lời giảng dưới slide (`giang/<deck>.mjs`)
 - Đúng **một dòng/slide**, đủ 1..N (walkTst ném lỗi nếu thiếu/trùng). EN 50–90 từ, VI tương đương, giải thích **vì sao**, không đọc lại slide.
@@ -166,10 +180,11 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - Deck lab 9 slide: cover · mission · code under test · 8 bugs · first attempt · reference · rubric · hints · checklist.
 
 ### 7.2 Đề Code Lab kiểu `mutation` (chờ máy chấm)
-`testing/_de-codelab-mutation.json` — 29 đề, 163 đột biến + 11 thay đổi vô hại, **đã kiểm 174/174 đạt** trên một bản sao mới của
+`testing/_de-codelab-mutation.json` — 34 đề, 190 đột biến + 16 thay đổi vô hại (Ch7: 5 đề, 27 đột biến + 5 vô hại, 32/32), kiểm trên một bản sao mới của
 `_labflow-lite` (`npm ci`, Docker bật) bằng
 `node scripts/tst/kiem-de-mutation.mjs <SCRATCH>/lab/labflow-lite content/courses/testing/_de-codelab-mutation.json [id…]` (01/11/2026).
-Trường thêm: `config` (Ch4: `vitest.integration.config.js`, cần Docker) · `voHai[{file, from, to, label}]` = thay đổi VÔ HẠI mà test
+Trường thêm: `config` (Ch4: `vitest.integration.config.js`, cần Docker) · `runner: "playwright"` (Ch7: chạy `npx playwright test <testThamKhao> <args>`,
+`args` mặc định `["--project=chromium"]`, `[]` = cả 5 project; mỗi lần tự build web + bật server cổng 4173) · `voHai[{file, from, to, label}]` = thay đổi VÔ HẠI mà test
 phải VẪN XANH (bắt test quá chi tiết — đề 3.3).
 Mỗi đề: `id`, `bai` (slug bài gắn), `tieuDe` EN\|\|\|VI, `ham`, `fileDung` (code đúng trong `_labflow-lite`), `testThamKhao` (bộ test
 chứng minh mọi đột biến diệt được), `yeuCau`, `dotBien[{ file, from, to, label }]` (`from` khớp **đúng 1 chỗ**, kể cả xuống dòng).
@@ -206,6 +221,11 @@ Máy chấm sau này: chạy file test của người học trên code đúng (p
 | tst-cl-6-3 | tst-6-3-api-gia | createClient, AdminBookings, BookingForm | sai đường dẫn · rỗng thành bảng rỗng · 403 thành lỗi chung · nút thử lại chết · mất mạng thành lỗi máy chủ · mọi lỗi luật một câu · **vô hại:** template string |
 | tst-cl-6-4 | tst-6-4-nextjs | freeSlots, GET /api/slots, listBookings | khung sau lượt đặt bị chiếm · khung trước bị chiếm · thêm 21:00 · thiếu ngày không bị chặn · 502→500 · phòng khác chặn khung · **vô hại:** find thay some |
 | tst-cl-lab-6 | tst-6-5-lab-react | (8 đột biến của `dot-bien-6.mjs`) | **vô hại:** đổi tiền tố id |
+| tst-cl-7-1 | tst-7-1-playwright | LoginForm, header App, index.html (playwright) | sai tiêu đề tab · mật khẩu hiện chữ · label Username rời ô · sai mật khẩu im lặng · header mất vai trò · **vô hại:** class CSS cho form |
+| tst-cl-7-2 | tst-7-2-luong | phiên App, BookingForm, AdminBookings, needsApproval, repo bộ nhớ | phiên không được lưu · xác nhận mất tên phòng · danh sách admin mất giờ kết thúc · mất cột trạng thái · giảng viên 40 chỗ phải chờ duyệt · danh sách admin luôn rỗng · **vô hại:** đổi khoá localStorage |
+| tst-cl-7-3 | tst-7-3-on-dinh | `--repeat-each=3` | trùng đúng khung được nhận · 409 thành lỗi chung · đảo thông báo chờ duyệt · 31 chỗ không cần duyệt · **vô hại:** server lưu chậm 1,5 s, đăng nhập chậm 1,5 s |
+| tst-cl-7-4 | tst-7-4-da-trinh-duyet | style.css, index.html (`args: []` = 5 project) | media query 400px (Pixel 7 rộng 412) · điện thoại cỡ chữ máy tính · đổi cỡ chữ máy tính · mất thẻ meta viewport |
+| tst-cl-lab-7 | tst-7-5-lab-e2e | (8 đột biến của `dot-bien-7.mjs`) | **vô hại:** server lưu chậm 1,5 s |
 
 Chương mới ⇒ thêm 1 đề/bài dạy (3–8 đột biến, mỗi con là một bug THẬT có nghĩa với người dùng, không đột biến tương đương), chạy
 `kiem-de-mutation.mjs` tới khi `N/N`, rồi cập nhật bảng này. Đột biến phải giữ cú pháp hợp lệ: xoá `lab = $1 AND` làm `$1` thừa ⇒ cả câu

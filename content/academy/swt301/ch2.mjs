@@ -2104,6 +2104,16 @@ const L23 = {
       ['sp5', '§3.4.3 System testing (PDF 105–107); §3.4.4 Acceptance testing (PDF 108–111)', '§3.4.3 System testing (PDF 105–107); §3.4.4 Acceptance testing (PDF 108–111)'],
       ['sp4', '§3.4 System test pp.58–60 (PDF 73–75); §3.5 Acceptance test pp.61–64 (PDF 76–79)', '§3.4 System test trang 58–60 (PDF 73–75); §3.5 Acceptance test trang 61–64 (PDF 76–79)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026, Chương 7)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-7-2-luong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 7.2: testing real user flows</span><span class="lc-sub">Same as this lesson: system testing checks end-to-end tasks of the whole product, black-box, in a production-like environment. Different: Courses automates those tasks with Playwright in a real browser on LabFlow Lite — sign in once and reuse the session, one booking followed from a student to the admin, data prepared through the API — and measures what each choice really costs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-7-2-luong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 7.2: test luồng người dùng thật</span><span class="lc-sub">Giống bài này: system testing kiểm các tác vụ đầu-cuối của cả sản phẩm, kiểu hộp đen, trong môi trường giống thật. Khác: Courses tự động hoá chính các tác vụ đó bằng Playwright trên trình duyệt thật với LabFlow Lite — đăng nhập một lần rồi dùng lại phiên, theo một lượt đặt từ sinh viên tới admin, dựng dữ liệu qua API — và đo cái giá thật của từng lựa chọn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

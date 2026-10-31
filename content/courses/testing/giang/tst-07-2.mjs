@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 7.2 (deck tst-07-2, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-07-2', 'Testing real user flows', 'Test luồng người dùng thật', [
+  [1, 'Testing real user flows',
+    `<p>A real journey crosses screens and people: a student books, an admin sees it. This lesson signs in once, reuses the session, and follows one booking from one user to another.</p>`,
+    `<p>Một hành trình thật đi qua nhiều màn hình và nhiều người: sinh viên đặt, admin thấy. Bài này đăng nhập một lần, dùng lại phiên, và theo một lượt đặt từ người này sang người kia.</p>`],
+  [2, 'What you will be able to do after this lesson',
+    `<p>You will save and reuse sessions, order work with a setup project, run two users at once, and judge a speed claim by measuring it.</p>`,
+    `<p>Bạn sẽ lưu và dùng lại phiên đăng nhập, sắp thứ tự công việc bằng một setup project, chạy hai người dùng cùng lúc, và đánh giá một lời hứa về tốc độ bằng cách đo.</p>`],
+  [3, 'Sign in once, save the session',
+    `<p>The setup test signs in through the real page and writes the browser storage to a file. LabFlow keeps its token in localStorage, so that file is effectively a password — it stays out of git.</p>`,
+    `<p>Test setup đăng nhập qua trang thật rồi ghi storage của trình duyệt ra file. LabFlow giữ token trong localStorage, nên file đó thực chất là một mật khẩu — không được đưa vào git.</p>`],
+  [4, 'Projects: setup first, then the tests',
+    `<p>The chromium project depends on the setup project, so Playwright signs in first and only then runs the tests. A broken login fails once, clearly, instead of in every test.</p>`,
+    `<p>Project chromium phụ thuộc project setup, nên Playwright đăng nhập trước rồi mới chạy test. Đăng nhập hỏng thì đỏ một lần, rõ ràng, thay vì đỏ ở mọi test.</p>`],
+  [5, 'One journey, two users',
+    `<p>Two browser contexts are two people with separate storage. The student books in one, the admin finds the row in the other — the same path a booking takes in real life.</p>`,
+    `<p>Hai browser context là hai người với storage riêng. Sinh viên đặt ở context này, admin tìm thấy dòng ở context kia — đúng con đường một lượt đặt đi trong thực tế.</p>`],
+  [6, 'The suite: nine tests, three seconds',
+    `<p>Nine tests cover sign-in errors, sessions, roles, booking, approval, a taken slot and the cross-user journey. Rule details stay in unit tests; these tests check the wiring.</p>`,
+    `<p>Chín test phủ lỗi đăng nhập, phiên, vai trò, đặt phòng, chờ duyệt, khung đã có người đặt và hành trình giữa hai người. Chi tiết luật nằm ở unit test; các test này kiểm phần nối.</p>`],
+  [7, 'Does reusing the session save time? Measured',
+    `<p>Here it did not: signing in is a memory lookup, and the reused session was even slightly slower in this run. The reasons to reuse are elsewhere — real logins are slow or external, and booking tests should not break when the login page changes.</p>`,
+    `<p>Ở đây thì không: đăng nhập chỉ là tra trong bộ nhớ, và phiên dùng lại thậm chí còn chậm hơn chút trong lần chạy này. Lý do dùng lại nằm ở chỗ khác — đăng nhập thật thì chậm hoặc qua bên ngoài, và test đặt phòng không nên gãy khi trang đăng nhập thay đổi.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>The lecturer has no saved session: sign in through the form in a fresh context, book forty seats, then check the admin sees the booking confirmed.</p>`,
+    `<p>Giảng viên không có phiên lưu sẵn: đăng nhập qua form trong một context mới, đặt bốn mươi chỗ, rồi kiểm admin thấy lượt đặt đã xác nhận.</p>`],
+  [9, 'Summary',
+    `<p>Setup project, saved sessions, contexts as users, journeys over details, and measurements over assumptions.</p>`,
+    `<p>Setup project, phiên lưu sẵn, context là người dùng, hành trình hơn chi tiết, và số đo hơn giả định.</p>`],
+]);

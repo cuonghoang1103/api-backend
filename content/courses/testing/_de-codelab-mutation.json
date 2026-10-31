@@ -1,5 +1,5 @@
 {
-  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH.",
+  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH. Chương 7: \"runner\": \"playwright\" (+ \"args\", mặc định --project=chromium; [] = cả 5 project) — chạy npx playwright test, mỗi lần tự build web + bật server e2e ở cổng 4173.",
   "de": [
     {
       "id": "tst-cl-1-1",
@@ -1566,6 +1566,306 @@
           "from": "const id = 'booking-' + name;",
           "to": "const id = 'bk-' + name;",
           "label": "refactor: shorter ids (labels still linked)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-7-1",
+      "bai": "tst-7-1-playwright",
+      "runner": "playwright",
+      "tieuDe": "Your first browser tests: the sign-in page|||Test trình duyệt đầu tiên: trang đăng nhập",
+      "ham": "LoginForm, App header, index.html",
+      "fileDung": [
+        "web/app/LoginForm.jsx",
+        "web/app/App.jsx",
+        "web/app/index.html"
+      ],
+      "testThamKhao": [
+        "demo7/dau-tien.spec.js",
+        "demo7/th71.spec.js"
+      ],
+      "yeuCau": "Playwright in Chromium: find fields by label and buttons by role, sign in as a student and as a lecturer, a wrong password, the page title, the password field type; web-first assertions only|||Playwright trên Chromium: tìm ô theo label và nút theo role, đăng nhập bằng sinh viên và giảng viên, sai mật khẩu, tiêu đề trang, kiểu của ô mật khẩu; chỉ dùng assertion web-first",
+      "dotBien": [
+        {
+          "file": "web/app/index.html",
+          "from": "<title>LabFlow Lite</title>",
+          "to": "<title>LabFlow</title>",
+          "label": "the browser tab shows the wrong title"
+        },
+        {
+          "file": "web/app/LoginForm.jsx",
+          "from": "name=\"password\" type=\"password\"",
+          "to": "name=\"password\" type=\"text\"",
+          "label": "the password is shown as you type it"
+        },
+        {
+          "file": "web/app/LoginForm.jsx",
+          "from": "<label htmlFor=\"login-username\">Username</label>",
+          "to": "<label>Username</label>",
+          "label": "the Username label is not linked to its field"
+        },
+        {
+          "file": "web/app/LoginForm.jsx",
+          "from": "else setError('Wrong username or password.');",
+          "to": "else setError(null);",
+          "label": "a wrong password shows nothing"
+        },
+        {
+          "file": "web/app/App.jsx",
+          "from": "Signed in as {session.user.id} ({session.user.role})",
+          "to": "Signed in as {session.user.id}",
+          "label": "the header no longer says which role you have"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/app/LoginForm.jsx",
+          "from": "<form aria-label=\"Sign in\" onSubmit={handleSubmit}>",
+          "to": "<form aria-label=\"Sign in\" onSubmit={handleSubmit} className=\"login-form\">",
+          "label": "refactor: a CSS class on the form"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-7-2",
+      "bai": "tst-7-2-luong",
+      "runner": "playwright",
+      "tieuDe": "User journeys: a saved session, two users, one booking|||Hành trình người dùng: phiên lưu sẵn, hai người, một lượt đặt",
+      "ham": "App (session), BookingForm, AdminBookings, needsApproval, memory repository",
+      "fileDung": [
+        "web/app/App.jsx",
+        "web/BookingForm.jsx",
+        "web/AdminBookings.jsx",
+        "src/rules/booking.js",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "e2e/dat-phong.spec.js",
+        "demo7/th72.spec.js",
+        "demo7/qua-api.spec.js"
+      ],
+      "yeuCau": "A setup project that signs in once and saves storageState; booking journeys that start signed in; one journey across two browser contexts (student books, admin sees the row with its time and status); one booking arranged through the API|||Một setup project đăng nhập một lần và lưu storageState; các hành trình đặt phòng bắt đầu khi đã đăng nhập; một hành trình qua hai browser context (sinh viên đặt, admin thấy dòng kèm giờ và trạng thái); một lượt đặt dựng sẵn qua API",
+      "dotBien": [
+        {
+          "file": "web/app/App.jsx",
+          "from": "localStorage.setItem(KEY, JSON.stringify(next));",
+          "to": "",
+          "label": "the session is never saved (a reload signs you out)"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "'Booked. See you in ' + res.data.lab + '.'",
+          "to": "'Booked. See you soon.'",
+          "label": "the confirmation no longer says which lab"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "<td>{b.start}–{b.end}</td>",
+          "to": "<td>{b.start}</td>",
+          "label": "the admin list loses the end time"
+        },
+        {
+          "file": "web/AdminBookings.jsx",
+          "from": "<td>{b.status}</td>",
+          "to": "<td></td>",
+          "label": "the admin cannot see whether a booking is confirmed"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "if (role === 'LECTURER' || role === 'ADMIN') return false;",
+          "to": "if (role === 'ADMIN') return false;",
+          "label": "a lecturer's 40-seat booking waits for approval"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "return [...rows];",
+          "to": "return [];",
+          "label": "the admin list is always empty"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "web/app/App.jsx",
+          "from": "const KEY = 'labflow.session';",
+          "to": "const KEY = 'labflow.session.v2';",
+          "label": "refactor: the session is stored under a new key (storageState is saved again by setup)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-7-3",
+      "bai": "tst-7-3-on-dinh",
+      "runner": "playwright",
+      "args": [
+        "--project=chromium",
+        "--repeat-each=3"
+      ],
+      "tieuDe": "Stable journeys: own data, retrying assertions, a slow server|||Hành trình ổn định: dữ liệu riêng, assertion biết thử lại, server chậm",
+      "ham": "bookLab via the e2e server, BookingForm messages, memory repository",
+      "fileDung": [
+        "e2e/server.js",
+        "web/BookingForm.jsx",
+        "src/booking/service.js",
+        "src/rules/booking.js"
+      ],
+      "testThamKhao": [
+        "e2e/dat-phong.spec.js"
+      ],
+      "yeuCau": "Run with --repeat-each=3: every test books a lab of its own (freshLab), waits only with web-first assertions (no waitForTimeout, no isVisible() inside expect), and must stay green when the server answers 1.5 s later|||Chạy với --repeat-each=3: mỗi test đặt một phòng riêng (freshLab), chỉ chờ bằng assertion web-first (không waitForTimeout, không isVisible() trong expect), và phải vẫn xanh khi server trả lời chậm 1,5 giây",
+      "dotBien": [
+        {
+          "file": "src/booking/service.js",
+          "from": "b.start < end && start < b.end",
+          "to": "b.start < end && start < b.start",
+          "label": "the exact same slot can be booked twice"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "MESSAGES[res.data.error.code] ??",
+          "to": "MESSAGES[res.status] ??",
+          "label": "a taken slot shows a generic error"
+        },
+        {
+          "file": "web/BookingForm.jsx",
+          "from": "res.data.status === 'PENDING' ?",
+          "to": "res.data.status !== 'PENDING' ?",
+          "label": "pending and confirmed messages swapped"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "return seats > APPROVAL_SEATS;",
+          "to": "return seats > APPROVAL_SEATS + 1;",
+          "label": "31 seats is confirmed without approval"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "e2e/server.js",
+          "from": "const app = createApp({ repo: createMemoryRepo(), auth });",
+          "to": "const slowRepo = ((repo) => ({ ...repo, insert: async (b) => { await new Promise((ok) => setTimeout(ok, 1500)); return repo.insert(b); } }))(createMemoryRepo());\nconst app = createApp({ repo: slowRepo, auth });",
+          "label": "slow server: every booking is saved 1.5 s later (web-first assertions keep waiting)"
+        },
+        {
+          "file": "e2e/server.js",
+          "from": "app.post('/api/login', async (req, res) => {",
+          "to": "app.post('/api/login', async (req, res) => {\n  await new Promise((ok) => setTimeout(ok, 1500));",
+          "label": "slow server: sign-in answers 1.5 s later"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-7-4",
+      "bai": "tst-7-4-da-trinh-duyet",
+      "runner": "playwright",
+      "args": [],
+      "tieuDe": "Five projects: the header on desktops and phones|||Năm project: header trên máy tính và điện thoại",
+      "ham": "style.css (media query), index.html (viewport)",
+      "fileDung": [
+        "web/app/style.css",
+        "web/app/index.html"
+      ],
+      "testThamKhao": [
+        "demo7/th74.spec.js"
+      ],
+      "yeuCau": "One test, all five projects (Chromium, Firefox, WebKit, Pixel 7, iPhone 15): the computed font size of the header title is 20px on desktops and 17px on phones|||Một test, cả năm project (Chromium, Firefox, WebKit, Pixel 7, iPhone 15): cỡ chữ đã tính của tiêu đề header là 20px trên máy tính và 17px trên điện thoại",
+      "dotBien": [
+        {
+          "file": "web/app/style.css",
+          "from": "@media (max-width: 600px)",
+          "to": "@media (max-width: 400px)",
+          "label": "phones wider than 400 px (Pixel 7: 412) get the desktop header"
+        },
+        {
+          "file": "web/app/style.css",
+          "from": "header h1 { font-size: 17px; }",
+          "to": "header h1 { font-size: 20px; }",
+          "label": "phones get the desktop title size"
+        },
+        {
+          "file": "web/app/style.css",
+          "from": "header h1 { font-size: 20px; margin: 0; }",
+          "to": "header h1 { font-size: 22px; margin: 0; }",
+          "label": "the desktop title size changed"
+        },
+        {
+          "file": "web/app/index.html",
+          "from": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />",
+          "to": "",
+          "label": "no viewport tag: phones render the desktop layout zoomed out"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-7",
+      "bai": "tst-7-5-lab-e2e",
+      "runner": "playwright",
+      "tieuDe": "Lab 7 — end-to-end journeys: kill 8 mutants|||Lab 7 — hành trình đầu-cuối: diệt 8 đột biến",
+      "ham": "App, LoginForm, e2e server (8 mutants of scripts/dot-bien-7.mjs)",
+      "fileDung": [
+        "web/app/App.jsx",
+        "web/app/LoginForm.jsx",
+        "e2e/server.js"
+      ],
+      "testThamKhao": [
+        "e2e/"
+      ],
+      "yeuCau": "Sign-in errors, reload and sign-out, roles (admin list vs booking form), booking journeys and one cross-user journey; web-first assertions; a lab of its own per test|||Lỗi đăng nhập, tải lại và đăng xuất, vai trò (danh sách admin so với form đặt), hành trình đặt phòng và một hành trình giữa hai người; assertion web-first; mỗi test một phòng riêng",
+      "dotBien": [
+        {
+          "file": "web/app/App.jsx",
+          "from": "session.user.role === 'ADMIN'",
+          "to": "session.user.role === 'LECTURER'",
+          "label": "admins get the booking form, not the list"
+        },
+        {
+          "file": "web/app/App.jsx",
+          "from": "localStorage.removeItem(KEY);",
+          "to": "",
+          "label": "Sign out does not end the session"
+        },
+        {
+          "file": "web/app/App.jsx",
+          "from": "try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; }",
+          "to": "return null;",
+          "label": "a reload signs the user out"
+        },
+        {
+          "file": "e2e/server.js",
+          "from": "password !== PASSWORD",
+          "to": "password === undefined",
+          "label": "any password is accepted"
+        },
+        {
+          "file": "web/app/App.jsx",
+          "from": "createClient({ token: session.token })",
+          "to": "createClient({ token: session.user.id })",
+          "label": "requests carry the wrong token"
+        },
+        {
+          "file": "web/app/LoginForm.jsx",
+          "from": "{error && <p role=\"alert\">{error}</p>}",
+          "to": "{error && <p>{error}</p>}",
+          "label": "a failed sign-in is not announced"
+        },
+        {
+          "file": "web/app/LoginForm.jsx",
+          "from": "password: form.get('password')",
+          "to": "password: form.get('username')",
+          "label": "the username is sent as the password"
+        },
+        {
+          "file": "e2e/server.js",
+          "from": "boss: 'ADMIN'",
+          "to": "boss: 'LECTURER'",
+          "label": "the admin account lost its role"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "e2e/server.js",
+          "from": "const app = createApp({ repo: createMemoryRepo(), auth });",
+          "to": "const slowRepo = ((repo) => ({ ...repo, insert: async (b) => { await new Promise((ok) => setTimeout(ok, 1500)); return repo.insert(b); } }))(createMemoryRepo());\nconst app = createApp({ repo: slowRepo, auth });",
+          "label": "slow server: every booking is saved 1.5 s later (web-first assertions keep waiting)"
         }
       ]
     }

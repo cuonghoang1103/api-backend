@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 7.4 (deck tst-07-4, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-07-4', 'Browsers, devices and visual checks', 'Nhiều trình duyệt, thiết bị và kiểm tra hình ảnh', [
+  [1, 'Browsers, devices and visual checks',
+    `<p>Users open LabFlow in Chrome, Firefox, Safari and on phones. This lesson runs the same tests in three browser engines and two emulated phones, and adds a test that compares pixels.</p>`,
+    `<p>Người dùng mở LabFlow bằng Chrome, Firefox, Safari và trên điện thoại. Bài này chạy cùng bộ test trên ba engine trình duyệt và hai điện thoại giả lập, và thêm một test so từng điểm ảnh.</p>`],
+  [2, 'What you will be able to do after this lesson',
+    `<p>You will configure projects for browsers and devices, test a layout rule per screen size, and use screenshot comparison knowing exactly what it can and cannot see.</p>`,
+    `<p>Bạn sẽ cấu hình project cho trình duyệt và thiết bị, test một luật bố cục theo kích thước màn hình, và dùng so sánh ảnh chụp khi biết rõ nó thấy và không thấy được gì.</p>`],
+  [3, 'One test file, five projects',
+    `<p>Each project runs the same tests with different browser settings. WebKit stands in for Safari — and every browser on an iPhone uses WebKit. Device presets set viewport, touch and user agent; they emulate, they are not phones.</p>`,
+    `<p>Mỗi project chạy cùng bộ test với cấu hình trình duyệt khác nhau. WebKit đại diện cho Safari — và mọi trình duyệt trên iPhone đều dùng WebKit. Preset thiết bị đặt viewport, cảm ứng và user agent; đó là giả lập, không phải điện thoại thật.</p>`],
+  [4, 'All journeys, every browser',
+    `<p>Seven journeys times five projects plus two setup tests: thirty-seven passes in about seventeen seconds. Run Chromium while you work and everything before merging.</p>`,
+    `<p>Bảy hành trình nhân năm project cộng hai test setup: ba mươi bảy test qua trong khoảng mười bảy giây. Khi làm việc chạy Chromium, trước khi merge chạy tất cả.</p>`],
+  [5, 'A rule that depends on the screen',
+    `<p>The header title is smaller on narrow screens. One assertion reads the computed font size and expects the value for that project: twenty pixels on desktops, seventeen on phones.</p>`,
+    `<p>Tiêu đề trên header nhỏ hơn khi màn hình hẹp. Một assertion đọc cỡ chữ đã tính và mong giá trị đúng cho project đó: hai mươi pixel trên máy tính, mười bảy trên điện thoại.</p>`],
+  [6, 'Screenshot comparison',
+    `<p>The first run has nothing to compare with, so it writes a baseline and fails; the second run passes. The file name carries the browser and the operating system, because fonts render differently on each.</p>`,
+    `<p>Lần chạy đầu chưa có gì để so nên ghi ảnh gốc và đỏ; lần thứ hai thì qua. Tên file mang cả trình duyệt lẫn hệ điều hành, vì font hiển thị khác nhau trên mỗi nơi.</p>`],
+  [7, 'What a pixel test sees — and misses',
+    `<p>A darker orange button passed: the default threshold treats similar colours as the same. A blue button failed with two thousand four hundred different pixels and a diff image. Visual tests catch visible changes, not every change.</p>`,
+    `<p>Nút màu cam đậm hơn vẫn qua: ngưỡng mặc định coi các màu gần nhau là như nhau. Nút màu xanh dương thì đỏ với hai nghìn bốn trăm điểm ảnh khác và một ảnh diff. Test hình ảnh bắt thay đổi nhìn thấy được, không phải mọi thay đổi.</p>`],
+  [8, 'Practice (15 minutes)',
+    `<p>Run the first test file of lesson 7.1 in Firefox and WebKit: the booking test turns red in Firefox. Read its error context before blaming the browser — both projects booked the same fixed slot on one server. Then write the font-size test for all five projects, and update a baseline only after looking at the diff.</p>`,
+    `<p>Chạy file test đầu tiên của bài 7.1 trên Firefox và WebKit: test đặt phòng đỏ trên Firefox. Đọc error context trước khi đổ lỗi cho trình duyệt — hai project cùng đặt một khung cố định trên một server. Rồi viết test cỡ chữ cho cả năm project, và chỉ cập nhật ảnh gốc sau khi đã xem ảnh diff.</p>`],
+  [9, 'Summary',
+    `<p>Projects for browsers and devices, WebKit for iPhone users, emulation with its limits, and pixel tests with their threshold and per-OS baselines.</p>`,
+    `<p>Project cho trình duyệt và thiết bị, WebKit cho người dùng iPhone, giả lập với giới hạn của nó, và test điểm ảnh với ngưỡng và ảnh gốc riêng cho từng hệ điều hành.</p>`],
+]);

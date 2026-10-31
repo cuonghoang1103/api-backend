@@ -3,6 +3,8 @@
 //   cp -r content/courses/testing/_labflow-lite <scratch>/labflow-lite && (cd <scratch>/labflow-lite && npm ci)
 //   node scripts/tst/kiem-de-mutation.mjs <scratch>/labflow-lite content/courses/testing/_de-codelab-mutation.json [id…]
 // Luôn trả file về trong finally. Cần Node 22 (TST_NODE_BIN như chay.sh).
+// Chương 7: đề có "runner": "playwright" chạy `npx playwright test <testThamKhao> <args>` (args mặc định ['--project=chromium'];
+// [] = mọi project). Mỗi lần chạy Playwright tự build web + bật server e2e (webServer, reuseExistingServer: false) ⇒ cổng 4173 phải trống.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -11,10 +13,14 @@ const { de } = JSON.parse(readFileSync(path.resolve(specPath), 'utf8'));
 process.chdir(duAn);
 const env = { ...process.env, PATH: (process.env.TST_NODE_BIN ? process.env.TST_NODE_BIN + path.delimiter : '') + process.env.PATH };
 let cfg = [];
-const run = (t) => spawnSync('npx', ['vitest', 'run', ...cfg, ...t], { encoding: 'utf8', env, shell: process.platform === 'win32' }).status;
+let cur = {};
+const run = (t) => (cur.runner === 'playwright'
+  ? spawnSync('npx', ['playwright', 'test', ...t, ...(cur.args ?? ['--project=chromium'])], { encoding: 'utf8', env, shell: process.platform === 'win32' })
+  : spawnSync('npx', ['vitest', 'run', ...cfg, ...t], { encoding: 'utf8', env, shell: process.platform === 'win32' })).status;
 let song = 0, tong = 0;
 for (const d of de.filter((x) => !chi.length || chi.includes(x.id))) {
   cfg = d.config ? ['--config', d.config] : [];   // vd vitest.integration.config.js cho Chương 4 (cần Docker)
+  cur = d;
   if (run(d.testThamKhao) !== 0) throw new Error(d.id + ': test tham khảo KHÔNG xanh trên code đúng');
   for (const m of d.dotBien) {
     const goc = readFileSync(m.file, 'utf8');

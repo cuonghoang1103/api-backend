@@ -22,6 +22,7 @@ thêm vào cuối mảng `content` của bài). Chỉ gắn khi đã đọc nộ
 | `swt301-test-levels` (2.2) | `tst-3-1-phan-loai` | thay thành phần xung quanh bằng stub (top-down) / driver (bottom-up) để test cô lập | đủ 5 loại double (dummy, stub, spy, mock, fake) dựng bằng Vitest quanh tính năng gửi thư; kiểm trạng thái vs tương tác |
 | `swt301-test-levels` (2.2) | `tst-4-1-vi-sao` | integration testing: các thành phần làm việc cùng nhau | tích hợp với PostgreSQL 17 thật (Testcontainers); lỗi đặt trùng chỉ lộ khi hai kết nối thật tranh nhau, sửa bằng ràng buộc EXCLUDE |
 | `swt301-test-types` (2.4, slide 118 Security Tests) | `tst-5-2-xac-thuc` | security testing: phân quyền, mức truy cập thông tin | test API tự động với token thật: 401 token giả/hết hạn (đồng hồ cố định), 403 sai vai trò, 404 lượt đặt của người khác (IDOR, OWASP A01), role trong body → 400 |
+| `swt301-system-acceptance` (2.3) | `tst-7-2-luong` | system testing: kiểm các tác vụ đầu-cuối của cả sản phẩm, hộp đen, môi trường giống thật | tự động hoá bằng Playwright trên trình duyệt thật: setup project + storageState (đo thật: KHÔNG nhanh hơn ở LabFlow, nêu khi nào đáng), một lượt đặt đi từ sinh viên tới admin bằng hai browser context, dựng dữ liệu qua API; Lab 7 cài 8 bug ở chỗ nối |
 
 Ngoài SWT301 (01/11, Chương 2): `tst-2-1-async` → khoá Node.js `nodejs-1-4-bat-dong-bo` (ôn async/await, thẻ một chiều).
 
@@ -37,7 +38,7 @@ Một chiều sang khoá Node.js (Courses): `tst-3-4` → `nodejs-14-2-unit-test
 Một chiều sang khoá API Design (phiên khác soạn — KHÔNG sửa file của nó): `tst-5-3` → `api-2-2-validation`.
 
 Không cặp (đợt mẫu): `tst-1-2-matcher` (SWT301 không dạy matcher JS; phần `assertThrows` đã nằm trong bảng JUnit ↔ Vitest của 1.1), Lab 1 (kiểm thử đột biến — SWT301 chưa có bài tương ứng; Chương 8 Courses sẽ nối với SWT301 Ch.5 coverage).
-Không cặp Chương 2: `tst-2-1-async`, `tst-2-4-ngau-nhien`, Lab 2, quiz (SWT301 không dạy promise, fake timers hay seed). Không cặp Chương 3–4: 3.2 (vi.mock/MSW), 3.3, 4.2–4.4, các Lab và quiz. Không cặp Chương 5: 5.1, 5.3, 5.4 (SWT301 không dạy test API/contract), Lab 5, quiz. Không cặp SWT301 ở Chương 6 (SWT301 không dạy test giao diện tự động). Chương 7–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch8 coverage ↔ `swt301-whitebox-coverage`; Ch10 TDD ↔ `swt301-tdd-bdd`).
+Không cặp Chương 2: `tst-2-1-async`, `tst-2-4-ngau-nhien`, Lab 2, quiz (SWT301 không dạy promise, fake timers hay seed). Không cặp Chương 3–4: 3.2 (vi.mock/MSW), 3.3, 4.2–4.4, các Lab và quiz. Không cặp Chương 5: 5.1, 5.3, 5.4 (SWT301 không dạy test API/contract), Lab 5, quiz. Không cặp SWT301 ở Chương 6 (SWT301 không dạy test giao diện tự động). Chương 7 (01/11): chỉ 7.2 ↔ `swt301-system-acceptance` (hai chiều); 7.1, 7.3, 7.4, Lab 7, quiz không cặp (SWT301 không dạy Playwright, test chập chờn hay so sánh ảnh chụp); 7.1 có thẻ một chiều sang Courses `nextjs` `nextjs-19-4-playwright-e2e`. Chương 8–11 Courses còn là khung — gắn thêm khi soạn (gợi ý: Ch8 coverage ↔ `swt301-whitebox-coverage`, Ch8 flaky ↔ nhắc lại 7.3; Ch10 TDD ↔ `swt301-tdd-bdd`).
 
 FER202 (Academy, slug `front-end-web-development-with-react`) ↔ Testing — hai chiều (01/11, Chương 6):
 

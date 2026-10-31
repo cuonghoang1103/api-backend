@@ -1,0 +1,15 @@
+/* Just enough style for a real page: the screenshots in lesson 7.4 compare it pixel by pixel. */
+body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #1f2933; }
+header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: #e06a1b; color: #fff; }
+header h1 { font-size: 20px; margin: 0; }
+main { max-width: 640px; margin: 24px auto; padding: 20px; background: #fff; border-radius: 8px; }
+form p { display: flex; flex-direction: column; gap: 4px; margin: 0 0 12px; }
+input { font-size: 16px; padding: 6px 8px; border: 1px solid #9aa5b1; border-radius: 4px; }
+input[aria-invalid="true"] { border-color: #c0392b; }
+button { font-size: 16px; padding: 8px 16px; border: 0; border-radius: 4px; background: #e06a1b; color: #fff; cursor: pointer; }
+button:disabled { opacity: 0.6; }
+[role="alert"] { color: #c0392b; }
+[role="status"] { color: #2f7d4f; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 6px; border-bottom: 1px solid #e4e7eb; }
+@media (max-width: 600px) { main { margin: 0; border-radius: 0; } header h1 { font-size: 17px; } }

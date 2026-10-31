@@ -302,6 +302,11 @@ export default {
 <div class="out">Deploy to Tomcat, visit <span class="badge">localhost:8080/app/hello</span> → the browser shows "Hello, PRJ301!". The <span class="badge">@WebServlet("/hello")</span> maps that URL to this class.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>HTTP is stateless — and why that matters.</b> Each request is independent; the server does not remember the last one. So how does a site "remember" you are logged in? Through <b>cookies</b> and <b>sessions</b> (Chapter 4). Understanding that the web is stateless by default explains every session bug you will ever hit — and is the reason the session scope exists at all.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-0-1-http" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 0.1: HTTP you actually need</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: the request–response cycle, GET vs POST and status codes. Different: Courses reads raw HTTP with curl instead of through a Servlet. It also adds: every request and response line explained, the headers an API depends on, statelessness, and why a missing Content-Type silently empties the body.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.1</span>
@@ -335,6 +340,11 @@ export default {
 <div class="out">Deploy lên Tomcat, truy cập <span class="badge">localhost:8080/app/hello</span> → trình duyệt hiện "Hello, PRJ301!". <span class="badge">@WebServlet("/hello")</span> ánh xạ URL đó tới lớp này.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>HTTP không trạng thái (stateless) — và vì sao điều đó quan trọng.</b> Mỗi request độc lập; server không nhớ request trước. Vậy làm sao một site "nhớ" bạn đã đăng nhập? Qua <b>cookie</b> và <b>session</b> (Chương 4). Hiểu rằng web mặc định không trạng thái giải thích mọi lỗi session bạn sẽ gặp — và là lý do phạm vi session tồn tại.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-0-1-http" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 0.1: HTTP bạn thật sự cần</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: vòng request–response, GET với POST và mã trạng thái. Khác: Courses đọc HTTP "trần" bằng curl thay vì qua Servlet. Ở đó có thêm: giải thích từng dòng request và response, những header mà một API dựa vào, tính không giữ trạng thái, và vì sao thiếu Content-Type làm body lặng lẽ biến mất.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },

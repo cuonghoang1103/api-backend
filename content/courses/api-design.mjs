@@ -1,8 +1,12 @@
 /**
  * API & System Design — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"), chi tiết soạn sau
  * theo quy trình khoá Docker (content/courses/docker/_HOP-DONG.md). Xem _chung/khung.mjs.
+ * 31/10/2026 — ĐỢT MẪU: Mục 0 + Chương 1 soạn chi tiết (./api-design/s00-intro.mjs, s01-tai-nguyen.mjs; slide API/v1 deck api-00-*, api-01-*, api-lab-1).
+ *   Dự án xuyên khoá: LabFlow API (đặt phòng lab/thiết bị), Node 22 + Express 5. Chương 2–12 vẫn là khung (khung() bên dưới), slug giữ nguyên.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './api-design/s00-intro.mjs';
+import s01 from './api-design/s01-tai-nguyen.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -18,10 +22,10 @@ export default {
     shortDescription: 'Design APIs other developers enjoy using, then scale them: REST done properly, errors, pagination, versioning, idempotency, caching, queues, and the system-design interview round explained from first principles.|||Thiết kế API mà người khác thích dùng, rồi mở rộng nó: REST làm cho đúng, lỗi, phân trang, versioning, idempotency, cache, hàng đợi, và vòng phỏng vấn system design giải thích từ gốc.',
     description: 'Khoá thiết kế API và system design cơ bản cho lập trình viên backend/fullstack. Nửa đầu: thiết kế REST API chuẩn chỉnh (tài nguyên, phương thức, status code, lỗi, phân trang, lọc, versioning, idempotency, OpenAPI, bảo mật API). Nửa sau: tư duy hệ thống (độ trễ và thông lượng, cache, cơ sở dữ liệu và mở rộng, hàng đợi, realtime, tính sẵn sàng) và cách đi qua một vòng phỏng vấn system design từng bước, với các đề kinh điển như rút gọn link, feed, chat, đặt lịch.',
     whatYouLearn: 'Thiết kế endpoint và mô hình tài nguyên rõ ràng; trả lỗi nhất quán; phân trang cursor đúng cách; version API mà không phá client; làm POST an toàn khi thử lại; viết tài liệu OpenAPI; ước lượng tải; chọn cache, index, replica, hàng đợi đúng lúc; và trình bày một bài system design trong 45 phút.',
-    requirements: 'Đã viết được API bằng Node.js/Express; biết SQL cơ bản. Nên học trước khoá Node.js, PostgreSQL và Redis.',
+    requirements: 'JavaScript cơ bản (biến, hàm, object, mảng) và quen gõ lệnh trên terminal; máy chạy được Node.js 22. Không cần biết Express trước — bài 0.3 dựng dự án LabFlow API từ số 0. Không cần cơ sở dữ liệu cho tới dự án cuối khoá. Đã học SDN302 hoặc khoá Node.js thì sẽ thấy quen và đi nhanh hơn.',
     documentsNote: 'Tài liệu chính: RFC 9110 (HTTP semantics) • RFC 9457 (Problem Details) • spec.openapis.org • Google AIP (aip.dev) • Microsoft REST API Guidelines • System Design Primer (github.com/donnemartin/system-design-primer).',
   },
-  sections: khung('api', [
+  sections: [s00, s01, ...khung('api', [
     ['Section 0 — Why API design matters', 'Mục 0 — Vì sao thiết kế API quan trọng', 'API là hợp đồng; system design là vòng phỏng vấn hay gặp.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What API and system design are, and why interviews test them', 'Bắt đầu tại đây (1/2) — Thiết kế API và system design là gì, vì sao phỏng vấn hay hỏi', 'API là hợp đồng giữa các đội · Lịch sử: RPC, SOAP, REST của Roy Fielding 2000, GraphQL, gRPC · Vòng system design trong phỏng vấn · Khoá đưa bạn tới đâu'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Bad APIs in the wild, and how to study this course', 'Bắt đầu tại đây (2/2) — API tệ ngoài đời thật, và cách học khoá này', 'Sự cố do API thiết kế kém (có nguồn) · Đổi API làm vỡ app di động · Lộ trình học'],
@@ -94,11 +98,11 @@ export default {
       ['feed-chat', 'Interview: design the APIs of a news feed and a chat', 'Phỏng vấn: thiết kế API cho news feed và chat', 'Phân trang feed bằng cursor · Gửi tin: REST hay WebSocket, id phía client chống trùng · Đã đọc và đồng bộ nhiều thiết bị ở mức hợp đồng · Fan-out và lưu trữ → /courses/system-design Ch6–7'],
       ['dat-lich', 'Interview: design the API of a booking system', 'Phỏng vấn: thiết kế API cho hệ thống đặt lịch', 'Giữ chỗ tạm có hạn · Idempotency key khi đặt · 409 Conflict khi trùng · Khoá và chống đặt trùng ở quy mô lớn → /courses/system-design Ch9'],
     ]],
-    ['Chapter 12 — Capstone: design and build a production API', 'Chương 12 — Dự án cuối khoá: thiết kế và dựng một API production', 'API "Đặt lịch phòng khám" từ OpenAPI tới triển khai.', [
+    ['Chapter 12 — Capstone: design and build a production API', 'Chương 12 — Dự án cuối khoá: thiết kế và dựng một API production', 'Hoàn thiện LabFlow API (đặt phòng lab/thiết bị — dự án xây dần từ Mục 0) từ OpenAPI tới PostgreSQL và triển khai.', [
       ['thiet-ke', 'Designing the API contract', 'Thiết kế hợp đồng API', 'Tài nguyên · Lỗi · Phân trang · OpenAPI'],
       ['xay-dung', 'Building it with Express and Postgres', 'Dựng bằng Express và Postgres', 'Validation · Idempotency · Rate limit'],
       ['mo-rong', 'Making it scale', 'Làm nó chịu tải', 'Cache · Hàng đợi thông báo · Đo tải'],
       ['tong-ket', 'Review, documentation and interview story', 'Rà soát, tài liệu và câu chuyện kể khi phỏng vấn', 'Checklist · Kể dự án theo STAR'],
     ]],
-  ]),
+  ]).slice(2)],
 };

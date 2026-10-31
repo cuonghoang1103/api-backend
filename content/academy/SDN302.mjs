@@ -529,6 +529,11 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
   <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 3.5: An HTTP server without a framework</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: building a server with Node's plain http module. Different: Courses uses that server to show the pain points and lead into Express. It also adds: what the bare server makes you do by hand, streaming the response, and what the raw http module leaves to you.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-0-1-http" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 0.1: HTTP you actually need</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: the parts of a request and response and a server built on Node’s http module. Different: Courses turns that server into a mirror that shows exactly what arrives. It also adds: reading curl -i and curl -v line by line, the five parts of a URL, statelessness and the missing Content-Type trap.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -565,6 +570,11 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-3-5-http-server" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 3.5: Server HTTP không dùng framework</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: dựng server bằng module http thuần của Node. Khác: Courses dùng server đó để chỉ ra những chỗ khó chịu và dẫn sang Express. Ở đó có thêm: những chỗ bắt bạn tự làm tay, trả phản hồi theo dòng chảy, module http trần bắt bạn tự làm những gì.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-0-1-http" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 0.1: HTTP bạn thật sự cần</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: các phần của request và response, và một server dựng bằng module http của Node. Khác: Courses biến server đó thành tấm gương cho thấy chính xác cái gì tới nơi. Ở đó có thêm: đọc curl -i và curl -v từng dòng, năm phần của URL, tính không giữ trạng thái và bẫy thiếu Content-Type.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,
@@ -642,6 +652,11 @@ cd myapp &amp;&amp; npm install &amp;&amp; npm start</code></pre></div>
   <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 5.2: Routing: params, query and Router</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: Express routing and organising routes with Router. Different: Courses uses Express 5 and shows real bugs rather than only stating rules. It also adds: anatomy of a route, path parameters, the route-order bug seen first-hand, query strings, wildcards and the Express 5 change.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-1-2-phuong-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 1.2: Methods and their guarantees</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: one router per resource with get, post, put and delete. Different: Courses asks what each method promises, not just how to register it. It also adds: safe and idempotent, why a POST must not be retried blindly, PUT vs PATCH with JSON Merge Patch, and 405 with an Allow header — all run on a real API.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -683,6 +698,11 @@ cd myapp &amp;&amp; npm install &amp;&amp; npm start</code></pre></div>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-5-2-dinh-tuyen" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 5.2: Định tuyến: params, query và Router</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: định tuyến Express và tổ chức route bằng Router. Khác: Courses dùng Express 5 và đo lỗi thật thay vì chỉ nêu quy tắc. Ở đó có thêm: giải phẫu một route, tham số trên đường dẫn, bug thứ tự route xem tận mắt, query string, ký tự đại diện và thay đổi ở Express 5.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-1-2-phuong-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 1.2: Phương thức và cam kết của chúng</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: mỗi tài nguyên một router với get, post, put, delete. Khác: Courses hỏi mỗi phương thức hứa điều gì, không chỉ cách đăng ký nó. Ở đó có thêm: safe và idempotent, vì sao không được gửi lại POST mù quáng, PUT so với PATCH theo JSON Merge Patch, và 405 kèm header Allow — tất cả chạy trên API thật.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,
@@ -1049,6 +1069,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   <span class="lc-body"><span class="lc-title">Go deeper in the Node.js course (Courses) — lesson 18.1: Layers and responsibilities</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Node.js course on Courses. Same as this lesson: layering route – controller/service – data so a growing API stays maintainable. Different: Courses measures whether the layer boundaries actually hold on a real backend. It also adds: what each layer may and may not know, and why a service that does not know it was called over HTTP can be reused by workers and tests.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-1-3-status" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 1.3: Status codes that mean something</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: the 200/201/400/401/403/404/500 table and never returning 200 for errors. Different: Courses triggers every code on a real API and chooses it with a fixed order of questions. It also adds: 201 with Location, 400 vs 422, 409 for state conflicts, 410, 415, and what a 500 must not leak.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.1</span>
@@ -1099,6 +1124,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-18-1-tang-va-trach-nhiem" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Node.js (Courses) — bài 18.1: Các tầng và trách nhiệm</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Node.js ở Courses. Giống bài này: phân lớp route – controller/service – dữ liệu để API lớn dần vẫn dễ sửa. Khác: Courses đo xem ranh giới giữa các tầng có thật sự đứng vững trên một backend thật. Ở đó có thêm: mỗi tầng được phép biết gì (và không được biết gì), vì sao service không biết mình được gọi qua HTTP thì dùng lại được cho worker và test.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-1-3-status" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 1.3: Mã trạng thái có ý nghĩa</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: bảng 200/201/400/401/403/404/500 và không bao giờ trả 200 cho lỗi. Khác: Courses kích hoạt từng mã trên API thật và chọn mã theo một thứ tự câu hỏi cố định. Ở đó có thêm: 201 kèm Location, 400 so với 422, 409 cho xung đột trạng thái, 410, 415, và những gì một lỗi 500 không được làm lộ.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

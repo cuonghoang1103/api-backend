@@ -940,6 +940,11 @@ export default {
 <br>Resolved + "customer reopens" → Open
 <br><b>Value:</b> the table instantly exposes missing transitions — e.g. "can a Closed ticket be reopened?" is a requirement question the diagram forced you to answer.</div>
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Model = shared language, and the source of "requirement smells".</b> Modeling isn't just documentation — the act of drawing surfaces disagreements ("wait, can one order have two customers?") that pure prose hides. Advanced BAs also learn to spot <b>requirement smells</b>: an entity with no relationships (orphan — is it needed?), a many-to-many with no join meaning (probably hides a missing entity, like <em>Enrollment</em> between Student and Course), or a process in a DFD with inputs but no outputs (a "black hole"). The model turns fuzzy prose into questions you can actually answer.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-1-1-tai-nguyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 1.1: Modelling resources, not actions</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: finding the business entities and their relationships in the requirements. Different: Courses turns those entities into API resources and URLs. It also adds: collection and item URLs, one level of nesting, nested URL vs filter, and how to design actions such as cancelling a booking.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -984,6 +989,11 @@ export default {
 <br>Resolved + "khách mở lại" → Open
 <br><b>Giá trị:</b> bảng lập tức lộ ra các chuyển thiếu — vd "ticket Closed có mở lại được không?" là một câu hỏi yêu cầu mà sơ đồ buộc bạn phải trả lời.</div>
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mô hình = ngôn ngữ chung, và nguồn phát hiện "requirement smell".</b> Mô hình hoá không chỉ là tài liệu — hành động vẽ làm lộ các bất đồng ("khoan, một đơn có hai khách được không?") mà văn xuôi thuần giấu đi. BA giỏi còn học phát hiện <b>requirement smell</b>: một thực thể không có quan hệ nào (mồ côi — có cần không?), một quan hệ nhiều-nhiều không có ý nghĩa nối (thường giấu một thực thể còn thiếu, như <em>Enrollment</em> giữa Student và Course), hoặc một process trong DFD có đầu vào mà không có đầu ra (một "hố đen"). Mô hình biến văn xuôi mờ nhạt thành các câu hỏi bạn thật sự trả lời được.</div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-1-1-tai-nguyen" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 1.1: Mô hình hoá tài nguyên, không phải hành động</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: tìm các thực thể nghiệp vụ và quan hệ giữa chúng trong yêu cầu. Khác: Courses biến những thực thể đó thành tài nguyên và URL của API. Ở đó có thêm: URL bộ sưu tập và phần tử, lồng một tầng, URL lồng so với bộ lọc, và cách thiết kế hành động như huỷ lượt đặt.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },

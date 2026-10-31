@@ -393,6 +393,11 @@ DETAIL:  Key (student_id, course_id)=(1, 10) already exists.</div>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: break each constraint and read the error it throws</span><span class="lc-sub">The Code Lab track turns every rejection above into a hands-on exercise.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-rang-buoc-sql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 5.3: Constraints in SQL Server &amp; ALTER TABLE</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: turning data rules into constraints so bad data cannot enter, and naming constraints clearly. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: generated columns (computed, never out of sync), composite UNIQUE and why the name matters, where a rule should live. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -467,6 +472,11 @@ DETAIL:  Key (student_id, course_id)=(1, 10) already exists.</div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: phá từng ràng buộc và đọc lỗi nó ném ra</span><span class="lc-sub">Track Code Lab biến mọi lần từ chối ở trên thành bài tập thực hành.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-rang-buoc-sql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 5.3: Ràng buộc trong SQL Server &amp; ALTER TABLE</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: viết luật dữ liệu thành ràng buộc để dữ liệu sai không thể vào bảng, và đặt tên ràng buộc cho rõ. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: cột sinh (tính tự động, không bao giờ lệch), UNIQUE tổ hợp và vì sao cái tên quan trọng, luật nên sống ở đâu. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,
@@ -566,6 +576,16 @@ ORDER BY o.id;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: reproduce the update anomaly, then normalize it away</span><span class="lc-sub">The Code Lab track makes the "data doesn't add up" bug and its fix concrete.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-rang-buoc-sql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 5.3: Constraints in SQL Server &amp; ALTER TABLE</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: changing a table that already has rows with ALTER TABLE. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: which ALTER locks the table and how to do it safely, designing so you change less. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-chuan-hoa-vi-du" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 4.4: One table, normalised 1NF → BCNF step by step</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: one fact lives in exactly one place. Different: Academy normalises rigorously by functional dependencies up to BCNF for the exam; Courses treats normalisation as part of designing and changing a schema. In this lesson we add: normalisation alongside ALTER TABLE on tables that already hold data, and the payoff of normalisation being JOIN (lesson 5.1). If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -653,6 +673,16 @@ ORDER BY o.id;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: tái hiện dị thường cập nhật, rồi chuẩn hoá cho nó biến mất</span><span class="lc-sub">Track Code Lab làm bug "dữ liệu không khớp" và cách sửa nó thành cụ thể.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-rang-buoc-sql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 5.3: Ràng buộc trong SQL Server &amp; ALTER TABLE</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: sửa một bảng đã có dữ liệu bằng ALTER TABLE. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: lệnh ALTER nào khoá bảng và cách làm cho an toàn, thiết kế sao cho ít phải đổi. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-chuan-hoa-vi-du" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 4.4: Một bảng, chuẩn hoá 1NF → BCNF từng bước</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: một sự thật chỉ nằm ở một chỗ. Khác: Academy chuẩn hoá chặt chẽ theo phụ thuộc hàm đến BCNF cho đề thi; Courses nhìn chuẩn hoá như một phần của việc thiết kế và đổi lược đồ. Ở bài này mình học thêm: chuẩn hoá đi cùng ALTER TABLE trên bảng đã có dữ liệu, và phần thưởng của chuẩn hoá là JOIN (bài 5.1). Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

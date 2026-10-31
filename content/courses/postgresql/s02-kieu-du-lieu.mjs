@@ -83,6 +83,11 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: watch float drift, then fix it with numeric</span><span class="lc-sub">The Code Lab track reproduces the money bug hands-on.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-kieu-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 5.2: Data types &amp; choices that leave consequences</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: never store money in floating point; use an exact decimal type, and auto-increment keys with IDENTITY. Different: DBI202 works on SQL Server, this course on PostgreSQL (DECIMAL in SQL Server, numeric in PostgreSQL). In this lesson we add: the integer family and how to pick a numeric type, why IDENTITY rather than serial, the money rule numeric vs float. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -143,6 +148,11 @@ HINT:  Use OVERRIDING SYSTEM VALUE to override.</div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: xem float trôi lệch, rồi sửa bằng numeric</span><span class="lc-sub">Track Code Lab tái hiện bug tiền bạc bằng tay.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-kieu-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 5.2: Kiểu dữ liệu &amp; những lựa chọn để lại hậu quả</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: đừng lưu tiền bằng số thực dấu phẩy động mà dùng kiểu thập phân chính xác, và khoá tự tăng bằng IDENTITY. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL (DECIMAL ở SQL Server, numeric ở PostgreSQL). Ở bài này mình học thêm: họ số nguyên và cách chọn kiểu số, vì sao dùng IDENTITY chứ không dùng serial, luật tiền bạc numeric vs float. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,
@@ -363,6 +373,11 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: see the same instant in two timezones</span><span class="lc-sub">The Code Lab track makes the timestamptz conversion click.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-kieu-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 5.2: Data types &amp; choices that leave consequences</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: dates and times — one type per meaning. Different: Academy states the rule for choosing a type; Courses goes into time zones. In this lesson we add: how timestamp differs from timestamptz, now()/age()/intervals, the only two time types you need. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -423,6 +438,11 @@ SELECT '2026-08-10 09:00:00+07'::timestamptz;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: thấy cùng một khoảnh khắc trong hai múi giờ</span><span class="lc-sub">Track Code Lab làm phép chuyển đổi timestamptz sáng ra.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-kieu-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 5.2: Kiểu dữ liệu &amp; những lựa chọn để lại hậu quả</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: ngày giờ — mỗi ý nghĩa một kiểu. Khác: Academy nêu nguyên tắc chọn kiểu; Courses đi vào múi giờ. Ở bài này mình học thêm: timestamp khác timestamptz ở đâu, now()/age()/interval, hai kiểu thời gian duy nhất bạn cần. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

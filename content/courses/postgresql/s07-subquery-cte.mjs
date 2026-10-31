@@ -218,6 +218,11 @@ ORDER BY u.id;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: EXISTS vs the NOT IN NULL trap, side by side</span><span class="lc-sub">The Code Lab track reproduces the empty-result bug and its fix.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-truy-van-long" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 6.4: Nested queries: IN, EXISTS, ANY, ALL &amp; NULL logic</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: correlated subqueries, EXISTS/NOT EXISTS and the NOT IN trap when NULL appears. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: the one question that matters — correlated or not; lesson 7.3 adds CTEs (WITH) for step-by-step queries, lesson 7.4 recursive CTEs. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -284,6 +289,11 @@ ORDER BY u.id;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: EXISTS vs bẫy NULL của NOT IN, cạnh nhau</span><span class="lc-sub">Track Code Lab tái hiện bug kết-quả-rỗng và cách sửa.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-truy-van-long" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 6.4: Truy vấn lồng: IN, EXISTS, ANY, ALL &amp; lô-gic NULL</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: subquery tương quan, EXISTS/NOT EXISTS và bẫy NOT IN khi gặp NULL. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: câu hỏi duy nhất cần hỏi — có tương quan hay không; bài 7.3 thêm CTE (WITH) để viết truy vấn theo bước, bài 7.4 CTE đệ quy. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

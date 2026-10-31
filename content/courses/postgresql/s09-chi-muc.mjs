@@ -83,6 +83,11 @@ export default {
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: run EXPLAIN ANALYZE and watch a Seq Scan become an Index Scan</span><span class="lc-sub">The Code Lab track builds the 500k-row table so you can measure it yourself.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-chi-muc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.1: Indexes &amp; query performance</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: an index works like a book index and speeds up queries. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: without an index you get a Seq Scan, with one an Index Scan, why a B-tree; later lessons cover composite and covering indexes, when an index is NOT used, and GIN/BRIN/GiST. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -140,6 +145,11 @@ export default {
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: chạy EXPLAIN ANALYZE và nhìn Seq Scan thành Index Scan</span><span class="lc-sub">Track Code Lab dựng bảng 500k dòng để bạn tự đo.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-chi-muc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.1: Chỉ mục &amp; hiệu năng truy vấn</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: chỉ mục như mục lục sách làm truy vấn nhanh. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: không có chỉ mục thì Seq Scan, thêm chỉ mục thì Index Scan, vì sao là B-tree; các bài sau còn chỉ mục tổ hợp, covering, khi chỉ mục KHÔNG được dùng và các loại GIN/BRIN/GiST. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,
@@ -234,6 +244,11 @@ export default {
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: composite indexes, column order, and INCLUDE</span><span class="lc-sub">The Code Lab track proves the left-prefix rule with EXPLAIN.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-execution-plan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.2: Clustered vs non-clustered indexes &amp; reading the plan</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: multi-column indexes and the order of columns in an index. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: choosing which columns to index, composite and covering indexes on PostgreSQL. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -316,6 +331,11 @@ export default {
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: chỉ mục tổ hợp, thứ tự cột, và INCLUDE</span><span class="lc-sub">Track Code Lab chứng minh luật tiền-tố-trái bằng EXPLAIN.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-execution-plan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.2: Chỉ mục gom cụm vs không gom cụm &amp; đọc kế hoạch</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: chỉ mục ghép nhiều cột và thứ tự cột trong chỉ mục. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: chọn cột nào để đánh chỉ mục, chỉ mục tổ hợp và covering index trên PostgreSQL. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

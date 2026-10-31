@@ -76,6 +76,11 @@ export default {
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: read cost, rows, and actual on real plans</span><span class="lc-sub">The Code Lab track builds the customer + ord tables used all chapter.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-execution-plan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.2: Clustered vs non-clustered indexes &amp; reading the plan</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: reading the execution plan to see whether an index is used. Different: Academy views the plan with Ctrl+M in SSMS; Courses uses EXPLAIN and EXPLAIN ANALYZE. In this lesson we add: plain EXPLAIN (estimate) vs EXPLAIN ANALYZE (really run), reading a plan from the inside out; a later lesson covers BUFFERS and a tuning workflow. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -126,6 +131,11 @@ export default {
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: đọc cost, rows, và actual trên plan thật</span><span class="lc-sub">Track Code Lab dựng bảng customer + ord dùng cả chương.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-execution-plan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.2: Chỉ mục gom cụm vs không gom cụm &amp; đọc kế hoạch</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: đọc kế hoạch thực thi để biết chỉ mục có được dùng không. Khác: Academy xem plan bằng Ctrl+M trong SSMS; Courses dùng EXPLAIN và EXPLAIN ANALYZE. Ở bài này mình học thêm: EXPLAIN trơn (ước lượng) so với EXPLAIN ANALYZE (chạy thật), đọc plan từ trong ra; bài sau có BUFFERS và quy trình tinh chỉnh. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

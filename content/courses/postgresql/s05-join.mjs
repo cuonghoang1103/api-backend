@@ -208,6 +208,11 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: LEFT JOIN and the find-the-orphans anti-join</span><span class="lc-sub">The Code Lab track reproduces every result above.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-join-day-du" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 6.2: Every kind of JOIN, with result tables</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: LEFT JOIN keeping every left row, the anti-join pattern "who has nothing?", RIGHT and FULL. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: the four shapes side by side; around it, what the server really does when joining (lesson 5.1), join traps (lesson 5.4) and the Nested Loop/Hash/Merge strategies (lesson 10.2). If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -282,6 +287,11 @@ ORDER BY u.id NULLS LAST, n.id NULLS LAST;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: LEFT JOIN và anti-join tìm mồ côi</span><span class="lc-sub">Track Code Lab tái hiện mọi kết quả ở trên.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-join-day-du" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 6.2: Toàn bộ các phép JOIN, kèm bảng kết quả</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: LEFT JOIN giữ mọi dòng bên trái, khuôn phản nối "ai không có gì?", RIGHT và FULL. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: bốn hình dạng đặt cạnh nhau; xung quanh nó còn máy chủ thật sự làm gì khi join (bài 5.1), cạm bẫy join (bài 5.4) và chiến lược Nested Loop/Hash/Merge (bài 10.2). Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

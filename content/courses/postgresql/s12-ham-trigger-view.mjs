@@ -105,6 +105,11 @@ số lần in "goi STABLE":     6   -- 1 lần lúc planner ước lượng + 5 
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: count the RAISE NOTICE lines and watch IMMUTABLE fold to one call</span><span class="lc-sub">The Code Lab track reproduces the 5-vs-1 measurement.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-proc-function" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 7.3: Stored procedures &amp; functions</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: putting logic next to the data with functions and procedures. Different: Academy writes T-SQL for SQL Server; Courses writes SQL and PL/pgSQL for PostgreSQL. In this lesson we add: simple SQL functions, PL/pgSQL when you need variables and branching, volatility — the declaration that decides how often a function runs. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -184,6 +189,11 @@ số lần in "goi STABLE":     6   -- 1 lần lúc planner ước lượng + 5 
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: đếm số dòng RAISE NOTICE và xem IMMUTABLE gấp lại còn một lần gọi</span><span class="lc-sub">Nhánh Code Lab tái hiện đúng phép đo 5-so-với-1.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-proc-function" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 7.3: Thủ tục &amp; hàm lưu trữ</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: đặt logic ngay cạnh dữ liệu bằng hàm và thủ tục. Khác: Academy viết bằng T-SQL của SQL Server; Courses viết bằng SQL và PL/pgSQL của PostgreSQL. Ở bài này mình học thêm: hàm SQL đơn giản, PL/pgSQL khi cần biến và rẽ nhánh, volatility — khai báo quyết định hàm chạy bao nhiêu lần. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,
@@ -275,6 +285,11 @@ $$;
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: build both triggers, then make an INSERT vanish on purpose</span><span class="lc-sub">The Code Lab track reproduces the audit table and the INSERT 0 0 result.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-trigger-cursor" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 7.4: Triggers &amp; cursors (and when not to)</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: a trigger runs automatically when data changes, whether or not the application remembers. Different: Academy uses SQL Server's inserted/deleted virtual tables; PostgreSQL lets you choose FOR EACH ROW or FOR EACH STATEMENT. In this lesson we add: an updated_at trigger, an audit log that records only real changes, the trap of a BEFORE trigger returning NULL. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -356,6 +371,11 @@ $$;
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: dựng cả hai trigger, rồi cố tình làm một lệnh INSERT bốc hơi</span><span class="lc-sub">Nhánh Code Lab tái hiện bảng kiểm toán và kết quả INSERT 0 0.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-trigger-cursor" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 7.4: Trigger &amp; cursor (và khi nào đừng dùng)</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: trigger chạy tự động khi dữ liệu đổi, bất kể ứng dụng có nhớ hay không. Khác: Academy dùng bảng ảo inserted/deleted của SQL Server; PostgreSQL cho chọn FOR EACH ROW hoặc FOR EACH STATEMENT. Ở bài này mình học thêm: trigger cập nhật updated_at, nhật ký kiểm toán chỉ ghi thay đổi thật, cái bẫy BEFORE trigger trả về NULL. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
+</a>
 </div>
 `,
     },
@@ -433,6 +453,11 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: write through a view, then watch WITH CHECK OPTION refuse an escape</span><span class="lc-sub">The Code Lab track reproduces both error messages exactly.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-view" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 7.2: Views: virtual tables that hide complexity</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: a view is a stored query, some views are updatable, and WITH CHECK OPTION closes the escape route. Different: Academy covers SQL Server indexed views; Courses has PostgreSQL materialized views. In this lesson we add: naming a query to write it once; lesson 12.4 materialized views: trading freshness for speed. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -500,6 +525,11 @@ DETAIL:  Failing row contains (20, 2, Note 20, Body of note 20, 5, …).</div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: ghi qua một view, rồi xem WITH CHECK OPTION từ chối một cú thoát</span><span class="lc-sub">Nhánh Code Lab tái hiện chính xác cả hai thông báo lỗi.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-view" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 7.2: View: bảng ảo che đi sự phức tạp</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: view là truy vấn được lưu, có view cập nhật được và WITH CHECK OPTION bịt lối thoát. Khác: Academy nói đến view có chỉ mục của SQL Server; Courses có materialized view của PostgreSQL. Ở bài này mình học thêm: đặt tên cho truy vấn để chỉ viết một lần; bài 12.4 materialized view: đánh đổi độ tươi lấy tốc độ. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

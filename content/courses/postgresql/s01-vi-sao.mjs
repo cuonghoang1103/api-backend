@@ -252,6 +252,11 @@ synchronous_commit = on</div>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: build your own transfer and break it</span><span class="lc-sub">The Code Lab track walks through BEGIN/COMMIT/ROLLBACK hands-on.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.3: Transactions, ACID &amp; isolation levels</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: ACID, one guarantee per letter. Different: Academy explains each letter; Courses demonstrates each guarantee with experiments. In this lesson we add: each ACID guarantee demonstrated on a real PostgreSQL. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -334,6 +339,11 @@ synchronous_commit = on</div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: tự dựng một phi vụ chuyển tiền và phá nó</span><span class="lc-sub">Track Code Lab dẫn qua BEGIN/COMMIT/ROLLBACK thực hành.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.3: Giao dịch, ACID &amp; mức cô lập</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: ACID, mỗi chữ một bảo đảm. Khác: Academy giải thích từng chữ; Courses chứng minh từng bảo đảm bằng thí nghiệm. Ở bài này mình học thêm: từng bảo đảm ACID được chứng minh trên PostgreSQL thật. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

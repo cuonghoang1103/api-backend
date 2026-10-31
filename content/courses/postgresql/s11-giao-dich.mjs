@@ -572,6 +572,11 @@ B│ HINT:  The transaction might succeed if retried.</div>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: break the on-call invariant, then watch SERIALIZABLE refuse it</span><span class="lc-sub">The Code Lab track runs both versions side by side in two sessions.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.3: Transactions, ACID &amp; isolation levels</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: isolation levels and the phenomena each prevents. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: Read Committed (the default), Repeatable Read — one snapshot for the whole transaction, Serializable, choosing in practice; lesson 11.2 explains MVCC: readers never block writers. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -688,6 +693,11 @@ B│ HINT:  The transaction might succeed if retried.</div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: phá bất biến lịch trực, rồi xem SERIALIZABLE từ chối nó</span><span class="lc-sub">Nhánh Code Lab chạy cả hai phiên bản cạnh nhau trên hai phiên.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.3: Giao dịch, ACID &amp; mức cô lập</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: các mức cô lập và hiện tượng mỗi mức ngăn được. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: Read Committed (mặc định), Repeatable Read — một ảnh chụp cho cả giao dịch, Serializable, cách chọn trong thực tế; bài 11.2 giải thích MVCC: người đọc không chặn người ghi. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,
@@ -836,6 +846,11 @@ B│ COMMIT</div>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: reproduce the lost update, fix it twice, then cause a deadlock on purpose</span><span class="lc-sub">The Code Lab track walks both sessions through every transcript above.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 8.3: Transactions, ACID &amp; isolation levels</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: deadlocks. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: row locks, lost updates and two fixes (never read just to write back; SELECT … FOR UPDATE), NOWAIT/lock_timeout, SKIP LOCKED, and deadlocks. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -973,6 +988,11 @@ B│ COMMIT</div>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: tái hiện lost update, sửa nó hai kiểu, rồi cố tình gây một deadlock</span><span class="lc-sub">Nhánh Code Lab dẫn cả hai phiên đi qua từng bản ghi ở trên.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-transaction-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 8.3: Giao dịch, ACID &amp; mức cô lập</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: khoá chết (deadlock). Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: khoá dòng, lost update và hai cách sửa (không đọc rồi ghi lại; SELECT … FOR UPDATE), NOWAIT/lock_timeout, SKIP LOCKED, và deadlock. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

@@ -642,6 +642,11 @@ SELECT count(*) AS remaining FROM note;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Next chapter: JOINs — combining tables</span><span class="lc-sub">You can now read and write one table. Next: reassemble data split across many.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-cap-nhat-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 6.5: INSERT, UPDATE, DELETE done safely</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: the missing-WHERE catastrophe and how to protect yourself. Different: DBI202 works on SQL Server, this course on PostgreSQL (SQL Server uses TOP, PostgreSQL uses LIMIT). In this lesson we add: UPDATE/DELETE ... RETURNING shows which rows changed right away, the shape of a safe write; lesson 4.1 adds multi-row INSERT, RETURNING and UPSERT. If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -711,6 +716,11 @@ SELECT count(*) AS remaining FROM note;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Chương tới: JOIN — kết hợp các bảng</span><span class="lc-sub">Giờ bạn đọc và ghi được một bảng. Tiếp theo: ráp lại dữ liệu tách trên nhiều bảng.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-cap-nhat-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 6.5: INSERT, UPDATE, DELETE làm cho an toàn</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: tai hoạ thiếu mệnh đề WHERE và cách tự bảo vệ. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL (SQL Server dùng TOP, PostgreSQL dùng LIMIT). Ở bài này mình học thêm: UPDATE/DELETE ... RETURNING cho thấy ngay dòng nào bị đổi, hình dạng của một lệnh ghi an toàn; bài 4.1 thêm INSERT nhiều dòng, RETURNING và UPSERT. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

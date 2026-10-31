@@ -189,6 +189,11 @@ ORDER BY u.city, n.tag;</code></pre>
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Practice: group by author, by tag, and by two columns</span><span class="lc-sub">The Code Lab track includes the "must appear in GROUP BY" error to feel it.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-group-by-subquery" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in DBI202 — lesson 6.3: GROUP BY, aggregates &amp; subqueries</span><span class="lc-sub">If you took DBI202 on Academy, this part will feel familiar. Same: GROUP BY and aggregate functions. Different: DBI202 works on SQL Server, this course on PostgreSQL. In this lesson we add: the rule everyone hits (every selected column grouped or aggregated), the grain rule, grouping by several columns; later lessons cover HAVING vs WHERE and FILTER (6.3), aggregating over JOINs and fan-out (6.4). If you have not taken DBI202, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN DBI202 LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -252,6 +257,11 @@ ORDER BY u.city, n.tag;</code></pre>
 <a class="link-card codelab" href="/code-lab/postgresql${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🗄️</span>
   <span class="lc-body"><span class="lc-title">Thực hành: gom theo tác giả, theo tag, và theo hai cột</span><span class="lc-sub">Track Code Lab gồm lỗi "phải nằm trong GROUP BY" để bạn cảm nhận.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/introduction-to-databases/learn?lessonSlug=dbi202-group-by-subquery" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 6.3: GROUP BY, hàm tổng hợp &amp; truy vấn con</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: GROUP BY và hàm tổng hợp. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở bài này mình học thêm: luật ai cũng dính (mọi cột chọn phải được gom hoặc tổng hợp), luật về độ mịn, gom theo nhiều cột; các bài sau có HAVING vs WHERE và FILTER (6.3), tổng hợp trên JOIN và fan-out (6.4). Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI DBI202 →</span>
 </a>
 </div>
 `,

@@ -1192,6 +1192,11 @@ product_id → unit_price &nbsp; <em>(also only part of the key)</em><br>
 <div class="pitfall"><b>Do not jump straight to the final answer.</b> Markers award points for naming <em>which</em> dependency violates <em>which</em> normal form. A correct final schema with no justification typically loses half the marks — and you cannot defend it in the oral check.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Above BCNF: 4NF and multivalued dependencies.</b> A table Course(course, lecturer, textbook) where lecturers and textbooks are independent of each other still forces you to store every lecturer × textbook combination — no FD is violated, yet the redundancy is obvious. That is a <em>multivalued</em> dependency, removed by 4NF, which splits it into (course, lecturer) and (course, textbook). 5NF handles the rarer join dependencies. In practice, a schema in BCNF is nearly always in 4NF too — but knowing the boundary is what separates "I memorised three normal forms" from "I understand what normalization removes". <em>Beyond syllabus because DBI202 stops at BCNF.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-3-4-alter-chuan-hoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 3.4: Schema evolution: ALTER TABLE &amp; normalisation</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: one fact lives in exactly one place. Different: Academy normalises rigorously by functional dependencies up to BCNF for the exam; Courses treats normalisation as part of designing and changing a schema. It also adds: normalisation alongside ALTER TABLE on tables that already hold data, and the payoff of normalisation being JOIN (lesson 5.1).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.4</span>
@@ -1247,6 +1252,11 @@ product_id → unit_price &nbsp; <em>(cũng chỉ một phần khoá)</em><br>
 <div class="pitfall"><b>Đừng nhảy thẳng tới đáp án cuối.</b> Người chấm cho điểm ở chỗ bạn gọi tên được <em>phụ thuộc nào</em> vi phạm <em>dạng chuẩn nào</em>. Một lược đồ cuối đúng mà không có lập luận thường chỉ được nửa điểm — và bạn cũng không bảo vệ được nó khi bị hỏi miệng.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trên BCNF: 4NF và phụ thuộc đa trị.</b> Bảng Course(course, lecturer, textbook) mà giảng viên và giáo trình độc lập với nhau vẫn buộc bạn lưu mọi tổ hợp giảng viên × giáo trình — không phụ thuộc hàm nào bị vi phạm, nhưng dư thừa thì rõ mồn một. Đó là <em>phụ thuộc đa trị</em>, được 4NF loại bỏ bằng cách tách thành (course, lecturer) và (course, textbook). 5NF xử lý các phụ thuộc nối hiếm gặp hơn. Trong thực tế, lược đồ đạt BCNF thì gần như luôn đạt cả 4NF — nhưng biết ranh giới đó mới là khác biệt giữa "em thuộc ba dạng chuẩn" và "em hiểu chuẩn hoá loại bỏ cái gì". <em>Ngoài giáo trình vì DBI202 dừng ở BCNF.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-3-4-alter-chuan-hoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 3.4: Tiến hoá lược đồ: ALTER TABLE &amp; chuẩn hoá</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: một sự thật chỉ nằm ở một chỗ. Khác: Academy chuẩn hoá chặt chẽ theo phụ thuộc hàm đến BCNF cho đề thi; Courses nhìn chuẩn hoá như một phần của việc thiết kế và đổi lược đồ. Ở đó có thêm: chuẩn hoá đi cùng ALTER TABLE trên bảng đã có dữ liệu, và phần thưởng của chuẩn hoá là JOIN (bài 5.1).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -1380,6 +1390,16 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <div class="pitfall"><b>IDENTITY values are consumed even by rolled-back transactions.</b> If an insert fails, that number is gone forever and your ids will have gaps. That is by design — gaps are not corruption. Never use "the maximum id" as a count, and never expose IDENTITY values as sequential public references (customers notice that invoice #431 followed #430 and infer your volume).</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Types decide how many rows fit on a page.</b> SQL Server reads and writes 8 KB pages. A row of 100 bytes gives ~80 rows per page; padding the same row to 400 bytes with over-sized <span class="badge">CHAR</span> and <span class="badge">NVARCHAR(MAX)</span> columns gives ~20 — so a full table scan needs four times as many disk reads, and four times as much cache to hold the hot data. Choosing narrow types is a performance decision long before it is a tidiness decision. <em>Beyond syllabus because the course treats types as syntax, while their real effect is on the I/O count that determines query speed (lesson 8.1).</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-2-1-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 2.1: Numbers: integers, numeric &amp; the money trap</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: never store money in floating point; use an exact decimal type, and auto-increment keys with IDENTITY. Different: DBI202 works on SQL Server, this course on PostgreSQL (DECIMAL in SQL Server, numeric in PostgreSQL). It also adds: the integer family and how to pick a numeric type, why IDENTITY rather than serial, the money rule numeric vs float.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-2-3-ngay-gio" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 2.3: Boolean, dates &amp; times (and time zones)</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: dates and times — one type per meaning. Different: Academy states the rule for choosing a type; Courses goes into time zones. It also adds: how timestamp differs from timestamptz, now()/age()/intervals, the only two time types you need.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1423,6 +1443,16 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <div class="pitfall"><b>Giá trị IDENTITY bị tiêu thụ ngay cả bởi giao dịch bị huỷ.</b> Nếu một lệnh chèn thất bại, con số đó mất vĩnh viễn và dãy id của bạn sẽ có lỗ hổng. Đó là thiết kế cố ý — lỗ hổng không phải hỏng dữ liệu. Đừng bao giờ lấy "id lớn nhất" làm số lượng, và đừng phơi giá trị IDENTITY ra ngoài dưới dạng mã công khai liên tiếp (khách hàng thấy hoá đơn #431 ngay sau #430 là đoán được doanh số của bạn).</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Kiểu dữ liệu quyết định mỗi trang chứa được bao nhiêu dòng.</b> SQL Server đọc và ghi theo trang 8 KB. Một dòng 100 byte cho ~80 dòng mỗi trang; nhồi đúng dòng đó lên 400 byte bằng các cột <span class="badge">CHAR</span> quá khổ và <span class="badge">NVARCHAR(MAX)</span> thì chỉ còn ~20 — nên quét toàn bảng cần gấp bốn lần số lần đọc đĩa, và gấp bốn lần bộ nhớ đệm để giữ dữ liệu nóng. Chọn kiểu hẹp là quyết định hiệu năng, từ rất lâu trước khi nó là chuyện gọn gàng. <em>Ngoài giáo trình vì môn học coi kiểu dữ liệu là cú pháp, trong khi tác dụng thật của chúng là lên số lần vào/ra vốn quyết định tốc độ truy vấn (bài 8.1).</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-2-1-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 2.1: Số: số nguyên, numeric &amp; cạm bẫy tiền bạc</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: đừng lưu tiền bằng số thực dấu phẩy động mà dùng kiểu thập phân chính xác, và khoá tự tăng bằng IDENTITY. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL (DECIMAL ở SQL Server, numeric ở PostgreSQL). Ở đó có thêm: họ số nguyên và cách chọn kiểu số, vì sao dùng IDENTITY chứ không dùng serial, luật tiền bạc numeric vs float.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-2-3-ngay-gio" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 2.3: Boolean, ngày &amp; giờ (và múi giờ)</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: ngày giờ — mỗi ý nghĩa một kiểu. Khác: Academy nêu nguyên tắc chọn kiểu; Courses đi vào múi giờ. Ở đó có thêm: timestamp khác timestamptz ở đâu, now()/age()/interval, hai kiểu thời gian duy nhất bạn cần.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -1481,6 +1511,16 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <div class="pitfall"><b><span class="badge">DROP TABLE</span> fails while another table references it</b> — remove the child tables (or the foreign keys) first. Drop in reverse dependency order: children before parents, the mirror image of the creation order in lesson 3.4.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Schema changes belong in version control, not in SSMS.</b> Professional teams never edit a production schema by hand: every change is a numbered migration script (<span class="badge">V007__add_email.sql</span>), committed to git, applied in order by a tool (Flyway, Liquibase, EF Migrations, Prisma Migrate) that records which scripts have run. That gives every environment the same schema, makes the change reviewable, and gives you a rollback plan. <em>Beyond syllabus because the lab has you type DDL interactively, while the first thing a real job will ask is "where is the migration?".</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-3-3-rang-buoc-cot" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 3.3: Column constraints: NOT NULL, DEFAULT, UNIQUE, CHECK &amp; generated columns</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: turning data rules into constraints so bad data cannot enter, and naming constraints clearly. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: generated columns (computed, never out of sync), composite UNIQUE and why the name matters, where a rule should live.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-3-4-alter-chuan-hoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 3.4: Schema evolution: ALTER TABLE &amp; normalisation</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: changing a table that already has rows with ALTER TABLE. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: which ALTER locks the table and how to do it safely, designing so you change less.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.3</span>
@@ -1531,6 +1571,16 @@ id <span class="tok-type">UNIQUEIDENTIFIER DEFAULT NEWID</span>()       <span cl
 <div class="pitfall"><b><span class="badge">DROP TABLE</span> thất bại khi còn bảng khác tham chiếu tới nó</b> — hãy xoá bảng con (hoặc các khoá ngoại) trước. Xoá theo thứ tự phụ thuộc ngược lại: con trước cha sau, đúng ảnh gương của thứ tự tạo bảng ở bài 3.4.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thay đổi lược đồ thuộc về hệ quản lý phiên bản, không phải SSMS.</b> Đội ngũ chuyên nghiệp không bao giờ sửa lược đồ trên môi trường thật bằng tay: mọi thay đổi là một script di trú có đánh số (<span class="badge">V007__add_email.sql</span>), commit vào git, được một công cụ (Flyway, Liquibase, EF Migrations, Prisma Migrate) chạy theo thứ tự và ghi lại script nào đã chạy. Nhờ đó mọi môi trường có cùng lược đồ, thay đổi được review, và bạn có phương án quay lui. <em>Ngoài giáo trình vì bài lab bắt bạn gõ DDL tương tác, còn câu hỏi đầu tiên của công việc thật sẽ là "script di trú đâu?".</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-3-3-rang-buoc-cot" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 3.3: Ràng buộc cột: NOT NULL, DEFAULT, UNIQUE, CHECK &amp; cột sinh</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: viết luật dữ liệu thành ràng buộc để dữ liệu sai không thể vào bảng, và đặt tên ràng buộc cho rõ. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: cột sinh (tính tự động, không bao giờ lệch), UNIQUE tổ hợp và vì sao cái tên quan trọng, luật nên sống ở đâu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-3-4-alter-chuan-hoa" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 3.4: Tiến hoá lược đồ: ALTER TABLE &amp; chuẩn hoá</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: sửa một bảng đã có dữ liệu bằng ALTER TABLE. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: lệnh ALTER nào khoá bảng và cách làm cho an toàn, thiết kế sao cho ít phải đổi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -1661,6 +1711,11 @@ LEFT is required so the top manager, whose <span class="badge">mgr_id</span> is 
 <div class="pitfall"><b>Row counts after a join are not what beginners expect.</b> An inner join can return <em>more</em> rows than either table (one order matching three order lines gives three rows) or fewer (unmatched rows vanish). Before trusting an aggregate over a join, run the join alone and count — a duplicated join is the number-one cause of "my SUM is too big".</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>The three physical join algorithms.</b> Your <span class="badge">JOIN</span> keyword says <em>what</em>, not <em>how</em>; the optimiser picks one of three: <b>nested loops</b> (for each row of the small table, look up the other via an index — best when one side is tiny), <b>merge join</b> (both inputs sorted, walk them together — best when indexes already provide the order), <b>hash join</b> (build a hash table of the smaller side, probe with the larger — best for big unsorted sets). Reading which one appeared in the execution plan (lesson 8.2) tells you immediately whether the missing index is the problem. <em>Beyond syllabus because SQL is declarative, yet performance work is entirely about the physical operator that was chosen.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-5-2-outer-join" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 5.2: OUTER JOIN: keeping the rows that do not match</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: LEFT JOIN keeping every left row, the anti-join pattern "who has nothing?", RIGHT and FULL. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: the four shapes side by side; around it, what the server really does when joining (lesson 5.1), join traps (lesson 5.4) and the Nested Loop/Hash/Merge strategies (lesson 10.2).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.2</span>
@@ -1711,6 +1766,11 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
 <div class="pitfall"><b>Số dòng sau khi nối không như người mới hình dung.</b> Phép nối trong có thể trả về <em>nhiều</em> dòng hơn cả hai bảng (một đơn hàng khớp ba dòng chi tiết thì ra ba dòng) hoặc ít hơn (dòng không khớp biến mất). Trước khi tin một hàm tổng hợp trên phép nối, hãy chạy riêng phép nối và đếm — nối bị nhân dòng là nguyên nhân số một của "SUM của em bị to quá".</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Ba thuật toán nối vật lý.</b> Từ khoá <span class="badge">JOIN</span> của bạn nói <em>làm gì</em>, không nói <em>làm thế nào</em>; bộ tối ưu chọn một trong ba: <b>nested loops</b> (với mỗi dòng của bảng nhỏ, tra bảng kia qua chỉ mục — tốt nhất khi một phía rất bé), <b>merge join</b> (hai đầu vào đã sắp, đi song song — tốt nhất khi chỉ mục đã cho sẵn thứ tự), <b>hash join</b> (dựng bảng băm từ phía nhỏ hơn rồi dò bằng phía lớn — tốt nhất cho tập lớn chưa sắp). Đọc xem cái nào xuất hiện trong kế hoạch thực thi (bài 8.2) là biết ngay có phải thiếu chỉ mục hay không. <em>Ngoài giáo trình vì SQL là ngôn ngữ khai báo, nhưng công việc tối ưu hiệu năng lại hoàn toàn xoay quanh toán tử vật lý đã được chọn.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-5-2-outer-join" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 5.2: OUTER JOIN: giữ lại các dòng không khớp</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: LEFT JOIN giữ mọi dòng bên trái, khuôn phản nối "ai không có gì?", RIGHT và FULL. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: bốn hình dạng đặt cạnh nhau; xung quanh nó còn máy chủ thật sự làm gì khi join (bài 5.1), cạm bẫy join (bài 5.4) và chiến lược Nested Loop/Hash/Merge (bài 10.2).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -1738,6 +1798,11 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
   <span class="lc-body"><span class="lc-title">Practise: Aggregation & subqueries</span><span class="lc-sub">GROUP BY, HAVING and nested queries.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-6-2-group-by" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 6.2: GROUP BY: one summary per group</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: GROUP BY and aggregate functions. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: the rule everyone hits (every selected column grouped or aggregated), the grain rule, grouping by several columns; later lessons cover HAVING vs WHERE and FILTER (6.3), aggregating over JOINs and fan-out (6.4).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.3</span>
@@ -1756,6 +1821,11 @@ Bắt buộc dùng LEFT để người quản lý cao nhất, vốn có <span cl
   <span class="lc-ico">📊</span>
   <span class="lc-body"><span class="lc-title">Luyện: Tổng hợp & truy vấn con</span><span class="lc-sub">GROUP BY, HAVING và truy vấn lồng.</span></span>
   <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-6-2-group-by" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 6.2: GROUP BY: một tóm tắt cho mỗi nhóm</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: GROUP BY và hàm tổng hợp. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: luật ai cũng dính (mọi cột chọn phải được gom hoặc tổng hợp), luật về độ mịn, gom theo nhiều cột; các bài sau có HAVING vs WHERE và FILTER (6.3), tổng hợp trên JOIN và fan-out (6.4).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -1817,6 +1887,11 @@ Both are accepted; be able to produce at least one under exam pressure.</div>
 <div class="pitfall"><b>A scalar subquery that returns two rows raises a run-time error</b> ("Subquery returned more than 1 value"), not a compile-time one — so it can pass your test and fail on the marker's data. If uniqueness is not guaranteed, wrap it in <span class="badge">MAX()</span> or add <span class="badge">TOP 1</span> with an explicit ORDER BY.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>CTEs make nested logic readable — and recursive.</b> <span class="badge">WITH ranked AS (SELECT …) SELECT * FROM ranked WHERE …</span> names a subquery instead of burying it, and several CTEs can chain. The recursive form walks hierarchies — an employee's whole management chain, a category tree, a bill of materials — with an anchor query UNION ALL a step that references the CTE itself. It is the one thing plain subqueries genuinely cannot do. <em>Beyond syllabus because DBI202 covers only inline subqueries, while CTEs are how the same logic is written in every professional codebase.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-7-2-correlated-exists" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 7.2: Correlated subqueries, EXISTS &amp; the NOT IN trap</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: correlated subqueries, EXISTS/NOT EXISTS and the NOT IN trap when NULL appears. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: the one question that matters — correlated or not; lesson 7.3 adds CTEs (WITH) for step-by-step queries, lesson 7.4 recursive CTEs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.4</span>
@@ -1869,6 +1944,11 @@ Cả hai đều được chấp nhận; hãy chắc chắn viết được ít n
 <div class="pitfall"><b>Truy vấn con vô hướng trả về hai dòng sẽ báo lỗi lúc CHẠY</b> ("Subquery returned more than 1 value"), chứ không phải lúc biên dịch — nên nó có thể qua được dữ liệu thử của bạn và chết trên dữ liệu của người chấm. Nếu không chắc chắn duy nhất, hãy bọc bằng <span class="badge">MAX()</span> hoặc thêm <span class="badge">TOP 1</span> kèm ORDER BY tường minh.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>CTE làm lô-gic lồng nhau dễ đọc — và cho phép đệ quy.</b> <span class="badge">WITH ranked AS (SELECT …) SELECT * FROM ranked WHERE …</span> đặt tên cho truy vấn con thay vì chôn nó vào giữa, và nhiều CTE nối tiếp được. Dạng đệ quy đi được theo cây phân cấp — toàn bộ chuỗi quản lý của một nhân viên, cây danh mục, bảng định mức vật tư — bằng một truy vấn neo UNION ALL với một bước tham chiếu chính CTE đó. Đây là thứ duy nhất mà truy vấn con thường thật sự không làm được. <em>Ngoài giáo trình vì DBI202 chỉ dạy truy vấn con nội tuyến, trong khi CTE mới là cách viết cùng lô-gic đó trong mọi mã nguồn chuyên nghiệp.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-7-2-correlated-exists" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 7.2: Subquery tương quan, EXISTS &amp; bẫy NOT IN</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: subquery tương quan, EXISTS/NOT EXISTS và bẫy NOT IN khi gặp NULL. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: câu hỏi duy nhất cần hỏi — có tương quan hay không; bài 7.3 thêm CTE (WITH) để viết truy vấn theo bước, bài 7.4 CTE đệ quy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -1932,6 +2012,11 @@ This is the single habit that separates people who have dropped production data 
 <div class="pitfall"><b>SQL Server has no <span class="badge">LIMIT</span>.</b> Use <span class="badge">TOP (n)</span>, or <span class="badge">ORDER BY … OFFSET n ROWS FETCH NEXT m ROWS ONLY</span> for paging. Writing MySQL's <span class="badge">LIMIT 10</span> in the PE is an instant syntax error — and a surprisingly common one.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Soft delete: in real systems, rows are rarely removed.</b> Production schemas add <span class="badge">deleted_at DATETIME2 NULL</span> and an UPDATE replaces the DELETE, with every query filtering <span class="badge">WHERE deleted_at IS NULL</span> (usually through a view). You keep the audit trail, references never break, and "undo" becomes possible — at the price of a filter everywhere and a periodic purge job. Regulated domains (finance, health) mandate this pattern. <em>Beyond syllabus because the course teaches DELETE as final, while the professional default is that data is never physically destroyed.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-4-4-update-delete" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 4.4: UPDATE &amp; DELETE — safely</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: the missing-WHERE catastrophe and how to protect yourself. Different: DBI202 works on SQL Server, this course on PostgreSQL (SQL Server uses TOP, PostgreSQL uses LIMIT). It also adds: UPDATE/DELETE ... RETURNING shows which rows changed right away, the shape of a safe write; lesson 4.1 adds multi-row INSERT, RETURNING and UPSERT.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.5</span>
@@ -1987,6 +2072,11 @@ This is the single habit that separates people who have dropped production data 
 <div class="pitfall"><b>SQL Server không có <span class="badge">LIMIT</span>.</b> Hãy dùng <span class="badge">TOP (n)</span>, hoặc <span class="badge">ORDER BY … OFFSET n ROWS FETCH NEXT m ROWS ONLY</span> để phân trang. Viết <span class="badge">LIMIT 10</span> kiểu MySQL trong PE là lỗi cú pháp ngay lập tức — và là lỗi phổ biến đến bất ngờ.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Xoá mềm: trong hệ thống thật, dòng dữ liệu hiếm khi bị xoá.</b> Lược đồ sản xuất thêm cột <span class="badge">deleted_at DATETIME2 NULL</span> và dùng UPDATE thay cho DELETE, mọi truy vấn đều lọc <span class="badge">WHERE deleted_at IS NULL</span> (thường qua một view). Bạn giữ được dấu vết kiểm toán, các tham chiếu không bao giờ gãy, và "hoàn tác" trở nên khả thi — đổi lại phải thêm bộ lọc ở khắp nơi và một tác vụ dọn dẹp định kỳ. Các lĩnh vực bị quản lý chặt (tài chính, y tế) bắt buộc dùng khuôn này. <em>Ngoài giáo trình vì môn học dạy DELETE là dứt điểm, còn mặc định chuyên nghiệp là dữ liệu không bao giờ bị huỷ vật lý.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-4-4-update-delete" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 4.4: UPDATE &amp; DELETE — an toàn</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: tai hoạ thiếu mệnh đề WHERE và cách tự bảo vệ. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL (SQL Server dùng TOP, PostgreSQL dùng LIMIT). Ở đó có thêm: UPDATE/DELETE ... RETURNING cho thấy ngay dòng nào bị đổi, hình dạng của một lệnh ghi an toàn; bài 4.1 thêm INSERT nhiều dòng, RETURNING và UPSERT.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -2105,6 +2195,11 @@ This is the single habit that separates people who have dropped production data 
 <div class="pitfall"><b>Views do not make queries faster.</b> <span class="badge">SELECT * FROM v_Big WHERE sid = 5</span> runs the view's whole query and then filters — unless the optimiser can push the predicate down, which it usually can, but not through <span class="badge">DISTINCT</span>, <span class="badge">TOP</span> or window functions. Nesting views three deep is a reliable way to produce a query nobody can optimise.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Views are the seam that makes zero-downtime migrations possible.</b> To split <span class="badge">Customer</span> into <span class="badge">Customer</span> + <span class="badge">Address</span> without stopping the application: create the new tables, backfill, create a view named after the old table that joins them, point the old code at the view, migrate the code gradually, then drop the view. The database changed shape while every deployed version kept working. <em>Beyond syllabus because DBI202 presents views as convenience, while their strategic use is decoupling the schema's evolution from the application's release cycle.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-12-3-view" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 12.3: Views: a named query</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: a view is a stored query, some views are updatable, and WITH CHECK OPTION closes the escape route. Different: Academy covers SQL Server indexed views; Courses has PostgreSQL materialized views. It also adds: naming a query to write it once; lesson 12.4 materialized views: trading freshness for speed.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.2</span>
@@ -2148,6 +2243,11 @@ This is the single habit that separates people who have dropped production data 
 <div class="pitfall"><b>View không làm truy vấn nhanh hơn.</b> <span class="badge">SELECT * FROM v_Big WHERE sid = 5</span> chạy toàn bộ truy vấn của view rồi mới lọc — trừ khi bộ tối ưu đẩy được điều kiện xuống dưới, việc nó thường làm được, nhưng không xuyên qua <span class="badge">DISTINCT</span>, <span class="badge">TOP</span> hay hàm cửa sổ. Lồng view ba tầng là cách chắc chắn tạo ra một truy vấn không ai tối ưu nổi.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>View là đường nối giúp di trú không cần dừng hệ thống.</b> Muốn tách <span class="badge">Customer</span> thành <span class="badge">Customer</span> + <span class="badge">Address</span> mà không dừng ứng dụng: tạo bảng mới, lấp dữ liệu, tạo một view mang đúng tên bảng cũ để nối hai bảng lại, trỏ mã nguồn cũ vào view, chuyển dần mã nguồn, rồi mới bỏ view. Cơ sở dữ liệu đã đổi hình dạng trong khi mọi phiên bản đang chạy vẫn hoạt động. <em>Ngoài giáo trình vì DBI202 trình bày view như một tiện ích, còn công dụng chiến lược của nó là tách rời tiến hoá của lược đồ khỏi chu kỳ phát hành của ứng dụng.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-12-3-view" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 12.3: View: một truy vấn có tên</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: view là truy vấn được lưu, có view cập nhật được và WITH CHECK OPTION bịt lối thoát. Khác: Academy nói đến view có chỉ mục của SQL Server; Courses có materialized view của PostgreSQL. Ở đó có thêm: đặt tên cho truy vấn để chỉ viết một lần; bài 12.4 materialized view: đánh đổi độ tươi lấy tốc độ.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -2220,6 +2320,11 @@ This is the single habit that separates people who have dropped production data 
 <div class="pitfall"><b>A scalar function inside a WHERE clause runs once per row and blocks index use.</b> <span class="badge">WHERE fn_GPA(sid) &gt; 8</span> on a 100,000-row table executes the function 100,000 times and forces a full scan. Rewrite it as a join to an <em>inline table-valued</em> function, which the optimiser can expand into the outer query. This is the single most common cause of a "mysteriously slow" query in student projects.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Stored procedures were the original defence against SQL injection.</b> Parameters are typed values, never concatenated text, so <span class="badge">@name = "'; DROP TABLE Student;--"</span> is stored as a harmless string. But the protection comes from <em>parameterisation</em>, not from the procedure: build dynamic SQL with <span class="badge">EXEC('SELECT … ' + @name)</span> inside a procedure and the hole is right back. Modern applications get the same guarantee with prepared statements (<span class="badge">PreparedStatement</span> in PRJ301), which is why business logic mostly moved back into the application. <em>Beyond syllabus because the course teaches the syntax, while the security reasoning is what an interviewer asks about.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-12-1-ham" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 12.1: Functions: SQL, PL/pgSQL and volatility</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: putting logic next to the data with functions and procedures. Different: Academy writes T-SQL for SQL Server; Courses writes SQL and PL/pgSQL for PostgreSQL. It also adds: simple SQL functions, PL/pgSQL when you need variables and branching, volatility — the declaration that decides how often a function runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.3</span>
@@ -2284,6 +2389,11 @@ This is the single habit that separates people who have dropped production data 
 <div class="pitfall"><b>Hàm vô hướng đặt trong mệnh đề WHERE chạy một lần cho mỗi dòng và chặn việc dùng chỉ mục.</b> <span class="badge">WHERE fn_GPA(sid) &gt; 8</span> trên bảng 100.000 dòng sẽ gọi hàm 100.000 lần và buộc quét toàn bảng. Hãy viết lại thành phép nối với một hàm <em>trả bảng nội tuyến</em>, thứ mà bộ tối ưu khai triển được vào truy vấn ngoài. Đây là nguyên nhân phổ biến nhất của truy vấn "tự dưng chậm" trong đồ án sinh viên.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thủ tục lưu trữ từng là tuyến phòng thủ đầu tiên chống SQL injection.</b> Tham số là giá trị có kiểu, không bao giờ là văn bản được nối chuỗi, nên <span class="badge">@name = "'; DROP TABLE Student;--"</span> chỉ được lưu như một chuỗi vô hại. Nhưng sự bảo vệ đến từ <em>việc tham số hoá</em>, không phải từ bản thân thủ tục: dựng SQL động bằng <span class="badge">EXEC('SELECT … ' + @name)</span> ngay trong thủ tục là lỗ hổng quay lại y nguyên. Ứng dụng hiện đại có cùng đảm bảo đó nhờ câu lệnh chuẩn bị sẵn (<span class="badge">PreparedStatement</span> ở PRJ301), và vì thế lô-gic nghiệp vụ phần lớn đã quay về tầng ứng dụng. <em>Ngoài giáo trình vì môn học dạy cú pháp, còn phần lập luận về an ninh mới là thứ người phỏng vấn hỏi.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-12-1-ham" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 12.1: Hàm: SQL, PL/pgSQL và volatility</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: đặt logic ngay cạnh dữ liệu bằng hàm và thủ tục. Khác: Academy viết bằng T-SQL của SQL Server; Courses viết bằng SQL và PL/pgSQL của PostgreSQL. Ở đó có thêm: hàm SQL đơn giản, PL/pgSQL khi cần biến và rẽ nhánh, volatility — khai báo quyết định hàm chạy bao nhiêu lần.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -2346,6 +2456,11 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 <div class="pitfall"><b>Triggers are invisible.</b> A colleague's UPDATE mysteriously writes to three other tables and takes 400 ms — because a trigger nobody remembers is doing extra work inside the same transaction. Keep triggers small, document them, and never put slow work (loops, remote calls, e-mail) inside one: the user's transaction stays open the whole time.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Change Data Capture replaces hand-written audit triggers.</b> Instead of a trigger per table, SQL Server can read the transaction log itself and expose every insert/update/delete as a stream — with no extra work inside the user's transaction. The same log-reading idea powers Debezium and Kafka Connect, which turn a database into an event stream that feeds caches, search indexes and analytics in near real time. <em>Beyond syllabus because the course teaches the trigger, while modern architectures move that concern out of the write path entirely.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-12-2-trigger" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 12.2: Triggers: automation the application cannot forget</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: a trigger runs automatically when data changes, whether or not the application remembers. Different: Academy uses SQL Server's inserted/deleted virtual tables; PostgreSQL lets you choose FOR EACH ROW or FOR EACH STATEMENT. It also adds: an updated_at trigger, an audit log that records only real changes, the trap of a BEFORE trigger returning NULL.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.4</span>
@@ -2400,6 +2515,11 @@ This is the number-one trigger bug in student projects, and it only shows up onc
 <div class="pitfall"><b>Trigger thì vô hình.</b> Lệnh UPDATE của đồng nghiệp tự dưng ghi vào ba bảng khác và mất 400 ms — vì một trigger mà không ai còn nhớ đang làm thêm việc trong cùng giao dịch đó. Hãy giữ trigger thật nhỏ, ghi tài liệu cho nó, và đừng bao giờ nhét việc chậm (vòng lặp, gọi dịch vụ từ xa, gửi email) vào trong: giao dịch của người dùng bị mở suốt thời gian đó.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Change Data Capture thay thế các trigger kiểm toán viết tay.</b> Thay vì mỗi bảng một trigger, SQL Server đọc thẳng nhật ký giao dịch và phơi mọi lệnh chèn/sửa/xoá thành một luồng — mà không thêm việc gì vào giao dịch của người dùng. Cùng ý tưởng đọc nhật ký đó là động cơ của Debezium và Kafka Connect, biến một cơ sở dữ liệu thành luồng sự kiện nuôi các cache, chỉ mục tìm kiếm và hệ phân tích gần như tức thời. <em>Ngoài giáo trình vì môn học dạy trigger, còn kiến trúc hiện đại thì đưa hẳn mối bận tâm đó ra khỏi đường ghi.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-12-2-trigger" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 12.2: Trigger: tự động hoá mà ứng dụng KHÔNG THỂ quên</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: trigger chạy tự động khi dữ liệu đổi, bất kể ứng dụng có nhớ hay không. Khác: Academy dùng bảng ảo inserted/deleted của SQL Server; PostgreSQL cho chọn FOR EACH ROW hoặc FOR EACH STATEMENT. Ở đó có thêm: trigger cập nhật updated_at, nhật ký kiểm toán chỉ ghi thay đổi thật, cái bẫy BEFORE trigger trả về NULL.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -2437,6 +2557,11 @@ This is the number-one trigger bug in student projects, and it only shows up onc
   <span class="lc-body"><span class="lc-title">Practise: Indexing strategies</span><span class="lc-sub">Indexing & advanced schema design.</span></span>
   <span class="lc-cta">CODE LAB →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 9.1: What an index is: B-tree, Seq Scan vs Index Scan</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: an index works like a book index and speeds up queries. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: without an index you get a Seq Scan, with one an Index Scan, why a B-tree; later lessons cover composite and covering indexes, when an index is NOT used, and GIN/BRIN/GiST.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.1</span>
@@ -2451,6 +2576,11 @@ This is the number-one trigger bug in student projects, and it only shows up onc
   <span class="lc-ico">⚡</span>
   <span class="lc-body"><span class="lc-title">Luyện: Chiến lược đánh chỉ mục</span><span class="lc-sub">Chỉ mục & thiết kế lược đồ nâng cao.</span></span>
   <span class="lc-cta">CODE LAB →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-1-chi-muc-la-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 9.1: Chỉ mục là gì: B-tree, Seq Scan vs Index Scan</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: chỉ mục như mục lục sách làm truy vấn nhanh. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: không có chỉ mục thì Seq Scan, thêm chỉ mục thì Index Scan, vì sao là B-tree; các bài sau còn chỉ mục tổ hợp, covering, khi chỉ mục KHÔNG được dùng và các loại GIN/BRIN/GiST.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -2501,6 +2631,16 @@ Query: <span class="badge">SELECT sid, grade FROM Enrolment WHERE cid = 'DBI202'
 <div class="pitfall"><b>A function on the indexed column disables the index.</b> <span class="badge">WHERE YEAR(order_date) = 2026</span> forces a scan; <span class="badge">WHERE order_date &gt;= '2026-01-01' AND order_date &lt; '2027-01-01'</span> seeks. The same applies to <span class="badge">WHERE CAST(sid AS VARCHAR) = '5'</span> and to <span class="badge">LIKE '%abc'</span> — a leading wildcard has no prefix to seek on. The technical term is a <em>non-sargable</em> predicate.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Every index makes writes slower — that is the whole trade.</b> An INSERT must add a row to the table plus an entry to each nonclustered index, keeping every one of them sorted; a table with eight indexes can write five times slower than the same table with two. Real tuning therefore starts by <em>deleting</em> unused indexes (SQL Server records usage in <span class="badge">sys.dm_db_index_usage_stats</span>), then adding the few that serve the most frequent queries. "Index every column" is not caution — it is a performance bug spread evenly across the schema. <em>Beyond syllabus because the course teaches how to create an index, while the professional skill is deciding which ones not to have.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 10.1: Reading a plan: EXPLAIN vs EXPLAIN ANALYZE</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: reading the execution plan to see whether an index is used. Different: Academy views the plan with Ctrl+M in SSMS; Courses uses EXPLAIN and EXPLAIN ANALYZE. It also adds: plain EXPLAIN (estimate) vs EXPLAIN ANALYZE (really run), reading a plan from the inside out; a later lesson covers BUFFERS and a tuning workflow.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-2-to-hop-covering" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 9.2: Which columns, composite &amp; covering indexes</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: multi-column indexes and the order of columns in an index. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: choosing which columns to index, composite and covering indexes on PostgreSQL.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.2</span>
@@ -2542,6 +2682,16 @@ Truy vấn: <span class="badge">SELECT sid, grade FROM Enrolment WHERE cid = 'DB
 <div class="pitfall"><b>Bọc một hàm quanh cột đã đánh chỉ mục là vô hiệu hoá chỉ mục.</b> <span class="badge">WHERE YEAR(order_date) = 2026</span> buộc quét bảng; <span class="badge">WHERE order_date &gt;= '2026-01-01' AND order_date &lt; '2027-01-01'</span> thì seek được. Điều tương tự với <span class="badge">WHERE CAST(sid AS VARCHAR) = '5'</span> và với <span class="badge">LIKE '%abc'</span> — dấu sao đứng đầu thì không còn tiền tố nào để seek. Thuật ngữ kỹ thuật là điều kiện <em>non-sargable</em>.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Mỗi chỉ mục làm phép ghi chậm đi — đó là toàn bộ phép đánh đổi.</b> Một lệnh INSERT phải thêm một dòng vào bảng cộng một mục vào từng chỉ mục không gom cụm, và giữ mọi chỉ mục đó luôn sắp đúng thứ tự; một bảng tám chỉ mục có thể ghi chậm gấp năm lần chính bảng đó với hai chỉ mục. Vì thế việc tinh chỉnh thật sự bắt đầu bằng <em>xoá</em> các chỉ mục không ai dùng (SQL Server ghi lại mức sử dụng trong <span class="badge">sys.dm_db_index_usage_stats</span>), rồi mới thêm vài cái phục vụ các truy vấn phổ biến nhất. "Đánh chỉ mục mọi cột" không phải cẩn thận — đó là một lỗi hiệu năng rải đều khắp lược đồ. <em>Ngoài giáo trình vì môn học dạy cách tạo chỉ mục, còn kỹ năng chuyên nghiệp là quyết định những chỉ mục nào KHÔNG nên có.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-10-1-doc-explain" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 10.1: Đọc một plan: EXPLAIN vs EXPLAIN ANALYZE</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: đọc kế hoạch thực thi để biết chỉ mục có được dùng không. Khác: Academy xem plan bằng Ctrl+M trong SSMS; Courses dùng EXPLAIN và EXPLAIN ANALYZE. Ở đó có thêm: EXPLAIN trơn (ước lượng) so với EXPLAIN ANALYZE (chạy thật), đọc plan từ trong ra; bài sau có BUFFERS và quy trình tinh chỉnh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-9-2-to-hop-covering" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 9.2: Cột nào, chỉ mục tổ hợp &amp; covering</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: chỉ mục ghép nhiều cột và thứ tự cột trong chỉ mục. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: chọn cột nào để đánh chỉ mục, chỉ mục tổ hợp và covering index trên PostgreSQL.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },
@@ -2593,6 +2743,21 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <div class="pitfall"><b>An open transaction holds locks until COMMIT or ROLLBACK.</b> Running <span class="badge">BEGIN TRAN</span> in SSMS and then going to lunch blocks every other session touching those rows. If a table suddenly "hangs", check <span class="badge">sys.dm_exec_requests</span> for a blocking session — nine times out of ten it is a forgotten transaction in someone's query window.</div>
 
 <div class="callout"><span class="badge">★ Beyond the syllabus</span> <b>Snapshot isolation: readers that never block writers.</b> Instead of locking, the engine keeps the previous version of each row and lets a transaction read a consistent snapshot from its start time (MVCC). Readers no longer block writers and writers no longer block readers — at the cost of extra space for versions (tempdb in SQL Server) and possible update conflicts that must be retried. It is the default in PostgreSQL and Oracle, and switched on in SQL Server with <span class="badge">ALTER DATABASE … SET READ_COMMITTED_SNAPSHOT ON</span>. <em>Beyond syllabus because DBI202 teaches lock-based isolation only, while most modern engines are version-based.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-1-2-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 1.2: ACID: four guarantees, demonstrated</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: ACID, one guarantee per letter. Different: Academy explains each letter; Courses demonstrates each guarantee with experiments. It also adds: each ACID guarantee demonstrated on a real PostgreSQL.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 11.3: Isolation levels and the anomalies each one prevents</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: isolation levels and the phenomena each prevents. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: Read Committed (the default), Repeatable Read — one snapshot for the whole transaction, Serializable, choosing in practice; lesson 11.2 explains MVCC: readers never block writers.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 11.4: Row locks, lost updates and deadlocks</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: deadlocks. Different: DBI202 works on SQL Server, this course on PostgreSQL. It also adds: row locks, lost updates and how to avoid deadlocks on PostgreSQL.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.3</span>
@@ -2636,6 +2801,21 @@ Booking the last seat: T1 runs <span class="badge">SELECT seats FROM Course WHER
 <div class="pitfall"><b>Giao dịch đang mở thì giữ khoá cho tới khi COMMIT hoặc ROLLBACK.</b> Gõ <span class="badge">BEGIN TRAN</span> trong SSMS rồi đi ăn trưa là chặn mọi phiên khác đụng vào những dòng đó. Nếu một bảng bỗng dưng "treo", hãy soi <span class="badge">sys.dm_exec_requests</span> tìm phiên đang chặn — mười lần thì chín là một giao dịch bị bỏ quên trong cửa sổ truy vấn của ai đó.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Cô lập theo ảnh chụp: người đọc không bao giờ chặn người ghi.</b> Thay vì khoá, bộ máy giữ lại phiên bản trước của mỗi dòng và cho một giao dịch đọc một ảnh chụp nhất quán tính từ lúc nó bắt đầu (MVCC). Người đọc thôi chặn người ghi và người ghi thôi chặn người đọc — đổi lại tốn thêm chỗ cho các phiên bản (tempdb trong SQL Server) và có thể phát sinh xung đột cập nhật phải chạy lại. Đây là mặc định của PostgreSQL và Oracle, còn SQL Server thì bật bằng <span class="badge">ALTER DATABASE … SET READ_COMMITTED_SNAPSHOT ON</span>. <em>Ngoài giáo trình vì DBI202 chỉ dạy cô lập dựa trên khoá, trong khi phần lớn bộ máy hiện đại dựa trên phiên bản.</em></div>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-1-2-acid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 1.2: ACID: bốn bảo đảm, được chứng minh</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: ACID, mỗi chữ một bảo đảm. Khác: Academy giải thích từng chữ; Courses chứng minh từng bảo đảm bằng thí nghiệm. Ở đó có thêm: từng bảo đảm ACID được chứng minh trên PostgreSQL thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-3-muc-co-lap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 11.3: Các mức cô lập và những bất thường mỗi mức chặn được</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: các mức cô lập và hiện tượng mỗi mức ngăn được. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: Read Committed (mặc định), Repeatable Read — một ảnh chụp cho cả giao dịch, Serializable, cách chọn trong thực tế; bài 11.2 giải thích MVCC: người đọc không chặn người ghi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-11-4-khoa-deadlock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 11.4: Khoá dòng, lost update và deadlock</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: khoá chết (deadlock). Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL. Ở đó có thêm: khoá dòng, lost update và cách tránh deadlock trên PostgreSQL.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
         },

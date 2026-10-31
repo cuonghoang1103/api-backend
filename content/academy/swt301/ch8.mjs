@@ -2464,6 +2464,26 @@ Luôn đọc số test đã chạy, đừng chỉ nhìn màu.</div>
       ['fst', '§6.1.5 "Tool support for test execution and logging" (unit test frameworks, test harnesses, coverage) — p.177', '§6.1.5 "Tool support for test execution and logging" (unit test framework, test harness, coverage) — trang 177'],
       ['sp5', '§7.1.4 "Tools for Automating Dynamic Tests" — PDF 314', '§7.1.4 "Tools for Automating Dynamic Tests" — PDF 314'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-2-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 0.3: the same ideas with Vitest</span><span class="lc-sub">Same as this lesson: a runner finds tests, prints expected vs actual and exits with code 1 on failure. Different: Courses does it in JavaScript with Vitest 5 — npm scripts, filters, watch mode, and a JUnit ↔ Vitest comparison.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-3-ten-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 1.3: names and it.each (≈ @DisplayName, @ParameterizedTest)</span><span class="lc-sub">Same as @DisplayName and @CsvSource here: readable names and one test fed by a table. Different: Courses shows why a good name turns a red CI line into a diagnosis, with a planted bug.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-2-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 0.3: cùng ý tưởng với Vitest</span><span class="lc-sub">Giống bài này: bộ chạy tìm test, in expected và actual, thoát với mã 1 khi hỏng. Khác: Courses làm bằng JavaScript với Vitest 5 — npm script, lọc test, chế độ watch, và bảng so JUnit ↔ Vitest.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-3-ten-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 1.3: đặt tên và it.each (≈ @DisplayName, @ParameterizedTest)</span><span class="lc-sub">Giống @DisplayName và @CsvSource ở đây: tên dễ đọc và một test được nuôi bằng bảng. Khác: Courses cho thấy vì sao tên tốt biến dòng đỏ trên CI thành bản chẩn đoán, bằng một con bug cài sẵn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -2741,6 +2761,16 @@ ${SEL}`),
       ['sp5', '§7.1.4 "Tools for Automating Dynamic Tests" PDF 314–320 · §7.2 benefits and risks of test automation PDF 323', '§7.1.4 "Tools for Automating Dynamic Tests" PDF 314–320 · §7.2 lợi ích và rủi ro của tự động hoá PDF 323'],
       ['fst', '§6.1.2 (continuous integration in management tools) p.171 · §6.1.5 test execution tools p.177', '§6.1.2 (tích hợp liên tục trong nhóm công cụ quản lý) trang 171 · §6.1.5 công cụ thực thi test trang 177'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 0.2: test pyramid and testing trophy</span><span class="lc-sub">Same as this lesson: Mike Cohn’s pyramid and the ice-cream-cone anti-pattern. Different: Courses measures the speed gap on a running Node API and adds Kent C. Dodds’ testing trophy; CI itself is built step by step in Chapter 9.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 0.2: kim tự tháp và chiếc cúp</span><span class="lc-sub">Giống bài này: kim tự tháp của Mike Cohn và dạng sai "cây kem". Khác: Courses đo khoảng cách tốc độ trên một API Node đang chạy và thêm chiếc cúp của Kent C. Dodds; phần CI được dựng từng bước ở Chương 9.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

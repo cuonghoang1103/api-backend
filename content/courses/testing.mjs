@@ -1,8 +1,11 @@
 /**
- * Testing — khoá học CuongThai (Courses, GENERAL). KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"): chương + bài + đề cương,
+ * Testing — khoá học CuongThai (Courses, GENERAL). Mục 0 + Chương 1 SOẠN CHI TIẾT 31/10–01/11/2026 (./testing/s00-intro.mjs, s01-unit-dau-tien.mjs;
+ * dự án xuyên khoá LabFlow Lite; slide deck tst-* ở scripts/slides-src, ảnh R2 images/academy/TST/v1). Chương 2–11 vẫn là KHUNG dựng 24/09/2026 (công khai từ 24/09 theo yêu cầu người dùng — bài chưa soạn hiện "Đang soạn"): chương + bài + đề cương,
  * bài giảng chi tiết soạn sau theo quy trình khoá Docker (content/courses/docker/_HOP-DONG.md). Xem _chung/khung.mjs.
  */
 import { khung } from './_chung/khung.mjs';
+import s00 from './testing/s00-intro.mjs';
+import s01 from './testing/s01-unit-dau-tien.mjs';
 
 export default {
   category: { slug: 'backend', name: 'Backend', icon: 'Server', sortOrder: 1 },
@@ -18,10 +21,10 @@ export default {
     shortDescription: 'Write tests that catch real bugs and run in CI: unit, integration against a real database, API and end-to-end browser tests, mocks without lying to yourself, and a test suite your team trusts.|||Viết test bắt được lỗi thật và chạy trong CI: unit, integration với cơ sở dữ liệu thật, test API và end-to-end trên trình duyệt, mock mà không tự lừa mình, và một bộ test cả nhóm tin được.',
     description: 'Khoá Testing từ số 0 tới mức tự dựng được bộ test cho một ứng dụng Node/TypeScript + Next.js thật và chạy nó trong GitHub Actions. Đi từ vì sao cần test và kim tự tháp test, qua Vitest/Jest cho unit test, test code bất đồng bộ, mock đúng chỗ, test tích hợp với Postgres thật trong Docker, test API bằng Supertest, test giao diện React bằng Testing Library, end-to-end bằng Playwright, đo độ phủ và đọc nó cho đúng, test không ổn định (flaky), TDD trong thực tế, tới một dự án cuối khoá và câu hỏi phỏng vấn về testing.',
     whatYouLearn: 'Viết unit test rõ ràng cho hàm và class TypeScript; test code async và bắt lỗi thời gian; biết khi nào mock, khi nào dùng thứ thật; dựng test tích hợp chạy với Postgres thật trong container; test REST API đầu-cuối; test component React theo cách người dùng dùng nó; viết test e2e Playwright ổn định; đọc độ phủ mà không bị nó lừa; và cắm cả bộ test vào CI.',
-    requirements: 'Biết JavaScript/TypeScript cơ bản và Node.js. Nên học trước khoá Git, Docker (để chạy CSDL thật khi test) và GitHub Actions (để chạy test trong CI). Nếu đang học môn SWT301 (Software Testing) trên Academy: SWT301 dạy LÝ THUYẾT thiết kế ca test theo ISTQB (phân vùng tương đương, giá trị biên, bảng quyết định, white-box, quản lý defect); khoá này là phần THỰC HÀNH biến các ca test đó thành code tự động trên stack Node/TypeScript/React — hai bên bổ sung, không lặp lại nhau.',
+    requirements: 'Biết JavaScript cơ bản (hàm, mảng, object, import/export, try/catch) và dùng được terminal; cần Node.js 22.12 trở lên (bài 0.3 hướng dẫn cài). Không cần biết gì về testing, TypeScript, React, Docker hay SQL — chương nào dùng tới thì dạy tới đó. Khoá tự đủ; nếu đang học SWT301 (Software Testing) trên Academy thì hai bên bổ sung nhau: SWT301 dạy lý thuyết ISTQB và thiết kế test case trên giấy/Report 5.x, khoá này biến chính các kỹ thuật đó (phân vùng, giá trị biên, bảng quyết định…) thành test tự động chạy thật trên dự án LabFlow Lite.',
     documentsNote: 'Tài liệu chính: vitest.dev • jestjs.io • testing-library.com • playwright.dev • testcontainers.com • martinfowler.com/testing.',
   },
-  sections: khung('tst', [
+  sections: [s00, s01, ...khung('tst', [
     ['Section 0 — Why test, and how to study this course', 'Mục 0 — Vì sao phải test, và cách học khoá này', 'Test là gì, vì sao công ty đòi hỏi nó, và một lộ trình học không nản.', [
       ['bat-dau-tai-day', 'Start here (1/2) — What testing is, and why every company asks about it', 'Bắt đầu tại đây (1/2) — Test là gì, và vì sao công ty nào cũng hỏi', 'Test bằng hình ảnh đời thường · Kiểm thử tự động khác kiểm thử tay · Lịch sử: xUnit, JUnit, TDD của Kent Beck · Test giúp gì trong đồ án và khi đi làm · Câu hỏi phỏng vấn hay gặp'],
       ['bat-dau-khi-khong-co', 'Start here (2/2) — Life without tests: real incidents, and how to learn without giving up', 'Bắt đầu tại đây (2/2) — Khi không có test: sự cố thật, và cách học không bỏ cuộc', 'Sự cố thật do thiếu test (có nguồn) · Tình huống đồ án: sửa một chỗ hỏng ba chỗ · Nỗi sợ "viết test tốn thời gian" · Lộ trình tối thiểu và đầy đủ'],
@@ -66,7 +69,7 @@ export default {
     ]],
     ['Chapter 7 — End-to-end tests with Playwright', 'Chương 7 — Test end-to-end với Playwright', 'Trình duyệt thật, luồng thật, và test không chập chờn.', [
       ['playwright', 'Playwright: your first browser test', 'Playwright: test trình duyệt đầu tiên', 'Cài đặt · Locator · Auto-wait · Codegen'],
-      ['luong', 'Testing real user flows', 'Test luồng người dùng thật', 'Đăng nhập một lần dùng lại (storageState) · Đặt lịch khám từ đầu tới cuối'],
+      ['luong', 'Testing real user flows', 'Test luồng người dùng thật', 'Đăng nhập một lần dùng lại (storageState) · Đặt một phòng lab LabFlow Lite từ đầu tới cuối'],
       ['on-dinh', 'Making e2e tests stable', 'Làm test e2e ổn định', 'Chờ đúng cách · Dữ liệu riêng mỗi test · Trace viewer · Retry có kiểm soát'],
       ['da-trinh-duyet', 'Browsers, devices and visual checks', 'Nhiều trình duyệt, thiết bị và kiểm tra hình ảnh', 'Chromium/Firefox/WebKit · Mobile viewport · Screenshot so sánh'],
     ]],
@@ -88,11 +91,11 @@ export default {
       ['review', 'Reviewing tests in pull requests', 'Review test trong pull request', 'Test tốt trông thế nào · Mùi test xấu'],
       ['phong-van', 'Testing interview questions', 'Câu hỏi phỏng vấn về testing', 'Câu hỏi hay gặp và ý trả lời · Kể về cách bạn test dự án'],
     ]],
-    ['Chapter 11 — Capstone: a fully tested booking app', 'Chương 11 — Dự án cuối khoá: ứng dụng đặt lịch được test đầy đủ', 'Dựng bộ test hoàn chỉnh cho app "Đặt lịch phòng khám".', [
+    ['Chapter 11 — Capstone: a fully tested booking app', 'Chương 11 — Dự án cuối khoá: ứng dụng đặt lịch được test đầy đủ', 'Dựng bộ test hoàn chỉnh cho LabFlow Lite — app đặt phòng lab theo dõi suốt khoá.', [
       ['ke-hoach', 'Planning the test strategy', 'Lập chiến lược test', 'Rủi ro ở đâu · Tỉ lệ unit/integration/e2e · Dữ liệu mẫu'],
       ['backend', 'Testing the backend end to end', 'Test backend từ đầu tới cuối', 'Unit + integration với Postgres + API'],
-      ['frontend', 'Testing the frontend and the full flow', 'Test frontend và luồng đầy đủ', 'Component + Playwright đặt lịch'],
+      ['frontend', 'Testing the frontend and the full flow', 'Test frontend và luồng đầy đủ', 'Component + Playwright đặt phòng lab'],
       ['ci', 'Shipping it in CI, and the final checklist', 'Đưa vào CI, và checklist cuối', 'Workflow hoàn chỉnh · Checklist năng lực cả khoá'],
     ]],
-  ]),
+  ]).slice(2)],
 };

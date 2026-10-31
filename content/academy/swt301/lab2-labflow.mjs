@@ -213,6 +213,16 @@ ${ansVi('BE-201', 'Giờ phải tròn 30 phút và nằm trong giờ mở cửa 
 ${card(BR, '📦', 'Repo LabFlow-AI-demo — nhánh lab2-unit-test', 'Công khai: clone thẳng, không cần đăng nhập · README (tài khoản demo) · docs/erd.md', 'GITHUB →')}
 ${card(`${BLOB}/docs/erd.md`, '🗺️', 'docs/erd.md — ERD theo Flyway V1…V7', 'Năm cụm bảng, đọc trước khi viết bất kỳ Precondition nào', 'MỞ →')}
 ${ctwVi()}`),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-3-gioi-thieu-du-an" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 0.1: LabFlow Lite, the same rules in Node.js</span><span class="lc-sub">Same as this lesson: the LabFlow booking story and BR-04/05/06. Different: Courses rebuilds a small Node version, LabFlow Lite, and tests it at every level — unit, database, API, browser, CI.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-3-gioi-thieu-du-an" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 0.1: LabFlow Lite, cùng luật nghiệp vụ trên Node.js</span><span class="lc-sub">Giống bài này: câu chuyện đặt phòng LabFlow và BR-04/05/06. Khác: Courses dựng lại một bản Node nhỏ, LabFlow Lite, và test nó ở mọi cấp — unit, cơ sở dữ liệu, API, trình duyệt, CI.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -803,6 +813,16 @@ ${ansVi('UTCID06', 'Đặt <code>lockedUntil = NOW + 10 phút</code>, dặn kho 
 ${card(`${TEST}/auth/AuthServiceLoginTest.java`, '🧪', 'AuthServiceLoginTest.java trên nhánh lab2-unit-test', 'Lớp test mẫu: setUp với Clock.fixed, UTCID01–04', 'GITHUB →')}
 ${card(`${SRC}/auth/AuthService.java#L143`, '🔍', 'AuthService.login — code được test (dòng 143)', '35 LOC, BR-02', 'GITHUB →')}
 ${ctwVi()}`),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-1-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 1.1: anatomy of a test (Arrange · Act · Assert)</span><span class="lc-sub">Same as this lesson: one test per case, Arrange builds the condition, Act calls one function, Assert compares. Different: Courses does it in Vitest, shows the test that checks nothing and how requireAssertions catches it, and the JUnit/Vitest argument-order trap.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-1-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 1.1: giải phẫu một test (Arrange · Act · Assert)</span><span class="lc-sub">Giống bài này: mỗi case một test, Arrange dựng điều kiện, Act gọi một hàm, Assert so sánh. Khác: Courses làm bằng Vitest, cho thấy test chẳng kiểm gì và cách requireAssertions bắt nó, cùng bẫy thứ tự tham số giữa JUnit và Vitest.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

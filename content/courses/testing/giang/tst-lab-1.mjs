@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 1 (deck tst-lab-1, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-lab-1', 'Lab 1 — test the rules, kill 8 mutants', 'Lab 1 — test luật nghiệp vụ, diệt 8 đột biến', [
+  [1, 'Lab 1 — test the rules, kill 8 mutants',
+    `<p>The chapter lab. You write the full test suite for LabFlow Lite's rules, and a script — not a teacher's opinion — tells you how good it is, by planting eight bugs and checking whether your tests notice each one.</p>`,
+    `<p>Lab của chương. Bạn viết trọn bộ test cho luật của LabFlow Lite, và một script — không phải cảm nhận của thầy cô — cho bạn biết bộ test tốt tới đâu, bằng cách cài tám con bug và kiểm xem test của bạn có nhận ra từng con không.</p>`],
+  [2, 'Your mission',
+    `<p>Two test files, green on the real code. Then run <code>node scripts/dot-bien.mjs</code>: it changes one line of the rules at a time, runs your tests, and restores the line. If your suite turns red, that "mutant" is killed. The goal is eight out of eight. Coverage tells you which lines ran; mutation testing tells you whether your tests would notice if those lines were wrong.</p>`,
+    `<p>Hai file test, xanh trên code thật. Rồi chạy <code>node scripts/dot-bien.mjs</code>: nó đổi từng dòng của luật một, chạy test của bạn, rồi trả dòng đó về như cũ. Nếu bộ test đỏ, con "đột biến" (mutant) đó bị diệt. Mục tiêu là tám trên tám. Độ phủ cho biết dòng nào đã chạy; kiểm thử đột biến cho biết test của bạn có nhận ra khi những dòng đó sai hay không.</p>`],
+  [3, 'The rules under test',
+    `<p>Five functions, all from lessons 0.3 and 1.1: <code>checkSlot</code>, <code>isWithinBookingWindow</code>, <code>needsApproval</code>, <code>createBooking</code>, and the time helpers. Do not edit the source: the mutation script looks for exact lines, and changing them breaks the check.</p>`,
+    `<p>Năm hàm, đều từ bài 0.3 và 1.1: <code>checkSlot</code>, <code>isWithinBookingWindow</code>, <code>needsApproval</code>, <code>createBooking</code>, và hai hàm thời gian. Đừng sửa code nguồn: script đột biến tìm đúng từng dòng, sửa đi là phép kiểm hỏng.</p>`],
+  [4, 'How the mutation check works',
+    `<p>Four steps per mutant: plant one bug, run <code>vitest run src/</code>, record killed or survived, restore the file — always, even if something crashes. The table lists the eight planted bugs. Each is a classic: a boundary flipped, a role forgotten, a rounding mistake. Read them only after writing your own tests, so you test the rules, not the list.</p>`,
+    `<p>Bốn bước cho mỗi con đột biến: cài một bug, chạy <code>vitest run src/</code>, ghi lại bị diệt hay sống sót, trả file về như cũ — luôn luôn, kể cả khi có gì đó lỗi. Bảng liệt kê tám con bug được cài. Con nào cũng kinh điển: một biên bị lật, một vai trò bị quên, một lỗi làm tròn. Hãy chỉ đọc bảng sau khi tự viết test, để bạn test theo luật chứ không test theo danh sách.</p>`],
+  [5, 'A typical first attempt: 1 of 8',
+    `<p>A real run with a weak suite: two happy-path tests for <code>checkSlot</code> plus the time tests from lesson 0.3. Five tests, all green — and seven of eight bugs survive. Each survivor names exactly the test you forgot: 14 days, 30 seats, 21:00, 240 minutes, a zero-length slot, the admin role, 24:00.</p>`,
+    `<p>Một lần chạy thật với bộ test yếu: hai test đường suôn sẻ cho <code>checkSlot</code> cộng các test thời gian ở bài 0.3. Năm test, đều xanh — vậy mà bảy trên tám con bug sống sót. Mỗi con sống sót gọi đúng tên cái test bạn quên: 14 ngày, 30 chỗ, 21:00, 240 phút, khung dài 0 phút, vai trò admin, 24:00.</p>`],
+  [6, 'The reference solution: 8 of 8',
+    `<p>The reference suite has forty tests built with this chapter's techniques: boundary rows for every limit, the full decision table for approval, invalid times and seat counts with the right error class, and the round-trip property. All eight mutants are killed.</p>`,
+    `<p>Bộ test tham khảo có bốn mươi test dựng bằng các kỹ thuật của chương: dòng biên cho mọi giới hạn, trọn bảng quyết định cho việc duyệt, giờ và số chỗ không hợp lệ kèm đúng lớp lỗi, và thuộc tính khứ hồi. Cả tám con đột biến đều bị diệt.</p>`],
+  [7, 'Rubric (10 points)',
+    `<p>Four points come from the script, half a point per mutant. Two points for boundary values on every limit, one for invalid inputs with the right error class, two for names and structure, one for hygiene: green on real code, no <code>.only</code> or <code>.skip</code>, every test asserts, under a second. Seven passes; aim for ten.</p>`,
+    `<p>Bốn điểm do script chấm, nửa điểm mỗi con đột biến. Hai điểm cho giá trị biên ở mọi giới hạn, một điểm cho đầu vào không hợp lệ với đúng lớp lỗi, hai điểm cho tên và cấu trúc, một điểm cho vệ sinh: xanh trên code thật, không <code>.only</code> hay <code>.skip</code>, test nào cũng có khẳng định, chạy dưới một giây. Bảy điểm là đạt; hãy nhắm tới mười.</p>`],
+  [8, 'Hints, from gentle to strong',
+    `<p>Use the hints one at a time. Write the rules as sentences first — each sentence is a test name. For every number in a rule, test it and one step either side. Draw the decision table for approval. Run the mutation script early and read each survivor as "the test I forgot". Only then compare with the reference solution.</p>`,
+    `<p>Dùng gợi ý từng cái một. Viết các luật thành câu trước — mỗi câu là một tên test. Với mỗi con số trong luật, test chính nó và một bước hai bên. Vẽ bảng quyết định cho việc duyệt. Chạy script đột biến sớm và đọc mỗi con sống sót như "cái test mình quên". Chỉ sau đó mới so với lời giải tham khảo.</p>`],
+  [9, 'Before you call it done',
+    `<p>Five checks: green with no <code>.only</code> or <code>.skip</code>, eight out of eight mutants killed, the source files unchanged after the script, a report tree that reads like the rules list, and a clear commit message. Then you are ready for the chapter quiz.</p>`,
+    `<p>Năm điều kiểm cuối: xanh và không có <code>.only</code>, <code>.skip</code>; diệt tám trên tám đột biến; file nguồn không thay đổi sau khi chạy script; cây báo cáo đọc lên như danh sách luật; và một commit message rõ ràng. Xong là bạn sẵn sàng cho quiz của chương.</p>`],
+]);

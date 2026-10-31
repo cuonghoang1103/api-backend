@@ -1518,6 +1518,16 @@ const L22 = {
       ['sp4', '§3.2 Component test pp.42–49 (PDF 57–64); §3.3 Integration test pp.50–57, strategies §3.3.5 p.55 (PDF 65–72)', '§3.2 Component test trang 42–49 (PDF 57–64); §3.3 Integration test trang 50–57, chiến lược §3.3.5 trang 55 (PDF 65–72)'],
       ['junit', 'Ch.7 "Coarse-grained testing with stubs" (PDF 127) and Ch.8 "Testing with mock objects" (PDF 143) — stubs/drivers in real Java code', 'Ch.7 "Coarse-grained testing with stubs" (PDF 127) và Ch.8 "Testing with mock objects" (PDF 143) — stub/driver bằng code Java thật'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 0.2: the test pyramid, measured</span><span class="lc-sub">Same as this lesson: component (unit) and integration levels. Different: Courses tests one LabFlow rule at two levels and measures the cost — about 0.015 ms per unit check vs about 1 ms per HTTP check — then places each LabFlow Lite test on its level.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 0.2: kim tự tháp test, đo thật</span><span class="lc-sub">Giống bài này: cấp component (unit) và cấp tích hợp. Khác: Courses test một luật LabFlow ở hai cấp và đo chi phí — khoảng 0,015 ms mỗi lần kiểm unit so với khoảng 1 ms mỗi lần kiểm HTTP — rồi đặt từng test của LabFlow Lite vào đúng cấp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

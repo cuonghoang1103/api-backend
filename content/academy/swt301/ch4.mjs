@@ -989,6 +989,16 @@ naive 50..800: ['3%', '5%'] 2/4 = 50%</code></pre>
       ['sp5', '§5.1.1 "Equivalence Partitioning" — PDF pp.165–175', '§5.1.1 "Equivalence Partitioning" — PDF 165–175'],
       ['sp4', '§5.1.1 "Equivalence Class Partitioning" — pp.110–120 (PDF pp.125–135)', '§5.1.1 "Equivalence Class Partitioning" — trang 110–120 (PDF 125–135)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-4-ham-thuan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 1.4: partitions and boundaries as running tests</span><span class="lc-sub">Same as this lesson: valid/invalid partitions, one representative each. Different: Courses writes each partition as a row of Vitest’s it.each on LabFlow’s BR-05, including the non-integer partition.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-4-ham-thuan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 1.4: phân vùng và giá trị biên thành test chạy được</span><span class="lc-sub">Giống bài này: phân vùng hợp lệ/không hợp lệ, mỗi vùng một đại diện. Khác: Courses viết mỗi phân vùng thành một dòng it.each của Vitest trên luật BR-05 của LabFlow, kể cả phân vùng không phải số nguyên.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -1686,6 +1696,16 @@ EP only : 0 failing test(s) against the buggy version
       ['sp5', '§5.1.2 "Boundary Value Analysis" — PDF pp.176–183', '§5.1.2 "Boundary Value Analysis" — PDF 176–183'],
       ['sp4', '§5.1.2 "Boundary Value Analysis" — pp.121–127 (PDF pp.136–142)', '§5.1.2 "Boundary Value Analysis" — trang 121–127 (PDF 136–142)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-4-ham-thuan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 1.4: an off-by-one caught by a boundary table</span><span class="lc-sub">Same as this lesson: on and next to each boundary; BVA catches what EP misses. Different: Courses plants daysAhead &lt; 14 and shows exactly one row turning red, and explains boundaries on a 30-minute grid.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-4-ham-thuan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 1.4: lỗi lệch một đơn vị bị bảng giá trị biên bắt</span><span class="lc-sub">Giống bài này: trên biên và sát biên; BVA bắt thứ EP bỏ lọt. Khác: Courses cài lỗi daysAhead &lt; 14 và cho thấy đúng một dòng chuyển đỏ, và giải thích giá trị biên trên lưới 30 phút.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -2222,6 +2242,16 @@ ${AV(`C — DT2, DT4`, `DT2 phủ R3 và DT4 phủ R2.`)}`],
       ['sp5', '§5.1.4 "Decision Table Testing" — PDF pp.192–198 (and §5.1.5 pair-wise testing, PDF pp.199–207)', '§5.1.4 "Decision Table Testing" — PDF 192–198 (và §5.1.5 pair-wise testing, PDF 199–207)'],
       ['sp4', '§5.1.4 "Logic-Based Techniques (Cause-Effect Graphing and Decision Table Technique)" — pp.136–140 (PDF pp.151–155)', '§5.1.4 "Logic-Based Techniques (Cause-Effect Graphing and Decision Table Technique)" — trang 136–140 (PDF 151–155)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-4-ham-thuan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 1.4: decision table → it.each</span><span class="lc-sub">Same as this lesson: conditions × actions, one rule per column. Different: Courses turns each column into a row of it.each for LabFlow’s BR-06 (role × seats > 30) with boundary seat values 30/31.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-4-ham-thuan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 1.4: bảng quyết định → it.each</span><span class="lc-sub">Giống bài này: điều kiện × hành động, mỗi cột một luật. Khác: Courses biến mỗi cột thành một dòng it.each cho BR-06 của LabFlow (vai trò × trên 30 chỗ) với số chỗ tại biên 30/31.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

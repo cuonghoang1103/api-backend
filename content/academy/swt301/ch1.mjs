@@ -659,6 +659,16 @@ const L11 = {
       ['sp5', '§2.1 "Concepts and Motivations", esp. §2.1.2 Testing terminology — PDF pp.27–37', '§2.1 "Concepts and Motivations", nhất là §2.1.2 Testing terminology — PDF 27–37'],
       ['sp4', '§2.1 "Terms and Motivation" — pp.6–16 (PDF pp.21–31)', '§2.1 "Terms and Motivation" — trang 6–16 (PDF 21–31)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-8-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — Start here (1/2): what testing is, where it came from, why it matters to you</span><span class="lc-sub">Same as this lesson: testing vs debugging, verification vs validation, error/defect/failure. Different: here you learn the ISTQB definitions for the exam; Courses turns them into code — your first automated test runs in ten minutes, with a checked timeline from 1947 to Vitest.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-8-bat-dau-tai-day" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — Bắt đầu tại đây (1/2): kiểm thử là gì, ra đời thế nào, vì sao quan trọng với bạn</span><span class="lc-sub">Giống bài này: testing khác debugging, verification khác validation, error/defect/failure. Khác: ở đây bạn học định nghĩa ISTQB để thi; Courses biến chúng thành code — test tự động đầu tiên chạy trong mười phút, kèm dòng thời gian có nguồn từ 1947 tới Vitest.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 
@@ -1169,6 +1179,16 @@ const L12 = {
       ['sp5', '§2.1.1 Defect and fault terminology (PDF 30); §2.2 Software quality & §2.2.2 QM and QA (PDF 44–48)', '§2.1.1 Thuật ngữ defect/fault (PDF 30); §2.2 Chất lượng phần mềm & §2.2.2 QM và QA (PDF 44–48)'],
       ['sp4', '§2.1.1 Error, defect and bug terminology p.7 (PDF 22); §2.1.3 Software quality p.11 (PDF 26)', '§2.1.1 Thuật ngữ error/defect/bug trang 7 (PDF 22); §2.1.3 Chất lượng phần mềm trang 11 (PDF 26)'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-9-bat-dau-khi-khong-co" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — Start here (2/2): life without tests, five real incidents</span><span class="lc-sub">Same as this lesson: the error → defect → failure → effect chain and why late defects are expensive. Different: Courses walks the chain through Knight Capital, Therac-25, Ariane 5, Mars Climate Orbiter and CrowdStrike 2024, naming the test each one was missing.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-9-bat-dau-khi-khong-co" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — Bắt đầu tại đây (2/2): khi không có test, năm sự cố thật</span><span class="lc-sub">Giống bài này: chuỗi error → defect → failure → effect và vì sao lỗi phát hiện muộn thì đắt. Khác: Courses đi qua chuỗi đó bằng Knight Capital, Therac-25, Ariane 5, Mars Climate Orbiter và CrowdStrike 2024, gọi tên cái test mà mỗi vụ đã thiếu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

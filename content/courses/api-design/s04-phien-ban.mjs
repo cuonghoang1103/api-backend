@@ -378,7 +378,17 @@ console.log(r.success ? 'lab_1 hợp lệ' : &#96;app báo lỗi: \${r.error.iss
     <tr><td>Query parameter</td><td><code>/bookings?version=2</code></td><td>trivial to try</td><td>mixes with filters and cache keys; easy to drop when building links</td></tr>
   </tbody>
 </table>
-<p><strong>Date-based versions (Stripe).</strong> Stripe names versions by date (for example <code>2024-06-20</code>). An account is pinned to the version current at its first request, can override it per request with the <code>Stripe-Version</code> header, and upgrades when it chooses. Internally the code knows only the newest shape; for an older version the response passes through a chain of small “version changes” that turn it back into the old shape. It is powerful and costly: every change needs its own backwards transform, forever. Code Lab 4.2 lets you build such a chain.</p>
+<p><strong>Date-based versions (Stripe)</strong> — checked against Stripe’s own documentation on 1 November 2026. Stripe names versions by a release date plus a release name: the current one is <code>2026-10-28.endive</code>. Since <code>2024-09-30.acacia</code> it ships a new version every month with <strong>no breaking changes</strong>, and twice a year a <strong>major release</strong> (for example Basil) whose first version may contain breaking changes. Each account has a <strong>default API version</strong> set in the dashboard (Workbench); a request can override it with the header <code>Stripe-Version: 2026-10-28.endive</code>, and the official SDKs send the version that was current when that SDK release came out. In a 2017 engineering article Stripe described the mechanism behind this: on an account’s first request it is pinned to the newest version, the code knows only the newest shape, and each backwards-incompatible change lives in a small <em>version change module</em>; for an older version the response “walks back through time” through those modules. It is powerful and costly: every change needs its own backwards transform, for as long as anyone uses the old version. Code Lab 4.2 lets you build such a chain.</p>
+<a class="link-card" href="https://docs.stripe.com/api/versioning" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: Stripe API reference — Versioning (read 1 Nov 2026)</span><span class="lc-sub">Version names like 2026-10-28.endive, monthly releases without breaking changes since 2024-09-30.acacia, two major releases a year, the account default version and the Stripe-Version header. See also docs.stripe.com/upgrades.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
+<a class="link-card" href="https://stripe.com/blog/api-versioning" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Source: “APIs as infrastructure: future-proofing Stripe with versioning” (Stripe blog, 5 Aug 2017)</span><span class="lc-sub">Pinning on the first request and version change modules that transform responses back to older versions. Written in 2017: the release process has changed since (see the reference above), the idea has not.</span></span>
+  <span class="lc-cta">OPEN →</span>
+</a>
 <p><strong>LabFlow’s choice:</strong> a <strong>major version in the URL</strong> (<code>/v1</code>, <code>/v2</code>), changed rarely, only for breaking changes; everything additive goes into the current version without a new number. The reasons are practical for this team: students and mobile developers read curl lines and logs, and a version they can see is a version they will not forget.</p>
 
 <h3>One set of routes, two representations</h3>
@@ -566,7 +576,17 @@ KHÔNG đặt được: 409 BOOKING_CONFLICT</div>
     <tr><td>Tham số query</td><td><code>/bookings?version=2</code></td><td>thử cực dễ</td><td>lẫn với bộ lọc và khoá cache; dễ rơi mất khi dựng link</td></tr>
   </tbody>
 </table>
-<p><strong>Phiên bản theo ngày (Stripe).</strong> Stripe đặt tên phiên bản bằng ngày (ví dụ <code>2024-06-20</code>). Mỗi tài khoản bị “ghim” vào phiên bản hiện hành lúc nó gọi lần đầu, có thể ghi đè từng request bằng header <code>Stripe-Version</code>, và tự chọn lúc nâng cấp. Bên trong, code chỉ biết hình dạng mới nhất; với phiên bản cũ hơn, response đi qua một chuỗi “version change” nhỏ biến nó về hình dạng cũ. Cách này mạnh và tốn: mỗi thay đổi cần một phép biến đổi ngược riêng, mãi mãi. Code Lab 4.2 cho bạn tự dựng một chuỗi như vậy.</p>
+<p><strong>Phiên bản theo ngày (Stripe)</strong> — đã đối chiếu với tài liệu chính thức của Stripe ngày 1/11/2026. Stripe đặt tên phiên bản bằng ngày phát hành cộng tên đợt phát hành: bản hiện hành là <code>2026-10-28.endive</code>. Từ <code>2024-09-30.acacia</code>, mỗi tháng Stripe ra một phiên bản <strong>không có thay đổi phá vỡ</strong>, và mỗi năm hai lần ra một <strong>bản phát hành lớn</strong> (ví dụ Basil) mà phiên bản đầu tiên có thể chứa thay đổi phá vỡ. Mỗi tài khoản có một <strong>phiên bản API mặc định</strong> đặt trong dashboard (Workbench); từng request có thể ghi đè bằng header <code>Stripe-Version: 2026-10-28.endive</code>, còn SDK chính thức gửi phiên bản hiện hành vào lúc bản SDK đó ra đời. Trong một bài kỹ thuật năm 2017, Stripe mô tả cơ chế phía sau: ở lần gọi đầu tiên, tài khoản được ghim vào phiên bản mới nhất; code chỉ biết hình dạng mới nhất, và mỗi thay đổi không tương thích nằm trong một <em>version change module</em> nhỏ; với phiên bản cũ hơn, response “đi ngược thời gian” qua các module đó. Cách này mạnh và tốn: mỗi thay đổi cần một phép biến đổi ngược riêng, chừng nào còn người dùng phiên bản cũ. Code Lab 4.2 cho bạn tự dựng một chuỗi như vậy.</p>
+<a class="link-card" href="https://docs.stripe.com/api/versioning" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: Stripe API reference — Versioning (đọc ngày 1/11/2026)</span><span class="lc-sub">Tên phiên bản kiểu 2026-10-28.endive, phát hành hằng tháng không phá vỡ từ 2024-09-30.acacia, hai bản lớn mỗi năm, phiên bản mặc định của tài khoản và header Stripe-Version. Xem thêm docs.stripe.com/upgrades.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card" href="https://stripe.com/blog/api-versioning" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">Nguồn: “APIs as infrastructure: future-proofing Stripe with versioning” (blog Stripe, 5/8/2017)</span><span class="lc-sub">Ghim phiên bản ở lần gọi đầu và các version change module biến response về phiên bản cũ. Viết năm 2017: quy trình phát hành đã đổi từ đó (xem tài liệu ở trên), ý tưởng thì không.</span></span>
+  <span class="lc-cta">MỞ →</span>
+</a>
 <p><strong>LabFlow chọn:</strong> <strong>số phiên bản lớn trong URL</strong> (<code>/v1</code>, <code>/v2</code>), đổi hiếm, chỉ cho thay đổi phá vỡ; mọi thay đổi chỉ-thêm vào phiên bản hiện tại mà không tăng số. Lý do thực tế với nhóm này: sinh viên và lập trình viên di động đọc dòng curl và log, và một phiên bản nhìn thấy được là phiên bản họ không quên.</p>
 
 <h3>Một bộ route, hai cách biểu diễn</h3>

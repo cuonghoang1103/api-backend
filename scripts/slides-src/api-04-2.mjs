@@ -31,11 +31,12 @@ export const slides = lamDeck(meta, [
 
   { t: 'Date-based versions (Stripe) and LabFlow’s choice', to: true, giua: true, body: two(`
 <ul>
-<li>Versions named by <b>date</b>, e.g. <code class="i">2024-06-20</code></li>
-<li>An account is <b>pinned</b> to the version of its first request; override per request with <code class="i">Stripe-Version</code></li>
-<li>Code knows only the <b>newest</b> shape; older versions pass through a chain of small backwards <b>transforms</b></li>
-<li>Powerful — and every change needs its transform, forever (Code Lab 4.2)</li>
-</ul>`, box('LabFlow', '<b>Major version in the URL</b> (<code class="i">/v1</code>, <code class="i">/v2</code>), changed only for breaking changes, batched. Additive changes go into the current version.', 'xanh') +
+<li>Named by <b>date + release</b>: <code class="i">2026-10-28.endive</code></li>
+<li>Monthly versions <b>without</b> breaking changes; two <b>major</b> releases a year may break (since <code class="i">2024-09-30.acacia</code>)</li>
+<li>Account <b>default version</b>; per request: <code class="i">Stripe-Version</code></li>
+<li>Inside (2017 article): newest shape only + backwards <b>version change modules</b></li>
+</ul>
+<p style="font-size:17px;margin:6px 0 0">Source: docs.stripe.com/api/versioning, read 1 Nov 2026 · stripe.com/blog/api-versioning (2017)</p>`, box('LabFlow', '<b>Major version in the URL</b> (<code class="i">/v1</code>, <code class="i">/v2</code>), changed only for breaking changes, batched. Additive changes go into the current version.', 'xanh') +
   box('Why', 'Students and mobile developers read curl lines and logs — a version they can see is a version they will not forget.', 'lam'), 'r64') },
 
   { t: 'One router, many versions', to: true, body: two(sql(`// versioning.js
@@ -140,7 +141,7 @@ Vary: LabFlow-Version`, { lang: 'http' }), '✗ traps', '✓ LabFlow') + `<p sty
   { t: 'In interviews and at work', to: true, giua: true, body: cards([
     ['“URL or header versioning?”', 'Both work. URL: visible, simple to route and cache. Header/media type: stable URLs, purer HTTP, harder to see. Pick one, apply it everywhere, need it rarely.'],
     ['“Two versions without two codebases?”', 'One domain model and rule set; versioned schemas at the input edge, versioned views at the output edge, chosen once per request.'],
-    ['“How does Stripe do it?”', 'Date versions pinned per account, a header override, and a chain of backwards transforms from the newest shape.'],
+    ['“How does Stripe do it?”', 'Dated versions (2026-10-28.endive), an account default plus a Stripe-Version header, and backwards transforms from the newest shape.'],
   ]) },
 
   { t: 'Summary', to: true, giua: true, body: `

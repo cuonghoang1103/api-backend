@@ -68,7 +68,7 @@ KHÔNG `<svg>`/script/style/details trong nội dung bài — hình đi qua slid
 - Chuỗi base64 dài KHÔNG xuống dòng trong `http()` ⇒ cắt bằng `…` (`eyJjcmVhdGVkQXQiOiIyMD…`), ghi trong slide là đã cắt.
 - ⚠ Tự động chèn cờ `giua/to` bằng regex `\n  \{ ` từng chèn nhầm vào dòng mã `{ id: 'lab_1'…` trong template ⇒ sau mỗi lần sửa tự động: `grep -n "{ giua: true, \|{ to: true, " scripts/slides-src/api-*.mjs | grep -v "t: '\|cover\|nhan"` phải rỗng.
 - Render + XEM ẢNH: `node scripts/_render-slides.mjs --deck scripts/slides-src/api-NN-M.mjs --out <dir>`; ghép 4 ảnh `node scripts/_api-ghep-slide.mjs <dir>/<deck> 1 2 3 4` rồi Read từng tấm.
-- Upload: `node --env-file=.env scripts/upload-academy-slides.mjs --dir <dir> --prefix API/v1 --decks api-NN-M` ⇒ `images/academy/API/v1/<deck>/<NNN>.webp`. **KHÔNG GET URL media.cuongthai.com trước khi upload** (Cloudflare cache 404). Dựng lại deck đã upload ⇒ prefix mới `API/v2` + ghi vào `VER` trong `_slides.mjs` (hiện: `{ 'api-01-3': 'v2', 'api-02-3': 'v2' }`). Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+- Upload: `node --env-file=.env scripts/upload-academy-slides.mjs --dir <dir> --prefix API/v1 --decks api-NN-M` ⇒ `images/academy/API/v1/<deck>/<NNN>.webp`. **KHÔNG GET URL media.cuongthai.com trước khi upload** (Cloudflare cache 404). Dựng lại deck đã upload ⇒ prefix mới `API/v2` + ghi vào `VER` trong `_slides.mjs` (hiện: `{ 'api-01-3': 'v2', 'api-02-3': 'v2', 'api-04-2': 'v2' }`). Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 - Giảng `giang/api-NN-M.mjs`: phủ ĐỦ mọi slide đúng thứ tự (walkApi tự kiểm); EN dịch sát ý VI; VI giải nghĩa thuật ngữ. Kiểm số slide = số dòng giảng.
 
 ## 5. Dự án xuyên khoá: LabFlow API

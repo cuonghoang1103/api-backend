@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.4 "CORS, CSRF và trình duyệt" (deck api-06-4, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-06-4', "CORS, CSRF and browsers", "CORS, CSRF và trình duyệt", [
+  [1, "Cover",
+    `<p>Lesson 6.4: the red “blocked by CORS policy” line every front-end developer meets, what it really protects and what it does not.</p>`,
+    `<p>Bài 6.4: dòng đỏ “blocked by CORS policy” mà lập trình viên front-end nào cũng gặp, nó thật sự bảo vệ cái gì và không bảo vệ cái gì.</p>`],
+  [2, "What you will get",
+    `<p>Origins and preflight, a CORS allow-list with the right headers, a measurement in a real Chromium that shows what was blocked and what still reached the server, the dangerous reflect mistake, CSRF, and why curl never shows a CORS error.</p>`,
+    `<p>Origin và preflight, một danh sách CORS cho phép kèm đúng các header, phép đo trong Chromium thật cho thấy cái gì bị chặn và cái gì vẫn tới server, lỗi phản chiếu nguy hiểm, CSRF, và vì sao curl không bao giờ báo lỗi CORS.</p>`],
+  [3, "Origins and the same-origin policy",
+    `<p>An origin is scheme, host and port, so ports 5173, 5174 and 4000 are three origins. A page may send requests anywhere but may not read another origin’s responses unless the server says so. Simple requests are sent and only the reading is blocked; others need a preflight OPTIONS first.</p>`,
+    `<p>Origin gồm scheme, host và cổng, nên cổng 5173, 5174 và 4000 là ba origin. Một trang được gửi request đi bất cứ đâu nhưng không được đọc câu trả lời của origin khác trừ khi server cho phép. Request đơn giản vẫn được gửi, chỉ việc đọc bị chặn; các request khác phải qua preflight OPTIONS trước.</p>`],
+  [4, "Build it: an allow-list",
+    `<p>The middleware answers with the exact origin only when it is on the list, never a star, always adds Vary Origin, and exposes the headers the earlier chapters rely on, such as Location, ETag and RateLimit. The allowed origin gets a full preflight answer; the stranger gets 204 with no permission.</p>`,
+    `<p>Middleware chỉ trả đúng origin khi nó nằm trong danh sách, không bao giờ dấu sao, luôn thêm Vary Origin, và mở các header mà những chương trước dựa vào như Location, ETag và RateLimit. Origin được phép nhận câu trả lời preflight đầy đủ; người lạ nhận 204 không kèm quyền gì.</p>`],
+  [5, "A real browser",
+    `<p>In Chromium the page on 5173 works and the page on 5174 gets Failed to fetch. The server log tells the important part: the stranger’s GET reached the server and was answered, the browser only hid the response, while the JSON POST stopped at the preflight. CORS protects users’ browsers, not your server.</p>`,
+    `<p>Trong Chromium trang ở 5173 chạy được còn trang ở 5174 nhận Failed to fetch. Log server kể phần quan trọng: GET của người lạ đã tới server và được trả lời, trình duyệt chỉ giấu câu trả lời, còn POST JSON dừng ở preflight. CORS bảo vệ trình duyệt của người dùng, không bảo vệ server của bạn.</p>`],
+  [6, "The dangerous mistake, and CSRF",
+    `<p>Reflecting any origin together with Allow-Credentials hands your users’ data to every website. CSRF is different: a stranger’s page makes the browser send a request with the user’s cookies attached. LabFlow sends tokens in the Authorization header, which browsers never add on their own; cookie apps need SameSite and anti-CSRF tokens.</p>`,
+    `<p>Phản chiếu mọi origin kèm Allow-Credentials là trao dữ liệu người dùng cho mọi website. CSRF thì khác: trang của người lạ khiến trình duyệt gửi request có kèm cookie của người dùng. LabFlow gửi token trong header Authorization, thứ trình duyệt không bao giờ tự thêm; ứng dụng dùng cookie cần SameSite và token chống CSRF.</p>`],
+  [7, "Traps",
+    `<p>Trying to fix CORS for a curl error, treating Origin as authentication, and putting a star or a reflected origin on an authenticated API.</p>`,
+    `<p>Đi sửa CORS cho một lỗi của curl, coi Origin là xác thực, và đặt dấu sao hoặc origin phản chiếu trên API có xác thực.</p>`],
+  [8, "In interviews and at work",
+    `<p>What CORS protects against, what a preflight is, and how CORS differs from CSRF. At work, when someone reports a CORS error, read the server log first.</p>`,
+    `<p>CORS bảo vệ khỏi cái gì, preflight là gì, và CORS khác CSRF ra sao. Đi làm, khi có người báo lỗi CORS, đọc log server trước tiên.</p>`],
+  [9, "Summary",
+    `<p>An allow-list with Vary and exposed headers, a browser measurement that shows requests still reach the server, no reflecting with credentials, and bearer tokens that avoid classic CSRF. Next: Lab 6, a full security review.</p>`,
+    `<p>Danh sách cho phép kèm Vary và header được mở, phép đo trình duyệt cho thấy request vẫn tới server, không phản chiếu kèm credentials, và token bearer tránh được CSRF kinh điển. Tiếp theo: Lab 6, một buổi review bảo mật trọn vẹn.</p>`],
+]);

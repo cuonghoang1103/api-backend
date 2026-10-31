@@ -259,7 +259,7 @@ export function lamDeck(meta, items) {
  * opts: { title='terminal', sm, hl: [dòng 1-based cần tô nền] }
  */
 export function http(text, opts = {}) {
-  const { title = 'terminal', sm = false, hl = [], wrap = false } = opts;   // wrap: dòng dài tự xuống dòng như terminal thật
+  const { title = 'terminal', sm = false, hl = [], wrap = false } = opts;   // wrap: dòng dài tự xuống dòng như terminal thật; wrap:'any' = bẻ cả chuỗi dài không dấu cách (JSON, token)
   let trongHeader = false;
   const lines = String(text).replace(/\n$/, '').split('\n').map((l, i) => {
     let h = esc(l);
@@ -272,7 +272,7 @@ export function http(text, opts = {}) {
     else if (l.trim() === '') trongHeader = false;
     return `<span class="pl${hl.includes(i + 1) ? ' hl' : ''}">${h || ' '}</span>`;
   });
-  return `<div class="term${sm ? ' sm' : ''}"><div class="tb"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i>&nbsp;${esc(title)}</div><pre${wrap ? ' style="white-space:pre-wrap"' : ''}>${lines.join('\n')}</pre></div>`;
+  return `<div class="term${sm ? ' sm' : ''}"><div class="tb"><i style="background:#ff5f56"></i><i style="background:#ffbd2e"></i><i style="background:#27c93f"></i>&nbsp;${esc(title)}</div><pre${wrap ? ` style="white-space:pre-wrap${wrap === 'any' ? ';overflow-wrap:anywhere' : ''}"` : ''}>${lines.join('\n')}</pre></div>`;
 }
 
 /** Giải phẫu một request/response thô: rows = [[dòng thô, chú thích HTML], …]. */

@@ -1295,6 +1295,11 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 3.2: Each cookie attribute and what it really blocks</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Authentication course on Courses. Same as this lesson: sessions travel in a cookie. Different: Academy uses Passport-local; Courses dissects each attribute of the session cookie. It also adds: HttpOnly stops a token being read but not used, and which attacks each other attribute blocks; the chapter also covers the sessions table and CSRF.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 6.1: Authentication options</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: hash passwords with a slow salted function and never store them. Different: Courses uses scrypt from node:crypto and hand-builds an HS256 JWT instead of Passport sessions. It also adds: forging tokens and alg none against your own API (401), a login limit per IP and email (the 6th guess gets 429), API keys shown once and stored hashed, and a production start that refuses to run without a secret.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1340,6 +1345,11 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 <a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-2-thuoc-tinh-cookie" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 3.2: Từng thuộc tính cookie và nó thật sự chặn được gì</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Authentication ở Courses. Giống bài này: session đi kèm cookie. Khác: Academy dùng Passport-local; Courses mổ từng thuộc tính của cookie phiên. Ở đó có thêm: HttpOnly chặn việc token bị đọc nhưng không chặn việc nó bị dùng, và các thuộc tính khác chặn cú tấn công nào; kèm cả chương về bảng phiên và CSRF.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 6.1: Các cách xác thực</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: băm mật khẩu bằng hàm chậm có muối, không bao giờ lưu mật khẩu. Khác: Courses dùng scrypt của node:crypto và tự dựng JWT HS256 thay cho session của Passport. Ở đó có thêm: tự giả token và alg none để tấn công chính API của mình (401), giới hạn đăng nhập theo IP và email (lần đoán thứ 6 nhận 429), API key hiện một lần và lưu dạng hash, và server production không chịu chạy nếu thiếu bí mật.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,
@@ -1432,6 +1442,11 @@ https.<span class="tok-function">createServer</span>({
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 5.2: testing authentication and authorisation</span><span class="lc-sub">Same as this lesson: JWT bearer tokens protect Express routes. Different: Courses tests them — missing, forged and expired tokens (401), a student on an admin route (403), another student’s booking that must look missing (404), and a role smuggled in the request body.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-4-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 6.4: CORS, CSRF and browsers</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: let your own front-end call the API from the browser. Different: Courses writes the CORS middleware itself (an allow-list, never *, Vary: Origin, Expose-Headers) instead of installing the cors package. It also adds: a measurement in a real Chromium showing that a stranger’s GET still reaches the server while a JSON POST stops at the preflight, the reflect-origin-with-credentials mistake, and CSRF versus bearer tokens.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -1513,6 +1528,11 @@ https.<span class="tok-function">createServer</span>({
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-2-xac-thuc" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 5.2: test xác thực và phân quyền</span><span class="lc-sub">Giống bài này: token JWT dạng Bearer bảo vệ các route Express. Khác: Courses viết test cho chúng — token thiếu, giả mạo, hết hạn (401), sinh viên vào route admin (403), lượt đặt của sinh viên khác phải trông như không tồn tại (404), và vai trò bị nhét lén vào body.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-4-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 6.4: CORS, CSRF và trình duyệt</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: cho front-end của mình gọi API từ trình duyệt. Khác: Courses tự viết middleware CORS (danh sách cho phép, không bao giờ *, Vary: Origin, Expose-Headers) thay vì cài gói cors. Ở đó có thêm: phép đo trong Chromium thật cho thấy GET của người lạ vẫn tới server còn POST JSON dừng ở preflight, lỗi phản chiếu origin kèm credentials, và CSRF so với token bearer.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

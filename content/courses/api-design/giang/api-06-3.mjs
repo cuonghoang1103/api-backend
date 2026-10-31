@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.3 "OWASP API Security Top 10" (deck api-06-3, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-06-3', "OWASP API Security Top 10", "OWASP API Security Top 10", [
+  [1, "Cover",
+    `<p>Lesson 6.3: the 2023 edition of the OWASP API Security Top 10, still the current one on 1 November 2026, mapped onto LabFlow and turned into a script.</p>`,
+    `<p>Bài 6.3: OWASP API Security Top 10 bản 2023, vẫn là bản hiện hành ngày 1/11/2026, đặt lên LabFlow và biến thành một script.</p>`],
+  [2, "What you will get",
+    `<p>All ten risks with a LabFlow example, two new defences for business flows and SSRF, an automatic audit that fails nine checks on the vulnerable build and passes all on the fixed one, and the reason one hole opened two more.</p>`,
+    `<p>Đủ mười rủi ro kèm ví dụ trên LabFlow, hai lớp phòng thủ mới cho luồng nghiệp vụ và SSRF, một bộ kiểm tự động trượt chín phép trên bản lỗi và đạt hết trên bản đã vá, và lý do một lỗ mở thêm hai lỗ.</p>`],
+  [3, "The ten, on LabFlow",
+    `<p>Read the right column: API3, 4, 5, 8 and 9 were closed by ordinary design in Chapters 1 to 5, and lessons 6.1 and 6.2 closed API1 and API2. This lesson adds API6 and API7 and then checks all ten.</p>`,
+    `<p>Đọc cột bên phải: API3, 4, 5, 8 và 9 đã được đóng bằng thiết kế bình thường ở Chương 1 đến 5, bài 6.1 và 6.2 đóng API1 và API2. Bài này thêm API6 và API7 rồi kiểm cả mười.</p>`],
+  [4, "API6: a business flow needs a limit",
+    `<p>Rate limits count requests per minute, but a script that books one slot per minute still takes the whole semester. The rule that helps is about state: a student may hold at most three active bookings, and the fourth gets 422.</p>`,
+    `<p>Giới hạn tốc độ đếm request mỗi phút, nhưng một script mỗi phút đặt một ca vẫn chiếm hết cả học kỳ. Luật có ích là luật về trạng thái: một sinh viên giữ tối đa ba booking còn hiệu lực, booking thứ tư nhận 422.</p>`],
+  [5, "API7: SSRF",
+    `<p>Without the guard the server fetched its own health endpoint for whoever asked, and tried the cloud metadata address. safeFetch accepts only https, resolves the name first and refuses private addresses, and refuses redirects because a redirect could lead inside after the check.</p>`,
+    `<p>Không có lớp chặn, server tự gọi endpoint health của chính nó cho bất kỳ ai yêu cầu, và thử cả địa chỉ metadata của cloud. safeFetch chỉ nhận https, phân giải tên trước rồi từ chối địa chỉ nội bộ, và từ chối chuyển hướng vì một lần chuyển hướng có thể dẫn vào trong sau khi đã kiểm.</p>`],
+  [6, "The audit",
+    `<p>The audit runs one check per risk. The vulnerable build fails nine; the fixed build passes all. API5 and API6 were not switched off: they fail because API3 let An make herself a manager first, and managers may patch devices and have no booking cap.</p>`,
+    `<p>Bộ kiểm chạy một phép cho mỗi rủi ro. Bản lỗi trượt chín; bản đã vá đạt hết. API5 và API6 không hề bị tắt: chúng trượt vì API3 cho An tự nâng mình thành quản lý trước, mà quản lý thì được sửa thiết bị và không bị giới hạn booking.</p>`],
+  [7, "Traps",
+    `<p>Treating security as a checklist at the end, blocking localhost by string instead of by resolved address, and trusting data from third-party APIs. Keep the audit next to the tests so a refactor that reopens a hole turns the build red.</p>`,
+    `<p>Coi bảo mật là bảng kiểm làm ở cuối, chặn localhost theo chuỗi thay vì theo địa chỉ đã phân giải, và tin dữ liệu từ API bên thứ ba. Đặt bộ kiểm cạnh bộ test để lần refactor nào mở lại lỗ là build đỏ ngay.</p>`],
+  [8, "In interviews and at work",
+    `<p>Name the ten with an example you built for each, and explain SSRF prevention in one breath. Security reviews and pentest reports use exactly these names.</p>`,
+    `<p>Kể được mười mục, mỗi mục kèm một ví dụ bạn tự dựng, và giải thích cách chặn SSRF trong một hơi. Các buổi review bảo mật và báo cáo pentest dùng đúng những cái tên này.</p>`],
+  [9, "Summary",
+    `<p>The Top 10 on LabFlow, a booking cap and safeFetch added, nine failures on the vulnerable build and none on the fixed one. Next: CORS and CSRF, measured in a real browser.</p>`,
+    `<p>Top 10 đặt lên LabFlow, thêm giới hạn booking và safeFetch, chín lần trượt trên bản lỗi và không lần nào trên bản đã vá. Bài sau: CORS và CSRF, đo trong trình duyệt thật.</p>`],
+]);

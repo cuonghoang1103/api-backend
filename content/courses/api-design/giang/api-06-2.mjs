@@ -1,0 +1,32 @@
+/** Giảng theo slide — bài 6.2 "Phân quyền và BOLA" (deck api-06-2, 9 slide). EN = dịch sát ý VI. */
+import { walkApi } from '../_slides.mjs';
+
+export default walkApi('api-06-2', "Authorisation and BOLA", "Phân quyền và BOLA", [
+  [1, "Cover",
+    `<p>Lesson 6.2: the caller is logged in and may call the endpoint, but the record belongs to someone else. That gap is OWASP’s number one API risk.</p>`,
+    `<p>Bài 6.2: người gọi đã đăng nhập và được gọi endpoint, nhưng bản ghi lại là của người khác. Khoảng hở đó là rủi ro API số một của OWASP.</p>`],
+  [2, "What you will get",
+    `<p>Three levels of authorisation, a BOLA exploited on a new receipt endpoint, the fix with one policy table and 404, and a matrix that proves the fix for every role and every booking.</p>`,
+    `<p>Ba tầng phân quyền, một lỗ BOLA khai thác được trên endpoint biên nhận mới, cách vá bằng một bảng chính sách và 404, và một ma trận chứng minh bản vá cho mọi vai trò và mọi booking.</p>`],
+  [3, "Three levels of “may I?”",
+    `<p>Function level asks whether a role may call an operation at all; object level asks whether this person may touch this record; property level asks whether they may change this field. Object level is forgotten most often, because every test you run with your own account passes.</p>`,
+    `<p>Tầng chức năng hỏi một vai trò có được gọi thao tác đó không; tầng đối tượng hỏi người này có được đụng bản ghi này không; tầng thuộc tính hỏi họ có được sửa trường này không. Tầng đối tượng hay bị quên nhất, vì mọi phép thử bằng chính tài khoản của mình đều qua.</p>`],
+  [4, "The quick receipt and the exploit",
+    `<p>The quick receipt only checks that someone is logged in. Bin, logged in correctly, asks for bk_1 and receives An’s name and email. Sequential ids make a loop read everyone, and random ids do not fix it, because ids leak through links, logs and screenshots.</p>`,
+    `<p>Bản biên nhận viết vội chỉ kiểm tra đã đăng nhập. Bình đăng nhập đúng, hỏi bk_1 và nhận về tên và email của An. Id tuần tự cho một vòng lặp đọc hết mọi người, và id ngẫu nhiên cũng không vá được, vì id rò qua link, log và ảnh chụp màn hình.</p>`],
+  [5, "The fix: one policy",
+    `<p>All rules live in one POLICIES table and every object access calls authorize. Missing rule means no access. A forbidden record answers 404 like a record that does not exist, so Bin cannot even learn that bk_1 exists, while the old endpoint keeps its 403 because changing a status code would break clients.</p>`,
+    `<p>Mọi luật nằm trong một bảng POLICIES và mọi lần truy cập đối tượng đều gọi authorize. Không có luật nghĩa là không có quyền. Bản ghi bị cấm trả 404 như bản ghi không tồn tại, nên Bình không biết được bk_1 có tồn tại, còn endpoint cũ giữ 403 vì đổi mã trạng thái sẽ làm gãy client.</p>`],
+  [6, "Prove it: the matrix",
+    `<p>The matrix logs in as every person and requests every booking. On the quick build it finds 8 wrong cells, the two students reading each other’s receipts; after the fix it finds 0. Put this script next to your tests and it catches the next BOLA before users do.</p>`,
+    `<p>Ma trận đăng nhập lần lượt từng người và hỏi từng booking. Trên bản viết vội nó tìm ra 8 ô sai, hai sinh viên đọc được biên nhận của nhau; sau khi vá còn 0. Đặt script này cạnh bộ test là nó bắt được lỗ BOLA tiếp theo trước người dùng.</p>`],
+  [7, "Traps",
+    `<p>Trusting ids or owner fields sent by the client, checking the list but not the single item, and testing only with your own account. The owner always comes from the token.</p>`,
+    `<p>Tin id hay trường chủ sở hữu do client gửi, kiểm danh sách nhưng quên kiểm từng mục, và chỉ thử bằng tài khoản của mình. Chủ sở hữu luôn lấy từ token.</p>`],
+  [8, "In interviews and at work",
+    `<p>Explain BOLA in one sentence, prevent it with a central policy, deny by default and 404, and answer that UUIDs only slow guessing down. At work, a security review starts exactly here.</p>`,
+    `<p>Giải thích BOLA trong một câu, chặn nó bằng chính sách tập trung, mặc định từ chối và 404, và trả lời rằng UUID chỉ làm chậm việc đoán. Đi làm, một buổi review bảo mật bắt đầu đúng từ đây.</p>`],
+  [9, "Summary",
+    `<p>The quick receipt leaked An’s data to Bin; one policy table and authorize with 404 closed it; the matrix went from 8 wrong cells to 0. Next lesson: the whole OWASP API Top 10 as an automatic audit.</p>`,
+    `<p>Biên nhận viết vội làm lộ dữ liệu của An cho Bình; một bảng chính sách cùng authorize trả 404 đã đóng lỗ; ma trận đi từ 8 ô sai về 0. Bài sau: trọn OWASP API Top 10 thành một bộ kiểm tự động.</p>`],
+]);

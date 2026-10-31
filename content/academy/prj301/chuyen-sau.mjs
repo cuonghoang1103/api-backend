@@ -21294,7 +21294,12 @@ ENV ..&gt; CO : env variables
 <li>springdoc 3.x for Boot 4 (2.x for Boot 3); generated docs need <code>@ApiResponse</code>/<code>@ResponseStatus</code>; off in prod.</li>
 <li>Uploads: limits in config, check the bytes, own file names, a configured folder outside the jar. Mail: real config in prod, fake sender in dev, send after commit.</li>
 <li><code>@Scheduled</code>: one thread by default, runs on every instance. <code>@Cacheable</code>: needs <code>@EnableCaching</code>, evict on change, no self-calls. One page record, max page size, idempotency key on important POSTs.</li>
-</ul>`,
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-3-design-first" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 7.4: Design-first vs code-first</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: one OpenAPI document as the API contract, and the warning that generated docs can be wrong. Different: here springdoc generates the document from Java code (code-first); Courses writes the document first and makes the code match it. It also adds: a Prism mock for the front-end, a Spectral style guide, a gate that blocks breaking changes, and a contract check that found a real bug.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
     `<h2>📌 Cần mang theo gì từ slide 13–26</h2>
 <ul>
 <li><code>application.yml</code> + <code>-dev</code>/<code>-prod</code>; biến môi trường đè lên; secret chỉ ở dạng <code>&#36;{TÊN:}</code>, không bao giờ trong Git, log hay response.</li>
@@ -21303,22 +21308,18 @@ ENV ..&gt; CO : env variables
 <li>springdoc 3.x cho Boot 4 (2.x cho Boot 3); tài liệu sinh ra cần <code>@ApiResponse</code>/<code>@ResponseStatus</code>; tắt ở prod.</li>
 <li>Upload: giới hạn trong cấu hình, kiểm byte, tự đặt tên file, thư mục cấu hình nằm ngoài jar. Mail: cấu hình thật ở prod, bộ gửi giả ở dev, gửi sau commit.</li>
 <li><code>@Scheduled</code>: mặc định một luồng, chạy trên mọi instance. <code>@Cacheable</code>: cần <code>@EnableCaching</code>, evict khi đổi, không tự gọi. Một record trang, kích thước trang tối đa, idempotency key cho POST quan trọng.</li>
-</ul>`),
+</ul>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-3-design-first" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 7.4: Thiết kế trước hay code trước</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: một tài liệu OpenAPI làm hợp đồng API, và lời cảnh báo rằng tài liệu sinh tự động có thể sai. Khác: ở đây springdoc sinh tài liệu từ code Java (code-first); Courses viết tài liệu trước rồi bắt code khớp nó. Ở đó có thêm: mock Prism cho front-end, bộ luật phong cách Spectral, cổng chặn thay đổi phá vỡ, và bộ kiểm hợp đồng đã bắt được một lỗi thật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
     books([
       ['springBoot', '"Externalized Configuration" (type-safe @ConfigurationProperties, validation), "Profiles", "Logging" (log levels, custom patterns), "IO — Sending Email", "IO — Caching", "Task Execution and Scheduling", Web — "Multipart File Uploads"', '"Externalized Configuration" (@ConfigurationProperties an toàn kiểu, validation), "Profiles", "Logging" (mức log, mẫu riêng), "IO — Sending Email", "IO — Caching", "Task Execution and Scheduling", Web — "Multipart File Uploads"'],
       ['springFramework', 'Integration — "Cache Abstraction" (@Cacheable, @CacheEvict, proxy mode), "Task Execution and Scheduling" (@Scheduled, cron expressions), "Email" (JavaMailSender, MimeMessageHelper)', 'Integration — "Cache Abstraction" (@Cacheable, @CacheEvict, chế độ proxy), "Task Execution and Scheduling" (@Scheduled, biểu thức cron), "Email" (JavaMailSender, MimeMessageHelper)'],
       ['rfc9110', '§9.2.2 "Idempotent Methods" and §15 "Status Codes" (201 Created with Location, 204, 409, 413, 415)', '§9.2.2 "Idempotent Methods" và §15 "Status Codes" (201 Created kèm Location, 204, 409, 413, 415)'],
       ['springData', '"Paging, Iterating Large Results, Sorting" (Page vs Slice) and web support (Pageable resolution, max page size)', '"Paging, Iterating Large Results, Sorting" (Page so với Slice) và hỗ trợ web (giải Pageable, kích thước trang tối đa)'],
     ]),
-    bi(`<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-3-design-first" target="_blank" rel="noopener">
-  <span class="lc-ico">🔗</span>
-  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 7.4: Design-first vs code-first</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: one OpenAPI document as the API contract, and the warning that generated docs can be wrong. Different: here springdoc generates the document from Java code (code-first); Courses writes the document first and makes the code match it. It also adds: a Prism mock for the front-end, a Spectral style guide, a gate that blocks breaking changes, and a contract check that found a real bug.</span></span>
-  <span class="lc-cta">OPEN LESSON →</span>
-</a>`, `<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-3-design-first" target="_blank" rel="noopener">
-  <span class="lc-ico">🔗</span>
-  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 7.4: Thiết kế trước hay code trước</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: một tài liệu OpenAPI làm hợp đồng API, và lời cảnh báo rằng tài liệu sinh tự động có thể sai. Khác: ở đây springdoc sinh tài liệu từ code Java (code-first); Courses viết tài liệu trước rồi bắt code khớp nó. Ở đó có thêm: mock Prism cho front-end, bộ luật phong cách Spectral, cổng chặn thay đổi phá vỡ, và bộ kiểm hợp đồng đã bắt được một lỗi thật.</span></span>
-  <span class="lc-cta">MỞ BÀI →</span>
-</a>`),
   ].join('\n'),
 };
 

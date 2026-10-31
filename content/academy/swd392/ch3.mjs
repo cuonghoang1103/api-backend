@@ -13910,7 +13910,12 @@ W --&gt; DB
 </ul>
 <h2>✍️ Try it yourself</h2>
 <p>A mobile banking app must show exchange rates. Three providers offer a "rates" service; the app does not care which one, but once it has chosen, it asks for rates every 10 seconds for the rest of the session. (a) Which broker pattern(s) fit, and in what order? (b) How many messages go through the broker for a 30-minute session with Broker Forwarding and with your design? (c) Which principle from slide 4 does "the app does not care which one" rely on?</p>
-<p class="dap-an">✅ (a) Service Discovery (yellow pages: "all services of type <em>rates</em>", 4 messages including select and handle), then direct calls with the handle — i.e. Discovery followed by Broker Handle, because the app has a long dialog with one service. (b) 30 min × 6 requests/min = 180 requests. Forwarding: 180 × 4 = 720 broker messages (+2 if you count a lookup). Discovery + Handle: 4 broker messages in total — the other 360 go directly between app and service. (c) The service contract (all three expose the same interface) together with discoverability; without a common contract the app could not switch providers.</p>`,
+<p class="dap-an">✅ (a) Service Discovery (yellow pages: "all services of type <em>rates</em>", 4 messages including select and handle), then direct calls with the handle — i.e. Discovery followed by Broker Handle, because the app has a long dialog with one service. (b) 30 min × 6 requests/min = 180 requests. Forwarding: 180 × 4 = 720 broker messages (+2 if you count a lookup). Discovery + Handle: 4 broker messages in total — the other 360 go directly between app and service. (c) The service contract (all three expose the same interface) together with discoverability; without a common contract the app could not switch providers.</p>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-4-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 7.5: GraphQL and gRPC</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: a service is described by a machine-readable contract (WSDL here, OpenAPI or .proto there). Different: this lesson is the architecture view of SOA and SOAP; Courses builds REST, GraphQL and gRPC on the same LabFlow data and measures them. It also adds: round trips and bytes, the N+1 problem and DataLoader, Protobuf vs JSON size, streaming, and when each style is the right choice.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`,
     `<h2>📌 Cần nhớ từ slide 1–14</h2>
 <ul>
 <li>SOA = kiến trúc phân tán gồm các dịch vụ tự trị, dùng lại được, trên nền tảng dị chủng, nói giao thức chuẩn và công bố bản mô tả.</li>
@@ -13922,21 +13927,17 @@ W --&gt; DB
 </ul>
 <h2>✍️ Tự làm thử</h2>
 <p>Một app ngân hàng di động phải hiện tỷ giá. Ba nhà cung cấp có dịch vụ "rates"; app không quan tâm dùng bên nào, nhưng đã chọn thì cứ 10 giây hỏi tỷ giá một lần suốt phiên. (a) Mẫu broker nào hợp, theo thứ tự nào? (b) Một phiên 30 phút có bao nhiêu thông điệp đi qua broker nếu dùng Broker Forwarding, và nếu dùng thiết kế của bạn? (c) Câu "app không quan tâm bên nào" dựa vào nguyên tắc nào ở slide 4?</p>
-<p class="dap-an">✅ (a) Service Discovery (trang vàng: "mọi dịch vụ loại <em>rates</em>", 4 thông điệp kể cả chọn và lấy handle), rồi gọi thẳng bằng handle — tức Discovery theo sau là Broker Handle, vì app có một cuộc hội thoại dài với một dịch vụ. (b) 30 phút × 6 yêu cầu/phút = 180 yêu cầu. Forwarding: 180 × 4 = 720 thông điệp qua broker (+2 nếu tính một lần tra cứu). Discovery + Handle: tổng cộng 4 thông điệp qua broker — 360 thông điệp còn lại đi thẳng giữa app và dịch vụ. (c) Hợp đồng dịch vụ (cả ba có cùng interface) cùng với khám phá được; không có hợp đồng chung thì app không thể đổi nhà cung cấp.</p>`),
+<p class="dap-an">✅ (a) Service Discovery (trang vàng: "mọi dịch vụ loại <em>rates</em>", 4 thông điệp kể cả chọn và lấy handle), rồi gọi thẳng bằng handle — tức Discovery theo sau là Broker Handle, vì app có một cuộc hội thoại dài với một dịch vụ. (b) 30 phút × 6 yêu cầu/phút = 180 yêu cầu. Forwarding: 180 × 4 = 720 thông điệp qua broker (+2 nếu tính một lần tra cứu). Discovery + Handle: tổng cộng 4 thông điệp qua broker — 360 thông điệp còn lại đi thẳng giữa app và dịch vụ. (c) Hợp đồng dịch vụ (cả ba có cùng interface) cùng với khám phá được; không có hợp đồng chung thì app không thể đổi nhà cung cấp.</p>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-4-khac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 7.5: GraphQL và gRPC</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: dịch vụ được mô tả bằng một hợp đồng máy đọc được (ở đây là WSDL, ở đó là OpenAPI hay .proto). Khác: bài này là góc nhìn kiến trúc về SOA và SOAP; Courses dựng REST, GraphQL và gRPC trên cùng dữ liệu LabFlow rồi đo chúng. Ở đó có thêm: số lượt đi-về và byte, vấn đề N+1 và DataLoader, kích thước Protobuf so với JSON, streaming, và khi nào chọn kiểu nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
     books([
       ['gomaa', 'Chapter 16, sections 16.1–16.3 (Figures 16.1–16.6); exercises 1–7 at the end of the chapter', 'Chương 16, mục 16.1–16.3 (Hình 16.1–16.6); câu hỏi 1–7 cuối chương'],
       ['plantuml', '"Deployment Diagram" (node, cloud, database) and "Sequence Diagram" (== separators ==, notes)', 'mục "Deployment Diagram" (node, cloud, database) và "Sequence Diagram" (dải phân cách ==, ghi chú)'],
       ['fuSlides', 'deck "Ch16 - Designing Service-Oriented Architectures", slides 1–14', 'bộ "Ch16 - Designing Service-Oriented Architectures", slide 1–14'],
     ]),
-    bi(`<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-4-khac" target="_blank" rel="noopener">
-  <span class="lc-ico">🔗</span>
-  <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 7.5: GraphQL and gRPC</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: a service is described by a machine-readable contract (WSDL here, OpenAPI or .proto there). Different: this lesson is the architecture view of SOA and SOAP; Courses builds REST, GraphQL and gRPC on the same LabFlow data and measures them. It also adds: round trips and bytes, the N+1 problem and DataLoader, Protobuf vs JSON size, streaming, and when each style is the right choice.</span></span>
-  <span class="lc-cta">OPEN LESSON →</span>
-</a>`, `<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-7-4-khac" target="_blank" rel="noopener">
-  <span class="lc-ico">🔗</span>
-  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 7.5: GraphQL và gRPC</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: dịch vụ được mô tả bằng một hợp đồng máy đọc được (ở đây là WSDL, ở đó là OpenAPI hay .proto). Khác: bài này là góc nhìn kiến trúc về SOA và SOAP; Courses dựng REST, GraphQL và gRPC trên cùng dữ liệu LabFlow rồi đo chúng. Ở đó có thêm: số lượt đi-về và byte, vấn đề N+1 và DataLoader, kích thước Protobuf so với JSON, streaming, và khi nào chọn kiểu nào.</span></span>
-  <span class="lc-cta">MỞ BÀI →</span>
-</a>`),
   ].join('\n'),
 };
 

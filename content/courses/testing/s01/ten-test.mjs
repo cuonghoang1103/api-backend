@@ -119,6 +119,15 @@ ${ra(OUT['13-only-ci'])}
   <div class="kv"><span class="k">CI environment variable</span><span class="v"><code>CI=true</code> — tools use it to behave strictly (no watch, no <code>.only</code>).</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 How a test report reads</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">describe: the unit</span><span class="lz-lnote">checkSlot</span></div>
+  <div class="lz-layer"><span class="lz-lname">describe: the rule</span><span class="lz-lnote">BR-04 — 30-minute grid</span></div>
+  <div class="lz-layer"><span class="lz-lname">it: the case</span><span class="lz-lnote">08:15 start → OFF_GRID</span></div>
+  <div class="lz-layer"><span class="lz-lname">it.each row</span><span class="lz-lnote">one line per value, values in the name</span></div>
+</div>
+<div class="pitfall"><strong>A name that only says “works”.</strong> When <code>it('works')</code> turns red, the report tells you nothing. Name the input and the expected result — “14 days ahead is still allowed” — so the red line is already the diagnosis. And never commit <code>.only</code>: the rest of the suite silently stops running.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A test name is the first thing read when CI is red — make it the diagnosis.</li>
@@ -228,6 +237,14 @@ ${ra(OUT['13-only-ci'])}
   <div class="kv"><span class="k">biến môi trường CI</span><span class="v"><code>CI=true</code> — công cụ dựa vào đó để chạy chặt chẽ (không watch, không <code>.only</code>).</span></div>
 </div>
 
+<h3>🗺 Báo cáo test đọc thế nào</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">describe: đơn vị</span><span class="lz-lnote">checkSlot</span></div>
+  <div class="lz-layer"><span class="lz-lname">describe: luật</span><span class="lz-lnote">BR-04 — lưới 30 phút</span></div>
+  <div class="lz-layer"><span class="lz-lname">it: tình huống</span><span class="lz-lnote">bắt đầu 08:15 → OFF_GRID</span></div>
+  <div class="lz-layer"><span class="lz-lname">dòng it.each</span><span class="lz-lnote">mỗi giá trị một dòng, giá trị nằm trong tên</span></div>
+</div>
+<div class="pitfall"><strong>Cái tên chỉ ghi “works”.</strong> Khi <code>it('works')</code> đỏ, báo cáo không nói gì cả. Hãy ghi đầu vào và kết quả mong đợi — “đặt trước đúng 14 ngày vẫn được” — để dòng đỏ chính là chẩn đoán. Và đừng bao giờ commit <code>.only</code>: phần còn lại của bộ test lặng lẽ ngừng chạy.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Tên test là thứ đầu tiên được đọc khi CI đỏ — hãy biến nó thành bản chẩn đoán.</li>

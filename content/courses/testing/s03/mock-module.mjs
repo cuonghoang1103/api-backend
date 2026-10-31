@@ -99,6 +99,14 @@ ${ra(OUT['32-th'])}
   <div class="kv"><span class="k">adapter</span><span class="v">Your own thin wrapper around a third-party service.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Where to fake a dependency</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Parameter</div><div class="lz-d">pass a stub — the cheapest seam</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">vi.mock</div><div class="lz-d">replace a whole module import</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">MSW</div><div class="lz-d">answer at the network: real client code runs</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Real service</div><div class="lz-d">only in integration or e2e tests</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li><code>vi.mock</code> replaces modules; it is hoisted, so use <code>vi.hoisted</code> for what the factory needs.</li>
@@ -174,6 +182,13 @@ ${ra(OUT['32-th'])}
   <div class="kv"><span class="k">adapter (bộ chuyển)</span><span class="v">Lớp bọc mỏng của chính bạn quanh một dịch vụ bên thứ ba.</span></div>
 </div>
 
+<h3>🗺 Giả một phụ thuộc ở đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Tham số</div><div class="lz-d">truyền một stub — chỗ nối rẻ nhất</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">vi.mock</div><div class="lz-d">thay cả một module được import</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">MSW</div><div class="lz-d">trả lời ở tầng mạng: code client thật vẫn chạy</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Dịch vụ thật</div><div class="lz-d">chỉ trong test tích hợp hoặc đầu-cuối</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li><code>vi.mock</code> thay module; nó bị dời lên đầu, nên dùng <code>vi.hoisted</code> cho thứ factory cần.</li>

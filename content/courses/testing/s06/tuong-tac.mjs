@@ -93,6 +93,16 @@ ${ra(gon(OUT['62-th']))}
   <div class="kv"><span class="k">deferred promise</span><span class="v">A promise together with its resolve function, so the test controls when it settles.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 One booking, as the test sees it</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Type</div><div class="lz-d">user.type into each field</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Validate</div><div class="lz-d">the browser checks lab code and seats</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Submit</div><div class="lz-d">onSubmit receives the exact object</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Busy</div><div class="lz-d">“Booking…”, button disabled</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Result</div><div class="lz-d">status on success, alert on error</div></div>
+</div>
+<div class="pitfall"><strong>findBy without await.</strong> <code>expect(screen.findByRole('status')).toBeTruthy()</code> passed in 28 ms even though no message could appear: a Promise is always truthy. Every <code>findBy</code> needs <code>await</code>.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li><code>userEvent.setup()</code>, then <code>await</code> every interaction.</li>
@@ -158,6 +168,15 @@ ${ra(gon(OUT['62-th']))}
   <div class="kv"><span class="k">deferred promise (promise hoãn)</span><span class="v">Một promise đi kèm hàm hoàn tất nó, để test điều khiển lúc nó kết thúc.</span></div>
 </div>
 
+<h3>🗺 Một lượt đặt, nhìn từ phía test</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Gõ</div><div class="lz-d">user.type vào từng ô</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Kiểm</div><div class="lz-d">trình duyệt kiểm mã phòng và số chỗ</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Gửi</div><div class="lz-d">onSubmit nhận đúng object</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Bận</div><div class="lz-d">“Booking…”, nút bị khoá</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Kết quả</div><div class="lz-d">status khi thành công, alert khi lỗi</div></div>
+</div>
+<div class="pitfall"><strong>findBy thiếu await.</strong> <code>expect(screen.findByRole('status')).toBeTruthy()</code> qua trong 28 ms dù không thông báo nào có thể xuất hiện: Promise luôn truthy. Mọi <code>findBy</code> đều cần <code>await</code>.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li><code>userEvent.setup()</code>, rồi <code>await</code> mọi tương tác.</li>

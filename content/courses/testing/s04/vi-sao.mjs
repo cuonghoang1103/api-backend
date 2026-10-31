@@ -81,6 +81,16 @@ ${ra(gon(OUT['41-th']))}
   <div class="kv"><span class="k">type affinity</span><span class="v">SQLite’s loose typing: a column’s type is a preference, not a rule.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Why the double booking only shows on a real database</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Request A</div><div class="lz-d">findOverlap → slot is free</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Request B</div><div class="lz-d">findOverlap → slot is still free</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">A inserts</div><div class="lz-d">row saved</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">B inserts</div><div class="lz-d">row saved — double booking</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">EXCLUDE constraint</div><div class="lz-d">PostgreSQL refuses B with 23P01</div></div>
+</div>
+<div class="pitfall"><strong>SQLite as a stand-in.</strong> A lighter database makes tests faster but does not have PostgreSQL’s exclusion constraint or its types, so the very rule that stops double bookings is never exercised. Test against the database you run in production.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A new adapter for the same port; <code>bookLab</code> unchanged except for letting OVERLAP through.</li>
@@ -154,6 +164,15 @@ ${ra(gon(OUT['41-th']))}
   <div class="kv"><span class="k">type affinity</span><span class="v">Kiểu dữ liệu “lỏng” của SQLite: kiểu của cột chỉ là ưu tiên, không phải luật.</span></div>
 </div>
 
+<h3>🗺 Vì sao đặt trùng chỉ lộ trên CSDL thật</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Request A</div><div class="lz-d">findOverlap → khung còn trống</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Request B</div><div class="lz-d">findOverlap → khung vẫn còn trống</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">A ghi</div><div class="lz-d">dòng được lưu</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">B ghi</div><div class="lz-d">dòng được lưu — đặt trùng</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Ràng buộc EXCLUDE</div><div class="lz-d">PostgreSQL từ chối B với 23P01</div></div>
+</div>
+<div class="pitfall"><strong>Dùng SQLite thay thế.</strong> Một CSDL nhẹ hơn làm test nhanh hơn nhưng không có ràng buộc loại trừ hay các kiểu dữ liệu của PostgreSQL, nên chính luật chặn đặt trùng không bao giờ được chạy. Hãy test trên CSDL bạn chạy ở production.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Adapter mới cho cùng port; <code>bookLab</code> giữ nguyên, chỉ thêm việc cho OVERLAP đi qua.</li>

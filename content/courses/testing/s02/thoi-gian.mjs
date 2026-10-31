@@ -155,6 +155,15 @@ ${ra(OUT['22-th'])}
   <div class="kv"><span class="k">order-dependent test</span><span class="v">A test whose result depends on which tests ran before it — a sign of leaked state.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Time as an input</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Real clock</div><div class="lz-d">tests depend on when they run</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Inject now</div><div class="lz-d">the function takes a clock parameter</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Fake timers</div><div class="lz-d">vi.useFakeTimers for setTimeout</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Advance</div><div class="lz-d">jump 15 minutes in microseconds</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Boundaries</div><div class="lz-d">14:59.999 locked · 15:00 open</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Time is an input: a unit test must never depend on the real clock.</li>
@@ -268,6 +277,14 @@ ${ra(OUT['22-th'])}
   <div class="kv"><span class="k">order-dependent test (test phụ thuộc thứ tự)</span><span class="v">Test có kết quả tuỳ vào những test nào đã chạy trước nó — dấu hiệu trạng thái bị rò rỉ.</span></div>
 </div>
 
+<h3>🗺 Thời gian là một đầu vào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Đồng hồ thật</div><div class="lz-d">test phụ thuộc vào lúc chạy</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Tiêm now</div><div class="lz-d">hàm nhận tham số đồng hồ</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Fake timers</div><div class="lz-d">vi.useFakeTimers cho setTimeout</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Tua</div><div class="lz-d">nhảy 15 phút trong vài micro giây</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Biên</div><div class="lz-d">14:59.999 còn khoá · 15:00 mở</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Thời gian là một đầu vào: unit test không bao giờ được phụ thuộc đồng hồ thật.</li>

@@ -95,6 +95,16 @@ ${ra(gon(OUT['64-th']))}
   <div class="kv"><span class="k">Client Component</span><span class="v">A component marked <code>'use client'</code>; it runs in the browser and may use state and events.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Next.js code by test level</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Assembled pages, routing, middleware</span><span class="lz-lnote">Playwright — Chapter 7</span></div>
+  <div class="lz-layer"><span class="lz-lname">Async Server Components</span><span class="lz-lnote">render(await Page(props)) — top level only</span></div>
+  <div class="lz-layer"><span class="lz-lname">Route handlers</span><span class="lz-lnote">GET(new Request(…)) in the node environment</span></div>
+  <div class="lz-layer"><span class="lz-lname">Client components</span><span class="lz-lnote">Testing Library in jsdom</span></div>
+  <div class="lz-layer"><span class="lz-lname">Pure helpers</span><span class="lz-lnote">plain unit tests</span></div>
+</div>
+<div class="pitfall"><strong>Rendering an async Server Component as an element.</strong> <code>render(&lt;BookingPage /&gt;)</code> makes React treat it as an async client component and refuse. Await it as a function and render the result — and remember that an async child inside it fails the same way.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Sort code by where it runs, then test each piece at the cheapest level.</li>
@@ -160,6 +170,15 @@ ${ra(gon(OUT['64-th']))}
   <div class="kv"><span class="k">Client Component</span><span class="v">Component đánh dấu <code>'use client'</code>; chạy trên trình duyệt, dùng được state và sự kiện.</span></div>
 </div>
 
+<h3>🗺 Code Next.js theo cấp test</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Trang đã ráp, định tuyến, middleware</span><span class="lz-lnote">Playwright — Chương 7</span></div>
+  <div class="lz-layer"><span class="lz-lname">Server Component bất đồng bộ</span><span class="lz-lnote">render(await Page(props)) — chỉ tầng ngoài</span></div>
+  <div class="lz-layer"><span class="lz-lname">Route handler</span><span class="lz-lnote">GET(new Request(…)) trong môi trường node</span></div>
+  <div class="lz-layer"><span class="lz-lname">Client component</span><span class="lz-lnote">Testing Library trong jsdom</span></div>
+  <div class="lz-layer"><span class="lz-lname">Hàm phụ thuần</span><span class="lz-lnote">unit test thường</span></div>
+</div>
+<div class="pitfall"><strong>Render Server Component bất đồng bộ như một phần tử.</strong> <code>render(&lt;BookingPage /&gt;)</code> khiến React coi nó là client component bất đồng bộ và từ chối. Hãy await nó như một hàm rồi render kết quả — và nhớ rằng component con bất đồng bộ bên trong cũng hỏng y như vậy.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Xếp code theo nơi nó chạy, rồi test mỗi phần ở cấp rẻ nhất.</li>

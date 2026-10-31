@@ -112,6 +112,16 @@ ${ra(UNIT)}
 <li><code>git diff web/</code> shows only test files. Commit: <code>test: LabFlow Lite React screens (Lab 6, 8/8)</code>.</li>
 </ul>
 
+<!-- SODO-TST -->
+<h3>🗺 Which query catches which Lab 6 bug</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">getByLabelText on every field</span><span class="lz-lnote">#2 detached labels</span></div>
+  <div class="lz-layer"><span class="lz-lname">findByRole('alert') vs 'status'</span><span class="lz-lnote">#1 errors not announced</span></div>
+  <div class="lz-layer"><span class="lz-lname">deferred() + second click</span><span class="lz-lnote">#3 double booking</span></div>
+  <div class="lz-layer"><span class="lz-lname">seats 0 · 1 · 200 · 201</span><span class="lz-lnote">#4 off-by-one limit</span></div>
+  <div class="lz-layer"><span class="lz-lname">400 · 403 · retry stubs</span><span class="lz-lnote">#5, #7, #8</span></div>
+</div>
+<div class="pitfall"><strong>Querying like a developer.</strong> <code>querySelector('input[name=…]')</code> and <code>fireEvent</code> never touch a label or a role, so accessibility bugs pass unnoticed: the first attempt in this lab let 7 of 8 bugs through.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Querying like a developer let 7 of 8 bugs through.</li>
@@ -170,6 +180,15 @@ ${ra(UNIT)}
 <li><code>git diff web/</code> chỉ có file test. Commit: <code>test: LabFlow Lite React screens (Lab 6, 8/8)</code>.</li>
 </ul>
 
+<h3>🗺 Truy vấn nào bắt bug nào của Lab 6</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">getByLabelText cho mọi trường</span><span class="lz-lnote">con 2 label bị tách</span></div>
+  <div class="lz-layer"><span class="lz-lname">findByRole('alert') so với 'status'</span><span class="lz-lnote">con 1 lỗi không được đọc</span></div>
+  <div class="lz-layer"><span class="lz-lname">deferred() + bấm lần hai</span><span class="lz-lnote">con 3 đặt hai lần</span></div>
+  <div class="lz-layer"><span class="lz-lname">số chỗ 0 · 1 · 200 · 201</span><span class="lz-lnote">con 4 lệch một</span></div>
+  <div class="lz-layer"><span class="lz-lname">stub 400 · 403 · thử lại</span><span class="lz-lnote">con 5, 7, 8</span></div>
+</div>
+<div class="pitfall"><strong>Truy vấn như lập trình viên.</strong> <code>querySelector('input[name=…]')</code> và <code>fireEvent</code> không bao giờ chạm tới label hay role, nên bug trợ năng lọt qua: lần thử đầu của lab này để lọt 7/8 bug.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Truy vấn như lập trình viên để lọt 7/8 bug.</li>

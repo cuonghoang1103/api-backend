@@ -118,6 +118,14 @@ ${ra(OUT['24-th-100'])}
   <div class="kv"><span class="k">birthday problem</span><span class="v">Collisions among random picks are far more likely than intuition says.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Making randomness testable</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Random inside</div><div class="lz-d">a different result every run</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Inject</div><div class="lz-d">pass random() and newId() in</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Seed</div><div class="lz-d">the same seed gives the same sequence</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Assert</div><div class="lz-d">exact values, or properties for many seeds</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Randomness makes tests flaky: 14 and 18 failures in two runs of 100, the same code each time.</li>
@@ -213,6 +221,13 @@ ${ra(OUT['24-th-100'])}
   <div class="kv"><span class="k">birthday problem (bài toán ngày sinh)</span><span class="v">Khả năng trùng nhau giữa các lần chọn ngẫu nhiên cao hơn trực giác rất nhiều.</span></div>
 </div>
 
+<h3>🗺 Làm ngẫu nhiên test được</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Ngẫu nhiên bên trong</div><div class="lz-d">mỗi lần chạy một kết quả</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Tiêm vào</div><div class="lz-d">truyền random() và newId() từ ngoài</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Seed</div><div class="lz-d">cùng seed ra cùng một dãy</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Khẳng định</div><div class="lz-d">giá trị chính xác, hoặc thuộc tính cho nhiều seed</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Ngẫu nhiên làm test chập chờn: 14 và 18 lần hỏng trong hai lượt 100 lần, cùng một code.</li>

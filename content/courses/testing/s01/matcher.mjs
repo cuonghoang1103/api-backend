@@ -121,6 +121,14 @@ ${ra(OUT['12-th-bug'])}
   <div class="kv"><span class="k">mutation (planted bug)</span><span class="v">A small deliberate change to the code to check that a test really fails — Lab 1 automates it.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Pick the matcher by what you compare</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">toBe</span><span class="lz-lnote">primitives and the same object (Object.is)</span></div>
+  <div class="lz-layer"><span class="lz-lname">toEqual</span><span class="lz-lnote">the same shape and values, deeply</span></div>
+  <div class="lz-layer"><span class="lz-lname">toThrow</span><span class="lz-lnote">a call that must fail — wrap it in a function</span></div>
+  <div class="lz-layer"><span class="lz-lname">toBeCloseTo</span><span class="lz-lnote">decimals where rounding is expected</span></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li><code>toBe</code> checks identity (<code>Object.is</code>); compare objects with <code>toEqual</code>.</li>
@@ -210,6 +218,13 @@ ${ra(OUT['12-th-bug'])}
   <div class="kv"><span class="k">mutation (đột biến, bug cài sẵn)</span><span class="v">Một thay đổi nhỏ cố ý trong code để kiểm test có thật sự đỏ không — Lab 1 tự động hoá việc này.</span></div>
 </div>
 
+<h3>🗺 Chọn matcher theo thứ bạn so</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">toBe</span><span class="lz-lnote">giá trị nguyên thuỷ và cùng một object (Object.is)</span></div>
+  <div class="lz-layer"><span class="lz-lname">toEqual</span><span class="lz-lnote">cùng hình dạng và giá trị, so sâu</span></div>
+  <div class="lz-layer"><span class="lz-lname">toThrow</span><span class="lz-lnote">lời gọi phải hỏng — bọc trong một hàm</span></div>
+  <div class="lz-layer"><span class="lz-lname">toBeCloseTo</span><span class="lz-lnote">số thập phân có làm tròn</span></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li><code>toBe</code> kiểm danh tính (<code>Object.is</code>); so object thì dùng <code>toEqual</code>.</li>

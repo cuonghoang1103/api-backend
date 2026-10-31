@@ -110,6 +110,15 @@ ${ra(OUT['lab-mut-strong'])}
   <div class="kv"><span class="k">rubric</span><span class="v">A scoring table that says exactly what earns each point.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 How the mutation script grades you</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Plant</div><div class="lz-d">replace one exact line with a bug</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Run</div><div class="lz-d">npm run test:unit on your tests</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Judge</div><div class="lz-d">red = killed ✔ · green = survived ✘</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Restore</div><div class="lz-d">put the original line back</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Repeat</div><div class="lz-d">8 bugs → your score is N/8</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A green suite can still miss most bugs — the weak attempt was green and killed 1 of 8.</li>
@@ -195,6 +204,14 @@ ${ra(OUT['lab-mut-strong'])}
   <div class="kv"><span class="k">rubric (thang chấm)</span><span class="v">Bảng chấm điểm nói rõ làm gì thì được mỗi điểm.</span></div>
 </div>
 
+<h3>🗺 Script đột biến chấm bạn thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Cài</div><div class="lz-d">thay đúng một dòng bằng một bug</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Chạy</div><div class="lz-d">npm run test:unit trên test của bạn</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Phán</div><div class="lz-d">đỏ = diệt ✔ · xanh = sống ✘</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Trả lại</div><div class="lz-d">đưa dòng gốc về chỗ cũ</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Lặp</div><div class="lz-d">8 bug → điểm của bạn là N/8</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Một bộ test xanh vẫn có thể bỏ lọt phần lớn bug — lần thử yếu xanh mà chỉ diệt 1/8.</li>

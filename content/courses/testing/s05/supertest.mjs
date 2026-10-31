@@ -96,6 +96,15 @@ ${ra(gon(OUT['51-th']))}
   <div class="kv"><span class="k">entry point</span><span class="v">The file that starts the real server (<code>main.js</code>); tests never import it.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 One Supertest request</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">makeApi()</div><div class="lz-d">a fresh app, memory repo, test secret</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">request(app)</div><div class="lz-d">Supertest opens a temporary port</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Express</div><div class="lz-d">routing, JSON, middleware, error mapping</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">bookLab</div><div class="lz-d">the real business rules</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Assert</div><div class="lz-d">status, Location, the whole body</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Export the app; only one file calls <code>listen</code>.</li>
@@ -162,6 +171,14 @@ ${ra(gon(OUT['51-th']))}
   <div class="kv"><span class="k">entry point (điểm khởi chạy)</span><span class="v">File bật server thật (<code>main.js</code>); test không bao giờ import nó.</span></div>
 </div>
 
+<h3>🗺 Một request Supertest</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">makeApi()</div><div class="lz-d">một app mới, repo trong bộ nhớ, khoá cho test</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">request(app)</div><div class="lz-d">Supertest mở một cổng tạm</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Express</div><div class="lz-d">định tuyến, JSON, middleware, đổi mã lỗi</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">bookLab</div><div class="lz-d">luật nghiệp vụ thật</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Khẳng định</div><div class="lz-d">mã trạng thái, Location, cả body</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Xuất app ra; chỉ một file gọi <code>listen</code>.</li>

@@ -83,6 +83,16 @@ ${ra(gon(OUT['54-th']))}
   <div class="kv"><span class="k">breaking change</span><span class="v">A change that makes existing clients fail, e.g. renaming or removing a field.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 A contract check on every response</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Real request</div><div class="lz-d">through Supertest</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Find the route</div><div class="lz-d">method + path template in openapi.json</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Status documented?</div><div class="lz-d">otherwise an error</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Body matches schema?</div><div class="lz-d">Ajv, additionalProperties false</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Errors listed</div><div class="lz-d">missing fields, extra fields, wrong types</div></div>
+</div>
+<div class="pitfall"><strong>toMatchObject hides leaks.</strong> It ignores extra fields by design, so a response that suddenly includes <code>userId</code> and <code>role</code> still passes. Use <code>toEqual</code> on the whole body or a schema with <code>additionalProperties: false</code>.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>The API description is a contract other teams build on.</li>
@@ -143,6 +153,15 @@ ${ra(gon(OUT['54-th']))}
   <div class="kv"><span class="k">breaking change (thay đổi phá vỡ)</span><span class="v">Thay đổi làm client hiện có hỏng, vd đổi tên hay bỏ một trường.</span></div>
 </div>
 
+<h3>🗺 Kiểm hợp đồng trên mọi phản hồi</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Request thật</div><div class="lz-d">qua Supertest</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Tìm route</div><div class="lz-d">method + đường dẫn mẫu trong openapi.json</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Mã trạng thái đã ghi?</div><div class="lz-d">không thì báo lỗi</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Body khớp schema?</div><div class="lz-d">Ajv, additionalProperties false</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Liệt kê lỗi</div><div class="lz-d">thiếu trường, thừa trường, sai kiểu</div></div>
+</div>
+<div class="pitfall"><strong>toMatchObject che giấu rò rỉ.</strong> Nó bỏ qua trường thừa theo thiết kế, nên một phản hồi bỗng có thêm <code>userId</code> và <code>role</code> vẫn qua. Dùng <code>toEqual</code> trên cả body hoặc schema có <code>additionalProperties: false</code>.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Bản mô tả API là hợp đồng mà các nhóm khác dựa vào để xây.</li>

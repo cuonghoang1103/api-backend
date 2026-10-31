@@ -88,6 +88,16 @@ ${ra(gon(OUT['63-th']))}
   <div class="kv"><span class="k">base URL</span><span class="v">The scheme, host and port that relative API paths are joined to.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 A fetching screen, from request to state</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Component</div><div class="lz-d">calls client.listAll()</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Real client</div><div class="lz-d">builds the URL, adds Authorization</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">MSW</div><div class="lz-d">answers 200, [], 403, 500 or a network error</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">State</div><div class="lz-d">loading → table / empty / forbidden / failed</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Retry</div><div class="lz-d">“Try again” sends the request once more</div></div>
+</div>
+<div class="pitfall"><strong>A relative URL in Node.</strong> <code>fetch('/api/admin/bookings')</code> works in a browser but Node’s fetch throws “Failed to parse URL”. The screen shows its error state and a test waiting for the table fails with a message far from the real cause. Use an absolute base URL in tests.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Pass <code>fetch</code> and the base URL into the client.</li>
@@ -150,6 +160,15 @@ ${ra(gon(OUT['63-th']))}
   <div class="kv"><span class="k">base URL</span><span class="v">Phần scheme, host và port mà các đường dẫn API tương đối được ghép vào.</span></div>
 </div>
 
+<h3>🗺 Màn hình gọi API, từ request tới trạng thái</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Component</div><div class="lz-d">gọi client.listAll()</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Client thật</div><div class="lz-d">dựng URL, thêm Authorization</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">MSW</div><div class="lz-d">trả 200, [], 403, 500 hoặc lỗi mạng</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Trạng thái</div><div class="lz-d">đang tải → bảng / rỗng / bị cấm / lỗi</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Thử lại</div><div class="lz-d">“Try again” gửi request thêm lần nữa</div></div>
+</div>
+<div class="pitfall"><strong>URL tương đối trong Node.</strong> <code>fetch('/api/admin/bookings')</code> chạy trên trình duyệt nhưng fetch của Node ném “Failed to parse URL”. Màn hình hiện trạng thái lỗi và test chờ bảng đỏ với thông báo xa nguyên nhân thật. Trong test hãy dùng base URL tuyệt đối.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Truyền <code>fetch</code> và base URL vào client.</li>

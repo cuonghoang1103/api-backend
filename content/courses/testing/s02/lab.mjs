@@ -145,6 +145,16 @@ ${ra(OUT['lab2-mut-strong'])}
   <div class="kv"><span class="k">repeatable</span><span class="v">Same result on every run, machine and time zone.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 The Lab 2 loop</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Read the rules</div><div class="lz-d">async booking, time, errors, codes</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Write tests</div><div class="lz-d">await everything, fake the clock</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Run the grader</div><div class="lz-d">node scripts/dot-bien-2.mjs</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Read survivors</div><div class="lz-d">each one names a missing check</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Close the gap</div><div class="lz-d">add the test, rerun until 8/8</div></div>
+</div>
+<div class="pitfall"><strong>Green is not the goal.</strong> A suite that passes but never awaits, never moves the clock and never checks an error code can stay green while most planted bugs survive. Read every survivor as a missing test, not as bad luck.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A green suite can notice nothing: five tests near, but not on, the risky lines killed 0 of 8.</li>
@@ -235,6 +245,15 @@ ${ra(OUT['lab2-mut-strong'])}
   <div class="kv"><span class="k">repeatable (lặp lại được)</span><span class="v">Cùng kết quả ở mọi lần chạy, mọi máy, mọi múi giờ.</span></div>
 </div>
 
+<h3>🗺 Vòng lặp của Lab 2</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Đọc luật</div><div class="lz-d">đặt phòng bất đồng bộ, thời gian, lỗi, mã</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Viết test</div><div class="lz-d">await mọi thứ, giả đồng hồ</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Chạy máy chấm</div><div class="lz-d">node scripts/dot-bien-2.mjs</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Đọc con sống sót</div><div class="lz-d">mỗi con chỉ ra một phép kiểm còn thiếu</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Lấp chỗ hổng</div><div class="lz-d">thêm test, chạy lại tới 8/8</div></div>
+</div>
+<div class="pitfall"><strong>Xanh không phải là đích.</strong> Một bộ test qua hết nhưng không bao giờ await, không bao giờ tua đồng hồ và không kiểm mã lỗi có thể vẫn xanh trong khi phần lớn bug cài sẵn sống sót. Hãy đọc mỗi con sống sót như một test còn thiếu, không phải do xui.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Bộ test xanh vẫn có thể không nhận ra gì: năm test ở gần, nhưng không trúng, những dòng rủi ro đã diệt 0/8.</li>

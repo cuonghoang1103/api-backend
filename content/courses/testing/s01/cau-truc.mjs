@@ -150,6 +150,13 @@ ${ra(OUT['11-tach'])}
   <div class="kv"><span class="k">unit under test</span><span class="v">The function or module a test is about — what you name the <code>describe</code> after.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Arrange · Act · Assert</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Arrange</div><div class="lz-d">prepare the input: a booking, a role, a time</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Act</div><div class="lz-d">call the one function under test</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Assert</div><div class="lz-d">compare the result with what the rule says</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li><code>describe</code> groups, <code>it</code> states one fact, <code>expect(actual).toBe(expected)</code> checks it.</li>
@@ -252,6 +259,12 @@ ${ra(OUT['11-tach'])}
   <div class="kv"><span class="k">unit under test (đơn vị đang test)</span><span class="v">Hàm hay module mà test nói về — thứ bạn dùng để đặt tên <code>describe</code>.</span></div>
 </div>
 
+<h3>🗺 Arrange · Act · Assert</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Arrange</div><div class="lz-d">chuẩn bị đầu vào: lượt đặt, vai trò, giờ</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Act</div><div class="lz-d">gọi đúng một hàm đang được test</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Assert</div><div class="lz-d">so kết quả với điều luật nói</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li><code>describe</code> gom nhóm, <code>it</code> nói một sự thật, <code>expect(actual).toBe(expected)</code> kiểm nó.</li>

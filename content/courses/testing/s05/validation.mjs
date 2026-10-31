@@ -81,6 +81,16 @@ ${ra(gon(OUT['53-th']))}
   <div class="kv"><span class="k">error middleware</span><span class="v">The one Express handler (four arguments) that turns thrown errors into responses.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Where a bad request is stopped</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">JSON parser</div><div class="lz-d">broken JSON → 400 BAD_JSON</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Zod schema</div><div class="lz-d">wrong shape → 400 VALIDATION + field</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Business rules</div><div class="lz-d">off grid, too long → 422 + code</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Repository</div><div class="lz-d">slot taken → 409 OVERLAP</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Anything else</div><div class="lz-d">500 INTERNAL, no stack trace</div></div>
+</div>
+<div class="pitfall"><strong>Silently dropping unknown keys.</strong> <code>z.object</code> strips keys it does not know, so <code>role: "ADMIN"</code> in a body disappears without a trace — safe today, dangerous after the next refactor. <code>z.strictObject</code> refuses with 400, and a test can pin that down.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Validate at the door with a strict schema; refuse unknown keys.</li>
@@ -134,6 +144,15 @@ ${ra(gon(OUT['53-th']))}
   <div class="kv"><span class="k">error middleware (middleware lỗi)</span><span class="v">Handler Express duy nhất (bốn tham số) biến lỗi được ném thành phản hồi.</span></div>
 </div>
 
+<h3>🗺 Request xấu bị chặn ở đâu</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Bộ phân tích JSON</div><div class="lz-d">JSON hỏng → 400 BAD_JSON</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Schema Zod</div><div class="lz-d">sai hình dạng → 400 VALIDATION + trường</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Luật nghiệp vụ</div><div class="lz-d">lệch lưới, quá dài → 422 + mã</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Repository</div><div class="lz-d">khung đã có người đặt → 409 OVERLAP</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Mọi thứ khác</div><div class="lz-d">500 INTERNAL, không lộ stack trace</div></div>
+</div>
+<div class="pitfall"><strong>Lặng lẽ bỏ khoá lạ.</strong> <code>z.object</code> bỏ những khoá nó không biết, nên <code>role: "ADMIN"</code> trong body biến mất không dấu vết — hôm nay an toàn, nguy hiểm sau lần refactor tới. <code>z.strictObject</code> từ chối với 400, và một test ghim được điều đó.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Kiểm ở cửa bằng schema nghiêm ngặt; từ chối khoá lạ.</li>

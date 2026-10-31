@@ -216,6 +216,13 @@ ${BANG_DO}
   <div class="kv"><span class="k">flaky test</span><span class="v">A test that sometimes passes and sometimes fails without any code change.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 The test pyramid, top to bottom</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">End-to-end</span><span class="lz-lnote">few · slow · a real browser, the whole app</span></div>
+  <div class="lz-layer"><span class="lz-lname">Integration / HTTP</span><span class="lz-lnote">some · about 1 ms per HTTP check here</span></div>
+  <div class="lz-layer"><span class="lz-lname">Unit</span><span class="lz-lnote">many · about 0.015 ms per check · pure rules</span></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>The same rule at two levels: about 0.015 ms per unit check vs 0.75–1 ms per HTTP check, measured four times.</li>
@@ -332,6 +339,12 @@ ${BANG_DO}
   <div class="kv"><span class="k">flaky test (test chập chờn)</span><span class="v">Test lúc đạt lúc hỏng dù code không hề đổi.</span></div>
 </div>
 
+<h3>🗺 Kim tự tháp test, từ đỉnh xuống đáy</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Đầu-cuối</span><span class="lz-lnote">ít · chậm · trình duyệt thật, cả ứng dụng</span></div>
+  <div class="lz-layer"><span class="lz-lname">Tích hợp / HTTP</span><span class="lz-lnote">vừa phải · khoảng 1 ms mỗi lần kiểm HTTP ở đây</span></div>
+  <div class="lz-layer"><span class="lz-lname">Unit</span><span class="lz-lnote">nhiều · khoảng 0,015 ms mỗi lần kiểm · luật thuần</span></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Cùng một luật ở hai cấp: khoảng 0,015 ms mỗi lần kiểm unit so với 0,75–1 ms mỗi lần kiểm HTTP, đo bốn lần.</li>

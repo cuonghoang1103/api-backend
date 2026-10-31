@@ -146,6 +146,14 @@ ${ra(OUT['23-th'])}
   <div class="kv"><span class="k">error guessing</span><span class="v">Designing tests from a list of likely failures, based on experience.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 What a good error carries</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">class</span><span class="lz-lnote">BookingError — callers can check instanceof</span></div>
+  <div class="lz-layer"><span class="lz-lname">code</span><span class="lz-lnote">OVERLAP, OFF_GRID … — what the program switches on</span></div>
+  <div class="lz-layer"><span class="lz-lname">message</span><span class="lz-lnote">for humans and logs</span></div>
+  <div class="lz-layer"><span class="lz-lname">cause</span><span class="lz-lnote">the original error, kept for debugging</span></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Give errors a class, a stable code and a cause; assert the code (and cause), not the wording.</li>
@@ -241,6 +249,13 @@ ${ra(OUT['23-th'])}
   <div class="kv"><span class="k">error guessing (đoán lỗi)</span><span class="v">Thiết kế test từ danh sách những chỗ hay hỏng, dựa trên kinh nghiệm.</span></div>
 </div>
 
+<h3>🗺 Một lỗi tốt mang theo gì</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">class</span><span class="lz-lnote">BookingError — nơi gọi kiểm được instanceof</span></div>
+  <div class="lz-layer"><span class="lz-lname">code</span><span class="lz-lnote">OVERLAP, OFF_GRID … — thứ chương trình rẽ nhánh</span></div>
+  <div class="lz-layer"><span class="lz-lname">message</span><span class="lz-lnote">cho con người và log</span></div>
+  <div class="lz-layer"><span class="lz-lname">cause</span><span class="lz-lnote">lỗi gốc, giữ lại để gỡ rối</span></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Cho lỗi một lớp, một mã ổn định và một nguyên nhân; khẳng định mã (và nguyên nhân), không khẳng định câu chữ.</li>

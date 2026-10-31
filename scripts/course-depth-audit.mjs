@@ -39,7 +39,7 @@ for (const sec of sections) {
     sd      += cnt(c, /class="lz-(map|flow|stack)"/g);
     diagrams += cnt(c, /class="lz-(map|flow|stack)"/g);
     links   += cnt(c, /class="link-card/g);
-    pitfalls += cnt(c, /class="pitfall"/g);
+    pitfalls += cnt(c, /class="pitfall[" ]/g);   // cả biến thể "pitfall co-tieu-de" (globals.css) — trước 01/11 bị đếm sót
     code    += cnt(c, /<pre/g);
     outs    += cnt(c, /class="out"/g);
   }

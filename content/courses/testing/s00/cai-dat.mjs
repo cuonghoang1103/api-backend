@@ -396,6 +396,15 @@ ${ra(M.tsOut)}
   <div class="kv"><span class="k">exit code</span><span class="v">The number a program returns when it ends: 0 = success, non-zero = failure. CI reads it.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 What happens when you run a test</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">npm script</div><div class="lz-d">runs vitest</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Collect</div><div class="lz-d">finds *.test.js files</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Run</div><div class="lz-d">each it() with its expect()</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Report</div><div class="lz-d">green ✓ or red × with expected/actual</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Exit code</div><div class="lz-d">0 if all pass, 1 otherwise — what CI reads</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Vitest 5 needs Node 22.12 or newer; install it once as a dev dependency.</li>
@@ -532,6 +541,14 @@ ${ra(M.tsOut)}
   <div class="kv"><span class="k">exit code (mã thoát)</span><span class="v">Con số chương trình trả về khi kết thúc: 0 = thành công, khác 0 = thất bại. CI đọc con số này.</span></div>
 </div>
 
+<h3>🗺 Chuyện gì xảy ra khi chạy test</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">npm script</div><div class="lz-d">gọi vitest</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Thu thập</div><div class="lz-d">tìm các file *.test.js</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Chạy</div><div class="lz-d">từng it() với expect() của nó</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Báo cáo</div><div class="lz-d">✓ xanh hoặc × đỏ kèm expected/actual</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Exit code</div><div class="lz-d">0 nếu tất cả qua, 1 nếu không — thứ CI đọc</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Vitest 5 cần Node 22.12 trở lên; cài một lần làm dev dependency.</li>

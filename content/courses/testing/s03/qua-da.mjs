@@ -86,6 +86,15 @@ ${ra(OUT['33-th-refactor'])}
   <div class="kv"><span class="k">false confidence</span><span class="v">Green tests that would stay green on a real bug.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Two probes for every test</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Plant a real bug</div><div class="lz-d">the test must turn red</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Make a harmless change</div><div class="lz-d">the test must stay green</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Both pass</div><div class="lz-d">the test checks behaviour</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Either fails</div><div class="lz-d">too weak, or too tied to the code</div></div>
+</div>
+<div class="pitfall"><strong>Mocking everything.</strong> A test that mocks every collaborator and checks every call stays green when the real behaviour breaks and turns red when you merely refactor. If a harmless change breaks the test, the test checks the implementation, not the behaviour.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Plant a bug and look: a test that stays green has no value against that bug.</li>
@@ -148,6 +157,14 @@ ${ra(OUT['33-th-refactor'])}
   <div class="kv"><span class="k">false confidence (tự tin giả)</span><span class="v">Test xanh mà vẫn sẽ xanh khi có bug thật.</span></div>
 </div>
 
+<h3>🗺 Hai phép thử cho mỗi test</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Cài một bug thật</div><div class="lz-d">test phải đỏ</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Đổi vô hại</div><div class="lz-d">test phải vẫn xanh</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Cả hai đạt</div><div class="lz-d">test kiểm hành vi</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Một cái trượt</div><div class="lz-d">quá yếu, hoặc dính chặt vào code</div></div>
+</div>
+<div class="pitfall"><strong>Mock mọi thứ.</strong> Một test mock mọi đối tác và kiểm mọi lời gọi sẽ vẫn xanh khi hành vi thật hỏng, và đỏ khi bạn chỉ refactor. Nếu một thay đổi vô hại làm test đỏ, test đang kiểm cách cài đặt chứ không phải hành vi.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Cài một bug rồi nhìn: test vẫn xanh thì vô giá trị với bug đó.</li>

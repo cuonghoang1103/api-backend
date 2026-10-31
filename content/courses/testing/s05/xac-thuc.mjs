@@ -80,6 +80,16 @@ ${ra(gon(OUT['52-th']))}
   <div class="kv"><span class="k">privilege escalation</span><span class="v">Getting rights you should not have — e.g. a role accepted from the request body.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Who may read booking 1?</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">No or bad token</div><div class="lz-d">401 — who are you?</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Valid token</div><div class="lz-d">identity and role from the token, never the body</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Admin route, wrong role</div><div class="lz-d">403 — not allowed</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Someone else’s booking</div><div class="lz-d">404 — looks missing (IDOR)</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Owner or admin</div><div class="lz-d">200 with the booking</div></div>
+</div>
+<div class="pitfall"><strong>Testing auth only as the owner.</strong> If every test reads its own data, the IDOR bug — anyone can read anyone’s booking — stays green. Write access control as a table: every role against own and other people’s data.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Test with real tokens and a test secret; never mock authentication.</li>
@@ -139,6 +149,15 @@ ${ra(gon(OUT['52-th']))}
   <div class="kv"><span class="k">privilege escalation (leo thang quyền)</span><span class="v">Có được quyền không nên có — vd vai trò được nhận từ body của request.</span></div>
 </div>
 
+<h3>🗺 Ai được đọc lượt đặt 1?</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Không có hoặc sai token</div><div class="lz-d">401 — bạn là ai?</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Token hợp lệ</div><div class="lz-d">danh tính và vai trò lấy từ token, không bao giờ từ body</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Route admin, sai vai trò</div><div class="lz-d">403 — không được phép</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Lượt đặt của người khác</div><div class="lz-d">404 — trông như không tồn tại (IDOR)</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Chủ sở hữu hoặc admin</div><div class="lz-d">200 kèm lượt đặt</div></div>
+</div>
+<div class="pitfall"><strong>Chỉ test xác thực với vai chủ sở hữu.</strong> Nếu mọi test chỉ đọc dữ liệu của chính mình, bug IDOR — ai cũng đọc được lượt đặt của ai — vẫn xanh. Hãy viết phân quyền thành bảng: mọi vai trò so với dữ liệu của mình và của người khác.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Test bằng token thật và khoá cho test; đừng bao giờ mock xác thực.</li>

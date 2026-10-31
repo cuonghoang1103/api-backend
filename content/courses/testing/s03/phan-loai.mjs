@@ -85,6 +85,16 @@ ${ra(OUT['31-th'])}
   <div class="kv"><span class="k">state vs interaction verification</span><span class="v">Checking results vs checking calls.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Five test doubles, from simplest</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Dummy</span><span class="lz-lnote">passed but never used</span></div>
+  <div class="lz-layer"><span class="lz-lname">Stub</span><span class="lz-lnote">returns a canned answer</span></div>
+  <div class="lz-layer"><span class="lz-lname">Spy</span><span class="lz-lnote">records how it was called</span></div>
+  <div class="lz-layer"><span class="lz-lname">Mock</span><span class="lz-lnote">a spy with expectations set up front</span></div>
+  <div class="lz-layer"><span class="lz-lname">Fake</span><span class="lz-lnote">a working light version — the memory repository</span></div>
+</div>
+<div class="pitfall"><strong>Checking calls when you could check results.</strong> “mailer.send was called once” says nothing about what the e-mail said or whether the booking was saved. Prefer asserting state — the stored booking, the returned flag — and assert interactions only when the call itself is the behaviour.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A double stands in for a slow or uncontrollable dependency.</li>
@@ -146,6 +156,15 @@ ${ra(OUT['31-th'])}
   <div class="kv"><span class="k">kiểm trạng thái vs kiểm tương tác</span><span class="v">Kiểm kết quả vs kiểm các lời gọi.</span></div>
 </div>
 
+<h3>🗺 Năm loại test double, từ đơn giản nhất</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Dummy</span><span class="lz-lnote">được truyền vào nhưng không dùng</span></div>
+  <div class="lz-layer"><span class="lz-lname">Stub</span><span class="lz-lnote">trả một câu trả lời soạn sẵn</span></div>
+  <div class="lz-layer"><span class="lz-lname">Spy</span><span class="lz-lnote">ghi lại nó được gọi thế nào</span></div>
+  <div class="lz-layer"><span class="lz-lname">Mock</span><span class="lz-lnote">spy có kỳ vọng đặt trước</span></div>
+  <div class="lz-layer"><span class="lz-lname">Fake</span><span class="lz-lnote">bản nhẹ chạy được thật — repository trong bộ nhớ</span></div>
+</div>
+<div class="pitfall"><strong>Kiểm lời gọi khi có thể kiểm kết quả.</strong> “mailer.send được gọi một lần” không nói gì về nội dung email hay lượt đặt có được lưu không. Ưu tiên khẳng định trạng thái — lượt đặt đã lưu, cờ trả về — và chỉ khẳng định tương tác khi chính lời gọi là hành vi.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Đồ đóng thế đứng thay phụ thuộc chậm hoặc không điều khiển được.</li>

@@ -209,6 +209,15 @@ ${ra(M.fail)}</li>
   <div class="kv"><span class="k">verification · validation</span><span class="v">Built it right (vs the spec) · built the right thing (value for the user).</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 One lesson, five moves</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Read</div><div class="lz-d">the lesson once, slides and text</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Type</div><div class="lz-d">every example by hand, run it</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Break</div><div class="lz-d">plant a bug, watch the test turn red</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Fix</div><div class="lz-d">make it green again, read the message</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Practise</div><div class="lz-d">the 🧪 task, then compare with the solution</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A test compares an <strong>actual</strong> result with an <strong>expected</strong> one; an automated test does it in code, so a machine repeats it for free.</li>
@@ -342,6 +351,14 @@ ${ra(M.fail)}</li>
   <div class="kv"><span class="k">verification · validation (kiểm định · xác nhận)</span><span class="v">Làm đúng cách (so với spec) · làm đúng thứ cần (giá trị cho người dùng).</span></div>
 </div>
 
+<h3>🗺 Một bài, năm bước</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Đọc</div><div class="lz-d">bài một lượt, slide và chữ</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Gõ</div><div class="lz-d">tự gõ mọi ví dụ, chạy thử</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Phá</div><div class="lz-d">cài một bug, xem test đỏ</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Sửa</div><div class="lz-d">cho xanh lại, đọc thông báo</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Luyện</div><div class="lz-d">làm phần 🧪 rồi so với lời giải</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Test so kết quả <strong>thực tế</strong> với kết quả <strong>mong đợi</strong>; test tự động làm việc đó bằng code nên máy lặp lại miễn phí.</li>

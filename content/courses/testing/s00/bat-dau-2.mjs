@@ -205,6 +205,16 @@ ${ra(M.red)}
   <div class="kv"><span class="k">staged rollout</span><span class="v">Releasing to a small group first, then everyone, so a bad change hurts few people.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 The chain behind every incident</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">A change</div><div class="lz-d">a line of code or a config file</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">No test</div><div class="lz-d">nothing ran the risky path</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Release</div><div class="lz-d">it reaches users or machines</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Failure</div><div class="lz-d">users see the bug first</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Cost</div><div class="lz-d">downtime, refunds, trust</div></div>
+</div>
+<div class="pitfall"><strong>“It worked on my machine” is not a test.</strong> A check you did once by hand is gone the moment the code changes; only a check that runs again on every change protects you. That is the whole reason this course turns every rule into an automated test.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>The famous disasters came from missing <em>tests</em>, not missing testers: the risky line never ran with the risky value.</li>
@@ -333,6 +343,15 @@ ${ra(M.red)}
   <div class="kv"><span class="k">staged rollout (triển khai từng đợt)</span><span class="v">Phát hành cho một nhóm nhỏ trước rồi mới tới mọi người, để thay đổi xấu chỉ ảnh hưởng ít người.</span></div>
 </div>
 
+<h3>🗺 Chuỗi phía sau mỗi sự cố</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Một thay đổi</div><div class="lz-d">một dòng code hay một file cấu hình</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Không có test</div><div class="lz-d">không gì chạy qua nhánh rủi ro</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Phát hành</div><div class="lz-d">tới tay người dùng hoặc máy chủ</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Hỏng</div><div class="lz-d">người dùng thấy bug trước</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Cái giá</div><div class="lz-d">ngừng dịch vụ, hoàn tiền, mất niềm tin</div></div>
+</div>
+<div class="pitfall"><strong>“Máy em chạy được” không phải là test.</strong> Một lần kiểm bằng tay biến mất ngay khi code đổi; chỉ phép kiểm chạy lại ở mỗi lần thay đổi mới bảo vệ bạn. Đó là toàn bộ lý do khoá này biến mỗi luật thành một test tự động.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Các thảm hoạ nổi tiếng đến từ việc thiếu <em>test</em>, không phải thiếu tester: dòng nguy hiểm chưa từng chạy với giá trị nguy hiểm.</li>

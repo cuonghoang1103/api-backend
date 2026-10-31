@@ -85,6 +85,16 @@ ${ra(UNIT)}
 <li>Commit: <code>test: PostgreSQL adapter and constraints (Lab 4, 8/8)</code>.</li>
 </ul>
 
+<!-- SODO-TST -->
+<h3>🗺 Reaching every layer in Lab 4</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">findOverlap</div><div class="lz-d">a table of neighbours: touching, overlapping, other lab</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Constraint</div><div class="lz-d">insert directly to bypass the pre-check</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">CHECK</div><div class="lz-d">zero seats → 23514</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Mapping</div><div class="lz-d">23P01 → OVERLAP, cause kept</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Grade</div><div class="lz-d">dot-bien-4.mjs, fresh PostgreSQL each mutant</div></div>
+</div>
+<div class="pitfall"><strong>A real database does not make a weak test strong.</strong> The first attempt in this lab used real PostgreSQL and still killed 0 of 8 mutants: its times overlapped clearly, so neither the boundaries nor the constraint were ever reached.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A real database does not make a weak test strong: the first attempt killed 0 of 8.</li>
@@ -141,6 +151,15 @@ ${ra(UNIT)}
 <li>Commit: <code>test: PostgreSQL adapter and constraints (Lab 4, 8/8)</code>.</li>
 </ul>
 
+<h3>🗺 Chạm tới mọi tầng trong Lab 4</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">findOverlap</div><div class="lz-d">bảng hàng xóm: chạm nhau, chồng nhau, phòng khác</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Ràng buộc</div><div class="lz-d">ghi thẳng để vượt qua bước kiểm trước</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">CHECK</div><div class="lz-d">0 chỗ → 23514</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Đổi mã</div><div class="lz-d">23P01 → OVERLAP, giữ cause</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Chấm</div><div class="lz-d">dot-bien-4.mjs, mỗi đột biến một PostgreSQL mới</div></div>
+</div>
+<div class="pitfall"><strong>CSDL thật không biến test yếu thành test mạnh.</strong> Lần thử đầu của lab này dùng PostgreSQL thật mà vẫn diệt 0/8 đột biến: các giờ chồng nhau rõ ràng nên cả biên lẫn ràng buộc chưa bao giờ được chạm tới.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Cơ sở dữ liệu thật không biến test yếu thành test mạnh: lần thử đầu diệt 0/8.</li>

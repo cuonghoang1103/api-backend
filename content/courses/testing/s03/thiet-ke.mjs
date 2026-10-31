@@ -68,6 +68,14 @@ ${ra(OUT['34-th'])}
   <div class="kv"><span class="k">port · adapter</span><span class="v">The interface the core needs · an implementation of it (real or fake).</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Testable design in three habits</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Inject dependencies</span><span class="lz-lnote">pass repo, mailer, clock as parameters</span></div>
+  <div class="lz-layer"><span class="lz-lname">Keep logic pure</span><span class="lz-lnote">build the e-mail in a function, send it elsewhere</span></div>
+  <div class="lz-layer"><span class="lz-lname">Thin edges</span><span class="lz-lnote">routes and handlers only wire things together</span></div>
+</div>
+<div class="pitfall"><strong>Hidden imports.</strong> A service that imports its own database pool and mailer can only be tested with module mocks and fake timers; the lesson measured the same test at 11 lines with injected dependencies against 21 lines with two <code>vi.mock</code> calls. Hard to test usually means hard to change.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Hidden dependencies make tests slow, fragile or impossible — measured: ECONNREFUSED, then 21 lines of patches.</li>
@@ -131,6 +139,13 @@ ${ra(OUT['34-th'])}
   <div class="kv"><span class="k">port · adapter</span><span class="v">Interface mà lõi cần · một bản cài đặt của nó (thật hoặc giả).</span></div>
 </div>
 
+<h3>🗺 Thiết kế dễ test qua ba thói quen</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Tiêm phụ thuộc</span><span class="lz-lnote">truyền repo, mailer, đồng hồ qua tham số</span></div>
+  <div class="lz-layer"><span class="lz-lname">Giữ logic thuần</span><span class="lz-lnote">dựng email trong một hàm, gửi ở chỗ khác</span></div>
+  <div class="lz-layer"><span class="lz-lname">Rìa mỏng</span><span class="lz-lnote">route và handler chỉ nối các phần lại</span></div>
+</div>
+<div class="pitfall"><strong>Import ẩn.</strong> Một service tự import pool CSDL và mailer chỉ test được bằng mock module và đồng hồ giả; bài đã đo cùng một test: 11 dòng khi tiêm phụ thuộc, 21 dòng với hai lời gọi <code>vi.mock</code>. Khó test thường có nghĩa là khó sửa.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Phụ thuộc ẩn làm test chậm, giòn hoặc không viết nổi — đo được: ECONNREFUSED, rồi 21 dòng vá víu.</li>

@@ -142,6 +142,16 @@ ${ra(PROP_BUG_GON)}
   <div class="kv"><span class="k">counterexample · shrinking · seed</span><span class="v">An input that breaks the property · simplifying it · the number that replays the run.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 From a rule to test values</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Rule</div><div class="lz-d">“at most 14 days in advance”</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Classes</div><div class="lz-d">past · 0–14 · more than 14 · not a whole number</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Boundaries</div><div class="lz-d">−1, 0, 14, 15</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Table</div><div class="lz-d">one it.each row per value</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Properties</div><div class="lz-d">fast-check tries hundreds more</div></div>
+</div>
+<div class="pitfall"><strong>Testing only the middle.</strong> A test with 7 days passes whether the code says <code>&lt;= 14</code> or <code>&lt; 14</code>. Off-by-one bugs live on the edges: always test the last valid value and the first invalid one.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Keep rules pure: a value in, a value out — testable in milliseconds.</li>
@@ -242,6 +252,15 @@ ${ra(PROP_BUG_GON)}
   <div class="kv"><span class="k">counterexample · shrinking · seed (phản ví dụ · thu nhỏ · hạt giống)</span><span class="v">Đầu vào làm hỏng thuộc tính · làm nó đơn giản lại · con số giúp chạy lại đúng lần đó.</span></div>
 </div>
 
+<h3>🗺 Từ một luật tới các giá trị test</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">Luật</div><div class="lz-d">“đặt trước tối đa 14 ngày”</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Lớp tương đương</div><div class="lz-d">quá khứ · 0–14 · hơn 14 · không phải số nguyên</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Biên</div><div class="lz-d">−1, 0, 14, 15</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Bảng</div><div class="lz-d">mỗi giá trị một dòng it.each</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Thuộc tính</div><div class="lz-d">fast-check thử thêm hàng trăm giá trị</div></div>
+</div>
+<div class="pitfall"><strong>Chỉ test ở giữa.</strong> Test với 7 ngày qua dù code viết <code>&lt;= 14</code> hay <code>&lt; 14</code>. Bug lệch một nằm ở biên: luôn test giá trị hợp lệ cuối cùng và giá trị không hợp lệ đầu tiên.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Giữ luật nghiệp vụ thuần: giá trị vào, giá trị ra — test được trong vài mili-giây.</li>

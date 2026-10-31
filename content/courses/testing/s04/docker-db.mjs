@@ -71,6 +71,15 @@ ${ma('bash', DOWN)}
   <div class="kv"><span class="k">global setup</span><span class="v">Code Vitest runs once before all test files (and its returned function once after).</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 A throw-away PostgreSQL with Compose</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">compose up --wait</div><div class="lz-d">container starts, health check passes</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Apply schema</div><div class="lz-d">db/schema.sql on an empty database</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Run tests</div><div class="lz-d">npm run test:int</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">compose down -v</div><div class="lz-d">container and data gone</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">tmpfs</div><div class="lz-d">data lives in RAM — nothing to clean</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>A disposable PostgreSQL: same major version, separate port, tmpfs, healthcheck.</li>
@@ -134,6 +143,14 @@ ${ma('bash', DOWN)}
   <div class="kv"><span class="k">global setup</span><span class="v">Code Vitest chạy một lần trước mọi file test (và hàm nó trả về chạy một lần sau đó).</span></div>
 </div>
 
+<h3>🗺 Một PostgreSQL dùng một lần với Compose</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">compose up --wait</div><div class="lz-d">container chạy, health check đạt</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Áp schema</div><div class="lz-d">db/schema.sql lên CSDL rỗng</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Chạy test</div><div class="lz-d">npm run test:int</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">compose down -v</div><div class="lz-d">container và dữ liệu biến mất</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">tmpfs</div><div class="lz-d">dữ liệu nằm trong RAM — không có gì để dọn</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Một PostgreSQL dùng một lần: cùng phiên bản chính, cổng riêng, tmpfs, healthcheck.</li>

@@ -171,6 +171,16 @@ ${ra(M.tuKiemOut)}
   <div class="kv"><span class="k">CI (continuous integration)</span><span class="v">A server that runs the test suite on every push and pull request.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 LabFlow Lite, layer by layer</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">React screens</span><span class="lz-lnote">Chapter 6 — Testing Library, MSW</span></div>
+  <div class="lz-layer"><span class="lz-lname">Express 5 API</span><span class="lz-lnote">Chapter 5 — Supertest, contracts</span></div>
+  <div class="lz-layer"><span class="lz-lname">Business rules</span><span class="lz-lnote">Chapters 1–3 — pure functions, async, doubles</span></div>
+  <div class="lz-layer"><span class="lz-lname">PostgreSQL</span><span class="lz-lnote">Chapter 4 — real database, Testcontainers</span></div>
+  <div class="lz-layer"><span class="lz-lname">Whole journey in a browser</span><span class="lz-lnote">Chapter 7 — Playwright</span></div>
+</div>
+<div class="pitfall"><strong>Starting from the UI.</strong> Beginners often test the screen first because it is what they see. The rules are where the logic lives and where tests are cheapest — that is why LabFlow Lite starts with pure functions and adds layers one chapter at a time.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>You finish with a repository — LabFlow Lite — tested at every level and checked by CI.</li>
@@ -282,6 +292,15 @@ ${ra(M.tuKiemOut)}
   <div class="kv"><span class="k">CI — continuous integration (tích hợp liên tục)</span><span class="v">Một máy chủ chạy bộ test ở mỗi lần push và mỗi pull request.</span></div>
 </div>
 
+<h3>🗺 LabFlow Lite, từng tầng</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Màn hình React</span><span class="lz-lnote">Chương 6 — Testing Library, MSW</span></div>
+  <div class="lz-layer"><span class="lz-lname">API Express 5</span><span class="lz-lnote">Chương 5 — Supertest, hợp đồng</span></div>
+  <div class="lz-layer"><span class="lz-lname">Luật nghiệp vụ</span><span class="lz-lnote">Chương 1–3 — hàm thuần, bất đồng bộ, test double</span></div>
+  <div class="lz-layer"><span class="lz-lname">PostgreSQL</span><span class="lz-lnote">Chương 4 — CSDL thật, Testcontainers</span></div>
+  <div class="lz-layer"><span class="lz-lname">Cả hành trình trong trình duyệt</span><span class="lz-lnote">Chương 7 — Playwright</span></div>
+</div>
+<div class="pitfall"><strong>Bắt đầu từ giao diện.</strong> Người mới hay test màn hình trước vì đó là thứ họ thấy. Luật nghiệp vụ mới là nơi chứa logic và là nơi test rẻ nhất — vì thế LabFlow Lite bắt đầu bằng hàm thuần và mỗi chương thêm một tầng.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Bạn kết thúc với một repository — LabFlow Lite — được test ở mọi tầng và được CI kiểm.</li>

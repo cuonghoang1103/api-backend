@@ -89,6 +89,15 @@ ${ra(gon(OUT['44-th']))}
   <div class="kv"><span class="k">factory</span><span class="v">A function that builds valid test data with defaults you can override.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Two ways to start each test from empty</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">TRUNCATE</div><div class="lz-d">wipe the tables before each file or test</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">or BEGIN</div><div class="lz-d">open a transaction per test</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Test runs</div><div class="lz-d">reads and writes freely</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">ROLLBACK</div><div class="lz-d">everything the test wrote disappears</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Limit</div><div class="lz-d">rollback cannot undo rows another connection committed</div></div>
+</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Rows leak between tests exactly like mocks do — measured: B red after A, green alone.</li>
@@ -156,6 +165,14 @@ ${ra(gon(OUT['44-th']))}
   <div class="kv"><span class="k">factory</span><span class="v">Hàm dựng dữ liệu test hợp lệ với giá trị mặc định ghi đè được.</span></div>
 </div>
 
+<h3>🗺 Hai cách cho mỗi test bắt đầu từ bảng rỗng</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">TRUNCATE</div><div class="lz-d">xoá sạch bảng trước mỗi file hoặc test</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">hoặc BEGIN</div><div class="lz-d">mở một transaction cho mỗi test</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">Test chạy</div><div class="lz-d">đọc ghi thoải mái</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">ROLLBACK</div><div class="lz-d">mọi thứ test đã ghi biến mất</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Giới hạn</div><div class="lz-d">rollback không huỷ được dòng mà kết nối khác đã commit</div></div>
+</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Dữ liệu rò giữa các test y như mock — đo được: B đỏ khi chạy sau A, xanh khi chạy riêng.</li>

@@ -112,6 +112,17 @@ ${ra(UTC)}
 <li>Commit: <code>test: LabFlow Lite HTTP API (Lab 5, 8/8)</code>.</li>
 </ul>
 
+<!-- SODO-TST -->
+<h3>🗺 The Lab 5 access table</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Owner reads booking 1</span><span class="lz-lnote">200</span></div>
+  <div class="lz-layer"><span class="lz-lname">Another student</span><span class="lz-lnote">404</span></div>
+  <div class="lz-layer"><span class="lz-lname">Lecturer</span><span class="lz-lnote">404</span></div>
+  <div class="lz-layer"><span class="lz-lname">Admin</span><span class="lz-lnote">200</span></div>
+  <div class="lz-layer"><span class="lz-lname">Student / lecturer on the admin list</span><span class="lz-lnote">403</span></div>
+  <div class="lz-layer"><span class="lz-lname">Expired token (fixed clock)</span><span class="lz-lnote">401</span></div>
+</div>
+<div class="pitfall"><strong>Status ranges.</strong> <code>toBeLessThan(300)</code> accepts 200 for a create and <code>toBeGreaterThanOrEqual(400)</code> accepts 401 for a 403. The first attempt in this lab killed 0 of 8 mutants with exactly these checks.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Status ranges hide bugs: the first attempt killed 0 of 8.</li>
@@ -171,6 +182,16 @@ ${ra(UTC)}
 <li>Commit: <code>test: LabFlow Lite HTTP API (Lab 5, 8/8)</code>.</li>
 </ul>
 
+<h3>🗺 Bảng phân quyền của Lab 5</h3>
+<div class="lz-stack">
+  <div class="lz-layer"><span class="lz-lname">Chủ sở hữu đọc lượt 1</span><span class="lz-lnote">200</span></div>
+  <div class="lz-layer"><span class="lz-lname">Sinh viên khác</span><span class="lz-lnote">404</span></div>
+  <div class="lz-layer"><span class="lz-lname">Giảng viên</span><span class="lz-lnote">404</span></div>
+  <div class="lz-layer"><span class="lz-lname">Admin</span><span class="lz-lnote">200</span></div>
+  <div class="lz-layer"><span class="lz-lname">Sinh viên / giảng viên ở danh sách admin</span><span class="lz-lnote">403</span></div>
+  <div class="lz-layer"><span class="lz-lname">Token hết hạn (đồng hồ cố định)</span><span class="lz-lnote">401</span></div>
+</div>
+<div class="pitfall"><strong>Khoảng mã trạng thái.</strong> <code>toBeLessThan(300)</code> chấp nhận 200 cho thao tác tạo và <code>toBeGreaterThanOrEqual(400)</code> chấp nhận 401 thay cho 403. Lần thử đầu của lab này diệt 0/8 đột biến với đúng những phép kiểm đó.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Khoảng mã trạng thái che giấu bug: lần thử đầu diệt 0/8.</li>

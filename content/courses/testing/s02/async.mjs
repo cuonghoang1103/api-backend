@@ -132,6 +132,15 @@ ${ra(OUT['21-th'])}
   <div class="kv"><span class="k">testTimeout</span><span class="v">How long Vitest waits for one test (default 5000 ms).</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 An async test, step by step</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">async it</div><div class="lz-d">the test function returns a promise</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">await</div><div class="lz-d">the call under test finishes first</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">expect</div><div class="lz-d">on the resolved value or with .rejects</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Vitest waits</div><div class="lz-d">for the promise before judging the test</div></div>
+</div>
+<div class="pitfall"><strong>A promise nobody waits for.</strong> <code>.then(...)</code> without <code>await</code> or <code>return</code>, and <code>expect(...).rejects</code> without <code>await</code>, both let the test finish before the check runs — green and wrong. The lesson shows both traps and the one config line that catches them.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Async code returns promises; the test must <code>await</code> them or it ends too early.</li>
@@ -242,6 +251,14 @@ ${ra(OUT['21-th'])}
   <div class="kv"><span class="k">testTimeout</span><span class="v">Thời gian Vitest chờ một test (mặc định 5000 ms).</span></div>
 </div>
 
+<h3>🗺 Một test bất đồng bộ, từng bước</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">async it</div><div class="lz-d">hàm test trả về một promise</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">await</div><div class="lz-d">lời gọi được test chạy xong trước</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">expect</div><div class="lz-d">trên giá trị đã resolve hoặc với .rejects</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Vitest chờ</div><div class="lz-d">promise xong rồi mới phán test</div></div>
+</div>
+<div class="pitfall"><strong>Một promise không ai chờ.</strong> <code>.then(...)</code> thiếu <code>await</code> hay <code>return</code>, và <code>expect(...).rejects</code> thiếu <code>await</code>, đều để test kết thúc trước khi phép kiểm chạy — xanh mà sai. Bài này cho thấy cả hai bẫy và một dòng cấu hình bắt được chúng.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Code bất đồng bộ trả về promise; test phải <code>await</code> chúng, nếu không sẽ kết thúc quá sớm.</li>

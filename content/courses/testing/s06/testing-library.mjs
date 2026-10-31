@@ -128,6 +128,16 @@ ${ra(gon(OUT['61-th']))}
   <div class="kv"><span class="k">CORS preflight</span><span class="v">An <code>OPTIONS</code> request a browser sends before some cross-origin requests to ask for permission.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 How Testing Library finds an element</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">render</div><div class="lz-d">the component into jsdom</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Accessibility tree</div><div class="lz-d">roles and names, as a screen reader sees them</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">getByRole</div><div class="lz-d">button “Book”, textbox “Lab”</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">getByLabelText</div><div class="lz-d">date and time fields</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Assert</div><div class="lz-d">jest-dom matchers: toBeEnabled, toHaveValue</div></div>
+</div>
+<div class="pitfall"><strong>No cleanup between tests.</strong> Without Vitest globals, Testing Library cannot unmount on its own: the second test found two Book buttons. Worse, <code>getByLabelText</code> did not fail — both labels pointed to the first form — so a test could silently check the wrong element. Register <code>afterEach(cleanup)</code> once.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Component tests run in a fake DOM; keep them in their own config.</li>
@@ -203,6 +213,15 @@ ${ra(gon(OUT['61-th']))}
   <div class="kv"><span class="k">CORS preflight</span><span class="v">Request <code>OPTIONS</code> trình duyệt gửi trước một số request khác origin để xin phép.</span></div>
 </div>
 
+<h3>🗺 Testing Library tìm phần tử thế nào</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">render</div><div class="lz-d">component vào jsdom</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">Cây trợ năng</div><div class="lz-d">role và tên, như trình đọc màn hình thấy</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">getByRole</div><div class="lz-d">button “Book”, textbox “Lab”</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">getByLabelText</div><div class="lz-d">ô ngày và giờ</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Khẳng định</div><div class="lz-d">matcher jest-dom: toBeEnabled, toHaveValue</div></div>
+</div>
+<div class="pitfall"><strong>Không dọn dẹp giữa các test.</strong> Không có globals của Vitest, Testing Library không tự gỡ: test thứ hai thấy hai nút Book. Tệ hơn, <code>getByLabelText</code> không hỏng — cả hai label đều trỏ về form đầu — nên test có thể lặng lẽ kiểm nhầm phần tử. Đăng ký <code>afterEach(cleanup)</code> một lần.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Test component chạy trong DOM giả; để chúng trong config riêng.</li>

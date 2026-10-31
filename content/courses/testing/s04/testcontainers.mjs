@@ -83,6 +83,16 @@ ${ra(gon(OUT['43-th']))}
   <div class="kv"><span class="k">teardown</span><span class="v">Cleanup that runs after the tests — here, the function returned by setup.</span></div>
 </div>
 
+<!-- SODO-TST -->
+<h3>🗺 Testcontainers inside one test run</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">globalSetup</div><div class="lz-d">start postgres:17, apply the schema</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">provide</div><div class="lz-d">hand the connection URL to the workers</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">inject</div><div class="lz-d">each test file reads the URL</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Tests</div><div class="lz-d">run against the real database</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Teardown</div><div class="lz-d">container stopped and removed</div></div>
+</div>
+<div class="pitfall"><strong>Running integration tests with the unit tests.</strong> If the main config also picks up files that need Docker, every <code>npm run test:unit</code> becomes slow and fails on machines without Docker. Keep them in their own config and their own script.</div>
 <h3>📌 Summary</h3>
 <ul>
 <li>Global setup starts PostgreSQL, applies the schema, provides the URL, and stops the container afterwards.</li>
@@ -140,6 +150,15 @@ ${ra(gon(OUT['43-th']))}
   <div class="kv"><span class="k">teardown (dọn dẹp)</span><span class="v">Phần dọn chạy sau các test — ở đây là hàm mà setup trả về.</span></div>
 </div>
 
+<h3>🗺 Testcontainers trong một lần chạy test</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1</div><div class="lz-t">globalSetup</div><div class="lz-d">bật postgres:17, áp schema</div></div>
+  <div class="lz-step"><div class="lz-k">2</div><div class="lz-t">provide</div><div class="lz-d">đưa URL kết nối cho các worker</div></div>
+  <div class="lz-step"><div class="lz-k">3</div><div class="lz-t">inject</div><div class="lz-d">mỗi file test đọc URL</div></div>
+  <div class="lz-step"><div class="lz-k">4</div><div class="lz-t">Test</div><div class="lz-d">chạy trên CSDL thật</div></div>
+  <div class="lz-step"><div class="lz-k">5</div><div class="lz-t">Teardown</div><div class="lz-d">container được dừng và xoá</div></div>
+</div>
+<div class="pitfall"><strong>Chạy test tích hợp chung với unit test.</strong> Nếu config chính cũng gom các file cần Docker, mọi lần <code>npm run test:unit</code> đều chậm và hỏng trên máy không có Docker. Để chúng trong config riêng và script riêng.</div>
 <h3>📌 Tóm tắt</h3>
 <ul>
 <li>Global setup bật PostgreSQL, áp schema, cung cấp URL, và dừng container sau đó.</li>

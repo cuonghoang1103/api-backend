@@ -1,0 +1,520 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-0-3-dang-nhap-sai",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-0-3-dang-nhap-sai"
+  },
+  "exercises": [
+    {
+      "title": "0.3-1 — Six holes, six chapters",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "threat overview"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Each row is real evidence from LabFlow ID v0 (lesson 0.3). Pick the chapter that closes the hole first.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng là một bằng chứng thật từ LabFlow ID v0 (bài 0.3). Chọn chương đóng lỗ đó trước tiên.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Randomness is a primitive — Chapter 1.|||Ngẫu nhiên là một nguyên hàm — Chương 1.",
+        "Sessions and cookies are one chapter.|||Phiên và cookie là một chương."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.3-1 — Six holes, six chapters\n\nAnswer in the answer panel (no code needed).\n\n1. Evidence → chapterBằng chứng → chương\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.3-1 — Six holes, six chapters — answer key\n\n1. Evidence → chapterBằng chứng → chương\n   - r1.c: Chapter 2\n   - r2.c: Chapter 6\n   - r3.c: Chapter 1\n   - r4.c: Chapter 3\n   - r5.c: Chapter 3\n   - r6.c: Chapter 10\n   Chapter 1 already replaces Date.now() with 256 random bits (v0.1). Chapter 2 hashes passwords; Chapter 3 gives sessions expiry, logout and an HttpOnly cookie; Chapter 6 makes every failed login look the same; Chapter 10 limits guessing.VI: Chương 1 đã thay Date.now() bằng 256 bit ngẫu nhiên (v0.1). Chương 2 băm mật khẩu; Chương 3 cho phiên hạn dùng, đăng xuất và cookie HttpOnly; Chương 6 làm mọi lần đăng nhập trượt trông như nhau; Chương 10 giới hạn việc đoán.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Chapter 1 already replaces Date.now() with 256 random bits (v0.1). Chapter 2 hashes passwords; Chapter 3 gives sessions expiry, logout and an HttpOnly cookie; Chapter 6 makes every failed login look the same; Chapter 10 limits guessing.</p><p><i>VI: Chương 1 đã thay Date.now() bằng 256 bit ngẫu nhiên (v0.1). Chương 2 băm mật khẩu; Chương 3 cho phiên hạn dùng, đăng xuất và cookie HttpOnly; Chương 6 làm mọi lần đăng nhập trượt trông như nhau; Chương 10 giới hạn việc đoán.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Evidence → chapter</p><p style=\"opacity:.75;font-size:.92em\"><i>Bằng chứng → chương</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Evidence"
+              },
+              {
+                "ma": "c",
+                "ten": "Fixed in",
+                "luaChon": [
+                  "Chapter 1",
+                  "Chapter 2",
+                  "Chapter 3",
+                  "Chapter 6",
+                  "Chapter 10"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "cat data/db.json prints \"password\": \"123456\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "\"Wrong password\" vs \"No account with that email\" tells a stranger who has an account"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "The session id is Date.now(): 36839 guesses found An’s session in 4.37 s"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "POST /sign-out is 404 and the old session id still works"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "The session lives in localStorage; one injected script sent it to 127.0.0.1:4801"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "10001 password guesses in 3.48 s, every one answered 401, never 429"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "Chapter 2",
+              "r2.c": "Chapter 6",
+              "r3.c": "Chapter 1",
+              "r4.c": "Chapter 3",
+              "r5.c": "Chapter 3",
+              "r6.c": "Chapter 10"
+            },
+            "giaiThich": "<p>Chapter 1 already replaces Date.now() with 256 random bits (v0.1). Chapter 2 hashes passwords; Chapter 3 gives sessions expiry, logout and an HttpOnly cookie; Chapter 6 makes every failed login look the same; Chapter 10 limits guessing.</p><p><i>VI: Chương 1 đã thay Date.now() bằng 256 bit ngẫu nhiên (v0.1). Chương 2 băm mật khẩu; Chương 3 cho phiên hạn dùng, đăng xuất và cookie HttpOnly; Chương 6 làm mọi lần đăng nhập trượt trông như nhau; Chương 10 giới hạn việc đoán.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Hash the session id” for hole 3: the problem is that it is guessable, not that it is stored.|||\"Băm id phiên\" cho lỗ 3: vấn đề là nó đoán được, không phải nó được lưu."
+        },
+        {
+          "loi": "Thinking one message fixes enumeration: timing still differs (Chapter 6).|||Tưởng một thông báo là sửa xong việc dò tài khoản: thời gian vẫn khác (Chương 6)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "enumeration",
+          "vi": "dò ra tài khoản nào tồn tại"
+        }
+      ]
+    },
+    {
+      "title": "0.3-2 — Write sessionSearch(windowMs, rate)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "guessable identifiers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A <code>Date.now()</code> session id is one of <code>windowMs</code> numbers if the attacker knows when the sign-in happened to within that window. Lesson 0.3 measured <b>8424 requests/s</b> on localhost. Return <code>{ candidates, worstSeconds, averageSeconds }</code>: candidates = how many ids are possible, worst = trying all of them, average = half of that; round both times to 2 decimals.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Id phiên kiểu <code>Date.now()</code> là một trong <code>windowMs</code> số nếu kẻ tấn công biết lúc đăng nhập trong cửa sổ đó. Bài 0.3 đo được <b>8424 request/giây</b> trên localhost. Trả về <code>{ candidates, worstSeconds, averageSeconds }</code>: candidates = số id có thể, worst = thử hết, average = một nửa; làm tròn hai thời gian tới 2 chữ số thập phân.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sessionSearch(60000, 8424)",
+          "output": "{\"candidates\":60000,\"worstSeconds\":7.12,\"averageSeconds\":3.56}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One millisecond = one candidate.|||Một mili giây = một ứng viên.",
+        "Math.round(x * 100) / 100."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { candidates, worstSeconds, averageSeconds } */\nfunction sessionSearch(windowMs, rate) {\n  // Write your solution here\n  return { candidates: windowMs / 1000, worstSeconds: 0, averageSeconds: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sessionSearch(windowMs, rate) {\n  var candidates = windowMs;                              // Date.now() moves 1 per millisecond\n  var worst = candidates / rate;\n  return { candidates: candidates, worstSeconds: Math.round(worst * 100) / 100, averageSeconds: Math.round(worst / 2 * 100) / 100 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One minute is 60,000 candidates; at 8424 requests/s the whole minute takes about 7.1 s — the real run found An after 36839 tries. A 256-bit token has 1.16e77 candidates: the same formula gives a number larger than the age of the universe.</p>",
+      "solutionExplanationHtmlVi": "<p>Một phút là 60.000 ứng viên; với 8424 request/giây, cả phút mất khoảng 7.1 giây — lần chạy thật tìm ra An sau 36839 lượt. Token 256 bit có 1,16e77 ứng viên: cùng công thức ra một con số lớn hơn tuổi vũ trụ.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "One minute at the measured rate",
+              "vi": "Một phút với tốc độ đo được"
+            },
+            "goi": "sessionSearch(60000, 8424)",
+            "mongDoi": {
+              "candidates": 60000,
+              "worstSeconds": 7.12,
+              "averageSeconds": 3.56
+            }
+          },
+          {
+            "moTa": {
+              "en": "One hour",
+              "vi": "Một giờ"
+            },
+            "goi": "sessionSearch(3600000, 8424)",
+            "mongDoi": {
+              "candidates": 3600000,
+              "worstSeconds": 427.35,
+              "averageSeconds": 213.68
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "sessionSearch(1000, 100)",
+            "mongDoi": {
+              "candidates": 1000,
+              "worstSeconds": 10,
+              "averageSeconds": 5
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sessionSearch(60000, 1)",
+            "mongDoi": {
+              "candidates": 60000,
+              "worstSeconds": 60000,
+              "averageSeconds": 30000
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting seconds instead of milliseconds: 60 candidates per minute instead of 60,000.|||Đếm theo giây thay vì mili giây: 60 ứng viên mỗi phút thay vì 60.000."
+        },
+        {
+          "loi": "Rounding before halving.|||Làm tròn trước khi chia đôi."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "0.3-3 — Write signInResponse(): one answer for every failure",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "account enumeration"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>v0 answered <code>No account with that email</code> or <code>Wrong password</code> — real output of the enumeration script:</p><pre>HAS AN ACCOUNT  an@student.labflow.example ← \"Wrong password\"\nno account      minh@student.labflow.example ← \"No account with that email\"\nHAS AN ACCOUNT  binh@student.labflow.example ← \"Wrong password\"</pre><p>Write <code>signInResponse(users, email, password)</code>: success ⇒ <code>{ status: 200, body: { userId } }</code>; <b>every</b> failure (unknown email, wrong password, missing fields) ⇒ <code>{ status: 401, body: { error: 'Email or password is incorrect' } }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>v0 trả <code>No account with that email</code> hoặc <code>Wrong password</code> — output thật của script dò:</p><pre>HAS AN ACCOUNT  an@student.labflow.example ← \"Wrong password\"\nno account      minh@student.labflow.example ← \"No account with that email\"\nHAS AN ACCOUNT  binh@student.labflow.example ← \"Wrong password\"</pre><p>Viết <code>signInResponse(users, email, password)</code>: thành công ⇒ <code>{ status: 200, body: { userId } }</code>; <b>mọi</b> thất bại (email lạ, sai mật khẩu, thiếu trường) ⇒ <code>{ status: 401, body: { error: 'Email or password is incorrect' } }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\"},{\"id\":\"usr_2\",\"email\":\"binh@student.labflow.example\",\"password\":\"123456\"}], \"an@student.labflow.example\", \"an-lab-2026\")",
+          "output": "{\"status\":200,\"body\":{\"userId\":\"usr_1\"}}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compute one boolean ok, then branch once.|||Tính một biến ok duy nhất rồi rẽ nhánh một lần.",
+        "A missing password must not match a user whose password is also missing.|||Thiếu mật khẩu không được khớp với người dùng cũng thiếu mật khẩu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { status, body } */\nfunction signInResponse(users, email, password) {\n  // Write your solution here\n  var user = users.find(function (u) { return u.email === email; });\n  if (!user) return { status: 401, body: { error: 'No account with that email' } };\n  if (user.password !== password) return { status: 401, body: { error: 'Wrong password' } };\n  return { status: 200, body: { userId: user.id } };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction signInResponse(users, email, password) {\n  var user = users.find(function (u) { return u.email === email; });\n  var ok = !!user && typeof password === 'string' && user.password === password; // plain text only in v0 — Chapter 2 hashes it\n  if (!ok) return { status: 401, body: { error: 'Email or password is incorrect' } };\n  return { status: 200, body: { userId: user.id } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Same status, same body for every failure removes the message oracle. Chapter 6 removes the timing oracle too (both branches must cost the same once passwords are hashed).</p>",
+      "solutionExplanationHtmlVi": "<p>Cùng mã, cùng body cho mọi thất bại xoá cỗ máy dò bằng thông báo. Chương 6 xoá nốt cỗ máy dò bằng thời gian (khi mật khẩu đã băm, hai nhánh phải tốn như nhau).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2...",
+              "vi": "Ca 1"
+            },
+            "goi": "signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\"},{\"id\":\"usr_2\",\"email\":\"binh@student.labflow.example\",\"password\":\"123456\"}], \"an@student.labflow.example\", \"an-lab-2026\")",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "userId": "usr_1"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Case 2: signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2...",
+              "vi": "Ca 2"
+            },
+            "goi": "signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\"},{\"id\":\"usr_2\",\"email\":\"binh@student.labflow.example\",\"password\":\"123456\"}], \"minh@student.labflow.example\", \"x\")",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "error": "Email or password is incorrect"
+              }
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\"},{\"id\":\"usr_2\",\"email\":\"binh@student.labflow.example\",\"password\":\"123456\"}], \"binh@student.labflow.example\", \"x\")",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "error": "Email or password is incorrect"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\"},{\"id\":\"usr_2\",\"email\":\"binh@student.labflow.example\",\"password\":\"123456\"},{\"id\":\"usr_9\",\"email\":\"nopw@labflow.example\"}], 'nopw@labflow.example', undefined)",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "error": "Email or password is incorrect"
+              }
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "signInResponse([{\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"password\":\"an-lab-2026\"},{\"id\":\"usr_2\",\"email\":\"binh@student.labflow.example\",\"password\":\"123456\"}])",
+            "mongDoi": {
+              "status": 401,
+              "body": {
+                "error": "Email or password is incorrect"
+              }
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Two returns with two messages — the enumeration oracle again.|||Hai lệnh return với hai thông báo — lại thành cỗ máy dò tài khoản."
+        },
+        {
+          "loi": "Comparing undefined === undefined and logging in someone without a password.|||So undefined === undefined và cho đăng nhập người không có mật khẩu."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "0.3-4 — Reading the brute-force run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "online guessing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real output of demo0/brute.mjs against v0:<pre>$ node demo0/brute.mjs binh@student.labflow.example wordlists/10k-most-common.txt\nbinh@student.labflow.example: 2 attempts in 0.03 s (59 attempts/s), statuses {\"200\":1,\"401\":1}\nPASSWORD FOUND at attempt 2: \"123456\"</pre><pre>$ node demo0/brute.mjs an@student.labflow.example wordlists/10k-most-common.txt\nan@student.labflow.example: 10001 attempts in 3.48 s (2877 attempts/s), statuses {\"401\":10001}\nnot in the list</pre></p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Output thật của demo0/brute.mjs đánh vào v0:<pre>$ node demo0/brute.mjs binh@student.labflow.example wordlists/10k-most-common.txt\nbinh@student.labflow.example: 2 attempts in 0.03 s (59 attempts/s), statuses {\"200\":1,\"401\":1}\nPASSWORD FOUND at attempt 2: \"123456\"</pre><pre>$ node demo0/brute.mjs an@student.labflow.example wordlists/10k-most-common.txt\nan@student.labflow.example: 10001 attempts in 3.48 s (2877 attempts/s), statuses {\"401\":10001}\nnot in the list</pre></p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look at the statuses object.|||Nhìn object statuses.",
+        "Which list was used?|||Đã dùng danh sách nào?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.3-4 — Reading the brute-force run\n\nAnswer in the answer panel (no code needed).\n\n1. What protected An, and what did not?Điều gì bảo vệ An, điều gì không?\n2. Binh fell at attempt 2. What does that say about password policy?Bình đổ ở lượt thứ 2. Điều đó nói gì về chính sách mật khẩu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 0.3-4 — Reading the brute-force run — answer key\n\n1. What protected An, and what did not?Điều gì bảo vệ An, điều gì không?\n   Answer: a) Only luck: her password was not in this particular list\n   statuses {\"401\": 10001}: no 429, no lock-out. An is safe only from THIS list; Chapter 10 makes guessing itself expensive.VI: statuses {\"401\": 10001}: không 429, không khoá. An chỉ an toàn trước danh sách NÀY; Chương 10 làm chính việc đoán trở nên đắt.\n\n2. Binh fell at attempt 2. What does that say about password policy?Bình đổ ở lượt thứ 2. Điều đó nói gì về chính sách mật khẩu?\n   Answer: a) Reject passwords found in common and breached lists\n   123456 is near the top of every list. Composition rules do not stop it; checking against known-bad lists does.VI: 123456 nằm gần đầu mọi danh sách. Luật \"phải có ký tự đặc biệt\" không chặn được nó; kiểm với danh sách mật khẩu xấu thì chặn được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Only luck: her password was not in this particular list</p><p>statuses {\"401\": 10001}: no 429, no lock-out. An is safe only from THIS list; Chapter 10 makes guessing itself expensive.</p><p><i>VI: statuses {\"401\": 10001}: không 429, không khoá. An chỉ an toàn trước danh sách NÀY; Chương 10 làm chính việc đoán trở nên đắt.</i></p></li><li><p><b>a)</b> Reject passwords found in common and breached lists</p><p>123456 is near the top of every list. Composition rules do not stop it; checking against known-bad lists does.</p><p><i>VI: 123456 nằm gần đầu mọi danh sách. Luật \"phải có ký tự đặc biệt\" không chặn được nó; kiểm với danh sách mật khẩu xấu thì chặn được.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What protected An, and what did not?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điều gì bảo vệ An, điều gì không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only luck: her password was not in this particular list"
+              },
+              {
+                "ma": "b",
+                "noiDung": "HTTPS: the guesses could not be read on the network"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A lock-out: the server locked her account after 5 tries"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Rate limiting: the server answered 429 after a while"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>statuses {\"401\": 10001}: no 429, no lock-out. An is safe only from THIS list; Chapter 10 makes guessing itself expensive.</p><p><i>VI: statuses {\"401\": 10001}: không 429, không khoá. An chỉ an toàn trước danh sách NÀY; Chương 10 làm chính việc đoán trở nên đắt.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Binh fell at attempt 2. What does that say about password policy?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bình đổ ở lượt thứ 2. Điều đó nói gì về chính sách mật khẩu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Reject passwords found in common and breached lists"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Require at least 8 characters including a symbol"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Force every user to change the password monthly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing: choosing a weak password is Binh’s right"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>123456 is near the top of every list. Composition rules do not stop it; checking against known-bad lists does.</p><p><i>VI: 123456 nằm gần đầu mọi danh sách. Luật \"phải có ký tự đặc biệt\" không chặn được nó; kiểm với danh sách mật khẩu xấu thì chặn được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading “not in the list” as “strong password”.|||Đọc \"not in the list\" thành \"mật khẩu mạnh\"."
+        },
+        {
+          "loi": "Thinking 401 slows an attacker down.|||Tưởng 401 làm chậm kẻ tấn công."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

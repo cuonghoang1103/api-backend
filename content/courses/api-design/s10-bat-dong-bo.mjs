@@ -2237,6 +2237,11 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
   <li>Cancellation delivered before creation: last-write-wins ended PENDING (wrong); version check kept CANCELLED.</li>
   <li>Dedupe ids live as long as the sender retries and are written with the effect, in one transaction.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-3-so-sanh-hang-thoi-gian" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 1.3: comparing two secrets with === is a bug</span><span class="lc-sub">Same: the signature is checked over the raw body, in constant time, inside a 300-second window. That lesson adds why the comparison must be constant-time, measured: === costs 4.61 → 6.56 ns over 64 characters and 38.05 ns at 1,024, a benchmark that lies (0.99 ns flat), safeEqual with double HMAC, and looking up digests instead of comparing.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -2390,6 +2395,11 @@ chữ ký trên body thô v1,ZLrEsD7a9yl… · trên bản dựng lại v1,wAoAD
   <li>Tin huỷ giao trước tin đặt: ai ghi sau thắng ra PENDING (sai); so version giữ CANCELLED.</li>
   <li>Id chống trùng sống lâu bằng thời gian bên gửi thử lại và được ghi cùng tác dụng, trong một transaction.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-3-so-sanh-hang-thoi-gian" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 1.3: so sánh hai bí mật bằng === là một con bug</span><span class="lc-sub">Giống: chữ ký được kiểm trên thân gốc, hằng thời gian, trong cửa sổ 300 giây. Bài đó thêm vì sao phép so phải hằng thời gian, có đo: === tốn 4,61 → 6,56 ns trên 64 ký tự và 38,05 ns ở 1.024, một phép đo nói dối (0,99 ns phẳng), safeEqual HMAC hai lớp, và tra digest thay vì so.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
 </div>
 `,
     },

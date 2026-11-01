@@ -1,0 +1,623 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-1-3-so-sanh-hang-thoi-gian",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-1-3-so-sanh-hang-thoi-gian"
+  },
+  "exercises": [
+    {
+      "title": "1.3-1 — Read the measurements (and spot the one that lies)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "timing attacks"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real runs of lesson 1.3 on a 64-character token (Node 22.23.3). Naive benchmark (one guess object per position):<pre> 0 leading chars right → 0.99 ns\n 1 leading chars right → 0.99 ns\n 8 leading chars right → 0.99 ns\n…</pre>Fixed benchmark (8 copies rotated, every result used):<pre> 0 leading chars right → 4.61 ns\n 1 leading chars right → 4.56 ns\n 8 leading chars right → 4.59 ns\n16 leading chars right → 5.28 ns\n32 leading chars right → 6.29 ns\n48 leading chars right → 6.61 ns\n63 leading chars right → 6.56 ns\n64 leading chars right → 6.24 ns</pre>timingSafeEqual:<pre>0 leading chars right → 65.13 ns\n…\n63 leading chars right → 65.47 ns</pre>Over HTTP on 127.0.0.1, 20,000 requests per guess, three runs:<pre>median difference: 125 ns (the in-process difference was about 2 ns)\nmedian difference: -126 ns (the in-process difference was about 2 ns)\nmedian difference: -42 ns (the in-process difference was about 2 ns)</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Các lần đo thật của bài 1.3 trên token 64 ký tự (Node 22.23.3). Phép đo ngây thơ (một đối tượng đoán mỗi vị trí):<pre> 0 leading chars right → 0.99 ns\n 1 leading chars right → 0.99 ns\n 8 leading chars right → 0.99 ns\n…</pre>Phép đo đã sửa (xoay 8 bản sao, dùng mọi kết quả):<pre> 0 leading chars right → 4.61 ns\n 1 leading chars right → 4.56 ns\n 8 leading chars right → 4.59 ns\n16 leading chars right → 5.28 ns\n32 leading chars right → 6.29 ns\n48 leading chars right → 6.61 ns\n63 leading chars right → 6.56 ns\n64 leading chars right → 6.24 ns</pre>timingSafeEqual:<pre>0 leading chars right → 65.13 ns\n…\n63 leading chars right → 65.47 ns</pre>Qua HTTP trên 127.0.0.1, 20.000 request mỗi chuỗi đoán, ba lần chạy:<pre>median difference: 125 ns (the in-process difference was about 2 ns)\nmedian difference: -126 ns (the in-process difference was about 2 ns)\nmedian difference: -42 ns (the in-process difference was about 2 ns)</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what the CPU actually had to do in each loop.|||Hỏi CPU thật sự phải làm gì trong mỗi vòng lặp.",
+        "Compare the size of the signal with the spread of the noise.|||So độ lớn tín hiệu với độ dao động của nhiễu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.3-1 — Read the measurements (and spot the one that lies)\n\nAnswer in the answer panel (no code needed).\n\n1. The naive benchmark printed 0.99 ns for every row. What does that prove?Phép đo ngây thơ in 0,99 ns cho mọi dòng. Điều đó chứng minh gì?\n2. Why do 0, 1 and 8 correct characters cost the same with ===?Vì sao đúng 0, 1 và 8 ký tự tốn như nhau với ===?\n3. Over HTTP the median difference changed sign between runs. The right conclusion:Qua HTTP, chênh lệch trung vị đổi dấu giữa các lần chạy. Kết luận đúng:\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.3-1 — Read the measurements (and spot the one that lies) — answer key\n\n1. The naive benchmark printed 0.99 ns for every row. What does that prove?Phép đo ngây thơ in 0,99 ns cho mọi dòng. Điều đó chứng minh gì?\n   Answer: d) Nothing: the JIT computed it once and timed an empty loop\n   A flat, suspiciously fast benchmark usually measures the optimiser. Rotating inputs and using results gives the real staircase.VI: Một phép đo phẳng và nhanh đáng ngờ thường là đang đo trình tối ưu. Xoay đầu vào và dùng kết quả mới ra bậc thang thật.\n\n2. Why do 0, 1 and 8 correct characters cost the same with ===?Vì sao đúng 0, 1 và 8 ký tự tốn như nhau với ===?\n   Answer: c) V8 compares a block of bytes at a time\n   The leak is real but coarse: about 2 ns over 64 characters, in steps. Longer values leak more (1,024 characters: about 4.6 → 38 ns).VI: Chỗ rò có thật nhưng thô: khoảng 2 ns trên 64 ký tự, theo bậc. Giá trị dài hơn rò nhiều hơn (1.024 ký tự: khoảng 4,6 → 38 ns).\n\n3. Over HTTP the median difference changed sign between runs. The right conclusion:Qua HTTP, chênh lệch trung vị đổi dấu giữa các lần chạy. Kết luận đúng:\n   Answer: a) Hard to exploit here, but the fix is free: use it anyway\n   Hard ≠ impossible: more samples, longer secrets, slower comparisons and attackers in the same data centre all help the attacker. timingSafeEqual or a digest lookup costs nothing.VI: Khó ≠ không thể: nhiều mẫu hơn, bí mật dài hơn, phép so chậm hơn và kẻ tấn công cùng trung tâm dữ liệu đều giúp kẻ tấn công. timingSafeEqual hay tra digest chẳng tốn gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Nothing: the JIT computed it once and timed an empty loop</p><p>A flat, suspiciously fast benchmark usually measures the optimiser. Rotating inputs and using results gives the real staircase.</p><p><i>VI: Một phép đo phẳng và nhanh đáng ngờ thường là đang đo trình tối ưu. Xoay đầu vào và dùng kết quả mới ra bậc thang thật.</i></p></li><li><p><b>c)</b> V8 compares a block of bytes at a time</p><p>The leak is real but coarse: about 2 ns over 64 characters, in steps. Longer values leak more (1,024 characters: about 4.6 → 38 ns).</p><p><i>VI: Chỗ rò có thật nhưng thô: khoảng 2 ns trên 64 ký tự, theo bậc. Giá trị dài hơn rò nhiều hơn (1.024 ký tự: khoảng 4,6 → 38 ns).</i></p></li><li><p><b>a)</b> Hard to exploit here, but the fix is free: use it anyway</p><p>Hard ≠ impossible: more samples, longer secrets, slower comparisons and attackers in the same data centre all help the attacker. timingSafeEqual or a digest lookup costs nothing.</p><p><i>VI: Khó ≠ không thể: nhiều mẫu hơn, bí mật dài hơn, phép so chậm hơn và kẻ tấn công cùng trung tâm dữ liệu đều giúp kẻ tấn công. timingSafeEqual hay tra digest chẳng tốn gì.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The naive benchmark printed 0.99 ns for every row. What does that prove?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phép đo ngây thơ in 0,99 ns cho mọi dòng. Điều đó chứng minh gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "That the CPU was throttled during the measurement"
+              },
+              {
+                "ma": "b",
+                "noiDung": "That === has been constant-time since Node 22"
+              },
+              {
+                "ma": "c",
+                "noiDung": "That V8 hashes both strings before comparing them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing: the JIT computed it once and timed an empty loop"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A flat, suspiciously fast benchmark usually measures the optimiser. Rotating inputs and using results gives the real staircase.</p><p><i>VI: Một phép đo phẳng và nhanh đáng ngờ thường là đang đo trình tối ưu. Xoay đầu vào và dùng kết quả mới ra bậc thang thật.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why do 0, 1 and 8 correct characters cost the same with ===?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao đúng 0, 1 và 8 ký tự tốn như nhau với ===?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "base64url characters carry only 6 bits each"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The benchmark rotates 8 copies of every guess"
+              },
+              {
+                "ma": "c",
+                "noiDung": "V8 compares a block of bytes at a time"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The first 8 characters are cached by V8"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The leak is real but coarse: about 2 ns over 64 characters, in steps. Longer values leak more (1,024 characters: about 4.6 → 38 ns).</p><p><i>VI: Chỗ rò có thật nhưng thô: khoảng 2 ns trên 64 ký tự, theo bậc. Giá trị dài hơn rò nhiều hơn (1.024 ký tự: khoảng 4,6 → 38 ns).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Over HTTP the median difference changed sign between runs. The right conclusion:</p><p style=\"opacity:.75;font-size:.92em\"><i>Qua HTTP, chênh lệch trung vị đổi dấu giữa các lần chạy. Kết luận đúng:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Hard to exploit here, but the fix is free: use it anyway"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The server became constant-time by accident"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Localhost adds more noise than the real internet"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Over a network === is safe, so keep it as it is"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Hard ≠ impossible: more samples, longer secrets, slower comparisons and attackers in the same data centre all help the attacker. timingSafeEqual or a digest lookup costs nothing.</p><p><i>VI: Khó ≠ không thể: nhiều mẫu hơn, bí mật dài hơn, phép so chậm hơn và kẻ tấn công cùng trung tâm dữ liệu đều giúp kẻ tấn công. timingSafeEqual hay tra digest chẳng tốn gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trusting a flat benchmark.|||Tin một phép đo phẳng lì."
+        },
+        {
+          "loi": "“Not exploitable over HTTP, so leave ===”.|||\"Qua HTTP không khai thác được, cứ để ===\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "timing side channel",
+          "vi": "kênh rò thời gian"
+        },
+        {
+          "en": "micro-benchmark",
+          "vi": "phép đo hiệu năng nhỏ"
+        }
+      ]
+    },
+    {
+      "title": "1.3-2 — Write safeEqual(a, b) without an early exit",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "constant-time comparison"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Write <code>safeEqual(a, b)</code> for two strings: <code>true</code> only if they are equal. It must look at <b>every</b> character no matter where the first difference is — combine differences with <code>^</code> and <code>|=</code> and decide once at the end. Different lengths ⇒ <code>false</code> (do not return early: fold the length difference into the same accumulator). Non-strings ⇒ <code>false</code>; it never throws. No <code>crypto</code>, no <code>timingSafeEqual</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>safeEqual(a, b)</code> cho hai chuỗi: chỉ <code>true</code> khi chúng bằng nhau. Nó phải xem <b>mọi</b> ký tự bất kể chỗ khác đầu tiên ở đâu — gộp các chỗ khác bằng <code>^</code> và <code>|=</code> rồi quyết định một lần ở cuối. Khác độ dài ⇒ <code>false</code> (đừng thoát sớm: gộp chênh lệch độ dài vào cùng biến tích luỹ). Không phải chuỗi ⇒ <code>false</code>; không bao giờ ném lỗi. Không dùng <code>crypto</code>, không <code>timingSafeEqual</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "safeEqual(\"lfid_ses_abcdef\", \"lfid_ses_abcdef\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "diff = a.length ^ b.length; then loop over the longer length.|||diff = a.length ^ b.length; rồi lặp theo độ dài lớn hơn.",
+        "charCodeAt past the end gives NaN; turn it into a number.|||charCodeAt quá cuối chuỗi ra NaN; đổi nó thành một số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** true only if a and b are the same string — look at every character */\nfunction safeEqual(a, b) {\n  // Write your solution here\n  if (a.length !== b.length) return false;\n  for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false;\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction safeEqual(a, b) {\n  if (typeof a !== 'string' || typeof b !== 'string') return false;\n  var diff = a.length ^ b.length;                    // different lengths ⇒ not equal, but keep going\n  var n = Math.max(a.length, b.length);\n  for (var i = 0; i < n; i++) {\n    diff |= (a.charCodeAt(i) | 0) ^ (b.charCodeAt(i) | 0);   // past the end: NaN | 0 = 0\n  }\n  return diff === 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The accumulator only grows (|=), so one difference anywhere makes it non-zero, and the loop runs the same number of iterations for any content of the given lengths. In LabFlow ID the toolkit goes further (double HMAC, lesson 1.3) — and the best option is not comparing at all (digest lookup).</p>",
+      "solutionExplanationHtmlVi": "<p>Biến tích luỹ chỉ tăng (|=), nên một chỗ khác bất kỳ cũng làm nó khác 0, và vòng lặp chạy cùng số lần với mọi nội dung ở cùng độ dài. Bộ công cụ của LabFlow ID đi xa hơn (HMAC hai lớp, bài 1.3) — và tốt nhất là không so gì cả (tra digest).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: safeEqual(\"lfid_ses_abcdef\", \"lfid_ses_abcdef\")",
+              "vi": "Ca 1"
+            },
+            "goi": "safeEqual(\"lfid_ses_abcdef\", \"lfid_ses_abcdef\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Case 2: safeEqual(\"lfid_ses_abcdef\", \"lfid_ses_abcdeg\")",
+              "vi": "Ca 2"
+            },
+            "goi": "safeEqual(\"lfid_ses_abcdef\", \"lfid_ses_abcdeg\")",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "safeEqual(\"lfid_ses_abc\", \"lfid_ses_abcdef\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "safeEqual(\"\", \"\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "safeEqual(\"abc\", \"\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "undefined vs undefined ⇒ false",
+              "vi": "undefined với undefined ⇒ false"
+            },
+            "goi": "safeEqual(undefined, undefined)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "safeEqual(\"é\", \"é\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "A prefix repeated",
+              "vi": "Lặp lại tiền tố"
+            },
+            "goi": "safeEqual(\"ab\", \"abab\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "Combines differences with ^ and |=",
+              "vi": "Gộp chỗ khác bằng ^ và |="
+            },
+            "tep": "answer.js",
+            "khop": "\\|="
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "Never compares single characters with == / === / != / !== (that is the early exit)",
+              "vi": "Không so từng ký tự bằng == / === / != / !== (đó chính là lối thoát sớm)"
+            },
+            "tep": "answer.js",
+            "khop": "(\\[\\s*\\w+\\s*\\]|charAt\\(\\s*\\w+\\s*\\)|charCodeAt\\(\\s*\\w+\\s*\\))\\s*(!==?|===?)",
+            "phuDinh": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": {
+              "en": "Written by hand (no timingSafeEqual, crypto or require)",
+              "vi": "Tự viết (không timingSafeEqual, crypto hay require)"
+            },
+            "tep": "answer.js",
+            "khop": "timingSafeEqual|crypto|require\\s*\\(",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "if (a[i] !== b[i]) return false — the early exit is exactly the leak.|||if (a[i] !== b[i]) return false — chính lối thoát sớm là chỗ rò."
+        },
+        {
+          "loi": "Returning false as soon as the lengths differ — fine only when length is public.|||Trả false ngay khi độ dài khác nhau — chỉ ổn khi độ dài là công khai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "accumulator",
+          "vi": "biến tích luỹ"
+        }
+      ]
+    },
+    {
+      "title": "1.3-3 — Write verifyWebhook(header, raw, nowSec, macHex)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "webhook signatures"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID signs webhooks with the header <code>LabFlow-Signature: t=&lt;unix seconds&gt;,v1=&lt;64 hex chars&gt;</code>, where <code>v1 = HMAC-SHA256(secret, t + \".\" + rawBody)</code>. <code>macHex(text)</code> is given (it already knows the secret). Return:</p><ul>\n<li><code>'MALFORMED'</code> — <code>t</code> is not all digits, or <code>v1</code> is not exactly 64 lower-case hex characters (parts may come in any order, with spaces around them);</li>\n<li><code>'TOO_OLD'</code> — <code>|nowSec − t| &gt; 300</code>;</li>\n<li><code>'BAD_SIGNATURE'</code> — <code>v1</code> differs from <code>macHex(t + \".\" + raw)</code> (compare all 64 characters, no early exit);</li>\n<li><code>'OK'</code> otherwise.</li></ul><p>Lesson 1.3’s real run: parsed body ⇒ BAD_SIGNATURE, raw body ⇒ OK, user changed ⇒ BAD_SIGNATURE, replayed 10 min later ⇒ TOO_OLD.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID ký webhook bằng header <code>LabFlow-Signature: t=&lt;giây unix&gt;,v1=&lt;64 ký tự hex&gt;</code>, với <code>v1 = HMAC-SHA256(bí mật, t + \".\" + thân gốc)</code>. <code>macHex(text)</code> được cho sẵn (nó đã biết bí mật). Trả về:</p><ul>\n<li><code>'MALFORMED'</code> — <code>t</code> không toàn chữ số, hoặc <code>v1</code> không đúng 64 ký tự hex thường (các phần có thể theo thứ tự bất kỳ, có khoảng trắng quanh chúng);</li>\n<li><code>'TOO_OLD'</code> — <code>|nowSec − t| &gt; 300</code>;</li>\n<li><code>'BAD_SIGNATURE'</code> — <code>v1</code> khác <code>macHex(t + \".\" + raw)</code> (so đủ 64 ký tự, không thoát sớm);</li>\n<li><code>'OK'</code> trong trường hợp còn lại.</li></ul><p>Lần chạy thật của bài 1.3: thân đã parse ⇒ BAD_SIGNATURE, thân gốc ⇒ OK, đổi người dùng ⇒ BAD_SIGNATURE, gửi lại sau 10 phút ⇒ TOO_OLD.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1793512800,v1=' + mac('1793512800.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\"), \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Split on \",\", then split each part at the first \"=\".|||Tách theo \",\", rồi tách mỗi phần ở dấu \"=\" đầu tiên.",
+        "Check format, then time, then the signature — the cheap checks first.|||Kiểm định dạng, rồi thời gian, rồi chữ ký — kiểm rẻ trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'OK' | 'MALFORMED' | 'TOO_OLD' | 'BAD_SIGNATURE' */\nfunction verifyWebhook(header, raw, nowSec, macHex) {\n  // Write your solution here\n  var v1 = header.split('v1=')[1];\n  return v1 === macHex(raw) ? 'OK' : 'BAD_SIGNATURE';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction verifyWebhook(header, raw, nowSec, macHex) {\n  var parts = {};\n  String(header || '').split(',').forEach(function (kv) {\n    var i = kv.indexOf('=');\n    if (i > 0) parts[kv.slice(0, i).trim()] = kv.slice(i + 1).trim();\n  });\n  var t = Number(parts.t);\n  if (!/^\\d+$/.test(parts.t || '') || !/^[0-9a-f]{64}$/.test(parts.v1 || '')) return 'MALFORMED';\n  if (Math.abs(nowSec - t) > 300) return 'TOO_OLD';\n  var expected = macHex(parts.t + '.' + raw);         // the exact raw bytes, never a re-serialised object\n  var diff = 0;\n  for (var k = 0; k < 64; k++) diff |= expected.charCodeAt(k) ^ parts.v1.charCodeAt(k);\n  return diff === 0 ? 'OK' : 'BAD_SIGNATURE';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Format first (cheap, and guarantees 64 + 64 characters for the comparison), then the time window, then a constant-time comparison over the exact raw bytes. This is the same shape GitHub, Stripe and Standard Webhooks use.</p>",
+      "solutionExplanationHtmlVi": "<p>Định dạng trước (rẻ, và bảo đảm 64 + 64 ký tự cho phép so), rồi cửa sổ thời gian, rồi so hằng thời gian trên đúng các byte gốc. Đây cũng là hình dạng GitHub, Stripe và Standard Webhooks dùng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Raw body, fresh (real run: OK)",
+              "vi": "Thân gốc, mới (chạy thật: OK)"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1793512800,v1=' + mac('1793512800.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\"), \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "User changed (real run: BAD_SIGNATURE)",
+              "vi": "Đổi người dùng (chạy thật: BAD_SIGNATURE)"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1793512800,v1=' + mac('1793512800.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\"), \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_3\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "BAD_SIGNATURE"
+          },
+          {
+            "moTa": {
+              "en": "Replayed 10 minutes later",
+              "vi": "Gửi lại sau 10 phút"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1793512200,v1=' + mac('1793512200.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\"), \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "TOO_OLD",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "4 minutes old: still inside the window",
+              "vi": "Cũ 4 phút: vẫn trong cửa sổ"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1793512560,v1=' + mac('1793512560.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\"), \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Re-serialised body",
+              "vi": "Thân bị serialize lại"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1793512800,v1=' + mac('1793512800.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\"), \"{\\\"type\\\":\\\"user.disabled\\\",\\\"user\\\":\\\"usr_2\\\",\\\"at\\\":\\\"2026-11-01T06:00:00Z\\\"}\", 1793512800, mac); })()",
+            "mongDoi": "BAD_SIGNATURE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Parts reversed, with spaces",
+              "vi": "Đảo thứ tự, có khoảng trắng"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('v1=' + mac('1793512800.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\") + ' , t=1793512800', \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1793512800,v1=abc', \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "MALFORMED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook('t=1e9,v1=' + mac('1e9.' + \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\"), \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "MALFORMED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 9",
+              "vi": "Ca ẩn 9"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 8; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return verifyWebhook(undefined, \"{\\n  \\\"type\\\": \\\"user.disabled\\\",\\n  \\\"user\\\": \\\"usr_2\\\",\\n  \\\"at\\\": \\\"2026-11-01T06:00:00Z\\\"\\n}\", 1793512800, mac); })()",
+            "mongDoi": "MALFORMED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Recomputing the MAC over JSON.stringify(JSON.parse(raw)) — the bytes change.|||Tính MAC trên JSON.stringify(JSON.parse(raw)) — các byte đổi."
+        },
+        {
+          "loi": "No time check: a captured request can be replayed forever.|||Không kiểm thời gian: request bị bắt được có thể gửi lại mãi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "replay",
+          "vi": "phát lại request cũ"
+        },
+        {
+          "en": "tolerance",
+          "vi": "dung sai thời gian"
+        }
+      ]
+    },
+    {
+      "title": "1.3-4 — When to use which",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "constant-time comparison"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>For each thing LabFlow ID has to check, pick how to check it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi thứ LabFlow ID phải kiểm, chọn cách kiểm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Is it random and long, recomputed, human-chosen, short, or not secret at all?|||Nó ngẫu nhiên và dài, tự tính lại, do người chọn, ngắn, hay chẳng phải bí mật?",
+        "A session token never needs to be compared in your code.|||Token phiên không bao giờ cần so trong mã của bạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.3-4 — When to use which\n\nAnswer in the answer panel (no code needed).\n\n1. Value → how to checkGiá trị → cách kiểm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1.3-4 — When to use which — answer key\n\n1. Value → how to checkGiá trị → cách kiểm\n   - r1.c: store a digest and look it up\n   - r2.c: store a digest and look it up\n   - r3.c: timingSafeEqual / safeEqual\n   - r4.c: let argon2.verify compare\n   - r5.c: safeEqual + an attempt limit\n   - r6.c: plain === is fine\n   Random tokens: no comparison at all (the database index does it). Recomputed signatures: constant time. Passwords: the slow hash compares. Short codes: constant time is not enough — a million possibilities need an attempt limit. Non-secrets: ===.VI: Token ngẫu nhiên: không so gì (chỉ mục CSDL lo). Chữ ký tự tính lại: hằng thời gian. Mật khẩu: hàm băm chậm tự so. Mã ngắn: hằng thời gian chưa đủ — một triệu khả năng cần giới hạn lượt thử. Không phải bí mật: ===.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Random tokens: no comparison at all (the database index does it). Recomputed signatures: constant time. Passwords: the slow hash compares. Short codes: constant time is not enough — a million possibilities need an attempt limit. Non-secrets: ===.</p><p><i>VI: Token ngẫu nhiên: không so gì (chỉ mục CSDL lo). Chữ ký tự tính lại: hằng thời gian. Mật khẩu: hàm băm chậm tự so. Mã ngắn: hằng thời gian chưa đủ — một triệu khả năng cần giới hạn lượt thử. Không phải bí mật: ===.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Value → how to check</p><p style=\"opacity:.75;font-size:.92em\"><i>Giá trị → cách kiểm</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Value"
+              },
+              {
+                "ma": "c",
+                "ten": "How",
+                "luaChon": [
+                  "store a digest and look it up",
+                  "timingSafeEqual / safeEqual",
+                  "let argon2.verify compare",
+                  "safeEqual + an attempt limit",
+                  "plain === is fine"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "A session token lfid_ses_… presented on every request"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "An API key lfid_key_… sent by a script"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "The v1 signature of an incoming webhook"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "The password typed at sign-in"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "A 6-digit code from an authenticator app"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "The role \"LAB_MANAGER\" read from the database"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.c": "store a digest and look it up",
+              "r2.c": "store a digest and look it up",
+              "r3.c": "timingSafeEqual / safeEqual",
+              "r4.c": "let argon2.verify compare",
+              "r5.c": "safeEqual + an attempt limit",
+              "r6.c": "plain === is fine"
+            },
+            "giaiThich": "<p>Random tokens: no comparison at all (the database index does it). Recomputed signatures: constant time. Passwords: the slow hash compares. Short codes: constant time is not enough — a million possibilities need an attempt limit. Non-secrets: ===.</p><p><i>VI: Token ngẫu nhiên: không so gì (chỉ mục CSDL lo). Chữ ký tự tính lại: hằng thời gian. Mật khẩu: hàm băm chậm tự so. Mã ngắn: hằng thời gian chưa đủ — một triệu khả năng cần giới hạn lượt thử. Không phải bí mật: ===.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hashing passwords with SHA-256 because tokens use SHA-256.|||Băm mật khẩu bằng SHA-256 vì token dùng SHA-256."
+        },
+        {
+          "loi": "Protecting a 6-digit code only with constant time.|||Bảo vệ mã 6 chữ số chỉ bằng so hằng thời gian."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

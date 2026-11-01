@@ -1320,6 +1320,11 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
   <span class="lc-body"><span class="lc-title">Go deeper in the API Design course (Courses) — lesson 6.1: Authentication options</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the API Design course on Courses. Same as this lesson: hash passwords with a slow salted function and never store them. Different: Courses uses scrypt from node:crypto and hand-builds an HS256 JWT instead of Passport sessions. It also adds: forging tokens and alg none against your own API (401), a login limit per IP and email (the 6th guess gets 429), API keys shown once and stored hashed, and a production start that refuses to run without a secret.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-3-dang-nhap-sai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 0.3: a login that runs, and is wrong in six ways</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Authentication course on Courses. Same as this lesson: never store a plain password, never trust the client. Different: Courses starts from a login WITHOUT those protections and attacks it for real. It also adds: plain passwords read straight from the data file, an error message that tells a stranger which emails have accounts, a session id guessed in 4.37 s from the minute of sign-in, and 10,001 passwords tried with no limit.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1370,6 +1375,11 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-1-xac-thuc" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá API Design (Courses) — bài 6.1: Các cách xác thực</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá API Design ở Courses. Giống bài này: băm mật khẩu bằng hàm chậm có muối, không bao giờ lưu mật khẩu. Khác: Courses dùng scrypt của node:crypto và tự dựng JWT HS256 thay cho session của Passport. Ở đó có thêm: tự giả token và alg none để tấn công chính API của mình (401), giới hạn đăng nhập theo IP và email (lần đoán thứ 6 nhận 429), API key hiện một lần và lưu dạng hash, và server production không chịu chạy nếu thiếu bí mật.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-3-dang-nhap-sai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 0.3: một cái đăng nhập chạy được, và sai sáu chỗ</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Authentication ở Courses. Giống bài này: không bao giờ lưu mật khẩu thô, không bao giờ tin client. Khác: Courses bắt đầu từ một cái đăng nhập KHÔNG có các lớp bảo vệ đó và tấn công nó thật. Ở đó có thêm: mật khẩu thô đọc thẳng từ tệp dữ liệu, thông báo lỗi khai cho người lạ email nào có tài khoản, mã phiên bị đoán ra trong 4,37 s chỉ từ phút đăng nhập, và 10.001 mật khẩu thử liên tục không giới hạn.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

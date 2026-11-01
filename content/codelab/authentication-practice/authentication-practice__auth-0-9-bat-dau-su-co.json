@@ -1,0 +1,537 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-0-9-bat-dau-su-co",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-0-9-bat-dau-su-co"
+  },
+  "exercises": [
+    {
+      "title": "Incidents 1 — What actually went wrong?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "incidents"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Each row is a widely reported incident (summarised from public reports). Pick the root cause. None of them needed a genius attacker.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi dòng là một sự cố được đưa tin rộng rãi (tóm tắt từ báo cáo công khai). Chọn nguyên nhân gốc. Không vụ nào cần kẻ tấn công thiên tài.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A HAR file records every request — headers included.|||Tệp HAR ghi lại mọi request — kể cả header.",
+        "“Forged tokens” means someone could sign as the issuer.|||\"Token giả mạo\" nghĩa là có người ký được như bên phát hành."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 1 — What actually went wrong?\n\nAnswer in the answer panel (no code needed).\n\n1. Incident → root causeSự cố → nguyên nhân gốc\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 1 — What actually went wrong? — answer key\n\n1. Incident → root causeSự cố → nguyên nhân gốc\n   - r1.r: passwords stored in plain text\n   - r2.r: fast unsalted hash\n   - r3.r: password written to logs\n   - r4.r: credentials committed to a code repository\n   - r5.r: session tokens shared in a support file\n   - r6.r: a stolen signing key\n   - r7.r: password reuse + no second factor\n   Every one is a “boring” mistake this course fixes: plain text and fast hashes (Ch2), secrets in logs and repositories (1.5, Ch11), bearer tokens copied out of a browser (1.1, Ch3–5), signing keys (1.4, Ch4, Ch11), credential stuffing without MFA (Ch7, Ch10).VI: Vụ nào cũng là một lỗi \"nhàm chán\" mà khoá này sửa: mật khẩu thô và băm nhanh (Ch2), bí mật trong log và kho mã (1.5, Ch11), token kiểu mang theo bị chép ra khỏi trình duyệt (1.1, Ch3–5), khoá ký (1.4, Ch4, Ch11), nhồi mật khẩu khi không có MFA (Ch7, Ch10).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every one is a “boring” mistake this course fixes: plain text and fast hashes (Ch2), secrets in logs and repositories (1.5, Ch11), bearer tokens copied out of a browser (1.1, Ch3–5), signing keys (1.4, Ch4, Ch11), credential stuffing without MFA (Ch7, Ch10).</p><p><i>VI: Vụ nào cũng là một lỗi \"nhàm chán\" mà khoá này sửa: mật khẩu thô và băm nhanh (Ch2), bí mật trong log và kho mã (1.5, Ch11), token kiểu mang theo bị chép ra khỏi trình duyệt (1.1, Ch3–5), khoá ký (1.4, Ch4, Ch11), nhồi mật khẩu khi không có MFA (Ch7, Ch10).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Incident → root cause</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự cố → nguyên nhân gốc</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Incident"
+              },
+              {
+                "ma": "r",
+                "ten": "Root cause",
+                "luaChon": [
+                  "passwords stored in plain text",
+                  "fast unsalted hash",
+                  "password written to logs",
+                  "credentials committed to a code repository",
+                  "session tokens shared in a support file",
+                  "a stolen signing key",
+                  "password reuse + no second factor"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "RockYou (2009): about 32 million passwords leaked and were readable immediately"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "LinkedIn (2012): millions of hashes leaked and most were cracked within days"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Facebook (2019): hundreds of millions of passwords found readable in internal systems"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Uber (2016): attackers found cloud access keys inside a private GitHub repository"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Okta (2023): customers uploaded browser HAR files to support; attackers reused what was inside"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "Microsoft Storm-0558 (2023): attackers forged authentication tokens to read email"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "x": "Snowflake customers (2024): logins with credentials stolen elsewhere, on accounts without MFA"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "passwords stored in plain text",
+              "r2.r": "fast unsalted hash",
+              "r3.r": "password written to logs",
+              "r4.r": "credentials committed to a code repository",
+              "r5.r": "session tokens shared in a support file",
+              "r6.r": "a stolen signing key",
+              "r7.r": "password reuse + no second factor"
+            },
+            "giaiThich": "<p>Every one is a “boring” mistake this course fixes: plain text and fast hashes (Ch2), secrets in logs and repositories (1.5, Ch11), bearer tokens copied out of a browser (1.1, Ch3–5), signing keys (1.4, Ch4, Ch11), credential stuffing without MFA (Ch7, Ch10).</p><p><i>VI: Vụ nào cũng là một lỗi \"nhàm chán\" mà khoá này sửa: mật khẩu thô và băm nhanh (Ch2), bí mật trong log và kho mã (1.5, Ch11), token kiểu mang theo bị chép ra khỏi trình duyệt (1.1, Ch3–5), khoá ký (1.4, Ch4, Ch11), nhồi mật khẩu khi không có MFA (Ch7, Ch10).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Blaming “hackers” instead of the design choice that made it cheap.|||Đổ cho \"hacker\" thay vì lựa chọn thiết kế khiến nó rẻ."
+        },
+        {
+          "loi": "Mixing up plain text (RockYou) and fast hashing (LinkedIn): both fall, at different speeds.|||Nhầm mật khẩu thô (RockYou) với băm nhanh (LinkedIn): cả hai đều đổ, chỉ khác tốc độ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "credential stuffing",
+          "vi": "nhồi thông tin đăng nhập bị lộ từ nơi khác"
+        },
+        {
+          "en": "HAR file",
+          "vi": "tệp ghi lại lưu lượng trình duyệt"
+        }
+      ]
+    },
+    {
+      "title": "Incidents 2 — Replay of 2012, on your machine",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "password hashing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lesson “Start here (2/2)” replays the LinkedIn mistake with three LabFlow users and the 10k most common passwords:<pre>$ node demo0/linkedin-replay.mjs\nlookup table: 10001 common passwords hashed in 11.8 ms\nan    2677ae8a88965e7c… → not in the table (this time)\nbinh  7c4a8d09ca3762af… → CRACKED: \"123456\"\nlan   39289cdf947655dc… → not in the table (this time)</pre>then adds a per-user salt:<pre>$ node demo0/th09.mjs\nsalted hash in the precomputed table? false\nguessing Binh alone with her salt: found \"123456\" at guess 2 in 0.26 ms</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài \"Bắt đầu tại đây (2/2)\" phát lại lỗi của LinkedIn với ba người dùng LabFlow và 10 nghìn mật khẩu phổ biến nhất:<pre>$ node demo0/linkedin-replay.mjs\nlookup table: 10001 common passwords hashed in 11.8 ms\nan    2677ae8a88965e7c… → not in the table (this time)\nbinh  7c4a8d09ca3762af… → CRACKED: \"123456\"\nlan   39289cdf947655dc… → not in the table (this time)</pre>rồi thêm muối riêng cho từng người:<pre>$ node demo0/th09.mjs\nsalted hash in the precomputed table? false\nguessing Binh alone with her salt: found \"123456\" at guess 2 in 0.26 ms</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A hash has no key.|||Băm không có khoá.",
+        "Salt ≠ slowness.|||Muối ≠ chậm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 2 — Replay of 2012, on your machine\n\nAnswer in the answer panel (no code needed).\n\n1. Why was the lookup table enough to crack Binh?Vì sao bảng tra là đủ để bẻ Bình?\n2. After adding a salt, what is still true?Sau khi thêm muối, điều gì vẫn đúng?\n3. An and Co Lan were “not in the table (this time)”. Why “this time”?An và Cô Lan \"not in the table (this time)\". Sao lại \"lần này\"?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 2 — Replay of 2012, on your machine — answer key\n\n1. Why was the lookup table enough to crack Binh?Vì sao bảng tra là đủ để bẻ Bình?\n   Answer: b) Without a salt, the same password always gives the same hash\n   A hash is not encryption: there is no key. Without a salt, equal passwords have equal hashes, so the table is computed once and reused forever.VI: Băm không phải mã hoá: chẳng có khoá nào. Không có muối thì mật khẩu giống nhau có bản băm giống nhau, nên bảng chỉ cần tính một lần và dùng mãi.\n\n2. After adding a salt, what is still true?Sau khi thêm muối, điều gì vẫn đúng?\n   Answer: d) A weak password still falls fast when guessed with her salt\n   The salt kills shared tables, not guessing: 123456 is the 2nd guess. Only a deliberately slow hash (argon2id, Chapter 2) makes each guess expensive. The salt is stored next to the hash; it is not a secret.VI: Muối giết bảng tra dùng chung, không giết việc đoán: 123456 là lượt đoán thứ 2. Chỉ hàm băm cố ý chậm (argon2id, Chương 2) mới làm mỗi lượt đoán đắt. Muối lưu ngay cạnh bản băm; nó không phải bí mật.\n\n3. An and Co Lan were “not in the table (this time)”. Why “this time”?An và Cô Lan \"not in the table (this time)\". Sao lại \"lần này\"?\n   Answer: c) A bigger list could still find them: the hash is fast\n   Fast hashes let attackers try billions of guesses; “not in my small list” is not “safe”.VI: Hàm băm nhanh cho kẻ tấn công thử hàng tỉ lần; \"không có trong danh sách nhỏ\" không có nghĩa là \"an toàn\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Without a salt, the same password always gives the same hash</p><p>A hash is not encryption: there is no key. Without a salt, equal passwords have equal hashes, so the table is computed once and reused forever.</p><p><i>VI: Băm không phải mã hoá: chẳng có khoá nào. Không có muối thì mật khẩu giống nhau có bản băm giống nhau, nên bảng chỉ cần tính một lần và dùng mãi.</i></p></li><li><p><b>d)</b> A weak password still falls fast when guessed with her salt</p><p>The salt kills shared tables, not guessing: 123456 is the 2nd guess. Only a deliberately slow hash (argon2id, Chapter 2) makes each guess expensive. The salt is stored next to the hash; it is not a secret.</p><p><i>VI: Muối giết bảng tra dùng chung, không giết việc đoán: 123456 là lượt đoán thứ 2. Chỉ hàm băm cố ý chậm (argon2id, Chương 2) mới làm mỗi lượt đoán đắt. Muối lưu ngay cạnh bản băm; nó không phải bí mật.</i></p></li><li><p><b>c)</b> A bigger list could still find them: the hash is fast</p><p>Fast hashes let attackers try billions of guesses; “not in my small list” is not “safe”.</p><p><i>VI: Hàm băm nhanh cho kẻ tấn công thử hàng tỉ lần; \"không có trong danh sách nhỏ\" không có nghĩa là \"an toàn\".</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why was the lookup table enough to crack Binh?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bảng tra là đủ để bẻ Bình?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The table contains every password that can exist"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Without a salt, the same password always gives the same hash"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Binh’s hash was shorter, so it was faster to search"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SHA-1 can be decrypted once you find the right key"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A hash is not encryption: there is no key. Without a salt, equal passwords have equal hashes, so the table is computed once and reused forever.</p><p><i>VI: Băm không phải mã hoá: chẳng có khoá nào. Không có muối thì mật khẩu giống nhau có bản băm giống nhau, nên bảng chỉ cần tính một lần và dùng mãi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>After adding a salt, what is still true?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi thêm muối, điều gì vẫn đúng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Adding a salt makes SHA-1 as slow as argon2id"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The password can no longer be guessed in any way at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The salt now has to be kept secret, like a key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A weak password still falls fast when guessed with her salt"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The salt kills shared tables, not guessing: 123456 is the 2nd guess. Only a deliberately slow hash (argon2id, Chapter 2) makes each guess expensive. The salt is stored next to the hash; it is not a secret.</p><p><i>VI: Muối giết bảng tra dùng chung, không giết việc đoán: 123456 là lượt đoán thứ 2. Chỉ hàm băm cố ý chậm (argon2id, Chương 2) mới làm mỗi lượt đoán đắt. Muối lưu ngay cạnh bản băm; nó không phải bí mật.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An and Co Lan were “not in the table (this time)”. Why “this time”?</p><p style=\"opacity:.75;font-size:.92em\"><i>An và Cô Lan \"not in the table (this time)\". Sao lại \"lần này\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SHA-1 refuses to hash passwords with a dash inside"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They signed in with a passkey, not a password"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A bigger list could still find them: the hash is fast"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Their passwords are long, so they can never be broken"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Fast hashes let attackers try billions of guesses; “not in my small list” is not “safe”.</p><p><i>VI: Hàm băm nhanh cho kẻ tấn công thử hàng tỉ lần; \"không có trong danh sách nhỏ\" không có nghĩa là \"an toàn\".</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a salted fast hash “secure”.|||Gọi băm nhanh có muối là \"an toàn\"."
+        },
+        {
+          "loi": "Hiding the salt as if it were a key.|||Giấu muối như thể nó là khoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "salt",
+          "vi": "muối — chuỗi ngẫu nhiên riêng cho từng mật khẩu"
+        },
+        {
+          "en": "lookup table",
+          "vi": "bảng tra băm → mật khẩu"
+        }
+      ]
+    },
+    {
+      "title": "Incidents 3 — Write crackUnsalted(leaked, table)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "lookup table attack"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>You are the attacker of 2012, for teaching purposes. <code>leaked</code> maps user ⇒ unsalted SHA-1 hex digest from a dump; <code>table</code> maps digest ⇒ password (precomputed once). Return an object user ⇒ password, or <code>null</code> when the digest is not in the table. Digests in a dump may be upper case; the table uses lower case. Keys like <code>\"toString\"</code> must not be found on the object prototype.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bạn là kẻ tấn công năm 2012, vì mục đích học. <code>leaked</code> ánh xạ người dùng ⇒ digest SHA-1 hex không muối lấy từ bản dump; <code>table</code> ánh xạ digest ⇒ mật khẩu (tính sẵn một lần). Trả về object người dùng ⇒ mật khẩu, hoặc <code>null</code> khi digest không có trong bảng. Digest trong dump có thể viết hoa; bảng dùng chữ thường. Khoá kiểu <code>\"toString\"</code> không được tìm thấy trên prototype của object.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "crackUnsalted({\"binh\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"an\":\"2677ae8a88965e7c06b060c96529f17ef8b86f18\"}, {\"7c4a8d09ca3762af61e59520943dc26494f8941b\":\"123456\",\"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8\":\"password\",\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\":\"qwerty\"})",
+          "output": "{\"binh\":\"123456\",\"an\":null}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One loop over the leaked users; one lookup each.|||Một vòng lặp qua người dùng bị lộ; mỗi người tra một lần.",
+        "Use hasOwnProperty, not table[h] !== undefined.|||Dùng hasOwnProperty, không dùng table[h] !== undefined."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** leaked: { user: sha1Hex }, table: { sha1Hex: password } ⇒ { user: password | null } */\nfunction crackUnsalted(leaked, table) {\n  // Write your solution here\n  var out = {};\n  for (var user in leaked) out[user] = table[leaked[user]] || null;\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction crackUnsalted(leaked, table) {\n  var out = {};\n  Object.keys(leaked).forEach(function (user) {\n    var h = String(leaked[user]).toLowerCase();       // hex digests may be printed in upper case\n    out[user] = Object.prototype.hasOwnProperty.call(table, h) ? table[h] : null;\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the whole attack: no decryption, just a dictionary from hash to password. It runs in milliseconds for millions of users — exactly why salts (and slow hashes) exist.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là toàn bộ đòn tấn công: không giải mã gì cả, chỉ là từ điển băm ⇒ mật khẩu. Nó chạy trong vài mili giây cho hàng triệu người dùng — chính vì vậy mới có muối (và hàm băm chậm).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: crackUnsalted({\"binh\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"an\":\"2677ae8a88965e7c...",
+              "vi": "Ca 1"
+            },
+            "goi": "crackUnsalted({\"binh\":\"7c4a8d09ca3762af61e59520943dc26494f8941b\",\"an\":\"2677ae8a88965e7c06b060c96529f17ef8b86f18\"}, {\"7c4a8d09ca3762af61e59520943dc26494f8941b\":\"123456\",\"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8\":\"password\",\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\":\"qwerty\"})",
+            "mongDoi": {
+              "binh": "123456",
+              "an": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Upper-case digest",
+              "vi": "Digest viết hoa"
+            },
+            "goi": "crackUnsalted({\"lan\":\"5BAA61E4C9B93F3F0682250B6CF8331B7EE68FD8\"}, {\"7c4a8d09ca3762af61e59520943dc26494f8941b\":\"123456\",\"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8\":\"password\",\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\":\"qwerty\"})",
+            "mongDoi": {
+              "lan": "password"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Prototype key",
+              "vi": "Khoá trên prototype"
+            },
+            "goi": "crackUnsalted({\"mallory\":\"toString\"}, {\"7c4a8d09ca3762af61e59520943dc26494f8941b\":\"123456\",\"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8\":\"password\",\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\":\"qwerty\"})",
+            "mongDoi": {
+              "mallory": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "crackUnsalted({}, {\"7c4a8d09ca3762af61e59520943dc26494f8941b\":\"123456\",\"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8\":\"password\",\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\":\"qwerty\"})",
+            "mongDoi": {},
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Two users, same password, same hash",
+              "vi": "Hai người, cùng mật khẩu, cùng bản băm"
+            },
+            "goi": "crackUnsalted({\"a\":\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\",\"b\":\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\"}, {\"7c4a8d09ca3762af61e59520943dc26494f8941b\":\"123456\",\"5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8\":\"password\",\"b1b3773a05c0ed0176787a4f1574ff0075f7521e\":\"qwerty\"})",
+            "mongDoi": {
+              "a": "qwerty",
+              "b": "qwerty"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting toLowerCase — the same digest is missed.|||Quên toLowerCase — cùng digest mà tra trượt."
+        },
+        {
+          "loi": "table[\"toString\"] returns a function, not undefined.|||table[\"toString\"] trả về một hàm, không phải undefined."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dump",
+          "vi": "bản sao dữ liệu bị lộ"
+        }
+      ]
+    },
+    {
+      "title": "Incidents 4 — A study loop that sticks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "study method"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The course suggests one rhythm for every lesson. Put the steps in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khoá gợi ý một nhịp học cho mọi bài. Sắp các bước theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "You cannot compare outputs before running the commands.|||Không thể so output trước khi chạy lệnh.",
+        "Notes come last, in your own words.|||Ghi chép đi sau cùng, bằng lời của bạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 4 — A study loop that sticks\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTrước tới sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Incidents 4 — A study loop that sticks — answer key\n\n1. First to lastTrước tới sau\n   Answer: m4) Watch the slides with the narration (20 minutes)  →  m3) Run every command of the lesson in LabFlow ID and compare with the real output  →  m5) Do the 🧪 Practice without looking at the solution  →  m2) Do the Code Lab set of the lesson  →  m1) Write three lines in your own notes: what broke, why, and the fix\n   See it, run it, try it alone, practise it, then write it down: each step makes the next one easier, and the last one is what you will remember in an interview.VI: Xem, chạy, tự thử, luyện, rồi ghi lại: mỗi bước làm bước sau dễ hơn, và bước cuối là thứ bạn nhớ được khi phỏng vấn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>See it, run it, try it alone, practise it, then write it down: each step makes the next one easier, and the last one is what you will remember in an interview.</p><p><i>VI: Xem, chạy, tự thử, luyện, rồi ghi lại: mỗi bước làm bước sau dễ hơn, và bước cuối là thứ bạn nhớ được khi phỏng vấn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước tới sau</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Write three lines in your own notes: what broke, why, and the fix"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Do the Code Lab set of the lesson"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Run every command of the lesson in LabFlow ID and compare with the real output"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Watch the slides with the narration (20 minutes)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Do the 🧪 Practice without looking at the solution"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m3",
+              "m5",
+              "m2",
+              "m1"
+            ],
+            "giaiThich": "<p>See it, run it, try it alone, practise it, then write it down: each step makes the next one easier, and the last one is what you will remember in an interview.</p><p><i>VI: Xem, chạy, tự thử, luyện, rồi ghi lại: mỗi bước làm bước sau dễ hơn, và bước cuối là thứ bạn nhớ được khi phỏng vấn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the solution before trying.|||Đọc lời giải trước khi thử."
+        },
+        {
+          "loi": "Skipping the real run because “the output is in the lesson”.|||Bỏ chạy thật vì \"output có trong bài rồi\"."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

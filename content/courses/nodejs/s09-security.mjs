@@ -957,6 +957,11 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
   <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 11.1 — Secrets: getting them to the process without touching the repo</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: secrets reach the process at runtime, never through git or the image; generate them, rotate them. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: why a secret must be 32 random bytes (measured cracking speed), NEXT_PUBLIC_* as a public key, gitleaks with a narrow tested exception, and least privilege against a malicious dependency. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-5-bi-mat-ro-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 1.5: where secrets leak without anyone attacking</span><span class="lc-sub">Same: secrets reach the process at runtime, front-end build variables are public, gitleaks belongs in pre-commit. That lesson adds leaks measured on LabFlow ID: console.log and a pino deny-list that misses x-session and newPassword, an axios error whose 9,771-byte log line holds the API key five times, a .env “removed” but still in history (and a fixture default rules miss), and a VITE_ key inside the bundle.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1074,6 +1079,11 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
 <a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-1-bi-mat" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 11.1 — Bí mật: đưa chúng tới tiến trình mà không đụng vào kho mã</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: bí mật tới tiến trình lúc chạy, không bao giờ qua git hay image; sinh ra bằng máy, xoay được. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: vì sao bí mật phải là 32 byte ngẫu nhiên (tốc độ bẻ đo thật), NEXT_PUBLIC_* là khoá công khai, gitleaks với ngoại lệ hẹp đã kiểm, và quyền tối thiểu trước một dependency độc. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-5-bi-mat-ro-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 1.5: chỗ bí mật rò ra mà không ai tấn công cả</span><span class="lc-sub">Giống: bí mật tới tiến trình lúc chạy, biến build của front-end là công khai, gitleaks thuộc về pre-commit. Bài đó thêm các chỗ rò đo trên LabFlow ID: console.log và deny-list của pino sót x-session và newPassword, lỗi axios với dòng log 9.771 byte chứa API key năm lần, .env đã "xoá" mà vẫn nằm trong lịch sử (kèm một fixture mà luật mặc định bỏ sót), và khoá VITE_ nằm trong bundle.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>

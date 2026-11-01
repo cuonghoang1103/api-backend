@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 1 Bộ công cụ nguyên hàm của LabFlow ID (deck auth-lab-1, 9 slide). */
+import { walkAuth } from '../_slides.mjs';
+
+export default walkAuth('auth-lab-1', 'Build LabFlow ID’s toolkit of primitives', 'Dựng bộ công cụ nguyên hàm của LabFlow ID', [
+  [1, 'Build LabFlow ID’s toolkit of primitives',
+    `<p>This lab turns Chapter 1 into code you keep. Every later chapter imports these six functions, so getting them right now saves you rewriting sessions, reset links and key rotation later.</p>`,
+    `<p>Lab này biến Chương 1 thành mã bạn giữ lại. Mọi chương sau đều import sáu hàm này, nên làm đúng bây giờ là đỡ phải viết lại phiên, link đặt lại mật khẩu và xoay khoá về sau.</p>`],
+  [2, 'Mission',
+    `<p>Random tokens with a prefix, their digests, a comparison that never throws and takes the same time, signed values with expiry and a key id, and redaction by allow-list. A grader checks behaviour: ten points, pass at seven.</p>`,
+    `<p>Token ngẫu nhiên có tiền tố, digest của chúng, phép so không bao giờ ném lỗi và chạy hằng thời gian, giá trị có ký kèm hạn và mã khoá, và che log theo allow-list. Máy chấm kiểm hành vi: mười điểm, đạt từ bảy.</p>`],
+  [3, 'Start from the empty starter',
+    `<p>Copy the starter, keep the six exported names, and grade it once to see zero out of ten — that proves the grader runs on your machine. Then write a few calls of your own; the grader is a safety net, not your tests.</p>`,
+    `<p>Chép bản khởi đầu, giữ nguyên sáu tên export, chấm thử một lần để thấy không trên mười — tức là máy chấm chạy được trên máy bạn. Rồi tự viết vài lời gọi; máy chấm là lưới an toàn, không phải bộ test của bạn.</p>`],
+  [4, 'Nine checks, and what a failure means for a user',
+    `<p>Each check maps to a lesson and to a harm: predictable tokens, a missing header that passes, a click in the timing, a role edited in a cookie, one extra second of validity, a rotation that logs everyone out, a secret in the log.</p>`,
+    `<p>Mỗi phép chấm gắn với một bài và một tác hại: token đoán được, header thiếu mà vẫn qua, tiếng tách của thời gian, vai trò bị sửa trong cookie, thêm một giây hiệu lực, xoay khoá làm mọi người bị đăng xuất, bí mật nằm trong log.</p>`],
+  [5, 'A first attempt that “works”: 2 / 10',
+    `<p>This attempt returns the right thing on every happy path and still scores two. Math.random tokens, a plain triple equals that is 6.73 times slower at the end of a long string, greater-than instead of greater-or-equal, no key id, a deny-list. Each cross is a real bug.</p>`,
+    `<p>Lần thử này trả đúng ở mọi đường thẳng mà vẫn chỉ được hai điểm. Token Math.random, phép so ba dấu bằng chậm gấp 6,73 lần ở cuối chuỗi dài, lớn hơn thay vì lớn hơn hoặc bằng, không có mã khoá, deny-list. Mỗi dấu chéo là một con bug thật.</p>`],
+  [6, 'Reference: LabFlow ID’s src/crypto — 10 / 10',
+    `<p>The reference verifyValue rejects anything malformed, looks the key up safely, checks the signature with safeEqual, and only then trusts the expiry. It never throws. Read it after your own attempt, not before.</p>`,
+    `<p>verifyValue tham khảo từ chối mọi thứ hỏng định dạng, tra khoá an toàn, kiểm chữ ký bằng safeEqual, và chỉ sau đó mới tin hạn dùng. Nó không bao giờ ném lỗi. Đọc sau khi đã tự làm, đừng đọc trước.</p>`],
+  [7, 'Rubric: the grader is the rubric',
+    `<p>Ten points from nine behaviour checks, pass at seven. Run it twice because one check measures time. Different correct toolkits look different, so the grader only asks what a user or an attacker would see.</p>`,
+    `<p>Mười điểm từ chín phép chấm hành vi, đạt từ bảy. Chạy hai lần vì có một phép đo thời gian. Các bộ công cụ đúng có thể trông rất khác nhau, nên máy chấm chỉ hỏi người dùng hay kẻ tấn công sẽ thấy gì.</p>`],
+  [8, 'Hints, from light to strong',
+    `<p>Re-run the matching lesson demo first. For safeEqual, HMAC both sides. For verifyValue, four parts, a safe key lookup, signature before expiry. For redact, a small recursive walk. And remember the grader itself once fell into the benchmark trap.</p>`,
+    `<p>Chạy lại demo của bài tương ứng trước. safeEqual: HMAC cả hai phía. verifyValue: bốn phần, tra khoá an toàn, chữ ký trước hạn dùng. redact: một hàm đệ quy nhỏ. Và nhớ rằng chính máy chấm từng sa vào bẫy phép đo.</p>`],
+  [9, 'Checklist before you submit',
+    `<p>Seven or more, twice in a row; no Math.random and no logged secrets; and you can explain the timing check and key rotation in your own words. Then take the chapter quiz and move on to passwords.</p>`,
+    `<p>Từ bảy điểm trở lên, hai lần liên tiếp; không Math.random, không log bí mật; và bạn giải thích được phép đo thời gian và việc xoay khoá bằng lời của mình. Rồi làm quiz chương và sang phần mật khẩu.</p>`],
+]);

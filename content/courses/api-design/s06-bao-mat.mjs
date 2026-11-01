@@ -243,6 +243,16 @@ Retry-After: 180</div>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: a login limit: the 6th wrong guess in a row gets 429 with Retry-After. There you add: the limit keyed on IP + email (another email from the same IP still gets in), counting before verifying (the right password is 429 too), and trust proxy run with a spoofed X-Forwarded-For (true lets 8 out of 8 through). This lesson adds what that one does not: the price of the limit for the real user (Retry-After 180: she waits three minutes too) inside a whole authentication design.</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-4-bam-mac-chu-ky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 1.4: hash, MAC, signature</span><span class="lc-sub">Same: HS256 is HMAC-SHA256 with a secret only the server knows. That lesson adds: what each of hash, MAC and signature proves, a real length-extension forgery against sha256(secret + message), why a shared HMAC key lets every verifier mint tokens (Ed25519 instead), and AES-CTR flipping admin:false to true while GCM refuses.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-1-tin-vat-mang-theo" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 1.1: whoever holds it, is you</span><span class="lc-sub">Same: a JWT, an API key and a session are bearer credentials, so a short lifetime (15 minutes here) limits a stolen one. That lesson measures it on LabFlow ID: a copied token works from another machine and browser, a reset token in the URL lands in the access log, and which Referrer-Policy leaks it to a third party in Chromium 156.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -463,6 +473,16 @@ Retry-After: 180</div>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: giới hạn đăng nhập: lần đoán sai thứ 6 liên tiếp nhận 429 kèm Retry-After. Ở đó học thêm: giới hạn theo IP + email (email khác cùng IP vẫn vào được), đếm trước khi kiểm (mật khẩu đúng cũng 429), và trust proxy chạy với X-Forwarded-For giả (true để lọt 8 trên 8). Bài này có thứ bài kia không có: cái giá của giới hạn với người dùng thật (Retry-After 180: chính chủ cũng phải chờ ba phút) trong cả một thiết kế xác thực.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-4-bam-mac-chu-ky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 1.4: băm, MAC, chữ ký</span><span class="lc-sub">Giống: HS256 là HMAC-SHA256 với bí mật chỉ server biết. Bài đó thêm: băm, MAC và chữ ký mỗi thứ chứng minh điều gì, một cú giả length extension thật với sha256(secret + thông điệp), vì sao khoá HMAC dùng chung cho mọi bên kiểm cũng phát được token (thay bằng Ed25519), và AES-CTR lật admin:false thành true còn GCM từ chối.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-1-tin-vat-mang-theo" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 1.1: ai cầm nó, người đó LÀ bạn</span><span class="lc-sub">Giống: JWT, API key và phiên đều là tín vật bearer, nên tuổi thọ ngắn (ở đây 15 phút) giới hạn thiệt hại khi bị cắp. Bài đó đo trên LabFlow ID: token bị chép chạy được từ máy và trình duyệt khác, token đặt lại nằm trong URL rơi vào access log, và Referrer-Policy nào làm nó rò sang bên thứ ba trong Chromium 156.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
 </div>
 `,
     },
@@ -646,6 +666,11 @@ usr_3 LAB_MANAGER 1:200 2:200 3:200 4:200 5:200 6:200 7:200 8:200
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.3 — requireAuth, roles, and deleting AUTHOR_ID = 1</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: a logged-in user reading another person's record by changing the id, closed by one rule and a 404. There you add: requireAuth with six machine-readable refusals run on a real server, the user lookup it costs (0.026 → 0.664 ms), middleware order run for real (a route silently public), and the quick service vs canTouch with the same script. This lesson adds what that one does not: a policy table with deny-by-default and a matrix that logs in as everyone and asks for everything (8 wrong cells → 0).</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-2-ba-bai-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 0.2: three problems hiding in the word “login”</span><span class="lc-sub">Same: a signed-in user changes an id and reads someone else’s record; the fix lives in the lookup and answers 404. That lesson adds: identification, authentication and authorization as three separate gates on LabFlow ID — a claimed X-User-Id accepted as anyone, an IDOR scan of usr_1…usr_4, and the 401/403/404 matrix for four callers.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -819,6 +844,11 @@ usr_3 LAB_MANAGER 1:200 2:200 3:200 4:200 5:200 6:200 7:200 8:200
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.3 — requireAuth, phân quyền, và xoá bỏ AUTHOR_ID = 1</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: một người đã đăng nhập đọc bản ghi của người khác chỉ bằng cách đổi id, đóng bằng một quy tắc và mã 404. Ở đó học thêm: requireAuth với sáu lần từ chối có mã riêng chạy trên server thật, cái giá của lần tra user (0,026 → 0,664 ms), thứ tự middleware chạy thật (một route công khai nhầm), và bản viết vội so với canTouch bằng cùng một kịch bản. Bài này có thứ bài kia không có: một bảng chính sách mặc định từ chối và một ma trận đăng nhập từng người, hỏi từng bản ghi (8 ô sai → 0).</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-0-2-ba-bai-toan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 0.2: ba bài toán trốn trong chữ “đăng nhập”</span><span class="lc-sub">Giống: người đã đăng nhập đổi id là đọc được bản ghi của người khác; cách sửa nằm trong phép tra và trả 404. Bài đó thêm: định danh, xác thực, phân quyền là ba cổng riêng trên LabFlow ID — header X-User-Id tự khai được nhận như ai cũng được, quét IDOR usr_1…usr_4, và ma trận 401/403/404 cho bốn người gọi.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,

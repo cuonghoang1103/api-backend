@@ -1,0 +1,9 @@
+# demo1/git/gitleaks-lfid.toml — lesson 1.5: teach gitleaks what a LabFlow ID secret looks like (the prefix from lesson 1.2).
+[extend]
+useDefault = true
+
+[[rules]]
+id = "labflow-id-secret"
+description = "LabFlow ID secret (lfid_key_ / lfid_ses_ / lfid_reset_)"
+regex = '''lfid_(?:key|ses|reset)_[A-Za-z0-9_-]{20,}'''
+keywords = ["lfid_"]

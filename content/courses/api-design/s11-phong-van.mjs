@@ -579,6 +579,11 @@ base62 của bộ đếm:
   <span class="lc-body"><span class="lc-title">Go deeper: System Design in Practice — 4.2 Generating short codes without collisions across servers</span><span class="lc-sub">This lesson is the interview version on one machine. That course (being written) runs the shortener at scale: ID blocks per server, edge redirects, hot links, click analytics.</span></span>
   <span class="lc-cta">OPEN →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-2-ngau-nhien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 1.2: randomness, and how many bits is enough</span><span class="lc-sub">Same: random codes collide far sooner than intuition says (the birthday bound). That lesson adds the same bound for session tokens (128 bits: 2.17e19 tokens for a 50% chance), Math.random predicted exactly from 4 outputs, the modulo bias of byte % 10, and why string length is not entropy.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -763,6 +768,11 @@ base62 của bộ đếm:
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn: System Design in Practice — 4.2 Sinh mã ngắn không trùng trên nhiều máy chủ</span><span class="lc-sub">Bài này là bản phỏng vấn trên một máy. Khoá đó (đang soạn) chạy dịch vụ rút gọn ở quy mô lớn: khối ID cho từng máy, chuyển hướng ở biên, link nóng, thống kê lượt bấm.</span></span>
   <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-2-ngau-nhien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 1.2: ngẫu nhiên, và bao nhiêu bit là đủ</span><span class="lc-sub">Giống: mã ngẫu nhiên trùng nhau sớm hơn trực giác nhiều (cận ngày sinh). Bài đó thêm cùng cận ấy cho token phiên (128 bit: 2,17e19 token mới có 50% trùng), Math.random bị đoán đúng từ 4 giá trị, sai lệch modulo của byte % 10, và vì sao độ dài chuỗi không phải entropy.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,

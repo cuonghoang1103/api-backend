@@ -11,7 +11,8 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 |---|---|---|
 | 0 | `csd201-big-o` 3 (đếm phép toán arrayMax, công thức đóng 7 vòng lặp ⏱, nhị phân vs tuần tự ⏱) · `csd201-on-ch0` 4 (tổng tiền tố ⏱, tìm trùng O(n) ⏱, mảng gấp đôi ⏱, CarList f1–f4) | 7 |
 | 1 | `csd201-mang` 3 (chèn/xoá dời, xoá mọi phần tử một lượt ⏱, xoay 3 lần đảo ⏱) · `csd201-linked-list` 4 (SLL ⏱, insertAt/deleteAt, vòng chỉ tail, kép) · `csd201-doubly-sentinel` 3 (header/trailer, sắp có lính canh, lịch sử trình duyệt) · `csd201-java-list-api` 3 (Iterator.remove ⏱, trộn bằng iterator ⏱, ArrayDeque vs remove(0) ⏱) · `csd201-luyen-tap-list` 3 (đảo tại chỗ ⏱, Floyd ⏱, trộn nối lại ⏱) · `csd201-on-ch1` 3 (Josephus ⏱, palindrome O(1) ⏱, 🎯 **PE MyList Car f1–f4**) | 19 |
-| **tổng** | 8 module | **26** |
+| 2 | `csd201-stack-queue` 3 (stack liên kết, queue liên kết ⏱, đảo k phần tử đầu) · `csd201-stack-queue-cai-dat` 3 (stack mảng ⏱, queue mảng vòng first/last như slide, queue bằng 2 stack ⏱) · `csd201-stack-ung-dung` 4 (ngoặc + vị trí lỗi, hậu tố, shunting-yard, undo/redo) · `csd201-deque` 3 (deque mảng vòng, max cửa sổ trượt ⏱, số âm đầu mỗi cửa sổ ⏱) · `csd201-priority-queue-heap` 3 (min-heap kiểm bất biến ⏱, top-k heap cỡ k ⏱, cấp cứu Comparator) · `csd201-on-ch2` 4 (round-robin, hàng bệnh nhân f1–f4 kiểu PE, phần tử lớn hơn kế tiếp ⏱, hình chữ nhật lớn nhất ⏱) | 20 |
+| **tổng** | 14 module | **46** |
 
 ⏱ = có ca kiểm độ phức tạp. 🎯 = đề đúng khuôn PE của trường.
 
@@ -40,7 +41,7 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 
 ## Còn thiếu (làm tiếp theo đúng khuôn)
 
-Ch2 (stack/queue/PQ) · Ch3 (đệ quy) · Ch4 (cây, BST, AVL, heap + 🎯 PE BSTree) · Ch5 (đồ thị + 🎯 PE Graph) · Ch6 (sắp xếp) ·
+Ch3 (đệ quy) · Ch4 (cây, BST, AVL, heap + 🎯 PE BSTree) · Ch5 (đồ thị + 🎯 PE Graph) · Ch6 (sắp xếp) ·
 Ch7 (băm) · Ch8 (KMP, Huffman, LZW/RLE) · Nâng cao (A.1, A.2) · ⭐ CS.1–CS.10 · 🎯 Luyện PE (`csd201-on-pe`: đề thật SP26 B5 P4).
 Nguồn ý đề + code thật: `~/Documents/FLM-nguon/_repo/CSD201/gen/src/practice/chN.txt` + `gen/java/chN/Pe*.java`,
 `gen/src/extra/csN-on.txt` + `gen/java/csN/Ex*.java` (CHỈ ĐỌC — không sửa flm-nguon).

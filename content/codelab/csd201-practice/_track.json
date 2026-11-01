@@ -56,6 +56,42 @@
       "name": "1.6 🧪 Practice — Josephus, palindrome list and a 🎯 PE-format MyList paper",
       "level": "BEGINNER",
       "description": "Luyện: The Josephus circle on a circular linked list · Is the linked list a palindrome? O(n) time, O(1) memory, list restored · 🎯 PE format — MyList of Cars: f1 addLast with a condition, f2 insert as 3rd, f3 delete the first max, f4 stable sort"
+    },
+    {
+      "slug": "csd201-stack-queue",
+      "name": "2.1 Stacks (LIFO) & Queues (FIFO)",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A linked stack: push, pop, top — all at the head · A linked queue: enqueue at the tail, dequeue at the head, both O(1) · Reverse the first k elements of a queue with a stack"
+    },
+    {
+      "slug": "csd201-stack-queue-cai-dat",
+      "name": "2.2 Implementing stacks & queues: circular array vs linked",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: An array stack that grows correctly (and the off-by-one in top) · Circular array queue with first/last as on the slides — wrap around, then grow in queue order · A queue made of two stacks: amortized O(1)"
+    },
+    {
+      "slug": "csd201-stack-ung-dung",
+      "name": "2.3 Stack applications: brackets, RPN, undo",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Balanced brackets — and where the first error is · Evaluate a postfix (RPN) expression · Infix to postfix with the shunting-yard algorithm · Undo and redo with two stacks"
+    },
+    {
+      "slug": "csd201-deque",
+      "name": "2.4 Deques & the sliding-window maximum",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A deque on a circular array: add and remove at both ends in O(1) · Sliding window maximum in O(n) with a monotonic deque · First negative number in every window of size k"
+    },
+    {
+      "slug": "csd201-priority-queue-heap",
+      "name": "2.5 Priority Queues & Heaps",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A priority queue on a binary min-heap: insert and removeMin in O(log n) · The k largest of a million numbers with a heap of size k · Emergency triage: severity first, then arrival order, with a Comparator"
+    },
+    {
+      "slug": "csd201-on-ch2",
+      "name": "2.6 🧪 Practice — round-robin, a patient queue (PE), monotonic stacks",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A round-robin CPU scheduler with a queue · PE style: a patient priority queue on a sorted linked list (f1–f4) · Next greater element with a monotonic stack · Largest rectangle in a histogram (stack, O(n))"
     }
   ]
 }

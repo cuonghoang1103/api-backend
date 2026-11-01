@@ -215,5 +215,158 @@
    "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f3.txt:\n  (S,2) (T,4) (U,6) (V,8) \n  (S,2) (T,4) (U,6) \n\n",
    "\n 1. Test f1 (1 mark)\n 2. Test f2 (1 mark)\n 3. Test f3 (1 mark)\n 4. Test f4 (1 mark)\n 0. Exit\n    Your selection (0 -> 4): Your output:\n Content of the file f4.txt:\n  (A,5) (C,5) (D,1) (E,5) (F,1) (G,5) \n  (D,1) (F,1) (A,5) (C,5) (E,5) (G,5) \n\n"
   ]
+ },
+ "csd201-2-1-linked-queue": {
+  "bam": "a89bbcbcd82499ca",
+  "ra": [
+   "ENQ 1 -> ok | [1] tail ok\nENQ 2 -> ok | [1 2] tail ok\nENQ 3 -> ok | [1 2 3] tail ok\nDEQ -> 1 | [2 3] tail ok\nFRONT -> 2 | [2 3] tail ok\nENQ 4 -> ok | [2 3 4] tail ok\nDEQ -> 2 | [3 4] tail ok\nDEQ -> 3 | [4] tail ok\nDEQ -> 4 | [(empty)] tail ok\nDEQ -> THROWS NoSuchElementException: queue is empty | [(empty)] tail ok\n",
+   "FRONT -> THROWS NoSuchElementException: queue is empty | [(empty)] tail ok\nENQ 9 -> ok | [9] tail ok\nDEQ -> 9 | [(empty)] tail ok\nENQ 8 -> ok | [8] tail ok\nENQ 7 -> ok | [8 7] tail ok\nDEQ -> 8 | [7] tail ok\nDEQ -> 7 | [(empty)] tail ok\nENQ 6 -> ok | [6] tail ok\nFRONT -> 6 | [6] tail ok\n",
+   "PERF -> 500,000 enqueues, then 500,000 dequeues: OK, sum 124999750000 | [(empty)] tail ok\n"
+  ]
+ },
+ "csd201-2-1-linked-stack": {
+  "bam": "1ddfc1ea5d09c4ad",
+  "ra": [
+   "PUSH 1 -> ok | top-> 1 size=1 empty=false\nPUSH 2 -> ok | top-> 2 1 size=2 empty=false\nPUSH 3 -> ok | top-> 3 2 1 size=3 empty=false\nTOP -> 3 | top-> 3 2 1 size=3 empty=false\nPOP -> 3 | top-> 2 1 size=2 empty=false\nPOP -> 2 | top-> 1 size=1 empty=false\nPUSH 4 -> ok | top-> 4 1 size=2 empty=false\nPOP -> 4 | top-> 1 size=1 empty=false\nPOP -> 1 | top-> (empty) size=0 empty=true\nPOP -> THROWS EmptyStackException | top-> (empty) size=0 empty=true\nTOP -> THROWS EmptyStackException | top-> (empty) size=0 empty=true\n",
+   "POP -> THROWS EmptyStackException | top-> (empty) size=0 empty=true\nTOP -> THROWS EmptyStackException | top-> (empty) size=0 empty=true\nPUSH -5 -> ok | top-> -5 size=1 empty=false\nTOP -> -5 | top-> -5 size=1 empty=false\nPOP -> -5 | top-> (empty) size=0 empty=true\nPUSH 6 -> ok | top-> 6 size=1 empty=false\nPUSH 6 -> ok | top-> 6 6 size=2 empty=false\nPOP -> 6 | top-> 6 size=1 empty=false\nTOP -> 6 | top-> 6 size=1 empty=false\n"
+  ]
+ },
+ "csd201-2-1-reverse-first-k": {
+  "bam": "bbf07a0133332a1c",
+  "ra": [
+   "3 : 1 2 3 4 5 -> [3, 2, 1, 4, 5]\n5 : 1 2 3 4 5 -> [5, 4, 3, 2, 1]\n1 : 1 2 3 -> [1, 2, 3]\n",
+   "0 : 1 2 -> [1, 2]\n4 : 1 2 3 -> [1, 2, 3]\n2 : -> []\n2 : 7 7 8 8 -> [7, 7, 8, 8]\n"
+  ]
+ },
+ "csd201-2-2-array-stack": {
+  "bam": "49b28b831fab6a7f",
+  "ra": [
+   "PUSH 1 -> ok | top=0 capacity=2 used=[1]\nPUSH 2 -> ok | top=1 capacity=2 used=[1, 2]\nPUSH 3 -> ok | top=2 capacity=4 used=[1, 2, 3]\nPUSH 4 -> ok | top=3 capacity=4 used=[1, 2, 3, 4]\nPUSH 5 -> ok | top=4 capacity=8 used=[1, 2, 3, 4, 5]\nTOP -> 5 | top=4 capacity=8 used=[1, 2, 3, 4, 5]\nPOP -> 5 | top=3 capacity=8 used=[1, 2, 3, 4]\nPOP -> 4 | top=2 capacity=8 used=[1, 2, 3]\nPUSH 6 -> ok | top=3 capacity=8 used=[1, 2, 3, 6]\n",
+   "POP -> THROWS EmptyStackException | top=-1 capacity=2 used=[]\nTOP -> THROWS EmptyStackException | top=-1 capacity=2 used=[]\nPUSH 7 -> ok | top=0 capacity=2 used=[7]\nPOP -> 7 | top=-1 capacity=2 used=[]\nPOP -> THROWS EmptyStackException | top=-1 capacity=2 used=[]\n",
+   "PERF -> 2,000,000 pushes: OK, top value 1999999 | top=-1 capacity=2 used=[]\n"
+  ]
+ },
+ "csd201-2-2-circular-queue": {
+  "bam": "548e9164226f21ef",
+  "ra": [
+   "ENQ 1 -> ok | first=0 last=0 max=4 a=[1, 0, 0, 0] queue=[1]\nENQ 2 -> ok | first=0 last=1 max=4 a=[1, 2, 0, 0] queue=[1 2]\nENQ 3 -> ok | first=0 last=2 max=4 a=[1, 2, 3, 0] queue=[1 2 3]\nDEQ -> 1 | first=1 last=2 max=4 a=[1, 2, 3, 0] queue=[2 3]\nDEQ -> 2 | first=2 last=2 max=4 a=[1, 2, 3, 0] queue=[3]\nENQ 4 -> ok | first=2 last=3 max=4 a=[1, 2, 3, 4] queue=[3 4]\nENQ 5 -> ok | first=2 last=0 max=4 a=[5, 2, 3, 4] queue=[3 4 5]\nENQ 6 -> ok | first=2 last=1 max=4 a=[5, 6, 3, 4] queue=[3 4 5 6]\nENQ 7 -> ok | first=0 last=4 max=8 a=[3, 4, 5, 6, 7, 0, 0, 0] queue=[3 4 5 6 7]\nDEQ -> 3 | first=1 last=4 max=8 a=[3, 4, 5, 6, 7, 0, 0, 0] queue=[4 5 6 7]\nDEQ -> 4 | first=2 last=4 max=8 a=[3, 4, 5, 6, 7, 0, 0, 0] queue=[5 6 7]\nDEQ -> 5 | first=3 last=4 max=8 a=[3, 4, 5, 6, 7, 0, 0, 0] queue=[6 7]\nDEQ -> 6 | first=4 last=4 max=8 a=[3, 4, 5, 6, 7, 0, 0, 0] queue=[7]\nDEQ -> 7 | first=-1 last=-1 max=8 a=[3, 4, 5, 6, 7, 0, 0, 0] queue=[]\nDEQ -> THROWS NoSuchElementException | first=-1 last=-1 max=8 a=[3, 4, 5, 6, 7, 0, 0, 0] queue=[]\n",
+   "ENQ 1 -> ok | first=0 last=0 max=1 a=[1] queue=[1]\nENQ 2 -> ok | first=0 last=1 max=2 a=[1, 2] queue=[1 2]\nENQ 3 -> ok | first=0 last=2 max=4 a=[1, 2, 3, 0] queue=[1 2 3]\nDEQ -> 1 | first=1 last=2 max=4 a=[1, 2, 3, 0] queue=[2 3]\nENQ 4 -> ok | first=1 last=3 max=4 a=[1, 2, 3, 4] queue=[2 3 4]\nDEQ -> 2 | first=2 last=3 max=4 a=[1, 2, 3, 4] queue=[3 4]\nDEQ -> 3 | first=3 last=3 max=4 a=[1, 2, 3, 4] queue=[4]\nDEQ -> 4 | first=-1 last=-1 max=4 a=[1, 2, 3, 4] queue=[]\n",
+   "ENQ 1 -> ok | first=0 last=0 max=3 a=[1, 0, 0] queue=[1]\nENQ 2 -> ok | first=0 last=1 max=3 a=[1, 2, 0] queue=[1 2]\nDEQ -> 1 | first=1 last=1 max=3 a=[1, 2, 0] queue=[2]\nENQ 3 -> ok | first=1 last=2 max=3 a=[1, 2, 3] queue=[2 3]\nDEQ -> 2 | first=2 last=2 max=3 a=[1, 2, 3] queue=[3]\nENQ 4 -> ok | first=2 last=0 max=3 a=[4, 2, 3] queue=[3 4]\nDEQ -> 3 | first=0 last=0 max=3 a=[4, 2, 3] queue=[4]\nENQ 5 -> ok | first=0 last=1 max=3 a=[4, 5, 3] queue=[4 5]\nENQ 6 -> ok | first=0 last=2 max=3 a=[4, 5, 6] queue=[4 5 6]\nDEQ -> 4 | first=1 last=2 max=3 a=[4, 5, 6] queue=[5 6]\nENQ 7 -> ok | first=1 last=0 max=3 a=[7, 5, 6] queue=[5 6 7]\nENQ 8 -> ok | first=0 last=3 max=6 a=[5, 6, 7, 8, 0, 0] queue=[5 6 7 8]\nDEQ -> 5 | first=1 last=3 max=6 a=[5, 6, 7, 8, 0, 0] queue=[6 7 8]\nDEQ -> 6 | first=2 last=3 max=6 a=[5, 6, 7, 8, 0, 0] queue=[7 8]\n"
+  ]
+ },
+ "csd201-2-2-two-stack-queue": {
+  "bam": "a8465761bbebc2ce",
+  "ra": [
+   "ENQ 1 -> ok | in [1] out []\nENQ 2 -> ok | in [2, 1] out []\nENQ 3 -> ok | in [3, 2, 1] out []\nDEQ -> 1 | in [] out [2, 3]\nENQ 4 -> ok | in [4] out [2, 3]\nPEEK -> 2 | in [4] out [2, 3]\nDEQ -> 2 | in [4] out [3]\nDEQ -> 3 | in [4] out []\nENQ 5 -> ok | in [5, 4] out []\nDEQ -> 4 | in [] out [5]\nDEQ -> 5 | in [] out []\nDEQ -> THROWS NoSuchElementException | in [] out []\n",
+   "PEEK -> THROWS NoSuchElementException | in [] out []\nENQ 9 -> ok | in [9] out []\nDEQ -> 9 | in [] out []\nDEQ -> THROWS NoSuchElementException | in [] out []\nENQ 1 -> ok | in [1] out []\nENQ 2 -> ok | in [2, 1] out []\nPEEK -> 1 | in [] out [1, 2]\nENQ 3 -> ok | in [3] out [1, 2]\nDEQ -> 1 | in [3] out [2]\nDEQ -> 2 | in [3] out []\nDEQ -> 3 | in [] out []\n",
+   "PERF -> 300,000 x (enqueue, enqueue, dequeue), then empty it: OK, sum 179999700000 | in [] out []\n"
+  ]
+ },
+ "csd201-2-3-brackets": {
+  "bam": "184450e11252cc3a",
+  "ra": [
+   "{a[(b+c)*d]} -> OK\n(a+b] -> MISMATCH at 4\na+b) -> UNEXPECTED at 3\n((a) -> UNCLOSED at 0\n[{()}]() -> OK\n",
+   "x -> OK\n{[( -> UNCLOSED at 2\n)( -> UNEXPECTED at 0\n([)] -> MISMATCH at 2\nif (a[i] > 0) { f(x); } -> OK\n"
+  ]
+ },
+ "csd201-2-3-infix-to-postfix": {
+  "bam": "fa61e58f48bc7688",
+  "ra": [
+   "a+b*(c-d)/e -> a b c d - * e / +\na+b*c -> a b c * +\n(a+b)*c -> a b + c *\na*b+c -> a b * c +\n",
+   "a-b-c -> a b - c -\na/b*c -> a b / c *\n8-2+3 -> 8 2 - 3 +\n",
+   "((a)) -> a\na * ( b + ( c - d ) * e ) -> a b c d - e * + *\n( 1 + 2 ) * ( 3 + 4 ) / 5 -> 1 2 + 3 4 + * 5 /\nx -> x\n"
+  ]
+ },
+ "csd201-2-3-postfix-eval": {
+  "bam": "e291bf80a4fc0f1d",
+  "ra": [
+   "5 1 2 + 4 * + 3 - -> 14\n2 3 4 * + -> 14\n10 3 - -> 7\n10 3 / -> 3\n-7 2 / -> -3\n",
+   "1 + -> ERROR: not enough operands\n1 2 -> ERROR: too many operands\n4 0 / -> ERROR: division by zero\n7 -> 7\n+ -> ERROR: not enough operands\n",
+   "100000 100000 * 3 * -> 30000000000\n2147483647 1 + -> 2147483648\n"
+  ]
+ },
+ "csd201-2-3-undo-redo": {
+  "bam": "e918ba7c16aac3af",
+  "ra": [
+   "TYPE hello -> ok | text=\"hello\"\nTYPE  world -> ok | text=\"hello world\"\nDEL 3 -> ok | text=\"hello wo\"\nUNDO -> true | text=\"hello world\"\nUNDO -> true | text=\"hello\"\nREDO -> true | text=\"hello world\"\nREDO -> true | text=\"hello wo\"\nREDO -> false | text=\"hello wo\"\nUNDO -> true | text=\"hello world\"\n",
+   "UNDO -> false | text=\"\"\nTYPE ab -> ok | text=\"ab\"\nDEL 10 -> ok | text=\"\"\nUNDO -> true | text=\"ab\"\nUNDO -> true | text=\"\"\nREDO -> true | text=\"ab\"\nTYPE c -> ok | text=\"abc\"\nREDO -> false | text=\"abc\"\nUNDO -> true | text=\"ab\"\nUNDO -> true | text=\"\"\nUNDO -> false | text=\"\"\n"
+  ]
+ },
+ "csd201-2-4-circular-deque": {
+  "bam": "e1ddea3bae9d429f",
+  "ra": [
+   "AL 1 -> ok | front=0 size=1 a=[1, 0, 0, 0] deque=[1]\nAL 2 -> ok | front=0 size=2 a=[1, 2, 0, 0] deque=[1, 2]\nAF 0 -> ok | front=3 size=3 a=[1, 2, 0, 0] deque=[0, 1, 2]\nAF -1 -> ok | front=2 size=4 a=[1, 2, -1, 0] deque=[-1, 0, 1, 2]\nRL -> 2 | front=2 size=3 a=[1, 2, -1, 0] deque=[-1, 0, 1]\nRF -> -1 | front=3 size=2 a=[1, 2, -1, 0] deque=[0, 1]\nAL 3 -> ok | front=3 size=3 a=[1, 3, -1, 0] deque=[0, 1, 3]\nAL 4 -> ok | front=3 size=4 a=[1, 3, 4, 0] deque=[0, 1, 3, 4]\nRF -> 0 | front=0 size=3 a=[1, 3, 4, 0] deque=[1, 3, 4]\nRF -> 1 | front=1 size=2 a=[1, 3, 4, 0] deque=[3, 4]\n",
+   "AF 3 -> ok | front=3 size=1 a=[0, 0, 0, 3] deque=[3]\nAF 2 -> ok | front=2 size=2 a=[0, 0, 2, 3] deque=[2, 3]\nAF 1 -> ok | front=1 size=3 a=[0, 1, 2, 3] deque=[1, 2, 3]\nAL 4 -> ok | front=1 size=4 a=[4, 1, 2, 3] deque=[1, 2, 3, 4]\nAL 5 -> ok | front=0 size=5 a=[1, 2, 3, 4, 5, 0, 0, 0] deque=[1, 2, 3, 4, 5]\nRL -> 5 | front=0 size=4 a=[1, 2, 3, 4, 5, 0, 0, 0] deque=[1, 2, 3, 4]\nRF -> 1 | front=1 size=3 a=[1, 2, 3, 4, 5, 0, 0, 0] deque=[2, 3, 4]\nRF -> 2 | front=2 size=2 a=[1, 2, 3, 4, 5, 0, 0, 0] deque=[3, 4]\nRF -> 3 | front=3 size=1 a=[1, 2, 3, 4, 5, 0, 0, 0] deque=[4]\nRF -> 4 | front=4 size=0 a=[1, 2, 3, 4, 5, 0, 0, 0] deque=[]\nRF -> THROWS NoSuchElementException | front=4 size=0 a=[1, 2, 3, 4, 5, 0, 0, 0] deque=[]\n",
+   "AF 1 -> ok | front=3 size=1 a=[0, 0, 0, 1] deque=[1]\nAF 2 -> ok | front=2 size=2 a=[0, 0, 2, 1] deque=[2, 1]\nRF -> 2 | front=3 size=1 a=[0, 0, 2, 1] deque=[1]\nRF -> 1 | front=0 size=0 a=[0, 0, 2, 1] deque=[]\nAL 3 -> ok | front=0 size=1 a=[3, 0, 2, 1] deque=[3]\nAL 4 -> ok | front=0 size=2 a=[3, 4, 2, 1] deque=[3, 4]\nRF -> 3 | front=1 size=1 a=[3, 4, 2, 1] deque=[4]\nAF 5 -> ok | front=0 size=2 a=[5, 4, 2, 1] deque=[5, 4]\nRL -> 4 | front=0 size=1 a=[5, 4, 2, 1] deque=[5]\nRL -> 5 | front=0 size=0 a=[5, 4, 2, 1] deque=[]\nRL -> THROWS NoSuchElementException | front=0 size=0 a=[5, 4, 2, 1] deque=[]\n"
+  ]
+ },
+ "csd201-2-4-first-negative": {
+  "bam": "b864fb7072872379",
+  "ra": [
+   "3 : 12 -1 -7 8 -15 30 16 28 -> [-1, -1, -7, -15, -15, 0]\n2 : -8 2 3 -6 10 -> [-8, 0, -6, -6]\n",
+   "2 : 1 2 3 -> [0, 0]\n2 : -1 -2 -3 -> [-1, -2]\n1 : 5 -5 0 -> [0, -5, 0]\n4 : 1 2 -> []\n",
+   "PERF -> n = 1,000,000, k = 400,000: OK, windows 600001, last -899999\n"
+  ]
+ },
+ "csd201-2-4-sliding-window-max": {
+  "bam": "21f144296fe0dcbf",
+  "ra": [
+   "3 : 1 3 -1 -3 5 3 6 7 -> [3, 3, 5, 5, 6, 7]\n1 : 4 2 12 3 -> [4, 2, 12, 3]\n4 : 4 2 12 3 -> [12]\n5 : 1 2 3 -> []\n",
+   "2 : 9 8 7 6 5 -> [9, 8, 7, 6]\n2 : 1 2 3 4 5 -> [2, 3, 4, 5]\n3 : 5 5 5 5 -> [5, 5]\n2 : -1 -3 -2 -5 -> [-1, -2, -2]\n",
+   "PERF -> n = 1,000,000, k = 500,000: OK, windows 500001, first 999990679\n"
+  ]
+ },
+ "csd201-2-5-min-heap-pq": {
+  "bam": "0d355083e9348739",
+  "ra": [
+   "INS 5 -> ok | [5] heap OK\nINS 3 -> ok | [3, 5] heap OK\nINS 8 -> ok | [3, 5, 8] heap OK\nINS 1 -> ok | [1, 3, 8, 5] heap OK\nINS 9 -> ok | [1, 3, 8, 5, 9] heap OK\nINS 2 -> ok | [1, 3, 2, 5, 9, 8] heap OK\nMIN -> 1 | [1, 3, 2, 5, 9, 8] heap OK\nDEL -> 1 | [2, 3, 8, 5, 9] heap OK\nDEL -> 2 | [3, 5, 8, 9] heap OK\nDEL -> 3 | [5, 9, 8] heap OK\nINS 0 -> ok | [0, 5, 8, 9] heap OK\nDEL -> 0 | [5, 9, 8] heap OK\n",
+   "DEL -> THROWS NoSuchElementException | [] heap OK\nINS 4 -> ok | [4] heap OK\nINS 4 -> ok | [4, 4] heap OK\nINS 4 -> ok | [4, 4, 4] heap OK\nDEL -> 4 | [4, 4] heap OK\nDEL -> 4 | [4] heap OK\nDEL -> 4 | [] heap OK\nMIN -> THROWS NoSuchElementException | [] heap OK\nINS -1 -> ok | [-1] heap OK\nINS 7 -> ok | [-1, 7] heap OK\nINS -3 -> ok | [-3, 7, -1] heap OK\nDEL -> -3 | [-1, 7] heap OK\n",
+   "PERF -> 1,000,000 inserts then 1,000,000 removeMin: OK, came out sorted: true | [] heap OK\n"
+  ]
+ },
+ "csd201-2-5-top-k": {
+  "bam": "af2c2d8090ab228d",
+  "ra": [
+   "3 : 5 1 9 3 7 9 2 -> [9, 9, 7]\n2 : 4 4 4 -> [4, 4]\n1 : -5 -2 -9 -> [-2]\n",
+   "5 : 3 1 2 -> [3, 2, 1]\n0 : 1 2 3 -> []\n3 : 10 20 30 -> [30, 20, 10]\n",
+   "PERF -> n = 3,000,000, k = 100,000: OK, largest 1999999878, 100,000th 1928484418\n"
+  ]
+ },
+ "csd201-2-5-triage-comparator": {
+  "bam": "d5248efd16a0a479",
+  "ra": [
+   "IN An 3 -> true | waiting 1\nIN Binh 5 -> true | waiting 2\nIN Chi 3 -> true | waiting 3\nIN Dung 1 -> true | waiting 4\nIN Em 5 -> true | waiting 5\nIN Phuc 3 -> true | waiting 6\nNEXT -> Binh(5) | waiting 5\nNEXT -> Em(5) | waiting 4\nNEXT -> An(3) | waiting 3\nNEXT -> Chi(3) | waiting 2\nNEXT -> Phuc(3) | waiting 1\nNEXT -> Dung(1) | waiting 0\nNEXT -> nobody | waiting 0\n",
+   "IN X 0 -> false | waiting 0\nIN Y 6 -> false | waiting 0\nIN a 2 -> true | waiting 1\nIN b 2 -> true | waiting 2\nIN c 2 -> true | waiting 3\nIN d 2 -> true | waiting 4\nIN e 2 -> true | waiting 5\nIN f 2 -> true | waiting 6\nIN g 2 -> true | waiting 7\nNEXT -> a(2) | waiting 6\nIN h 4 -> true | waiting 7\nNEXT -> h(4) | waiting 6\nNEXT -> b(2) | waiting 5\nNEXT -> c(2) | waiting 4\nNEXT -> d(2) | waiting 3\nNEXT -> e(2) | waiting 2\nNEXT -> f(2) | waiting 1\nNEXT -> g(2) | waiting 0\nNEXT -> nobody | waiting 0\n"
+  ]
+ },
+ "csd201-2-6-largest-rectangle": {
+  "bam": "dc9571787fc8c453",
+  "ra": [
+   "2 1 5 6 2 3 -> 10\n2 4 -> 4\n6 2 5 4 5 1 6 -> 12\n3 -> 3\n",
+   "1 2 3 4 5 -> 9\n5 4 3 2 1 -> 9\n0 0 0 -> 0\n4 4 4 4 -> 16\n0 9 0 -> 9\n",
+   "PERF -> n = 2,000,000 equal bars of 10^9: OK, area 2000000000000000\n"
+  ]
+ },
+ "csd201-2-6-next-greater": {
+  "bam": "3b9fe024e3617c72",
+  "ra": [
+   "2 1 2 4 3 -> [4, 2, 4, -1, -1]\n1 2 3 4 -> [2, 3, 4, -1]\n4 3 2 1 -> [-1, -1, -1, -1]\n7 -> [-1]\n",
+   "5 5 5 6 -> [6, 6, 6, -1]\n-3 -1 -2 0 -> [-1, 0, 0, -1]\n3 1 1 1 2 -> [-1, 2, 2, 2, -1]\n",
+   "PERF -> n = 2,000,000 (decreasing, then one big value): OK, answer[0] = 5000000\n"
+  ]
+ },
+ "csd201-2-6-patient-queue": {
+  "bam": "574eb5c65410f884",
+  "ra": [
+   "IN An 3 -> ok | An(3)\nIN Binh 5 -> ok | Binh(5) An(3)\nIN Chi 3 -> ok | Binh(5) An(3) Chi(3)\nIN Dung 1 -> ok | Binh(5) An(3) Chi(3) Dung(1)\nIN Em 5 -> ok | Binh(5) Em(5) An(3) Chi(3) Dung(1)\nIN Bad 7 -> ok | Binh(5) Em(5) An(3) Chi(3) Dung(1)\nCOUNT 3 -> 4 | Binh(5) Em(5) An(3) Chi(3) Dung(1)\nUPD Dung 5 -> true | Binh(5) Em(5) Dung(5) An(3) Chi(3)\nUPD Chi 1 -> true | Binh(5) Em(5) Dung(5) An(3) Chi(1)\nUPD Zed 2 -> false | Binh(5) Em(5) Dung(5) An(3) Chi(1)\nOUT -> Binh(5) | Em(5) Dung(5) An(3) Chi(1)\nOUT -> Em(5) | Dung(5) An(3) Chi(1)\nCOUNT 4 -> 1 | Dung(5) An(3) Chi(1)\n",
+   "OUT -> null | (empty)\nUPD X 3 -> false | (empty)\nIN A 2 -> ok | A(2)\nIN B 2 -> ok | A(2) B(2)\nUPD A 2 -> true | B(2) A(2)\nUPD B 0 -> false | B(2) A(2)\nCOUNT 1 -> 2 | B(2) A(2)\nCOUNT 3 -> 0 | B(2) A(2)\nOUT -> B(2) | A(2)\nOUT -> A(2) | (empty)\nOUT -> null | (empty)\n"
+  ]
+ },
+ "csd201-2-6-round-robin": {
+  "bam": "efb9cd0798dc4a73",
+  "ra": [
+   "2 : P1 5 P2 2 P3 4 -> [P2@4 P3@10 P1@11]\n1 : P1 5 P2 2 P3 4 -> [P2@5 P3@10 P1@11]\n10 : P1 5 P2 2 P3 4 -> [P1@5 P2@7 P3@11]\n",
+   "3 : A 0 B -2 C 7 -> [C@7]\n2 : X 0 -> []\n4 : A 4 B 4 C 4 -> [A@4 B@8 C@12]\n"
+  ]
  }
 }

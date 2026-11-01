@@ -99,6 +99,11 @@ ${ra(gon(OUT['41-th']))}
 <li>SQLite ≠ PostgreSQL: test the engine you deploy.</li>
 <li>Integration tests cost seconds — keep them focused on what only the database can show.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.4: the same race in Redis</span><span class="lc-sub">500 parallel requests through a limit of 100: INCR allows 100 and blocks 400; GET → check → SET allows all 500 and leaves the counter at 1. Only a concurrent test against a real Redis shows it — a mock would pass.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -181,6 +186,11 @@ ${ra(gon(OUT['41-th']))}
 <li>SQLite ≠ PostgreSQL: test đúng engine bạn triển khai.</li>
 <li>Test tích hợp tốn vài giây — giữ chúng tập trung vào thứ chỉ cơ sở dữ liệu mới cho thấy.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.4: cùng cuộc đua trong Redis</span><span class="lc-sub">500 request song song qua giới hạn 100: INCR cho 100, chặn 400; GET → kiểm → SET cho cả 500 lọt và bộ đếm dừng ở 1. Chỉ một test song song trên Redis thật mới thấy — dùng mock thì test vẫn xanh.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
 };

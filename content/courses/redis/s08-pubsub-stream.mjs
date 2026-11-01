@@ -795,6 +795,11 @@ redis-cli XINFO CONSUMERS orders billing</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A group splits entries between its consumers while separate groups each get everything — split within, fan out across — and the PEL is what makes it a queue: delivery records the entry, and only <code>XACK</code> after successful work removes it. Read with <code>&gt;</code> in steady state and with an explicit <code>0</code> on startup to finish what this consumer left pending, use a stable consumer name, and never acknowledge in a <code>finally</code>. And the guarantee is at-least-once, not exactly-once — no placement of <code>XACK</code> closes the gap between doing the work and recording that you did, so every handler needs an idempotency key, and the stream entry ID is one you already have.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.5: Pub/Sub vs Streams</span><span class="lc-sub">Pub/Sub delivers only to whoever listens NOW (an offline subscriber loses the message, PUBLISH returns 0); a handler registered on every reconnect turns one message into three; a Stream with a consumer group loses no job when a worker dies.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.3</span>
@@ -976,6 +981,11 @@ redis-cli XINFO CONSUMERS orders billing</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một nhóm chia các mục cho các consumer của nó trong khi các nhóm riêng biệt thì mỗi nhóm nhận đủ mọi thứ — chia bên trong, toả ra bên ngoài — và PEL là thứ làm cho nó thành một hàng đợi: việc giao hàng ghi lại cái mục, và chỉ lệnh <code>XACK</code> sau khi làm việc thành công mới gỡ nó ra. Hãy đọc bằng <code>&gt;</code> ở trạng thái ổn định và bằng <code>0</code> tường minh lúc khởi động để làm nốt những gì consumer này còn để chờ, hãy dùng tên consumer ổn định, và đừng bao giờ xác nhận trong một khối <code>finally</code>. Và cái bảo đảm là ít-nhất-một-lần chứ không phải đúng-một-lần — không cách đặt <code>XACK</code> nào bịt được khe hở giữa việc làm xong và việc ghi lại rằng bạn đã làm, nên mọi handler đều cần một khoá chống trùng, và mã mục của stream là một cái bạn vốn đã có sẵn.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.5: Pub/Sub hay Streams</span><span class="lc-sub">Pub/Sub chỉ giao cho ai đang nghe NGAY LÚC ĐÓ (thuê bao offline mất tin, PUBLISH trả 0); handler đăng ký lại mỗi lần nối lại biến một tin thành ba; Stream với consumer group không mất job nào khi worker chết.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

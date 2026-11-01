@@ -383,6 +383,11 @@ mem_fragmentation_ratio:1.53</div>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A hash is a listpack until it has more than 128 fields <em>or</em> any field/value longer than 64 bytes, and after that it is a hashtable costing 60–100 bytes per field forever — the conversion never reverses. Bucketing many small objects into fewer hashes cut a real million-object dataset from 89 MB to 26 MB, because you stop paying top-level key overhead a million times. And measure before you optimise: <code>--memkeys</code> ranks by actual memory, <code>MEMORY USAGE</code> is sampled unless you say <code>SAMPLES 0</code>, and raising the listpack thresholds to force the win converts a visible memory problem into an invisible latency one.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.3: the same data, a fraction of the RAM</span><span class="lc-sub">100,000 sessions stored three ways (11.91 / 11.67 / 5.92 MB), the saving that comes from FEWER KEYS, the 513th field cliff measured with MEMORY USAGE … SAMPLES 0, bitmaps (1,000,000 users in 131,136 bytes) and sorted-set leaderboards.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -499,6 +504,11 @@ mem_fragmentation_ratio:1.53</div>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Một hash là listpack cho tới khi nó có hơn 128 trường <em>hoặc</em> có trường/giá trị nào dài hơn 64 byte, sau đó nó là hashtable tốn 60–100 byte mỗi trường mãi mãi — việc chuyển kiểu không bao giờ đảo ngược. Gom nhiều đối tượng nhỏ vào ít hash hơn đã cắt một tập dữ liệu một triệu đối tượng thật từ 89 MB xuống 26 MB, vì bạn thôi trả chi phí khoá cấp cao nhất một triệu lần. Và hãy đo trước khi tối ưu: <code>--memkeys</code> xếp hạng theo bộ nhớ thật, <code>MEMORY USAGE</code> là lấy mẫu trừ khi bạn nói <code>SAMPLES 0</code>, và nâng ngưỡng listpack lên để ép lấy phần thắng chỉ biến một vấn đề bộ nhớ nhìn thấy được thành một vấn đề độ trễ vô hình.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-3-cau-truc-du-lieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.3: cùng dữ liệu, một phần RAM</span><span class="lc-sub">100.000 phiên lưu ba cách (11,91 / 11,67 / 5,92 MB), khoản tiết kiệm đến từ ÍT KHOÁ hơn, vách trường thứ 513 đo bằng MEMORY USAGE … SAMPLES 0, bitmap (1.000.000 người trong 131.136 byte) và bảng xếp hạng bằng sorted set.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

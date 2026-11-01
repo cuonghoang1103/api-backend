@@ -1661,6 +1661,11 @@ COMMIT;</code></pre>
   <span class="lc-body"><span class="lc-title">Go deeper: System Design in Practice — 6.4 A notification system</span><span class="lc-sub">Being written: in-app, push and email with preferences, quiet hours and batching.</span></span>
   <span class="lc-cta">OPEN →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The mechanism underneath — Node.js lesson 12.5: Pub/Sub vs Streams</span><span class="lc-sub">Why the outbox relay writes to a Stream and not a channel, measured: an offline Pub/Sub subscriber loses messages (PUBLISH → 0), a consumer group recovers a crashed worker's jobs (PENDING 2 → XAUTOCLAIM → 0), and an untrimmed stream keeps growing.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1816,6 +1821,11 @@ COMMIT;</code></pre>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Đi sâu: System Design thực chiến — 6.4 Hệ thông báo</span><span class="lc-sub">Đang soạn: trong app, push và email với tuỳ chọn, giờ yên lặng và gom lô.</span></span>
   <span class="lc-cta">MỞ →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-5-pubsub-streams" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cơ chế bên dưới — Node.js bài 12.5: Pub/Sub hay Streams</span><span class="lc-sub">Vì sao relay của outbox ghi vào Stream chứ không phải một kênh, đo thật: thuê bao Pub/Sub offline mất tin (PUBLISH → 0), consumer group thu hồi job của worker sập (PENDING 2 → XAUTOCLAIM → 0), và stream không cắt thì phình mãi.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,

@@ -526,6 +526,11 @@ redis-cli SET lock:page:home 1 NX EX 30</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Three different problems share the name: synchronised expiry (fix with jitter, one line), one hot key with concurrent misses (fix with single-flight), and a cold cache (fix by warming before taking traffic) — and jitter, which everyone reaches for first, does nothing for the second and third. A lock must have a TTL <em>and</em> a token, because releasing with a plain <code>DEL</code> can delete someone else's lock and leave two workers inside the critical section. And the best-feeling fix is serving stale while one worker refreshes behind it: nobody ever waits, at the price of a product decision about how old is too old.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.2: the stampede, measured</span><span class="lc-sub">200 concurrent requests the moment the key expired, Postgres pool of 10: plain cache-aside 200 queries / 4,178 ms, single-flight (a Map of promises) 1 / 69.1 ms, SET NX lock 1 / 80.6 ms, warm cache 0 / 2.9 ms.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.3</span>
@@ -644,6 +649,11 @@ redis-cli SET lock:page:home 1 NX EX 30</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Ba vấn đề khác nhau dùng chung cái tên: hết hạn đồng loạt (chữa bằng rắc nhiễu, một dòng), một khoá nóng bị trượt đồng thời (chữa bằng một-lượt-duy-nhất), và bộ đệm nguội (chữa bằng làm ấm trước khi nhận lưu lượng) — và rắc nhiễu, thứ ai cũng với tay lấy đầu tiên, chẳng làm được gì cho hai cái sau. Một cái khoá phải có TTL <em>và</em> một mã thông báo, vì nhả bằng <code>DEL</code> trơn có thể xoá mất khoá của người khác và để hai worker cùng nằm trong vùng tới hạn. Và cách chữa cho cảm giác tốt nhất là phục vụ đồ ôi trong lúc một worker làm mới phía sau: không ai phải chờ, với cái giá là một quyết định về sản phẩm rằng cũ tới đâu thì là quá cũ.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.2: cơn giẫm đạp, đo thật</span><span class="lc-sub">200 request cùng lúc đúng khi khoá hết hạn, pool Postgres 10: cache-aside thường 200 truy vấn / 4.178 ms, single-flight (Map các promise) 1 / 69,1 ms, khoá SET NX 1 / 80,6 ms, cache ấm 0 / 2,9 ms.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

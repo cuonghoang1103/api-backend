@@ -619,6 +619,11 @@ return inflight.get(key);   // 50 request cùng trượt ⇒ cùng chờ MỘT l
   <li>Key = everything that changes the answer + a schema version; TTL with jitter.</li>
   <li>The contract says how stale the answer may be; the cache must fail open to the database.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.2: cache-aside and its four betrayals</span><span class="lc-sub">On 500,000 notes in PostgreSQL 17: a 58.34 ms leaderboard served in 0.41 ms (143.5×), a 1.6 MB list where the cache is 13% SLOWER than the database, 90% hits = 6.73 ms vs 99% = 0.93 ms, and 200 concurrent requests = 200 queries (4,178 ms) → 1 with single-flight (69.1 ms).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -775,6 +780,11 @@ return inflight.get(key);   // 50 request cùng trượt ⇒ cùng chờ MỘT l
   <li>Khoá = mọi thứ làm đổi câu trả lời + số phiên bản hình dạng; TTL có jitter.</li>
   <li>Hợp đồng nói câu trả lời được cũ tới đâu; cache hỏng thì phải lùi về CSDL.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-2-cache-aside" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.2: cache-aside và bốn lần nó phản chủ</span><span class="lc-sub">Trên 500.000 ghi chú PostgreSQL 17: bảng xếp hạng 58,34 ms phục vụ trong 0,41 ms (143,5×), danh sách 1,6 MB nơi cache CHẬM hơn CSDL 13%, trúng 90% = 6,73 ms vs 99% = 0,93 ms, và 200 request cùng lúc = 200 truy vấn (4.178 ms) → 1 với single-flight (69,1 ms).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

@@ -602,6 +602,11 @@ lazyfreed_objects:0</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> writing a <code>SCAN</code> loop that stops on an empty batch. The code looks reasonable — scan, get keys, if there are none we must be done — and it is wrong, because <code>MATCH</code> filters <em>after</em> the batch is fetched. Scanning a million keys for <code>MATCH 'lock:*'</code> will return empty batches for most of the iteration while the cursor is still marching through the hash table, so a loop with <code>while (keys.length)</code> exits after the first batch and silently processes a fraction of the keyspace. The termination condition is the cursor and only the cursor: loop until <code>SCAN</code> returns <code>"0"</code>. The same mistake in reverse is a loop that never terminates because it stores the cursor as a number and drops a large value's precision — cursors are 64-bit and must be treated as opaque strings in JavaScript.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> <code>SCAN</code> guarantees only that keys present for the whole iteration appear at least once — duplicates happen, and an empty batch means nothing because <code>MATCH</code> filters after fetching. Terminate on a cursor of <code>"0"</code>, never on an empty result. And make <code>UNLINK</code> your default over <code>DEL</code>: deleting one five-million-element set froze the server for 412ms, versus 2ms — then turn on all four <code>lazyfree-*</code> settings so the same protection applies to expiry, eviction and code you did not write.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.6: the commands that freeze everything</span><span class="lc-sub">Measured from a second connection: KEYS vs SCAN, DEL vs UNLINK, maxmemory with noeviction (writes OOM, reads fine), allkeys-lru (128,140 keys evicted, 0 errors), volatile-lru with no TTLs, and a restart with and without AOF (1,000 → 0 vs 1,000 → 1,000).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.3</span>
@@ -740,6 +745,11 @@ lazyfreed_objects:0</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> viết một vòng lặp <code>SCAN</code> dừng lại khi gặp một mẻ RỖNG. Đoạn mã trông có vẻ hợp lý — quét, lấy khoá, nếu không có cái nào thì chắc là xong — và nó SAI, vì <code>MATCH</code> lọc <em>SAU</em> khi mẻ dữ liệu đã được lấy về. Quét một triệu khoá với <code>MATCH 'lock:*'</code> sẽ trả về những mẻ rỗng suốt phần lớn lượt duyệt trong khi con trỏ vẫn đang đi qua bảng băm, nên một vòng lặp với <code>while (keys.length)</code> sẽ thoát ngay sau mẻ đầu tiên và lặng lẽ xử lý được một phần nhỏ của không gian khoá. Điều kiện dừng là CON TRỎ và chỉ con trỏ: hãy lặp cho tới khi <code>SCAN</code> trả về <code>"0"</code>. Sai lầm ngược lại là một vòng lặp không bao giờ dừng vì nó lưu con trỏ dưới dạng SỐ rồi làm mất độ chính xác với một giá trị lớn — con trỏ là 64 bit và trong JavaScript phải được xử lý như một chuỗi mờ.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> <code>SCAN</code> chỉ bảo đảm rằng những khoá có mặt suốt lượt duyệt sẽ xuất hiện ít nhất một lần — trùng lặp là chuyện có thật, và một mẻ rỗng chẳng nói lên điều gì vì <code>MATCH</code> lọc sau khi lấy về. Hãy dừng khi con trỏ bằng <code>"0"</code>, đừng bao giờ dừng vì kết quả rỗng. Và hãy lấy <code>UNLINK</code> làm mặc định thay cho <code>DEL</code>: xoá một cái set năm triệu phần tử làm đông cứng máy chủ 412ms, so với 2ms — rồi bật cả bốn thiết lập <code>lazyfree-*</code> để cùng lớp bảo vệ đó áp cho việc hết hạn, việc đẩy khoá, và cả mã không phải bạn viết.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-6-van-hanh-production" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.6: những lệnh làm đứng hình tất cả</span><span class="lc-sub">Đo từ một kết nối thứ hai: KEYS vs SCAN, DEL vs UNLINK, maxmemory với noeviction (ghi lỗi OOM, đọc vẫn chạy), allkeys-lru (vứt 128.140 khoá, 0 lỗi), volatile-lru khi không có TTL, và khởi động lại có/không AOF (1.000 → 0 vs 1.000 → 1.000).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

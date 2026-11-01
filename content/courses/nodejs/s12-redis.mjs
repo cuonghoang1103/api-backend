@@ -34,7 +34,7 @@ export default {
 <p>Redis is a server that keeps its data in RAM and answers over TCP. Four properties follow, and all four matter:</p>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-t">In RAM</span><span class="lz-d">reads and writes cost nanoseconds, not disk seeks. It also means the dataset must FIT in RAM, and that RAM is the resource you run out of</span></div>
-  <div class="lz-layer"><span class="lz-t">Single-threaded for commands</span><span class="lz-d">one command runs at a time, start to finish. That gives you atomicity for free — and means one slow command freezes every other client (lesson 12.5)</span></div>
+  <div class="lz-layer"><span class="lz-t">Single-threaded for commands</span><span class="lz-d">one command runs at a time, start to finish. That gives you atomicity for free — and means one slow command freezes every other client (lesson 12.6)</span></div>
   <div class="lz-layer"><span class="lz-t">Data structures, not just strings</span><span class="lz-d">hashes, sets, sorted sets, bitmaps, streams. Choosing the right one is worth 95× the RAM (lesson 12.3)</span></div>
   <div class="lz-layer"><span class="lz-t">Over the network</span><span class="lz-d">every command is a round trip. This is the cost that dominates, and the one beginners never see</span></div>
 </div>
@@ -119,6 +119,11 @@ export function getRedis() {
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-429"><span class="lc-t">Code Lab · Performance, Scripting, and Production Patterns</span><span class="lc-d">Pipelines, benchmarks and production patterns</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-1-4-pipeline" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 1.4: Pipelining: 100 round trips become one</span><span class="lc-sub">Same idea: a pipeline removes the waiting, not the work. The Redis course shows it from redis-cli and the protocol; this lesson measures it from Node: PING 0.481 ms a round trip while Redis itself spends 0.53 µs (INFO commandstats), 10,000 SETs 4,683.7 → 28.4 ms, batch size 1 → 10,000, MGET 510×.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -130,7 +135,7 @@ export function getRedis() {
 <p>Redis là một máy chủ giữ dữ liệu trong RAM và trả lời qua TCP. Từ đó suy ra bốn tính chất, và cả bốn đều quan trọng:</p>
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-t">Nằm trong RAM</span><span class="lz-d">đọc và ghi tốn nano-giây chứ không phải một cú quay đầu đọc đĩa. Đổi lại, toàn bộ dữ liệu PHẢI vừa trong RAM, và RAM chính là thứ bạn sẽ hết</span></div>
-  <div class="lz-layer"><span class="lz-t">Một luồng cho mọi lệnh</span><span class="lz-d">mỗi lúc chỉ một lệnh chạy, từ đầu tới cuối. Điều đó cho bạn tính nguyên tử miễn phí — và cũng có nghĩa MỘT lệnh chậm làm đông cứng mọi client khác (bài 12.5)</span></div>
+  <div class="lz-layer"><span class="lz-t">Một luồng cho mọi lệnh</span><span class="lz-d">mỗi lúc chỉ một lệnh chạy, từ đầu tới cuối. Điều đó cho bạn tính nguyên tử miễn phí — và cũng có nghĩa MỘT lệnh chậm làm đông cứng mọi client khác (bài 12.6)</span></div>
   <div class="lz-layer"><span class="lz-t">Cấu trúc dữ liệu chứ không chỉ chuỗi</span><span class="lz-d">hash, set, sorted set, bitmap, stream. Chọn đúng kiểu đáng giá 95 lần RAM (bài 12.3)</span></div>
   <div class="lz-layer"><span class="lz-t">Đi qua mạng</span><span class="lz-d">mỗi lệnh là một vòng đi-về. Đây là chi phí chiếm ưu thế, và là thứ người mới không bao giờ nhìn thấy</span></div>
 </div>
@@ -215,6 +220,11 @@ export function getRedis() {
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-429"><span class="lc-t">Code Lab · Performance, Scripting, and Production Patterns</span><span class="lc-d">Pipeline, benchmark và các khuôn mẫu production</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-1-4-pipeline" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 1.4: Pipeline: 100 vòng mạng thành một</span><span class="lc-sub">Cùng ý: pipeline bỏ đi phần chờ, không bỏ công việc. Khoá Redis cho thấy nó từ redis-cli và giao thức; bài này đo từ Node: mỗi vòng đi-về PING 0,481 ms trong khi Redis tự làm 0,53 µs (INFO commandstats), 10.000 SET 4.683,7 → 28,4 ms, lô 1 → 10.000, MGET nhanh 510×.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -357,6 +367,16 @@ if (got) {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Betrayal — the write path forgets</span><span class="lz-d">Updating the row without invalidating the key serves stale data until the TTL. This is the one that produces &quot;it fixed itself after five minutes&quot;.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Betrayal — everything expires at once</span><span class="lz-d">Identical TTLs written in one batch expire in one batch, and the stampede hits the database together. Add jitter to the TTL.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-9-1-server-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Same pattern under load in API Design — lesson 9.2: server-side caching with Redis</span><span class="lc-sub">API Design measures cache-aside with autocannon on a 1,000,000-row aggregate: 43 → 4,150 requests/s, and a stampede of 50 requests: 50 → 32 → 1 queries with single-flight. This lesson adds the cases where the cache LOSES (a 1.6 MB payload, 11.81 vs 10.46 ms), the non-linear hit rate, and the plain SET that deletes the TTL.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-6-3-giam-dap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 6.3: the stampede</span><span class="lc-sub">The Redis course explains why a single cache miss can take down the database and the families of fixes. This lesson reproduces it from Node against PostgreSQL: 200 queries in 4,178 ms, single-flight 1 query in 69.1 ms, a SET NX lock 1 query in 80.6 ms, and TTL jitter spreading 50 expiries over 26 seconds.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -483,6 +503,16 @@ if (got) {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Phản bội — đường ghi quên mất</span><span class="lz-d">Cập nhật cái dòng mà không vô hiệu hoá cái khoá thì phục vụ dữ liệu cũ cho tới hết TTL. Đây là cú tạo ra câu &quot;năm phút sau nó tự khỏi&quot;.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Phản bội — mọi thứ hết hạn cùng lúc</span><span class="lz-d">Những TTL giống hệt nhau ghi trong một lô sẽ hết hạn trong một lô, và cơn lũ đập vào cơ sở dữ liệu cùng lúc. Hãy thêm nhiễu ngẫu nhiên vào TTL.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-9-1-server-cache" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cùng khuôn dưới tải ở API Design — bài 9.2: cache phía server bằng Redis</span><span class="lc-sub">API Design đo cache-aside bằng autocannon trên truy vấn gộp 1.000.000 dòng: 43 → 4.150 request/giây, và cú giẫm đạp 50 request: 50 → 32 → 1 truy vấn với single-flight. Bài này thêm chỗ cache THUA (payload 1,6 MB, 11,81 vs 10,46 ms), tỉ lệ trúng phi tuyến, và lệnh SET trơn xoá mất TTL.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-6-3-giam-dap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 6.3: giẫm đạp</span><span class="lc-sub">Khoá Redis giải thích vì sao một lần trượt có thể hạ gục CSDL và các họ cách chữa. Bài này dựng lại từ Node với PostgreSQL: 200 truy vấn trong 4.178 ms, single-flight 1 truy vấn 69,1 ms, khoá SET NX 1 truy vấn 80,6 ms, và jitter rải 50 lần hết hạn ra 26 giây.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -528,7 +558,7 @@ hash-max-listpack-entries = 512</div>
 [5] HyperLogLog: PFADD 100k id                    0,04MB  (     1 khoá, 30,65ms)
     Set đếm CHÍNH XÁC 100000 | HLL ước lượng 100165 (lệch 0,17%)
     HLL nhỏ hơn Set 95× — đổi độ chính xác lấy RAM</div>
-<p><strong>95× smaller, 0,17% wrong.</strong> A HyperLogLog is a fixed 12 KB no matter how many items you add — one million or one billion, still 12 KB. The trade is absolute: you can ask <em>how many</em> (<code>PFCOUNT</code>) and you can merge two of them (<code>PFMERGE</code>, which is how "unique visitors this week" works), but you can <strong>never</strong> ask whether a specific user is in it. If you need <code>SISMEMBER</code>, you need a Set.</p>
+<p><strong>95× smaller, 0,17% wrong.</strong> A HyperLogLog is a fixed 12 KB no matter how many items you add — one million or one billion, still 12 KB. The trade is absolute: you can ask <em>how many</em> (<code>PFCOUNT</code>) and you can merge two of them (<code>PFMERGE</code>, which is how "unique visitors this week" works), but you can <strong>never</strong> ask whether a specific user is in it. If you need <code>SISMEMBER</code>, you need a Set. <em>(Measured again with exact accounting — INFO used_memory before and after, Redis 7.4.9 — the Set took 3,68 MB and the HyperLogLog 14,5 KB: about 254× smaller. The 0,04 MB above includes measurement overhead; a dense HyperLogLog is ~12 KB of registers plus a small header. Whichever ruler you use, the gap is hundreds of times.)</em></p>
 
 <h3>Membership over a dense id space: bitmaps</h3>
 <div class="out">[6] Bitmap: SETBIT cho 1.000.000 user             0,15MB  (     1 khoá, 800,00ms)
@@ -562,7 +592,7 @@ hash-max-listpack-entries = 512</div>
 <p>Two rules make this pay off. Put the <strong>time bucket inside the key</strong> when the data is periodic — <code>quota:42:month:2026-07</code> needs no reset job, because next month is simply a different key. And keep prefixes short but never cryptic: with 100.000 keys, the prefix is stored 100.000 times, but a key nobody can decode during an incident costs far more than the bytes.</p>
 
 <div class="pitfall">
-<p><strong>The number that will surprise you at 3am.</strong> An empty Redis holding 1.000.000 tiny keys uses <strong>93,4 MB</strong> (measured in lesson 12.5). That is roughly 93 bytes of overhead per key before your values. Teams size Redis by adding up their value sizes, deploy, and hit <code>maxmemory</code> at a third of the expected key count. Size by <em>key count</em> first, value size second.</p>
+<p><strong>The number that will surprise you at 3am.</strong> An empty Redis holding 1.000.000 tiny keys uses <strong>93,4 MB</strong> (measured in lesson 12.6). That is roughly 93 bytes of overhead per key before your values. Teams size Redis by adding up their value sizes, deploy, and hit <code>maxmemory</code> at a third of the expected key count. Size by <em>key count</em> first, value size second.</p>
 </div>
 
 <div class="note-ct">
@@ -582,6 +612,11 @@ hash-max-listpack-entries = 512</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">The encoding has a cliff</span><span class="lz-d">Past a configured entry count or value size, Redis converts to the general structure and memory jumps — one extra field can multiply the footprint.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And for counting, do not store the members</span><span class="lz-d">A Set of unique visitors grows with traffic; HyperLogLog answers the same question in a fixed twelve kilobytes, with about 0.8% error.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-5-2-ma-hoa-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 5.2: encoding and memory</span><span class="lc-sub">The Redis course explains listpack, intset and the thresholds. This lesson measures the cliff from Node: 512 → 513 fields = 5,168 → 28,816 bytes (×5.6), the same 1,000 fields split into 8 × 125 = 10,368 bytes, ~50 bytes per key, and an HLL vs a Set (14.5 KB vs 3.68 MB).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -619,7 +654,7 @@ hash-max-listpack-entries = 512</div>
 [5] HyperLogLog: PFADD 100k id                    0,04MB  (     1 khoá, 30,65ms)
     Set đếm CHÍNH XÁC 100000 | HLL ước lượng 100165 (lệch 0,17%)
     HLL nhỏ hơn Set 95× — đổi độ chính xác lấy RAM</div>
-<p><strong>Nhỏ hơn 95 lần, sai 0,17%.</strong> Một HyperLogLog luôn là 12 KB cố định bất kể bạn nhét vào bao nhiêu — một triệu hay một tỉ, vẫn 12 KB. Cuộc đánh đổi thì tuyệt đối: bạn hỏi được <em>có bao nhiêu</em> (<code>PFCOUNT</code>) và trộn được hai cái lại (<code>PFMERGE</code>, đó chính là cách tính "số người duy nhất trong tuần"), nhưng bạn <strong>không bao giờ</strong> hỏi được một người cụ thể có nằm trong đó hay không. Nếu bạn cần <code>SISMEMBER</code> thì bạn cần Set.</p>
+<p><strong>Nhỏ hơn 95 lần, sai 0,17%.</strong> Một HyperLogLog luôn là 12 KB cố định bất kể bạn nhét vào bao nhiêu — một triệu hay một tỉ, vẫn 12 KB. Cuộc đánh đổi thì tuyệt đối: bạn hỏi được <em>có bao nhiêu</em> (<code>PFCOUNT</code>) và trộn được hai cái lại (<code>PFMERGE</code>, đó chính là cách tính "số người duy nhất trong tuần"), nhưng bạn <strong>không bao giờ</strong> hỏi được một người cụ thể có nằm trong đó hay không. Nếu bạn cần <code>SISMEMBER</code> thì bạn cần Set. <em>(Đo lại cho chính xác — INFO used_memory trước và sau, Redis 7.4.9 — Set tốn 3,68 MB, HyperLogLog 14,5 KB: nhỏ hơn khoảng 254 lần. Con số 0,04 MB ở trên gồm cả phần phụ của lần đo; một HyperLogLog dày đặc là ~12 KB thanh ghi cộng một phần đầu nhỏ. Thước đo nào thì khoảng cách cũng là hàng trăm lần.)</em></p>
 
 <h3>Kiểm tra thành viên trên dải id dày đặc: bitmap</h3>
 <div class="out">[6] Bitmap: SETBIT cho 1.000.000 user             0,15MB  (     1 khoá, 800,00ms)
@@ -653,7 +688,7 @@ hash-max-listpack-entries = 512</div>
 <p>Hai quy tắc khiến cách này sinh lời. Hãy nhét <strong>mốc thời gian vào trong tên khoá</strong> khi dữ liệu có tính chu kỳ — <code>quota:42:month:2026-07</code> chẳng cần công việc reset nào cả, vì tháng sau đơn giản là một khoá khác. Và giữ tiền tố ngắn nhưng đừng bao giờ khó hiểu: với 100.000 khoá thì tiền tố bị lưu 100.000 lần, nhưng một cái khoá không ai giải mã nổi giữa lúc sự cố còn đắt hơn nhiều so với mấy byte ấy.</p>
 
 <div class="pitfall">
-<p><strong>Con số sẽ làm bạn ngạc nhiên lúc 3 giờ sáng.</strong> Một Redis rỗng chứa 1.000.000 khoá tí hon dùng hết <strong>93,4 MB</strong> (đo ở bài 12.5). Tức là xấp xỉ 93 byte phụ trội cho mỗi khoá, trước khi tính giá trị của bạn. Các đội thường ước lượng dung lượng Redis bằng cách cộng kích thước các giá trị lại, deploy, rồi đụng trần <code>maxmemory</code> khi mới đạt một phần ba số khoá dự kiến. Hãy ước lượng theo <em>số lượng khoá</em> trước, kích thước giá trị sau.</p>
+<p><strong>Con số sẽ làm bạn ngạc nhiên lúc 3 giờ sáng.</strong> Một Redis rỗng chứa 1.000.000 khoá tí hon dùng hết <strong>93,4 MB</strong> (đo ở bài 12.6). Tức là xấp xỉ 93 byte phụ trội cho mỗi khoá, trước khi tính giá trị của bạn. Các đội thường ước lượng dung lượng Redis bằng cách cộng kích thước các giá trị lại, deploy, rồi đụng trần <code>maxmemory</code> khi mới đạt một phần ba số khoá dự kiến. Hãy ước lượng theo <em>số lượng khoá</em> trước, kích thước giá trị sau.</p>
 </div>
 
 <div class="note-ct">
@@ -673,6 +708,11 @@ hash-max-listpack-entries = 512</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Cách mã hoá đó có một VÁCH ĐÁ</span><span class="lz-d">Vượt qua số mục hoặc cỡ giá trị đã cấu hình là Redis chuyển sang cấu trúc tổng quát và bộ nhớ nhảy vọt — một field thêm vào có thể nhân dung lượng lên nhiều lần.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và để ĐẾM thì đừng lưu các phần tử</span><span class="lz-d">Một Set khách truy cập duy nhất phình lên theo lưu lượng; HyperLogLog trả lời cùng câu hỏi trong đúng mười hai kilobyte cố định, với sai số cỡ 0,8%.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-5-2-ma-hoa-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 5.2: mã hoá và bộ nhớ</span><span class="lc-sub">Khoá Redis giải thích listpack, intset và các ngưỡng. Bài này đo vách đá từ Node: 512 → 513 trường = 5.168 → 28.816 byte (×5,6), cùng 1.000 trường chẻ 8 × 125 = 10.368 byte, ~50 byte mỗi khoá, và HLL so với Set (14,5 KB vs 3,68 MB).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -825,6 +865,16 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.4: two instances, one truth</span><span class="lc-sub">The same atomic token bucket behind a real API on two instances: one Lua script with the clock from Redis TIME, 5 × 201 then 429 whichever instance answers — and what the API does when Redis is down (bookings still 201).</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-7-5-khoa-phan-tan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 7.5: distributed locks, and what they cannot promise</span><span class="lc-sub">The Redis course covers lock semantics, Redlock and why a lock is not a guarantee. This lesson measures the failures from Node: SETNX with no expiry stuck forever, a plain DEL deleting another worker's lock, token + compare-and-delete in Lua, and 50 workers: no lock = 2, lock = 50, INCR = 50.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-4-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Test it for real — Testing lesson 4.1: why a real database beats a mocked one</span><span class="lc-sub">The same kind of race, caught by a test: two bookings slip through without a constraint, an EXCLUDE constraint turns the second into 23P01. Here the race is in Redis — GET → check → SET lets 500 of 500 through a limit of 100 while every one-request-at-a-time test passes.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -961,6 +1011,16 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.4: hai instance, một sự thật</span><span class="lc-sub">Cùng token bucket nguyên tử đứng sau một API thật chạy hai instance: một script Lua lấy giờ từ TIME của Redis, 5 × 201 rồi 429 dù instance nào trả lời — và API làm gì khi Redis chết (đặt chỗ vẫn 201).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-7-5-khoa-phan-tan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 7.5: khoá phân tán, và điều nó không thể hứa</span><span class="lc-sub">Khoá Redis nói về ngữ nghĩa khoá, Redlock và vì sao khoá không phải lời bảo đảm. Bài này đo các cú hỏng từ Node: SETNX không hạn kẹt mãi, DEL thẳng xoá khoá của worker khác, token + so-rồi-xoá bằng Lua, và 50 worker: không khoá = 2, có khoá = 50, INCR = 50.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-4-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Kiểm cho thật — Testing bài 4.1: vì sao CSDL thật hơn CSDL giả</span><span class="lc-sub">Cùng loại cuộc đua, bị một test bắt: không ràng buộc thì hai lượt đặt cùng lọt, có EXCLUDE thì lượt thứ hai thành 23P01. Ở đây cuộc đua nằm trong Redis — GET → kiểm → SET cho 500/500 lọt giới hạn 100 trong khi mọi test gửi từng request một đều xanh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1002,7 +1062,7 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
    XADD 5 job → XLEN = 5
    đọc lại từ đầu (XRANGE): 5 tin, id đầu = 1785182199789-0
    id có dạng &lt;mili-giây&gt;-&lt;số thứ tự&gt;, tự tăng, sắp xếp được</div>
-<p>A stream is an append-only log. Entries stay until you delete them, ids are monotonic (<code>&lt;milliseconds&gt;-&lt;sequence&gt;</code>) and you can re-read any range at any time. That id format is quietly useful: it is a timestamp you can sort, range-scan and resume from — which is exactly the <code>?since=&lt;last id&gt;</code> pattern chapter 11.4 needed after a socket reconnect.</p>
+<p>A stream is an append-only log. Entries stay until you delete them, ids are monotonic (<code>&lt;milliseconds&gt;-&lt;sequence&gt;</code>) and you can re-read any range at any time. That id format is quietly useful: it is a timestamp you can sort, range-scan and resume from — which is exactly the <code>?since=&lt;last id&gt;</code> pattern lesson 11.3 needed after a socket reconnect.</p>
 
 <h3>Consumer groups: split the work, then prove nothing is lost</h3>
 <div class="out">--- 4. Consumer group: 2 worker chia 5 job, không trùng ---
@@ -1062,7 +1122,7 @@ stream-node-max-entries = 100</div>
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> The Socket.IO Redis adapter measured in chapter 11 is Pub/Sub: process B publishes a room broadcast, process A's subscriber receives it and delivers to its local sockets — the 5,02ms cross-process delivery from that chapter. It is the right tool precisely because a dropped broadcast is harmless: the client treats the socket as a signal and re-fetches over REST, which is the rule chapter 11.4 arrived at after watching a reconnect lose all five buffered messages.</p>
+<p><strong>How cuongthai.com does it.</strong> The Socket.IO Redis adapter measured in chapter 11 is Pub/Sub: process B publishes a room broadcast, process A's subscriber receives it and delivers to its local sockets — the 5,02ms cross-process delivery from that chapter. It is the right tool precisely because a dropped broadcast is harmless: the client treats the socket as a signal and re-fetches over REST, which is the rule lesson 11.3 arrived at after watching a reconnect lose all five buffered messages.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1078,6 +1138,16 @@ stream-node-max-entries = 100</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Streams keep the messages</span><span class="lz-d">An append-only log with ids. A consumer that was down reads what it missed, which is what makes it a queue rather than a broadcast.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Consumer groups split the work</span><span class="lz-d">Each message to one member of the group, with a pending list for what was delivered and never acknowledged — the at-least-once machinery.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-3-consumer-group" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 8.3: consumer groups, done right</span><span class="lc-sub">The Redis course details XREADGROUP, the PEL and claiming. This lesson runs it from Node with ioredis: A gets 3 jobs, B gets 2, B crashes ⇒ PENDING 2, C XAUTOCLAIMs both ⇒ PENDING 0; plus Pub/Sub losing a message (PUBLISH → 0) and MAXLEN ~ 1000 leaving 40,000 of 50,000 entries.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Used in a real API — API Design 12.5: a transactional outbox and a notification queue</span><span class="lc-sub">The capstone relays outbox rows to a Redis Stream and moves e-mail to a queue with retries (sync: +300 ms and 500s; queued: ~4 ms, nothing lost). This lesson is the mechanism underneath: why Pub/Sub would lose those events, and how a consumer group proves no job is lost.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1104,7 +1174,7 @@ stream-node-max-entries = 100</div>
    XADD 5 job → XLEN = 5
    đọc lại từ đầu (XRANGE): 5 tin, id đầu = 1785182199789-0
    id có dạng &lt;mili-giây&gt;-&lt;số thứ tự&gt;, tự tăng, sắp xếp được</div>
-<p>Stream là một cuốn nhật ký chỉ ghi thêm. Các mục nằm lại tới khi bạn xoá, id thì tăng đơn điệu (<code>&lt;mili-giây&gt;-&lt;số thứ tự&gt;</code>) và bạn đọc lại khoảng bất kỳ vào lúc nào cũng được. Cái định dạng id ấy hữu dụng một cách lặng lẽ: nó là một mốc thời gian mà bạn sắp xếp được, quét theo khoảng được và tiếp tục từ đó được — đúng bằng khuôn mẫu <code>?since=&lt;id cuối&gt;</code> mà bài 11.4 cần tới sau mỗi lần socket nối lại.</p>
+<p>Stream là một cuốn nhật ký chỉ ghi thêm. Các mục nằm lại tới khi bạn xoá, id thì tăng đơn điệu (<code>&lt;mili-giây&gt;-&lt;số thứ tự&gt;</code>) và bạn đọc lại khoảng bất kỳ vào lúc nào cũng được. Cái định dạng id ấy hữu dụng một cách lặng lẽ: nó là một mốc thời gian mà bạn sắp xếp được, quét theo khoảng được và tiếp tục từ đó được — đúng bằng khuôn mẫu <code>?since=&lt;id cuối&gt;</code> mà bài 11.3 cần tới sau mỗi lần socket nối lại.</p>
 
 <h3>Consumer group: chia việc, rồi chứng minh không mất việc nào</h3>
 <div class="out">--- 4. Consumer group: 2 worker chia 5 job, không trùng ---
@@ -1164,7 +1234,7 @@ stream-node-max-entries = 100</div>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Cái adapter Redis của Socket.IO đo ở chương 11 chính là Pub/Sub: tiến trình B publish một lượt phát tin vào phòng, thuê bao của tiến trình A nhận được rồi giao cho các socket cục bộ của nó — đúng con số 5,02ms giao tin xuyên tiến trình của chương đó. Nó là công cụ đúng chính bởi vì một lượt phát tin bị rơi là vô hại: client coi socket là TÍN HIỆU rồi lấy lại dữ liệu qua REST, đúng quy tắc mà bài 11.4 rút ra sau khi chứng kiến một lần nối lại làm mất sạch cả năm tin nhắn.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Cái adapter Redis của Socket.IO đo ở chương 11 chính là Pub/Sub: tiến trình B publish một lượt phát tin vào phòng, thuê bao của tiến trình A nhận được rồi giao cho các socket cục bộ của nó — đúng con số 5,02ms giao tin xuyên tiến trình của chương đó. Nó là công cụ đúng chính bởi vì một lượt phát tin bị rơi là vô hại: client coi socket là TÍN HIỆU rồi lấy lại dữ liệu qua REST, đúng quy tắc mà bài 11.3 rút ra sau khi chứng kiến một lần nối lại làm mất sạch cả năm tin nhắn.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1180,6 +1250,16 @@ stream-node-max-entries = 100</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Streams GIỮ LẠI các thông điệp</span><span class="lz-d">Một cuốn log chỉ-ghi-thêm kèm id. Một bên tiêu thụ vừa chết sống dậy sẽ đọc được phần nó bỏ lỡ, và chính điều đó làm nó thành một hàng đợi chứ không phải một cú phát thanh.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nhóm tiêu thụ chia việc ra</span><span class="lz-d">Mỗi thông điệp tới một thành viên của nhóm, kèm một danh sách chờ cho những cái đã giao mà chưa từng được xác nhận — chính là bộ máy ít-nhất-một-lần.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-3-consumer-group" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 8.3: nhóm tiêu thụ, làm cho đúng</span><span class="lc-sub">Khoá Redis đi sâu XREADGROUP, danh sách pending và cách đòi lại. Bài này chạy từ Node với ioredis: A nhận 3 job, B nhận 2, B sập ⇒ PENDING 2, C XAUTOCLAIM cả hai ⇒ PENDING 0; kèm Pub/Sub mất tin (PUBLISH → 0) và MAXLEN ~ 1000 còn 40.000/50.000 mục.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-3-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Dùng trong một API thật — API Design 12.5: transactional outbox và hàng đợi thông báo</span><span class="lc-sub">Dự án cuối khoá đẩy các dòng outbox sang một Redis Stream và chuyển email lên hàng đợi có thử lại (đồng bộ: +300 ms và lỗi 500; hàng đợi: ~4 ms, không mất gì). Bài này là cơ chế bên dưới: vì sao Pub/Sub sẽ làm mất các sự kiện đó, và consumer group chứng minh không mất job nào.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1285,6 +1365,11 @@ stream-node-max-entries = 100</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">DEL blocks proportionally to size</span><span class="lz-d">Freeing a large collection takes time on the main thread. <code>UNLINK</code> hands the free to a background thread and returns immediately.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So the rule is: nothing unbounded</span><span class="lz-d"><code>KEYS</code>, <code>FLUSHALL</code>, <code>SMEMBERS</code> on a huge set, a Lua script with a loop — each is fine on your laptop and an outage on production.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-2-3-scan-unlink" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 2.3: finding and deleting keys safely</span><span class="lc-sub">The Redis course explains SCAN cursors, MATCH/COUNT and UNLINK. This lesson measures the damage from a second client on 1,000,000 keys: KEYS makes another PING wait 231.87 ms, SCAN 5.31 ms; DEL of a 1,000,000-field hash blocks 207 ms, UNLINK 0.54 ms; and a nightly cleanup job done both ways (80.8 vs 5.2 ms).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1381,6 +1466,11 @@ stream-node-max-entries = 100</div>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">DEL chặn tỷ lệ với kích thước</span><span class="lz-d">Giải phóng một tập hợp lớn tốn thời gian trên luồng chính. <code>UNLINK</code> giao việc giải phóng cho một luồng nền rồi trả về ngay.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên luật là: đừng có gì không giới hạn</span><span class="lz-d"><code>KEYS</code>, <code>FLUSHALL</code>, <code>SMEMBERS</code> trên một tập khổng lồ, một script Lua có vòng lặp — cái nào cũng ổn trên laptop của bạn và là một cú gián đoạn trên production.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-2-3-scan-unlink" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 2.3: tìm và xoá khoá an toàn</span><span class="lc-sub">Khoá Redis giải thích con trỏ SCAN, MATCH/COUNT và UNLINK. Bài này đo thiệt hại từ một client thứ hai trên 1.000.000 khoá: KEYS làm PING khác chờ 231,87 ms, SCAN 5,31 ms; DEL một hash 1.000.000 trường chặn 207 ms, UNLINK 0,54 ms; và job dọn phiên đêm làm hai cách (80,8 vs 5,2 ms).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

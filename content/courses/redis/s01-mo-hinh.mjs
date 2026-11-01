@@ -775,6 +775,11 @@ real	0m4.812s</div>
 
 <div class="pitfall"><strong>Pitfall:</strong> a loop of <code>await redis.get(...)</code> inside a request handler. It looks completely ordinary, it passes review, and each iteration costs a full network round trip — so fetching fifty cached user records takes fifty round trips and turns a 2ms operation into 15ms of waiting. The tell is easy to spot once you know it: any <code>for</code> or <code>map</code> loop with an <code>await</code> on a Redis call inside it. The fix is one of three, in order of preference: use the variadic command if one exists (<code>MGET</code>, <code>HMGET</code>), use a pipeline if the commands differ, or restructure so you need one key instead of fifty — a hash, or a JSON blob, or a sorted set range. This is the same shape as the N+1 query problem in SQL, it is just less visible because each individual call is genuinely fast.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Without pipelining you pay one network round trip per command, and for most applications that is where nearly all the time goes — 1,000 sequential commands took 8.4 seconds where a pipeline took 0.16. Batch 100–1000 at a time, not 100,000: every queued reply sits in the server's output buffer, and the batch blocks everyone else while it runs. And a pipeline is <em>not</em> a transaction — other clients interleave between your commands, and one failure does not stop the rest.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.1: where the time goes</span><span class="lc-sub">The same pipeline measured from a Node process with ioredis: 165× for 10,000 SETs, enableAutoPipelining, why batches of 100–1,000 beat "send everything", and the 200-GET loop (84.0 ms) that made Redis slower than one Postgres query (1.3 ms).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.4</span>
@@ -895,6 +900,11 @@ real	0m4.812s</div>
 
 <div class="pitfall"><strong>Bẫy:</strong> một vòng lặp <code>await redis.get(...)</code> nằm trong một hàm xử lý request. Nó trông hoàn toàn bình thường, nó qua được review, và mỗi lượt lặp tốn trọn một vòng mạng — nên lấy năm mươi bản ghi người dùng đã cache tốn năm mươi vòng mạng và biến một thao tác 2ms thành 15ms ngồi chờ. Dấu hiệu rất dễ nhận ra khi bạn đã biết: bất kỳ vòng <code>for</code> hay <code>map</code> nào có một lệnh <code>await</code> gọi Redis bên trong. Cách chữa là một trong ba, theo thứ tự ưu tiên: dùng câu lệnh nhiều tham số nếu có (<code>MGET</code>, <code>HMGET</code>), dùng pipeline nếu các câu lệnh khác nhau, hoặc tái cấu trúc để bạn chỉ cần MỘT khoá thay vì năm mươi — một cái hash, hoặc một khối JSON, hoặc một dải sorted set. Đây cùng hình dạng với bài toán truy vấn N+1 trong SQL, chỉ khó thấy hơn vì từng lời gọi riêng lẻ đúng là nhanh thật.</div>
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Không có pipeline thì bạn trả một vòng mạng cho MỖI câu lệnh, và với phần lớn ứng dụng thì gần như toàn bộ thời gian đi vào đó — 1.000 câu lệnh tuần tự mất 8,4 giây trong khi một pipeline mất 0,16. Hãy gom lô 100–1000 một lần, đừng 100.000: mọi câu trả lời xếp hàng đều nằm trong bộ đệm ra của máy chủ, và cả lô chặn mọi người khác trong lúc nó chạy. Và một pipeline KHÔNG phải giao dịch — client khác xen được vào giữa các câu lệnh của bạn, và một cái hỏng không chặn phần còn lại.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-1-redis-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.1: thời gian trôi đi đâu</span><span class="lc-sub">Cùng pipeline đo từ một tiến trình Node với ioredis: nhanh 165× cho 10.000 SET, enableAutoPipelining, vì sao lô 100–1.000 thắng "gửi tất", và vòng lặp 200 GET (84,0 ms) làm Redis chậm hơn một truy vấn Postgres (1,3 ms).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

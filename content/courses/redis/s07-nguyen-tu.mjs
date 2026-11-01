@@ -1332,6 +1332,11 @@ const timer = setInterval(async () =&gt; {
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Before writing a lock, check whether a single atomic command, a Lua script, or the database's own transaction already does the job — most locks in the wild are guarding something Redis or Postgres was already guarding. When you do write one, it is <code>SET key token NX PX ttl</code> to acquire and a Lua compare-and-delete to release, never a bare <code>DEL</code>. And the guarantee is a lease, not mutual exclusion: a paused process wakes up believing it still holds an expired lock, which no TTL, no Redlock and no configuration prevents — so use locks for efficiency and get correctness from fencing tokens, unique constraints or idempotency keys.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.4: locks done right, measured</span><span class="lc-sub">A 300 ms lock and a 400 ms job: worker-1's DEL removes worker-2's lock; with a random token and a Lua compare-and-delete it deletes 0. Plus 500 parallel requests through a limit of 100 with GET→SET, and three Lua rate limiters (0.34–0.37 ms each).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 7 · Bài 7.5</span>
@@ -1450,6 +1455,11 @@ const timer = setInterval(async () =&gt; {
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Trước khi viết một cái khoá, hãy kiểm xem một lệnh nguyên tử đơn, một script Lua, hay chính giao dịch của cơ sở dữ liệu đã làm được việc đó chưa — phần lớn khoá ngoài đời đang canh gác thứ mà Redis hoặc Postgres vốn đã canh sẵn. Khi bạn thật sự viết một cái, nó là <code>SET key token NX PX ttl</code> để giành và một phép so-sánh-rồi-xoá bằng Lua để nhả, không bao giờ là một lệnh <code>DEL</code> trơn. Và cái bảo đảm ở đây là một hợp đồng thuê, không phải loại trừ lẫn nhau: một tiến trình bị tạm dừng tỉnh dậy và tin rằng nó vẫn giữ một cái khoá đã hết hạn, điều mà không TTL nào, không Redlock nào và không cấu hình nào ngăn được — nên hãy dùng khoá cho hiệu quả và lấy tính đúng đắn từ mã hàng rào, ràng buộc duy nhất hoặc khoá chống trùng.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-12-4-nguyen-tu-rate-limit-lock" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.4: khoá làm cho đúng, đo thật</span><span class="lc-sub">Khoá 300 ms, việc 400 ms: DEL của worker-1 xoá khoá của worker-2; có token ngẫu nhiên và Lua so-rồi-xoá thì xoá 0. Kèm 500 request song song lọt giới hạn 100 với GET→SET, và ba bộ giới hạn bằng Lua (0,34–0,37 ms mỗi lần).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

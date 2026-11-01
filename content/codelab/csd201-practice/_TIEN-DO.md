@@ -19,7 +19,8 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 | 7 | `csd201-bam` 3 (cặp tổng K bằng HashSet ⏱, tần suất từ + top k, nhóm đảo chữ) · `csd201-ham-bam` 3 (băm đa thức = String.hashCode + đếm va chạm, lớp Plate equals/hashCode, Rabin–Karp ⏱) · `csd201-va-cham` 3 (dò tuyến tính có dấu DELETED, dò bậc hai biển số (m không nguyên tố bỏ sót ô), dây chuyền) · `csd201-load-factor` 3 (dây chuyền tự băm lại α > 0,75 ⏱, hashCode tồi trong HashMap ⏱, tập int địa chỉ mở có nới ⏱) · `csd201-on-ch7` 3 (dãy liên tiếp dài nhất ⏱, đếm đoạn con tổng K ⏱, danh mục sách dây chuyền kiểu PE f1–f4) | 15 |
 | 8 | `csd201-nen-van-ban` 3 (RLE + tỉ lệ nén, DNA 2 bit/base, mã tiền tố + giải mã) · `csd201-kmp` 3 (bảng T[] như slide + vị trí + số so sánh, KMP 2·10⁶ ký tự ⏱, chu kỳ ngắn nhất ⏱) · `csd201-huffman` 3 (cây Huffman quy ước slide + mã/giải mã, tổng bit = tổng các lần gộp ⏱, entropy/độ dài TB/tỉ lệ) · `csd201-lzw-rle` 3 (LZW mã hoá đánh số từ 1 ⏱, LZW giải mã ca KwKwK, RLE ảnh đen trắng) · `csd201-on-ch8` 3 (vét cạn + số so sánh kiểu PE, nhật ký tin nhắn f1–f3 kiểu PE, so sánh RLE/LZW/Huffman) | 15 |
 | 11 🎯 | `csd201-on-pe` 4 — ĐỀ THẬT: SP26 Paper 1 (ShipmentCLL vòng countFruits/removeById + FruitBST insert/countInRange; sửa HAI tệp, Main/Assignment/Fruit thật) · SP26 B5 P4 Q1 MyList Drum · Q2 BSTree Tiger (khoá sound, xoá sao chép + quay trái nút thứ 4 tiền thứ tự) · Q3 Graph (BFS đoạn 3–7, Dijkstra + 4 đỉnh cuối vào S). Ca 1 mỗi lựa chọn = đúng đáp án trong `content/exams/CSD201-PE1`/`PE3` (đã đối chiếu từng dòng) | 4 |
-| **tổng** | 54 module | **168** |
+| 9 Nâng cao | `csd201-cay-can-bang` 3 (kiểm cây đỏ-đen theo thứ tự 4 luật — tiền thứ tự quyết định nút báo, skip list mức cho trước + đếm bước ⏱ 200k, B-tree CLRS tách chủ động ⏱ 10⁶ khoá t = 32 → cao 4) · `csd201-dijkstra-mst` 3 (Union-Find hạng + nén lặp — chuỗi 10⁶ cha + dãy xấu ⏱, đếm phép chép mảng động gấp đôi vs +k + dự đoán 10⁹ không cấp phát ⏱, co ở 1/4 chống dao động ⏱) | 6 |
+| **tổng** | 56 module | **174** |
 
 ⏱ = có ca kiểm độ phức tạp. 🎯 = đề đúng khuôn PE của trường.
 
@@ -51,7 +52,7 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 
 ## Còn thiếu (làm tiếp theo đúng khuôn)
 
-Nâng cao (`csd201-cay-can-bang` 9.1, `csd201-dijkstra-mst` 9.2) · ⭐ CS.1–CS.10 (`csd201-cs1-on` … `csd201-cs10-on`, 10.x) ·
+⭐ CS.1–CS.10 (`csd201-cs1-on` … `csd201-cs10-on`, 10.x) ·
 thêm đề thật khác vào `csd201-on-pe` nếu muốn (khuôn: `dePeFile({ hoc: {tệp: lời giải}, mainJava, cho, data, dataAn })`,
 lời giải chèn vào tệp THẬT bằng `chenSau(tệpThật, [[mốc, mã], …], hàmPhụ)` trong `csd201-on-pe.mjs`).
 Nguồn ý đề + code thật: `~/Documents/FLM-nguon/_repo/CSD201/gen/src/practice/chN.txt` + `gen/java/chN/Pe*.java`,

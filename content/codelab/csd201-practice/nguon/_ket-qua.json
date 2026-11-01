@@ -1256,6 +1256,60 @@
    "A : AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA -> raw 800 rle 32 lzw 168 huffman 100 best rle\nABCDEFGH : HGFEDCBA -> raw 64 rle 128 lzw 96 huffman 24 best huffman\n"
   ]
  },
+ "csd201-a-1-b-tree": {
+  "bam": "4be9d24a0f67a98b",
+  "ra": [
+   "INS 10 20 30 -> ok | [10 20 30]\nINS 40 -> ok | [20] / [10][30 40]\nINS 50 60 70 -> ok | [20 40] / [10][30][50 60 70]\nHAS 60 -> true, reads 2 | [20 40] / [10][30][50 60 70]\nHAS 65 -> false, reads 2 | [20 40] / [10][30][50 60 70]\nINS 20 -> ok | [20 40] / [10][30][50 60 70]\n",
+   "NEW 3 -> ok | []\nINS 6 19 17 11 3 12 8 20 22 23 13 18 14 16 1 2 24 25 4 26 5 -> ok | [14] / [3 11][19 23] / [1 2][4 5 6 8][12 13][16 17 18][20 22][24 25 26]\nHAS 16 -> true, reads 3 | [14] / [3 11][19 23] / [1 2][4 5 6 8][12 13][16 17 18][20 22][24 25 26]\nHAS 26 -> true, reads 3 | [14] / [3 11][19 23] / [1 2][4 5 6 8][12 13][16 17 18][20 22][24 25 26]\nHAS 7 -> false, reads 3 | [14] / [3 11][19 23] / [1 2][4 5 6 8][12 13][16 17 18][20 22][24 25 26]\n",
+   "NEW 2 -> ok | []\nINS 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 -> ok | [4 8] / [2][6][10 12 14] / [1][3][5][7][9][11][13][15 16]\nHAS 1 -> true, reads 3 | [4 8] / [2][6][10 12 14] / [1][3][5][7][9][11][13][15 16]\nNEW 4 -> ok | []\nINS 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 -> ok | [15 19 23 27] / [10 11 12 13 14][16 17 18][20 21 22][24 25 26][28 29 30]\nHAS 30 -> true, reads 2 | [15 19 23 27] / [10 11 12 13 14][16 17 18][20 21 22][24 25 26][28 29 30]\n",
+   "PERF -> 1,000,000 inserts + 1,000,000 searches: OK, found 1000000, most pages read 4, height 4, root keys 14 | \n"
+  ]
+ },
+ "csd201-a-1-red-black-check": {
+  "bam": "6429ae120283b445",
+  "ra": [
+   "CHECK 13B 8R 1B # 6R # # 11B # # 17R 15B # # 25B 22R # # 27R # # -> OK, black height 2, height 4\nCHECK # -> OK, black height 0, height 0\nCHECK 7B # # -> OK, black height 1, height 1\n",
+   "CHECK 10R 5B # # 15B # # -> ROOT IS RED\nCHECK 10B 5R # 12B # # 15R # # -> NOT A BST at 10\nCHECK 10B 5R 3R # # # 15R # # -> RED-RED at 5\nCHECK 10B 5B # # 15R # # -> BLACK HEIGHT at 10: left 1, right 0\n",
+   "CHECK 20B 10B 5R # # 15B # # 30B 25B # # 35B # # -> BLACK HEIGHT at 20: left 1, right 2\nCHECK 20B 10B 5B # # 15R # # 30B 25B # # 35B # # -> BLACK HEIGHT at 10: left 1, right 0\nCHECK 20B 10R 5R # # 15B # # 30B # # -> RED-RED at 10\nCHECK 20B 10R 5B # # 15B # # 30R 25B # # 40B # 45R # # -> OK, black height 2, height 4\n",
+   "CHECK 50B 30R 20B # # 40B 35R # # 55R # # 70R 60B # # 80B # # -> NOT A BST at 50\nCHECK 10B 10R # # # -> NOT A BST at 10\nCHECK 8B 4R 2B 1R # # 3R # # 6B 5R # # 7R # # 12R 10B 9R # # 11R # # 14B 13R # # 15R # # -> OK, black height 2, height 4\n"
+  ]
+ },
+ "csd201-a-1-skip-list": {
+  "bam": "c4f3598e83c3f55b",
+  "ra": [
+   "INS 1 3 -> true | level 3, size 1 / L3: 1 / L2: 1 / L1: 1\nINS 3 1 -> true | level 3, size 2 / L3: 1 / L2: 1 / L1: 1 3\nINS 5 2 -> true | level 3, size 3 / L3: 1 / L2: 1 5 / L1: 1 3 5\nINS 6 1 -> true | level 3, size 4 / L3: 1 / L2: 1 5 / L1: 1 3 5 6\nINS 7 1 -> true | level 3, size 5 / L3: 1 / L2: 1 5 / L1: 1 3 5 6 7\nINS 9 3 -> true | level 3, size 6 / L3: 1 9 / L2: 1 5 9 / L1: 1 3 5 6 7 9\nHAS 7 -> true, moves 3 | level 3, size 6 / L3: 1 9 / L2: 1 5 9 / L1: 1 3 5 6 7 9\nHAS 8 -> false, moves 4 | level 3, size 6 / L3: 1 9 / L2: 1 5 9 / L1: 1 3 5 6 7 9\nHAS 0 -> false, moves 0 | level 3, size 6 / L3: 1 9 / L2: 1 5 9 / L1: 1 3 5 6 7 9\nINS 5 4 -> false | level 3, size 6 / L3: 1 9 / L2: 1 5 9 / L1: 1 3 5 6 7 9\n",
+   "INS 10 1 -> true | level 1, size 1 / L1: 10\nINS 20 4 -> true | level 4, size 2 / L4: 20 / L3: 20 / L2: 20 / L1: 10 20\nINS 30 2 -> true | level 4, size 3 / L4: 20 / L3: 20 / L2: 20 30 / L1: 10 20 30\nINS 40 1 -> true | level 4, size 4 / L4: 20 / L3: 20 / L2: 20 30 / L1: 10 20 30 40\nDEL 20 -> true | level 2, size 3 / L2: 30 / L1: 10 30 40\nHAS 30 -> true, moves 1 | level 2, size 3 / L2: 30 / L1: 10 30 40\nDEL 20 -> false | level 2, size 3 / L2: 30 / L1: 10 30 40\nDEL 10 -> true | level 2, size 2 / L2: 30 / L1: 30 40\nDEL 40 -> true | level 2, size 1 / L2: 30 / L1: 30\nDEL 30 -> true | level 1, size 0\nINS 5 2 -> true | level 2, size 1 / L2: 5 / L1: 5\n",
+   "INS 50 2 -> true | level 2, size 1 / L2: 50 / L1: 50\nINS 40 1 -> true | level 2, size 2 / L2: 50 / L1: 40 50\nINS 30 3 -> true | level 3, size 3 / L3: 30 / L2: 30 50 / L1: 30 40 50\nINS 20 1 -> true | level 3, size 4 / L3: 30 / L2: 30 50 / L1: 20 30 40 50\nINS 10 2 -> true | level 3, size 5 / L3: 30 / L2: 10 30 50 / L1: 10 20 30 40 50\nHAS 50 -> true, moves 2 | level 3, size 5 / L3: 30 / L2: 10 30 50 / L1: 10 20 30 40 50\nHAS 45 -> false, moves 2 | level 3, size 5 / L3: 30 / L2: 10 30 50 / L1: 10 20 30 40 50\nDEL 10 -> true | level 3, size 4 / L3: 30 / L2: 30 50 / L1: 20 30 40 50\nDEL 50 -> true | level 3, size 3 / L3: 30 / L2: 30 / L1: 20 30 40\nHAS 40 -> true, moves 1 | level 3, size 3 / L3: 30 / L2: 30 / L1: 20 30 40\nINS 35 5 -> true | level 5, size 4 / L5: 35 / L4: 35 / L3: 30 35 / L2: 30 35 / L1: 20 30 35 40\nHAS 40 -> true, moves 1 | level 5, size 4 / L5: 35 / L4: 35 / L3: 30 35 / L2: 30 35 / L1: 20 30 35 40\n",
+   "PERF -> 200,000 inserts + 200,000 searches: OK, found 66667, average moves 15, size 200000 | \n"
+  ]
+ },
+ "csd201-a-2-dynamic-array-copies": {
+  "bam": "ad7861f5e28f3910",
+  "ra": [
+   "DOUBLE 1 16 -> capacity 16, copies 15, per append 0.94, predicted 15\nDOUBLE 1 17 -> capacity 32, copies 31, per append 1.82, predicted 31\nSTEP 1 1 16 -> capacity 16, copies 120, per append 7.50, predicted 120\nSTEP 4 4 100 -> capacity 100, copies 1200, per append 12.00, predicted 1200\nDOUBLE 4 100 -> capacity 128, copies 124, per append 1.24, predicted 124\n",
+   "PREDICT D 1 0 1000000000 -> predict: OK, copies 1073741823\nPREDICT S 1000 1000 1000000000 -> predict: OK, copies 499999500000000\nPREDICT S 1 1000000 1000000000 -> predict: OK, copies 499500001000\n",
+   "DOUBLE 8 8 -> capacity 8, copies 0, per append 0.00, predicted 0\nDOUBLE 8 9 -> capacity 16, copies 8, per append 0.89, predicted 8\nSTEP 10 3 5 -> capacity 10, copies 0, per append 0.00, predicted 0\nSTEP 2 3 30 -> capacity 32, copies 155, per append 5.17, predicted 155\nDOUBLE 3 1000 -> capacity 1536, copies 1533, per append 1.53, predicted 1533\nPREDICT D 3 0 1000 -> predict: OK, copies 1533\nPREDICT S 7 5 7 -> predict: OK, copies 0\n",
+   "PERF -> 10,000,000 appends (doubling): OK, capacity 16777216, copies 16777215, per append 1.68, predicted 16777215\n"
+  ]
+ },
+ "csd201-a-2-shrink-quarter": {
+  "bam": "2024f6855d62923a",
+  "ra": [
+   "PUSH 9 -> ok | size 9, capacity 16, copies 12\nPOP 4 -> last 6 | size 5, capacity 16, copies 12\nPOP 1 -> last 5 | size 4, capacity 8, copies 16\nPOP 2 -> last 3 | size 2, capacity 4, copies 18\nPOP 1 -> last 2 | size 1, capacity 4, copies 18\nPOP 1 -> last 1 | size 0, capacity 4, copies 18\n",
+   "PUSH 2 -> ok | size 2, capacity 4, copies 0\nPOP 2 -> last 1 | size 0, capacity 4, copies 0\nPOP 1 -> THROWS RuntimeException: empty | size 0, capacity 4, copies 0\nPUSH 1 -> ok | size 1, capacity 4, copies 0\n",
+   "PUSH 1000 -> ok | size 1000, capacity 1024, copies 1020\nPOP 743 -> last 258 | size 257, capacity 1024, copies 1020\nPOP 129 -> last 129 | size 128, capacity 256, copies 1404\nPOP 64 -> last 65 | size 64, capacity 128, copies 1468\nPOP 63 -> last 2 | size 1, capacity 4, copies 1530\nPOP 1 -> last 1 | size 0, capacity 4, copies 1530\nPUSH 5 -> ok | size 5, capacity 8, copies 1534\n",
+   "PERF -> push, pop, pop, push x 250,000 at a full array of 2^20: OK, copies during the loop 1048576, size 1048576, sum 62500548576 | \n"
+  ]
+ },
+ "csd201-a-2-union-find": {
+  "bam": "b8fdd7037a8a05ef",
+  "ra": [
+   "LINK 1 2 -> ok | parent [0, 2, 2, 3, 4, 5] rank [0, 0, 0, 0, 0, 0] count 6\nLINK 2 3 -> ok | parent [0, 2, 3, 3, 4, 5] rank [0, 0, 0, 0, 0, 0] count 6\nLINK 3 4 -> ok | parent [0, 2, 3, 4, 4, 5] rank [0, 0, 0, 0, 0, 0] count 6\nLINK 4 5 -> ok | parent [0, 2, 3, 4, 5, 5] rank [0, 0, 0, 0, 0, 0] count 6\nFIND 1 -> 5 | parent [0, 5, 5, 5, 5, 5] rank [0, 0, 0, 0, 0, 0] count 6\nNEW 6 -> ok | parent [0, 1, 2, 3, 4, 5] rank [0, 0, 0, 0, 0, 0] count 6\nUNION 0 1 -> true | parent [0, 0, 2, 3, 4, 5] rank [1, 0, 0, 0, 0, 0] count 5\nUNION 2 3 -> true | parent [0, 0, 2, 2, 4, 5] rank [1, 0, 1, 0, 0, 0] count 4\nUNION 0 2 -> true | parent [0, 0, 0, 2, 4, 5] rank [2, 0, 1, 0, 0, 0] count 3\nUNION 4 1 -> true | parent [0, 0, 0, 2, 0, 5] rank [2, 0, 1, 0, 0, 0] count 2\nSAME 3 4 -> true | parent [0, 0, 0, 0, 0, 5] rank [2, 0, 1, 0, 0, 0] count 2\nSAME 3 5 -> false | parent [0, 0, 0, 0, 0, 5] rank [2, 0, 1, 0, 0, 0] count 2\nUNION 3 4 -> false | parent [0, 0, 0, 0, 0, 5] rank [2, 0, 1, 0, 0, 0] count 2\n",
+   "DEEP -> find(0) on a chain of 1,000,000 parents: OK, root 999999, parent[500000] = 999999 | \n",
+   "NEW 8 -> ok | parent [0, 1, 2, 3, 4, 5, 6, 7] rank [0, 0, 0, 0, 0, 0, 0, 0] count 8\nUNION 0 1 -> true | parent [0, 0, 2, 3, 4, 5, 6, 7] rank [1, 0, 0, 0, 0, 0, 0, 0] count 7\nUNION 2 3 -> true | parent [0, 0, 2, 2, 4, 5, 6, 7] rank [1, 0, 1, 0, 0, 0, 0, 0] count 6\nUNION 2 0 -> true | parent [2, 0, 2, 2, 4, 5, 6, 7] rank [1, 0, 2, 0, 0, 0, 0, 0] count 5\nUNION 5 4 -> true | parent [2, 0, 2, 2, 5, 5, 6, 7] rank [1, 0, 2, 0, 0, 1, 0, 0] count 4\nUNION 4 0 -> true | parent [2, 0, 2, 2, 5, 2, 6, 7] rank [1, 0, 2, 0, 0, 1, 0, 0] count 3\nUNION 6 7 -> true | parent [2, 0, 2, 2, 5, 2, 6, 6] rank [1, 0, 2, 0, 0, 1, 1, 0] count 2\nUNION 7 2 -> true | parent [2, 0, 2, 2, 5, 2, 2, 6] rank [1, 0, 2, 0, 0, 1, 1, 0] count 1\nFIND 1 -> 2 | parent [2, 2, 2, 2, 5, 2, 2, 6] rank [1, 0, 2, 0, 0, 1, 1, 0] count 1\nSAME 6 1 -> true | parent [2, 2, 2, 2, 5, 2, 2, 6] rank [1, 0, 2, 0, 0, 1, 1, 0] count 1\n",
+   "PERF -> union(i, i+1) + connected(0, i+1) for every i: OK, connected 999999, count 1 | \n"
+  ]
+ },
  "csd201-pe-sp26-b5p4-q1-mylist": {
   "bam": "2182e62fb9c36da9",
   "ra": [

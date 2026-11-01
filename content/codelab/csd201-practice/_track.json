@@ -328,6 +328,18 @@
       "description": "Luyện: PE style: brute-force matching, every position and the number of comparisons · The message log (close to a real PE): f1 KMP search, f2 RLE, f3 Huffman bits · Which compression wins? RLE, LZW and Huffman on the same text"
     },
     {
+      "slug": "csd201-cay-can-bang",
+      "name": "9.1 Red-Black trees, B-trees and skip lists",
+      "level": "ADVANCED",
+      "description": "Luyện: Is it a red-black tree? Check the rules in order and report the first violation · A skip list with given levels: search from the top lane, insert, delete, count the moves · A B-tree (CLRS): insert with proactive splits, count the pages read by a search"
+    },
+    {
+      "slug": "csd201-dijkstra-mst",
+      "name": "9.2 Union-Find and amortized analysis",
+      "level": "ADVANCED",
+      "description": "Luyện: Union-Find with union by rank and iterative path compression · Amortized analysis by counting: element copies of a dynamic array, doubling vs growing by k · A stack that grows and shrinks: halve at one quarter, not at one half"
+    },
+    {
       "slug": "csd201-on-pe",
       "name": "11.1 🎯 PE practice — the real papers SP26 Paper 1 and SP26 Block 5 Paper 4",
       "level": "ADVANCED",

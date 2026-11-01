@@ -113,7 +113,9 @@ export function deJava(s) {
   for (const [f, text] of Object.entries(s.harness || {})) harness[`cham/${f}`] = String(text).replace(/^\n/, '').replace(/\s+$/, '') + '\n';
   if (s.kiem) harness['cham/Kiem.java'] = KIEM_JAVA;
   const caGoc = s.ca.map((x) => ({ name: hai(x.ten).en, ...(x.phien ? { sessions: x.phien.map(chuanVao) } : { input: chuanVao(x.vao ?? '') }), ...(x.tepCa ? { files: x.tepCa } : {}), ...(x.args ? { args: x.args } : {}) }));
-  const khoaBam = bam({ giai, harness, caGoc, main: s.main, v: 1 });
+  // tuỳ chọn chạy ảnh hưởng tới output ghi lại ⇒ vào khoá băm (chỉ khi có, để băm các đề cũ không đổi)
+  const tuyChon = { ...(s.homNay ? { homNay: s.homNay } : {}), ...(s.captcha ? { captcha: s.captcha } : {}) };
+  const khoaBam = bam({ giai, harness, caGoc, main: s.main, v: 1, ...(Object.keys(tuyChon).length ? { tuyChon } : {}) });
   const daGhi = docCache()[s.id];
   const coKq = daGhi && daGhi.bam === khoaBam;
   if (!coKq && !process.env.PRO192_DUNG) throw new Error(`${s.id}: output mong đợi chưa có / đã cũ — chạy: node content/codelab/pro192-practice/nguon/_dung.mjs`);
@@ -121,7 +123,7 @@ export function deJava(s) {
   const cases = caGoc.map((x, i) => (s.ca[i].an ? { h: Buffer.from(JSON.stringify({ ...x, expected: ra[i] }), 'utf8').toString('base64') } : { ...x, expected: ra[i] }));
   const DE = {
     id: s.id, title: hai(s.tieuDe).en, src, extra: Object.keys(harness).length ? ['cham'] : [], main: s.main || 'Main', javaMin,
-    timeoutMs: s.timeoutMs ?? 10000, loose: !!s.loose, lab211: !!s.lab211,
+    timeoutMs: s.timeoutMs ?? 10000, loose: !!s.loose, lab211: !!s.lab211, ...(s.release ? { release: s.release } : {}), ...tuyChon,
     rules: (s.quyTac || []).map((r) => ({ id: r.id, en: r.en, vi: r.vi, re: r.re, ...(r.flags ? { flags: r.flags } : {}), ...(r.file ? { file: r.file } : {}), ...(r.need ? { need: true } : {}) })),
     cases,
   };
@@ -203,6 +205,28 @@ export const LOI_CHUNG = {
   soSanhChuoi: { en: 'Comparing strings with == instead of equals() — it compares references, so two equal texts read from the keyboard are "different".', vi: 'So chuỗi bằng == thay vì equals() — nó so tham chiếu, nên hai chuỗi giống nhau đọc từ bàn phím vẫn "khác nhau".' },
 };
 
+/** Cài lỗi vào đáp án ⇒ code khởi đầu của đề "sửa lỗi review" (chỉ tệp đổi; tepMoi = tệp thêm, null = bỏ tệp). */
+function caiBay(giai, { thay = [], tepMoi = {} }) {
+  const khoi = {};
+  for (const { tep, tim, thanh } of thay) {
+    const goc = khoi[tep] ?? giai[tep];
+    if (goc == null || !goc.includes(tim)) throw new Error(`bẫy: không thấy đoạn cần thay trong ${tep}: ${tim.slice(0, 60)}`);
+    khoi[tep] = goc.replace(tim, thanh);
+  }
+  return { ...khoi, ...tepMoi };
+}
+
+/**
+ * Luật thầy LAB211 soát được bằng máy (memory feedback_lab211_loi_thay_da_bat): chỉ view/main in ra màn hình, chỉ main
+ * có Scanner, service không giữ/gọi repository ("CRUD không được nằm trong service" — P0011 26/10), Scanner là biến cục bộ.
+ */
+export const LUAT_THAY = [
+  { id: 'T1', en: 'only view/ and main/ print to the screen (controller, service, repository, model, dto, utils never call System.out)', vi: 'chỉ view/ và main/ in ra màn hình (controller, service, repository, model, dto, utils không gọi System.out)', re: String.raw`\bSystem\s*\.\s*(out|err)\b`, file: '^(?!view/|main/)' },
+  { id: 'T2', en: 'the keyboard (Scanner) is read only in main/', vi: 'chỉ main/ đọc bàn phím (Scanner)', re: String.raw`\bScanner\b`, file: '^(?!main/)' },
+  { id: 'T3', en: 'a service never holds or calls a repository — the controller calls the repository (CRUD) and hands the data to the service', vi: 'service không giữ, không gọi repository — controller gọi repository (CRUD) rồi đưa dữ liệu cho service', re: String.raw`\b\w*Repository\b`, file: '^service/' },
+  { id: 'T4', en: 'the Scanner is a local variable of main(), not a static field', vi: 'Scanner là biến cục bộ của main(), không phải trường static', re: String.raw`\bstatic\b[^;(]*\bScanner\b`, file: '^main/' },
+];
+
 /**
  * Lab CT Library / bài LAB211 (dự án nhiều package của nguồn bài học, vendor ở _lab/<lab>.json bằng _lay-lab.mjs).
  * Ca 1 = harness/input.txt chính thức của lab (+ input-2.txt = lần MỞ LẠI chương trình, + data/ của Lab 9); `ca` thêm ca ẩn.
@@ -210,8 +234,10 @@ export const LOI_CHUNG = {
  */
 export function deLab(lab, s) {
   const L = JSON.parse(fs.readFileSync(path.join(DAY, '_lab', `${lab}.json`), 'utf8'));
+  // `bay`: code khởi đầu = ĐÁP ÁN cài sẵn lỗi (đề "sửa lỗi review") thay cho bản rút thân — { thay: [{ tep, tim, thanh }], tepMoi: {} }
+  const khoiLab = s.bay ? caiBay(L.giai, s.bay) : L.khoi;
   const todo = [];
-  for (const [f, t] of Object.entries(L.khoi)) {
+  for (const [f, t] of Object.entries(khoiLab)) {
     if (t == null) continue;
     t.split('\n').forEach((line, i) => { const m = /\/\/\s*(TODO\b.*)$/.exec(line); if (m) todo.push(`<code>src/${esc(f)}:${i + 1}</code> — ${esc(m[1].trim())}`); });
   }
@@ -226,7 +252,7 @@ export function deLab(lab, s) {
   const doi = (t) => (s.thay || []).reduce((x, [a, b]) => x.split(a).join(b), t);
   const them = [];
   if (s.thay) them.push({ ten: { en: 'the official session with other data (titles, codes, names…)', vi: 'phiên chính thức với dữ liệu khác (tên, mã, họ tên…)' }, ...(L.vao2 ? { phien: [doi(L.vao), doi(L.vao2)] } : { vao: doi(L.vao) }), an: true });
-  if (s.menuRac) them.push({ ten: { en: 'wrong menu choices of every kind, then a listing and exit', vi: 'chọn menu sai đủ kiểu, rồi liệt kê và thoát' }, vao: `abc\n-3\n99\n\n 1x\n${s.menuRac}\n0\n`, an: true });
+  if (s.menuRac) them.push({ ten: { en: 'wrong menu choices of every kind, then a listing and exit', vi: 'chọn menu sai đủ kiểu, rồi liệt kê và thoát' }, vao: `abc\n-3\n99\n\n 1x\n${s.menuRac}\n${s.menuThoat ?? '0'}\n`, an: true });
   const ca = [ca0, ...them, ...(s.ca || [])].map((x) => ({ ...x, ...(tepCa && !x.tepCa ? { tepCa } : {}) }));
   const moTa = hai(s.moTa);
   const dsTodo = todo.length ? `<p><b>Your TODOs in the starter</b> (search "TODO" — NetBeans: Window › Action Items):</p><ul>${todo.map((t) => `<li>${t}</li>`).join('')}</ul>` : '';
@@ -238,14 +264,18 @@ export function deLab(lab, s) {
     tieuDe: s.tieuDe, doKho: s.doKho || 'HARD', phut: s.phut || 90, dangBai: s.dangBai || 'lab',
     khaiNiem: s.khaiNiem, the: ['ct-library', 'lab211-style', ...(s.the || [])],
     moTa: { en: `${moTa.en}\n${lop}\n${dsTodo}`, vi: `${moTa.vi}\n${lopVi}\n${dsTodoVi}` },
-    yeuCau: s.yeuCau || {
+    yeuCau: s.yeuCau || (s.bay ? {
+      en: ['Fix the given code so that it passes the review: change only what the description points at — the behaviour on screen stays the same.', 'Case 1 replays the lab’s official harness input; the hidden cases use other data and other wrong inputs.', 'The grader checks the LAB211 review rules L1–L7 and the lecturer’s layering rules T1–T4 (who prints, who reads the keyboard, who calls the repository).'],
+      vi: ['Sửa code cho sẵn để qua review: chỉ đổi những gì đề chỉ ra — hành vi trên màn hình giữ nguyên.', 'Ca 1 chạy lại input chính thức của lab; các ca ẩn dùng dữ liệu khác và những lần nhập sai khác.', 'Máy chấm soát luật review LAB211 L1–L7 và luật chia tầng của thầy T1–T4 (ai in, ai đọc bàn phím, ai gọi repository).'],
+    } : {
       en: ['Finish every TODO; keep each class in its layer (no Scanner outside main, no printing outside view/main).', 'Case 1 replays the lab’s official harness input; the hidden cases use other data and other wrong inputs.', 'The grader also checks the LAB211 review rules L1–L7 (no System.exit, only nextLine(), List/Map declarations, no empty catch, private fields, switch with default, @Override).'],
       vi: ['Làm hết các TODO; mỗi lớp đúng tầng của nó (không Scanner ngoài main, không in ngoài view/main).', 'Ca 1 chạy lại input chính thức của lab; các ca ẩn dùng dữ liệu khác và những lần nhập sai khác.', 'Máy chấm soát thêm luật review LAB211 L1–L7 (không System.exit, chỉ nextLine(), khai báo List/Map, không catch rỗng, trường private, switch có default, @Override).'],
-    },
+    }),
     dauVao: s.dauVao || { en: 'Keyboard input to the menu, one value per line (see tests/1.in).', vi: 'Nhập bàn phím cho menu, mỗi giá trị một dòng (xem tests/1.in).' },
     dauRa: s.dauRa || { en: 'Exactly the screens of the reference solution (menu, prompts, messages, tables).', vi: 'Đúng từng màn hình của đáp án (menu, lời nhắc, thông báo, bảng).' },
-    main: 'main.Main', lab211: s.lab211 ?? true, java: 8, timeoutMs: 15000,
-    tep: L.giai, khoiDau: L.khoi, ca, quyTac: s.quyTac, soViDu: 1,
+    main: 'main.Main', lab211: s.lab211 ?? true, java: 8, release: 8, timeoutMs: s.timeoutMs ?? 15000, homNay: s.homNay, captcha: s.captcha,
+    tep: L.giai, khoiDau: khoiLab, ca, quyTac: [...(lab.startsWith('l211-') && s.luatThay !== false ? LUAT_THAY : []), ...(s.quyTac || [])], soViDu: 1,
+    khoiDauLoi: s.khoiDauLoi,
     goiY: s.goiY, loiHayGap: s.loiHayGap, giaiThich: s.giaiThich, thuatNgu: s.thuatNgu,
   });
 }

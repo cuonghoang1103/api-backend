@@ -182,6 +182,48 @@
       "name": "9.3 Lab 9 — CT Library: saving to a file",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 9 — CT Library: saving to a file"
+    },
+    {
+      "slug": "pro192-lab211-cach-qua-review",
+      "name": "L.0 🎓 LAB211 in practice — passing the lecturer’s review",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: L.0 — The LAB211 frame: Note Management in 8 packages · L.0 — Fix the 5 review errors the lecturer catches first · L.0 — \"CRUD must not be in the service\": take the repository out · L.0 — It runs at home, not in the lab room: back to Java 8"
+    },
+    {
+      "slug": "pro192-lab211-p0011-change-base-number",
+      "name": "L.1 🎓 LAB211 J1.S.P0011 — Change Base Number System",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: L.1 — LAB211 J1.S.P0011: Change Base Number System (BIN, DEC, HEX)"
+    },
+    {
+      "slug": "pro192-lab211-p0021-student-management",
+      "name": "L.2 🎓 LAB211 J1.L.P0021 — Student Management",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: L.2 — LAB211 J1.L.P0021: Student Management (Long Assignment)"
+    },
+    {
+      "slug": "pro192-lab211-p0056-worker-management",
+      "name": "L.3 🎓 LAB211 J1.S.P0056 — Worker Management",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: L.3 — LAB211 J1.S.P0056: Worker Management (salary history with today’s date)"
+    },
+    {
+      "slug": "pro192-lab211-p0070-ebank-login",
+      "name": "L.4 🎓 LAB211 J1.S.P0070 — Ebank Login",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: L.4 — LAB211 J1.S.P0070: Ebank Login (two languages, random captcha)"
+    },
+    {
+      "slug": "pro192-lab211-p0071-task-management",
+      "name": "L.5 🎓 LAB211 J1.S.P0071 — Task Management",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: L.5 — LAB211 J1.S.P0071: Task Management"
+    },
+    {
+      "slug": "pro192-lab211-p0073-handy-expense",
+      "name": "L.6 🎓 LAB211 J1.S.P0073 — Handy Expense",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: L.6 — LAB211 J1.S.P0073: Handy Expense (saved to a file)"
     }
   ]
 }

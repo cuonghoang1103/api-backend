@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rutThan } from './_rut-than.mjs';
 
 const NGUON = path.join(os.homedir(), 'Documents/FLM-nguon/_repo/PRO192/gen/lab');
 const RA = path.join(path.dirname(fileURLToPath(import.meta.url)), '_lab');
@@ -57,21 +58,47 @@ function theoInterface(src) {
   out = out.replace(/((?:^import [\w.]+;\n)+)/m, (blk) => blk.split('\n').filter(Boolean).sort().join('\n') + '\n');
   return out;
 }
+/**
+ * Bài LAB211 (l211-*): nguồn khoá chỉ có solution/ ⇒ code khởi đầu = đáp án đã RÚT THÂN các hàm của tầng controller/service/
+ * repository, các tiện ích kiểm/sinh/đọc tệp (utils/Validation, CaptchaUtils, FileUtils) và các hàm nhập của Main (giữ `main`
+ * với menu + switch và `inputChoice`). Giữ nguyên constants/model/dto/view và mọi constructor. `giu` thêm theo bài.
+ */
+const RUT = { tep: /^(controller|service|repository)\/|^utils\/(Validation|CaptchaUtils|FileUtils)\.java$|^main\/Main\.java$/, giu: ['main', 'inputChoice', 'inputLine'] };
+const RUT_THEM = { };
+function rutStarter(lab, giai) {
+  const giu = [...RUT.giu, ...((RUT_THEM[lab] || {}).giu || [])];
+  const khoi = {};
+  for (const [f, t] of Object.entries(giai)) {
+    if (!f.endsWith('.java') || !RUT.tep.test(f)) continue;
+    const moi = rutThan(t, (x) => !x.laConstructor && !giu.includes(x.ten));
+    if (moi !== t) khoi[f] = moi;
+  }
+  return khoi;
+}
+/**
+ * .properties: dấu cách CUỐI giá trị ("account=Account number:  ") là một phần câu chữ, mà bộ xuất chung (codelab-xuat-de
+ * bỏ khoảng trắng cuối dòng của mọi tệp code), trình soạn thảo và git hay cắt mất ⇒ viết thành \u0020 (Properties.load hiểu).
+ */
+function khoangCuoi(o) {
+  return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, !k.endsWith('.properties') ? v
+    : v.replace(/^([^#!\n][^\n]*?)( +)$/gm, (m, a, sp) => a + '\\u0020'.repeat(sp.length))
+      .replace(/^(#[^\n]*\n)/, '$1# \\u0020 = one space kept at the end of a text (editors and git often cut plain trailing spaces)\n')]));
+}
 const map = (o, f) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, k.endsWith('.java') ? f(v) : v]));
 
 for (const lab of process.argv.slice(2)) {
   const base = path.join(NGUON, lab);
   const meta = JSON.parse(fs.readFileSync(path.join(base, 'lab.json'), 'utf8'));
-  const giai = map(doc(path.join(base, 'solution/src')), theoInterface);
+  const giai = khoangCuoi(map(doc(path.join(base, 'solution/src')), theoInterface));
   const khoiDu = fs.existsSync(path.join(base, 'starter/src')) ? map(doc(path.join(base, 'starter/src')), theoInterface) : null;
-  const khoi = {};
+  const khoi = khoiDu || !lab.startsWith('l211-') ? {} : rutStarter(lab, giai);
   if (khoiDu) {
     for (const [f, t] of Object.entries(khoiDu)) if (giai[f] !== t) khoi[f] = t;
     for (const f of Object.keys(giai)) if (!(f in khoiDu)) khoi[f] = null;
   }
   const h = path.join(base, 'solution/harness');
   const ra = {
-    ten: meta.ten, ticket: meta.ticket, slug: meta.slug, coStarter: !!khoiDu,
+    ten: meta.ten, ticket: meta.ticket, slug: meta.slug, coStarter: !!khoiDu, ...(Object.keys(khoi).length && !khoiDu ? { starterRut: true } : {}),
     giai, khoi,
     vao: fs.readFileSync(path.join(h, 'input.txt'), 'utf8'),
     ra: fs.readFileSync(path.join(h, 'expected.txt'), 'utf8'),

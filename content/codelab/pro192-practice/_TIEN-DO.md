@@ -17,22 +17,37 @@ mỗi đề tải về một thư mục, người học làm trên máy với JD
 | 7 | `pro192-7-1-mang-doi-tuong` 3 · `pro192-on-ch7` 4 · `pro192-lab-7-danh-sach-doi-tuong` 1 | 8 |
 | 8 | `pro192-8-1-collections` 4 · `pro192-on-ch8` 4 · `pro192-lab-8-collections` 1 | 9 |
 | 9 | `pro192-9-1-file-io` 4 · `pro192-on-ch9` 4 · `pro192-lab-9-luu-tep` 1 | 9 |
-| **tổng** | 29 module | **85** |
+| 🎓 LAB211 | `pro192-lab211-cach-qua-review` 4 (khung Note từ TODO + 3 đề "sửa lỗi thầy bắt": lỗi thường gặp, service giữ repo, Java 8) · `-p0011-change-base-number` 1 · `-p0021-student-management` 1 · `-p0056-worker-management` 1 · `-p0070-ebank-login` 1 · `-p0071-task-management` 1 · `-p0073-handy-expense` 1 | 10 |
+| **tổng** | 36 module | **95** |
 
 Đăng ký track: `src/services/codeLab.practice.ts` (`'object-oriented-programming': 'pro192-practice'`; PRACTICE_CATALOG có sẵn dòng PRO192).
 
+### 🎓 LAB211 — cơ chế đã thêm (01/11, đợt 2)
+
+- **Starter rút thân** (`nguon/_rut-than.mjs`, gọi từ `_lay-lab.mjs` khi nguồn chỉ có `solution/`): thân mọi hàm của
+  `controller/ service/ repository/`, `utils/Validation|CaptchaUtils|FileUtils` và các hàm nhập của `Main` (giữ `main`,
+  `inputChoice`, `inputLine`, mọi constructor) ⇒ `// TODO: <dòng chú thích trên hàm>` + `return <mặc định>` (số 0, false, "", List/Map
+  rỗng, còn lại null). Quét Java bằng mặt nạ chú thích/chuỗi. Thêm tên giữ theo bài: `RUT_THEM` trong `_lay-lab.mjs`.
+- **Đề "sửa lỗi review"**: `deLab(lab, { id, bay: { thay: [{ tep, tim, thanh }], tepMoi: {} } })` ⇒ khởi đầu = ĐÁP ÁN cài lỗi.
+- **Luật thầy T1–T4** (`LUAT_THAY` trong `_chung.mjs`, tự bật cho lab `l211-*`): chỉ view/main in; chỉ main có Scanner; service
+  không nhắc tới `*Repository`; Scanner không phải trường static. L2 nay chỉ soát tệp có `Scanner` (Random.nextInt không tính).
+- **`release: 8`** cho mọi deLab: cham.mjs biên dịch `--release 8 -Xlint:-options` khi JDK ≥ 9 (bắt `var`, `List.of`…).
+- **Ngày hôm nay (P0056)**: `homNay: 'dd/MM/yyyy'` ⇒ cham.mjs thay ngày hôm nay (theo mẫu) trong output bằng chính chữ mẫu,
+  cả lúc ghi (`--record`) lẫn lúc so — khớp luôn `expected.txt` của khoá (vốn ghi `dd/MM/yyyy`).
+- **Captcha ngẫu nhiên (P0070)**: `captcha: { show: 'Captcha: ([A-Za-z0-9]{5})(?!…)', as: 'XXXXX', prompt: '<lời nhắc nhập captcha>$' }`
+  ⇒ ca chạy TƯƠNG TÁC (spawn): gõ input từng dòng, tới dòng có `{CAP1}`/`{CAPMID}`/`{CAP}` thì đợi chương trình đứng ở lời nhắc
+  captcha (yên 200 ms; lời nhắc khác thì yên 1,5 s), lấy captcha CUỐI CÙNG đã in rồi điền; khi so che thành `XXXXX` (đúng
+  `expected.txt` của khoá). Captcha không đúng 5 chữ/số ⇒ không che ⇒ lệch dòng; ≥ 3 captcha trong một ca mà giống hệt ⇒ trượt
+  ("phải sinh mới mỗi lần"). Đột biến đã thử: captcha cố định, nhận chuỗi trống — đều trượt.
+- **Tệp không phải .java trong `src/`** (Language_*.properties) được chép vào classpath. Dấu cách cuối giá trị `.properties`
+  viết thành `\u0020` lúc vendor (bộ xuất chung cắt khoảng trắng cuối dòng của mọi tệp code — đã làm mất "Account number:  ").
+- **Vòng lặp vô tận khi hết input** (Main bắt `catch (Exception)` quanh `nextLine()`): output > 2 MB ⇒ dừng ngay, báo rõ
+  (trước đó starter chạy đủ 15 s mỗi ca). `menuThoat` = lựa chọn thoát cho ca `menuRac` (mặc định '0').
+
 ## Còn thiếu (làm tiếp theo đúng khuôn)
 
-1. **🎓 LAB211 thực chiến** — 6 bài `pro192-lab211-p0011-change-base-number`, `-p0021-student-management`, `-p0056-worker-management`,
-   `-p0070-ebank-login`, `-p0071-task-management`, `-p0073-handy-expense` (+ `pro192-lab211-cach-qua-review` L.0: vài đề nhỏ soát luật).
-   Nguồn: `~/Documents/FLM-nguon/_repo/PRO192/gen/lab/l211-*` (CHỈ có `solution/`, không có starter). Việc cần làm:
-   - `node nguon/_lay-lab.mjs l211-p0011 …` (chép + đổi khai báo sang List/Map theo luật thầy 29/10);
-   - starter: chưa có ⇒ viết một bộ "rút thân hàm" (giữ model/constants/view/main/dto, thay thân phương thức của
-     service/repository/controller/utils bằng `// TODO` + giá trị mặc định) hoặc soạn tay TODO như `gen/lab/labN/starter.mjs`;
-   - P0056 in ngày hôm nay ⇒ cần phép "chuẩn hoá" (thay `dd/MM/yyyy` bằng chữ cố định cả ở mong đợi lẫn output — thêm tuỳ chọn
-     `thayThe: [[regex, chuỗi]]` vào `_cham-mau.mjs › norm`); P0070 có captcha ngẫu nhiên + `.properties` ⇒ cần (a) chép tệp
-     không phải .java của `src/` vào classpath khi biên dịch, (b) captcha: ca nhập tương tác (đọc dòng captcha rồi gõ lại) hoặc
-     để đề này `khongCham` (chỉ chấm luật L1–L7 + biên dịch). `lab.json` có `cham: false` cho hai bài này.
+1. (LAB211 xong — xem trên.) Có thể thêm đề "sửa lỗi review" cho từng bài từ `bay/truoc-khi-sua` của khoá, nhưng các bản đó
+   viết lại gần hết (package `constant`, câu chữ khác) nên không hợp làm đề sửa N chỗ.
 2. **⭐ Chuyên sâu CS.1–CS.8** — module `pro192-cs1-on` … `pro192-cs8-on` (3–6 đề/bài, Java 17+: đặt `java: 17` trong spec ⇒
    `javac --release 17` và cham.mjs đòi JDK 17). Ý đề + lời giải chạy thật có sẵn ở `gen/src/extra/csN-on.txt` + `gen/java/csN/`.
    Đề đa luồng (CS.8): output phải tất định (join, CountDownLatch, kết quả cuối) — đừng in thứ tự xen kẽ của luồng.

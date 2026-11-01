@@ -13,6 +13,7 @@
  * - Rich query with author, media, like/comment counts
  */
 
+import type { Prisma } from '@prisma/client';
 import { prisma } from '../config/database.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { registerSocketEmitter } from '../socket/messaging.socket.js';
@@ -758,12 +759,15 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
     }
   }
 
+  // Keyset (createdAt, id) — 01/11/2026. Trước đây lọc `id < cursor` nhưng sắp theo createdAt ⇒ bài có
+  // createdAt lệch thứ tự id (nhập/hẹn giờ/bot tin) bị LẶP hoặc SÓT khi cuộn. Con trỏ vẫn là id (app cũ không đổi).
+  const sauConTro = cursor ? await keysetSauBai(cursor) : null;
   const posts = await prisma.socialPost.findMany({
     where: {
       ...visibilityWhere,
       ...(authorId ? { authorId } : {}),
       ...(followingAuthorIds ? { authorId: { in: followingAuthorIds } } : {}),
-      ...(cursor ? { id: { lt: cursor } } : {}),
+      ...(sauConTro ? { AND: [sauConTro] } : {}),
       // Hashtag filter: ILIKE '%#tag%' — uses the GIN trigram index on
       // social_posts.content (created at startup if pg_trgm is available).
       ...(hashtag ? { content: { contains: `#${hashtag}`, mode: 'insensitive' as const } } : {}),
@@ -793,8 +797,8 @@ export async function getFeed(options: FeedOptions & { currentUserId?: number })
       ...(sort === 'popular' ? { createdAt: { gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) } } : {}),
     },
     // For popular we want a weighted ranking, not pure createdAt;
-    // we still use id < cursor as a stable cursor for pagination.
-    orderBy: { createdAt: 'desc' },
+    // pagination is keyset on (createdAt, id) — id is the tiebreaker.
+    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
     take: limit + 1,
     include: {
       author: {
@@ -1779,9 +1783,10 @@ export async function getSavedPosts(userId: number, folder?: string, cursor?: nu
     where: {
       userId,
       ...(folder ? { folder } : {}),
-      ...(cursor ? { id: { lt: cursor } } : {}),
+      ...(cursor ? await keysetSauLuu(cursor) : {}),
     },
-    orderBy: { createdAt: 'desc' },
+    // Keyset (createdAt, id) như feed chính — xem keysetSauBai.
+    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
     take: limit + 1,
     include: {
       post: {
@@ -2478,4 +2483,21 @@ export async function getPostSeriesIndex(slug: string): Promise<PostSeriesIndex 
   };
   seriesCache.set(slug, { at: Date.now(), data });
   return data;
+}
+
+/**
+ * Điều kiện "đứng SAU con trỏ" theo thứ tự (createdAt desc, id desc). Con trỏ là id của phần tử cuối
+ * trang trước; tra createdAt của nó rồi lấy (createdAt nhỏ hơn) HOẶC (cùng createdAt và id nhỏ hơn).
+ * Phần tử con trỏ đã bị xoá ⇒ lùi về `id < cursor` như cũ.
+ */
+export async function keysetSauBai(cursor: number): Promise<Prisma.SocialPostWhereInput> {
+  const c = await prisma.socialPost.findUnique({ where: { id: cursor }, select: { createdAt: true } });
+  if (!c) return { id: { lt: cursor } };
+  return { OR: [{ createdAt: { lt: c.createdAt } }, { createdAt: c.createdAt, id: { lt: cursor } }] };
+}
+
+async function keysetSauLuu(cursor: number): Promise<Prisma.SocialSaveWhereInput> {
+  const c = await prisma.socialSave.findUnique({ where: { id: cursor }, select: { createdAt: true } });
+  if (!c) return { id: { lt: cursor } };
+  return { OR: [{ createdAt: { lt: c.createdAt } }, { createdAt: c.createdAt, id: { lt: cursor } }] };
 }

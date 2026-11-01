@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 1 Đổi luật LabFlow sang TypeScript (deck ts-lab-1, 9 slide). */
+import { walkTs } from '../_slides.mjs';
+
+export default walkTs('ts-lab-1', 'Lab 1 — convert LabFlow’s rules to TypeScript', 'Lab 1 — đổi luật LabFlow sang TypeScript', [
+  [1, 'Lab 1 — convert LabFlow’s rules to TypeScript',
+    `<p>The chapter lab. You take LabFlow's real JavaScript rules and turn them into strict TypeScript. A script — not a teacher's opinion — grades you out of ten, by running the compiler and Node exactly as a CI server would.</p>`,
+    `<p>Lab của chương. Bạn lấy đúng các luật JavaScript thật của LabFlow và biến chúng thành TypeScript strict. Một script — không phải cảm nhận của thầy cô — chấm bạn trên thang mười, bằng cách chạy trình biên dịch và Node đúng như một máy CI.</p>`],
+  [2, 'Your mission',
+    `<p>Four things at once: compile under strict mode, use no <code>any</code> and no <code>@ts-ignore</code>, keep the fifteen behaviour tests green, and make the compiler refuse eight wrong calls with the right error code. The last part is the point: anyone can make red lines disappear; the lab measures whether your types actually stop bugs.</p>`,
+    `<p>Bốn việc cùng lúc: biên dịch được ở chế độ strict, không dùng <code>any</code> và không <code>@ts-ignore</code>, giữ mười lăm test hành vi xanh, và khiến trình biên dịch từ chối tám lời gọi sai với đúng mã lỗi. Phần cuối mới là mục đích: ai cũng làm mất được gạch đỏ; lab đo xem kiểu của bạn có thật sự chặn được bug hay không.</p>`],
+  [3, 'The code under test — and the untouched starter',
+    `<p>The starter is the JavaScript file, only renamed to dot-ts. Graded as-is it scores 2.5: thirteen "implicitly has an any type" errors, the tests cannot even load because <code>./time.js</code> does not exist, yet three wrong calls are already refused. Renaming alone gave you checks for free — remember that for the next slide.</p>`,
+    `<p>Mã khởi đầu là tệp JavaScript, chỉ đổi đuôi sang .ts. Chấm nguyên trạng được 2,5: mười ba lỗi "ngầm có kiểu any", test còn không nạp được vì <code>./time.js</code> không tồn tại, vậy mà ba lời gọi sai đã bị từ chối. Chỉ đổi đuôi thôi đã được kiểm miễn phí — nhớ điều này cho slide sau.</p>`],
+  [4, 'Eight wrong calls tsc must refuse',
+    `<p>Each wrong call is a bug a teammate could write tomorrow. The last column comes from running the same calls against the original JavaScript: two crash, and the other six give a wrong answer with no error at all — NaN on a dashboard, a lecturer waiting for approval. Those silent ones are what types are for.</p>`,
+    `<p>Mỗi lời gọi sai là một bug mà bạn cùng nhóm có thể viết ngày mai. Cột cuối lấy từ việc chạy đúng các lời gọi đó trên bản JavaScript gốc: hai cái làm sập, sáu cái còn lại trả kết quả sai mà không báo lỗi gì — NaN trên bảng thống kê, giảng viên phải chờ duyệt. Những lỗi im lặng đó chính là thứ kiểu sinh ra để chặn.</p>`],
+  [5, 'Two typical first attempts',
+    `<p>Attempt A silences every error with <code>any</code>: it compiles and passes the tests, yet refuses only one wrong call — fewer than the untouched starter. Attempt B types everything as string and number: it passes with eight, but "lecturer" and "APPROVED" are still strings, and the inferred return types make correct callers fail.</p>`,
+    `<p>Lần thử A tắt mọi lỗi bằng <code>any</code>: biên dịch được, qua test, nhưng chỉ từ chối một lời gọi sai — ít hơn cả mã khởi đầu chưa sửa gì. Lần thử B gõ mọi thứ là string và number: đạt với tám điểm, nhưng "lecturer" và "APPROVED" vẫn là chuỗi hợp lệ, còn kiểu trả về do suy luận làm hỏng cả những lời gọi đúng.</p>`],
+  [6, 'The reference solution: 10 of 10',
+    `<p>Three ideas close the gap. Closed sets of values — roles, slot codes, statuses — become literal unions. The functions whose results others rely on get an explicit return type. And the import says <code>./time.ts</code>, the file Node actually runs. Chapters 2 to 5 teach each idea in depth.</p>`,
+    `<p>Ba ý lấp chỗ hổng. Các tập giá trị đóng — vai trò, mã khung giờ, trạng thái — thành union literal. Hàm mà người khác dựa vào kết quả thì có kiểu trả về viết rõ. Và lệnh import ghi <code>./time.ts</code>, đúng tệp Node thật sự chạy. Chương 2 tới 5 dạy sâu từng ý.</p>`],
+  [7, 'Rubric (10 points)',
+    `<p>Five parts. Compiling and honesty are only three points together; behaviour is two; the biggest share, four points, is for wrong calls refused. Part B exists so you cannot win by making types absurdly strict: correct code must keep compiling. Seven passes, but aim for ten.</p>`,
+    `<p>Năm phần. Biên dịch được và trung thực cộng lại chỉ ba điểm; hành vi hai điểm; phần lớn nhất, bốn điểm, dành cho lời gọi sai bị từ chối. Phần B tồn tại để bạn không thắng được bằng cách siết kiểu vô lý: code đúng phải vẫn biên dịch được. Bảy là đạt, nhưng hãy nhắm mười.</p>`],
+  [8, 'Hints, from gentle to strong',
+    `<p>Open them one at a time. Fix the import, then read every "implicitly any" error as a question: what comes in here? Then look for closed lists of values, write the return type of <code>checkSlot</code> as a sentence before writing it as a type, and give <code>usageRate</code> the smallest type it really needs.</p>`,
+    `<p>Mở từng gợi ý một. Sửa import trước, rồi đọc mỗi lỗi "ngầm any" như một câu hỏi: thứ gì đi vào đây? Sau đó tìm các danh sách giá trị đóng, viết kiểu trả về của <code>checkSlot</code> thành một câu trước khi viết thành kiểu, và cho <code>usageRate</code> kiểu nhỏ nhất mà nó thật sự cần.</p>`],
+  [9, 'Before you call it done',
+    `<p>Ten out of ten from the grader, no <code>any</code> anywhere, only <code>lab1/src</code> edited, and — the real test — you can point at the exact type that refuses each of the eight wrong calls. Then commit with a message that says what changed.</p>`,
+    `<p>Mười trên mười từ máy chấm, không có <code>any</code> ở đâu cả, chỉ sửa <code>lab1/src</code>, và — phép thử thật — bạn chỉ ra được chính xác kiểu nào từ chối từng lời gọi trong tám lời gọi sai. Rồi commit với lời nhắn nói rõ cái gì đã đổi.</p>`],
+]);

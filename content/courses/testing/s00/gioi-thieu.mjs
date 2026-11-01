@@ -191,6 +191,7 @@ ${ra(M.tuKiemOut)}
 <li>All outputs are real (Node 22.23.3, Vitest 5.0.5).</li>
 </ul>
 ${lienKet({ bai: 'swt301-lab2-labflow-nghiep-vu', title: 'Also in SWT301 — L2.10: LabFlow Demo, the business story and the data', sub: 'Same: the LabFlow booking journey and the business rules BR-04 (30-minute grid, 07:00–21:00), BR-05 (≤ 14 days) and BR-06 (> 30 seats needs approval). Different: SWT301 tests the Java/Spring Boot LabFlow Demo with JUnit and Report 5.1; this course rebuilds a small Node version, LabFlow Lite, and tests it at every level.', cta: 'OPEN SWT301 LESSON →' })}
+${lienKet({ khoa: 'typescript', bai: 'typescript-0-1-gioi-thieu', title: 'Also in the TypeScript course — 0.1: the LabFlow TS project', sub: 'Same: LabFlow Lite and its booking rules (time.js, booking.js). Different: the TypeScript course converts them to strict TypeScript in Chapter 1 and grows them into a typed Express API, a React form and Zod/Prisma at the boundary.', cta: 'OPEN TYPESCRIPT LESSON →' })}
 </div>
 
 <div class="ml-vi">
@@ -311,6 +312,7 @@ ${ra(M.tuKiemOut)}
 <li>Mọi output là thật (Node 22.23.3, Vitest 5.0.5).</li>
 </ul>
 ${lienKet({ bai: 'swt301-lab2-labflow-nghiep-vu', title: 'Đã gặp ở SWT301 — L2.10: LabFlow Demo, nghiệp vụ và dữ liệu', sub: 'Giống: hành trình đặt phòng LabFlow và các luật BR-04 (lưới 30 phút, 07:00–21:00), BR-05 (≤ 14 ngày), BR-06 (> 30 chỗ cần duyệt). Khác: SWT301 test bản Java/Spring Boot bằng JUnit và Report 5.1; khoá này dựng lại một bản Node nhỏ, LabFlow Lite, và test nó ở mọi tầng.', cta: 'MỞ BÀI SWT301 →' })}
+${lienKet({ khoa: 'typescript', bai: 'typescript-0-1-gioi-thieu', title: 'Cũng có ở khoá TypeScript — 0.1: dự án LabFlow TS', sub: 'Giống: LabFlow Lite và các luật đặt phòng (time.js, booking.js). Khác: khoá TypeScript đổi chúng sang TypeScript strict ở Chương 1 rồi lớn dần thành API Express có kiểu, form React và Zod/Prisma ở biên.', cta: 'MỞ BÀI TYPESCRIPT →' })}
 </div>
 `,
 };

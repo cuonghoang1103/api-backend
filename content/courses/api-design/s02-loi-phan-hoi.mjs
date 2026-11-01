@@ -1488,6 +1488,11 @@ Keep-Alive: timeout=5
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 8.2: Hardening an API for the real world</span><span class="lc-sub">If you took SDN302 on Academy, “strong validation with Joi or Zod” and “validate at the edge, trust nothing inside” are the same advice. Same: one validation step per route before the service layer. Different: SDN302 states the habit; here you attack a real API first and measure what slips through. This lesson adds: strict objects against mass assignment, field errors as RFC 9457 JSON Pointers, 415 and 413 at the door, coercion traps, and why tightening rules later is a breaking change. Not taken SDN302? This lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-2-chung-minh-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Also in the TypeScript course — 1.2: what a type checker proves, and what it cannot</span><span class="lc-sub">Same: never trust the request body. Different: here a Zod schema checks the body at the door at runtime; that lesson shows, with real output, why the TypeScript type alone cannot — a body with "seats": "31" compiles and still crashes — and writes the first hand-made guard that Zod later replaces.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -2096,6 +2101,11 @@ Keep-Alive: timeout=5
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp phần này ở SDN302 — bài 8.2: Gia cố một API cho thế giới thật</span><span class="lc-sub">Nếu đã học SDN302 trên Academy, "validation mạnh bằng Joi hoặc Zod" và "kiểm ở cửa, bên trong không tin gì" là cùng một lời khuyên. Giống: một bước kiểm cho mỗi route, trước tầng service. Khác: SDN302 nêu thói quen; ở đây bạn tấn công một API thật trước và đo thứ gì lọt qua. Bài này thêm: object strict chặn mass assignment, lỗi từng trường dạng JSON Pointer của RFC 9457, 415 và 413 ở cửa, bẫy ép kiểu, và vì sao siết luật về sau là thay đổi phá vỡ. Chưa học SDN302? Bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-2-chung-minh-gi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cũng có ở khoá TypeScript — 1.2: trình kiểm tra kiểu chứng minh được gì, và không được gì</span><span class="lc-sub">Giống: không bao giờ tin body của request. Khác: ở đây schema Zod kiểm body ngay cửa lúc chạy; bài đó cho thấy bằng output thật vì sao chỉ có kiểu TypeScript thì không đủ — body có "seats": "31" vẫn biên dịch rồi vẫn sập — và viết guard tự tay đầu tiên mà sau này Zod thay thế.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

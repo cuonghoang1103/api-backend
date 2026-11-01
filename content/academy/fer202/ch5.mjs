@@ -211,6 +211,15 @@ const PROPTYPES = {
     books([
       ['reactdoc', '“Typechecking With PropTypes” (legacy docs) — and the modern alternative, TypeScript (Advanced chapter)', '“Typechecking With PropTypes” (tài liệu cũ) — và lựa chọn hiện đại, TypeScript (chương Nâng cao)'],
     ]),
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the TypeScript course (Courses) — 1.4: any, unknown and adopting TypeScript gradually</span><span class="lc-sub">Same: say what type each value should be, and stop wrong data early. Different: PropTypes checks at runtime and only warns in development; TypeScript refuses a wrong prop or argument before the code runs — and that lesson shows, with real output, how any switches the checking off and how JSDoc lets you start in plain .js files.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-1-4-any-unknown" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá TypeScript (Courses) — 1.4: any, unknown và dùng TypeScript dần dần</span><span class="lc-sub">Giống: nói rõ mỗi giá trị phải có kiểu gì, và chặn dữ liệu sai sớm. Khác: PropTypes kiểm lúc chạy và chỉ cảnh báo ở development; TypeScript từ chối prop hay đối số sai trước khi code chạy — và bài đó cho thấy bằng output thật any tắt việc kiểm ra sao, và JSDoc giúp bắt đầu ngay trên tệp .js thường như thế nào.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>`),
   ].join('\n'),
 };
 

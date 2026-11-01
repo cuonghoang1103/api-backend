@@ -1,0 +1,1413 @@
+[
+  {
+    "id": "ts-cl-0-8-a",
+    "bai": "typescript-0-8-bat-dau-tai-day",
+    "tieuDe": "Label the LabFlow helper so a text start time is refused|||Gắn nhãn cho hàm LabFlow để giờ bắt đầu dạng chữ bị từ chối",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>src/end.ts is the endMinute helper from lesson 0.8, still without types. Add type annotations so that (1) the file compiles under the course tsconfig (strict), (2) the three wrong calls in kiem/sai.ts are refused with TS2345, TS2554 and TS2322, and (3) the tests still pass. Do not use any.</p><p><strong>Done when:</strong> tsc is clean on src/ and test/, each line of kiem/sai.ts gets its expected error, node --test is green.</p>|||<p>src/end.ts là hàm endMinute của bài 0.8, chưa có kiểu. Thêm chú thích kiểu để (1) file biên dịch sạch với tsconfig của khoá (strict), (2) ba lời gọi sai trong kiem/sai.ts bị từ chối với TS2345, TS2554 và TS2322, và (3) test vẫn xanh. Không dùng any.</p><p><strong>Đạt khi:</strong> tsc sạch trên src/ và test/, mỗi dòng của kiem/sai.ts có đúng lỗi mong đợi, node --test xanh.</p>",
+    "khoiDau": {
+      "src/end.ts": "// When does a LabFlow booking end, in minutes since 00:00?\nexport function endMinute(startMinute, length) {\n  return startMinute + length;\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { endMinute } from '../src/end.ts';\n\nendMinute('480', 120); // expect TS2345\nendMinute(480); // expect TS2554\nconst label: string = endMinute(480, 120); // expect TS2322\n",
+      "test/end.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { endMinute } from '../src/end.ts';\n\ntest('08:00 + 2 hours ends at minute 600', () => assert.equal(endMinute(480, 120), 600));\ntest('a 30-minute slot from 20:30 ends at 21:00', () => assert.equal(endMinute(1230, 30), 1260));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/end.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/end.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/end.ts": "// When does a LabFlow booking end, in minutes since 00:00?\n// Both inputs are numbers of minutes, and so is the result: a text such as '480' must be refused by tsc.\nexport function endMinute(startMinute: number, length: number): number {\n  return startMinute + length;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "every parameter typed as any",
+        "tep": {
+          "src/end.ts": "// When does a LabFlow booking end, in minutes since 00:00?\n// Both inputs are numbers of minutes, and so is the result: a text such as '480' must be refused by tsc.\nexport function endMinute(startMinute: any, length: any): any {\n  return startMinute + length;\n}\n"
+        }
+      },
+      {
+        "nhan": "accepts string | number and converts — the text call is no longer refused",
+        "tep": {
+          "src/end.ts": "// When does a LabFlow booking end?\nexport function endMinute(startMinute: string | number, length: number) {\n  return Number(startMinute) + length;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-8-b",
+    "bai": "typescript-0-8-bat-dau-tai-day",
+    "tieuDe": "Fix the values, not the labels|||Sửa giá trị, đừng sửa nhãn",
+    "doKho": "EASY",
+    "phut": 6,
+    "moTa": "<p>src/line.ts has three labelled values and tsc reports two TS2322 errors. The labels are correct — seats and start ARE numbers. Fix the values so the file compiles and node src/line.ts prints <code>BE-201 needs 31 seats from minute 480</code>. Changing a label to string, casting with as, or using any does not count.</p><p><strong>Done when:</strong> tsc is clean and the printed line matches.</p>|||<p>src/line.ts có ba giá trị gắn nhãn và tsc báo hai lỗi TS2322. Nhãn đúng — seats và start ĐÚNG là số. Sửa giá trị để file biên dịch được và node src/line.ts in <code>BE-201 needs 31 seats from minute 480</code>. Đổi nhãn thành string, ép kiểu bằng as, hay dùng any đều không tính.</p><p><strong>Đạt khi:</strong> tsc sạch và dòng in ra khớp.</p>",
+    "khoiDau": {
+      "src/line.ts": "// One line of the LabFlow booking screen. Three values, three type labels.\nconst lab: string = 'BE-201';\nconst seats: number = '31';\nconst start: number = '480';\nconsole.log(lab + ' needs ' + seats + ' seats from minute ' + start);\n"
+    },
+    "coDinh": {},
+    "kiem": {
+      "sach": [],
+      "chay": [
+        "node src/line.ts"
+      ],
+      "ra": "BE-201 needs 31 seats from minute 480",
+      "cam": [
+        "\\bany\\b",
+        "@ts-",
+        "\\bas\\s+(unknown|number|string|any)\\b",
+        "seats:\\s*string",
+        "start:\\s*string"
+      ]
+    },
+    "loiGiai": {
+      "src/line.ts": "// One line of the LabFlow booking screen. Three values, three type labels.\n// The labels were right; the VALUES were wrong: 31 and 480 are numbers, so no quotes.\nconst lab: string = 'BE-201';\nconst seats: number = 31;\nconst start: number = 480;\nconsole.log(lab + ' needs ' + seats + ' seats from minute ' + start);\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "labels changed to string",
+        "tep": {
+          "src/line.ts": "// One line of the LabFlow booking screen. Three values, three type labels.\nconst lab: string = 'BE-201';\nconst seats: string = '31';\nconst start: string = '480';\nconsole.log(lab + ' needs ' + seats + ' seats from minute ' + start);\n"
+        }
+      },
+      {
+        "nhan": "cast with as unknown as number",
+        "tep": {
+          "src/line.ts": "// One line of the LabFlow booking screen. Three values, three type labels.\nconst lab: string = 'BE-201';\nconst seats: number = '31' as unknown as number;\nconst start: number = '480' as unknown as number;\nconsole.log(lab + ' needs ' + seats + ' seats from minute ' + start);\n"
+        }
+      },
+      {
+        "nhan": "labels changed to any",
+        "tep": {
+          "src/line.ts": "// One line of the LabFlow booking screen. Three values, three type labels.\nconst lab: string = 'BE-201';\nconst seats: any = '31';\nconst start: any = '480';\nconsole.log(lab + ' needs ' + seats + ' seats from minute ' + start);\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-9-a",
+    "bai": "typescript-0-9-bat-dau-tai-day-2",
+    "tieuDe": "Fix the stale copy in the seed|||Sửa bản sao cũ trong seed",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>The seed script keeps its own hand-written copy of <code>ContentType</code> — the incident of 8 Aug 2026. Remove the copy, use the real type from <code>src/types.ts</code>, and fix the data. Keep exporting <code>SeedPost</code>.</p><p><strong>Done when:</strong> <code>node src/seed.ts</code> prints <code>seeded 3 posts</code>, and a <code>SeedPost</code> with <code>type: 'CODE'</code> or <code>'Quiz'</code> no longer compiles.</p>|||<p>Script seed giữ bản chép tay riêng của <code>ContentType</code> — đúng sự cố 08/08/2026. Xoá bản sao, dùng kiểu thật từ <code>src/types.ts</code>, và sửa dữ liệu. Vẫn export <code>SeedPost</code>.</p><p><strong>Đạt khi:</strong> <code>node src/seed.ts</code> in <code>seeded 3 posts</code>, và một <code>SeedPost</code> có <code>type: 'CODE'</code> hay <code>'Quiz'</code> không còn biên dịch được.</p>",
+    "khoiDau": {
+      "src/seed.ts": "// TODO: this seed keeps its own copy of the union — the bug of 8 Aug 2026.\nimport { insertPost } from './db.ts';\n\ntype ContentType = 'VLOG' | 'ARTICLE' | 'CODE' | 'QUIZ';\n\nexport type SeedPost = { title: string; type: ContentType };\n\nexport const posts: SeedPost[] = [\n  { title: 'Welcome to LabFlow', type: 'ARTICLE' },\n  { title: 'Review: checkSlot()', type: 'CODE' },\n  { title: 'Week 1 quiz', type: 'QUIZ' },\n];\n\nfor (const p of posts) insertPost(p);\nconsole.log('seeded', posts.length, 'posts');\n"
+    },
+    "coDinh": {
+      "src/types.ts": "// The single source of truth (do not edit): CODE was renamed to CODE_REVIEW.\nexport type ContentType = 'VLOG' | 'ARTICLE' | 'CODE_REVIEW' | 'QUIZ';\n",
+      "src/db.ts": "import type { ContentType } from './types.ts';\n\nconst ALLOWED: readonly ContentType[] = ['VLOG', 'ARTICLE', 'CODE_REVIEW', 'QUIZ'];\n\nexport function insertPost(post: { title: string; type: ContentType }): void {\n  if (!ALLOWED.includes(post.type)) {\n    throw new Error('invalid input value for enum \"ContentType\": \"' + post.type + '\"');\n  }\n  console.log('inserted', post.type, '-', post.title);\n}\n",
+      "kiem/sai.ts": "import type { SeedPost } from '../src/seed.ts';\n\nconst old: SeedPost = { title: 'Old review', type: 'CODE' }; // expect TS2322\nconst typo: SeedPost = { title: 'Typo', type: 'Quiz' }; // expect TS2820\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/types.ts",
+        "src/db.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node src/seed.ts"
+      ],
+      "ra": "seeded 3 posts",
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "type ContentType\\s*="
+      ]
+    },
+    "loiGiai": {
+      "src/seed.ts": "// One definition, imported: a rename in types.ts now reaches this file.\nimport type { ContentType } from './types.ts';\nimport { insertPost } from './db.ts';\n\nexport type SeedPost = { title: string; type: ContentType };\n\nexport const posts: SeedPost[] = [\n  { title: 'Welcome to LabFlow', type: 'ARTICLE' },\n  { title: 'Review: checkSlot()', type: 'CODE_REVIEW' },\n  { title: 'Week 1 quiz', type: 'QUIZ' },\n];\n\nfor (const p of posts) insertPost(p);\nconsole.log('seeded', posts.length, 'posts');\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "copy updated by hand (still a second truth)|||chép tay lại bản mới (vẫn là sự thật thứ hai)",
+        "tep": {
+          "src/seed.ts": "// TODO: this seed keeps its own copy of the union — the bug of 8 Aug 2026.\nimport { insertPost } from './db.ts';\n\ntype ContentType = 'VLOG' | 'ARTICLE' | 'CODE_REVIEW' | 'QUIZ';\n\nexport type SeedPost = { title: string; type: ContentType };\n\nexport const posts: SeedPost[] = [\n  { title: 'Welcome to LabFlow', type: 'ARTICLE' },\n  { title: 'Review: checkSlot()', type: 'CODE_REVIEW' },\n  { title: 'Week 1 quiz', type: 'QUIZ' },\n];\n\nfor (const p of posts) insertPost(p);\nconsole.log('seeded', posts.length, 'posts');\n"
+        }
+      },
+      {
+        "nhan": "type: string + a cast to silence the call|||type: string + ép kiểu cho lời gọi im lặng",
+        "tep": {
+          "src/seed.ts": "// One definition, imported: a rename in types.ts now reaches this file.\nimport { insertPost } from './db.ts';\n\nexport type SeedPost = { title: string; type: string };\n\nexport const posts: SeedPost[] = [\n  { title: 'Welcome to LabFlow', type: 'ARTICLE' },\n  { title: 'Review: checkSlot()', type: 'CODE_REVIEW' },\n  { title: 'Week 1 quiz', type: 'QUIZ' },\n];\n\nfor (const p of posts) insertPost(p as { title: string; type: 'QUIZ' });\nconsole.log('seeded', posts.length, 'posts');\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-9-b",
+    "bai": "typescript-0-9-bat-dau-tai-day-2",
+    "tieuDe": "Handle the lab that does not exist|||Xử lý phòng lab không tồn tại",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "moTa": "<p><code>seatsOf</code> reads <code>.seats</code> from <code>find()</code>, which can return <code>undefined</code>: tsc says <code>TS2532</code>, and Node crashes with <code>Cannot read properties of undefined</code>. Make it compile under strict mode and throw <code>Error('Unknown lab ' + code)</code> for an unknown lab. No <code>!</code>, no <code>any</code>, no casts.</p><p><strong>Done when:</strong> tsc is clean and the three tests in <code>test/labs.test.ts</code> pass.</p>|||<p><code>seatsOf</code> đọc <code>.seats</code> từ <code>find()</code>, mà <code>find()</code> có thể trả <code>undefined</code>: tsc báo <code>TS2532</code>, Node sập với <code>Cannot read properties of undefined</code>. Hãy làm nó biên dịch được ở chế độ strict và ném <code>Error('Unknown lab ' + code)</code> khi phòng không tồn tại. Không <code>!</code>, không <code>any</code>, không ép kiểu.</p><p><strong>Đạt khi:</strong> tsc sạch và ba test trong <code>test/labs.test.ts</code> đều qua.</p>",
+    "khoiDau": {
+      "src/labs.ts": "// LabFlow: how many seats does a lab have?\nexport const LABS = [\n  { code: 'BE-201', seats: 40 },\n  { code: 'BE-202', seats: 30 },\n];\n\nexport function seatsOf(code: string): number {\n  return LABS.find((lab) => lab.code === code).seats;\n}\n"
+    },
+    "coDinh": {
+      "test/labs.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsOf } from '../src/labs.ts';\n\ntest('BE-201 has 40 seats', () => assert.equal(seatsOf('BE-201'), 40));\ntest('BE-202 has 30 seats', () => assert.equal(seatsOf('BE-202'), 30));\ntest('an unknown lab is a clear error, not a crash', () => {\n  assert.throws(() => seatsOf('BE-209'), { message: 'Unknown lab BE-209' });\n});\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/labs.test.ts"
+      ],
+      "chay": [
+        "node --test test/labs.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/labs.ts": "// LabFlow: how many seats does a lab have?\nexport const LABS = [\n  { code: 'BE-201', seats: 40 },\n  { code: 'BE-202', seats: 30 },\n];\n\nexport function seatsOf(code: string): number {\n  const lab = LABS.find((l) => l.code === code);\n  // find() returns undefined when no lab matches: decide what happens, explicitly.\n  if (lab === undefined) throw new Error('Unknown lab ' + code);\n  return lab.seats; // narrowed: lab is defined here\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "non-null assertion ! (compiles, still crashes)|||khẳng định non-null ! (biên dịch được, vẫn sập)",
+        "tep": {
+          "src/labs.ts": "// LabFlow: how many seats does a lab have?\nexport const LABS = [\n  { code: 'BE-201', seats: 40 },\n  { code: 'BE-202', seats: 30 },\n];\n\nexport function seatsOf(code: string): number {\n  return LABS.find((lab) => lab.code === code)!.seats;\n}\n"
+        }
+      },
+      {
+        "nhan": "?. ?? 0 — an unknown lab silently has 0 seats|||?. ?? 0 — phòng lạ âm thầm có 0 chỗ",
+        "tep": {
+          "src/labs.ts": "// LabFlow: how many seats does a lab have?\nexport const LABS = [\n  { code: 'BE-201', seats: 40 },\n  { code: 'BE-202', seats: 30 },\n];\n\nexport function seatsOf(code: string): number {\n  return LABS.find((lab) => lab.code === code)?.seats ?? 0;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-1-a",
+    "bai": "typescript-0-1-gioi-thieu",
+    "tieuDe": "Fix the four bugs in one LabFlow day|||Sửa bốn con bug trong một ngày của LabFlow",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p><code>src/day.ts</code> simulates one working day and hides four bugs: a typo, a misspelled property, a lower-case role and a status that does not exist. Run <code>npx tsc --noEmit</code>, read each error, fix the line it points at. Do not use <code>any</code> or <code>@ts-ignore</code>.</p><p><strong>Done when:</strong> tsc reports 0 errors and <code>node src/day.ts</code> prints a usage of 0.42857142857142855 and 2 confirmed bookings.</p>|||<p><code>src/day.ts</code> mô phỏng một ngày làm việc và giấu bốn con bug: gõ nhầm tên trường, viết sai tên thuộc tính, vai trò viết thường và một trạng thái không tồn tại. Chạy <code>npx tsc --noEmit</code>, đọc từng lỗi, sửa đúng dòng nó chỉ. Không dùng <code>any</code> hay <code>@ts-ignore</code>.</p><p><strong>Đạt khi:</strong> tsc báo 0 lỗi và <code>node src/day.ts</code> in tỉ lệ sử dụng 0.42857142857142855 và 2 lượt đặt đã xác nhận.</p>",
+    "khoiDau": {
+      "src/day.ts": "// One working day at LabFlow. Four bugs are hidden here — tsc finds all of them.\nimport { needsApproval, createBooking, OPEN, CLOSE } from '../lib/booking.ts';\nimport type { Booking, BookingInput } from '../lib/booking.ts';\n\nconst requests: BookingInput[] = [\n  { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-201', seats: 35, role: 'lecturer', start: '13:00', end: '15:00' },\n  { lab: 'BE-305', seats: 40, role: 'STUDENT', start: '15:00', end: '17:00' },\n];\n\nfunction usage(bookings: Booking[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minute / (CLOSE - OPEN);\n  return rate;\n}\n\nconst bookings: Booking[] = [];\nfor (const r of requests) {\n  const wait = r.role === 'STUDENT' && r.seats > 30\n    ? needsApproval({ seat: r.seats, role: r.role })\n    : needsApproval({ seats: r.seats, role: r.role });\n  console.log(r.lab, r.start, r.role, '-> needs approval:', wait);\n  bookings.push(createBooking(r));\n}\n\nconst confirmed = bookings.filter((b) => b.status === 'APPROVED').length;\nconsole.log('usage today:', usage(bookings));\nconsole.log('confirmed bookings:', confirmed);\n"
+    },
+    "coDinh": {
+      "lib/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+      "lib/booking.ts": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+    },
+    "kiem": {
+      "sach": [],
+      "chay": [
+        "node src/day.ts"
+      ],
+      "ra": "BE-201 08:00 STUDENT -> needs approval: false\nBE-201 13:00 LECTURER -> needs approval: false\nBE-305 15:00 STUDENT -> needs approval: true\nusage today: 0.42857142857142855\nconfirmed bookings: 2"
+    },
+    "loiGiai": {
+      "src/day.ts": "// One working day at LabFlow — all four bugs fixed, each one pointed out by tsc.\nimport { needsApproval, createBooking, OPEN, CLOSE } from '../lib/booking.ts';\nimport type { Booking, BookingInput } from '../lib/booking.ts';\n\nconst requests: BookingInput[] = [\n  { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-201', seats: 35, role: 'LECTURER', start: '13:00', end: '15:00' },\n  { lab: 'BE-305', seats: 40, role: 'STUDENT', start: '15:00', end: '17:00' },\n];\n\n// TS2551: the field is minutes · TS2561: seats · TS2820: roles are upper-case · TS2367: only PENDING | CONFIRMED\nfunction usage(bookings: Booking[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n\nconst bookings: Booking[] = [];\nfor (const r of requests) {\n  const wait = r.role === 'STUDENT' && r.seats > 30\n    ? needsApproval({ seats: r.seats, role: r.role })\n    : needsApproval({ seats: r.seats, role: r.role });\n  console.log(r.lab, r.start, r.role, '-> needs approval:', wait);\n  bookings.push(createBooking(r));\n}\n\nconst confirmed = bookings.filter((b) => b.status === 'CONFIRMED').length;\nconsole.log('usage today:', usage(bookings));\nconsole.log('confirmed bookings:', confirmed);\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "silence every red line with as any",
+        "tep": {
+          "src/day.ts": "// One working day at LabFlow. Four bugs are hidden here — tsc finds all of them.\nimport { needsApproval, createBooking, OPEN, CLOSE } from '../lib/booking.ts';\nimport type { Booking, BookingInput } from '../lib/booking.ts';\n\nconst requests: BookingInput[] = [\n  { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-201', seats: 35, role: 'lecturer' as any, start: '13:00', end: '15:00' },\n  { lab: 'BE-305', seats: 40, role: 'STUDENT', start: '15:00', end: '17:00' },\n];\n\nfunction usage(bookings: Booking[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += (b as any).minute / (CLOSE - OPEN);\n  return rate;\n}\n\nconst bookings: Booking[] = [];\nfor (const r of requests) {\n  const wait = r.role === 'STUDENT' && r.seats > 30\n    ? needsApproval({ seat: r.seats, role: r.role } as any)\n    : needsApproval({ seats: r.seats, role: r.role });\n  console.log(r.lab, r.start, r.role, '-> needs approval:', wait);\n  bookings.push(createBooking(r));\n}\n\nconst confirmed = bookings.filter((b) => (b.status as any) === 'APPROVED').length;\nconsole.log('usage today:', usage(bookings));\nconsole.log('confirmed bookings:', confirmed);\n"
+        }
+      },
+      {
+        "nhan": "compiles, but 'fixes' the lecturer into a STUDENT and counts PENDING",
+        "tep": {
+          "src/day.ts": "// One working day at LabFlow. Four bugs are hidden here — tsc finds all of them.\nimport { needsApproval, createBooking, OPEN, CLOSE } from '../lib/booking.ts';\nimport type { Booking, BookingInput } from '../lib/booking.ts';\n\nconst requests: BookingInput[] = [\n  { lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-201', seats: 35, role: 'STUDENT', start: '13:00', end: '15:00' },\n  { lab: 'BE-305', seats: 40, role: 'STUDENT', start: '15:00', end: '17:00' },\n];\n\nfunction usage(bookings: Booking[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n\nconst bookings: Booking[] = [];\nfor (const r of requests) {\n  const wait = r.role === 'STUDENT' && r.seats > 30\n    ? needsApproval({ seats: r.seats, role: r.role })\n    : needsApproval({ seats: r.seats, role: r.role });\n  console.log(r.lab, r.start, r.role, '-> needs approval:', wait);\n  bookings.push(createBooking(r));\n}\n\nconst confirmed = bookings.filter((b) => b.status === 'PENDING').length;\nconsole.log('usage today:', usage(bookings));\nconsole.log('confirmed bookings:', confirmed);\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-1-b",
+    "bai": "typescript-0-1-gioi-thieu",
+    "tieuDe": "Finish a rename the compiler started|||Hoàn tất một lần đổi tên mà trình biên dịch đã chỉ chỗ",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>The rules in <code>lib/booking.ts</code> renamed the field <code>seats</code> to <code>seatCount</code>. In plain JavaScript the old calls would load fine and throw <code>RangeError … got undefined</code> only when they run. Here tsc lists every one. Update <code>src/calls.ts</code> so it compiles and the three behaviour tests pass. No <code>any</code>, no <code>@ts-ignore</code>.</p><p><strong>Done when:</strong> tsc reports 0 errors and <code>node --test test/calls.test.ts</code> shows 3 passing tests.</p>|||<p>Bộ luật trong <code>lib/booking.ts</code> đã đổi tên trường <code>seats</code> thành <code>seatCount</code>. Với JavaScript thuần, các lời gọi cũ vẫn nạp bình thường và chỉ ném <code>RangeError … got undefined</code> khi chạy tới. Ở đây tsc liệt kê từng chỗ. Sửa <code>src/calls.ts</code> cho biên dịch được và ba test hành vi qua. Không <code>any</code>, không <code>@ts-ignore</code>.</p><p><strong>Đạt khi:</strong> tsc báo 0 lỗi và <code>node --test test/calls.test.ts</code> hiện 3 test qua.</p>",
+    "khoiDau": {
+      "src/calls.ts": "// Finish the refactor: lib/booking.ts renamed seats -> seatCount. tsc lists every call below that still says seats.\nimport { needsApproval, createBooking } from '../lib/booking.ts';\n\nexport function bigClassWaits(): boolean {\n  return needsApproval({ seats: 40, role: 'STUDENT' });\n}\n\nexport function lecturerWaits(): boolean {\n  return needsApproval({ seats: 40, role: 'LECTURER' });\n}\n\nexport function morningBooking() {\n  return createBooking({ lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' });\n}\n"
+    },
+    "coDinh": {
+      "lib/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+      "lib/booking.ts": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seatCount: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seatCount, role }: { seatCount: number; role: Role }): boolean {\n  if (!Number.isInteger(seatCount) || seatCount < 1) {\n    throw new RangeError('seatCount must be a positive integer, got ' + seatCount);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seatCount > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seatCount, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seatCount, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n",
+      "test/calls.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { bigClassWaits, lecturerWaits, morningBooking } from '../src/calls.ts';\n\ntest('a 40-seat student class waits for approval', () => assert.equal(bigClassWaits(), true));\ntest('a lecturer never waits', () => assert.equal(lecturerWaits(), false));\ntest('a 20-seat morning booking is CONFIRMED', () => assert.equal(morningBooking().status, 'CONFIRMED'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/calls.test.ts"
+      ],
+      "chay": [
+        "node --test test/calls.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/calls.ts": "// Refactor finished: every call now uses seatCount — tsc listed each one, we fixed each one.\nimport { needsApproval, createBooking } from '../lib/booking.ts';\n\nexport function bigClassWaits(): boolean {\n  return needsApproval({ seatCount: 40, role: 'STUDENT' });\n}\n\nexport function lecturerWaits(): boolean {\n  return needsApproval({ seatCount: 40, role: 'LECTURER' });\n}\n\nexport function morningBooking() {\n  return createBooking({ lab: 'BE-201', seatCount: 20, role: 'STUDENT', start: '08:00', end: '10:00' });\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "// @ts-ignore above each red call",
+        "tep": {
+          "src/calls.ts": "// Finish the refactor: lib/booking.ts renamed seats -> seatCount. tsc lists every call below that still says seats.\nimport { needsApproval, createBooking } from '../lib/booking.ts';\n\nexport function bigClassWaits(): boolean {\n  // @ts-ignore\n  return needsApproval({ seats: 40, role: 'STUDENT' });\n}\n\nexport function lecturerWaits(): boolean {\n  // @ts-ignore\n  return needsApproval({ seats: 40, role: 'LECTURER' });\n}\n\nexport function morningBooking() {\n  // @ts-ignore\n  return createBooking({ lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' });\n}\n"
+        }
+      },
+      {
+        "nhan": "renames only the first call",
+        "tep": {
+          "src/calls.ts": "// Finish the refactor: lib/booking.ts renamed seats -> seatCount. tsc lists every call below that still says seats.\nimport { needsApproval, createBooking } from '../lib/booking.ts';\n\nexport function bigClassWaits(): boolean {\n  return needsApproval({ seatCount: 40, role: 'STUDENT' });\n}\n\nexport function lecturerWaits(): boolean {\n  return needsApproval({ seats: 40, role: 'LECTURER' });\n}\n\nexport function morningBooking() {\n  return createBooking({ lab: 'BE-201', seats: 20, role: 'STUDENT', start: '08:00', end: '10:00' });\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-2-a",
+    "bai": "typescript-0-2-cach-hoc",
+    "tieuDe": "Read two errors, fix two lines|||Đọc hai lỗi, sửa hai dòng",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>Run <code>npx tsc</code> on <code>src/opening.ts</code>. Read each line <code>file(line,col): error TSxxxx: …</code> and fix the code it points at — do not silence it. <code>lib/time.ts</code> is given and must not change.</p><p><strong>Done when:</strong> tsc reports 0 errors and <code>node src/opening.ts</code> prints <code>Opens at 07:30 (450 minutes)</code>.</p>|||<p>Chạy <code>npx tsc</code> trên <code>src/opening.ts</code>. Đọc từng dòng <code>tệp(dòng,cột): error TSxxxx: …</code> rồi sửa đúng chỗ nó chỉ — không bịt lỗi. <code>lib/time.ts</code> cho sẵn, không được sửa.</p><p><strong>Đạt khi:</strong> tsc báo 0 lỗi và <code>node src/opening.ts</code> in <code>Opens at 07:30 (450 minutes)</code>.</p>",
+    "khoiDau": {
+      "src/opening.ts": "import { parseTime, formatTime } from '../lib/time.ts';\n\nconst openMinutes = parseTime('07:30');\nconst label = formatTime('07:30');\nconsole.log('Opens at ' + label + ' (' + openMinutes.toFixd(0) + ' minutes)');\n"
+    },
+    "coDinh": {
+      "lib/time.ts": "// Grader-owned helper (same as LabFlow src/rules/time.ts).\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "lib/time.ts"
+      ],
+      "chay": [
+        "node src/opening.ts"
+      ],
+      "ra": "Opens at 07:30 (450 minutes)"
+    },
+    "loiGiai": {
+      "src/opening.ts": "import { parseTime, formatTime } from '../lib/time.ts';\n\nconst openMinutes = parseTime('07:30');\n// TS2345: formatTime takes minutes (a number), so pass the number we already have.\nconst label = formatTime(openMinutes);\n// TS2551: \"Did you mean 'toFixed'?\" — the compiler already wrote the fix for us.\nconsole.log('Opens at ' + label + ' (' + openMinutes.toFixed(0) + ' minutes)');\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "silence with any",
+        "tep": {
+          "src/opening.ts": "import { parseTime, formatTime } from '../lib/time.ts';\n\nconst openMinutes: any = parseTime('07:30');\nconst label = formatTime('07:30' as any);\nconsole.log('Opens at ' + label + ' (' + openMinutes.toFixed(0) + ' minutes)');\n"
+        }
+      },
+      {
+        "nhan": "compiles but converts the wrong value",
+        "tep": {
+          "src/opening.ts": "import { parseTime, formatTime } from '../lib/time.ts';\n\nconst openMinutes = parseTime('07:30');\nconst label = formatTime(Number('07:30'));\nconsole.log('Opens at ' + label + ' (' + openMinutes.toFixed(0) + ' minutes)');\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-2-b",
+    "bai": "typescript-0-2-cach-hoc",
+    "tieuDe": "Make tsc refuse the wrong calls|||Làm cho tsc từ chối các lời gọi sai",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "moTa": "<p>Add types to <code>seatsLeft</code> in <code>src/seats.ts</code>. The grader file <code>kiem/sai.ts</code> marks each wrong call with <code>// expect TSxxxx</code>: your types must make tsc report exactly that code on that line. <code>kiem/dung.ts</code> holds correct calls that must keep compiling. No <code>any</code>, no <code>@ts-…</code> comments.</p><p><strong>Done when:</strong> every marked line fails with its code, <code>kiem/dung.ts</code> compiles, and the test passes.</p>|||<p>Thêm kiểu cho <code>seatsLeft</code> trong <code>src/seats.ts</code>. Tệp chấm <code>kiem/sai.ts</code> đánh dấu mỗi lời gọi sai bằng <code>// expect TSxxxx</code>: kiểu của bạn phải làm tsc báo đúng mã đó ở đúng dòng đó. <code>kiem/dung.ts</code> chứa lời gọi đúng phải tiếp tục biên dịch được. Không <code>any</code>, không chú thích <code>@ts-…</code>.</p><p><strong>Đạt khi:</strong> mọi dòng đánh dấu báo đúng mã, <code>kiem/dung.ts</code> biên dịch được và test qua.</p>",
+    "khoiDau": {
+      "src/seats.ts": "// Seats still free in a lab after some are booked (never below 0).\nexport function seatsLeft(capacity, booked) {\n  return Math.max(0, capacity - booked);\n}\n"
+    },
+    "coDinh": {
+      "kiem/sai.ts": "import { seatsLeft } from '../src/seats.ts';\n\nseatsLeft('40', 12); // expect TS2345\nseatsLeft(40); // expect TS2554\nconst label: string = seatsLeft(40, 12); // expect TS2322\nconsole.log(label);\n",
+      "kiem/dung.ts": "import { seatsLeft } from '../src/seats.ts';\n\nconst free: number = seatsLeft(40, 12);\nconsole.log(free, seatsLeft(30, 45));\n",
+      "test/seats.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seatsLeft } from '../src/seats.ts';\n\ntest('40 seats, 12 booked: 28 left', () => assert.equal(seatsLeft(40, 12), 28));\ntest('never below zero', () => assert.equal(seatsLeft(30, 45), 0));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/seats.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/seats.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/seats.ts": "// Seats still free in a lab after some are booked (never below 0).\n// Typing both parameters gives TS2345 (wrong type) and TS2554 (missing argument);\n// the return type number gives TS2322 when someone stores it in a string.\nexport function seatsLeft(capacity: number, booked: number): number {\n  return Math.max(0, capacity - booked);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "parameters typed any",
+        "tep": {
+          "src/seats.ts": "export function seatsLeft(capacity: any, booked: any): number {\n  return Math.max(0, capacity - booked);\n}\n"
+        }
+      },
+      {
+        "nhan": "booked made optional",
+        "tep": {
+          "src/seats.ts": "export function seatsLeft(capacity: number, booked: number = 0): number {\n  return Math.max(0, capacity - booked);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-2-c",
+    "bai": "typescript-0-2-cach-hoc",
+    "tieuDe": "Produce two exact error codes|||Tạo ra đúng hai mã lỗi",
+    "doKho": "HARD",
+    "phut": 15,
+    "moTa": "<p>Reverse exercise: knowing a code means you can cause it on purpose. Edit <code>src/codes.ts</code> so that tsc reports <strong>exactly</strong> these two codes and nothing else: <code>TS2551</code> (a property that does not exist, with a \"Did you mean…?\" suggestion) and <code>TS18048</code> (a value that is possibly <code>undefined</code>). No <code>any</code>, no <code>@ts-…</code> comments.</p><p><strong>Done when:</strong> the set of codes tsc prints is exactly {TS18048, TS2551}.</p>|||<p>Bài làm ngược: hiểu một mã lỗi nghĩa là cố ý gây ra được nó. Sửa <code>src/codes.ts</code> để tsc báo <strong>đúng</strong> hai mã này và không gì khác: <code>TS2551</code> (thuộc tính không tồn tại, kèm gợi ý \"Did you mean…?\") và <code>TS18048</code> (giá trị có thể là <code>undefined</code>). Không <code>any</code>, không chú thích <code>@ts-…</code>.</p><p><strong>Đạt khi:</strong> tập mã lỗi tsc in ra đúng bằng {TS18048, TS2551}.</p>",
+    "khoiDau": {
+      "src/codes.ts": "type Booking = { lab: string; minutes: number };\n\nconst bookings: Booking[] = [{ lab: 'BE-201', minutes: 120 }];\nconsole.log(bookings.length);\n"
+    },
+    "coDinh": {},
+    "kiem": {
+      "loiTsc": [
+        "TS2551",
+        "TS18048"
+      ]
+    },
+    "loiGiai": {
+      "src/codes.ts": "type Booking = { lab: string; minutes: number };\n\nconst bookings: Booking[] = [{ lab: 'BE-201', minutes: 120 }];\n// TS18048: with noUncheckedIndexedAccess, bookings[0] is Booking | undefined.\nconst first = bookings[0];\nconsole.log(first.lab);\n// TS2551: \"minute\" is one letter away from \"minutes\", so tsc suggests it.\nconst b: Booking = { lab: 'BE-202', minutes: 60 };\nconsole.log(b.minute);\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "TS2339 instead of TS2551 (no near name)",
+        "tep": {
+          "src/codes.ts": "type Booking = { lab: string; minutes: number };\n\nconst bookings: Booking[] = [{ lab: 'BE-201', minutes: 120 }];\nconst first = bookings[0];\nconsole.log(first.lab);\nconst b: Booking = { lab: 'BE-202', minutes: 60 };\nconsole.log(b.room);\n"
+        }
+      },
+      {
+        "nhan": "only one of the two codes",
+        "tep": {
+          "src/codes.ts": "type Booking = { lab: string; minutes: number };\n\nconst b: Booking = { lab: 'BE-202', minutes: 60 };\nconsole.log(b.minute);\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-3-a",
+    "bai": "typescript-0-3-cai-dat",
+    "tieuDe": "Green check AND green run|||Kiểm xanh VÀ chạy xanh",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>src/main.ts</code> has two setup mistakes from lesson 0.3: one only <code>npx tsc</code> sees, one only <code>node</code> sees. Fix both without <code>any</code>.</p><p><strong>Done when:</strong> <code>npx tsc</code> exits 0 and <code>node src/main.ts</code> prints <code>LabFlow closes at 21:00</code>.</p>|||<p><code>src/main.ts</code> có hai lỗi cài đặt của bài 0.3: một lỗi chỉ <code>npx tsc</code> thấy, một lỗi chỉ <code>node</code> thấy. Sửa cả hai, không dùng <code>any</code>.</p><p><strong>Đạt khi:</strong> <code>npx tsc</code> thoát 0 và <code>node src/main.ts</code> in <code>LabFlow closes at 21:00</code>.</p>",
+    "khoiDau": {
+      "src/main.ts": "// src/main.ts — prints the closing time of the lab.\nimport { formatTime } from './hello.js';\n\nconsole.log('LabFlow closes at ' + formatTime('21:00'));\n"
+    },
+    "coDinh": {
+      "src/hello.ts": "// src/hello.ts — given, do not change.\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/hello.ts"
+      ],
+      "chay": [
+        "node src/main.ts"
+      ],
+      "ra": "LabFlow closes at 21:00"
+    },
+    "loiGiai": {
+      "src/main.ts": "// src/main.ts — prints the closing time of the lab.\n// Node runs .ts files directly, so import the file that really exists: hello.ts.\nimport { formatTime } from './hello.ts';\n\n// formatTime takes minutes since 00:00, not an \"HH:MM\" string: 21:00 is 21 * 60.\nconsole.log('LabFlow closes at ' + formatTime(21 * 60));\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "fixed the type error only — still imports ./hello.js (tsc green, node ERR_MODULE_NOT_FOUND)",
+        "tep": {
+          "src/main.ts": "import { formatTime } from './hello.js';\n\nconsole.log('LabFlow closes at ' + formatTime(21 * 60));\n"
+        }
+      },
+      {
+        "nhan": "fixed the import only — Number('21:00') compiles but prints NaN:NaN",
+        "tep": {
+          "src/main.ts": "import { formatTime } from './hello.ts';\n\nconsole.log('LabFlow closes at ' + formatTime(Number('21:00')));\n"
+        }
+      },
+      {
+        "nhan": "silenced tsc with any",
+        "tep": {
+          "src/main.ts": "import { formatTime } from './hello.ts';\n\nconst t: any = '21:00';\nconsole.log('LabFlow closes at ' + formatTime(t));\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-3-b",
+    "bai": "typescript-0-3-cai-dat",
+    "tieuDe": "Replace the enum so Node can run it|||Thay enum để Node chạy được",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "moTa": "<p><code>src/role.ts</code> uses an <code>enum</code>. The course tsconfig has <code>erasableSyntaxOnly</code>, and Node 22 refuses enums (<code>ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX</code>). Rewrite <code>Role</code> so that the tests (which pass plain strings such as <code>'STUDENT'</code>) compile and run, and a misspelt role like <code>'lecturer'</code> is still refused by tsc.</p><p><strong>Done when:</strong> tsc is clean, <code>node --test test/role.test.ts</code> passes, and each line in <code>kiem/sai.ts</code> is refused with the code written after it.</p>|||<p><code>src/role.ts</code> dùng <code>enum</code>. tsconfig của khoá bật <code>erasableSyntaxOnly</code>, và Node 22 từ chối enum (<code>ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX</code>). Viết lại <code>Role</code> để test (truyền chuỗi thường như <code>'STUDENT'</code>) biên dịch và chạy được, mà vai trò viết sai như <code>'lecturer'</code> vẫn bị tsc từ chối.</p><p><strong>Đạt khi:</strong> tsc sạch, <code>node --test test/role.test.ts</code> qua, và mỗi dòng trong <code>kiem/sai.ts</code> bị từ chối đúng mã ghi sau nó.</p>",
+    "khoiDau": {
+      "src/role.ts": "// src/role.ts — LabFlow roles and the approval rule (BR-06: students need approval above 30 seats).\nexport enum Role {\n  STUDENT = 'STUDENT',\n  LECTURER = 'LECTURER',\n  ADMIN = 'ADMIN',\n}\n\nexport function needsApproval(seats: number, role: Role): boolean {\n  if (role === Role.LECTURER || role === Role.ADMIN) return false;\n  return seats > 30;\n}\n"
+    },
+    "coDinh": {
+      "test/role.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { needsApproval } from '../src/role.ts';\n\ntest('31 student seats need approval', () => assert.equal(needsApproval(31, 'STUDENT'), true));\ntest('30 student seats do not', () => assert.equal(needsApproval(30, 'STUDENT'), false));\ntest('lecturers never wait', () => assert.equal(needsApproval(200, 'LECTURER'), false));\n",
+      "kiem/sai.ts": "import { needsApproval } from '../src/role.ts';\n\nneedsApproval(31, 'lecturer'); // expect TS2345\nneedsApproval(31, 'GUEST'); // expect TS2345\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/role.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/role.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/role.ts": "// src/role.ts — LabFlow roles and the approval rule (BR-06: students need approval above 30 seats).\n// A union of string literals instead of an enum: it is erased completely, so Node's type stripping can run\n// this file, and erasableSyntaxOnly (TS1294) has nothing to complain about.\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\nexport function needsApproval(seats: number, role: Role): boolean {\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > 30;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "role: string — compiles and runs, but 'lecturer' and 'GUEST' are accepted",
+        "tep": {
+          "src/role.ts": "export function needsApproval(seats: number, role: string): boolean {\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > 30;\n}\n"
+        }
+      },
+      {
+        "nhan": "kept the enum, added string overload via any",
+        "tep": {
+          "src/role.ts": "export enum Role {\n  STUDENT = 'STUDENT',\n  LECTURER = 'LECTURER',\n  ADMIN = 'ADMIN',\n}\n\nexport function needsApproval(seats: number, role: any): boolean {\n  if (role === Role.LECTURER || role === Role.ADMIN) return false;\n  return seats > 30;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-4-a",
+    "bai": "typescript-0-4-mo-hinh",
+    "tieuDe": "Replace an enum so Node can run the file|||Thay enum để Node chạy được tệp",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>src/status.ts</code> uses an <code>enum</code>. Node 22 strips types but cannot run enums (<code>ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX</code>), and the course tsconfig turns on <code>erasableSyntaxOnly</code> (TS1294). Rewrite <code>Status</code> as a union of string literals so <code>statusLabel('PENDING')</code> works and <code>statusLabel('APPROVED')</code> is refused.</p><p><b>Done when:</b> tsc is clean, <code>node --test test/status.test.ts</code> passes, and the wrong call in <code>kiem/sai.ts</code> is refused with TS2345.</p>|||<p><code>src/status.ts</code> dùng <code>enum</code>. Node 22 bỏ kiểu nhưng không chạy được enum (<code>ERR_UNSUPPORTED_TYPESCRIPT_SYNTAX</code>), và tsconfig của khoá bật <code>erasableSyntaxOnly</code> (TS1294). Viết lại <code>Status</code> thành union các chuỗi literal để <code>statusLabel('PENDING')</code> chạy được còn <code>statusLabel('APPROVED')</code> bị từ chối.</p><p><b>Đạt khi:</b> tsc sạch, <code>node --test test/status.test.ts</code> qua, và lời gọi sai trong <code>kiem/sai.ts</code> bị từ chối với TS2345.</p>",
+    "khoiDau": {
+      "src/status.ts": "export enum Status {\n  Pending = 'PENDING',\n  Confirmed = 'CONFIRMED',\n}\n\nexport function statusLabel(s: Status): string {\n  return s === Status.Pending ? 'waiting for approval' : 'confirmed';\n}\n"
+    },
+    "coDinh": {
+      "test/status.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { statusLabel } from '../src/status.ts';\n\ntest('PENDING waits for approval', () => assert.equal(statusLabel('PENDING'), 'waiting for approval'));\ntest('CONFIRMED is confirmed', () => assert.equal(statusLabel('CONFIRMED'), 'confirmed'));\n",
+      "kiem/sai.ts": "import { statusLabel } from '../src/status.ts';\n\nstatusLabel('APPROVED'); // expect TS2345\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/status.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/status.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/status.ts": "// A union of string literals is pure type information: Node can erase it, tsc can still check it.\nexport type Status = 'PENDING' | 'CONFIRMED';\n\nexport function statusLabel(s: Status): string {\n  return s === 'PENDING' ? 'waiting for approval' : 'confirmed';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "type Status = string (runs, but 'APPROVED' is accepted)",
+        "tep": {
+          "src/status.ts": "export type Status = string;\n\nexport function statusLabel(s: Status): string {\n  return s === 'PENDING' ? 'waiting for approval' : 'confirmed';\n}\n"
+        }
+      },
+      {
+        "nhan": "keeps the enum, adds @ts-ignore",
+        "tep": {
+          "src/status.ts": "// @ts-ignore\nexport enum Status {\n  Pending = 'PENDING',\n  Confirmed = 'CONFIRMED',\n}\n\nexport function statusLabel(s: Status): string {\n  return s === Status.Pending ? 'waiting for approval' : 'confirmed';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-4-b",
+    "bai": "typescript-0-4-mo-hinh",
+    "tieuDe": "A type is not a value: write a runtime check|||Kiểu không phải giá trị: viết phép kiểm lúc chạy",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "moTa": "<p><code>isBooking</code> uses <code>x instanceof Booking</code>, but <code>Booking</code> is a type — it is erased before the code runs (TS2693, and <code>ReferenceError</code> at runtime). Rewrite <code>isBooking(x: unknown): x is Booking</code> with real JavaScript checks: an object, not null, <code>lab</code> is a string, <code>seats</code> is a number.</p><p><b>Done when:</b> tsc is clean and the 4 tests pass. No <code>any</code>.</p>|||<p><code>isBooking</code> dùng <code>x instanceof Booking</code>, nhưng <code>Booking</code> là một kiểu — nó bị xoá trước khi code chạy (TS2693, và <code>ReferenceError</code> lúc chạy). Viết lại <code>isBooking(x: unknown): x is Booking</code> bằng phép kiểm JavaScript thật: là object, khác null, <code>lab</code> là chuỗi, <code>seats</code> là số.</p><p><b>Đạt khi:</b> tsc sạch và 4 test qua. Không dùng <code>any</code>.</p>",
+    "khoiDau": {
+      "src/guard.ts": "export type Booking = { lab: string; seats: number };\n\nexport function isBooking(x: unknown): x is Booking {\n  return x instanceof Booking;\n}\n"
+    },
+    "coDinh": {
+      "test/guard.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { isBooking } from '../src/guard.ts';\n\ntest('a real booking passes', () => assert.equal(isBooking({ lab: 'BE-201', seats: 12 }), true));\ntest('seats as a string fails', () => assert.equal(isBooking({ lab: 'BE-201', seats: '12' }), false));\ntest('null fails', () => assert.equal(isBooking(null), false));\ntest('a string fails', () => assert.equal(isBooking('BE-201'), false));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/guard.test.ts"
+      ],
+      "chay": [
+        "node --test test/guard.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/guard.ts": "export type Booking = { lab: string; seats: number };\n\n// Types are gone at runtime, so the check must use values: typeof, null, property reads.\nexport function isBooking(x: unknown): x is Booking {\n  if (typeof x !== 'object' || x === null) return false;\n  const o = x as { lab?: unknown; seats?: unknown };\n  return typeof o.lab === 'string' && typeof o.seats === 'number';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "return true (compiles, lies)",
+        "tep": {
+          "src/guard.ts": "export type Booking = { lab: string; seats: number };\n\nexport function isBooking(x: unknown): x is Booking {\n  return x !== null;\n}\n"
+        }
+      },
+      {
+        "nhan": "checks only that it is an object",
+        "tep": {
+          "src/guard.ts": "export type Booking = { lab: string; seats: number };\n\nexport function isBooking(x: unknown): x is Booking {\n  return typeof x === 'object' && x !== null && 'lab' in x;\n}\n"
+        }
+      },
+      {
+        "nhan": "silences tsc with any",
+        "tep": {
+          "src/guard.ts": "export type Booking = { lab: string; seats: number };\n\nexport function isBooking(x: any): x is Booking {\n  return typeof x === 'object' && x !== null && typeof x.lab === 'string' && typeof x.seats === 'number';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-0-4-c",
+    "bai": "typescript-0-4-mo-hinh",
+    "tieuDe": "Do not trust JSON.parse|||Đừng tin JSON.parse",
+    "doKho": "HARD",
+    "phut": 20,
+    "moTa": "<p><code>parseBookingInput(body)</code> returns <code>JSON.parse(body) as BookingInput</code>. It compiles, but <code>as</code> is a promise, not a check: a body with <code>\"seats\":\"31\"</code> or <code>\"role\":\"student\"</code> slips through and crashes later. Make it return a <code>BookingInput</code> only when every field really has the right type and value (role one of STUDENT / LECTURER / ADMIN, seats a positive integer), and <code>null</code> otherwise. Read the parsed value as <code>unknown</code>; <code>as BookingInput</code> is not allowed.</p><p><b>Done when:</b> tsc is clean and the 5 tests pass.</p>|||<p><code>parseBookingInput(body)</code> trả về <code>JSON.parse(body) as BookingInput</code>. Nó biên dịch được, nhưng <code>as</code> là một lời hứa, không phải phép kiểm: thân request có <code>\"seats\":\"31\"</code> hay <code>\"role\":\"student\"</code> lọt qua rồi sập ở chỗ khác. Hãy làm cho hàm chỉ trả <code>BookingInput</code> khi mọi trường đúng kiểu và đúng giá trị (role là STUDENT / LECTURER / ADMIN, seats là số nguyên dương), ngược lại trả <code>null</code>. Đọc giá trị parse ra như <code>unknown</code>; cấm <code>as BookingInput</code>.</p><p><b>Đạt khi:</b> tsc sạch và 5 test qua.</p>",
+    "khoiDau": {
+      "src/parse.ts": "import type { BookingInput } from './types.ts';\n\nexport function parseBookingInput(body: string): BookingInput | null {\n  return JSON.parse(body) as BookingInput;\n}\n"
+    },
+    "coDinh": {
+      "src/types.ts": "export type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\n",
+      "test/parse.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseBookingInput } from '../src/parse.ts';\n\nconst ok = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\n\ntest('a valid body is returned', () => assert.deepEqual(parseBookingInput(JSON.stringify(ok)), ok));\ntest('seats as a string is refused', () => assert.equal(parseBookingInput(JSON.stringify({ ...ok, seats: '31' })), null));\ntest('a lower-case role is refused', () => assert.equal(parseBookingInput(JSON.stringify({ ...ok, role: 'student' })), null));\ntest('2.5 seats is refused', () => assert.equal(parseBookingInput(JSON.stringify({ ...ok, seats: 2.5 })), null));\ntest('a JSON array is refused', () => assert.equal(parseBookingInput('[1,2]'), null));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/parse.test.ts"
+      ],
+      "chay": [
+        "node --test test/parse.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "as BookingInput"
+      ]
+    },
+    "loiGiai": {
+      "src/parse.ts": "import type { BookingInput, Role } from './types.ts';\n\nconst ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\nconst isRole = (r: unknown): r is Role => typeof r === 'string' && ROLES.includes(r);\n\n// JSON.parse gives no guarantee at runtime, so treat its result as unknown and check every field.\nexport function parseBookingInput(body: string): BookingInput | null {\n  const raw: unknown = JSON.parse(body);\n  if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return null;\n  const o = raw as Record<string, unknown>;\n  const { lab, seats, role, start, end } = o;\n  if (typeof lab !== 'string' || typeof start !== 'string' || typeof end !== 'string') return null;\n  if (typeof seats !== 'number' || !Number.isInteger(seats) || seats < 1) return null;\n  if (!isRole(role)) return null;\n  return { lab, seats, role, start, end };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "keeps the as BookingInput lie",
+        "tep": {
+          "src/parse.ts": "import type { BookingInput } from './types.ts';\n\nexport function parseBookingInput(body: string): BookingInput | null {\n  const raw = JSON.parse(body);\n  return raw.lab ? (raw as BookingInput) : null;\n}\n"
+        }
+      },
+      {
+        "nhan": "checks typeof only, not the role values or integer seats",
+        "tep": {
+          "src/parse.ts": "import type { BookingInput, Role } from './types.ts';\n\nexport function parseBookingInput(body: string): BookingInput | null {\n  const raw: unknown = JSON.parse(body);\n  if (typeof raw !== 'object' || raw === null) return null;\n  const o = raw as Record<string, unknown>;\n  if (typeof o.lab !== 'string' || typeof o.seats !== 'number' || typeof o.role !== 'string') return null;\n  if (typeof o.start !== 'string' || typeof o.end !== 'string') return null;\n  return { lab: o.lab, seats: o.seats, role: o.role as Role, start: o.start, end: o.end };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-1-a",
+    "bai": "typescript-1-1-ba-con-bug",
+    "tieuDe": "Make the NaN typo impossible|||Làm lỗi gõ sai ra NaN không thể xảy ra",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p><code>usageRate</code> prints <code>NaN</code> because of a typo, and <code>any</code> hides it. Replace <code>any</code> with a real parameter type (each booking has <code>minutes: number</code>), let tsc point at the typo, fix it.</p><p><b>Done when:</b> tsc is clean, the tests pass, and a list with <code>minute</code> or a plain number is refused.</p>|||<p><code>usageRate</code> in ra <code>NaN</code> vì một lỗi gõ, và <code>any</code> che mất nó. Thay <code>any</code> bằng kiểu tham số thật (mỗi lượt đặt có <code>minutes: number</code>), để tsc chỉ vào lỗi gõ, rồi sửa.</p><p><b>Đạt khi:</b> tsc sạch, test qua, và danh sách có <code>minute</code> hoặc một con số trần bị từ chối.</p>",
+    "khoiDau": {
+      "src/usage.ts": "// LabFlow: share of opening hours already booked (0..1).\nconst OPEN = 7 * 60;\nconst CLOSE = 21 * 60;\n\nexport function usageRate(bookings: any): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minute / (CLOSE - OPEN);\n  return rate;\n}\n"
+    },
+    "coDinh": {
+      "test/usage.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { usageRate } from '../src/usage.ts';\n\ntest('420 + 420 minutes fill one day', () => assert.equal(usageRate([{ minutes: 420 }, { minutes: 420 }]), 1));\ntest('no bookings is 0', () => assert.equal(usageRate([]), 0));\n",
+      "kiem/sai.ts": "import { usageRate } from '../src/usage.ts';\n\nusageRate([{ minute: 60 }]); // expect TS2561\nusageRate(120); // expect TS2345\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/usage.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/usage.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/usage.ts": "// LabFlow: share of opening hours already booked (0..1).\nconst OPEN = 7 * 60;\nconst CLOSE = 21 * 60;\n\n// The parameter type says what a booking must have. With it, tsc refuses the old typo \"b.minute\" (TS2551).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "typed parameter but the typo is still there|||có kiểu nhưng vẫn để lỗi gõ",
+        "tep": {
+          "src/usage.ts": "// LabFlow: share of opening hours already booked (0..1).\nconst OPEN = 7 * 60;\nconst CLOSE = 21 * 60;\n\n// The parameter type says what a booking must have. With it, tsc refuses the old typo \"b.minute\" (TS2551).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minute / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      },
+      {
+        "nhan": "any[] instead of a real type|||any[] thay cho kiểu thật",
+        "tep": {
+          "src/usage.ts": "// LabFlow: share of opening hours already booked (0..1).\nconst OPEN = 7 * 60;\nconst CLOSE = 21 * 60;\n\n// The parameter type says what a booking must have. With it, tsc refuses the old typo \"b.minute\" (TS2551).\nexport function usageRate(bookings: any[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-1-b",
+    "bai": "typescript-1-1-ba-con-bug",
+    "tieuDe": "Refuse the wrong shape of a call|||Từ chối lời gọi sai hình dạng",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>In JavaScript <code>checkSlot(480, 600)</code> and <code>checkSlot('08:00')</code> only fail when they run. Annotate <code>parseTime</code> and <code>checkSlot</code> so tsc refuses them first. No <code>any</code>.</p><p><b>Done when:</b> tsc clean, tests pass, the three wrong calls get TS2345, TS2554, TS2345.</p>|||<p>Trong JavaScript <code>checkSlot(480, 600)</code> và <code>checkSlot('08:00')</code> chỉ hỏng khi chạy. Chú thích kiểu cho <code>parseTime</code> và <code>checkSlot</code> để tsc từ chối chúng trước. Không dùng <code>any</code>.</p><p><b>Đạt khi:</b> tsc sạch, test qua, ba lời gọi sai bị báo TS2345, TS2554, TS2345.</p>",
+    "khoiDau": {
+      "src/slot.ts": "// LabFlow BR-04: a slot is on a 30-minute grid, inside 07:00–21:00, at most 4 hours.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % 30 !== 0 || e % 30 !== 0) return 'OFF_GRID';\n  if (e <= s) return 'END_BEFORE_START';\n  if (s < 420 || e > 1260) return 'OUTSIDE_HOURS';\n  if (e - s > 240) return 'TOO_LONG';\n  return 'OK';\n}\n"
+    },
+    "coDinh": {
+      "test/slot.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { checkSlot, parseTime } from '../src/slot.ts';\n\ntest('07:30 is minute 450', () => assert.equal(parseTime('07:30'), 450));\ntest('08:00-10:00 is OK', () => assert.equal(checkSlot('08:00', '10:00'), 'OK'));\ntest('08:15 is off the grid', () => assert.equal(checkSlot('08:15', '09:00'), 'OFF_GRID'));\n",
+      "kiem/sai.ts": "import { checkSlot, parseTime } from '../src/slot.ts';\n\ncheckSlot(480, 600); // expect TS2345\ncheckSlot('08:00'); // expect TS2554\nparseTime(420); // expect TS2345\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/slot.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/slot.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/slot.ts": "// Times are \"HH:MM\" strings, so both functions take string parameters.\n// LabFlow BR-04: a slot is on a 30-minute grid, inside 07:00–21:00, at most 4 hours.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function checkSlot(start: string, end: string): string {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % 30 !== 0 || e % 30 !== 0) return 'OFF_GRID';\n  if (e <= s) return 'END_BEFORE_START';\n  if (s < 420 || e > 1260) return 'OUTSIDE_HOURS';\n  if (e - s > 240) return 'TOO_LONG';\n  return 'OK';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "string | number parameters|||tham số string | number",
+        "tep": {
+          "src/slot.ts": "// Times are \"HH:MM\" strings, so both functions take string parameters.\n// LabFlow BR-04: a slot is on a 30-minute grid, inside 07:00–21:00, at most 4 hours.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function checkSlot(start: string | number, end: string | number): string {\n  const s = parseTime(String(start));\n  const e = parseTime(String(end));\n  if (s % 30 !== 0 || e % 30 !== 0) return 'OFF_GRID';\n  if (e <= s) return 'END_BEFORE_START';\n  if (s < 420 || e > 1260) return 'OUTSIDE_HOURS';\n  if (e - s > 240) return 'TOO_LONG';\n  return 'OK';\n}\n"
+        }
+      },
+      {
+        "nhan": "optional end parameter|||tham số end tuỳ chọn",
+        "tep": {
+          "src/slot.ts": "// Times are \"HH:MM\" strings, so both functions take string parameters.\n// LabFlow BR-04: a slot is on a 30-minute grid, inside 07:00–21:00, at most 4 hours.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  return Number(m[1]) * 60 + Number(m[2]);\n}\n\nexport function checkSlot(start: string, end = '21:00'): string {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % 30 !== 0 || e % 30 !== 0) return 'OFF_GRID';\n  if (e <= s) return 'END_BEFORE_START';\n  if (s < 420 || e > 1260) return 'OUTSIDE_HOURS';\n  if (e - s > 240) return 'TOO_LONG';\n  return 'OK';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-1-c",
+    "bai": "typescript-1-1-ba-con-bug",
+    "tieuDe": "The silent bug: a lower-case role|||Con bug im lặng: vai trò viết thường",
+    "doKho": "MEDIUM",
+    "phut": 12,
+    "moTa": "<p><code>role: string</code> accepts <code>'lecturer'</code>, and then a lecturer waits for approval — no crash, wrong result. Give <code>role</code> a type that allows exactly <code>'STUDENT'</code>, <code>'LECTURER'</code>, <code>'ADMIN'</code>.</p><p><b>Done when:</b> tsc clean, tests pass, <code>'lecturer'</code> gets TS2820 and <code>'GUEST'</code> gets TS2322.</p>|||<p><code>role: string</code> nhận <code>'lecturer'</code>, rồi giảng viên phải chờ duyệt — không lỗi, kết quả sai. Cho <code>role</code> một kiểu chỉ nhận đúng <code>'STUDENT'</code>, <code>'LECTURER'</code>, <code>'ADMIN'</code>.</p><p><b>Đạt khi:</b> tsc sạch, test qua, <code>'lecturer'</code> bị TS2820 và <code>'GUEST'</code> bị TS2322.</p>",
+    "khoiDau": {
+      "src/approval.ts": "// LabFlow BR-06: students need approval above 30 seats; lecturers and admins never do.\nexport function needsApproval({ seats, role }: { seats: number; role: string }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) throw new RangeError('seats must be a positive integer, got ' + seats);\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > 30;\n}\n"
+    },
+    "coDinh": {
+      "test/approval.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { needsApproval } from '../src/approval.ts';\n\ntest('31 student seats need approval', () => assert.equal(needsApproval({ seats: 31, role: 'STUDENT' }), true));\ntest('admins never wait', () => assert.equal(needsApproval({ seats: 200, role: 'ADMIN' }), false));\ntest('a lecturer with 31 seats does not wait', () => assert.equal(needsApproval({ seats: 31, role: 'LECTURER' }), false));\n",
+      "kiem/sai.ts": "import { needsApproval } from '../src/approval.ts';\n\nneedsApproval({ seats: 31, role: 'lecturer' }); // expect TS2820\nneedsApproval({ seats: 31, role: 'GUEST' }); // expect TS2322\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/approval.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/approval.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/approval.ts": "// LabFlow BR-06: students need approval above 30 seats; lecturers and admins never do.\n// A literal union lists the ONLY three role strings that exist, so \"lecturer\" or \"GUEST\" is refused.\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) throw new RangeError('seats must be a positive integer, got ' + seats);\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > 30;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "forgot ADMIN in the union|||quên ADMIN trong union",
+        "tep": {
+          "src/approval.ts": "// LabFlow BR-06: students need approval above 30 seats; lecturers and admins never do.\n// A literal union lists the ONLY three role strings that exist, so \"lecturer\" or \"GUEST\" is refused.\nexport type Role = 'STUDENT' | 'LECTURER';\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) throw new RangeError('seats must be a positive integer, got ' + seats);\n  if (role === 'LECTURER') return false;\n  return seats > 30;\n}\n"
+        }
+      },
+      {
+        "nhan": "toUpperCase() at runtime instead of a type|||toUpperCase() lúc chạy thay cho kiểu",
+        "tep": {
+          "src/approval.ts": "// LabFlow BR-06: students need approval above 30 seats; lecturers and admins never do.\nexport function needsApproval({ seats, role }: { seats: number; role: string }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) throw new RangeError('seats must be a positive integer, got ' + seats);\n  if (role.toUpperCase() === 'LECTURER' || role.toUpperCase() === 'ADMIN') return false;\n  return seats > 30;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-1-d",
+    "bai": "typescript-1-1-ba-con-bug",
+    "tieuDe": "Type the input AND the result of createBooking|||Gõ kiểu cả đầu vào LẪN kết quả của createBooking",
+    "doKho": "HARD",
+    "phut": 15,
+    "moTa": "<p>Write the input type and the return type of <code>createBooking</code> so tsc refuses four mistakes callers make: <code>seat</code> instead of <code>seats</code>, a lower-case role, reading <code>.minute</code> that does not exist, and comparing <code>status</code> with <code>'APPROVED'</code>, a status LabFlow does not have.</p><p><b>Done when:</b> tsc clean, tests pass, the four wrong lines get TS2561, TS2820, TS2339, TS2367.</p>|||<p>Viết kiểu đầu vào và kiểu trả về của <code>createBooking</code> để tsc từ chối bốn lỗi người gọi hay mắc: <code>seat</code> thay cho <code>seats</code>, vai trò viết thường, đọc <code>.minute</code> không tồn tại, và so <code>status</code> với <code>'APPROVED'</code> — trạng thái LabFlow không có.</p><p><b>Đạt khi:</b> tsc sạch, test qua, bốn dòng sai bị TS2561, TS2820, TS2339, TS2367.</p>",
+    "khoiDau": {
+      "src/booking.ts": "// LabFlow: build a booking. Untyped JavaScript, renamed to .ts.\nexport function createBooking({ lab, seats, role, start, end }) {\n  const wait = role === 'STUDENT' && seats > 30;\n  return { lab, start, end, seats, status: wait ? 'PENDING' : 'CONFIRMED' };\n}\n"
+    },
+    "coDinh": {
+      "test/booking.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { createBooking } from '../src/booking.ts';\n\ntest('31 student seats wait', () => assert.equal(createBooking({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' }).status, 'PENDING'));\ntest('a lecturer is confirmed', () => assert.equal(createBooking({ lab: 'BE-201', seats: 31, role: 'LECTURER', start: '08:00', end: '10:00' }).status, 'CONFIRMED'));\n",
+      "kiem/sai.ts": "import { createBooking } from '../src/booking.ts';\n\nconst ok = createBooking({ lab: 'BE-201', seats: 5, role: 'ADMIN', start: '08:00', end: '09:00' });\ncreateBooking({ lab: 'BE-201', seat: 5, role: 'ADMIN', start: '08:00', end: '09:00' }); // expect TS2561\ncreateBooking({ lab: 'BE-201', seats: 5, role: 'admin', start: '08:00', end: '09:00' }); // expect TS2820\nconsole.log(ok.minute); // expect TS2339\nif (ok.status === 'APPROVED') console.log('never'); // expect TS2367\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/booking.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/booking.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/booking.ts": "// LabFlow: build a booking, now with the input and the result written down as types.\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; start: string; end: string; seats: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const wait = role === 'STUDENT' && seats > 30;\n  return { lab, start, end, seats, status: wait ? 'PENDING' : 'CONFIRMED' };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "status: string in the result|||status: string trong kết quả",
+        "tep": {
+          "src/booking.ts": "// LabFlow: build a booking, now with the input and the result written down as types.\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; start: string; end: string; seats: number; status: string };\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const wait = role === 'STUDENT' && seats > 30;\n  return { lab, start, end, seats, status: wait ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        }
+      },
+      {
+        "nhan": "typed the input, left the result to inference|||gõ kiểu đầu vào, để kết quả cho suy luận",
+        "tep": {
+          "src/booking.ts": "// LabFlow: build a booking, now with the input and the result written down as types.\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; start: string; end: string; seats: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput) {\n  const wait = role === 'STUDENT' && seats > 30;\n  return { lab, start, end, seats, status: wait ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-2-a",
+    "bai": "typescript-1-2-chung-minh-gi",
+    "tieuDe": "Read the first lab safely|||Đọc phòng đầu tiên một cách an toàn",
+    "doKho": "EASY",
+    "phut": 8,
+    "moTa": "<p>With <code>noUncheckedIndexedAccess</code> on (the course tsconfig), <code>labs[0]</code> has type <code>string | undefined</code>, so <code>src/first.ts</code> does not compile (TS18048). Make <code>firstLabCode</code> return the first code in upper case, or <code>'NONE'</code> for an empty list — <strong>without</strong> the non-null assertion <code>!</code>.</p><p><strong>Done when:</strong> tsc reports 0 errors and the tests pass.</p>|||<p>Khi bật <code>noUncheckedIndexedAccess</code> (tsconfig của khoá), <code>labs[0]</code> có kiểu <code>string | undefined</code>, nên <code>src/first.ts</code> không biên dịch (TS18048). Sửa <code>firstLabCode</code> để trả mã đầu tiên viết hoa, hoặc <code>'NONE'</code> khi danh sách rỗng — <strong>không</strong> dùng dấu <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc 0 lỗi và test qua.</p>",
+    "khoiDau": {
+      "src/first.ts": "export function firstLabCode(labs: string[]): string {\n  return labs[0].toUpperCase();\n}\n"
+    },
+    "coDinh": {
+      "test/first.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { firstLabCode } from '../src/first.ts';\n\ntest('first code in upper case', () => assert.equal(firstLabCode(['be-201', 'al-305']), 'BE-201'));\ntest('empty list gives NONE', () => assert.equal(firstLabCode([]), 'NONE'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/first.test.ts"
+      ],
+      "chay": [
+        "node --test test/first.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-",
+        "\\]!",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/first.ts": "export function firstLabCode(labs: string[]): string {\n  const first = labs[0];            // string | undefined\n  if (first === undefined) return 'NONE';\n  return first.toUpperCase();       // narrowed to string here\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "labs[0]! — compiles, crashes on an empty list",
+        "tep": {
+          "src/first.ts": "export function firstLabCode(labs: string[]): string {\n  return labs[0]!.toUpperCase();\n}\n"
+        }
+      },
+      {
+        "nhan": "labs[0] as string",
+        "tep": {
+          "src/first.ts": "export function firstLabCode(labs: string[]): string {\n  return (labs[0] as string).toUpperCase();\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-2-b",
+    "bai": "typescript-1-2-chung-minh-gi",
+    "tieuDe": "Write the BookingInput guard|||Viết guard cho BookingInput",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p>Write <code>isBookingInput(x: unknown): x is BookingInput</code> in <code>src/guard.ts</code>. It must accept a correct body and refuse: seats as a string, a non-integer or zero seat count, a role not in STUDENT/LECTURER/ADMIN (case matters), a missing field, <code>null</code> and arrays. No <code>any</code>, no <code>as</code>.</p><p><strong>Done when:</strong> tsc 0 errors (including <code>kiem/dung.ts</code>, which uses your guard to narrow) and all 7 tests pass.</p>|||<p>Viết <code>isBookingInput(x: unknown): x is BookingInput</code> trong <code>src/guard.ts</code>. Nhận body đúng và từ chối: seats là chuỗi, số chỗ không nguyên hoặc bằng 0, role ngoài STUDENT/LECTURER/ADMIN (phân biệt hoa thường), thiếu trường, <code>null</code> và mảng. Không <code>any</code>, không <code>as</code>.</p><p><strong>Đạt khi:</strong> tsc 0 lỗi (kể cả <code>kiem/dung.ts</code> dùng guard của bạn để thu hẹp kiểu) và cả 7 test qua.</p>",
+    "khoiDau": {
+      "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return true; // TODO: real checks\n}\n"
+    },
+    "coDinh": {
+      "src/booking-types.ts": "// Types from LabFlow TS (src/rules/booking.ts), copied so the exercise stands alone.\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\n",
+      "test/guard.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { isBookingInput } from '../src/guard.ts';\n\nconst ok = { lab: 'BE-201', seats: 31, role: 'LECTURER', start: '08:00', end: '10:00' };\ntest('accepts a correct body', () => assert.equal(isBookingInput(JSON.parse(JSON.stringify(ok))), true));\ntest('refuses seats as a string', () => assert.equal(isBookingInput({ ...ok, seats: '31' }), false));\ntest('refuses 2.5 seats', () => assert.equal(isBookingInput({ ...ok, seats: 2.5 }), false));\ntest('refuses 0 seats', () => assert.equal(isBookingInput({ ...ok, seats: 0 }), false));\ntest('refuses a lowercase role', () => assert.equal(isBookingInput({ ...ok, role: 'lecturer' }), false));\ntest('refuses a missing end', () => assert.equal(isBookingInput({ lab: 'BE-201', seats: 3, role: 'ADMIN', start: '08:00' }), false));\ntest('refuses null and arrays', () => {\n  assert.equal(isBookingInput(null), false);\n  assert.equal(isBookingInput([ok]), false);\n});\n",
+      "kiem/dung.ts": "import { isBookingInput } from '../src/guard.ts';\nimport type { BookingInput } from '../src/booking-types.ts';\n\nconst data: unknown = JSON.parse('{}');\nif (isBookingInput(data)) {\n  const input: BookingInput = data;   // must compile: the guard narrows unknown to BookingInput\n  console.log(input.seats);\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/booking-types.ts",
+        "test/guard.test.ts",
+        "kiem/dung.ts"
+      ],
+      "chay": [
+        "node --test test/guard.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\nconst ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' && Number.isInteger(x.seats) && x.seats >= 1 &&\n    'role' in x && typeof x.role === 'string' && ROLES.includes(x.role) &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "forgets the role check (lecturer walks in)",
+        "tep": {
+          "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' && Number.isInteger(x.seats) && x.seats >= 1 &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n"
+        }
+      },
+      {
+        "nhan": "typeof seats === 'number' only (2.5 and 0 pass)",
+        "tep": {
+          "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\nconst ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' &&\n    'role' in x && typeof x.role === 'string' && ROLES.includes(x.role) &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n"
+        }
+      },
+      {
+        "nhan": "returns boolean instead of a type predicate",
+        "tep": {
+          "src/guard.ts": "const ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): boolean {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' && Number.isInteger(x.seats) && x.seats >= 1 &&\n    'role' in x && typeof x.role === 'string' && ROLES.includes(x.role) &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-2-c",
+    "bai": "typescript-1-2-chung-minh-gi",
+    "tieuDe": "Replace a promise with a check|||Thay lời hứa bằng phép kiểm",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p><code>rateFromBody</code> passes <code>JSON.parse(body)</code> straight to <code>usageRate</code>. It compiles (JSON.parse returns <code>any</code>) and returns <code>NaN</code> for bad data. Parse into <code>unknown</code>, check the shape, and return <code>'INVALID_BODY'</code> for anything that is not a list of objects with a positive number <code>minutes</code>. No <code>any</code>, no <code>as</code>.</p><p><strong>Done when:</strong> tsc 0 errors and the 5 tests pass.</p>|||<p><code>rateFromBody</code> đưa thẳng <code>JSON.parse(body)</code> vào <code>usageRate</code>. Nó biên dịch được (JSON.parse trả <code>any</code>) và trả <code>NaN</code> khi dữ liệu sai. Hãy parse ra <code>unknown</code>, kiểm hình dạng, và trả <code>'INVALID_BODY'</code> cho mọi thứ không phải danh sách object có <code>minutes</code> là số dương. Không <code>any</code>, không <code>as</code>.</p><p><strong>Đạt khi:</strong> tsc 0 lỗi và 5 test qua.</p>",
+    "khoiDau": {
+      "src/report.ts": "import { usageRate } from './usage.ts';\n\nexport function rateFromBody(body: string): number | 'INVALID_BODY' {\n  return usageRate(JSON.parse(body));\n}\n"
+    },
+    "coDinh": {
+      "src/usage.ts": "// usageRate from LabFlow TS: share of the 07:00–21:00 opening hours (840 minutes) already booked.\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / 840;\n  return rate;\n}\n",
+      "test/report.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { rateFromBody } from '../src/report.ts';\n\ntest('a good list', () => assert.equal(rateFromBody('[{\"minutes\":420},{\"minutes\":420}]'), 1));\ntest('minutes as a string is refused', () => assert.equal(rateFromBody('[{\"minutes\":\"60\"}]'), 'INVALID_BODY'));\ntest('a typo is refused', () => assert.equal(rateFromBody('[{\"minute\":60}]'), 'INVALID_BODY'));\ntest('an object instead of a list is refused', () => assert.equal(rateFromBody('{\"minutes\":60}'), 'INVALID_BODY'));\ntest('negative minutes are refused', () => assert.equal(rateFromBody('[{\"minutes\":-30}]'), 'INVALID_BODY'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/usage.ts",
+        "test/report.test.ts"
+      ],
+      "chay": [
+        "node --test test/report.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/report.ts": "import { usageRate } from './usage.ts';\n\n// Prove the shape at runtime instead of promising it with a type assertion.\nfunction isMinutesList(x: unknown): x is { minutes: number }[] {\n  return Array.isArray(x) && x.every((b: unknown) =>\n    typeof b === 'object' && b !== null && 'minutes' in b &&\n    typeof b.minutes === 'number' && b.minutes > 0);\n}\n\nexport function rateFromBody(body: string): number | 'INVALID_BODY' {\n  const data: unknown = JSON.parse(body);\n  if (!isMinutesList(data)) return 'INVALID_BODY';\n  return usageRate(data);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "JSON.parse(body) as { minutes: number }[]",
+        "tep": {
+          "src/report.ts": "import { usageRate } from './usage.ts';\n\nexport function rateFromBody(body: string): number | 'INVALID_BODY' {\n  const data = JSON.parse(body) as { minutes: number }[];\n  return usageRate(data);\n}\n"
+        }
+      },
+      {
+        "nhan": "checks Array.isArray only",
+        "tep": {
+          "src/report.ts": "import { usageRate } from './usage.ts';\n\nexport function rateFromBody(body: string): number | 'INVALID_BODY' {\n  const data: unknown = JSON.parse(body);\n  if (!Array.isArray(data)) return 'INVALID_BODY';\n  return usageRate(data);\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-2-d",
+    "bai": "typescript-1-2-chung-minh-gi",
+    "tieuDe": "A list guard the compiler can use|||Guard cho danh sách mà trình biên dịch dùng được",
+    "doKho": "HARD",
+    "phut": 20,
+    "moTa": "<p>The import endpoint receives a JSON list of bookings. <code>isBookingList</code> in <code>src/guard.ts</code> only checks <code>Array.isArray</code> and returns a plain <code>boolean</code>, so after <code>if (isBookingList(data))</code> the value is still <code>unknown</code>. Make it a real type predicate <code>x is BookingInput[]</code> that checks <em>every</em> item (reuse <code>isBookingInput</code>).</p><p>The grader compiles <code>kiem/sai.ts</code>: inside the <code>if</code>, a typo <code>b.seat</code> must be refused with TS2551 and pushing an incomplete booking with TS2739 (missing properties) — which only happens if your predicate really narrows. <strong>Done when:</strong> tsc 0 errors on your file + <code>kiem/dung.ts</code>, both expected errors appear, and the 4 tests pass.</p>|||<p>Endpoint nhập dữ liệu nhận một danh sách lượt đặt dạng JSON. <code>isBookingList</code> trong <code>src/guard.ts</code> chỉ kiểm <code>Array.isArray</code> và trả <code>boolean</code> thường, nên sau <code>if (isBookingList(data))</code> giá trị vẫn là <code>unknown</code>. Hãy biến nó thành type predicate thật <code>x is BookingInput[]</code> kiểm <em>từng</em> phần tử (dùng lại <code>isBookingInput</code>).</p><p>Máy chấm biên dịch <code>kiem/sai.ts</code>: bên trong <code>if</code>, lỗi gõ <code>b.seat</code> phải bị từ chối với TS2551 và việc push một lượt đặt thiếu trường phải ra TS2739 (thiếu thuộc tính) — điều chỉ xảy ra khi predicate của bạn thật sự thu hẹp kiểu. <strong>Đạt khi:</strong> tsc 0 lỗi trên tệp của bạn + <code>kiem/dung.ts</code>, hai lỗi mong đợi xuất hiện, và 4 test qua.</p>",
+    "khoiDau": {
+      "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\nconst ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' && Number.isInteger(x.seats) && x.seats >= 1 &&\n    'role' in x && typeof x.role === 'string' && ROLES.includes(x.role) &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n\nexport function isBookingList(x: unknown): boolean {\n  return Array.isArray(x);\n}\n"
+    },
+    "coDinh": {
+      "src/booking-types.ts": "// Types from LabFlow TS (src/rules/booking.ts), copied so the exercise stands alone.\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\n",
+      "test/list.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { isBookingList } from '../src/guard.ts';\n\nconst ok = { lab: 'BE-201', seats: 31, role: 'LECTURER', start: '08:00', end: '10:00' };\ntest('accepts a list of correct bodies', () => assert.equal(isBookingList([ok, { ...ok, seats: 2 }]), true));\ntest('accepts an empty list', () => assert.equal(isBookingList([]), true));\ntest('refuses one bad item', () => assert.equal(isBookingList([ok, { ...ok, role: 'lecturer' }]), false));\ntest('refuses an object', () => assert.equal(isBookingList(ok), false));\n",
+      "kiem/dung.ts": "import { isBookingList } from '../src/guard.ts';\nimport type { BookingInput } from '../src/booking-types.ts';\n\nconst data: unknown = JSON.parse('[]');\nif (isBookingList(data)) {\n  const list: BookingInput[] = data;          // must compile\n  console.log(list.map((b) => b.seats + 1));\n}\n",
+      "kiem/sai.ts": "import { isBookingList } from '../src/guard.ts';\n\nconst data: unknown = JSON.parse('[]');\nif (isBookingList(data)) {\n  data.map((b) => b.seat);   // expect TS2551\n  data.push({ lab: 'BE-201' });   // expect TS2739\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/booking-types.ts",
+        "test/list.test.ts",
+        "kiem/dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/list.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\nconst ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' && Number.isInteger(x.seats) && x.seats >= 1 &&\n    'role' in x && typeof x.role === 'string' && ROLES.includes(x.role) &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n\n// A list guard reuses the item guard.\nexport function isBookingList(x: unknown): x is BookingInput[] {\n  return Array.isArray(x) && x.every((item: unknown) => isBookingInput(item));\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "predicate added but only Array.isArray checked",
+        "tep": {
+          "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\nconst ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' && Number.isInteger(x.seats) && x.seats >= 1 &&\n    'role' in x && typeof x.role === 'string' && ROLES.includes(x.role) &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n\nexport function isBookingList(x: unknown): x is BookingInput[] {\n  return Array.isArray(x);\n}\n"
+        }
+      },
+      {
+        "nhan": "checks every item but returns boolean",
+        "tep": {
+          "src/guard.ts": "import type { BookingInput } from './booking-types.ts';\n\nconst ROLES: readonly string[] = ['STUDENT', 'LECTURER', 'ADMIN'];\n\n// Runtime checks; \"x is BookingInput\" lets TypeScript narrow after a true result.\nexport function isBookingInput(x: unknown): x is BookingInput {\n  return (\n    typeof x === 'object' && x !== null && !Array.isArray(x) &&\n    'lab' in x && typeof x.lab === 'string' &&\n    'seats' in x && typeof x.seats === 'number' && Number.isInteger(x.seats) && x.seats >= 1 &&\n    'role' in x && typeof x.role === 'string' && ROLES.includes(x.role) &&\n    'start' in x && typeof x.start === 'string' &&\n    'end' in x && typeof x.end === 'string'\n  );\n}\n\nexport function isBookingList(x: unknown): boolean {\n  return Array.isArray(x) && x.every((item: unknown) => isBookingInput(item));\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-3-a",
+    "bai": "typescript-1-3-suy-luan-kieu",
+    "doKho": "EASY",
+    "phut": 10,
+    "tieuDe": "Declare what checkSlot returns|||Khai báo checkSlot trả về gì",
+    "moTa": "<p>checkSlot returns objects whose type is left to inference, so <code>ok</code> is inferred as <code>boolean</code> and a caller cannot narrow on it. Declare a result type and annotate the return so that <code>kiem/dung.ts</code> compiles.</p><p><b>Done when:</b> tsc is clean, the tests pass, no <code>any</code>.</p>|||<p>checkSlot trả về object với kiểu để tự suy, nên <code>ok</code> bị suy là <code>boolean</code> và người gọi không thu hẹp được. Khai báo một kiểu kết quả và ghi kiểu trả về để <code>kiem/dung.ts</code> biên dịch được.</p><p><b>Đạt khi:</b> tsc sạch, test qua, không có <code>any</code>.</p>",
+    "khoiDau": {
+      "src/slot.ts": "// Type the result of checkSlot so that callers can trust ok.\nexport function checkSlot(start: number, end: number) {\n  if (start % 30 !== 0 || end % 30 !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (end <= start) return { ok: false, code: 'END_BEFORE_START' };\n  return { ok: true, minutes: end - start };\n}\n"
+    },
+    "coDinh": {
+      "kiem/dung.ts": "import { checkSlot } from '../src/slot.ts';\n\nconst slot = checkSlot(480, 600);\nif (!slot.ok) throw new Error(slot.code);\nconst minutes: number = slot.minutes;\nconsole.log(minutes);\n",
+      "test/slot.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { checkSlot } from '../src/slot.ts';\ntest('480–600 is 120 minutes', () => assert.deepEqual(checkSlot(480, 600), { ok: true, minutes: 120 }));\ntest('495 is off the grid', () => assert.deepEqual(checkSlot(495, 600), { ok: false, code: 'OFF_GRID' }));\n"
+    },
+    "kiem": {
+      "sach": [
+        "kiem/dung.ts",
+        "test/slot.test.ts"
+      ],
+      "chay": [
+        "node --test test/slot.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/slot.ts": "// One declared result type: ok: true carries minutes, ok: false carries a known code.\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\n// The return type is the contract: a typo in a code is now an error on its own line.\nexport function checkSlot(start: number, end: number): SlotResult {\n  if (start % 30 !== 0 || end % 30 !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (end <= start) return { ok: false, code: 'END_BEFORE_START' };\n  return { ok: true, minutes: end - start };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "one loose object type: { ok: boolean; minutes?: number; code?: string }",
+        "tep": {
+          "src/slot.ts": "export function checkSlot(start: number, end: number): { ok: boolean; minutes?: number; code?: string } {\n  if (start % 30 !== 0 || end % 30 !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (end <= start) return { ok: false, code: 'END_BEFORE_START' };\n  return { ok: true, minutes: end - start };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-3-b",
+    "bai": "typescript-1-3-suy-luan-kieu",
+    "doKho": "EASY",
+    "phut": 8,
+    "tieuDe": "Stop the input object from widening|||Đừng để object input bị nới rộng",
+    "moTa": "<p><code>input</code> is built first and passed later, so its <code>role</code> is inferred as <code>string</code> and <code>createBooking(input)</code> fails with TS2345. Fix it without changing the call and without a cast (<code>as</code> to a type).</p><p><b>Done when:</b> tsc is clean and <code>node src/main.ts</code> prints <code>PENDING</code>.</p>|||<p><code>input</code> được dựng trước rồi truyền sau, nên <code>role</code> bị suy là <code>string</code> và <code>createBooking(input)</code> lỗi TS2345. Sửa mà không đổi lời gọi và không ép kiểu (<code>as</code> sang một kiểu).</p><p><b>Đạt khi:</b> tsc sạch và <code>node src/main.ts</code> in <code>PENDING</code>.</p>",
+    "khoiDau": {
+      "src/main.ts": "import { createBooking } from '../lib/rules.ts';\n\n// Built first, passed later. Make this compile WITHOUT changing the createBooking call.\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\nconsole.log(createBooking(input).status);\n"
+    },
+    "coDinh": {
+      "lib/rules.ts": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+    },
+    "kiem": {
+      "sach": [
+        "lib/rules.ts"
+      ],
+      "chay": [
+        "node src/main.ts"
+      ],
+      "ra": "PENDING",
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\s+(BookingInput|Role)\\b",
+        "createBooking\\(\\s*\\{"
+      ]
+    },
+    "loiGiai": {
+      "src/main.ts": "import { createBooking } from '../lib/rules.ts';\nimport type { BookingInput } from '../lib/rules.ts';\n\n// satisfies: checked against BookingInput while it is still a literal, so role keeps the type 'STUDENT'.\n// (Annotating the variable, \": BookingInput\", works just as well.)\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' } satisfies BookingInput;\nconsole.log(createBooking(input).status);\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "cast: createBooking(input as BookingInput)",
+        "tep": {
+          "src/main.ts": "import { createBooking } from '../lib/rules.ts';\nimport type { BookingInput } from '../lib/rules.ts';\n\n// Built first, passed later. Make this compile WITHOUT changing the createBooking call.\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\nconsole.log(createBooking(input as BookingInput).status);\n"
+        }
+      },
+      {
+        "nhan": "role: string annotation",
+        "tep": {
+          "src/main.ts": "import { createBooking } from '../lib/rules.ts';\n\n// Built first, passed later. Make this compile WITHOUT changing the createBooking call.\nconst input: { lab: string; seats: number; role: string; start: string; end: string } = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' };\nconsole.log(createBooking(input).status);\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-3-c",
+    "bai": "typescript-1-3-suy-luan-kieu",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "tieuDe": "Remove the noise, keep the information|||Bỏ chú thích thừa, giữ chú thích có thông tin",
+    "moTa": "<p>The file compiles but repeats what inference already knows. Remove the redundant annotations (locals initialised with a value, callback parameters and their return types, variables holding a computed array). Keep the ones that carry information. The wrong call in <code>kiem/sai.ts</code> must stay refused.</p><p><b>Done when:</b> tsc is clean, <code>node src/day.ts</code> prints <code>270 BE-201,BE-305</code>, the grader finds none of the redundant patterns.</p>|||<p>File biên dịch được nhưng lặp lại điều suy luận đã biết. Bỏ các chú thích thừa (biến cục bộ có giá trị đầu, tham số callback và kiểu trả về của callback, biến chứa mảng tính ra). Giữ chú thích mang thông tin. Lời gọi sai trong <code>kiem/sai.ts</code> phải vẫn bị từ chối.</p><p><b>Đạt khi:</b> tsc sạch, <code>node src/day.ts</code> in <code>270 BE-201,BE-305</code>, máy chấm không thấy mẫu thừa nào.</p>",
+    "khoiDau": {
+      "src/day.ts": "import { createBooking } from '../lib/rules.ts';\nimport type { Booking, BookingInput } from '../lib/rules.ts';\n\n// Too many annotations. Remove the ones inference already gives you; keep the ones that carry information.\nexport function totalMinutes(bookings: readonly { minutes: number }[]): number {\n  let total: number = 0;\n  for (const b of bookings) total += b.minutes;\n  return total;\n}\n\nexport const day: BookingInput[] = [\n  { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-305', seats: 12, role: 'LECTURER', start: '13:00', end: '15:30' },\n];\nexport const bookings: Booking[] = day.map((input: BookingInput): Booking => createBooking(input));\nexport const labs: string[] = bookings.map((b: Booking): string => b.lab);\nconsole.log(totalMinutes(bookings), labs.join(','));\n"
+    },
+    "coDinh": {
+      "lib/rules.ts": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n",
+      "kiem/sai.ts": "import { totalMinutes } from '../src/day.ts';\n\ntotalMinutes([{ minute: 60 }]); // expect TS2561\n"
+    },
+    "kiem": {
+      "sach": [
+        "lib/rules.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node src/day.ts"
+      ],
+      "ra": "270 BE-201,BE-305",
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        ":\\s*number\\s*=\\s*0",
+        "\\(\\w+:\\s*\\w+\\)\\s*:",
+        ":\\s*Booking\\[\\]\\s*=",
+        ":\\s*string\\[\\]\\s*="
+      ]
+    },
+    "loiGiai": {
+      "src/day.ts": "import { createBooking } from '../lib/rules.ts';\nimport type { BookingInput } from '../lib/rules.ts';\n\n// Kept: the exported function's parameter and return type (its contract).\nexport function totalMinutes(bookings: readonly { minutes: number }[]): number {\n  let total = 0;\n  for (const b of bookings) total += b.minutes;\n  return total;\n}\n\n// Kept: data built far from where it is used — without it, role widens to string.\nexport const day: BookingInput[] = [\n  { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-305', seats: 12, role: 'LECTURER', start: '13:00', end: '15:30' },\n];\n// Inferred: Booking[] and string[] — the callbacks get their types from context.\nexport const bookings = day.map((input) => createBooking(input));\nexport const labs = bookings.map((b) => b.lab);\nconsole.log(totalMinutes(bookings), labs.join(','));\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "removed one too many: day no longer BookingInput[] (role widens)",
+        "tep": {
+          "src/day.ts": "import { createBooking } from '../lib/rules.ts';\nimport type { BookingInput } from '../lib/rules.ts';\n\n// Kept: the exported function's parameter and return type (its contract).\nexport function totalMinutes(bookings: readonly { minutes: number }[]): number {\n  let total = 0;\n  for (const b of bookings) total += b.minutes;\n  return total;\n}\n\n// Kept: data built far from where it is used — without it, role widens to string.\nexport const day = [\n  { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-305', seats: 12, role: 'LECTURER', start: '13:00', end: '15:30' },\n];\n// Inferred: Booking[] and string[] — the callbacks get their types from context.\nexport const bookings = day.map((input) => createBooking(input));\nexport const labs = bookings.map((b) => b.lab);\nconsole.log(totalMinutes(bookings), labs.join(','));\n"
+        }
+      },
+      {
+        "nhan": "parameter typed any",
+        "tep": {
+          "src/day.ts": "import { createBooking } from '../lib/rules.ts';\nimport type { BookingInput } from '../lib/rules.ts';\n\n// Kept: the exported function's parameter and return type (its contract).\nexport function totalMinutes(bookings: any): number {\n  let total = 0;\n  for (const b of bookings) total += b.minutes;\n  return total;\n}\n\n// Kept: data built far from where it is used — without it, role widens to string.\nexport const day: BookingInput[] = [\n  { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' },\n  { lab: 'BE-305', seats: 12, role: 'LECTURER', start: '13:00', end: '15:30' },\n];\n// Inferred: Booking[] and string[] — the callbacks get their types from context.\nexport const bookings = day.map((input) => createBooking(input));\nexport const labs = bookings.map((b) => b.lab);\nconsole.log(totalMinutes(bookings), labs.join(','));\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-3-d",
+    "bai": "typescript-1-3-suy-luan-kieu",
+    "doKho": "HARD",
+    "phut": 15,
+    "tieuDe": "Make the contract of an exported function explicit|||Làm rõ hợp đồng của một hàm export",
+    "moTa": "<p><code>summarize</code> is exported but its return type is inferred, so <code>status</code> is a plain <code>string</code> and both wrong uses in <code>kiem/sai.ts</code> compile. Give it an explicit return type so that each marked line fails with the expected code, while <code>kiem/dung.ts</code> still compiles.</p><p><b>Done when:</b> tsc refuses exactly the two marked lines, tests pass.</p>|||<p><code>summarize</code> được export nhưng kiểu trả về để tự suy, nên <code>status</code> là <code>string</code> trơn và cả hai cách dùng sai trong <code>kiem/sai.ts</code> đều biên dịch được. Ghi kiểu trả về rõ ràng để mỗi dòng được đánh dấu lỗi đúng mã, còn <code>kiem/dung.ts</code> vẫn biên dịch được.</p><p><b>Đạt khi:</b> tsc từ chối đúng hai dòng đánh dấu, test qua.</p>",
+    "khoiDau": {
+      "src/summary.ts": "import type { BookingInput } from '../lib/rules.ts';\n\n// Exported, but its return type is left to inference. Make wrong uses of the result fail to compile.\nexport function summarize(input: BookingInput) {\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, seats: input.seats, status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+    },
+    "coDinh": {
+      "lib/rules.ts": "// Fixed module used by this exercise (do not edit).\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = { lab: string; minutes: number; status: 'PENDING' | 'CONFIRMED' };\n\nexport function createBooking(input: BookingInput): Booking {\n  const [sh = 0, sm = 0] = input.start.split(':').map(Number);\n  const [eh = 0, em = 0] = input.end.split(':').map(Number);\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, minutes: eh * 60 + em - (sh * 60 + sm), status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n",
+      "kiem/sai.ts": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' });\nif (s.status === 'APPROVED') console.log('never'); // expect TS2367\nconsole.log(s.seat); // expect TS2551\n",
+      "kiem/dung.ts": "import { summarize } from '../src/summary.ts';\n\nconst s = summarize({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '08:00', end: '09:00' });\nconst status: 'PENDING' | 'CONFIRMED' = s.status;\nconst seats: number = s.seats;\nconsole.log(status, seats);\n",
+      "test/summary.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { summarize } from '../src/summary.ts';\ntest('31 student seats wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' }).status, 'PENDING'));\ntest('lecturers never wait', () => assert.equal(summarize({ lab: 'BE-201', seats: 40, role: 'LECTURER', start: '08:00', end: '10:00' }).status, 'CONFIRMED'));\n"
+    },
+    "kiem": {
+      "sach": [
+        "lib/rules.ts",
+        "kiem/dung.ts",
+        "test/summary.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/summary.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/summary.ts": "import type { BookingInput } from '../lib/rules.ts';\n\nexport type Summary = { lab: string; seats: number; status: 'PENDING' | 'CONFIRMED' };\n\n// Declaring the return type keeps status narrow: a misspelt or unknown status is now a compile error.\n// (Appending \"as const\" to the returned object would also pass these checks, but leaves the contract implicit.)\nexport function summarize(input: BookingInput): Summary {\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, seats: input.seats, status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "return type written, but status: string",
+        "tep": {
+          "src/summary.ts": "import type { BookingInput } from '../lib/rules.ts';\n\nexport type Summary = { lab: string; seats: number; status: string };\n\n// Declaring the return type keeps status narrow: a misspelt or unknown status is now a compile error.\n// (Appending \"as const\" to the returned object would also pass these checks, but leaves the contract implicit.)\nexport function summarize(input: BookingInput): Summary {\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, seats: input.seats, status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        }
+      },
+      {
+        "nhan": "return type Record<string, string | number> (every key allowed, status not narrow)",
+        "tep": {
+          "src/summary.ts": "import type { BookingInput } from '../lib/rules.ts';\n\n// Exported, but its return type is left to inference. Make wrong uses of the result fail to compile.\nexport function summarize(input: BookingInput): Record<string, string | number> {\n  const pending = input.role === 'STUDENT' && input.seats > 30;\n  return { lab: input.lab, seats: input.seats, status: pending ? 'PENDING' : 'CONFIRMED' };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-4-a",
+    "bai": "typescript-1-4-any-unknown",
+    "tieuDe": "Read seats from unknown data|||Đọc số chỗ từ dữ liệu unknown",
+    "doKho": "EASY",
+    "phut": 10,
+    "moTa": "<p>A LabFlow request body arrives as parsed JSON. <code>readSeats</code> currently takes <code>any</code> and returns whatever it finds. Rewrite it as <code>readSeats(data: unknown): number</code>: return <code>data.seats</code> only when <code>data</code> is a non-null object with an integer <code>seats</code> ≥ 1; otherwise throw a <code>RangeError</code>. No <code>any</code>, no <code>as</code>.</p><p><strong>Done when:</strong> tsc is clean, the 4 tests pass, and assigning the result to a <code>string</code> is an error.</p>|||<p>Request body của LabFlow tới dưới dạng JSON đã parse. <code>readSeats</code> đang nhận <code>any</code> và trả về bất cứ thứ gì nó thấy. Viết lại thành <code>readSeats(data: unknown): number</code>: chỉ trả <code>data.seats</code> khi <code>data</code> là object khác null có <code>seats</code> là số nguyên ≥ 1; ngược lại ném <code>RangeError</code>. Không <code>any</code>, không <code>as</code>.</p><p><strong>Đạt khi:</strong> tsc sạch, 4 test qua, và gán kết quả vào biến <code>string</code> là lỗi.</p>",
+    "khoiDau": {
+      "src/seats.ts": "// Read the seat count from a parsed request body.\nexport function readSeats(data: any) {\n  return data.seats;\n}\n"
+    },
+    "coDinh": {
+      "test/seats.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { readSeats } from '../src/seats.ts';\n\ntest('reads 31 seats', () => assert.equal(readSeats(JSON.parse('{\"seats\":31}')), 31));\ntest('rejects a string', () => assert.throws(() => readSeats('31'), RangeError));\ntest('rejects null', () => assert.throws(() => readSeats(null), RangeError));\ntest('rejects 2.5 seats', () => assert.throws(() => readSeats({ seats: 2.5 }), RangeError));\n",
+      "kiem/sai.ts": "import { readSeats } from '../src/seats.ts';\n\nconst label: string = readSeats({ seats: 3 }); // expect TS2322\nconsole.log(label);\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/seats.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/seats.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/seats.ts": "// Read the seat count from a parsed request body.\n// unknown: we do not trust the body until every part is checked.\nexport function readSeats(data: unknown): number {\n  if (typeof data === 'object' && data !== null && 'seats' in data) {\n    const seats = data.seats;            // still unknown here\n    if (typeof seats === 'number' && Number.isInteger(seats) && seats >= 1) {\n      return seats;                      // narrowed to number\n    }\n  }\n  throw new RangeError('seats must be a positive integer');\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "typed unknown but cast instead of checking (as)",
+        "tep": {
+          "src/seats.ts": "export function readSeats(data: unknown): number {\n  return (data as { seats: number }).seats;\n}\n"
+        }
+      },
+      {
+        "nhan": "return type left as any (checks only for null)",
+        "tep": {
+          "src/seats.ts": "export function readSeats(data: any) {\n  if (data === null) throw new RangeError('no data');\n  return data.seats;\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-4-b",
+    "bai": "typescript-1-4-any-unknown",
+    "tieuDe": "Load booking history without any|||Nạp lịch sử đặt phòng không dùng any",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p><code>loadHistory(text)</code> returns <code>JSON.parse(text)</code> — an <code>any</code> that makes <code>usageRate</code> print <code>NaN</code> when one row says <code>minute</code>. Give it the return type <code>{ minutes: number }[]</code>, treat the parsed value as <code>unknown</code>, and throw <code>TypeError</code> when the value is not a list or a row has no numeric <code>minutes</code>. Watch the leak: <code>Array.isArray</code> gives <code>any[]</code>, so type each row <code>unknown</code>.</p><p><strong>Done when:</strong> tsc is clean, the tests pass, and no <code>any</code>/<code>as</code> appears.</p>|||<p><code>loadHistory(text)</code> trả về <code>JSON.parse(text)</code> — một <code>any</code> khiến <code>usageRate</code> in <code>NaN</code> khi một dòng ghi <code>minute</code>. Cho nó kiểu trả về <code>{ minutes: number }[]</code>, coi giá trị parse ra là <code>unknown</code>, và ném <code>TypeError</code> khi giá trị không phải danh sách hoặc một dòng không có <code>minutes</code> kiểu số. Coi chừng chỗ rò: <code>Array.isArray</code> cho ra <code>any[]</code>, nên gõ kiểu mỗi dòng là <code>unknown</code>.</p><p><strong>Đạt khi:</strong> tsc sạch, test qua, không có <code>any</code>/<code>as</code>.</p>",
+    "khoiDau": {
+      "src/history.ts": "// Load a lab's booking history from JSON text.\nexport function loadHistory(text: string) {\n  return JSON.parse(text);\n}\n"
+    },
+    "coDinh": {
+      "test/history.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { loadHistory } from '../src/history.ts';\n\ntest('loads two rows', () => assert.deepEqual(loadHistory('[{\"minutes\":420},{\"minutes\":210}]'), [{ minutes: 420 }, { minutes: 210 }]));\ntest('rejects a typo row', () => assert.throws(() => loadHistory('[{\"minutes\":420},{\"minute\":210}]'), TypeError));\ntest('rejects a single object', () => assert.throws(() => loadHistory('{\"minutes\":420}'), TypeError));\ntest('rejects minutes as text', () => assert.throws(() => loadHistory('[{\"minutes\":\"60\"}]'), TypeError));\n",
+      "kiem/sai.ts": "import { loadHistory } from '../src/history.ts';\n\nconst names: string[] = loadHistory('[]'); // expect TS2322\nconsole.log(names);\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/history.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/history.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/history.ts": "// Load a lab's booking history from JSON text.\n// The parsed value is unknown: every row is checked before it is trusted.\nexport function loadHistory(text: string): { minutes: number }[] {\n  const data: unknown = JSON.parse(text);\n  if (!Array.isArray(data)) throw new TypeError('history must be a list');\n  // Array.isArray widens the list; typing each row unknown keeps the check honest.\n  return data.map((row: unknown, i: number) => {\n    if (typeof row === 'object' && row !== null && 'minutes' in row && typeof row.minutes === 'number') {\n      return { minutes: row.minutes };\n    }\n    throw new TypeError('row ' + i + ': minutes must be a number');\n  });\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "return type added but no runtime check (JSON.parse is any, so it compiles)",
+        "tep": {
+          "src/history.ts": "export function loadHistory(text: string): { minutes: number }[] {\n  return JSON.parse(text);\n}\n"
+        }
+      },
+      {
+        "nhan": "checks the list but trusts the rows (row is any after Array.isArray)",
+        "tep": {
+          "src/history.ts": "export function loadHistory(text: string): { minutes: number }[] {\n  const data: unknown = JSON.parse(text);\n  if (!Array.isArray(data)) throw new TypeError('history must be a list');\n  return data.map((row) => ({ minutes: row.minutes }));\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-4-c",
+    "bai": "typescript-1-4-any-unknown",
+    "tieuDe": "Migrate a JS module: type the edges under strict|||Chuyển một module JS: gõ kiểu ở mép dưới strict",
+    "doKho": "MEDIUM",
+    "phut": 15,
+    "moTa": "<p><code>src/fees.ts</code> is LabFlow's late-fee module, renamed from <code>.js</code>. Under strict it has implicit-<code>any</code> errors. Type the <strong>edges</strong> — every parameter and every exported return type — so that tsc is clean and the three wrong calls in <code>kiem/sai.ts</code> are refused. Do not change behaviour; do not use <code>any</code> or <code>@ts-ignore</code>.</p><p><strong>Done when:</strong> tsc is clean, tests pass, all three marked lines are refused with the shown codes.</p>|||<p><code>src/fees.ts</code> là module phí trả phòng muộn của LabFlow, vừa đổi đuôi từ <code>.js</code>. Dưới strict nó có lỗi <code>any</code> ngầm. Gõ kiểu ở <strong>mép</strong> — mọi tham số và mọi kiểu trả về được export — để tsc sạch và ba lời gọi sai trong <code>kiem/sai.ts</code> bị từ chối. Không đổi hành vi; không dùng <code>any</code> hay <code>@ts-ignore</code>.</p><p><strong>Đạt khi:</strong> tsc sạch, test qua, cả ba dòng đánh dấu bị từ chối đúng mã.</p>",
+    "khoiDau": {
+      "src/fees.ts": "// Late fee: the first 15 minutes are free, then 10,000 VND per started 30 minutes.\nexport function lateFee(minutesLate) {\n  if (minutesLate <= 15) return 0;\n  return Math.ceil((minutesLate - 15) / 30) * 10000;\n}\n\nexport function totalFees(bookings) {\n  let total = 0;\n  for (const b of bookings) total += lateFee(b.minutesLate);\n  return total;\n}\n\nexport function formatVnd(amount) {\n  return amount.toLocaleString('en-US') + ' VND';\n}\n"
+    },
+    "coDinh": {
+      "test/fees.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { lateFee, totalFees, formatVnd } from '../src/fees.ts';\n\ntest('15 minutes late is free', () => assert.equal(lateFee(15), 0));\ntest('16 minutes late costs one block', () => assert.equal(lateFee(16), 10000));\ntest('46 minutes late costs two blocks', () => assert.equal(lateFee(46), 20000));\ntest('totals a list', () => assert.equal(totalFees([{ minutesLate: 20 }, { minutesLate: 50 }]), 30000));\ntest('formats VND', () => assert.equal(formatVnd(30000), '30,000 VND'));\n",
+      "kiem/sai.ts": "import { lateFee, totalFees, formatVnd } from '../src/fees.ts';\n\nlateFee('20'); // expect TS2345\ntotalFees([{ minuteLate: 20 }]); // expect TS2561\nconst doubled = formatVnd(lateFee(40)) * 2; // expect TS2362\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/fees.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/fees.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/fees.ts": "// Late fee: the first 15 minutes are free, then 10,000 VND per started 30 minutes.\n// Edges typed: parameters and exported return types. Inside, inference does the rest.\nexport function lateFee(minutesLate: number): number {\n  if (minutesLate <= 15) return 0;\n  return Math.ceil((minutesLate - 15) / 30) * 10000;\n}\n\nexport function totalFees(bookings: readonly { minutesLate: number }[]): number {\n  let total = 0;\n  for (const b of bookings) total += lateFee(b.minutesLate);\n  return total;\n}\n\nexport function formatVnd(amount: number): string {\n  return amount.toLocaleString('en-US') + ' VND';\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "every parameter typed any",
+        "tep": {
+          "src/fees.ts": "export function lateFee(minutesLate: any): any {\n  if (minutesLate <= 15) return 0;\n  return Math.ceil((minutesLate - 15) / 30) * 10000;\n}\n\nexport function totalFees(bookings: any): any {\n  let total = 0;\n  for (const b of bookings) total += lateFee(b.minutesLate);\n  return total;\n}\n\nexport function formatVnd(amount: any): any {\n  return amount.toLocaleString('en-US') + ' VND';\n}\n"
+        }
+      },
+      {
+        "nhan": "strict switched off for the file with @ts-nocheck",
+        "tep": {
+          "src/fees.ts": "// @ts-nocheck\nexport function lateFee(minutesLate) {\n  if (minutesLate <= 15) return 0;\n  return Math.ceil((minutesLate - 15) / 30) * 10000;\n}\n\nexport function totalFees(bookings) {\n  let total = 0;\n  for (const b of bookings) total += lateFee(b.minutesLate);\n  return total;\n}\n\nexport function formatVnd(amount) {\n  return amount.toLocaleString('en-US') + ' VND';\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-1-4-d",
+    "bai": "typescript-1-4-any-unknown",
+    "tieuDe": "Replace a double cast with real checks|||Thay ép kiểu kép bằng phép kiểm thật",
+    "doKho": "HARD",
+    "phut": 20,
+    "moTa": "<p><code>toBooking(row: unknown): Booking</code> currently does <code>row as any as Booking</code>, so a row with <code>minute</code> or status <code>APPROVED</code> becomes a broken booking. Replace the cast with checks: object, string <code>lab</code>/<code>start</code>/<code>end</code>, number <code>minutes</code>, status <code>'PENDING'</code> or <code>'CONFIRMED'</code>; otherwise throw <code>TypeError</code>. No <code>as</code> anywhere.</p><p><strong>Done when:</strong> tsc is clean, the 3 tests pass, and reading <code>.minute</code> on the result is refused.</p>|||<p><code>toBooking(row: unknown): Booking</code> đang làm <code>row as any as Booking</code>, nên một dòng ghi <code>minute</code> hay trạng thái <code>APPROVED</code> thành lượt đặt hỏng. Thay ép kiểu bằng phép kiểm: object, <code>lab</code>/<code>start</code>/<code>end</code> là chuỗi, <code>minutes</code> là số, status là <code>'PENDING'</code> hoặc <code>'CONFIRMED'</code>; ngược lại ném <code>TypeError</code>. Không có <code>as</code> ở đâu cả.</p><p><strong>Đạt khi:</strong> tsc sạch, 3 test qua, và đọc <code>.minute</code> trên kết quả bị từ chối.</p>",
+    "khoiDau": {
+      "src/to-booking.ts": "import type { Booking } from '../lib/booking.ts';\n\n// Turn a row read from storage into a Booking.\nexport function toBooking(row: unknown): Booking {\n  return row as any as Booking;\n}\n"
+    },
+    "coDinh": {
+      "lib/booking.ts": "export type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n",
+      "test/to-booking.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { toBooking } from '../src/to-booking.ts';\n\nconst ok = { lab: 'BE-201', start: '08:00', end: '10:00', minutes: 120, status: 'PENDING' };\ntest('keeps a valid row', () => assert.deepEqual(toBooking(ok), ok));\ntest('rejects a minute typo', () => assert.throws(() => toBooking({ ...ok, minutes: undefined, minute: 120 }), TypeError));\ntest('rejects APPROVED', () => assert.throws(() => toBooking({ ...ok, status: 'APPROVED' }), TypeError));\n",
+      "kiem/sai.ts": "import { toBooking } from '../src/to-booking.ts';\n\nconsole.log(toBooking({}).minute); // expect TS2551\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/to-booking.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/to-booking.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "\\bas\\b"
+      ]
+    },
+    "loiGiai": {
+      "src/to-booking.ts": "import type { Booking } from '../lib/booking.ts';\n\n// Turn a row read from storage into a Booking — checked, not cast.\nexport function toBooking(row: unknown): Booking {\n  if (typeof row !== 'object' || row === null) throw new TypeError('row must be an object');\n  if (!('lab' in row) || typeof row.lab !== 'string') throw new TypeError('lab must be a string');\n  if (!('start' in row) || typeof row.start !== 'string') throw new TypeError('start must be a string');\n  if (!('end' in row) || typeof row.end !== 'string') throw new TypeError('end must be a string');\n  if (!('minutes' in row) || typeof row.minutes !== 'number') throw new TypeError('minutes must be a number');\n  if (!('status' in row) || (row.status !== 'PENDING' && row.status !== 'CONFIRMED')) {\n    throw new TypeError('status must be PENDING or CONFIRMED');\n  }\n  // Every field is narrowed now, so this object literal is a real Booking.\n  return { lab: row.lab, start: row.start, end: row.end, minutes: row.minutes, status: row.status };\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "checks it is an object, then casts (as Booking)",
+        "tep": {
+          "src/to-booking.ts": "import type { Booking } from '../lib/booking.ts';\n\nexport function toBooking(row: unknown): Booking {\n  if (typeof row !== 'object' || row === null) throw new TypeError('row must be an object');\n  return row as Booking;\n}\n"
+        }
+      },
+      {
+        "nhan": "checks every field except status",
+        "tep": {
+          "src/to-booking.ts": "import type { Booking } from '../lib/booking.ts';\n\nexport function toBooking(row: unknown): Booking {\n  if (typeof row !== 'object' || row === null) throw new TypeError('row must be an object');\n  if (!('lab' in row) || typeof row.lab !== 'string') throw new TypeError('lab');\n  if (!('start' in row) || typeof row.start !== 'string') throw new TypeError('start');\n  if (!('end' in row) || typeof row.end !== 'string') throw new TypeError('end');\n  if (!('minutes' in row) || typeof row.minutes !== 'number') throw new TypeError('minutes');\n  return { lab: row.lab, start: row.start, end: row.end, minutes: row.minutes, status: 'PENDING' };\n}\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-1",
+    "bai": "typescript-1-6-lab-chuyen-doi",
+    "tieuDe": "Lab 1 — Convert LabFlow's rules to TypeScript|||Lab 1 — Đổi luật LabFlow sang TypeScript",
+    "doKho": "HARD",
+    "phut": 75,
+    "moTa": "<p>The two files in <code>src/</code> are LabFlow's JavaScript rules, only renamed to <code>.ts</code>. Add types so that (1) they compile under the course's strict tsconfig with no <code>any</code> and no <code>@ts-</code> directive, (2) the correct calls in <code>kiem/phai-dung.ts</code> still compile, (3) the 15 behaviour tests in <code>test/rules.test.ts</code> pass under Node 22, and (4) every one of the 8 wrong calls in <code>kiem/sai.ts</code> is refused by tsc with the marked error code. Start from the rules (roles, statuses, slot results), not from the list of wrong calls.</p><p><strong>Done when:</strong> all four checks pass — the same checks as <code>node scripts/cham-lab-1.mjs</code> (10/10).</p>|||<p>Hai tệp trong <code>src/</code> là luật JavaScript của LabFlow, mới chỉ đổi đuôi sang <code>.ts</code>. Thêm kiểu sao cho (1) chúng biên dịch được với tsconfig strict của khoá, không <code>any</code>, không chỉ thị <code>@ts-</code>, (2) các lời gọi đúng trong <code>kiem/phai-dung.ts</code> vẫn biên dịch được, (3) 15 test hành vi trong <code>test/rules.test.ts</code> qua trên Node 22, và (4) cả 8 lời gọi sai trong <code>kiem/sai.ts</code> đều bị tsc từ chối đúng mã lỗi đã đánh dấu. Bắt đầu từ luật (vai trò, trạng thái, kết quả khung giờ), đừng bắt đầu từ danh sách lời gọi sai.</p><p><strong>Đạt khi:</strong> cả bốn phép kiểm đều qua — đúng các phép của <code>node scripts/cham-lab-1.mjs</code> (10/10).</p>",
+    "khoiDau": {
+      "src/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text) {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes) {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+      "src/booking.ts": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start, end) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead) {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }) {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings) {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+    },
+    "coDinh": {
+      "test/rules.test.ts": "// Lab 1 — behaviour must not change while you add types. Run: node --test --test-reporter=spec lab1/test/\nimport { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, isWithinBookingWindow } from '../src/booking.ts';\n\ntest('parseTime: 07:00 is minute 420', () => assert.equal(parseTime('07:00'), 420));\ntest('parseTime: rejects 7:00', () => assert.throws(() => parseTime('7:00'), TypeError));\ntest('parseTime: rejects 23:60', () => assert.throws(() => parseTime('23:60'), RangeError));\ntest('formatTime: 1290 is 21:30', () => assert.equal(formatTime(1290), '21:30'));\ntest('checkSlot: 08:00–10:00 lasts 120 minutes', () =>\n  assert.deepEqual(checkSlot('08:00', '10:00'), { ok: true, minutes: 120 }));\ntest('checkSlot: 06:30 starts before opening', () =>\n  assert.deepEqual(checkSlot('06:30', '08:00'), { ok: false, code: 'OUTSIDE_HOURS' }));\ntest('checkSlot: 08:00–12:30 is too long', () =>\n  assert.deepEqual(checkSlot('08:00', '12:30'), { ok: false, code: 'TOO_LONG' }));\ntest('needsApproval: 31 student seats', () => assert.equal(needsApproval({ seats: 31, role: 'STUDENT' }), true));\ntest('needsApproval: 30 student seats', () => assert.equal(needsApproval({ seats: 30, role: 'STUDENT' }), false));\ntest('needsApproval: admins never wait', () => assert.equal(needsApproval({ seats: 200, role: 'ADMIN' }), false));\ntest('needsApproval: 0 seats is a RangeError', () =>\n  assert.throws(() => needsApproval({ seats: 0, role: 'STUDENT' }), RangeError));\ntest('createBooking: off-grid slot throws OFF_GRID', () =>\n  assert.throws(() => createBooking({ lab: 'BE-201', seats: 5, role: 'STUDENT', start: '08:15', end: '09:00' }), /OFF_GRID/));\ntest('createBooking: a lecturer with 31 seats is CONFIRMED', () =>\n  assert.equal(createBooking({ lab: 'BE-201', seats: 31, role: 'LECTURER', start: '13:00', end: '15:30' }).status, 'CONFIRMED'));\ntest('usageRate: 210 + 210 minutes is half a day', () => assert.equal(usageRate([{ minutes: 210 }, { minutes: 210 }]), 0.5));\ntest('isWithinBookingWindow: 14 days ahead is allowed, 15 is not', () => {\n  assert.equal(isWithinBookingWindow(14), true);\n  assert.equal(isWithinBookingWindow(15), false);\n});\n",
+      "kiem/phai-dung.ts": "// Lab 1 — correct calls that must KEEP compiling. Types that are too strict break these.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate, OPEN } from '../src/booking.ts';\n\nconst start: number = parseTime('08:00');\nconst label: string = formatTime(start + 90);\nconst slot = checkSlot('08:00', '10:00');\nif (slot.ok) {\n  const minutes: number = slot.minutes;\n  console.log(label, minutes);\n}\nconst wait: boolean = needsApproval({ seats: 31, role: 'STUDENT' });\nconst booking = createBooking({ lab: 'BE-201', seats: 12, role: 'ADMIN', start: '18:00', end: '21:00' });\nconst status: 'PENDING' | 'CONFIRMED' = booking.status;\nconst rate: number = usageRate([booking, { minutes: 30 }]);\nconst opensAt: number = OPEN;\nconsole.log(wait, status, rate, opensAt);\n",
+      "kiem/sai.ts": "// Lab 1 — eight calls that are WRONG. Your types must make tsc refuse every one of them.\n// The grader compiles this file against YOUR src/ and expects an error with the marked code on each marked line.\nimport { parseTime, formatTime } from '../src/time.ts';\nimport { checkSlot, needsApproval, createBooking, usageRate } from '../src/booking.ts';\n\nconst input = { lab: 'BE-201', seats: 31, role: 'STUDENT', start: '08:00', end: '10:00' } as const;\n\nparseTime(420);                                              // S1: a number is not \"HH:MM\" · // expect TS2345\nformatTime('07:30');                                         // S2: formatTime takes minutes · // expect TS2345\ncheckSlot('08:00');                                          // S3: the end time is missing · // expect TS2554\nneedsApproval({ seat: 31, role: 'STUDENT' });                // S4: typo: seat instead of seats · // expect TS2561\nneedsApproval({ seats: 31, role: 'lecturer' });              // S5: roles are upper-case · // expect TS2820\ncreateBooking(input).minute;                                 // S6: typo: minute instead of minutes · // expect TS2551\nif (createBooking(input).status === 'APPROVED') {}           // S7: there is no APPROVED status · // expect TS2367\nusageRate([{ minute: 60 }]);                                 // S8: typo inside a list of bookings · // expect TS2561\n"
+    },
+    "kiem": {
+      "sach": [
+        "test/rules.test.ts",
+        "kiem/phai-dung.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/rules.test.ts"
+      ]
+    },
+    "loiGiai": {
+      "src/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+      "src/booking.ts": "import { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "every red line silenced with any (lab1/yeu — 5.5/10 in the lab grader)",
+        "tep": {
+          "src/time.ts": "// Lab 1 — a WEAK first attempt: every red line silenced with \"any\". It compiles and the tests pass. Graded in the lab lesson.\n// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: any): any {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: any): any {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "src/booking.ts": "// Lab 1 — a WEAK first attempt: every red line silenced with \"any\". It compiles and the tests pass. Graded in the lab lesson.\nimport { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start: any, end: any): any {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: any): any {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: any): any {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: any): any {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: any): any {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      },
+      {
+        "nhan": "string/number only, no literal unions, return types inferred (lab1/vua — 8/10)",
+        "tep": {
+          "src/time.ts": "// Lab 1 — a SECOND attempt: every parameter typed with string/number, return types left to inference. Graded in the lab lesson.\n// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "src/booking.ts": "// Lab 1 — a SECOND attempt: every parameter typed with string/number, return types left to inference. Graded in the lab lesson.\nimport { parseTime } from './time.ts';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport function checkSlot(start: string, end: string) {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: string }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: { lab: string; seats: number; role: string; start: string; end: string }) {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      },
+      {
+        "nhan": "types right but import still './time.js' (Node cannot find time.js at runtime)",
+        "tep": {
+          "src/time.ts": "// Convert between \"HH:MM\" and minutes since 00:00.\nexport function parseTime(text: string): number {\n  const m = /^([0-9]{2}):([0-9]{2})$/.exec(text);\n  if (!m) throw new TypeError('Invalid time \"' + text + '\", expected HH:MM');\n  const h = Number(m[1]);\n  const min = Number(m[2]);\n  if (h > 23 || min > 59) throw new RangeError('Time out of range: ' + text);\n  return h * 60 + min;\n}\n\nexport function formatTime(minutes: number): string {\n  const h = Math.floor(minutes / 60);\n  const m = minutes % 60;\n  return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');\n}\n",
+          "src/booking.ts": "import { parseTime } from './time.js';\n\nexport const OPEN = 7 * 60;          // 07:00\nexport const CLOSE = 21 * 60;        // 21:00\nexport const STEP = 30;              // BR-04: 30-minute grid\nexport const MAX_MINUTES = 240;      // Lite-1: at most 4 hours\nexport const MAX_DAYS_AHEAD = 14;    // BR-05: at most 14 days ahead\nexport const APPROVAL_SEATS = 30;    // BR-06: more than 30 seats needs approval\n\nexport type Role = 'STUDENT' | 'LECTURER' | 'ADMIN';\nexport type SlotCode = 'OFF_GRID' | 'END_BEFORE_START' | 'OUTSIDE_HOURS' | 'TOO_LONG';\nexport type SlotResult = { ok: true; minutes: number } | { ok: false; code: SlotCode };\n\nexport type BookingInput = { lab: string; seats: number; role: Role; start: string; end: string };\nexport type Booking = {\n  lab: string;\n  start: string;\n  end: string;\n  minutes: number;\n  status: 'PENDING' | 'CONFIRMED';\n};\n\nexport function checkSlot(start: string, end: string): SlotResult {\n  const s = parseTime(start);\n  const e = parseTime(end);\n  if (s % STEP !== 0 || e % STEP !== 0) return { ok: false, code: 'OFF_GRID' };\n  if (e <= s) return { ok: false, code: 'END_BEFORE_START' };\n  if (s < OPEN || e > CLOSE) return { ok: false, code: 'OUTSIDE_HOURS' };\n  if (e - s > MAX_MINUTES) return { ok: false, code: 'TOO_LONG' };\n  return { ok: true, minutes: e - s };\n}\n\nexport function isWithinBookingWindow(daysAhead: number): boolean {\n  return Number.isInteger(daysAhead) && daysAhead >= 0 && daysAhead <= MAX_DAYS_AHEAD;\n}\n\nexport function needsApproval({ seats, role }: { seats: number; role: Role }): boolean {\n  if (!Number.isInteger(seats) || seats < 1) {\n    throw new RangeError('seats must be a positive integer, got ' + seats);\n  }\n  if (role === 'LECTURER' || role === 'ADMIN') return false;\n  return seats > APPROVAL_SEATS;\n}\n\nexport function createBooking({ lab, seats, role, start, end }: BookingInput): Booking {\n  const slot = checkSlot(start, end);\n  if (!slot.ok) throw new Error(slot.code);\n  return {\n    lab,\n    start,\n    end,\n    minutes: slot.minutes,\n    status: needsApproval({ seats, role }) ? 'PENDING' : 'CONFIRMED',\n  };\n}\n\n// Share of opening hours already booked, added booking by booking (0..1).\nexport function usageRate(bookings: readonly { minutes: number }[]): number {\n  let rate = 0;\n  for (const b of bookings) rate += b.minutes / (CLOSE - OPEN);\n  return rate;\n}\n"
+        }
+      }
+    ]
+  }
+]

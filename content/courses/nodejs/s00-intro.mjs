@@ -426,6 +426,11 @@ Type ".help" for more information.
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Environment setup guide — downloads &amp; troubleshooting</span><span class="lc-sub">Step-by-step nvm / fnm / VS Code setup for Windows, macOS and Linux, with official download links — on Exp Hub.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-0-3-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Next in the TypeScript course — 0.3: Node 22, TypeScript 7 and VS Code</span><span class="lc-sub">Same: Node 22 installed with nvm, npm init, a project folder. Different: on top of it you pin typescript 7.0.2 and @types/node, write the course tsconfig, and let Node 22 run .ts files directly while tsc does the checking.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -517,6 +522,11 @@ Type ".help" for more information.
 <a class="link-card exphub" href="/exp-hub/nodejs-cai-dat-moi-truong${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🛠️</span>
   <span class="lc-body"><span class="lc-title">Hướng dẫn cài môi trường — link tải &amp; xử lý lỗi</span><span class="lc-sub">Các bước cài nvm / fnm / VS Code cho Windows, macOS, Linux kèm link tải chính chủ — trên Exp Hub.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-0-3-cai-dat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học tiếp ở khoá TypeScript — 0.3: Node 22, TypeScript 7 và VS Code</span><span class="lc-sub">Giống: Node 22 cài bằng nvm, npm init, một thư mục dự án. Khác: trên nền đó bạn ghim typescript 7.0.2 và @types/node, viết tsconfig của khoá, và để Node 22 chạy thẳng tệp .ts còn tsc lo phần kiểm kiểu.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

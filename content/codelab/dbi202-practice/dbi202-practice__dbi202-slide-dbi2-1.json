@@ -1,0 +1,665 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi2-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi2-1"
+  },
+  "exercises": [
+    {
+      "title": "Slide 10: books published in 1989",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "SELECT",
+        "WHERE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "select",
+        "slide"
+      ],
+      "problemHtml": "<p>Slide 10 asks: <i>which books (title and author) were published in 1989?</i> Write that query on the BOOK table.</p>\n<p><b>Table</b> (slide 10, tab <code>Book.sql</code>): <code>BOOK(Title PK, Author, Publisher, Year)</code> — 4 books; <code>Year</code> is stored as text, as on the slide.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>Title, Author</code>.</li>\n  <li>Year is text: compare with <code>'1989'</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 10 hỏi: <i>những cuốn sách nào (tên và tác giả) xuất bản năm 1989?</i> Viết truy vấn đó trên bảng BOOK.</p>\n<p><b>Bảng</b> (slide 10, tab <code>Book.sql</code>): <code>BOOK(Title PK, Author, Publisher, Year)</code> — 4 cuốn; <code>Year</code> lưu dạng chuỗi như trên slide.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>Title, Author</code>.</li>\n  <li>Year là chuỗi: so với <code>'1989'</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "Title         | Author\n--------------+-------\nLondon Fields | Amis  ",
+          "explanation": "Expected result of check \"Books of 1989\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Sách năm 1989\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "SELECT the two columns FROM BOOK, keep rows WHERE Year = '1989'.|||SELECT hai cột FROM BOOK, giữ dòng WHERE Year = '1989'.",
+        "Year is VARCHAR(4) here, so put the value in quotes.|||Year ở đây là VARCHAR(4) nên đặt giá trị trong nháy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Book.sql",
+          "language": "sql",
+          "code": "-- Book.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Book.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE BOOK (\n  Title     VARCHAR(50) NOT NULL,\n  Author    VARCHAR(30) NULL,\n  Publisher VARCHAR(30) NULL,\n  Year      VARCHAR(4)  NULL,\n  CONSTRAINT pk_book PRIMARY KEY (Title)\n);\nINSERT INTO BOOK VALUES\n  ('Intro to DB Systems',   'Date',     'Addison-Wesley', '1986'),\n  ('London Fields',         'Amis',     'Penguin',        '1989'),\n  ('100 years of solitude', 'Marquez',  'Picador',        '1982'),\n  ('The history man',       'Bradbury', 'Arrow Books',    '1977');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT Title, Author\nFROM BOOK\nWHERE Year = '1989';     -- the DBMS finds the rows; you only say WHAT you want\n"
+        },
+        {
+          "name": "Book.sql",
+          "language": "sql",
+          "code": "-- Book.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Book.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE BOOK (\n  Title     VARCHAR(50) NOT NULL,\n  Author    VARCHAR(30) NULL,\n  Publisher VARCHAR(30) NULL,\n  Year      VARCHAR(4)  NULL,\n  CONSTRAINT pk_book PRIMARY KEY (Title)\n);\nINSERT INTO BOOK VALUES\n  ('Intro to DB Systems',   'Date',     'Addison-Wesley', '1986'),\n  ('London Fields',         'Amis',     'Penguin',        '1989'),\n  ('100 years of solitude', 'Marquez',  'Picador',        '1982'),\n  ('The history man',       'Bradbury', 'Arrow Books',    '1977');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the point of slide 10: a query language is <b>declarative</b> — you describe the result, the DBMS decides how to find it.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là ý của slide 10: ngôn ngữ truy vấn là <b>khai báo</b> — bạn mô tả kết quả, DBMS tự quyết cách tìm.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE BOOK (\n  Title     VARCHAR(50) NOT NULL,\n  Author    VARCHAR(30) NULL,\n  Publisher VARCHAR(30) NULL,\n  Year      VARCHAR(4)  NULL,\n  CONSTRAINT pk_book PRIMARY KEY (Title)\n);\nINSERT INTO BOOK VALUES\n  ('Intro to DB Systems',   'Date',     'Addison-Wesley', '1986'),\n  ('London Fields',         'Amis',     'Penguin',        '1989'),\n  ('100 years of solitude', 'Marquez',  'Picador',        '1982'),\n  ('The history man',       'Bradbury', 'Arrow Books',    '1977');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Books of 1989|||Sách năm 1989",
+            "mongDoi": {
+              "cot": [
+                "Title",
+                "Author"
+              ],
+              "hang": [
+                [
+                  "London Fields",
+                  "Amis"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Two more books, one from 1989|||Thêm hai cuốn, một cuốn năm 1989",
+            "an": true,
+            "themCsdl": "INSERT INTO BOOK VALUES ('Database Design', 'Hoffer', 'Pearson', '1989'), ('Data and Reality', 'Kent', 'North-Holland', '1978')",
+            "mongDoi": {
+              "cot": [
+                "Title",
+                "Author"
+              ],
+              "hang": [
+                [
+                  "London Fields",
+                  "Amis"
+                ],
+                [
+                  "Database Design",
+                  "Hoffer"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Filters with WHERE|||Lọc bằng WHERE",
+            "khop": "\\bWHERE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting the WHERE — every book is returned.|||Quên WHERE — trả mọi cuốn sách."
+        },
+        {
+          "loi": "Returning only Title — the question asks for the author too.|||Chỉ trả Title — đề hỏi cả tác giả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "SELECT … FROM …",
+          "vi": "chọn cột từ bảng",
+          "giaiThich": "Danh sách cột (projection) lấy từ một hay nhiều bảng."
+        },
+        {
+          "en": "WHERE",
+          "vi": "điều kiện lọc dòng",
+          "giaiThich": "Lọc TỪNG DÒNG trước khi gộp nhóm."
+        }
+      ]
+    },
+    {
+      "title": "Slide 10: the yellow, pink and grey rows",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "INSERT",
+        "UPDATE",
+        "DELETE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "dml",
+        "slide"
+      ],
+      "problemHtml": "<p>Apply the three changes coloured on slide 10, in this order:</p><ol><li><b>Yellow</b> — add <i>Fund. of DB Systems</i> by Elmasri, Addison-Wesley, 1989.</li><li><b>Pink</b> — remove <i>London Fields</i>.</li><li><b>Grey</b> — <i>The history man</i> was actually published in 1975.</li></ol>\n<p><b>Table</b> (slide 10, tab <code>Book.sql</code>): <code>BOOK(Title PK, Author, Publisher, Year)</code> — 4 books; <code>Year</code> is stored as text, as on the slide.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Three statements: INSERT, DELETE, UPDATE.</li>\n  <li>Each DELETE/UPDATE touches exactly one book (filter by the key, Title).</li>\n</ul>",
+      "problemHtmlVi": "<p>Thực hiện ba thay đổi tô màu trên slide 10, theo thứ tự:</p><ol><li><b>Vàng</b> — thêm <i>Fund. of DB Systems</i> của Elmasri, Addison-Wesley, 1989.</li><li><b>Hồng</b> — xoá <i>London Fields</i>.</li><li><b>Xám</b> — <i>The history man</i> thật ra xuất bản năm 1975.</li></ol>\n<p><b>Bảng</b> (slide 10, tab <code>Book.sql</code>): <code>BOOK(Title PK, Author, Publisher, Year)</code> — 4 cuốn; <code>Year</code> lưu dạng chuỗi như trên slide.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba câu: INSERT, DELETE, UPDATE.</li>\n  <li>Mỗi câu DELETE/UPDATE chỉ đụng đúng một cuốn (lọc theo khoá Title).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "Title                 | Author   | Publisher      | Year\n----------------------+----------+----------------+-----\nIntro to DB Systems   | Date     | Addison-Wesley | 1986\n100 years of solitude | Marquez  | Picador        | 1982\nFund. of DB Systems   | Elmasri  | Addison-Wesley | 1989\nThe history man       | Bradbury | Arrow Books    | 1975",
+          "explanation": "Expected result of check \"The BOOK table after the three changes\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng BOOK sau ba thay đổi\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Identify each row by its key (Title), not by a value many rows share.|||Xác định từng dòng bằng khoá (Title), không bằng giá trị nhiều dòng cùng có.",
+        "UPDATE BOOK SET Year = '1975' WHERE Title = 'The history man';"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Book.sql",
+          "language": "sql",
+          "code": "-- Book.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Book.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE BOOK (\n  Title     VARCHAR(50) NOT NULL,\n  Author    VARCHAR(30) NULL,\n  Publisher VARCHAR(30) NULL,\n  Year      VARCHAR(4)  NULL,\n  CONSTRAINT pk_book PRIMARY KEY (Title)\n);\nINSERT INTO BOOK VALUES\n  ('Intro to DB Systems',   'Date',     'Addison-Wesley', '1986'),\n  ('London Fields',         'Amis',     'Penguin',        '1989'),\n  ('100 years of solitude', 'Marquez',  'Picador',        '1982'),\n  ('The history man',       'Bradbury', 'Arrow Books',    '1977');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "INSERT INTO BOOK (Title, Author, Publisher, Year)\nVALUES ('Fund. of DB Systems', 'Elmasri', 'Addison-Wesley', '1989');   -- yellow\nDELETE FROM BOOK WHERE Title = 'London Fields';                       -- pink\nUPDATE BOOK SET Year = '1975' WHERE Title = 'The history man';        -- grey\n"
+        },
+        {
+          "name": "Book.sql",
+          "language": "sql",
+          "code": "-- Book.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Book.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE BOOK (\n  Title     VARCHAR(50) NOT NULL,\n  Author    VARCHAR(30) NULL,\n  Publisher VARCHAR(30) NULL,\n  Year      VARCHAR(4)  NULL,\n  CONSTRAINT pk_book PRIMARY KEY (Title)\n);\nINSERT INTO BOOK VALUES\n  ('Intro to DB Systems',   'Date',     'Addison-Wesley', '1986'),\n  ('London Fields',         'Amis',     'Penguin',        '1989'),\n  ('100 years of solitude', 'Marquez',  'Picador',        '1982'),\n  ('The history man',       'Bradbury', 'Arrow Books',    '1977');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>INSERT adds a row, DELETE removes rows that match the WHERE, UPDATE changes values in rows that match the WHERE. Filtering by the primary key guarantees exactly one row is touched.</p>",
+      "solutionExplanationHtmlVi": "<p>INSERT thêm dòng, DELETE xoá các dòng khớp WHERE, UPDATE sửa giá trị các dòng khớp WHERE. Lọc theo khoá chính bảo đảm chỉ đúng một dòng bị đụng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE BOOK (\n  Title     VARCHAR(50) NOT NULL,\n  Author    VARCHAR(30) NULL,\n  Publisher VARCHAR(30) NULL,\n  Year      VARCHAR(4)  NULL,\n  CONSTRAINT pk_book PRIMARY KEY (Title)\n);\nINSERT INTO BOOK VALUES\n  ('Intro to DB Systems',   'Date',     'Addison-Wesley', '1986'),\n  ('London Fields',         'Amis',     'Penguin',        '1989'),\n  ('100 years of solitude', 'Marquez',  'Picador',        '1982'),\n  ('The history man',       'Bradbury', 'Arrow Books',    '1977');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The BOOK table after the three changes|||Bảng BOOK sau ba thay đổi",
+            "kiemTra": "SELECT Title, Author, Publisher, Year FROM BOOK",
+            "mongDoi": {
+              "cot": [
+                "Title",
+                "Author",
+                "Publisher",
+                "Year"
+              ],
+              "hang": [
+                [
+                  "Intro to DB Systems",
+                  "Date",
+                  "Addison-Wesley",
+                  "1986"
+                ],
+                [
+                  "100 years of solitude",
+                  "Marquez",
+                  "Picador",
+                  "1982"
+                ],
+                [
+                  "Fund. of DB Systems",
+                  "Elmasri",
+                  "Addison-Wesley",
+                  "1989"
+                ],
+                [
+                  "The history man",
+                  "Bradbury",
+                  "Arrow Books",
+                  "1975"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: other books are untouched|||Ẩn: các cuốn khác không bị đụng",
+            "kiemTra": "SELECT Title, Year FROM BOOK",
+            "an": true,
+            "themCsdl": "INSERT INTO BOOK VALUES ('Database Design', 'Hoffer', 'Pearson', '1989'), ('Data and Reality', 'Kent', 'North-Holland', '1978')",
+            "mongDoi": {
+              "cot": [
+                "Title",
+                "Year"
+              ],
+              "hang": [
+                [
+                  "Intro to DB Systems",
+                  "1986"
+                ],
+                [
+                  "100 years of solitude",
+                  "1982"
+                ],
+                [
+                  "Database Design",
+                  "1989"
+                ],
+                [
+                  "Data and Reality",
+                  "1978"
+                ],
+                [
+                  "Fund. of DB Systems",
+                  "1989"
+                ],
+                [
+                  "The history man",
+                  "1975"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses INSERT, DELETE and UPDATE|||Dùng INSERT, DELETE và UPDATE",
+            "khop": "\\bINSERT\\b[\\s\\S]*\\bDELETE\\b[\\s\\S]*\\bUPDATE\\b|\\bINSERT\\b[\\s\\S]*\\bUPDATE\\b[\\s\\S]*\\bDELETE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "DELETE … WHERE Year = '1989' — also deletes the book you just inserted.|||DELETE … WHERE Year = '1989' — xoá luôn cuốn vừa thêm."
+        },
+        {
+          "loi": "UPDATE without WHERE — every book becomes 1975.|||UPDATE không WHERE — mọi cuốn thành năm 1975."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DML",
+          "vi": "ngôn ngữ thao tác dữ liệu",
+          "giaiThich": "INSERT, UPDATE, DELETE."
+        },
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        }
+      ]
+    },
+    {
+      "title": "Inside a DBMS: who does what?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "DBMS architecture",
+        "query processor",
+        "storage manager",
+        "transaction manager"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory",
+        "slide"
+      ],
+      "problemHtml": "<p>The deck draws a DBMS as a few cooperating parts (query processor, storage manager, transaction manager, the data and metadata on disk). Match each job to the part that does it.</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bộ slide vẽ DBMS là vài bộ phận phối hợp (bộ xử lý truy vấn, bộ quản lý lưu trữ, bộ quản lý giao dịch, dữ liệu và siêu dữ liệu trên đĩa). Ghép mỗi việc với bộ phận làm việc đó.</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Query processor = \"what plan?\"; storage manager = \"which pages?\"; transaction manager = \"who goes first, what if it crashes?\".|||Bộ xử lý truy vấn = \"kế hoạch nào?\"; bộ quản lý lưu trữ = \"trang nào?\"; bộ quản lý giao dịch = \"ai trước, sập thì sao?\".",
+        "Metadata = the description of the tables, stored by the DBMS itself.|||Siêu dữ liệu = mô tả các bảng, do chính DBMS lưu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inside a DBMS: who does what?\n\nAnswer in the answer panel (no code needed).\n\n1. Turns a SELECT into an efficient plan (which index, which join order).Biến câu SELECT thành kế hoạch chạy hiệu quả (dùng chỉ mục nào, nối theo thứ tự nào).\n2. Moves 8 KB pages between disk and memory and keeps track of free space.Chuyển các trang 8 KB giữa đĩa và bộ nhớ, theo dõi chỗ trống.\n3. Two clerks update the same account at the same time; nobody's change may be lost.Hai nhân viên cùng sửa một tài khoản cùng lúc; không ai được mất thay đổi.\n4. After a power cut, committed transfers must still be there and half-done ones must vanish.Sau khi mất điện, các lần chuyển tiền đã commit phải còn, lần làm dở phải biến mất.\n5. \"Table Lop has columns maLop, tenLop; maLop is the key\" — where is this stored?\"Bảng Lop có cột maLop, tenLop; maLop là khoá\" — điều này được lưu ở đâu?\n6. CREATE TABLE, ALTER TABLE, DROP TABLE belong to…CREATE TABLE, ALTER TABLE, DROP TABLE thuộc…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Inside a DBMS: who does what? — answer key\n\n1. Turns a SELECT into an efficient plan (which index, which join order).Biến câu SELECT thành kế hoạch chạy hiệu quả (dùng chỉ mục nào, nối theo thứ tự nào).\n   Answer: c) Query processor\n   Parsing and optimising queries is the query processor (compiler + optimizer).VI: Phân tích và tối ưu truy vấn là việc của bộ xử lý truy vấn (compiler + optimizer).\n\n2. Moves 8 KB pages between disk and memory and keeps track of free space.Chuyển các trang 8 KB giữa đĩa và bộ nhớ, theo dõi chỗ trống.\n   Answer: d) Storage manager\n   The storage (and buffer) manager owns files, pages and the buffer pool.VI: Bộ quản lý lưu trữ (và bộ đệm) nắm tệp, trang và vùng đệm.\n\n3. Two clerks update the same account at the same time; nobody's change may be lost.Hai nhân viên cùng sửa một tài khoản cùng lúc; không ai được mất thay đổi.\n   Answer: d) Transaction manager (concurrency control)\n   Isolation between concurrent users is concurrency control, part of transaction management (Chapter 8).VI: Cách ly giữa người dùng đồng thời là kiểm soát tương tranh, thuộc quản lý giao dịch (Chương 8).\n\n4. After a power cut, committed transfers must still be there and half-done ones must vanish.Sau khi mất điện, các lần chuyển tiền đã commit phải còn, lần làm dở phải biến mất.\n   Answer: c) Transaction manager (logging and recovery)\n   Durability and atomicity are guaranteed by the log and the recovery manager.VI: Tính bền và nguyên tử do nhật ký (log) và bộ phục hồi bảo đảm.\n\n5. \"Table Lop has columns maLop, tenLop; maLop is the key\" — where is this stored?\"Bảng Lop có cột maLop, tenLop; maLop là khoá\" — điều này được lưu ở đâu?\n   Answer: a) In the metadata (system catalog)\n   Schema information is data about data: metadata, kept by the DBMS in its catalog (sys.tables, sys.columns…).VI: Thông tin lược đồ là dữ liệu về dữ liệu: siêu dữ liệu, DBMS giữ trong catalog (sys.tables, sys.columns…).\n\n6. CREATE TABLE, ALTER TABLE, DROP TABLE belong to…CREATE TABLE, ALTER TABLE, DROP TABLE thuộc…\n   Answer: d) DDL — they change the schema\n   DDL defines structure; DML (SELECT/INSERT/UPDATE/DELETE) works on the rows inside it.VI: DDL định nghĩa cấu trúc; DML (SELECT/INSERT/UPDATE/DELETE) làm việc với dòng bên trong.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Query processor</p><p>Parsing and optimising queries is the query processor (compiler + optimizer).</p><p><i>VI: Phân tích và tối ưu truy vấn là việc của bộ xử lý truy vấn (compiler + optimizer).</i></p></li><li><p><b>d)</b> Storage manager</p><p>The storage (and buffer) manager owns files, pages and the buffer pool.</p><p><i>VI: Bộ quản lý lưu trữ (và bộ đệm) nắm tệp, trang và vùng đệm.</i></p></li><li><p><b>d)</b> Transaction manager (concurrency control)</p><p>Isolation between concurrent users is concurrency control, part of transaction management (Chapter 8).</p><p><i>VI: Cách ly giữa người dùng đồng thời là kiểm soát tương tranh, thuộc quản lý giao dịch (Chương 8).</i></p></li><li><p><b>c)</b> Transaction manager (logging and recovery)</p><p>Durability and atomicity are guaranteed by the log and the recovery manager.</p><p><i>VI: Tính bền và nguyên tử do nhật ký (log) và bộ phục hồi bảo đảm.</i></p></li><li><p><b>a)</b> In the metadata (system catalog)</p><p>Schema information is data about data: metadata, kept by the DBMS in its catalog (sys.tables, sys.columns…).</p><p><i>VI: Thông tin lược đồ là dữ liệu về dữ liệu: siêu dữ liệu, DBMS giữ trong catalog (sys.tables, sys.columns…).</i></p></li><li><p><b>d)</b> DDL — they change the schema</p><p>DDL defines structure; DML (SELECT/INSERT/UPDATE/DELETE) works on the rows inside it.</p><p><i>VI: DDL định nghĩa cấu trúc; DML (SELECT/INSERT/UPDATE/DELETE) làm việc với dòng bên trong.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Turns a SELECT into an efficient plan (which index, which join order).</p><p style=\"opacity:.75;font-size:.92em\"><i>Biến câu SELECT thành kế hoạch chạy hiệu quả (dùng chỉ mục nào, nối theo thứ tự nào).</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Buffer of the operating system"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Transaction manager"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Query processor"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Storage manager"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Parsing and optimising queries is the query processor (compiler + optimizer).</p><p><i>VI: Phân tích và tối ưu truy vấn là việc của bộ xử lý truy vấn (compiler + optimizer).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Moves 8 KB pages between disk and memory and keeps track of free space.</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuyển các trang 8 KB giữa đĩa và bộ nhớ, theo dõi chỗ trống.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Query processor"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Application program"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Transaction manager"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Storage manager"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The storage (and buffer) manager owns files, pages and the buffer pool.</p><p><i>VI: Bộ quản lý lưu trữ (và bộ đệm) nắm tệp, trang và vùng đệm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Two clerks update the same account at the same time; nobody's change may be lost.</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai nhân viên cùng sửa một tài khoản cùng lúc; không ai được mất thay đổi.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "DDL compiler (schema checker)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Query processor (plan optimizer)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Storage manager (buffer pool)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Transaction manager (concurrency control)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Isolation between concurrent users is concurrency control, part of transaction management (Chapter 8).</p><p><i>VI: Cách ly giữa người dùng đồng thời là kiểm soát tương tranh, thuộc quản lý giao dịch (Chương 8).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>After a power cut, committed transfers must still be there and half-done ones must vanish.</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi mất điện, các lần chuyển tiền đã commit phải còn, lần làm dở phải biến mất.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "View definition (stored SELECT)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Query processor (parser and optimizer)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Transaction manager (logging and recovery)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Index structure (B+ tree on disk)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Durability and atomicity are guaranteed by the log and the recovery manager.</p><p><i>VI: Tính bền và nguyên tử do nhật ký (log) và bộ phục hồi bảo đảm.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"Table Lop has columns maLop, tenLop; maLop is the key\" — where is this stored?</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Bảng Lop có cột maLop, tenLop; maLop là khoá\" — điều này được lưu ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the metadata (system catalog)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In the application code only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "In every data row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nowhere: it is in the DBA's head"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Schema information is data about data: metadata, kept by the DBMS in its catalog (sys.tables, sys.columns…).</p><p><i>VI: Thông tin lược đồ là dữ liệu về dữ liệu: siêu dữ liệu, DBMS giữ trong catalog (sys.tables, sys.columns…).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>CREATE TABLE, ALTER TABLE, DROP TABLE belong to…</p><p style=\"opacity:.75;font-size:.92em\"><i>CREATE TABLE, ALTER TABLE, DROP TABLE thuộc…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "TCL — they end transactions"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DCL — they change permissions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "DML — they change the data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DDL — they change the schema"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>DDL defines structure; DML (SELECT/INSERT/UPDATE/DELETE) works on the rows inside it.</p><p><i>VI: DDL định nghĩa cấu trúc; DML (SELECT/INSERT/UPDATE/DELETE) làm việc với dòng bên trong.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the application program enforces concurrency — it is the DBMS's job.|||Tưởng chương trình ứng dụng lo tương tranh — đó là việc của DBMS."
+        },
+        {
+          "loi": "Mixing DDL and DML: CREATE is DDL even though it \"creates data structures\".|||Nhầm DDL và DML: CREATE là DDL dù nó \"tạo cấu trúc\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "metadata",
+          "vi": "siêu dữ liệu",
+          "giaiThich": "Dữ liệu mô tả dữ liệu: tên bảng, cột, kiểu, khoá…"
+        },
+        {
+          "en": "query processor",
+          "vi": "bộ xử lý truy vấn"
+        },
+        {
+          "en": "transaction manager",
+          "vi": "bộ quản lý giao dịch"
+        }
+      ]
+    },
+    {
+      "title": "The journey of one query through the DBMS",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "query processing"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory",
+        "slide"
+      ],
+      "problemHtml": "<p>Put the steps in the order they happen when you press F5 on <code>SELECT Title FROM BOOK WHERE Year = '1989'</code>.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sắp các bước theo đúng thứ tự xảy ra khi bạn bấm F5 câu <code>SELECT Title FROM BOOK WHERE Year = '1989'</code>.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The plan must exist before anything is read.|||Phải có kế hoạch rồi mới đọc dữ liệu.",
+        "The disk is touched only when the page is not already in memory.|||Chỉ đụng đĩa khi trang chưa có sẵn trong bộ nhớ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The journey of one query through the DBMS\n\nAnswer in the answer panel (no code needed).\n\n1. From the keyboard to the result gridTừ bàn phím tới lưới kết quả\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The journey of one query through the DBMS — answer key\n\n1. From the keyboard to the result gridTừ bàn phím tới lưới kết quả\n   Answer: m5) The client sends the SQL text to the server  →  m3) The parser checks the syntax and the names (using the catalog)  →  m6) The optimizer chooses an execution plan  →  m2) The execution engine asks the storage manager for the pages it needs  →  m1) Pages are read from disk into the buffer pool if not already there  →  m4) Matching rows are sent back to the client\n   Text → parse/bind (catalog) → optimize → execute → pages through the buffer pool → result rows.VI: Chuỗi SQL → phân tích/ràng tên (catalog) → tối ưu → thực thi → trang qua vùng đệm → trả dòng kết quả.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Text → parse/bind (catalog) → optimize → execute → pages through the buffer pool → result rows.</p><p><i>VI: Chuỗi SQL → phân tích/ràng tên (catalog) → tối ưu → thực thi → trang qua vùng đệm → trả dòng kết quả.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From the keyboard to the result grid</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ bàn phím tới lưới kết quả</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Pages are read from disk into the buffer pool if not already there"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The execution engine asks the storage manager for the pages it needs"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The parser checks the syntax and the names (using the catalog)"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Matching rows are sent back to the client"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "The client sends the SQL text to the server"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "The optimizer chooses an execution plan"
+              }
+            ],
+            "dapAn": [
+              "m5",
+              "m3",
+              "m6",
+              "m2",
+              "m1",
+              "m4"
+            ],
+            "giaiThich": "<p>Text → parse/bind (catalog) → optimize → execute → pages through the buffer pool → result rows.</p><p><i>VI: Chuỗi SQL → phân tích/ràng tên (catalog) → tối ưu → thực thi → trang qua vùng đệm → trả dòng kết quả.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting \"read from disk\" before the optimizer — the optimizer decides WHAT to read.|||Đặt \"đọc đĩa\" trước bộ tối ưu — bộ tối ưu quyết định đọc CÁI GÌ."
+        },
+        {
+          "loi": "Forgetting that names are checked against the catalog before planning.|||Quên rằng tên được kiểm với catalog trước khi lập kế hoạch."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

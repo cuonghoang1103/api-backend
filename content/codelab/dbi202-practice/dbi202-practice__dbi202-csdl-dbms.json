@@ -1,0 +1,486 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-csdl-dbms",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-csdl-dbms"
+  },
+  "exercises": [
+    {
+      "title": "Spreadsheet trouble: name the problem a DBMS solves",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "file-processing problems",
+        "redundancy",
+        "integrity",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory"
+      ],
+      "problemHtml": "<p>A faculty keeps marks in several Excel files. For each incident, name the classic file-processing problem it shows (lesson 1.1).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một khoa lưu điểm trong nhiều tệp Excel. Với mỗi sự cố, gọi tên vấn đề kinh điển của xử lý bằng tệp mà nó cho thấy (bài 1.1).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Same fact in many places ⇒ redundancy; copies disagree ⇒ inconsistency.|||Một sự kiện ở nhiều nơi ⇒ dư thừa; các bản lệch nhau ⇒ không nhất quán.",
+        "\"Half done\" is about atomicity; \"at the same time\" is about concurrency.|||\"Làm dở\" là tính nguyên tử; \"cùng lúc\" là tương tranh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Spreadsheet trouble: name the problem a DBMS solves\n\nAnswer in the answer panel (no code needed).\n\n1. Incident → problemSự cố → vấn đề\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Spreadsheet trouble: name the problem a DBMS solves — answer key\n\n1. Incident → problemSự cố → vấn đề\n   - r1.vd: redundancy & inconsistency\n   - r2.vd: integrity (bad values)\n   - r3.vd: concurrent access\n   - r4.vd: atomicity (half-done work)\n   - r5.vd: security (who may see what)\n   - r6.vd: hard data access (new question = new program)\n   A DBMS answers each: one copy of each fact, constraints (CHECK), concurrency control, transactions, permissions and a query language.VI: DBMS giải từng cái: mỗi sự kiện một bản, ràng buộc (CHECK), kiểm soát tương tranh, giao dịch, phân quyền và ngôn ngữ truy vấn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A DBMS answers each: one copy of each fact, constraints (CHECK), concurrency control, transactions, permissions and a query language.</p><p><i>VI: DBMS giải từng cái: mỗi sự kiện một bản, ràng buộc (CHECK), kiểm soát tương tranh, giao dịch, phân quyền và ngôn ngữ truy vấn.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Incident → problem</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự cố → vấn đề</i></p>",
+            "cot": [
+              {
+                "ma": "sc",
+                "ten": "Incident / Sự cố"
+              },
+              {
+                "ma": "vd",
+                "ten": "Problem / Vấn đề",
+                "luaChon": [
+                  "redundancy & inconsistency",
+                  "integrity (bad values)",
+                  "concurrent access",
+                  "atomicity (half-done work)",
+                  "security (who may see what)",
+                  "hard data access (new question = new program)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "sc": "A student's phone number is in 3 files; one was updated, two were not."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "sc": "Someone typed 85 instead of 8.5 and nothing complained."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "sc": "Two lecturers saved the same file at once; the second save erased the first."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "sc": "The laptop died while a macro was moving marks to the new file; half of them moved."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "sc": "Every TA can open the file that also holds students' home addresses."
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "sc": "\"Which students failed two courses this term?\" needs someone to write a new VBA script."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.vd": "redundancy & inconsistency",
+              "r2.vd": "integrity (bad values)",
+              "r3.vd": "concurrent access",
+              "r4.vd": "atomicity (half-done work)",
+              "r5.vd": "security (who may see what)",
+              "r6.vd": "hard data access (new question = new program)"
+            },
+            "giaiThich": "<p>A DBMS answers each: one copy of each fact, constraints (CHECK), concurrency control, transactions, permissions and a query language.</p><p><i>VI: DBMS giải từng cái: mỗi sự kiện một bản, ràng buộc (CHECK), kiểm soát tương tranh, giao dịch, phân quyền và ngôn ngữ truy vấn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the 85-for-8.5 typo \"inconsistency\" — it is a single bad value: an integrity problem.|||Gọi lỗi gõ 85 thay 8.5 là \"không nhất quán\" — đó là một giá trị sai: vấn đề toàn vẹn."
+        },
+        {
+          "loi": "Mixing concurrency (two users at once) with atomicity (one job interrupted).|||Nhầm tương tranh (hai người cùng lúc) với nguyên tử (một việc bị ngắt giữa chừng)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "data redundancy",
+          "vi": "dư thừa dữ liệu"
+        },
+        {
+          "en": "data integrity",
+          "vi": "toàn vẹn dữ liệu"
+        },
+        {
+          "en": "atomicity",
+          "vi": "tính nguyên tử"
+        }
+      ]
+    },
+    {
+      "title": "Put the rule in the database: the Mark table",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "CHECK",
+        "PRIMARY KEY",
+        "integrity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "ddl",
+        "constraints"
+      ],
+      "problemHtml": "<p>In Excel nothing stopped a typo of 85 instead of 8.5. Create the table <code>Mark</code> so that the <b>database itself</b> rejects bad data:</p><ul><li><code>studentID CHAR(8)</code>, <code>course CHAR(6)</code>, <code>score DECIMAL(3,1)</code> — all required;</li><li>a score must be between 0 and 10;</li><li>the same student cannot get two marks for the same course.</li></ul>\n<h4>Requirements</h4>\n<ul>\n  <li>One CREATE TABLE statement named <code>Mark</code>.</li>\n  <li>Use NOT NULL, a CHECK and a composite PRIMARY KEY.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong Excel không gì chặn lỗi gõ 85 thay vì 8.5. Tạo bảng <code>Mark</code> để <b>chính CSDL</b> từ chối dữ liệu sai:</p><ul><li><code>studentID CHAR(8)</code>, <code>course CHAR(6)</code>, <code>score DECIMAL(3,1)</code> — đều bắt buộc;</li><li>điểm phải từ 0 đến 10;</li><li>một sinh viên không có hai điểm cho cùng một môn.</li></ul>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu CREATE TABLE tên <code>Mark</code>.</li>\n  <li>Dùng NOT NULL, một CHECK và khoá chính ghép.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO Mark VALUES ('SE190001', 'DBI202', 8.5)|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO Mark VALUES ('SE190001', 'DBI202', 8.5)",
+          "output": "Accepted (the statement succeeds).|||Chạy được (câu lệnh thành công).",
+          "explanation": "Check \"A normal mark is accepted\".|||Kiểm \"Điểm bình thường được nhận\"."
+        }
+      ],
+      "hintsJson": [
+        "CHECK (score BETWEEN 0 AND 10) stops 85 and -1.|||CHECK (score BETWEEN 0 AND 10) chặn 85 và -1.",
+        "\"Same student, same course\" ⇒ the key is the PAIR (studentID, course).|||\"Cùng sinh viên, cùng môn\" ⇒ khoá là CẶP (studentID, course)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Mark (\n    studentID CHAR(8)      NOT NULL,\n    course    CHAR(6)      NOT NULL,\n    score     DECIMAL(3,1) NOT NULL CHECK (score BETWEEN 0 AND 10),   -- the rule lives in the database\n    CONSTRAINT pk_mark PRIMARY KEY (studentID, course)                -- no duplicate mark\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The rules now protect every program that writes to the table — Excel, a web app, a script. A CHECK rejects a row only when the condition is FALSE, so \"required\" still needs NOT NULL.</p>",
+      "solutionExplanationHtmlVi": "<p>Luật giờ bảo vệ mọi chương trình ghi vào bảng — Excel, web app, script. CHECK chỉ từ chối khi điều kiện FALSE nên \"bắt buộc\" vẫn cần NOT NULL.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A normal mark is accepted|||Điểm bình thường được nhận",
+            "thu": "INSERT INTO Mark VALUES ('SE190001', 'DBI202', 8.5)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "85 instead of 8.5 is rejected|||85 thay vì 8.5 bị từ chối",
+            "thu": "INSERT INTO Mark VALUES ('SE190002', 'DBI202', 85)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A negative score is rejected|||Điểm âm bị từ chối",
+            "thu": "INSERT INTO Mark VALUES ('SE190002', 'DBI202', -1)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A second mark for the same student and course is rejected|||Điểm thứ hai cùng sinh viên cùng môn bị từ chối",
+            "thu": "INSERT INTO Mark VALUES ('SE190001', 'DBI202', 8.5); INSERT INTO Mark VALUES ('SE190001', 'DBI202', 9.0)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A missing score is rejected|||Thiếu điểm bị từ chối",
+            "thu": "INSERT INTO Mark (studentID, course) VALUES ('SE190003', 'DBI202')",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "The same student may have marks in two courses|||Một sinh viên được có điểm ở hai môn",
+            "thu": "INSERT INTO Mark VALUES ('SE190001', 'DBI202', 8.5); INSERT INTO Mark VALUES ('SE190001', 'CSD201', 7.0)"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "PRIMARY KEY on studentID alone — a student could then have only one mark in the whole school.|||PRIMARY KEY chỉ trên studentID — khi đó cả trường mỗi sinh viên chỉ có một điểm."
+        },
+        {
+          "loi": "Forgetting NOT NULL on score — CHECK lets NULL through (NULL is UNKNOWN, not FALSE).|||Quên NOT NULL ở score — CHECK cho NULL lọt qua (NULL là UNKNOWN, không phải FALSE)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        },
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "DDL",
+          "vi": "ngôn ngữ định nghĩa dữ liệu",
+          "giaiThich": "CREATE, ALTER, DROP bảng/view/ràng buộc."
+        }
+      ]
+    },
+    {
+      "title": "What a DBMS gives you (and what it does not)",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "DBMS functions",
+        "data independence",
+        "declarative query"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory"
+      ],
+      "problemHtml": "<p>Five quick questions on the role of a DBMS (lesson 1.1).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu nhanh về vai trò của DBMS (bài 1.1).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Database ≠ DBMS ≠ database system.|||Database ≠ DBMS ≠ hệ CSDL.",
+        "Physical independence = storage changes; logical independence = schema changes.|||Độc lập vật lý = đổi lưu trữ; độc lập logic = đổi lược đồ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a DBMS gives you (and what it does not)\n\nAnswer in the answer panel (no code needed).\n\n1. Which statement about a DBMS is TRUE?Phát biểu nào về DBMS là ĐÚNG?\n2. SQL is called declarative because…SQL được gọi là ngôn ngữ khai báo vì…\n3. A new index is added; every existing program still works unchanged. This is…Thêm một chỉ mục; mọi chương trình cũ vẫn chạy không đổi. Đó là…\n4. Which job is NOT done by the DBMS itself?Việc nào KHÔNG do DBMS làm?\n5. \"Metadata\" in a DBMS means…\"Siêu dữ liệu\" trong DBMS nghĩa là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What a DBMS gives you (and what it does not) — answer key\n\n1. Which statement about a DBMS is TRUE?Phát biểu nào về DBMS là ĐÚNG?\n   Answer: d) It is the software that stores, retrieves and protects the data of a database\n   Database = the data; DBMS = the software managing it; database system = both together (+ users, apps).VI: Database = dữ liệu; DBMS = phần mềm quản lý; hệ CSDL = cả hai (+ người dùng, ứng dụng).\n\n2. SQL is called declarative because…SQL được gọi là ngôn ngữ khai báo vì…\n   Answer: b) you say WHAT result you want, the DBMS decides HOW to get it\n   The optimizer picks the access path; your query only describes the result.VI: Bộ tối ưu chọn cách truy cập; câu truy vấn chỉ mô tả kết quả.\n\n3. A new index is added; every existing program still works unchanged. This is…Thêm một chỉ mục; mọi chương trình cũ vẫn chạy không đổi. Đó là…\n   Answer: b) physical data independence\n   Changing storage structures (indexes, files) without touching the logical schema or programs is physical independence.VI: Đổi cấu trúc lưu trữ (chỉ mục, tệp) mà không đổi lược đồ logic hay chương trình là độc lập vật lý.\n\n4. Which job is NOT done by the DBMS itself?Việc nào KHÔNG do DBMS làm?\n   Answer: c) Deciding which business rules the company wants\n   People decide the rules (design); the DBMS enforces the rules you declare.VI: Con người quyết luật (thiết kế); DBMS thi hành luật bạn khai báo.\n\n5. \"Metadata\" in a DBMS means…\"Siêu dữ liệu\" trong DBMS nghĩa là…\n   Answer: d) the description of the data: tables, columns, types, keys\n   The catalog (data dictionary) stores the schema; the DBMS reads it to check every query.VI: Catalog (từ điển dữ liệu) lưu lược đồ; DBMS đọc nó để kiểm mọi câu truy vấn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> It is the software that stores, retrieves and protects the data of a database</p><p>Database = the data; DBMS = the software managing it; database system = both together (+ users, apps).</p><p><i>VI: Database = dữ liệu; DBMS = phần mềm quản lý; hệ CSDL = cả hai (+ người dùng, ứng dụng).</i></p></li><li><p><b>b)</b> you say WHAT result you want, the DBMS decides HOW to get it</p><p>The optimizer picks the access path; your query only describes the result.</p><p><i>VI: Bộ tối ưu chọn cách truy cập; câu truy vấn chỉ mô tả kết quả.</i></p></li><li><p><b>b)</b> physical data independence</p><p>Changing storage structures (indexes, files) without touching the logical schema or programs is physical independence.</p><p><i>VI: Đổi cấu trúc lưu trữ (chỉ mục, tệp) mà không đổi lược đồ logic hay chương trình là độc lập vật lý.</i></p></li><li><p><b>c)</b> Deciding which business rules the company wants</p><p>People decide the rules (design); the DBMS enforces the rules you declare.</p><p><i>VI: Con người quyết luật (thiết kế); DBMS thi hành luật bạn khai báo.</i></p></li><li><p><b>d)</b> the description of the data: tables, columns, types, keys</p><p>The catalog (data dictionary) stores the schema; the DBMS reads it to check every query.</p><p><i>VI: Catalog (từ điển dữ liệu) lưu lược đồ; DBMS đọc nó để kiểm mọi câu truy vấn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which statement about a DBMS is TRUE?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phát biểu nào về DBMS là ĐÚNG?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is the application that end users click on"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It is a spreadsheet with more rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It is another name for the data stored on disk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is the software that stores, retrieves and protects the data of a database"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Database = the data; DBMS = the software managing it; database system = both together (+ users, apps).</p><p><i>VI: Database = dữ liệu; DBMS = phần mềm quản lý; hệ CSDL = cả hai (+ người dùng, ứng dụng).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>SQL is called declarative because…</p><p style=\"opacity:.75;font-size:.92em\"><i>SQL được gọi là ngôn ngữ khai báo vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "you write the loops that scan the file yourself"
+              },
+              {
+                "ma": "b",
+                "noiDung": "you say WHAT result you want, the DBMS decides HOW to get it"
+              },
+              {
+                "ma": "c",
+                "noiDung": "every variable must be declared before use"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it only declares tables, it cannot read data"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The optimizer picks the access path; your query only describes the result.</p><p><i>VI: Bộ tối ưu chọn cách truy cập; câu truy vấn chỉ mô tả kết quả.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A new index is added; every existing program still works unchanged. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thêm một chỉ mục; mọi chương trình cũ vẫn chạy không đổi. Đó là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "referential integrity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "physical data independence"
+              },
+              {
+                "ma": "c",
+                "noiDung": "data redundancy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "logical data independence"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Changing storage structures (indexes, files) without touching the logical schema or programs is physical independence.</p><p><i>VI: Đổi cấu trúc lưu trữ (chỉ mục, tệp) mà không đổi lược đồ logic hay chương trình là độc lập vật lý.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which job is NOT done by the DBMS itself?</p><p style=\"opacity:.75;font-size:.92em\"><i>Việc nào KHÔNG do DBMS làm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Letting 200 users query at once"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Enforcing a CHECK constraint"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Deciding which business rules the company wants"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Recovering committed work after a crash"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>People decide the rules (design); the DBMS enforces the rules you declare.</p><p><i>VI: Con người quyết luật (thiết kế); DBMS thi hành luật bạn khai báo.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"Metadata\" in a DBMS means…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Siêu dữ liệu\" trong DBMS nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "rows copied to another server for reporting"
+              },
+              {
+                "ma": "b",
+                "noiDung": "deleted rows kept by the server for a later backup"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the newest version of each row after an UPDATE"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the description of the data: tables, columns, types, keys"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The catalog (data dictionary) stores the schema; the DBMS reads it to check every query.</p><p><i>VI: Catalog (từ điển dữ liệu) lưu lược đồ; DBMS đọc nó để kiểm mọi câu truy vấn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling MySQL \"a database\" — it is a DBMS; the database is what it manages.|||Gọi MySQL là \"một database\" — nó là DBMS; database là thứ nó quản lý."
+        },
+        {
+          "loi": "Confusing physical and logical data independence.|||Nhầm độc lập dữ liệu vật lý với logic."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DBMS",
+          "vi": "hệ quản trị CSDL"
+        },
+        {
+          "en": "data independence",
+          "vi": "độc lập dữ liệu"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,626 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi3-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi3-1"
+  },
+  "exercises": [
+    {
+      "title": "Read a relation: schema, tuples, degree, cardinality",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "relation",
+        "attribute",
+        "tuple",
+        "degree",
+        "cardinality",
+        "domain"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-model",
+        "slide"
+      ],
+      "problemHtml": "<p>The relation on slide 5 (a slice of <code>Movies</code>):</p><table><thead><tr><th>title</th><th>year</th><th>length</th><th>genre</th></tr></thead><tbody><tr><td>Gone With the Wind</td><td>1939</td><td>231</td><td>drama</td></tr><tr><td>Star Wars</td><td>1977</td><td>124</td><td>sciFi</td></tr><tr><td>Wayne's World</td><td>1992</td><td>95</td><td>comedy</td></tr></tbody></table><p>Fill in the words and numbers.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quan hệ của slide 5 (một lát của <code>Movies</code>) như bảng trên. Điền thuật ngữ và con số.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Degree ↔ columns, cardinality ↔ rows.|||Bậc ↔ cột, lực lượng ↔ dòng.",
+        "Write the schema exactly as Movies(title, year, length, genre).|||Viết lược đồ đúng dạng Movies(title, year, length, genre)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read a relation: schema, tuples, degree, cardinality\n\nAnswer in the answer panel (no code needed).\n\n1. Vocabulary of a relationThuật ngữ của một quan hệ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read a relation: schema, tuples, degree, cardinality — answer key\n\n1. Vocabulary of a relationThuật ngữ của một quan hệ\n   - r1.dap: 4\n   - r2.dap: 3\n   - r3.dap: Movies(title, year, length, genre) / Movies(title,year,length,genre)\n   - r4.dap: tuple / tuples\n   - r5.dap: domain / domains\n   Degree counts columns (4), cardinality counts rows (3). A row is a tuple; the type/set of values of an attribute is its domain. The schema is the relation name plus its attribute list.VI: Bậc đếm cột (4), lực lượng đếm dòng (3). Một dòng là một bộ (tuple); tập giá trị cho phép của thuộc tính là miền (domain). Lược đồ là tên quan hệ cùng danh sách thuộc tính.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Degree counts columns (4), cardinality counts rows (3). A row is a tuple; the type/set of values of an attribute is its domain. The schema is the relation name plus its attribute list.</p><p><i>VI: Bậc đếm cột (4), lực lượng đếm dòng (3). Một dòng là một bộ (tuple); tập giá trị cho phép của thuộc tính là miền (domain). Lược đồ là tên quan hệ cùng danh sách thuộc tính.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Vocabulary of a relation</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật ngữ của một quan hệ</i></p>",
+            "cot": [
+              {
+                "ma": "hoi",
+                "ten": "Question / Câu hỏi"
+              },
+              {
+                "ma": "dap",
+                "ten": "Answer / Đáp án"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "hoi": "Degree (arity) — number of attributes"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "hoi": "Cardinality — number of tuples"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "hoi": "The schema, written Name(attr, …) in order title, year, length, genre"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "hoi": "A row such as (Star Wars, 1977, 124, sciFi) is called a …"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "hoi": "The set of allowed values of an attribute (e.g. integers for year) is its …"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dap": "4",
+              "r2.dap": "3",
+              "r3.dap": [
+                "Movies(title, year, length, genre)",
+                "Movies(title,year,length,genre)"
+              ],
+              "r4.dap": [
+                "tuple",
+                "tuples"
+              ],
+              "r5.dap": [
+                "domain",
+                "domains"
+              ]
+            },
+            "giaiThich": "<p>Degree counts columns (4), cardinality counts rows (3). A row is a tuple; the type/set of values of an attribute is its domain. The schema is the relation name plus its attribute list.</p><p><i>VI: Bậc đếm cột (4), lực lượng đếm dòng (3). Một dòng là một bộ (tuple); tập giá trị cho phép của thuộc tính là miền (domain). Lược đồ là tên quan hệ cùng danh sách thuộc tính.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping degree and cardinality.|||Đảo bậc với lực lượng."
+        },
+        {
+          "loi": "Calling a row a \"record\" in an exam that asks for the relational term (tuple).|||Gọi dòng là \"record\" khi đề hỏi thuật ngữ quan hệ (tuple)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "tuple",
+          "vi": "bộ"
+        },
+        {
+          "en": "degree / arity",
+          "vi": "bậc"
+        },
+        {
+          "en": "cardinality",
+          "vi": "lực lượng"
+        },
+        {
+          "en": "domain",
+          "vi": "miền giá trị"
+        }
+      ]
+    },
+    {
+      "title": "Relations are sets: what changes the relation, and what is a key?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "relation as a set",
+        "key",
+        "instance vs schema"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-model",
+        "keys",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 6–11: a relation is a <b>set</b> of tuples, a schema is the structure, an instance is the data at one moment, and a key is a set of attributes no two tuples may share.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 6–11: quan hệ là một <b>tập</b> các bộ, lược đồ là cấu trúc, thể hiện là dữ liệu tại một thời điểm, khoá là tập thuộc tính mà hai bộ không được trùng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Set ⇒ no order, no duplicates.|||Tập ⇒ không thứ tự, không trùng.",
+        "A key must stay unique for EVERY instance the real world allows, not just today's rows.|||Khoá phải duy nhất với MỌI thể hiện mà thực tế cho phép, không chỉ dữ liệu hôm nay."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations are sets: what changes the relation, and what is a key?\n\nAnswer in the answer panel (no code needed).\n\n1. You list the same three tuples of Movies in a different row order. Is it the same relation?Liệt kê cùng ba bộ của Movies theo thứ tự dòng khác. Có phải cùng một quan hệ?\n2. Why is {title, year} — not {title} — the key of Movies?Vì sao khoá của Movies là {title, year} chứ không phải {title}?\n3. Adding a new film changes…Thêm một phim mới làm thay đổi…\n4. In the relational model each attribute value must be…Trong mô hình quan hệ, mỗi giá trị thuộc tính phải…\n5. The three parts of a data model (slide 3) are…Ba thành phần của một mô hình dữ liệu (slide 3) là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Relations are sets: what changes the relation, and what is a key? — answer key\n\n1. You list the same three tuples of Movies in a different row order. Is it the same relation?Liệt kê cùng ba bộ của Movies theo thứ tự dòng khác. Có phải cùng một quan hệ?\n   Answer: a) Yes — a relation is a set, row order is irrelevant\n   A set has no order. (Column order is also irrelevant if the attributes are reordered together with their values.)VI: Tập không có thứ tự. (Thứ tự cột cũng không quan trọng nếu đổi chỗ thuộc tính cùng giá trị.)\n\n2. Why is {title, year} — not {title} — the key of Movies?Vì sao khoá của Movies là {title, year} chứ không phải {title}?\n   Answer: b) Remakes share a title, so title alone can repeat\n   King Kong (1933) and King Kong (2005): same title, different films. The pair is unique.VI: King Kong (1933) và King Kong (2005): cùng tên, khác phim. Cặp mới là duy nhất.\n\n3. Adding a new film changes…Thêm một phim mới làm thay đổi…\n   Answer: c) the instance, not the schema\n   Schema = structure (changes rarely, via ALTER); instance = current set of tuples (changes with every INSERT).VI: Lược đồ = cấu trúc (hiếm đổi, qua ALTER); thể hiện = tập bộ hiện tại (đổi sau mỗi INSERT).\n\n4. In the relational model each attribute value must be…Trong mô hình quan hệ, mỗi giá trị thuộc tính phải…\n   Answer: a) atomic — a single value from the domain\n   First normal form: no lists or nested tables inside a cell. Uniqueness is only required of keys.VI: Dạng chuẩn 1: không danh sách hay bảng lồng trong một ô. Chỉ khoá mới phải duy nhất.\n\n5. The three parts of a data model (slide 3) are…Ba thành phần của một mô hình dữ liệu (slide 3) là…\n   Answer: d) structure, operations and constraints\n   Structure (tables), operations (queries/updates — the algebra) and constraints (keys, CHECKs…).VI: Cấu trúc (bảng), phép toán (truy vấn/cập nhật — đại số) và ràng buộc (khoá, CHECK…).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Yes — a relation is a set, row order is irrelevant</p><p>A set has no order. (Column order is also irrelevant if the attributes are reordered together with their values.)</p><p><i>VI: Tập không có thứ tự. (Thứ tự cột cũng không quan trọng nếu đổi chỗ thuộc tính cùng giá trị.)</i></p></li><li><p><b>b)</b> Remakes share a title, so title alone can repeat</p><p>King Kong (1933) and King Kong (2005): same title, different films. The pair is unique.</p><p><i>VI: King Kong (1933) và King Kong (2005): cùng tên, khác phim. Cặp mới là duy nhất.</i></p></li><li><p><b>c)</b> the instance, not the schema</p><p>Schema = structure (changes rarely, via ALTER); instance = current set of tuples (changes with every INSERT).</p><p><i>VI: Lược đồ = cấu trúc (hiếm đổi, qua ALTER); thể hiện = tập bộ hiện tại (đổi sau mỗi INSERT).</i></p></li><li><p><b>a)</b> atomic — a single value from the domain</p><p>First normal form: no lists or nested tables inside a cell. Uniqueness is only required of keys.</p><p><i>VI: Dạng chuẩn 1: không danh sách hay bảng lồng trong một ô. Chỉ khoá mới phải duy nhất.</i></p></li><li><p><b>d)</b> structure, operations and constraints</p><p>Structure (tables), operations (queries/updates — the algebra) and constraints (keys, CHECKs…).</p><p><i>VI: Cấu trúc (bảng), phép toán (truy vấn/cập nhật — đại số) và ràng buộc (khoá, CHECK…).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>You list the same three tuples of Movies in a different row order. Is it the same relation?</p><p style=\"opacity:.75;font-size:.92em\"><i>Liệt kê cùng ba bộ của Movies theo thứ tự dòng khác. Có phải cùng một quan hệ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — a relation is a set, row order is irrelevant"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — a relation is a list of rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only if the columns stay in the same order too"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — the first row is the key"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A set has no order. (Column order is also irrelevant if the attributes are reordered together with their values.)</p><p><i>VI: Tập không có thứ tự. (Thứ tự cột cũng không quan trọng nếu đổi chỗ thuộc tính cùng giá trị.)</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is {title, year} — not {title} — the key of Movies?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao khoá của Movies là {title, year} chứ không phải {title}?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "year must always be part of every key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Remakes share a title, so title alone can repeat"
+              },
+              {
+                "ma": "c",
+                "noiDung": "title is too long to be a key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A key needs at least two attributes"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>King Kong (1933) and King Kong (2005): same title, different films. The pair is unique.</p><p><i>VI: King Kong (1933) và King Kong (2005): cùng tên, khác phim. Cặp mới là duy nhất.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Adding a new film changes…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thêm một phim mới làm thay đổi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the schema, not the instance"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the domain of title"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the instance, not the schema"
+              },
+              {
+                "ma": "d",
+                "noiDung": "both the schema and the instance"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Schema = structure (changes rarely, via ALTER); instance = current set of tuples (changes with every INSERT).</p><p><i>VI: Lược đồ = cấu trúc (hiếm đổi, qua ALTER); thể hiện = tập bộ hiện tại (đổi sau mỗi INSERT).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>In the relational model each attribute value must be…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong mô hình quan hệ, mỗi giá trị thuộc tính phải…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "atomic — a single value from the domain"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a list of values separated by commas"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a pointer to another tuple"
+              },
+              {
+                "ma": "d",
+                "noiDung": "unique in the whole relation"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>First normal form: no lists or nested tables inside a cell. Uniqueness is only required of keys.</p><p><i>VI: Dạng chuẩn 1: không danh sách hay bảng lồng trong một ô. Chỉ khoá mới phải duy nhất.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>The three parts of a data model (slide 3) are…</p><p style=\"opacity:.75;font-size:.92em\"><i>Ba thành phần của một mô hình dữ liệu (slide 3) là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "files, pages and records"
+              },
+              {
+                "ma": "b",
+                "noiDung": "DDL, DML and DCL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "tables, rows and columns"
+              },
+              {
+                "ma": "d",
+                "noiDung": "structure, operations and constraints"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Structure (tables), operations (queries/updates — the algebra) and constraints (keys, CHECKs…).</p><p><i>VI: Cấu trúc (bảng), phép toán (truy vấn/cập nhật — đại số) và ràng buộc (khoá, CHECK…).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a key is decided by today's data — today no remake may exist, but the rule must allow one.|||Tưởng khoá được quyết theo dữ liệu hôm nay — hôm nay có thể chưa có phim làm lại, nhưng luật phải cho phép."
+        },
+        {
+          "loi": "Mixing schema (structure) and instance (data).|||Nhầm lược đồ (cấu trúc) với thể hiện (dữ liệu)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "schema / instance",
+          "vi": "lược đồ / thể hiện"
+        }
+      ]
+    },
+    {
+      "title": "Declare Movies with its composite key",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "CREATE TABLE",
+        "composite key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "ddl",
+        "keys",
+        "slide"
+      ],
+      "problemHtml": "<p>Slide 9 declares <code>Movies(title, year, length, genre)</code> with key <code>(title, year)</code>. Write it in SQL: <code>title VARCHAR(100)</code>, <code>year INT</code>, <code>length INT</code>, <code>genre VARCHAR(10)</code>; title and year are required.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One CREATE TABLE statement named <code>Movies</code>.</li>\n  <li>The PRIMARY KEY is the pair (title, year).</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 9 khai <code>Movies(title, year, length, genre)</code> với khoá <code>(title, year)</code>. Viết bằng SQL: <code>title VARCHAR(100)</code>, <code>year INT</code>, <code>length INT</code>, <code>genre VARCHAR(10)</code>; title và year bắt buộc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu CREATE TABLE tên <code>Movies</code>.</li>\n  <li>PRIMARY KEY là cặp (title, year).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO Movies VALUES ('Star Wars', 1977, 124, 'sciFi')|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO Movies VALUES ('Star Wars', 1977, 124, 'sciFi')",
+          "output": "Accepted (the statement succeeds).|||Chạy được (câu lệnh thành công).",
+          "explanation": "Check \"A film can be inserted\".|||Kiểm \"Thêm được một phim\"."
+        }
+      ],
+      "hintsJson": [
+        "A composite key is declared at table level: PRIMARY KEY (title, year).|||Khoá ghép khai ở mức bảng: PRIMARY KEY (title, year).",
+        "Columns of a primary key are NOT NULL automatically, but writing NOT NULL makes the intent clear.|||Cột của khoá chính tự là NOT NULL, nhưng ghi NOT NULL cho rõ ý."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Movies (\n    title  VARCHAR(100) NOT NULL,\n    year   INT          NOT NULL,\n    length INT          NULL,\n    genre  VARCHAR(10)  NULL,\n    CONSTRAINT pk_movies PRIMARY KEY (title, year)   -- remakes share a title, not a (title, year)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two separate <code>PRIMARY KEY</code> words on two columns is an error; a composite key needs the table-level form with both columns in one list.</p>",
+      "solutionExplanationHtmlVi": "<p>Viết hai chữ <code>PRIMARY KEY</code> trên hai cột là lỗi; khoá ghép phải khai ở mức bảng với cả hai cột trong một danh sách.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A film can be inserted|||Thêm được một phim",
+            "thu": "INSERT INTO Movies VALUES ('Star Wars', 1977, 124, 'sciFi')"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A remake (same title, other year) is accepted|||Phim làm lại (cùng tên, khác năm) được nhận",
+            "thu": "INSERT INTO Movies VALUES ('King Kong', 1933, 100, 'drama'); INSERT INTO Movies VALUES ('King Kong', 2005, 187, 'drama')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same (title, year) twice is rejected|||Cùng (title, year) hai lần bị từ chối",
+            "thu": "INSERT INTO Movies VALUES ('Star Wars', 1977, 124, 'sciFi'); INSERT INTO Movies VALUES ('Star Wars', 1977, 121, 'sciFi')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A film without a year is rejected|||Phim thiếu năm bị từ chối",
+            "thu": "INSERT INTO Movies (title, length) VALUES ('Untitled', 90)",
+            "maLoi": "23502"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "PRIMARY KEY on title alone — the remake King Kong (2005) is rejected.|||PRIMARY KEY chỉ trên title — phim làm lại King Kong (2005) bị từ chối."
+        },
+        {
+          "loi": "No key at all — two identical films can be stored.|||Không có khoá — lưu được hai phim y hệt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "composite key",
+          "vi": "khoá ghép"
+        }
+      ]
+    },
+    {
+      "title": "Prove that title alone is not a key",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "key",
+        "GROUP BY",
+        "HAVING"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "keys",
+        "group-by",
+        "slide"
+      ],
+      "problemHtml": "<p>On the Movies instance, a key candidate is refuted by two tuples that share its value. Find every <b>studioName</b> value that appears in more than one movie — proof that <code>studioName</code> is not a key of Movies — with the number of movies.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Movies schema</b> (the running example of the school slides — full script in the <code>Movies.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 movies, 6 stars, 13 StarsIn rows, 4 executives, 4 studios. E.T. and Jaws have no stars listed; Fox has no president (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>studioName, movies</code>.</li>\n  <li>Only studios with at least 2 movies; row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên thể hiện Movies, một ứng viên khoá bị bác bỏ khi hai bộ có cùng giá trị đó. Tìm mọi giá trị <b>studioName</b> xuất hiện ở hơn một phim — bằng chứng <code>studioName</code> không phải khoá của Movies — kèm số phim.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ Movies</b> (ví dụ xuyên suốt của slide trường — script đầy đủ ở tab <code>Movies.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 phim, 6 diễn viên, 13 dòng StarsIn, 4 nhà điều hành, 4 hãng. E.T. và Jaws chưa có diễn viên; Fox không có chủ tịch (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>studioName, movies</code>.</li>\n  <li>Chỉ hãng có từ 2 phim; thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "studioName | movies\n-----------+-------\nFox        | 2     \nParamount  | 2     \nDisney     | 4     ",
+          "explanation": "Expected result of check \"Studios that appear more than once\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Hãng xuất hiện hơn một lần\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Group the tuples by studioName and count each group.|||Gộp các bộ theo studioName và đếm từng nhóm.",
+        "Keep the groups with HAVING COUNT(*) &gt; 1.|||Giữ nhóm có HAVING COUNT(*) &gt; 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT studioName, COUNT(*) AS movies\nFROM Movies\nGROUP BY studioName\nHAVING COUNT(*) > 1;      -- any group with 2+ tuples refutes \"studioName is a key\"\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One instance can <i>refute</i> a key (two tuples share the value) but can never <i>prove</i> one — a key is a rule about every allowed instance. This GROUP BY … HAVING COUNT(*) &gt; 1 pattern is also how you find duplicates before adding a UNIQUE constraint.</p>",
+      "solutionExplanationHtmlVi": "<p>Một thể hiện có thể <i>bác bỏ</i> khoá (hai bộ trùng giá trị) nhưng không bao giờ <i>chứng minh</i> được khoá — khoá là luật cho mọi thể hiện hợp lệ. Mẫu GROUP BY … HAVING COUNT(*) &gt; 1 cũng là cách tìm trùng trước khi thêm ràng buộc UNIQUE.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Studios that appear more than once|||Hãng xuất hiện hơn một lần",
+            "mongDoi": {
+              "cot": [
+                "studioName",
+                "movies"
+              ],
+              "hang": [
+                [
+                  "Fox",
+                  2
+                ],
+                [
+                  "Paramount",
+                  2
+                ],
+                [
+                  "Disney",
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Lucasfilm gets a second film|||Lucasfilm có thêm phim thứ hai",
+            "an": true,
+            "themCsdl": "INSERT INTO Movies VALUES ('THX 1138', 1971, 86, N'sciFi', N'Lucasfilm', 100), ('American Graffiti', 1973, 110, N'comedy', N'Lucasfilm', 100)",
+            "mongDoi": {
+              "cot": [
+                "studioName",
+                "movies"
+              ],
+              "hang": [
+                [
+                  "Lucasfilm",
+                  2
+                ],
+                [
+                  "Fox",
+                  2
+                ],
+                [
+                  "Paramount",
+                  2
+                ],
+                [
+                  "Disney",
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses HAVING|||Dùng HAVING",
+            "khop": "\\bHAVING\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting HAVING — studios with a single film are listed too.|||Quên HAVING — hãng chỉ có một phim cũng hiện."
+        },
+        {
+          "loi": "HAVING COUNT(*) &gt; 2 — two films already break the key.|||HAVING COUNT(*) &gt; 2 — chỉ hai phim đã phá khoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GROUP BY",
+          "vi": "gộp nhóm",
+          "giaiThich": "Mỗi nhóm giá trị giống nhau ⇒ một dòng kết quả."
+        },
+        {
+          "en": "HAVING",
+          "vi": "điều kiện trên nhóm",
+          "giaiThich": "Lọc NHÓM sau khi gộp (dùng được hàm gộp); WHERE lọc dòng trước khi gộp."
+        }
+      ]
+    }
+  ]
+}

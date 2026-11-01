@@ -1,0 +1,741 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-rang-buoc-quan-he",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-rang-buoc-quan-he"
+  },
+  "exercises": [
+    {
+      "title": "Which family of constraint is it?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "domain constraint",
+        "key constraint",
+        "referential integrity",
+        "general constraint"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "constraints"
+      ],
+      "problemHtml": "<p>Lesson 2.4 sorts constraints into four families. Classify each rule.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 2.4 chia ràng buộc thành bốn họ. Phân loại từng luật.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One attribute, a set of values ⇒ domain.|||Một thuộc tính, một tập giá trị ⇒ miền.",
+        "\"At most N per …\" needs counting rows ⇒ general constraint.|||\"Tối đa N mỗi …\" cần đếm dòng ⇒ ràng buộc tổng quát."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which family of constraint is it?\n\nAnswer in the answer panel (no code needed).\n\n1. Rule → familyLuật → họ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which family of constraint is it? — answer key\n\n1. Rule → familyLuật → họ\n   - r1.ho: domain\n   - r2.ho: key\n   - r3.ho: referential integrity\n   - r4.ho: general (CHECK / assertion)\n   - r5.ho: domain\n   - r6.ho: key\n   Domain = allowed values of one attribute; key = uniqueness; referential = values must exist elsewhere; anything spanning many rows/tables is a general constraint.VI: Miền = giá trị cho phép của một thuộc tính; khoá = duy nhất; tham chiếu = giá trị phải có ở nơi khác; mọi thứ trải nhiều dòng/bảng là ràng buộc tổng quát.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Domain = allowed values of one attribute; key = uniqueness; referential = values must exist elsewhere; anything spanning many rows/tables is a general constraint.</p><p><i>VI: Miền = giá trị cho phép của một thuộc tính; khoá = duy nhất; tham chiếu = giá trị phải có ở nơi khác; mọi thứ trải nhiều dòng/bảng là ràng buộc tổng quát.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Rule → family</p><p style=\"opacity:.75;font-size:.92em\"><i>Luật → họ</i></p>",
+            "cot": [
+              {
+                "ma": "luat",
+                "ten": "Rule / Luật"
+              },
+              {
+                "ma": "ho",
+                "ten": "Family / Họ",
+                "luaChon": [
+                  "domain",
+                  "key",
+                  "referential integrity",
+                  "general (CHECK / assertion)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "luat": "score is a number with one decimal between 0 and 10"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "luat": "no two students have the same sid"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "luat": "every sid in Enroll exists in Student"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "luat": "a student may not take more than 6 courses per term"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "luat": "major is one of SE, AI, GD, IA"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "luat": "the pair (sid, cid) appears at most once in Enroll"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ho": "domain",
+              "r2.ho": "key",
+              "r3.ho": "referential integrity",
+              "r4.ho": "general (CHECK / assertion)",
+              "r5.ho": "domain",
+              "r6.ho": "key"
+            },
+            "giaiThich": "<p>Domain = allowed values of one attribute; key = uniqueness; referential = values must exist elsewhere; anything spanning many rows/tables is a general constraint.</p><p><i>VI: Miền = giá trị cho phép của một thuộc tính; khoá = duy nhất; tham chiếu = giá trị phải có ở nơi khác; mọi thứ trải nhiều dòng/bảng là ràng buộc tổng quát.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling \"(sid, cid) once\" referential — it is uniqueness, a key.|||Gọi \"(sid, cid) một lần\" là tham chiếu — đó là duy nhất, tức khoá."
+        },
+        {
+          "loi": "Calling \"at most 6 courses\" a domain constraint — it involves many rows.|||Gọi \"tối đa 6 môn\" là ràng buộc miền — nó liên quan nhiều dòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "referential integrity",
+          "vi": "toàn vẹn tham chiếu"
+        },
+        {
+          "en": "domain constraint",
+          "vi": "ràng buộc miền"
+        }
+      ]
+    },
+    {
+      "title": "Referential integrity in algebra: π_sid(EnrollRaw) − π_sid(StudentRaw)",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "referential integrity",
+        "difference",
+        "EXCEPT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "constraints",
+        "except"
+      ],
+      "problemHtml": "<p>The constraint \"every enrolment belongs to a known student\" is written in algebra as <code>π<sub>sid</sub>(EnrollRaw) − π<sub>sid</sub>(StudentRaw) = ∅</code>. Compute the left side: the sids that <b>violate</b> it.</p>\n<p><b>Imported from Excel, no constraints yet</b> (tab <code>Raw.sql</code>): <code>StudentRaw(sid, name, major)</code> — 5 rows; <code>EnrollRaw(sid, cid, score)</code> — 6 rows. Neither table has a primary or foreign key, so bad rows got in.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One column: <code>sid</code>.</li>\n  <li>Each violating sid once; row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ràng buộc \"mọi lượt đăng ký thuộc về một sinh viên đã biết\" viết bằng đại số là <code>π<sub>sid</sub>(EnrollRaw) − π<sub>sid</sub>(StudentRaw) = ∅</code>. Tính vế trái: các sid <b>vi phạm</b>.</p>\n<p><b>Nhập từ Excel, chưa có ràng buộc</b> (tab <code>Raw.sql</code>): <code>StudentRaw(sid, name, major)</code> — 5 dòng; <code>EnrollRaw(sid, cid, score)</code> — 6 dòng. Hai bảng chưa có khoá chính/khoá ngoại nên dòng sai đã lọt vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một cột: <code>sid</code>.</li>\n  <li>Mỗi sid vi phạm một lần; thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sid \n----\nSE09",
+          "explanation": "Expected result of check \"Orphan sids in EnrollRaw\" (row order does not matter).|||Kết quả mong đợi của kiểm \"sid mồ côi trong EnrollRaw\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The constraint says the difference must be empty — so the difference itself lists the violations.|||Ràng buộc nói phép hiệu phải rỗng — nên chính phép hiệu liệt kê các vi phạm.",
+        "EnrollRaw first, StudentRaw second.|||EnrollRaw trước, StudentRaw sau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Raw.sql",
+          "language": "sql",
+          "code": "-- Raw.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Raw.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT sid FROM EnrollRaw\nEXCEPT                          -- the constraint holds iff this is empty\nSELECT sid FROM StudentRaw;\n"
+        },
+        {
+          "name": "Raw.sql",
+          "language": "sql",
+          "code": "-- Raw.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Raw.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every constraint can be written as \"some expression = ∅\" (or R ⊆ S). Before adding a FOREIGN KEY to imported data, run exactly this query and fix what it returns — otherwise ALTER TABLE … ADD FOREIGN KEY fails.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi ràng buộc đều viết được dạng \"một biểu thức = ∅\" (hoặc R ⊆ S). Trước khi thêm FOREIGN KEY cho dữ liệu nhập về, chạy đúng truy vấn này và sửa những gì nó trả — nếu không ALTER TABLE … ADD FOREIGN KEY sẽ lỗi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Orphan sids in EnrollRaw|||sid mồ côi trong EnrollRaw",
+            "mongDoi": {
+              "cot": [
+                "sid"
+              ],
+              "hang": [
+                [
+                  "SE09"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "More orphans|||Thêm dòng mồ côi",
+            "an": true,
+            "themCsdl": "INSERT INTO StudentRaw VALUES ('AI01', N'Chi Trần', 'AI'), ('SE05', N'Em', 'SE');\nINSERT INTO EnrollRaw VALUES ('SE07', 'CSD201', 6.5), ('SE05', 'CSD201', -1.0), ('SE09', 'MAE101', 5.0)",
+            "mongDoi": {
+              "cot": [
+                "sid"
+              ],
+              "hang": [
+                [
+                  "SE07"
+                ],
+                [
+                  "SE09"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses EXCEPT or NOT EXISTS|||Dùng EXCEPT hoặc NOT EXISTS",
+            "khop": "\\bEXCEPT\\b|\\bNOT\\s+EXISTS\\b|\\bNOT\\s+IN\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reversing the operands — that lists students without enrolments (allowed, not a violation).|||Đảo hai vế — đó là sinh viên chưa đăng ký (được phép, không vi phạm)."
+        },
+        {
+          "loi": "Hard-coding SE09 — the hidden data has other orphans.|||Ghi cứng SE09 — dữ liệu ẩn có dòng mồ côi khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "UNION / INTERSECT / EXCEPT",
+          "vi": "hợp / giao / hiệu",
+          "giaiThich": "Phép tập hợp trên hai câu SELECT cùng số cột, kiểu tương thích; mặc định bỏ dòng trùng."
+        }
+      ]
+    },
+    {
+      "title": "Key violations: sids used by two different rows",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "key constraint",
+        "self-join",
+        "GROUP BY HAVING"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "constraints",
+        "group-by"
+      ],
+      "problemHtml": "<p>The key constraint on StudentRaw is <code>σ<sub>S1.sid = S2.sid AND S1.name ≠ S2.name</sub>(ρ<sub>S1</sub>(StudentRaw) × ρ<sub>S2</sub>(StudentRaw)) = ∅</code>. List the sids that break it, with how many rows use each.</p>\n<p><b>Imported from Excel, no constraints yet</b> (tab <code>Raw.sql</code>): <code>StudentRaw(sid, name, major)</code> — 5 rows; <code>EnrollRaw(sid, cid, score)</code> — 6 rows. Neither table has a primary or foreign key, so bad rows got in.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>sid, copies</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ràng buộc khoá của StudentRaw là <code>σ<sub>S1.sid = S2.sid AND S1.name ≠ S2.name</sub>(ρ<sub>S1</sub>(StudentRaw) × ρ<sub>S2</sub>(StudentRaw)) = ∅</code>. Liệt kê các sid phá nó, kèm số dòng dùng mỗi sid.</p>\n<p><b>Nhập từ Excel, chưa có ràng buộc</b> (tab <code>Raw.sql</code>): <code>StudentRaw(sid, name, major)</code> — 5 dòng; <code>EnrollRaw(sid, cid, score)</code> — 6 dòng. Hai bảng chưa có khoá chính/khoá ngoại nên dòng sai đã lọt vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>sid, copies</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sid  | copies\n-----+-------\nSE02 | 2     ",
+          "explanation": "Expected result of check \"Duplicated sids\" (row order does not matter).|||Kết quả mong đợi của kiểm \"sid bị trùng\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "A key is violated when one sid appears in more than one row.|||Khoá bị vi phạm khi một sid xuất hiện ở hơn một dòng.",
+        "GROUP BY sid HAVING COUNT(*) &gt; 1"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Raw.sql",
+          "language": "sql",
+          "code": "-- Raw.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Raw.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT sid, COUNT(*) AS copies\nFROM StudentRaw\nGROUP BY sid\nHAVING COUNT(*) > 1;\n"
+        },
+        {
+          "name": "Raw.sql",
+          "language": "sql",
+          "code": "-- Raw.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Raw.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: SE02 2 (\"Bình\" and \"Bình Nguyễn\" share SE02). Fix the duplicates, then <code>ALTER TABLE StudentRaw ADD CONSTRAINT pk_studentraw PRIMARY KEY (sid)</code> will succeed.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: SE02 2 (\"Bình\" và \"Bình Nguyễn\" cùng SE02). Sửa chỗ trùng thì <code>ALTER TABLE StudentRaw ADD CONSTRAINT pk_studentraw PRIMARY KEY (sid)</code> mới chạy được.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Duplicated sids|||sid bị trùng",
+            "mongDoi": {
+              "cot": [
+                "sid",
+                "copies"
+              ],
+              "hang": [
+                [
+                  "SE02",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Another duplicated sid|||Thêm một sid trùng",
+            "an": true,
+            "themCsdl": "INSERT INTO StudentRaw VALUES ('AI01', N'Chi Trần', 'AI'), ('SE05', N'Em', 'SE');\nINSERT INTO EnrollRaw VALUES ('SE07', 'CSD201', 6.5), ('SE05', 'CSD201', -1.0), ('SE09', 'MAE101', 5.0)",
+            "mongDoi": {
+              "cot": [
+                "sid",
+                "copies"
+              ],
+              "hang": [
+                [
+                  "AI01",
+                  2
+                ],
+                [
+                  "SE02",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses GROUP BY … HAVING or a self-join|||Dùng GROUP BY … HAVING hoặc tự nối",
+            "khop": "\\bHAVING\\b|\\bJOIN\\s+StudentRaw\\b|,\\s*StudentRaw\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No HAVING — every sid is listed with 1.|||Không HAVING — sid nào cũng hiện với 1."
+        },
+        {
+          "loi": "Grouping by name — names may repeat legally; the key is sid.|||Gộp theo name — tên được phép trùng; khoá là sid."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "HAVING",
+          "vi": "điều kiện trên nhóm",
+          "giaiThich": "Lọc NHÓM sau khi gộp (dùng được hàm gộp); WHERE lọc dòng trước khi gộp."
+        }
+      ]
+    },
+    {
+      "title": "Domain violations: scores outside 0–10",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "domain constraint",
+        "NULL vs CHECK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "constraints"
+      ],
+      "problemHtml": "<p>The domain of score is \"0 to 10, or unknown\". Return the enrolment rows that violate it. (A NULL score is allowed: a CHECK only rejects a row when its condition is FALSE.)</p>\n<p><b>Imported from Excel, no constraints yet</b> (tab <code>Raw.sql</code>): <code>StudentRaw(sid, name, major)</code> — 5 rows; <code>EnrollRaw(sid, cid, score)</code> — 6 rows. Neither table has a primary or foreign key, so bad rows got in.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>sid, cid, score</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Miền của score là \"từ 0 tới 10, hoặc chưa biết\". Trả các dòng đăng ký vi phạm. (Điểm NULL được phép: CHECK chỉ từ chối dòng khi điều kiện là FALSE.)</p>\n<p><b>Nhập từ Excel, chưa có ràng buộc</b> (tab <code>Raw.sql</code>): <code>StudentRaw(sid, name, major)</code> — 5 dòng; <code>EnrollRaw(sid, cid, score)</code> — 6 dòng. Hai bảng chưa có khoá chính/khoá ngoại nên dòng sai đã lọt vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>sid, cid, score</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sid  | cid    | score\n-----+--------+------\nAI01 | DBI202 | 12.5 ",
+          "explanation": "Expected result of check \"Rows with an impossible score\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Dòng có điểm vô lý\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Out of range = score &lt; 0 OR score &gt; 10.|||Ngoài miền = score &lt; 0 OR score &gt; 10.",
+        "Do not report NULL scores — \"unknown\" is allowed here.|||Đừng báo điểm NULL — \"chưa biết\" được phép ở đây."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Raw.sql",
+          "language": "sql",
+          "code": "-- Raw.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Raw.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT sid, cid, score\nFROM EnrollRaw\nWHERE score < 0 OR score > 10;      -- NULL makes both tests UNKNOWN ⇒ not returned (allowed)\n"
+        },
+        {
+          "name": "Raw.sql",
+          "language": "sql",
+          "code": "-- Raw.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Raw.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: (AI01, DBI202, 12.5). The same three-valued logic decides what a CHECK accepts: TRUE or UNKNOWN pass, only FALSE is rejected.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: (AI01, DBI202, 12.5). Cùng logic ba trị quyết định CHECK nhận gì: TRUE hoặc UNKNOWN đều qua, chỉ FALSE bị từ chối.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE StudentRaw (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NULL);\nCREATE TABLE EnrollRaw  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(4,1) NULL);\nINSERT INTO StudentRaw VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                              ('SE02', N'Bình Nguyễn', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO EnrollRaw VALUES ('SE01', 'DBI202', 8.5), ('SE02', 'DBI202', 6.0), ('AI01', 'CSD201', 8.0),\n                             ('SE09', 'DBI202', 7.0), ('AI01', 'DBI202', 12.5), ('GD01', 'MAE101', NULL);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Rows with an impossible score|||Dòng có điểm vô lý",
+            "mongDoi": {
+              "cot": [
+                "sid",
+                "cid",
+                "score"
+              ],
+              "hang": [
+                [
+                  "AI01",
+                  "DBI202",
+                  12.5
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A negative score added|||Thêm một điểm âm",
+            "an": true,
+            "themCsdl": "INSERT INTO StudentRaw VALUES ('AI01', N'Chi Trần', 'AI'), ('SE05', N'Em', 'SE');\nINSERT INTO EnrollRaw VALUES ('SE07', 'CSD201', 6.5), ('SE05', 'CSD201', -1.0), ('SE09', 'MAE101', 5.0)",
+            "mongDoi": {
+              "cot": [
+                "sid",
+                "cid",
+                "score"
+              ],
+              "hang": [
+                [
+                  "AI01",
+                  "DBI202",
+                  12.5
+                ],
+                [
+                  "SE05",
+                  "CSD201",
+                  -1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Has a WHERE|||Có WHERE",
+            "khop": "\\bWHERE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only score &gt; 10 — the hidden data has a negative score.|||Chỉ score &gt; 10 — dữ liệu ẩn có điểm âm."
+        },
+        {
+          "loi": "Adding OR score IS NULL — NULL is not a violation of CHECK (score BETWEEN 0 AND 10).|||Thêm OR score IS NULL — NULL không vi phạm CHECK (score BETWEEN 0 AND 10)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        },
+        {
+          "en": "NULL",
+          "vi": "giá trị chưa biết",
+          "giaiThich": "So sánh với NULL bằng = cho UNKNOWN ⇒ dòng bị loại. Dùng IS NULL / IS NOT NULL."
+        }
+      ]
+    },
+    {
+      "title": "Deleting a row that is still referenced",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "ON DELETE",
+        "referential actions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "constraints",
+        "foreign-key"
+      ],
+      "problemHtml": "<p>Enroll.sid → Student.sid. Student SE01 still has two enrolments. What happens on <code>DELETE FROM Student WHERE sid = 'SE01'</code> under each policy?</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Enroll.sid → Student.sid. Sinh viên SE01 còn hai lượt đăng ký. Chuyện gì xảy ra với <code>DELETE FROM Student WHERE sid = 'SE01'</code> theo từng chính sách?</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Parent side: DELETE / UPDATE of the key can violate. Child side: INSERT / UPDATE of the FK can violate.|||Phía cha: DELETE / UPDATE khoá có thể vi phạm. Phía con: INSERT / UPDATE khoá ngoại có thể vi phạm.",
+        "CASCADE, SET NULL, SET DEFAULT, NO ACTION are the four policies.|||CASCADE, SET NULL, SET DEFAULT, NO ACTION là bốn chính sách."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deleting a row that is still referenced\n\nAnswer in the answer panel (no code needed).\n\n1. Default (NO ACTION / RESTRICT):Mặc định (NO ACTION / RESTRICT):\n2. ON DELETE CASCADE:ON DELETE CASCADE:\n3. ON DELETE SET NULL — why is it impossible for Enroll.sid here?ON DELETE SET NULL — vì sao không dùng được cho Enroll.sid ở đây?\n4. Which statement on the CHILD table can also violate the foreign key?Câu lệnh nào trên bảng CON cũng có thể vi phạm khoá ngoại?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Deleting a row that is still referenced — answer key\n\n1. Default (NO ACTION / RESTRICT):Mặc định (NO ACTION / RESTRICT):\n   Answer: d) The DELETE is rejected; nothing changes\n   The default protects the children: the parent cannot be deleted while referenced.VI: Mặc định bảo vệ dòng con: không xoá được cha khi còn bị tham chiếu.\n\n2. ON DELETE CASCADE:ON DELETE CASCADE:\n   Answer: b) SE01 and its two enrolments are deleted\n   Cascade propagates the delete to the referencing rows.VI: Cascade lan việc xoá sang các dòng tham chiếu.\n\n3. ON DELETE SET NULL — why is it impossible for Enroll.sid here?ON DELETE SET NULL — vì sao không dùng được cho Enroll.sid ở đây?\n   Answer: a) sid is part of Enroll's primary key, which cannot be NULL\n   SET NULL needs a nullable FK column; Enroll.sid is in the PK (sid, cid).VI: SET NULL cần cột khoá ngoại cho phép NULL; Enroll.sid nằm trong khoá chính (sid, cid).\n\n4. Which statement on the CHILD table can also violate the foreign key?Câu lệnh nào trên bảng CON cũng có thể vi phạm khoá ngoại?\n   Answer: a) INSERT INTO Enroll VALUES ('SE99', 'DBI202', 7)\n   A child row pointing at a non-existent parent is the classic violation. Deleting children or changing score never breaks the FK.VI: Dòng con trỏ tới cha không tồn tại là vi phạm kinh điển. Xoá dòng con hay đổi score không bao giờ phá khoá ngoại.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> The DELETE is rejected; nothing changes</p><p>The default protects the children: the parent cannot be deleted while referenced.</p><p><i>VI: Mặc định bảo vệ dòng con: không xoá được cha khi còn bị tham chiếu.</i></p></li><li><p><b>b)</b> SE01 and its two enrolments are deleted</p><p>Cascade propagates the delete to the referencing rows.</p><p><i>VI: Cascade lan việc xoá sang các dòng tham chiếu.</i></p></li><li><p><b>a)</b> sid is part of Enroll's primary key, which cannot be NULL</p><p>SET NULL needs a nullable FK column; Enroll.sid is in the PK (sid, cid).</p><p><i>VI: SET NULL cần cột khoá ngoại cho phép NULL; Enroll.sid nằm trong khoá chính (sid, cid).</i></p></li><li><p><b>a)</b> INSERT INTO Enroll VALUES ('SE99', 'DBI202', 7)</p><p>A child row pointing at a non-existent parent is the classic violation. Deleting children or changing score never breaks the FK.</p><p><i>VI: Dòng con trỏ tới cha không tồn tại là vi phạm kinh điển. Xoá dòng con hay đổi score không bao giờ phá khoá ngoại.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Default (NO ACTION / RESTRICT):</p><p style=\"opacity:.75;font-size:.92em\"><i>Mặc định (NO ACTION / RESTRICT):</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SE01 is deleted, its enrolments stay unchanged"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SE01 is deleted, its enrolments get sid = NULL"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SE01 and its two enrolments are deleted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The DELETE is rejected; nothing changes"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The default protects the children: the parent cannot be deleted while referenced.</p><p><i>VI: Mặc định bảo vệ dòng con: không xoá được cha khi còn bị tham chiếu.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>ON DELETE CASCADE:</p><p style=\"opacity:.75;font-size:.92em\"><i>ON DELETE CASCADE:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The DELETE is rejected; nothing changes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SE01 and its two enrolments are deleted"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only the two enrolments are deleted"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SE01 is deleted, its enrolments get sid = NULL"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Cascade propagates the delete to the referencing rows.</p><p><i>VI: Cascade lan việc xoá sang các dòng tham chiếu.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>ON DELETE SET NULL — why is it impossible for Enroll.sid here?</p><p style=\"opacity:.75;font-size:.92em\"><i>ON DELETE SET NULL — vì sao không dùng được cho Enroll.sid ở đây?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "sid is part of Enroll's primary key, which cannot be NULL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Foreign keys cannot reference CHAR columns"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SET NULL deletes the parent twice"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SET NULL exists only in PostgreSQL"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>SET NULL needs a nullable FK column; Enroll.sid is in the PK (sid, cid).</p><p><i>VI: SET NULL cần cột khoá ngoại cho phép NULL; Enroll.sid nằm trong khoá chính (sid, cid).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Which statement on the CHILD table can also violate the foreign key?</p><p style=\"opacity:.75;font-size:.92em\"><i>Câu lệnh nào trên bảng CON cũng có thể vi phạm khoá ngoại?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "INSERT INTO Enroll VALUES ('SE99', 'DBI202', 7)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "SELECT * FROM Enroll"
+              },
+              {
+                "ma": "c",
+                "noiDung": "UPDATE Enroll SET score = 9 WHERE sid = 'SE01'"
+              },
+              {
+                "ma": "d",
+                "noiDung": "DELETE FROM Enroll WHERE sid = 'SE01'"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A child row pointing at a non-existent parent is the classic violation. Deleting children or changing score never breaks the FK.</p><p><i>VI: Dòng con trỏ tới cha không tồn tại là vi phạm kinh điển. Xoá dòng con hay đổi score không bao giờ phá khoá ngoại.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the default is CASCADE — the default is to reject.|||Tưởng mặc định là CASCADE — mặc định là từ chối."
+        },
+        {
+          "loi": "Choosing SET NULL for a column that is part of a primary key.|||Chọn SET NULL cho cột nằm trong khoá chính."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "ON DELETE CASCADE",
+          "vi": "xoá lan truyền"
+        }
+      ]
+    }
+  ]
+}

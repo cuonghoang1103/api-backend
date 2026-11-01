@@ -1,0 +1,626 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-mo-hinh-quan-he",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-mo-hinh-quan-he"
+  },
+  "exercises": [
+    {
+      "title": "Superkey, candidate key, primary key, foreign key",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "superkey",
+        "candidate key",
+        "primary key",
+        "foreign key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "keys",
+        "relational-model"
+      ],
+      "problemHtml": "<p>Use the University schema: <code>Student(sid, name, major)</code>, <code>Course(cid, title, credits)</code>, <code>Enroll(sid, cid, score)</code>.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng lược đồ University: <code>Student(sid, name, major)</code>, <code>Course(cid, title, credits)</code>, <code>Enroll(sid, cid, score)</code>.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Superkey = unique; candidate key = unique AND minimal.|||Siêu khoá = duy nhất; khoá ứng viên = duy nhất VÀ tối thiểu.",
+        "A foreign key points at a key in another (or the same) table.|||Khoá ngoại trỏ tới khoá ở bảng khác (hoặc chính nó)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Superkey, candidate key, primary key, foreign key\n\nAnswer in the answer panel (no code needed).\n\n1. {sid, name} uniquely identifies a student. It is…{sid, name} xác định duy nhất một sinh viên. Nó là…\n2. What is the key of Enroll?Khoá của Enroll là gì?\n3. Enroll.sid → Student.sid is…Enroll.sid → Student.sid là…\n4. Student also stores a unique email. Then Student has…Student có thêm email duy nhất. Khi đó Student có…\n5. Can a primary-key attribute be NULL?Thuộc tính của khoá chính có được NULL?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Superkey, candidate key, primary key, foreign key — answer key\n\n1. {sid, name} uniquely identifies a student. It is…{sid, name} xác định duy nhất một sinh viên. Nó là…\n   Answer: a) a superkey but not a candidate key\n   It is unique (superkey), but not minimal: {sid} alone is already unique, so name is redundant.VI: Nó duy nhất (siêu khoá) nhưng không tối thiểu: chỉ {sid} đã duy nhất, name là thừa.\n\n2. What is the key of Enroll?Khoá của Enroll là gì?\n   Answer: d) {sid, cid}\n   A student takes many courses and a course has many students, so neither alone is unique; the pair is, and it is minimal.VI: Một sinh viên học nhiều môn, một môn có nhiều sinh viên nên riêng từng cột không duy nhất; cặp thì duy nhất và tối thiểu.\n\n3. Enroll.sid → Student.sid is…Enroll.sid → Student.sid là…\n   Answer: c) a foreign key: every sid in Enroll must exist in Student\n   A foreign key references the key of another relation (referential integrity).VI: Khoá ngoại tham chiếu khoá của quan hệ khác (toàn vẹn tham chiếu).\n\n4. Student also stores a unique email. Then Student has…Student có thêm email duy nhất. Khi đó Student có…\n   Answer: d) two candidate keys, {sid} and {email}; one is chosen as primary key\n   Every minimal unique set is a candidate key; the designer picks ONE as primary, the other gets UNIQUE.VI: Mọi tập duy nhất tối thiểu đều là khoá ứng viên; người thiết kế chọn MỘT làm khoá chính, cái kia đặt UNIQUE.\n\n5. Can a primary-key attribute be NULL?Thuộc tính của khoá chính có được NULL?\n   Answer: b) No — entity integrity: every tuple must be identifiable\n   Entity integrity forbids NULL in the primary key; SQL makes PK columns NOT NULL.VI: Toàn vẹn thực thể cấm NULL trong khoá chính; SQL tự đặt NOT NULL cho cột khoá chính.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> a superkey but not a candidate key</p><p>It is unique (superkey), but not minimal: {sid} alone is already unique, so name is redundant.</p><p><i>VI: Nó duy nhất (siêu khoá) nhưng không tối thiểu: chỉ {sid} đã duy nhất, name là thừa.</i></p></li><li><p><b>d)</b> {sid, cid}</p><p>A student takes many courses and a course has many students, so neither alone is unique; the pair is, and it is minimal.</p><p><i>VI: Một sinh viên học nhiều môn, một môn có nhiều sinh viên nên riêng từng cột không duy nhất; cặp thì duy nhất và tối thiểu.</i></p></li><li><p><b>c)</b> a foreign key: every sid in Enroll must exist in Student</p><p>A foreign key references the key of another relation (referential integrity).</p><p><i>VI: Khoá ngoại tham chiếu khoá của quan hệ khác (toàn vẹn tham chiếu).</i></p></li><li><p><b>d)</b> two candidate keys, {sid} and {email}; one is chosen as primary key</p><p>Every minimal unique set is a candidate key; the designer picks ONE as primary, the other gets UNIQUE.</p><p><i>VI: Mọi tập duy nhất tối thiểu đều là khoá ứng viên; người thiết kế chọn MỘT làm khoá chính, cái kia đặt UNIQUE.</i></p></li><li><p><b>b)</b> No — entity integrity: every tuple must be identifiable</p><p>Entity integrity forbids NULL in the primary key; SQL makes PK columns NOT NULL.</p><p><i>VI: Toàn vẹn thực thể cấm NULL trong khoá chính; SQL tự đặt NOT NULL cho cột khoá chính.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>{sid, name} uniquely identifies a student. It is…</p><p style=\"opacity:.75;font-size:.92em\"><i>{sid, name} xác định duy nhất một sinh viên. Nó là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a superkey but not a candidate key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "not a key of any kind"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a foreign key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a candidate key"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>It is unique (superkey), but not minimal: {sid} alone is already unique, so name is redundant.</p><p><i>VI: Nó duy nhất (siêu khoá) nhưng không tối thiểu: chỉ {sid} đã duy nhất, name là thừa.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>What is the key of Enroll?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá của Enroll là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{sid}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{sid, cid, score}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{cid}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{sid, cid}"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A student takes many courses and a course has many students, so neither alone is unique; the pair is, and it is minimal.</p><p><i>VI: Một sinh viên học nhiều môn, một môn có nhiều sinh viên nên riêng từng cột không duy nhất; cặp thì duy nhất và tối thiểu.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Enroll.sid → Student.sid is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Enroll.sid → Student.sid là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a candidate key of Student, chosen instead of sid"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a CHECK constraint comparing the two sid columns"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a foreign key: every sid in Enroll must exist in Student"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a second primary key of Enroll, next to (sid, cid)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A foreign key references the key of another relation (referential integrity).</p><p><i>VI: Khoá ngoại tham chiếu khoá của quan hệ khác (toàn vẹn tham chiếu).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Student also stores a unique email. Then Student has…</p><p style=\"opacity:.75;font-size:.92em\"><i>Student có thêm email duy nhất. Khi đó Student có…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "two primary keys"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a composite key {sid, email}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "no key, because there are two unique columns"
+              },
+              {
+                "ma": "d",
+                "noiDung": "two candidate keys, {sid} and {email}; one is chosen as primary key"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every minimal unique set is a candidate key; the designer picks ONE as primary, the other gets UNIQUE.</p><p><i>VI: Mọi tập duy nhất tối thiểu đều là khoá ứng viên; người thiết kế chọn MỘT làm khoá chính, cái kia đặt UNIQUE.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Can a primary-key attribute be NULL?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuộc tính của khoá chính có được NULL?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, once per table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — entity integrity: every tuple must be identifiable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only in SQL Server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes, if the other key attributes are not NULL"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Entity integrity forbids NULL in the primary key; SQL makes PK columns NOT NULL.</p><p><i>VI: Toàn vẹn thực thể cấm NULL trong khoá chính; SQL tự đặt NOT NULL cho cột khoá chính.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling every unique set a candidate key — minimality is required.|||Gọi mọi tập duy nhất là khoá ứng viên — phải tối thiểu."
+        },
+        {
+          "loi": "Saying a table can have two primary keys — it has one primary key (possibly composite) and maybe more candidate keys.|||Nói một bảng có hai khoá chính — chỉ một khoá chính (có thể ghép) và có thể thêm khoá ứng viên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "superkey",
+          "vi": "siêu khoá"
+        },
+        {
+          "en": "candidate key",
+          "vi": "khoá ứng viên"
+        },
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        }
+      ]
+    },
+    {
+      "title": "Could it be a key? Judge from the instance",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "key",
+        "instance can refute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "keys",
+        "relational-model"
+      ],
+      "problemHtml": "<p>Look at the sample data of University (Student: SE01 An SE, SE02 Bình SE, AI01 Chi AI, SE03 An SE, GD01 Dũng GD). For each attribute set of Student, answer whether <b>this instance</b> refutes it as a key (two tuples share the value).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhìn dữ liệu mẫu University (Student: SE01 An SE, SE02 Bình SE, AI01 Chi AI, SE03 An SE, GD01 Dũng GD). Với mỗi tập thuộc tính của Student, cho biết <b>thể hiện này</b> có bác bỏ nó làm khoá không (hai bộ trùng giá trị).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for two tuples with the same value(s) in those columns.|||Tìm hai bộ có cùng giá trị ở các cột đó.",
+        "SE01 and SE03 are both (An, SE).|||SE01 và SE03 đều là (An, SE)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Could it be a key? Judge from the instance\n\nAnswer in the answer panel (no code needed).\n\n1. Refuted by the data?Dữ liệu có bác bỏ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Could it be a key? Judge from the instance — answer key\n\n1. Refuted by the data?Dữ liệu có bác bỏ?\n   - r1.kq: not refuted\n   - r2.kq: refuted\n   - r3.kq: refuted\n   - r4.kq: refuted\n   - r5.kq: not refuted\n   name: two An. major: three SE. {name, major}: (An, SE) twice — SE01 and SE03. Any set containing sid is unique here. Remember: \"not refuted\" is not a proof — keys come from the meaning of the data.VI: name: hai An. major: ba SE. {name, major}: (An, SE) hai lần — SE01 và SE03. Mọi tập chứa sid đều duy nhất ở đây. Nhớ: \"không bị bác bỏ\" không phải là chứng minh — khoá đến từ ý nghĩa dữ liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>name: two An. major: three SE. {name, major}: (An, SE) twice — SE01 and SE03. Any set containing sid is unique here. Remember: \"not refuted\" is not a proof — keys come from the meaning of the data.</p><p><i>VI: name: hai An. major: ba SE. {name, major}: (An, SE) hai lần — SE01 và SE03. Mọi tập chứa sid đều duy nhất ở đây. Nhớ: \"không bị bác bỏ\" không phải là chứng minh — khoá đến từ ý nghĩa dữ liệu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Refuted by the data?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dữ liệu có bác bỏ?</i></p>",
+            "cot": [
+              {
+                "ma": "tap",
+                "ten": "Attribute set / Tập thuộc tính"
+              },
+              {
+                "ma": "kq",
+                "ten": "Refuted? / Bị bác bỏ?",
+                "luaChon": [
+                  "refuted",
+                  "not refuted"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tap": "{sid}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tap": "{name}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tap": "{major}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tap": "{name, major}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "tap": "{sid, major}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.kq": "not refuted",
+              "r2.kq": "refuted",
+              "r3.kq": "refuted",
+              "r4.kq": "refuted",
+              "r5.kq": "not refuted"
+            },
+            "giaiThich": "<p>name: two An. major: three SE. {name, major}: (An, SE) twice — SE01 and SE03. Any set containing sid is unique here. Remember: \"not refuted\" is not a proof — keys come from the meaning of the data.</p><p><i>VI: name: hai An. major: ba SE. {name, major}: (An, SE) hai lần — SE01 và SE03. Mọi tập chứa sid đều duy nhất ở đây. Nhớ: \"không bị bác bỏ\" không phải là chứng minh — khoá đến từ ý nghĩa dữ liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding that {sid, major} IS a key — it is unique but not minimal (a superkey).|||Kết luận {sid, major} LÀ khoá — nó duy nhất nhưng không tối thiểu (siêu khoá)."
+        },
+        {
+          "loi": "Thinking {name, major} is safe because names alone repeat only in different majors.|||Tưởng {name, major} an toàn vì tên chỉ trùng ở ngành khác nhau."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Show that name is not a key of Student",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "key",
+        "duplicates",
+        "GROUP BY",
+        "HAVING"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "keys",
+        "group-by"
+      ],
+      "problemHtml": "<p>Find every name shared by more than one student, with how many students have it.</p>\n<details class=\"cl-luoc-do\" open><summary><b>University schema</b> (lesson 2.5 — full script in the <code>University.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 students (two different students are both called <b>An</b>: SE01 and SE03; GD01 Dũng takes nothing), 4 courses (nobody takes JPD113), 7 enrolments.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>name, students</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tìm mọi tên được nhiều hơn một sinh viên dùng, kèm số sinh viên mang tên đó.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ University</b> (bài 2.5 — script đầy đủ ở tab <code>University.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 sinh viên (hai người khác nhau cùng tên <b>An</b>: SE01 và SE03; GD01 Dũng không học môn nào), 4 môn (không ai học JPD113), 7 lượt đăng ký.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>name, students</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name | students\n-----+---------\nAn   | 2       ",
+          "explanation": "Expected result of check \"Names used by 2+ students\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Tên có từ 2 sinh viên\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "GROUP BY name, then keep groups with more than one row.|||GROUP BY name, rồi giữ nhóm có hơn một dòng.",
+        "HAVING filters groups; WHERE cannot use COUNT.|||HAVING lọc nhóm; WHERE không dùng được COUNT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT name, COUNT(*) AS students\nFROM Student\nGROUP BY name\nHAVING COUNT(*) > 1;\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>One counter-example is enough to refute a key. Expected on the sample data: An, 2.</p>",
+      "solutionExplanationHtmlVi": "<p>Một phản ví dụ là đủ bác bỏ khoá. Kết quả trên dữ liệu mẫu: An, 2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Names used by 2+ students|||Tên có từ 2 sinh viên",
+            "mongDoi": {
+              "cot": [
+                "name",
+                "students"
+              ],
+              "hang": [
+                [
+                  "An",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "More students with repeated names|||Thêm sinh viên trùng tên",
+            "an": true,
+            "themCsdl": "INSERT INTO Student VALUES ('SE04', N'Bình', 'SE'), ('AI02', N'Chi', 'AI'), ('GD02', N'Em', 'GD');\nINSERT INTO Enroll VALUES ('SE04', 'JPD113', 7.5), ('AI02', 'DBI202', 8.0)",
+            "mongDoi": {
+              "cot": [
+                "name",
+                "students"
+              ],
+              "hang": [
+                [
+                  "Bình",
+                  2
+                ],
+                [
+                  "An",
+                  2
+                ],
+                [
+                  "Chi",
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses HAVING|||Dùng HAVING",
+            "khop": "\\bHAVING\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No HAVING — every name is listed.|||Không HAVING — tên nào cũng hiện."
+        },
+        {
+          "loi": "Restricting to one major — the duplicates of other majors are missed (hidden check).|||Chỉ xét một ngành — trùng ở ngành khác bị bỏ sót (kiểm ẩn)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GROUP BY",
+          "vi": "gộp nhóm",
+          "giaiThich": "Mỗi nhóm giá trị giống nhau ⇒ một dòng kết quả."
+        },
+        {
+          "en": "HAVING",
+          "vi": "điều kiện trên nhóm",
+          "giaiThich": "Lọc NHÓM sau khi gộp (dùng được hàm gộp); WHERE lọc dòng trước khi gộp."
+        }
+      ]
+    },
+    {
+      "title": "Courses that no student takes",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "foreign key",
+        "NOT EXISTS",
+        "dangling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "keys",
+        "not-exists"
+      ],
+      "problemHtml": "<p>The foreign key Enroll.cid → Course.cid guarantees every enrolment points at a real course — but nothing forces a course to have enrolments. List the courses (<code>cid, title</code>) that appear in no Enroll row.</p>\n<details class=\"cl-luoc-do\" open><summary><b>University schema</b> (lesson 2.5 — full script in the <code>University.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 students (two different students are both called <b>An</b>: SE01 and SE03; GD01 Dũng takes nothing), 4 courses (nobody takes JPD113), 7 enrolments.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>cid, title</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khoá ngoại Enroll.cid → Course.cid bảo đảm mọi lượt đăng ký trỏ tới môn có thật — nhưng không có gì buộc một môn phải có người đăng ký. Liệt kê các môn (<code>cid, title</code>) không xuất hiện trong dòng Enroll nào.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ University</b> (bài 2.5 — script đầy đủ ở tab <code>University.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 sinh viên (hai người khác nhau cùng tên <b>An</b>: SE01 và SE03; GD01 Dũng không học môn nào), 4 môn (không ai học JPD113), 7 lượt đăng ký.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>cid, title</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "cid    | title     \n-------+-----------\nJPD113 | Japanese 1",
+          "explanation": "Expected result of check \"Courses with no enrolment\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Môn không ai đăng ký\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "\"No row in Enroll\" = NOT EXISTS (SELECT 1 FROM Enroll WHERE cid = c.cid).|||\"Không có dòng trong Enroll\" = NOT EXISTS (SELECT 1 FROM Enroll WHERE cid = c.cid).",
+        "Alternative: LEFT JOIN Enroll … WHERE e.sid IS NULL.|||Cách khác: LEFT JOIN Enroll … WHERE e.sid IS NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT c.cid, c.title\nFROM Course c\nWHERE NOT EXISTS (SELECT 1 FROM Enroll e WHERE e.cid = c.cid);\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A foreign key constrains the child side only. \"Parents without children\" are found with an anti-join: NOT EXISTS, EXCEPT, or LEFT JOIN … IS NULL. Expected: JPD113.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoá ngoại chỉ ràng buộc phía con. \"Cha không có con\" tìm bằng anti-join: NOT EXISTS, EXCEPT, hoặc LEFT JOIN … IS NULL. Kết quả: JPD113.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Courses with no enrolment|||Môn không ai đăng ký",
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "title"
+              ],
+              "hang": [
+                [
+                  "JPD113",
+                  "Japanese 1"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "JPD113 gets a student, a new course has none|||JPD113 có người học, môn mới thì chưa",
+            "an": true,
+            "themCsdl": "INSERT INTO Course VALUES ('PRF192', N'Programming Fundamentals', 3); INSERT INTO Student VALUES ('SE04', N'Bình', 'SE'), ('AI02', N'Chi', 'AI'), ('GD02', N'Em', 'GD');\nINSERT INTO Enroll VALUES ('SE04', 'JPD113', 7.5), ('AI02', 'DBI202', 8.0)",
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "title"
+              ],
+              "hang": [
+                [
+                  "PRF192",
+                  "Programming Fundamentals"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses NOT EXISTS, NOT IN, EXCEPT or an outer join|||Dùng NOT EXISTS, NOT IN, EXCEPT hoặc nối ngoài",
+            "khop": "\\bNOT\\s+EXISTS\\b|\\bNOT\\s+IN\\b|\\bEXCEPT\\b|\\bLEFT\\s+(OUTER\\s+)?JOIN\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "JOIN … ON e.cid &lt;&gt; c.cid — pairs each course with every OTHER enrolment; almost every course comes back.|||JOIN … ON e.cid &lt;&gt; c.cid — ghép mỗi môn với mọi lượt đăng ký KHÁC; gần như môn nào cũng hiện."
+        },
+        {
+          "loi": "Hard-coding JPD113 — the hidden data changes who has no students.|||Ghi cứng JPD113 — dữ liệu ẩn đổi môn nào không có người học."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "EXISTS / NOT EXISTS",
+          "vi": "có tồn tại / không tồn tại",
+          "giaiThich": "Đúng khi truy vấn con trả ≥ 1 dòng; an toàn với NULL hơn NOT IN."
+        }
+      ]
+    }
+  ]
+}

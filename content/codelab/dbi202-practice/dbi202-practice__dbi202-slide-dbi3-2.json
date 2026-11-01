@@ -1,0 +1,815 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi3-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi3-2"
+  },
+  "exercises": [
+    {
+      "title": "σ then π: long Disney movies",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "selection σ",
+        "projection π"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "slide"
+      ],
+      "problemHtml": "<p>Write in SQL: <code>π<sub>title, year</sub>(σ<sub>studioName = 'Disney' AND length ≥ 120</sub>(Movies))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Movies schema</b> (the running example of the school slides — full script in the <code>Movies.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 movies, 6 stars, 13 StarsIn rows, 4 executives, 4 studios. E.T. and Jaws have no stars listed; Fox has no president (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>title, year</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết bằng SQL: <code>π<sub>title, year</sub>(σ<sub>studioName = 'Disney' AND length ≥ 120</sub>(Movies))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ Movies</b> (ví dụ xuyên suốt của slide trường — script đầy đủ ở tab <code>Movies.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 phim, 6 diễn viên, 13 dòng StarsIn, 4 nhà điều hành, 4 hãng. E.T. và Jaws chưa có diễn viên; Fox không có chủ tịch (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>title, year</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "title             | year\n------------------+-----\nJaws              | 1975\nJurassic Park     | 1993\nThe Force Awakens | 2015",
+          "explanation": "Expected result of check \"Disney movies of 120+ minutes\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Phim Disney từ 120 phút\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "σ is the WHERE clause, π is the SELECT list.|||σ là mệnh đề WHERE, π là danh sách SELECT.",
+        "≥ is &gt;= in SQL.|||≥ trong SQL là &gt;=."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT title, year                                   -- π title, year\nFROM Movies\nWHERE studioName = 'Disney' AND length >= 120;       -- σ\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>σ keeps rows, π keeps columns. The inner operator is evaluated first: σ on Movies, then π on the result.</p>",
+      "solutionExplanationHtmlVi": "<p>σ giữ dòng, π giữ cột. Phép bên trong chạy trước: σ trên Movies, rồi π trên kết quả.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Disney movies of 120+ minutes|||Phim Disney từ 120 phút",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year"
+              ],
+              "hang": [
+                [
+                  "Jaws",
+                  1975
+                ],
+                [
+                  "Jurassic Park",
+                  1993
+                ],
+                [
+                  "The Force Awakens",
+                  2015
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hook (142 min, Disney) added|||Thêm Hook (142 phút, Disney)",
+            "an": true,
+            "themCsdl": "INSERT INTO Movies VALUES (N'Indiana Jones and the Last Crusade', 1989, 127, N'action', N'Paramount', 100), (N'Hook', 1991, 142, N'fantasy', N'Disney', 200), (N'The BFG', 2016, 120, N'fantasy', N'Disney', 200);\nINSERT INTO MovieStar VALUES (N'Julia Roberts', N'1 Sunset Blvd.', 'F', '1967-10-28');\nINSERT INTO StarsIn VALUES (N'Indiana Jones and the Last Crusade', 1989, N'Harrison Ford'), (N'Hook', 1991, N'Julia Roberts')",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year"
+              ],
+              "hang": [
+                [
+                  "Jaws",
+                  1975
+                ],
+                [
+                  "Jurassic Park",
+                  1993
+                ],
+                [
+                  "The Force Awakens",
+                  2015
+                ],
+                [
+                  "Hook",
+                  1991
+                ],
+                [
+                  "The BFG",
+                  2016
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Has a WHERE (σ)|||Có WHERE (σ)",
+            "khop": "\\bWHERE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "&gt; instead of &gt;= — a Disney film of exactly 120 minutes is lost (the hidden check has one).|||&gt; thay vì &gt;= — phim Disney đúng 120 phút bị mất (kiểm ẩn có một phim như vậy)."
+        },
+        {
+          "loi": "OR instead of AND — every Disney film plus every long film.|||OR thay vì AND — mọi phim Disney cộng mọi phim dài."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "selection σ",
+          "vi": "phép chọn σ",
+          "giaiThich": "Giữ các bộ thoả điều kiện — WHERE."
+        },
+        {
+          "en": "projection π",
+          "vi": "phép chiếu π",
+          "giaiThich": "Giữ các thuộc tính được nêu — danh sách SELECT (+ DISTINCT trên tập)."
+        }
+      ]
+    },
+    {
+      "title": "π on a set: the distinct genres",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "projection π",
+        "set semantics",
+        "DISTINCT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "distinct",
+        "slide"
+      ],
+      "problemHtml": "<p>Relational algebra works on <b>sets</b>. Write <code>π<sub>genre</sub>(Movies)</code> so that the result is a set, as the algebra says.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Movies schema</b> (the running example of the school slides — full script in the <code>Movies.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 movies, 6 stars, 13 StarsIn rows, 4 executives, 4 studios. E.T. and Jaws have no stars listed; Fox has no president (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>One column: <code>genre</code>.</li>\n  <li>Each genre once.</li>\n</ul>",
+      "problemHtmlVi": "<p>Đại số quan hệ làm việc trên <b>tập</b>. Viết <code>π<sub>genre</sub>(Movies)</code> sao cho kết quả là một tập, đúng như đại số.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ Movies</b> (ví dụ xuyên suốt của slide trường — script đầy đủ ở tab <code>Movies.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 phim, 6 diễn viên, 13 dòng StarsIn, 4 nhà điều hành, 4 hãng. E.T. và Jaws chưa có diễn viên; Fox không có chủ tịch (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một cột: <code>genre</code>.</li>\n  <li>Mỗi thể loại một lần.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "genre \n------\ndrama \naction\ncomedy\nsciFi ",
+          "explanation": "Expected result of check \"Each genre once\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Mỗi thể loại một lần\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "SQL tables are bags; plain SELECT keeps duplicates.|||Bảng SQL là túi; SELECT thường giữ trùng.",
+        "SELECT DISTINCT genre FROM Movies"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT DISTINCT genre      -- π on a set: duplicates removed\nFROM Movies;\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The algebra's π returns a set; SQL's SELECT returns a bag unless you add DISTINCT. Chapter 2.C (bags) is about exactly this difference.</p>",
+      "solutionExplanationHtmlVi": "<p>π của đại số trả một tập; SELECT của SQL trả túi trừ khi thêm DISTINCT. Chương 2.C (túi) nói đúng về khác biệt này.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Each genre once|||Mỗi thể loại một lần",
+            "mongDoi": {
+              "cot": [
+                "genre"
+              ],
+              "hang": [
+                [
+                  "drama"
+                ],
+                [
+                  "action"
+                ],
+                [
+                  "comedy"
+                ],
+                [
+                  "sciFi"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Two more genres appear|||Thêm hai thể loại",
+            "an": true,
+            "themCsdl": "INSERT INTO Movies VALUES (N'Indiana Jones and the Last Crusade', 1989, 127, N'action', N'Paramount', 100), (N'Hook', 1991, 142, N'fantasy', N'Disney', 200), (N'The BFG', 2016, 120, N'fantasy', N'Disney', 200);\nINSERT INTO MovieStar VALUES (N'Julia Roberts', N'1 Sunset Blvd.', 'F', '1967-10-28');\nINSERT INTO StarsIn VALUES (N'Indiana Jones and the Last Crusade', 1989, N'Harrison Ford'), (N'Hook', 1991, N'Julia Roberts')",
+            "mongDoi": {
+              "cot": [
+                "genre"
+              ],
+              "hang": [
+                [
+                  "fantasy"
+                ],
+                [
+                  "drama"
+                ],
+                [
+                  "action"
+                ],
+                [
+                  "comedy"
+                ],
+                [
+                  "sciFi"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses DISTINCT|||Dùng DISTINCT",
+            "khop": "\\bDISTINCT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "SELECT genre without DISTINCT — sciFi appears 5 times.|||SELECT genre không DISTINCT — sciFi hiện 5 lần."
+        },
+        {
+          "loi": "GROUP BY genre also works, but say DISTINCT when you only want to remove duplicates.|||GROUP BY genre cũng được, nhưng chỉ muốn bỏ trùng thì dùng DISTINCT."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DISTINCT",
+          "vi": "loại trùng"
+        }
+      ]
+    },
+    {
+      "title": "Natural join: who starred in what, women only",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "natural join",
+        "join condition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "join",
+        "slide"
+      ],
+      "problemHtml": "<p><code>StarsIn</code> and <code>MovieStar</code> share the star's name (<code>starName</code> / <code>name</code>). Write <code>π<sub>name, movieTitle, movieYear</sub>(σ<sub>gender = 'F'</sub>(MovieStar ⋈<sub>name = starName</sub> StarsIn))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Movies schema</b> (the running example of the school slides — full script in the <code>Movies.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 movies, 6 stars, 13 StarsIn rows, 4 executives, 4 studios. E.T. and Jaws have no stars listed; Fox has no president (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>name, movieTitle, movieYear</code>.</li>\n  <li>Use JOIN … ON (the column names differ, so NATURAL JOIN would not match them — and SQL Server has no NATURAL JOIN).</li>\n</ul>",
+      "problemHtmlVi": "<p><code>StarsIn</code> và <code>MovieStar</code> chung tên diễn viên (<code>starName</code> / <code>name</code>). Viết <code>π<sub>name, movieTitle, movieYear</sub>(σ<sub>gender = 'F'</sub>(MovieStar ⋈<sub>name = starName</sub> StarsIn))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ Movies</b> (ví dụ xuyên suốt của slide trường — script đầy đủ ở tab <code>Movies.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 phim, 6 diễn viên, 13 dòng StarsIn, 4 nhà điều hành, 4 hãng. E.T. và Jaws chưa có diễn viên; Fox không có chủ tịch (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>name, movieTitle, movieYear</code>.</li>\n  <li>Dùng JOIN … ON (tên cột khác nhau nên NATURAL JOIN không khớp được — và SQL Server không có NATURAL JOIN).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "name          | movieTitle          | movieYear\n--------------+---------------------+----------\nCarrie Fisher | Star Wars           | 1977     \nCarrie Fisher | Empire Strikes Back | 1980     \nLaura Dern    | Jurassic Park       | 1993     \nCarrie Fisher | The Force Awakens   | 2015     ",
+          "explanation": "Expected result of check \"Female stars and their movies\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Nữ diễn viên và phim của họ\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The join condition is si.starName = s.name.|||Điều kiện nối là si.starName = s.name.",
+        "Then filter gender = 'F' in WHERE.|||Rồi lọc gender = 'F' ở WHERE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT s.name, si.movieTitle, si.movieYear\nFROM MovieStar s\nJOIN StarsIn si ON si.starName = s.name     -- ⋈ on the shared attribute\nWHERE s.gender = 'F';                       -- σ\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>⋈<sub>θ</sub> = σ<sub>θ</sub>(R × S). Without the ON condition you get the whole product. A natural join matches on attributes with the SAME name; here the names differ, so we write the θ-join explicitly.</p>",
+      "solutionExplanationHtmlVi": "<p>⋈<sub>θ</sub> = σ<sub>θ</sub>(R × S). Thiếu điều kiện ON là ra cả tích. Nối tự nhiên khớp các thuộc tính CÙNG tên; ở đây tên khác nhau nên viết θ-join tường minh.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Female stars and their movies|||Nữ diễn viên và phim của họ",
+            "mongDoi": {
+              "cot": [
+                "name",
+                "movieTitle",
+                "movieYear"
+              ],
+              "hang": [
+                [
+                  "Carrie Fisher",
+                  "Star Wars",
+                  1977
+                ],
+                [
+                  "Carrie Fisher",
+                  "Empire Strikes Back",
+                  1980
+                ],
+                [
+                  "Laura Dern",
+                  "Jurassic Park",
+                  1993
+                ],
+                [
+                  "Carrie Fisher",
+                  "The Force Awakens",
+                  2015
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Julia Roberts in Hook|||Julia Roberts trong Hook",
+            "an": true,
+            "themCsdl": "INSERT INTO Movies VALUES (N'Indiana Jones and the Last Crusade', 1989, 127, N'action', N'Paramount', 100), (N'Hook', 1991, 142, N'fantasy', N'Disney', 200), (N'The BFG', 2016, 120, N'fantasy', N'Disney', 200);\nINSERT INTO MovieStar VALUES (N'Julia Roberts', N'1 Sunset Blvd.', 'F', '1967-10-28');\nINSERT INTO StarsIn VALUES (N'Indiana Jones and the Last Crusade', 1989, N'Harrison Ford'), (N'Hook', 1991, N'Julia Roberts')",
+            "mongDoi": {
+              "cot": [
+                "name",
+                "movieTitle",
+                "movieYear"
+              ],
+              "hang": [
+                [
+                  "Carrie Fisher",
+                  "Star Wars",
+                  1977
+                ],
+                [
+                  "Carrie Fisher",
+                  "Empire Strikes Back",
+                  1980
+                ],
+                [
+                  "Laura Dern",
+                  "Jurassic Park",
+                  1993
+                ],
+                [
+                  "Carrie Fisher",
+                  "The Force Awakens",
+                  2015
+                ],
+                [
+                  "Julia Roberts",
+                  "Hook",
+                  1991
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses JOIN … ON|||Dùng JOIN … ON",
+            "khop": "\\bJOIN\\b[\\s\\S]*\\bON\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A comma join with no join condition — that is the product ×: every woman with every StarsIn row.|||Nối bằng dấu phẩy không có điều kiện — đó là tích ×: mỗi nữ diễn viên với mọi dòng StarsIn."
+        },
+        {
+          "loi": "Forgetting σ gender = 'F'.|||Quên σ gender = 'F'."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "INNER JOIN",
+          "vi": "nối trong",
+          "giaiThich": "Chỉ giữ cặp dòng thoả điều kiện ON ở cả hai bảng."
+        },
+        {
+          "en": "product ×",
+          "vi": "tích Đề-các",
+          "giaiThich": "Mỗi bộ của R ghép với mọi bộ của S — |R| × |S| bộ."
+        }
+      ]
+    },
+    {
+      "title": "∩ and −: stars of Star Wars, with and without Raiders",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "intersection",
+        "difference",
+        "union-compatible"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "set-operations",
+        "slide"
+      ],
+      "problemHtml": "<p>Let <code>A = π<sub>starName</sub>(σ<sub>movieTitle = 'Star Wars'</sub>(StarsIn))</code> and <code>B = π<sub>starName</sub>(σ<sub>movieTitle = 'Raiders of the Lost Ark'</sub>(StarsIn))</code>. Return <code>A − B</code>: the Star Wars stars who were <b>not</b> in Raiders.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Movies schema</b> (the running example of the school slides — full script in the <code>Movies.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 movies, 6 stars, 13 StarsIn rows, 4 executives, 4 studios. E.T. and Jaws have no stars listed; Fox has no president (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>One column: <code>starName</code>.</li>\n  <li>Use EXCEPT; row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho <code>A = π<sub>starName</sub>(σ<sub>movieTitle = 'Star Wars'</sub>(StarsIn))</code> và <code>B = π<sub>starName</sub>(σ<sub>movieTitle = 'Raiders of the Lost Ark'</sub>(StarsIn))</code>. Trả <code>A − B</code>: diễn viên Star Wars <b>không</b> đóng Raiders.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ Movies</b> (ví dụ xuyên suốt của slide trường — script đầy đủ ở tab <code>Movies.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Movies</code></td><td><span style=\"text-decoration:underline\">title, year</span>, length, genre, <i>studioName</i> → Studio, <i>producerCertNo</i> → MovieExec</td></tr><tr><td><code>StarsIn</code></td><td><span style=\"text-decoration:underline\"><i>movieTitle, movieYear</i>, <i>starName</i></span></td></tr><tr><td><code>MovieStar</code></td><td><span style=\"text-decoration:underline\">name</span>, address, gender, birthdate</td></tr><tr><td><code>MovieExec</code></td><td><span style=\"text-decoration:underline\">certNo</span>, name, address, netWorth</td></tr><tr><td><code>Studio</code></td><td><span style=\"text-decoration:underline\">name</span>, address, <i>presCertNo</i> → MovieExec</td></tr></tbody></table><p>8 phim, 6 diễn viên, 13 dòng StarsIn, 4 nhà điều hành, 4 hãng. E.T. và Jaws chưa có diễn viên; Fox không có chủ tịch (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một cột: <code>starName</code>.</li>\n  <li>Dùng EXCEPT; thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "starName     \n-------------\nCarrie Fisher\nMark Hamill  ",
+          "explanation": "Expected result of check \"Star Wars stars not in Raiders\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Diễn viên Star Wars không đóng Raiders\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "− is EXCEPT in SQL (Oracle calls it MINUS).|||− trong SQL là EXCEPT (Oracle gọi MINUS).",
+        "Both sides return one column of the same type — they are union-compatible.|||Hai vế cùng trả một cột cùng kiểu — tương thích hợp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT starName FROM StarsIn WHERE movieTitle = 'Star Wars'\nEXCEPT                                                                 -- −  (set difference)\nSELECT starName FROM StarsIn WHERE movieTitle = 'Raiders of the Lost Ark';\n"
+        },
+        {
+          "name": "Movies.sql",
+          "language": "sql",
+          "code": "-- Movies.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Difference is not commutative: A − B ≠ B − A. Expected: Carrie Fisher, Mark Hamill.</p>",
+      "solutionExplanationHtmlVi": "<p>Phép hiệu không giao hoán: A − B ≠ B − A. Kết quả: Carrie Fisher, Mark Hamill.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE MovieExec (certNo INT NOT NULL, name NVARCHAR(40) NOT NULL, address NVARCHAR(60) NULL, netWorth DECIMAL(12,0) NULL,\n                        CONSTRAINT pk_movieexec PRIMARY KEY (certNo));\nCREATE TABLE Studio (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, presCertNo INT NULL,\n                     CONSTRAINT pk_studio PRIMARY KEY (name),\n                     CONSTRAINT fk_studio_pres FOREIGN KEY (presCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE Movies (title NVARCHAR(40) NOT NULL, year INT NOT NULL, length INT NULL, genre NVARCHAR(12) NULL,\n                     studioName NVARCHAR(30) NULL, producerCertNo INT NULL,\n                     CONSTRAINT pk_movies PRIMARY KEY (title, year),\n                     CONSTRAINT fk_movies_studio FOREIGN KEY (studioName) REFERENCES Studio (name),\n                     CONSTRAINT fk_movies_producer FOREIGN KEY (producerCertNo) REFERENCES MovieExec (certNo));\nCREATE TABLE MovieStar (name NVARCHAR(30) NOT NULL, address NVARCHAR(60) NULL, gender CHAR(1) NULL, birthdate DATE NULL,\n                        CONSTRAINT pk_moviestar PRIMARY KEY (name));\nCREATE TABLE StarsIn (movieTitle NVARCHAR(40) NOT NULL, movieYear INT NOT NULL, starName NVARCHAR(30) NOT NULL,\n                      CONSTRAINT pk_starsin PRIMARY KEY (movieTitle, movieYear, starName),\n                      CONSTRAINT fk_starsin_movie FOREIGN KEY (movieTitle, movieYear) REFERENCES Movies (title, year),\n                      CONSTRAINT fk_starsin_star FOREIGN KEY (starName) REFERENCES MovieStar (name));\nINSERT INTO MovieExec VALUES\n  (100, N'George Lucas', N'Marin County', 5000000000),\n  (200, N'Steven Spielberg', N'Pacific Palisades', 4000000000),\n  (300, N'Kathleen Kennedy', N'Brentwood', 200000000),\n  (400, N'Ted Turner', N'Atlanta', 2200000000);\nINSERT INTO Studio VALUES\n  ('Lucasfilm', N'San Rafael', 100), ('Paramount', N'Hollywood', 400), ('Fox', N'Century City', NULL), ('Disney', N'Burbank', 300);\nINSERT INTO Movies VALUES\n  ('Star Wars', 1977, 124, 'sciFi', 'Fox', 100),\n  ('Empire Strikes Back', 1980, 124, 'sciFi', 'Fox', 100),\n  ('Raiders of the Lost Ark', 1981, 115, 'action', 'Paramount', 100),\n  ('E.T.', 1982, 115, 'sciFi', 'Disney', 200),\n  ('Jaws', 1975, 124, 'drama', 'Disney', 200),\n  ('Jurassic Park', 1993, 127, 'sciFi', 'Disney', 200),\n  ('Wayne''s World', 1992, 95, 'comedy', 'Paramount', 400),\n  ('The Force Awakens', 2015, 138, 'sciFi', 'Disney', 300);\nINSERT INTO MovieStar VALUES\n  ('Carrie Fisher', N'123 Maple St., Hollywood', 'F', '1956-10-21'),\n  ('Mark Hamill', N'456 Oak Rd., Brentwood', 'M', '1951-09-25'),\n  ('Harrison Ford', N'789 Palm Dr., Beverly Hills', 'M', '1942-07-13'),\n  ('Dana Carvey', N'12 Elm St., Malibu', 'M', '1955-06-02'),\n  ('Sam Neill', NULL, 'M', '1947-09-14'),\n  ('Laura Dern', N'5 Ocean Ave., Malibu', 'F', '1967-02-10');\nINSERT INTO StarsIn VALUES\n  ('Star Wars', 1977, 'Carrie Fisher'), ('Star Wars', 1977, 'Mark Hamill'), ('Star Wars', 1977, 'Harrison Ford'),\n  ('Empire Strikes Back', 1980, 'Carrie Fisher'), ('Empire Strikes Back', 1980, 'Mark Hamill'), ('Empire Strikes Back', 1980, 'Harrison Ford'),\n  ('Raiders of the Lost Ark', 1981, 'Harrison Ford'),\n  ('Wayne''s World', 1992, 'Dana Carvey'),\n  ('Jurassic Park', 1993, 'Sam Neill'), ('Jurassic Park', 1993, 'Laura Dern'),\n  ('The Force Awakens', 2015, 'Carrie Fisher'), ('The Force Awakens', 2015, 'Mark Hamill'), ('The Force Awakens', 2015, 'Harrison Ford');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Star Wars stars not in Raiders|||Diễn viên Star Wars không đóng Raiders",
+            "mongDoi": {
+              "cot": [
+                "starName"
+              ],
+              "hang": [
+                [
+                  "Carrie Fisher"
+                ],
+                [
+                  "Mark Hamill"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Hidden: Mark Hamill gets a Raiders cameo|||Ẩn: Mark Hamill đóng vai khách mời Raiders",
+            "an": true,
+            "themCsdl": "INSERT INTO StarsIn VALUES (N'Raiders of the Lost Ark', 1981, N'Mark Hamill')",
+            "mongDoi": {
+              "cot": [
+                "starName"
+              ],
+              "hang": [
+                [
+                  "Carrie Fisher"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses EXCEPT|||Dùng EXCEPT",
+            "khop": "\\bEXCEPT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping the operands — B − A is the Raiders stars not in Star Wars (empty here).|||Đảo hai vế — B − A là diễn viên Raiders không đóng Star Wars (ở đây rỗng)."
+        },
+        {
+          "loi": "INTERSECT — that is A ∩ B (Harrison Ford), the opposite question.|||INTERSECT — đó là A ∩ B (Harrison Ford), câu hỏi ngược lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "UNION / INTERSECT / EXCEPT",
+          "vi": "hợp / giao / hiệu",
+          "giaiThich": "Phép tập hợp trên hai câu SELECT cùng số cột, kiểu tương thích; mặc định bỏ dòng trùng."
+        }
+      ]
+    },
+    {
+      "title": "Expression trees and the rules of the algebra",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "expression tree",
+        "union compatibility",
+        "rename ρ",
+        "σ push-down"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 12–25 in five questions.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 12–25 trong năm câu.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Union-compatible = same number of attributes, matching domains.|||Tương thích hợp = cùng số thuộc tính, miền khớp nhau.",
+        "σ can move down past a join when it mentions attributes of one side only.|||σ được đẩy xuống dưới phép nối khi nó chỉ nhắc thuộc tính của một vế."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Expression trees and the rules of the algebra\n\nAnswer in the answer panel (no code needed).\n\n1. R(name, address) and S(title, year). Is R ∪ S legal?R(name, address) và S(title, year). R ∪ S có hợp lệ?\n2. |R| = 3 tuples, |S| = 4 tuples. How many tuples in R × S?|R| = 3 bộ, |S| = 4 bộ. R × S có bao nhiêu bộ?\n3. Why do we need ρ (rename) for \"pairs of stars living at the same address\"?Vì sao cần ρ (đổi tên) cho \"cặp diễn viên sống cùng địa chỉ\"?\n4. πtitle(σyear>1990(Movies ⋈ StarsIn)) — which rewrite is equivalent and usually cheaper?πtitle(σyear>1990(Movies ⋈ StarsIn)) — cách viết lại nào tương đương và thường rẻ hơn?\n5. In an expression tree, which operator is evaluated FIRST?Trong cây biểu thức, phép nào được tính TRƯỚC?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Expression trees and the rules of the algebra — answer key\n\n1. R(name, address) and S(title, year). Is R ∪ S legal?R(name, address) và S(title, year). R ∪ S có hợp lệ?\n   Answer: c) No — the operands must have the same attributes with compatible domains\n   ∪, ∩, − need union-compatible operands: same arity AND matching domains (and, in the algebra, the same attribute names).VI: ∪, ∩, − cần hai vế tương thích: cùng bậc VÀ miền tương ứng khớp (trong đại số còn cùng tên thuộc tính).\n\n2. |R| = 3 tuples, |S| = 4 tuples. How many tuples in R × S?|R| = 3 bộ, |S| = 4 bộ. R × S có bao nhiêu bộ?\n   Answer: a) 12\n   The product pairs every tuple of R with every tuple of S: 3 × 4.VI: Tích ghép mọi bộ của R với mọi bộ của S: 3 × 4.\n\n3. Why do we need ρ (rename) for \"pairs of stars living at the same address\"?Vì sao cần ρ (đổi tên) cho \"cặp diễn viên sống cùng địa chỉ\"?\n   Answer: b) To use two copies of MovieStar whose attributes must be told apart\n   A self-join needs two copies, ρS1(MovieStar) and ρS2(MovieStar), so S1.address and S2.address can be compared.VI: Tự nối cần hai bản sao ρS1(MovieStar), ρS2(MovieStar) để so S1.address với S2.address.\n\n4. πtitle(σyear>1990(Movies ⋈ StarsIn)) — which rewrite is equivalent and usually cheaper?πtitle(σyear>1990(Movies ⋈ StarsIn)) — cách viết lại nào tương đương và thường rẻ hơn?\n   Answer: b) πtitle(σyear>1990(Movies) ⋈ StarsIn)\n   Push σ down to the table it mentions: fewer tuples enter the join. Projecting title first would lose year, so σ could no longer be tested.VI: Đẩy σ xuống bảng mà nó nói tới: ít bộ vào phép nối hơn. Chiếu title trước sẽ mất year, σ không kiểm được nữa.\n\n5. In an expression tree, which operator is evaluated FIRST?Trong cây biểu thức, phép nào được tính TRƯỚC?\n   Answer: d) The ones at the leaves' level, closest to the base tables\n   A tree is evaluated bottom-up: leaves are relations, each inner node takes the results of its children.VI: Cây được tính từ dưới lên: lá là quan hệ, mỗi nút trong nhận kết quả của các nút con.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> No — the operands must have the same attributes with compatible domains</p><p>∪, ∩, − need union-compatible operands: same arity AND matching domains (and, in the algebra, the same attribute names).</p><p><i>VI: ∪, ∩, − cần hai vế tương thích: cùng bậc VÀ miền tương ứng khớp (trong đại số còn cùng tên thuộc tính).</i></p></li><li><p><b>a)</b> 12</p><p>The product pairs every tuple of R with every tuple of S: 3 × 4.</p><p><i>VI: Tích ghép mọi bộ của R với mọi bộ của S: 3 × 4.</i></p></li><li><p><b>b)</b> To use two copies of MovieStar whose attributes must be told apart</p><p>A self-join needs two copies, ρS1(MovieStar) and ρS2(MovieStar), so S1.address and S2.address can be compared.</p><p><i>VI: Tự nối cần hai bản sao ρS1(MovieStar), ρS2(MovieStar) để so S1.address với S2.address.</i></p></li><li><p><b>b)</b> πtitle(σyear>1990(Movies) ⋈ StarsIn)</p><p>Push σ down to the table it mentions: fewer tuples enter the join. Projecting title first would lose year, so σ could no longer be tested.</p><p><i>VI: Đẩy σ xuống bảng mà nó nói tới: ít bộ vào phép nối hơn. Chiếu title trước sẽ mất year, σ không kiểm được nữa.</i></p></li><li><p><b>d)</b> The ones at the leaves' level, closest to the base tables</p><p>A tree is evaluated bottom-up: leaves are relations, each inner node takes the results of its children.</p><p><i>VI: Cây được tính từ dưới lên: lá là quan hệ, mỗi nút trong nhận kết quả của các nút con.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>R(name, address) and S(title, year). Is R ∪ S legal?</p><p style=\"opacity:.75;font-size:.92em\"><i>R(name, address) và S(title, year). R ∪ S có hợp lệ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only if R and S have the same number of tuples"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — both have two attributes, that is enough"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — the operands must have the same attributes with compatible domains"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes — SQL converts the types automatically"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>∪, ∩, − need union-compatible operands: same arity AND matching domains (and, in the algebra, the same attribute names).</p><p><i>VI: ∪, ∩, − cần hai vế tương thích: cùng bậc VÀ miền tương ứng khớp (trong đại số còn cùng tên thuộc tính).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>|R| = 3 tuples, |S| = 4 tuples. How many tuples in R × S?</p><p style=\"opacity:.75;font-size:.92em\"><i>|R| = 3 bộ, |S| = 4 bộ. R × S có bao nhiêu bộ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "12"
+              },
+              {
+                "ma": "b",
+                "noiDung": "At most 3"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4"
+              },
+              {
+                "ma": "d",
+                "noiDung": "7"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The product pairs every tuple of R with every tuple of S: 3 × 4.</p><p><i>VI: Tích ghép mọi bộ của R với mọi bộ của S: 3 × 4.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why do we need ρ (rename) for \"pairs of stars living at the same address\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao cần ρ (đổi tên) cho \"cặp diễn viên sống cùng địa chỉ\"?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To remove duplicate tuples"
+              },
+              {
+                "ma": "b",
+                "noiDung": "To use two copies of MovieStar whose attributes must be told apart"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because joins are only allowed between different tables"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To sort the result by name"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A self-join needs two copies, ρS1(MovieStar) and ρS2(MovieStar), so S1.address and S2.address can be compared.</p><p><i>VI: Tự nối cần hai bản sao ρS1(MovieStar), ρS2(MovieStar) để so S1.address với S2.address.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>πtitle(σyear>1990(Movies ⋈ StarsIn)) — which rewrite is equivalent and usually cheaper?</p><p style=\"opacity:.75;font-size:.92em\"><i>πtitle(σyear>1990(Movies ⋈ StarsIn)) — cách viết lại nào tương đương và thường rẻ hơn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "σyear>1990(Movies) × StarsIn"
+              },
+              {
+                "ma": "b",
+                "noiDung": "πtitle(σyear>1990(Movies) ⋈ StarsIn)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "σyear>1990(πtitle(Movies ⋈ StarsIn))"
+              },
+              {
+                "ma": "d",
+                "noiDung": "πtitle(Movies) ⋈ σyear>1990(StarsIn)"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Push σ down to the table it mentions: fewer tuples enter the join. Projecting title first would lose year, so σ could no longer be tested.</p><p><i>VI: Đẩy σ xuống bảng mà nó nói tới: ít bộ vào phép nối hơn. Chiếu title trước sẽ mất year, σ không kiểm được nữa.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>In an expression tree, which operator is evaluated FIRST?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong cây biểu thức, phép nào được tính TRƯỚC?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The root at the top, because it is read first"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Any of them: the order is chosen at random"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Always π, because it makes the tuples smaller"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The ones at the leaves' level, closest to the base tables"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A tree is evaluated bottom-up: leaves are relations, each inner node takes the results of its children.</p><p><i>VI: Cây được tính từ dưới lên: lá là quan hệ, mỗi nút trong nhận kết quả của các nút con.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking same arity is enough for ∪ — domains must match too.|||Tưởng cùng bậc là đủ cho ∪ — miền cũng phải khớp."
+        },
+        {
+          "loi": "Projecting away an attribute that a later σ still needs.|||Chiếu bỏ một thuộc tính mà σ phía sau còn cần."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rename ρ",
+          "vi": "phép đổi tên ρ"
+        },
+        {
+          "en": "expression tree",
+          "vi": "cây biểu thức"
+        }
+      ]
+    }
+  ]
+}

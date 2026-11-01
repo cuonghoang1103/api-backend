@@ -1,0 +1,780 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-on-ch1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-ch1"
+  },
+  "exercises": [
+    {
+      "title": "Database, DBMS, database system — or none?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "database",
+        "DBMS",
+        "database system",
+        "metadata"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory",
+        "cq1-2"
+      ],
+      "problemHtml": "<p>CQ1.2: classify each item (practice lesson, exercise 3).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>CQ1.2: phân loại từng mục (bài thực hành, bài 3).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Software ⇒ DBMS; data ⇒ database; everything together ⇒ database system.|||Phần mềm ⇒ DBMS; dữ liệu ⇒ database; tất cả gộp lại ⇒ hệ CSDL.",
+        "Excel is not a DBMS: no constraints, no transactions, no query optimizer.|||Excel không phải DBMS: không ràng buộc, không giao dịch, không bộ tối ưu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Database, DBMS, database system — or none?\n\nAnswer in the answer panel (no code needed).\n\n1. ClassifyPhân loại\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Database, DBMS, database system — or none? — answer key\n\n1. ClassifyPhân loại\n   - r1.loai: DBMS\n   - r2.loai: database\n   - r3.loai: database system\n   - r4.loai: DBMS\n   - r5.loai: none of them\n   - r6.loai: metadata\n   - r7.loai: database\n   SQL Server and PostgreSQL are DBMSs (software); the data and its file are the database; DBMS + data + apps is a database system; table definitions are metadata; a spreadsheet is none of them.VI: SQL Server, PostgreSQL là DBMS (phần mềm); dữ liệu và tệp chứa nó là database; DBMS + dữ liệu + ứng dụng là hệ CSDL; định nghĩa bảng là siêu dữ liệu; bảng tính không thuộc loại nào.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SQL Server and PostgreSQL are DBMSs (software); the data and its file are the database; DBMS + data + apps is a database system; table definitions are metadata; a spreadsheet is none of them.</p><p><i>VI: SQL Server, PostgreSQL là DBMS (phần mềm); dữ liệu và tệp chứa nó là database; DBMS + dữ liệu + ứng dụng là hệ CSDL; định nghĩa bảng là siêu dữ liệu; bảng tính không thuộc loại nào.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Classify</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân loại</i></p>",
+            "cot": [
+              {
+                "ma": "muc",
+                "ten": "Item / Mục"
+              },
+              {
+                "ma": "loai",
+                "ten": "Answer / Đáp án",
+                "luaChon": [
+                  "DBMS",
+                  "database",
+                  "database system",
+                  "metadata",
+                  "none of them"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "muc": "Microsoft SQL Server"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "muc": "the rows of all FPTU students' marks"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "muc": "FAP = its application + SQL Server + the marks"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "muc": "PostgreSQL"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "muc": "an Excel workbook of expenses"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "muc": "the table definitions of FAP (names, columns, types)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "muc": "the file FUHCompany.mdf on disk"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.loai": "DBMS",
+              "r2.loai": "database",
+              "r3.loai": "database system",
+              "r4.loai": "DBMS",
+              "r5.loai": "none of them",
+              "r6.loai": "metadata",
+              "r7.loai": "database"
+            },
+            "giaiThich": "<p>SQL Server and PostgreSQL are DBMSs (software); the data and its file are the database; DBMS + data + apps is a database system; table definitions are metadata; a spreadsheet is none of them.</p><p><i>VI: SQL Server, PostgreSQL là DBMS (phần mềm); dữ liệu và tệp chứa nó là database; DBMS + dữ liệu + ứng dụng là hệ CSDL; định nghĩa bảng là siêu dữ liệu; bảng tính không thuộc loại nào.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"SQL Server is a database\" — the everyday phrase and the FE trap.|||\"SQL Server là một database\" — cách nói hằng ngày và cái bẫy của FE."
+        },
+        {
+          "loi": "Calling table definitions \"data\" — they are data about data (metadata).|||Gọi định nghĩa bảng là \"dữ liệu\" — đó là dữ liệu về dữ liệu (siêu dữ liệu)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "database system",
+          "vi": "hệ cơ sở dữ liệu"
+        }
+      ]
+    },
+    {
+      "title": "DDL or DML? Eight statements",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "DDL",
+        "DML",
+        "TRUNCATE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory",
+        "sql"
+      ],
+      "problemHtml": "<p>Classify each statement on the table <code>Club</code> (exercise 7 — a classic progress-test question).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phân loại từng câu lệnh trên bảng <code>Club</code> (bài 7 — câu progress test kinh điển).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: does it change the table's structure, or the rows inside?|||Hỏi: nó đổi cấu trúc bảng, hay đổi các dòng bên trong?",
+        "TRUNCATE empties the table like DELETE but SQL Server files it under DDL.|||TRUNCATE làm rỗng bảng như DELETE nhưng SQL Server xếp nó vào DDL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DDL or DML? Eight statements\n\nAnswer in the answer panel (no code needed).\n\n1. DDL or DMLDDL hay DML\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# DDL or DML? Eight statements — answer key\n\n1. DDL or DMLDDL hay DML\n   - r1.loai: DDL\n   - r2.loai: DDL\n   - r3.loai: DML\n   - r4.loai: DML\n   - r5.loai: DML\n   - r6.loai: DML\n   - r7.loai: DDL\n   - r8.loai: DDL\n   DDL changes structure (CREATE, ALTER, DROP — and TRUNCATE in SQL Server, which deallocates pages and cannot have WHERE); DML reads or changes rows (SELECT, INSERT, UPDATE, DELETE).VI: DDL đổi cấu trúc (CREATE, ALTER, DROP — và TRUNCATE trong SQL Server, vì nó giải phóng trang và không có WHERE); DML đọc hoặc đổi dòng (SELECT, INSERT, UPDATE, DELETE).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>DDL changes structure (CREATE, ALTER, DROP — and TRUNCATE in SQL Server, which deallocates pages and cannot have WHERE); DML reads or changes rows (SELECT, INSERT, UPDATE, DELETE).</p><p><i>VI: DDL đổi cấu trúc (CREATE, ALTER, DROP — và TRUNCATE trong SQL Server, vì nó giải phóng trang và không có WHERE); DML đọc hoặc đổi dòng (SELECT, INSERT, UPDATE, DELETE).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>DDL or DML</p><p style=\"opacity:.75;font-size:.92em\"><i>DDL hay DML</i></p>",
+            "cot": [
+              {
+                "ma": "cau",
+                "ten": "Statement / Câu lệnh"
+              },
+              {
+                "ma": "loai",
+                "ten": "Class / Loại",
+                "luaChon": [
+                  "DDL",
+                  "DML"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cau": "CREATE TABLE Club (clubID INT PRIMARY KEY, name NVARCHAR(40))"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cau": "ALTER TABLE Club ADD founded INT"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cau": "INSERT INTO Club VALUES (1, N'CLB Guitar', 2015)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cau": "UPDATE Club SET founded = 2016 WHERE clubID = 1"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "cau": "SELECT name, founded FROM Club"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "cau": "DELETE FROM Club WHERE clubID = 2"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "cau": "TRUNCATE TABLE Club"
+                }
+              },
+              {
+                "ma": "r8",
+                "o": {
+                  "cau": "DROP TABLE Club"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.loai": "DDL",
+              "r2.loai": "DDL",
+              "r3.loai": "DML",
+              "r4.loai": "DML",
+              "r5.loai": "DML",
+              "r6.loai": "DML",
+              "r7.loai": "DDL",
+              "r8.loai": "DDL"
+            },
+            "giaiThich": "<p>DDL changes structure (CREATE, ALTER, DROP — and TRUNCATE in SQL Server, which deallocates pages and cannot have WHERE); DML reads or changes rows (SELECT, INSERT, UPDATE, DELETE).</p><p><i>VI: DDL đổi cấu trúc (CREATE, ALTER, DROP — và TRUNCATE trong SQL Server, vì nó giải phóng trang và không có WHERE); DML đọc hoặc đổi dòng (SELECT, INSERT, UPDATE, DELETE).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling TRUNCATE DML because \"it removes rows\".|||Gọi TRUNCATE là DML vì \"nó xoá dòng\"."
+        },
+        {
+          "loi": "Calling SELECT \"not DML\" — it is the query part of DML.|||Cho rằng SELECT \"không phải DML\" — nó là phần truy vấn của DML."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "The stages of database history, in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "data models",
+        "history"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory",
+        "cq1-1"
+      ],
+      "problemHtml": "<p>CQ1.1: put the stages the database has gone through in chronological order (exercise 2).</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>CQ1.1: sắp các giai đoạn phát triển của CSDL theo thời gian (bài 2).</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Hierarchical (one parent) came before network (many parents).|||Phân cấp (một cha) có trước mạng (nhiều cha).",
+        "Relational = 1970s (Codd 1970, System R); NoSQL = 2000s.|||Quan hệ = thập niên 1970 (Codd 1970, System R); NoSQL = thập niên 2000."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The stages of database history, in order\n\nAnswer in the answer panel (no code needed).\n\n1. From the oldest to the newestTừ cũ nhất tới mới nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The stages of database history, in order — answer key\n\n1. From the oldest to the newestTừ cũ nhất tới mới nhất\n   Answer: m1) File systems — each program owns its files  →  m4) Hierarchical model — trees (IBM IMS)  →  m2) Network model — graphs and pointers (CODASYL)  →  m6) Relational model — tables and SQL (System R, Oracle)  →  m3) Object-relational — complex types inside tables  →  m5) NoSQL / NewSQL — scale-out documents, key-value; SQL on many machines\n   Files → trees → graphs → tables → objects → NoSQL/NewSQL: each stage fixed the pain of the previous one (duplication, pointer programs, rigidity, scale).VI: Tệp → cây → đồ thị → bảng → đối tượng → NoSQL/NewSQL: mỗi giai đoạn chữa nỗi khổ của giai đoạn trước (trùng lặp, lập trình con trỏ, cứng nhắc, quy mô).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Files → trees → graphs → tables → objects → NoSQL/NewSQL: each stage fixed the pain of the previous one (duplication, pointer programs, rigidity, scale).</p><p><i>VI: Tệp → cây → đồ thị → bảng → đối tượng → NoSQL/NewSQL: mỗi giai đoạn chữa nỗi khổ của giai đoạn trước (trùng lặp, lập trình con trỏ, cứng nhắc, quy mô).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From the oldest to the newest</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ cũ nhất tới mới nhất</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "File systems — each program owns its files"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Network model — graphs and pointers (CODASYL)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Object-relational — complex types inside tables"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Hierarchical model — trees (IBM IMS)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "NoSQL / NewSQL — scale-out documents, key-value; SQL on many machines"
+              },
+              {
+                "ma": "m6",
+                "noiDung": "Relational model — tables and SQL (System R, Oracle)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m2",
+              "m6",
+              "m3",
+              "m5"
+            ],
+            "giaiThich": "<p>Files → trees → graphs → tables → objects → NoSQL/NewSQL: each stage fixed the pain of the previous one (duplication, pointer programs, rigidity, scale).</p><p><i>VI: Tệp → cây → đồ thị → bảng → đối tượng → NoSQL/NewSQL: mỗi giai đoạn chữa nỗi khổ của giai đoạn trước (trùng lặp, lập trình con trỏ, cứng nhắc, quy mô).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the network model before the hierarchical one.|||Đặt mô hình mạng trước mô hình phân cấp."
+        },
+        {
+          "loi": "Thinking NoSQL replaced relational — both are used today.|||Tưởng NoSQL thay thế quan hệ — ngày nay cả hai đều dùng."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Three levels, data independence and who does what",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "three-schema architecture",
+        "data independence",
+        "DBA"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "theory",
+        "cq1-3"
+      ],
+      "problemHtml": "<p>CQ1.3 / CQ8.2: the ANSI/SPARC three levels (external, conceptual, internal) and the people around a database (exercises 6 and 8).</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>CQ1.3 / CQ8.2: ba mức ANSI/SPARC (ngoài, khái niệm, trong) và những người làm việc với CSDL (bài 6 và 8).</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "External = per user view; conceptual = all tables/keys; internal = files, pages, indexes.|||Ngoài = góc nhìn từng người dùng; khái niệm = mọi bảng/khoá; trong = tệp, trang, chỉ mục.",
+        "Physical independence protects the conceptual level from storage changes; logical independence protects the external level from schema changes.|||Độc lập vật lý che mức khái niệm khỏi đổi lưu trữ; độc lập logic che mức ngoài khỏi đổi lược đồ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Three levels, data independence and who does what\n\nAnswer in the answer panel (no code needed).\n\n1. A view PhoneBook shows only (fullName, dept) of Employee to receptionists. Which level is it?View PhoneBook chỉ cho lễ tân thấy (fullName, dept) của Employee. Đó là mức nào?\n2. The DBA moves the data file to a faster SSD and rebuilds an index; no query changes. This shows…DBA chuyển tệp dữ liệu sang SSD nhanh hơn và dựng lại chỉ mục; không câu truy vấn nào phải sửa. Đây là…\n3. A column is added to Employee; the PhoneBook view and the programs using it keep working. This shows…Thêm một cột vào Employee; view PhoneBook và chương trình dùng nó vẫn chạy. Đây là…\n4. \"Back up the database every night and grant accounts to new staff\" is the job of…\"Sao lưu CSDL mỗi đêm và cấp tài khoản cho nhân viên mới\" là việc của…\n5. \"Enroll's key must include the semester\" is decided by…\"Khoá của Enroll phải có học kỳ\" do ai quyết?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Three levels, data independence and who does what — answer key\n\n1. A view PhoneBook shows only (fullName, dept) of Employee to receptionists. Which level is it?View PhoneBook chỉ cho lễ tân thấy (fullName, dept) của Employee. Đó là mức nào?\n   Answer: b) External level\n   Each user group's own window on the data is an external schema; views implement it.VI: Cửa sổ riêng của mỗi nhóm người dùng là lược đồ ngoài; view hiện thực nó.\n\n2. The DBA moves the data file to a faster SSD and rebuilds an index; no query changes. This shows…DBA chuyển tệp dữ liệu sang SSD nhanh hơn và dựng lại chỉ mục; không câu truy vấn nào phải sửa. Đây là…\n   Answer: a) physical data independence\n   Internal (storage) changes hidden from the conceptual level = physical independence.VI: Thay đổi mức trong (lưu trữ) được che khỏi mức khái niệm = độc lập vật lý.\n\n3. A column is added to Employee; the PhoneBook view and the programs using it keep working. This shows…Thêm một cột vào Employee; view PhoneBook và chương trình dùng nó vẫn chạy. Đây là…\n   Answer: a) logical data independence\n   A conceptual-schema change hidden from the external level = logical independence (harder to get than physical).VI: Thay đổi lược đồ khái niệm được che khỏi mức ngoài = độc lập logic (khó đạt hơn độc lập vật lý).\n\n4. \"Back up the database every night and grant accounts to new staff\" is the job of…\"Sao lưu CSDL mỗi đêm và cấp tài khoản cho nhân viên mới\" là việc của…\n   Answer: d) the database administrator (DBA)\n   Operations and security are the DBA's; deciding tables and keys is the designer's; typing marks is the end user's.VI: Vận hành và bảo mật là việc của DBA; quyết bảng và khoá là của người thiết kế; nhập điểm là của người dùng cuối.\n\n5. \"Enroll's key must include the semester\" is decided by…\"Khoá của Enroll phải có học kỳ\" do ai quyết?\n   Answer: b) the database designer\n   Choosing keys is schema design (conceptual level).VI: Chọn khoá là thiết kế lược đồ (mức khái niệm).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> External level</p><p>Each user group's own window on the data is an external schema; views implement it.</p><p><i>VI: Cửa sổ riêng của mỗi nhóm người dùng là lược đồ ngoài; view hiện thực nó.</i></p></li><li><p><b>a)</b> physical data independence</p><p>Internal (storage) changes hidden from the conceptual level = physical independence.</p><p><i>VI: Thay đổi mức trong (lưu trữ) được che khỏi mức khái niệm = độc lập vật lý.</i></p></li><li><p><b>a)</b> logical data independence</p><p>A conceptual-schema change hidden from the external level = logical independence (harder to get than physical).</p><p><i>VI: Thay đổi lược đồ khái niệm được che khỏi mức ngoài = độc lập logic (khó đạt hơn độc lập vật lý).</i></p></li><li><p><b>d)</b> the database administrator (DBA)</p><p>Operations and security are the DBA's; deciding tables and keys is the designer's; typing marks is the end user's.</p><p><i>VI: Vận hành và bảo mật là việc của DBA; quyết bảng và khoá là của người thiết kế; nhập điểm là của người dùng cuối.</i></p></li><li><p><b>b)</b> the database designer</p><p>Choosing keys is schema design (conceptual level).</p><p><i>VI: Chọn khoá là thiết kế lược đồ (mức khái niệm).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A view PhoneBook shows only (fullName, dept) of Employee to receptionists. Which level is it?</p><p style=\"opacity:.75;font-size:.92em\"><i>View PhoneBook chỉ cho lễ tân thấy (fullName, dept) của Employee. Đó là mức nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Physical file level"
+              },
+              {
+                "ma": "b",
+                "noiDung": "External level"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Conceptual level"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Internal level"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each user group's own window on the data is an external schema; views implement it.</p><p><i>VI: Cửa sổ riêng của mỗi nhóm người dùng là lược đồ ngoài; view hiện thực nó.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The DBA moves the data file to a faster SSD and rebuilds an index; no query changes. This shows…</p><p style=\"opacity:.75;font-size:.92em\"><i>DBA chuyển tệp dữ liệu sang SSD nhanh hơn và dựng lại chỉ mục; không câu truy vấn nào phải sửa. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "physical data independence"
+              },
+              {
+                "ma": "b",
+                "noiDung": "logical data independence"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a lost update"
+              },
+              {
+                "ma": "d",
+                "noiDung": "referential integrity"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Internal (storage) changes hidden from the conceptual level = physical independence.</p><p><i>VI: Thay đổi mức trong (lưu trữ) được che khỏi mức khái niệm = độc lập vật lý.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A column is added to Employee; the PhoneBook view and the programs using it keep working. This shows…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thêm một cột vào Employee; view PhoneBook và chương trình dùng nó vẫn chạy. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "logical data independence"
+              },
+              {
+                "ma": "b",
+                "noiDung": "data redundancy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "physical data independence"
+              },
+              {
+                "ma": "d",
+                "noiDung": "atomicity"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A conceptual-schema change hidden from the external level = logical independence (harder to get than physical).</p><p><i>VI: Thay đổi lược đồ khái niệm được che khỏi mức ngoài = độc lập logic (khó đạt hơn độc lập vật lý).</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>\"Back up the database every night and grant accounts to new staff\" is the job of…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Sao lưu CSDL mỗi đêm và cấp tài khoản cho nhân viên mới\" là việc của…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the end user"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the database designer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the DBMS vendor"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the database administrator (DBA)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Operations and security are the DBA's; deciding tables and keys is the designer's; typing marks is the end user's.</p><p><i>VI: Vận hành và bảo mật là việc của DBA; quyết bảng và khoá là của người thiết kế; nhập điểm là của người dùng cuối.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"Enroll's key must include the semester\" is decided by…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Khoá của Enroll phải có học kỳ\" do ai quyết?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the end user"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the database designer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the query optimizer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the DBA"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Choosing keys is schema design (conceptual level).</p><p><i>VI: Chọn khoá là thiết kế lược đồ (mức khái niệm).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling an index change \"logical\" independence.|||Gọi việc đổi chỉ mục là độc lập \"logic\"."
+        },
+        {
+          "loi": "Thinking the DBA designs the tables — usually a separate role.|||Tưởng DBA thiết kế bảng — thường là vai trò khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "external / conceptual / internal level",
+          "vi": "mức ngoài / khái niệm / trong"
+        },
+        {
+          "en": "DBA",
+          "vi": "người quản trị CSDL"
+        }
+      ]
+    },
+    {
+      "title": "From data to information: a report per course",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "GROUP BY",
+        "COUNT",
+        "AVG",
+        "conditional SUM"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "group-by",
+        "information"
+      ],
+      "problemHtml": "<p>Exercise 8: six rows of marks are <i>data</i>. Turn them into <i>information</i> the head of department can act on: for each course, the number of students, the average score and how many failed (score &lt; 5).</p>\n<p><b>Table</b> (tab <code>Mark.sql</code>): <code>Mark(studentID, course, score)</code> — 6 rows, key (studentID, course).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>course, students, avgScore, failed</code>.</li>\n  <li>One row per course; row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 8: sáu dòng điểm là <i>dữ liệu</i>. Biến chúng thành <i>thông tin</i> trưởng bộ môn dùng được: với mỗi môn, số sinh viên, điểm trung bình và số người trượt (điểm &lt; 5).</p>\n<p><b>Bảng</b> (tab <code>Mark.sql</code>): <code>Mark(studentID, course, score)</code> — 6 dòng, khoá (studentID, course).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>course, students, avgScore, failed</code>.</li>\n  <li>Mỗi môn một dòng; thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "course | students | avgScore | failed\n-------+----------+----------+-------\nDBI202 | 4        | 5.625    | 2     \nCSD201 | 2        | 8        | 0     ",
+          "explanation": "Expected result of check \"One summary row per course\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Mỗi môn một dòng tổng hợp\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "GROUP BY course gives one row per course; COUNT and AVG work inside each group.|||GROUP BY course cho mỗi môn một dòng; COUNT và AVG tính trong từng nhóm.",
+        "Count failures with SUM(CASE WHEN score &lt; 5 THEN 1 ELSE 0 END).|||Đếm số trượt bằng SUM(CASE WHEN score &lt; 5 THEN 1 ELSE 0 END)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Mark.sql",
+          "language": "sql",
+          "code": "-- Mark.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Mark.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Mark (\n  studentID CHAR(8)      NOT NULL,\n  course    CHAR(6)      NOT NULL,\n  score     DECIMAL(3,1) NOT NULL CHECK (score BETWEEN 0 AND 10),\n  CONSTRAINT pk_mark PRIMARY KEY (studentID, course)\n);\nINSERT INTO Mark VALUES\n  ('SE190001', 'DBI202', 8.5), ('SE190002', 'DBI202', 4.0), ('SE190003', 'DBI202', 6.5), ('SE190004', 'DBI202', 3.5),\n  ('SE190001', 'CSD201', 7.5), ('SE190002', 'CSD201', 8.5);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT course,\n       COUNT(*)                                   AS students,\n       AVG(score)                                 AS avgScore,\n       SUM(CASE WHEN score < 5 THEN 1 ELSE 0 END) AS failed     -- count only the rows that match\nFROM Mark\nGROUP BY course;\n"
+        },
+        {
+          "name": "Mark.sql",
+          "language": "sql",
+          "code": "-- Mark.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Mark.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Mark (\n  studentID CHAR(8)      NOT NULL,\n  course    CHAR(6)      NOT NULL,\n  score     DECIMAL(3,1) NOT NULL CHECK (score BETWEEN 0 AND 10),\n  CONSTRAINT pk_mark PRIMARY KEY (studentID, course)\n);\nINSERT INTO Mark VALUES\n  ('SE190001', 'DBI202', 8.5), ('SE190002', 'DBI202', 4.0), ('SE190003', 'DBI202', 6.5), ('SE190004', 'DBI202', 3.5),\n  ('SE190001', 'CSD201', 7.5), ('SE190002', 'CSD201', 8.5);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Data are raw facts; information is data processed for a decision. \"DBI202: 4 students, average 5.625, 2 failed\" tells the department where to open a revision class.</p>",
+      "solutionExplanationHtmlVi": "<p>Dữ liệu là sự kiện thô; thông tin là dữ liệu đã xử lý để ra quyết định. \"DBI202: 4 sinh viên, trung bình 5.625, 2 trượt\" cho bộ môn biết nên mở lớp ôn ở đâu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Mark (\n  studentID CHAR(8)      NOT NULL,\n  course    CHAR(6)      NOT NULL,\n  score     DECIMAL(3,1) NOT NULL CHECK (score BETWEEN 0 AND 10),\n  CONSTRAINT pk_mark PRIMARY KEY (studentID, course)\n);\nINSERT INTO Mark VALUES\n  ('SE190001', 'DBI202', 8.5), ('SE190002', 'DBI202', 4.0), ('SE190003', 'DBI202', 6.5), ('SE190004', 'DBI202', 3.5),\n  ('SE190001', 'CSD201', 7.5), ('SE190002', 'CSD201', 8.5);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "One summary row per course|||Mỗi môn một dòng tổng hợp",
+            "saiSo": 0.001,
+            "mongDoi": {
+              "cot": [
+                "course",
+                "students",
+                "avgScore",
+                "failed"
+              ],
+              "hang": [
+                [
+                  "DBI202",
+                  4,
+                  5.625,
+                  2
+                ],
+                [
+                  "CSD201",
+                  2,
+                  8,
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new course and more marks|||Thêm một môn và vài điểm",
+            "an": true,
+            "themCsdl": "INSERT INTO Mark VALUES ('SE190005', 'DBI202', 9.0), ('SE190003', 'MAE101', 4.5), ('SE190004', 'MAE101', 2.0)",
+            "saiSo": 0.001,
+            "mongDoi": {
+              "cot": [
+                "course",
+                "students",
+                "avgScore",
+                "failed"
+              ],
+              "hang": [
+                [
+                  "DBI202",
+                  5,
+                  6.3,
+                  2
+                ],
+                [
+                  "MAE101",
+                  2,
+                  3.25,
+                  2
+                ],
+                [
+                  "CSD201",
+                  2,
+                  8,
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses GROUP BY|||Dùng GROUP BY",
+            "khop": "\\bGROUP\\s+BY\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "COUNT(score) for failed — that counts every mark, not the failing ones.|||COUNT(score) cho số trượt — đếm mọi điểm chứ không chỉ điểm trượt."
+        },
+        {
+          "loi": "Filtering WHERE score &gt;= 5 first — then nobody fails and the averages change.|||Lọc WHERE score &gt;= 5 trước — khi đó không ai trượt và trung bình bị đổi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GROUP BY",
+          "vi": "gộp nhóm",
+          "giaiThich": "Mỗi nhóm giá trị giống nhau ⇒ một dòng kết quả."
+        },
+        {
+          "en": "aggregate function",
+          "vi": "hàm gộp",
+          "giaiThich": "COUNT, SUM, AVG, MIN, MAX — biến nhiều dòng thành một giá trị."
+        }
+      ]
+    }
+  ]
+}

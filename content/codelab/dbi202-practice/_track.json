@@ -7,8 +7,92 @@
   "docsUrl": "https://learn.microsoft.com/en-us/sql/t-sql/language-reference",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện môn DBI202 (Database Systems) có MÁY CHẤM SQL THẬT ngay trong trình duyệt: PostgreSQL 18 (WASM) ở chế độ giống SQL Server — so chuỗi không phân biệt hoa thường, AVG số nguyên, GROUP BY chặt. Viết SQL chuẩn chạy cả SQL Server lẫn PostgreSQL; cú pháp riêng một hệ bị báo rõ. CSDL mẫu FUHCompany của môn, mỗi bài học một bộ đề dễ → khó (kiểm ẩn đổi dữ liệu), Lab chương dạng bản in và đề luyện PE theo dạng SP26.",
+  "description": "Bộ luyện môn DBI202 (Database Systems) phủ MỌI bài học của khoá: đại số quan hệ, ERD → bảng, phụ thuộc hàm và chuẩn hoá (câu hỏi/bảng chấm tự động), SQL chấm bằng MÁY CHẤM SQL THẬT ngay trong trình duyệt — PostgreSQL 18 (WASM) ở chế độ giống SQL Server: so chuỗi không phân biệt hoa thường, AVG số nguyên, GROUP BY chặt. Viết SQL chuẩn chạy cả SQL Server lẫn PostgreSQL; cú pháp riêng một hệ bị báo rõ. Phần T-SQL thuần (stored procedure, function, trigger, cursor, giao dịch, chỉ mục CLUSTERED) chạy trên SQL Server của bạn với tệp tự kiểm check.sql in PASS/FAIL. CSDL mẫu FUHCompany của môn, mỗi bài học một bộ đề dễ → khó (kiểm ẩn đổi dữ liệu), Lab chương dạng bản in và đề luyện PE theo dạng SP26.",
   "modules": [
+    {
+      "slug": "dbi202-cai-dat-ket-noi",
+      "name": "0.2 Install SQL Server and connect — check your setup",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Prove your SQL Server is ready: a Unicode table · Read the connection error, pick the fix · Which server image and which client, on which machine?"
+    },
+    {
+      "slug": "dbi202-buoi-dau-tien",
+      "name": "0.3 First session: INSERT, SELECT, UPDATE, DELETE",
+      "level": "BEGINNER",
+      "description": "Luyện: Add a class, then a student in it · Students without a score yet · Class SE1801, best score first · Half a point of bonus for SE1802, capped at 10 · Delete class SE1801 safely"
+    },
+    {
+      "slug": "dbi202-slide-dbi2-1",
+      "name": "1.A The worlds of database systems (slides 1–21)",
+      "level": "BEGINNER",
+      "description": "Luyện: Slide 10: books published in 1989 · Slide 10: the yellow, pink and grey rows · Inside a DBMS: who does what? · The journey of one query through the DBMS"
+    },
+    {
+      "slug": "dbi202-csdl-dbms",
+      "name": "1.1 Why databases & what a DBMS does",
+      "level": "BEGINNER",
+      "description": "Luyện: Spreadsheet trouble: name the problem a DBMS solves · Put the rule in the database: the Mark table · What a DBMS gives you (and what it does not)"
+    },
+    {
+      "slug": "dbi202-on-ch1",
+      "name": "1.2 Practice: databases & DBMS (CQ1.1–CQ1.3)",
+      "level": "BEGINNER",
+      "description": "Luyện: Database, DBMS, database system — or none? · DDL or DML? Eight statements · The stages of database history, in order · Three levels, data independence and who does what · From data to information: a report per course"
+    },
+    {
+      "slug": "dbi202-slide-dbi3-1",
+      "name": "2.A Data models, relations & keys (slides 1–11)",
+      "level": "BEGINNER",
+      "description": "Luyện: Read a relation: schema, tuples, degree, cardinality · Relations are sets: what changes the relation, and what is a key? · Declare Movies with its composite key · Prove that title alone is not a key"
+    },
+    {
+      "slug": "dbi202-slide-dbi3-2",
+      "name": "2.B Set ops, σ, π, joins, ρ & expression trees (slides 12–25)",
+      "level": "BEGINNER",
+      "description": "Luyện: σ then π: long Disney movies · π on a set: the distinct genres · Natural join: who starred in what, women only · ∩ and −: stars of Star Wars, with and without Raiders · Expression trees and the rules of the algebra"
+    },
+    {
+      "slug": "dbi202-slide-dbi6-1",
+      "name": "2.C Relations as bags (slides 1–14)",
+      "level": "BEGINNER",
+      "description": "Luyện: Count the copies: bag ∪, ∩, − by hand · How many times does each tuple appear? · Bag union with UNION ALL · Bag difference R − S without EXCEPT ALL · Sets vs bags: which laws survive?"
+    },
+    {
+      "slug": "dbi202-slide-dbi6-2",
+      "name": "2.D Extended operators: δ, γ, extended π, τ, outer joins (slides 15–30)",
+      "level": "BEGINNER",
+      "description": "Luyện: γ: movies and average length per studio · Extended π: length in hours and a renamed column · τ: sort by year (newest first), then by title · Outer join: every movie with its number of stars (0 included) · Full, left and right outer join of two tiny relations"
+    },
+    {
+      "slug": "dbi202-mo-hinh-quan-he",
+      "name": "2.1 Tables, keys & the relational model",
+      "level": "BEGINNER",
+      "description": "Luyện: Superkey, candidate key, primary key, foreign key · Could it be a key? Judge from the instance · Show that name is not a key of Student · Courses that no student takes"
+    },
+    {
+      "slug": "dbi202-dai-so-quan-he",
+      "name": "2.2 Relational algebra",
+      "level": "BEGINNER",
+      "description": "Luyện: π after σ: names of SE students (a set) · A 3-step expression tree: ⋈, σ, π · ρ and a self-join: pairs of students in the same major · Match the question with its algebra expression · Evaluate the tree bottom-up"
+    },
+    {
+      "slug": "dbi202-dai-so-nang-cao",
+      "name": "2.3 Joins, outer joins & division in algebra",
+      "level": "BEGINNER",
+      "description": "Luyện: Natural join, outer joins and division on a tiny example · θ-join: high scores in 3-credit courses · ⟕: every course with its number of students · Division: students who take every course AI01 takes"
+    },
+    {
+      "slug": "dbi202-rang-buoc-quan-he",
+      "name": "2.4 Constraints on relations",
+      "level": "BEGINNER",
+      "description": "Luyện: Which family of constraint is it? · Referential integrity in algebra: π_sid(EnrollRaw) − π_sid(StudentRaw) · Key violations: sids used by two different rows · Domain violations: scores outside 0–10 · Deleting a row that is still referenced"
+    },
+    {
+      "slug": "dbi202-on-ch2",
+      "name": "2.5 Practice: relational algebra on sets and bags",
+      "level": "BEGINNER",
+      "description": "Luyện: Exercise 3 — ∩: students who take both DBI202 and CSD201 · Exercise 4 — difference, then join back: who takes nothing? · Exercise 6 — bags: how many more cups did Q1 sell, per drink? · Exercise 7 — γ, σ after γ, τ: courses with 2+ students · Exercises 1–2 — set vs bag counts and tree order"
+    },
     {
       "slug": "dbi202-sql-ddl",
       "name": "5.1 CREATE TABLE: keys and constraints",
@@ -26,6 +110,12 @@
       "name": "Lab 5 — Build the CT Library database (DDL + constraints)",
       "level": "ADVANCED",
       "description": "Lab 5 (bản in): dựng CSDL thư viện CT Library 5 câu × 2 điểm — bảng, ràng buộc cột/bảng, DEFAULT, ALTER, xoá đúng thứ tự khoá ngoại."
+    },
+    {
+      "slug": "dbi202-slide-dbi7-4",
+      "name": "6.7 Set operations: UNION, INTERSECT, EXCEPT",
+      "level": "INTERMEDIATE",
+      "description": "Phép tập hợp UNION, INTERSECT, EXCEPT, UNION ALL (túi vs tập) trên FUHCompany."
     },
     {
       "slug": "dbi202-select-join",
@@ -56,12 +146,6 @@
       "name": "6.5 INSERT, UPDATE, DELETE done safely",
       "level": "INTERMEDIATE",
       "description": "INSERT đủ/thiếu cột, UPDATE/DELETE có điều kiện, UPDATE theo truy vấn con, INSERT … SELECT — chấm bằng truy vấn kiểm sau lệnh."
-    },
-    {
-      "slug": "dbi202-slide-dbi7-4",
-      "name": "6.7 Set operations: UNION, INTERSECT, EXCEPT",
-      "level": "INTERMEDIATE",
-      "description": "Phép tập hợp UNION, INTERSECT, EXCEPT, UNION ALL (túi vs tập) trên FUHCompany."
     },
     {
       "slug": "dbi202-6-lab-fuhcompany-reports",

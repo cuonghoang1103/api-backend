@@ -1,0 +1,749 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-on-ch2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-ch2"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 3 — ∩: students who take both DBI202 and CSD201",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "intersection"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "intersect"
+      ],
+      "problemHtml": "<p>Write <code>π<sub>sid</sub>(σ<sub>cid='DBI202'</sub>(Enroll)) ∩ π<sub>sid</sub>(σ<sub>cid='CSD201'</sub>(Enroll))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>University schema</b> (lesson 2.5 — full script in the <code>University.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 students (two different students are both called <b>An</b>: SE01 and SE03; GD01 Dũng takes nothing), 4 courses (nobody takes JPD113), 7 enrolments.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>One column: <code>sid</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>π<sub>sid</sub>(σ<sub>cid='DBI202'</sub>(Enroll)) ∩ π<sub>sid</sub>(σ<sub>cid='CSD201'</sub>(Enroll))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ University</b> (bài 2.5 — script đầy đủ ở tab <code>University.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 sinh viên (hai người khác nhau cùng tên <b>An</b>: SE01 và SE03; GD01 Dũng không học môn nào), 4 môn (không ai học JPD113), 7 lượt đăng ký.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một cột: <code>sid</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sid \n----\nAI01\nSE01",
+          "explanation": "Expected result of check \"sids in both courses\" (row order does not matter).|||Kết quả mong đợi của kiểm \"sid học cả hai môn\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "σ tests one row at a time — no row has two course codes.|||σ kiểm từng dòng — không dòng nào có hai mã môn.",
+        "Build the two sets, then INTERSECT them.|||Dựng hai tập rồi INTERSECT."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT sid FROM Enroll WHERE cid = 'DBI202'\nINTERSECT\nSELECT sid FROM Enroll WHERE cid = 'CSD201';\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: AI01, SE01. \"Both\" across rows = ∩ (or a self-join of Enroll).</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: AI01, SE01. \"Cả hai\" trên nhiều dòng = ∩ (hoặc tự nối Enroll).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "sids in both courses|||sid học cả hai môn",
+            "mongDoi": {
+              "cot": [
+                "sid"
+              ],
+              "hang": [
+                [
+                  "AI01"
+                ],
+                [
+                  "SE01"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "SE04 takes both too|||SE04 cũng học cả hai",
+            "an": true,
+            "themCsdl": "INSERT INTO Student VALUES ('SE04', N'Giang', 'SE'), ('IA01', N'Huy', 'IA');\nINSERT INTO Enroll VALUES ('SE04', 'DBI202', 7.0), ('SE04', 'CSD201', 9.0), ('SE03', 'MAE101', 4.0)",
+            "mongDoi": {
+              "cot": [
+                "sid"
+              ],
+              "hang": [
+                [
+                  "AI01"
+                ],
+                [
+                  "SE01"
+                ],
+                [
+                  "SE04"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses INTERSECT (or an equivalent self-join / IN)|||Dùng INTERSECT (hoặc tự nối / IN tương đương)",
+            "khop": "\\bINTERSECT\\b|\\bJOIN\\b|\\bIN\\s*\\(|\\bEXISTS\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "WHERE cid = 'DBI202' AND cid = 'CSD201' — always 0 rows.|||WHERE cid = 'DBI202' AND cid = 'CSD201' — luôn 0 dòng."
+        },
+        {
+          "loi": "UNION — that is \"either\", not \"both\".|||UNION — đó là \"một trong hai\", không phải \"cả hai\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "UNION / INTERSECT / EXCEPT",
+          "vi": "hợp / giao / hiệu",
+          "giaiThich": "Phép tập hợp trên hai câu SELECT cùng số cột, kiểu tương thích; mặc định bỏ dòng trùng."
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — difference, then join back: who takes nothing?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "difference",
+        "join back"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "except"
+      ],
+      "problemHtml": "<p>Write <code>π<sub>sid, name</sub>((π<sub>sid</sub>(Student) − π<sub>sid</sub>(Enroll)) ⋈ Student)</code>: the students who take no course, with their names. (A plain difference loses the name; join the result back to Student.)</p>\n<details class=\"cl-luoc-do\" open><summary><b>University schema</b> (lesson 2.5 — full script in the <code>University.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 students (two different students are both called <b>An</b>: SE01 and SE03; GD01 Dũng takes nothing), 4 courses (nobody takes JPD113), 7 enrolments.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>sid, name</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>π<sub>sid, name</sub>((π<sub>sid</sub>(Student) − π<sub>sid</sub>(Enroll)) ⋈ Student)</code>: sinh viên không học môn nào, kèm tên. (Phép hiệu thuần mất cột name; nối kết quả lại với Student.)</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ University</b> (bài 2.5 — script đầy đủ ở tab <code>University.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 sinh viên (hai người khác nhau cùng tên <b>An</b>: SE01 và SE03; GD01 Dũng không học môn nào), 4 môn (không ai học JPD113), 7 lượt đăng ký.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>sid, name</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sid  | name\n-----+-----\nGD01 | Dũng",
+          "explanation": "Expected result of check \"Students without enrolments\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Sinh viên không đăng ký môn nào\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Difference needs union-compatible sides: compute it on sid only.|||Phép hiệu cần hai vế tương thích: tính trên sid thôi.",
+        "Then join with Student to get the name.|||Rồi nối với Student để lấy tên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT s.sid, s.name\nFROM (SELECT sid FROM Student\n      EXCEPT\n      SELECT sid FROM Enroll) AS d          -- π sid(Student) − π sid(Enroll)\nJOIN Student s ON s.sid = d.sid;            -- ⋈ Student to recover the name\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: GD01 Dũng. Three correct shapes: EXCEPT + join back, NOT EXISTS, LEFT JOIN … WHERE e.sid IS NULL.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: GD01 Dũng. Ba dạng đúng: EXCEPT + nối lại, NOT EXISTS, LEFT JOIN … WHERE e.sid IS NULL.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Students without enrolments|||Sinh viên không đăng ký môn nào",
+            "mongDoi": {
+              "cot": [
+                "sid",
+                "name"
+              ],
+              "hang": [
+                [
+                  "GD01",
+                  "Dũng"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new student with no course; another who only failed|||Sinh viên mới chưa học môn nào; một người chỉ có điểm trượt",
+            "an": true,
+            "themCsdl": "INSERT INTO Student VALUES ('SE04', N'Giang', 'SE'), ('IA01', N'Huy', 'IA');\nINSERT INTO Enroll VALUES ('SE04', 'DBI202', 7.0), ('SE04', 'CSD201', 9.0), ('SE03', 'MAE101', 4.0); INSERT INTO Student VALUES ('SE05', N'Khánh', 'SE'); INSERT INTO Enroll VALUES ('SE05', 'MAE101', 3.0)",
+            "mongDoi": {
+              "cot": [
+                "sid",
+                "name"
+              ],
+              "hang": [
+                [
+                  "GD01",
+                  "Dũng"
+                ],
+                [
+                  "IA01",
+                  "Huy"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses EXCEPT, NOT EXISTS or NOT IN|||Dùng EXCEPT, NOT EXISTS hoặc NOT IN",
+            "khop": "\\bEXCEPT\\b|\\bNOT\\s+EXISTS\\b|\\bNOT\\s+IN\\b|\\bIS\\s+NULL\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Filtering the right side (score ≥ 5) — a student who failed is still enrolled.|||Lọc vế phải (điểm ≥ 5) — sinh viên trượt vẫn là đã đăng ký."
+        },
+        {
+          "loi": "INNER JOIN … WHERE cid IS NULL — an inner join never produces NULL there; use LEFT JOIN for that pattern.|||INNER JOIN … WHERE cid IS NULL — nối trong không bao giờ sinh NULL ở đó; mẫu đó cần LEFT JOIN."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "UNION / INTERSECT / EXCEPT",
+          "vi": "hợp / giao / hiệu",
+          "giaiThich": "Phép tập hợp trên hai câu SELECT cùng số cột, kiểu tương thích; mặc định bỏ dòng trùng."
+        },
+        {
+          "en": "EXISTS / NOT EXISTS",
+          "vi": "có tồn tại / không tồn tại",
+          "giaiThich": "Đúng khi truy vấn con trả ≥ 1 dòng; an toàn với NULL hơn NOT IN."
+        }
+      ]
+    },
+    {
+      "title": "Exercise 6 — bags: how many more cups did Q1 sell, per drink?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "bag difference",
+        "counts",
+        "outer join"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "bags",
+        "group-by"
+      ],
+      "problemHtml": "<p>The bag difference SaleQ1 − SaleQ3 keeps, for each drink, max(0, n − m) copies (n cups in Q1, m in Q3). Return it as counts: one row per drink that Q1 sold <b>more</b> of than Q3, with the difference.</p>\n<p><b>Two cafés</b> (tab <code>Cafe.sql</code>): <code>SaleQ1(drink)</code> and <code>SaleQ3(drink)</code> — one row per cup sold, no key, so each table is a <b>bag</b>. Q1: cà phê sữa ×3, trà đào ×1, bạc xỉu ×1. Q3: trà đào ×2, cà phê sữa ×1.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>drink, more</code> (more = n − m &gt; 0).</li>\n  <li>A drink Q3 never sold still counts (m = 0). Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiệu túi SaleQ1 − SaleQ3 giữ, với mỗi đồ uống, max(0, n − m) bản (n ly ở Q1, m ở Q3). Trả kết quả dạng số đếm: mỗi đồ uống Q1 bán <b>nhiều hơn</b> Q3 một dòng, kèm phần chênh.</p>\n<p><b>Hai quán cà phê</b> (tab <code>Cafe.sql</code>): <code>SaleQ1(drink)</code> và <code>SaleQ3(drink)</code> — mỗi ly bán một dòng, không có khoá nên mỗi bảng là một <b>túi</b>. Q1: cà phê sữa ×3, trà đào ×1, bạc xỉu ×1. Q3: trà đào ×2, cà phê sữa ×1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>drink, more</code> (more = n − m &gt; 0).</li>\n  <li>Đồ uống Q3 chưa bán vẫn tính (m = 0). Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "drink      | more\n-----------+-----\ncà phê sữa | 2   \nbạc xỉu    | 1   ",
+          "explanation": "Expected result of check \"Drinks Q1 sold more of\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Đồ uống Q1 bán nhiều hơn\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Count n per drink in Q1 and m per drink in Q3 first.|||Đếm n mỗi đồ uống ở Q1 và m ở Q3 trước.",
+        "LEFT JOIN the counts and treat a missing m as 0 with COALESCE.|||LEFT JOIN hai bảng đếm và coi m thiếu là 0 bằng COALESCE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Cafe.sql",
+          "language": "sql",
+          "code": "-- Cafe.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Cafe.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE SaleQ1 (drink NVARCHAR(20) NOT NULL);   -- branch District 1, no key: a bag (one row per cup)\nCREATE TABLE SaleQ3 (drink NVARCHAR(20) NOT NULL);   -- branch District 3\nINSERT INTO SaleQ1 VALUES (N'cà phê sữa'), (N'trà đào'), (N'cà phê sữa'), (N'bạc xỉu'), (N'cà phê sữa');\nINSERT INTO SaleQ3 VALUES (N'trà đào'), (N'cà phê sữa'), (N'trà đào');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT a.drink, a.n - COALESCE(b.m, 0) AS more\nFROM (SELECT drink, COUNT(*) AS n FROM SaleQ1 GROUP BY drink) AS a\nLEFT JOIN (SELECT drink, COUNT(*) AS m FROM SaleQ3 GROUP BY drink) AS b\n       ON b.drink = a.drink                              -- bạc xỉu has no partner ⇒ m = 0\nWHERE a.n - COALESCE(b.m, 0) > 0;\n"
+        },
+        {
+          "name": "Cafe.sql",
+          "language": "sql",
+          "code": "-- Cafe.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Cafe.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE SaleQ1 (drink NVARCHAR(20) NOT NULL);   -- branch District 1, no key: a bag (one row per cup)\nCREATE TABLE SaleQ3 (drink NVARCHAR(20) NOT NULL);   -- branch District 3\nINSERT INTO SaleQ1 VALUES (N'cà phê sữa'), (N'trà đào'), (N'cà phê sữa'), (N'bạc xỉu'), (N'cà phê sữa');\nINSERT INTO SaleQ3 VALUES (N'trà đào'), (N'cà phê sữa'), (N'trà đào');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: cà phê sữa 2, bạc xỉu 1 — the bag difference {cà phê sữa, cà phê sữa, bạc xỉu} written as counts. The set difference would only say {bạc xỉu}.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: cà phê sữa 2, bạc xỉu 1 — hiệu túi {cà phê sữa, cà phê sữa, bạc xỉu} viết dạng số đếm. Hiệu tập chỉ nói được {bạc xỉu}.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE SaleQ1 (drink NVARCHAR(20) NOT NULL);   -- branch District 1, no key: a bag (one row per cup)\nCREATE TABLE SaleQ3 (drink NVARCHAR(20) NOT NULL);   -- branch District 3\nINSERT INTO SaleQ1 VALUES (N'cà phê sữa'), (N'trà đào'), (N'cà phê sữa'), (N'bạc xỉu'), (N'cà phê sữa');\nINSERT INTO SaleQ3 VALUES (N'trà đào'), (N'cà phê sữa'), (N'trà đào');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Drinks Q1 sold more of|||Đồ uống Q1 bán nhiều hơn",
+            "mongDoi": {
+              "cot": [
+                "drink",
+                "more"
+              ],
+              "hang": [
+                [
+                  "cà phê sữa",
+                  2
+                ],
+                [
+                  "bạc xỉu",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "More sales on both sides|||Thêm doanh số hai bên",
+            "an": true,
+            "themCsdl": "INSERT INTO SaleQ1 VALUES (N'trà đào'), (N'trà đào'), (N'sinh tố bơ'); INSERT INTO SaleQ3 VALUES (N'cà phê sữa'), (N'bạc xỉu')",
+            "mongDoi": {
+              "cot": [
+                "drink",
+                "more"
+              ],
+              "hang": [
+                [
+                  "cà phê sữa",
+                  1
+                ],
+                [
+                  "trà đào",
+                  1
+                ],
+                [
+                  "sinh tố bơ",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Counts with GROUP BY|||Đếm bằng GROUP BY",
+            "khop": "\\bGROUP\\s+BY\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "INNER JOIN of the counts — bạc xỉu (never sold in Q3) disappears.|||INNER JOIN hai bảng đếm — bạc xỉu (Q3 chưa bán) biến mất."
+        },
+        {
+          "loi": "Set EXCEPT — only \"not at all\", it cannot say \"2 more\".|||EXCEPT tập — chỉ nói \"không hề có\", không nói được \"nhiều hơn 2\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bag difference",
+          "vi": "hiệu túi"
+        },
+        {
+          "en": "COALESCE",
+          "vi": "giá trị thay NULL",
+          "giaiThich": "COALESCE(x, y): x nếu x khác NULL, ngược lại y — chuẩn SQL."
+        }
+      ]
+    },
+    {
+      "title": "Exercise 7 — γ, σ after γ, τ: courses with 2+ students",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "grouping γ",
+        "HAVING",
+        "ORDER BY"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra",
+        "group-by",
+        "having"
+      ],
+      "problemHtml": "<p>Write <code>τ<sub>avgScore DESC</sub>(σ<sub>n ≥ 2</sub>(γ<sub>cid, COUNT(sid)→n, AVG(score)→avgScore</sub>(Enroll)))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>University schema</b> (lesson 2.5 — full script in the <code>University.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 students (two different students are both called <b>An</b>: SE01 and SE03; GD01 Dũng takes nothing), 4 courses (nobody takes JPD113), 7 enrolments.</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>cid, n, avgScore</code>.</li>\n  <li>Best average first (row order is checked).</li>\n</ul>",
+      "problemHtmlVi": "<p>Viết <code>τ<sub>avgScore DESC</sub>(σ<sub>n ≥ 2</sub>(γ<sub>cid, COUNT(sid)→n, AVG(score)→avgScore</sub>(Enroll)))</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ University</b> (bài 2.5 — script đầy đủ ở tab <code>University.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Student</code></td><td><span style=\"text-decoration:underline\">sid</span> CHAR(4), name NVARCHAR(20), major CHAR(2)</td></tr><tr><td><code>Course</code></td><td><span style=\"text-decoration:underline\">cid</span> CHAR(6), title NVARCHAR(30), credits INT</td></tr><tr><td><code>Enroll</code></td><td><span style=\"text-decoration:underline\"><i>sid</i>, <i>cid</i></span>, score DECIMAL(3,1)</td></tr></tbody></table><p>5 sinh viên (hai người khác nhau cùng tên <b>An</b>: SE01 và SE03; GD01 Dũng không học môn nào), 4 môn (không ai học JPD113), 7 lượt đăng ký.</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>cid, n, avgScore</code>.</li>\n  <li>Trung bình cao nhất trước (có kiểm thứ tự).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "cid    | n | avgScore         \n-------+---+------------------\nDBI202 | 3 | 8                \nCSD201 | 3 | 6.833333333333333",
+          "explanation": "Expected result of check \"Popular courses, best average first\" (row order matters).|||Kết quả mong đợi của kiểm \"Môn đông người học, trung bình cao trước\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "σ on an aggregate result is HAVING, not WHERE.|||σ trên kết quả gộp là HAVING, không phải WHERE.",
+        "τ is ORDER BY, last.|||τ là ORDER BY, cuối cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT cid, COUNT(sid) AS n, AVG(score) AS avgScore   -- γ\nFROM Enroll\nGROUP BY cid\nHAVING COUNT(sid) >= 2                                   -- σ on the result of γ\nORDER BY AVG(score) DESC;                                -- τ\n"
+        },
+        {
+          "name": "University.sql",
+          "language": "sql",
+          "code": "-- University.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- University.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: DBI202 3 8.0, CSD201 3 6.83. Reading the expression inside-out gives the SQL clauses in order: GROUP BY → HAVING → ORDER BY.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: DBI202 3 8.0, CSD201 3 6.83. Đọc biểu thức từ trong ra ngoài là ra thứ tự mệnh đề SQL: GROUP BY → HAVING → ORDER BY.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Student (sid CHAR(4) NOT NULL, name NVARCHAR(20) NOT NULL, major CHAR(2) NOT NULL,\n                      CONSTRAINT pk_student PRIMARY KEY (sid));\nCREATE TABLE Course  (cid CHAR(6) NOT NULL, title NVARCHAR(30) NOT NULL, credits INT NOT NULL,\n                      CONSTRAINT pk_course PRIMARY KEY (cid));\nCREATE TABLE Enroll  (sid CHAR(4) NOT NULL, cid CHAR(6) NOT NULL, score DECIMAL(3,1),\n                      CONSTRAINT pk_enroll PRIMARY KEY (sid, cid),\n                      CONSTRAINT fk_enroll_student FOREIGN KEY (sid) REFERENCES Student(sid),\n                      CONSTRAINT fk_enroll_course  FOREIGN KEY (cid) REFERENCES Course(cid));\nINSERT INTO Student VALUES ('SE01', N'An', 'SE'), ('SE02', N'Bình', 'SE'), ('AI01', N'Chi', 'AI'),\n                           ('SE03', N'An', 'SE'), ('GD01', N'Dũng', 'GD');\nINSERT INTO Course VALUES ('DBI202', N'Databases', 3), ('CSD201', N'Data Structures', 3),\n                          ('MAE101', N'Mathematics', 3), ('JPD113', N'Japanese 1', 3);\nINSERT INTO Enroll VALUES ('SE01', 'DBI202', 8.5), ('SE01', 'CSD201', 7.0), ('SE02', 'DBI202', 6.0),\n                          ('SE02', 'MAE101', 9.0), ('AI01', 'DBI202', 9.5), ('AI01', 'CSD201', 8.0),\n                          ('SE03', 'CSD201', 5.5);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Popular courses, best average first|||Môn đông người học, trung bình cao trước",
+            "thuTu": true,
+            "saiSo": 0.001,
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "n",
+                "avgScore"
+              ],
+              "hang": [
+                [
+                  "DBI202",
+                  3,
+                  8
+                ],
+                [
+                  "CSD201",
+                  3,
+                  6.833333333333333
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "MAE101 reaches 2 students|||MAE101 đạt 2 sinh viên",
+            "an": true,
+            "themCsdl": "INSERT INTO Student VALUES ('SE04', N'Giang', 'SE'), ('IA01', N'Huy', 'IA');\nINSERT INTO Enroll VALUES ('SE04', 'DBI202', 7.0), ('SE04', 'CSD201', 9.0), ('SE03', 'MAE101', 4.0)",
+            "thuTu": true,
+            "saiSo": 0.001,
+            "mongDoi": {
+              "cot": [
+                "cid",
+                "n",
+                "avgScore"
+              ],
+              "hang": [
+                [
+                  "DBI202",
+                  4,
+                  7.75
+                ],
+                [
+                  "CSD201",
+                  4,
+                  7.375
+                ],
+                [
+                  "MAE101",
+                  2,
+                  6.5
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses HAVING and ORDER BY|||Dùng HAVING và ORDER BY",
+            "khop": "\\bHAVING\\b[\\s\\S]*\\bORDER\\s+BY\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No HAVING — MAE101 with one student is listed.|||Không HAVING — MAE101 chỉ một sinh viên vẫn hiện."
+        },
+        {
+          "loi": "Ascending order — worst average first.|||Sắp tăng dần — trung bình thấp nhất trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GROUP BY",
+          "vi": "gộp nhóm",
+          "giaiThich": "Mỗi nhóm giá trị giống nhau ⇒ một dòng kết quả."
+        },
+        {
+          "en": "HAVING",
+          "vi": "điều kiện trên nhóm",
+          "giaiThich": "Lọc NHÓM sau khi gộp (dùng được hàm gộp); WHERE lọc dòng trước khi gộp."
+        },
+        {
+          "en": "ORDER BY",
+          "vi": "sắp xếp kết quả",
+          "giaiThich": "Không có ORDER BY thì thứ tự dòng là KHÔNG xác định."
+        }
+      ]
+    },
+    {
+      "title": "Exercises 1–2 — set vs bag counts and tree order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "set vs bag",
+        "expression order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "relational-algebra"
+      ],
+      "problemHtml": "<p>Quick questions from exercises 1 and 2 of the practice lesson (University data).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu hỏi nhanh từ bài 1 và 2 của bài thực hành (dữ liệu University).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Set ⇒ remove duplicates; SQL ⇒ keep them unless DISTINCT.|||Tập ⇒ bỏ trùng; SQL ⇒ giữ trùng trừ khi DISTINCT.",
+        "A join produces one tuple per matching pair.|||Phép nối sinh một bộ cho mỗi cặp khớp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercises 1–2 — set vs bag counts and tree order\n\nAnswer in the answer panel (no code needed).\n\n1. πname(σmajor='SE'(Student)) under SET semantics has how many tuples?πname(σmajor='SE'(Student)) theo ngữ nghĩa TẬP có bao nhiêu bộ?\n2. And SELECT name FROM Student WHERE major = 'SE' returns how many rows?Còn SELECT name FROM Student WHERE major = 'SE' trả bao nhiêu dòng?\n3. Why is σmajor='SE'(πname(Student)) wrong?Vì sao σmajor='SE'(πname(Student)) sai?\n4. Student ⋈ Enroll (natural join on sid) has how many tuples?Student ⋈ Enroll (nối tự nhiên trên sid) có bao nhiêu bộ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercises 1–2 — set vs bag counts and tree order — answer key\n\n1. πname(σmajor='SE'(Student)) under SET semantics has how many tuples?πname(σmajor='SE'(Student)) theo ngữ nghĩa TẬP có bao nhiêu bộ?\n   Answer: d) 2\n   SE students: An, Bình, An ⇒ the set {An, Bình}.VI: Sinh viên SE: An, Bình, An ⇒ tập {An, Bình}.\n\n2. And SELECT name FROM Student WHERE major = 'SE' returns how many rows?Còn SELECT name FROM Student WHERE major = 'SE' trả bao nhiêu dòng?\n   Answer: d) 3\n   SQL keeps duplicates (bag): An, Bình, An.VI: SQL giữ trùng (túi): An, Bình, An.\n\n3. Why is σmajor='SE'(πname(Student)) wrong?Vì sao σmajor='SE'(πname(Student)) sai?\n   Answer: b) After π only name is left, so major cannot be tested\n   Select first, project last — unless the projection keeps the attributes σ needs.VI: Chọn trước, chiếu sau — trừ khi phép chiếu giữ thuộc tính σ cần.\n\n4. Student ⋈ Enroll (natural join on sid) has how many tuples?Student ⋈ Enroll (nối tự nhiên trên sid) có bao nhiêu bộ?\n   Answer: d) 7\n   One per enrolment; Dũng (no enrolment) disappears. The product would be 5 × 7 = 35.VI: Mỗi lượt đăng ký một bộ; Dũng (không đăng ký) biến mất. Tích sẽ là 5 × 7 = 35.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 2</p><p>SE students: An, Bình, An ⇒ the set {An, Bình}.</p><p><i>VI: Sinh viên SE: An, Bình, An ⇒ tập {An, Bình}.</i></p></li><li><p><b>d)</b> 3</p><p>SQL keeps duplicates (bag): An, Bình, An.</p><p><i>VI: SQL giữ trùng (túi): An, Bình, An.</i></p></li><li><p><b>b)</b> After π only name is left, so major cannot be tested</p><p>Select first, project last — unless the projection keeps the attributes σ needs.</p><p><i>VI: Chọn trước, chiếu sau — trừ khi phép chiếu giữ thuộc tính σ cần.</i></p></li><li><p><b>d)</b> 7</p><p>One per enrolment; Dũng (no enrolment) disappears. The product would be 5 × 7 = 35.</p><p><i>VI: Mỗi lượt đăng ký một bộ; Dũng (không đăng ký) biến mất. Tích sẽ là 5 × 7 = 35.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>π<sub>name</sub>(σ<sub>major='SE'</sub>(Student)) under SET semantics has how many tuples?</p><p style=\"opacity:.75;font-size:.92em\"><i>π<sub>name</sub>(σ<sub>major='SE'</sub>(Student)) theo ngữ nghĩa TẬP có bao nhiêu bộ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SE students: An, Bình, An ⇒ the set {An, Bình}.</p><p><i>VI: Sinh viên SE: An, Bình, An ⇒ tập {An, Bình}.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>And SELECT name FROM Student WHERE major = 'SE' returns how many rows?</p><p style=\"opacity:.75;font-size:.92em\"><i>Còn SELECT name FROM Student WHERE major = 'SE' trả bao nhiêu dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "4"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>SQL keeps duplicates (bag): An, Bình, An.</p><p><i>VI: SQL giữ trùng (túi): An, Bình, An.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is σ<sub>major='SE'</sub>(π<sub>name</sub>(Student)) wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao σ<sub>major='SE'</sub>(π<sub>name</sub>(Student)) sai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "σ must always be the outermost operator"
+              },
+              {
+                "ma": "b",
+                "noiDung": "After π only name is left, so major cannot be tested"
+              },
+              {
+                "ma": "c",
+                "noiDung": "π cannot be applied to Student"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It returns the same result but slower"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Select first, project last — unless the projection keeps the attributes σ needs.</p><p><i>VI: Chọn trước, chiếu sau — trừ khi phép chiếu giữ thuộc tính σ cần.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Student ⋈ Enroll (natural join on sid) has how many tuples?</p><p style=\"opacity:.75;font-size:.92em\"><i>Student ⋈ Enroll (nối tự nhiên trên sid) có bao nhiêu bộ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "5"
+              },
+              {
+                "ma": "b",
+                "noiDung": "35"
+              },
+              {
+                "ma": "c",
+                "noiDung": "12"
+              },
+              {
+                "ma": "d",
+                "noiDung": "7"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>One per enrolment; Dũng (no enrolment) disappears. The product would be 5 × 7 = 35.</p><p><i>VI: Mỗi lượt đăng ký một bộ; Dũng (không đăng ký) biến mất. Tích sẽ là 5 × 7 = 35.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 3 for the set question (bag thinking).|||Trả lời 3 cho câu về tập (nghĩ theo túi)."
+        },
+        {
+          "loi": "Counting the product instead of the join.|||Đếm tích thay vì phép nối."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

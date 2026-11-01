@@ -1,0 +1,816 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi6-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi6-1"
+  },
+  "exercises": [
+    {
+      "title": "Count the copies: bag ∪, ∩, − by hand",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "bag union",
+        "bag intersection",
+        "bag difference"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "bags",
+        "slide"
+      ],
+      "problemHtml": "<p>With R = {(1,2), (3,4), (1,2), (1,2)} and S = {(1,2), (3,4), (3,4), (5,6)}, write how many copies of each tuple are in each result. Rule (slide 8): ∪ adds the counts, ∩ takes the minimum, − subtracts and stops at 0.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với R = {(1,2), (3,4), (1,2), (1,2)} và S = {(1,2), (3,4), (3,4), (5,6)}, ghi số bản sao của mỗi bộ trong từng kết quả. Luật (slide 8): ∪ cộng số lần, ∩ lấy nhỏ nhất, − trừ đi và dừng ở 0.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Count n (copies in R) and m (copies in S) first.|||Đếm n (số bản trong R) và m (số bản trong S) trước.",
+        "∪ = n + m, ∩ = min(n, m), R − S = max(0, n − m)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Count the copies: bag ∪, ∩, − by hand\n\nAnswer in the answer panel (no code needed).\n\n1. Copies of each tupleSố bản sao của mỗi bộ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Count the copies: bag ∪, ∩, − by hand — answer key\n\n1. Copies of each tupleSố bản sao của mỗi bộ\n   - r1.hop: 4\n   - r1.giao: 1\n   - r1.hieu: 2\n   - r1.hieu2: 0\n   - r2.hop: 3\n   - r2.giao: 1\n   - r2.hieu: 0\n   - r2.hieu2: 1\n   - r3.hop: 1\n   - r3.giao: 0\n   - r3.hieu: 0\n   - r3.hieu2: 1\n   (1,2): R has 3, S has 1 ⇒ ∪ 4, ∩ 1, R−S 2, S−R 0. (3,4): R 1, S 2 ⇒ 3, 1, 0, 1. (5,6): R 0, S 1 ⇒ 1, 0, 0, 1.VI: (1,2): R có 3, S có 1 ⇒ ∪ 4, ∩ 1, R−S 2, S−R 0. (3,4): R 1, S 2 ⇒ 3, 1, 0, 1. (5,6): R 0, S 1 ⇒ 1, 0, 0, 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(1,2): R has 3, S has 1 ⇒ ∪ 4, ∩ 1, R−S 2, S−R 0. (3,4): R 1, S 2 ⇒ 3, 1, 0, 1. (5,6): R 0, S 1 ⇒ 1, 0, 0, 1.</p><p><i>VI: (1,2): R có 3, S có 1 ⇒ ∪ 4, ∩ 1, R−S 2, S−R 0. (3,4): R 1, S 2 ⇒ 3, 1, 0, 1. (5,6): R 0, S 1 ⇒ 1, 0, 0, 1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Copies of each tuple</p><p style=\"opacity:.75;font-size:.92em\"><i>Số bản sao của mỗi bộ</i></p>",
+            "cot": [
+              {
+                "ma": "bo",
+                "ten": "Tuple / Bộ"
+              },
+              {
+                "ma": "hop",
+                "ten": "R ∪ S"
+              },
+              {
+                "ma": "giao",
+                "ten": "R ∩ S"
+              },
+              {
+                "ma": "hieu",
+                "ten": "R − S"
+              },
+              {
+                "ma": "hieu2",
+                "ten": "S − R"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "bo": "(1,2)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "bo": "(3,4)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "bo": "(5,6)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.hop": "4",
+              "r1.giao": "1",
+              "r1.hieu": "2",
+              "r1.hieu2": "0",
+              "r2.hop": "3",
+              "r2.giao": "1",
+              "r2.hieu": "0",
+              "r2.hieu2": "1",
+              "r3.hop": "1",
+              "r3.giao": "0",
+              "r3.hieu": "0",
+              "r3.hieu2": "1"
+            },
+            "giaiThich": "<p>(1,2): R has 3, S has 1 ⇒ ∪ 4, ∩ 1, R−S 2, S−R 0. (3,4): R 1, S 2 ⇒ 3, 1, 0, 1. (5,6): R 0, S 1 ⇒ 1, 0, 0, 1.</p><p><i>VI: (1,2): R có 3, S có 1 ⇒ ∪ 4, ∩ 1, R−S 2, S−R 0. (3,4): R 1, S 2 ⇒ 3, 1, 0, 1. (5,6): R 0, S 1 ⇒ 1, 0, 0, 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using set rules (every count 0 or 1) on bags.|||Dùng luật tập (mọi số đếm 0 hoặc 1) cho túi."
+        },
+        {
+          "loi": "Writing a negative count for R − S — it stops at 0.|||Ghi số âm cho R − S — nó dừng ở 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bag (multiset)",
+          "vi": "túi (đa tập)"
+        }
+      ]
+    },
+    {
+      "title": "How many times does each tuple appear?",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "bag",
+        "GROUP BY",
+        "COUNT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "bags",
+        "group-by",
+        "slide"
+      ],
+      "problemHtml": "<p>Turn the bag R into a \"set with counts\": every distinct tuple of R once, with the number of times it appears.</p>\n<p><b>Two bags</b> (slide 4, tab <code>Bags.sql</code>): <code>R(A, B)</code> = {(1,2), (3,4), (1,2), (1,2)} and <code>S(A, B)</code> = {(1,2), (3,4), (3,4), (5,6)} — no keys, so the same tuple may appear several times.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>A, B, times</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Biến túi R thành \"tập kèm số đếm\": mỗi bộ khác nhau của R một lần, kèm số lần nó xuất hiện.</p>\n<p><b>Hai túi</b> (slide 4, tab <code>Bags.sql</code>): <code>R(A, B)</code> = {(1,2), (3,4), (1,2), (1,2)} và <code>S(A, B)</code> = {(1,2), (3,4), (3,4), (5,6)} — không có khoá nên một bộ có thể xuất hiện nhiều lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>A, B, times</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "A | B | times\n--+---+------\n3 | 4 | 1    \n1 | 2 | 3    ",
+          "explanation": "Expected result of check \"Each tuple of R with its count\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Mỗi bộ của R kèm số đếm\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "GROUP BY A, B makes one group per distinct tuple.|||GROUP BY A, B tạo một nhóm cho mỗi bộ khác nhau.",
+        "COUNT(*) counts the rows in each group.|||COUNT(*) đếm số dòng trong mỗi nhóm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Bags.sql",
+          "language": "sql",
+          "code": "-- Bags.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Bags.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT A, B, COUNT(*) AS times     -- one row per distinct tuple, with its multiplicity\nFROM R\nGROUP BY A, B;\n"
+        },
+        {
+          "name": "Bags.sql",
+          "language": "sql",
+          "code": "-- Bags.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Bags.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A bag is fully described by (tuple, multiplicity). DISTINCT turns a bag into a set (the δ operator of 2.D); GROUP BY + COUNT keeps the information.</p>",
+      "solutionExplanationHtmlVi": "<p>Một túi được mô tả đủ bằng (bộ, số lần). DISTINCT biến túi thành tập (phép δ của 2.D); GROUP BY + COUNT giữ lại thông tin.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Each tuple of R with its count|||Mỗi bộ của R kèm số đếm",
+            "mongDoi": {
+              "cot": [
+                "A",
+                "B",
+                "times"
+              ],
+              "hang": [
+                [
+                  3,
+                  4,
+                  1
+                ],
+                [
+                  1,
+                  2,
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "More copies added to R|||Thêm bản sao vào R",
+            "an": true,
+            "themCsdl": "INSERT INTO R VALUES (5, 6), (5, 6), (7, 8); INSERT INTO S VALUES (1, 2), (7, 8)",
+            "mongDoi": {
+              "cot": [
+                "A",
+                "B",
+                "times"
+              ],
+              "hang": [
+                [
+                  7,
+                  8,
+                  1
+                ],
+                [
+                  3,
+                  4,
+                  1
+                ],
+                [
+                  5,
+                  6,
+                  2
+                ],
+                [
+                  1,
+                  2,
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses GROUP BY|||Dùng GROUP BY",
+            "khop": "\\bGROUP\\s+BY\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "SELECT DISTINCT … — loses the counts, which is exactly what makes a bag a bag.|||SELECT DISTINCT … — mất số đếm, mà số đếm chính là thứ làm nên túi."
+        },
+        {
+          "loi": "COUNT(DISTINCT A) — always 1 inside a group of identical tuples.|||COUNT(DISTINCT A) — luôn là 1 trong nhóm các bộ giống hệt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "GROUP BY",
+          "vi": "gộp nhóm",
+          "giaiThich": "Mỗi nhóm giá trị giống nhau ⇒ một dòng kết quả."
+        },
+        {
+          "en": "multiplicity",
+          "vi": "số lần xuất hiện"
+        }
+      ]
+    },
+    {
+      "title": "Bag union with UNION ALL",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "bag union",
+        "UNION ALL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "bags",
+        "union-all",
+        "slide"
+      ],
+      "problemHtml": "<p>Compute the <b>bag</b> union R ∪ S (every copy of every tuple of both bags).</p>\n<p><b>Two bags</b> (slide 4, tab <code>Bags.sql</code>): <code>R(A, B)</code> = {(1,2), (3,4), (1,2), (1,2)} and <code>S(A, B)</code> = {(1,2), (3,4), (3,4), (5,6)} — no keys, so the same tuple may appear several times.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>A, B</code>.</li>\n  <li>Expected 8 rows; row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tính hợp <b>túi</b> R ∪ S (mọi bản sao của mọi bộ ở cả hai túi).</p>\n<p><b>Hai túi</b> (slide 4, tab <code>Bags.sql</code>): <code>R(A, B)</code> = {(1,2), (3,4), (1,2), (1,2)} và <code>S(A, B)</code> = {(1,2), (3,4), (3,4), (5,6)} — không có khoá nên một bộ có thể xuất hiện nhiều lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>A, B</code>.</li>\n  <li>Mong đợi 8 dòng; thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "A | B\n--+--\n1 | 2\n3 | 4\n1 | 2\n1 | 2\n1 | 2\n3 | 4\n3 | 4\n5 | 6",
+          "explanation": "Expected result of check \"R ∪ S as a bag (8 rows)\" (row order does not matter).|||Kết quả mong đợi của kiểm \"R ∪ S dạng túi (8 dòng)\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "UNION removes duplicates (set union); UNION ALL keeps them (bag union).|||UNION bỏ trùng (hợp tập); UNION ALL giữ trùng (hợp túi).",
+        "SELECT A, B FROM R UNION ALL SELECT A, B FROM S"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Bags.sql",
+          "language": "sql",
+          "code": "-- Bags.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Bags.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT A, B FROM R\nUNION ALL                -- bag union: counts add up\nSELECT A, B FROM S;\n"
+        },
+        {
+          "name": "Bags.sql",
+          "language": "sql",
+          "code": "-- Bags.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Bags.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bag union adds multiplicities: (1,2) appears 3 + 1 = 4 times. SQL Server has only UNION ALL as a bag operator; bag ∩ and − need a trick (next exercise) because INTERSECT ALL / EXCEPT ALL exist in PostgreSQL but not in SQL Server.</p>",
+      "solutionExplanationHtmlVi": "<p>Hợp túi cộng số lần: (1,2) xuất hiện 3 + 1 = 4 lần. SQL Server chỉ có UNION ALL là phép trên túi; ∩ và − trên túi cần mẹo (bài sau) vì INTERSECT ALL / EXCEPT ALL có ở PostgreSQL mà không có ở SQL Server.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "R ∪ S as a bag (8 rows)|||R ∪ S dạng túi (8 dòng)",
+            "mongDoi": {
+              "cot": [
+                "A",
+                "B"
+              ],
+              "hang": [
+                [
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  5,
+                  6
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "More rows in both|||Thêm dòng ở cả hai",
+            "an": true,
+            "themCsdl": "INSERT INTO R VALUES (5, 6), (5, 6), (7, 8); INSERT INTO S VALUES (1, 2), (7, 8)",
+            "mongDoi": {
+              "cot": [
+                "A",
+                "B"
+              ],
+              "hang": [
+                [
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  5,
+                  6
+                ],
+                [
+                  5,
+                  6
+                ],
+                [
+                  7,
+                  8
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  5,
+                  6
+                ],
+                [
+                  1,
+                  2
+                ],
+                [
+                  7,
+                  8
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses UNION ALL|||Dùng UNION ALL",
+            "khop": "\\bUNION\\s+ALL\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "UNION — 3 rows instead of 8.|||UNION — 3 dòng thay vì 8."
+        },
+        {
+          "loi": "Thinking UNION ALL is \"UNION with extra checks\" — it is the cheaper one: no duplicate removal.|||Tưởng UNION ALL là \"UNION kiểm thêm\" — nó rẻ hơn: không phải loại trùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "UNION / INTERSECT / EXCEPT",
+          "vi": "hợp / giao / hiệu",
+          "giaiThich": "Phép tập hợp trên hai câu SELECT cùng số cột, kiểu tương thích; mặc định bỏ dòng trùng."
+        }
+      ]
+    },
+    {
+      "title": "Bag difference R − S without EXCEPT ALL",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "bag difference",
+        "ROW_NUMBER",
+        "EXCEPT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "bags",
+        "window-function",
+        "slide"
+      ],
+      "problemHtml": "<p>SQL Server has no <code>EXCEPT ALL</code>. Compute the <b>bag</b> difference R − S anyway: (1,2) must appear twice (3 copies in R − 1 in S), (3,4) zero times. Trick from the lesson: number the copies of each tuple with <code>ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A)</code> on both sides, then use a plain EXCEPT on (A, B, copyNo).</p>\n<p><b>Two bags</b> (slide 4, tab <code>Bags.sql</code>): <code>R(A, B)</code> = {(1,2), (3,4), (1,2), (1,2)} and <code>S(A, B)</code> = {(1,2), (3,4), (3,4), (5,6)} — no keys, so the same tuple may appear several times.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>A, B</code> (one row per remaining copy).</li>\n  <li>No EXCEPT ALL (SQL Server does not have it). Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>SQL Server không có <code>EXCEPT ALL</code>. Vẫn tính hiệu <b>túi</b> R − S: (1,2) phải xuất hiện hai lần (3 bản trong R − 1 trong S), (3,4) không lần nào. Mẹo của bài: đánh số các bản sao của mỗi bộ bằng <code>ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A)</code> ở cả hai vế, rồi EXCEPT thường trên (A, B, sốBản).</p>\n<p><b>Hai túi</b> (slide 4, tab <code>Bags.sql</code>): <code>R(A, B)</code> = {(1,2), (3,4), (1,2), (1,2)} và <code>S(A, B)</code> = {(1,2), (3,4), (3,4), (5,6)} — không có khoá nên một bộ có thể xuất hiện nhiều lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>A, B</code> (mỗi bản sao còn lại một dòng).</li>\n  <li>Không dùng EXCEPT ALL (SQL Server không có). Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "A | B\n--+--\n1 | 2\n1 | 2",
+          "explanation": "Expected result of check \"R − S as a bag\" (row order does not matter).|||Kết quả mong đợi của kiểm \"R − S dạng túi\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "After numbering, R has (1,2,1), (1,2,2), (1,2,3), (3,4,1); S has (1,2,1), (3,4,1), (3,4,2), (5,6,1).|||Sau khi đánh số, R có (1,2,1), (1,2,2), (1,2,3), (3,4,1); S có (1,2,1), (3,4,1), (3,4,2), (5,6,1).",
+        "Set EXCEPT on the numbered tuples leaves (1,2,2), (1,2,3) — then drop the number.|||EXCEPT tập trên các bộ đã đánh số còn (1,2,2), (1,2,3) — rồi bỏ cột số."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Bags.sql",
+          "language": "sql",
+          "code": "-- Bags.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Bags.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT A, B\nFROM (\n    SELECT A, B, ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A) AS n FROM R   -- copies 1, 2, 3 of (1,2)\n    EXCEPT\n    SELECT A, B, ROW_NUMBER() OVER (PARTITION BY A, B ORDER BY A) AS n FROM S   -- copy 1 of (1,2) cancels one\n) AS T;\n"
+        },
+        {
+          "name": "Bags.sql",
+          "language": "sql",
+          "code": "-- Bags.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Bags.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Numbering turns each copy into a distinct tuple, so set operators now count copies. The same trick with INTERSECT gives the bag ∩ (min of the counts). PostgreSQL simply writes <code>EXCEPT ALL</code>.</p>",
+      "solutionExplanationHtmlVi": "<p>Đánh số biến mỗi bản sao thành một bộ riêng, nên phép tập giờ đếm được bản sao. Cùng mẹo với INTERSECT ra ∩ túi (min các số đếm). PostgreSQL chỉ cần viết <code>EXCEPT ALL</code>.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE R (A INT NOT NULL, B INT NOT NULL);   -- no key: a bag\nCREATE TABLE S (A INT NOT NULL, B INT NOT NULL);\nINSERT INTO R VALUES (1, 2), (3, 4), (1, 2), (1, 2);\nINSERT INTO S VALUES (1, 2), (3, 4), (3, 4), (5, 6);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "R − S as a bag|||R − S dạng túi",
+            "mongDoi": {
+              "cot": [
+                "A",
+                "B"
+              ],
+              "hang": [
+                [
+                  1,
+                  2
+                ],
+                [
+                  1,
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Different multiplicities|||Số lần khác",
+            "an": true,
+            "themCsdl": "INSERT INTO R VALUES (5, 6), (5, 6), (7, 8); INSERT INTO S VALUES (1, 2), (7, 8)",
+            "mongDoi": {
+              "cot": [
+                "A",
+                "B"
+              ],
+              "hang": [
+                [
+                  5,
+                  6
+                ],
+                [
+                  1,
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Numbers the copies with ROW_NUMBER|||Đánh số bản sao bằng ROW_NUMBER",
+            "khop": "\\bROW_NUMBER\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Plain EXCEPT — set difference: (1,2) is in S, so it disappears completely; result empty.|||EXCEPT thường — hiệu tập: (1,2) có trong S nên mất hẳn; kết quả rỗng."
+        },
+        {
+          "loi": "Swapping the sides — that computes S − R.|||Đảo hai vế — đó là S − R."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ROW_NUMBER()",
+          "vi": "đánh số thứ tự dòng",
+          "giaiThich": "Hàm cửa sổ: đánh số 1, 2, 3… trong mỗi nhóm PARTITION BY."
+        }
+      ]
+    },
+    {
+      "title": "Sets vs bags: which laws survive?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "algebraic laws",
+        "bags vs sets",
+        "AVG on bags"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "bags",
+        "slide"
+      ],
+      "problemHtml": "<p>Some identities of set algebra are false on bags (slides 11–14).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một số đẳng thức của đại số tập sai trên túi (slide 11–14).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "On bags, every operator keeps track of counts.|||Trên túi, mọi phép đều theo dõi số lần.",
+        "Idempotence (R ∪ R = R) and some distributive laws fail on bags.|||Tính luỹ đẳng (R ∪ R = R) và vài luật phân phối sai trên túi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets vs bags: which laws survive?\n\nAnswer in the answer panel (no code needed).\n\n1. Is R ∪ R = R true on bags?R ∪ R = R có đúng trên túi?\n2. R = {1, 1, 2}. What is AVG over the bag, and over the set?R = {1, 1, 2}. AVG trên túi và trên tập là bao nhiêu?\n3. Why does SQL use bags by default?Vì sao SQL mặc định dùng túi?\n4. πA(R) on the bag R = {(1,2), (3,4), (1,2), (1,2)} has how many tuples?πA(R) trên túi R = {(1,2), (3,4), (1,2), (1,2)} có bao nhiêu bộ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Sets vs bags: which laws survive? — answer key\n\n1. Is R ∪ R = R true on bags?R ∪ R = R có đúng trên túi?\n   Answer: b) No — on bags R ∪ R doubles every count\n   Bag union adds counts, so R ∪ R has every tuple twice as often. (If R has a key it is a set and has no duplicates — but R ∪ R still duplicates it.)VI: Hợp túi cộng số lần nên R ∪ R có mỗi bộ gấp đôi.\n\n2. R = {1, 1, 2}. What is AVG over the bag, and over the set?R = {1, 1, 2}. AVG trên túi và trên tập là bao nhiêu?\n   Answer: b) 4/3 on the bag, 3/2 on the set\n   Bag: (1+1+2)/3 = 4/3. Set {1, 2}: 3/2. In SQL: AVG(x) vs AVG(DISTINCT x).VI: Túi: (1+1+2)/3 = 4/3. Tập {1, 2}: 3/2. Trong SQL: AVG(x) vs AVG(DISTINCT x).\n\n3. Why does SQL use bags by default?Vì sao SQL mặc định dùng túi?\n   Answer: d) Removing duplicates costs a sort or hash, and counts are often meaningful\n   Projection and union are cheaper without de-duplication; and \"how many times\" (cups sold) is information.VI: Phép chiếu và hợp rẻ hơn khi không loại trùng; và \"bao nhiêu lần\" (số ly bán) là thông tin.\n\n4. πA(R) on the bag R = {(1,2), (3,4), (1,2), (1,2)} has how many tuples?πA(R) trên túi R = {(1,2), (3,4), (1,2), (1,2)} có bao nhiêu bộ?\n   Answer: b) 4\n   Bag projection keeps one output tuple per input tuple: 1, 3, 1, 1.VI: Phép chiếu túi giữ mỗi bộ vào một bộ ra: 1, 3, 1, 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> No — on bags R ∪ R doubles every count</p><p>Bag union adds counts, so R ∪ R has every tuple twice as often. (If R has a key it is a set and has no duplicates — but R ∪ R still duplicates it.)</p><p><i>VI: Hợp túi cộng số lần nên R ∪ R có mỗi bộ gấp đôi.</i></p></li><li><p><b>b)</b> 4/3 on the bag, 3/2 on the set</p><p>Bag: (1+1+2)/3 = 4/3. Set {1, 2}: 3/2. In SQL: AVG(x) vs AVG(DISTINCT x).</p><p><i>VI: Túi: (1+1+2)/3 = 4/3. Tập {1, 2}: 3/2. Trong SQL: AVG(x) vs AVG(DISTINCT x).</i></p></li><li><p><b>d)</b> Removing duplicates costs a sort or hash, and counts are often meaningful</p><p>Projection and union are cheaper without de-duplication; and \"how many times\" (cups sold) is information.</p><p><i>VI: Phép chiếu và hợp rẻ hơn khi không loại trùng; và \"bao nhiêu lần\" (số ly bán) là thông tin.</i></p></li><li><p><b>b)</b> 4</p><p>Bag projection keeps one output tuple per input tuple: 1, 3, 1, 1.</p><p><i>VI: Phép chiếu túi giữ mỗi bộ vào một bộ ra: 1, 3, 1, 1.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Is R ∪ R = R true on bags?</p><p style=\"opacity:.75;font-size:.92em\"><i>R ∪ R = R có đúng trên túi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — union is idempotent everywhere"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — on bags R ∪ R doubles every count"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only for empty R"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only if R has a key"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Bag union adds counts, so R ∪ R has every tuple twice as often. (If R has a key it is a set and has no duplicates — but R ∪ R still duplicates it.)</p><p><i>VI: Hợp túi cộng số lần nên R ∪ R có mỗi bộ gấp đôi.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>R = {1, 1, 2}. What is AVG over the bag, and over the set?</p><p style=\"opacity:.75;font-size:.92em\"><i>R = {1, 1, 2}. AVG trên túi và trên tập là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1 on the bag, 2 on the set"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4/3 on the bag, 3/2 on the set"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3/2 on both"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4/3 on both"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Bag: (1+1+2)/3 = 4/3. Set {1, 2}: 3/2. In SQL: AVG(x) vs AVG(DISTINCT x).</p><p><i>VI: Túi: (1+1+2)/3 = 4/3. Tập {1, 2}: 3/2. Trong SQL: AVG(x) vs AVG(DISTINCT x).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why does SQL use bags by default?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao SQL mặc định dùng túi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because primary keys require duplicates"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because the relational model forbids sets"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because sets cannot be stored on disk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Removing duplicates costs a sort or hash, and counts are often meaningful"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Projection and union are cheaper without de-duplication; and \"how many times\" (cups sold) is information.</p><p><i>VI: Phép chiếu và hợp rẻ hơn khi không loại trùng; và \"bao nhiêu lần\" (số ly bán) là thông tin.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>π<sub>A</sub>(R) on the bag R = {(1,2), (3,4), (1,2), (1,2)} has how many tuples?</p><p style=\"opacity:.75;font-size:.92em\"><i>π<sub>A</sub>(R) trên túi R = {(1,2), (3,4), (1,2), (1,2)} có bao nhiêu bộ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "4"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Bag projection keeps one output tuple per input tuple: 1, 3, 1, 1.</p><p><i>VI: Phép chiếu túi giữ mỗi bộ vào một bộ ra: 1, 3, 1, 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Applying set intuition (\"duplicates vanish\") to SQL results.|||Áp trực giác tập (\"trùng tự biến mất\") cho kết quả SQL."
+        },
+        {
+          "loi": "Forgetting DISTINCT changes AVG and COUNT.|||Quên rằng DISTINCT làm đổi AVG và COUNT."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "bag semantics",
+          "vi": "ngữ nghĩa túi"
+        }
+      ]
+    }
+  ]
+}

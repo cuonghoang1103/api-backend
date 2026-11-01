@@ -1,0 +1,475 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-cai-dat-ket-noi",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-cai-dat-ket-noi"
+  },
+  "exercises": [
+    {
+      "title": "Prove your SQL Server is ready: a Unicode table",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "SQL Server setup",
+        "NVARCHAR",
+        "N'' literal"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "tsql",
+        "chay-tai-may",
+        "setup",
+        "unicode"
+      ],
+      "problemHtml": "<p>Use this exercise as the smoke test of your setup (lesson \"Start here 2/2\"). In <code>solution.sql</code> create a table <code>HelloDbi</code> with <code>id INT</code> (primary key) and <code>msg NVARCHAR(50) NOT NULL</code>, then insert the row <code>(1, 'Xin chào, tôi học DBI202')</code> so that every Vietnamese letter is stored correctly.</p><p>The self-check also prints your server version: it must be SQL Server 2019 or newer (Azure SQL Edge counts as 2019).</p><p class=\"callout warn\"><b>Runs on YOUR SQL Server, not in the browser.</b> This exercise is about YOUR installation: it only makes sense on the SQL Server you will use for the labs and the PE. Nothing here is graded automatically: run the self-check <code>check.sql</code> on your machine and, when it prints <b>ALL 3 CHECKS PASSED</b>, press <b>Mark as solved</b>.</p><h4>How to run it (Windows or macOS)</h4>\n<p>Press <b>Tải .zip</b> (download) above the code and unzip it. The folder has three files: <code>setup.sql</code> (re-creates a scratch database <code>DBI202_CL</code> with the sample tables), <code>solution.sql</code> (YOUR answer — edit only this one) and <code>check.sql</code> (3 checks; prints <code>PASS</code>/<code>FAIL</code> for each and ends with <b>ALL 3 CHECKS PASSED</b>). Always run them in this order: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (the course setup, lesson 0.3): open <code>setup.sql</code> → <b>F5</b>; open <code>solution.sql</code> → <b>F5</b>; open <code>check.sql</code> → <b>F5</b>, then read the <i>Messages</i> tab. Or in a terminal inside the folder (sqlcmd ships with SQL Server; otherwise <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (use <code>-U sa -P \"&lt;password&gt;\"</code> instead of <code>-E</code> for a SQL login).</li>\n<li><b>macOS</b> (SQL Server in Docker, as in lesson 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>then install the command-line client once with <code>brew install sqlcmd</code> and, inside the folder:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(or open the three files in VS Code with the <i>SQL Server (mssql)</i> extension and run them in the same order).</li>\n</ul>\n<p>Use <code>CREATE OR ALTER</code> for procedures, functions, triggers and views so that you can run <code>solution.sql</code> again and again. In the real PE you submit only the <code>CREATE …</code> statement, without <code>GO</code> or test commands.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Table <code>HelloDbi(id INT PRIMARY KEY, msg NVARCHAR(50) NOT NULL)</code>.</li>\n  <li>One row: id 1, msg <code>Xin chào, tôi học DBI202</code> — exactly, with diacritics.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng bài này để kiểm tra bản cài (bài \"Bắt đầu 2/2\"). Trong <code>solution.sql</code> tạo bảng <code>HelloDbi</code> gồm <code>id INT</code> (khoá chính) và <code>msg NVARCHAR(50) NOT NULL</code>, rồi thêm dòng <code>(1, 'Xin chào, tôi học DBI202')</code> sao cho mọi chữ tiếng Việt được lưu đúng.</p><p>Tệp tự kiểm cũng kiểm phiên bản máy chủ: phải là SQL Server 2019 trở lên (Azure SQL Edge tính là 2019).</p><p class=\"callout warn\"><b>Chạy trên SQL SERVER CỦA BẠN, không chạy trong trình duyệt.</b> Bài này kiểm chính BẢN CÀI của bạn: chỉ có nghĩa khi chạy trên SQL Server bạn sẽ dùng cho lab và PE. Trang này không tự chấm: chạy tệp tự kiểm <code>check.sql</code> trên máy bạn, khi nó in <b>ALL 3 CHECKS PASSED</b> thì bấm <b>Tự đánh dấu đã giải</b>.</p><h4>Cách chạy (Windows hoặc macOS)</h4>\n<p>Bấm <b>Tải .zip</b> ở khung code rồi giải nén. Thư mục có ba tệp: <code>setup.sql</code> (tạo lại CSDL nháp <code>DBI202_CL</code> với các bảng mẫu), <code>solution.sql</code> (bài làm CỦA BẠN — chỉ sửa tệp này) và <code>check.sql</code> (3 kiểm; in <code>PASS</code>/<code>FAIL</code> từng kiểm và kết thúc bằng <b>ALL 3 CHECKS PASSED</b>). Luôn chạy đúng thứ tự: <b>setup → solution → check</b>.</p>\n<ul>\n<li><b>Windows + SSMS</b> (cài như bài 0.3): mở <code>setup.sql</code> → <b>F5</b>; mở <code>solution.sql</code> → <b>F5</b>; mở <code>check.sql</code> → <b>F5</b>, rồi đọc tab <i>Messages</i>. Hoặc mở terminal trong thư mục (sqlcmd đi kèm SQL Server; chưa có thì <code>winget install sqlcmd</code>):<br><code>sqlcmd -S localhost -E -C -i setup.sql,solution.sql,check.sql</code> (đăng nhập SQL thì thay <code>-E</code> bằng <code>-U sa -P \"&lt;mật khẩu&gt;\"</code>).</li>\n<li><b>macOS</b> (SQL Server trong Docker như bài 0.3 — Apple Silicon: <code>mcr.microsoft.com/azure-sql-edge</code>, Intel: <code>mcr.microsoft.com/mssql/server:2022-latest</code>):<br><code>docker run -d --name dbi202-sql -e ACCEPT_EULA=Y -e \"MSSQL_SA_PASSWORD=Dbi202#Lab\" -p 1433:1433 mcr.microsoft.com/azure-sql-edge</code><br>rồi cài trình dòng lệnh một lần bằng <code>brew install sqlcmd</code> và, trong thư mục bài:<br><code>sqlcmd -S localhost,1433 -U sa -P \"Dbi202#Lab\" -C -i setup.sql,solution.sql,check.sql</code><br>(hoặc mở ba tệp trong VS Code có extension <i>SQL Server (mssql)</i> và chạy đúng thứ tự đó).</li>\n</ul>\n<p>Viết procedure, function, trigger, view bằng <code>CREATE OR ALTER</code> để chạy lại <code>solution.sql</code> bao nhiêu lần cũng được. Khi thi PE thật chỉ nộp lệnh <code>CREATE …</code>, không <code>GO</code>, không lệnh chạy thử.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bảng <code>HelloDbi(id INT PRIMARY KEY, msg NVARCHAR(50) NOT NULL)</code>.</li>\n  <li>Một dòng: id 1, msg <code>Xin chào, tôi học DBI202</code> — đúng từng dấu.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "setup.sql → solution.sql → check.sql (SSMS, sqlcmd or VS Code)|||setup.sql → solution.sql → check.sql (SSMS, sqlcmd hoặc VS Code)",
+          "output": "PASS 1. The server is SQL Server 2019 or newer\nPASS 2. Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL\nPASS 3. Row 1 holds the Vietnamese text exactly (no \"?\")\nALL 3 CHECKS PASSED",
+          "explanation": "Each line of check.sql is one check; a FAIL line says what was expected.|||Mỗi dòng của check.sql là một kiểm; dòng FAIL nói rõ điều mong đợi."
+        }
+      ],
+      "hintsJson": [
+        "NVARCHAR stores Unicode; VARCHAR on a default (Latin1) collation cannot store \"ọ\" or \"ư\".|||NVARCHAR lưu Unicode; VARCHAR với collation mặc định (Latin1) không lưu được \"ọ\", \"ư\".",
+        "The literal needs the N prefix too: N'Xin chào…' — without it the text is converted to the server's code page BEFORE it reaches the column.|||Chuỗi hằng cũng cần tiền tố N: N'Xin chào…' — thiếu N là chữ bị đổi sang bảng mã của máy chủ TRƯỚC khi vào cột."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Prove your SQL Server is ready: a Unicode table\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\n-- 1) CREATE TABLE HelloDbi (...)\n-- 2) INSERT the row (1, 'Xin chào, tôi học DBI202') — think about the N prefix\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Prove your SQL Server is ready: a Unicode table\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables — this exercise starts from an empty database)\nSELECT CAST(SERVERPROPERTY('ProductVersion') AS NVARCHAR(30)) AS ServerVersion, CAST(SERVERPROPERTY('Edition') AS NVARCHAR(60)) AS Edition;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Prove your SQL Server is ready: a Unicode table\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: The server is SQL Server 2019 or newer\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(CAST(PARSENAME(CAST(SERVERPROPERTY(''ProductVersion'') AS NVARCHAR(30)), 4) AS INT) >= 15, 1, 0);\nSET @info = CONCAT(N''your version is '', CAST(SERVERPROPERTY(''ProductVersion'') AS NVARCHAR(30)), N'' — install SQL Server 2019/2022 (or Azure SQL Edge on Apple Silicon)'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. The server is SQL Server 2019 or newer | Máy chủ là SQL Server 2019 trở lên'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. The server is SQL Server 2019 or newer | Máy chủ là SQL Server 2019 trở lên', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(OBJECT_ID(N''dbo.HelloDbi'', N''U'') IS NOT NULL\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.HelloDbi'') AND c.name = N''id'' AND t.name = N''int'')\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.HelloDbi'') AND c.name = N''msg'' AND t.name = N''nvarchar'' AND c.max_length = 100 AND c.is_nullable = 0)\n  AND EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.HelloDbi'') AND i.is_primary_key = 1 AND c.name = N''id''), 1, 0);\nSET @info = N''expected HelloDbi(id INT PRIMARY KEY, msg NVARCHAR(50) NOT NULL)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL | Bảng HelloDbi có id INT (khoá chính) và msg NVARCHAR(50) NOT NULL'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL | Bảng HelloDbi có id INT (khoá chính) và msg NVARCHAR(50) NOT NULL', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Row 1 holds the Vietnamese text exactly (no \"?\")\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(50) = (SELECT msg FROM dbo.HelloDbi WHERE id = 1);\nSET @ok = IIF(@m = N''Xin chào, tôi học DBI202'' COLLATE Latin1_General_BIN2, 1, 0);\nSET @info = CONCAT(N''found: '', COALESCE(@m, N''(no row 1)''), N'' — did you forget the N in N''''...''''?'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Row 1 holds the Vietnamese text exactly (no \"?\") | Dòng 1 giữ đúng chữ tiếng Việt (không thành \"?\")'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Row 1 holds the Vietnamese text exactly (no \"?\") | Dòng 1 giữ đúng chữ tiếng Việt (không thành \"?\")', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "solution.sql",
+          "language": "sql",
+          "code": "-- solution.sql — YOUR answer for: Prove your SQL Server is ready: a Unicode table\n-- Bài làm CỦA BẠN. Run order / thứ tự chạy: setup.sql → solution.sql → check.sql\nUSE DBI202_CL;\nGO\nCREATE TABLE HelloDbi (\n    id  INT           NOT NULL PRIMARY KEY,\n    msg NVARCHAR(50)  NOT NULL               -- N = Unicode: Vietnamese letters survive\n);\nINSERT INTO HelloDbi (id, msg) VALUES (1, N'Xin chào, tôi học DBI202');   -- N'' = a Unicode literal\n"
+        },
+        {
+          "name": "setup.sql",
+          "language": "sql",
+          "code": "-- setup.sql — sample database for: Prove your SQL Server is ready: a Unicode table\n-- Drops and re-creates the database DBI202_CL (a scratch database used only by Code Lab exercises), then the tables + rows.\n-- Xoá và tạo lại CSDL DBI202_CL (CSDL nháp chỉ dùng cho bài Code Lab), rồi tạo bảng + dữ liệu. Chạy lại bất cứ lúc nào để làm sạch.\nUSE master;\nGO\nIF DB_ID(N'DBI202_CL') IS NOT NULL\nBEGIN\n    ALTER DATABASE DBI202_CL SET SINGLE_USER WITH ROLLBACK IMMEDIATE;\n    DROP DATABASE DBI202_CL;\nEND\nGO\nCREATE DATABASE DBI202_CL;\nGO\nUSE DBI202_CL;\nGO\n-- (no sample tables — this exercise starts from an empty database)\nSELECT CAST(SERVERPROPERTY('ProductVersion') AS NVARCHAR(30)) AS ServerVersion, CAST(SERVERPROPERTY('Edition') AS NVARCHAR(60)) AS Edition;\nGO\nPRINT N'setup.sql: database DBI202_CL ready.';\n"
+        },
+        {
+          "name": "check.sql",
+          "language": "sql",
+          "code": "-- check.sql — self-check for: Prove your SQL Server is ready: a Unicode table\n-- Generated with the exercise — DO NOT EDIT. Run it AFTER setup.sql and your solution.sql (see the task text).\n-- Tự kiểm cho bài này — sinh kèm đề, ĐỪNG SỬA. Chạy SAU setup.sql và solution.sql của bạn (xem đề).\nUSE DBI202_CL;\nGO\nSET NOCOUNT ON;\nDECLARE @ok BIT, @info NVARCHAR(4000), @pass INT = 0, @fail INT = 0;\nPRINT N'────────── check.sql: 3 checks ──────────';\n\n-- CHECK 1: The server is SQL Server 2019 or newer\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(CAST(PARSENAME(CAST(SERVERPROPERTY(''ProductVersion'') AS NVARCHAR(30)), 4) AS INT) >= 15, 1, 0);\nSET @info = CONCAT(N''your version is '', CAST(SERVERPROPERTY(''ProductVersion'') AS NVARCHAR(30)), N'' — install SQL Server 2019/2022 (or Azure SQL Edge on Apple Silicon)'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 1. The server is SQL Server 2019 or newer | Máy chủ là SQL Server 2019 trở lên'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 1. The server is SQL Server 2019 or newer | Máy chủ là SQL Server 2019 trở lên', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 2: Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'SET @ok = IIF(OBJECT_ID(N''dbo.HelloDbi'', N''U'') IS NOT NULL\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.HelloDbi'') AND c.name = N''id'' AND t.name = N''int'')\n  AND EXISTS (SELECT 1 FROM sys.columns c JOIN sys.types t ON t.user_type_id = c.user_type_id WHERE c.object_id = OBJECT_ID(N''dbo.HelloDbi'') AND c.name = N''msg'' AND t.name = N''nvarchar'' AND c.max_length = 100 AND c.is_nullable = 0)\n  AND EXISTS (SELECT 1 FROM sys.indexes i JOIN sys.index_columns ic ON ic.object_id = i.object_id AND ic.index_id = i.index_id JOIN sys.columns c ON c.object_id = ic.object_id AND c.column_id = ic.column_id WHERE i.object_id = OBJECT_ID(N''dbo.HelloDbi'') AND i.is_primary_key = 1 AND c.name = N''id''), 1, 0);\nSET @info = N''expected HelloDbi(id INT PRIMARY KEY, msg NVARCHAR(50) NOT NULL)'';',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 2. Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL | Bảng HelloDbi có id INT (khoá chính) và msg NVARCHAR(50) NOT NULL'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 2. Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL | Bảng HelloDbi có id INT (khoá chính) và msg NVARCHAR(50) NOT NULL', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\n-- CHECK 3: Row 1 holds the Vietnamese text exactly (no \"?\")\nSELECT @ok = 0, @info = NULL;\nBEGIN TRY\n  EXEC sp_executesql N'DECLARE @m NVARCHAR(50) = (SELECT msg FROM dbo.HelloDbi WHERE id = 1);\nSET @ok = IIF(@m = N''Xin chào, tôi học DBI202'' COLLATE Latin1_General_BIN2, 1, 0);\nSET @info = CONCAT(N''found: '', COALESCE(@m, N''(no row 1)''), N'' — did you forget the N in N''''...''''?'');',\n    N'@ok BIT OUTPUT, @info NVARCHAR(4000) OUTPUT', @ok = @ok OUTPUT, @info = @info OUTPUT;\nEND TRY\nBEGIN CATCH\n  SELECT @ok = 0, @info = CONCAT(N'error ', ERROR_NUMBER(), N': ', ERROR_MESSAGE());\nEND CATCH;\nWHILE @@TRANCOUNT > 0 ROLLBACK;\nIF @ok = 1 BEGIN SET @pass += 1; PRINT N'PASS 3. Row 1 holds the Vietnamese text exactly (no \"?\") | Dòng 1 giữ đúng chữ tiếng Việt (không thành \"?\")'; END\nELSE BEGIN SET @fail += 1; PRINT CONCAT(N'FAIL 3. Row 1 holds the Vietnamese text exactly (no \"?\") | Dòng 1 giữ đúng chữ tiếng Việt (không thành \"?\")', CASE WHEN @info IS NULL THEN N'' ELSE CONCAT(N'  ⇒  ', @info) END); END\n\nPRINT N'──────────────────────────────────────';\nIF @fail = 0 PRINT CONCAT(N'ALL ', @pass, N' CHECKS PASSED — go back to Code Lab and press \"Mark as solved\".');\nELSE PRINT CONCAT(@pass, N' passed, ', @fail, N' FAILED — fix solution.sql, then run setup.sql, solution.sql, check.sql again.');\nSELECT CASE WHEN @fail = 0 THEN N'ALL CHECKS PASSED' ELSE N'NOT YET' END AS Result, @pass AS Passed, @fail AS Failed;\nIF @fail > 0 RAISERROR(N'%d check(s) failed', 16, 1, @fail);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two things must both be Unicode: the column type (NVARCHAR) and the literal (N'…'). The check compares with a binary collation, so a single \"?\" is caught. If check 1 fails, fix the installation first (lesson \"Start here 2/2\").</p>",
+      "solutionExplanationHtmlVi": "<p>Hai thứ đều phải là Unicode: kiểu cột (NVARCHAR) và chuỗi hằng (N'…'). Kiểm so bằng collation nhị phân nên chỉ một dấu \"?\" cũng bị bắt. Kiểm 1 trượt thì sửa bản cài trước (bài \"Bắt đầu 2/2\").</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "manual",
+        "chayTaiMay": {
+          "lenh": "sqlcmd -i setup.sql,solution.sql,check.sql",
+          "lyDo": "This exercise is about YOUR installation: it only makes sense on the SQL Server you will use for the labs and the PE.|||Bài này kiểm chính BẢN CÀI của bạn: chỉ có nghĩa khi chạy trên SQL Server bạn sẽ dùng cho lab và PE.",
+          "runner": "sqlserver",
+          "tep": [
+            "setup.sql",
+            "solution.sql",
+            "check.sql"
+          ],
+          "kiem": [
+            "1. The server is SQL Server 2019 or newer",
+            "2. Table HelloDbi has id INT (primary key) and msg NVARCHAR(50) NOT NULL",
+            "3. Row 1 holds the Vietnamese text exactly (no \"?\")"
+          ]
+        }
+      },
+      "gradeKind": "manual",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "INSERT … VALUES (1, 'Xin chào, tôi học DBI202') without N — the column is NVARCHAR but the value arrives as 'h?c'.|||INSERT … VALUES (1, 'Xin chào, tôi học DBI202') thiếu N — cột NVARCHAR nhưng giá trị tới nơi đã thành 'h?c'."
+        },
+        {
+          "loi": "Declaring msg VARCHAR(50) — even with N'…' the column itself cannot hold the letter \"ọ\".|||Khai msg VARCHAR(50) — dù có N'…' thì bản thân cột cũng không chứa được chữ \"ọ\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NVARCHAR",
+          "vi": "chuỗi Unicode",
+          "giaiThich": "Kiểu chữ Unicode của SQL Server — bắt buộc cho tiếng Việt có dấu."
+        },
+        {
+          "en": "N'' literal",
+          "vi": "chuỗi hằng Unicode",
+          "giaiThich": "Tiền tố N trước chuỗi: N'Đức' — báo cho SQL Server đây là chuỗi Unicode."
+        }
+      ]
+    },
+    {
+      "title": "Read the connection error, pick the fix",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "connection errors",
+        "SQL Server authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "setup",
+        "errors"
+      ],
+      "problemHtml": "<p>Each question quotes a real message from SSMS or a driver. Pick what it really means / how to fix it (lesson \"Start here 2/2\", section 3).</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi câu trích một thông báo thật của SSMS hay driver. Chọn ý nghĩa thật / cách sửa (bài \"Bắt đầu 2/2\", mục 3).</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "First ask: did the connection reach the server at all (network / certificate errors) or did it fail later (login, database, object)?|||Hỏi trước: kết nối có tới được máy chủ chưa (lỗi mạng / chứng chỉ) hay hỏng ở bước sau (đăng nhập, CSDL, đối tượng)?",
+        "Error 18456 is always about the LOGIN; Msg 208 is always about the CURRENT DATABASE.|||Lỗi 18456 luôn về ĐĂNG NHẬP; Msg 208 luôn về CSDL HIỆN TẠI."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the connection error, pick the fix\n\nAnswer in the answer panel (no code needed).\n\n1. \"Login failed for user 'sa'. (Error: 18456) State: 1\" right after installing with Windows Authentication only.\"Login failed for user 'sa'. (Error: 18456) State: 1\" ngay sau khi cài chỉ bật Windows Authentication.\n2. \"The certificate chain was issued by an authority that is not trusted.\"\"The certificate chain was issued by an authority that is not trusted.\"\n3. \"Invalid object name 'SinhVien'.\" (Msg 208) — but you created the table yesterday.\"Invalid object name 'SinhVien'.\" (Msg 208) — dù hôm qua đã tạo bảng.\n4. \"…(provider: TCP Provider, error: 0 — No connection could be made because the target machine actively refused it)\"\"…(provider: TCP Provider, error: 0 — No connection could be made because the target machine actively refused it)\"\n5. \"String or binary data would be truncated in table 'dbo.Lop', column 'tenLop'.\"\"String or binary data would be truncated in table 'dbo.Lop', column 'tenLop'.\"\n6. On a MacBook M2, docker run mcr.microsoft.com/mssql/server:2022-latest exits immediately with \"exec format error\".Trên MacBook M2, docker run mcr.microsoft.com/mssql/server:2022-latest thoát ngay với \"exec format error\".\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the connection error, pick the fix — answer key\n\n1. \"Login failed for user 'sa'. (Error: 18456) State: 1\" right after installing with Windows Authentication only.\"Login failed for user 'sa'. (Error: 18456) State: 1\" ngay sau khi cài chỉ bật Windows Authentication.\n   Answer: c) SQL logins are disabled: switch the server to Mixed Mode and restart it\n   State 1 hides the real cause; in practice it means the server only accepts Windows logins. Enable Mixed Mode (Server properties → Security) and restart.VI: State 1 che nguyên nhân thật; thực tế là máy chủ chỉ nhận đăng nhập Windows. Bật Mixed Mode (Server properties → Security) rồi khởi động lại dịch vụ.\n\n2. \"The certificate chain was issued by an authority that is not trusted.\"\"The certificate chain was issued by an authority that is not trusted.\"\n   Answer: a) Tick \"Trust server certificate\" (or add -C to sqlcmd)\n   New drivers encrypt by default and a local SQL Server only has a self-signed certificate. Trusting it is fine on your own machine.VI: Driver mới mặc định mã hoá, còn SQL Server ở máy chỉ có chứng chỉ tự ký. Tin chứng chỉ đó là ổn trên máy của bạn.\n\n3. \"Invalid object name 'SinhVien'.\" (Msg 208) — but you created the table yesterday.\"Invalid object name 'SinhVien'.\" (Msg 208) — dù hôm qua đã tạo bảng.\n   Answer: d) The window is on another database (often master): USE the right one\n   Msg 208 comes after a successful connection: the object is not in the CURRENT database. Check the database drop-down or run USE QuanLyLop first.VI: Msg 208 xảy ra khi đã kết nối được: đối tượng không nằm trong CSDL HIỆN TẠI. Xem ô chọn CSDL hoặc chạy USE QuanLyLop trước.\n\n4. \"…(provider: TCP Provider, error: 0 — No connection could be made because the target machine actively refused it)\"\"…(provider: TCP Provider, error: 0 — No connection could be made because the target machine actively refused it)\"\n   Answer: d) Nothing listens on that TCP port: enable TCP/IP or start the container\n   \"Actively refused\" = the machine answered but no SQL Server listens on that TCP port: TCP/IP disabled, wrong port, or the Docker container is not running.VI: \"Actively refused\" = máy trả lời nhưng không có SQL Server nghe ở cổng TCP đó: TCP/IP bị tắt, sai cổng, hoặc container Docker chưa chạy.\n\n5. \"String or binary data would be truncated in table 'dbo.Lop', column 'tenLop'.\"\"String or binary data would be truncated in table 'dbo.Lop', column 'tenLop'.\"\n   Answer: d) The value is longer than the column: widen it or shorten the value\n   The value does not fit, e.g. 60 characters into NVARCHAR(50). SQL Server 2019+ names the column for you.VI: Giá trị không vừa cột, vd 60 ký tự vào NVARCHAR(50). SQL Server 2019+ ghi rõ tên cột.\n\n6. On a MacBook M2, docker run mcr.microsoft.com/mssql/server:2022-latest exits immediately with \"exec format error\".Trên MacBook M2, docker run mcr.microsoft.com/mssql/server:2022-latest thoát ngay với \"exec format error\".\n   Answer: a) The image is x86_64 only: enable Rosetta or use azure-sql-edge\n   Apple Silicon is arm64; the official image is x86_64. Either enable \"Use Rosetta for x86_64/amd64 emulation\" (and add --platform linux/amd64) or run mcr.microsoft.com/azure-sql-edge, which is arm64-native.VI: Apple Silicon là arm64; image chính thức là x86_64. Bật \"Use Rosetta for x86_64/amd64 emulation\" (thêm --platform linux/amd64) hoặc chạy mcr.microsoft.com/azure-sql-edge — bản arm64 gốc.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> SQL logins are disabled: switch the server to Mixed Mode and restart it</p><p>State 1 hides the real cause; in practice it means the server only accepts Windows logins. Enable Mixed Mode (Server properties → Security) and restart.</p><p><i>VI: State 1 che nguyên nhân thật; thực tế là máy chủ chỉ nhận đăng nhập Windows. Bật Mixed Mode (Server properties → Security) rồi khởi động lại dịch vụ.</i></p></li><li><p><b>a)</b> Tick \"Trust server certificate\" (or add -C to sqlcmd)</p><p>New drivers encrypt by default and a local SQL Server only has a self-signed certificate. Trusting it is fine on your own machine.</p><p><i>VI: Driver mới mặc định mã hoá, còn SQL Server ở máy chỉ có chứng chỉ tự ký. Tin chứng chỉ đó là ổn trên máy của bạn.</i></p></li><li><p><b>d)</b> The window is on another database (often master): USE the right one</p><p>Msg 208 comes after a successful connection: the object is not in the CURRENT database. Check the database drop-down or run USE QuanLyLop first.</p><p><i>VI: Msg 208 xảy ra khi đã kết nối được: đối tượng không nằm trong CSDL HIỆN TẠI. Xem ô chọn CSDL hoặc chạy USE QuanLyLop trước.</i></p></li><li><p><b>d)</b> Nothing listens on that TCP port: enable TCP/IP or start the container</p><p>\"Actively refused\" = the machine answered but no SQL Server listens on that TCP port: TCP/IP disabled, wrong port, or the Docker container is not running.</p><p><i>VI: \"Actively refused\" = máy trả lời nhưng không có SQL Server nghe ở cổng TCP đó: TCP/IP bị tắt, sai cổng, hoặc container Docker chưa chạy.</i></p></li><li><p><b>d)</b> The value is longer than the column: widen it or shorten the value</p><p>The value does not fit, e.g. 60 characters into NVARCHAR(50). SQL Server 2019+ names the column for you.</p><p><i>VI: Giá trị không vừa cột, vd 60 ký tự vào NVARCHAR(50). SQL Server 2019+ ghi rõ tên cột.</i></p></li><li><p><b>a)</b> The image is x86_64 only: enable Rosetta or use azure-sql-edge</p><p>Apple Silicon is arm64; the official image is x86_64. Either enable \"Use Rosetta for x86_64/amd64 emulation\" (and add --platform linux/amd64) or run mcr.microsoft.com/azure-sql-edge, which is arm64-native.</p><p><i>VI: Apple Silicon là arm64; image chính thức là x86_64. Bật \"Use Rosetta for x86_64/amd64 emulation\" (thêm --platform linux/amd64) hoặc chạy mcr.microsoft.com/azure-sql-edge — bản arm64 gốc.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>\"Login failed for user 'sa'. (Error: 18456) State: 1\" right after installing with Windows Authentication only.</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Login failed for user 'sa'. (Error: 18456) State: 1\" ngay sau khi cài chỉ bật Windows Authentication.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The default database is missing: create it, then log in again"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The SQL Server service is stopped: start it in services.msc"
+              },
+              {
+                "ma": "c",
+                "noiDung": "SQL logins are disabled: switch the server to Mixed Mode and restart it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The sa password has a typo: retype it carefully in the dialog"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>State 1 hides the real cause; in practice it means the server only accepts Windows logins. Enable Mixed Mode (Server properties → Security) and restart.</p><p><i>VI: State 1 che nguyên nhân thật; thực tế là máy chủ chỉ nhận đăng nhập Windows. Bật Mixed Mode (Server properties → Security) rồi khởi động lại dịch vụ.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>\"The certificate chain was issued by an authority that is not trusted.\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"The certificate chain was issued by an authority that is not trusted.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Tick \"Trust server certificate\" (or add -C to sqlcmd)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Grant the login the sysadmin role"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Use the port 1434 instead of 1433"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Reinstall SQL Server with a new certificate"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>New drivers encrypt by default and a local SQL Server only has a self-signed certificate. Trusting it is fine on your own machine.</p><p><i>VI: Driver mới mặc định mã hoá, còn SQL Server ở máy chỉ có chứng chỉ tự ký. Tin chứng chỉ đó là ổn trên máy của bạn.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>\"Invalid object name 'SinhVien'.\" (Msg 208) — but you created the table yesterday.</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Invalid object name 'SinhVien'.\" (Msg 208) — dù hôm qua đã tạo bảng.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "SQL Server drops tables at night: run the CREATE TABLE again"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Table names are case-sensitive: write SINHVIEN in capitals"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The login lost its password: reset it, then reconnect"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The window is on another database (often master): USE the right one"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Msg 208 comes after a successful connection: the object is not in the CURRENT database. Check the database drop-down or run USE QuanLyLop first.</p><p><i>VI: Msg 208 xảy ra khi đã kết nối được: đối tượng không nằm trong CSDL HIỆN TẠI. Xem ô chọn CSDL hoặc chạy USE QuanLyLop trước.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>\"…(provider: TCP Provider, error: 0 — No connection could be made because the target machine actively refused it)\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"…(provider: TCP Provider, error: 0 — No connection could be made because the target machine actively refused it)\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A table is locked by another session: wait and run again"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The sa password expired: set a new one with ALTER LOGIN sa"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The data disk is full: free space, then reconnect again"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing listens on that TCP port: enable TCP/IP or start the container"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>\"Actively refused\" = the machine answered but no SQL Server listens on that TCP port: TCP/IP disabled, wrong port, or the Docker container is not running.</p><p><i>VI: \"Actively refused\" = máy trả lời nhưng không có SQL Server nghe ở cổng TCP đó: TCP/IP bị tắt, sai cổng, hoặc container Docker chưa chạy.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"String or binary data would be truncated in table 'dbo.Lop', column 'tenLop'.\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"String or binary data would be truncated in table 'dbo.Lop', column 'tenLop'.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The column is NOT NULL and the INSERT sent a NULL value there"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The foreign key points to a class that does not exist yet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The network connection timed out in the middle of the INSERT"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The value is longer than the column: widen it or shorten the value"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The value does not fit, e.g. 60 characters into NVARCHAR(50). SQL Server 2019+ names the column for you.</p><p><i>VI: Giá trị không vừa cột, vd 60 ký tự vào NVARCHAR(50). SQL Server 2019+ ghi rõ tên cột.</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>On a MacBook M2, docker run mcr.microsoft.com/mssql/server:2022-latest exits immediately with \"exec format error\".</p><p style=\"opacity:.75;font-size:.92em\"><i>Trên MacBook M2, docker run mcr.microsoft.com/mssql/server:2022-latest thoát ngay với \"exec format error\".</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The image is x86_64 only: enable Rosetta or use azure-sql-edge"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Port 1433 is taken by PostgreSQL: publish another host port"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The sa password is too short: use at least 8 mixed characters"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Docker has too little memory: give it more than 16 GB of RAM"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Apple Silicon is arm64; the official image is x86_64. Either enable \"Use Rosetta for x86_64/amd64 emulation\" (and add --platform linux/amd64) or run mcr.microsoft.com/azure-sql-edge, which is arm64-native.</p><p><i>VI: Apple Silicon là arm64; image chính thức là x86_64. Bật \"Use Rosetta for x86_64/amd64 emulation\" (thêm --platform linux/amd64) hoặc chạy mcr.microsoft.com/azure-sql-edge — bản arm64 gốc.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reinstalling SQL Server for a certificate or login-mode problem — both are one setting.|||Cài lại SQL Server vì lỗi chứng chỉ hay chế độ đăng nhập — cả hai chỉ là một tuỳ chọn."
+        },
+        {
+          "loi": "Thinking Msg 208 means the table is gone — usually the window is still on master.|||Tưởng Msg 208 là mất bảng — thường là cửa sổ vẫn đang ở master."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Mixed Mode authentication",
+          "vi": "xác thực hỗn hợp",
+          "giaiThich": "Cho phép cả đăng nhập Windows lẫn đăng nhập SQL (sa + mật khẩu)."
+        }
+      ]
+    },
+    {
+      "title": "Which server image and which client, on which machine?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "Docker",
+        "SQL Server tools"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "setup"
+      ],
+      "problemHtml": "<p>Fill the table: for each machine, the SQL Server you run and the tool you query it with (lesson \"Start here 2/2\", sections 1 and 4).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Điền bảng: với mỗi máy, chạy SQL Server nào và truy vấn bằng công cụ nào (bài \"Bắt đầu 2/2\", mục 1 và 4).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "SSMS exists only on Windows.|||SSMS chỉ có trên Windows.",
+        "The official mssql/server image is x86_64 only.|||Image mssql/server chính thức chỉ có x86_64."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which server image and which client, on which machine?\n\nAnswer in the answer panel (no code needed).\n\n1. Machine → server → clientMáy → máy chủ → công cụ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which server image and which client, on which machine? — answer key\n\n1. Machine → server → clientMáy → máy chủ → công cụ\n   - r1.sv: installer of SQL Server 2022 Developer\n   - r1.cc: SSMS\n   - r2.sv: Docker mcr.microsoft.com/azure-sql-edge\n   - r2.cc: VS Code + SQL Server (mssql) extension\n   - r3.sv: Docker mcr.microsoft.com/mssql/server:2022-latest\n   - r3.cc: VS Code + SQL Server (mssql) extension\n   SQL Server has no macOS build, so a Mac always runs it in Docker; arm64 Macs use the arm64 Azure SQL Edge image (or Rosetta). SSMS is Windows-only — on a Mac use the VS Code mssql extension.VI: SQL Server không có bản macOS nên Mac luôn chạy trong Docker; Mac arm64 dùng image Azure SQL Edge (hoặc Rosetta). SSMS chỉ có trên Windows — trên Mac dùng extension mssql của VS Code.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SQL Server has no macOS build, so a Mac always runs it in Docker; arm64 Macs use the arm64 Azure SQL Edge image (or Rosetta). SSMS is Windows-only — on a Mac use the VS Code mssql extension.</p><p><i>VI: SQL Server không có bản macOS nên Mac luôn chạy trong Docker; Mac arm64 dùng image Azure SQL Edge (hoặc Rosetta). SSMS chỉ có trên Windows — trên Mac dùng extension mssql của VS Code.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Machine → server → client</p><p style=\"opacity:.75;font-size:.92em\"><i>Máy → máy chủ → công cụ</i></p>",
+            "cot": [
+              {
+                "ma": "may",
+                "ten": "Machine / Máy"
+              },
+              {
+                "ma": "sv",
+                "ten": "SQL Server to run / Chạy máy chủ nào",
+                "luaChon": [
+                  "installer of SQL Server 2022 Developer",
+                  "Docker mcr.microsoft.com/mssql/server:2022-latest",
+                  "Docker mcr.microsoft.com/azure-sql-edge"
+                ]
+              },
+              {
+                "ma": "cc",
+                "ten": "Client / Công cụ",
+                "luaChon": [
+                  "SSMS",
+                  "VS Code + SQL Server (mssql) extension"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "may": "Windows 11 laptop (x64)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "may": "MacBook Air M3 (arm64)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "may": "iMac 2019 (Intel x86_64)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.sv": "installer of SQL Server 2022 Developer",
+              "r1.cc": "SSMS",
+              "r2.sv": "Docker mcr.microsoft.com/azure-sql-edge",
+              "r2.cc": "VS Code + SQL Server (mssql) extension",
+              "r3.sv": "Docker mcr.microsoft.com/mssql/server:2022-latest",
+              "r3.cc": "VS Code + SQL Server (mssql) extension"
+            },
+            "giaiThich": "<p>SQL Server has no macOS build, so a Mac always runs it in Docker; arm64 Macs use the arm64 Azure SQL Edge image (or Rosetta). SSMS is Windows-only — on a Mac use the VS Code mssql extension.</p><p><i>VI: SQL Server không có bản macOS nên Mac luôn chạy trong Docker; Mac arm64 dùng image Azure SQL Edge (hoặc Rosetta). SSMS chỉ có trên Windows — trên Mac dùng extension mssql của VS Code.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing SSMS on a Mac — there is no macOS version.|||Chọn SSMS trên Mac — không có bản macOS."
+        },
+        {
+          "loi": "Running mssql/server on Apple Silicon without Rosetta — \"exec format error\".|||Chạy mssql/server trên Apple Silicon không bật Rosetta — \"exec format error\"."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

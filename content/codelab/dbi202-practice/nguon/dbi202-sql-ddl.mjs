@@ -117,8 +117,8 @@ export default doiDau({
       doKho: 'MEDIUM', phut: 10,
       khaiNiem: ['composite primary key', 'FOREIGN KEY … REFERENCES', 'many-to-many'], the: ['ddl', 'foreign-key', 'composite-key'],
       csdl: BASE_SV, tenCsdl: 'StudentBase', luocDo: {
-        en: '<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code>, <code>tblStudent(<u>studentID</u>, fullName, email, gpa)</code> with two students (HE170001, HE170002) and two courses (DBI202, PRF192).</p>',
-        vi: '<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code>, <code>tblStudent(<u>studentID</u>, fullName, email, gpa)</code> với hai sinh viên (HE170001, HE170002) và hai môn (DBI202, PRF192).</p>',
+        en: '<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<span style="text-decoration:underline">courseID</span>, courseName, credits)</code>, <code>tblStudent(<span style="text-decoration:underline">studentID</span>, fullName, email, gpa)</code> with two students (HE170001, HE170002) and two courses (DBI202, PRF192).</p>',
+        vi: '<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<span style="text-decoration:underline">courseID</span>, courseName, credits)</code>, <code>tblStudent(<span style="text-decoration:underline">studentID</span>, fullName, email, gpa)</code> với hai sinh viên (HE170001, HE170002) và hai môn (DBI202, PRF192).</p>',
       },
       moTa: {
         en: '<p>A student takes many courses, a course has many students, and a student may retake a course in another semester. Create <code>tblEnrollment(studentID, courseID, semester, grade)</code>: semester is CHAR(4) like <code>SU26</code>, grade DECIMAL(3,1) optional. The key is (studentID, courseID, semester); studentID and courseID reference the existing tables.</p>',
@@ -163,8 +163,8 @@ export default doiDau({
       doKho: 'MEDIUM', phut: 10,
       khaiNiem: ['DEFAULT', 'CHECK … IN (…)', 'foreign key'], the: ['ddl', 'default', 'check'],
       csdl: BASE_SV, tenCsdl: 'StudentBase', luocDo: {
-        en: '<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblStudent(<u>studentID</u>, …)</code> with HE170001 and HE170002.</p>',
-        vi: '<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblStudent(<u>studentID</u>, …)</code> với HE170001 và HE170002.</p>',
+        en: '<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblStudent(<span style="text-decoration:underline">studentID</span>, …)</code> with HE170001 and HE170002.</p>',
+        vi: '<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblStudent(<span style="text-decoration:underline">studentID</span>, …)</code> với HE170001 và HE170002.</p>',
       },
       moTa: {
         en: '<p>Create <code>tblPayment(paymentID, studentID, amount, method, paidOn)</code>: paymentID INT primary key; studentID CHAR(8) required, referencing tblStudent; amount DECIMAL(10,2) <b>greater than 0</b>; method VARCHAR(10) that is <b>CASH, CARD or BANK</b> and <b>defaults to CASH</b>; paidOn DATE required.</p>',
@@ -210,8 +210,8 @@ export default doiDau({
       doKho: 'HARD', phut: 12,
       khaiNiem: ['weak entity', 'composite key containing a foreign key', 'ON DELETE CASCADE'], the: ['ddl', 'cascade', 'weak-entity'],
       csdl: BASE_SV, tenCsdl: 'StudentBase', luocDo: {
-        en: '<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code> with DBI202 and PRF192.</p>',
-        vi: '<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<u>courseID</u>, courseName, credits)</code> với DBI202 và PRF192.</p>',
+        en: '<p><b>Existing tables</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<span style="text-decoration:underline">courseID</span>, courseName, credits)</code> with DBI202 and PRF192.</p>',
+        vi: '<p><b>Bảng đã có</b> (tab <code>StudentBase.sql</code>): <code>tblCourse(<span style="text-decoration:underline">courseID</span>, courseName, credits)</code> với DBI202 và PRF192.</p>',
       },
       moTa: {
         en: '<p>A <b>section</b> (class group) only exists inside its course: it is identified by the course + a section number (1, 2, 3…). Create <code>tblSection(courseID, sectionNo, room)</code> so that <b>deleting a course automatically deletes its sections</b>.</p>',

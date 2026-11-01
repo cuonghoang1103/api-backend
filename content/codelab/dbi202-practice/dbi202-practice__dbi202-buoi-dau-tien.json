@@ -1,0 +1,784 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-buoi-dau-tien",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-buoi-dau-tien"
+  },
+  "exercises": [
+    {
+      "title": "Add a class, then a student in it",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "INSERT",
+        "foreign key order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "insert",
+        "quanlylop"
+      ],
+      "problemHtml": "<p>Insert the new class <code>SE1803</code> named <i>Kỹ thuật phần mềm 1803</i>, then the student <code>SV006</code> <i>Đỗ Thị Lan</i>, born 2004-09-09, score 8.00, in class SE1803.</p>\n<details class=\"cl-luoc-do\" open><summary><b>QuanLyLop schema</b> (lesson 0.3 — full script in the <code>QuanLyLop.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 classes (SE1801, SE1802), 5 students; SV005 has no score yet (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Two INSERT statements, the class first (the student's maLop is a foreign key to Lop).</li>\n  <li>Name the columns in each INSERT; use N'…' for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Thêm lớp mới <code>SE1803</code> tên <i>Kỹ thuật phần mềm 1803</i>, rồi thêm sinh viên <code>SV006</code> <i>Đỗ Thị Lan</i>, sinh 2004-09-09, điểm 8.00, thuộc lớp SE1803.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ QuanLyLop</b> (bài 0.3 — script đầy đủ ở tab <code>QuanLyLop.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 lớp (SE1801, SE1802), 5 sinh viên; SV005 chưa có điểm (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai câu INSERT, lớp trước (maLop của sinh viên là khoá ngoại tới Lop).</li>\n  <li>Ghi rõ tên cột trong mỗi INSERT; chữ tiếng Việt dùng N'…'.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "maLop  | tenLop                \n-------+-----------------------\nSE1803 | Kỹ thuật phần mềm 1803",
+          "explanation": "Expected result of check \"The class SE1803 exists\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Có lớp SE1803\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The foreign key fk_sinhvien_lop says: maLop of a student must already exist in Lop.|||Khoá ngoại fk_sinhvien_lop nói: maLop của sinh viên phải CÓ SẴN trong Lop.",
+        "INSERT INTO Lop (…) VALUES (…); then INSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES (…);|||INSERT INTO Lop (…) VALUES (…); rồi INSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES (…);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "INSERT INTO Lop (maLop, tenLop) VALUES ('SE1803', N'Kỹ thuật phần mềm 1803');   -- parent first\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop)\nVALUES ('SV006', N'Đỗ Thị Lan', '2004-09-09', 8.00, 'SE1803');                    -- then the child\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A foreign key protects the child side: no student may point at a class that does not exist. So the parent row goes in first. Naming the columns makes the INSERT survive a later ALTER TABLE that adds a column.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoá ngoại bảo vệ phía con: không sinh viên nào được trỏ tới lớp chưa có. Vì vậy dòng cha vào trước. Ghi rõ tên cột giúp câu INSERT không hỏng khi sau này bảng thêm cột.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The class SE1803 exists|||Có lớp SE1803",
+            "kiemTra": "SELECT maLop, tenLop FROM Lop WHERE maLop = 'SE1803'",
+            "mongDoi": {
+              "cot": [
+                "maLop",
+                "tenLop"
+              ],
+              "hang": [
+                [
+                  "SE1803",
+                  "Kỹ thuật phần mềm 1803"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The student SV006 is in SE1803 with every value right|||SV006 thuộc SE1803, đủ giá trị đúng",
+            "kiemTra": "SELECT maSV, hoTen, ngaySinh, diemTB, maLop FROM SinhVien WHERE maSV = 'SV006'",
+            "mongDoi": {
+              "cot": [
+                "maSV",
+                "hoTen",
+                "ngaySinh",
+                "diemTB",
+                "maLop"
+              ],
+              "hang": [
+                [
+                  "SV006",
+                  "Đỗ Thị Lan",
+                  "2004-09-09",
+                  8,
+                  "SE1803"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Nothing else changed (3 classes, 6 students)|||Không thay đổi gì khác (3 lớp, 6 sinh viên)",
+            "kiemTra": "SELECT (SELECT COUNT(*) FROM Lop) AS soLop, (SELECT COUNT(*) FROM SinhVien) AS soSV",
+            "mongDoi": {
+              "cot": [
+                "soLop",
+                "soSV"
+              ],
+              "hang": [
+                [
+                  3,
+                  6
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Inserting the student first — the foreign key rejects it because SE1803 does not exist yet.|||Thêm sinh viên trước — khoá ngoại từ chối vì SE1803 chưa tồn tại."
+        },
+        {
+          "loi": "Forgetting N'…' — on SQL Server the diacritics of a non-Unicode literal can turn into \"?\".|||Quên N'…' — trên SQL Server chữ có dấu trong chuỗi không Unicode có thể thành \"?\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DML",
+          "vi": "ngôn ngữ thao tác dữ liệu",
+          "giaiThich": "INSERT, UPDATE, DELETE."
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        }
+      ]
+    },
+    {
+      "title": "Students without a score yet",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "NULL",
+        "IS NULL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "select",
+        "null",
+        "quanlylop"
+      ],
+      "problemHtml": "<p>List the <b>code and name</b> of every student whose <code>diemTB</code> has never been set.</p>\n<details class=\"cl-luoc-do\" open><summary><b>QuanLyLop schema</b> (lesson 0.3 — full script in the <code>QuanLyLop.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 classes (SE1801, SE1802), 5 students; SV005 has no score yet (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>maSV, hoTen</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Liệt kê <b>mã và tên</b> mọi sinh viên chưa có điểm <code>diemTB</code>.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ QuanLyLop</b> (bài 0.3 — script đầy đủ ở tab <code>QuanLyLop.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 lớp (SE1801, SE1802), 5 sinh viên; SV005 chưa có điểm (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>maSV, hoTen</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "maSV  | hoTen        \n------+--------------\nSV005 | Hoàng Văn Đức",
+          "explanation": "Expected result of check \"Students with no score\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Sinh viên chưa có điểm\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "NULL means \"unknown\" — it is not 0 and it is not equal to anything.|||NULL nghĩa là \"chưa biết\" — không phải 0, không bằng bất kỳ thứ gì.",
+        "WHERE diemTB IS NULL"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT maSV, hoTen\nFROM SinhVien\nWHERE diemTB IS NULL;     -- \"= NULL\" is never true: NULL is tested with IS NULL\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Any comparison with NULL using =, &lt;&gt;, &lt;, &gt; gives UNKNOWN, and WHERE keeps only TRUE rows. IS NULL is the only test that returns TRUE for a missing value.</p>",
+      "solutionExplanationHtmlVi": "<p>Mọi phép so sánh với NULL bằng =, &lt;&gt;, &lt;, &gt; đều ra UNKNOWN, còn WHERE chỉ giữ dòng TRUE. IS NULL là phép thử duy nhất trả TRUE cho giá trị thiếu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Students with no score|||Sinh viên chưa có điểm",
+            "mongDoi": {
+              "cot": [
+                "maSV",
+                "hoTen"
+              ],
+              "hang": [
+                [
+                  "SV005",
+                  "Hoàng Văn Đức"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Two more students, one without a score|||Thêm hai sinh viên, một người chưa có điểm",
+            "an": true,
+            "themCsdl": "INSERT INTO Lop (maLop, tenLop) VALUES ('SE1804', N'Kỹ thuật phần mềm 1804');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV007', N'Vũ Minh Khôi', '2004-02-02', NULL, 'SE1802'),\n  ('SV008', N'Đinh Thu Trang', '2004-08-08', 9.80, 'SE1802'),\n  ('SV009', N'Ngô Gia Bảo', '2004-04-04', 5.00, 'SE1801')",
+            "mongDoi": {
+              "cot": [
+                "maSV",
+                "hoTen"
+              ],
+              "hang": [
+                [
+                  "SV005",
+                  "Hoàng Văn Đức"
+                ],
+                [
+                  "SV007",
+                  "Vũ Minh Khôi"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses IS NULL|||Dùng IS NULL",
+            "khop": "\\bIS\\s+NULL\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "WHERE diemTB = NULL — the comparison is UNKNOWN for every row, so 0 rows come back.|||WHERE diemTB = NULL — phép so sánh ra UNKNOWN với mọi dòng nên trả 0 dòng."
+        },
+        {
+          "loi": "WHERE diemTB = 0 — a zero score is a real score; NULL is \"not graded yet\".|||WHERE diemTB = 0 — điểm 0 là điểm thật; NULL là \"chưa chấm\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "NULL",
+          "vi": "giá trị chưa biết",
+          "giaiThich": "So sánh với NULL bằng = cho UNKNOWN ⇒ dòng bị loại. Dùng IS NULL / IS NOT NULL."
+        },
+        {
+          "en": "WHERE",
+          "vi": "điều kiện lọc dòng",
+          "giaiThich": "Lọc TỪNG DÒNG trước khi gộp nhóm."
+        }
+      ]
+    },
+    {
+      "title": "Class SE1801, best score first",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "ORDER BY",
+        "WHERE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "select",
+        "order-by",
+        "quanlylop"
+      ],
+      "problemHtml": "<p>Show the students of class <code>SE1801</code> <b>who already have a score</b>, best score first.</p>\n<details class=\"cl-luoc-do\" open><summary><b>QuanLyLop schema</b> (lesson 0.3 — full script in the <code>QuanLyLop.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 classes (SE1801, SE1802), 5 students; SV005 has no score yet (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>hoTen, diemTB</code>.</li>\n  <li>Highest diemTB first (row order is checked).</li>\n  <li>Leave out students whose score is NULL.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiện các sinh viên lớp <code>SE1801</code> <b>đã có điểm</b>, điểm cao nhất trước.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ QuanLyLop</b> (bài 0.3 — script đầy đủ ở tab <code>QuanLyLop.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 lớp (SE1801, SE1802), 5 sinh viên; SV005 chưa có điểm (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>hoTen, diemTB</code>.</li>\n  <li>diemTB cao nhất trước (có kiểm thứ tự dòng).</li>\n  <li>Bỏ sinh viên có điểm NULL.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "hoTen            | diemTB\n-----------------+-------\nNguyễn Văn Cường | 8.5   \nTrần Thị Hoa     | 7.2   ",
+          "explanation": "Expected result of check \"SE1801 students by score, descending\" (row order matters).|||Kết quả mong đợi của kiểm \"Sinh viên SE1801 theo điểm giảm dần\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Filter with WHERE first, then sort with ORDER BY at the very end.|||Lọc bằng WHERE trước, sắp bằng ORDER BY ở cuối cùng.",
+        "ORDER BY diemTB DESC — ASC (the default) puts the lowest first.|||ORDER BY diemTB DESC — ASC (mặc định) đặt thấp nhất lên đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT hoTen, diemTB\nFROM SinhVien\nWHERE maLop = 'SE1801'\n  AND diemTB IS NOT NULL    -- NULL would sort first on SQL Server, last on PostgreSQL\nORDER BY diemTB DESC;\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SQL evaluates FROM → WHERE → SELECT → ORDER BY. Without ORDER BY the row order is not guaranteed at all. Excluding NULL scores also avoids the one place where SQL Server and PostgreSQL disagree (where NULL goes when sorting).</p>",
+      "solutionExplanationHtmlVi": "<p>SQL chạy FROM → WHERE → SELECT → ORDER BY. Không có ORDER BY thì thứ tự dòng không được đảm bảo. Bỏ điểm NULL còn tránh được chỗ SQL Server và PostgreSQL khác nhau (NULL đứng đâu khi sắp).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "SE1801 students by score, descending|||Sinh viên SE1801 theo điểm giảm dần",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "hoTen",
+                "diemTB"
+              ],
+              "hang": [
+                [
+                  "Nguyễn Văn Cường",
+                  8.5
+                ],
+                [
+                  "Trần Thị Hoa",
+                  7.2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A new SE1801 student with 5.00|||Thêm sinh viên SE1801 điểm 5.00",
+            "an": true,
+            "themCsdl": "INSERT INTO Lop (maLop, tenLop) VALUES ('SE1804', N'Kỹ thuật phần mềm 1804');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV007', N'Vũ Minh Khôi', '2004-02-02', NULL, 'SE1802'),\n  ('SV008', N'Đinh Thu Trang', '2004-08-08', 9.80, 'SE1802'),\n  ('SV009', N'Ngô Gia Bảo', '2004-04-04', 5.00, 'SE1801')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "hoTen",
+                "diemTB"
+              ],
+              "hang": [
+                [
+                  "Nguyễn Văn Cường",
+                  8.5
+                ],
+                [
+                  "Trần Thị Hoa",
+                  7.2
+                ],
+                [
+                  "Ngô Gia Bảo",
+                  5
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses ORDER BY … DESC|||Dùng ORDER BY … DESC",
+            "khop": "\\bORDER\\s+BY\\b[\\s\\S]*\\bDESC\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting DESC — the default order is ascending.|||Quên DESC — mặc định là tăng dần."
+        },
+        {
+          "loi": "Forgetting WHERE maLop = 'SE1801' — students of every class appear.|||Quên WHERE maLop = 'SE1801' — sinh viên mọi lớp đều hiện."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ORDER BY",
+          "vi": "sắp xếp kết quả",
+          "giaiThich": "Không có ORDER BY thì thứ tự dòng là KHÔNG xác định."
+        },
+        {
+          "en": "WHERE",
+          "vi": "điều kiện lọc dòng",
+          "giaiThich": "Lọc TỪNG DÒNG trước khi gộp nhóm."
+        }
+      ]
+    },
+    {
+      "title": "Half a point of bonus for SE1802, capped at 10",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "UPDATE",
+        "CASE",
+        "CHECK constraint"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "update",
+        "case",
+        "quanlylop"
+      ],
+      "problemHtml": "<p>Give every student of class <code>SE1802</code> a bonus of 0.5 point, but nobody may go above 10 (the table has <code>CHECK (diemTB &lt;= 10)</code>). Students of other classes must not change.</p>\n<details class=\"cl-luoc-do\" open><summary><b>QuanLyLop schema</b> (lesson 0.3 — full script in the <code>QuanLyLop.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 classes (SE1801, SE1802), 5 students; SV005 has no score yet (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>One UPDATE statement.</li>\n  <li>A student at 9.80 ends at 10.00, not 10.30.</li>\n  <li>A NULL score stays NULL.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cộng 0,5 điểm thưởng cho mọi sinh viên lớp <code>SE1802</code>, nhưng không ai được vượt 10 (bảng có <code>CHECK (diemTB &lt;= 10)</code>). Sinh viên lớp khác giữ nguyên.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ QuanLyLop</b> (bài 0.3 — script đầy đủ ở tab <code>QuanLyLop.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 lớp (SE1801, SE1802), 5 sinh viên; SV005 chưa có điểm (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu UPDATE.</li>\n  <li>Sinh viên đang 9.80 thành 10.00, không phải 10.30.</li>\n  <li>Điểm NULL vẫn là NULL.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "maSV  | diemTB\n------+-------\nSV001 | 8.5   \nSV002 | 7.2   \nSV005 | NULL  \nSV003 | 7.3   \nSV004 | 9.6   ",
+          "explanation": "Expected result of check \"Scores of every student after the bonus\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Điểm mọi sinh viên sau khi cộng\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Without a cap, 9.80 + 0.5 breaks the CHECK and the WHOLE UPDATE fails (0 rows change).|||Không chặn trần, 9.80 + 0.5 vi phạm CHECK và CẢ câu UPDATE thất bại (0 dòng đổi).",
+        "SET diemTB = CASE WHEN diemTB + 0.5 > 10 THEN 10 ELSE diemTB + 0.5 END"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE SinhVien\nSET diemTB = CASE WHEN diemTB + 0.5 > 10 THEN 10    -- cap at 10\n                  ELSE diemTB + 0.5 END             -- NULL + 0.5 is NULL: an ungraded student stays ungraded\nWHERE maLop = 'SE1802';\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A statement is atomic: if one row would violate a constraint, no row changes. CASE computes the capped value per row, and NULL + 0.5 = NULL, so ungraded students stay ungraded.</p>",
+      "solutionExplanationHtmlVi": "<p>Một câu lệnh là nguyên tử: chỉ một dòng vi phạm ràng buộc là không dòng nào đổi. CASE tính giá trị đã chặn trần cho từng dòng, và NULL + 0.5 = NULL nên người chưa có điểm vẫn chưa có điểm.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Scores of every student after the bonus|||Điểm mọi sinh viên sau khi cộng",
+            "kiemTra": "SELECT maSV, diemTB FROM SinhVien",
+            "mongDoi": {
+              "cot": [
+                "maSV",
+                "diemTB"
+              ],
+              "hang": [
+                [
+                  "SV001",
+                  8.5
+                ],
+                [
+                  "SV002",
+                  7.2
+                ],
+                [
+                  "SV005",
+                  null
+                ],
+                [
+                  "SV003",
+                  7.3
+                ],
+                [
+                  "SV004",
+                  9.6
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "With a 9.80 student: capped at 10, NULL stays NULL|||Có người 9.80: chặn ở 10, NULL giữ NULL",
+            "kiemTra": "SELECT maSV, diemTB FROM SinhVien",
+            "an": true,
+            "themCsdl": "INSERT INTO Lop (maLop, tenLop) VALUES ('SE1804', N'Kỹ thuật phần mềm 1804');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV007', N'Vũ Minh Khôi', '2004-02-02', NULL, 'SE1802'),\n  ('SV008', N'Đinh Thu Trang', '2004-08-08', 9.80, 'SE1802'),\n  ('SV009', N'Ngô Gia Bảo', '2004-04-04', 5.00, 'SE1801')",
+            "mongDoi": {
+              "cot": [
+                "maSV",
+                "diemTB"
+              ],
+              "hang": [
+                [
+                  "SV001",
+                  8.5
+                ],
+                [
+                  "SV002",
+                  7.2
+                ],
+                [
+                  "SV005",
+                  null
+                ],
+                [
+                  "SV009",
+                  5
+                ],
+                [
+                  "SV003",
+                  7.3
+                ],
+                [
+                  "SV004",
+                  9.6
+                ],
+                [
+                  "SV007",
+                  null
+                ],
+                [
+                  "SV008",
+                  10
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses UPDATE … WHERE|||Dùng UPDATE … WHERE",
+            "khop": "\\bUPDATE\\b[\\s\\S]*\\bWHERE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "SET diemTB = diemTB + 0.5 with no cap — fine on the sample data, but the hidden check has a 9.80 student and the UPDATE is rejected by the CHECK constraint.|||SET diemTB = diemTB + 0.5 không chặn trần — dữ liệu mẫu thì qua, nhưng kiểm ẩn có người 9.80 và CHECK từ chối cả câu UPDATE."
+        },
+        {
+          "loi": "No WHERE — every class gets the bonus.|||Không WHERE — lớp nào cũng được cộng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DML",
+          "vi": "ngôn ngữ thao tác dữ liệu",
+          "giaiThich": "INSERT, UPDATE, DELETE."
+        },
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        },
+        {
+          "en": "CASE expression",
+          "vi": "biểu thức CASE",
+          "giaiThich": "CASE WHEN điều kiện THEN giá trị … ELSE … END — chọn giá trị theo điều kiện, dùng được trong SELECT, SET, ORDER BY."
+        }
+      ]
+    },
+    {
+      "title": "Delete class SE1801 safely",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "DELETE",
+        "foreign key",
+        "order of deletes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "delete",
+        "foreign-key",
+        "quanlylop"
+      ],
+      "problemHtml": "<p>Class <code>SE1801</code> is closed: remove it <b>and its students</b>. The foreign key has no ON DELETE CASCADE, so <code>DELETE FROM Lop WHERE maLop = 'SE1801'</code> alone is rejected while students still point at it.</p>\n<details class=\"cl-luoc-do\" open><summary><b>QuanLyLop schema</b> (lesson 0.3 — full script in the <code>QuanLyLop.sql</code> tab)</summary><table><thead><tr><th>Table</th><th>Columns</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 classes (SE1801, SE1802), 5 students; SV005 has no score yet (NULL).</p></details>\n<h4>Requirements</h4>\n<ul>\n  <li>Two DELETE statements in the right order.</li>\n  <li>Class SE1802 and its students must stay.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lớp <code>SE1801</code> giải thể: xoá lớp <b>và các sinh viên của lớp</b>. Khoá ngoại không có ON DELETE CASCADE nên chỉ <code>DELETE FROM Lop WHERE maLop = 'SE1801'</code> sẽ bị từ chối khi còn sinh viên trỏ tới.</p>\n<details class=\"cl-luoc-do\" open><summary><b>Lược đồ QuanLyLop</b> (bài 0.3 — script đầy đủ ở tab <code>QuanLyLop.sql</code>)</summary><table><thead><tr><th>Bảng</th><th>Cột</th></tr></thead><tbody><tr><td><code>Lop</code></td><td><span style=\"text-decoration:underline\">maLop</span> VARCHAR(10), tenLop NVARCHAR(50)</td></tr><tr><td><code>SinhVien</code></td><td><span style=\"text-decoration:underline\">maSV</span> VARCHAR(10), hoTen NVARCHAR(50), ngaySinh DATE, diemTB DECIMAL(4,2) NULL (CHECK 0–10), <i>maLop</i> → Lop NOT NULL</td></tr></tbody></table><p>2 lớp (SE1801, SE1802), 5 sinh viên; SV005 chưa có điểm (NULL).</p></details>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai câu DELETE theo đúng thứ tự.</li>\n  <li>Lớp SE1802 và sinh viên của nó phải còn nguyên.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "maLop \n------\nSE1802",
+          "explanation": "Expected result of check \"Remaining classes\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Các lớp còn lại\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "A foreign key also blocks deleting a parent that still has children.|||Khoá ngoại cũng chặn xoá dòng cha khi còn dòng con.",
+        "Delete the SinhVien rows of SE1801 first, then the Lop row.|||Xoá các dòng SinhVien của SE1801 trước, rồi đến dòng Lop."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "DELETE FROM SinhVien WHERE maLop = 'SE1801';   -- children first\nDELETE FROM Lop      WHERE maLop = 'SE1801';   -- now nobody points at the class\n"
+        },
+        {
+          "name": "QuanLyLop.sql",
+          "language": "sql",
+          "code": "-- QuanLyLop.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- QuanLyLop.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Deletes go in the reverse order of inserts: children before parents. Filtering the children by <code>maLop</code> (not by a hand-copied list of codes) keeps the statement correct whatever students the class has today. Chapter 5 shows ON DELETE CASCADE, which makes the database do the first DELETE for you.</p>",
+      "solutionExplanationHtmlVi": "<p>Xoá theo thứ tự ngược với thêm: con trước, cha sau. Lọc dòng con theo <code>maLop</code> (không phải danh sách mã chép tay) giữ câu lệnh đúng dù lớp có những ai. Chương 5 dạy ON DELETE CASCADE — để CSDL tự làm câu DELETE thứ nhất.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Lop (\n  maLop   VARCHAR(10)  NOT NULL,\n  tenLop  NVARCHAR(50) NOT NULL,\n  CONSTRAINT pk_lop PRIMARY KEY (maLop)\n);\nCREATE TABLE SinhVien (\n  maSV     VARCHAR(10)   NOT NULL,\n  hoTen    NVARCHAR(50)  NOT NULL,\n  ngaySinh DATE          NULL,\n  diemTB   DECIMAL(4,2)  NULL,\n  maLop    VARCHAR(10)   NOT NULL,\n  CONSTRAINT pk_sinhvien PRIMARY KEY (maSV),\n  CONSTRAINT fk_sinhvien_lop FOREIGN KEY (maLop) REFERENCES Lop(maLop),\n  CONSTRAINT ck_sinhvien_diem CHECK (diemTB IS NULL OR (diemTB >= 0 AND diemTB <= 10))\n);\nINSERT INTO Lop (maLop, tenLop) VALUES\n  ('SE1801', N'Kỹ thuật phần mềm 1801'),\n  ('SE1802', N'Kỹ thuật phần mềm 1802');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV001', N'Nguyễn Văn Cường', '2004-03-12', 8.50, 'SE1801'),\n  ('SV002', N'Trần Thị Hoa',     '2004-07-25', 7.20, 'SE1801'),\n  ('SV003', N'Lê Văn Bình',      '2004-01-30', 6.80, 'SE1802'),\n  ('SV004', N'Phạm Thị Mai',     '2004-11-02', 9.10, 'SE1802'),\n  ('SV005', N'Hoàng Văn Đức',    '2004-05-18', NULL, 'SE1801');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Remaining classes|||Các lớp còn lại",
+            "kiemTra": "SELECT maLop FROM Lop",
+            "mongDoi": {
+              "cot": [
+                "maLop"
+              ],
+              "hang": [
+                [
+                  "SE1802"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Remaining students|||Các sinh viên còn lại",
+            "kiemTra": "SELECT maSV, maLop FROM SinhVien",
+            "mongDoi": {
+              "cot": [
+                "maSV",
+                "maLop"
+              ],
+              "hang": [
+                [
+                  "SV003",
+                  "SE1802"
+                ],
+                [
+                  "SV004",
+                  "SE1802"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: a newly added SE1801 student is removed too|||Ẩn: sinh viên SE1801 mới thêm cũng bị xoá",
+            "kiemTra": "SELECT maSV, maLop FROM SinhVien",
+            "an": true,
+            "themCsdl": "INSERT INTO Lop (maLop, tenLop) VALUES ('SE1804', N'Kỹ thuật phần mềm 1804');\nINSERT INTO SinhVien (maSV, hoTen, ngaySinh, diemTB, maLop) VALUES\n  ('SV007', N'Vũ Minh Khôi', '2004-02-02', NULL, 'SE1802'),\n  ('SV008', N'Đinh Thu Trang', '2004-08-08', 9.80, 'SE1802'),\n  ('SV009', N'Ngô Gia Bảo', '2004-04-04', 5.00, 'SE1801')",
+            "mongDoi": {
+              "cot": [
+                "maSV",
+                "maLop"
+              ],
+              "hang": [
+                [
+                  "SV003",
+                  "SE1802"
+                ],
+                [
+                  "SV004",
+                  "SE1802"
+                ],
+                [
+                  "SV007",
+                  "SE1802"
+                ],
+                [
+                  "SV008",
+                  "SE1802"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Deleting the class first — \"conflicted with the REFERENCE constraint fk_sinhvien_lop\".|||Xoá lớp trước — \"conflicted with the REFERENCE constraint fk_sinhvien_lop\"."
+        },
+        {
+          "loi": "Listing the students by code (SV001, SV002, SV005) — any student added later stays behind and the class delete fails again (hidden check).|||Liệt kê sinh viên theo mã (SV001, SV002, SV005) — sinh viên thêm sau còn sót và câu xoá lớp lại lỗi (kiểm ẩn)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "DML",
+          "vi": "ngôn ngữ thao tác dữ liệu",
+          "giaiThich": "INSERT, UPDATE, DELETE."
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        }
+      ]
+    }
+  ]
+}

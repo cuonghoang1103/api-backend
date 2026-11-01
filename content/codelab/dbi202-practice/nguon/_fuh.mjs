@@ -163,13 +163,13 @@ INSERT INTO tblDependent (depName, empSSN, depSex, depBirthdate, depRelationship
 
 /** Lược đồ (HTML) chèn vào mọi đề dùng FUHCompany. Khoá chính gạch chân, khoá ngoại in nghiêng. */
 const BANG = [
-  ['tblEmployee', '<u>empSSN</u> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee'],
-  ['tblDepartment', '<u>depNum</u> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE'],
-  ['tblProject', '<u>proNum</u> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment'],
-  ['tblWorksOn', '<u><i>empSSN</i>, <i>proNum</i></u>, workHours DECIMAL(5,1)'],
-  ['tblLocation', '<u>locNum</u> INT, locName NVARCHAR(50) UNIQUE'],
-  ['tblDepLocation', '<u><i>depNum</i>, <i>locNum</i></u>'],
-  ['tblDependent', '<u><i>empSSN</i>, depName</u> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)'],
+  ['tblEmployee', '<span style="text-decoration:underline">empSSN</span> DECIMAL(18,0), empName NVARCHAR(50), empAddress NVARCHAR(100), empSalary DECIMAL(10,0), empSex CHAR(1) (F/M), empBirthdate DATE, <i>depNum</i> → tblDepartment, <i>supervisorSSN</i> → tblEmployee'],
+  ['tblDepartment', '<span style="text-decoration:underline">depNum</span> INT, depName NVARCHAR(50) UNIQUE, <i>mgrSSN</i> → tblEmployee, mgrAssDate DATE'],
+  ['tblProject', '<span style="text-decoration:underline">proNum</span> INT, proName NVARCHAR(50), <i>locNum</i> → tblLocation, <i>depNum</i> → tblDepartment'],
+  ['tblWorksOn', '<span style="text-decoration:underline"><i>empSSN</i>, <i>proNum</i></span>, workHours DECIMAL(5,1)'],
+  ['tblLocation', '<span style="text-decoration:underline">locNum</span> INT, locName NVARCHAR(50) UNIQUE'],
+  ['tblDepLocation', '<span style="text-decoration:underline"><i>depNum</i>, <i>locNum</i></span>'],
+  ['tblDependent', '<span style="text-decoration:underline"><i>empSSN</i>, depName</span> NVARCHAR(50), depSex CHAR(1), depBirthdate DATE, depRelationship NVARCHAR(30)'],
 ];
 const bangHtml = (tieu) => `<table><thead><tr><th>${tieu[0]}</th><th>${tieu[1]}</th></tr></thead><tbody>${BANG.map(([t, c]) => `<tr><td><code>${t}</code></td><td>${c}</td></tr>`).join('')}</tbody></table>`;
 export const LUOC_DO_FUH = {

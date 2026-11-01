@@ -1016,6 +1016,11 @@ PASS  API9 Inventory         old unversioned path announces its end
   <li>Resolve host names before checking addresses; refuse redirects.</li>
   <li>Keep the audit in your test suite.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-3-dau-vao-doc-hai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 9.3 — Input is the enemy: ReDoS, prototype pollution, body limits, SSRF</span><span class="lc-sub">The Node.js course runs this on a real Express server and measures it. Same: SSRF: the server fetches a URL for the user and reaches what the attacker cannot; the fix is https only, check the resolved IP, never follow a redirect blindly. There you add: internal secrets read through a preview route, an allow-list that a single 302 walks around, re-checking every hop with redirect: 'manual', and new URL() normalising 127.1 / 2130706433 / 0x7f.0.0.1 — plus ReDoS, prototype pollution and body limits measured. This lesson adds what that one does not: a complete safeFetch on LabFlow (DNS resolution, private ranges refused, 3 s timeout) and the whole OWASP API Top 10 as an automatic audit.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1203,6 +1208,11 @@ PASS  API9 Inventory         old unversioned path announces its end
   <li>Phân giải tên miền trước khi kiểm địa chỉ; từ chối chuyển hướng.</li>
   <li>Giữ bộ kiểm trong bộ test của bạn.</li>
 </ul>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-3-dau-vao-doc-hai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 9.3 — Đầu vào là kẻ thù: ReDoS, ô nhiễm nguyên mẫu, giới hạn thân request, SSRF</span><span class="lc-sub">Khoá Node.js chạy đúng phần này trên một server Express thật và đo nó. Giống: SSRF: server đi lấy một URL giùm người dùng và với tới chỗ kẻ tấn công không với tới được; cách chặn là chỉ https, kiểm IP sau khi phân giải, không đi theo chuyển hướng mù quáng. Ở đó học thêm: bí mật nội bộ bị đọc qua route xem trước, một danh sách trắng bị cú 302 đi vòng, kiểm lại từng chặng bằng redirect: 'manual', và new URL() chuẩn hoá 127.1 / 2130706433 / 0x7f.0.0.1 — cùng ReDoS, ô nhiễm nguyên mẫu và giới hạn thân request đo thật. Bài này có thứ bài kia không có: một safeFetch đầy đủ trên LabFlow (phân giải DNS, chặn dải nội bộ, timeout 3 s) và cả OWASP API Top 10 thành bộ kiểm tự động.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -1377,6 +1387,11 @@ Access-Control-Allow-Credentials: true</div>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 8.4 — Cookies, CSRF, revocation and rate limiting</span><span class="lc-sub">The Node.js course builds this into a real API and measures it. Same: what a browser sends on its own and what it lets a page read; Bearer tokens have no CSRF surface. There you add: the cookie side: HttpOnly vs localStorage in a real browser, a SameSite matrix in Chromium 149, double submit, and logging out everywhere with tokenVersion. This lesson adds what that one does not: the CORS side in Chromium: a stranger's GET still reaches the server, a JSON POST stops at the preflight, and the reflect-with-credentials mistake.</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 9.1 — The perimeter: security headers, CSP and CORS</span><span class="lc-sub">The Node.js course runs this on a real Express server and measures it. Same: CORS only decides who may READ a response — a stranger's request still reaches the server; and an allow-list with Vary: Origin, never reflect-with-credentials. There you add: the headers the cors package really sends for four configurations (the rejected origin still gets 204 to its preflight), a POST that moves money on a server with no CORS at all, a shared cache that serves the wrong origin without Vary, and helmet's 12 headers. This lesson adds what that one does not: the same rules measured in a real Chromium: a stranger's GET reached the server, a JSON POST stopped at the preflight, plus CSRF.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1540,6 +1555,11 @@ Access-Control-Allow-Credentials: true</div>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-8-4-cookie-csrf-thu-hoi" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 8.4 — Cookie, CSRF, thu hồi phiên và chặn dò mật khẩu</span><span class="lc-sub">Khoá Node.js dựng đúng phần này vào một API thật và đo nó. Giống: trình duyệt tự gửi gì và cho trang đọc gì; token Bearer không có bề mặt CSRF. Ở đó học thêm: phía cookie: HttpOnly so với localStorage trong trình duyệt thật, ma trận SameSite trong Chromium 149, double submit, và đăng xuất mọi nơi bằng tokenVersion. Bài này có thứ bài kia không có: phía CORS trong Chromium: GET của người lạ vẫn tới server, POST JSON dừng ở preflight, và lỗi phản chiếu kèm credentials.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-1-header-csp-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 9.1 — Đường biên: header bảo mật, CSP và CORS</span><span class="lc-sub">Khoá Node.js chạy đúng phần này trên một server Express thật và đo nó. Giống: CORS chỉ quyết định ai được ĐỌC phản hồi — request của người lạ vẫn tới server; và danh sách trắng kèm Vary: Origin, không bao giờ phản chiếu kèm credentials. Ở đó học thêm: header mà gói cors thật sự gửi cho bốn cấu hình (origin bị từ chối vẫn nhận 204 ở preflight), một POST chuyển tiền trên server không cấu hình CORS gì cả, một cache dùng chung trả nhầm origin khi thiếu Vary, và 12 header của helmet. Bài này có thứ bài kia không có: cùng các luật đó đo trong Chromium thật: GET của người lạ tới được server, POST JSON dừng ở preflight, cộng thêm CSRF.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>

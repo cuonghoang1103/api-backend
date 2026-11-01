@@ -112,6 +112,11 @@ diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// 
 <a class="link-card" href="https://12factor.net/config" target="_blank" rel="noopener"><span class="lc-ico">📗</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — config</span><span class="lc-sub">12factor.net · Why configuration belongs in the environment, and the limits of that</span></span></a>
 <a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">CuongThai course — Docker</span><span class="lc-sub">Build arguments versus runtime environment, and what ends up in an image layer</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Commit a secret, remove it, then find it again in the history</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-4-bi-mat-va-phu-thuoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 9.4 — Secrets, dependencies and what your errors give away</span><span class="lc-sub">The Node.js course runs this on a real Express server and measures it. Same: secrets reach the process at runtime, never through git or the image; generate them, rotate them. There you add: why a secret must be 32 random bytes (measured cracking speed), NEXT_PUBLIC_* as a public key, gitleaks with a narrow tested exception, and least privilege against a malicious dependency. This lesson adds what that one does not: four ways to get secrets in, ranked, failing at startup instead of at 3 a.m., documentation drift measured on this repo, and rotation as the real goal.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -206,6 +211,11 @@ diff /tmp/dang-doc /tmp/dang-khai || exit 1        <span class="tok-comment">// 
 <a class="link-card" href="https://12factor.net/config" target="_blank" rel="noopener"><span class="lc-ico">📗</span><span class="lc-body"><span class="lc-title">The Twelve-Factor App — cấu hình</span><span class="lc-sub">12factor.net · Vì sao cấu hình thuộc về môi trường, và giới hạn của điều đó</span></span></a>
 <a class="link-card" href="/courses/docker/learn${REF}"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Docker</span><span class="lc-sub">Tham số lúc dựng so với biến môi trường lúc chạy, và cái gì rốt cuộc nằm lại trong một lớp ảnh</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Commit một bí mật, gỡ nó ra, rồi tìm lại nó trong lịch sử</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-4-bi-mat-va-phu-thuoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 9.4 — Bí mật, phụ thuộc, và những gì lỗi của bạn khai ra</span><span class="lc-sub">Khoá Node.js chạy đúng phần này trên một server Express thật và đo nó. Giống: bí mật tới tiến trình lúc chạy, không bao giờ qua git hay image; sinh ra bằng máy, xoay được. Ở đó học thêm: vì sao bí mật phải là 32 byte ngẫu nhiên (tốc độ bẻ đo thật), NEXT_PUBLIC_* là khoá công khai, gitleaks với ngoại lệ hẹp đã kiểm, và quyền tối thiểu trước một dependency độc. Bài này có thứ bài kia không có: bốn cách đưa bí mật vào xếp hạng, hỏng ngay lúc khởi động thay vì lúc ba giờ sáng, tài liệu trôi dạt đo trên chính kho mã này, và xoay vòng là mục đích thật.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

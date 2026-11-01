@@ -552,6 +552,11 @@ if (upload.length !== signature.length || !timingSafeEqual(signature, upload)) {
 <a class="link-card" href="https://docs.stripe.com/webhooks#verify-manually" target="_blank" rel="noopener"><span class="lc-ico">🪝</span><span class="lc-body"><span class="lc-title">Stripe — verifying webhook signatures</span><span class="lc-sub">docs.stripe.com · Timestamp, raw body and constant-time compare, done correctly</span></span></a>
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">🗄️</span><span class="lc-body"><span class="lc-title">OWASP — Cryptographic Storage</span><span class="lc-sub">cheatsheetseries.owasp.org · Which hash for which purpose, including tokens versus passwords</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Recover a token one byte at a time from timing, then close the channel two different ways</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-4-bi-mat-va-phu-thuoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 9.4 — Secrets, dependencies and what your errors give away</span><span class="lc-sub">The Node.js course runs this on a real Express server and measures it. Same: comparing secrets with === leaks timing; timingSafeEqual throws on different lengths; better still, compare hashes. There you add: the same rule beside a weak JWT secret cracked from one token (under 1 ms; the raw HMAC guesses ~880,000 secrets/s on one core), what a 500 with err.message gives away, and a dependency that steals the environment at runtime. This lesson adds what that one does not: the leak actually measured, why a lookup beats a comparison, and where this bug really appears: webhook signatures.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -670,6 +675,11 @@ if (upload.length !== signature.length || !timingSafeEqual(signature, upload)) {
 <a class="link-card" href="https://docs.stripe.com/webhooks#verify-manually" target="_blank" rel="noopener"><span class="lc-ico">🪝</span><span class="lc-body"><span class="lc-title">Stripe — xác minh chữ ký webhook</span><span class="lc-sub">docs.stripe.com · Dấu thời gian, thân thô và so sánh thời gian hằng, làm đúng</span></span></a>
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">🗄️</span><span class="lc-body"><span class="lc-title">OWASP — Cryptographic Storage</span><span class="lc-sub">cheatsheetseries.owasp.org · Hàm băm nào cho mục đích nào, kể cả token đối lại mật khẩu</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Khôi phục một token từng byte một bằng thời gian, rồi bịt cái kênh đó theo hai cách khác nhau</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-4-bi-mat-va-phu-thuoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 9.4 — Bí mật, phụ thuộc, và những gì lỗi của bạn khai ra</span><span class="lc-sub">Khoá Node.js chạy đúng phần này trên một server Express thật và đo nó. Giống: so bí mật bằng === làm rò thời gian; timingSafeEqual ném lỗi khi khác độ dài; tốt hơn nữa là so bản băm. Ở đó học thêm: cùng luật đó đặt cạnh một bí mật JWT yếu bị bẻ từ một token (dưới 1 ms; HMAC thô đoán ~880.000 bí mật/giây trên một nhân), lỗi 500 kèm err.message khai gì, và một dependency lấy cắp biến môi trường lúc chạy. Bài này có thứ bài kia không có: chỗ rò được đo thật, vì sao tra cứu tốt hơn so sánh, và nơi con bug này thật sự xuất hiện: chữ ký webhook.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

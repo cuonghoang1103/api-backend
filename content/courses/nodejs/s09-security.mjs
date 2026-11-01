@@ -110,6 +110,7 @@ upgrade-insecure-requests</div>
 
 --- cors({ origin: ['https://cuongthai.com'] })  ← danh sách trắng ---
   GET  200  ACAO=null  ACAC=true  Vary=Origin
+  OPTIONS(preflight) 204  ACAO=null
   danh sách trắng + Origin ĐÚNG → ACAO=https://cuongthai.com</div>
 <p>Read the second block again. <code>origin: true</code> means "reflect whatever origin asked" — combined with <code>credentials: true</code> it tells the browser that <em>any</em> website may make authenticated requests to your API and read the answers. It is the single most common CORS mistake, it passes every local test, and it hands your entire authenticated API to any page your user happens to have open.</p>
 <p>The third block is broken in a different way: <code>Access-Control-Allow-Origin: *</code> together with credentials is explicitly forbidden by the spec, so the browser refuses the response. Your server thinks it is permissive; the browser treats it as an error. You get bug reports about "CORS errors" that no amount of adding origins will fix.</p>
@@ -150,6 +151,16 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 5.2: JWT, HTTPS, CORS &amp; file upload/download</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: CORS lets a React app call the API. Different: Courses explains what CORS relaxes in the Same-Origin Policy, with measurements. In this lesson we add: what helmet really does, the five headers that matter, reading CSP directive by directive, what nobody tells you about CORS, the Vary header. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-4-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.4 — CORS, CSRF and browsers: measured in a real Chromium</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: CORS only decides who may READ a response — a stranger's request still reaches the server; and an allow-list with Vary: Origin, never reflect-with-credentials. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: the headers the cors package really sends for four configurations (the rejected origin still gets 204 to its preflight), a POST that moves money on a server with no CORS at all, a shared cache that serves the wrong origin without Vary, and helmet's 12 headers. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/web-security" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Going further: the Web Security course (in preparation)</span><span class="lc-sub">The Web Security course will take the browser side of this chapter further — CSP in depth, the full XSS family, clickjacking and the rest of the OWASP Top 10 for web apps. Its lessons are not published yet; this chapter stands on its own.</span></span>
+  <span class="lc-cta">OPEN WEB SECURITY →</span>
 </a>
 </div>
 
@@ -246,6 +257,7 @@ upgrade-insecure-requests</div>
 
 --- cors({ origin: ['https://cuongthai.com'] })  ← danh sách trắng ---
   GET  200  ACAO=null  ACAC=true  Vary=Origin
+  OPTIONS(preflight) 204  ACAO=null
   danh sách trắng + Origin ĐÚNG → ACAO=https://cuongthai.com</div>
 <p>Đọc lại khối thứ hai. <code>origin: true</code> nghĩa là "phản chiếu lại bất kỳ origin nào hỏi" — cộng với <code>credentials: true</code> nó nói với trình duyệt rằng <em>bất kỳ</em> website nào cũng được gọi API của bạn kèm thông tin đăng nhập và đọc câu trả lời. Đây là lỗi CORS phổ biến nhất, nó qua mọi bài test cục bộ, và nó dâng toàn bộ API đã xác thực của bạn cho bất kỳ trang nào người dùng đang mở.</p>
 <p>Khối thứ ba hỏng theo kiểu khác: <code>Access-Control-Allow-Origin: *</code> đi cùng credentials bị chuẩn cấm tường minh, nên trình duyệt từ chối phản hồi. Máy chủ của bạn tưởng mình đang dễ tính; trình duyệt coi đó là lỗi. Kết quả là bạn nhận báo lỗi "lỗi CORS" mà thêm bao nhiêu origin cũng không sửa được.</p>
@@ -286,6 +298,16 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 5.2: JWT, HTTPS, CORS &amp; upload/download file</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: CORS cho phép app React gọi API. Khác: Courses giải thích CORS nới lỏng cái gì của Same-Origin Policy và có phép đo. Ở bài này mình học thêm: helmet thật sự làm gì, năm header quan trọng, đọc CSP từng chỉ thị, điều không ai nói về CORS, header Vary. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-4-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.4 — CORS, CSRF và trình duyệt: đo trong Chromium thật</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: CORS chỉ quyết định ai được ĐỌC phản hồi — request của người lạ vẫn tới server; và danh sách trắng kèm Vary: Origin, không bao giờ phản chiếu kèm credentials. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: header mà gói cors thật sự gửi cho bốn cấu hình (origin bị từ chối vẫn nhận 204 ở preflight), một POST chuyển tiền trên server không cấu hình CORS gì cả, một cache dùng chung trả nhầm origin khi thiếu Vary, và 12 header của helmet. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/web-security" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Đi xa hơn: khoá Web Security (đang soạn)</span><span class="lc-sub">Khoá Web Security sẽ đi sâu phía trình duyệt của chương này — CSP chi tiết, cả họ XSS, clickjacking và phần còn lại của OWASP Top 10 cho web. Các bài của khoá chưa lên; chương này tự đủ.</span></span>
+  <span class="lc-cta">MỞ KHOÁ WEB SECURITY →</span>
 </a>
 </div>
 `,
@@ -389,7 +411,7 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 <p>The trade-off is real, and the reason to prefer the render layer is that bypasses are discovered <em>after</em> your data is stored. A mutation-XSS bypass patched in DOMPurify next month protects you retroactively only if you sanitize when rendering. Sanitizing on write and trusting the column forever means the row that was "clean" under an old version stays in your database, trusted, forever.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> The stored-XSS defence lives at the render layer, in <code>frontend/src/lib/sanitizeHtml.ts</code>: a single exported <code>sanitizeHtml(dirty)</code> wrapping <code>isomorphic-dompurify</code>, called on every path that reaches <code>dangerouslySetInnerHTML</code> — Exp Hub notes and explanations, tech-trends article bodies, the rich-text editor preview. <code>isomorphic-dompurify</code> is chosen deliberately so the same import works in a client component and during server rendering (it falls back to a jsdom window on the server, native DOMPurify in the browser). YouTube embeds are <em>not</em> allowed through the HTML; Exp Hub carries a separate structured <code>youtubeUrl</code> field and builds its own iframe — which is the general pattern: when you need one dangerous element, take it out of the free-text channel and give it a typed field of its own.</p>
+<p><strong>How cuongthai.com does it.</strong> The stored-XSS defence lives at the render layer, in <code>frontend/src/lib/sanitizeHtml.ts</code>: a single exported <code>sanitizeHtml(dirty)</code> wrapping <code>isomorphic-dompurify</code>, called on the paths that render user-authored HTML — Exp Hub notes and explanations, tech-trends article bodies, the rich-text editor preview. (A grep on 01/11/2026 finds 95 <code>dangerouslySetInnerHTML</code> in the frontend; most pour HTML the code itself produced — JSON-LD with <code>&lt;</code> escaped, highlighted code, mermaid SVG. Every new one has to answer one question: can this string ever contain a user's text?) <code>isomorphic-dompurify</code> is chosen deliberately so the same import works in a client component and during server rendering (it falls back to a jsdom window on the server, native DOMPurify in the browser). YouTube embeds are <em>not</em> allowed through the HTML; Exp Hub carries a separate structured <code>youtubeUrl</code> field and builds its own iframe — which is the general pattern: when you need one dangerous element, take it out of the free-text channel and give it a typed field of its own.</p>
 </div>
 
 <div class="pitfall">
@@ -405,6 +427,11 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 <a class="link-card codelab" href="/code-lab/javascript${REF}#module-561" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 561 — Security, Error Handling, and Debugging Mastery</span><span class="lc-sub">10 bài tập: xử lý dữ liệu không tin cậy ngay trong JavaScript.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-5-cat-token-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 4.5 — Where to keep a token in the browser</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: what an XSS actually gets: an injected script runs inside the user's session whether or not it can read the token. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: a stored XSS end to end in a real Chromium (the session cookie reaches the attacker; with httpOnly the script still deletes the user's data; sanitising or CSP stops it), nine payloads judged by the browser, and what sanitising costs. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
 </div>
 
@@ -500,7 +527,7 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 <p>Đánh đổi là có thật, và lý do nên nghiêng về tầng render là: các đòn qua mặt sanitizer luôn được phát hiện SAU khi dữ liệu của bạn đã nằm trong kho. Một đòn mutation-XSS được vá trong DOMPurify tháng sau chỉ bảo vệ bạn cho dữ liệu cũ nếu bạn sanitize lúc hiển thị. Sanitize lúc ghi rồi tin tưởng cái cột đó mãi mãi nghĩa là dòng dữ liệu từng "sạch" theo phiên bản cũ sẽ nằm im trong cơ sở dữ liệu, được tin tưởng, vĩnh viễn.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Lớp chống stored XSS nằm ở tầng render, trong <code>frontend/src/lib/sanitizeHtml.ts</code>: đúng một hàm <code>sanitizeHtml(dirty)</code> bọc <code>isomorphic-dompurify</code>, được gọi trên mọi đường dẫn dẫn tới <code>dangerouslySetInnerHTML</code> — ghi chú và phần giải thích của Exp Hub, thân bài viết tech-trends, phần xem trước của trình soạn thảo rich-text. <code>isomorphic-dompurify</code> được chọn có chủ đích để cùng một câu import chạy được cả trong client component lẫn khi render phía máy chủ (trên máy chủ nó lùi về một window jsdom, trong trình duyệt thì dùng DOMPurify gốc). Nhúng YouTube <em>không</em> được cho phép đi qua HTML; Exp Hub có một trường riêng có cấu trúc là <code>youtubeUrl</code> và tự dựng iframe của nó — đó là khuôn mẫu chung: khi bạn cần đúng một phần tử nguy hiểm, hãy lôi nó ra khỏi kênh văn bản tự do và cấp cho nó một trường có kiểu riêng.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Lớp chống stored XSS nằm ở tầng render, trong <code>frontend/src/lib/sanitizeHtml.ts</code>: đúng một hàm <code>sanitizeHtml(dirty)</code> bọc <code>isomorphic-dompurify</code>, được gọi trên các đường hiển thị HTML do người dùng soạn — ghi chú và phần giải thích của Exp Hub, thân bài viết tech-trends, phần xem trước của trình soạn thảo rich-text. (Grep ngày 01/11/2026 ra 95 chỗ <code>dangerouslySetInnerHTML</code> trong frontend; phần lớn đổ HTML do chính code sinh ra — JSON-LD đã escape <code>&lt;</code>, mã tô màu, SVG mermaid. Mỗi chỗ mới phải trả lời đúng một câu: chuỗi này có bao giờ chứa chữ của người dùng không?) <code>isomorphic-dompurify</code> được chọn có chủ đích để cùng một câu import chạy được cả trong client component lẫn khi render phía máy chủ (trên máy chủ nó lùi về một window jsdom, trong trình duyệt thì dùng DOMPurify gốc). Nhúng YouTube <em>không</em> được cho phép đi qua HTML; Exp Hub có một trường riêng có cấu trúc là <code>youtubeUrl</code> và tự dựng iframe của nó — đó là khuôn mẫu chung: khi bạn cần đúng một phần tử nguy hiểm, hãy lôi nó ra khỏi kênh văn bản tự do và cấp cho nó một trường có kiểu riêng.</p>
 </div>
 
 <div class="pitfall">
@@ -516,6 +543,11 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
 <a class="link-card codelab" href="/code-lab/javascript${REF}#module-561" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 561 — Security, Error Handling, and Debugging Mastery</span><span class="lc-sub">10 bài tập: xử lý dữ liệu không tin cậy ngay trong JavaScript.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-4-5-cat-token-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 4.5 — Cất token ở đâu trong trình duyệt</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: một lỗ XSS thật sự mang lại gì: script chèn vào chạy bên trong phiên của người dùng, dù có đọc được token hay không. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: một lỗ stored XSS đầu-cuối trong Chromium thật (cookie phiên tới tay kẻ tấn công; có httpOnly script vẫn xoá dữ liệu; sanitize hoặc CSP chặn được), chín payload do trình duyệt phán, và cái giá của sanitize. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,
@@ -635,9 +667,9 @@ RSS sau 1.5 giây      : 213 MB</div>
 /preview-safe (ảnh hợp lệ)      → 200 {"ok":"sẽ đi lấy","host":"media.cuongthai.com"}
 /preview?url=file:///etc/hostname → fetch failed (undici không hỗ trợ file:)</div>
 <div class="callout danger"><p>And now the trap. The attacker gives you a URL that passes every check — a real https host they control — which answers with a <code>302</code>:</p>
-<div class="out">/preview?url=http://127.0.0.1:4406/anh.png (URL "vô hại" rồi 302 về nội bộ) →
+<div class="out">/preview-checked?url=http://localhost:4406/cat.png (host được phép, trả 302 về 127.0.0.1:4404) →
   200 {"DATABASE_URL":"postgres://prod:sieu-mat@db:5432/app","R2_SECRET":"wJalr…"}</div>
-<p><code>fetch</code> follows redirects by default, and your validation only ever saw the first URL. Checking the hostname is necessary and not sufficient.</p></div>
+<p>Measured through a route that DOES check scheme and allow-list, with the lab's <code>localhost:4406</code> standing in for the attacker's allowed https host. <code>fetch</code> follows redirects by default, and your validation only ever saw the first URL. Re-checking every hop with <code>redirect: 'manual'</code> stops the same URL at hop 1 with a 400. Checking the hostname is necessary and not sufficient.</p></div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-t">redirect: 'manual'</span><span class="lz-d">follow redirects yourself, re-validating every hop</span></div>
   <div class="lz-step"><span class="lz-t">Resolve then check the IP</span><span class="lz-d">a hostname you allow can still resolve to 127.0.0.1 or 10.0.0.0/8 — reject private ranges after DNS, and be aware of DNS rebinding between check and connect</span></div>
@@ -645,7 +677,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com handles these.</strong> Body limits: <code>express.json({ limit: '10mb' })</code> and the same for <code>urlencoded</code> in <code>src/index.ts</code> — chosen for rich-text payloads, and the reason media never travels as JSON. Outbound fetches follow the "do not take URLs" rule: the GIPHY proxy at <code>/api/v1/gifs</code> (<code>src/routes/gifs.routes.ts</code>) accepts a search term and a limit, and <em>constructs</em> the GIPHY URL server-side with a key from runtime env — the client can never influence which host is contacted. That route exists for a different reason (keeping the API key out of the browser bundle, chapter 4), and it happens to be SSRF-proof by construction. That is typical: the design that keeps secrets out of the client is usually also the design that keeps the fetch target under your control.</p>
+<p><strong>How cuongthai.com handles these.</strong> Body limits: <code>express.json({ limit: '10mb' })</code> and the same for <code>urlencoded</code> in <code>src/index.ts</code> — chosen for rich-text payloads — with bigger, route-specific parsers mounted <em>before</em> it (AI chat, whose attachments arrive as base64 inside JSON, and the agent route at 48mb), because whichever parser reads the body first decides. That is the "limit per route" rule above, in practice; ordinary media still goes through multipart (chapter 10). Outbound fetches follow the "do not take URLs" rule: the GIPHY proxy at <code>/api/v1/gifs</code> (<code>src/routes/gifs.routes.ts</code>) accepts a search term and a page offset, and <em>constructs</em> the GIPHY URL server-side with a key from runtime env — the client can never influence which host is contacted. That route exists for a different reason (keeping the API key out of the browser bundle, chapter 4), and it happens to be SSRF-proof by construction. That is typical: the design that keeps secrets out of the client is usually also the design that keeps the fetch target under your control.</p>
 </div>
 
 <div class="pitfall">
@@ -659,6 +691,11 @@ RSS sau 1.5 giây      : 213 MB</div>
 <a class="link-card exphub" href="/exp-hub${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧰</span>
   <span class="lc-body"><span class="lc-title">Exp Hub — tips and frequently used snippets</span><span class="lc-sub">Tra nhanh cú pháp zod, helmet, cors khi đang code.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-3-owasp-api" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the API Design course — lesson 6.3 — OWASP API Security Top 10 (2023) on LabFlow, as an automatic audit</span><span class="lc-sub">If you took the API Design course, this part will feel familiar. Same: SSRF: the server fetches a URL for the user and reaches what the attacker cannot; the fix is https only, check the resolved IP, never follow a redirect blindly. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: internal secrets read through a preview route, an allow-list that a single 302 walks around, re-checking every hop with redirect: 'manual', and new URL() normalising 127.1 / 2130706433 / 0x7f.0.0.1 — plus ReDoS, prototype pollution and body limits measured. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN API DESIGN LESSON →</span>
 </a>
 </div>
 
@@ -763,9 +800,9 @@ RSS sau 1.5 giây      : 213 MB</div>
 /preview-safe (ảnh hợp lệ)      → 200 {"ok":"sẽ đi lấy","host":"media.cuongthai.com"}
 /preview?url=file:///etc/hostname → fetch failed (undici không hỗ trợ file:)</div>
 <div class="callout danger"><p>Và đây là cái bẫy. Kẻ tấn công đưa cho bạn một URL vượt qua MỌI phép kiểm tra — một host https thật mà họ sở hữu — rồi host đó trả về <code>302</code>:</p>
-<div class="out">/preview?url=http://127.0.0.1:4406/anh.png (URL "vô hại" rồi 302 về nội bộ) →
+<div class="out">/preview-checked?url=http://localhost:4406/cat.png (host được phép, trả 302 về 127.0.0.1:4404) →
   200 {"DATABASE_URL":"postgres://prod:sieu-mat@db:5432/app","R2_SECRET":"wJalr…"}</div>
-<p><code>fetch</code> mặc định đi theo chuyển hướng, còn lớp kiểm tra của bạn chỉ nhìn thấy URL đầu tiên. Kiểm tên miền là cần thiết nhưng chưa đủ.</p></div>
+<p>Đo qua một route CÓ kiểm giao thức và danh sách trắng, với <code>localhost:4406</code> của lab đóng vai host https được phép của kẻ tấn công. <code>fetch</code> mặc định đi theo chuyển hướng, còn lớp kiểm tra của bạn chỉ nhìn thấy URL đầu tiên. Kiểm lại từng chặng bằng <code>redirect: 'manual'</code> thì cùng URL đó dừng ở chặng 1 với mã 400. Kiểm tên miền là cần thiết nhưng chưa đủ.</p></div>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-t">redirect: 'manual'</span><span class="lz-d">tự đi theo chuyển hướng, kiểm tra lại ở TỪNG chặng</span></div>
   <div class="lz-step"><span class="lz-t">Phân giải rồi kiểm IP</span><span class="lz-d">một tên miền bạn cho phép vẫn có thể phân giải ra 127.0.0.1 hay 10.0.0.0/8 — hãy chặn các dải IP nội bộ SAU khi phân giải DNS, và biết rằng có đòn đổi DNS giữa lúc kiểm và lúc kết nối</span></div>
@@ -773,7 +810,7 @@ RSS sau 1.5 giây      : 213 MB</div>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com xử lý mấy chuyện này thế nào.</strong> Giới hạn thân request: <code>express.json({ limit: '10mb' })</code> và tương tự cho <code>urlencoded</code> trong <code>src/index.ts</code> — chọn vì payload rich-text, và cũng là lý do media không bao giờ đi dưới dạng JSON. Các lượt fetch ra ngoài theo đúng luật "đừng nhận URL": proxy GIPHY ở <code>/api/v1/gifs</code> (<code>src/routes/gifs.routes.ts</code>) nhận một từ khoá tìm kiếm và một số lượng, rồi <em>tự dựng</em> URL GIPHY ở phía máy chủ với khoá lấy từ biến môi trường lúc chạy — client không bao giờ tác động được vào việc liên hệ với host nào. Route đó ra đời vì một lý do khác (giữ khoá API khỏi bundle của trình duyệt, chương 4), và tình cờ nó chống SSRF ngay từ thiết kế. Điều này rất điển hình: cái thiết kế giữ bí mật khỏi client thường cũng là cái thiết kế giữ đích đến của lượt fetch nằm trong tay bạn.</p>
+<p><strong>cuongthai.com xử lý mấy chuyện này thế nào.</strong> Giới hạn thân request: <code>express.json({ limit: '10mb' })</code> và tương tự cho <code>urlencoded</code> trong <code>src/index.ts</code> — chọn vì payload rich-text — cộng các parser riêng, lớn hơn, gắn <em>trước</em> nó (chat AI, nơi tệp đính kèm đi dạng base64 trong JSON, và route agent 48mb), vì parser nào đọc thân trước thì nó quyết. Đó chính là luật "giới hạn theo từng route" ở trên, áp vào thực tế; media thông thường vẫn đi multipart (chương 10). Các lượt fetch ra ngoài theo đúng luật "đừng nhận URL": proxy GIPHY ở <code>/api/v1/gifs</code> (<code>src/routes/gifs.routes.ts</code>) nhận một từ khoá tìm kiếm và một vị trí trang (offset), rồi <em>tự dựng</em> URL GIPHY ở phía máy chủ với khoá lấy từ biến môi trường lúc chạy — client không bao giờ tác động được vào việc liên hệ với host nào. Route đó ra đời vì một lý do khác (giữ khoá API khỏi bundle của trình duyệt, chương 4), và tình cờ nó chống SSRF ngay từ thiết kế. Điều này rất điển hình: cái thiết kế giữ bí mật khỏi client thường cũng là cái thiết kế giữ đích đến của lượt fetch nằm trong tay bạn.</p>
 </div>
 
 <div class="pitfall">
@@ -787,6 +824,11 @@ RSS sau 1.5 giây      : 213 MB</div>
 <a class="link-card exphub" href="/exp-hub${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧰</span>
   <span class="lc-body"><span class="lc-title">Exp Hub — mẹo và đoạn code hay dùng</span><span class="lc-sub">Tra nhanh cú pháp zod, helmet, cors khi đang code.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-6-3-owasp-api" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá API Design — bài 6.3 — OWASP API Security Top 10 (2023) trên LabFlow, thành bộ kiểm tự động</span><span class="lc-sub">Nếu bạn đã học khoá API Design thì phần này không còn lạ. Giống: SSRF: server đi lấy một URL giùm người dùng và với tới chỗ kẻ tấn công không với tới được; cách chặn là chỉ https, kiểm IP sau khi phân giải, không đi theo chuyển hướng mù quáng. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: bí mật nội bộ bị đọc qua route xem trước, một danh sách trắng bị cú 302 đi vòng, kiểm lại từng chặng bằng redirect: 'manual', và new URL() chuẩn hoá 127.1 / 2130706433 / 0x7f.0.0.1 — cùng ReDoS, ô nhiễm nguyên mẫu và giới hạn thân request đo thật. Chưa học khoá API Design cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI API DESIGN →</span>
 </a>
 </div>
 `,
@@ -809,13 +851,14 @@ RSS sau 1.5 giây      : 213 MB</div>
              <span class="tok-str">'supersecret'</span>, <span class="tok-str">'mysecretkey'</span>, <span class="tok-str">'secretkey'</span>, <span class="tok-str">'nodejs'</span>, <span class="tok-str">'admin123'</span>];
 <span class="tok-kw">for</span> (<span class="tok-kw">const</span> w <span class="tok-kw">of</span> WEAK) { <span class="tok-kw">try</span> { jwt.verify(token, w); found = w; <span class="tok-kw">break</span> } <span class="tok-kw">catch</span> {} }</code></pre>
 <div class="out">từ điển 10 từ → tìm thấy "supersecret" trong 1.04ms
-tốc độ thử: 35.465 bí mật/giây trên MỘT nhân
-vét cạn 8 ký tự thường (26^8)        = 68,2 ngày
-vét cạn 8 ký tự chữ+số (36^8)        = 2,5 năm
+tốc độ thử qua jwt.verify: 35.465 bí mật/giây trên MỘT nhân
+tốc độ thử bằng HMAC thô (cách công cụ bẻ khoá làm): 877.404/giây  ← đo lại 01/11/2026
+vét cạn 8 ký tự thường (26^8)        = 68,2 ngày qua jwt.verify · 2,8 ngày bằng HMAC thô
+vét cạn 8 ký tự chữ+số (36^8)        = 2,5 năm qua jwt.verify · 37 ngày bằng HMAC thô
 vét cạn 32 byte ngẫu nhiên (2^256)   = 1,0e+65 năm
 crypto.randomBytes(32).toString('base64url') = xUMtHMbnIi6NDoiYUqHLnNsgPLpRnGpdcZp0KD1qk6g</div>
 <p>One millisecond. And once the secret is known the attacker does not steal a session — they <em>mint</em> tokens: any user id, any role, any expiry, signed correctly. Every defence from chapter 8 (rotation, revocation, rate limiting) is bypassed, because from the server's point of view these tokens are genuine.</p>
-<p>Notice the third line too: an eight-character alphanumeric password, the kind a human invents, falls in 2.5 years on one core — which means days on rented GPUs. The bottom line is the only acceptable one: <strong>32 bytes from a CSPRNG, generated by a machine, never typed by a person.</strong></p>
+<p>Notice the speed lines too. A cracker does not call <code>jwt.verify</code>: it recomputes the HMAC of <code>header.payload</code> and compares — about 22× faster on the same core. At that speed an eight-character alphanumeric password, the kind a human invents, falls in about 37 days on ONE core — which means hours to days on rented GPUs. The bottom line is the only acceptable one: <strong>32 bytes from a CSPRNG, generated by a machine, never typed by a person.</strong></p>
 <div class="callout"><p>The same rule applies to every secret with the same shape: session keys, webhook signing secrets, internal service tokens, cron trigger keys. If a human could remember it, it is too short.</p></div>
 
 <h3>Measurement 2 — comparing secrets</h3>
@@ -840,7 +883,7 @@ nên trả     : {"error":"INTERNAL","requestId":"90779998-0e6f-4c9d-9538-bd4b59
   <div class="lz-step"><span class="lz-t">Return almost nothing</span><span class="lz-d">a stable error code and the same request id — enough for a user to quote in a support ticket</span></div>
   <div class="lz-step"><span class="lz-t">Distinguish 4xx from 5xx</span><span class="lz-d">a validation error <em>should</em> be specific (lesson 6.3); an internal error should not be</span></div>
 </div>
-<p>The request id is what makes this workable: the user sends you eight characters, you find the full stack in the log. Production on this project sets it as <code>X-Request-ID</code> on every response — you can see it with <code>curl -sI https://cuongthai.com/api/v1/courses</code>.</p>
+<p>The request id is what makes this workable: the user sends you twelve characters (<code>nanoid(12)</code> in <code>src/index.ts</code>), you find the full stack in the log. Production on this project sets it as <code>X-Request-ID</code> on every response — you can see it with <code>curl -sI https://cuongthai.com/api/v1/courses</code>.</p>
 
 <h3>Measurement 4 — how much code you did not write</h3>
 <p>The chapter 8 sandbox — a small Express + Prisma + auth app with <strong>nine</strong> direct dependencies:</p>
@@ -880,7 +923,7 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com handles secrets.</strong> Production runtime env lives in <code>/opt/cuongthai/.env</code> on the VPS; <code>deploy.sh</code> loads it on every deploy and the rsync step <strong>excludes</strong> <code>.env*</code>, so values put there survive deploys permanently and never travel from a laptop. Nothing secret is baked into an image. The repository has a <code>gitleaks</code> pre-commit hook that refuses a commit containing anything shaped like a key — including, at one point, a randomly generated refresh token printed as an example in <em>this very course</em>; the fix was an explicit allow-list in <code>.gitleaks.toml</code> for <code>content/courses/</code> and <code>content/exphub/</code>, scoped to the <code>generic-api-key</code> rule only, verified by checking that a real RSA key in the same directory is still caught. That is the right shape for a security exception: as narrow as possible, and tested in both directions.</p>
+<p><strong>How cuongthai.com handles secrets.</strong> Production runtime env lives in a <code>.env</code> file on the VPS, outside the code tree; the deploy script loads it on every deploy and never overwrites it (the fallback rsync deploy <strong>excludes</strong> <code>.env*</code>), so values put there survive deploys permanently and never travel from a laptop. Nothing secret is baked into an image. The repository has a <code>gitleaks</code> pre-commit hook that refuses a commit containing anything shaped like a key — including, at one point, a randomly generated refresh token printed as an example in <em>this very course</em>; the fix was an explicit allow-list in <code>.gitleaks.toml</code> for <code>content/(courses|exphub|exams)/</code>, scoped to the <code>generic-api-key</code> and <code>jwt</code> rules only (the exams print sample tokens on purpose, including an <code>alg: none</code> one), verified by checking that a real RSA key in the same directory is still caught. That is the right shape for a security exception: as narrow as possible, and tested in both directions.</p>
 </div>
 
 <h3>A short pre-production checklist</h3>
@@ -904,6 +947,16 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 1005 — Securing the Server (users, firewall, keys)</span><span class="lc-sub">10 bài tập: khoá SSH, tường lửa, và quyền tối thiểu trên VPS.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-3-so-sanh-hang-thoi-gian" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 1.3 — Comparing two secrets with === is a bug</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: comparing secrets with === leaks timing; timingSafeEqual throws on different lengths; better still, compare hashes. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: the same rule beside a weak JWT secret cracked from one token (under 1 ms; the raw HMAC guesses ~880,000 secrets/s on one core), what a 500 with err.message gives away, and a dependency that steals the environment at runtime. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-1-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 11.1 — Secrets: getting them to the process without touching the repo</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: secrets reach the process at runtime, never through git or the image; generate them, rotate them. Different: that lesson looks at the idea on its own; this one runs it on a real Express 5 server — and in a real Chromium where a browser is involved — and measures it. In this lesson we add: why a secret must be 32 random bytes (measured cracking speed), NEXT_PUBLIC_* as a public key, gitleaks with a narrow tested exception, and least privilege against a malicious dependency. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -917,13 +970,14 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
              <span class="tok-str">'supersecret'</span>, <span class="tok-str">'mysecretkey'</span>, <span class="tok-str">'secretkey'</span>, <span class="tok-str">'nodejs'</span>, <span class="tok-str">'admin123'</span>];
 <span class="tok-kw">for</span> (<span class="tok-kw">const</span> w <span class="tok-kw">of</span> WEAK) { <span class="tok-kw">try</span> { jwt.verify(token, w); found = w; <span class="tok-kw">break</span> } <span class="tok-kw">catch</span> {} }</code></pre>
 <div class="out">từ điển 10 từ → tìm thấy "supersecret" trong 1.04ms
-tốc độ thử: 35.465 bí mật/giây trên MỘT nhân
-vét cạn 8 ký tự thường (26^8)        = 68,2 ngày
-vét cạn 8 ký tự chữ+số (36^8)        = 2,5 năm
+tốc độ thử qua jwt.verify: 35.465 bí mật/giây trên MỘT nhân
+tốc độ thử bằng HMAC thô (cách công cụ bẻ khoá làm): 877.404/giây  ← đo lại 01/11/2026
+vét cạn 8 ký tự thường (26^8)        = 68,2 ngày qua jwt.verify · 2,8 ngày bằng HMAC thô
+vét cạn 8 ký tự chữ+số (36^8)        = 2,5 năm qua jwt.verify · 37 ngày bằng HMAC thô
 vét cạn 32 byte ngẫu nhiên (2^256)   = 1,0e+65 năm
 crypto.randomBytes(32).toString('base64url') = xUMtHMbnIi6NDoiYUqHLnNsgPLpRnGpdcZp0KD1qk6g</div>
 <p>Một phần nghìn giây. Và khi đã biết bí mật, kẻ tấn công không đi ăn cắp phiên — họ <em>tự phát hành</em> token: id người dùng nào cũng được, vai trò nào cũng được, hạn nào cũng được, ký đúng chuẩn. Mọi lớp phòng thủ của chương 8 (xoay vòng, thu hồi, chặn tần suất) bị vô hiệu, vì dưới góc nhìn của máy chủ những token đó là thật.</p>
-<p>Cũng để ý dòng thứ ba: một mật khẩu tám ký tự chữ và số, kiểu do con người nghĩ ra, gục sau 2,5 năm trên MỘT nhân — nghĩa là vài ngày trên GPU thuê. Dòng cuối mới là dòng duy nhất chấp nhận được: <strong>32 byte từ bộ sinh ngẫu nhiên mật mã, do máy sinh ra, không bao giờ do người gõ.</strong></p>
+<p>Cũng để ý hai dòng tốc độ. Công cụ bẻ khoá không gọi <code>jwt.verify</code>: nó tính lại HMAC của <code>header.payload</code> rồi so — nhanh hơn khoảng 22 lần trên cùng một nhân. Ở tốc độ đó, một mật khẩu tám ký tự chữ và số, kiểu do con người nghĩ ra, gục sau khoảng 37 ngày trên MỘT nhân — nghĩa là vài giờ tới vài ngày trên GPU thuê. Dòng cuối mới là dòng duy nhất chấp nhận được: <strong>32 byte từ bộ sinh ngẫu nhiên mật mã, do máy sinh ra, không bao giờ do người gõ.</strong></p>
 <div class="callout"><p>Luật đó áp dụng cho mọi bí mật cùng hình dạng: khoá phiên, khoá ký webhook, token giữa các dịch vụ nội bộ, khoá kích hoạt cron. Nếu con người nhớ được nó thì nó quá ngắn.</p></div>
 
 <h3>Phép đo 2 — so sánh chuỗi bí mật</h3>
@@ -948,7 +1002,7 @@ nên trả     : {"error":"INTERNAL","requestId":"90779998-0e6f-4c9d-9538-bd4b59
   <div class="lz-step"><span class="lz-t">Trả ra gần như không gì</span><span class="lz-d">một mã lỗi ổn định và chính cái request id đó — đủ để người dùng dán vào phiếu hỗ trợ</span></div>
   <div class="lz-step"><span class="lz-t">Phân biệt 4xx với 5xx</span><span class="lz-d">lỗi kiểm dữ liệu thì <em>nên</em> cụ thể (bài 6.3); lỗi nội bộ thì không</span></div>
 </div>
-<p>Chính cái request id làm cho cách này chạy được: người dùng gửi bạn tám ký tự, bạn tìm ra nguyên cái stack trong log. Production của dự án này đặt nó thành header <code>X-Request-ID</code> trên mọi phản hồi — bạn nhìn thấy nó bằng <code>curl -sI https://cuongthai.com/api/v1/courses</code>.</p>
+<p>Chính cái request id làm cho cách này chạy được: người dùng gửi bạn mười hai ký tự (<code>nanoid(12)</code> trong <code>src/index.ts</code>), bạn tìm ra nguyên cái stack trong log. Production của dự án này đặt nó thành header <code>X-Request-ID</code> trên mọi phản hồi — bạn nhìn thấy nó bằng <code>curl -sI https://cuongthai.com/api/v1/courses</code>.</p>
 
 <h3>Phép đo 4 — bạn đang chạy bao nhiêu code không do mình viết</h3>
 <p>Sandbox của chương 8 — một app Express + Prisma + auth nhỏ với <strong>chín</strong> dependency trực tiếp:</p>
@@ -988,7 +1042,7 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com giữ bí mật thế nào.</strong> Biến môi trường lúc chạy của production nằm ở <code>/opt/cuongthai/.env</code> trên VPS; <code>deploy.sh</code> nạp nó ở mỗi lần deploy còn bước rsync thì <strong>loại trừ</strong> <code>.env*</code>, nên giá trị đặt ở đó sống sót qua mọi lần deploy và không bao giờ phải đi từ máy cá nhân lên. Không có gì bí mật bị nướng vào image. Repo có một hook <code>gitleaks</code> chạy trước mỗi commit, từ chối mọi commit chứa thứ gì có hình dạng của một cái khoá — kể cả, ở một thời điểm, một refresh token sinh ngẫu nhiên được in ra làm ví dụ trong <em>chính khoá học này</em>; cách sửa là một danh sách miễn trừ tường minh trong <code>.gitleaks.toml</code> cho <code>content/courses/</code> và <code>content/exphub/</code>, chỉ giới hạn ở đúng luật <code>generic-api-key</code>, và được kiểm chứng bằng cách thử đặt một khoá RSA thật vào cùng thư mục để chắc chắn nó VẪN bị bắt. Đó là hình dạng đúng của một ngoại lệ bảo mật: hẹp hết mức có thể, và được kiểm cả hai chiều.</p>
+<p><strong>cuongthai.com giữ bí mật thế nào.</strong> Biến môi trường lúc chạy của production nằm trong một file <code>.env</code> trên VPS, ngoài cây mã; script deploy nạp nó ở mỗi lần deploy và không bao giờ ghi đè nó (đường deploy dự phòng bằng rsync thì <strong>loại trừ</strong> <code>.env*</code>), nên giá trị đặt ở đó sống sót qua mọi lần deploy và không bao giờ phải đi từ máy cá nhân lên. Không có gì bí mật bị nướng vào image. Repo có một hook <code>gitleaks</code> chạy trước mỗi commit, từ chối mọi commit chứa thứ gì có hình dạng của một cái khoá — kể cả, ở một thời điểm, một refresh token sinh ngẫu nhiên được in ra làm ví dụ trong <em>chính khoá học này</em>; cách sửa là một danh sách miễn trừ tường minh trong <code>.gitleaks.toml</code> cho <code>content/(courses|exphub|exams)/</code>, chỉ giới hạn ở đúng hai luật <code>generic-api-key</code> và <code>jwt</code> (đề thi cố ý in token mẫu, kể cả một token <code>alg: none</code>), và được kiểm chứng bằng cách thử đặt một khoá RSA thật vào cùng thư mục để chắc chắn nó VẪN bị bắt. Đó là hình dạng đúng của một ngoại lệ bảo mật: hẹp hết mức có thể, và được kiểm cả hai chiều.</p>
 </div>
 
 <h3>Danh sách kiểm ngắn trước khi lên production</h3>
@@ -1011,6 +1065,16 @@ file kẻ tấn công ghi ra: [["DATABASE_URL","postgres://prod:sieu-mat@db:5432
 <a class="link-card codelab" href="/code-lab/deploy-vps${REF}#module-1005" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Module 1005 — Securing the Server (users, firewall, keys)</span><span class="lc-sub">10 bài tập: khoá SSH, tường lửa, và quyền tối thiểu trên VPS.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-1-3-so-sanh-hang-thoi-gian" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 1.3 — So sánh hai bí mật bằng === là một con bug</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: so bí mật bằng === làm rò thời gian; timingSafeEqual ném lỗi khi khác độ dài; tốt hơn nữa là so bản băm. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: cùng luật đó đặt cạnh một bí mật JWT yếu bị bẻ từ một token (dưới 1 ms; HMAC thô đoán ~880.000 bí mật/giây trên một nhân), lỗi 500 kèm err.message khai gì, và một dependency lấy cắp biến môi trường lúc chạy. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-1-bi-mat" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 11.1 — Bí mật: đưa chúng tới tiến trình mà không đụng vào kho mã</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: bí mật tới tiến trình lúc chạy, không bao giờ qua git hay image; sinh ra bằng máy, xoay được. Khác: bài đó xem ý tưởng tự thân nó; bài này chạy nó trên một server Express 5 thật — và trong Chromium thật khi có trình duyệt — rồi đo. Ở bài này mình học thêm: vì sao bí mật phải là 32 byte ngẫu nhiên (tốc độ bẻ đo thật), NEXT_PUBLIC_* là khoá công khai, gitleaks với ngoại lệ hẹp đã kiểm, và quyền tối thiểu trước một dependency độc. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,

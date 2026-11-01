@@ -1032,6 +1032,11 @@ async function call(url: string, opt: RequestInit = {}) {
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">OWASP — XSS prevention</span><span class="lc-sub">cheatsheetseries.owasp.org · The problem this whole lesson is downstream of</span></span></a>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">CuongThai course — Node.js</span><span class="lc-sub">CSP, sanitisation and a stored-XSS reproduced end to end in a real browser</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Run one XSS payload against all five storage choices and compare what it gets</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-2-xss-va-sanitize" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 9.2 — XSS: from a stranger's note to your session</span><span class="lc-sub">The Node.js course runs this on a real Express server and measures it. Same: what an XSS actually gets: an injected script runs inside the user's session whether or not it can read the token. There you add: a stored XSS end to end in a real Chromium (the session cookie reaches the attacker; with httpOnly the script still deletes the user's data; sanitising or CSP stops it), nine payloads judged by the browser, and what sanitising costs. This lesson adds what that one does not: five places to keep a token, ranked, the in-memory pattern written out, and the BFF recommendation for browsers.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1138,6 +1143,11 @@ async function call(url: string, opt: RequestInit = {}) {
 <a class="link-card" href="https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener"><span class="lc-ico">🚫</span><span class="lc-body"><span class="lc-title">OWASP — phòng chống XSS</span><span class="lc-sub">cheatsheetseries.owasp.org · Bài toán mà cả bài học này là hệ quả của nó</span></span></a>
 <a class="link-card" href="/courses/nodejs/learn${REF}"><span class="lc-ico">🟢</span><span class="lc-body"><span class="lc-title">Khoá CuongThai — Node.js</span><span class="lc-sub">CSP, làm sạch dữ liệu và một cú XSS lưu trữ tái hiện end-to-end trên trình duyệt thật</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Chạy MỘT payload XSS lên cả năm lựa chọn cất token và so xem nó lấy được gì</span></span></a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-9-2-xss-va-sanitize" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 9.2 — XSS: từ ghi chú của người lạ tới phiên đăng nhập của bạn</span><span class="lc-sub">Khoá Node.js chạy đúng phần này trên một server Express thật và đo nó. Giống: một lỗ XSS thật sự mang lại gì: script chèn vào chạy bên trong phiên của người dùng, dù có đọc được token hay không. Ở đó học thêm: một lỗ stored XSS đầu-cuối trong Chromium thật (cookie phiên tới tay kẻ tấn công; có httpOnly script vẫn xoá dữ liệu; sanitize hoặc CSP chặn được), chín payload do trình duyệt phán, và cái giá của sanitize. Bài này có thứ bài kia không có: năm chỗ cất token xếp hạng, mẫu giữ trong bộ nhớ viết cụ thể, và khuyến nghị BFF cho trình duyệt.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

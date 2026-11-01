@@ -1,0 +1,57 @@
+
+
+ ❯ demo/wrong-query.test.js (1 test | 1 failed) 79ms
+   × finds the button by a name that does not exist 79ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  demo/wrong-query.test.js > finds the button by a name that does not exist
+TestingLibraryElementError: Unable to find an accessible element with the role "button" and name "Register"
+
+Here are the accessible roles:
+
+  heading:
+
+  Name "Create an account":
+  <h2 />
+
+  --------------------------------------------------
+  textbox:
+
+  Name "Email":
+  <input
+    autocomplete="email"
+    id="email"
+    name="email"
+    type="email"
+  />
+
+  --------------------------------------------------
+  paragraph:
+
+  Name "":
+  <p
+    class="hint"
+    id="pw-hint"
+  />
+
+  --------------------------------------------------
+  button:
+
+  Name "Sign up":
+  <button
+    disabled=""
+    type="submit"
+  />
+
+  --------------------------------------------------
+  status:
+
+  Name "":
+  <p
+    class="status"
+    role="status"
+  />
+
+  --------------------------------------------------
+

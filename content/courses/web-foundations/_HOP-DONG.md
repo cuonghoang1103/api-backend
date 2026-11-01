@@ -20,6 +20,7 @@
 | `web-foundations/_slides.mjs` | `gallery()` (deck CHƯƠNG cũ `wf-html`…), **`walkWf()`** (deck BÀI `wf-N-M` + lời giảng EN/VI), `ma()`, `ra()`, `lienKet()`, `nguon()`, bảng `VER`. |
 | `web-foundations/_demo/<N-M>/…` | Mã ví dụ của bài (`.js` script cổ điển, `.mjs` module, `.html` trang) + output đã chụp `*.out.txt`. |
 | `web-foundations/_ma.mjs` | **SINH TỰ ĐỘNG** bởi `scripts/wf/sinh-ma.mjs`: `CODE[đường dẫn]`, `OUT[đường dẫn bỏ đuôi]`. Không sửa tay. |
+| `web-foundations/_demo/_t13/` | Dự án Vitest của Ch13 (không có node_modules). Dựng lại: chép ra scratch, `npm install`, `PATH=<node22>/bin:$PATH FORCE_COLOR=0 npx vitest run …` > `out/*.out.txt`, bỏ dòng ` RUN ` và mã màu ANSI. Thư mục `_` không bị chay-demo chạy. |
 | `scripts/wf/chay-demo.mjs` | Chạy mọi demo trong **Chromium thật** (Playwright), ghi `*.out.txt` (console + lỗi chưa bắt) và ảnh `*.png` khi trang khai `<meta name="chup">`. |
 | `scripts/slides-src/wf-N-M.mjs` | Deck bài, khuôn **`_pg-chung.mjs`** (`lamDeck({ khoa: 'Web Foundations', duong: 'courses/web-foundations', bieuTuong: '🌐', … })`), slide **tiếng Anh**. |
 | `content/_LIEN-KET-CHEO/web-foundations.md` | Bảng liên kết chéo hai chiều (FER202, PRJ301, react, testing, git, nodejs, nextjs…). |
@@ -69,3 +70,4 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 |---|---|---|
 | Ch11 | 11.1–11.5 | ✅ 01/11 — bài 32–38k chữ, deck wf-11-1…5 (63 slide, WF/v1), Code Lab 5 module × 6 đề (máy chấm trình duyệt 170/170) |
 | Ch12 | 12.1–12.4 | ✅ 01/11 — bài 34–36k chữ, ảnh chụp thật trong deck wf-12-1…4 (46 slide, WF/v1), Code Lab 4 module × 6 đề (dom + 2 js; kiểm `chiTrinhDuyet` cho var/@layer), máy chấm trình duyệt 194/194 |
+| Ch13 | 13.1–13.4 | ✅ 01/11 — bài 28–33k chữ; dự án Vitest `_demo/_t13` (Vitest 5.0.5, jsdom 30.1.3, Testing Library 10.4.2, user-event 14.6.8, Node 22.23.3, actionlint) chạy thật, output ở `_t13/out/`; deck wf-13-1…4 (47 slide); Code Lab 4 module × 6 đề (js + dom), máy chấm trình duyệt 218/218 |

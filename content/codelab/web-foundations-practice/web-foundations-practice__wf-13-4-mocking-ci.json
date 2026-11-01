@@ -1,0 +1,662 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-13-4-mocking-ci",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-13-4-mocking-ci"
+  },
+  "exercises": [
+    {
+      "title": "Tiêm fetch để test được",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "dependency injection",
+        "tham số mặc định"
+      ],
+      "prerequisites": [
+        "async/await",
+        "fetch"
+      ],
+      "tags": [
+        "javascript",
+        "testing",
+        "mock"
+      ],
+      "problemHtml": "<p><em>Bài 13.4 — Giả lập và chạy test trong CI.</em> Máy chấm KHÔNG có mạng thật: nó đưa cho bạn <code>fetch</code> giả và đồng hồ ảo (<code>setTimeout</code> và <code>Date.now()</code> chạy tức thì) — đúng những gì một test tốt làm.</p><p><code>getUserName(id)</code> đang gọi thẳng <code>fetch</code> toàn cục nên test không thay được. Thêm tham số <code>fetchFn = fetch</code> và dùng nó. Hàm gọi <code>\"/api/users/\" + id</code>, trả <code>data.name</code>. Máy chấm sẽ gọi cả có lẫn không có <code>fetchFn</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chữ ký <code>getUserName(id, fetchFn = fetch)</code>.</li>\n  <li>Gọi đúng URL /api/users/<id>.</li>\n  <li>Không truyền fetchFn ⇒ dùng fetch toàn cục.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "id: number; fetchFn?: hàm.",
+      "outputSpec": "Promise<string>.",
+      "constraints": "Không gọi fetch trực tiếp trong thân hàm.",
+      "examplesJson": [
+        {
+          "input": "await getUserName(7, fakeFetch)",
+          "output": "\"Lan\"",
+          "explanation": "fakeFetch trả { name: \"Lan\" }."
+        }
+      ],
+      "hintsJson": [
+        "async function getUserName(id, fetchFn = fetch) { … }",
+        "const res = await fetchFn(\"/api/users/\" + id); const data = await res.json(); return data.name;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — tiêm fetch\nasync function getUserName(id) {\n  const res = await fetch('/api/users/' + id);\n  const data = await res.json();\n  return data.name;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — tiêm fetch: code thật dùng fetch mặc định, test đưa hàm giả của riêng nó\nasync function getUserName(id, fetchFn = fetch) {\n  const res = await fetchFn('/api/users/' + id);\n  const data = await res.json();\n  return data.name;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tham số mặc định là cách tiêm phụ thuộc đơn giản nhất: nơi gọi thật không phải đổi gì, test thì đưa vào một hàm giả trả đúng thứ cần. Không cần vá <code>globalThis.fetch</code> — vốn dễ quên trả lại và làm hỏng test khác.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gán globalThis.fetch = … trong code — ảnh hưởng mọi nơi.</li>\n  <li>Đặt fetchFn trước id — mọi nơi gọi cũ vỡ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.4 Mocking và CI.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/guide/mocking.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "fetchGia": {
+          "/api/users/7": {
+            "status": 200,
+            "json": {
+              "id": 7,
+              "name": "Lan"
+            }
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "Uses the injected fake|||Dùng hàm giả được tiêm",
+            "chuanBi": "const reply = (status, body) => ({ ok: status >= 200 && status < 300, status, json: async () => body }); const calls = []; const fake = async (url) => { calls.push(url); return reply(200, { name: 'Minh' }); };",
+            "goi": "[await getUserName(9, fake), calls]",
+            "mongDoi": [
+              "Minh",
+              [
+                "/api/users/9"
+              ]
+            ]
+          },
+          {
+            "moTa": "Falls back to the global fetch|||Không tiêm thì dùng fetch toàn cục",
+            "goi": "await getUserName(7)",
+            "mongDoi": "Lan"
+          },
+          {
+            "moTa": "Declares fetchFn = fetch|||Khai báo fetchFn = fetch",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "fetchFn\\s*=\\s*fetch"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán globalThis.fetch = … trong code — ảnh hưởng mọi nơi."
+        },
+        {
+          "loi": "Đặt fetchFn trước id — mọi nơi gọi cũ vỡ."
+        }
+      ]
+    },
+    {
+      "title": "Hàm giả tự ghi lời gọi (vi.fn tí hon)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "spy",
+        "closure",
+        "hàm cũng là object"
+      ],
+      "prerequisites": [
+        "closure",
+        "rest parameter"
+      ],
+      "tags": [
+        "javascript",
+        "testing",
+        "mock"
+      ],
+      "problemHtml": "<p><em>Bài 13.4 — Giả lập và chạy test trong CI.</em> Máy chấm KHÔNG có mạng thật: nó đưa cho bạn <code>fetch</code> giả và đồng hồ ảo (<code>setTimeout</code> và <code>Date.now()</code> chạy tức thì) — đúng những gì một test tốt làm.</p><p>Viết <code>createSpy()</code> — phiên bản nhỏ của <code>vi.fn()</code>: trả về một hàm ghi lại đối số của MỖI lần gọi vào mảng <code>spy.calls</code>; <code>spy.callCount</code> là số lần gọi; <code>spy.returns(v)</code> làm mọi lần gọi sau trả <code>v</code> (và trả lại chính spy để nối chuỗi); mặc định trả <code>undefined</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>spy.calls là mảng các mảng đối số.</li>\n  <li>callCount đúng.</li>\n  <li>returns(v) đổi giá trị trả về và nối chuỗi được.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không.",
+      "outputSpec": "Một hàm có thêm calls, callCount, returns.",
+      "constraints": "Hai spy không dùng chung dữ liệu.",
+      "examplesJson": [
+        {
+          "input": "const s = createSpy().returns(5); s(1, 2); s.calls",
+          "output": "[[1, 2]]",
+          "explanation": "Ghi đúng đối số."
+        }
+      ],
+      "hintsJson": [
+        "const spy = (...args) => { spy.calls.push(args); return value; }; spy.calls = [];",
+        "callCount nên là getter: Object.defineProperty(spy, \"callCount\", { get: () => spy.calls.length })"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — spy tí hon\nfunction createSpy() {\n  return function () {};\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — spy tí hon: closure giữ giá trị trả về, thuộc tính trên chính hàm giữ lịch sử gọi\nfunction createSpy() {\n  let value;                                   // giá trị trả về hiện tại\n  const spy = (...args) => {\n    spy.calls.push(args);                      // ghi lại đối số của lần gọi này\n    return value;\n  };\n  spy.calls = [];\n  Object.defineProperty(spy, 'callCount', { get: () => spy.calls.length });\n  spy.returns = (v) => { value = v; return spy; };   // trả spy để nối chuỗi\n  return spy;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hàm trong JavaScript là object, nên gắn thêm <code>calls</code> hay <code>returns</code> được. <code>value</code> sống trong closure (bài 11.1), mỗi lần <code>createSpy()</code> có bản riêng. <code>vi.fn</code> của Vitest là cùng ý tưởng với nhiều tính năng hơn (<code>mockResolvedValue</code>, <code>mock.calls</code>…).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lưu calls ở biến toàn cục — hai spy lẫn nhau.</li>\n  <li>callCount là số cố định gán một lần — không cập nhật.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.4 Mocking và CI.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/mock.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Records the arguments of every call|||Ghi đối số của mọi lần gọi",
+            "chuanBi": "const s = createSpy(); s(1, 2); s(\"a\");",
+            "goi": "[s.calls, s.callCount]",
+            "mongDoi": [
+              [
+                [
+                  1,
+                  2
+                ],
+                [
+                  "a"
+                ]
+              ],
+              2
+            ]
+          },
+          {
+            "moTa": "returns(v) is chainable and sets the result|||returns(v) nối chuỗi được và đặt kết quả",
+            "chuanBi": "const s = createSpy().returns(42);",
+            "goi": "[s(), s(\"x\"), s.callCount]",
+            "mongDoi": [
+              42,
+              42,
+              2
+            ]
+          },
+          {
+            "moTa": "Defaults to undefined; spies are independent|||Mặc định undefined; hai spy độc lập",
+            "chuanBi": "const a = createSpy(); const b = createSpy().returns(1); a(); a();",
+            "goi": "[a(), b.callCount, a.callCount]",
+            "mongDoi": [
+              {
+                "$js": "undefined"
+              },
+              0,
+              3
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu calls ở biến toàn cục — hai spy lẫn nhau."
+        },
+        {
+          "loi": "callCount là số cố định gán một lần — không cập nhật."
+        }
+      ]
+    },
+    {
+      "title": "Đường lỗi: 404, 500, mất mạng",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "sad path",
+        "res.ok",
+        "mockRejectedValue"
+      ],
+      "prerequisites": [
+        "fetch",
+        "throw"
+      ],
+      "tags": [
+        "javascript",
+        "testing",
+        "mock"
+      ],
+      "problemHtml": "<p><em>Bài 13.4 — Giả lập và chạy test trong CI.</em> Máy chấm KHÔNG có mạng thật: nó đưa cho bạn <code>fetch</code> giả và đồng hồ ảo (<code>setTimeout</code> và <code>Date.now()</code> chạy tức thì) — đúng những gì một test tốt làm.</p><p>Bài luyện trong bài học. <code>getUserName(id, fetchFn = fetch)</code>: 200 ⇒ <code>data.name</code>; 404 ⇒ <code>\"Guest\"</code>; mã lỗi khác ⇒ ném <code>Error('users service failed: &lt;status&gt;')</code>; mất mạng ⇒ để lỗi <code>TypeError</code> của fetch đi tiếp (không nuốt). Máy chấm dùng fetch giả với từng mã trạng thái.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>200 ⇒ tên; 404 ⇒ \"Guest\".</li>\n  <li>500 ⇒ Error đúng thông điệp.</li>\n  <li>Mất mạng ⇒ TypeError truyền ra ngoài.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "id: number; fetchFn?.",
+      "outputSpec": "Promise<string>.",
+      "constraints": "Không bắt (catch) lỗi mạng rồi trả chuỗi.",
+      "examplesJson": [
+        {
+          "input": "await getUserName(404)",
+          "output": "\"Guest\"",
+          "explanation": "Người dùng chưa có hồ sơ."
+        }
+      ],
+      "hintsJson": [
+        "fetch KHÔNG ném lỗi với 404/500 — tự kiểm res.status / res.ok.",
+        "if (res.status === 404) return \"Guest\"; if (!res.ok) throw new Error(\"users service failed: \" + res.status);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — đường lỗi\nasync function getUserName(id, fetchFn = fetch) {\n  const res = await fetchFn('/api/users/' + id);\n  const data = await res.json();\n  return data.name;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — đường lỗi: fetch không ném với 404/500 nên tự kiểm mã trạng thái\nasync function getUserName(id, fetchFn = fetch) {\n  const res = await fetchFn('/api/users/' + id);      // mất mạng ⇒ TypeError ném ra từ đây, để nó đi tiếp\n  if (res.status === 404) return 'Guest';             // chưa có hồ sơ: không phải lỗi\n  if (!res.ok) throw new Error('users service failed: ' + res.status);\n  const data = await res.json();\n  return data.name;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ba đường, ba cách xử lý khác nhau: 404 là một trạng thái hợp lệ (\"chưa có\"), 500 là lỗi của máy chủ cần báo rõ, mất mạng là lỗi của môi trường — để nó nổi lên cho tầng trên quyết định (thử lại, báo người dùng). Chỉ đồ giả mới cho bạn tạo ba đường đó theo ý.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gọi res.json() trước khi kiểm status — 500 trả HTML làm json() ném SyntaxError.</li>\n  <li>catch mọi lỗi rồi trả \"Guest\" — che mất sự cố thật.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.4 Mocking và CI.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Response/ok",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "fetchGia": {
+          "/api/users/7": {
+            "status": 200,
+            "json": {
+              "name": "Lan"
+            }
+          },
+          "/api/users/404": {
+            "status": 404,
+            "json": {
+              "error": "not found"
+            }
+          },
+          "/api/users/500": {
+            "status": 500,
+            "json": {}
+          },
+          "/api/users/0": {
+            "loiMang": true
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "200 ⇒ name|||200 ⇒ tên",
+            "goi": "await getUserName(7)",
+            "mongDoi": "Lan"
+          },
+          {
+            "moTa": "404 ⇒ \"Guest\"|||404 ⇒ \"Guest\"",
+            "goi": "await getUserName(404)",
+            "mongDoi": "Guest"
+          },
+          {
+            "moTa": "500 ⇒ clear error|||500 ⇒ lỗi rõ ràng",
+            "goi": "await getUserName(500)",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^users service failed: 500$"
+            }
+          },
+          {
+            "moTa": "Network failure propagates as TypeError|||Mất mạng truyền ra TypeError",
+            "goi": "await getUserName(0)",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          },
+          {
+            "moTa": "Hidden: works with an injected fake too|||Ẩn: chạy với hàm giả được tiêm",
+            "an": true,
+            "chuanBi": "const reply = (status, body) => ({ ok: status >= 200 && status < 300, status, json: async () => body });",
+            "goi": "await getUserName(1, async () => reply(503, {}))",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "503"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi res.json() trước khi kiểm status — 500 trả HTML làm json() ném SyntaxError."
+        },
+        {
+          "loi": "catch mọi lỗi rồi trả \"Guest\" — che mất sự cố thật."
+        }
+      ]
+    },
+    {
+      "title": "Debounce trên đồng hồ ảo",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "debounce",
+        "clearTimeout",
+        "fake timers"
+      ],
+      "prerequisites": [
+        "setTimeout",
+        "closure"
+      ],
+      "tags": [
+        "javascript",
+        "testing",
+        "timer"
+      ],
+      "problemHtml": "<p><em>Bài 13.4 — Giả lập và chạy test trong CI.</em> Máy chấm KHÔNG có mạng thật: nó đưa cho bạn <code>fetch</code> giả và đồng hồ ảo (<code>setTimeout</code> và <code>Date.now()</code> chạy tức thì) — đúng những gì một test tốt làm.</p><p>Viết <code>createDebouncedSearch(onSearch, delay = 300)</code> trả về hàm <code>search(text)</code>: mỗi lần gọi huỷ hẹn giờ cũ và hẹn lại; chỉ khi <code>delay</code> ms trôi qua không có lần gọi mới thì mới gọi <code>onSearch(text)</code> với chữ CUỐI. Máy chấm dùng đồng hồ ảo: chờ 299 ms hay 1 giờ đều tức thì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gõ liên tục ⇒ chỉ một lần onSearch, với chữ cuối.</li>\n  <li>Trước delay ms ⇒ chưa gọi.</li>\n  <li>Hai đợt gõ cách nhau > delay ⇒ hai lần gọi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "onSearch: hàm; delay: ms.",
+      "outputSpec": "Hàm search(text).",
+      "constraints": "Dùng setTimeout/clearTimeout.",
+      "examplesJson": [
+        {
+          "input": "search(\"j\"); search(\"ja\"); search(\"java\"); /* 300 ms sau */",
+          "output": "onSearch(\"java\") đúng một lần",
+          "explanation": "Các hẹn giờ cũ đã bị huỷ."
+        }
+      ],
+      "hintsJson": [
+        "let timer; return (text) => { clearTimeout(timer); timer = setTimeout(() => onSearch(text), delay); };",
+        "timer nằm trong closure — mỗi ô tìm kiếm có hẹn giờ riêng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — debounce (chưa đúng: gọi ngay mỗi lần gõ)\nfunction createDebouncedSearch(onSearch, delay = 300) {\n  return (text) => onSearch(text);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — debounce: chỉ chạy khi người dùng NGỪNG gõ đủ delay ms\nfunction createDebouncedSearch(onSearch, delay = 300) {\n  let timer;                                   // hẹn giờ đang chờ (riêng cho ô tìm kiếm này)\n  return (text) => {\n    clearTimeout(timer);                       // gõ tiếp ⇒ huỷ lần hẹn trước\n    timer = setTimeout(() => onSearch(text), delay);\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi lần gõ huỷ hẹn giờ cũ và đặt hẹn mới, nên chỉ lần cuối sống sót đủ <code>delay</code> ms. Test với đồng hồ thật phải ngủ thật; với đồng hồ giả (<code>vi.useFakeTimers</code> trong bài, đồng hồ ảo ở máy chấm) mọi thứ tức thì và chính xác tới từng mili giây.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên clearTimeout — mỗi phím một lần tìm.</li>\n  <li>Đặt timer ở ngoài hàm — hai ô tìm kiếm huỷ hẹn của nhau.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.4 Mocking và CI.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/guide/mocking.html#timers",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Typing fast ⇒ one call with the last text|||Gõ nhanh ⇒ một lần gọi với chữ cuối",
+            "chuanBi": "const got = []; const s = createDebouncedSearch((t) => got.push(t), 300); s(\"j\"); s(\"ja\"); s(\"jav\"); s(\"java\"); await new Promise((r) => setTimeout(r, 300));",
+            "goi": "got",
+            "mongDoi": [
+              "java"
+            ]
+          },
+          {
+            "moTa": "Nothing before the delay|||Chưa tới delay thì chưa gọi",
+            "chuanBi": "const got = []; const s = createDebouncedSearch((t) => got.push(t), 300); s(\"a\"); await new Promise((r) => setTimeout(r, 299));",
+            "goi": "got.length",
+            "mongDoi": 0
+          },
+          {
+            "moTa": "Two bursts ⇒ two calls|||Hai đợt gõ ⇒ hai lần gọi",
+            "chuanBi": "const got = []; const s = createDebouncedSearch((t) => got.push(t), 100); s(\"a\"); s(\"ab\"); await new Promise((r) => setTimeout(r, 150)); s(\"x\"); await new Promise((r) => setTimeout(r, 150));",
+            "goi": "got",
+            "mongDoi": [
+              "ab",
+              "x"
+            ]
+          },
+          {
+            "moTa": "Hidden: two searches do not cancel each other|||Ẩn: hai ô tìm kiếm không huỷ nhau",
+            "an": true,
+            "chuanBi": "const got = []; const a = createDebouncedSearch((t) => got.push(\"a:\" + t), 50); const b = createDebouncedSearch((t) => got.push(\"b:\" + t), 50); a(\"1\"); b(\"2\"); await new Promise((r) => setTimeout(r, 60));",
+            "goi": "got.sort()",
+            "mongDoi": [
+              "a:1",
+              "b:2"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên clearTimeout — mỗi phím một lần tìm."
+        },
+        {
+          "loi": "Đặt timer ở ngoài hàm — hai ô tìm kiếm huỷ hẹn của nhau."
+        }
+      ]
+    },
+    {
+      "title": "Tiêm thời gian: lời chào theo giờ",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "tiêm thời gian",
+        "Date",
+        "giá trị biên"
+      ],
+      "prerequisites": [
+        "Date",
+        "tham số mặc định"
+      ],
+      "tags": [
+        "javascript",
+        "testing",
+        "time"
+      ],
+      "problemHtml": "<p><em>Bài 13.4 — Giả lập và chạy test trong CI.</em> Máy chấm KHÔNG có mạng thật: nó đưa cho bạn <code>fetch</code> giả và đồng hồ ảo (<code>setTimeout</code> và <code>Date.now()</code> chạy tức thì) — đúng những gì một test tốt làm.</p><p><code>greeting()</code> đang gọi <code>new Date()</code> bên trong nên chỉ test được vào đúng giờ đó. Thêm tham số <code>now = new Date()</code>: trước 12 giờ <code>\"Good morning\"</code>, trước 18 giờ <code>\"Good afternoon\"</code>, còn lại <code>\"Good evening\"</code>. Máy chấm đưa các mốc 11:59, 12:00, 17:59, 18:00.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhận tham số now (Date), mặc định là bây giờ.</li>\n  <li>Đúng ở cả hai phía của 12:00 và 18:00.</li>\n  <li>Gọi không đối số vẫn trả một trong ba lời chào.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "now?: Date.",
+      "outputSpec": "string.",
+      "constraints": "Đọc giờ bằng now.getHours().",
+      "examplesJson": [
+        {
+          "input": "greeting(new Date(2026, 10, 1, 12, 0))",
+          "output": "\"Good afternoon\"",
+          "explanation": "Đúng 12:00 là buổi chiều."
+        }
+      ],
+      "hintsJson": [
+        "function greeting(now = new Date()) { const h = now.getHours(); … }",
+        "return h < 12 ? \"Good morning\" : h < 18 ? \"Good afternoon\" : \"Good evening\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — lời chào (không test được)\nfunction greeting() {\n  const h = new Date().getHours();\n  return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — lời chào: \"bây giờ\" là một tham số ⇒ test đưa bất kỳ thời điểm nào\nfunction greeting(now = new Date()) {\n  const h = now.getHours();\n  if (h < 12) return 'Good morning';\n  if (h < 18) return 'Good afternoon';\n  return 'Good evening';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đồng hồ là một phụ thuộc bên ngoài giống như mạng. Tiêm nó qua tham số cho test đi tới bất kỳ thời điểm nào — kể cả các mốc 12:00 và 18:00 nơi bug hay nấp. Trong Vitest còn có <code>vi.setSystemTime</code> khi không sửa được chữ ký hàm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng <= 12 — đúng 12:00 thành buổi sáng.</li>\n  <li>Viết test so với giờ hiện tại thật — đỏ hay xanh tuỳ lúc chạy.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.4 Mocking và CI.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/vi.html#vi-setsystemtime",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Around noon|||Quanh trưa",
+            "goi": "[greeting(new Date(2026, 10, 1, 11, 59)), greeting(new Date(2026, 10, 1, 12, 0))]",
+            "mongDoi": [
+              "Good morning",
+              "Good afternoon"
+            ]
+          },
+          {
+            "moTa": "Around 18:00|||Quanh 18 giờ",
+            "goi": "[greeting(new Date(2026, 10, 1, 17, 59)), greeting(new Date(2026, 10, 1, 18, 0))]",
+            "mongDoi": [
+              "Good afternoon",
+              "Good evening"
+            ]
+          },
+          {
+            "moTa": "Default argument still works|||Không đối số vẫn chạy",
+            "goi": "[\"Good morning\", \"Good afternoon\", \"Good evening\"].includes(greeting())",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Accepts a now parameter|||Có tham số now",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "greeting\\s*\\(\\s*now\\s*=\\s*new Date\\(\\)\\s*\\)"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <= 12 — đúng 12:00 thành buổi sáng."
+        },
+        {
+          "loi": "Viết test so với giờ hiện tại thật — đỏ hay xanh tuỳ lúc chạy."
+        }
+      ]
+    },
+    {
+      "title": "retry có chờ giữa các lần",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "retry",
+        "async/await",
+        "đồng hồ ảo"
+      ],
+      "prerequisites": [
+        "async/await",
+        "setTimeout",
+        "try/catch"
+      ],
+      "tags": [
+        "javascript",
+        "testing",
+        "async"
+      ],
+      "problemHtml": "<p><em>Bài 13.4 — Giả lập và chạy test trong CI.</em> Máy chấm KHÔNG có mạng thật: nó đưa cho bạn <code>fetch</code> giả và đồng hồ ảo (<code>setTimeout</code> và <code>Date.now()</code> chạy tức thì) — đúng những gì một test tốt làm.</p><p>Viết <code>retry(fn, { times = 3, delayMs = 100 } = {})</code>: gọi <code>await fn()</code>; nếu nó ném/từ chối thì chờ <code>delayMs</code> rồi thử lại, tối đa <code>times</code> lần TỔNG CỘNG; thành công thì trả kết quả ngay; hết lượt thì ném lại lỗi CUỐI CÙNG. Máy chấm đo bằng <code>Date.now()</code> của đồng hồ ảo: 3 lần thất bại với 100ms phải tốn đúng 200ms (không chờ sau lần cuối).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thành công ở lần 2 ⇒ trả kết quả, fn chạy 2 lần.</li>\n  <li>Hết lượt ⇒ ném lỗi cuối cùng.</li>\n  <li>Chỉ chờ GIỮA các lần (times = 3, delay 100 ⇒ 200 ms).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "fn: hàm async; { times, delayMs }.",
+      "outputSpec": "Promise kết quả của fn.",
+      "constraints": "Không chờ sau lần thử cuối.",
+      "examplesJson": [
+        {
+          "input": "await retry(flaky, { times: 3, delayMs: 100 })",
+          "output": "kết quả lần thành công",
+          "explanation": "Lỗi tạm thời được che bằng thử lại."
+        }
+      ],
+      "hintsJson": [
+        "for (let i = 1; i <= times; i++) { try { return await fn(); } catch (e) { last = e; if (i < times) await sleep(delayMs); } } throw last;",
+        "const sleep = (ms) => new Promise((r) => setTimeout(r, ms));"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — retry (chưa thử lại)\nasync function retry(fn, { times = 3, delayMs = 100 } = {}) {\n  return fn();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.4 — retry: thử lại tối đa times lần, chờ delayMs GIỮA các lần, ném lỗi cuối nếu hết lượt\nconst sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\n\nasync function retry(fn, { times = 3, delayMs = 100 } = {}) {\n  let lastError;\n  for (let attempt = 1; attempt <= times; attempt++) {\n    try {\n      return await fn();                       // await: bắt được cả promise bị từ chối\n    } catch (e) {\n      lastError = e;\n      if (attempt < times) await sleep(delayMs);   // không chờ sau lần cuối\n    }\n  }\n  throw lastError;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>return await</code> quan trọng: thiếu <code>await</code>, promise bị từ chối không rơi vào <code>catch</code> của vòng lặp. Đồng hồ ảo cho phép kiểm cả hành vi thời gian (200ms, không phải 300ms) mà không chờ thật — đúng cách test retry trong dự án thật bằng <code>vi.useFakeTimers</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>return fn() thay vì return await fn() — lỗi async không được bắt.</li>\n  <li>Chờ cả sau lần cuối — chậm thêm vô ích.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.4 Mocking và CI.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/guide/mocking.html#timers",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Succeeds on the 2nd attempt|||Thành công ở lần thử thứ 2",
+            "chuanBi": "let n = 0; const flaky = async () => { n++; if (n < 2) throw new Error(\"try again\"); return \"ok\"; };",
+            "goi": "[await retry(flaky, { times: 3, delayMs: 100 }), n]",
+            "mongDoi": [
+              "ok",
+              2
+            ]
+          },
+          {
+            "moTa": "Gives up with the LAST error|||Hết lượt thì ném lỗi CUỐI",
+            "chuanBi": "let n = 0; const bad = async () => { n++; throw new Error(\"fail \" + n); };",
+            "goi": "await retry(bad, { times: 3, delayMs: 10 })",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^fail 3$"
+            }
+          },
+          {
+            "moTa": "Waits only between attempts: 200 ms|||Chỉ chờ giữa các lần: 200 ms",
+            "chuanBi": "const t0 = Date.now(); try { await retry(async () => { throw new Error(\"x\"); }, { times: 3, delayMs: 100 }); } catch {}",
+            "goi": "Date.now() - t0",
+            "mongDoi": 200
+          },
+          {
+            "moTa": "Hidden: immediate success, no waiting|||Ẩn: thành công ngay, không chờ",
+            "an": true,
+            "chuanBi": "const t0 = Date.now(); const v = await retry(async () => 7);",
+            "goi": "[v, Date.now() - t0]",
+            "mongDoi": [
+              7,
+              0
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "return fn() thay vì return await fn() — lỗi async không được bắt."
+        },
+        {
+          "loi": "Chờ cả sau lần cuối — chậm thêm vô ích."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+
+
+ ✓ test/weather.test.js > returns the temperature from the API 2ms
+ ✓ test/weather.test.js > throws a clear error when the service answers 500 1ms
+ ✓ test/weather.test.js > lets a network failure through as a TypeError 0ms
+ ✓ test/time.test.js > debounce: only the last text is searched, 300 ms after typing stops 3ms
+ ✓ test/time.test.js > greeting at 08:00, 14:00 and 21:00 — no waiting for the real clock 1ms
+
+ Test Files  2 passed (2)
+      Tests  5 passed (5)
+   Start at  22:44:26
+   Duration  92ms (import 35%, transform 26%, tests 25%, worker 13%)
+

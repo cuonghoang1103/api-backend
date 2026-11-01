@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử.",
   "modules": [
     {
       "slug": "wf-2-1-html-basics",
@@ -182,6 +182,30 @@
       "name": "12.4 Token thiết kế và chế độ sáng/tối",
       "level": "INTERMEDIATE",
       "description": "Khai báo token trên :root, component chỉ dùng token, sửa bẫy thiếu đơn vị, theme tối bằng [data-theme], nút chuyển theme bằng JavaScript, hàm tính tỉ lệ tương phản WCAG — 6 bài."
+    },
+    {
+      "slug": "wf-13-1-why-test",
+      "name": "13.1 Kiểm thử để làm gì",
+      "level": "BEGINNER",
+      "description": "Sửa lỗi hồi quy ở giá trị biên, viết bảng ca kiểm phủ đủ biên, tự viết expect().toBe(), luật miễn phí ship sau mã giảm giá, đọc báo cáo đỏ, chạy cả bảng ca kiểm — 6 bài."
+    },
+    {
+      "slug": "wf-13-2-unit-tests",
+      "name": "13.2 Những unit test đầu tiên",
+      "level": "BEGINNER",
+      "description": "Hàm xếp loại nhiều biên, so sâu kiểu toEqual, toBeCloseTo đúng quy tắc Vitest, bọc lời gọi để kiểm ném lỗi, định dạng tên it.each, và một describe/it tí hon — 6 bài."
+    },
+    {
+      "slug": "wf-13-3-testing-library",
+      "name": "13.3 Kiểm thử giao diện theo cách người dùng thấy",
+      "level": "INTERMEDIATE",
+      "description": "Gắn nhãn cho ô nhập, đổi div thành button thật, thông báo role=\"status\"/\"alert\", bộ đếm có nút khoá ở 0, form khoá nút tới khi hợp lệ, tab có ARIA — 6 bài chấm bằng tương tác thật."
+    },
+    {
+      "slug": "wf-13-4-mocking-ci",
+      "name": "13.4 Giả lập và chạy test trong CI",
+      "level": "INTERMEDIATE",
+      "description": "Tiêm fetch để test được, hàm giả tự ghi lời gọi (vi.fn tí hon), đường lỗi 404/500/mất mạng, debounce trên đồng hồ ảo, tiêm thời gian cho lời chào, retry có chờ — 6 bài, không một byte mạng thật."
     }
   ]
 }

@@ -1,0 +1,620 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-13-2-unit-tests",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-13-2-unit-tests"
+  },
+  "exercises": [
+    {
+      "title": "Xếp loại điểm: mọi giá trị biên",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "giá trị biên",
+        "RangeError"
+      ],
+      "prerequisites": [
+        "if/else"
+      ],
+      "tags": [
+        "javascript",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.2 — Những unit test đầu tiên.</em> Máy chấm gọi hàm của bạn với từng ca và so sâu kết quả — đúng kiểu một bộ unit test.</p><p>Bài luyện của bài học. Viết <code>grade(score)</code>: điểm 0–10 trả <code>\"A\"</code> từ 8.5, <code>\"B\"</code> từ 7, <code>\"C\"</code> từ 5.5, <code>\"D\"</code> từ 4, còn lại <code>\"F\"</code>; điểm ngoài 0–10 (hoặc không phải số) ném <code>RangeError</code>. Máy chấm thử cả hai phía của mọi mốc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng mọi mốc 8.5 / 7 / 5.5 / 4 (cả hai phía).</li>\n  <li>0 và 10 hợp lệ.</li>\n  <li>Ngoài khoảng hoặc NaN ⇒ RangeError.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "score: number.",
+      "outputSpec": "\"A\" | \"B\" | \"C\" | \"D\" | \"F\".",
+      "constraints": "Dùng >= cho các mốc.",
+      "examplesJson": [
+        {
+          "input": "grade(8.5)",
+          "output": "\"A\"",
+          "explanation": "Đúng mốc thuộc bậc trên."
+        },
+        {
+          "input": "grade(8.4)",
+          "output": "\"B\"",
+          "explanation": "Ngay dưới mốc."
+        }
+      ],
+      "hintsJson": [
+        "Kiểm lỗi trước: if (!(score >= 0 && score <= 10)) throw new RangeError(...) — bắt luôn NaN.",
+        "Rồi if (score >= 8.5) return \"A\"; if (score >= 7) return \"B\"; …"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — xếp loại\nfunction grade(score) {\n  if (score > 8.5) return 'A';\n  if (score > 7) return 'B';\n  if (score > 5.5) return 'C';\n  if (score > 4) return 'D';\n  return 'F';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — xếp loại: kiểm đầu vào trước, rồi các mốc từ cao xuống thấp, đều dùng >=\nfunction grade(score) {\n  // !(a && b) bắt cả NaN: mọi phép so với NaN đều false\n  if (!(score >= 0 && score <= 10)) throw new RangeError('score must be between 0 and 10');\n  if (score >= 8.5) return 'A';\n  if (score >= 7) return 'B';\n  if (score >= 5.5) return 'C';\n  if (score >= 4) return 'D';\n  return 'F';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Từ 8.5\" nghĩa là <code>&gt;=</code>. Viết <code>&gt;</code> sai đúng tại mốc — chỉ ca biên mới lộ ra. Kiểm đầu vào bằng <code>!(score &gt;= 0 &amp;&amp; score &lt;= 10)</code> còn bắt được <code>NaN</code>, thứ mà <code>score &lt; 0 || score &gt; 10</code> để lọt.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng > ở các mốc.</li>\n  <li>Kiểm score < 0 || score > 10 — NaN lọt qua và ra \"F\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.2 Unit test với Vitest.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/#test-each",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Upper side of each boundary|||Phía trên mỗi mốc",
+            "goi": "[10, 8.5, 7, 5.5, 4].map(grade)",
+            "mongDoi": [
+              "A",
+              "A",
+              "B",
+              "C",
+              "D"
+            ]
+          },
+          {
+            "moTa": "Lower side of each boundary|||Phía dưới mỗi mốc",
+            "goi": "[8.4, 6.9, 5.4, 3.9, 0].map(grade)",
+            "mongDoi": [
+              "B",
+              "C",
+              "D",
+              "F",
+              "F"
+            ]
+          },
+          {
+            "moTa": "Out of range throws RangeError|||Ngoài khoảng ném RangeError",
+            "goi": "grade(10.5)",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": "Negative and NaN throw too|||Số âm và NaN cũng ném",
+            "goi": "[-1, NaN].map((v) => { try { grade(v); return \"no\"; } catch (e) { return e.name; } })",
+            "mongDoi": [
+              "RangeError",
+              "RangeError"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng > ở các mốc."
+        },
+        {
+          "loi": "Kiểm score < 0 || score > 10 — NaN lọt qua và ra \"F\"."
+        }
+      ]
+    },
+    {
+      "title": "So sâu như toEqual",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "so sánh sâu",
+        "đệ quy",
+        "tham chiếu"
+      ],
+      "prerequisites": [
+        "object",
+        "mảng",
+        "đệ quy"
+      ],
+      "tags": [
+        "javascript",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.2 — Những unit test đầu tiên.</em> Máy chấm gọi hàm của bạn với từng ca và so sâu kết quả — đúng kiểu một bộ unit test.</p><p><code>toBe</code> so tham chiếu nên hai <code>{ id: 1 }</code> riêng biệt là khác nhau. Viết <code>deepEqual(a, b)</code> so NỘI DUNG như <code>toEqual</code>: giá trị nguyên thuỷ so bằng <code>Object.is</code>; mảng cùng độ dài và từng phần tử bằng nhau; object thường cùng tập khoá (không kể thứ tự) và từng giá trị bằng nhau — lồng bao nhiêu tầng cũng được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Object/mảng lồng nhau so theo nội dung.</li>\n  <li>Mảng khác object; [1,2] khác [2,1].</li>\n  <li>NaN bằng NaN; khoá thiếu là khác.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "a, b: số, chuỗi, boolean, null, mảng, object thường.",
+      "outputSpec": "boolean.",
+      "constraints": "Không dùng JSON.stringify (thứ tự khoá làm sai kết quả).",
+      "examplesJson": [
+        {
+          "input": "deepEqual({ id: 1, tags: [\"a\"] }, { tags: [\"a\"], id: 1 })",
+          "output": "true",
+          "explanation": "Thứ tự khoá không quan trọng."
+        }
+      ],
+      "hintsJson": [
+        "Nếu Object.is(a, b) ⇒ true. Nếu một bên không phải object (hoặc null) ⇒ false.",
+        "Array.isArray hai bên phải giống nhau; so Object.keys rồi đệ quy từng khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — so sâu\nfunction deepEqual(a, b) {\n  return a === b;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — so sâu: giống toEqual ở các trường hợp cơ bản\nfunction deepEqual(a, b) {\n  if (Object.is(a, b)) return true;                                   // cùng giá trị / cùng object, NaN = NaN\n  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n  if (Array.isArray(a) !== Array.isArray(b)) return false;             // [] khác {}\n  const ka = Object.keys(a), kb = Object.keys(b);\n  if (ka.length !== kb.length) return false;\n  // mỗi khoá của a phải có ở b và giá trị bằng nhau (đệ quy cho tầng sâu)\n  return ka.every((k) => Object.hasOwn(b, k) && deepEqual(a[k], b[k]));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>So sâu là đệ quy: hai container bằng nhau khi chúng cùng loại, cùng khoá, và từng giá trị con bằng nhau. Với mảng, khoá chính là chỉ số nên thứ tự phần tử được giữ. <code>JSON.stringify</code> trông tiện nhưng phụ thuộc thứ tự khoá và nuốt <code>undefined</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So bằng JSON.stringify — {a:1,b:2} khác {b:2,a:1}.</li>\n  <li>Quên trường hợp null (typeof null === \"object\").</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.2 Unit test với Vitest.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/expect.html#toequal",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Look-alike objects are equal|||Object trông giống nhau thì bằng",
+            "goi": "deepEqual({ id: 1, tags: [\"a\"] }, { tags: [\"a\"], id: 1 })",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Nested difference is found|||Tìm ra khác biệt ở tầng sâu",
+            "goi": "deepEqual({ a: { b: [1, 2, { c: 3 }] } }, { a: { b: [1, 2, { c: 4 }] } })",
+            "mongDoi": false
+          },
+          {
+            "moTa": "Order matters in arrays, [] is not {}|||Thứ tự trong mảng quan trọng, [] khác {}",
+            "goi": "[deepEqual([1, 2], [2, 1]), deepEqual([], {}), deepEqual({ a: 1 }, { a: 1, b: undefined })]",
+            "mongDoi": [
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Primitives and NaN|||Giá trị nguyên thuỷ và NaN",
+            "goi": "[deepEqual(NaN, NaN), deepEqual(\"1\", 1), deepEqual(null, {})]",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So bằng JSON.stringify — {a:1,b:2} khác {b:2,a:1}."
+        },
+        {
+          "loi": "Quên trường hợp null (typeof null === \"object\")."
+        }
+      ]
+    },
+    {
+      "title": "toBeCloseTo đúng quy tắc",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "số thực",
+        "sai số"
+      ],
+      "prerequisites": [
+        "Math.abs",
+        "**"
+      ],
+      "tags": [
+        "javascript",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.2 — Những unit test đầu tiên.</em> Máy chấm gọi hàm của bạn với từng ca và so sâu kết quả — đúng kiểu một bộ unit test.</p><p><code>0.1 + 0.2</code> là <code>0.30000000000000004</code>. Viết <code>closeTo(actual, expected, digits = 2)</code> theo đúng quy tắc của <code>toBeCloseTo</code>: đạt khi <code>|actual − expected| &lt; 10^(−digits) / 2</code>. Thêm trường hợp đặc biệt: hai vô cực cùng dấu thì đạt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>closeTo(0.1 + 0.2, 0.3) là true.</li>\n  <li>Đúng ngưỡng: digits = 2 ⇒ sai số phải < 0.005.</li>\n  <li>Infinity với Infinity là true; NaN là false.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "actual, expected: number; digits?: number.",
+      "outputSpec": "boolean.",
+      "constraints": "Không làm tròn hai số rồi so (sai ở biên).",
+      "examplesJson": [
+        {
+          "input": "closeTo(0.3049, 0.3, 2)",
+          "output": "true",
+          "explanation": "0.0049 < 0.005."
+        },
+        {
+          "input": "closeTo(0.305, 0.3, 2)",
+          "output": "false",
+          "explanation": "0.005 không nhỏ hơn 0.005."
+        }
+      ],
+      "hintsJson": [
+        "Math.abs(actual - expected) < 10 ** -digits / 2",
+        "if (actual === expected) return true; — bắt Infinity === Infinity trước khi trừ (Infinity − Infinity là NaN)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — closeTo\nfunction closeTo(actual, expected, digits = 2) {\n  return actual.toFixed(digits) === expected.toFixed(digits);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — closeTo: đúng quy tắc của Vitest toBeCloseTo\nfunction closeTo(actual, expected, digits = 2) {\n  if (actual === expected) return true;                     // gồm Infinity === Infinity\n  return Math.abs(actual - expected) < 10 ** -digits / 2;    // NaN ⇒ false (mọi so sánh với NaN là false)\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Làm tròn hai số rồi so (<code>toFixed</code>) sai ở biên: 0.305 và 0.304 làm tròn thành 0.31 và 0.30 dù chỉ lệch 0.001. Quy tắc \"sai số nhỏ hơn nửa đơn vị của chữ số cuối\" là thứ Vitest và Jest dùng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng <= thay vì < — 0.305 bị tính là gần 0.3.</li>\n  <li>Trừ hai Infinity ra NaN rồi trả false.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.2 Unit test với Vitest.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/expect.html#tobecloseto",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "0.1 + 0.2 is close to 0.3|||0.1 + 0.2 gần 0.3",
+            "goi": "closeTo(0.1 + 0.2, 0.3)",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Exact threshold behaviour|||Đúng ngưỡng",
+            "goi": "[closeTo(0.3049, 0.3), closeTo(0.305, 0.3), closeTo(0.304, 0.305)]",
+            "mongDoi": [
+              true,
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": "Custom digits|||Số chữ số tuỳ chọn",
+            "goi": "[closeTo(3.14159, 3.14, 2), closeTo(3.14159, 3.14, 3)]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Infinity and NaN|||Vô cực và NaN",
+            "goi": "[closeTo(Infinity, Infinity), closeTo(NaN, NaN), closeTo(-Infinity, Infinity)]",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng <= thay vì < — 0.305 bị tính là gần 0.3."
+        },
+        {
+          "loi": "Trừ hai Infinity ra NaN rồi trả false."
+        }
+      ]
+    },
+    {
+      "title": "Kiểm ném lỗi: bọc lời gọi",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "toThrow",
+        "try/catch",
+        "hàm làm đối số"
+      ],
+      "prerequisites": [
+        "try/catch",
+        "instanceof"
+      ],
+      "tags": [
+        "javascript",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.2 — Những unit test đầu tiên.</em> Máy chấm gọi hàm của bạn với từng ca và so sâu kết quả — đúng kiểu một bộ unit test.</p><p>Viết <code>throwsWith(fn, expected)</code> giống <code>expect(fn).toThrow(expected)</code>: gọi <code>fn()</code>; trả <code>true</code> nếu nó ném lỗi khớp — <code>expected</code> có thể là một lớp lỗi (so <code>instanceof</code>), một chuỗi (thông điệp CHỨA chuỗi đó), hoặc vắng (lỗi gì cũng được). Không ném ⇒ <code>false</code>. Nếu <code>fn</code> không phải hàm ⇒ ném <code>TypeError</code> với thông điệp <code>\"pass a function, not its result\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lớp lỗi: so bằng instanceof (lớp con cũng khớp).</li>\n  <li>Chuỗi: message chứa chuỗi đó.</li>\n  <li>fn không phải hàm ⇒ TypeError với thông điệp đúng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "fn: hàm; expected?: lớp lỗi | string.",
+      "outputSpec": "boolean.",
+      "constraints": "Không dùng thư viện.",
+      "examplesJson": [
+        {
+          "input": "throwsWith(() => applyCoupon(1, 0), RangeError)",
+          "output": "true",
+          "explanation": "Lời gọi được bọc trong hàm."
+        }
+      ],
+      "hintsJson": [
+        "if (typeof fn !== \"function\") throw new TypeError(\"pass a function, not its result\");",
+        "try { fn(); return false; } catch (e) { if (typeof expected === \"string\") return String(e.message).includes(expected); … }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — throwsWith\nfunction throwsWith(fn, expected) {\n  try {\n    fn();\n  } catch (e) {\n    return true;\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — throwsWith: phiên bản nhỏ của expect(fn).toThrow(expected)\nfunction throwsWith(fn, expected) {\n  // lỗi kinh điển: expect(applyCoupon(1, 0)) — đã GỌI hàm trước khi kịp bắt lỗi\n  if (typeof fn !== 'function') throw new TypeError('pass a function, not its result');\n  try {\n    fn();\n  } catch (e) {\n    if (expected === undefined) return true;                       // lỗi gì cũng được\n    if (typeof expected === 'string') return String(e && e.message).includes(expected);\n    return e instanceof expected;                                  // lớp con cũng khớp\n  }\n  return false;                                                    // không ném ⇒ không đạt\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Vì phải BẮT lỗi, matcher cần tự gọi hàm bên trong try/catch — nên bạn đưa hàm, không đưa kết quả. Kiểm <code>typeof fn</code> trước giúp người dùng thấy ngay lỗi kinh điển \"đã gọi rồi mới đưa\".</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên return false khi không có lỗi (trả undefined).</li>\n  <li>So e.constructor === expected — lớp con không khớp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.2 Unit test với Vitest.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/expect.html#tothrowerror",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Matches by class (and subclasses)|||Khớp theo lớp (cả lớp con)",
+            "goi": "[throwsWith(() => { throw new RangeError(\"x\"); }, RangeError), throwsWith(() => { throw new RangeError(\"x\"); }, Error), throwsWith(() => { throw new TypeError(\"x\"); }, RangeError)]",
+            "mongDoi": [
+              true,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Matches by message substring|||Khớp theo một phần thông điệp",
+            "goi": "[throwsWith(() => { throw new Error(\"coupon must be 1-50\"); }, \"1-50\"), throwsWith(() => { throw new Error(\"boom\"); }, \"1-50\")]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "No throw ⇒ false|||Không ném ⇒ false",
+            "goi": "throwsWith(() => 42)",
+            "mongDoi": false
+          },
+          {
+            "moTa": "Passing a result is rejected|||Đưa kết quả thay vì hàm bị từ chối",
+            "goi": "throwsWith(42, RangeError)",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "pass a function, not its result"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên return false khi không có lỗi (trả undefined)."
+        },
+        {
+          "loi": "So e.constructor === expected — lớp con không khớp."
+        }
+      ]
+    },
+    {
+      "title": "Định dạng tên it.each",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "it.each",
+        "định dạng chuỗi"
+      ],
+      "prerequisites": [
+        "replace với hàm"
+      ],
+      "tags": [
+        "javascript",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.2 — Những unit test đầu tiên.</em> Máy chấm gọi hàm của bạn với từng ca và so sâu kết quả — đúng kiểu một bộ unit test.</p><p>Trong <code>it.each([...])(\"order of %i đ ships for %i đ\", …)</code>, Vitest thay từng <code>%…</code> bằng giá trị của dòng theo thứ tự. Viết <code>formatName(template, row)</code> hỗ trợ: <code>%i</code> (số nguyên, <code>Math.trunc</code>), <code>%s</code> (chuỗi <code>String(v)</code>), <code>%j</code> (<code>JSON.stringify</code>), và <code>%%</code> thành một dấu <code>%</code> (không ăn giá trị).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thay lần lượt theo thứ tự các giá trị trong row.</li>\n  <li>%i cắt phần thập phân; %j dùng JSON.</li>\n  <li>%% thành % và không tiêu thụ giá trị.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "template: string; row: mảng giá trị.",
+      "outputSpec": "string.",
+      "constraints": "Một lần duyệt bằng replace với regex.",
+      "examplesJson": [
+        {
+          "input": "formatName(\"order of %i đ ships for %i đ\", [500000, 0])",
+          "output": "\"order of 500000 đ ships for 0 đ\"",
+          "explanation": "Đúng như báo cáo Vitest."
+        }
+      ],
+      "hintsJson": [
+        "template.replace(/%[isj%]/g, (tok) => …) với một biến đếm i.",
+        "tok === \"%%\" ⇒ \"%\"; \"%i\" ⇒ String(Math.trunc(row[i++]))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — định dạng tên it.each\nfunction formatName(template, row) {\n  return template.replace('%i', row[0]);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — định dạng tên it.each: mỗi %x lấy giá trị KẾ TIẾP của dòng\nfunction formatName(template, row) {\n  let i = 0;\n  return template.replace(/%[isj%]/g, (tok) => {\n    if (tok === '%%') return '%';                       // dấu % thật, không ăn giá trị\n    const v = row[i++];\n    if (tok === '%i') return String(Math.trunc(v));\n    if (tok === '%j') return JSON.stringify(v);\n    return String(v);                                   // %s\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>replace</code> với regex có cờ <code>g</code> và một hàm thay thế duyệt mọi token theo thứ tự xuất hiện; biến đếm <code>i</code> nằm trong closure (bài 11.1) để mỗi token lấy giá trị kế tiếp.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>replace với chuỗi chỉ thay token đầu tiên.</li>\n  <li>%% cũng tăng i — các giá trị sau bị lệch.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.2 Unit test với Vitest.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/#test-each",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The shipping names from the lesson|||Tên các test ship trong bài",
+            "goi": "formatName(\"order of %i đ ships for %i đ\", [500000, 0])",
+            "mongDoi": "order of 500000 đ ships for 0 đ"
+          },
+          {
+            "moTa": "%i truncates, %s stringifies|||%i cắt thập phân, %s thành chuỗi",
+            "goi": "formatName(\"rejects %s (%i)\", [12.5, 12.5])",
+            "mongDoi": "rejects 12.5 (12)"
+          },
+          {
+            "moTa": "%j and %%|||%j và %%",
+            "goi": "formatName(\"%j gives 100%%, then %s\", [{ a: 1 }, \"ok\"])",
+            "mongDoi": "{\"a\":1} gives 100%, then ok"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "replace với chuỗi chỉ thay token đầu tiên."
+        },
+        {
+          "loi": "%% cũng tăng i — các giá trị sau bị lệch."
+        }
+      ]
+    },
+    {
+      "title": "describe / it tí hon",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "test runner",
+        "describe lồng",
+        "async test"
+      ],
+      "prerequisites": [
+        "closure",
+        "async/await",
+        "try/catch"
+      ],
+      "tags": [
+        "javascript",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.2 — Những unit test đầu tiên.</em> Máy chấm gọi hàm của bạn với từng ca và so sâu kết quả — đúng kiểu một bộ unit test.</p><p>Viết <code>createSuite()</code> trả về <code>{ describe, it, run }</code>. <code>describe(name, fn)</code> gom các test (lồng được); <code>it(name, fn)</code> đăng ký một test (fn có thể là async); <code>await run()</code> chạy theo đúng thứ tự khai báo và trả mảng dòng: <code>\"✓ subtotal &gt; is 0 for an empty cart\"</code> hoặc <code>\"× subtotal &gt; … — &lt;thông điệp lỗi&gt;\"</code>. Tên nối bằng <code>\" &gt; \"</code>. Một test đỏ không làm dừng test sau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên đầy đủ gồm các describe lồng, nối bằng \" > \".</li>\n  <li>Test async được await; test ném lỗi ⇒ dòng \"×\" kèm thông điệp.</li>\n  <li>Đúng thứ tự khai báo.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không.",
+      "outputSpec": "Promise<string[]>.",
+      "constraints": "Không dùng thư viện.",
+      "examplesJson": [
+        {
+          "input": "describe(\"a\", () => it(\"b\", () => {})); await run()",
+          "output": "[\"✓ a > b\"]",
+          "explanation": "Một test qua."
+        }
+      ],
+      "hintsJson": [
+        "Giữ một mảng tests [{ name, fn }] và một ngăn xếp tên describe; describe đẩy tên, gọi fn, rồi bỏ tên ra.",
+        "run: for (const t of tests) { try { await t.fn(); out.push(\"✓ \" + t.name); } catch (e) { out.push(\"× \" + t.name + \" — \" + e.message); } }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — describe / it tí hon\nfunction createSuite() {\n  const tests = [];\n  return {\n    describe(name, fn) { fn(); },\n    it(name, fn) { tests.push({ name, fn }); },\n    async run() { return tests.map((t) => '✓ ' + t.name); },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 13.2 — describe / it tí hon: đăng ký trước, chạy sau, mỗi test độc lập\nfunction createSuite() {\n  const tests = [];        // [{ name: \"a > b > c\", fn }] theo thứ tự khai báo\n  const stack = [];        // tên các describe đang mở\n\n  return {\n    describe(name, fn) {\n      stack.push(name);\n      try { fn(); } finally { stack.pop(); }   // describe chạy NGAY để đăng ký các it bên trong\n    },\n    it(name, fn) {\n      tests.push({ name: [...stack, name].join(' > '), fn });\n    },\n    async run() {\n      const out = [];\n      for (const t of tests) {\n        try {\n          await t.fn();                         // await được cả test đồng bộ lẫn async\n          out.push('✓ ' + t.name);\n        } catch (e) {\n          out.push('× ' + t.name + ' — ' + (e && e.message));   // ghi lại, chạy tiếp\n        }\n      }\n      return out;\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Test runner thật chia làm hai pha: <strong>thu thập</strong> (chạy các describe để biết có những it nào, tên đầy đủ là gì) và <strong>thực thi</strong> (chạy từng it trong try/catch). <code>stack</code> cho tên lồng nhau; <code>finally</code> đảm bảo tên được bỏ ra kể cả khi describe ném lỗi; <code>await</code> trên kết quả đồng bộ vẫn chạy bình thường.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chạy test ngay trong it() — thứ tự và báo cáo sai, describe sau chưa kịp đăng ký.</li>\n  <li>Quên await — test async đỏ vẫn hiện ✓.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.2 Unit test với Vitest.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vitest.dev/api/#describe",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Nested names joined with \" > \"|||Tên lồng nối bằng \" > \"",
+            "chuanBi": "const s = createSuite(); s.describe(\"cart\", () => { s.describe(\"subtotal\", () => { s.it(\"is 0 for an empty cart\", () => {}); }); s.it(\"works\", () => {}); });",
+            "goi": "await s.run()",
+            "mongDoi": [
+              "✓ cart > subtotal > is 0 for an empty cart",
+              "✓ cart > works"
+            ]
+          },
+          {
+            "moTa": "A failing test is reported and the rest still run|||Test đỏ được báo và các test sau vẫn chạy",
+            "chuanBi": "const s = createSuite(); s.it(\"a\", () => { throw new Error(\"expected 30000 to be 0\"); }); s.it(\"b\", () => {});",
+            "goi": "await s.run()",
+            "mongDoi": [
+              "× a — expected 30000 to be 0",
+              "✓ b"
+            ]
+          },
+          {
+            "moTa": "Async tests are awaited|||Test async được await",
+            "chuanBi": "const s = createSuite(); s.it(\"async red\", async () => { await new Promise((r) => setTimeout(r, 50)); throw new Error(\"late\"); }); s.it(\"async green\", async () => { await Promise.resolve(); });",
+            "goi": "await s.run()",
+            "mongDoi": [
+              "× async red — late",
+              "✓ async green"
+            ]
+          },
+          {
+            "moTa": "Hidden: names reset after describe|||Ẩn: tên được trả lại sau describe",
+            "an": true,
+            "chuanBi": "const s = createSuite(); s.describe(\"x\", () => {}); s.it(\"top\", () => {});",
+            "goi": "await s.run()",
+            "mongDoi": [
+              "✓ top"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chạy test ngay trong it() — thứ tự và báo cáo sai, describe sau chưa kịp đăng ký."
+        },
+        {
+          "loi": "Quên await — test async đỏ vẫn hiện ✓."
+        }
+      ]
+    }
+  ]
+}

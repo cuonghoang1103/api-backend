@@ -37,7 +37,8 @@ export const bash = ma('bash');
 export const con = (k, tay, opts = {}) => psql(k ? lay(k, OUT, 'OUT') : tay, { title: opts.title || 'Chromium · console', sm: opts.sm ?? true, hl: opts.hl || [] })
   .replace('<pre>', '<pre style="white-space:pre-wrap;overflow-wrap:anywhere">');   // dòng console dài ⇒ xuống dòng, không tràn ngang
 /** Terminal: term(k | null, chữ). */
-export const term = (k, tay, opts = {}) => psql(k ? lay(k, OUT, 'OUT') : tay, { title: opts.title || 'terminal', sm: opts.sm ?? true, hl: opts.hl || [] });
+export const term = (k, tay, opts = {}) => psql(k ? lay(k, OUT, 'OUT') : tay, { title: opts.title || 'terminal', sm: opts.sm ?? true, hl: opts.hl || [] })
+  .replace('<pre>', '<pre style="white-space:pre-wrap;overflow-wrap:anywhere">');
 /** Ảnh chụp thật (png trong _demo/) nhúng base64. anh('11-1/buttons.png', { w: 520 }) */
 export function anh(rel, opts = {}) {
   const f = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../content/courses/web-foundations/_demo', rel);

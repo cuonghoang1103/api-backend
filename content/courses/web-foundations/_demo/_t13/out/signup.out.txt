@@ -1,0 +1,12 @@
+
+
+ ✓ test/signup.test.js > keeps "Sign up" disabled until the email and password are valid 148ms
+ ✓ test/signup.test.js > submits the email and greets the user 64ms
+ ✓ test/signup.test.js > shows an alert and re-enables the button when the server fails 65ms
+ ✓ test/signup.test.js > get vs query: query returns null, get throws 10ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  22:44:25
+   Duration  793ms (environment 50%, tests 40%, import 9%, transform 1%)
+

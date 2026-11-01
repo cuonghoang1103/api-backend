@@ -1,0 +1,553 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-0-4-mo-hinh",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-0-4-mo-hinh"
+  },
+  "exercises": [
+    {
+      "title": "Client, server and who does the work",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "client–server",
+        "declarative SQL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "concepts"
+      ],
+      "problemHtml": "<p>Lesson 0.4 in five questions: PostgreSQL is a <b>server</b> you send SQL to, not a library inside your app.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 0.4 trong năm câu: PostgreSQL là một <b>máy chủ</b> bạn gửi SQL tới, không phải thư viện nằm trong app.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: which process holds the data files?|||Tự hỏi: tiến trình nào giữ tệp dữ liệu?",
+        "A client is anything that connects and sends SQL.|||Client là bất cứ thứ gì kết nối và gửi SQL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Client, server and who does the work\n\nAnswer in the answer panel (no code needed).\n\n1. Your Node.js API crashes in the middle of the day. What happens to the rows it already committed?API Node.js của bạn sập giữa ngày. Các dòng nó đã commit thì sao?\n2. Which of these is a PostgreSQL client?Cái nào là client của PostgreSQL?\n3. SELECT title FROM notes WHERE pinned ORDER BY created_at DESC; — who decides whether to read the whole table or use an index?SELECT title FROM notes WHERE pinned ORDER BY created_at DESC; — ai quyết định đọc cả bảng hay dùng chỉ mục?\n4. Two users load the same page at the same instant and both read notes. How many copies of the table exist?Hai người mở cùng trang cùng lúc và cùng đọc notes. Có bao nhiêu bản của bảng?\n5. Where does the result of a SELECT get computed?Kết quả của một câu SELECT được tính ở đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Client, server and who does the work — answer key\n\n1. Your Node.js API crashes in the middle of the day. What happens to the rows it already committed?API Node.js của bạn sập giữa ngày. Các dòng nó đã commit thì sao?\n   Answer: a) They stay: they live in the PostgreSQL server process and its files, not in the API\n   The server owns the data; a client only sends requests. A committed transaction is durable no matter what the client does afterwards (only an OPEN transaction is rolled back when its connection dies).VI: Dữ liệu thuộc về máy chủ; client chỉ gửi yêu cầu. Giao dịch đã commit là bền dù client làm gì sau đó (chỉ giao dịch đang MỞ mới bị huỷ khi kết nối chết).\n\n2. Which of these is a PostgreSQL client?Cái nào là client của PostgreSQL?\n   Answer: b) psql, pgAdmin, DBeaver and your Prisma app — all of them\n   Every program that opens a connection and sends SQL is a client. They all talk the same wire protocol to the same server.VI: Mọi chương trình mở kết nối và gửi SQL đều là client. Chúng cùng nói một giao thức với cùng một máy chủ.\n\n3. SELECT title FROM notes WHERE pinned ORDER BY created_at DESC; — who decides whether to read the whole table or use an index?SELECT title FROM notes WHERE pinned ORDER BY created_at DESC; — ai quyết định đọc cả bảng hay dùng chỉ mục?\n   Answer: c) the server's planner — SQL says WHAT you want, not HOW\n   SQL is declarative. The planner looks at statistics and available indexes and picks a plan; EXPLAIN shows its choice (chapter 10).VI: SQL là khai báo. Bộ lập kế hoạch xem thống kê và chỉ mục có sẵn rồi chọn cách chạy; EXPLAIN cho thấy lựa chọn đó (chương 10).\n\n4. Two users load the same page at the same instant and both read notes. How many copies of the table exist?Hai người mở cùng trang cùng lúc và cùng đọc notes. Có bao nhiêu bản của bảng?\n   Answer: a) One — both connections read the same server-side table\n   There is one table on the server. Each connection has its own backend process and its own snapshot of what it may see (MVCC, chapter 11), but the data is stored once.VI: Chỉ có một bảng trên máy chủ. Mỗi kết nối có một tiến trình phục vụ và một ảnh chụp riêng về những gì nó được thấy (MVCC, chương 11), nhưng dữ liệu chỉ lưu một lần.\n\n5. Where does the result of a SELECT get computed?Kết quả của một câu SELECT được tính ở đâu?\n   Answer: d) On the server; only the result rows travel back to the client\n   Filtering, joining and sorting happen on the server next to the data; that is why a well-written query sends 10 rows over the network instead of 10 million.VI: Lọc, nối, sắp xếp diễn ra trên máy chủ, cạnh dữ liệu; vì vậy câu viết tốt chỉ gửi 10 dòng qua mạng thay vì 10 triệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> They stay: they live in the PostgreSQL server process and its files, not in the API</p><p>The server owns the data; a client only sends requests. A committed transaction is durable no matter what the client does afterwards (only an OPEN transaction is rolled back when its connection dies).</p><p><i>VI: Dữ liệu thuộc về máy chủ; client chỉ gửi yêu cầu. Giao dịch đã commit là bền dù client làm gì sau đó (chỉ giao dịch đang MỞ mới bị huỷ khi kết nối chết).</i></p></li><li><p><b>b)</b> psql, pgAdmin, DBeaver and your Prisma app — all of them</p><p>Every program that opens a connection and sends SQL is a client. They all talk the same wire protocol to the same server.</p><p><i>VI: Mọi chương trình mở kết nối và gửi SQL đều là client. Chúng cùng nói một giao thức với cùng một máy chủ.</i></p></li><li><p><b>c)</b> the server's planner — SQL says WHAT you want, not HOW</p><p>SQL is declarative. The planner looks at statistics and available indexes and picks a plan; EXPLAIN shows its choice (chapter 10).</p><p><i>VI: SQL là khai báo. Bộ lập kế hoạch xem thống kê và chỉ mục có sẵn rồi chọn cách chạy; EXPLAIN cho thấy lựa chọn đó (chương 10).</i></p></li><li><p><b>a)</b> One — both connections read the same server-side table</p><p>There is one table on the server. Each connection has its own backend process and its own snapshot of what it may see (MVCC, chapter 11), but the data is stored once.</p><p><i>VI: Chỉ có một bảng trên máy chủ. Mỗi kết nối có một tiến trình phục vụ và một ảnh chụp riêng về những gì nó được thấy (MVCC, chương 11), nhưng dữ liệu chỉ lưu một lần.</i></p></li><li><p><b>d)</b> On the server; only the result rows travel back to the client</p><p>Filtering, joining and sorting happen on the server next to the data; that is why a well-written query sends 10 rows over the network instead of 10 million.</p><p><i>VI: Lọc, nối, sắp xếp diễn ra trên máy chủ, cạnh dữ liệu; vì vậy câu viết tốt chỉ gửi 10 dòng qua mạng thay vì 10 triệu.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>Your Node.js API crashes in the middle of the day. What happens to the rows it already committed?</p><p style=\"opacity:.75;font-size:.92em\"><i>API Node.js của bạn sập giữa ngày. Các dòng nó đã commit thì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They stay: they live in the PostgreSQL server process and its files, not in the API"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are lost, because the connection closed"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They are rolled back automatically when the client disappears"
+              },
+              {
+                "ma": "d",
+                "noiDung": "They stay only if the API called <code>pg.save()</code> before crashing"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The server owns the data; a client only sends requests. A committed transaction is durable no matter what the client does afterwards (only an OPEN transaction is rolled back when its connection dies).</p><p><i>VI: Dữ liệu thuộc về máy chủ; client chỉ gửi yêu cầu. Giao dịch đã commit là bền dù client làm gì sau đó (chỉ giao dịch đang MỞ mới bị huỷ khi kết nối chết).</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which of these is a PostgreSQL <b>client</b>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào là <b>client</b> của PostgreSQL?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only the Prisma app"
+              },
+              {
+                "ma": "b",
+                "noiDung": "psql, pgAdmin, DBeaver and your Prisma app — all of them"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only psql"
+              },
+              {
+                "ma": "d",
+                "noiDung": "none — PostgreSQL has no clients, it is embedded"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Every program that opens a connection and sends SQL is a client. They all talk the same wire protocol to the same server.</p><p><i>VI: Mọi chương trình mở kết nối và gửi SQL đều là client. Chúng cùng nói một giao thức với cùng một máy chủ.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p><code>SELECT title FROM notes WHERE pinned ORDER BY created_at DESC;</code> — who decides whether to read the whole table or use an index?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>SELECT title FROM notes WHERE pinned ORDER BY created_at DESC;</code> — ai quyết định đọc cả bảng hay dùng chỉ mục?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "you, by writing the clauses in the right order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the client library"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the server's planner — SQL says WHAT you want, not HOW"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the order of words in your query"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>SQL is declarative. The planner looks at statistics and available indexes and picks a plan; EXPLAIN shows its choice (chapter 10).</p><p><i>VI: SQL là khai báo. Bộ lập kế hoạch xem thống kê và chỉ mục có sẵn rồi chọn cách chạy; EXPLAIN cho thấy lựa chọn đó (chương 10).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Two users load the same page at the same instant and both read <code>notes</code>. How many copies of the table exist?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai người mở cùng trang cùng lúc và cùng đọc <code>notes</code>. Có bao nhiêu bản của bảng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One — both connections read the same server-side table"
+              },
+              {
+                "ma": "b",
+                "noiDung": "One per browser tab"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Two — each connection gets its own copy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It depends on the ORM"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>There is one table on the server. Each connection has its own backend process and its own snapshot of what it may see (MVCC, chapter 11), but the data is stored once.</p><p><i>VI: Chỉ có một bảng trên máy chủ. Mỗi kết nối có một tiến trình phục vụ và một ảnh chụp riêng về những gì nó được thấy (MVCC, chương 11), nhưng dữ liệu chỉ lưu một lần.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>Where does the result of a SELECT get computed?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kết quả của một câu SELECT được tính ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "In the operating system cache"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In the client, after downloading the whole table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Half in the client, half on the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "On the server; only the result rows travel back to the client"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Filtering, joining and sorting happen on the server next to the data; that is why a well-written query sends 10 rows over the network instead of 10 million.</p><p><i>VI: Lọc, nối, sắp xếp diễn ra trên máy chủ, cạnh dữ liệu; vì vậy câu viết tốt chỉ gửi 10 dòng qua mạng thay vì 10 triệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking of PostgreSQL like SQLite (a file inside your app) — then crashes, connections and pools make no sense.|||Nghĩ PostgreSQL như SQLite (một tệp trong app) — khi đó sập, kết nối, pool đều khó hiểu."
+        },
+        {
+          "loi": "Believing the order you write WHERE conditions decides how the query runs.|||Tin rằng thứ tự viết điều kiện WHERE quyết định cách truy vấn chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "client / server",
+          "vi": "máy khách / máy chủ"
+        },
+        {
+          "en": "declarative",
+          "vi": "khai báo",
+          "giaiThich": "nói muốn gì, không nói làm thế nào"
+        }
+      ]
+    },
+    {
+      "title": "Say what, not how: the pinned notes",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "SELECT",
+        "WHERE boolean",
+        "ORDER BY … DESC"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "select",
+        "notes"
+      ],
+      "problemHtml": "<p>The home screen of the Notes app shows the <b>pinned</b> notes, newest first. Return <code>title</code> and <code>created_at</code> of every pinned note, ordered by <code>created_at</code> from newest to oldest.</p>\n<h4>Sample table</h4><pre>notes (id identity PK, title varchar(200), body text NULL, pinned boolean, created_at timestamptz, meta jsonb)\n5 rows — 3 pinned; meta = {\"lang\": \"en\"|\"vi\", \"tags\": [...]}</pre><p>Full script: the <code>notes.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One SELECT on <code>notes</code>.</li>\n  <li>Columns: <code>title, created_at</code>; newest first.</li>\n</ul>",
+      "problemHtmlVi": "<p>Màn hình chính của app Notes hiện các ghi chú <b>đã ghim</b>, mới nhất trước. Trả về <code>title</code> và <code>created_at</code> của mọi ghi chú đã ghim, sắp theo <code>created_at</code> từ mới tới cũ.</p>\n<h4>Bảng mẫu</h4><pre>notes (id identity PK, title varchar(200), body text NULL, pinned boolean, created_at timestamptz, meta jsonb)\n5 dòng — 3 dòng ghim; meta = {\"lang\": \"en\"|\"vi\", \"tags\": [...]}</pre><p>Script đầy đủ: tab <code>notes.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một câu SELECT trên <code>notes</code>.</li>\n  <li>Cột: <code>title, created_at</code>; mới nhất trước.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "title            | created_at         \n-----------------+--------------------\nÔn ACID          | 2026-10-05 22:00:00\nRead the manual  | 2026-10-03 21:15:00\nLearn PostgreSQL | 2026-10-01 08:00:00",
+          "explanation": "Expected result of check \"Three pinned notes, newest first\" (row order matters).|||Kết quả mong đợi của kiểm \"Ba ghi chú đã ghim, mới nhất trước\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>WHERE pinned</code> keeps the rows where the boolean is true.|||<code>WHERE pinned</code> giữ các dòng có giá trị boolean là true.",
+        "<code>ORDER BY created_at DESC</code> puts the latest first.|||<code>ORDER BY created_at DESC</code> đưa dòng mới nhất lên đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT title, created_at\nFROM notes\nWHERE pinned                 -- a boolean column is already a condition (= true is optional)\nORDER BY created_at DESC;\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>You describe the rows you want (pinned) and the order (newest first); the server decides how to find them. The hidden check pins one more note and expects it to appear at its correct place.</p>",
+      "solutionExplanationHtmlVi": "<p>Bạn mô tả dòng muốn lấy (đã ghim) và thứ tự (mới nhất trước); máy chủ tự quyết cách tìm. Kiểm ẩn ghim thêm một ghi chú và mong nó hiện đúng vị trí.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Three pinned notes, newest first|||Ba ghi chú đã ghim, mới nhất trước",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "title",
+                "created_at"
+              ],
+              "hang": [
+                [
+                  "Ôn ACID",
+                  "2026-10-05 22:00:00"
+                ],
+                [
+                  "Read the manual",
+                  "2026-10-03 21:15:00"
+                ],
+                [
+                  "Learn PostgreSQL",
+                  "2026-10-01 08:00:00"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A newly pinned note appears in the right place|||Ghi chú vừa ghim hiện đúng chỗ",
+            "an": true,
+            "themCsdl": "UPDATE notes SET pinned = true WHERE title = 'Buy coffee'",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "title",
+                "created_at"
+              ],
+              "hang": [
+                [
+                  "Ôn ACID",
+                  "2026-10-05 22:00:00"
+                ],
+                [
+                  "Read the manual",
+                  "2026-10-03 21:15:00"
+                ],
+                [
+                  "Buy coffee",
+                  "2026-10-01 09:30:00"
+                ],
+                [
+                  "Learn PostgreSQL",
+                  "2026-10-01 08:00:00"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Filters on pinned|||Lọc theo pinned",
+            "khop": "\\bWHERE\\b[\\s\\S]*\\bpinned\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting DESC — ORDER BY is ascending (oldest first) by default.|||Quên DESC — ORDER BY mặc định tăng dần (cũ nhất trước)."
+        },
+        {
+          "loi": "Relying on the order rows were inserted: without ORDER BY the order is not guaranteed.|||Dựa vào thứ tự chèn: không có ORDER BY thì thứ tự không được bảo đảm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ORDER BY … DESC",
+          "vi": "sắp giảm dần"
+        }
+      ]
+    },
+    {
+      "title": "A glimpse of the power types: read JSON from a column",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "jsonb ->>",
+        "jsonb_array_length",
+        "::cast"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "jsonb",
+        "notes"
+      ],
+      "problemHtml": "<p>Each note carries a small JSON document in <code>meta</code>, e.g. <code>{\"lang\": \"vi\", \"tags\": [\"psql\"]}</code>. For every note return <code>id</code>, <code>title</code>, <code>lang</code> (the text value of key <code>lang</code>) and <code>tag_count</code> (how many tags the array holds), ordered by id.</p>\n<h4>Sample table</h4><pre>notes (id identity PK, title varchar(200), body text NULL, pinned boolean, created_at timestamptz, meta jsonb)\n5 rows — 3 pinned; meta = {\"lang\": \"en\"|\"vi\", \"tags\": [...]}</pre><p>Full script: the <code>notes.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>meta -&gt;&gt; 'lang'</code> gives text; <code>meta -&gt; 'tags'</code> gives a jsonb array.</li>\n  <li>Columns exactly <code>id, title, lang, tag_count</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi ghi chú mang một tài liệu JSON nhỏ trong <code>meta</code>, vd <code>{\"lang\": \"vi\", \"tags\": [\"psql\"]}</code>. Với mọi ghi chú trả về <code>id</code>, <code>title</code>, <code>lang</code> (giá trị chữ của khoá <code>lang</code>) và <code>tag_count</code> (số phần tử của mảng tags), sắp theo id.</p>\n<h4>Bảng mẫu</h4><pre>notes (id identity PK, title varchar(200), body text NULL, pinned boolean, created_at timestamptz, meta jsonb)\n5 dòng — 3 dòng ghim; meta = {\"lang\": \"en\"|\"vi\", \"tags\": [...]}</pre><p>Script đầy đủ: tab <code>notes.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>meta -&gt;&gt; 'lang'</code> trả chữ; <code>meta -&gt; 'tags'</code> trả mảng jsonb.</li>\n  <li>Cột đúng <code>id, title, lang, tag_count</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | title            | lang | tag_count\n---+------------------+------+----------\n1  | Learn PostgreSQL | en   | 2        \n2  | Buy coffee       | en   | 0        \n3  | Read the manual  | en   | 1        \n4  | Học psql         | vi   | 1        \n5  | Ôn ACID          | vi   | 1        ",
+          "explanation": "Expected result of check \"Language and tag count of every note\" (row order matters).|||Kết quả mong đợi của kiểm \"Ngôn ngữ và số thẻ của mọi ghi chú\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>-&gt;</code> keeps JSON, <code>-&gt;&gt;</code> turns the value into text.|||<code>-&gt;</code> giữ JSON, <code>-&gt;&gt;</code> biến giá trị thành chữ.",
+        "<code>jsonb_array_length(jsonb)</code> counts the elements of a JSON array.|||<code>jsonb_array_length(jsonb)</code> đếm phần tử của mảng JSON."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT id,\n       title,\n       meta ->> 'lang'                      AS lang,       -- ->> : value as text\n       jsonb_array_length(meta -> 'tags')   AS tag_count   -- ->  : value as jsonb (here an array)\nFROM notes\nORDER BY id;\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>PostgreSQL stores <code>jsonb</code> parsed, so it can reach inside documents with operators. Chapter 13 adds containment (<code>@&gt;</code>) and GIN indexes on top of this.</p>",
+      "solutionExplanationHtmlVi": "<p>PostgreSQL lưu <code>jsonb</code> ở dạng đã phân tích nên với được vào trong tài liệu bằng toán tử. Chương 13 thêm phép chứa (<code>@&gt;</code>) và chỉ mục GIN.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Language and tag count of every note|||Ngôn ngữ và số thẻ của mọi ghi chú",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title",
+                "lang",
+                "tag_count"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Learn PostgreSQL",
+                  "en",
+                  2
+                ],
+                [
+                  2,
+                  "Buy coffee",
+                  "en",
+                  0
+                ],
+                [
+                  3,
+                  "Read the manual",
+                  "en",
+                  1
+                ],
+                [
+                  4,
+                  "Học psql",
+                  "vi",
+                  1
+                ],
+                [
+                  5,
+                  "Ôn ACID",
+                  "vi",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A note with three tags|||Một ghi chú có ba thẻ",
+            "an": true,
+            "themCsdl": "INSERT INTO notes (title, meta) VALUES ('Index tips', '{\"lang\": \"en\", \"tags\": [\"db\", \"index\", \"perf\"]}')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "title",
+                "lang",
+                "tag_count"
+              ],
+              "hang": [
+                [
+                  1,
+                  "Learn PostgreSQL",
+                  "en",
+                  2
+                ],
+                [
+                  2,
+                  "Buy coffee",
+                  "en",
+                  0
+                ],
+                [
+                  3,
+                  "Read the manual",
+                  "en",
+                  1
+                ],
+                [
+                  4,
+                  "Học psql",
+                  "vi",
+                  1
+                ],
+                [
+                  5,
+                  "Ôn ACID",
+                  "vi",
+                  1
+                ],
+                [
+                  6,
+                  "Index tips",
+                  "en",
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "lang is read as TEXT with ->>|||lang được đọc thành CHỮ bằng ->>",
+            "khop": "->>\\s*'lang'",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using <code>-&gt;</code> for lang — you get the JSON string <code>\"vi\"</code> with quotes, not the text vi.|||Dùng <code>-&gt;</code> cho lang — nhận chuỗi JSON <code>\"vi\"</code> có ngoặc kép, không phải chữ vi."
+        },
+        {
+          "loi": "<code>length(meta -&gt;&gt; 'tags')</code> counts characters of the text <code>[\"db\", \"sql\"]</code>, not elements.|||<code>length(meta -&gt;&gt; 'tags')</code> đếm ký tự của chuỗi <code>[\"db\", \"sql\"]</code>, không đếm phần tử."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jsonb",
+          "vi": "JSON nhị phân",
+          "giaiThich": "Kiểu tài liệu JSON lưu dạng đã phân tích: so sánh, chứa (@>), đánh chỉ mục GIN được."
+        }
+      ]
+    }
+  ]
+}

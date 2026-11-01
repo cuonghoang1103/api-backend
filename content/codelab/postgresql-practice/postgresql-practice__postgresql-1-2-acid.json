@@ -1,0 +1,591 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-1-2-acid",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-1-2-acid"
+  },
+  "exercises": [
+    {
+      "title": "A transfer is two updates",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "UPDATE … SET balance = balance ± x"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "transaction",
+        "acid"
+      ],
+      "problemHtml": "<p>Cuong (account A) sends <b>30.00</b> to Mai (account B). Write the two UPDATE statements of the transfer.</p>\n<h4>Sample table (lesson 1.2)</h4><pre>accounts (id text PK, owner, balance numeric(12,2) CHECK (balance &gt;= 0))\nA Cuong 100.00 · B Mai 0.00 · C Lan 250.00</pre><p>The grader wraps each check in its own transaction and rolls it back — do not write BEGIN/COMMIT.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Subtract from A, add to B — relative to the current balance (<code>balance - 30</code>), never a hard-coded result.</li>\n  <li>No BEGIN/COMMIT: the grader runs your statements inside one transaction for you.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cuong (tài khoản A) chuyển <b>30.00</b> cho Mai (tài khoản B). Viết hai lệnh UPDATE của phi vụ chuyển tiền.</p>\n<h4>Bảng mẫu (bài 1.2)</h4><pre>accounts (id text PK, owner, balance numeric(12,2) CHECK (balance &gt;= 0))\nA Cuong 100.00 · B Mai 0.00 · C Lan 250.00</pre><p>Máy chấm tự bọc mỗi kiểm trong một giao dịch rồi huỷ — đừng viết BEGIN/COMMIT.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trừ A, cộng B — tính từ số dư hiện tại (<code>balance - 30</code>), không ghi cứng kết quả.</li>\n  <li>Không BEGIN/COMMIT: máy chấm tự chạy các lệnh của bạn trong một giao dịch.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | balance\n---+--------\nA  | 70     \nB  | 30     \nC  | 250    ",
+          "explanation": "Expected result of check \"A 70.00, B 30.00, C unchanged\" (row order matters).|||Kết quả mong đợi của kiểm \"A 70.00, B 30.00, C giữ nguyên\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>UPDATE accounts SET balance = balance - 30 WHERE id = 'A';</code>",
+        "Then the same for B with +.|||Rồi tương tự cho B với dấu +."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "accounts.sql",
+          "language": "sql",
+          "code": "-- accounts.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- accounts.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00), ('C', 'Lan', 250.00);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE accounts SET balance = balance - 30 WHERE id = 'A';\nUPDATE accounts SET balance = balance + 30 WHERE id = 'B';\n"
+        },
+        {
+          "name": "accounts.sql",
+          "language": "sql",
+          "code": "-- accounts.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- accounts.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00), ('C', 'Lan', 250.00);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both updates belong to ONE transaction, so either both are visible after COMMIT or neither is. Writing <code>balance - 30</code> lets the database compute from the value it has right now.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai lệnh cập nhật thuộc MỘT giao dịch, nên sau COMMIT hoặc cả hai cùng hiện, hoặc không cái nào. Viết <code>balance - 30</code> để CSDL tính từ giá trị nó đang có.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00), ('C', 'Lan', 250.00);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "A 70.00, B 30.00, C unchanged|||A 70.00, B 30.00, C giữ nguyên",
+            "kiemTra": "SELECT id, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  70
+                ],
+                [
+                  "B",
+                  30
+                ],
+                [
+                  "C",
+                  250
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Relative to the balance at that moment|||Tính theo số dư lúc chạy",
+            "kiemTra": "SELECT id, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "an": true,
+            "themCsdl": "UPDATE accounts SET balance = 500 WHERE id = 'A'; UPDATE accounts SET balance = 12.5 WHERE id = 'B'",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  470
+                ],
+                [
+                  "B",
+                  42.5
+                ],
+                [
+                  "C",
+                  250
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Two UPDATE statements|||Hai lệnh UPDATE",
+            "khop": "\\bUPDATE\\b[\\s\\S]*\\bUPDATE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing the final numbers (<code>SET balance = 70</code>) — wrong the moment the balance was not exactly 100.|||Ghi số cuối (<code>SET balance = 70</code>) — sai ngay khi số dư không đúng 100."
+        },
+        {
+          "loi": "Only debiting A: money disappears from the system.|||Chỉ trừ A: tiền biến mất khỏi hệ thống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction",
+          "vi": "giao dịch",
+          "giaiThich": "Nhóm lệnh được tất cả hoặc không gì (BEGIN … COMMIT / ROLLBACK)."
+        }
+      ]
+    },
+    {
+      "title": "C is a constraint: make overdraft impossible",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "CHECK",
+        "numeric(12,2)",
+        "PRIMARY KEY"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "ddl",
+        "acid",
+        "check"
+      ],
+      "problemHtml": "<p>Create the <code>accounts</code> table of lesson 1.2 so that <b>no statement, from any app</b>, can leave a negative balance or two accounts with the same id. Then open accounts <code>A</code> (Cuong, 100.00) and <code>B</code> (Mai, 0.00).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns <code>id text</code> (primary key), <code>owner text NOT NULL</code>, <code>balance numeric(12,2) NOT NULL</code> with a CHECK.</li>\n  <li>Then INSERT the two accounts.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tạo bảng <code>accounts</code> của bài 1.2 sao cho <b>không lệnh nào, từ app nào</b>, để lại số dư âm hay hai tài khoản trùng id. Rồi mở tài khoản <code>A</code> (Cuong, 100.00) và <code>B</code> (Mai, 0.00).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột <code>id text</code> (khoá chính), <code>owner text NOT NULL</code>, <code>balance numeric(12,2) NOT NULL</code> kèm CHECK.</li>\n  <li>Rồi INSERT hai tài khoản.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | owner | balance\n---+-------+--------\nA  | Cuong | 100    \nB  | Mai   | 0      ",
+          "explanation": "Expected result of check \"Two accounts opened\" (row order matters).|||Kết quả mong đợi của kiểm \"Đã mở hai tài khoản\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>CHECK (balance &gt;= 0)</code> on the column.|||<code>CHECK (balance &gt;= 0)</code> trên cột.",
+        "A zero balance is legal — the CHECK must accept 0.|||Số dư 0 là hợp lệ — CHECK phải nhận 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Consistency means the rules you declared hold after every transaction. The CHECK makes the database reject the overdraft — and because the statement fails, the whole transaction fails, so the matching credit to B never survives either.</p>",
+      "solutionExplanationHtmlVi": "<p>Nhất quán nghĩa là luật bạn khai luôn đúng sau mỗi giao dịch. CHECK làm CSDL từ chối lệnh rút quá — và vì lệnh lỗi nên cả giao dịch hỏng, khoản cộng cho B cũng không còn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Two accounts opened|||Đã mở hai tài khoản",
+            "kiemTra": "SELECT id, owner, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "owner",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  "Cuong",
+                  100
+                ],
+                [
+                  "B",
+                  "Mai",
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Taking 150 from A is rejected (A would be −50)|||Rút 150 từ A bị chặn (A sẽ là −50)",
+            "thu": "UPDATE accounts SET balance = balance - 150 WHERE id = 'A'",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A second account with id A is rejected|||Tài khoản thứ hai cùng id A bị chặn",
+            "thu": "INSERT INTO accounts VALUES ('A', 'Ghost', 1)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Taking exactly 100 from A is fine (balance 0)|||Rút đúng 100 từ A thì được (số dư 0)",
+            "thu": "UPDATE accounts SET balance = balance - 100 WHERE id = 'A'",
+            "an": true
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An account without balance is rejected|||Tài khoản không có số dư bị chặn",
+            "thu": "INSERT INTO accounts (id, owner) VALUES ('Z', 'Nobody')",
+            "maLoi": "23502",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking the balance only in the app — another app (or a hand-typed UPDATE) still writes −50.|||Chỉ kiểm số dư trong app — app khác (hay lệnh UPDATE gõ tay) vẫn ghi −50."
+        },
+        {
+          "loi": "<code>CHECK (balance &gt; 0)</code>: Mai's new account with 0.00 cannot even be opened.|||<code>CHECK (balance &gt; 0)</code>: tài khoản mới 0.00 của Mai không mở được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả; NULL (UNKNOWN) vẫn lọt qua CHECK."
+        },
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL, có sẵn một chỉ mục B-tree."
+        }
+      ]
+    },
+    {
+      "title": "One statement, one atomic transfer",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "UPDATE with CASE",
+        "WHERE id IN (…)",
+        "statement atomicity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "transaction",
+        "acid"
+      ],
+      "problemHtml": "<p>Some drivers run every statement in autocommit. Make the transfer of <b>40.00</b> from Lan (C) to Cuong (A) a <b>single UPDATE</b>, so it is atomic even without an explicit transaction. Return <code>id, balance</code> of the two changed accounts.</p>\n<h4>Sample table (lesson 1.2)</h4><pre>accounts (id text PK, owner, balance numeric(12,2) CHECK (balance &gt;= 0))\nA Cuong 100.00 · B Mai 0.00 · C Lan 250.00</pre><p>The grader wraps each check in its own transaction and rolls it back — do not write BEGIN/COMMIT.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly ONE UPDATE statement touching both rows (<code>WHERE id IN ('A', 'C')</code>).</li>\n  <li><code>SET balance = CASE id WHEN … THEN … END</code>; finish with <code>RETURNING id, balance</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Vài driver chạy mỗi lệnh ở chế độ autocommit. Hãy làm phi vụ chuyển <b>40.00</b> từ Lan (C) sang Cuong (A) thành <b>một lệnh UPDATE duy nhất</b>, để nó nguyên tử ngay cả khi không mở giao dịch. Trả về <code>id, balance</code> của hai tài khoản bị đổi.</p>\n<h4>Bảng mẫu (bài 1.2)</h4><pre>accounts (id text PK, owner, balance numeric(12,2) CHECK (balance &gt;= 0))\nA Cuong 100.00 · B Mai 0.00 · C Lan 250.00</pre><p>Máy chấm tự bọc mỗi kiểm trong một giao dịch rồi huỷ — đừng viết BEGIN/COMMIT.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng MỘT lệnh UPDATE đụng cả hai dòng (<code>WHERE id IN ('A', 'C')</code>).</li>\n  <li><code>SET balance = CASE id WHEN … THEN … END</code>; kết thúc bằng <code>RETURNING id, balance</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "id | balance\n---+--------\nA  | 140    \nC  | 210    ",
+          "explanation": "Expected result of check \"A 140.00 and C 210.00\" (row order does not matter).|||Kết quả mong đợi của kiểm \"A 140.00 và C 210.00\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "A CASE expression can compute a different new value for each row.|||Biểu thức CASE tính được giá trị mới khác nhau cho từng dòng.",
+        "Restrict the rows with <code>WHERE id IN ('A', 'C')</code> so RETURNING shows only the two accounts.|||Giới hạn dòng bằng <code>WHERE id IN ('A', 'C')</code> để RETURNING chỉ hiện hai tài khoản."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "accounts.sql",
+          "language": "sql",
+          "code": "-- accounts.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- accounts.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00), ('C', 'Lan', 250.00);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE accounts\nSET balance = CASE id\n                WHEN 'C' THEN balance - 40     -- debit\n                WHEN 'A' THEN balance + 40     -- credit\n              END\nWHERE id IN ('A', 'C')                         -- without this, B would get NULL (and fail NOT NULL)\nRETURNING id, balance;\n"
+        },
+        {
+          "name": "accounts.sql",
+          "language": "sql",
+          "code": "-- accounts.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- accounts.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00), ('C', 'Lan', 250.00);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every single SQL statement is atomic: if the CHECK fails for C, the credit to A is undone with it. One UPDATE with CASE moves the money in one step — handy when you cannot control the transaction boundaries.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi câu SQL đơn lẻ đều nguyên tử: nếu CHECK của C hỏng thì khoản cộng cho A cũng bị huỷ theo. Một UPDATE với CASE chuyển tiền trong một bước — tiện khi bạn không điều khiển được ranh giới giao dịch.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE accounts (\n  id      text PRIMARY KEY,\n  owner   text NOT NULL,\n  balance numeric(12,2) NOT NULL CHECK (balance >= 0)\n);\nINSERT INTO accounts VALUES ('A', 'Cuong', 100.00), ('B', 'Mai', 0.00), ('C', 'Lan', 250.00);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "A 140.00 and C 210.00|||A 140.00 và C 210.00",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  140
+                ],
+                [
+                  "C",
+                  210
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "B is untouched|||B không bị đụng",
+            "kiemTra": "SELECT id, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  140
+                ],
+                [
+                  "B",
+                  0
+                ],
+                [
+                  "C",
+                  210
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Works from any starting balance|||Đúng với mọi số dư ban đầu",
+            "kiemTra": "SELECT id, balance FROM accounts ORDER BY id",
+            "thuTu": true,
+            "an": true,
+            "themCsdl": "UPDATE accounts SET balance = 41 WHERE id = 'C'; UPDATE accounts SET balance = 0 WHERE id = 'A'",
+            "mongDoi": {
+              "cot": [
+                "id",
+                "balance"
+              ],
+              "hang": [
+                [
+                  "A",
+                  40
+                ],
+                [
+                  "B",
+                  0
+                ],
+                [
+                  "C",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "A single UPDATE statement|||Một lệnh UPDATE duy nhất",
+            "khop": "^(?![\\s\\S]*\\bUPDATE\\b[\\s\\S]*\\bUPDATE\\b)[\\s\\S]*\\bUPDATE\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No WHERE (with <code>ELSE balance</code>): every account is rewritten, B appears in RETURNING and its row is locked for nothing.|||Không WHERE (có <code>ELSE balance</code>): mọi tài khoản bị ghi lại, B hiện trong RETURNING và dòng của nó bị khoá vô ích."
+        },
+        {
+          "loi": "Two UPDATEs in autocommit: a crash between them loses 40.00.|||Hai lệnh UPDATE ở autocommit: sập giữa chừng là mất 40.00."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction",
+          "vi": "giao dịch",
+          "giaiThich": "Nhóm lệnh được tất cả hoặc không gì (BEGIN … COMMIT / ROLLBACK)."
+        },
+        {
+          "en": "CASE",
+          "vi": "biểu thức rẽ nhánh"
+        }
+      ]
+    },
+    {
+      "title": "Which letter of ACID saved you?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "atomicity",
+        "consistency",
+        "isolation",
+        "durability"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "acid",
+        "concepts"
+      ],
+      "problemHtml": "<p>For each incident, pick the ACID property that is doing the work.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi sự cố, chọn tính chất ACID đang làm việc.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: is it about a crash after COMMIT (D), a partial failure (A), a rule (C) or other sessions (I)?|||Tự hỏi: sự cố sau COMMIT (D), lỗi giữa chừng (A), luật (C) hay phiên khác (I)?",
+        "Constraints are the tool of C.|||Ràng buộc là công cụ của C."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which letter of ACID saved you?\n\nAnswer in the answer panel (no code needed).\n\n1. Incident → propertySự cố → tính chất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which letter of ACID saved you? — answer key\n\n1. Incident → propertySự cố → tính chất\n   - r1.tc: D\n   - r2.tc: A\n   - r3.tc: I\n   - r4.tc: C\n   - r5.tc: C\n   Atomicity = all or nothing; Consistency = declared rules hold; Isolation = in-flight work of others is invisible; Durability = committed survives crashes (WAL flushed to disk before COMMIT returns).VI: Nguyên tử = tất cả hoặc không; Nhất quán = luật đã khai luôn đúng; Cô lập = việc dở dang của người khác không nhìn thấy; Bền vững = đã commit thì sống qua sự cố (WAL ghi đĩa trước khi COMMIT trả về).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Atomicity = all or nothing; Consistency = declared rules hold; Isolation = in-flight work of others is invisible; Durability = committed survives crashes (WAL flushed to disk before COMMIT returns).</p><p><i>VI: Nguyên tử = tất cả hoặc không; Nhất quán = luật đã khai luôn đúng; Cô lập = việc dở dang của người khác không nhìn thấy; Bền vững = đã commit thì sống qua sự cố (WAL ghi đĩa trước khi COMMIT trả về).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Incident → property</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự cố → tính chất</i></p>",
+            "cot": [
+              {
+                "ma": "su",
+                "ten": "Incident / Sự cố"
+              },
+              {
+                "ma": "tc",
+                "ten": "Property",
+                "luaChon": [
+                  "A",
+                  "C",
+                  "I",
+                  "D"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "su": "The server loses power one second after COMMIT returned; after restart the transfer is there. / Mất điện 1 giây sau khi COMMIT trả về; khởi động lại, phi vụ vẫn còn."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "su": "The second UPDATE of a transfer fails, and the first one is undone too. / UPDATE thứ hai của phi vụ lỗi, UPDATE thứ nhất cũng bị huỷ."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "su": "A report running during a transfer never sees A debited but B not yet credited. / Báo cáo chạy giữa phi vụ không bao giờ thấy A đã trừ mà B chưa cộng."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "su": "An UPDATE that would make a balance −50 is rejected by CHECK. / Lệnh UPDATE làm số dư −50 bị CHECK chặn."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "su": "A typo inserts two rows with the same account id; the primary key refuses the second one. / Gõ nhầm chèn hai dòng cùng id; khoá chính từ chối dòng thứ hai."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.tc": "D",
+              "r2.tc": "A",
+              "r3.tc": "I",
+              "r4.tc": "C",
+              "r5.tc": "C"
+            },
+            "giaiThich": "<p>Atomicity = all or nothing; Consistency = declared rules hold; Isolation = in-flight work of others is invisible; Durability = committed survives crashes (WAL flushed to disk before COMMIT returns).</p><p><i>VI: Nguyên tử = tất cả hoặc không; Nhất quán = luật đã khai luôn đúng; Cô lập = việc dở dang của người khác không nhìn thấy; Bền vững = đã commit thì sống qua sự cố (WAL ghi đĩa trước khi COMMIT trả về).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the CHECK case \"atomicity\" — the statement failing is A, but the RULE that made it fail is C.|||Gọi trường hợp CHECK là \"nguyên tử\" — lệnh hỏng là A, nhưng LUẬT khiến nó hỏng là C."
+        },
+        {
+          "loi": "Mixing up isolation (others) and atomicity (my own partial work).|||Nhầm cô lập (người khác) với nguyên tử (việc dở của chính mình)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transaction",
+          "vi": "giao dịch",
+          "giaiThich": "Nhóm lệnh được tất cả hoặc không gì (BEGIN … COMMIT / ROLLBACK)."
+        }
+      ]
+    }
+  ]
+}

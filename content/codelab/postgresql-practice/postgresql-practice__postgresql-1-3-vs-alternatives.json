@@ -1,0 +1,352 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-1-3-vs-alternatives",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-1-3-vs-alternatives"
+  },
+  "exercises": [
+    {
+      "title": "Pick the database for the job",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "decision guide"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "concepts",
+        "choice"
+      ],
+      "problemHtml": "<p>Lesson 1.3 ends with a decision guide. Apply it: for each project choose the system the lesson recommends as the <b>default</b> fit.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 1.3 kết thúc bằng một hướng dẫn chọn. Áp dụng nó: với mỗi dự án chọn hệ mà bài khuyên là lựa chọn <b>mặc định</b> phù hợp.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: one user on one device, or many users over a network?|||Tự hỏi: một người trên một máy, hay nhiều người qua mạng?",
+        "Flexible attributes inside a relational app ⇒ jsonb, not a second database.|||Thuộc tính linh hoạt trong app quan hệ ⇒ jsonb, không cần CSDL thứ hai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the database for the job\n\nAnswer in the answer panel (no code needed).\n\n1. Project → systemDự án → hệ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Pick the database for the job — answer key\n\n1. Project → systemDự án → hệ\n   - r1.he: SQLite\n   - r2.he: PostgreSQL\n   - r3.he: Redis\n   - r4.he: MySQL\n   - r5.he: PostgreSQL\n   SQLite = a file inside one app; PostgreSQL = the default server for relational data with integrity and concurrency, and its jsonb covers per-category attributes without a second database; Redis = in-memory key/value with expiry; MySQL when the ecosystem already chose it. A document store earns its place only when the whole model is documents.VI: SQLite = một tệp trong một app; PostgreSQL = máy chủ mặc định cho dữ liệu quan hệ cần toàn vẹn và đồng thời, jsonb của nó lo thuộc tính theo danh mục mà không cần CSDL thứ hai; Redis = khoá/giá trị trong RAM có hết hạn; MySQL khi hệ sinh thái đã chọn sẵn. Kho tài liệu chỉ đáng dùng khi cả mô hình là tài liệu.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>SQLite = a file inside one app; PostgreSQL = the default server for relational data with integrity and concurrency, and its jsonb covers per-category attributes without a second database; Redis = in-memory key/value with expiry; MySQL when the ecosystem already chose it. A document store earns its place only when the whole model is documents.</p><p><i>VI: SQLite = một tệp trong một app; PostgreSQL = máy chủ mặc định cho dữ liệu quan hệ cần toàn vẹn và đồng thời, jsonb của nó lo thuộc tính theo danh mục mà không cần CSDL thứ hai; Redis = khoá/giá trị trong RAM có hết hạn; MySQL khi hệ sinh thái đã chọn sẵn. Kho tài liệu chỉ đáng dùng khi cả mô hình là tài liệu.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Project → system</p><p style=\"opacity:.75;font-size:.92em\"><i>Dự án → hệ</i></p>",
+            "cot": [
+              {
+                "ma": "da",
+                "ten": "Project / Dự án"
+              },
+              {
+                "ma": "he",
+                "ten": "System",
+                "luaChon": [
+                  "PostgreSQL",
+                  "SQLite",
+                  "MySQL",
+                  "MongoDB",
+                  "Redis"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "da": "A mobile app keeps the user's offline notes on the phone, single user, no server. / App di động giữ ghi chú offline trên điện thoại, một người dùng, không máy chủ."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "da": "A web shop: orders, payments, stock, reports, many concurrent users. / Cửa hàng web: đơn, thanh toán, tồn kho, báo cáo, nhiều người dùng đồng thời."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "da": "A cache of computed pages with a 60-second expiry, read thousands of times per second. / Bộ đệm trang đã tính, hết hạn sau 60 giây, đọc hàng nghìn lần mỗi giây."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "da": "A team inherits a large existing WordPress site built on it. / Nhóm nhận lại một site WordPress lớn đã dựng sẵn trên nó."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "da": "Product attributes differ per category (pens: ink colour; calculators: functions) inside an otherwise relational shop. / Thuộc tính sản phẩm khác nhau theo danh mục (bút: màu mực; máy tính: chức năng) trong một cửa hàng vốn là quan hệ."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.he": "SQLite",
+              "r2.he": "PostgreSQL",
+              "r3.he": "Redis",
+              "r4.he": "MySQL",
+              "r5.he": "PostgreSQL"
+            },
+            "giaiThich": "<p>SQLite = a file inside one app; PostgreSQL = the default server for relational data with integrity and concurrency, and its jsonb covers per-category attributes without a second database; Redis = in-memory key/value with expiry; MySQL when the ecosystem already chose it. A document store earns its place only when the whole model is documents.</p><p><i>VI: SQLite = một tệp trong một app; PostgreSQL = máy chủ mặc định cho dữ liệu quan hệ cần toàn vẹn và đồng thời, jsonb của nó lo thuộc tính theo danh mục mà không cần CSDL thứ hai; Redis = khoá/giá trị trong RAM có hết hạn; MySQL khi hệ sinh thái đã chọn sẵn. Kho tài liệu chỉ đáng dùng khi cả mô hình là tài liệu.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing MongoDB because \"some fields vary\" — the rest of the shop (orders, payments) is still relational.|||Chọn MongoDB vì \"vài trường thay đổi\" — phần còn lại (đơn, thanh toán) vẫn là quan hệ."
+        },
+        {
+          "loi": "Using SQLite as a multi-user web database — one writer at a time.|||Dùng SQLite làm CSDL web nhiều người — mỗi lúc chỉ một người ghi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "embedded database",
+          "vi": "CSDL nhúng",
+          "giaiThich": "chạy trong tiến trình của app, không có máy chủ riêng"
+        }
+      ]
+    },
+    {
+      "title": "SQL vs NoSQL: what is really different",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "schema",
+        "joins",
+        "transactions"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "concepts",
+        "nosql"
+      ],
+      "problemHtml": "<p>Five claims you will hear. Choose the accurate statement each time.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm lời bạn sẽ nghe. Mỗi lần chọn phát biểu chính xác.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look for statements about where rules are enforced.|||Tìm phát biểu nói về nơi luật được ép.",
+        "\"Always\" and \"never\" in an option are usually wrong.|||Phương án có \"luôn luôn\" hay \"không bao giờ\" thường sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SQL vs NoSQL: what is really different\n\nAnswer in the answer panel (no code needed).\n\n1. \"NoSQL has no schema.\"\"NoSQL không có lược đồ.\"\n2. Which is a genuine strength of PostgreSQL over a typical document store for a shop?Điểm mạnh thật của PostgreSQL so với kho tài liệu thường gặp, cho một cửa hàng?\n3. Can PostgreSQL store and query documents?PostgreSQL có lưu và truy vấn tài liệu được không?\n4. Why does SQLite not fit a busy multi-user web API?Vì sao SQLite không hợp với một API web đông người dùng?\n5. MySQL and PostgreSQL are both relational. A typical difference lesson 1.3 points out:MySQL và PostgreSQL đều là quan hệ. Một khác biệt điển hình bài 1.3 nêu:\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# SQL vs NoSQL: what is really different — answer key\n\n1. \"NoSQL has no schema.\"\"NoSQL không có lược đồ.\"\n   Answer: d) the schema still exists — it moves from the database into every application that reads the data\n   Code that reads order.customer.email assumes a shape. Without the database enforcing it, each reader must defend against missing or mistyped fields.VI: Mã đọc order.customer.email đã giả định một hình dạng. CSDL không ép thì mọi nơi đọc phải tự phòng trường thiếu hay sai kiểu.\n\n2. Which is a genuine strength of PostgreSQL over a typical document store for a shop?Điểm mạnh thật của PostgreSQL so với kho tài liệu thường gặp, cho một cửa hàng?\n   Answer: b) foreign keys and multi-row transactions across orders, payments and stock\n   Integrity across several entities (an order, its payment, the stock it consumes) is where the relational model shines. Speed depends on the workload and indexes.VI: Toàn vẹn qua nhiều thực thể (đơn, thanh toán, tồn kho nó dùng) là chỗ mô hình quan hệ toả sáng. Tốc độ tuỳ khối lượng việc và chỉ mục.\n\n3. Can PostgreSQL store and query documents?PostgreSQL có lưu và truy vấn tài liệu được không?\n   Answer: d) yes — jsonb, with operators and GIN indexes (chapter 13)\n   jsonb is built in, parsed on write, indexable with GIN, and can live next to normal columns in the same row.VI: jsonb có sẵn, được phân tích khi ghi, đánh chỉ mục GIN được, và nằm cạnh cột thường trong cùng một dòng.\n\n4. Why does SQLite not fit a busy multi-user web API?Vì sao SQLite không hợp với một API web đông người dùng?\n   Answer: a) it is a library writing to a local file, with one writer at a time and no network server\n   SQLite is excellent embedded; its design (a file, a single writer lock) is the reason, not a lack of SQL.VI: SQLite tuyệt vời khi nhúng; thiết kế của nó (một tệp, khoá một người ghi) là lý do, không phải vì thiếu SQL.\n\n5. MySQL and PostgreSQL are both relational. A typical difference lesson 1.3 points out:MySQL và PostgreSQL đều là quan hệ. Một khác biệt điển hình bài 1.3 nêu:\n   Answer: b) PostgreSQL has a richer type system and is stricter by default (no silent truncation)\n   Both have transactions (InnoDB) and indexes; PostgreSQL adds types like jsonb, arrays, ranges, enums and refuses invalid data instead of \"fixing\" it quietly.VI: Cả hai có giao dịch (InnoDB) và chỉ mục; PostgreSQL thêm kiểu như jsonb, mảng, khoảng, enum và từ chối dữ liệu sai thay vì lặng lẽ \"sửa\".\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> the schema still exists — it moves from the database into every application that reads the data</p><p>Code that reads <code>order.customer.email</code> assumes a shape. Without the database enforcing it, each reader must defend against missing or mistyped fields.</p><p><i>VI: Mã đọc <code>order.customer.email</code> đã giả định một hình dạng. CSDL không ép thì mọi nơi đọc phải tự phòng trường thiếu hay sai kiểu.</i></p></li><li><p><b>b)</b> foreign keys and multi-row transactions across orders, payments and stock</p><p>Integrity across several entities (an order, its payment, the stock it consumes) is where the relational model shines. Speed depends on the workload and indexes.</p><p><i>VI: Toàn vẹn qua nhiều thực thể (đơn, thanh toán, tồn kho nó dùng) là chỗ mô hình quan hệ toả sáng. Tốc độ tuỳ khối lượng việc và chỉ mục.</i></p></li><li><p><b>d)</b> yes — jsonb, with operators and GIN indexes (chapter 13)</p><p>jsonb is built in, parsed on write, indexable with GIN, and can live next to normal columns in the same row.</p><p><i>VI: jsonb có sẵn, được phân tích khi ghi, đánh chỉ mục GIN được, và nằm cạnh cột thường trong cùng một dòng.</i></p></li><li><p><b>a)</b> it is a library writing to a local file, with one writer at a time and no network server</p><p>SQLite is excellent embedded; its design (a file, a single writer lock) is the reason, not a lack of SQL.</p><p><i>VI: SQLite tuyệt vời khi nhúng; thiết kế của nó (một tệp, khoá một người ghi) là lý do, không phải vì thiếu SQL.</i></p></li><li><p><b>b)</b> PostgreSQL has a richer type system and is stricter by default (no silent truncation)</p><p>Both have transactions (InnoDB) and indexes; PostgreSQL adds types like jsonb, arrays, ranges, enums and refuses invalid data instead of \"fixing\" it quietly.</p><p><i>VI: Cả hai có giao dịch (InnoDB) và chỉ mục; PostgreSQL thêm kiểu như jsonb, mảng, khoảng, enum và từ chối dữ liệu sai thay vì lặng lẽ \"sửa\".</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>\"NoSQL has no schema.\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"NoSQL không có lược đồ.\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "false: MongoDB enforces the same schema as PostgreSQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it only applies to key/value stores"
+              },
+              {
+                "ma": "c",
+                "noiDung": "true: documents never need a structure"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the schema still exists — it moves from the database into every application that reads the data"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Code that reads <code>order.customer.email</code> assumes a shape. Without the database enforcing it, each reader must defend against missing or mistyped fields.</p><p><i>VI: Mã đọc <code>order.customer.email</code> đã giả định một hình dạng. CSDL không ép thì mọi nơi đọc phải tự phòng trường thiếu hay sai kiểu.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>Which is a genuine strength of PostgreSQL over a typical document store for a shop?</p><p style=\"opacity:.75;font-size:.92em\"><i>Điểm mạnh thật của PostgreSQL so với kho tài liệu thường gặp, cho một cửa hàng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it cannot store JSON"
+              },
+              {
+                "ma": "b",
+                "noiDung": "foreign keys and multi-row transactions across orders, payments and stock"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it never needs indexes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is always faster for every read"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Integrity across several entities (an order, its payment, the stock it consumes) is where the relational model shines. Speed depends on the workload and indexes.</p><p><i>VI: Toàn vẹn qua nhiều thực thể (đơn, thanh toán, tồn kho nó dùng) là chỗ mô hình quan hệ toả sáng. Tốc độ tuỳ khối lượng việc và chỉ mục.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Can PostgreSQL store and query documents?</p><p style=\"opacity:.75;font-size:.92em\"><i>PostgreSQL có lưu và truy vấn tài liệu được không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "only through an extension that is not installed by default"
+              },
+              {
+                "ma": "b",
+                "noiDung": "no"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only as plain text"
+              },
+              {
+                "ma": "d",
+                "noiDung": "yes — jsonb, with operators and GIN indexes (chapter 13)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>jsonb is built in, parsed on write, indexable with GIN, and can live next to normal columns in the same row.</p><p><i>VI: jsonb có sẵn, được phân tích khi ghi, đánh chỉ mục GIN được, và nằm cạnh cột thường trong cùng một dòng.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Why does SQLite not fit a busy multi-user web API?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao SQLite không hợp với một API web đông người dùng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it is a library writing to a local file, with one writer at a time and no network server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it cannot store more than 1 MB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it has no indexes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it does not support SQL"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>SQLite is excellent embedded; its design (a file, a single writer lock) is the reason, not a lack of SQL.</p><p><i>VI: SQLite tuyệt vời khi nhúng; thiết kế của nó (một tệp, khoá một người ghi) là lý do, không phải vì thiếu SQL.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>MySQL and PostgreSQL are both relational. A typical difference lesson 1.3 points out:</p><p style=\"opacity:.75;font-size:.92em\"><i>MySQL và PostgreSQL đều là quan hệ. Một khác biệt điển hình bài 1.3 nêu:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "MySQL does not speak SQL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "PostgreSQL has a richer type system and is stricter by default (no silent truncation)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL cannot use indexes on text"
+              },
+              {
+                "ma": "d",
+                "noiDung": "MySQL has no transactions at all"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Both have transactions (InnoDB) and indexes; PostgreSQL adds types like jsonb, arrays, ranges, enums and refuses invalid data instead of \"fixing\" it quietly.</p><p><i>VI: Cả hai có giao dịch (InnoDB) và chỉ mục; PostgreSQL thêm kiểu như jsonb, mảng, khoảng, enum và từ chối dữ liệu sai thay vì lặng lẽ \"sửa\".</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Repeating \"NoSQL is schemaless\" as if the shape of data stopped mattering.|||Lặp lại \"NoSQL không lược đồ\" như thể hình dạng dữ liệu không còn quan trọng."
+        },
+        {
+          "loi": "Picking a database by benchmark headlines instead of by integrity needs.|||Chọn CSDL theo tiêu đề benchmark thay vì theo nhu cầu toàn vẹn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "schema-on-read",
+          "vi": "lược đồ khi đọc",
+          "giaiThich": "hình dạng dữ liệu được kiểm khi đọc, ở app"
+        },
+        {
+          "en": "schema-on-write",
+          "vi": "lược đồ khi ghi",
+          "giaiThich": "CSDL kiểm hình dạng ngay lúc ghi"
+        }
+      ]
+    }
+  ]
+}

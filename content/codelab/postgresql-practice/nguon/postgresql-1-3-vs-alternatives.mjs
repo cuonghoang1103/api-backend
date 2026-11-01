@@ -1,0 +1,37 @@
+/** PostgreSQL · 1.3 — PostgreSQL vs MySQL, SQLite & NoSQL. Bài lựa chọn ⇒ trắc nghiệm tình huống + bảng quyết định. */
+import { mod, cs, q, bang1, tn } from './_chung.mjs';
+
+const HE = ['PostgreSQL', 'SQLite', 'MySQL', 'MongoDB', 'Redis'];
+
+export default mod('postgresql-1-3-vs-alternatives', '1.3 PostgreSQL vs MySQL, SQLite & NoSQL', [
+  cs({
+    t: 'Pick the database for the job', k: 'EASY', p: 6, loai: 'table', kn: ['decision guide'], tag: ['concepts', 'choice'],
+    en: '<p>Lesson 1.3 ends with a decision guide. Apply it: for each project choose the system the lesson recommends as the <b>default</b> fit.</p>',
+    vi: '<p>Bài 1.3 kết thúc bằng một hướng dẫn chọn. Áp dụng nó: với mỗi dự án chọn hệ mà bài khuyên là lựa chọn <b>mặc định</b> phù hợp.</p>',
+    bang: [bang1('b1', ['Project → system', 'Dự án → hệ'], [{ ma: 'da', ten: 'Project / Dự án' }, { ma: 'he', ten: 'System', luaChon: HE }], [
+      { o: { da: 'A mobile app keeps the user\'s offline notes on the phone, single user, no server. / App di động giữ ghi chú offline trên điện thoại, một người dùng, không máy chủ.' }, a: { he: 'SQLite' } },
+      { o: { da: 'A web shop: orders, payments, stock, reports, many concurrent users. / Cửa hàng web: đơn, thanh toán, tồn kho, báo cáo, nhiều người dùng đồng thời.' }, a: { he: 'PostgreSQL' } },
+      { o: { da: 'A cache of computed pages with a 60-second expiry, read thousands of times per second. / Bộ đệm trang đã tính, hết hạn sau 60 giây, đọc hàng nghìn lần mỗi giây.' }, a: { he: 'Redis' } },
+      { o: { da: 'A team inherits a large existing WordPress site built on it. / Nhóm nhận lại một site WordPress lớn đã dựng sẵn trên nó.' }, a: { he: 'MySQL' } },
+      { o: { da: 'Product attributes differ per category (pens: ink colour; calculators: functions) inside an otherwise relational shop. / Thuộc tính sản phẩm khác nhau theo danh mục (bút: màu mực; máy tính: chức năng) trong một cửa hàng vốn là quan hệ.' }, a: { he: 'PostgreSQL' } },
+    ], ['SQLite = a file inside one app; PostgreSQL = the default server for relational data with integrity and concurrency, and its jsonb covers per-category attributes without a second database; Redis = in-memory key/value with expiry; MySQL when the ecosystem already chose it. A document store earns its place only when the whole model is documents.', 'SQLite = một tệp trong một app; PostgreSQL = máy chủ mặc định cho dữ liệu quan hệ cần toàn vẹn và đồng thời, jsonb của nó lo thuộc tính theo danh mục mà không cần CSDL thứ hai; Redis = khoá/giá trị trong RAM có hết hạn; MySQL khi hệ sinh thái đã chọn sẵn. Kho tài liệu chỉ đáng dùng khi cả mô hình là tài liệu.'])],
+    gy: [['Ask: one user on one device, or many users over a network?', 'Tự hỏi: một người trên một máy, hay nhiều người qua mạng?'], ['Flexible attributes inside a relational app ⇒ jsonb, not a second database.', 'Thuộc tính linh hoạt trong app quan hệ ⇒ jsonb, không cần CSDL thứ hai.']],
+    lhg: [['Choosing MongoDB because "some fields vary" — the rest of the shop (orders, payments) is still relational.', 'Chọn MongoDB vì "vài trường thay đổi" — phần còn lại (đơn, thanh toán) vẫn là quan hệ.'], ['Using SQLite as a multi-user web database — one writer at a time.', 'Dùng SQLite làm CSDL web nhiều người — mỗi lúc chỉ một người ghi.']],
+    tn: [tn('embedded database', 'CSDL nhúng', 'chạy trong tiến trình của app, không có máy chủ riêng')],
+  }),
+
+  cs({
+    t: 'SQL vs NoSQL: what is really different', k: 'MEDIUM', p: 6, kn: ['schema', 'joins', 'transactions'], tag: ['concepts', 'nosql'],
+    en: '<p>Five claims you will hear. Choose the accurate statement each time.</p>', vi: '<p>Năm lời bạn sẽ nghe. Mỗi lần chọn phát biểu chính xác.</p>',
+    cau: [
+      q('q1', ['"NoSQL has no schema."', '"NoSQL không có lược đồ."'], ['the schema still exists — it moves from the database into every application that reads the data', 'true: documents never need a structure', 'false: MongoDB enforces the same schema as PostgreSQL', 'it only applies to key/value stores'], ['Code that reads <code>order.customer.email</code> assumes a shape. Without the database enforcing it, each reader must defend against missing or mistyped fields.', 'Mã đọc <code>order.customer.email</code> đã giả định một hình dạng. CSDL không ép thì mọi nơi đọc phải tự phòng trường thiếu hay sai kiểu.']),
+      q('q2', ['Which is a genuine strength of PostgreSQL over a typical document store for a shop?', 'Điểm mạnh thật của PostgreSQL so với kho tài liệu thường gặp, cho một cửa hàng?'], ['foreign keys and multi-row transactions across orders, payments and stock', 'it cannot store JSON', 'it never needs indexes', 'it is always faster for every read'], ['Integrity across several entities (an order, its payment, the stock it consumes) is where the relational model shines. Speed depends on the workload and indexes.', 'Toàn vẹn qua nhiều thực thể (đơn, thanh toán, tồn kho nó dùng) là chỗ mô hình quan hệ toả sáng. Tốc độ tuỳ khối lượng việc và chỉ mục.']),
+      q('q3', ['Can PostgreSQL store and query documents?', 'PostgreSQL có lưu và truy vấn tài liệu được không?'], ['yes — jsonb, with operators and GIN indexes (chapter 13)', 'only as plain text', 'only through an extension that is not installed by default', 'no'], ['jsonb is built in, parsed on write, indexable with GIN, and can live next to normal columns in the same row.', 'jsonb có sẵn, được phân tích khi ghi, đánh chỉ mục GIN được, và nằm cạnh cột thường trong cùng một dòng.']),
+      q('q4', ['Why does SQLite not fit a busy multi-user web API?', 'Vì sao SQLite không hợp với một API web đông người dùng?'], ['it is a library writing to a local file, with one writer at a time and no network server', 'it does not support SQL', 'it cannot store more than 1 MB', 'it has no indexes'], ['SQLite is excellent embedded; its design (a file, a single writer lock) is the reason, not a lack of SQL.', 'SQLite tuyệt vời khi nhúng; thiết kế của nó (một tệp, khoá một người ghi) là lý do, không phải vì thiếu SQL.']),
+      q('q5', ['MySQL and PostgreSQL are both relational. A typical difference lesson 1.3 points out:', 'MySQL và PostgreSQL đều là quan hệ. Một khác biệt điển hình bài 1.3 nêu:'], ['PostgreSQL has a richer type system and is stricter by default (no silent truncation)', 'MySQL has no transactions at all', 'PostgreSQL cannot use indexes on text', 'MySQL does not speak SQL'], ['Both have transactions (InnoDB) and indexes; PostgreSQL adds types like jsonb, arrays, ranges, enums and refuses invalid data instead of "fixing" it quietly.', 'Cả hai có giao dịch (InnoDB) và chỉ mục; PostgreSQL thêm kiểu như jsonb, mảng, khoảng, enum và từ chối dữ liệu sai thay vì lặng lẽ "sửa".']),
+    ],
+    gy: [['Look for statements about where rules are enforced.', 'Tìm phát biểu nói về nơi luật được ép.'], ['"Always" and "never" in an option are usually wrong.', 'Phương án có "luôn luôn" hay "không bao giờ" thường sai.']],
+    lhg: [['Repeating "NoSQL is schemaless" as if the shape of data stopped mattering.', 'Lặp lại "NoSQL không lược đồ" như thể hình dạng dữ liệu không còn quan trọng.'], ['Picking a database by benchmark headlines instead of by integrity needs.', 'Chọn CSDL theo tiêu đề benchmark thay vì theo nhu cầu toàn vẹn.']],
+    tn: [tn('schema-on-read', 'lược đồ khi đọc', 'hình dạng dữ liệu được kiểm khi đọc, ở app'), tn('schema-on-write', 'lược đồ khi ghi', 'CSDL kiểm hình dạng ngay lúc ghi')],
+  }),
+]);

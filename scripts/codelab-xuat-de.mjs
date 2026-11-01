@@ -57,6 +57,10 @@ function haiDs(v) {
   return [v.en ?? [], v.vi ?? null];
 }
 
+/** moTa của một kiểm: chuỗi | "EN|||VI" | { en, vi } ⇒ từng thứ tiếng (ví dụ trong đề tự dựng từ kiểm mẫu). */
+const moTaEn = (m) => (m && typeof m === 'object' ? (m.en ?? m.vi) : String(m ?? '').split('|||')[0].trim());
+const moTaVi = (m) => (m && typeof m === 'object' ? (m.vi ?? m.en) : (String(m ?? '').split('|||')[1] ?? String(m ?? '')).trim());
+
 function ngonNguTep(ten) {
   if (/\.css$/.test(ten)) return 'css';
   if (/\.(jsx|tsx)$/.test(ten)) return 'jsx';
@@ -193,7 +197,7 @@ for (const f of tepNguon) {
         ex.examplesJson.push({
           input: gop(ex.testsJson.viDuVao ?? { en: 'The sample database of this task (schema above).', vi: 'CSDL mẫu của bài (lược đồ ở trên).' }),
           output: soSanh.bangChu(k.mongDoi, 8),
-          explanation: gop({ en: `Expected result of check "${k.moTa}"${k.thuTu ? ' (row order matters)' : ' (row order does not matter)'}.`, vi: `Kết quả mong đợi của kiểm "${k.moTa}"${k.thuTu ? ' (đúng thứ tự dòng)' : ' (thứ tự dòng không quan trọng)'}.` }),
+          explanation: gop({ en: `Expected result of check "${moTaEn(k.moTa)}"${k.thuTu ? ' (row order matters)' : ' (row order does not matter)'}.`, vi: `Kết quả mong đợi của kiểm "${moTaVi(k.moTa)}"${k.thuTu ? ' (đúng thứ tự dòng)' : ' (thứ tự dòng không quan trọng)'}.` }),
         });
       }
       const t = !k && ex.testsJson.kiem.find((x) => !x.an && (x.kiem === 'chay-duoc' || x.kiem === 'bi-chan'));
@@ -201,7 +205,7 @@ for (const f of tepNguon) {
         ex.examplesJson.push({
           input: gop({ en: `After your statement(s), the grader runs: ${t.thu}`, vi: `Sau (các) lệnh của bạn, máy chấm chạy: ${t.thu}` }),
           output: gop(t.kiem === 'chay-duoc' ? { en: 'Accepted (the statement succeeds).', vi: 'Chạy được (câu lệnh thành công).' } : { en: 'Rejected by a constraint (error).', vi: 'Bị ràng buộc chặn (báo lỗi).' }),
-          explanation: gop({ en: `Check "${t.moTa}".`, vi: `Kiểm "${t.moTa}".` }),
+          explanation: gop({ en: `Check "${moTaEn(t.moTa)}".`, vi: `Kiểm "${moTaVi(t.moTa)}".` }),
         });
       }
     }

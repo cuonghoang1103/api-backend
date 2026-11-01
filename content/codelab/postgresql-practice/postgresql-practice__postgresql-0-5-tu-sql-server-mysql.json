@@ -1,0 +1,934 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-0-5-tu-sql-server-mysql",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-0-5-tu-sql-server-mysql"
+  },
+  "exercises": [
+    {
+      "title": "TOP 3 becomes LIMIT 3",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "LIMIT",
+        "boolean WHERE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "port",
+        "tsql",
+        "mysql"
+      ],
+      "problemHtml": "<p>This query ran on SQL Server:</p><pre>SELECT TOP 3 sku, price\nFROM product\nWHERE is_active = 1\nORDER BY price DESC;</pre><p>Rewrite it for PostgreSQL: the three most expensive <b>active</b> products, <code>sku, price</code>, most expensive first.</p>\n<h4>Sample database: ctmini (lesson 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 rows: BUT-01, VO-02, THUOC-03 (inactive, stock 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL for Bình, '' (empty string) for Chi)</pre><p>Full script: the <code>ctmini.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>No <code>TOP</code>; use <code>LIMIT</code>.</li>\n  <li><code>is_active</code> is a real boolean in PostgreSQL — compare it like one.</li>\n</ul>",
+      "problemHtmlVi": "<p>Câu này chạy trên SQL Server:</p><pre>SELECT TOP 3 sku, price\nFROM product\nWHERE is_active = 1\nORDER BY price DESC;</pre><p>Viết lại cho PostgreSQL: ba sản phẩm <b>đang bán</b> đắt nhất, <code>sku, price</code>, đắt nhất trước.</p>\n<h4>CSDL mẫu: ctmini (bài 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 dòng: BUT-01, VO-02, THUOC-03 (ngừng bán, tồn 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL với Bình, '' (chuỗi rỗng) với Chi)</pre><p>Script đầy đủ: tab <code>ctmini.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không dùng <code>TOP</code>; dùng <code>LIMIT</code>.</li>\n  <li><code>is_active</code> là boolean thật trong PostgreSQL — so sánh đúng kiểu boolean.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sku     | price \n--------+-------\nMAY-05  | 690000\nBALO-04 | 450000\nVO-02   | 18000 ",
+          "explanation": "Expected result of check \"MAY-05, BALO-04, VO-02 in that order\" (row order matters).|||Kết quả mong đợi của kiểm \"MAY-05, BALO-04, VO-02 đúng thứ tự\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Move the row limit to the end: <code>… ORDER BY price DESC LIMIT 3</code>.|||Dời giới hạn dòng xuống cuối: <code>… ORDER BY price DESC LIMIT 3</code>.",
+        "<code>WHERE is_active</code> (or <code>= true</code>); <code>= 1</code> compares boolean with integer and fails.|||<code>WHERE is_active</code> (hoặc <code>= true</code>); <code>= 1</code> so boolean với số nguyên và báo lỗi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT sku, price\nFROM product\nWHERE is_active              -- boolean: no \"= 1\"\nORDER BY price DESC\nLIMIT 3;                     -- T-SQL TOP 3\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>PostgreSQL spells the row limit <code>LIMIT n</code> (or the standard <code>FETCH FIRST n ROWS ONLY</code>) after ORDER BY, and a boolean column is a condition by itself.</p>",
+      "solutionExplanationHtmlVi": "<p>PostgreSQL viết giới hạn dòng là <code>LIMIT n</code> (hoặc chuẩn <code>FETCH FIRST n ROWS ONLY</code>) sau ORDER BY, và cột boolean tự nó đã là điều kiện.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "MAY-05, BALO-04, VO-02 in that order|||MAY-05, BALO-04, VO-02 đúng thứ tự",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "price"
+              ],
+              "hang": [
+                [
+                  "MAY-05",
+                  690000
+                ],
+                [
+                  "BALO-04",
+                  450000
+                ],
+                [
+                  "VO-02",
+                  18000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "An expensive but inactive product stays out|||Sản phẩm đắt nhưng ngừng bán không lọt vào",
+            "an": true,
+            "themCsdl": "INSERT INTO product (sku, name, price, stock, is_active) VALUES ('LAP-06', 'Laptop cũ', 9000000, 1, false)",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "price"
+              ],
+              "hang": [
+                [
+                  "MAY-05",
+                  690000
+                ],
+                [
+                  "BALO-04",
+                  450000
+                ],
+                [
+                  "VO-02",
+                  18000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses LIMIT|||Dùng LIMIT",
+            "khop": "\\bLIMIT\\s+3\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping <code>is_active = 1</code> — PostgreSQL: \"operator does not exist: boolean = integer\".|||Giữ <code>is_active = 1</code> — PostgreSQL: \"operator does not exist: boolean = integer\"."
+        },
+        {
+          "loi": "Dropping the WHERE while porting — the inactive THUOC-03 (or any expensive inactive item) sneaks in.|||Bỏ mất WHERE khi chuyển — THUOC-03 ngừng bán (hay món đắt đã ngừng bán) lọt vào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "LIMIT / OFFSET",
+          "vi": "giới hạn / bỏ qua",
+          "giaiThich": "LIMIT n lấy tối đa n dòng; OFFSET k bỏ k dòng đầu. Chỉ có nghĩa khi có ORDER BY."
+        }
+      ]
+    },
+    {
+      "title": "ISNULL and + become COALESCE and ||",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "COALESCE",
+        "NULLIF",
+        "|| concatenation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "port",
+        "tsql",
+        "mysql"
+      ],
+      "problemHtml": "<p>The customer list in SQL Server:</p><pre>SELECT full_name + N' &lt;' + email + N'&gt;' AS contact,\n       ISNULL(NULLIF(phone, N''), N'no phone') AS phone\nFROM customer\nORDER BY id;</pre><p>Port it. <code>contact</code> looks like <code>Nguyễn Văn An &lt;an@ctshop.vn&gt;</code>; a missing phone — NULL <b>or</b> an empty string — shows <code>no phone</code>.</p>\n<h4>Sample database: ctmini (lesson 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 rows: BUT-01, VO-02, THUOC-03 (inactive, stock 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL for Bình, '' (empty string) for Chi)</pre><p>Full script: the <code>ctmini.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Concatenate with <code>||</code>; replace ISNULL with COALESCE.</li>\n  <li>Columns <code>contact, phone</code>, ordered by id.</li>\n</ul>",
+      "problemHtmlVi": "<p>Danh sách khách trên SQL Server:</p><pre>SELECT full_name + N' &lt;' + email + N'&gt;' AS contact,\n       ISNULL(NULLIF(phone, N''), N'no phone') AS phone\nFROM customer\nORDER BY id;</pre><p>Chuyển sang PostgreSQL. <code>contact</code> có dạng <code>Nguyễn Văn An &lt;an@ctshop.vn&gt;</code>; số điện thoại thiếu — NULL <b>hoặc</b> chuỗi rỗng — hiện <code>no phone</code>.</p>\n<h4>CSDL mẫu: ctmini (bài 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 dòng: BUT-01, VO-02, THUOC-03 (ngừng bán, tồn 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL với Bình, '' (chuỗi rỗng) với Chi)</pre><p>Script đầy đủ: tab <code>ctmini.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nối chuỗi bằng <code>||</code>; thay ISNULL bằng COALESCE.</li>\n  <li>Cột <code>contact, phone</code>, sắp theo id.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "contact                      | phone     \n-----------------------------+-----------\nNguyễn Văn An <an@ctshop.vn> | 0901000001\nTrần Thị Bình <binh@ctshop.… | no phone  \nLê Minh Chi <chi@ctshop.vn>  | no phone  ",
+          "explanation": "Expected result of check \"Three contacts, Bình and Chi without phone\" (row order matters).|||Kết quả mong đợi của kiểm \"Ba liên hệ, Bình và Chi không có số\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "<code>a || b</code> concatenates text; <code>COALESCE(x, y)</code> returns the first non-NULL.|||<code>a || b</code> nối chữ; <code>COALESCE(x, y)</code> trả giá trị khác NULL đầu tiên.",
+        "Turn the empty string into NULL first: <code>NULLIF(phone, '')</code>.|||Biến chuỗi rỗng thành NULL trước: <code>NULLIF(phone, '')</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT full_name || ' <' || email || '>'          AS contact,\n       COALESCE(NULLIF(phone, ''), 'no phone')     AS phone   -- '' → NULL → 'no phone'\nFROM customer\nORDER BY id;\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>PostgreSQL follows the standard: <code>||</code> joins strings and <code>COALESCE</code> picks the first non-NULL argument. An empty string is a real value, not NULL — <code>NULLIF</code> converts it before COALESCE.</p>",
+      "solutionExplanationHtmlVi": "<p>PostgreSQL theo chuẩn: <code>||</code> nối chuỗi, <code>COALESCE</code> lấy đối số khác NULL đầu tiên. Chuỗi rỗng là giá trị thật, không phải NULL — <code>NULLIF</code> đổi nó trước khi COALESCE.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Three contacts, Bình and Chi without phone|||Ba liên hệ, Bình và Chi không có số",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "contact",
+                "phone"
+              ],
+              "hang": [
+                [
+                  "Nguyễn Văn An <an@ctshop.vn>",
+                  "0901000001"
+                ],
+                [
+                  "Trần Thị Bình <binh@ctshop.vn>",
+                  "no phone"
+                ],
+                [
+                  "Lê Minh Chi <chi@ctshop.vn>",
+                  "no phone"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A phone made of spaces is still a phone (only exactly empty is missing)|||Số chỉ gồm dấu cách vẫn là số (chỉ đúng chuỗi rỗng mới là thiếu)",
+            "an": true,
+            "themCsdl": "INSERT INTO customer (email, full_name, phone) VALUES ('dung@ctshop.vn', 'Phạm Dũng', '0988000004')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "contact",
+                "phone"
+              ],
+              "hang": [
+                [
+                  "Nguyễn Văn An <an@ctshop.vn>",
+                  "0901000001"
+                ],
+                [
+                  "Trần Thị Bình <binh@ctshop.vn>",
+                  "no phone"
+                ],
+                [
+                  "Lê Minh Chi <chi@ctshop.vn>",
+                  "no phone"
+                ],
+                [
+                  "Phạm Dũng <dung@ctshop.vn>",
+                  "0988000004"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses COALESCE|||Dùng COALESCE",
+            "khop": "\\bCOALESCE\\s*\\(",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>COALESCE(phone, 'no phone')</code> alone — Chi's empty string is not NULL and shows as an empty phone.|||Chỉ <code>COALESCE(phone, 'no phone')</code> — chuỗi rỗng của Chi không phải NULL nên hiện số trống."
+        },
+        {
+          "loi": "Keeping <code>ISNULL(…)</code> — PostgreSQL has no such function (it has the <code>IS NULL</code> test).|||Giữ <code>ISNULL(…)</code> — PostgreSQL không có hàm này (chỉ có phép thử <code>IS NULL</code>)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "COALESCE",
+          "vi": "giá trị khác NULL đầu tiên"
+        },
+        {
+          "en": "NULLIF(a, b)",
+          "vi": "NULL nếu a = b"
+        }
+      ]
+    },
+    {
+      "title": "OUTPUT becomes RETURNING",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "UPDATE … RETURNING",
+        "boolean"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "port",
+        "tsql",
+        "mysql"
+      ],
+      "problemHtml": "<p>A nightly job on SQL Server switches off every product that is out of stock and logs which ones it touched:</p><pre>UPDATE product\nSET is_active = 0\nOUTPUT inserted.sku, inserted.is_active\nWHERE stock = 0 AND is_active = 1;</pre><p>Write the PostgreSQL version — only port the statement. (In the sample data THUOC-03 is already inactive; the checks add more sold-out products.)</p>\n<h4>Sample database: ctmini (lesson 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 rows: BUT-01, VO-02, THUOC-03 (inactive, stock 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL for Bình, '' (empty string) for Chi)</pre><p>Full script: the <code>ctmini.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>One UPDATE ending with <code>RETURNING sku, is_active</code>.</li>\n  <li>Only rows that are out of stock AND still active are changed.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một job ban đêm trên SQL Server tắt mọi sản phẩm hết hàng và ghi lại những món nó đã đụng tới:</p><pre>UPDATE product\nSET is_active = 0\nOUTPUT inserted.sku, inserted.is_active\nWHERE stock = 0 AND is_active = 1;</pre><p>Viết bản PostgreSQL — chỉ chuyển câu lệnh. (Trong dữ liệu mẫu THUOC-03 đã tắt sẵn; các kiểm thêm sản phẩm hết hàng khác.)</p>\n<h4>CSDL mẫu: ctmini (bài 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 dòng: BUT-01, VO-02, THUOC-03 (ngừng bán, tồn 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL với Bình, '' (chuỗi rỗng) với Chi)</pre><p>Script đầy đủ: tab <code>ctmini.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một lệnh UPDATE kết thúc bằng <code>RETURNING sku, is_active</code>.</li>\n  <li>Chỉ đổi dòng hết hàng VÀ còn đang bán.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sku      | stock | is_active\n---------+-------+----------\nBUT-01   | 120   | true     \nVO-02    | 40    | true     \nTHUOC-03 | 0     | false    \nBALO-04  | 0     | false    \nMAY-05   | 15    | true     ",
+          "explanation": "Expected result of check \"Products after the job\" (row order matters).|||Kết quả mong đợi của kiểm \"Sản phẩm sau job\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "T-SQL <code>OUTPUT inserted.col</code> = PostgreSQL <code>RETURNING col</code>, placed at the very end.|||T-SQL <code>OUTPUT inserted.col</code> = PostgreSQL <code>RETURNING col</code>, đặt ở cuối cùng.",
+        "Booleans: <code>SET is_active = false</code>, <code>WHERE … AND is_active</code>.|||Boolean: <code>SET is_active = false</code>, <code>WHERE … AND is_active</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE product\nSET is_active = false\nWHERE stock = 0 AND is_active\nRETURNING sku, is_active;      -- T-SQL: OUTPUT inserted.sku, inserted.is_active\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>RETURNING</code> returns the new version of every row the UPDATE changed — the same idea as <code>OUTPUT inserted.*</code>, but written last.</p>",
+      "solutionExplanationHtmlVi": "<p><code>RETURNING</code> trả phiên bản mới của mọi dòng UPDATE đã đổi — cùng ý với <code>OUTPUT inserted.*</code>, nhưng viết ở cuối.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Products after the job|||Sản phẩm sau job",
+            "kiemTra": "SELECT sku, stock, is_active FROM product ORDER BY id",
+            "thuTu": true,
+            "themCsdl": "UPDATE product SET stock = 0 WHERE sku = 'BALO-04'",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock",
+                "is_active"
+              ],
+              "hang": [
+                [
+                  "BUT-01",
+                  120,
+                  true
+                ],
+                [
+                  "VO-02",
+                  40,
+                  true
+                ],
+                [
+                  "THUOC-03",
+                  0,
+                  false
+                ],
+                [
+                  "BALO-04",
+                  0,
+                  false
+                ],
+                [
+                  "MAY-05",
+                  15,
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "RETURNING lists exactly the switched-off products|||RETURNING liệt kê đúng các món vừa bị tắt",
+            "an": true,
+            "themCsdl": "UPDATE product SET stock = 0 WHERE sku IN ('BALO-04', 'VO-02')",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "is_active"
+              ],
+              "hang": [
+                [
+                  "VO-02",
+                  false
+                ],
+                [
+                  "BALO-04",
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses RETURNING|||Dùng RETURNING",
+            "khop": "\\bRETURNING\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dropping <code>AND is_active</code>: rows that were already inactive are \"touched\" again and appear in the log.|||Bỏ <code>AND is_active</code>: dòng đã tắt sẵn bị \"đụng\" lại và hiện trong nhật ký."
+        },
+        {
+          "loi": "Forgetting RETURNING — the job no longer knows what it changed.|||Quên RETURNING — job không còn biết nó đã đổi gì."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RETURNING",
+          "vi": "trả về dòng vừa ghi",
+          "giaiThich": "INSERT/UPDATE/DELETE … RETURNING cột ⇒ lệnh ghi trả lại các dòng nó vừa đụng tới — khỏi phải SELECT lại."
+        }
+      ]
+    },
+    {
+      "title": "MERGE / ON DUPLICATE KEY becomes ON CONFLICT",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "INSERT … ON CONFLICT DO UPDATE",
+        "EXCLUDED"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "port",
+        "tsql",
+        "mysql"
+      ],
+      "problemHtml": "<p>A delivery arrives: <b>30</b> more BUT-01 (Bút bi Thiên Long, 5000) and <b>10</b> of a new product <b>GOM-07</b> (Gôm tẩy, 3000). In MySQL the shop wrote:</p><pre>INSERT INTO product (sku, name, price, stock)\nVALUES ('BUT-01', 'Bút bi Thiên Long', 5000, 30), ('GOM-07', 'Gôm tẩy', 3000, 10) AS s\nON DUPLICATE KEY UPDATE stock = product.stock + s.stock;</pre><p>Write ONE PostgreSQL statement that adds the delivered quantity to existing SKUs, creates new ones, and returns <code>sku, stock</code>.</p>\n<h4>Sample database: ctmini (lesson 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 rows: BUT-01, VO-02, THUOC-03 (inactive, stock 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL for Bình, '' (empty string) for Chi)</pre><p>Full script: the <code>ctmini.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>INSERT … ON CONFLICT (sku) DO UPDATE SET stock = … + EXCLUDED.stock</code>.</li>\n  <li>End with <code>RETURNING sku, stock</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một lô hàng về: thêm <b>30</b> cây BUT-01 (Bút bi Thiên Long, 5000) và <b>10</b> cục của sản phẩm mới <b>GOM-07</b> (Gôm tẩy, 3000). Ở MySQL cửa hàng viết:</p><pre>INSERT INTO product (sku, name, price, stock)\nVALUES ('BUT-01', 'Bút bi Thiên Long', 5000, 30), ('GOM-07', 'Gôm tẩy', 3000, 10) AS s\nON DUPLICATE KEY UPDATE stock = product.stock + s.stock;</pre><p>Viết MỘT lệnh PostgreSQL cộng số giao vào SKU đã có, tạo SKU mới, và trả về <code>sku, stock</code>.</p>\n<h4>CSDL mẫu: ctmini (bài 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 dòng: BUT-01, VO-02, THUOC-03 (ngừng bán, tồn 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL với Bình, '' (chuỗi rỗng) với Chi)</pre><p>Script đầy đủ: tab <code>ctmini.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>INSERT … ON CONFLICT (sku) DO UPDATE SET stock = … + EXCLUDED.stock</code>.</li>\n  <li>Kết thúc bằng <code>RETURNING sku, stock</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sku    | stock\n-------+------\nBUT-01 | 150  \nGOM-07 | 10   ",
+          "explanation": "Expected result of check \"BUT-01 goes 120 → 150, GOM-07 is created with 10\" (row order does not matter).|||Kết quả mong đợi của kiểm \"BUT-01 từ 120 lên 150, GOM-07 được tạo với 10\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "ON CONFLICT needs the unique column that decides \"already there\": <code>(sku)</code>.|||ON CONFLICT cần cột unique quyết định \"đã có\": <code>(sku)</code>.",
+        "MySQL's alias <code>s</code> is PostgreSQL's <code>EXCLUDED</code>; the current row is <code>product.stock</code>.|||Bí danh <code>s</code> của MySQL là <code>EXCLUDED</code> của PostgreSQL; dòng hiện có là <code>product.stock</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "INSERT INTO product (sku, name, price, stock)\nVALUES ('BUT-01', 'Bút bi Thiên Long', 5000, 30),\n       ('GOM-07', 'Gôm tẩy',           3000, 10)\nON CONFLICT (sku) DO UPDATE\n   SET stock = product.stock + EXCLUDED.stock   -- EXCLUDED = the row you tried to insert\nRETURNING sku, stock;\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For each row PostgreSQL tries the INSERT; if the UNIQUE index on sku already has the value, it runs DO UPDATE on the existing row instead. One statement, atomic, no race between \"check\" and \"insert\".</p>",
+      "solutionExplanationHtmlVi": "<p>Với từng dòng PostgreSQL thử INSERT; nếu chỉ mục UNIQUE trên sku đã có giá trị đó thì chạy DO UPDATE trên dòng cũ. Một lệnh, nguyên tử, không có khe hở giữa \"kiểm\" và \"chèn\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "BUT-01 goes 120 → 150, GOM-07 is created with 10|||BUT-01 từ 120 lên 150, GOM-07 được tạo với 10",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock"
+              ],
+              "hang": [
+                [
+                  "BUT-01",
+                  150
+                ],
+                [
+                  "GOM-07",
+                  10
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Stored stock and price|||Tồn kho và giá đã lưu",
+            "kiemTra": "SELECT sku, price, stock FROM product WHERE sku IN ('BUT-01', 'GOM-07') ORDER BY sku",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "price",
+                "stock"
+              ],
+              "hang": [
+                [
+                  "BUT-01",
+                  5000,
+                  150
+                ],
+                [
+                  "GOM-07",
+                  3000,
+                  10
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Adds to whatever is on the shelf now|||Cộng vào số đang có trên kệ, không ghi đè",
+            "kiemTra": "SELECT sku, stock FROM product WHERE sku = 'BUT-01'",
+            "an": true,
+            "themCsdl": "UPDATE product SET stock = 7 WHERE sku = 'BUT-01'",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock"
+              ],
+              "hang": [
+                [
+                  "BUT-01",
+                  37
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses ON CONFLICT|||Dùng ON CONFLICT",
+            "khop": "\\bON\\s+CONFLICT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "<code>SET stock = EXCLUDED.stock</code> overwrites 120 pens with 30.|||<code>SET stock = EXCLUDED.stock</code> ghi đè 120 cây bút thành 30."
+        },
+        {
+          "loi": "<code>DO NOTHING</code> silently ignores the delivery for existing products.|||<code>DO NOTHING</code> lặng lẽ bỏ qua lô hàng của sản phẩm đã có."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "UPSERT (ON CONFLICT)",
+          "vi": "chèn hoặc cập nhật",
+          "giaiThich": "INSERT … ON CONFLICT (khoá) DO UPDATE / DO NOTHING: trùng khoá thì sửa dòng cũ hoặc bỏ qua, trong MỘT lệnh nguyên tử."
+        },
+        {
+          "en": "EXCLUDED",
+          "vi": "dòng định chèn",
+          "giaiThich": "Trong ON CONFLICT DO UPDATE, EXCLUDED là dòng bạn định chèn mà bị trùng khoá."
+        }
+      ]
+    },
+    {
+      "title": "UPDATE … ORDER BY … LIMIT 1 the PostgreSQL way",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "UPDATE with a subquery",
+        "ORDER BY … LIMIT in a subquery",
+        "RETURNING"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "port",
+        "tsql",
+        "mysql"
+      ],
+      "problemHtml": "<p>A promotion gives away ONE unit of the most expensive product that is still in stock. MySQL allows:</p><pre>UPDATE product SET stock = stock - 1\nWHERE stock &gt; 0\nORDER BY price DESC\nLIMIT 1;</pre><p>PostgreSQL has no ORDER BY / LIMIT on UPDATE. Write the PostgreSQL statement that takes one unit from that product and returns <code>sku, stock</code>.</p>\n<h4>Sample database: ctmini (lesson 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 rows: BUT-01, VO-02, THUOC-03 (inactive, stock 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL for Bình, '' (empty string) for Chi)</pre><p>Full script: the <code>ctmini.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Pick the row in a subquery: <code>WHERE id = (SELECT id … ORDER BY price DESC LIMIT 1)</code>.</li>\n  <li>Exactly one row changes; finish with <code>RETURNING sku, stock</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một khuyến mãi tặng MỘT đơn vị của sản phẩm đắt nhất còn hàng. MySQL cho phép:</p><pre>UPDATE product SET stock = stock - 1\nWHERE stock &gt; 0\nORDER BY price DESC\nLIMIT 1;</pre><p>PostgreSQL không có ORDER BY / LIMIT trong UPDATE. Viết lệnh PostgreSQL lấy một đơn vị của sản phẩm đó và trả về <code>sku, stock</code>.</p>\n<h4>CSDL mẫu: ctmini (bài 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 dòng: BUT-01, VO-02, THUOC-03 (ngừng bán, tồn 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL với Bình, '' (chuỗi rỗng) với Chi)</pre><p>Script đầy đủ: tab <code>ctmini.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chọn dòng bằng truy vấn con: <code>WHERE id = (SELECT id … ORDER BY price DESC LIMIT 1)</code>.</li>\n  <li>Đúng một dòng bị đổi; kết thúc bằng <code>RETURNING sku, stock</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "sku    | stock\n-------+------\nMAY-05 | 14   ",
+          "explanation": "Expected result of check \"MAY-05 goes from 15 to 14\" (row order does not matter).|||Kết quả mong đợi của kiểm \"MAY-05 từ 15 xuống 14\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Find the id first: <code>SELECT id FROM product WHERE stock &gt; 0 ORDER BY price DESC LIMIT 1</code>.|||Tìm id trước: <code>SELECT id FROM product WHERE stock &gt; 0 ORDER BY price DESC LIMIT 1</code>.",
+        "Then <code>UPDATE … WHERE id = (that subquery)</code>.|||Rồi <code>UPDATE … WHERE id = (truy vấn con đó)</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "UPDATE product\nSET stock = stock - 1\nWHERE id = (SELECT id\n            FROM product\n            WHERE stock > 0\n            ORDER BY price DESC, id      -- id breaks a tie in price\n            LIMIT 1)\nRETURNING sku, stock;\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The subquery chooses exactly one id with the ordering you want; the outer UPDATE touches only that row. The hidden check sells out MAY-05 to prove the choice is computed, not hard-coded.</p>",
+      "solutionExplanationHtmlVi": "<p>Truy vấn con chọn đúng một id theo thứ tự bạn muốn; UPDATE ngoài chỉ đụng dòng đó. Kiểm ẩn cho MAY-05 hết hàng để chứng minh lựa chọn được tính, không chép cứng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "MAY-05 goes from 15 to 14|||MAY-05 từ 15 xuống 14",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock"
+              ],
+              "hang": [
+                [
+                  "MAY-05",
+                  14
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "No other product changed|||Không sản phẩm nào khác bị đổi",
+            "kiemTra": "SELECT sku, stock FROM product ORDER BY id",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock"
+              ],
+              "hang": [
+                [
+                  "BUT-01",
+                  120
+                ],
+                [
+                  "VO-02",
+                  40
+                ],
+                [
+                  "THUOC-03",
+                  0
+                ],
+                [
+                  "BALO-04",
+                  8
+                ],
+                [
+                  "MAY-05",
+                  14
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "When the priciest item is sold out, the next one in stock is chosen|||Khi món đắt nhất hết hàng thì chọn món kế tiếp còn hàng",
+            "an": true,
+            "themCsdl": "UPDATE product SET stock = 0 WHERE sku = 'MAY-05'",
+            "mongDoi": {
+              "cot": [
+                "sku",
+                "stock"
+              ],
+              "hang": [
+                [
+                  "BALO-04",
+                  7
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses a LIMIT 1 subquery|||Dùng truy vấn con LIMIT 1",
+            "khop": "\\(\\s*SELECT[\\s\\S]*LIMIT\\s+1[\\s\\S]*\\)",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting <code>stock &gt; 0</code> inside the subquery — once MAY-05 is sold out, its stock goes to −1 and the CHECK… there is none here, so it silently goes negative.|||Quên <code>stock &gt; 0</code> trong truy vấn con — khi MAY-05 hết hàng, tồn kho thành −1 (bảng này không có CHECK nên âm lặng lẽ)."
+        },
+        {
+          "loi": "Dropping the subquery: every in-stock product loses one unit.|||Bỏ truy vấn con: mọi sản phẩm còn hàng đều mất một đơn vị."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "RETURNING",
+          "vi": "trả về dòng vừa ghi",
+          "giaiThich": "INSERT/UPDATE/DELETE … RETURNING cột ⇒ lệnh ghi trả lại các dòng nó vừa đụng tới — khỏi phải SELECT lại."
+        },
+        {
+          "en": "subquery",
+          "vi": "truy vấn con"
+        }
+      ]
+    },
+    {
+      "title": "A T-SQL procedure becomes a PL/pgSQL function",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "CREATE FUNCTION",
+        "LANGUAGE plpgsql",
+        "SELECT … INTO",
+        "COALESCE on aggregates"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "port",
+        "tsql",
+        "mysql",
+        "plpgsql"
+      ],
+      "problemHtml": "<p>The SQL Server shop had this procedure:</p><pre>CREATE PROCEDURE dbo.stock_value @min_price DECIMAL(12,2)\nAS\nBEGIN\n  DECLARE @total DECIMAL(18,2);\n  SELECT @total = SUM(price * stock) FROM product WHERE price &gt;= @min_price AND is_active = 1;\n  SELECT ISNULL(@total, 0) AS total;\nEND;</pre><p>Create the PostgreSQL function <code>stock_value(min_price numeric) RETURNS numeric</code> in PL/pgSQL: the value of the stock of <b>active</b> products whose price is at least <code>min_price</code>, and <b>0</b> (not NULL) when nothing matches.</p>\n<h4>Sample database: ctmini (lesson 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 rows: BUT-01, VO-02, THUOC-03 (inactive, stock 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL for Bình, '' (empty string) for Chi)</pre><p>Full script: the <code>ctmini.sql</code> tab.</p>\n<h4>Requirements</h4>\n<ul>\n  <li><code>CREATE FUNCTION stock_value(min_price numeric) RETURNS numeric LANGUAGE plpgsql AS $$ … $$;</code></li>\n  <li>Inside: <code>DECLARE total numeric;</code>, <code>SELECT … INTO total</code>, <code>RETURN …</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cửa hàng SQL Server có thủ tục:</p><pre>CREATE PROCEDURE dbo.stock_value @min_price DECIMAL(12,2)\nAS\nBEGIN\n  DECLARE @total DECIMAL(18,2);\n  SELECT @total = SUM(price * stock) FROM product WHERE price &gt;= @min_price AND is_active = 1;\n  SELECT ISNULL(@total, 0) AS total;\nEND;</pre><p>Tạo hàm PostgreSQL <code>stock_value(min_price numeric) RETURNS numeric</code> bằng PL/pgSQL: giá trị tồn kho của các sản phẩm <b>đang bán</b> có giá từ <code>min_price</code> trở lên, và <b>0</b> (không phải NULL) khi không có gì khớp.</p>\n<h4>CSDL mẫu: ctmini (bài 0.5)</h4><pre>product  (id identity PK, sku UNIQUE, name, price numeric(12,2), stock int DEFAULT 0, is_active boolean DEFAULT true, created_at)\n         5 dòng: BUT-01, VO-02, THUOC-03 (ngừng bán, tồn 0), BALO-04, MAY-05\ncustomer (id identity PK, email UNIQUE, full_name, phone — NULL với Bình, '' (chuỗi rỗng) với Chi)</pre><p>Script đầy đủ: tab <code>ctmini.sql</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>CREATE FUNCTION stock_value(min_price numeric) RETURNS numeric LANGUAGE plpgsql AS $$ … $$;</code></li>\n  <li>Bên trong: <code>DECLARE total numeric;</code>, <code>SELECT … INTO total</code>, <code>RETURN …</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "from_10k | from_500k\n---------+----------\n14670000 | 10350000 ",
+          "explanation": "Expected result of check \"stock_value(10000) and stock_value(500000)\" (row order does not matter).|||Kết quả mong đợi của kiểm \"stock_value(10000) và stock_value(500000)\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Variables have no @ in PL/pgSQL; parameters are used by name.|||Biến trong PL/pgSQL không có @; tham số dùng thẳng theo tên.",
+        "<code>sum()</code> over zero rows is NULL — wrap the result in <code>COALESCE(total, 0)</code>.|||<code>sum()</code> trên 0 dòng là NULL — bọc kết quả bằng <code>COALESCE(total, 0)</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE FUNCTION stock_value(min_price numeric) RETURNS numeric\nLANGUAGE plpgsql AS $$\nDECLARE\n  total numeric;                         -- T-SQL: DECLARE @total\nBEGIN\n  SELECT sum(price * stock) INTO total   -- T-SQL: SELECT @total = …\n  FROM product\n  WHERE price >= min_price AND is_active;\n  RETURN COALESCE(total, 0);             -- sum() of no rows is NULL, not 0\nEND;\n$$;\n"
+        },
+        {
+          "name": "ctmini.sql",
+          "language": "sql",
+          "code": "-- ctmini.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- ctmini.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A function body is a string between <code>$$</code>; PL/pgSQL adds variables, <code>SELECT … INTO</code> and <code>RETURN</code>. You call it inside SQL: <code>SELECT stock_value(10000)</code> — that is how PostgreSQL replaces most T-SQL procedures that just compute a value.</p>",
+      "solutionExplanationHtmlVi": "<p>Thân hàm là một chuỗi giữa <code>$$</code>; PL/pgSQL thêm biến, <code>SELECT … INTO</code> và <code>RETURN</code>. Gọi nó ngay trong SQL: <code>SELECT stock_value(10000)</code> — đó là cách PostgreSQL thay phần lớn thủ tục T-SQL chỉ để tính một giá trị.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE product (\n  id         int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  sku        text          NOT NULL UNIQUE,\n  name       text          NOT NULL,\n  price      numeric(12,2) NOT NULL,\n  stock      int           NOT NULL DEFAULT 0,\n  is_active  boolean       NOT NULL DEFAULT true,\n  created_at timestamptz   NOT NULL DEFAULT now()\n);\nINSERT INTO product (sku, name, price, stock, is_active) VALUES\n ('BUT-01',   'Bút bi Thiên Long',      5000, 120, true),\n ('VO-02',    'Vở kẻ ngang 200 trang', 18000,  40, true),\n ('THUOC-03', 'Thước kẻ 30cm',          7000,   0, false),\n ('BALO-04',  'Balo chống gù',        450000,   8, true),\n ('MAY-05',   'Máy tính Casio fx-580',690000,  15, true);\nCREATE TABLE customer (\n  id        int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  email     text NOT NULL UNIQUE,\n  full_name text NOT NULL,\n  phone     text\n);\nINSERT INTO customer (email, full_name, phone) VALUES\n ('an@ctshop.vn',  'Nguyễn Văn An', '0901000001'),\n ('binh@ctshop.vn','Trần Thị Bình', NULL),\n ('chi@ctshop.vn', 'Lê Minh Chi',   '');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "stock_value(10000) and stock_value(500000)|||stock_value(10000) và stock_value(500000)",
+            "kiemTra": "SELECT stock_value(10000) AS from_10k, stock_value(500000) AS from_500k",
+            "mongDoi": {
+              "cot": [
+                "from_10k",
+                "from_500k"
+              ],
+              "hang": [
+                [
+                  14670000,
+                  10350000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Nothing matches ⇒ 0, not NULL|||Không khớp gì ⇒ 0, không phải NULL",
+            "kiemTra": "SELECT stock_value(100000000) AS nothing",
+            "mongDoi": {
+              "cot": [
+                "nothing"
+              ],
+              "hang": [
+                [
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Inactive products are not counted|||Sản phẩm ngừng bán không được tính",
+            "kiemTra": "SELECT stock_value(0) AS everything",
+            "an": true,
+            "themCsdl": "UPDATE product SET stock = 50 WHERE sku = 'THUOC-03'",
+            "mongDoi": {
+              "cot": [
+                "everything"
+              ],
+              "hang": [
+                [
+                  15270000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Written in PL/pgSQL|||Viết bằng PL/pgSQL",
+            "khop": "LANGUAGE\\s+plpgsql",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning <code>total</code> directly — a price nobody reaches gives NULL, and the report prints an empty cell.|||Trả thẳng <code>total</code> — mức giá không món nào đạt cho NULL, báo cáo in ô trống."
+        },
+        {
+          "loi": "Losing <code>is_active</code> while porting <code>is_active = 1</code>.|||Đánh rơi <code>is_active</code> khi chuyển <code>is_active = 1</code>."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PL/pgSQL",
+          "vi": "ngôn ngữ thủ tục của PostgreSQL"
+        },
+        {
+          "en": "dollar quoting $$",
+          "vi": "chuỗi đặt giữa $$, khỏi phải nhân đôi dấu nháy"
+        }
+      ]
+    }
+  ]
+}

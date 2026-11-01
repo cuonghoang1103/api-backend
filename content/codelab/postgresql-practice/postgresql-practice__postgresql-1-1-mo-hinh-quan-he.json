@@ -1,0 +1,545 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-1-1-mo-hinh-quan-he",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-1-1-mo-hinh-quan-he"
+  },
+  "exercises": [
+    {
+      "title": "Tables, rows, keys — the vocabulary",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "relation",
+        "primary key",
+        "foreign key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "concepts"
+      ],
+      "problemHtml": "<p>Five questions on the words lesson 1.1 builds everything on.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về những từ mà bài 1.1 dựng mọi thứ lên trên.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think \"one row = one fact\".|||Nghĩ \"một dòng = một sự kiện\".",
+        "A key identifies; a foreign key links.|||Khoá để định danh; khoá ngoại để nối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tables, rows, keys — the vocabulary\n\nAnswer in the answer panel (no code needed).\n\n1. In table notes, what is one row?Trong bảng notes, một dòng là gì?\n2. What does notes.user_id REFERENCES users(id) guarantee?notes.user_id REFERENCES users(id) bảo đảm điều gì?\n3. Why store the username once in users instead of in every note?Vì sao lưu username một lần ở users thay vì trong mọi ghi chú?\n4. What is the primary key for?Khoá chính dùng để làm gì?\n5. The relational model \"won\" mainly because…Mô hình quan hệ \"thắng\" chủ yếu vì…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Tables, rows, keys — the vocabulary — answer key\n\n1. In table notes, what is one row?Trong bảng notes, một dòng là gì?\n   Answer: d) one note, with a value for every column\n   A row (tuple) is one fact: one note with its id, owner, title and pinned flag. A column is one attribute across all rows.VI: Một dòng (bộ) là một sự kiện: một ghi chú với id, chủ, tiêu đề và cờ ghim. Một cột là một thuộc tính trên mọi dòng.\n\n2. What does notes.user_id REFERENCES users(id) guarantee?notes.user_id REFERENCES users(id) bảo đảm điều gì?\n   Answer: d) every note points to a user that really exists\n   A foreign key only checks the link: the referenced id must exist. It does not force users to have notes, and deleting a user with notes is REFUSED by default (cascade is opt-in, lesson 3.2).VI: Khoá ngoại chỉ kiểm mối nối: id được trỏ tới phải tồn tại. Nó không bắt user phải có ghi chú, và xoá user còn ghi chú bị TỪ CHỐI theo mặc định (cascade phải tự bật, bài 3.2).\n\n3. Why store the username once in users instead of in every note?Vì sao lưu username một lần ở users thay vì trong mọi ghi chú?\n   Answer: b) renaming a user is then one UPDATE of one row, with no copy left behind\n   One fact in one place: a rename touches one row. Copies drift apart the day one update misses a row (the update anomaly of lesson 3.4).VI: Một sự kiện ở một chỗ: đổi tên chỉ sửa một dòng. Bản sao sẽ lệch nhau ngay khi một lần cập nhật sót dòng (dị thường cập nhật, bài 3.4).\n\n4. What is the primary key for?Khoá chính dùng để làm gì?\n   Answer: a) to name each row uniquely so other rows can point at it\n   A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.\n\n5. The relational model \"won\" mainly because…Mô hình quan hệ \"thắng\" chủ yếu vì…\n   Answer: c) you ask questions in a declarative language and the database enforces the rules for every app\n   SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> one note, with a value for every column</p><p>A row (tuple) is one fact: one note with its id, owner, title and pinned flag. A column is one attribute across all rows.</p><p><i>VI: Một dòng (bộ) là một sự kiện: một ghi chú với id, chủ, tiêu đề và cờ ghim. Một cột là một thuộc tính trên mọi dòng.</i></p></li><li><p><b>d)</b> every note points to a user that really exists</p><p>A foreign key only checks the link: the referenced id must exist. It does not force users to have notes, and deleting a user with notes is REFUSED by default (cascade is opt-in, lesson 3.2).</p><p><i>VI: Khoá ngoại chỉ kiểm mối nối: id được trỏ tới phải tồn tại. Nó không bắt user phải có ghi chú, và xoá user còn ghi chú bị TỪ CHỐI theo mặc định (cascade phải tự bật, bài 3.2).</i></p></li><li><p><b>b)</b> renaming a user is then one UPDATE of one row, with no copy left behind</p><p>One fact in one place: a rename touches one row. Copies drift apart the day one update misses a row (the update anomaly of lesson 3.4).</p><p><i>VI: Một sự kiện ở một chỗ: đổi tên chỉ sửa một dòng. Bản sao sẽ lệch nhau ngay khi một lần cập nhật sót dòng (dị thường cập nhật, bài 3.4).</i></p></li><li><p><b>a)</b> to name each row uniquely so other rows can point at it</p><p>A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.</p><p><i>VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.</i></p></li><li><p><b>c)</b> you ask questions in a declarative language and the database enforces the rules for every app</p><p>SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.</p><p><i>VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>In table <code>notes</code>, what is one <b>row</b>?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong bảng <code>notes</code>, một <b>dòng</b> là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one column, e.g. all titles"
+              },
+              {
+                "ma": "b",
+                "noiDung": "the definition of the table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one user and all of their notes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "one note, with a value for every column"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A row (tuple) is one fact: one note with its id, owner, title and pinned flag. A column is one attribute across all rows.</p><p><i>VI: Một dòng (bộ) là một sự kiện: một ghi chú với id, chủ, tiêu đề và cờ ghim. Một cột là một thuộc tính trên mọi dòng.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>What does <code>notes.user_id REFERENCES users(id)</code> guarantee?</p><p style=\"opacity:.75;font-size:.92em\"><i><code>notes.user_id REFERENCES users(id)</code> bảo đảm điều gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "notes are deleted when their user is deleted"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every user has at least one note"
+              },
+              {
+                "ma": "c",
+                "noiDung": "user ids are never reused"
+              },
+              {
+                "ma": "d",
+                "noiDung": "every note points to a user that really exists"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A foreign key only checks the link: the referenced id must exist. It does not force users to have notes, and deleting a user with notes is REFUSED by default (cascade is opt-in, lesson 3.2).</p><p><i>VI: Khoá ngoại chỉ kiểm mối nối: id được trỏ tới phải tồn tại. Nó không bắt user phải có ghi chú, và xoá user còn ghi chú bị TỪ CHỐI theo mặc định (cascade phải tự bật, bài 3.2).</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Why store the username once in <code>users</code> instead of in every note?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao lưu username một lần ở <code>users</code> thay vì trong mọi ghi chú?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it makes SELECT faster in every case"
+              },
+              {
+                "ma": "b",
+                "noiDung": "renaming a user is then one UPDATE of one row, with no copy left behind"
+              },
+              {
+                "ma": "c",
+                "noiDung": "usernames are too long for the notes table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL forbids repeated text"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>One fact in one place: a rename touches one row. Copies drift apart the day one update misses a row (the update anomaly of lesson 3.4).</p><p><i>VI: Một sự kiện ở một chỗ: đổi tên chỉ sửa một dòng. Bản sao sẽ lệch nhau ngay khi một lần cập nhật sót dòng (dị thường cập nhật, bài 3.4).</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>What is the primary key for?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá chính dùng để làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "to name each row uniquely so other rows can point at it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "to store the creation order"
+              },
+              {
+                "ma": "c",
+                "noiDung": "to speed up every query"
+              },
+              {
+                "ma": "d",
+                "noiDung": "to sort the table on disk"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A primary key is UNIQUE + NOT NULL: a stable name for a row. It does come with an index, but its job is identity, not ordering.</p><p><i>VI: Khoá chính là UNIQUE + NOT NULL: tên ổn định cho một dòng. Nó có kèm chỉ mục, nhưng việc của nó là định danh, không phải sắp xếp.</i></p>"
+          },
+          {
+            "ma": "q5",
+            "de": "<p>The relational model \"won\" mainly because…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mô hình quan hệ \"thắng\" chủ yếu vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it was the first database model ever"
+              },
+              {
+                "ma": "b",
+                "noiDung": "tables are the fastest data structure"
+              },
+              {
+                "ma": "c",
+                "noiDung": "you ask questions in a declarative language and the database enforces the rules for every app"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it needs no schema"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>SQL describes WHAT you want and constraints live in the database, so every client gets the same guarantees. Speed depends on indexes and plans, not on the model.</p><p><i>VI: SQL mô tả CÁI bạn muốn và ràng buộc nằm trong CSDL nên mọi client có cùng bảo đảm. Tốc độ phụ thuộc chỉ mục và kế hoạch, không phụ thuộc mô hình.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Believing a foreign key cascades deletes by default.|||Tin rằng khoá ngoại mặc định xoá dây chuyền."
+        },
+        {
+          "loi": "Mixing up a row and a column.|||Nhầm dòng với cột."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL, có sẵn một chỉ mục B-tree."
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        }
+      ]
+    },
+    {
+      "title": "Put the rows back together: who wrote which note",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "JOIN … ON",
+        "aliases"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "join",
+        "notes"
+      ],
+      "problemHtml": "<p>A note only stores <code>user_id</code>. Return <code>username, title, pinned</code> for every note, ordered by <code>username</code> then by note <code>id</code>.</p>\n<h4>Sample tables (lesson 1.1)</h4><pre>users (id identity PK, username UNIQUE, email)            3 rows: cuong, lan, minh\nnotes (id identity PK, user_id → users.id, title, pinned)  5 rows — minh has no note yet</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Join <code>notes</code> to <code>users</code> on <code>users.id = notes.user_id</code>.</li>\n  <li>Order: username, then note id.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghi chú chỉ lưu <code>user_id</code>. Trả về <code>username, title, pinned</code> cho mọi ghi chú, sắp theo <code>username</code> rồi theo <code>id</code> của ghi chú.</p>\n<h4>Bảng mẫu (bài 1.1)</h4><pre>users (id identity PK, username UNIQUE, email)            3 dòng: cuong, lan, minh\nnotes (id identity PK, user_id → users.id, title, pinned)  5 dòng — minh chưa có ghi chú nào</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nối <code>notes</code> với <code>users</code> theo <code>users.id = notes.user_id</code>.</li>\n  <li>Thứ tự: username, rồi id ghi chú.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "username | title            | pinned\n---------+------------------+-------\ncuong    | Learn PostgreSQL | true  \ncuong    | Read the manual  | false \ncuong    | Call mom         | false \nlan      | Buy coffee       | false \nlan      | Plan the trip    | true  ",
+          "explanation": "Expected result of check \"Five notes with their author\" (row order matters).|||Kết quả mong đợi của kiểm \"Năm ghi chú kèm tác giả\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "FROM notes n JOIN users u ON …",
+        "The link is <code>u.id = n.user_id</code> — not <code>n.id</code>.|||Mối nối là <code>u.id = n.user_id</code> — không phải <code>n.id</code>."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE users (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  username text NOT NULL UNIQUE,\n  email    text NOT NULL\n);\nINSERT INTO users (username, email) VALUES ('cuong', 'cuong@notes.vn'), ('lan', 'lan@notes.vn'), ('minh', 'minh@notes.vn');\nCREATE TABLE notes (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id  bigint NOT NULL REFERENCES users(id),\n  title    varchar(200) NOT NULL,\n  pinned   boolean NOT NULL DEFAULT false\n);\nINSERT INTO notes (user_id, title, pinned) VALUES\n  (1, 'Learn PostgreSQL', true), (2, 'Buy coffee', false), (1, 'Read the manual', false),\n  (2, 'Plan the trip', true), (1, 'Call mom', false);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT u.username, n.title, n.pinned\nFROM notes n\nJOIN users u ON u.id = n.user_id     -- the foreign key is the join path\nORDER BY u.username, n.id;\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE users (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  username text NOT NULL UNIQUE,\n  email    text NOT NULL\n);\nINSERT INTO users (username, email) VALUES ('cuong', 'cuong@notes.vn'), ('lan', 'lan@notes.vn'), ('minh', 'minh@notes.vn');\nCREATE TABLE notes (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id  bigint NOT NULL REFERENCES users(id),\n  title    varchar(200) NOT NULL,\n  pinned   boolean NOT NULL DEFAULT false\n);\nINSERT INTO notes (user_id, title, pinned) VALUES\n  (1, 'Learn PostgreSQL', true), (2, 'Buy coffee', false), (1, 'Read the manual', false),\n  (2, 'Plan the trip', true), (1, 'Call mom', false);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The foreign key column <code>user_id</code> is the path between the two tables; JOIN … ON follows it and returns one row per matching pair.</p>",
+      "solutionExplanationHtmlVi": "<p>Cột khoá ngoại <code>user_id</code> là đường nối hai bảng; JOIN … ON đi theo nó và trả một dòng cho mỗi cặp khớp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE users (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  username text NOT NULL UNIQUE,\n  email    text NOT NULL\n);\nINSERT INTO users (username, email) VALUES ('cuong', 'cuong@notes.vn'), ('lan', 'lan@notes.vn'), ('minh', 'minh@notes.vn');\nCREATE TABLE notes (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id  bigint NOT NULL REFERENCES users(id),\n  title    varchar(200) NOT NULL,\n  pinned   boolean NOT NULL DEFAULT false\n);\nINSERT INTO notes (user_id, title, pinned) VALUES\n  (1, 'Learn PostgreSQL', true), (2, 'Buy coffee', false), (1, 'Read the manual', false),\n  (2, 'Plan the trip', true), (1, 'Call mom', false);",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Five notes with their author|||Năm ghi chú kèm tác giả",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "username",
+                "title",
+                "pinned"
+              ],
+              "hang": [
+                [
+                  "cuong",
+                  "Learn PostgreSQL",
+                  true
+                ],
+                [
+                  "cuong",
+                  "Read the manual",
+                  false
+                ],
+                [
+                  "cuong",
+                  "Call mom",
+                  false
+                ],
+                [
+                  "lan",
+                  "Buy coffee",
+                  false
+                ],
+                [
+                  "lan",
+                  "Plan the trip",
+                  true
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "minh writes a note — it appears after the notes of lan|||minh viết một ghi chú — nó hiện sau lan",
+            "an": true,
+            "themCsdl": "INSERT INTO notes (user_id, title) VALUES (3, 'First note')",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "username",
+                "title",
+                "pinned"
+              ],
+              "hang": [
+                [
+                  "cuong",
+                  "Learn PostgreSQL",
+                  true
+                ],
+                [
+                  "cuong",
+                  "Read the manual",
+                  false
+                ],
+                [
+                  "cuong",
+                  "Call mom",
+                  false
+                ],
+                [
+                  "lan",
+                  "Buy coffee",
+                  false
+                ],
+                [
+                  "lan",
+                  "Plan the trip",
+                  true
+                ],
+                [
+                  "minh",
+                  "First note",
+                  false
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses JOIN|||Dùng JOIN",
+            "khop": "\\bJOIN\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Joining on <code>u.id = n.id</code>: a note's own id has nothing to do with its author — rows pair up by accident.|||Nối theo <code>u.id = n.id</code>: id của ghi chú chẳng liên quan tới tác giả — các dòng ghép bừa."
+        },
+        {
+          "loi": "Ordering by note id only — the brief asks username first.|||Chỉ sắp theo id ghi chú — đề yêu cầu username trước."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "INNER JOIN",
+          "vi": "nối trong",
+          "giaiThich": "Chỉ giữ cặp dòng thoả điều kiện ON ở cả hai bảng."
+        }
+      ]
+    },
+    {
+      "title": "Let the database refuse orphan notes",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "REFERENCES",
+        "NOT NULL",
+        "referential integrity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "ddl",
+        "fk",
+        "notes"
+      ],
+      "problemHtml": "<p>Table <code>users</code> already exists (3 users). Create table <code>notes</code> so that the <b>database itself</b> refuses a note of a user that does not exist, and a note without owner:</p><pre>notes: id bigint identity PK, user_id bigint (required, must be a real users.id), title varchar(200) required, pinned boolean required default false</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>One <code>CREATE TABLE notes</code>.</li>\n  <li><code>user_id … NOT NULL REFERENCES users(id)</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng <code>users</code> đã có (3 user). Tạo bảng <code>notes</code> sao cho <b>chính CSDL</b> từ chối ghi chú của user không tồn tại, và ghi chú không có chủ:</p><pre>notes: id bigint identity PK, user_id bigint (bắt buộc, phải là users.id có thật), title varchar(200) bắt buộc, pinned boolean bắt buộc mặc định false</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một lệnh <code>CREATE TABLE notes</code>.</li>\n  <li><code>user_id … NOT NULL REFERENCES users(id)</code>.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "After your statement(s), the grader runs: INSERT INTO notes (user_id, title) VALUES (1, 'ok')|||Sau (các) lệnh của bạn, máy chấm chạy: INSERT INTO notes (user_id, title) VALUES (1, 'ok')",
+          "output": "Accepted (the statement succeeds).|||Chạy được (câu lệnh thành công).",
+          "explanation": "Check \"A note of user 1 is accepted\".|||Kiểm \"Ghi chú của user 1 được nhận\"."
+        }
+      ],
+      "hintsJson": [
+        "Write the column first, then its rules: <code>user_id bigint NOT NULL REFERENCES users(id)</code>.|||Viết cột trước rồi tới luật: <code>user_id bigint NOT NULL REFERENCES users(id)</code>.",
+        "REFERENCES alone still allows NULL — add NOT NULL.|||Chỉ REFERENCES thì vẫn cho NULL — thêm NOT NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "users.sql",
+          "language": "sql",
+          "code": "-- users.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- users.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE users (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  username text NOT NULL UNIQUE,\n  email    text NOT NULL\n);\nINSERT INTO users (username, email) VALUES ('cuong', 'cuong@notes.vn'), ('lan', 'lan@notes.vn'), ('minh', 'minh@notes.vn');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE notes (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  user_id  bigint NOT NULL REFERENCES users(id),   -- no owner, or a fake owner ⇒ rejected\n  title    varchar(200) NOT NULL,\n  pinned   boolean NOT NULL DEFAULT false\n);\n"
+        },
+        {
+          "name": "users.sql",
+          "language": "sql",
+          "code": "-- users.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- users.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nCREATE TABLE users (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  username text NOT NULL UNIQUE,\n  email    text NOT NULL\n);\nINSERT INTO users (username, email) VALUES ('cuong', 'cuong@notes.vn'), ('lan', 'lan@notes.vn'), ('minh', 'minh@notes.vn');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The foreign key is checked on every INSERT/UPDATE of notes and on every DELETE/UPDATE of users — from every client. NOT NULL closes the remaining gap, because a foreign key ignores NULLs.</p>",
+      "solutionExplanationHtmlVi": "<p>Khoá ngoại được kiểm ở mọi INSERT/UPDATE của notes và mọi DELETE/UPDATE của users — từ mọi client. NOT NULL bịt khe còn lại, vì khoá ngoại bỏ qua NULL.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "CREATE TABLE users (\n  id       bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  username text NOT NULL UNIQUE,\n  email    text NOT NULL\n);\nINSERT INTO users (username, email) VALUES ('cuong', 'cuong@notes.vn'), ('lan', 'lan@notes.vn'), ('minh', 'minh@notes.vn');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A note of user 1 is accepted|||Ghi chú của user 1 được nhận",
+            "thu": "INSERT INTO notes (user_id, title) VALUES (1, 'ok')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A note of user 999 is rejected (foreign key)|||Ghi chú của user 999 bị chặn (khoá ngoại)",
+            "thu": "INSERT INTO notes (user_id, title) VALUES (999, 'orphan note')",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A note without owner is rejected|||Ghi chú không có chủ bị chặn",
+            "thu": "INSERT INTO notes (title) VALUES ('nobody')",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Deleting a user who still has notes is refused|||Xoá user còn ghi chú bị từ chối",
+            "thu": "INSERT INTO notes (user_id, title) VALUES (2, 'x'); DELETE FROM users WHERE id = 2",
+            "maLoi": "23503",
+            "an": true
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Columns|||Các cột",
+            "kiemTra": "SELECT column_name, data_type, is_nullable, column_default FROM information_schema.columns WHERE table_name = 'notes' AND column_name <> 'id' ORDER BY ordinal_position",
+            "thuTu": true,
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "column_name",
+                "data_type",
+                "is_nullable",
+                "column_default"
+              ],
+              "hang": [
+                [
+                  "user_id",
+                  "bigint",
+                  "NO",
+                  null
+                ],
+                [
+                  "title",
+                  "character varying",
+                  "NO",
+                  null
+                ],
+                [
+                  "pinned",
+                  "boolean",
+                  "NO",
+                  "false"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A plain <code>user_id bigint</code> column: the app \"always\" checks the user exists… until one code path forgets.|||Cột <code>user_id bigint</code> trơn: app \"luôn\" kiểm user tồn tại… cho tới khi một nhánh mã quên."
+        },
+        {
+          "loi": "REFERENCES without NOT NULL: a note with user_id NULL is a valid row to a foreign key.|||REFERENCES mà thiếu NOT NULL: với khoá ngoại, ghi chú có user_id NULL vẫn hợp lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "orphan row",
+          "vi": "dòng mồ côi",
+          "giaiThich": "dòng trỏ tới thứ không tồn tại"
+        }
+      ]
+    }
+  ]
+}

@@ -7,25 +7,91 @@
   "docsUrl": "https://www.postgresql.org/docs/current/",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá PostgreSQL, có MÁY CHẤM SQL THẬT ngay trong trình duyệt: PostgreSQL 18 (WASM) nguyên bản — LIMIT, RETURNING, ON CONFLICT, DISTINCT ON, CTE đệ quy, hàm cửa sổ, PL/pgSQL đều chạy và được chấm như máy chủ thật. CSDL CT Shop của khoá, mỗi bài học một bộ đề dễ → khó, kiểm ẩn đổi dữ liệu để bắt lời giải chép cứng.",
+  "description": "Bộ luyện đi kèm khoá PostgreSQL: mỗi bài học một bộ đề dễ → khó, mỗi chương một Lab lớn, chấm bằng MÁY CHẤM SQL THẬT ngay trong trình duyệt — PostgreSQL 18 (WASM) nguyên bản: RETURNING, ON CONFLICT, DISTINCT ON, CTE đệ quy, hàm cửa sổ, JSONB, full-text search, EXCLUDE, chỉ mục và kế hoạch EXPLAIN, PL/pgSQL, trigger, view, phân mảnh đều chạy và được chấm như máy chủ thật. Dữ liệu là bảng của chính bài giảng và CT Shop mini (lát cắt của dữ liệu lab). Phần không chạy được trong trình duyệt (đồng thời thật, sao lưu, nhân bản, pg_trgm) học bằng câu hỏi tình huống hoặc bài chạy trên máy bạn rồi tự đánh dấu. Kiểm ẩn đổi dữ liệu để bắt lời giải chép cứng.",
   "modules": [
+    {
+      "slug": "postgresql-0-3-cai-dat",
+      "name": "0.3 Installing PostgreSQL & meeting psql",
+      "level": "BEGINNER",
+      "description": "Luyện: Run PostgreSQL 17 in Docker and say hello from psql · psql meta-commands you will type every day · Your first table: notes"
+    },
+    {
+      "slug": "postgresql-0-4-mo-hinh",
+      "name": "0.4 The mental model: a server you talk to in SQL",
+      "level": "BEGINNER",
+      "description": "Luyện: Client, server and who does the work · Say what, not how: the pinned notes · A glimpse of the power types: read JSON from a column"
+    },
+    {
+      "slug": "postgresql-0-5-tu-sql-server-mysql",
+      "name": "0.5 From SQL Server / MySQL to PostgreSQL",
+      "level": "BEGINNER",
+      "description": "Luyện: TOP 3 becomes LIMIT 3 · ISNULL and + become COALESCE and || · OUTPUT becomes RETURNING · MERGE / ON DUPLICATE KEY becomes ON CONFLICT · UPDATE … ORDER BY … LIMIT 1 the PostgreSQL way · A T-SQL procedure becomes a PL/pgSQL function"
+    },
+    {
+      "slug": "postgresql-1-1-mo-hinh-quan-he",
+      "name": "1.1 The relational model & why it won",
+      "level": "BEGINNER",
+      "description": "Luyện: Tables, rows, keys — the vocabulary · Put the rows back together: who wrote which note · Let the database refuse orphan notes"
+    },
+    {
+      "slug": "postgresql-1-2-acid",
+      "name": "1.2 ACID: the four guarantees, proven",
+      "level": "BEGINNER",
+      "description": "Luyện: A transfer is two updates · C is a constraint: make overdraft impossible · One statement, one atomic transfer · Which letter of ACID saved you?"
+    },
+    {
+      "slug": "postgresql-1-3-vs-alternatives",
+      "name": "1.3 PostgreSQL vs MySQL, SQLite & NoSQL",
+      "level": "BEGINNER",
+      "description": "Luyện: Pick the database for the job · SQL vs NoSQL: what is really different"
+    },
+    {
+      "slug": "postgresql-1-4-dong-chay-truy-van",
+      "name": "1.4 How a query flows through Postgres",
+      "level": "BEGINNER",
+      "description": "Luyện: Put the four stages in order · Ask for the plan, not the rows · EXPLAIN or EXPLAIN ANALYZE?"
+    },
+    {
+      "slug": "postgresql-2-1-so",
+      "name": "2.1 Numbers: integers, numeric & the money trap",
+      "level": "BEGINNER",
+      "description": "Luyện: integer out of range: multiply in bigint · Money in float vs numeric · Import legacy ids into an identity column · VAT on an invoice, rounded like an accountant"
+    },
+    {
+      "slug": "postgresql-2-2-text",
+      "name": "2.2 Text: text, varchar & the char(n) trap",
+      "level": "BEGINNER",
+      "description": "Luyện: Rejects or truncates? Predict before you run · Get rid of a char(8) column · Characters vs bytes in Vietnamese names · A newsletter table that keeps emails clean"
+    },
+    {
+      "slug": "postgresql-2-3-ngay-gio",
+      "name": "2.3 Booleans, dates & times (and timezones)",
+      "level": "BEGINNER",
+      "description": "Luyện: One instant, two wall clocks · Orders from 1 to 5 October, all day long · Delivery promise and age of an order · Orders per month in Vietnam time"
+    },
+    {
+      "slug": "postgresql-2-4-uuid-enum-array-jsonb",
+      "name": "2.4 UUID, enum, array & jsonb",
+      "level": "BEGINNER",
+      "description": "Luyện: An enum for ticket priority · Posts tagged sql, with their tag count · Read product attributes from jsonb · API keys with a uuid primary key"
+    },
     {
       "slug": "postgresql-4-1-insert",
       "name": "4.1 INSERT: many rows, RETURNING & UPSERT",
       "level": "BEGINNER",
-      "description": "INSERT để cột identity tự cấp id, RETURNING lấy lại dòng vừa ghi, VALUES nhiều dòng + DEFAULT, UPSERT bằng ON CONFLICT … DO UPDATE với EXCLUDED."
+      "description": "Luyện: Add a category and get its new id back · Three new books in one statement · Receive a delivery with UPSERT"
     },
     {
       "slug": "postgresql-4-3-order-limit-distinct",
       "name": "4.3 ORDER BY, LIMIT/OFFSET & DISTINCT ON",
       "level": "BEGINNER",
-      "description": "Top N có khoá phá hoà, phân trang LIMIT/OFFSET đúng trang, đơn mới nhất của mỗi khách bằng DISTINCT ON."
+      "description": "Luyện: The three most expensive products on sale · Page 2 of the catalogue · Each customer's latest order (DISTINCT ON)"
     },
     {
       "slug": "postgresql-7-4-recursive-cte",
       "name": "7.4 Recursive CTEs: walking a hierarchy",
       "level": "INTERMEDIATE",
-      "description": "WITH RECURSIVE đi xuống cây danh mục kèm độ sâu, dựng breadcrumb từ gốc, và chống vòng lặp bằng CYCLE … SET … USING (dữ liệu có vòng — câu ngây thơ bị máy chấm dừng sau 4 giây)."
+      "description": "Luyện: Everything under \"Điện tử\", with its depth · Breadcrumbs for every category · Walk a tree that contains a cycle"
     }
   ]
 }

@@ -1,0 +1,430 @@
+{
+  "trackSlug": "postgresql-practice",
+  "moduleSlug": "postgresql-1-4-dong-chay-truy-van",
+  "lesson": {
+    "course": "postgresql",
+    "slug": "postgresql-1-4-dong-chay-truy-van"
+  },
+  "exercises": [
+    {
+      "title": "Put the four stages in order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 4,
+      "points": 10,
+      "concepts": [
+        "parser",
+        "rewriter",
+        "planner",
+        "executor"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "concepts",
+        "planner"
+      ],
+      "problemHtml": "<p>Your app sends <code>SELECT title FROM notes WHERE pinned;</code>. Order what happens inside the server.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>App gửi <code>SELECT title FROM notes WHERE pinned;</code>. Sắp thứ tự những gì diễn ra trong máy chủ.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Text must be understood before it can be optimized.|||Phải hiểu được chữ trước khi tối ưu.",
+        "Planning comes before any row is read.|||Lập kế hoạch xảy ra trước khi đọc bất kỳ dòng nào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Put the four stages in order\n\nAnswer in the answer panel (no code needed).\n\n1. From SQL text to rowsTừ chữ SQL tới các dòng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Put the four stages in order — answer key\n\n1. From SQL text to rowsTừ chữ SQL tới các dòng\n   Answer: m3) Parser: check the syntax and build a parse tree / kiểm cú pháp, dựng cây phân tích  →  m2) Analyzer + rewriter: resolve table/column names, expand views and rules / tra tên bảng/cột, bung view và rule  →  m4) Planner: estimate costs of possible plans, pick the cheapest / ước lượng chi phí các kế hoạch, chọn cái rẻ nhất  →  m1) Executor: run the chosen plan and stream rows back / chạy kế hoạch đã chọn và gửi dòng về\n   A misspelled keyword fails in the parser; an unknown column fails in analysis; only a valid query reaches the planner, and only the planner's plan is executed. EXPLAIN shows the planner's output without executing it.VI: Từ khoá sai chính tả hỏng ở parser; cột không tồn tại hỏng ở bước phân tích; chỉ truy vấn hợp lệ mới tới planner, và executor chỉ chạy kế hoạch planner chọn. EXPLAIN in kết quả của planner mà không chạy.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A misspelled keyword fails in the parser; an unknown column fails in analysis; only a valid query reaches the planner, and only the planner's plan is executed. EXPLAIN shows the planner's output without executing it.</p><p><i>VI: Từ khoá sai chính tả hỏng ở parser; cột không tồn tại hỏng ở bước phân tích; chỉ truy vấn hợp lệ mới tới planner, và executor chỉ chạy kế hoạch planner chọn. EXPLAIN in kết quả của planner mà không chạy.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>From SQL text to rows</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ chữ SQL tới các dòng</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Executor: run the chosen plan and stream rows back / chạy kế hoạch đã chọn và gửi dòng về"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Analyzer + rewriter: resolve table/column names, expand views and rules / tra tên bảng/cột, bung view và rule"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Parser: check the syntax and build a parse tree / kiểm cú pháp, dựng cây phân tích"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Planner: estimate costs of possible plans, pick the cheapest / ước lượng chi phí các kế hoạch, chọn cái rẻ nhất"
+              }
+            ],
+            "dapAn": [
+              "m3",
+              "m2",
+              "m4",
+              "m1"
+            ],
+            "giaiThich": "<p>A misspelled keyword fails in the parser; an unknown column fails in analysis; only a valid query reaches the planner, and only the planner's plan is executed. EXPLAIN shows the planner's output without executing it.</p><p><i>VI: Từ khoá sai chính tả hỏng ở parser; cột không tồn tại hỏng ở bước phân tích; chỉ truy vấn hợp lệ mới tới planner, và executor chỉ chạy kế hoạch planner chọn. EXPLAIN in kết quả của planner mà không chạy.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the planner runs while rows are read — the plan is fixed before execution starts.|||Nghĩ planner chạy trong lúc đọc dòng — kế hoạch đã chốt trước khi thực thi."
+        },
+        {
+          "loi": "Placing view expansion after planning.|||Đặt bước bung view sau lập kế hoạch."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "planner",
+          "vi": "bộ lập kế hoạch"
+        },
+        {
+          "en": "executor",
+          "vi": "bộ thực thi"
+        }
+      ]
+    },
+    {
+      "title": "Ask for the plan, not the rows",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "EXPLAIN",
+        "COSTS OFF",
+        "Seq Scan",
+        "Filter"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain",
+        "notes"
+      ],
+      "problemHtml": "<p>Show the plan PostgreSQL chooses for <code>SELECT title FROM notes WHERE pinned</code> — without running it — and hide the cost numbers so the output is stable: use <code>EXPLAIN (COSTS OFF)</code>.</p>\n<h4>Sample table</h4><pre>notes (id identity PK, title, body, pinned boolean, created_at timestamptz, meta jsonb) — 5 rows, no index except the primary key</pre>\n<h4>Requirements</h4>\n<ul>\n  <li>Exactly the query above, prefixed with <code>EXPLAIN (COSTS OFF)</code>.</li>\n  <li>No ANALYZE: the query must not run.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hiện kế hoạch PostgreSQL chọn cho <code>SELECT title FROM notes WHERE pinned</code> — không chạy nó — và ẩn các con số chi phí cho output ổn định: dùng <code>EXPLAIN (COSTS OFF)</code>.</p>\n<h4>Bảng mẫu</h4><pre>notes (id identity PK, title, body, pinned boolean, created_at timestamptz, meta jsonb) — 5 dòng, không chỉ mục nào ngoài khoá chính</pre>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng câu truy vấn trên, thêm tiền tố <code>EXPLAIN (COSTS OFF)</code>.</li>\n  <li>Không ANALYZE: truy vấn không được chạy.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "QUERY PLAN       \n-----------------\nSeq Scan on notes\n  Filter: pinned ",
+          "explanation": "Expected result of check \"The plan: a sequential scan with a filter\" (row order matters).|||Kết quả mong đợi của kiểm \"Kế hoạch: quét tuần tự kèm bộ lọc\" (đúng thứ tự dòng)."
+        }
+      ],
+      "hintsJson": [
+        "Prefix the statement: <code>EXPLAIN (COSTS OFF) SELECT …</code>.|||Thêm tiền tố: <code>EXPLAIN (COSTS OFF) SELECT …</code>.",
+        "Each output line is a row of the result: read it top-down, children indented.|||Mỗi dòng output là một dòng kết quả: đọc từ trên xuống, nút con thụt vào."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write your PostgreSQL statement(s) below. Each check runs on a fresh copy of the sample database, then rolls back.\n-- Viết (các) câu PostgreSQL bên dưới. Mỗi kiểm chạy trên một bản CSDL mẫu sạch rồi huỷ.\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "EXPLAIN (COSTS OFF)\nSELECT title FROM notes WHERE pinned;\n-- Seq Scan on notes      ← read every row of the table\n--   Filter: pinned       ← keep those where pinned is true\n"
+        },
+        {
+          "name": "notes.sql",
+          "language": "sql",
+          "code": "-- notes.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- notes.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Plain PostgreSQL: run it as-is in psql to get the same database on your machine.\nSET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Without an index on <code>pinned</code>, the only way to find pinned notes is to read all rows and filter: <code>Seq Scan</code> + <code>Filter: pinned</code>. EXPLAIN stops after planning; EXPLAIN ANALYZE would also execute and add actual row counts and times.</p>",
+      "solutionExplanationHtmlVi": "<p>Không có chỉ mục trên <code>pinned</code> thì cách duy nhất là đọc mọi dòng rồi lọc: <code>Seq Scan</code> + <code>Filter: pinned</code>. EXPLAIN dừng sau bước lập kế hoạch; EXPLAIN ANALYZE còn chạy thật và thêm số dòng, thời gian thực tế.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql-pg",
+        "csdl": "SET TimeZone = 'Asia/Ho_Chi_Minh';\nCREATE TABLE notes (\n  id         bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,\n  title      varchar(200) NOT NULL,\n  body       text,\n  pinned     boolean NOT NULL DEFAULT false,\n  created_at timestamptz NOT NULL DEFAULT now(),\n  meta       jsonb NOT NULL DEFAULT '{}'\n);\nINSERT INTO notes (title, body, pinned, created_at, meta) VALUES\n  ('Learn PostgreSQL', 'Day one',             true,  '2026-10-01 08:00+07', '{\"lang\": \"en\", \"tags\": [\"db\", \"sql\"]}'),\n  ('Buy coffee',       NULL,                  false, '2026-10-01 09:30+07', '{\"lang\": \"en\", \"tags\": []}'),\n  ('Read the manual',  'The EXPLAIN chapter', true,  '2026-10-03 21:15+07', '{\"lang\": \"en\", \"tags\": [\"sql\"]}'),\n  ('Học psql',         'Lệnh \\d và \\x',     false, '2026-10-04 07:45+07', '{\"lang\": \"vi\", \"tags\": [\"psql\"]}'),\n  ('Ôn ACID',          NULL,                  true,  '2026-10-05 22:00+07', '{\"lang\": \"vi\", \"tags\": [\"db\"]}');",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The plan: a sequential scan with a filter|||Kế hoạch: quét tuần tự kèm bộ lọc",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "QUERY PLAN"
+              ],
+              "hang": [
+                [
+                  "Seq Scan on notes"
+                ],
+                [
+                  "  Filter: pinned"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "EXPLAIN without ANALYZE|||EXPLAIN không có ANALYZE",
+            "khop": "^(?![\\s\\S]*\\bANALY[SZ]E\\b)[\\s\\S]*\\bEXPLAIN\\b",
+            "tep": "query.sql"
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "The same plan when the table is bigger|||Cùng kế hoạch khi bảng lớn hơn",
+            "an": true,
+            "themCsdl": "INSERT INTO notes (title) SELECT 'n' || g FROM generate_series(1, 50) g",
+            "thuTu": true,
+            "mongDoi": {
+              "cot": [
+                "QUERY PLAN"
+              ],
+              "hang": [
+                [
+                  "Seq Scan on notes"
+                ],
+                [
+                  "  Filter: pinned"
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql-pg",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Adding ANALYZE \"to be thorough\": the query really runs — dangerous for an UPDATE or DELETE.|||Thêm ANALYZE \"cho chắc\": truy vấn chạy thật — nguy hiểm với UPDATE hay DELETE."
+        },
+        {
+          "loi": "Comparing plans with costs on: the numbers depend on table size and settings, so they change between machines.|||So kế hoạch khi bật chi phí: các con số phụ thuộc kích thước bảng và cấu hình nên đổi theo máy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EXPLAIN",
+          "vi": "xem kế hoạch",
+          "giaiThich": "In kế hoạch thực thi bộ lập kế hoạch chọn; EXPLAIN ANALYZE chạy thật và in số đo thật."
+        },
+        {
+          "en": "Seq Scan",
+          "vi": "quét tuần tự",
+          "giaiThich": "đọc mọi trang của bảng"
+        }
+      ]
+    },
+    {
+      "title": "EXPLAIN or EXPLAIN ANALYZE?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 5,
+      "points": 20,
+      "concepts": [
+        "EXPLAIN",
+        "EXPLAIN ANALYZE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "postgresql",
+        "explain",
+        "concepts"
+      ],
+      "problemHtml": "<p>Choose the right tool and read the right number.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in psql on your own PostgreSQL), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn đúng công cụ và đọc đúng con số.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong psql trên PostgreSQL của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "ANALYZE in EXPLAIN means \"execute and measure\".|||ANALYZE trong EXPLAIN nghĩa là \"chạy và đo\".",
+        "Estimates come from statistics, actuals from execution.|||Ước lượng đến từ thống kê, số thực đến từ lúc chạy."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EXPLAIN or EXPLAIN ANALYZE?\n\nAnswer in the answer panel (no code needed).\n\n1. You want to know why DELETE FROM orders WHERE created_at < '2024-01-01' is slow on production, without deleting anything.Muốn biết vì sao DELETE FROM orders WHERE created_at < '2024-01-01' chậm trên production mà không xoá gì.\n2. In EXPLAIN ANALYZE, a node shows rows=10 (estimate) and actual rows=48210. What does the gap tell you?Trong EXPLAIN ANALYZE, một nút ghi rows=10 (ước lượng) và actual rows=48210. Khoảng cách đó nói gì?\n3. Which number in cost=0.00..18.10 is the TOTAL estimated cost?Trong cost=0.00..18.10, số nào là tổng chi phí ước lượng?\n4. Where does EXPLAIN get its row estimates from?EXPLAIN lấy số dòng ước lượng từ đâu?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# EXPLAIN or EXPLAIN ANALYZE? — answer key\n\n1. You want to know why DELETE FROM orders WHERE created_at < '2024-01-01' is slow on production, without deleting anything.Muốn biết vì sao DELETE FROM orders WHERE created_at < '2024-01-01' chậm trên production mà không xoá gì.\n   Answer: d) plain EXPLAIN (or EXPLAIN ANALYZE inside BEGIN … ROLLBACK)\n   EXPLAIN ANALYZE executes the statement. For writes, either use plain EXPLAIN or wrap ANALYZE in a transaction you roll back.VI: EXPLAIN ANALYZE chạy thật câu lệnh. Với lệnh ghi, dùng EXPLAIN thường hoặc bọc ANALYZE trong giao dịch rồi ROLLBACK.\n\n2. In EXPLAIN ANALYZE, a node shows rows=10 (estimate) and actual rows=48210. What does the gap tell you?Trong EXPLAIN ANALYZE, một nút ghi rows=10 (ước lượng) và actual rows=48210. Khoảng cách đó nói gì?\n   Answer: c) the planner's statistics are off — it may have chosen a plan for 10 rows that is bad for 48 210\n   Bad estimates lead to bad plan choices (e.g. a nested loop meant for a handful of rows). Chapter 10.3 fixes them with ANALYZE and extended statistics.VI: Ước lượng sai dẫn tới chọn kế hoạch tồi (vd vòng lặp lồng dành cho vài dòng). Chương 10.3 sửa bằng ANALYZE và thống kê mở rộng.\n\n3. Which number in cost=0.00..18.10 is the TOTAL estimated cost?Trong cost=0.00..18.10, số nào là tổng chi phí ước lượng?\n   Answer: c) 18.10 — the second number\n   The first number is the startup cost (before the first row), the second the total cost — in abstract planner units, not milliseconds.VI: Số đầu là chi phí khởi động (trước dòng đầu tiên), số sau là tổng chi phí — đơn vị trừu tượng của planner, không phải mili giây.\n\n4. Where does EXPLAIN get its row estimates from?EXPLAIN lấy số dòng ước lượng từ đâu?\n   Answer: b) statistics gathered by ANALYZE / autovacuum (pg_statistic)\n   The planner never counts the table while planning; it uses sampled statistics. Stale statistics ⇒ stale estimates.VI: Planner không bao giờ đếm bảng khi lập kế hoạch; nó dùng thống kê lấy mẫu. Thống kê cũ ⇒ ước lượng cũ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> plain <code>EXPLAIN</code> (or EXPLAIN ANALYZE inside BEGIN … ROLLBACK)</p><p>EXPLAIN ANALYZE executes the statement. For writes, either use plain EXPLAIN or wrap ANALYZE in a transaction you roll back.</p><p><i>VI: EXPLAIN ANALYZE chạy thật câu lệnh. Với lệnh ghi, dùng EXPLAIN thường hoặc bọc ANALYZE trong giao dịch rồi ROLLBACK.</i></p></li><li><p><b>c)</b> the planner's statistics are off — it may have chosen a plan for 10 rows that is bad for 48 210</p><p>Bad estimates lead to bad plan choices (e.g. a nested loop meant for a handful of rows). Chapter 10.3 fixes them with ANALYZE and extended statistics.</p><p><i>VI: Ước lượng sai dẫn tới chọn kế hoạch tồi (vd vòng lặp lồng dành cho vài dòng). Chương 10.3 sửa bằng ANALYZE và thống kê mở rộng.</i></p></li><li><p><b>c)</b> 18.10 — the second number</p><p>The first number is the startup cost (before the first row), the second the total cost — in abstract planner units, not milliseconds.</p><p><i>VI: Số đầu là chi phí khởi động (trước dòng đầu tiên), số sau là tổng chi phí — đơn vị trừu tượng của planner, không phải mili giây.</i></p></li><li><p><b>b)</b> statistics gathered by ANALYZE / autovacuum (pg_statistic)</p><p>The planner never counts the table while planning; it uses sampled statistics. Stale statistics ⇒ stale estimates.</p><p><i>VI: Planner không bao giờ đếm bảng khi lập kế hoạch; nó dùng thống kê lấy mẫu. Thống kê cũ ⇒ ước lượng cũ.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "q1",
+            "de": "<p>You want to know why <code>DELETE FROM orders WHERE created_at &lt; '2024-01-01'</code> is slow on production, without deleting anything.</p><p style=\"opacity:.75;font-size:.92em\"><i>Muốn biết vì sao <code>DELETE FROM orders WHERE created_at &lt; '2024-01-01'</code> chậm trên production mà không xoá gì.</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "run the DELETE and time it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "<code>EXPLAIN ANALYZE</code> directly in autocommit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "<code>\\timing</code> then the DELETE"
+              },
+              {
+                "ma": "d",
+                "noiDung": "plain <code>EXPLAIN</code> (or EXPLAIN ANALYZE inside BEGIN … ROLLBACK)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>EXPLAIN ANALYZE executes the statement. For writes, either use plain EXPLAIN or wrap ANALYZE in a transaction you roll back.</p><p><i>VI: EXPLAIN ANALYZE chạy thật câu lệnh. Với lệnh ghi, dùng EXPLAIN thường hoặc bọc ANALYZE trong giao dịch rồi ROLLBACK.</i></p>"
+          },
+          {
+            "ma": "q2",
+            "de": "<p>In <code>EXPLAIN ANALYZE</code>, a node shows <code>rows=10</code> (estimate) and <code>actual rows=48210</code>. What does the gap tell you?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong <code>EXPLAIN ANALYZE</code>, một nút ghi <code>rows=10</code> (ước lượng) và <code>actual rows=48210</code>. Khoảng cách đó nói gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the query returned wrong results"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing — estimates are never close"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the planner's statistics are off — it may have chosen a plan for 10 rows that is bad for 48 210"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the index is corrupted"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Bad estimates lead to bad plan choices (e.g. a nested loop meant for a handful of rows). Chapter 10.3 fixes them with ANALYZE and extended statistics.</p><p><i>VI: Ước lượng sai dẫn tới chọn kế hoạch tồi (vd vòng lặp lồng dành cho vài dòng). Chương 10.3 sửa bằng ANALYZE và thống kê mở rộng.</i></p>"
+          },
+          {
+            "ma": "q3",
+            "de": "<p>Which number in <code>cost=0.00..18.10</code> is the TOTAL estimated cost?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong <code>cost=0.00..18.10</code>, số nào là tổng chi phí ước lượng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "neither: cost is in milliseconds"
+              },
+              {
+                "ma": "b",
+                "noiDung": "0.00 — the first number"
+              },
+              {
+                "ma": "c",
+                "noiDung": "18.10 — the second number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "their difference"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The first number is the startup cost (before the first row), the second the total cost — in abstract planner units, not milliseconds.</p><p><i>VI: Số đầu là chi phí khởi động (trước dòng đầu tiên), số sau là tổng chi phí — đơn vị trừu tượng của planner, không phải mili giây.</i></p>"
+          },
+          {
+            "ma": "q4",
+            "de": "<p>Where does EXPLAIN get its row estimates from?</p><p style=\"opacity:.75;font-size:.92em\"><i>EXPLAIN lấy số dòng ước lượng từ đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "from the client"
+              },
+              {
+                "ma": "b",
+                "noiDung": "statistics gathered by ANALYZE / autovacuum (pg_statistic)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "by counting the table on every EXPLAIN"
+              },
+              {
+                "ma": "d",
+                "noiDung": "from the last time the query ran"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The planner never counts the table while planning; it uses sampled statistics. Stale statistics ⇒ stale estimates.</p><p><i>VI: Planner không bao giờ đếm bảng khi lập kế hoạch; nó dùng thống kê lấy mẫu. Thống kê cũ ⇒ ước lượng cũ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Running EXPLAIN ANALYZE on a DELETE in production \"just to look\".|||Chạy EXPLAIN ANALYZE cho một DELETE trên production \"chỉ để xem\"."
+        },
+        {
+          "loi": "Reading cost as milliseconds.|||Đọc cost như mili giây."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "EXPLAIN",
+          "vi": "xem kế hoạch",
+          "giaiThich": "In kế hoạch thực thi bộ lập kế hoạch chọn; EXPLAIN ANALYZE chạy thật và in số đo thật."
+        }
+      ]
+    }
+  ]
+}

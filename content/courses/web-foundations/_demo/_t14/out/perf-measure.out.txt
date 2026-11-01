@@ -1,0 +1,3 @@
+slow.html  LCP 12.34 s | CLS 0.209 | downloaded 2456 KB
+fast.html  LCP 1.24 s | CLS 0.000 | downloaded 182 KB
+best.html  LCP 1.24 s | CLS 0.000 | downloaded 182 KB

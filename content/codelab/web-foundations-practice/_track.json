@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
     {
       "slug": "wf-2-1-html-basics",
@@ -206,6 +206,30 @@
       "name": "13.4 Giả lập và chạy test trong CI",
       "level": "INTERMEDIATE",
       "description": "Tiêm fetch để test được, hàm giả tự ghi lời gọi (vi.fn tí hon), đường lỗi 404/500/mất mạng, debounce trên đồng hồ ảo, tiêm thời gian cho lời chào, retry có chờ — 6 bài, không một byte mạng thật."
+    },
+    {
+      "slug": "wf-14-1-build",
+      "name": "14.1 Bản dựng production thật ra làm gì",
+      "level": "INTERMEDIATE",
+      "description": "Tên file có mã băm, thu gọn CSS, thay import.meta.env lúc dựng, tree-shaking trên đồ thị module, thứ tự đóng gói theo phụ thuộc, viết lại index.html trỏ tới file đã dựng — 6 bài."
+    },
+    {
+      "slug": "wf-14-2-env-secrets",
+      "name": "14.2 Biến môi trường và bí mật",
+      "level": "INTERMEDIATE",
+      "description": "Đọc .env, lọc biến công khai VITE_, cấu hình chết sớm khi thiếu biến, soát bundle tìm bí mật, che bí mật trong log, đối chiếu .env.example — 6 bài."
+    },
+    {
+      "slug": "wf-14-3-deploy",
+      "name": "14.3 Deploy và kiểm chứng",
+      "level": "INTERMEDIATE",
+      "description": "Giải đường dẫn an toàn, SPA fallback, chính sách Cache-Control, luật chuyển hướng kiểu _redirects, smoke-test sau deploy, chọn bản để rollback — 6 bài."
+    },
+    {
+      "slug": "wf-14-4-performance",
+      "name": "14.4 Hiệu năng: đo và sửa",
+      "level": "INTERMEDIATE",
+      "description": "Xếp hạng Core Web Vitals, CLS theo cửa sổ phiên, TBT từ tác vụ dài, chọn ảnh từ srcset, ngân sách dung lượng trang, chia việc dài để nhường luồng chính, soát thẻ img — 7 bài."
     }
   ]
 }

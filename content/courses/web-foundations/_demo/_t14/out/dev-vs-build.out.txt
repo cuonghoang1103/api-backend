@@ -1,0 +1,2 @@
+npm run dev   (vite, :5199)    6 requests, 224.9 KB downloaded
+dist/ after npm run build      3 requests, 1.4 KB downloaded

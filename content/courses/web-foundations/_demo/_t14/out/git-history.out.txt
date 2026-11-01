@@ -1,0 +1,16 @@
+$ git ls-files
+.gitignore
+app.js
+
+$ git check-ignore -v .env
+.gitignore:1:.env	.env
+
+$ git log --oneline
+<sha> remove .env, add .gitignore
+<sha> first version
+
+$ git log -p -S "demo-password" --format="commit: %s" -- .env
+commit: remove .env, add .gitignore
+-DATABASE_URL=postgres://shop:demo-password@localhost:5432/shop
+commit: first version
++DATABASE_URL=postgres://shop:demo-password@localhost:5432/shop

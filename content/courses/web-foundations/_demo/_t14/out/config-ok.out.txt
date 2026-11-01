@@ -1,0 +1,2 @@
+config ok · port 3000 · database localhost:5432 · payment secret set (25 chars)
+exit code: 0

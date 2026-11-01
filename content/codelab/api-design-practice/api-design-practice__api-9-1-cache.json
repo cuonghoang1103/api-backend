@@ -1,0 +1,431 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-9-1-cache",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-9-1-cache"
+  },
+  "exercises": [
+    {
+      "title": "HTTP caching 1 — What the measurements showed",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "HTTP caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 9.1 (LabFlow, autocannon, perf/cache-proxy.mjs).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 9.1 (LabFlow, autocannon, perf/cache-proxy.mjs).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: when can the server compare?|||Hỏi: server so được lúc nào?",
+        "Ask: who may store this answer?|||Hỏi: ai được lưu câu trả lời này?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP caching 1 — What the measurements showed\n\nAnswer in the answer panel (no code needed).\n\n1. With Express’s automatic ETag, a 304 still showed db and sort in Server-Timing. Why?Với ETag tự động của Express, 304 vẫn có db và sort trong Server-Timing. Vì sao?\n2. Which Cache-Control fits GET /v2/bookings (each user’s own list)?Cache-Control nào hợp với GET /v2/bookings (danh sách của riêng từng người)?\n3. After POST /v2/bookings, the old ETag came back with 200 and a new ETag \"bookings-v1-…\". What changed it?Sau POST /v2/bookings, ETag cũ nhận 200 kèm ETag mới \"bookings-v1-…\". Cái gì làm nó đổi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# HTTP caching 1 — What the measurements showed — answer key\n\n1. With Express’s automatic ETag, a 304 still showed db and sort in Server-Timing. Why?Với ETag tự động của Express, 304 vẫn có db và sort trong Server-Timing. Vì sao?\n   Answer: a) Express hashes the finished body, so the query runs before it can compare\n   304 from Express: 1,033 req/s (bytes saved, work not). A version ETag checked before the query: 9,112 req/s.VI: 304 của Express: 1.033 req/s (đỡ byte, không đỡ công). ETag phiên bản so trước truy vấn: 9.112 req/s.\n\n2. Which Cache-Control fits GET /v2/bookings (each user’s own list)?Cache-Control nào hợp với GET /v2/bookings (danh sách của riêng từng người)?\n   Answer: d) private, no-cache\n   With public, the shared cache gave An’s bookings to Bình. private keeps shared caches out; no-cache forces revalidation with the ETag.VI: Với public, cache dùng chung đưa lượt đặt của An cho Bình. private chặn cache dùng chung; no-cache bắt kiểm lại bằng ETag.\n\n3. After POST /v2/bookings, the old ETag came back with 200 and a new ETag \"bookings-v1-…\". What changed it?Sau POST /v2/bookings, ETag cũ nhận 200 kèm ETag mới \"bookings-v1-…\". Cái gì làm nó đổi?\n   Answer: c) The write called bump(“bookings”) and the version is part of the tag\n   Every write bumps the collection version, so every page’s ETag stops matching.VI: Mỗi lệnh ghi tăng phiên bản bộ sưu tập, nên ETag của mọi trang thôi khớp.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Express hashes the finished body, so the query runs before it can compare</p><p>304 from Express: 1,033 req/s (bytes saved, work not). A version ETag checked before the query: 9,112 req/s.</p><p><i>VI: 304 của Express: 1.033 req/s (đỡ byte, không đỡ công). ETag phiên bản so trước truy vấn: 9.112 req/s.</i></p></li><li><p><b>d)</b> private, no-cache</p><p>With public, the shared cache gave An’s bookings to Bình. private keeps shared caches out; no-cache forces revalidation with the ETag.</p><p><i>VI: Với public, cache dùng chung đưa lượt đặt của An cho Bình. private chặn cache dùng chung; no-cache bắt kiểm lại bằng ETag.</i></p></li><li><p><b>c)</b> The write called bump(“bookings”) and the version is part of the tag</p><p>Every write bumps the collection version, so every page’s ETag stops matching.</p><p><i>VI: Mỗi lệnh ghi tăng phiên bản bộ sưu tập, nên ETag của mọi trang thôi khớp.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>With Express’s automatic ETag, a 304 still showed db and sort in Server-Timing. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với ETag tự động của Express, 304 vẫn có db và sort trong Server-Timing. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Express hashes the finished body, so the query runs before it can compare"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Server-Timing always lists every step, even skipped ones"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Weak ETags force the server to rebuild the response twice"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The If-None-Match header was ignored by the router"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>304 from Express: 1,033 req/s (bytes saved, work not). A version ETag checked before the query: 9,112 req/s.</p><p><i>VI: 304 của Express: 1.033 req/s (đỡ byte, không đỡ công). ETag phiên bản so trước truy vấn: 9.112 req/s.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Which Cache-Control fits GET /v2/bookings (each user’s own list)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cache-Control nào hợp với GET /v2/bookings (danh sách của riêng từng người)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "public, max-age=60"
+              },
+              {
+                "ma": "b",
+                "noiDung": "public, s-maxage=600"
+              },
+              {
+                "ma": "c",
+                "noiDung": "max-age=3600"
+              },
+              {
+                "ma": "d",
+                "noiDung": "private, no-cache"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>With public, the shared cache gave An’s bookings to Bình. private keeps shared caches out; no-cache forces revalidation with the ETag.</p><p><i>VI: Với public, cache dùng chung đưa lượt đặt của An cho Bình. private chặn cache dùng chung; no-cache bắt kiểm lại bằng ETag.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After POST /v2/bookings, the old ETag came back with 200 and a new ETag \"bookings-v1-…\". What changed it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau POST /v2/bookings, ETag cũ nhận 200 kèm ETag mới \"bookings-v1-…\". Cái gì làm nó đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ETag expires after one minute"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The client sent a different Accept-Language"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The write called bump(“bookings”) and the version is part of the tag"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Express recomputed the weak hash of the body"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Every write bumps the collection version, so every page’s ETag stops matching.</p><p><i>VI: Mỗi lệnh ghi tăng phiên bản bộ sưu tập, nên ETag của mọi trang thôi khớp.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Marking per-user data public.|||Ghi dữ liệu riêng là public."
+        },
+        {
+          "loi": "Believing every 304 saves server work.|||Tin rằng 304 nào cũng tiết kiệm công server."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Cache-Control",
+          "vi": "ai được lưu, lưu bao lâu"
+        },
+        {
+          "en": "304 Not Modified",
+          "vi": "bản của bạn vẫn đúng"
+        }
+      ]
+    },
+    {
+      "title": "HTTP caching 2 — Write notModified(ifNoneMatch, etag)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "HTTP caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Decide whether a GET may be answered with <code>304</code>. <code>If-None-Match</code> is a comma-separated list of entity tags, or <code>*</code> (matches any existing representation). Comparison for If-None-Match is <em>weak</em>: ignore a leading <code>W/</code> on either side. Missing header or missing ETag ⇒ <code>false</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Quyết định một GET có được trả <code>304</code> không. <code>If-None-Match</code> là danh sách nhãn cách nhau dấu phẩy, hoặc <code>*</code> (khớp mọi bản đang có). Phép so của If-None-Match là so <em>yếu</em>: bỏ qua tiền tố <code>W/</code> ở cả hai phía. Thiếu header hoặc thiếu ETag ⇒ <code>false</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "ifNoneMatch — string | undefined; etag — string | undefined|||ifNoneMatch — chuỗi | undefined; etag — chuỗi | undefined",
+      "outputSpec": "true | false",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "notModified(\"\\\"bookings-v0-GIYXoq2-h6kTmHuH\\\"\", \"\\\"bookings-v0-GIYXoq2-h6kTmHuH\\\"\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "split(\",\") then trim each tag.|||split(\",\") rồi trim từng nhãn.",
+        "Remove W/ before comparing.|||Bỏ W/ trước khi so."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** may this GET be answered 304? */\nfunction notModified(ifNoneMatch, etag) {\n  // Write your solution here\n  return ifNoneMatch === etag;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction notModified(ifNoneMatch, etag) {\n  if (!ifNoneMatch || !etag) return false;\n  if (ifNoneMatch.trim() === '*') return true;\n  const strip = (t) => t.trim().replace(/^W\\//, '');\n  return ifNoneMatch.split(',').map(strip).includes(strip(etag));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>RFC 9110 §13.1.2: If-None-Match uses the weak comparison. LabFlow’s early check makes the 304 cost 0.65 ms.</p>",
+      "solutionExplanationHtmlVi": "<p>RFC 9110 §13.1.2: If-None-Match dùng phép so yếu. Bước so sớm của LabFlow làm 304 chỉ tốn 0,65 ms.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Same tag",
+              "vi": "Cùng nhãn"
+            },
+            "goi": "notModified(\"\\\"bookings-v0-GIYXoq2-h6kTmHuH\\\"\", \"\\\"bookings-v0-GIYXoq2-h6kTmHuH\\\"\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "A list of tags",
+              "vi": "Danh sách nhãn"
+            },
+            "goi": "notModified(\"\\\"a\\\", \\\"bookings-v1-x\\\"\", \"\\\"bookings-v1-x\\\"\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "notModified(\"W/\\\"8e4c-LH6b\\\"\", \"\\\"8e4c-LH6b\\\"\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "notModified(\"*\", \"\\\"x\\\"\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "notModified(undefined, \"\\\"x\\\"\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "notModified(\"\\\"bookings-v0-a\\\"\", \"\\\"bookings-v1-a\\\"\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing the whole header string with the tag.|||So cả chuỗi header với nhãn."
+        },
+        {
+          "loi": "Treating W/\"x\" and \"x\" as different for If-None-Match.|||Coi W/\"x\" và \"x\" là khác nhau với If-None-Match."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "weak comparison",
+          "vi": "so yếu: bỏ qua W/"
+        },
+        {
+          "en": "entity tag",
+          "vi": "nhãn phiên bản"
+        }
+      ]
+    },
+    {
+      "title": "HTTP caching 3 — Write sharedMayStore(cacheControl, hasAuthorization, status)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "HTTP caching",
+        "security"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>The rules of LabFlow’s <code>cache-proxy.mjs</code> (a simplified RFC 9111 shared cache). Store only a <code>200</code> whose <code>Cache-Control</code> gives a positive <code>s-maxage</code> or <code>max-age</code>, and does not contain <code>private</code>, <code>no-store</code> or <code>no-cache</code>. If the request carried <code>Authorization</code>, store only when the response also has <code>public</code>, <code>s-maxage</code> or <code>must-revalidate</code>. Directive names are case-insensitive.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Luật của <code>cache-proxy.mjs</code> trong LabFlow (cache dùng chung RFC 9111 rút gọn). Chỉ lưu response <code>200</code> có <code>Cache-Control</code> cho <code>s-maxage</code> hoặc <code>max-age</code> dương, và không chứa <code>private</code>, <code>no-store</code> hay <code>no-cache</code>. Nếu request có <code>Authorization</code>, chỉ lưu khi response có thêm <code>public</code>, <code>s-maxage</code> hoặc <code>must-revalidate</code>. Tên chỉ thị không phân biệt hoa thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "cacheControl — string | undefined; hasAuthorization — boolean; status — number|||cacheControl — chuỗi | undefined; hasAuthorization — boolean; status — số",
+      "outputSpec": "true | false",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sharedMayStore(\"public, max-age=60\", true, 200)",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Parse \"a, b=1\" into { a: undefined, b: \"1\" }.|||Tách \"a, b=1\" thành { a: undefined, b: \"1\" }.",
+        "Check the Authorization rule last.|||Xét luật Authorization sau cùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** may a shared cache store this response? */\nfunction sharedMayStore(cacheControl, hasAuthorization, status) {\n  // Write your solution here\n  return status === 200 && /max-age/.test(cacheControl || '');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sharedMayStore(cacheControl, hasAuthorization, status) {\n  if (status !== 200) return false;\n  const d = Object.fromEntries((cacheControl || '').split(',').map((x) => x.trim().toLowerCase().split('=')).filter(([k]) => k));\n  if ('private' in d || 'no-store' in d || 'no-cache' in d) return false;\n  const fresh = Number(d['s-maxage'] ?? d['max-age'] ?? 0) > 0;\n  if (!fresh) return false;\n  if (hasAuthorization && !('public' in d) && !('s-maxage' in d) && !('must-revalidate' in d)) return false;\n  return true;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>public, max-age=60 with Authorization ⇒ true: that is exactly how Bình received An’s bookings. private, no-cache ⇒ false.</p>",
+      "solutionExplanationHtmlVi": "<p>public, max-age=60 kèm Authorization ⇒ true: đúng cách Bình nhận lượt đặt của An. private, no-cache ⇒ false.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "The bug of lesson 9.1",
+              "vi": "Lỗi của bài 9.1"
+            },
+            "goi": "sharedMayStore(\"public, max-age=60\", true, 200)",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "The fix",
+              "vi": "Cách sửa"
+            },
+            "goi": "sharedMayStore(\"private, no-cache\", true, 200)",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "sharedMayStore(\"max-age=60\", true, 200)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "sharedMayStore(\"max-age=60\", false, 200)",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "sharedMayStore(\"PUBLIC, MAX-AGE=0\", false, 200)",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "sharedMayStore(\"s-maxage=30\", true, 200)",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "sharedMayStore(\"public, max-age=60\", false, 404)",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Storing anything with max-age even when the request had Authorization.|||Lưu mọi thứ có max-age kể cả khi request có Authorization."
+        },
+        {
+          "loi": "Forgetting that public with Authorization IS storable — the leak of 9.1.|||Quên rằng public kèm Authorization LÀ được lưu — chính chỗ rò rỉ của bài 9.1."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shared cache",
+          "vi": "cache dùng chung"
+        },
+        {
+          "en": "s-maxage",
+          "vi": "thời hạn riêng cho cache dùng chung"
+        }
+      ]
+    }
+  ]
+}

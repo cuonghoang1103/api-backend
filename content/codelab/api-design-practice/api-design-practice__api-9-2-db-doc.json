@@ -1,0 +1,283 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-9-2-db-doc",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-9-2-db-doc"
+  },
+  "exercises": [
+    {
+      "title": "Read-after-write 1 — The note that vanished",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "consistency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 9.3 (PostgreSQL 18 primary :55432, streaming replica :55433 with a 2 s apply delay).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 9.3 (PostgreSQL 18 primary :55432, replica streaming :55433 trễ áp dụng 2 giây).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Where did each request go?|||Mỗi request đi tới đâu?",
+        "What does the token carry?|||Token mang gì?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read-after-write 1 — The note that vanished\n\nAnswer in the answer panel (no code needed).\n\n1. Right after POST created note_2, GET /v2/notes/note_2 answered 404. Why?Ngay sau khi POST tạo note_2, GET /v2/notes/note_2 trả 404. Vì sao?\n2. The first read after creating the lab_notes table returned 500. What does that teach?Lần đọc đầu sau khi tạo bảng lab_notes trả 500. Điều đó dạy gì?\n3. Which fix also covers the user’s OTHER devices and later screens?Cách sửa nào lo được cả thiết bị KHÁC và các màn hình sau của người dùng?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read-after-write 1 — The note that vanished — answer key\n\n1. Right after POST created note_2, GET /v2/notes/note_2 answered 404. Why?Ngay sau khi POST tạo note_2, GET /v2/notes/note_2 trả 404. Vì sao?\n   Answer: a) The read went to the replica, which had not applied the commit yet\n   2.5 s later the same GET was 200. Nothing was broken; the copy was behind.VI: 2,5 giây sau cùng GET ra 200. Không gì hỏng; bản sao chỉ chậm.\n\n2. The first read after creating the lab_notes table returned 500. What does that teach?Lần đọc đầu sau khi tạo bảng lab_notes trả 500. Điều đó dạy gì?\n   Answer: c) Schema changes lag too: wait for replicas before shipping code that reads the new table from them\n   “relation does not exist” on the replica: migrate, wait for catch-up, then deploy the readers.VI: “relation does not exist” trên replica: migrate, chờ đuổi kịp, rồi mới triển khai phần đọc.\n\n3. Which fix also covers the user’s OTHER devices and later screens?Cách sửa nào lo được cả thiết bị KHÁC và các màn hình sau của người dùng?\n   Answer: d) A consistency token from the write, sent back on reads\n   The 201 body covers only the screen that wrote. The token (an LSN) lets any read demand “at least this version”.VI: Body 201 chỉ lo màn hình vừa ghi. Token (một LSN) cho mọi lần đọc đòi “ít nhất là phiên bản này”.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The read went to the replica, which had not applied the commit yet</p><p>2.5 s later the same GET was 200. Nothing was broken; the copy was behind.</p><p><i>VI: 2,5 giây sau cùng GET ra 200. Không gì hỏng; bản sao chỉ chậm.</i></p></li><li><p><b>c)</b> Schema changes lag too: wait for replicas before shipping code that reads the new table from them</p><p>“relation does not exist” on the replica: migrate, wait for catch-up, then deploy the readers.</p><p><i>VI: “relation does not exist” trên replica: migrate, chờ đuổi kịp, rồi mới triển khai phần đọc.</i></p></li><li><p><b>d)</b> A consistency token from the write, sent back on reads</p><p>The 201 body covers only the screen that wrote. The token (an LSN) lets any read demand “at least this version”.</p><p><i>VI: Body 201 chỉ lo màn hình vừa ghi. Token (một LSN) cho mọi lần đọc đòi “ít nhất là phiên bản này”.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Right after POST created note_2, GET /v2/notes/note_2 answered 404. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ngay sau khi POST tạo note_2, GET /v2/notes/note_2 trả 404. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The read went to the replica, which had not applied the commit yet"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The note id is only valid after one minute"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The 404 was cached by the browser"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The POST was rolled back by the replica"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>2.5 s later the same GET was 200. Nothing was broken; the copy was behind.</p><p><i>VI: 2,5 giây sau cùng GET ra 200. Không gì hỏng; bản sao chỉ chậm.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The first read after creating the lab_notes table returned 500. What does that teach?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần đọc đầu sau khi tạo bảng lab_notes trả 500. Điều đó dạy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Replicas cannot store tables created after they started"
+              },
+              {
+                "ma": "b",
+                "noiDung": "CREATE TABLE must always run on the replica first"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Schema changes lag too: wait for replicas before shipping code that reads the new table from them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "500 is the correct status for a missing table"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>“relation does not exist” on the replica: migrate, wait for catch-up, then deploy the readers.</p><p><i>VI: “relation does not exist” trên replica: migrate, chờ đuổi kịp, rồi mới triển khai phần đọc.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which fix also covers the user’s OTHER devices and later screens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cách sửa nào lo được cả thiết bị KHÁC và các màn hình sau của người dùng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Disabling the HTTP cache with no-store"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Retrying the GET three times immediately"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Returning the created note in the 201 body"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A consistency token from the write, sent back on reads"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The 201 body covers only the screen that wrote. The token (an LSN) lets any read demand “at least this version”.</p><p><i>VI: Body 201 chỉ lo màn hình vừa ghi. Token (một LSN) cho mọi lần đọc đòi “ít nhất là phiên bản này”.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending every read to the primary.|||Đẩy mọi lần đọc về primary."
+        },
+        {
+          "loi": "Blaming the API code for replication lag.|||Đổ lỗi cho code API vì độ trễ nhân bản."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "replication lag",
+          "vi": "độ trễ nhân bản"
+        },
+        {
+          "en": "read-your-writes",
+          "vi": "đọc thấy cái mình vừa ghi"
+        }
+      ]
+    },
+    {
+      "title": "Read-after-write 2 — Write lsnAtLeast(replay, token)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "consistency",
+        "PostgreSQL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>A PostgreSQL LSN is written <code>X/Y</code>: two hexadecimal numbers (up to 8 digits each), the high and low 32 bits of a 64-bit position. Return whether the replica’s replay position <code>replay</code> is at or after <code>token</code> — the check behind <code>LabFlow-Consistency</code>. A malformed value ⇒ <code>null</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>LSN của PostgreSQL viết dạng <code>X/Y</code>: hai số thập lục phân (tối đa 8 chữ số mỗi số), là 32 bit cao và 32 bit thấp của một vị trí 64 bit. Trả về việc vị trí đã áp dụng của replica <code>replay</code> có bằng hoặc sau <code>token</code> không — đúng phép kiểm đứng sau <code>LabFlow-Consistency</code>. Giá trị sai dạng ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "replay, token — strings like \"0/12025438\"|||replay, token — chuỗi dạng \"0/12025438\"",
+      "outputSpec": "true | false | null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "lsnAtLeast(\"0/12025438\", \"0/12025438\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare the high part first, then the low part.|||So phần cao trước, rồi phần thấp.",
+        "parseInt(x, 16) reads hexadecimal.|||parseInt(x, 16) đọc số thập lục phân."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** has the replica replayed at least up to token? */\nfunction lsnAtLeast(replay, token) {\n  // Write your solution here\n  return replay >= token;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction lsnAtLeast(replay, token) {\n  const toNum = (lsn) => {\n    const m = /^([0-9A-Fa-f]{1,8})\\/([0-9A-Fa-f]{1,8})$/.exec(lsn);\n    if (!m) return null;\n    return parseInt(m[1], 16) * 2 ** 32 + parseInt(m[2], 16);\n  };\n  const a = toNum(replay), b = toNum(token);\n  if (a === null || b === null) return null;\n  return a >= b;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>In lesson 9.3 the token was 0/12025438; the replica answered pg_last_wal_replay_lsn() >= token only after it had replayed the write.</p>",
+      "solutionExplanationHtmlVi": "<p>Ở bài 9.3 token là 0/12025438; replica chỉ trả pg_last_wal_replay_lsn() >= token sau khi đã áp dụng lệnh ghi.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Caught up exactly",
+              "vi": "Vừa đuổi kịp"
+            },
+            "goi": "lsnAtLeast(\"0/12025438\", \"0/12025438\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Still behind (text comparison would lie)",
+              "vi": "Còn chậm (so chữ sẽ nói sai)"
+            },
+            "goi": "lsnAtLeast(\"0/9FFFFFF\", \"0/12025438\")",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "lsnAtLeast(\"1/0\", \"0/FFFFFFFF\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "lsnAtLeast(\"0/12025438\", \"abc\")",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "lsnAtLeast(\"0/1A\", \"0/9\")",
+            "mongDoi": true,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing the strings — \"0/9\" > \"0/12025438\" as text.|||So chuỗi — \"0/9\" > \"0/12025438\" theo chữ."
+        },
+        {
+          "loi": "Ignoring the part before the slash.|||Bỏ qua phần trước dấu gạch."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "LSN",
+          "vi": "vị trí trong WAL"
+        },
+        {
+          "en": "hexadecimal",
+          "vi": "thập lục phân"
+        }
+      ]
+    }
+  ]
+}

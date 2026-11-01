@@ -1,0 +1,283 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-9-1-server-cache",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-9-1-server-cache"
+  },
+  "exercises": [
+    {
+      "title": "Server cache 1 — Redis in front of a slow query",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "caching"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 9.2 (GET /v2/stats/labs over 1,000,000 bookings, Redis 8.2).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 9.2 (GET /v2/stats/labs trên 1.000.000 lượt đặt, Redis 8.2).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "When does a request see a hit?|||Khi nào một request trúng cache?",
+        "What else changes the answer?|||Còn gì làm đổi câu trả lời?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Server cache 1 — Redis in front of a slow query\n\nAnswer in the answer panel (no code needed).\n\n1. The key stats:labs:v1 had TTL 11 although the code asked for 10. Why?Khoá stats:labs:v1 có TTL 11 dù code xin 10. Vì sao?\n2. 50 requests hit an expired key. Plain cache-aside caused 32 database queries. Why not 1?50 request gặp khoá hết hạn. Cache-aside thường gây 32 truy vấn CSDL. Sao không phải 1?\n3. Why is the key named stats:labs:v1 and not just stats?Vì sao khoá tên stats:labs:v1 mà không chỉ là stats?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Server cache 1 — Redis in front of a slow query — answer key\n\n1. The key stats:labs:v1 had TTL 11 although the code asked for 10. Why?Khoá stats:labs:v1 có TTL 11 dù code xin 10. Vì sao?\n   Answer: a) Up to 10% jitter so keys written together do not expire together\n   Jitter spreads expiries; it reduces synchronized misses but does not replace single-flight.VI: Jitter rải các lần hết hạn; nó giảm trượt đồng loạt nhưng không thay được single-flight.\n\n2. 50 requests hit an expired key. Plain cache-aside caused 32 database queries. Why not 1?50 request gặp khoá hết hạn. Cache-aside thường gây 32 truy vấn CSDL. Sao không phải 1?\n   Answer: c) Every request arriving before the first load finished also missed and started its own load\n   Single-flight makes concurrent misses wait for one promise: 1 query, p50 92 ms.VI: Single-flight bắt các lần trượt đồng thời chờ chung một promise: 1 truy vấn, p50 92 ms.\n\n3. Why is the key named stats:labs:v1 and not just stats?Vì sao khoá tên stats:labs:v1 mà không chỉ là stats?\n   Answer: d) The key must contain everything that changes the answer, including a shape version\n   Change the response shape ⇒ change v1 to v2, or old and new code read each other’s values.VI: Đổi hình dạng response ⇒ đổi v1 thành v2, nếu không code cũ và mới đọc nhầm giá trị của nhau.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Up to 10% jitter so keys written together do not expire together</p><p>Jitter spreads expiries; it reduces synchronized misses but does not replace single-flight.</p><p><i>VI: Jitter rải các lần hết hạn; nó giảm trượt đồng loạt nhưng không thay được single-flight.</i></p></li><li><p><b>c)</b> Every request arriving before the first load finished also missed and started its own load</p><p>Single-flight makes concurrent misses wait for one promise: 1 query, p50 92 ms.</p><p><i>VI: Single-flight bắt các lần trượt đồng thời chờ chung một promise: 1 truy vấn, p50 92 ms.</i></p></li><li><p><b>d)</b> The key must contain everything that changes the answer, including a shape version</p><p>Change the response shape ⇒ change v1 to v2, or old and new code read each other’s values.</p><p><i>VI: Đổi hình dạng response ⇒ đổi v1 thành v2, nếu không code cũ và mới đọc nhầm giá trị của nhau.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The key stats:labs:v1 had TTL 11 although the code asked for 10. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá stats:labs:v1 có TTL 11 dù code xin 10. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Up to 10% jitter so keys written together do not expire together"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis rounds every TTL up to the next odd number"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The first request took one second to finish"
+              },
+              {
+                "ma": "d",
+                "noiDung": "node-redis adds a safety margin of one second"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Jitter spreads expiries; it reduces synchronized misses but does not replace single-flight.</p><p><i>VI: Jitter rải các lần hết hạn; nó giảm trượt đồng loạt nhưng không thay được single-flight.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>50 requests hit an expired key. Plain cache-aside caused 32 database queries. Why not 1?</p><p style=\"opacity:.75;font-size:.92em\"><i>50 request gặp khoá hết hạn. Cache-aside thường gây 32 truy vấn CSDL. Sao không phải 1?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Redis lost the key 31 times during the test"
+              },
+              {
+                "ma": "b",
+                "noiDung": "autocannon sent duplicate requests on purpose"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every request arriving before the first load finished also missed and started its own load"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The pool of 10 connections retried each query three times"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Single-flight makes concurrent misses wait for one promise: 1 query, p50 92 ms.</p><p><i>VI: Single-flight bắt các lần trượt đồng thời chờ chung một promise: 1 truy vấn, p50 92 ms.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is the key named stats:labs:v1 and not just stats?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao khoá tên stats:labs:v1 mà không chỉ là stats?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The version is the TTL in minutes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Redis requires at least two colons in every key"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Short keys are slower to look up"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The key must contain everything that changes the answer, including a shape version"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Change the response shape ⇒ change v1 to v2, or old and new code read each other’s values.</p><p><i>VI: Đổi hình dạng response ⇒ đổi v1 thành v2, nếu không code cũ và mới đọc nhầm giá trị của nhau.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a longer TTL prevents stampedes.|||Tưởng TTL dài hơn chặn được giẫm đạp."
+        },
+        {
+          "loi": "Forgetting the cache must fail open to the database.|||Quên rằng cache hỏng thì phải lùi về CSDL."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cache-aside",
+          "vi": "đọc cache, trượt thì nạp"
+        },
+        {
+          "en": "single-flight",
+          "vi": "dùng chung một lần nạp"
+        }
+      ]
+    },
+    {
+      "title": "Server cache 2 — Write countLoads(arrivals, loadMs, singleFlight)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "caching",
+        "concurrency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Simulate an empty cache key. <code>arrivals</code> are request times (ms, sorted). A request that misses starts a database load taking <code>loadMs</code>; when a load finishes, the value is in the cache and every later request hits. With <code>singleFlight</code>, a request that arrives while a load is already running waits for it instead of starting its own. Return how many loads ran.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng một khoá cache đang rỗng. <code>arrivals</code> là thời điểm các request tới (ms, đã sắp). Request trượt thì bắt đầu một lần nạp CSDL mất <code>loadMs</code>; khi một lần nạp xong, giá trị nằm trong cache và mọi request sau đó đều trúng. Với <code>singleFlight</code>, request tới lúc đã có lần nạp đang chạy thì chờ nó thay vì tự nạp. Trả về số lần nạp đã chạy.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "arrivals — number[] sorted; loadMs — number; singleFlight — boolean|||arrivals — number[] đã sắp; loadMs — số; singleFlight — boolean",
+      "outputSpec": "number of loads|||số lần nạp",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "countLoads([0,10,20,150], 100, false)",
+          "output": "3",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Track when the first load finishes (the cache is filled).|||Theo dõi lúc lần nạp đầu xong (cache có giá trị).",
+        "A request at exactly the fill time is a hit.|||Request tới đúng lúc cache có giá trị là trúng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** how many database loads for these arrivals? */\nfunction countLoads(arrivals, loadMs, singleFlight) {\n  // Write your solution here\n  return singleFlight ? 1 : arrivals.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction countLoads(arrivals, loadMs, singleFlight) {\n  let filledAt = Infinity;                 // lúc giá trị có trong cache\n  let inflightEnd = null;                  // lần nạp đang chạy kết thúc lúc nào\n  let loads = 0;\n  for (const t of arrivals) {\n    if (t >= filledAt) continue;           // trúng\n    if (singleFlight && inflightEnd !== null && t < inflightEnd) continue;   // chờ chung lần nạp đang chạy\n    loads++;\n    const end = t + loadMs;\n    if (inflightEnd === null || end < inflightEnd) inflightEnd = end;\n    filledAt = Math.min(filledAt, end);\n  }\n  return loads;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>50 arrivals within the first 30 ms and a 100 ms load: plain cache-aside 50 loads, single-flight 1 — the shape of lesson 9.2’s 50 → 32 → 1.</p>",
+      "solutionExplanationHtmlVi": "<p>50 request trong 30 ms đầu và lần nạp 100 ms: cache-aside thường 50 lần nạp, single-flight 1 — đúng dáng 50 → 32 → 1 của bài 9.2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Plain cache-aside",
+              "vi": "Cache-aside thường"
+            },
+            "goi": "countLoads([0,10,20,150], 100, false)",
+            "mongDoi": 3
+          },
+          {
+            "moTa": {
+              "en": "Single-flight",
+              "vi": "Single-flight"
+            },
+            "goi": "countLoads([0,10,20,150], 100, true)",
+            "mongDoi": 1
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "countLoads([], 100, true)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "countLoads([0,100,200], 100, false)",
+            "mongDoi": 1,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "countLoads([5,5,5,5,104,105], 100, false)",
+            "mongDoi": 5,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting every request as a load.|||Đếm mọi request là một lần nạp."
+        },
+        {
+          "loi": "With single-flight, still starting a load while one is running.|||Với single-flight vẫn tự nạp khi đã có lần nạp đang chạy."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "stampede",
+          "vi": "giẫm đạp cache"
+        },
+        {
+          "en": "in-flight",
+          "vi": "đang chạy"
+        }
+      ]
+    }
+  ]
+}

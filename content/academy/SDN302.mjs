@@ -898,6 +898,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
   <span class="lc-body"><span class="lc-title">Go deeper in the PostgreSQL course (Courses) — lesson 17.3: MongoDB documents vs PostgreSQL JSONB</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the PostgreSQL course on Courses. Same as this lesson: the document model compared with the relational table model. Different: Academy teaches MongoDB for CRUD; Courses puts the same data side by side as tables, documents and JSONB. It also adds: the same 2,000 orders built three ways, two queries on all three, indexes on both sides, what copies cost and changing shared data, when documents win and when tables win.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-9-4-nosql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Measure it in API &amp; System Design (Courses) — lesson 9.5: SQL vs NoSQL seen from the API</span><span class="lc-sub">Same choice as this lesson: embed sub-documents or reference them. Different: there the same lab data is stored as tables and as one JSON document per lab, and four real API requests are measured — the document wins the one-piece read (0.17 vs 0.24 ms) but loses cross-lab queries (8.3 vs 0.25 ms) and grows to 1.2 MB when a child list never stops growing.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.1</span>
@@ -936,6 +941,11 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
 <a class="link-card lien-ket-cheo" href="/courses/postgresql/learn?lessonSlug=postgresql-17-3-mongodb-vs-jsonb" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá PostgreSQL (Courses) — bài 17.3: Document MongoDB và JSONB của PostgreSQL</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá PostgreSQL ở Courses. Giống bài này: mô hình tài liệu (document) và so với mô hình bảng quan hệ. Khác: Academy dạy MongoDB để làm CRUD; Courses đặt cùng một dữ liệu dưới dạng bảng, document và JSONB để so sánh. Ở đó có thêm: cùng 2.000 đơn dựng ba kiểu, hai câu hỏi truy vấn trên cả ba, chỉ mục hai phía, giá của các bản sao và việc đổi dữ liệu dùng chung, khi nào document thắng, khi nào bảng thắng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-9-4-nosql" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Đo thật ở khoá API &amp; System Design (Courses) — bài 9.5: SQL vs NoSQL nhìn từ API</span><span class="lc-sub">Giống bài này: lựa chọn nhúng sub-document hay tham chiếu. Khác: ở đó cùng dữ liệu phòng lab được lưu dạng bảng và dạng mỗi phòng một tài liệu JSON, rồi đo bốn request API thật — tài liệu thắng khi đọc nguyên khối (0,17 so với 0,24 ms) nhưng thua truy vấn xuyên phòng (8,3 so với 0,25 ms) và phình tới 1,2 MB khi một danh sách con cứ lớn mãi.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>`,

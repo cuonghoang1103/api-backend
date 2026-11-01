@@ -1,0 +1,307 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-9-6-lab",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-9-6-lab"
+  },
+  "exercises": [
+    {
+      "title": "Lab 9 · 1 — The reference run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "caching",
+        "identifiers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>GET /v2/labs/lab_1/notes with 200,000 notes, primary + replica, Lab 9.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>GET /v2/labs/lab_1/notes với 200.000 ghi chú, primary + replica, Lab 9.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the error messages of the reference run.|||Đọc thông báo lỗi của lần chạy tham khảo.",
+        "What does a DEFAULT on ADD COLUMN do to old rows?|||DEFAULT khi ADD COLUMN làm gì với các dòng cũ?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9 · 1 — The reference run\n\nAnswer in the answer panel (no code needed).\n\n1. The first version of the ETag query used max(public_id) and failed. Why?Bản đầu của truy vấn ETag dùng max(public_id) và hỏng. Vì sao?\n2. Why res.vary(“LabFlow-Consistency”) instead of res.set(“Vary”, …)?Vì sao res.vary(“LabFlow-Consistency”) thay vì res.set(“Vary”, …)?\n3. The first note’s UUIDv7 decoded to 07:19:38 on 1 Nov, while its created_at was much earlier. Why?UUIDv7 của ghi chú đầu giải ra 07:19:38 ngày 1/11, trong khi created_at sớm hơn nhiều. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 9 · 1 — The reference run — answer key\n\n1. The first version of the ETag query used max(public_id) and failed. Why?Bản đầu của truy vấn ETag dùng max(public_id) và hỏng. Vì sao?\n   Answer: d) PostgreSQL has no max() aggregate for uuid\n   ORDER BY public_id DESC LIMIT 1 — one index lookup — gives the same answer.VI: ORDER BY public_id DESC LIMIT 1 — một lần dò chỉ mục — cho cùng kết quả.\n\n2. Why res.vary(“LabFlow-Consistency”) instead of res.set(“Vary”, …)?Vì sao res.vary(“LabFlow-Consistency”) thay vì res.set(“Vary”, …)?\n   Answer: d) res.set replaces the Vary: Origin that the CORS middleware had set\n   Vary must list every header that changes the response; vary() appends.VI: Vary phải liệt kê mọi header làm đổi response; vary() nối thêm.\n\n3. The first note’s UUIDv7 decoded to 07:19:38 on 1 Nov, while its created_at was much earlier. Why?UUIDv7 của ghi chú đầu giải ra 07:19:38 ngày 1/11, trong khi created_at sớm hơn nhiều. Vì sao?\n   Answer: a) The ids were backfilled by ALTER TABLE, so they carry the migration time\n   Backfill with uuidv7(created_at - now()) if the id should carry the creation time.VI: Điền bằng uuidv7(created_at - now()) nếu id phải mang thời điểm tạo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> PostgreSQL has no max() aggregate for uuid</p><p>ORDER BY public_id DESC LIMIT 1 — one index lookup — gives the same answer.</p><p><i>VI: ORDER BY public_id DESC LIMIT 1 — một lần dò chỉ mục — cho cùng kết quả.</i></p></li><li><p><b>d)</b> res.set replaces the Vary: Origin that the CORS middleware had set</p><p>Vary must list every header that changes the response; vary() appends.</p><p><i>VI: Vary phải liệt kê mọi header làm đổi response; vary() nối thêm.</i></p></li><li><p><b>a)</b> The ids were backfilled by ALTER TABLE, so they carry the migration time</p><p>Backfill with uuidv7(created_at - now()) if the id should carry the creation time.</p><p><i>VI: Điền bằng uuidv7(created_at - now()) nếu id phải mang thời điểm tạo.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The first version of the ETag query used max(public_id) and failed. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản đầu của truy vấn ETag dùng max(public_id) và hỏng. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "uuidv7 values cannot be compared"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The replica had no lab_notes table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "max() needs a GROUP BY"
+              },
+              {
+                "ma": "d",
+                "noiDung": "PostgreSQL has no max() aggregate for uuid"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>ORDER BY public_id DESC LIMIT 1 — one index lookup — gives the same answer.</p><p><i>VI: ORDER BY public_id DESC LIMIT 1 — một lần dò chỉ mục — cho cùng kết quả.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why res.vary(“LabFlow-Consistency”) instead of res.set(“Vary”, …)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao res.vary(“LabFlow-Consistency”) thay vì res.set(“Vary”, …)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "res.set does not work on 304 responses"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Vary must be lower-case"
+              },
+              {
+                "ma": "c",
+                "noiDung": "res.vary also sets Cache-Control"
+              },
+              {
+                "ma": "d",
+                "noiDung": "res.set replaces the Vary: Origin that the CORS middleware had set"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Vary must list every header that changes the response; vary() appends.</p><p><i>VI: Vary phải liệt kê mọi header làm đổi response; vary() nối thêm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>The first note’s UUIDv7 decoded to 07:19:38 on 1 Nov, while its created_at was much earlier. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>UUIDv7 của ghi chú đầu giải ra 07:19:38 ngày 1/11, trong khi created_at sớm hơn nhiều. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ids were backfilled by ALTER TABLE, so they carry the migration time"
+              },
+              {
+                "ma": "b",
+                "noiDung": "created_at was wrong"
+              },
+              {
+                "ma": "c",
+                "noiDung": "uuidv7() uses the server’s time zone incorrectly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The replica rewrote the ids"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Backfill with uuidv7(created_at - now()) if the id should carry the creation time.</p><p><i>VI: Điền bằng uuidv7(created_at - now()) nếu id phải mang thời điểm tạo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Overwriting Vary with res.set.|||Ghi đè Vary bằng res.set."
+        },
+        {
+          "loi": "Assuming every UUIDv7 says when the row was created.|||Cho rằng UUIDv7 nào cũng cho biết dòng được tạo lúc nào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "backfill",
+          "vi": "điền giá trị cho dòng cũ"
+        },
+        {
+          "en": "Vary",
+          "vi": "header làm đổi response"
+        }
+      ]
+    },
+    {
+      "title": "Lab 9 · 2 — Write pageAfter(ids, cursor, limit) with UUIDv7 cursors",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "pagination",
+        "identifiers"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Notes are identified by lower-case UUIDv7 strings, which sort by time as text. Return the page of newest notes after <code>cursor</code> (exclusive; no cursor ⇒ from the newest): <code>{ data: ids (newest first, at most limit), next }</code>, where <code>next</code> is the last id of the page when more notes remain, otherwise <code>null</code>. Do not modify <code>ids</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghi chú được định danh bằng chuỗi UUIDv7 chữ thường, xếp theo thời gian khi so như chữ. Trả trang các ghi chú mới nhất sau <code>cursor</code> (không gồm cursor; không có cursor ⇒ từ mới nhất): <code>{ data: các id (mới nhất trước, tối đa limit), next }</code>, với <code>next</code> là id cuối của trang khi còn ghi chú, ngược lại <code>null</code>. Không sửa <code>ids</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "ids — string[] (any order); cursor — string | null; limit — number|||ids — string[] (thứ tự bất kỳ); cursor — chuỗi | null; limit — số",
+      "outputSpec": "{ data: string[], next: string | null }",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "pageAfter([\"01a1-0001\",\"01a1-0003\",\"01a1-0002\"], null, 2)",
+          "output": "{\"data\":[\"01a1-0003\",\"01a1-0002\"],\"next\":\"01a1-0002\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "[...ids].sort().reverse() gives newest first.|||[...ids].sort().reverse() cho mới nhất trước.",
+        "Exclusive: keep ids strictly less than the cursor.|||Không gồm cursor: giữ id nhỏ hơn hẳn cursor."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** next page of notes after the cursor */\nfunction pageAfter(ids, cursor, limit) {\n  // Write your solution here\n  const start = cursor ? ids.indexOf(cursor) : 0;\n  return { data: ids.slice(start, start + limit), next: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction pageAfter(ids, cursor, limit) {\n  const sorted = [...ids].sort().reverse();                       // UUIDv7 dạng chuỗi xếp đúng theo thời gian\n  const rest = cursor ? sorted.filter((x) => x < cursor) : sorted;\n  const page = rest.slice(0, limit);\n  return { data: page, next: rest.length > limit ? page[page.length - 1] : null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the SQL of Lab 9 — WHERE public_id < $cursor ORDER BY public_id DESC LIMIT 21 — in JavaScript: 1.8 ms 100,000 notes deep.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là câu SQL của Lab 9 — WHERE public_id < $cursor ORDER BY public_id DESC LIMIT 21 — viết bằng JavaScript: 1,8 ms ở sâu 100.000 ghi chú.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "First page",
+              "vi": "Trang đầu"
+            },
+            "goi": "pageAfter([\"01a1-0001\",\"01a1-0003\",\"01a1-0002\"], null, 2)",
+            "mongDoi": {
+              "data": [
+                "01a1-0003",
+                "01a1-0002"
+              ],
+              "next": "01a1-0002"
+            }
+          },
+          {
+            "moTa": {
+              "en": "After the cursor",
+              "vi": "Sau cursor"
+            },
+            "goi": "pageAfter([\"01a1-0001\",\"01a1-0003\",\"01a1-0002\"], \"01a1-0002\", 2)",
+            "mongDoi": {
+              "data": [
+                "01a1-0001"
+              ],
+              "next": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "pageAfter([], null, 20)",
+            "mongDoi": {
+              "data": [],
+              "next": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "pageAfter([\"a\",\"b\",\"c\",\"d\",\"e\"], \"e\", 2)",
+            "mongDoi": {
+              "data": [
+                "d",
+                "c"
+              ],
+              "next": "c"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "pageAfter([\"a\",\"b\"], \"a\", 2)",
+            "mongDoi": {
+              "data": [],
+              "next": null
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Including the cursor itself — the same note twice.|||Gồm cả chính cursor — một ghi chú hai lần."
+        },
+        {
+          "loi": "Sorting the input array in place.|||Sắp thẳng mảng đầu vào."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cursor",
+          "vi": "vị trí tiếp tục"
+        },
+        {
+          "en": "exclusive",
+          "vi": "không gồm"
+        }
+      ]
+    }
+  ]
+}

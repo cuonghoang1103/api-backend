@@ -296,6 +296,42 @@
       "name": "Lab 8 — Usage report: measure, fix, protect",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 8 · 1 — Reading the measurements · Lab 8 · 2 — Write usageReport(bookings, labIds, from, days) in one pass · Lab 8 · 3 — Write cacheDecision(entry, now, ttlMs)"
+    },
+    {
+      "slug": "api-9-1-cache",
+      "name": "9.1 HTTP caching: Cache-Control, ETag and 304",
+      "level": "BEGINNER",
+      "description": "Luyện: HTTP caching 1 — What the measurements showed · HTTP caching 2 — Write notModified(ifNoneMatch, etag) · HTTP caching 3 — Write sharedMayStore(cacheControl, hasAuthorization, status)"
+    },
+    {
+      "slug": "api-9-1-server-cache",
+      "name": "9.2 Server-side caching and the stampede",
+      "level": "BEGINNER",
+      "description": "Luyện: Server cache 1 — Redis in front of a slow query · Server cache 2 — Write countLoads(arrivals, loadMs, singleFlight)"
+    },
+    {
+      "slug": "api-9-2-db-doc",
+      "name": "9.3 Read-after-write: replicas and stale reads",
+      "level": "BEGINNER",
+      "description": "Luyện: Read-after-write 1 — The note that vanished · Read-after-write 2 — Write lsnAtLeast(replay, token)"
+    },
+    {
+      "slug": "api-9-3-sharding",
+      "name": "9.4 IDs, pagination and filters that survive sharding",
+      "level": "BEGINNER",
+      "description": "Luyện: Sharding 1 — IDs and pages across shards · Sharding 2 — Write mergePage(shards, limit) · Sharding 3 — Write uuidV7Time(uuid): what a public id reveals"
+    },
+    {
+      "slug": "api-9-4-nosql",
+      "name": "9.5 SQL vs NoSQL seen from the API",
+      "level": "BEGINNER",
+      "description": "Luyện: Documents vs tables 1 — Read the measurements · Documents vs tables 2 — Write devicePath(doc, deviceId) for jsonb_set"
+    },
+    {
+      "slug": "api-9-6-lab",
+      "name": "Lab 9 — A notes feed ready for scale",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 9 · 1 — The reference run · Lab 9 · 2 — Write pageAfter(ids, cursor, limit) with UUIDv7 cursors"
     }
   ]
 }

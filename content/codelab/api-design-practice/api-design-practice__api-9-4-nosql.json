@@ -1,0 +1,282 @@
+{
+  "trackSlug": "api-design-practice",
+  "moduleSlug": "api-9-4-nosql",
+  "lesson": {
+    "course": "api-design",
+    "slug": "api-9-4-nosql"
+  },
+  "exercises": [
+    {
+      "title": "Documents vs tables 1 — Read the measurements",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "data modeling"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>Facts from lesson 9.5 (1,000 labs × 30 devices × 5 issues, tables vs one JSONB document per lab, PostgreSQL 18).</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Những điều từ bài 9.5 (1.000 phòng × 30 thiết bị × 5 báo hỏng, bảng so với mỗi phòng một tài liệu JSONB, PostgreSQL 18).</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "What shape does each endpoint return?|||Mỗi endpoint trả hình dạng gì?",
+        "Which lists keep growing?|||Danh sách nào cứ lớn mãi?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Documents vs tables 1 — Read the measurements\n\nAnswer in the answer panel (no code needed).\n\n1. Which request was FASTER with the document model?Request nào NHANH hơn với mô hình tài liệu?\n2. Why did updating one device cost more in the document model?Vì sao sửa một thiết bị tốn hơn trong mô hình tài liệu?\n3. A lab with 20,000 embedded issues: what is the API problem?Một phòng nhúng 20.000 báo hỏng: vấn đề với API là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Documents vs tables 1 — Read the measurements — answer key\n\n1. Which request was FASTER with the document model?Request nào NHANH hơn với mô hình tài liệu?\n   Answer: c) GET one lab with its devices inside (0.17 vs 0.24 ms)\n   A document wins when the endpoint reads one aggregate whole: the stored shape is the response.VI: Tài liệu thắng khi endpoint đọc nguyên một khối: hình dạng lưu chính là response.\n\n2. Why did updating one device cost more in the document model?Vì sao sửa một thiết bị tốn hơn trong mô hình tài liệu?\n   Answer: c) The array position must be found and the whole document is rewritten\n   jsonb_set rewrites the row with the full document (10 KB of JSON for one status change).VI: jsonb_set ghi lại cả dòng với toàn bộ tài liệu (10 KB JSON cho một lần đổi trạng thái).\n\n3. A lab with 20,000 embedded issues: what is the API problem?Một phòng nhúng 20.000 báo hỏng: vấn đề với API là gì?\n   Answer: c) Every read or update moves the whole 1.2 MB document — unbounded lists belong in their own rows\n   Read 8.9 ms vs 0.11 ms for “20 newest issues” from a table. MongoDB caps documents at 16 MB for the same reason.VI: Đọc 8,9 ms so với 0,11 ms cho “20 báo hỏng mới nhất” từ bảng. MongoDB giới hạn tài liệu 16 MB cũng vì lẽ đó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> GET one lab with its devices inside (0.17 vs 0.24 ms)</p><p>A document wins when the endpoint reads one aggregate whole: the stored shape is the response.</p><p><i>VI: Tài liệu thắng khi endpoint đọc nguyên một khối: hình dạng lưu chính là response.</i></p></li><li><p><b>c)</b> The array position must be found and the whole document is rewritten</p><p>jsonb_set rewrites the row with the full document (10 KB of JSON for one status change).</p><p><i>VI: jsonb_set ghi lại cả dòng với toàn bộ tài liệu (10 KB JSON cho một lần đổi trạng thái).</i></p></li><li><p><b>c)</b> Every read or update moves the whole 1.2 MB document — unbounded lists belong in their own rows</p><p>Read 8.9 ms vs 0.11 ms for “20 newest issues” from a table. MongoDB caps documents at 16 MB for the same reason.</p><p><i>VI: Đọc 8,9 ms so với 0,11 ms cho “20 báo hỏng mới nhất” từ bảng. MongoDB giới hạn tài liệu 16 MB cũng vì lẽ đó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which request was FASTER with the document model?</p><p style=\"opacity:.75;font-size:.92em\"><i>Request nào NHANH hơn với mô hình tài liệu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "PATCH one device (0.45 vs 0.10 ms)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The 20 newest issues of a device (8.9 vs 0.11 ms)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "GET one lab with its devices inside (0.17 vs 0.24 ms)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "All devices in MAINTENANCE across labs (8.3 vs 0.25 ms)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A document wins when the endpoint reads one aggregate whole: the stored shape is the response.</p><p><i>VI: Tài liệu thắng khi endpoint đọc nguyên một khối: hình dạng lưu chính là response.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why did updating one device cost more in the document model?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao sửa một thiết bị tốn hơn trong mô hình tài liệu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Documents are stored on a different disk"
+              },
+              {
+                "ma": "b",
+                "noiDung": "JSONB cannot be updated, only replaced by DELETE + INSERT"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The array position must be found and the whole document is rewritten"
+              },
+              {
+                "ma": "d",
+                "noiDung": "GIN indexes lock the whole table on update"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>jsonb_set rewrites the row with the full document (10 KB of JSON for one status change).</p><p><i>VI: jsonb_set ghi lại cả dòng với toàn bộ tài liệu (10 KB JSON cho một lần đổi trạng thái).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A lab with 20,000 embedded issues: what is the API problem?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một phòng nhúng 20.000 báo hỏng: vấn đề với API là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "JSONB cannot hold more than 10,000 items in one array, so the insert silently fails"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The GIN index stops working above 1 MB and every query becomes a full scan"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Every read or update moves the whole 1.2 MB document — unbounded lists belong in their own rows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — TOAST compression makes a large document as cheap as a small one"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Read 8.9 ms vs 0.11 ms for “20 newest issues” from a table. MongoDB caps documents at 16 MB for the same reason.</p><p><i>VI: Đọc 8,9 ms so với 0,11 ms cho “20 báo hỏng mới nhất” từ bảng. MongoDB giới hạn tài liệu 16 MB cũng vì lẽ đó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing the store by slogan.|||Chọn kho bằng khẩu hiệu."
+        },
+        {
+          "loi": "Exposing only PUT on the whole document.|||Chỉ mở PUT cho cả tài liệu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "aggregate",
+          "vi": "khối đọc/sửa cùng nhau"
+        },
+        {
+          "en": "embed",
+          "vi": "nhúng"
+        }
+      ]
+    },
+    {
+      "title": "Documents vs tables 2 — Write devicePath(doc, deviceId) for jsonb_set",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "data modeling",
+        "PostgreSQL"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "api-design"
+      ],
+      "problemHtml": "<p>To update one device inside a lab document with <code>jsonb_set(doc, path, value)</code> you need the <em>array position</em>, not the id. Return the path <code>['devices', '&lt;index&gt;', 'status']</code> (index as a string) for the device with <code>id === deviceId</code>, or <code>null</code> if the lab has no such device or no <code>devices</code> array.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Muốn sửa một thiết bị bên trong tài liệu phòng bằng <code>jsonb_set(doc, path, value)</code>, bạn cần <em>vị trí trong mảng</em>, không phải id. Trả đường dẫn <code>['devices', '&lt;chỉ số&gt;', 'status']</code> (chỉ số dạng chuỗi) cho thiết bị có <code>id === deviceId</code>, hoặc <code>null</code> nếu phòng không có thiết bị đó hay không có mảng <code>devices</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": "doc — { devices?: [{ id, status }] }; deviceId — number|||doc — { devices?: [{ id, status }] }; deviceId — số",
+      "outputSpec": "string[] | null",
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "devicePath({\"devices\":[{\"id\":31,\"status\":\"AVAILABLE\"},{\"id\":32,\"status\":\"AVAILABLE\"}]}, 32)",
+          "output": "[\"devices\",\"1\",\"status\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "findIndex returns −1 when nothing matches.|||findIndex trả −1 khi không khớp.",
+        "?? [] handles a missing array.|||?? [] xử lý mảng bị thiếu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** jsonb_set path for one device's status */\nfunction devicePath(doc, deviceId) {\n  // Write your solution here\n  return ['devices', String(deviceId), 'status'];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction devicePath(doc, deviceId) {\n  const i = (doc.devices ?? []).findIndex((d) => d.id === deviceId);\n  return i === -1 ? null : ['devices', String(i), 'status'];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This lookup is the extra step that made the document update 0.45 ms against 0.10 ms for a row (lesson 9.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Bước tra này là phần thêm làm việc sửa tài liệu tốn 0,45 ms so với 0,10 ms của một dòng (bài 9.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Second device",
+              "vi": "Thiết bị thứ hai"
+            },
+            "goi": "devicePath({\"devices\":[{\"id\":31,\"status\":\"AVAILABLE\"},{\"id\":32,\"status\":\"AVAILABLE\"}]}, 32)",
+            "mongDoi": [
+              "devices",
+              "1",
+              "status"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Not in this lab",
+              "vi": "Không thuộc phòng này"
+            },
+            "goi": "devicePath({\"devices\":[{\"id\":31,\"status\":\"AVAILABLE\"}]}, 99)",
+            "mongDoi": null
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "devicePath({}, 1)",
+            "mongDoi": null,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "devicePath({\"devices\":[{\"id\":5},{\"id\":4},{\"id\":3}]}, 3)",
+            "mongDoi": [
+              "devices",
+              "2",
+              "status"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using the device id as the array index.|||Dùng id thiết bị làm chỉ số mảng."
+        },
+        {
+          "loi": "Returning [\"devices\", -1, …] for a missing device.|||Trả [\"devices\", -1, …] cho thiết bị không tồn tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "jsonb_set",
+          "vi": "sửa một chỗ trong JSONB"
+        },
+        {
+          "en": "path",
+          "vi": "đường dẫn tới phần tử"
+        }
+      ]
+    }
+  ]
+}

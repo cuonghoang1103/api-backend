@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 3 Lớp phiên của LabFlow ID (deck auth-lab-3, 9 slide). */
+import { walkAuth } from '../_slides.mjs';
+
+export default walkAuth('auth-lab-3', 'LabFlow ID’s session layer', 'Lớp phiên của LabFlow ID', [
+  [1, 'LabFlow ID’s session layer',
+    `<p>The lab turns Chapter 3 into one function that returns five methods. A grader mounts it in a small server, talks to it over HTTP with a fake clock, and attacks it from another site in a real browser.</p>`,
+    `<p>Lab biến Chương 3 thành một hàm trả về năm phương thức. Máy chấm gắn nó vào một máy chủ nhỏ, nói chuyện với nó qua HTTP bằng đồng hồ giả, và tấn công nó từ site khác trong trình duyệt thật.</p>`],
+  [2, 'Mission',
+    `<p>Start a fresh session in a host-prefixed cookie, load it with both timeouts and a throttled touch, end one or all sessions properly, and refuse unsafe requests from other sites. Any store with the five-method interface works.</p>`,
+    `<p>Bắt đầu một phiên mới trong cookie có tiền tố host, nạp nó với cả hai mốc hết hạn và việc chạm có giới hạn, kết thúc một hay mọi phiên cho đúng, và từ chối request không an toàn từ site khác. Kho nào có giao diện năm phương thức cũng dùng được.</p>`],
+  [3, 'Setup: copy, then grade the empty starter',
+    `<p>Copy the starter, keep the exported name, and grade the empty version once to see zero. The grader needs Chromium from lesson 1.1, because one check runs a real cross-site attack.</p>`,
+    `<p>Chép bản khởi đầu, giữ nguyên tên export, và chấm bản rỗng một lần để thấy điểm không. Máy chấm cần Chromium từ bài 1.1, vì một phép chấm chạy đòn tấn công chéo site thật.</p>`],
+  [4, 'Nine checks, and what a failure means for a user',
+    `<p>Every check maps to one lesson of the chapter and to a concrete harm: a stolen token, a planted session, a session that never dies, a write per read, a sign-out that does not, or another site changing An's email.</p>`,
+    `<p>Mỗi phép chấm ứng với một bài trong chương và một thiệt hại cụ thể: token bị trộm, phiên bị cài, phiên không bao giờ chết, một lần ghi cho mỗi lần đọc, đăng xuất mà không đăng xuất, hay một site khác đổi email của An.</p>`],
+  [5, 'A first attempt that “works”: 2 / 10',
+    `<p>The typical first attempt passes the cookie attributes and the source check. Everything else fails, although signing in, reading the profile and signing out all appear to work.</p>`,
+    `<p>Lần thử đầu điển hình qua phần thuộc tính cookie và phép kiểm mã nguồn. Mọi thứ khác đều trượt, dù đăng nhập, đọc hồ sơ và đăng xuất trông đều chạy.</p>`],
+  [6, 'Why each check failed',
+    `<p>The token is stored as the key, the old session survives sign-in, the idle check is off by its boundary, there is no absolute limit, every request writes, the cookie is not really cleared, and the CSRF check does nothing.</p>`,
+    `<p>Token bị lưu làm khoá, phiên cũ sống sót qua đăng nhập, phép kiểm nhàn rỗi sai ở biên, không có giới hạn tuyệt đối, request nào cũng ghi, cookie không thật sự bị xoá, và phép kiểm CSRF chẳng làm gì.</p>`],
+  [7, 'Reference: src/sessions — 10 / 10',
+    `<p>The reference layer scores ten. Read it after your own attempt; the store is not graded, only the behaviour, so a PostgreSQL, Redis or memory store all pass the same way.</p>`,
+    `<p>Lớp tham khảo đạt mười. Đọc nó sau khi tự làm; kho không được chấm, chỉ hành vi được chấm, nên kho PostgreSQL, Redis hay bộ nhớ đều qua như nhau.</p>`],
+  [8, 'Hints, from light to strong',
+    `<p>Start from the lesson behind the failing check. Then: delete the old session before minting a new one, compare times with greater-or-equal, touch only after a minute, and check fetch metadata before origin.</p>`,
+    `<p>Bắt đầu từ bài đứng sau phép chấm bị trượt. Rồi: xoá phiên cũ trước khi tạo phiên mới, so thời gian bằng lớn-hơn-hoặc-bằng, chỉ chạm sau một phút, và kiểm fetch metadata trước origin.</p>`],
+  [9, 'Checklist before you submit',
+    `<p>Two passing runs, green tests, no forbidden attributes in the source, and an explanation for each failure of the first attempt. Then the chapter quiz, and Chapter 4 takes tokens apart.</p>`,
+    `<p>Hai lần chấm đạt, test vẫn xanh, không có thuộc tính bị cấm trong mã nguồn, và giải thích được từng lần trượt của lần thử đầu. Rồi làm quiz chương, và Chương 4 mổ xẻ token.</p>`],
+]);

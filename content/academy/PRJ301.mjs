@@ -1621,6 +1621,11 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
   <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 0.1: a protocol that forgets everything</span><span class="lc-sub">Once you are working, or if you want to go deeper here, continue with the Authentication course on Courses. Same as this lesson: HTTP remembers nothing, so the browser must bring something back on every request (the code there is Node.js, not Java — the ideas carry over). Different: Courses first tries to remember people by IP address and by TCP connection and shows both failing on real requests, then has the client carry a card — the idea behind JSESSIONID.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-3-tai-sinh-phien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course (Courses) — lesson 3.3: a new session on every privilege change</span><span class="lc-sub">Same: issue a fresh session id at login and invalidate the old one (request.changeSessionId() here). Deeper: session fixation run for real in Chromium — a naive server hands the attacker An’s account, the fixed one answers 401 — plus re-authentication and ending every other session on a password change. The code there is Node.js; the idea carries over to servlets unchanged.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.2</span>
@@ -1709,6 +1714,11 @@ req.<span class="tok-function">getSession</span>().<span class="tok-function">se
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 0.1: một giao thức quên sạch mọi thứ</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá Authentication ở Courses. Giống bài này: HTTP không nhớ gì, nên trình duyệt phải mang theo một thứ ở mọi request (code ở đó viết bằng Node.js, không phải Java — nhưng ý tưởng dùng được nguyên). Khác: Courses thử nhớ người dùng theo địa chỉ IP và theo kết nối TCP, cho thấy cả hai hỏng trên request thật, rồi để client mang theo một tấm thẻ — đúng ý tưởng đứng sau JSESSIONID.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-3-tai-sinh-phien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication (Courses) — bài 3.3: phiên mới ở mỗi lần đổi đặc quyền</span><span class="lc-sub">Giống: cấp session id mới khi đăng nhập và vô hiệu cái cũ (ở đây là request.changeSessionId()). Sâu hơn: chạy session fixation thật trong Chromium — máy chủ ngây thơ trao tài khoản An cho kẻ tấn công, bản đã vá trả 401 — cùng xác thực lại và kết thúc mọi phiên khác khi đổi mật khẩu. Mã ở đó là Node.js; ý tưởng dùng nguyên cho servlet.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,

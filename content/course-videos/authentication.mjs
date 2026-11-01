@@ -48,11 +48,12 @@ export default {
     'auth-2-7-lab-luu-mat-khau': { yt: 'xQa6lmu4QDc', credit: 'Ben Swordfire — Node.js Password Hashing with Argon2 | Beginners Tutorial' }, // 01/11/2026: argon2 trong Node.js — Lab 2
 
     /* ── Chương 3 — Phiên và cookie ── */
-    'auth-3-1-bang-phien': { yt: 'FVmxtmzyrSw', credit: 'CoderOne — Stop using JSON Web Tokens. Use Cookies & Server Sessions instead' },        // Stop using JSON Web Tokens. Use Cookies & Server Sessions instead
-    'auth-3-2-thuoc-tinh-cookie': { yt: '3asMiTut9x4', credit: 'CodeLucky — 🔒 PHP Cookie Security: Secure, HttpOnly & SameSite Explained!' }, // PHP Cookie Security: Secure, HttpOnly & SameSite Explained!
-    'auth-3-3-tai-sinh-phien': { yt: '98qu0k1KPLs', credit: 'Dev Academy — Sessions vs Tokens 🧪 COOKIES vs JWT [Authentication]' },    // Sessions vs Tokens — COOKIES vs JWT [Authentication]
-    'auth-3-4-csrf': { yt: 'kT1SVkkgE6k', credit: 'CyberSecurityTV — Can you prevent CSRF with Same-Site?' },              // Can you prevent CSRF with Same-Site?
-    'auth-3-5-phien-song-o-dau': { yt: '01TfhmfzFUw', credit: 'dhandrohit — CookieSession Vs JWT' },  // CookieSession Vs JWT
+    'auth-3-1-bang-phien': { yt: '5beyFcuTw20', credit: 'Ben Awad — How Sessions work in Web Servers' }, // 01/11/2026: phiên phía máy chủ, cookie chỉ mang id — đúng 3.1
+    'auth-3-2-thuoc-tinh-cookie': { yt: 'CZ8geW9Zh4U', credit: 'Chrome for Developers — The essentials of HTTP cookie attributes' }, // 01/11/2026: thuộc tính cookie từ đội Chrome — đúng 3.2
+    'auth-3-3-tai-sinh-phien': { yt: 'MZ0F6APgmNA', credit: 'BlueHat CyberSec Academy: Learn. Think. Defend. — Session Fixation Attack Explained | Advanced Web Hacking & Session Hijacking Vulnerability' }, // 01/11/2026: session fixation — đúng 3.3
+    'auth-3-4-csrf': { yt: 'eWEgUcHPle0', credit: 'PwnFunction — Cross-Site Request Forgery (CSRF) Explained' }, // 01/11/2026: CSRF và các lớp phòng — đúng 3.4
+    'auth-3-5-phien-song-o-dau': { yt: 'fyTxwIa-1U0', credit: 'ByteByteGo — Session Vs JWT: The Differences You May Not Know!' }, // 01/11/2026: phiên có trạng thái đối lại token không trạng thái — đúng 3.5
+    'auth-3-7-lab-phien-cookie': { yt: '-ebXpRi1yQg', credit: 'manfra․io — Session-Based Authentication - Explanation + Full Node.js Tutorial' }, // 01/11/2026: dựng xác thực theo phiên trong Node.js — Lab 3
 
     /* ── Chương 4 — Token: JWT nhìn từ bên trong ── */
     'auth-4-1-giai-ma-bang-tay': { yt: 'G3DtePAR7Fc', credit: 'average:dev — JSON Web Tokens (JWT) Explained in 1 Minute' },  // JSON Web Tokens (JWT) Explained in 1 Minute

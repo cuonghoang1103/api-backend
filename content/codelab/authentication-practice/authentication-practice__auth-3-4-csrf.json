@@ -1,0 +1,548 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-3-4-csrf",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-3-4-csrf"
+  },
+  "exercises": [
+    {
+      "title": "3.4-1 — Five configurations, one attacker page",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "CSRF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real runs (Chromium 156, attacker 127.0.0.1:4801, target localhost:4802; then LabFlow ID v0.3):<pre>Chromium 156.0.8078.4\ncookie SameSite  defence         attacker form  attacker fetch  An’s own form  email at the end\nNone             none            200 CHANGED    200 CHANGED     200            an.new@student.labflow.example\n(unset)          none            200 CHANGED    401             200            an.new@student.labflow.example\nLax              none            401            401             200            an.new@student.labflow.example\nNone             fetch-metadata  403            403             200            an.new@student.labflow.example\nNone             token           403            403             200            an.new@student.labflow.example</pre><pre>Sec-Fetch-Site: cross-site               → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-site                → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nOrigin: http://127.0.0.1:4801 (old browser) → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-origin              → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200\nno browser headers (curl, a mobile app)  → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy thật (Chromium 156, kẻ tấn công 127.0.0.1:4801, đích localhost:4802; rồi LabFlow ID v0.3):<pre>Chromium 156.0.8078.4\ncookie SameSite  defence         attacker form  attacker fetch  An’s own form  email at the end\nNone             none            200 CHANGED    200 CHANGED     200            an.new@student.labflow.example\n(unset)          none            200 CHANGED    401             200            an.new@student.labflow.example\nLax              none            401            401             200            an.new@student.labflow.example\nNone             fetch-metadata  403            403             200            an.new@student.labflow.example\nNone             token           403            403             200            an.new@student.labflow.example</pre><pre>Sec-Fetch-Site: cross-site               → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-site                → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nOrigin: http://127.0.0.1:4801 (old browser) → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-origin              → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200\nno browser headers (curl, a mobile app)  → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Who needs to read the response for the attack to work?|||Ai cần đọc phản hồi để đòn tấn công chạy được?",
+        "Same site ≠ same origin.|||Cùng site ≠ cùng origin."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.4-1 — Five configurations, one attacker page\n\nAnswer in the answer panel (no code needed).\n\n1. Row 1’s fetch used mode no-cors and could not read the answer. Did it matter?Fetch ở hàng 1 dùng mode no-cors và không đọc được câu trả lời. Có quan trọng không?\n2. With SameSite=Lax and no defence, both attacks got 401. Why does LabFlow ID still add the Sec-Fetch-Site check?Với SameSite=Lax và không phòng gì, cả hai đòn nhận 401. Vì sao LabFlow ID vẫn thêm phép kiểm Sec-Fetch-Site?\n3. Why did the request with no browser headers (curl) get 200 from v0.3?Vì sao request không có header trình duyệt nào (curl) nhận 200 từ v0.3?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.4-1 — Five configurations, one attacker page — answer key\n\n1. Row 1’s fetch used mode no-cors and could not read the answer. Did it matter?Fetch ở hàng 1 dùng mode no-cors và không đọc được câu trả lời. Có quan trọng không?\n   Answer: d) No: the request was sent with the cookie and the email CHANGED — CORS only hides responses\n   CSRF needs the write, not the read. CORS controls reading; simple POSTs are not even preflighted.VI: CSRF cần việc ghi, không cần đọc. CORS kiểm soát việc đọc; POST đơn giản thậm chí không qua preflight.\n\n2. With SameSite=Lax and no defence, both attacks got 401. Why does LabFlow ID still add the Sec-Fetch-Site check?Với SameSite=Lax và không phòng gì, cả hai đòn nhận 401. Vì sao LabFlow ID vẫn thêm phép kiểm Sec-Fetch-Site?\n   Answer: c) Lax misses same-site subdomains and old browsers\n   Defence in depth: the server check covers what the cookie attribute cannot — see “Sec-Fetch-Site: same-site → 403”.VI: Phòng thủ nhiều lớp: phép kiểm ở máy chủ che phần thuộc tính cookie không che được — xem \"Sec-Fetch-Site: same-site → 403\".\n\n3. Why did the request with no browser headers (curl) get 200 from v0.3?Vì sao request không có header trình duyệt nào (curl) nhận 200 từ v0.3?\n   Answer: d) It cannot ride on a victim’s browser cookie\n   CSRF requires a victim’s browser. A client with no browser metadata either has its own credentials or nothing.VI: CSRF cần trình duyệt của nạn nhân. Client không có thông tin trình duyệt thì hoặc có thông tin đăng nhập riêng, hoặc chẳng có gì.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> No: the request was sent with the cookie and the email CHANGED — CORS only hides responses</p><p>CSRF needs the write, not the read. CORS controls reading; simple POSTs are not even preflighted.</p><p><i>VI: CSRF cần việc ghi, không cần đọc. CORS kiểm soát việc đọc; POST đơn giản thậm chí không qua preflight.</i></p></li><li><p><b>c)</b> Lax misses same-site subdomains and old browsers</p><p>Defence in depth: the server check covers what the cookie attribute cannot — see “Sec-Fetch-Site: same-site → 403”.</p><p><i>VI: Phòng thủ nhiều lớp: phép kiểm ở máy chủ che phần thuộc tính cookie không che được — xem \"Sec-Fetch-Site: same-site → 403\".</i></p></li><li><p><b>d)</b> It cannot ride on a victim’s browser cookie</p><p>CSRF requires a victim’s browser. A client with no browser metadata either has its own credentials or nothing.</p><p><i>VI: CSRF cần trình duyệt của nạn nhân. Client không có thông tin trình duyệt thì hoặc có thông tin đăng nhập riêng, hoặc chẳng có gì.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Row 1’s fetch used mode no-cors and could not read the answer. Did it matter?</p><p style=\"opacity:.75;font-size:.92em\"><i>Fetch ở hàng 1 dùng mode no-cors và không đọc được câu trả lời. Có quan trọng không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes: no-cors requests never carry cookies"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No: but only because the server allowed CORS"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes: an unreadable response means the server ignored it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No: the request was sent with the cookie and the email CHANGED — CORS only hides responses"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>CSRF needs the write, not the read. CORS controls reading; simple POSTs are not even preflighted.</p><p><i>VI: CSRF cần việc ghi, không cần đọc. CORS kiểm soát việc đọc; POST đơn giản thậm chí không qua preflight.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With SameSite=Lax and no defence, both attacks got 401. Why does LabFlow ID still add the Sec-Fetch-Site check?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với SameSite=Lax và không phòng gì, cả hai đòn nhận 401. Vì sao LabFlow ID vẫn thêm phép kiểm Sec-Fetch-Site?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It does not — the Lax attribute is already enough"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because Lax stops working two minutes after login"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Lax misses same-site subdomains and old browsers"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because Lax cookies are sent with every POST anyway"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Defence in depth: the server check covers what the cookie attribute cannot — see “Sec-Fetch-Site: same-site → 403”.</p><p><i>VI: Phòng thủ nhiều lớp: phép kiểm ở máy chủ che phần thuộc tính cookie không che được — xem \"Sec-Fetch-Site: same-site → 403\".</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why did the request with no browser headers (curl) get 200 from v0.3?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao request không có header trình duyệt nào (curl) nhận 200 từ v0.3?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because v0.3 simply forgot to check that case"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because a POST without Origin is always same-origin"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because LabFlow ID trusts curl as a known client"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It cannot ride on a victim’s browser cookie"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>CSRF requires a victim’s browser. A client with no browser metadata either has its own credentials or nothing.</p><p><i>VI: CSRF cần trình duyệt của nạn nhân. Client không có thông tin trình duyệt thì hoặc có thông tin đăng nhập riêng, hoặc chẳng có gì.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“CORS protects us.”|||\"CORS bảo vệ mình.\""
+        },
+        {
+          "loi": "“Lax is the whole defence.”|||\"Lax là toàn bộ lớp phòng.\""
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Fetch Metadata",
+          "vi": "siêu dữ liệu fetch"
+        },
+        {
+          "en": "opaque response",
+          "vi": "phản hồi mờ đục"
+        }
+      ]
+    },
+    {
+      "title": "3.4-2 — Write csrfVerdict(req, origins): layer 2",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "CSRF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p><code>req = { method, headers }</code> (lower-case header names). Return <code>'ALLOW'</code> or <code>'BLOCK'</code>: safe methods (GET, HEAD, OPTIONS) ⇒ ALLOW; if <code>sec-fetch-site</code> is present ⇒ ALLOW only for <code>same-origin</code> or <code>none</code>; otherwise, an <code>origin</code> header not in <code>origins</code> (including <code>\"null\"</code>) ⇒ BLOCK; no browser metadata at all ⇒ ALLOW. The real v0.3 answers:<pre>Sec-Fetch-Site: cross-site               → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-site                → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nOrigin: http://127.0.0.1:4801 (old browser) → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-origin              → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200\nno browser headers (curl, a mobile app)  → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>req = { method, headers }</code> (tên header viết thường). Trả <code>'ALLOW'</code> hoặc <code>'BLOCK'</code>: method an toàn (GET, HEAD, OPTIONS) ⇒ ALLOW; nếu có <code>sec-fetch-site</code> ⇒ chỉ ALLOW với <code>same-origin</code> hoặc <code>none</code>; không thì header <code>origin</code> không nằm trong <code>origins</code> (kể cả <code>\"null\"</code>) ⇒ BLOCK; không có thông tin trình duyệt nào ⇒ ALLOW. Câu trả lời thật của v0.3:<pre>Sec-Fetch-Site: cross-site               → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-site                → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nOrigin: http://127.0.0.1:4801 (old browser) → {\"error\":\"CROSS_SITE_REQUEST\"} 403\nSec-Fetch-Site: same-origin              → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200\nno browser headers (curl, a mobile app)  → {\"ok\":true,\"email\":\"an@student.labflow.example\"} 200</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "csrfVerdict({\"method\":\"POST\",\"headers\":{\"sec-fetch-site\":\"cross-site\"}}, [\"http://localhost:4800\"])",
+          "output": "\"BLOCK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Sec-Fetch-Site first, Origin only as the fallback.|||Sec-Fetch-Site trước, Origin chỉ là dự phòng.",
+        "\"null\" is a string, and not ours.|||\"null\" là một chuỗi, và không phải của mình."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'ALLOW' | 'BLOCK' */\nfunction csrfVerdict(req, origins) {\n  // Write your solution here\n  return req.headers['sec-fetch-site'] === 'cross-site' ? 'BLOCK' : 'ALLOW';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction csrfVerdict(req, origins) {\n  if (['GET', 'HEAD', 'OPTIONS'].indexOf(req.method) >= 0) return 'ALLOW';\n  var h = req.headers || {};\n  var site = h['sec-fetch-site'];\n  if (site) return site === 'same-origin' || site === 'none' ? 'ALLOW' : 'BLOCK';\n  if (h.origin && origins.indexOf(h.origin) < 0) return 'BLOCK';\n  return 'ALLOW';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Modern browsers always say where a request came from; the Origin fallback covers older ones; with neither, the request did not come from a victim’s browser. That is OWASP’s recommendation and v0.3’s csrf().</p>",
+      "solutionExplanationHtmlVi": "<p>Trình duyệt hiện đại luôn cho biết request đến từ đâu; dự phòng Origin che trình duyệt cũ; không có cả hai thì request không đến từ trình duyệt của nạn nhân. Đó là khuyến nghị của OWASP và csrf() của v0.3.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Case 1: csrfVerdict({\"method\":\"POST\",\"headers\":{\"sec-fetch-site\":\"cross-site\"}}, [\"http://local...",
+              "vi": "Ca 1"
+            },
+            "goi": "csrfVerdict({\"method\":\"POST\",\"headers\":{\"sec-fetch-site\":\"cross-site\"}}, [\"http://localhost:4800\"])",
+            "mongDoi": "BLOCK"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: csrfVerdict({\"method\":\"POST\",\"headers\":{\"sec-fetch-site\":\"same-origin\"}}, [\"http://loca...",
+              "vi": "Ca 2"
+            },
+            "goi": "csrfVerdict({\"method\":\"POST\",\"headers\":{\"sec-fetch-site\":\"same-origin\"}}, [\"http://localhost:4800\"])",
+            "mongDoi": "ALLOW"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "csrfVerdict({\"method\":\"POST\",\"headers\":{\"sec-fetch-site\":\"same-site\"}}, [\"http://localhost:4800\"])",
+            "mongDoi": "BLOCK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "csrfVerdict({\"method\":\"POST\",\"headers\":{\"origin\":\"http://127.0.0.1:4801\"}}, [\"http://localhost:4800\"])",
+            "mongDoi": "BLOCK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "csrfVerdict({\"method\":\"POST\",\"headers\":{\"origin\":\"null\"}}, [\"http://localhost:4800\"])",
+            "mongDoi": "BLOCK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "csrfVerdict({\"method\":\"DELETE\",\"headers\":{}}, [\"http://localhost:4800\"])",
+            "mongDoi": "ALLOW",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "csrfVerdict({\"method\":\"GET\",\"headers\":{\"sec-fetch-site\":\"cross-site\"}}, [\"http://localhost:4800\"])",
+            "mongDoi": "ALLOW",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 8",
+              "vi": "Ca ẩn 8"
+            },
+            "goi": "csrfVerdict({\"method\":\"POST\",\"headers\":{\"sec-fetch-site\":\"none\"}}, [\"http://localhost:4800\"])",
+            "mongDoi": "ALLOW",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Allowing same-site.|||Cho same-site qua."
+        },
+        {
+          "loi": "Blocking when Origin is missing on a non-browser client.|||Chặn khi client không phải trình duyệt thiếu Origin."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "safe method",
+          "vi": "method an toàn"
+        }
+      ]
+    },
+    {
+      "title": "3.4-3 — Write checkCsrfToken(formToken, sessionId, mac): layer 3",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "CSRF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The synchronizer token of lesson 3.4 is <code>mac(sessionId)</code> (an HMAC with a server key — given). Return <code>true</code> only when <code>formToken</code> equals <code>mac(sessionId)</code>, compared in constant time (look at every character, no early exit); <code>false</code> for non-strings or an empty session id. A token from another session must fail.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Token đồng bộ của bài 3.4 là <code>mac(sessionId)</code> (HMAC với khoá máy chủ — cho sẵn). Trả <code>true</code> chỉ khi <code>formToken</code> bằng <code>mac(sessionId)</code>, so trong thời gian không đổi (xem mọi ký tự, không thoát sớm); <code>false</code> với dữ liệu không phải chuỗi hoặc session id rỗng. Token của phiên khác phải trượt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 4; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return checkCsrfToken(mac(\"sess-an\"), \"sess-an\", mac); })()",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compute expected = mac(sessionId), then compare like safeEqual (lesson 1.3).|||Tính expected = mac(sessionId), rồi so như safeEqual (bài 1.3).",
+        "Fold the length difference into the accumulator.|||Gộp chênh lệch độ dài vào biến tích luỹ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true only if formToken = mac(sessionId) */\nfunction checkCsrfToken(formToken, sessionId, mac) {\n  // Write your solution here\n  return formToken === 'csrf-demo';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction checkCsrfToken(formToken, sessionId, mac) {\n  if (typeof formToken !== 'string' || typeof sessionId !== 'string' || !sessionId) return false;\n  var expected = mac(sessionId);\n  var diff = formToken.length ^ expected.length;\n  for (var i = 0; i < Math.max(formToken.length, expected.length); i++) diff |= (formToken.charCodeAt(i) | 0) ^ (expected.charCodeAt(i) | 0);\n  return diff === 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Binding the token to the session means another user’s token is useless, and the attacker’s page cannot read yours. Constant-time comparison keeps the token from leaking through timing.</p>",
+      "solutionExplanationHtmlVi": "<p>Gắn token với phiên nghĩa là token của người khác vô dụng, và trang của kẻ tấn công không đọc được trang của bạn. So hằng thời gian giữ token không rò qua thời gian.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An’s own form",
+              "vi": "Form của chính An"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 4; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return checkCsrfToken(mac(\"sess-an\"), \"sess-an\", mac); })()",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Attacker’s own token",
+              "vi": "Token của chính kẻ tấn công"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 4; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return checkCsrfToken(mac(\"sess-attacker\"), \"sess-an\", mac); })()",
+            "mongDoi": false
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 4; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return checkCsrfToken(\"\", \"sess-an\", mac); })()",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 4; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return checkCsrfToken(undefined, \"sess-an\", mac); })()",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 4; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return checkCsrfToken(mac(\"\"), \"\", mac); })()",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () { var mac = function (s) { var h = 2166136261, o = \"\"; for (var r = 0; r < 4; r++) { for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i) + r; h = Math.imul(h, 16777619) >>> 0; } o += (\"0000000\" + h.toString(16)).slice(-8); } return o; }; return checkCsrfToken(mac(\"sess-an\") + \"x\", \"sess-an\", mac); })()",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A constant token for everyone: one sign-up reveals it.|||Một token cố định cho mọi người: một lần đăng ký là lộ."
+        },
+        {
+          "loi": "=== on the token.|||=== trên token."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "synchronizer token",
+          "vi": "token đồng bộ"
+        }
+      ]
+    },
+    {
+      "title": "3.4-4 — Rank the defences",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "CSRF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Place each measure in LabFlow ID’s ranking.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp mỗi biện pháp vào thứ hạng của LabFlow ID.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which one needs state?|||Cái nào cần trạng thái?",
+        "Which one did not stop the measured fetch?|||Cái nào không chặn được fetch đã đo?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.4-4 — Rank the defences\n\nAnswer in the answer panel (no code needed).\n\n1. Measure → rankBiện pháp → thứ hạng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.4-4 — Rank the defences — answer key\n\n1. Measure → rankBiện pháp → thứ hạng\n   - r1.r: 1st — always, one attribute\n   - r2.r: 2nd — always, ~10 lines, no state\n   - r3.r: 3rd — where layer 2 is not enough\n   - r4.r: not a CSRF defence\n   Cheapest and broadest first; the token covers what is left; CORS controls reading, and the measured fetch still changed the email.VI: Rẻ và rộng nhất trước; token che phần còn lại; CORS kiểm soát việc đọc, và fetch đo được vẫn đổi được email.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cheapest and broadest first; the token covers what is left; CORS controls reading, and the measured fetch still changed the email.</p><p><i>VI: Rẻ và rộng nhất trước; token che phần còn lại; CORS kiểm soát việc đọc, và fetch đo được vẫn đổi được email.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Measure → rank</p><p style=\"opacity:.75;font-size:.92em\"><i>Biện pháp → thứ hạng</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Measure"
+              },
+              {
+                "ma": "r",
+                "ten": "Rank",
+                "luaChon": [
+                  "1st — always, one attribute",
+                  "2nd — always, ~10 lines, no state",
+                  "3rd — where layer 2 is not enough",
+                  "not a CSRF defence"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "SameSite=Lax on the session cookie"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Sec-Fetch-Site check + Origin fallback"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "Synchronizer token (HMAC of the session id)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "CORS allowing only our origin"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "1st — always, one attribute",
+              "r2.r": "2nd — always, ~10 lines, no state",
+              "r3.r": "3rd — where layer 2 is not enough",
+              "r4.r": "not a CSRF defence"
+            },
+            "giaiThich": "<p>Cheapest and broadest first; the token covers what is left; CORS controls reading, and the measured fetch still changed the email.</p><p><i>VI: Rẻ và rộng nhất trước; token che phần còn lại; CORS kiểm soát việc đọc, và fetch đo được vẫn đổi được email.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ranking CORS as a defence.|||Xếp CORS là một lớp phòng."
+        },
+        {
+          "loi": "Token first, everywhere.|||Token trước tiên, ở mọi nơi."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,546 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-3-1-bang-phien",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-3-1-bang-phien"
+  },
+  "exercises": [
+    {
+      "title": "3.1-1 — Two timeouts and a write per read: read the real runs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.3 (real runs):<pre>07:00  An and Binh sign in; An then sends a request every 15 minutes, Binh walks away\n07:15  An:   signed in\n07:30  An:   signed in\n07:31  Binh (31 min without a request): NOT signed in (cookie cleared)\n18:45  An after 45 more requests: signed in\n19:00  An (12 h after sign-in, still active): NOT signed in (cookie cleared)\nstore writes: 2 inserts, 47 updates (last_seen), 2 deletes</pre><pre>port 4800: 1,000 × GET /me in 1.79 s · median 1.74 ms · p99 2.90 ms · sessions rows updated: 0\nport 4803: 1,000 × GET /me in 2.13 s · median 2.06 ms · p99 3.64 ms · sessions rows updated: 1000</pre><pre>laptop  /me → {\"id\":\"usr_1\",\"email\":\"an@student.labflo\nphone   /me → {\"id\":\"usr_1\",\"email\":\"an@student.labflo\nlabpc   /me → {\"id\":\"usr_1\",\"email\":\"an@student.labflo\nlaptop  POST /sign-out-everywhere → {\"ok\":true,\"ended\":3}\nlaptop  /me → {\"error\":\"Not signed in\"}\nphone   /me → {\"error\":\"Not signed in\"}\nlabpc   /me → {\"error\":\"Not signed in\"}</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.3 (chạy thật):<pre>07:00  An and Binh sign in; An then sends a request every 15 minutes, Binh walks away\n07:15  An:   signed in\n07:30  An:   signed in\n07:31  Binh (31 min without a request): NOT signed in (cookie cleared)\n18:45  An after 45 more requests: signed in\n19:00  An (12 h after sign-in, still active): NOT signed in (cookie cleared)\nstore writes: 2 inserts, 47 updates (last_seen), 2 deletes</pre><pre>port 4800: 1,000 × GET /me in 1.79 s · median 1.74 ms · p99 2.90 ms · sessions rows updated: 0\nport 4803: 1,000 × GET /me in 2.13 s · median 2.06 ms · p99 3.64 ms · sessions rows updated: 1000</pre><pre>laptop  /me → {\"id\":\"usr_1\",\"email\":\"an@student.labflo\nphone   /me → {\"id\":\"usr_1\",\"email\":\"an@student.labflo\nlabpc   /me → {\"id\":\"usr_1\",\"email\":\"an@student.labflo\nlaptop  POST /sign-out-everywhere → {\"ok\":true,\"ended\":3}\nlaptop  /me → {\"error\":\"Not signed in\"}\nphone   /me → {\"error\":\"Not signed in\"}\nlabpc   /me → {\"error\":\"Not signed in\"}</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which column decides each event?|||Cột nào quyết định từng sự kiện?",
+        "Count writes, not reads.|||Đếm số lần ghi, không đếm lần đọc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.1-1 — Two timeouts and a write per read: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. An was active every 15 minutes and still got signed out at 19:00. Which timeout did that?An hoạt động mỗi 15 phút mà vẫn bị đăng xuất lúc 19:00. Mốc nào làm việc đó?\n2. Port 4803 updated the sessions table 1,000 times for 1,000 reads. What did port 4800 change?Cổng 4803 cập nhật bảng sessions 1.000 lần cho 1.000 lần đọc. Cổng 4800 đã thay đổi gì?\n3. After POST /sign-out-everywhere from the laptop, why is the phone signed out too?Sau POST /sign-out-everywhere từ laptop, vì sao điện thoại cũng bị đăng xuất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.1-1 — Two timeouts and a write per read: read the real runs — answer key\n\n1. An was active every 15 minutes and still got signed out at 19:00. Which timeout did that?An hoạt động mỗi 15 phút mà vẫn bị đăng xuất lúc 19:00. Mốc nào làm việc đó?\n   Answer: b) The absolute timeout: 12 h after sign-in, however active\n   Absolute caps the life of any session — including a stolen cookie in daily use. Idle ended Bình at 07:31. The server checks both; Max-Age only advises the browser.VI: Tuyệt đối giới hạn tuổi thọ mọi phiên — kể cả cookie bị trộm dùng hằng ngày. Nhàn rỗi kết thúc Bình lúc 07:31. Máy chủ kiểm cả hai; Max-Age chỉ là lời khuyên cho trình duyệt.\n\n2. Port 4803 updated the sessions table 1,000 times for 1,000 reads. What did port 4800 change?Cổng 4803 cập nhật bảng sessions 1.000 lần cho 1.000 lần đọc. Cổng 4800 đã thay đổi gì?\n   Answer: a) It touches last_seen at most once a minute\n   Same server, TOUCH_EVERY_MS 60000 instead of 0. The idle check loses at most a minute of precision; the database loses 1,000 dead rows.VI: Cùng máy chủ, TOUCH_EVERY_MS 60000 thay vì 0. Phép kiểm nhàn rỗi chỉ kém chính xác tối đa một phút; cơ sở dữ liệu bớt 1.000 dòng chết.\n\n3. After POST /sign-out-everywhere from the laptop, why is the phone signed out too?Sau POST /sign-out-everywhere từ laptop, vì sao điện thoại cũng bị đăng xuất?\n   Answer: a) One DELETE … WHERE user_id removed all three rows\n   Server-side sessions are revoked by deleting rows; the cookie is just a pointer. An index on user_id keeps the delete fast.VI: Phiên phía máy chủ bị thu hồi bằng cách xoá dòng; cookie chỉ là con trỏ. Chỉ mục trên user_id giữ cho lệnh xoá nhanh.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> The absolute timeout: 12 h after sign-in, however active</p><p>Absolute caps the life of any session — including a stolen cookie in daily use. Idle ended Bình at 07:31. The server checks both; Max-Age only advises the browser.</p><p><i>VI: Tuyệt đối giới hạn tuổi thọ mọi phiên — kể cả cookie bị trộm dùng hằng ngày. Nhàn rỗi kết thúc Bình lúc 07:31. Máy chủ kiểm cả hai; Max-Age chỉ là lời khuyên cho trình duyệt.</i></p></li><li><p><b>a)</b> It touches last_seen at most once a minute</p><p>Same server, TOUCH_EVERY_MS 60000 instead of 0. The idle check loses at most a minute of precision; the database loses 1,000 dead rows.</p><p><i>VI: Cùng máy chủ, TOUCH_EVERY_MS 60000 thay vì 0. Phép kiểm nhàn rỗi chỉ kém chính xác tối đa một phút; cơ sở dữ liệu bớt 1.000 dòng chết.</i></p></li><li><p><b>a)</b> One DELETE … WHERE user_id removed all three rows</p><p>Server-side sessions are revoked by deleting rows; the cookie is just a pointer. An index on user_id keeps the delete fast.</p><p><i>VI: Phiên phía máy chủ bị thu hồi bằng cách xoá dòng; cookie chỉ là con trỏ. Chỉ mục trên user_id giữ cho lệnh xoá nhanh.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>An was active every 15 minutes and still got signed out at 19:00. Which timeout did that?</p><p style=\"opacity:.75;font-size:.92em\"><i>An hoạt động mỗi 15 phút mà vẫn bị đăng xuất lúc 19:00. Mốc nào làm việc đó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The idle timeout: 30 min after the last request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The absolute timeout: 12 h after sign-in, however active"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PostgreSQL deleting rows older than 12 h by itself"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The cookie’s Max-Age expiring in the browser"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Absolute caps the life of any session — including a stolen cookie in daily use. Idle ended Bình at 07:31. The server checks both; Max-Age only advises the browser.</p><p><i>VI: Tuyệt đối giới hạn tuổi thọ mọi phiên — kể cả cookie bị trộm dùng hằng ngày. Nhàn rỗi kết thúc Bình lúc 07:31. Máy chủ kiểm cả hai; Max-Age chỉ là lời khuyên cho trình duyệt.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Port 4803 updated the sessions table 1,000 times for 1,000 reads. What did port 4800 change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cổng 4803 cập nhật bảng sessions 1.000 lần cho 1.000 lần đọc. Cổng 4800 đã thay đổi gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It touches last_seen at most once a minute"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It stopped checking the idle timeout entirely"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It keeps sessions in Redis instead of PostgreSQL"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It caches every /me response for one minute"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Same server, TOUCH_EVERY_MS 60000 instead of 0. The idle check loses at most a minute of precision; the database loses 1,000 dead rows.</p><p><i>VI: Cùng máy chủ, TOUCH_EVERY_MS 60000 thay vì 0. Phép kiểm nhàn rỗi chỉ kém chính xác tối đa một phút; cơ sở dữ liệu bớt 1.000 dòng chết.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After POST /sign-out-everywhere from the laptop, why is the phone signed out too?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau POST /sign-out-everywhere từ laptop, vì sao điện thoại cũng bị đăng xuất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "One DELETE … WHERE user_id removed all three rows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The laptop’s cookie had been copied onto the phone"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server pushed a sign-out message to the phone"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The phone’s cookie happened to expire at that moment"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Server-side sessions are revoked by deleting rows; the cookie is just a pointer. An index on user_id keeps the delete fast.</p><p><i>VI: Phiên phía máy chủ bị thu hồi bằng cách xoá dòng; cookie chỉ là con trỏ. Chỉ mục trên user_id giữ cho lệnh xoá nhanh.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Max-Age is the timeout.”|||\"Max-Age chính là mốc hết hạn.\""
+        },
+        {
+          "loi": "“Updating last_seen is free.”|||\"Cập nhật last_seen thì miễn phí.\""
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "idle timeout",
+          "vi": "hết hạn nhàn rỗi"
+        },
+        {
+          "en": "absolute timeout",
+          "vi": "hết hạn tuyệt đối"
+        }
+      ]
+    },
+    {
+      "title": "3.1-2 — Write sessionState(row, now, opt): the check inside load()",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return what <code>load()</code> must do with a session row at time <code>now</code> (ms): <code>'NO_SESSION'</code> (row is null); <code>'EXPIRED_ABSOLUTE'</code> when <code>now ≥ expiresAt</code>; <code>'EXPIRED_IDLE'</code> when <code>now − lastSeenAt ≥ idleMs</code>; otherwise <code>'OK_TOUCH'</code> when <code>now − lastSeenAt ≥ touchEveryMs</code> (update last_seen), else <code>'OK'</code>. Check absolute first.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về việc <code>load()</code> phải làm với một dòng phiên ở thời điểm <code>now</code> (ms): <code>'NO_SESSION'</code> (dòng null); <code>'EXPIRED_ABSOLUTE'</code> khi <code>now ≥ expiresAt</code>; <code>'EXPIRED_IDLE'</code> khi <code>now − lastSeenAt ≥ idleMs</code>; còn lại <code>'OK_TOUCH'</code> khi <code>now − lastSeenAt ≥ touchEveryMs</code> (cập nhật last_seen), không thì <code>'OK'</code>. Kiểm tuyệt đối trước.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "sessionState({\"userId\":\"usr_1\",\"createdAt\":1793577600000,\"expiresAt\":1793620800000,\"lastSeenAt\":1793577600000}, 1793578800000, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+          "output": "\"OK_TOUCH\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Use ≥ at every boundary.|||Dùng ≥ ở mọi biên.",
+        "Order: null, absolute, idle, touch.|||Thứ tự: null, tuyệt đối, nhàn rỗi, chạm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'NO_SESSION' | 'EXPIRED_ABSOLUTE' | 'EXPIRED_IDLE' | 'OK_TOUCH' | 'OK' */\nfunction sessionState(row, now, opt) {\n  // Write your solution here\n  if (now - row.lastSeenAt > opt.idleMs) return 'EXPIRED_IDLE';\n  return 'OK_TOUCH';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction sessionState(row, now, opt) {\n  if (!row) return 'NO_SESSION';\n  if (now >= row.expiresAt) return 'EXPIRED_ABSOLUTE';\n  if (now - row.lastSeenAt >= opt.idleMs) return 'EXPIRED_IDLE';\n  return now - row.lastSeenAt >= opt.touchEveryMs ? 'OK_TOUCH' : 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Absolute first, because an active session must still die; idle second; and only a live session is touched, at most once per interval — the order of lesson 3.1’s load().</p>",
+      "solutionExplanationHtmlVi": "<p>Tuyệt đối trước, vì phiên đang hoạt động vẫn phải chết; nhàn rỗi sau; và chỉ phiên còn sống mới được chạm, tối đa mỗi khoảng một lần — đúng thứ tự load() của bài 3.1.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "20 min idle",
+              "vi": "Nhàn rỗi 20 phút"
+            },
+            "goi": "sessionState({\"userId\":\"usr_1\",\"createdAt\":1793577600000,\"expiresAt\":1793620800000,\"lastSeenAt\":1793577600000}, 1793578800000, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+            "mongDoi": "OK_TOUCH"
+          },
+          {
+            "moTa": {
+              "en": "Bình at 07:31",
+              "vi": "Bình lúc 07:31"
+            },
+            "goi": "sessionState({\"userId\":\"usr_1\",\"createdAt\":1793577600000,\"expiresAt\":1793620800000,\"lastSeenAt\":1793577600000}, 1793579460000, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+            "mongDoi": "EXPIRED_IDLE"
+          },
+          {
+            "moTa": {
+              "en": "An at 19:00, active",
+              "vi": "An lúc 19:00, đang hoạt động"
+            },
+            "goi": "sessionState({\"userId\":\"usr_1\",\"createdAt\":1793577600000,\"expiresAt\":1793620800000,\"lastSeenAt\":1793619900000}, 1793620800000, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+            "mongDoi": "EXPIRED_ABSOLUTE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Exactly 30 min idle",
+              "vi": "Nhàn rỗi đúng 30 phút"
+            },
+            "goi": "sessionState({\"userId\":\"usr_1\",\"createdAt\":1793577600000,\"expiresAt\":1793620800000,\"lastSeenAt\":1793577600000}, 1793579400000, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+            "mongDoi": "EXPIRED_IDLE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "sessionState({\"userId\":\"usr_1\",\"createdAt\":1793577600000,\"expiresAt\":1793620800000,\"lastSeenAt\":1793578170000}, 1793578200000, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "sessionState({\"userId\":\"usr_1\",\"createdAt\":1793577600000,\"expiresAt\":1793620800000,\"lastSeenAt\":1793578140000}, 1793578200000, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+            "mongDoi": "OK_TOUCH",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "sessionState(null, 0, {\"idleMs\":1800000,\"touchEveryMs\":60000})",
+            "mongDoi": "NO_SESSION",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "> instead of ≥: a session idle exactly 30 min survives (Lab 3 T4).|||> thay vì ≥: phiên nhàn rỗi đúng 30 phút vẫn sống (T4 của Lab 3)."
+        },
+        {
+          "loi": "Touching on every request.|||Chạm ở mọi request."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "boundary",
+          "vi": "biên"
+        }
+      ]
+    },
+    {
+      "title": "3.1-3 — Write countTouches(signInAt, times, touchEveryMs): how many UPDATEs?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "write amplification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A session starts with <code>lastSeenAt = signInAt</code>. For each request time in order, the server updates last_seen (one UPDATE) only when <code>time − lastSeenAt ≥ touchEveryMs</code>, and then <code>lastSeenAt = time</code>. Return the number of UPDATEs. Lesson 3.1 measured 1,000 UPDATEs with <code>touchEveryMs = 0</code> and 0 with 60 s for a 2-second burst.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một phiên bắt đầu với <code>lastSeenAt = signInAt</code>. Với mỗi thời điểm request theo thứ tự, máy chủ cập nhật last_seen (một UPDATE) chỉ khi <code>time − lastSeenAt ≥ touchEveryMs</code>, rồi gán <code>lastSeenAt = time</code>. Trả về số lần UPDATE. Bài 3.1 đo được 1.000 UPDATE với <code>touchEveryMs = 0</code> và 0 với 60 s cho một đợt 2 giây.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "countTouches(0, [1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4200,4300,4400,4500,4600,4700,4800,4900,5000,5100,5200,5300,5400,5500,5600,5700,5800,5900,6000,6100,6200,6300,6400,6500,6600,6700,6800,6900,7000,7100,7200,7300,7400,7500,7600,7700,7800,7900,8000,8100,8200,8300,8400,8500,8600,8700,8800,8900,9000,9100,9200,9300,9400,9500,9600,9700,9800,9900,10000,10100,10200,10300,10400,10500,10600,10700,10800,10900], 60000)",
+          "output": "0",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Keep lastSeen in a variable; move it only when you touch.|||Giữ lastSeen trong một biến; chỉ dời nó khi chạm.",
+        "touchEveryMs = 0 ⇒ every request touches.|||touchEveryMs = 0 ⇒ request nào cũng chạm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ number of last_seen UPDATEs */\nfunction countTouches(signInAt, requestTimes, touchEveryMs) {\n  // Write your solution here\n  return requestTimes.length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction countTouches(signInAt, requestTimes, touchEveryMs) {\n  var lastSeen = signInAt, n = 0;\n  for (var i = 0; i < requestTimes.length; i++) {\n    if (requestTimes[i] - lastSeen >= touchEveryMs) { lastSeen = requestTimes[i]; n++; }\n  }\n  return n;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>lastSeen moves only when the database is written; between touches the idle clock still runs from the last write — which is why the idle check is at most touchEveryMs late.</p>",
+      "solutionExplanationHtmlVi": "<p>lastSeen chỉ dời khi cơ sở dữ liệu được ghi; giữa hai lần chạm đồng hồ nhàn rỗi vẫn chạy từ lần ghi cuối — nên phép kiểm nhàn rỗi trễ tối đa touchEveryMs.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "100 requests in 10 s, touch every minute",
+              "vi": "100 request trong 10 s, chạm mỗi phút"
+            },
+            "goi": "countTouches(0, [1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4200,4300,4400,4500,4600,4700,4800,4900,5000,5100,5200,5300,5400,5500,5600,5700,5800,5900,6000,6100,6200,6300,6400,6500,6600,6700,6800,6900,7000,7100,7200,7300,7400,7500,7600,7700,7800,7900,8000,8100,8200,8300,8400,8500,8600,8700,8800,8900,9000,9100,9200,9300,9400,9500,9600,9700,9800,9900,10000,10100,10200,10300,10400,10500,10600,10700,10800,10900], 60000)",
+            "mongDoi": 0
+          },
+          {
+            "moTa": {
+              "en": "Case 2: countTouches(0, [1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,...",
+              "vi": "Ca 2"
+            },
+            "goi": "countTouches(0, [1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2400,2500,2600,2700,2800,2900,3000,3100,3200,3300,3400,3500,3600,3700,3800,3900,4000,4100,4200,4300,4400,4500,4600,4700,4800,4900,5000,5100,5200,5300,5400,5500,5600,5700,5800,5900,6000,6100,6200,6300,6400,6500,6600,6700,6800,6900,7000,7100,7200,7300,7400,7500,7600,7700,7800,7900,8000,8100,8200,8300,8400,8500,8600,8700,8800,8900,9000,9100,9200,9300,9400,9500,9600,9700,9800,9900,10000,10100,10200,10300,10400,10500,10600,10700,10800,10900], 0)",
+            "mongDoi": 100
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "countTouches(0, [30000,61000,90000,125000,200000], 60000)",
+            "mongDoi": 3,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "countTouches(0, [], 60000)",
+            "mongDoi": 0,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "An every 15 min for 12 h",
+              "vi": "An mỗi 15 phút trong 12 giờ"
+            },
+            "goi": "countTouches(0, [900000,1800000,2700000,3600000,4500000,5400000,6300000,7200000,8100000,9000000,9900000,10800000,11700000,12600000,13500000,14400000,15300000,16200000,17100000,18000000,18900000,19800000,20700000,21600000,22500000,23400000,24300000,25200000,26100000,27000000,27900000,28800000,29700000,30600000,31500000,32400000,33300000,34200000,35100000,36000000,36900000,37800000,38700000,39600000,40500000,41400000,42300000,43200000], 60000)",
+            "mongDoi": 48,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Moving lastSeen on every request: then nothing is ever ≥ 60 s.|||Dời lastSeen ở mọi request: khi đó chẳng khoảng nào ≥ 60 s."
+        },
+        {
+          "loi": "Counting the sign-in as a touch.|||Đếm cả lúc đăng nhập là một lần chạm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "throttle",
+          "vi": "giới hạn tần suất"
+        }
+      ]
+    },
+    {
+      "title": "3.1-4 — Each column answers a question",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each part of sql/002_sessions.sql with the question it answers.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi phần của sql/002_sessions.sql với câu hỏi nó trả lời.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of the support call each column answers.|||Nghĩ tới cuộc gọi hỗ trợ mà mỗi cột trả lời.",
+        "The index is not a column but answers a question too.|||Chỉ mục không phải cột nhưng cũng trả lời một câu hỏi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.1-4 — Each column answers a question\n\nAnswer in the answer panel (no code needed).\n\n1. Column → questionCột → câu hỏi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.1-4 — Each column answers a question — answer key\n\n1. Column → questionCột → câu hỏi\n   - r1.q: which session (never the token)\n   - r2.q: when it ends, whatever happens\n   - r3.q: has it been idle too long\n   - r4.q: when was the password last proven\n   - r5.q: is this you? (devices page)\n   - r6.q: sign out everywhere, fast\n   Every column exists because someone will ask that question in production; a column nobody asks about is a column to drop.VI: Mỗi cột tồn tại vì sẽ có người hỏi câu đó trên production; cột không ai hỏi tới là cột nên bỏ.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every column exists because someone will ask that question in production; a column nobody asks about is a column to drop.</p><p><i>VI: Mỗi cột tồn tại vì sẽ có người hỏi câu đó trên production; cột không ai hỏi tới là cột nên bỏ.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Column → question</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột → câu hỏi</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Column"
+              },
+              {
+                "ma": "q",
+                "ten": "Answers",
+                "luaChon": [
+                  "which session (never the token)",
+                  "when it ends, whatever happens",
+                  "has it been idle too long",
+                  "when was the password last proven",
+                  "is this you? (devices page)",
+                  "sign out everywhere, fast"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "digest (primary key)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "expires_at"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "last_seen_at"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "auth_at"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "ip, user_agent"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "x": "index on user_id"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "which session (never the token)",
+              "r2.q": "when it ends, whatever happens",
+              "r3.q": "has it been idle too long",
+              "r4.q": "when was the password last proven",
+              "r5.q": "is this you? (devices page)",
+              "r6.q": "sign out everywhere, fast"
+            },
+            "giaiThich": "<p>Every column exists because someone will ask that question in production; a column nobody asks about is a column to drop.</p><p><i>VI: Mỗi cột tồn tại vì sẽ có người hỏi câu đó trên production; cột không ai hỏi tới là cột nên bỏ.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Storing the token itself as the key.|||Lưu chính token làm khoá."
+        },
+        {
+          "loi": "Using created_at for idle.|||Dùng created_at cho nhàn rỗi."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

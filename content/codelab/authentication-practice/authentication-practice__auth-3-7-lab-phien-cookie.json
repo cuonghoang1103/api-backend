@@ -1,0 +1,393 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-3-7-lab-phien-cookie",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-3-7-lab-phien-cookie"
+  },
+  "exercises": [
+    {
+      "title": "Lab 3.1 — start(store, cookieHeader, userId, freshToken, now)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "session fixation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p><code>store</code> maps a <b>digest</b> to a session row. At sign-in: if the request's <code>Cookie</code> header carries <code>__Host-lfid_ses</code>, delete that session (<code>store[digest(old)]</code>); then store <code>{ userId, createdAt: now, expiresAt: now + 12 h, lastSeenAt: now }</code> under <code>digest(freshToken)</code> — never the token itself — and return the Set-Cookie value <code>__Host-lfid_ses=&lt;freshToken&gt;; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200</code> (<code>ATTRS</code> is provided). The first attempt of the lab failed here:<pre>✓ T1 cookie: __Host-lfid_ses; HttpOnly; Secure; Path=/; SameSite Lax/Strict; no Domain 1.5/1.5\n✗ T2 token: CSPRNG, ≥ 256 bits, the store keeps a digest — never the token             0/1.5\n✗ T3 sign-in replaces any session the browser already had (session fixation)           0/1.5</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>store</code> ánh xạ một <b>digest</b> tới một dòng phiên. Khi đăng nhập: nếu header <code>Cookie</code> của request mang <code>__Host-lfid_ses</code>, xoá phiên đó (<code>store[digest(old)]</code>); rồi lưu <code>{ userId, createdAt: now, expiresAt: now + 12 h, lastSeenAt: now }</code> dưới <code>digest(freshToken)</code> — không bao giờ lưu chính token — và trả về giá trị Set-Cookie <code>__Host-lfid_ses=&lt;freshToken&gt;; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200</code> (<code>ATTRS</code> cho sẵn). Lần thử đầu của lab trượt ở đây:<pre>✓ T1 cookie: __Host-lfid_ses; HttpOnly; Secure; Path=/; SameSite Lax/Strict; no Domain 1.5/1.5\n✗ T2 token: CSPRNG, ≥ 256 bits, the store keeps a digest — never the token             0/1.5\n✗ T3 sign-in replaces any session the browser already had (session fixation)           0/1.5</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var store = {}; \n  var setCookie = start(store, \"\", \"usr_1\", \"lfid_ses_AAA\", 1793577600000);\n  return { setCookie: setCookie, rows: Object.keys(store).sort().map(function (k) { return store[k].userId; }), tokenStored: JSON.stringify(store).indexOf(\"lfid_ses_AAA\") >= 0 }; })()",
+          "output": "{\"setCookie\":\"__Host-lfid_ses=lfid_ses_AAA; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200\",\"rows\":[\"usr_1\"],\"tokenStored\":false}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "readCookie(cookieHeader, \"__Host-lfid_ses\") gives the old token or null.|||readCookie(cookieHeader, \"__Host-lfid_ses\") cho token cũ hoặc null.",
+        "Key = digest(token), always.|||Khoá = digest(token), luôn luôn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided ──\nfunction digest(token) { return hex(sha256(utf8(token))); }   // = tokenDigest() of lesson 1.3\nfunction readCookie(header, name) {                            // lesson 0.1's parser\n  var parts = String(header || '').split(';');\n  for (var i = 0; i < parts.length; i++) { var j = parts[i].indexOf('='); if (j > 0 && parts[i].slice(0, j).trim() === name) return parts[i].slice(j + 1).trim(); }\n  return null;\n}\nvar ATTRS = 'Path=/; HttpOnly; Secure; SameSite=Lax';\n\n/** ⇒ the Set-Cookie value */\nfunction start(store, cookieHeader, userId, freshToken, now) {\n  // Write your solution here\n  store[freshToken] = { userId: userId, lastSeenAt: now };\n  return '__Host-lfid_ses=' + freshToken + '; Path=/; HttpOnly; Secure';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided ──\nfunction digest(token) { return hex(sha256(utf8(token))); }   // = tokenDigest() of lesson 1.3\nfunction readCookie(header, name) {                            // lesson 0.1's parser\n  var parts = String(header || '').split(';');\n  for (var i = 0; i < parts.length; i++) { var j = parts[i].indexOf('='); if (j > 0 && parts[i].slice(0, j).trim() === name) return parts[i].slice(j + 1).trim(); }\n  return null;\n}\nvar ATTRS = 'Path=/; HttpOnly; Secure; SameSite=Lax';\n\n// Reference solution\nfunction start(store, cookieHeader, userId, freshToken, now) {\n  var old = readCookie(cookieHeader, '__Host-lfid_ses');\n  if (old) delete store[digest(old)];                                 // the session the browser carried dies\n  store[digest(freshToken)] = { userId: userId, createdAt: now, expiresAt: now + 12 * 3600e3, lastSeenAt: now };\n  return '__Host-lfid_ses=' + freshToken + '; ' + ATTRS + '; Max-Age=43200';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three properties in eight lines: a planted session dies, a leaked store holds only digests, and the cookie carries every attribute lesson 3.2 measured.</p>",
+      "solutionExplanationHtmlVi": "<p>Ba tính chất trong tám dòng: phiên bị cài chết, kho bị lộ chỉ chứa digest, và cookie mang đủ mọi thuộc tính bài 3.2 đã đo.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A first sign-in",
+              "vi": "Đăng nhập lần đầu"
+            },
+            "goi": "(function () { var store = {}; \n  var setCookie = start(store, \"\", \"usr_1\", \"lfid_ses_AAA\", 1793577600000);\n  return { setCookie: setCookie, rows: Object.keys(store).sort().map(function (k) { return store[k].userId; }), tokenStored: JSON.stringify(store).indexOf(\"lfid_ses_AAA\") >= 0 }; })()",
+            "mongDoi": {
+              "setCookie": "__Host-lfid_ses=lfid_ses_AAA; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200",
+              "rows": [
+                "usr_1"
+              ],
+              "tokenStored": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Bình’s session planted, An signs in",
+              "vi": "Phiên của Bình bị cài, An đăng nhập"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_BINH')] = { userId: 'usr_2', expiresAt: 9e15, lastSeenAt: 0 };\n  var setCookie = start(store, \"__Host-lfid_ses=lfid_ses_BINH\", \"usr_1\", \"lfid_ses_NEW\", 1793577600000);\n  return { setCookie: setCookie, rows: Object.keys(store).sort().map(function (k) { return store[k].userId; }), tokenStored: JSON.stringify(store).indexOf(\"lfid_ses_NEW\") >= 0 }; })()",
+            "mongDoi": {
+              "setCookie": "__Host-lfid_ses=lfid_ses_NEW; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200",
+              "rows": [
+                "usr_1"
+              ],
+              "tokenStored": false
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_X')] = { userId: 'usr_3', expiresAt: 9e15, lastSeenAt: 0 };\n  var setCookie = start(store, \"lang=vi; __Host-lfid_ses=lfid_ses_ZZZ\", \"usr_1\", \"lfid_ses_N2\", 1793577600000);\n  return { setCookie: setCookie, rows: Object.keys(store).sort().map(function (k) { return store[k].userId; }), tokenStored: JSON.stringify(store).indexOf(\"lfid_ses_N2\") >= 0 }; })()",
+            "mongDoi": {
+              "setCookie": "__Host-lfid_ses=lfid_ses_N2; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200",
+              "rows": [
+                "usr_1",
+                "usr_3"
+              ],
+              "tokenStored": false
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Keeping the old session (fixation).|||Giữ phiên cũ (fixation)."
+        },
+        {
+          "loi": "store[freshToken] = … — a dump becomes a list of live sessions.|||store[freshToken] = … — bản dump thành danh sách phiên còn sống."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "digest",
+          "vi": "bản băm"
+        }
+      ]
+    },
+    {
+      "title": "Lab 3.2 — load(store, cookieHeader, now, opt)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>{ userId, setCookie }</code> for one request. No cookie ⇒ <code>{ userId: null, setCookie: null }</code>. Unknown digest, <code>now ≥ expiresAt</code> or <code>now − lastSeenAt ≥ idleMs</code> ⇒ delete the row (if any) and return <code>userId: null</code> with <code>setCookie = '__Host-lfid_ses=; ' + ATTRS + '; Max-Age=0'</code>. Otherwise return the user (<code>setCookie: null</code>) and set <code>lastSeenAt = now</code> only if <code>now − lastSeenAt ≥ touchEveryMs</code>. First attempt:<pre>✗ T4 idle timeout: 30 min without a request ⇒ 401, row deleted, cookie cleared         0/1\n✗ T5 absolute timeout: 12 h after sign-in ⇒ 401 even with activity                     0/1\n✗ T6 last-seen is not written on every request (100 requests in 10 s ⇒ ≤ 1 update)     0/0.5</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>{ userId, setCookie }</code> cho một request. Không có cookie ⇒ <code>{ userId: null, setCookie: null }</code>. Digest lạ, <code>now ≥ expiresAt</code> hoặc <code>now − lastSeenAt ≥ idleMs</code> ⇒ xoá dòng (nếu có) và trả <code>userId: null</code> với <code>setCookie = '__Host-lfid_ses=; ' + ATTRS + '; Max-Age=0'</code>. Còn lại trả người dùng (<code>setCookie: null</code>) và chỉ đặt <code>lastSeenAt = now</code> khi <code>now − lastSeenAt ≥ touchEveryMs</code>. Lần thử đầu:<pre>✗ T4 idle timeout: 30 min without a request ⇒ 401, row deleted, cookie cleared         0/1\n✗ T5 absolute timeout: 12 h after sign-in ⇒ 401 even with activity                     0/1\n✗ T6 last-seen is not written on every request (100 requests in 10 s ⇒ ≤ 1 update)     0/0.5</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1', createdAt: 1793577600000, expiresAt: 1793620800000, lastSeenAt: 1793577600000 };\n  var r = load(store, \"__Host-lfid_ses=lfid_ses_AN\", 1793578800000, {\"idleMs\":1800000,\"touchEveryMs\":60000});\n  var row = store[digest('lfid_ses_AN')];\n  return { userId: r.userId, setCookie: r.setCookie, rowLeft: !!row, lastSeenMin: row ? (row.lastSeenAt - 1793577600000) / 60000 : null }; })()",
+          "output": "{\"userId\":\"usr_1\",\"setCookie\":null,\"rowLeft\":true,\"lastSeenMin\":20}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Absolute first, then idle, then touch.|||Tuyệt đối trước, rồi nhàn rỗi, rồi chạm.",
+        "≥ at every boundary.|||≥ ở mọi biên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided ──\nfunction digest(token) { return hex(sha256(utf8(token))); }   // = tokenDigest() of lesson 1.3\nfunction readCookie(header, name) {                            // lesson 0.1's parser\n  var parts = String(header || '').split(';');\n  for (var i = 0; i < parts.length; i++) { var j = parts[i].indexOf('='); if (j > 0 && parts[i].slice(0, j).trim() === name) return parts[i].slice(j + 1).trim(); }\n  return null;\n}\nvar ATTRS = 'Path=/; HttpOnly; Secure; SameSite=Lax';\n\n/** ⇒ { userId, setCookie } */\nfunction load(store, cookieHeader, now, opt) {\n  // Write your solution here\n  var token = readCookie(cookieHeader, '__Host-lfid_ses');\n  var s = token && store[digest(token)];\n  if (s && now - s.lastSeenAt <= opt.idleMs) { s.lastSeenAt = now; return { userId: s.userId, setCookie: null }; }\n  return { userId: null, setCookie: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided ──\nfunction digest(token) { return hex(sha256(utf8(token))); }   // = tokenDigest() of lesson 1.3\nfunction readCookie(header, name) {                            // lesson 0.1's parser\n  var parts = String(header || '').split(';');\n  for (var i = 0; i < parts.length; i++) { var j = parts[i].indexOf('='); if (j > 0 && parts[i].slice(0, j).trim() === name) return parts[i].slice(j + 1).trim(); }\n  return null;\n}\nvar ATTRS = 'Path=/; HttpOnly; Secure; SameSite=Lax';\n\n// Reference solution\nfunction load(store, cookieHeader, now, opt) {\n  var token = readCookie(cookieHeader, '__Host-lfid_ses');\n  if (!token) return { userId: null, setCookie: null };\n  var d = digest(token), s = store[d];\n  var clear = '__Host-lfid_ses=; ' + ATTRS + '; Max-Age=0';\n  if (!s) return { userId: null, setCookie: clear };\n  if (now >= s.expiresAt || now - s.lastSeenAt >= opt.idleMs) { delete store[d]; return { userId: null, setCookie: clear }; }\n  if (now - s.lastSeenAt >= opt.touchEveryMs) s.lastSeenAt = now;\n  return { userId: s.userId, setCookie: null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The server, not Max-Age, decides when a session ends; expired rows are deleted, not left behind; and reads stay reads. This is load() of LabFlow ID v0.3.</p>",
+      "solutionExplanationHtmlVi": "<p>Máy chủ, không phải Max-Age, quyết định khi nào phiên kết thúc; dòng hết hạn bị xoá chứ không bị bỏ lại; và lần đọc vẫn chỉ là đọc. Đây là load() của LabFlow ID v0.3.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "20 min after the last request",
+              "vi": "20 phút sau request cuối"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1', createdAt: 1793577600000, expiresAt: 1793620800000, lastSeenAt: 1793577600000 };\n  var r = load(store, \"__Host-lfid_ses=lfid_ses_AN\", 1793578800000, {\"idleMs\":1800000,\"touchEveryMs\":60000});\n  var row = store[digest('lfid_ses_AN')];\n  return { userId: r.userId, setCookie: r.setCookie, rowLeft: !!row, lastSeenMin: row ? (row.lastSeenAt - 1793577600000) / 60000 : null }; })()",
+            "mongDoi": {
+              "userId": "usr_1",
+              "setCookie": null,
+              "rowLeft": true,
+              "lastSeenMin": 20
+            }
+          },
+          {
+            "moTa": {
+              "en": "Exactly 30 min idle",
+              "vi": "Nhàn rỗi đúng 30 phút"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1', createdAt: 1793577600000, expiresAt: 1793620800000, lastSeenAt: 1793577600000 };\n  var r = load(store, \"__Host-lfid_ses=lfid_ses_AN\", 1793579400000, {\"idleMs\":1800000,\"touchEveryMs\":60000});\n  var row = store[digest('lfid_ses_AN')];\n  return { userId: r.userId, setCookie: r.setCookie, rowLeft: !!row, lastSeenMin: row ? (row.lastSeenAt - 1793577600000) / 60000 : null }; })()",
+            "mongDoi": {
+              "userId": null,
+              "setCookie": "__Host-lfid_ses=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+              "rowLeft": false,
+              "lastSeenMin": null
+            }
+          },
+          {
+            "moTa": {
+              "en": "12 h after sign-in, active",
+              "vi": "12 giờ sau đăng nhập, đang hoạt động"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1', createdAt: 1793577600000, expiresAt: 1793620800000, lastSeenAt: 1793619900000 };\n  var r = load(store, \"__Host-lfid_ses=lfid_ses_AN\", 1793620800000, {\"idleMs\":1800000,\"touchEveryMs\":60000});\n  var row = store[digest('lfid_ses_AN')];\n  return { userId: r.userId, setCookie: r.setCookie, rowLeft: !!row, lastSeenMin: row ? (row.lastSeenAt - 1793577600000) / 60000 : null }; })()",
+            "mongDoi": {
+              "userId": null,
+              "setCookie": "__Host-lfid_ses=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+              "rowLeft": false,
+              "lastSeenMin": null
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "30 s after a touch",
+              "vi": "30 s sau một lần chạm"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1', createdAt: 1793577600000, expiresAt: 1793620800000, lastSeenAt: 1793578200000 };\n  var r = load(store, \"__Host-lfid_ses=lfid_ses_AN\", 1793578230000, {\"idleMs\":1800000,\"touchEveryMs\":60000});\n  var row = store[digest('lfid_ses_AN')];\n  return { userId: r.userId, setCookie: r.setCookie, rowLeft: !!row, lastSeenMin: row ? (row.lastSeenAt - 1793577600000) / 60000 : null }; })()",
+            "mongDoi": {
+              "userId": "usr_1",
+              "setCookie": null,
+              "rowLeft": true,
+              "lastSeenMin": 10
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1', createdAt: 1793577600000, expiresAt: 1793620800000, lastSeenAt: 1793577600000 };\n  var r = load(store, \"__Host-lfid_ses=lfid_ses_UNKNOWN\", 1793577900000, {\"idleMs\":1800000,\"touchEveryMs\":60000});\n  var row = store[digest('lfid_ses_AN')];\n  return { userId: r.userId, setCookie: r.setCookie, rowLeft: !!row, lastSeenMin: row ? (row.lastSeenAt - 1793577600000) / 60000 : null }; })()",
+            "mongDoi": {
+              "userId": null,
+              "setCookie": "__Host-lfid_ses=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+              "rowLeft": true,
+              "lastSeenMin": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1', createdAt: 1793577600000, expiresAt: 1793620800000, lastSeenAt: 1793577600000 };\n  var r = load(store, \"lang=vi\", 1793577900000, {\"idleMs\":1800000,\"touchEveryMs\":60000});\n  var row = store[digest('lfid_ses_AN')];\n  return { userId: r.userId, setCookie: r.setCookie, rowLeft: !!row, lastSeenMin: row ? (row.lastSeenAt - 1793577600000) / 60000 : null }; })()",
+            "mongDoi": {
+              "userId": null,
+              "setCookie": null,
+              "rowLeft": true,
+              "lastSeenMin": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "<= idleMs keeps a session idle exactly 30 min.|||<= idleMs giữ phiên nhàn rỗi đúng 30 phút."
+        },
+        {
+          "loi": "Updating lastSeenAt on every request.|||Cập nhật lastSeenAt ở mọi request."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "idle timeout",
+          "vi": "hết hạn nhàn rỗi"
+        }
+      ]
+    },
+    {
+      "title": "Lab 3.3 — end(store, cookieHeader): sign-out that really signs out",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Delete the session the cookie points to (other sessions of the user stay — that is <code>endAll</code>'s job) and return the clearing Set-Cookie <code>'__Host-lfid_ses=; ' + ATTRS + '; Max-Age=0'</code>, even when there was no cookie. The first attempt sent <code>__Host-lfid_ses=deleted</code>:<pre>✗ T7 sign-out clears the cookie and kills the row; sign-out-everywhere kills other devices 0/1</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xoá phiên mà cookie trỏ tới (các phiên khác của người đó ở lại — đó là việc của <code>endAll</code>) và trả về Set-Cookie xoá <code>'__Host-lfid_ses=; ' + ATTRS + '; Max-Age=0'</code>, kể cả khi không có cookie. Lần thử đầu gửi <code>__Host-lfid_ses=deleted</code>:<pre>✗ T7 sign-out clears the cookie and kills the row; sign-out-everywhere kills other devices 0/1</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1' }; store[digest('lfid_ses_PH')] = { userId: 'usr_1' };\n  var sc = end(store, \"__Host-lfid_ses=lfid_ses_AN\"); return { setCookie: sc, left: Object.keys(store).length }; })()",
+          "output": "{\"setCookie\":\"__Host-lfid_ses=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0\",\"left\":1}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Same name, same Path/Secure/HttpOnly/SameSite, Max-Age=0.|||Cùng tên, cùng Path/Secure/HttpOnly/SameSite, Max-Age=0.",
+        "Delete by digest.|||Xoá theo digest."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided ──\nfunction digest(token) { return hex(sha256(utf8(token))); }   // = tokenDigest() of lesson 1.3\nfunction readCookie(header, name) {                            // lesson 0.1's parser\n  var parts = String(header || '').split(';');\n  for (var i = 0; i < parts.length; i++) { var j = parts[i].indexOf('='); if (j > 0 && parts[i].slice(0, j).trim() === name) return parts[i].slice(j + 1).trim(); }\n  return null;\n}\nvar ATTRS = 'Path=/; HttpOnly; Secure; SameSite=Lax';\n\n/** ⇒ the clearing Set-Cookie value */\nfunction end(store, cookieHeader) {\n  // Write your solution here\n  return '__Host-lfid_ses=deleted';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// ── provided helpers (pure JavaScript, no Buffer / crypto) ──\nfunction utf8(str) { // string ⇒ array of bytes (UTF-8)\n  var out = [];\n  for (var i = 0; i < str.length; i++) {\n    var c = str.codePointAt(i);\n    if (c > 0xffff) i++;\n    if (c < 0x80) out.push(c);\n    else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));\n    else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n    else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));\n  }\n  return out;\n}\nfunction hex(bytes) { return bytes.map(function (b) { return (b < 16 ? '0' : '') + b.toString(16); }).join(''); }\nfunction sha256(bytes) { // array of bytes ⇒ array of 32 bytes\n  var K = [0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2];\n  var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];\n  var m = bytes.slice(); var bits = bytes.length * 8;\n  m.push(0x80); while (m.length % 64 !== 56) m.push(0);\n  for (var s = 56; s >= 0; s -= 8) m.push(s >= 32 ? Math.floor(bits / Math.pow(2, s)) & 255 : (bits >>> s) & 255);\n  var r = function (x, n) { return (x >>> n) | (x << (32 - n)); };\n  for (var o = 0; o < m.length; o += 64) {\n    var w = [];\n    for (var i = 0; i < 16; i++) w[i] = (m[o + 4 * i] << 24) | (m[o + 4 * i + 1] << 16) | (m[o + 4 * i + 2] << 8) | m[o + 4 * i + 3];\n    for (i = 16; i < 64; i++) w[i] = (w[i - 16] + (r(w[i - 15], 7) ^ r(w[i - 15], 18) ^ (w[i - 15] >>> 3)) + w[i - 7] + (r(w[i - 2], 17) ^ r(w[i - 2], 19) ^ (w[i - 2] >>> 10))) | 0;\n    var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], k = h[7];\n    for (i = 0; i < 64; i++) {\n      var t1 = (k + (r(e, 6) ^ r(e, 11) ^ r(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0;\n      var t2 = ((r(a, 2) ^ r(a, 13) ^ r(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;\n      k = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;\n    }\n    h = [h[0] + a, h[1] + b, h[2] + c, h[3] + d, h[4] + e, h[5] + f, h[6] + g, h[7] + k].map(function (x) { return x | 0; });\n  }\n  var out = [];\n  h.forEach(function (x) { out.push((x >>> 24) & 255, (x >>> 16) & 255, (x >>> 8) & 255, x & 255); });\n  return out;\n}\n// ── provided ──\nfunction digest(token) { return hex(sha256(utf8(token))); }   // = tokenDigest() of lesson 1.3\nfunction readCookie(header, name) {                            // lesson 0.1's parser\n  var parts = String(header || '').split(';');\n  for (var i = 0; i < parts.length; i++) { var j = parts[i].indexOf('='); if (j > 0 && parts[i].slice(0, j).trim() === name) return parts[i].slice(j + 1).trim(); }\n  return null;\n}\nvar ATTRS = 'Path=/; HttpOnly; Secure; SameSite=Lax';\n\n// Reference solution\nfunction end(store, cookieHeader) {\n  var token = readCookie(cookieHeader, '__Host-lfid_ses');\n  if (token) delete store[digest(token)];\n  return '__Host-lfid_ses=; ' + ATTRS + '; Max-Age=0';                // same name and attributes, or it is another cookie\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Sign-out has two halves: the server forgets the session (so a copy is useless) and the browser forgets the cookie (same attributes, lesson 3.2’s delete trap).</p>",
+      "solutionExplanationHtmlVi": "<p>Đăng xuất có hai nửa: máy chủ quên phiên (để bản chép vô dụng) và trình duyệt quên cookie (cùng thuộc tính, bẫy xoá cookie của bài 3.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Laptop signs out, the phone stays",
+              "vi": "Laptop đăng xuất, điện thoại ở lại"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1' }; store[digest('lfid_ses_PH')] = { userId: 'usr_1' };\n  var sc = end(store, \"__Host-lfid_ses=lfid_ses_AN\"); return { setCookie: sc, left: Object.keys(store).length }; })()",
+            "mongDoi": {
+              "setCookie": "__Host-lfid_ses=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+              "left": 1
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 2",
+              "vi": "Ca ẩn 2"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1' }; store[digest('lfid_ses_PH')] = { userId: 'usr_1' };\n  var sc = end(store, \"\"); return { setCookie: sc, left: Object.keys(store).length }; })()",
+            "mongDoi": {
+              "setCookie": "__Host-lfid_ses=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+              "left": 2
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "(function () { var store = {}; store[digest('lfid_ses_AN')] = { userId: 'usr_1' }; store[digest('lfid_ses_PH')] = { userId: 'usr_1' };\n  var sc = end(store, \"__Host-lfid_ses=lfid_ses_OTHER\"); return { setCookie: sc, left: Object.keys(store).length }; })()",
+            "mongDoi": {
+              "setCookie": "__Host-lfid_ses=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0",
+              "left": 2
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "A clearing cookie without Path=/ and Secure: the browser keeps the old one.|||Cookie xoá thiếu Path=/ và Secure: trình duyệt giữ cái cũ."
+        },
+        {
+          "loi": "Clearing the cookie but not the row: a copied cookie still works.|||Xoá cookie mà không xoá dòng: cookie bị chép vẫn dùng được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sign-out",
+          "vi": "đăng xuất"
+        }
+      ]
+    }
+  ]
+}

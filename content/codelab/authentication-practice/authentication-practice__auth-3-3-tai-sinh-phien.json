@@ -1,0 +1,549 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-3-3-tai-sinh-phien",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-3-3-tai-sinh-phien"
+  },
+  "exercises": [
+    {
+      "title": "3.3-1 — Session fixation, run for real",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "session fixation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real run in Chromium 156 (naive server :4802, LabFlow ID v0.3 :4800):<pre>naive :4802  attacker got anonymous sid H9Dt073h…\nnaive :4802  An signs in in her browser → 200; her sid is still H9Dt073h…\nnaive :4802  attacker GET /me with his sid → 200 {\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\"}\nv0.3  :4800  planted lfid_ses_3k4dhZmW…; An's tab before signing in: {\"id\":\"usr_2\",\"email\":\"binh@student.labflow.exampl…\nv0.3  :4800  An signs in → 200; her cookie is now lfid_ses_NejUYrMN…\nv0.3  :4800  attacker GET /me with the planted id → 401 {\"error\":\"Not signed in\"}\nv0.3  :4800  An's tab → {\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"name\":\"Nguyen Van An\",\"role\":\"STUDENT\"}</pre><pre>wrong current password  → {\"error\":\"REAUTH_FAILED\"}\nright current password  → {\"ok\":true,\"signedOutSessions\":2}\nphone /me               → {\"error\":\"Not signed in\"}\nlaptop OLD cookie /me   → {\"error\":\"Not signed in\"}\nlaptop NEW cookie /me   → {\"id\":\"usr_3\",\"email\":\"lan@labflow.example\",\"nam</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy thật trong Chromium 156 (máy chủ ngây thơ :4802, LabFlow ID v0.3 :4800):<pre>naive :4802  attacker got anonymous sid H9Dt073h…\nnaive :4802  An signs in in her browser → 200; her sid is still H9Dt073h…\nnaive :4802  attacker GET /me with his sid → 200 {\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\"}\nv0.3  :4800  planted lfid_ses_3k4dhZmW…; An's tab before signing in: {\"id\":\"usr_2\",\"email\":\"binh@student.labflow.exampl…\nv0.3  :4800  An signs in → 200; her cookie is now lfid_ses_NejUYrMN…\nv0.3  :4800  attacker GET /me with the planted id → 401 {\"error\":\"Not signed in\"}\nv0.3  :4800  An's tab → {\"id\":\"usr_1\",\"email\":\"an@student.labflow.example\",\"name\":\"Nguyen Van An\",\"role\":\"STUDENT\"}</pre><pre>wrong current password  → {\"error\":\"REAUTH_FAILED\"}\nright current password  → {\"ok\":true,\"signedOutSessions\":2}\nphone /me               → {\"error\":\"Not signed in\"}\nlaptop OLD cookie /me   → {\"error\":\"Not signed in\"}\nlaptop NEW cookie /me   → {\"id\":\"usr_3\",\"email\":\"lan@labflow.example\",\"nam</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "When did the attacker get the id — before or after sign-in?|||Kẻ tấn công có id lúc nào — trước hay sau đăng nhập?",
+        "Why do people change passwords?|||Vì sao người ta đổi mật khẩu?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.3-1 — Session fixation, run for real\n\nAnswer in the answer panel (no code needed).\n\n1. On :4802 the attacker’s GET /me returned An. What did he need?Ở :4802, GET /me của kẻ tấn công trả về An. Hắn đã cần gì?\n2. Before signing in on :4800, An’s tab showed Bình’s account. What is that called, and what stops it?Trước khi đăng nhập ở :4800, tab của An hiện tài khoản Bình. Đó gọi là gì, và cái gì chặn nó?\n3. After a successful password change, signedOutSessions was 2. Why end the other sessions?Sau khi đổi mật khẩu thành công, signedOutSessions là 2. Vì sao kết thúc các phiên khác?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.3-1 — Session fixation, run for real — answer key\n\n1. On :4802 the attacker’s GET /me returned An. What did he need?Ở :4802, GET /me của kẻ tấn công trả về An. Hắn đã cần gì?\n   Answer: c) Only a session id planted in An’s browser before she signed in\n   The server upgraded the session he already knew. No password, no theft after login.VI: Máy chủ nâng cấp đúng phiên hắn đã biết. Không mật khẩu, không trộm gì sau đăng nhập.\n\n2. Before signing in on :4800, An’s tab showed Bình’s account. What is that called, and what stops it?Trước khi đăng nhập ở :4800, tab của An hiện tài khoản Bình. Đó gọi là gì, và cái gì chặn nó?\n   Answer: a) Login CSRF — CSRF checks plus a new session at sign-in\n   The victim works inside the attacker’s account; once she signs in, start() replaces the planted session.VI: Nạn nhân làm việc trong tài khoản của kẻ tấn công; khi cô đăng nhập, start() thay phiên bị cài.\n\n3. After a successful password change, signedOutSessions was 2. Why end the other sessions?Sau khi đổi mật khẩu thành công, signedOutSessions là 2. Vì sao kết thúc các phiên khác?\n   Answer: b) If a thief had a session, changing the password must end it too\n   People change passwords because they suspect someone else is in. Ending every other session is the point.VI: Người ta đổi mật khẩu vì ngờ có ai khác đang vào. Kết thúc mọi phiên khác chính là mục đích.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Only a session id planted in An’s browser before she signed in</p><p>The server upgraded the session he already knew. No password, no theft after login.</p><p><i>VI: Máy chủ nâng cấp đúng phiên hắn đã biết. Không mật khẩu, không trộm gì sau đăng nhập.</i></p></li><li><p><b>a)</b> Login CSRF — CSRF checks plus a new session at sign-in</p><p>The victim works inside the attacker’s account; once she signs in, start() replaces the planted session.</p><p><i>VI: Nạn nhân làm việc trong tài khoản của kẻ tấn công; khi cô đăng nhập, start() thay phiên bị cài.</i></p></li><li><p><b>b)</b> If a thief had a session, changing the password must end it too</p><p>People change passwords because they suspect someone else is in. Ending every other session is the point.</p><p><i>VI: Người ta đổi mật khẩu vì ngờ có ai khác đang vào. Kết thúc mọi phiên khác chính là mục đích.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>On :4802 the attacker’s GET /me returned An. What did he need?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ở :4802, GET /me của kẻ tấn công trả về An. Hắn đã cần gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "An’s password"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An XSS on LabFlow ID"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Only a session id planted in An’s browser before she signed in"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An’s cookie, stolen after she signed in"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The server upgraded the session he already knew. No password, no theft after login.</p><p><i>VI: Máy chủ nâng cấp đúng phiên hắn đã biết. Không mật khẩu, không trộm gì sau đăng nhập.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Before signing in on :4800, An’s tab showed Bình’s account. What is that called, and what stops it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước khi đăng nhập ở :4800, tab của An hiện tài khoản Bình. Đó gọi là gì, và cái gì chặn nó?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Login CSRF — CSRF checks plus a new session at sign-in"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Clickjacking — fixed by an X-Frame-Options header"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Session fixation — and nothing can stop it at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "XSS — fixed by the HttpOnly attribute alone"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The victim works inside the attacker’s account; once she signs in, start() replaces the planted session.</p><p><i>VI: Nạn nhân làm việc trong tài khoản của kẻ tấn công; khi cô đăng nhập, start() thay phiên bị cài.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After a successful password change, signedOutSessions was 2. Why end the other sessions?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi đổi mật khẩu thành công, signedOutSessions là 2. Vì sao kết thúc các phiên khác?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "To free memory on the server"
+              },
+              {
+                "ma": "b",
+                "noiDung": "If a thief had a session, changing the password must end it too"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because PostgreSQL requires it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the old cookies have the old password inside"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>People change passwords because they suspect someone else is in. Ending every other session is the point.</p><p><i>VI: Người ta đổi mật khẩu vì ngờ có ai khác đang vào. Kết thúc mọi phiên khác chính là mục đích.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Fixation needs the password.”|||\"Fixation cần mật khẩu.\""
+        },
+        {
+          "loi": "Keeping other sessions after a password change.|||Giữ các phiên khác sau khi đổi mật khẩu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "session fixation",
+          "vi": "cố định phiên"
+        },
+        {
+          "en": "login CSRF",
+          "vi": "giả mạo đăng nhập"
+        }
+      ]
+    },
+    {
+      "title": "3.3-2 — Write startSession(sessions, oldToken, userId, freshToken)",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "session fixation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p><code>sessions</code> maps token → <code>{ userId }</code>. At sign-in the browser may carry <code>oldToken</code> (anonymous, planted, or the user's own). Return <code>{ sessions, cookie }</code>: a <b>new</b> object without <code>oldToken</code>, with <code>freshToken → { userId }</code> added, and <code>cookie = freshToken</code>. Never reuse <code>oldToken</code>; do not modify the input.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>sessions</code> ánh xạ token → <code>{ userId }</code>. Lúc đăng nhập, trình duyệt có thể mang <code>oldToken</code> (ẩn danh, bị cài, hoặc của chính người dùng). Trả <code>{ sessions, cookie }</code>: một object <b>mới</b> không còn <code>oldToken</code>, có thêm <code>freshToken → { userId }</code>, và <code>cookie = freshToken</code>. Không bao giờ dùng lại <code>oldToken</code>; không sửa đầu vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "startSession({\"anon1\":{\"userId\":null},\"b1\":{\"userId\":\"usr_2\"}}, \"anon1\", \"usr_1\", \"f1\")",
+          "output": "{\"sessions\":{\"b1\":{\"userId\":\"usr_2\"},\"f1\":{\"userId\":\"usr_1\"}},\"cookie\":\"f1\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Copy every entry except oldToken.|||Chép mọi phần tử trừ oldToken.",
+        "oldToken may be null or unknown.|||oldToken có thể null hoặc không tồn tại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { sessions, cookie } */\nfunction startSession(sessions, oldToken, userId, freshToken) {\n  // Write your solution here\n  if (oldToken && sessions[oldToken]) { sessions[oldToken].userId = userId; return { sessions: sessions, cookie: oldToken }; }\n  sessions[freshToken] = { userId: userId };\n  return { sessions: sessions, cookie: freshToken };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction startSession(sessions, oldToken, userId, freshToken) {\n  var next = {};\n  Object.keys(sessions).forEach(function (t) { if (t !== oldToken) next[t] = sessions[t]; });   // the planted / previous one dies\n  next[freshToken] = { userId: userId };\n  return { sessions: next, cookie: freshToken };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Whatever id the browser brought dies at sign-in, so no planting route works — that is the two lines of start() in LabFlow ID v0.3.</p>",
+      "solutionExplanationHtmlVi": "<p>Id nào trình duyệt mang tới cũng chết lúc đăng nhập, nên không đường cài nào hiệu quả — đó là hai dòng của start() trong LabFlow ID v0.3.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Planted anonymous sid",
+              "vi": "Sid ẩn danh bị cài"
+            },
+            "goi": "startSession({\"anon1\":{\"userId\":null},\"b1\":{\"userId\":\"usr_2\"}}, \"anon1\", \"usr_1\", \"f1\")",
+            "mongDoi": {
+              "sessions": {
+                "b1": {
+                  "userId": "usr_2"
+                },
+                "f1": {
+                  "userId": "usr_1"
+                }
+              },
+              "cookie": "f1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Bình’s session planted",
+              "vi": "Phiên của Bình bị cài"
+            },
+            "goi": "startSession({\"b1\":{\"userId\":\"usr_2\"}}, \"b1\", \"usr_1\", \"f2\")",
+            "mongDoi": {
+              "sessions": {
+                "f2": {
+                  "userId": "usr_1"
+                }
+              },
+              "cookie": "f2"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "startSession({}, null, \"usr_1\", \"f3\")",
+            "mongDoi": {
+              "sessions": {
+                "f3": {
+                  "userId": "usr_1"
+                }
+              },
+              "cookie": "f3"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "startSession({\"a1\":{\"userId\":\"usr_1\"}}, \"zz\", \"usr_1\", \"f4\")",
+            "mongDoi": {
+              "sessions": {
+                "a1": {
+                  "userId": "usr_1"
+                },
+                "f4": {
+                  "userId": "usr_1"
+                }
+              },
+              "cookie": "f4"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "sessions[oldToken].userId = userId — the fixation bug.|||sessions[oldToken].userId = userId — chính con bug fixation."
+        },
+        {
+          "loi": "Keeping oldToken “in case”.|||Giữ oldToken \"phòng khi cần\"."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "session regeneration",
+          "vi": "tái sinh phiên"
+        }
+      ]
+    },
+    {
+      "title": "3.3-3 — Write afterPasswordChange(sessions, userId, freshToken)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>After a verified password change: end <b>every</b> session of <code>userId</code> (including the current one), keep other users' sessions, add <code>freshToken → { userId }</code> for this device. Return <code>{ sessions, ended }</code> (a new object; <code>ended</code> counts removed sessions). Real run: Cô Lan on two devices ⇒ <code>signedOutSessions: 2</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Sau khi đổi mật khẩu đã xác thực: kết thúc <b>mọi</b> phiên của <code>userId</code> (kể cả phiên hiện tại), giữ phiên của người khác, thêm <code>freshToken → { userId }</code> cho thiết bị này. Trả <code>{ sessions, ended }</code> (object mới; <code>ended</code> đếm số phiên bị xoá). Chạy thật: Cô Lan trên hai thiết bị ⇒ <code>signedOutSessions: 2</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "afterPasswordChange({\"l1\":{\"userId\":\"usr_3\"},\"l2\":{\"userId\":\"usr_3\"},\"a1\":{\"userId\":\"usr_1\"}}, \"usr_3\", \"n1\")",
+          "output": "{\"sessions\":{\"a1\":{\"userId\":\"usr_1\"},\"n1\":{\"userId\":\"usr_3\"}},\"ended\":2}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "One pass: count and skip the user’s sessions.|||Một lượt duyệt: đếm và bỏ qua phiên của người đó.",
+        "Add the fresh one after the loop.|||Thêm phiên mới sau vòng lặp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { sessions, ended } */\nfunction afterPasswordChange(sessions, userId, freshToken) {\n  // Write your solution here\n  sessions[freshToken] = { userId: userId };\n  return { sessions: sessions, ended: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction afterPasswordChange(sessions, userId, freshToken) {\n  var next = {}, ended = 0;\n  Object.keys(sessions).forEach(function (t) {\n    if (sessions[t].userId === userId) ended++; else next[t] = sessions[t];\n  });\n  next[freshToken] = { userId: userId };\n  return { sessions: next, ended: ended };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ending all sessions removes any thief; the fresh session keeps the honest user working — the change-password route of v0.3.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết thúc mọi phiên loại bỏ mọi kẻ trộm; phiên mới giữ người dùng thật tiếp tục làm việc — đúng route đổi mật khẩu của v0.3.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Cô Lan on two devices",
+              "vi": "Cô Lan trên hai thiết bị"
+            },
+            "goi": "afterPasswordChange({\"l1\":{\"userId\":\"usr_3\"},\"l2\":{\"userId\":\"usr_3\"},\"a1\":{\"userId\":\"usr_1\"}}, \"usr_3\", \"n1\")",
+            "mongDoi": {
+              "sessions": {
+                "a1": {
+                  "userId": "usr_1"
+                },
+                "n1": {
+                  "userId": "usr_3"
+                }
+              },
+              "ended": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 2",
+              "vi": "Ca ẩn 2"
+            },
+            "goi": "afterPasswordChange({}, \"usr_3\", \"n2\")",
+            "mongDoi": {
+              "sessions": {
+                "n2": {
+                  "userId": "usr_3"
+                }
+              },
+              "ended": 0
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "afterPasswordChange({\"a1\":{\"userId\":\"usr_1\"},\"b1\":{\"userId\":\"usr_2\"}}, \"usr_3\", \"n3\")",
+            "mongDoi": {
+              "sessions": {
+                "a1": {
+                  "userId": "usr_1"
+                },
+                "b1": {
+                  "userId": "usr_2"
+                },
+                "n3": {
+                  "userId": "usr_3"
+                }
+              },
+              "ended": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping the current session instead of issuing a new one.|||Giữ phiên hiện tại thay vì cấp phiên mới."
+        },
+        {
+          "loi": "Ending other users’ sessions.|||Kết thúc phiên của người khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sign out everywhere",
+          "vi": "đăng xuất mọi nơi"
+        }
+      ]
+    },
+    {
+      "title": "3.3-4 — Which event, which move",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "session fixation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>For each event in LabFlow ID, pick what happens to sessions.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi sự kiện trong LabFlow ID, chọn điều xảy ra với các phiên.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Does the event raise or protect privileges?|||Sự kiện nâng hay bảo vệ đặc quyền?",
+        "Signing out on one PC should not sign you out on your phone.|||Đăng xuất trên một máy không nên đăng xuất cả điện thoại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.3-4 — Which event, which move\n\nAnswer in the answer panel (no code needed).\n\n1. Event → moveSự kiện → nước đi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.3-4 — Which event, which move — answer key\n\n1. Event → moveSự kiện → nước đi\n   - r1.m: new session, keep the others\n   - r2.m: new session, end all others\n   - r3.m: new session, end all others\n   - r4.m: delete it, keep the others\n   Every privilege change gets a new session; changes that protect the account (password, second factor) also end the others; signing out ends only this one.VI: Mỗi lần đổi đặc quyền có phiên mới; thay đổi bảo vệ tài khoản (mật khẩu, yếu tố thứ hai) còn kết thúc các phiên khác; đăng xuất chỉ kết thúc phiên này.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Every privilege change gets a new session; changes that protect the account (password, second factor) also end the others; signing out ends only this one.</p><p><i>VI: Mỗi lần đổi đặc quyền có phiên mới; thay đổi bảo vệ tài khoản (mật khẩu, yếu tố thứ hai) còn kết thúc các phiên khác; đăng xuất chỉ kết thúc phiên này.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Event → move</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự kiện → nước đi</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Event"
+              },
+              {
+                "ma": "m",
+                "ten": "Move",
+                "luaChon": [
+                  "new session, keep the others",
+                  "new session, end all others",
+                  "delete it, keep the others"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "An signs in"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Cô Lan changes her password"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "An adds a second factor (Chapter 7)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "Bình presses “Sign out” on the lab PC"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.m": "new session, keep the others",
+              "r2.m": "new session, end all others",
+              "r3.m": "new session, end all others",
+              "r4.m": "delete it, keep the others"
+            },
+            "giaiThich": "<p>Every privilege change gets a new session; changes that protect the account (password, second factor) also end the others; signing out ends only this one.</p><p><i>VI: Mỗi lần đổi đặc quyền có phiên mới; thay đổi bảo vệ tài khoản (mật khẩu, yếu tố thứ hai) còn kết thúc các phiên khác; đăng xuất chỉ kết thúc phiên này.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping other sessions after a password change.|||Giữ phiên khác sau khi đổi mật khẩu."
+        },
+        {
+          "loi": "Reusing the session at sign-in.|||Dùng lại phiên khi đăng nhập."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

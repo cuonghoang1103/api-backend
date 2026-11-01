@@ -36,3 +36,16 @@ Mọi tệp đích là tệp viết tay (đã kiểm header "FILE SINH TỰ Đ�
 
 Có sẵn từ trước, giữ nguyên thẻ ở cả hai phía (sổ `nodejs-ch8-auth-apidesign.md`): `auth-2-1-da-co-csdl` ↔ `nodejs-8-1-mat-khau-va-bam`,
 `auth-2-2-chon-va-chinh` ↔ `nodejs-8-1-mat-khau-va-bam`. Lab 2 (`auth-2-7-lab-luu-mat-khau`) chưa có cặp — SDN302 5.1 đã có 4 thẻ mỗi ngôn ngữ, không chèn thêm.
+
+## Chương 3 (01/11/2026) — 4 cặp hai chiều mới + 3 cặp có sẵn giữ nguyên
+
+| Authentication | Bài kia | Giống | Authentication thêm (đo thật, Chromium 156 + PostgreSQL 17.11 + Redis 7.4.9) |
+|---|---|---|---|
+| `auth-3-1-bang-phien` | `nodejs/nodejs-8-4-cookie-csrf-thu-hoi` | cookie trình duyệt tự gửi, nhu cầu thu hồi | phiên là một dòng ⇒ thu hồi = DELETE (đăng xuất mọi nơi ended 3); nhàn rỗi 30 phút/tuyệt đối 12 giờ bằng đồng hồ giả; 1.000 UPDATE → 0 khi chạm mỗi phút |
+| `auth-3-3-tai-sinh-phien` | Academy PRJ301 `prj301-cookie-session` | cấp session id mới khi đăng nhập (changeSessionId) | session fixation chạy thật trong Chromium: bản ngây thơ trao tài khoản An, v0.3 trả 401; đổi mật khẩu kết thúc 2 phiên khác |
+| `auth-3-4-csrf` | `api-design/api-6-4-cors` | trình duyệt tự gửi gì / cho đọc gì | 5 cấu hình bị tấn công từ site khác: fetch no-cors vẫn đổi email (CORS không chống CSRF), Lax 401, Fetch Metadata/token 403, same-site cũng bị từ chối |
+| `auth-3-5-phien-song-o-dau` | `api-design/api-8-3-mo-rong` | trạng thái trong một tiến trình hỏng khi có hai bản chạy | PG ~470 µs / Redis ~360 µs / cookie có ký 5 µs; sau "đăng xuất mọi nơi" chỉ cookie có ký còn hợp lệ |
+
+Có sẵn, giữ nguyên ở cả hai phía: `auth-3-2-thuoc-tinh-cookie` ↔ PRJ301 `prj301-cookie-session` và ↔ SDN302 `sdn302-5-1-passwords-sessions`
+(sổ `prj301-nodejs-auth-postgresql.md`), `auth-3-4-csrf` ↔ `nodejs-8-4-cookie-csrf-thu-hoi` (sổ `nodejs-ch8-auth-apidesign.md`).
+Lab 3 (`auth-3-7-lab-phien-cookie`) chưa có cặp. `nodejs/s12-redis.mjs` đang có thay đổi chưa commit của phiên khác ⇒ KHÔNG chèn thẻ cho 3.5 ở đó.

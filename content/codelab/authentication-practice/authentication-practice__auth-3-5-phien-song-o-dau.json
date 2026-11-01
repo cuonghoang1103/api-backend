@@ -1,0 +1,524 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-3-5-phien-song-o-dau",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-3-5-phien-song-o-dau"
+  },
+  "exercises": [
+    {
+      "title": "3.5-1 — Three stores, measured",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "session storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>node demo3/where.mjs (real run; PostgreSQL 17 and Redis 7 in Docker Desktop on macOS):<pre>5000 lookups each, one process; PostgreSQL 17 and Redis 7 in Docker Desktop (macOS port forwarding adds a hop)\nPostgreSQL row  median  470.8 µs per lookup · cookie 68 bytes\nRedis key       median  363.2 µs per lookup · cookie 68 bytes\nsigned cookie   median    5.0 µs per lookup · cookie 129 bytes\nRedis TTL of An's session key: 1796 s (the idle timeout is Redis's job)\nafter \"sign An out everywhere\":\n  PostgreSQL → null\n  Redis      → null\n  signed     → {\"userId\":\"usr_1\",\"authAt\":1793522022985}   (still valid until it expires, unless every reques…</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>node demo3/where.mjs (chạy thật; PostgreSQL 17 và Redis 7 trong Docker Desktop trên macOS):<pre>5000 lookups each, one process; PostgreSQL 17 and Redis 7 in Docker Desktop (macOS port forwarding adds a hop)\nPostgreSQL row  median  470.8 µs per lookup · cookie 68 bytes\nRedis key       median  363.2 µs per lookup · cookie 68 bytes\nsigned cookie   median    5.0 µs per lookup · cookie 129 bytes\nRedis TTL of An's session key: 1796 s (the idle timeout is Redis's job)\nafter \"sign An out everywhere\":\n  PostgreSQL → null\n  Redis      → null\n  signed     → {\"userId\":\"usr_1\",\"authAt\":1793522022985}   (still valid until it expires, unless every reques…</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the last line first.|||Đọc dòng cuối trước.",
+        "Compare µs with the ms of a request.|||So µs với ms của một request."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.5-1 — Three stores, measured\n\nAnswer in the answer panel (no code needed).\n\n1. The signed cookie is ~70–90× faster to look up. Why is it still not LabFlow ID’s browser session?Cookie có ký tra nhanh hơn ~70–90 lần. Vì sao nó vẫn không phải phiên trình duyệt của LabFlow ID?\n2. Why are the PostgreSQL and Redis numbers (hundreds of µs) not a reason to pick either?Vì sao số của PostgreSQL và Redis (vài trăm µs) không phải lý do để chọn bên nào?\n3. Redis showed TTL 1796 s on An’s session key. What does that give LabFlow ID for free?Redis cho thấy TTL 1796 s trên khoá phiên của An. Điều đó cho LabFlow ID không công gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.5-1 — Three stores, measured — answer key\n\n1. The signed cookie is ~70–90× faster to look up. Why is it still not LabFlow ID’s browser session?Cookie có ký tra nhanh hơn ~70–90 lần. Vì sao nó vẫn không phải phiên trình duyệt của LabFlow ID?\n   Answer: a) It cannot be revoked before it expires\n   Revocation versus a lookup: the saved lookup is the lost revocation. A denylist brings the lookup back.VI: Thu hồi đối lại một lần tra: lần tra tiết kiệm được chính là khả năng thu hồi bị mất. Một danh sách chặn mang lần tra quay lại.\n\n2. Why are the PostgreSQL and Redis numbers (hundreds of µs) not a reason to pick either?Vì sao số của PostgreSQL và Redis (vài trăm µs) không phải lý do để chọn bên nào?\n   Answer: c) Both are small next to a whole request (~1.7 ms)\n   Measure the whole request, not the component; then decide on revocation and operations.VI: Hãy đo cả request, không đo từng thành phần; rồi quyết định dựa trên thu hồi và vận hành.\n\n3. Redis showed TTL 1796 s on An’s session key. What does that give LabFlow ID for free?Redis cho thấy TTL 1796 s trên khoá phiên của An. Điều đó cho LabFlow ID không công gì?\n   Answer: a) The idle timeout, reset by every touch\n   TTL = idle. “Everywhere” still needs a per-user set; absolute still needs an expiresAt check.VI: TTL = nhàn rỗi. \"Mọi nơi\" vẫn cần tập theo người dùng; tuyệt đối vẫn cần kiểm expiresAt.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> It cannot be revoked before it expires</p><p>Revocation versus a lookup: the saved lookup is the lost revocation. A denylist brings the lookup back.</p><p><i>VI: Thu hồi đối lại một lần tra: lần tra tiết kiệm được chính là khả năng thu hồi bị mất. Một danh sách chặn mang lần tra quay lại.</i></p></li><li><p><b>c)</b> Both are small next to a whole request (~1.7 ms)</p><p>Measure the whole request, not the component; then decide on revocation and operations.</p><p><i>VI: Hãy đo cả request, không đo từng thành phần; rồi quyết định dựa trên thu hồi và vận hành.</i></p></li><li><p><b>a)</b> The idle timeout, reset by every touch</p><p>TTL = idle. “Everywhere” still needs a per-user set; absolute still needs an expiresAt check.</p><p><i>VI: TTL = nhàn rỗi. \"Mọi nơi\" vẫn cần tập theo người dùng; tuyệt đối vẫn cần kiểm expiresAt.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The signed cookie is ~70–90× faster to look up. Why is it still not LabFlow ID’s browser session?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cookie có ký tra nhanh hơn ~70–90 lần. Vì sao nó vẫn không phải phiên trình duyệt của LabFlow ID?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It cannot be revoked before it expires"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Its HMAC verification is not constant-time"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A signed cookie can never be marked HttpOnly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is larger than the 4 KB cookie limit"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Revocation versus a lookup: the saved lookup is the lost revocation. A denylist brings the lookup back.</p><p><i>VI: Thu hồi đối lại một lần tra: lần tra tiết kiệm được chính là khả năng thu hồi bị mất. Một danh sách chặn mang lần tra quay lại.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why are the PostgreSQL and Redis numbers (hundreds of µs) not a reason to pick either?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao số của PostgreSQL và Redis (vài trăm µs) không phải lý do để chọn bên nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because both numbers were averages of zero runs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because Node.js cannot measure microseconds"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both are small next to a whole request (~1.7 ms)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because PostgreSQL is always faster than Redis"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Measure the whole request, not the component; then decide on revocation and operations.</p><p><i>VI: Hãy đo cả request, không đo từng thành phần; rồi quyết định dựa trên thu hồi và vận hành.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Redis showed TTL 1796 s on An’s session key. What does that give LabFlow ID for free?</p><p style=\"opacity:.75;font-size:.92em\"><i>Redis cho thấy TTL 1796 s trên khoá phiên của An. Điều đó cho LabFlow ID không công gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The idle timeout, reset by every touch"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keeping sessions safe across restarts"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Signing a user out of every device"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The absolute timeout after twelve hours"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>TTL = idle. “Everywhere” still needs a per-user set; absolute still needs an expiresAt check.</p><p><i>VI: TTL = nhàn rỗi. \"Mọi nơi\" vẫn cần tập theo người dùng; tuyệt đối vẫn cần kiểm expiresAt.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Choosing by microseconds.|||Chọn theo micro giây."
+        },
+        {
+          "loi": "“TTL handles everything.”|||\"TTL lo hết mọi thứ.\""
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "TTL",
+          "vi": "thời gian sống"
+        },
+        {
+          "en": "denylist",
+          "vi": "danh sách chặn"
+        }
+      ]
+    },
+    {
+      "title": "3.5-2 — Write runTtl(ops): a key-value store with TTL",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "session storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Simulate Redis-style expiry. <code>ops</code> is a time-ordered list: <code>{ op: 'set', key, value, ttl, t }</code> (ttl in seconds, t in ms), <code>{ op: 'touch', key, ttl, t }</code> (reset the TTL if the key is alive), <code>{ op: 'get', key, t }</code>. A key is gone from the moment <code>t ≥ setOrTouchTime + ttl × 1000</code>. Return the results of every <code>get</code> in order (<code>null</code> if gone).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng hết hạn kiểu Redis. <code>ops</code> là danh sách theo thời gian: <code>{ op: 'set', key, value, ttl, t }</code> (ttl tính giây, t tính ms), <code>{ op: 'touch', key, ttl, t }</code> (đặt lại TTL nếu khoá còn sống), <code>{ op: 'get', key, t }</code>. Khoá biến mất từ lúc <code>t ≥ thời điểm set/touch + ttl × 1000</code>. Trả về kết quả của mọi <code>get</code> theo thứ tự (<code>null</code> nếu đã mất).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "runTtl([{\"op\":\"set\",\"key\":\"ses:a\",\"value\":\"usr_1\",\"ttl\":1800,\"t\":0},{\"op\":\"get\",\"key\":\"ses:a\",\"t\":1799000},{\"op\":\"get\",\"key\":\"ses:a\",\"t\":1800000}])",
+          "output": "[\"usr_1\",null]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Store expiresAt with each key.|||Lưu expiresAt cùng mỗi khoá.",
+        "Check expiry before every operation on a key.|||Kiểm hết hạn trước mọi thao tác trên một khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ results of the 'get' operations */\nfunction runTtl(ops) {\n  // Write your solution here\n  var store = {}, out = [];\n  ops.forEach(function (o) { if (o.op === 'set') store[o.key] = o.value; if (o.op === 'get') out.push(store[o.key] || null); });\n  return out;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction runTtl(ops) {\n  var store = {}, out = [];\n  ops.forEach(function (o) {\n    var e = store[o.key];\n    if (e && o.t >= e.expiresAt) { delete store[o.key]; e = undefined; }       // expired keys disappear by themselves\n    if (o.op === 'set') store[o.key] = { value: o.value, expiresAt: o.t + o.ttl * 1000 };\n    else if (o.op === 'get') out.push(e ? e.value : null);\n    else if (o.op === 'touch' && e) e.expiresAt = o.t + o.ttl * 1000;\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the idle timeout of lesson 3.5 handed to the store: each request touches the key, silence lets it expire — no last_seen column, no cleanup job.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là mốc nhàn rỗi của bài 3.5 giao cho kho: mỗi request chạm khoá, im lặng thì nó hết hạn — không cần cột last_seen, không cần việc dọn dẹp.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Idle 30 min",
+              "vi": "Nhàn rỗi 30 phút"
+            },
+            "goi": "runTtl([{\"op\":\"set\",\"key\":\"ses:a\",\"value\":\"usr_1\",\"ttl\":1800,\"t\":0},{\"op\":\"get\",\"key\":\"ses:a\",\"t\":1799000},{\"op\":\"get\",\"key\":\"ses:a\",\"t\":1800000}])",
+            "mongDoi": [
+              "usr_1",
+              null
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Case 2: runTtl([{\"op\":\"set\",\"key\":\"ses:a\",\"value\":\"usr_1\",\"ttl\":1800,\"t\":0},{\"op\":\"touch\",\"key\"...",
+              "vi": "Ca 2"
+            },
+            "goi": "runTtl([{\"op\":\"set\",\"key\":\"ses:a\",\"value\":\"usr_1\",\"ttl\":1800,\"t\":0},{\"op\":\"touch\",\"key\":\"ses:a\",\"ttl\":1800,\"t\":1500000},{\"op\":\"get\",\"key\":\"ses:a\",\"t\":3000000}])",
+            "mongDoi": [
+              "usr_1"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Touch after expiry does not revive",
+              "vi": "Chạm sau khi hết hạn không làm sống lại"
+            },
+            "goi": "runTtl([{\"op\":\"set\",\"key\":\"k\",\"value\":1,\"ttl\":10,\"t\":0},{\"op\":\"touch\",\"key\":\"k\",\"ttl\":10,\"t\":10000},{\"op\":\"get\",\"key\":\"k\",\"t\":11000}])",
+            "mongDoi": [
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "runTtl([{\"op\":\"get\",\"key\":\"x\",\"t\":0}])",
+            "mongDoi": [
+              null
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "runTtl([{\"op\":\"set\",\"key\":\"k\",\"value\":\"a\",\"ttl\":5,\"t\":0},{\"op\":\"set\",\"key\":\"k\",\"value\":\"b\",\"ttl\":5,\"t\":4000},{\"op\":\"get\",\"key\":\"k\",\"t\":8000}])",
+            "mongDoi": [
+              "b"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Touching an expired key brings it back.|||Chạm vào khoá đã hết hạn làm nó sống lại."
+        },
+        {
+          "loi": "> instead of ≥ at the expiry moment.|||> thay vì ≥ ở thời điểm hết hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "expiry",
+          "vi": "hết hạn"
+        }
+      ]
+    },
+    {
+      "title": "3.5-3 — Write endEverywhere(kv, userSets, userId): the Redis way",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "session storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Redis cannot search values, so LabFlow ID keeps <code>userSets[userId]</code> = the session keys of each user (<code>user-ses:&lt;id&gt;</code> in <code>demo3/redis-store.mjs</code>). Delete every key of the user from <code>kv</code>, delete the user's set, and return <code>{ kv, userSets, ended }</code> where <code>ended</code> counts keys that still existed (some may have expired already). Other users are untouched.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Redis không tìm theo giá trị được, nên LabFlow ID giữ <code>userSets[userId]</code> = các khoá phiên của từng người (<code>user-ses:&lt;id&gt;</code> trong <code>demo3/redis-store.mjs</code>). Xoá mọi khoá của người đó khỏi <code>kv</code>, xoá tập của người đó, rồi trả <code>{ kv, userSets, ended }</code> với <code>ended</code> đếm số khoá còn tồn tại (có khoá có thể đã hết hạn). Không đụng tới người khác.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "endEverywhere({\"ses:a1\":\"{\\\"userId\\\":\\\"usr_1\\\"}\",\"ses:a2\":\"{\\\"userId\\\":\\\"usr_1\\\"}\",\"ses:b1\":\"{\\\"userId\\\":\\\"usr_2\\\"}\"}, {\"usr_1\":[\"ses:a1\",\"ses:a2\"],\"usr_2\":[\"ses:b1\"]}, \"usr_1\")",
+          "output": "{\"kv\":{\"ses:b1\":\"{\\\"userId\\\":\\\"usr_2\\\"}\"},\"userSets\":{\"usr_2\":[\"ses:b1\"]},\"ended\":2}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Iterate the user’s set, not the whole kv.|||Duyệt tập của người đó, không duyệt cả kv.",
+        "Count only keys that were present.|||Chỉ đếm khoá còn tồn tại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { kv, userSets, ended } */\nfunction endEverywhere(kv, userSets, userId) {\n  // Write your solution here\n  var ended = 0;\n  Object.keys(kv).forEach(function (k) { if (kv[k] === userId) { delete kv[k]; ended++; } });\n  return { kv: kv, userSets: userSets, ended: ended };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction endEverywhere(kv, userSets, userId) {\n  var keys = userSets[userId] || [];\n  var ended = 0;\n  keys.forEach(function (k) { if (Object.prototype.hasOwnProperty.call(kv, k)) { delete kv[k]; ended++; } });\n  delete userSets[userId];\n  return { kv: kv, userSets: userSets, ended: ended };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The second structure is the price of “sign out everywhere” in a key-value store; keeping it in sync on every insert and delete is the extra work PostgreSQL’s index gives you for free.</p>",
+      "solutionExplanationHtmlVi": "<p>Cấu trúc thứ hai là cái giá của \"đăng xuất mọi nơi\" trong kho key-value; giữ nó khớp ở mọi lần thêm và xoá là phần việc thêm mà chỉ mục của PostgreSQL cho không.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "An on two devices",
+              "vi": "An trên hai thiết bị"
+            },
+            "goi": "endEverywhere({\"ses:a1\":\"{\\\"userId\\\":\\\"usr_1\\\"}\",\"ses:a2\":\"{\\\"userId\\\":\\\"usr_1\\\"}\",\"ses:b1\":\"{\\\"userId\\\":\\\"usr_2\\\"}\"}, {\"usr_1\":[\"ses:a1\",\"ses:a2\"],\"usr_2\":[\"ses:b1\"]}, \"usr_1\")",
+            "mongDoi": {
+              "kv": {
+                "ses:b1": "{\"userId\":\"usr_2\"}"
+              },
+              "userSets": {
+                "usr_2": [
+                  "ses:b1"
+                ]
+              },
+              "ended": 2
+            }
+          },
+          {
+            "moTa": {
+              "en": "One key already expired",
+              "vi": "Một khoá đã hết hạn"
+            },
+            "goi": "endEverywhere({\"ses:a2\":\"{\\\"userId\\\":\\\"usr_1\\\"}\"}, {\"usr_1\":[\"ses:a1\",\"ses:a2\"]}, \"usr_1\")",
+            "mongDoi": {
+              "kv": {},
+              "userSets": {},
+              "ended": 1
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "endEverywhere({}, {}, \"usr_9\")",
+            "mongDoi": {
+              "kv": {},
+              "userSets": {},
+              "ended": 0
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Scanning every value for userId — what Redis cannot do efficiently.|||Quét mọi giá trị tìm userId — điều Redis không làm hiệu quả được."
+        },
+        {
+          "loi": "Forgetting to delete the set itself.|||Quên xoá chính cái tập."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "secondary index",
+          "vi": "chỉ mục phụ"
+        }
+      ]
+    },
+    {
+      "title": "3.5-4 — Requirement → store",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "session storage"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Pick the session store each situation calls for (lesson 3.5).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn kho phiên mà mỗi tình huống cần (bài 3.5).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask first: must it be revocable now?|||Hỏi trước: có cần thu hồi ngay không?",
+        "Does it survive two instances?|||Nó có sống được với hai bản chạy không?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.5-4 — Requirement → store\n\nAnswer in the answer panel (no code needed).\n\n1. Situation → storeTình huống → kho\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.5-4 — Requirement → store — answer key\n\n1. Situation → storeTình huống → kho\n   - r1.s: PostgreSQL row\n   - r2.s: Redis key\n   - r3.s: signed cookie\n   - r4.s: in-memory Map\n   Revocation and queries ⇒ the database you already run; measured load or sharing ⇒ Redis; short-lived, unrevocable ⇒ signed; tests ⇒ memory — never in production.VI: Thu hồi và truy vấn ⇒ cơ sở dữ liệu đang chạy sẵn; tải đã đo hay cần chia sẻ ⇒ Redis; sống ngắn, không thu hồi ⇒ có ký; test ⇒ bộ nhớ — không bao giờ trên production.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Revocation and queries ⇒ the database you already run; measured load or sharing ⇒ Redis; short-lived, unrevocable ⇒ signed; tests ⇒ memory — never in production.</p><p><i>VI: Thu hồi và truy vấn ⇒ cơ sở dữ liệu đang chạy sẵn; tải đã đo hay cần chia sẻ ⇒ Redis; sống ngắn, không thu hồi ⇒ có ký; test ⇒ bộ nhớ — không bao giờ trên production.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Situation → store</p><p style=\"opacity:.75;font-size:.92em\"><i>Tình huống → kho</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Situation"
+              },
+              {
+                "ma": "s",
+                "ten": "Store",
+                "luaChon": [
+                  "PostgreSQL row",
+                  "Redis key",
+                  "signed cookie",
+                  "in-memory Map"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "LabFlow ID today: must revoke now, show a devices page, already runs PostgreSQL"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Lookups measured as the bottleneck; several services share the sessions"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "A 15-minute access token between two services, no revocation needed"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "The Lab 3 grader, one process, thrown away after the run"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "PostgreSQL row",
+              "r2.s": "Redis key",
+              "r3.s": "signed cookie",
+              "r4.s": "in-memory Map"
+            },
+            "giaiThich": "<p>Revocation and queries ⇒ the database you already run; measured load or sharing ⇒ Redis; short-lived, unrevocable ⇒ signed; tests ⇒ memory — never in production.</p><p><i>VI: Thu hồi và truy vấn ⇒ cơ sở dữ liệu đang chạy sẵn; tải đã đo hay cần chia sẻ ⇒ Redis; sống ngắn, không thu hồi ⇒ có ký; test ⇒ bộ nhớ — không bao giờ trên production.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A Map in production.|||Map trên production."
+        },
+        {
+          "loi": "A signed cookie as the main browser session.|||Cookie có ký làm phiên trình duyệt chính."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

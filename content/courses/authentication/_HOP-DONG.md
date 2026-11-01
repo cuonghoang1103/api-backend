@@ -98,24 +98,25 @@ Express **5.3.0**, pino **10.4.0**, axios **1.21.0** (dev, bài 1.5), Vite **8.3
 gitleaks **8.30.1**, git 2.51.1. Danh sách mật khẩu: SecLists `Passwords/Common-Credentials/10k-most-common.txt` (10.001 dòng,
 tải về `wordlists/` — KHÔNG đưa vào repo). Cài gói luôn `--save-exact`.
 
-### 3.3 Cây dự án cuối Ch2 (ảnh chụp `_labflow-id/`, v0.2)
+### 3.3 Cây dự án cuối Ch3 (ảnh chụp `_labflow-id/`, v0.3)
 ```
 package.json            # type module, engines node >=22.12, scripts dev/start/migrate/seed/test; deps + argon2 0.45.1, bcrypt 6.0.0, pg 8.23.1
-src/server.js           # v0.2 (PostgreSQL) · src/db.js (pg Pool, DATABASE_URL) · src/users.js (kho users cho signIn) · src/log.js
+src/server.js           # v0.3 (phiên trong cookie __Host-lfid_ses, CSRF) · src/db.js (pg Pool) · src/users.js · src/log.js
+src/sessions/           # layer.js pg-store.js memory-store.js index.js  ← Lab 3 (idle 30 phút, tuyệt đối 12 giờ, chạm mỗi phút)
 src/passwords/          # hash.js policy.js pwned.js signin.js index.js  ← Lab 2 (lời giải tham khảo; PARAMS m=64 MiB t=2 p=1)
 src/crypto/             # tokens.js compare.js signed.js redact.js index.js  ← Lab 1 (lời giải tham khảo)
 src/store.js            # kho JSON của v0/v0.1 — chỉ còn demo0 dùng
-sql/001_users.sql       # users (password_hash tự mô tả, must_change_password) + sessions (digest) — scripts/migrate.mjs áp
-test/crypto.test.js test/passwords.test.js   # 6 + 5 test node:test (npm test, không cần CSDL)
+sql/001_users.sql       # users + sessions (digest) · sql/002_sessions.sql: expires_at, last_seen_at, auth_at, ip, user_agent, index user_id
+test/crypto.test.js test/passwords.test.js test/sessions.test.js   # 6 + 5 + 4 test node:test (npm test, không cần CSDL)
 scripts/seed.mjs        # nhập thẳng An/Bình/Cô Lan bằng hashPassword (Ch1: qua /sign-up) · cham-lab-1.mjs · cham-lab-2.mjs
-lab1/starter/ lab1/yeu/ # 0/10 · 2/10        lab2/starter/ lab2/yeu/   # 0/10 · 3,5/10
-demo0/  demo1/  demo2/  # thí nghiệm từng bài (forget, gates, enumerate, guess-session, brute, storage-xss, first-proof,
+lab1/starter/ lab1/yeu/ # 0/10 · 2/10   lab2/… # 0/10 · 3,5/10   lab3/… # 0/10 · 2/10 (scripts/cham-lab-3.mjs: :4806 + Chromium)
+demo0/ … demo3/         # thí nghiệm từng bài (demo3 cần Redis 7 ở 4833 cho where.mjs) (forget, gates, enumerate, guess-session, brute, storage-xss, first-proof,
                         #   linkedin-replay, bearer, third-party, open-reset, predict-math-random, timing-*, webhook,
                         #   length-extension + sha256, shared-key, encrypt-not-protect, log-demo, axios-error, git/, web/)
 ```
 Dựng lại: `cp -r content/courses/authentication/_labflow-id <SCRATCH>/labflow-id && cd … && npm ci && mkdir -p wordlists &&
 curl -sLo wordlists/10k-most-common.txt https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10k-most-common.txt`.
-Kiểm: `npm test` (11 pass) · `node scripts/cham-lab-1.mjs src/crypto` (10/10) · `… lab1/yeu` (2/10) · `… lab1/starter` (0/10) ·
+Kiểm: `npm test` (15 pass) · `node scripts/cham-lab-3.mjs src/sessions` (10/10) · `… lab3/yeu` (2/10) · `… lab3/starter` (0/10) · · `node scripts/cham-lab-1.mjs src/crypto` (10/10) · `… lab1/yeu` (2/10) · `… lab1/starter` (0/10) ·
 `node scripts/cham-lab-2.mjs src/passwords` (10/10) · `… lab2/yeu` (3,5/10) · `… lab2/starter` (0/10). Máy chủ: PostgreSQL 17 (README) + `npm run migrate && npm run seed`.
 Xong chương ⇒ cập nhật ảnh chụp (rsync bỏ `node_modules data tmp wordlists demo1/web/dist`) và chạy lại ba lệnh trên.
 
@@ -155,7 +156,7 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
 - **Upload** (chủ ý chạm R2 thật): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/final --prefix AUTH/v1 --decks <deck,…>`
   ⇒ `images/academy/AUTH/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy.** Dựng lại deck đã đẩy ⇒ `AUTH/v2`
   + ghi `VER` trong `_slides.mjs`. Hiện (01/11): 11 deck Mục 0 + Ch1 ở v1 — 127 ảnh (00-8 11, 00-9 11, 00-1 12, 00-2 12, 00-3 13,
-  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9); Ch2 6 deck ở v1 — 68 ảnh (02-1 11, 02-2 12, 02-3 12, 02-4 12, 02-5 12, lab-2 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
+  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9); Ch2 6 deck ở v1 — 68 ảnh (02-1 11, 02-2 12, 02-3 12, 02-4 12, 02-5 12, lab-2 9); Ch3 6 deck ở v1 — 66 ảnh (03-1 11, 03-2 12, 03-3 11, 03-4 12, 03-5 11, lab-3 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
   output là phải render + đẩy lại (lên v2).
 - Không sửa `_render-slides.mjs`, `_pg-chung.mjs`, `_tst-chung.mjs`, `_api-chung.mjs`.
 
@@ -227,6 +228,9 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
   `codelab-kiem-noi-dung` 0 lỗi (đáp án đúng không dài hơn nhiễu). Đề viết hàm: `crackSalted` (đếm số lần băm), `timeToTry`, `chooseParams` (hai ngân sách,
   bảng tune thật), `needsRehash` (đọc theo tên), `timingVerdict`, `checkLength` (NFC + code point), `classicVsLength`, `pwnedFromRange`, `planRow`,
   `estimateWrap`; lab: `verifyPassword` (chọn đường theo tiền tố, hàm đứng thay argon2/bcrypt dựng từ SHA-256 thuần JS), `signIn` (đếm số lần kiểm), `checkNewPassword`.
+- **Chương 3 (01/11):** +6 module, 23 đề ⇒ track 23 module / 89 đề, lời giải 483/483, nội dung 0 lỗi. Đề viết hàm: `sessionState`, `countTouches`,
+  `hostCookieProblem`, `cookiesSent` (SameSite như đo trong Chromium 156, kể cả cửa sổ 2 phút), `startSession`, `afterPasswordChange`, `csrfVerdict`,
+  `checkCsrfToken`, `runTtl`, `endEverywhere`; lab: `start`/`load`/`end` trên kho digest (CSRF trong trình duyệt thật chỉ ở máy chấm dự án).
 
 ## 11. Kế hoạch toàn khoá (giữ slug; mỗi chương + Lab + quiz 10 câu)
 
@@ -292,6 +296,10 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   - Số đo khác khoá nodejs (cùng loại máy, tải khác): argon2 m=19 MiB t=2 26,1 ms (nodejs 8.1: 21,7 ms); rò thời gian đăng nhập 37–39× (nodejs: 27,4×,
     tham số khác); SHA-256 ~2,0–2,2 triệu/s (nodejs 2.010.039/s) — ghi rõ trong bài.
 
+- **Chương 3 (đo lại 01/11/2026, Chromium 156.0.8078.4, PostgreSQL 17.11, Redis 7.4.9):** bản cũ ghi "PostgreSQL 16 trên Ubuntu", dùng Prisma và không
+  đo trình duyệt ⇒ mọi số giờ từ Chromium thật và LabFlow ID v0.3. Hết hạn tuyệt đối chọn 12 giờ (ngày phòng lab 07:00–19:00) — OWASP gợi ý 4–8 giờ
+  cho ngày văn phòng, ghi rõ trong bài. Bản cũ nói Redis/PG "nhanh/chậm" bằng tính từ ⇒ giờ là số đo qua Docker Desktop (có ghi chú bước mạng của macOS).
+
 ## 15. Trạng thái (cập nhật cuối mỗi chương)
 
 - **01/11/2026 — Mục 0 + Ch1** (commit 26af2f9e4): đợt mẫu, đã duyệt.
@@ -299,4 +307,10 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   bài 40–45k ký tự (2.1 44,9k · 2.2 44,1k · 2.3 44,8k · 2.4 45,0k · 2.5 40,5k · Lab 39,1k); 6 deck 68 slide AUTH/v1 (đã đẩy); Code Lab +6 module/23 đề;
   liên kết chéo +3 cặp hai chiều (api-design 6.1 ↔ 2.3, nodejs 8.1 ↔ 2.4, 2.5); video YouTube 2.1–2.5 thay cho đúng chủ đề + Lab 2 mới (67/67 sống);
   `_labflow-id` = v0.2. Môi trường soạn: container `auth2-pg` (postgres:17, cổng 4832), máy chủ demo 4800/4801/4802/4803 theo PID.
-- Tiếp theo: Ch3 (phiên và cookie) theo §11 — bảng `sessions` mở rộng bằng `sql/002_…`, cookie `__Host-lfid_ses`, Chromium thật (Playwright 1.64.1).
+- **01/11/2026 — Ch3 trọn:** 5 bài + Lab 3 (`auth-3-7-lab-phien-cookie`, máy chấm `scripts/cham-lab-3.mjs` 9 phép, HTTP :4806 + đòn CSRF thật từ
+  :4807 trong Chromium 156) + quiz 10 câu (A2 B3 C2 D3); bài 36–43k ký tự (3.1 41,7k · 3.2 42,0k · 3.3 38,2k · 3.4 43,3k · 3.5 36,5k · Lab 36,8k);
+  6 deck 66 slide AUTH/v1 (đã đẩy); Code Lab +6 module/23 đề; liên kết chéo +4 cặp hai chiều (nodejs 8.4 ↔ 3.1, PRJ301 cookie-session ↔ 3.3,
+  api-design 6.4 ↔ 3.4, api-design 8.3 ↔ 3.5); video YouTube 3.1–3.5 thay đúng chủ đề + Lab 3 (68/68 sống); `_labflow-id` = v0.3 (redis 6.3.0).
+  Môi trường soạn thêm: container `auth2-redis` (redis:7, cổng 4833). Số đo chính: SameSite trên Chromium 156 giống nodejs 8.4/Chromium 149
+  (Lax chặn POST chéo site; không khai ⇒ POST cấp cao nhất kèm cookie trong 2 phút đầu); `__Host-` hợp lệ trên http://localhost.
+- **TẠM DỪNG sau Ch3 ngày 01/11 (theo yêu cầu chủ kênh); tiếp theo là Ch4** (JWT từ bên trong, §11) — chưa bắt đầu.

@@ -1285,6 +1285,11 @@ HTTP/1.1 404 Not Found labflow-instance: A</div>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 10.2: Object storage and presigned URLs</span><span class="lc-sub">Your checklist says files belong in object storage. The Node.js course does it end to end: the S3 API measured on MinIO, key layout, a presigned upload that keeps 120 MB away from the API (it received 41 bytes in total), and the Content-Type and size the signature does not cover.</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-5-phien-song-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 3.5: three places to keep a session</span><span class="lc-sub">Same: state kept in one process breaks with two instances; sticky sessions only hide it. Deeper: login sessions in PostgreSQL, Redis or a signed cookie, measured — lookups ~470 / ~360 / 5 µs, and after “sign out everywhere” only the signed cookie still works.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1472,6 +1477,11 @@ HTTP/1.1 404 Not Found labflow-instance: A</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 10.2: Object storage và URL ký sẵn</span><span class="lc-sub">Bảng kiểm của bài này nói file thuộc về object storage. Khoá Node.js làm trọn: API S3 đo trên MinIO, bố trí key, upload ký sẵn giữ 120 MB tránh xa API (API chỉ nhận 41 byte), và Content-Type cùng kích thước mà chữ ký không phủ.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-5-phien-song-o-dau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 3.5: ba chỗ để giữ một phiên</span><span class="lc-sub">Giống: trạng thái giữ trong một tiến trình hỏng khi có hai bản chạy; sticky session chỉ giấu nó. Sâu hơn: phiên đăng nhập trong PostgreSQL, Redis hay cookie có ký, đo thật — tra ~470 / ~360 / 5 µs, và sau "đăng xuất mọi nơi" chỉ cookie có ký vẫn còn dùng được.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,

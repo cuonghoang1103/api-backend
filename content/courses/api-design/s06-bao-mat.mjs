@@ -1432,6 +1432,11 @@ Access-Control-Allow-Credentials: true</div>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 9.1 — The perimeter: security headers, CSP and CORS</span><span class="lc-sub">The Node.js course runs this on a real Express server and measures it. Same: CORS only decides who may READ a response — a stranger's request still reaches the server; and an allow-list with Vary: Origin, never reflect-with-credentials. There you add: the headers the cors package really sends for four configurations (the rejected origin still gets 204 to its preflight), a POST that moves money on a server with no CORS at all, a shared cache that serves the wrong origin without Vary, and helmet's 12 headers. This lesson adds what that one does not: the same rules measured in a real Chromium: a stranger's GET reached the server, a JSON POST stopped at the preflight, plus CSRF.</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-4-csrf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 3.4: CSRF, and the three defences ranked</span><span class="lc-sub">Same: what a browser sends by itself and what it lets a page read. Deeper: five cookie/defence configurations attacked from another site in Chromium 156 — a no-cors fetch still changed the email (CORS hides responses, not writes), Lax ⇒ 401, Fetch Metadata or a synchronizer token ⇒ 403 — and why same-site subdomains are rejected too.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1601,6 +1606,11 @@ Access-Control-Allow-Credentials: true</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 9.1 — Đường biên: header bảo mật, CSP và CORS</span><span class="lc-sub">Khoá Node.js chạy đúng phần này trên một server Express thật và đo nó. Giống: CORS chỉ quyết định ai được ĐỌC phản hồi — request của người lạ vẫn tới server; và danh sách trắng kèm Vary: Origin, không bao giờ phản chiếu kèm credentials. Ở đó học thêm: header mà gói cors thật sự gửi cho bốn cấu hình (origin bị từ chối vẫn nhận 204 ở preflight), một POST chuyển tiền trên server không cấu hình CORS gì cả, một cache dùng chung trả nhầm origin khi thiếu Vary, và 12 header của helmet. Bài này có thứ bài kia không có: cùng các luật đó đo trong Chromium thật: GET của người lạ tới được server, POST JSON dừng ở preflight, cộng thêm CSRF.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-4-csrf" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 3.4: CSRF, và ba lớp phòng xếp theo thứ tự</span><span class="lc-sub">Giống: trình duyệt tự gửi gì và cho trang đọc gì. Sâu hơn: năm cấu hình cookie/lớp phòng bị tấn công từ site khác trong Chromium 156 — fetch no-cors vẫn đổi được email (CORS giấu phản hồi, không chặn việc ghi), Lax ⇒ 401, Fetch Metadata hay token đồng bộ ⇒ 403 — và vì sao subdomain cùng site cũng bị từ chối.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
 `,

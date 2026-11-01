@@ -18,6 +18,9 @@ export const users = {
   async updateHash(id, passwordHash) {
     await q('UPDATE users SET password_hash = $2 WHERE id = $1', [id, passwordHash]);
   },
+  async updateEmail(id, email) {
+    await q('UPDATE users SET email = $2 WHERE id = $1', [id, email]);
+  },
   async flagMustChange(id) {
     await q('UPDATE users SET must_change_password = true WHERE id = $1', [id]);
   },

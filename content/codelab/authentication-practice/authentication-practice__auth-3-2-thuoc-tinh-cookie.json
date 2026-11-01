@@ -1,0 +1,565 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-3-2-thuoc-tinh-cookie",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-3-2-thuoc-tinh-cookie"
+  },
+  "exercises": [
+    {
+      "title": "3.2-1 — What Chromium 156 did with each cookie",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "cookies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Real runs in Chromium 156.0.8078.4:<pre>Chromium 156.0.8078.4 · origin http://localhost:4802\ncase                     stored?  JS sees it?  sent to /me?\nplain                    yes      yes         yes\nhttponly                 yes      no          yes\nhost_ok                  yes      no          yes\nhost_no_secure           no       no          no\nhost_domain              no       no          no\nhost_path                no       no          no\nsecure_prefix_no_secure  no       no          no\npath_me                  yes      yes         yes\ndelete_wrong_path        scoped still stored: YES\ndelete_right_path        scoped still stored: no</pre><pre>Chromium 156.0.8078.4 · site localhost:4802, attacker 127.0.0.1:4801\ncookies set seconds ago:\n  link GET         Sec-Fetch-Site: cross-site  cookies sent: lax, none, unset\n  form-post POST   Sec-Fetch-Site: cross-site  cookies sent: none, unset\n  img GET          Sec-Fetch-Site: cross-site  cookies sent: none\n  fetch-post POST  Sec-Fetch-Site: cross-site  cookies sent: none\n125 s later:\n  link GET         Sec-Fetch-Site: cross-site  cookies sent: lax, none, unset\n  form-post POST   Sec-Fetch-Site: cross-site  cookies sent: none\n  img GET          Sec-Fetch-Site: cross-site  cookies sent: none\n  fetch-post POST  Sec-Fetch-Site: cross-site  cookies sent: none</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chạy thật trong Chromium 156.0.8078.4:<pre>Chromium 156.0.8078.4 · origin http://localhost:4802\ncase                     stored?  JS sees it?  sent to /me?\nplain                    yes      yes         yes\nhttponly                 yes      no          yes\nhost_ok                  yes      no          yes\nhost_no_secure           no       no          no\nhost_domain              no       no          no\nhost_path                no       no          no\nsecure_prefix_no_secure  no       no          no\npath_me                  yes      yes         yes\ndelete_wrong_path        scoped still stored: YES\ndelete_right_path        scoped still stored: no</pre><pre>Chromium 156.0.8078.4 · site localhost:4802, attacker 127.0.0.1:4801\ncookies set seconds ago:\n  link GET         Sec-Fetch-Site: cross-site  cookies sent: lax, none, unset\n  form-post POST   Sec-Fetch-Site: cross-site  cookies sent: none, unset\n  img GET          Sec-Fetch-Site: cross-site  cookies sent: none\n  fetch-post POST  Sec-Fetch-Site: cross-site  cookies sent: none\n125 s later:\n  link GET         Sec-Fetch-Site: cross-site  cookies sent: lax, none, unset\n  form-post POST   Sec-Fetch-Site: cross-site  cookies sent: none\n  img GET          Sec-Fetch-Site: cross-site  cookies sent: none\n  fetch-post POST  Sec-Fetch-Site: cross-site  cookies sent: none</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare the “stored?” column with the Set-Cookie of each case.|||So cột \"stored?\" với Set-Cookie của từng trường hợp.",
+        "Find the one line that differs between the two SameSite runs.|||Tìm dòng duy nhất khác nhau giữa hai lần chạy SameSite."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.2-1 — What Chromium 156 did with each cookie\n\nAnswer in the answer panel (no code needed).\n\n1. host_path (__Host-path=1; Path=/admin; Secure) shows “stored? no”. What did the user see?host_path (__Host-path=1; Path=/admin; Secure) hiện \"stored? no\". Người dùng thấy gì?\n2. delete_wrong_path left “scoped” stored. Why?delete_wrong_path để lại \"scoped\". Vì sao?\n3. In the SameSite run, which cookie arrived with the cross-site form POST seconds after login but not 125 s later?Trong lần chạy SameSite, cookie nào đi theo form POST chéo site vài giây sau đăng nhập nhưng không sau 125 s?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.2-1 — What Chromium 156 did with each cookie — answer key\n\n1. host_path (__Host-path=1; Path=/admin; Secure) shows “stored? no”. What did the user see?host_path (__Host-path=1; Path=/admin; Secure) hiện \"stored? no\". Người dùng thấy gì?\n   Answer: b) Nothing — the cookie silently does not exist\n   Broken prefixed cookies are dropped without any error; check the cookie jar, not the console.VI: Cookie tiền tố sai bị bỏ không kèm lỗi nào; hãy kiểm hộp cookie, đừng tìm trong console.\n\n2. delete_wrong_path left “scoped” stored. Why?delete_wrong_path để lại \"scoped\". Vì sao?\n   Answer: c) The original had Path=/me; the delete lacked it\n   A cookie is identified by name + domain + path; clear it with the same attributes.VI: Một cookie được nhận diện bằng tên + domain + path; xoá phải cùng thuộc tính.\n\n3. In the SameSite run, which cookie arrived with the cross-site form POST seconds after login but not 125 s later?Trong lần chạy SameSite, cookie nào đi theo form POST chéo site vài giây sau đăng nhập nhưng không sau 125 s?\n   Answer: b) unset — the 2-minute exception for cookies without SameSite\n   Explicit Lax is never sent on cross-site POST; only cookies without the attribute get the window. None is always sent.VI: Lax khai rõ không bao giờ đi theo POST chéo site; chỉ cookie không khai thuộc tính mới có cửa sổ đó. None thì luôn được gửi.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Nothing — the cookie silently does not exist</p><p>Broken prefixed cookies are dropped without any error; check the cookie jar, not the console.</p><p><i>VI: Cookie tiền tố sai bị bỏ không kèm lỗi nào; hãy kiểm hộp cookie, đừng tìm trong console.</i></p></li><li><p><b>c)</b> The original had Path=/me; the delete lacked it</p><p>A cookie is identified by name + domain + path; clear it with the same attributes.</p><p><i>VI: Một cookie được nhận diện bằng tên + domain + path; xoá phải cùng thuộc tính.</i></p></li><li><p><b>b)</b> unset — the 2-minute exception for cookies without SameSite</p><p>Explicit Lax is never sent on cross-site POST; only cookies without the attribute get the window. None is always sent.</p><p><i>VI: Lax khai rõ không bao giờ đi theo POST chéo site; chỉ cookie không khai thuộc tính mới có cửa sổ đó. None thì luôn được gửi.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>host_path (__Host-path=1; Path=/admin; Secure) shows “stored? no”. What did the user see?</p><p style=\"opacity:.75;font-size:.92em\"><i>host_path (__Host-path=1; Path=/admin; Secure) hiện \"stored? no\". Người dùng thấy gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A browser dialog warning about the cookie"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Nothing — the cookie silently does not exist"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A failed request answered with status 400"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A console error about the __Host- prefix rules"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Broken prefixed cookies are dropped without any error; check the cookie jar, not the console.</p><p><i>VI: Cookie tiền tố sai bị bỏ không kèm lỗi nào; hãy kiểm hộp cookie, đừng tìm trong console.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>delete_wrong_path left “scoped” stored. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>delete_wrong_path để lại \"scoped\". Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Chromium ignores Max-Age=0 on every cookie"
+              },
+              {
+                "ma": "b",
+                "noiDung": "HttpOnly cookies can never be deleted by a server"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The original had Path=/me; the delete lacked it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only an Expires date in the past deletes a cookie"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A cookie is identified by name + domain + path; clear it with the same attributes.</p><p><i>VI: Một cookie được nhận diện bằng tên + domain + path; xoá phải cùng thuộc tính.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In the SameSite run, which cookie arrived with the cross-site form POST seconds after login but not 125 s later?</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong lần chạy SameSite, cookie nào đi theo form POST chéo site vài giây sau đăng nhập nhưng không sau 125 s?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "lax — Lax allows POST for 2 minutes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "unset — the 2-minute exception for cookies without SameSite"
+              },
+              {
+                "ma": "c",
+                "noiDung": "none — None expires after 2 minutes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "strict — Strict is relaxed right after login"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Explicit Lax is never sent on cross-site POST; only cookies without the attribute get the window. None is always sent.</p><p><i>VI: Lax khai rõ không bao giờ đi theo POST chéo site; chỉ cookie không khai thuộc tính mới có cửa sổ đó. None thì luôn được gửi.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Expecting an error when a cookie is rejected.|||Chờ một thông báo lỗi khi cookie bị từ chối."
+        },
+        {
+          "loi": "“Lax blocks everything cross-site.”|||\"Lax chặn mọi thứ chéo site.\""
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cookie prefix",
+          "vi": "tiền tố cookie"
+        },
+        {
+          "en": "SameSite",
+          "vi": "cùng site"
+        }
+      ]
+    },
+    {
+      "title": "3.2-2 — Write hostCookieProblem(setCookie): the three __Host- rules",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "cookies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Given one <code>Set-Cookie</code> value, return why Chromium would drop it as a <code>__Host-</code> cookie, checking in this order: <code>'NOT_HOST_PREFIX'</code> (name does not start with <code>__Host-</code>, case-sensitive), <code>'NO_SECURE'</code>, <code>'HAS_DOMAIN'</code>, <code>'PATH_NOT_ROOT'</code> (no exact <code>Path=/</code>); else <code>'OK'</code>. Attribute names are case-insensitive (our run accepted <code>path=/; secure</code>).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho một giá trị <code>Set-Cookie</code>, trả về lý do Chromium sẽ bỏ nó với tư cách cookie <code>__Host-</code>, kiểm theo thứ tự: <code>'NOT_HOST_PREFIX'</code> (tên không bắt đầu bằng <code>__Host-</code>, phân biệt hoa thường), <code>'NO_SECURE'</code>, <code>'HAS_DOMAIN'</code>, <code>'PATH_NOT_ROOT'</code> (không có đúng <code>Path=/</code>); còn lại <code>'OK'</code>. Tên thuộc tính không phân biệt hoa thường (lần chạy của mình nhận <code>path=/; secure</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "hostCookieProblem(\"__Host-lfid_ses=lfid_ses_x; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200\")",
+          "output": "\"OK\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "split(\";\"), trim, lower-case the attributes but not the name.|||split(\";\"), trim, viết thường thuộc tính nhưng không viết thường tên.",
+        "Path=/admin is not Path=/.|||Path=/admin không phải Path=/."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'OK' | 'NOT_HOST_PREFIX' | 'NO_SECURE' | 'HAS_DOMAIN' | 'PATH_NOT_ROOT' */\nfunction hostCookieProblem(setCookie) {\n  // Write your solution here\n  if (setCookie.indexOf('Secure') < 0) return 'NO_SECURE';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction hostCookieProblem(setCookie) {\n  var parts = String(setCookie).split(';').map(function (p) { return p.trim(); });\n  var name = parts[0].split('=')[0];\n  if (name.indexOf('__Host-') !== 0) return 'NOT_HOST_PREFIX';\n  var attrs = parts.slice(1).map(function (p) { return p.toLowerCase(); });\n  if (attrs.indexOf('secure') < 0) return 'NO_SECURE';\n  if (attrs.some(function (a) { return a.indexOf('domain=') === 0; })) return 'HAS_DOMAIN';\n  if (attrs.indexOf('path=/') < 0) return 'PATH_NOT_ROOT';\n  return 'OK';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Three rules — Secure, Path=/, no Domain — make the cookie belong to exactly one host, so no subdomain can set or read it; the browser enforces them by silently dropping the cookie.</p>",
+      "solutionExplanationHtmlVi": "<p>Ba luật — Secure, Path=/, không Domain — khiến cookie thuộc về đúng một host, nên không subdomain nào đặt hay đọc được; trình duyệt áp chúng bằng cách âm thầm bỏ cookie.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "LabFlow ID v0.3",
+              "vi": "LabFlow ID v0.3"
+            },
+            "goi": "hostCookieProblem(\"__Host-lfid_ses=lfid_ses_x; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=43200\")",
+            "mongDoi": "OK"
+          },
+          {
+            "moTa": {
+              "en": "Case 2: hostCookieProblem(\"__Host-nosecure=1; Path=/; HttpOnly\")",
+              "vi": "Ca 2"
+            },
+            "goi": "hostCookieProblem(\"__Host-nosecure=1; Path=/; HttpOnly\")",
+            "mongDoi": "NO_SECURE"
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "hostCookieProblem(\"__Host-domain=1; Path=/; Secure; Domain=localhost\")",
+            "mongDoi": "HAS_DOMAIN",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "hostCookieProblem(\"__Host-path=1; Path=/admin; Secure\")",
+            "mongDoi": "PATH_NOT_ROOT",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "hostCookieProblem(\"__Host-lower=1; path=/; secure\")",
+            "mongDoi": "OK",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "hostCookieProblem(\"sid=1; Path=/; Secure\")",
+            "mongDoi": "NOT_HOST_PREFIX",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 7",
+              "vi": "Ca ẩn 7"
+            },
+            "goi": "hostCookieProblem(\"__Host-nopath=1; Secure\")",
+            "mongDoi": "PATH_NOT_ROOT",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A substring test \"path=/\" matches \"path=/admin\".|||Kiểm chuỗi con \"path=/\" khớp cả \"path=/admin\"."
+        },
+        {
+          "loi": "Lower-casing the name: \"__host-x\" is not a prefixed cookie.|||Viết thường cả tên: \"__host-x\" không phải cookie có tiền tố."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "__Host- prefix",
+          "vi": "tiền tố __Host-"
+        }
+      ]
+    },
+    {
+      "title": "3.2-3 — Write cookiesSent(cookies, req): SameSite as measured",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "SameSite cookies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Model what Chromium 156 did in lesson 3.2. <code>cookies = [{ name, sameSite: 'Strict'|'Lax'|'None'|null, ageSec }]</code>, <code>req = { crossSite, topLevel, method }</code>. Return the names sent, in order. Same-site requests carry all. Cross-site: None always; Strict never; Lax only on a top-level GET; no attribute (null) behaves like Lax, <b>plus</b> a top-level POST while the cookie is younger than 120 s. The real run:<pre>cookies set seconds ago:\n  link GET         Sec-Fetch-Site: cross-site  cookies sent: lax, none, unset\n  form-post POST   Sec-Fetch-Site: cross-site  cookies sent: none, unset\n  img GET          Sec-Fetch-Site: cross-site  cookies sent: none\n  fetch-post POST  Sec-Fetch-Site: cross-site  cookies sent: none</pre></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mô phỏng điều Chromium 156 đã làm ở bài 3.2. <code>cookies = [{ name, sameSite: 'Strict'|'Lax'|'None'|null, ageSec }]</code>, <code>req = { crossSite, topLevel, method }</code>. Trả về tên các cookie được gửi, theo thứ tự. Request cùng site mang tất cả. Chéo site: None luôn luôn; Strict không bao giờ; Lax chỉ với GET cấp cao nhất; không khai (null) cư xử như Lax, <b>cộng</b> POST cấp cao nhất khi cookie chưa tới 120 s tuổi. Lần chạy thật:<pre>cookies set seconds ago:\n  link GET         Sec-Fetch-Site: cross-site  cookies sent: lax, none, unset\n  form-post POST   Sec-Fetch-Site: cross-site  cookies sent: none, unset\n  img GET          Sec-Fetch-Site: cross-site  cookies sent: none\n  fetch-post POST  Sec-Fetch-Site: cross-site  cookies sent: none</pre></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "cookiesSent([{\"name\":\"strict\",\"sameSite\":\"Strict\",\"ageSec\":5},{\"name\":\"lax\",\"sameSite\":\"Lax\",\"ageSec\":5},{\"name\":\"none\",\"sameSite\":\"None\",\"ageSec\":5},{\"name\":\"unset\",\"sameSite\":null,\"ageSec\":5}], {\"crossSite\":true,\"topLevel\":true,\"method\":\"POST\"})",
+          "output": "[\"none\",\"unset\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "filter, then map to names.|||filter, rồi map ra tên.",
+        "An image or fetch is not top-level.|||Ảnh hay fetch không phải cấp cao nhất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ names of the cookies the browser attaches */\nfunction cookiesSent(cookies, req) {\n  // Write your solution here\n  return cookies.filter(function (c) { return !req.crossSite || c.sameSite !== 'Strict'; }).map(function (c) { return c.name; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction cookiesSent(cookies, req) {\n  return cookies.filter(function (c) {\n    if (!req.crossSite) return true;\n    if (c.sameSite === 'None') return true;\n    if (c.sameSite === 'Strict') return false;\n    var topGet = req.topLevel && req.method === 'GET';\n    if (c.sameSite === 'Lax') return topGet;\n    return topGet || (req.topLevel && req.method === 'POST' && c.ageSec < 120);   // unset: Lax, plus the 2-minute window\n  }).map(function (c) { return c.name; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>This is the table you can reproduce from the measurement: the only difference between the two runs is the unset cookie on the form POST. That window is why session cookies always declare SameSite explicitly.</p>",
+      "solutionExplanationHtmlVi": "<p>Đây là bảng tái tạo được từ phép đo: khác biệt duy nhất giữa hai lần chạy là cookie không khai trên form POST. Cửa sổ đó là lý do cookie phiên luôn khai SameSite rõ ràng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Form POST seconds after login",
+              "vi": "Form POST vài giây sau đăng nhập"
+            },
+            "goi": "cookiesSent([{\"name\":\"strict\",\"sameSite\":\"Strict\",\"ageSec\":5},{\"name\":\"lax\",\"sameSite\":\"Lax\",\"ageSec\":5},{\"name\":\"none\",\"sameSite\":\"None\",\"ageSec\":5},{\"name\":\"unset\",\"sameSite\":null,\"ageSec\":5}], {\"crossSite\":true,\"topLevel\":true,\"method\":\"POST\"})",
+            "mongDoi": [
+              "none",
+              "unset"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Form POST 125 s later",
+              "vi": "Form POST sau 125 s"
+            },
+            "goi": "cookiesSent([{\"name\":\"strict\",\"sameSite\":\"Strict\",\"ageSec\":125},{\"name\":\"lax\",\"sameSite\":\"Lax\",\"ageSec\":125},{\"name\":\"none\",\"sameSite\":\"None\",\"ageSec\":125},{\"name\":\"unset\",\"sameSite\":null,\"ageSec\":125}], {\"crossSite\":true,\"topLevel\":true,\"method\":\"POST\"})",
+            "mongDoi": [
+              "none"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 3",
+              "vi": "Ca ẩn 3"
+            },
+            "goi": "cookiesSent([{\"name\":\"strict\",\"sameSite\":\"Strict\",\"ageSec\":5},{\"name\":\"lax\",\"sameSite\":\"Lax\",\"ageSec\":5},{\"name\":\"none\",\"sameSite\":\"None\",\"ageSec\":5},{\"name\":\"unset\",\"sameSite\":null,\"ageSec\":5}], {\"crossSite\":true,\"topLevel\":true,\"method\":\"GET\"})",
+            "mongDoi": [
+              "lax",
+              "none",
+              "unset"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 4",
+              "vi": "Ca ẩn 4"
+            },
+            "goi": "cookiesSent([{\"name\":\"strict\",\"sameSite\":\"Strict\",\"ageSec\":5},{\"name\":\"lax\",\"sameSite\":\"Lax\",\"ageSec\":5},{\"name\":\"none\",\"sameSite\":\"None\",\"ageSec\":5},{\"name\":\"unset\",\"sameSite\":null,\"ageSec\":5}], {\"crossSite\":true,\"topLevel\":false,\"method\":\"GET\"})",
+            "mongDoi": [
+              "none"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 5",
+              "vi": "Ca ẩn 5"
+            },
+            "goi": "cookiesSent([{\"name\":\"strict\",\"sameSite\":\"Strict\",\"ageSec\":5},{\"name\":\"lax\",\"sameSite\":\"Lax\",\"ageSec\":5},{\"name\":\"none\",\"sameSite\":\"None\",\"ageSec\":5},{\"name\":\"unset\",\"sameSite\":null,\"ageSec\":5}], {\"crossSite\":true,\"topLevel\":false,\"method\":\"POST\"})",
+            "mongDoi": [
+              "none"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Hidden case 6",
+              "vi": "Ca ẩn 6"
+            },
+            "goi": "cookiesSent([{\"name\":\"strict\",\"sameSite\":\"Strict\",\"ageSec\":500},{\"name\":\"lax\",\"sameSite\":\"Lax\",\"ageSec\":500},{\"name\":\"none\",\"sameSite\":\"None\",\"ageSec\":500},{\"name\":\"unset\",\"sameSite\":null,\"ageSec\":500}], {\"crossSite\":false,\"topLevel\":false,\"method\":\"POST\"})",
+            "mongDoi": [
+              "strict",
+              "lax",
+              "none",
+              "unset"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giving the 2-minute window to explicit Lax.|||Cho cả Lax khai rõ hưởng cửa sổ 2 phút."
+        },
+        {
+          "loi": "Treating null as None.|||Coi null là None."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "top-level navigation",
+          "vi": "điều hướng cấp cao nhất"
+        }
+      ]
+    },
+    {
+      "title": "3.2-4 — What each attribute stops",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "cookies"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Pick what each attribute of a session cookie stops (lesson 3.2’s measurements).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chọn thứ mà mỗi thuộc tính của cookie phiên chặn được (số đo của bài 3.2).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Think of the measurement behind each one.|||Nghĩ tới phép đo đằng sau mỗi cái.",
+        "Domain never narrows.|||Domain không bao giờ thu hẹp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.2-4 — What each attribute stops\n\nAnswer in the answer panel (no code needed).\n\n1. Attribute → stopsThuộc tính → chặn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 3.2-4 — What each attribute stops — answer key\n\n1. Attribute → stopsThuộc tính → chặn\n   - r1.s: a script reading the token\n   - r2.s: the cookie over plain HTTP\n   - r3.s: cross-site POST, fetch, images\n   - r4.s: subdomains setting or receiving it\n   - r5.s: nothing — it widens the cookie\n   Each attribute stops one thing; none stops an XSS using the cookie in place (the email still changed).VI: Mỗi thuộc tính chặn một thứ; không cái nào chặn được XSS dùng cookie tại chỗ (email vẫn bị đổi).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each attribute stops one thing; none stops an XSS using the cookie in place (the email still changed).</p><p><i>VI: Mỗi thuộc tính chặn một thứ; không cái nào chặn được XSS dùng cookie tại chỗ (email vẫn bị đổi).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Attribute → stops</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuộc tính → chặn</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Attribute"
+              },
+              {
+                "ma": "s",
+                "ten": "Stops",
+                "luaChon": [
+                  "a script reading the token",
+                  "the cookie over plain HTTP",
+                  "cross-site POST, fetch, images",
+                  "subdomains setting or receiving it",
+                  "nothing — it widens the cookie"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "HttpOnly"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "Secure"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "SameSite=Lax"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "__Host- prefix (Secure, Path=/, no Domain)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "Domain=labflow.example"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.s": "a script reading the token",
+              "r2.s": "the cookie over plain HTTP",
+              "r3.s": "cross-site POST, fetch, images",
+              "r4.s": "subdomains setting or receiving it",
+              "r5.s": "nothing — it widens the cookie"
+            },
+            "giaiThich": "<p>Each attribute stops one thing; none stops an XSS using the cookie in place (the email still changed).</p><p><i>VI: Mỗi thuộc tính chặn một thứ; không cái nào chặn được XSS dùng cookie tại chỗ (email vẫn bị đổi).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“HttpOnly stops XSS.”|||\"HttpOnly chặn XSS.\""
+        },
+        {
+          "loi": "“Domain makes it safer.”|||\"Domain làm nó an toàn hơn.\""
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

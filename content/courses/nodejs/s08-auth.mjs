@@ -1550,6 +1550,11 @@ email KHÁC từ cùng IP        : HTTP 200</div>
   <span class="lc-body"><span class="lc-title">You met this in the Authentication course — lesson 11.3 — Rate limiting that survives real traffic</span><span class="lc-sub">If you took the Authentication course, this part will feel familiar. Same: a login limiter that counts attempts per key and answers 429 with Retry-After. Different: that lesson looks at the idea on its own; this one builds it into the Notes API (Node 22, Express 5, PostgreSQL) and measures it. In this lesson we add: a small limiter written in Express and attacked for real: keyed on IP + email, counting before verifying, RateLimit-* headers, and trust proxy with a spoofed X-Forwarded-For. If you have not taken it, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-1-bang-phien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Authentication course — lesson 3.1: one sessions table, and what every column is for</span><span class="lc-sub">Same: a cookie the browser sends by itself, and the need to revoke. Deeper: the session is a row, so revocation is one DELETE (sign out everywhere ended 3 devices); idle 30 min and absolute 12 h measured with a fake clock; touching last_seen on every request cost 1,000 UPDATEs for 1,000 reads, once a minute cost 0. If you have not taken it, this lesson stands on its own.</span></span>
+  <span class="lc-cta">OPEN AUTHENTICATION LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1722,6 +1727,11 @@ email KHÁC từ cùng IP        : HTTP 200</div>
 <a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-11-3-gioi-han-tan-suat" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở khoá Authentication — bài 11.3 — Giới hạn tần suất sống nổi với lưu lượng thật</span><span class="lc-sub">Nếu bạn đã học khoá Authentication thì phần này không còn lạ. Giống: bộ chặn đăng nhập đếm số lần thử theo khoá và trả 429 kèm Retry-After. Khác: bài đó xem ý tưởng tự thân nó; bài này dựng nó vào Notes API (Node 22, Express 5, PostgreSQL) rồi đo. Ở bài này mình học thêm: một bộ chặn nhỏ viết trong Express rồi tấn công thật: khoá theo IP + email, đếm trước khi kiểm, header RateLimit-*, và trust proxy với X-Forwarded-For giả. Chưa học khoá Authentication cũng không sao — bài này tự đủ từ đầu.</span></span>
+  <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/authentication/learn?lessonSlug=auth-3-1-bang-phien" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 3.1: một bảng phiên, và mỗi cột để làm gì</span><span class="lc-sub">Giống: cookie trình duyệt tự gửi, và nhu cầu thu hồi. Sâu hơn: phiên là một dòng, nên thu hồi là một DELETE (đăng xuất mọi nơi kết thúc 3 thiết bị); nhàn rỗi 30 phút và tuyệt đối 12 giờ đo bằng đồng hồ giả; chạm last_seen ở mọi request tốn 1.000 UPDATE cho 1.000 lần đọc, mỗi phút một lần thì 0. Chưa học khoá đó thì bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>

@@ -1,19 +1,25 @@
-// src/server.js — LabFlow ID v0.2 (end of Chapter 2). Fixed so far:
-//   hole 1 — passwords are argon2id hashes in PostgreSQL, parameters chosen by measurement, old hashes upgraded on login;
-//   hole 2 (sign-in half) — one answer and the same work for "no such email" and "wrong password" (lesson 2.3);
-//   hole 3 — CSPRNG session ids, only their SHA-256 stored (lessons 1.2, 1.3); credentials never logged (lesson 1.5).
-// Still open: holes 4, 5, 6 and the sign-up half of hole 2 — Chapters 3, 6, 10. Never deploy this file.
+// src/server.js — LabFlow ID v0.3 (end of Chapter 3). Fixed so far:
+//   hole 1 — argon2id in PostgreSQL, measured parameters, upgrade on login (Chapter 2);
+//   hole 3 — CSPRNG session ids, only their SHA-256 stored (Chapter 1);
+//   hole 4 — sessions end: idle 30 min, absolute 12 h, sign-out, sign-out-everywhere (lesson 3.1);
+//   hole 5 — the session travels in a __Host- cookie JavaScript cannot read, never in a JSON body (3.2); CSRF checked (3.4);
+//   sign-in and every privilege change start a NEW session (3.3).
+// Still open: the sign-up half of hole 2 (Chapter 6) and hole 6, unlimited guessing (Chapter 10). Never deploy this file.
 import express from 'express';
-import { q } from './db.js';
 import { users } from './users.js';
-import { newToken, tokenDigest } from './crypto/index.js';
-import { hashPassword, checkNewPassword, loadBlocklist, pwnedCount, signIn } from './passwords/index.js';
+import { hashPassword, verifyPassword, checkNewPassword, loadBlocklist, pwnedCount, signIn } from './passwords/index.js';
+import { sessionLayer, pgStore } from './sessions/index.js';
 import { log, requestLog } from './log.js';
 
 const BLOCKLIST = loadBlocklist();
+const sessions = sessionLayer({ store: pgStore, touchEveryMs: Number(process.env.TOUCH_EVERY_MS ?? 60e3) });
 const app = express();
-app.use(requestLog);                     // first, so even a request the body parser rejects (413, bad JSON) gets its log line
-app.use(express.json({ limit: '8kb' })); // a password is ≤ 128 characters; nobody needs a 100 kB sign-in body
+app.use(requestLog);
+app.use(express.json({ limit: '8kb' }));
+app.use(sessions.load);   // req.session = the row, or null
+app.use(sessions.csrf);   // POST/PUT/PATCH/DELETE must come from our own origin
+
+const needSession = (req, res, next) => (req.session ? next() : res.status(401).json({ error: 'Not signed in' }));
 
 app.post('/sign-up', async (req, res) => {
   const { email, password, name } = req.body ?? {};
@@ -31,23 +37,45 @@ app.post('/sign-up', async (req, res) => {
 app.post('/sign-in', async (req, res) => {
   const { email, password } = req.body ?? {};
   const { user, error } = await signIn(users, email, password);
-  if (error) return res.status(401).json({ error: 'Email or password is incorrect' }); // one message for both cases
+  if (error) return res.status(401).json({ error: 'Email or password is incorrect' });
   const common = BLOCKLIST.has(password.normalize('NFC').toLowerCase());
-  if (common) await users.flagMustChange(user.id); // lesson 2.4: a known-common password must be changed
-  const token = newToken('lfid_ses');
-  await q('INSERT INTO sessions (digest, user_id) VALUES ($1, $2)', [tokenDigest(token), user.id]); // hole 4
-  res.json({ session: token, mustChangePassword: user.mustChangePassword || common }); // hole 5
-}); // hole 6
-
-app.get('/me', async (req, res) => {
-  const r = await q(`SELECT u.id, u.email, u.name, u.role FROM sessions s JOIN users u ON u.id = s.user_id
-    WHERE s.digest = $1`, [tokenDigest(req.get('x-session') ?? '')]);
-  if (!r.rows[0]) return res.status(401).json({ error: 'Not signed in' });
-  res.json(r.rows[0]);
+  if (common) await users.flagMustChange(user.id);
+  await sessions.start(req, res, user.id);   // new session id, old one destroyed; the token goes in a cookie only
+  res.json({ ok: true, mustChangePassword: user.mustChangePassword || common });
 });
 
-// Errors answer with a code, never a stack trace (and never the body that caused them).
+app.get('/me', needSession, async (req, res) => {
+  const u = await users.findById(req.session.userId);
+  res.json({ id: u.id, email: u.email, name: u.name, role: u.role });
+});
+
+// lesson 3.4: the classic CSRF target — change the email, then "forgot password" takes the account
+app.post('/me/email', needSession, async (req, res) => {
+  const email = String(req.body?.email ?? '').trim().toLowerCase();
+  if (!/^[^@\s]+@[^@\s]+$/.test(email)) return res.status(422).json({ error: 'BAD_EMAIL' });
+  await users.updateEmail(req.session.userId, email);
+  res.json({ ok: true, email });
+});
+
+// lesson 3.3: prove the current password again, change it, sign out every other device, start a fresh session
+app.post('/me/password', needSession, async (req, res) => {
+  const { current, next: pw } = req.body ?? {};
+  const u = await users.findById(req.session.userId);
+  if (!(await verifyPassword(u.passwordHash, String(current ?? ''))).ok) return res.status(403).json({ error: 'REAUTH_FAILED' });
+  const problems = checkNewPassword(pw, { email: u.email, blocklist: BLOCKLIST });
+  if (problems.length) return res.status(422).json({ error: 'WEAK_PASSWORD', problems });
+  await users.updateHash(u.id, await hashPassword(pw));
+  const ended = await sessions.endAll(u.id);
+  await sessions.start(req, res, u.id);
+  res.json({ ok: true, signedOutSessions: ended });
+});
+
+app.post('/sign-out', async (req, res) => { await sessions.end(req, res); res.json({ ok: true }); });
+app.post('/sign-out-everywhere', needSession, async (req, res) => {
+  res.json({ ok: true, ended: await sessions.endAll(req.session.userId) });
+});
+
 app.use((err, req, res, next) => res.status(err.status ?? 500).json({ error: err.type ?? 'INTERNAL' }));
 
 const port = Number(process.env.PORT ?? 4800);
-app.listen(port, () => log.info(`LabFlow ID v0.2 on http://localhost:${port}`));
+app.listen(port, () => log.info(`LabFlow ID v0.3 on http://localhost:${port}`));

@@ -49,6 +49,9 @@ export const PRACTICE_TRACK_BY_COURSE: Readonly<Record<string, string>> = Object
   typescript: 'typescript-practice',
   // Courses (01/11/2026): authentication — LabFlow ID (content/codelab/authentication-practice).
   authentication: 'authentication-practice',
+  // PRO192 (01/11/2026): Java OOP — đề chạy & tự chấm TRÊN MÁY người học (manual + cham.mjs: javac, ca ẩn, reflection,
+  // luật review LAB211), content/codelab/pro192-practice. Module slug = slug bài học ⇒ thẻ "🏋️ Luyện tập" dưới mỗi bài.
+  'object-oriented-programming': 'pro192-practice',
 });
 
 /**

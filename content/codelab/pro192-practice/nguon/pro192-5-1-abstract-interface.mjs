@@ -187,7 +187,7 @@ const de2 = deJava({
 <ul><li>${c('compareTo')} trả số âm khi ${c('this')} đứng trước, 0 khi bằng, dương khi ngược lại — dùng ${c('Double.compare')} và ${c('String.compareTo')}, không trừ hai số double.</li>
 <li>${c('Main')} (cho sẵn) đọc sinh viên, sắp xếp và in bảng xếp hạng.</li></ul>`,
   },
-  yeuCau: { en: ['Do not change Main.java.', 'Student implements Comparable<Student> (generic, not raw Comparable).'], vi: ['Không sửa Main.java.', 'Student implements Comparable<Student> (có generic, không dùng Comparable thô).'] },
+  yeuCau: { en: ['Do not change Main.java.', 'Student implements Comparable&lt;Student&gt; (generic, not raw Comparable).'], vi: ['Không sửa Main.java.', 'Student implements Comparable&lt;Student&gt; (có generic, không dùng Comparable thô).'] },
   dauVao: { en: 'n, then lines id;name;gpa.', vi: 'n, rồi các dòng id;tên;gpa.' },
   dauRa: { en: 'The ranking.', vi: 'Bảng xếp hạng.' },
   main: 'Main', kiem: true,

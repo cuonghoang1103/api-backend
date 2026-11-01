@@ -128,8 +128,11 @@ export function deJava(s) {
   const cham = MAU.replace('/*@@DE@@*/null', JSON.stringify(DE, null, 1)).replace('@@TEN@@', `${s.id} — ${DE.title}`);
   const mau = {};
   s.ca.forEach((x, i) => {
-    if (x.an || x.phien || x.tepCa) return;
-    mau[`tests/${i + 1}.in`] = caGoc[i].input || '\n';
+    if (x.an || s.khongMau) return;
+    if (x.phien) x.phien.forEach((p, k) => { mau[`tests/${i + 1}${k ? `-session${k + 1}` : ''}.in`] = chuanVao(p); });
+    else mau[`tests/${i + 1}.in`] = caGoc[i].input || '\n';
+    // tệp mà ca cần trong thư mục chạy (vd data/books.csv) — để tự chạy tay được: java -cp … Main < tests/1.in (trong tests/1/)
+    for (const [f, t] of Object.entries(x.tepCa || {})) mau[`tests/${i + 1}/${f}`] = t;
     if (ra[i] != null) mau[`tests/${i + 1}.out`] = ra[i];
   });
   if (process.env.PRO192_DUNG) CAN_GHI.push({ id: s.id, bam: khoaBam, coKq, java: javaMin, src, giai, khoi, harness, cham, cases: caGoc });

@@ -128,6 +128,60 @@
       "name": "6.3 Lab 6 — CT Library: business exceptions, borrowing and returning",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 6 — CT Library: business exceptions, borrowing and returning"
+    },
+    {
+      "slug": "pro192-7-1-mang-doi-tuong",
+      "name": "7.1 Managing many objects",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A partly filled array: add, find, count · Remove without holes: shift left, and remove every match · Grow when full and insert at an index"
+    },
+    {
+      "slug": "pro192-on-ch7",
+      "name": "7.2 🧪 Practice — arrays of objects the PE way: Q3, one-pass reports, binary search, a LAB211 manager",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE question 3: an array of Laptop and the given ILaptop · Reports in one pass over a polymorphic array · Sort by code, then binary search an array of objects · A LAB211 product manager on an array"
+    },
+    {
+      "slug": "pro192-lab-7-danh-sach-doi-tuong",
+      "name": "7.3 Lab 7 — CT Library: a list of objects",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 7 — CT Library: a list of objects"
+    },
+    {
+      "slug": "pro192-8-1-collections",
+      "name": "8.1 List, Set & Map",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: ArrayList by commands: a reading queue · Sets: unique visitors and set operations · Map: word frequency and the top 3 · A map of lists: books grouped by author"
+    },
+    {
+      "slug": "pro192-on-ch8",
+      "name": "8.2 🧪 Practice — collections the PE way: IBike, XxxList extends ArrayList, equals/hashCode, a stock Map",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE question 3: Bike and MyBike implements the given IBike · PE: SimCardList extends ArrayList<SimCard> · Bug hunt: equals without hashCode · A 10-mark Q1: the shop’s stock in a Map"
+    },
+    {
+      "slug": "pro192-lab-8-collections",
+      "name": "8.3 Lab 8 — CT Library: Collections for real",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 8 — CT Library: Collections for real"
+    },
+    {
+      "slug": "pro192-9-1-file-io",
+      "name": "9.1 Reading & writing files",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Read a text file: lines, words, characters, the longest line · Write a report file in UTF-8, then read it back · CSV to objects: skip broken lines and say why · A log that survives a restart: append mode"
+    },
+    {
+      "slug": "pro192-on-ch9",
+      "name": "9.2 🧪 Practice — files the PE and LAB211 way: input/output files, CSV, UTF-8, binary records",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: PE question 1: input.txt → output.txt · LAB211: a student manager that saves to students.csv · A Vietnamese report: count students by family name (UTF-8) · Fixed-length records with RandomAccessFile"
+    },
+    {
+      "slug": "pro192-lab-9-luu-tep",
+      "name": "9.3 Lab 9 — CT Library: saving to a file",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 9 — CT Library: saving to a file"
     }
   ]
 }

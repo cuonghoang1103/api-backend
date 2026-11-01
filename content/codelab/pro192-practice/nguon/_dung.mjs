@@ -77,8 +77,9 @@ await pool(canChay, async (d) => {
   if (fs.existsSync(labJson)) {
     const L = JSON.parse(fs.readFileSync(labJson, 'utf8'));
     const chuan = (t) => t.replace(/\r\n?/g, '\n').split('\n').map((l) => l.replace(/\s+$/, '')).join('\n').replace(/\n+$/, '');
-    const lan1 = kq[0].out.split(/^===== RESTART: session 2.*$/m)[0];
-    if (L.ra != null && !L.vao2 && chuan(lan1) !== chuan(L.ra)) { loi++; console.log(`  ✗ ${d.id}: ca 1 KHÁC harness/expected.txt của khoá`); return; }
+    // Lab 9: lần mở lại — CheckHarness của khoá in dòng ngăn riêng
+    const ra1 = kq[0].out.replace(/^===== RESTART: session 2.*$/m, '===== MO LAI CHUONG TRINH (harness/input-2.txt) =====');
+    if (L.ra != null && chuan(ra1) !== chuan(L.ra)) { loi++; console.log(`  ✗ ${d.id}: ca 1 KHÁC harness/expected.txt của khoá`); return; }
   }
   cache[d.id] = { bam: d.bam, ra: kq.map((x) => x.out) };
   console.log(`  ✓ ${d.id}: ${kq.length} ca ghi output`);
@@ -119,6 +120,10 @@ const xuat = spawnSync(process.execPath, ['scripts/codelab-xuat-de.mjs', '--trac
 const dongXuat = (xuat.stdout + xuat.stderr).trim().split('\n');
 console.log(`③ codelab-xuat-de: ${dongXuat[dongXuat.length - 1]}`);
 if (xuat.status !== 0) { console.log(dongXuat.filter((l) => /✗|-\s/.test(l)).join('\n')); process.exit(1); }
+const nd = spawnSync(process.execPath, ['scripts/codelab-kiem-noi-dung.mjs', '--track', 'pro192-practice'], { cwd: GOC, encoding: 'utf8' });
+const dongNd = (nd.stdout + nd.stderr).trim().split('\n');
+console.log(`③b codelab-kiem-noi-dung: ${dongNd[dongNd.length - 1]}`);
+if (nd.status !== 0) { console.log(dongNd.filter((l) => /✗/.test(l)).join('\n')); loi++; }
 if (KHONG_KIEM) process.exit(loi ? 1 : 0);
 
 // ── 4. kiểm thật từ JSON ──

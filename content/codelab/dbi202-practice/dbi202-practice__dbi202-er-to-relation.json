@@ -1,0 +1,709 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-er-to-relation",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-er-to-relation"
+  },
+  "exercises": [
+    {
+      "title": "Which rule, which result?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "seven conversion rules"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd"
+      ],
+      "problemHtml": "<p>The seven rules of lesson 3.4 (R1 strong entity … R7 multivalued attribute). For each ERD element, give the rule and what it becomes.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảy quy tắc của bài 3.4 (R1 thực thể mạnh … R7 thuộc tính đa trị). Với mỗi thành phần ERD, cho biết quy tắc và kết quả.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Relationships with a \"1\" side never need their own table.|||Liên kết có phía \"1\" không bao giờ cần bảng riêng.",
+        "Weak entities, M:N, n-ary and multivalued attributes always do.|||Thực thể yếu, M:N, n-ngôi và thuộc tính đa trị thì luôn cần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which rule, which result?\n\nAnswer in the answer panel (no code needed).\n\n1. ERD element → tableThành phần ERD → bảng\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which rule, which result? — answer key\n\n1. ERD element → tableThành phần ERD → bảng\n   - r1.r: R1\n   - r1.kq: a new table\n   - r2.r: R2\n   - r2.kq: a new table\n   - r3.r: R3\n   - r3.kq: a foreign key column (no new table)\n   - r4.r: R4\n   - r4.kq: a foreign key column (no new table)\n   - r5.r: R5\n   - r5.kq: a new table\n   - r6.r: R6\n   - r6.kq: a new table\n   - r7.r: R7\n   - r7.kq: a new table\n   Only 1:N and 1:1 relationships fold into a foreign key; every other construct produces a table.VI: Chỉ liên kết 1:N và 1:1 được gộp thành khoá ngoại; mọi cấu trúc khác sinh bảng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Only 1:N and 1:1 relationships fold into a foreign key; every other construct produces a table.</p><p><i>VI: Chỉ liên kết 1:N và 1:1 được gộp thành khoá ngoại; mọi cấu trúc khác sinh bảng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>ERD element → table</p><p style=\"opacity:.75;font-size:.92em\"><i>Thành phần ERD → bảng</i></p>",
+            "cot": [
+              {
+                "ma": "tp",
+                "ten": "Element / Thành phần"
+              },
+              {
+                "ma": "r",
+                "ten": "Rule / Quy tắc",
+                "luaChon": [
+                  "R1",
+                  "R2",
+                  "R3",
+                  "R4",
+                  "R5",
+                  "R6",
+                  "R7"
+                ]
+              },
+              {
+                "ma": "kq",
+                "ten": "Becomes / Thành",
+                "luaChon": [
+                  "a new table",
+                  "a foreign key column (no new table)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tp": "strong entity Book(bid, title)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tp": "weak entity Copy(copy_no, status) of Branch"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tp": "1:N \"a lecturer teaches many courses\""
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tp": "1:1 \"a branch has exactly one manager (a member)\""
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "tp": "M:N Borrow(borrow_date, due_date) between Member and Book"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "tp": "ternary Supplies(Supplier, Part, Project)"
+                }
+              },
+              {
+                "ma": "r7",
+                "o": {
+                  "tp": "multivalued {phone} of Member"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.r": "R1",
+              "r1.kq": "a new table",
+              "r2.r": "R2",
+              "r2.kq": "a new table",
+              "r3.r": "R3",
+              "r3.kq": "a foreign key column (no new table)",
+              "r4.r": "R4",
+              "r4.kq": "a foreign key column (no new table)",
+              "r5.r": "R5",
+              "r5.kq": "a new table",
+              "r6.r": "R6",
+              "r6.kq": "a new table",
+              "r7.r": "R7",
+              "r7.kq": "a new table"
+            },
+            "giaiThich": "<p>Only 1:N and 1:1 relationships fold into a foreign key; every other construct produces a table.</p><p><i>VI: Chỉ liên kết 1:N và 1:1 được gộp thành khoá ngoại; mọi cấu trúc khác sinh bảng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Creating a table Teaches(lid, cid) for a 1:N — the most frequent conversion error.|||Tạo bảng Teaches(lid, cid) cho liên kết 1:N — lỗi chuyển đổi hay gặp nhất."
+        },
+        {
+          "loi": "Folding an M:N into a column of one side.|||Gộp M:N thành một cột ở một phía."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "mapping rules",
+          "vi": "quy tắc chuyển đổi"
+        }
+      ]
+    },
+    {
+      "title": "Convert the library ERD completely (6 tables)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "R1–R7",
+        "weak entity",
+        "1:1 with UNIQUE",
+        "M:N with attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl"
+      ],
+      "problemHtml": "<p>The worked example of lesson 3.4:</p><pre>[Member] mid, name, {phone}          [Book] bid, title\n    borrows (M:N, with borrow_date, due_date) between Member and Book\n[Branch] brid, addr ══&lt;holds&gt;══ [[Copy]] copy_no, status      (Copy is weak)\n[Member] ──1──&lt;manages&gt;──1── [Branch]   (every branch has exactly one manager)</pre><p>Create the 6 tables with exactly these names and columns: <code>Member(mid INT, name VARCHAR(50))</code>, <code>MemberPhone(mid, phone VARCHAR(15))</code>, <code>Book(bid INT, title VARCHAR(100))</code>, <code>Branch(brid INT, addr VARCHAR(100), manager_mid INT)</code>, <code>Copy(brid, copy_no INT, status VARCHAR(10))</code>, <code>Borrow(mid, bid, borrow_date DATE, due_date DATE)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Keys: MemberPhone (mid, phone); Copy (brid, copy_no) with ON DELETE CASCADE to Branch; Borrow (mid, bid, borrow_date).</li>\n  <li>manages (1:1, total on Branch): Branch.manager_mid NOT NULL UNIQUE REFERENCES Member.</li>\n  <li>Create parents before children.</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ví dụ có lời giải của bài 3.4 (sơ đồ ở trên). Tạo 6 bảng với đúng tên và cột: <code>Member(mid INT, name VARCHAR(50))</code>, <code>MemberPhone(mid, phone VARCHAR(15))</code>, <code>Book(bid INT, title VARCHAR(100))</code>, <code>Branch(brid INT, addr VARCHAR(100), manager_mid INT)</code>, <code>Copy(brid, copy_no INT, status VARCHAR(10))</code>, <code>Borrow(mid, bid, borrow_date DATE, due_date DATE)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá: MemberPhone (mid, phone); Copy (brid, copy_no) với ON DELETE CASCADE tới Branch; Borrow (mid, bid, borrow_date).</li>\n  <li>manages (1:1, toàn phần phía Branch): Branch.manager_mid NOT NULL UNIQUE REFERENCES Member.</li>\n  <li>Tạo bảng cha trước bảng con.</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl    | col         | type             \n-------+-------------+------------------\nborrow | mid         | integer          \nborrow | bid         | integer          \nborrow | borrow_date | date             \nborrow | due_date    | date             \nbook   | bid         | integer          \nbook   | title       | character varying\nmember | mid         | integer          \nmember | name        | character varying\n… (16 rows)",
+          "explanation": "Expected result of check \"The six tables and their columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Sáu bảng và các cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Go element by element: R1 for Member/Book/Branch, R7 for {phone}, R2 for Copy, R5 for Borrow, R4 for manages.|||Đi từng thành phần: R1 cho Member/Book/Branch, R7 cho {phone}, R2 cho Copy, R5 cho Borrow, R4 cho manages.",
+        "borrow_date must be in Borrow's key: the same member may borrow the same book again next month.|||borrow_date phải nằm trong khoá của Borrow: cùng độc giả có thể mượn lại cùng cuốn tháng sau."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Member (\n    mid  INT         NOT NULL PRIMARY KEY,            -- R1\n    name VARCHAR(50) NOT NULL\n);\nCREATE TABLE MemberPhone (                            -- R7 multivalued {phone}\n    mid   INT         NOT NULL REFERENCES Member (mid),\n    phone VARCHAR(15) NOT NULL,\n    PRIMARY KEY (mid, phone)\n);\nCREATE TABLE Book (\n    bid   INT          NOT NULL PRIMARY KEY,          -- R1\n    title VARCHAR(100) NOT NULL\n);\nCREATE TABLE Branch (\n    brid        INT         NOT NULL PRIMARY KEY,\n    addr        VARCHAR(100) NULL,\n    manager_mid INT         NOT NULL UNIQUE REFERENCES Member (mid)   -- R4 1:1, total on Branch\n);\nCREATE TABLE Copy (                                   -- R2 weak entity\n    brid    INT         NOT NULL REFERENCES Branch (brid) ON DELETE CASCADE,\n    copy_no INT         NOT NULL,\n    status  VARCHAR(10) NULL,\n    PRIMARY KEY (brid, copy_no)\n);\nCREATE TABLE Borrow (                                 -- R5 M:N with attributes\n    mid         INT  NOT NULL REFERENCES Member (mid),\n    bid         INT  NOT NULL REFERENCES Book (bid),\n    borrow_date DATE NOT NULL,\n    due_date    DATE NOT NULL,\n    PRIMARY KEY (mid, bid, borrow_date)               -- the same book can be borrowed again later\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>6 tables, created parents first: Member, MemberPhone, Book, Branch, Copy, Borrow. A correct conversion is usually already in 3NF — Chapter 4 checks that.</p>",
+      "solutionExplanationHtmlVi": "<p>6 bảng, tạo cha trước: Member, MemberPhone, Book, Branch, Copy, Borrow. Một chuyển đổi đúng thường đã ở 3NF — Chương 4 sẽ kiểm điều đó.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The six tables and their columns|||Sáu bảng và các cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('member', 'memberphone', 'book', 'branch', 'copy', 'borrow')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "borrow",
+                  "mid",
+                  "integer"
+                ],
+                [
+                  "borrow",
+                  "bid",
+                  "integer"
+                ],
+                [
+                  "borrow",
+                  "borrow_date",
+                  "date"
+                ],
+                [
+                  "borrow",
+                  "due_date",
+                  "date"
+                ],
+                [
+                  "book",
+                  "bid",
+                  "integer"
+                ],
+                [
+                  "book",
+                  "title",
+                  "character varying"
+                ],
+                [
+                  "member",
+                  "mid",
+                  "integer"
+                ],
+                [
+                  "member",
+                  "name",
+                  "character varying"
+                ],
+                [
+                  "memberphone",
+                  "mid",
+                  "integer"
+                ],
+                [
+                  "memberphone",
+                  "phone",
+                  "character varying"
+                ],
+                [
+                  "branch",
+                  "brid",
+                  "integer"
+                ],
+                [
+                  "branch",
+                  "addr",
+                  "character varying"
+                ],
+                [
+                  "branch",
+                  "manager_mid",
+                  "integer"
+                ],
+                [
+                  "copy",
+                  "brid",
+                  "integer"
+                ],
+                [
+                  "copy",
+                  "copy_no",
+                  "integer"
+                ],
+                [
+                  "copy",
+                  "status",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A full valid data set|||Một bộ dữ liệu hợp lệ đầy đủ",
+            "thu": "INSERT INTO Member VALUES (1, 'An'), (2, 'Binh'); INSERT INTO Book VALUES (10, 'Database Systems'), (11, 'Learning SQL'); INSERT INTO MemberPhone VALUES (1, '0901'), (1, '0902'); INSERT INTO Branch VALUES (100, 'Hoa Lac', 1); INSERT INTO Copy VALUES (100, 1, 'ok'), (100, 2, 'ok'); INSERT INTO Borrow VALUES (2, 10, '2026-10-01', '2026-10-15'), (2, 10, '2026-11-01', '2026-11-15')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "One member managing two branches is rejected (1:1)|||Một độc giả quản lý hai chi nhánh bị từ chối (1:1)",
+            "thu": "INSERT INTO Member VALUES (1, 'An'), (2, 'Binh'); INSERT INTO Book VALUES (10, 'Database Systems'), (11, 'Learning SQL'); INSERT INTO Branch VALUES (100, 'Hoa Lac', 1), (200, 'Cau Giay', 1)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A branch without a manager is rejected|||Chi nhánh không có quản lý bị từ chối",
+            "thu": "INSERT INTO Branch (brid, addr) VALUES (100, 'Hoa Lac')",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Copy 1 twice in the same branch is rejected|||Hai bản số 1 trong cùng chi nhánh bị từ chối",
+            "thu": "INSERT INTO Member VALUES (1, 'An'), (2, 'Binh'); INSERT INTO Book VALUES (10, 'Database Systems'), (11, 'Learning SQL'); INSERT INTO Branch VALUES (100, 'Hoa Lac', 1); INSERT INTO Copy VALUES (100, 1, 'ok'), (100, 1, 'lost')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same member borrowing the same book twice on the same day is rejected|||Cùng độc giả mượn cùng sách hai lần trong một ngày bị từ chối",
+            "thu": "INSERT INTO Member VALUES (1, 'An'), (2, 'Binh'); INSERT INTO Book VALUES (10, 'Database Systems'), (11, 'Learning SQL'); INSERT INTO Borrow VALUES (1, 10, '2026-10-01', '2026-10-15'), (1, 10, '2026-10-01', '2026-10-20')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same phone twice for one member is rejected|||Một số điện thoại hai lần cho một độc giả bị từ chối",
+            "thu": "INSERT INTO Member VALUES (1, 'An'), (2, 'Binh'); INSERT INTO Book VALUES (10, 'Database Systems'), (11, 'Learning SQL'); INSERT INTO MemberPhone VALUES (1, '0901'), (1, '0901')",
+            "maLoi": "23505",
+            "an": true
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Closing a branch deletes its copies|||Đóng chi nhánh thì xoá các bản sách của nó",
+            "kiemTra": "INSERT INTO Member VALUES (1, 'An'), (2, 'Binh'); INSERT INTO Book VALUES (10, 'Database Systems'), (11, 'Learning SQL'); INSERT INTO Branch VALUES (100, 'Hoa Lac', 1), (200, 'Cau Giay', 2); INSERT INTO Copy VALUES (100, 1, 'ok'), (200, 1, 'ok'); DELETE FROM Branch WHERE brid = 100; SELECT brid, copy_no FROM Copy",
+            "an": true,
+            "mongDoi": {
+              "cot": [
+                "brid",
+                "copy_no"
+              ],
+              "hang": [
+                [
+                  200,
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A loan of an unknown book is rejected|||Mượn sách không tồn tại bị từ chối",
+            "thu": "INSERT INTO Member VALUES (1, 'An'), (2, 'Binh'); INSERT INTO Book VALUES (10, 'Database Systems'), (11, 'Learning SQL'); INSERT INTO Borrow VALUES (1, 99, '2026-10-01', '2026-10-15')",
+            "maLoi": "23503",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "PRIMARY KEY (mid, bid) on Borrow — a second loan of the same book is impossible.|||PRIMARY KEY (mid, bid) trên Borrow — không mượn lại được cùng cuốn."
+        },
+        {
+          "loi": "No UNIQUE on manager_mid — one member could manage two branches (that is 1:N, not 1:1).|||Không UNIQUE ở manager_mid — một người quản lý được hai chi nhánh (đó là 1:N, không phải 1:1)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "1:1 relationship",
+          "vi": "liên kết một-một",
+          "giaiThich": "Khoá ngoại + UNIQUE ở phía tham gia toàn phần."
+        }
+      ]
+    },
+    {
+      "title": "Create and drop in dependency order",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "DDL order",
+        "DROP order"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl"
+      ],
+      "problemHtml": "<p>The library schema plus one more table: Branch references Member; Copy references Branch; <code>Reservation(brid, copy_no, mid)</code> references Copy (brid, copy_no).</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lược đồ thư viện thêm một bảng: Branch tham chiếu Member; Copy tham chiếu Branch; <code>Reservation(brid, copy_no, mid)</code> tham chiếu Copy (brid, copy_no).</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "CREATE: parents → children. DROP: children → parents.|||CREATE: cha → con. DROP: con → cha.",
+        "Follow the arrows of the foreign keys.|||Đi theo mũi tên của các khoá ngoại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Create and drop in dependency order\n\nAnswer in the answer panel (no code needed).\n\n1. The only valid CREATE TABLE orderThứ tự CREATE TABLE hợp lệ duy nhất\n2. The only valid DROP TABLE order (no CASCADE)Thứ tự DROP TABLE hợp lệ duy nhất (không CASCADE)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Create and drop in dependency order — answer key\n\n1. The only valid CREATE TABLE orderThứ tự CREATE TABLE hợp lệ duy nhất\n   Answer: m2) CREATE TABLE Member  →  m4) CREATE TABLE Branch  →  m1) CREATE TABLE Copy  →  m3) CREATE TABLE Reservation\n   A table can be created only after every table it references: Member ← Branch ← Copy ← Reservation is a chain, so there is exactly one order.VI: Một bảng chỉ tạo được sau mọi bảng nó tham chiếu: Member ← Branch ← Copy ← Reservation là một chuỗi nên chỉ có đúng một thứ tự.\n\n2. The only valid DROP TABLE order (no CASCADE)Thứ tự DROP TABLE hợp lệ duy nhất (không CASCADE)\n   Answer: m4) DROP TABLE Reservation  →  m2) DROP TABLE Copy  →  m1) DROP TABLE Branch  →  m3) DROP TABLE Member\n   Drop in reverse: a table can be dropped only when nothing references it any more.VI: Xoá theo thứ tự ngược: chỉ xoá được bảng khi không còn ai tham chiếu nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A table can be created only after every table it references: Member ← Branch ← Copy ← Reservation is a chain, so there is exactly one order.</p><p><i>VI: Một bảng chỉ tạo được sau mọi bảng nó tham chiếu: Member ← Branch ← Copy ← Reservation là một chuỗi nên chỉ có đúng một thứ tự.</i></p><p>Drop in reverse: a table can be dropped only when nothing references it any more.</p><p><i>VI: Xoá theo thứ tự ngược: chỉ xoá được bảng khi không còn ai tham chiếu nó.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>The only valid CREATE TABLE order</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự CREATE TABLE hợp lệ duy nhất</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "CREATE TABLE Copy"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "CREATE TABLE Member"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "CREATE TABLE Reservation"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "CREATE TABLE Branch"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m4",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>A table can be created only after every table it references: Member ← Branch ← Copy ← Reservation is a chain, so there is exactly one order.</p><p><i>VI: Một bảng chỉ tạo được sau mọi bảng nó tham chiếu: Member ← Branch ← Copy ← Reservation là một chuỗi nên chỉ có đúng một thứ tự.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>The only valid DROP TABLE order (no CASCADE)</p><p style=\"opacity:.75;font-size:.92em\"><i>Thứ tự DROP TABLE hợp lệ duy nhất (không CASCADE)</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "DROP TABLE Branch"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "DROP TABLE Copy"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "DROP TABLE Member"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "DROP TABLE Reservation"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>Drop in reverse: a table can be dropped only when nothing references it any more.</p><p><i>VI: Xoá theo thứ tự ngược: chỉ xoá được bảng khi không còn ai tham chiếu nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Creating Copy before Branch — \"Foreign key references invalid table\".|||Tạo Copy trước Branch — \"Foreign key references invalid table\"."
+        },
+        {
+          "loi": "Dropping Member first — it is still referenced by Branch.|||Xoá Member trước — Branch vẫn đang tham chiếu nó."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Reverse engineering: read the ERD back from the tables",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "reverse engineering"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd"
+      ],
+      "problemHtml": "<p>The seven rules read backwards (lesson 3.4, ★ Beyond the syllabus).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảy quy tắc đọc ngược (bài 3.4, ★ Ngoài giáo trình).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Look at the primary key: which of its columns are foreign keys?|||Nhìn khoá chính: những cột nào là khoá ngoại?",
+        "Nullable vs NOT NULL FK tells you the participation.|||Khoá ngoại NULL hay NOT NULL cho biết mức tham gia."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reverse engineering: read the ERD back from the tables\n\nAnswer in the answer panel (no code needed).\n\n1. Enrollment(studentID PK FK, courseID PK FK, grade). In the ERD this table is…Enrollment(studentID PK FK, courseID PK FK, grade). Trong ERD bảng này là…\n2. Manager(empID PK, FK → Employee, bonus). This table is…Manager(empID PK, FK → Employee, bonus). Bảng này là…\n3. Order.customerID is a nullable foreign key. In the ERD…Order.customerID là khoá ngoại cho phép NULL. Trong ERD…\n4. Room(hotelID PK FK, roomNo PK, price). This table is…Room(hotelID PK FK, roomNo PK, price). Bảng này là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Reverse engineering: read the ERD back from the tables — answer key\n\n1. Enrollment(studentID PK FK, courseID PK FK, grade). In the ERD this table is…Enrollment(studentID PK FK, courseID PK FK, grade). Trong ERD bảng này là…\n   Answer: a) an M:N relationship with attribute grade\n   A primary key made entirely of two foreign keys = M:N relationship.VI: Khoá chính chỉ gồm hai khoá ngoại = liên kết M:N.\n\n2. Manager(empID PK, FK → Employee, bonus). This table is…Manager(empID PK, FK → Employee, bonus). Bảng này là…\n   Answer: b) a subclass (or 1:1 extension) of Employee\n   Primary key that is also a foreign key = subclass / 1:1.VI: Khoá chính đồng thời là khoá ngoại = lớp con / 1:1.\n\n3. Order.customerID is a nullable foreign key. In the ERD…Order.customerID là khoá ngoại cho phép NULL. Trong ERD…\n   Answer: c) Order participates partially in a N:1 relationship with Customer\n   A nullable FK = partial participation; NOT NULL = total.VI: Khoá ngoại cho phép NULL = tham gia một phần; NOT NULL = toàn phần.\n\n4. Room(hotelID PK FK, roomNo PK, price). This table is…Room(hotelID PK FK, roomNo PK, price). Bảng này là…\n   Answer: c) a weak entity owned by Hotel\n   Key = owner's key + a non-FK column ⇒ weak entity with partial key roomNo.VI: Khoá = khoá chủ + một cột không phải khoá ngoại ⇒ thực thể yếu với khoá bộ phận roomNo.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> an M:N relationship with attribute grade</p><p>A primary key made entirely of two foreign keys = M:N relationship.</p><p><i>VI: Khoá chính chỉ gồm hai khoá ngoại = liên kết M:N.</i></p></li><li><p><b>b)</b> a subclass (or 1:1 extension) of Employee</p><p>Primary key that is also a foreign key = subclass / 1:1.</p><p><i>VI: Khoá chính đồng thời là khoá ngoại = lớp con / 1:1.</i></p></li><li><p><b>c)</b> Order participates partially in a N:1 relationship with Customer</p><p>A nullable FK = partial participation; NOT NULL = total.</p><p><i>VI: Khoá ngoại cho phép NULL = tham gia một phần; NOT NULL = toàn phần.</i></p></li><li><p><b>c)</b> a weak entity owned by Hotel</p><p>Key = owner's key + a non-FK column ⇒ weak entity with partial key roomNo.</p><p><i>VI: Khoá = khoá chủ + một cột không phải khoá ngoại ⇒ thực thể yếu với khoá bộ phận roomNo.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Enrollment(studentID PK FK, courseID PK FK, grade). In the ERD this table is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Enrollment(studentID PK FK, courseID PK FK, grade). Trong ERD bảng này là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an M:N relationship with attribute grade"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a weak entity of Student"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a 1:1 relationship"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a subclass of Course"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A primary key made entirely of two foreign keys = M:N relationship.</p><p><i>VI: Khoá chính chỉ gồm hai khoá ngoại = liên kết M:N.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Manager(empID PK, FK → Employee, bonus). This table is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Manager(empID PK, FK → Employee, bonus). Bảng này là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an M:N relationship"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a subclass (or 1:1 extension) of Employee"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a multivalued attribute"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a weak entity with partial key bonus"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Primary key that is also a foreign key = subclass / 1:1.</p><p><i>VI: Khoá chính đồng thời là khoá ngoại = lớp con / 1:1.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Order.customerID is a nullable foreign key. In the ERD…</p><p style=\"opacity:.75;font-size:.92em\"><i>Order.customerID là khoá ngoại cho phép NULL. Trong ERD…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Customer is a subclass of Order (ISA link)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Order is a weak entity owned by Customer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Order participates partially in a N:1 relationship with Customer"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is an M:N relationship between the two"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A nullable FK = partial participation; NOT NULL = total.</p><p><i>VI: Khoá ngoại cho phép NULL = tham gia một phần; NOT NULL = toàn phần.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Room(hotelID PK FK, roomNo PK, price). This table is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Room(hotelID PK FK, roomNo PK, price). Bảng này là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an M:N relationship"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a multivalued attribute of Hotel"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a weak entity owned by Hotel"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a strong entity with key roomNo"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Key = owner's key + a non-FK column ⇒ weak entity with partial key roomNo.</p><p><i>VI: Khoá = khoá chủ + một cột không phải khoá ngoại ⇒ thực thể yếu với khoá bộ phận roomNo.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling Room an M:N — only one of its key columns is a foreign key.|||Gọi Room là M:N — chỉ một cột khoá của nó là khoá ngoại."
+        },
+        {
+          "loi": "Calling Manager a weak entity — its whole key is the foreign key.|||Gọi Manager là thực thể yếu — toàn bộ khoá của nó là khoá ngoại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reverse engineering",
+          "vi": "đọc ngược thiết kế"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,523 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi5-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi5-1"
+  },
+  "exercises": [
+    {
+      "title": "Read the E/R diagram of the movie database",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "entity set",
+        "attribute",
+        "relationship",
+        "multiplicity"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 5–12 draw Movies(title, year, length, genre), Stars(name, address), Studios(name, address) with the relationships <b>Stars-in</b> (Movies–Stars) and <b>Owns</b> (Movies → Studios, arrow to Studios). Classify each piece.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 5–12 vẽ Movies(title, year, length, genre), Stars(name, address), Studios(name, address) với các liên kết <b>Stars-in</b> (Movies–Stars) và <b>Owns</b> (Movies → Studios, mũi tên chỉ về Studios). Phân loại từng phần.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Rectangle = entity set, oval = attribute, diamond = relationship.|||Chữ nhật = tập thực thể, oval = thuộc tính, hình thoi = liên kết.",
+        "An arrow points to the \"one\" side.|||Mũi tên chỉ về phía \"một\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the E/R diagram of the movie database\n\nAnswer in the answer panel (no code needed).\n\n1. Pieces of the diagramCác thành phần của sơ đồ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the E/R diagram of the movie database — answer key\n\n1. Pieces of the diagramCác thành phần của sơ đồ\n   - r1.loai: entity set (rectangle)\n   - r1.bs: —\n   - r2.loai: attribute (oval)\n   - r2.bs: —\n   - r3.loai: relationship (diamond)\n   - r3.bs: many-many\n   - r4.loai: relationship (diamond)\n   - r4.bs: many-one\n   - r5.loai: entity set (rectangle)\n   - r5.bs: —\n   A movie has many stars and a star plays in many movies: many-many (no arrows). The arrow of Owns points to Studios: each movie is owned by at most one studio — many-one.VI: Một phim có nhiều diễn viên, một diễn viên đóng nhiều phim: nhiều-nhiều (không mũi tên). Mũi tên của Owns chỉ về Studios: mỗi phim thuộc tối đa một hãng — nhiều-một.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A movie has many stars and a star plays in many movies: many-many (no arrows). The arrow of Owns points to Studios: each movie is owned by at most one studio — many-one.</p><p><i>VI: Một phim có nhiều diễn viên, một diễn viên đóng nhiều phim: nhiều-nhiều (không mũi tên). Mũi tên của Owns chỉ về Studios: mỗi phim thuộc tối đa một hãng — nhiều-một.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Pieces of the diagram</p><p style=\"opacity:.75;font-size:.92em\"><i>Các thành phần của sơ đồ</i></p>",
+            "cot": [
+              {
+                "ma": "pt",
+                "ten": "Piece / Thành phần"
+              },
+              {
+                "ma": "loai",
+                "ten": "Kind / Loại",
+                "luaChon": [
+                  "entity set (rectangle)",
+                  "attribute (oval)",
+                  "relationship (diamond)"
+                ]
+              },
+              {
+                "ma": "bs",
+                "ten": "Multiplicity (if a relationship) / Bản số",
+                "luaChon": [
+                  "—",
+                  "many-many",
+                  "many-one",
+                  "one-one"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "pt": "Movies"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "pt": "genre"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "pt": "Stars-in"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "pt": "Owns"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "pt": "Studios"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.loai": "entity set (rectangle)",
+              "r1.bs": "—",
+              "r2.loai": "attribute (oval)",
+              "r2.bs": "—",
+              "r3.loai": "relationship (diamond)",
+              "r3.bs": "many-many",
+              "r4.loai": "relationship (diamond)",
+              "r4.bs": "many-one",
+              "r5.loai": "entity set (rectangle)",
+              "r5.bs": "—"
+            },
+            "giaiThich": "<p>A movie has many stars and a star plays in many movies: many-many (no arrows). The arrow of Owns points to Studios: each movie is owned by at most one studio — many-one.</p><p><i>VI: Một phim có nhiều diễn viên, một diễn viên đóng nhiều phim: nhiều-nhiều (không mũi tên). Mũi tên của Owns chỉ về Studios: mỗi phim thuộc tối đa một hãng — nhiều-một.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading the arrow backwards (\"one movie owns many studios\").|||Đọc mũi tên ngược (\"một phim sở hữu nhiều hãng\")."
+        },
+        {
+          "loi": "Calling genre an entity set — it is just a value of a movie.|||Gọi genre là tập thực thể — nó chỉ là một giá trị của phim."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entity set",
+          "vi": "tập thực thể"
+        },
+        {
+          "en": "relationship",
+          "vi": "liên kết"
+        },
+        {
+          "en": "multiplicity",
+          "vi": "bản số"
+        }
+      ]
+    },
+    {
+      "title": "Multiplicity, roles, weak entity sets",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "many-one",
+        "roles",
+        "weak entity set",
+        "supporting relationship"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "slide"
+      ],
+      "problemHtml": "<p>Five questions on slides 9–18.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu về slide 9–18.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Arrow = \"at most one\"; rounded arrow = \"exactly one\".|||Mũi tên = \"tối đa một\"; mũi tên tròn = \"đúng một\".",
+        "Weak = identified only together with its owner's key.|||Yếu = chỉ xác định được khi kèm khoá của chủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiplicity, roles, weak entity sets\n\nAnswer in the answer panel (no code needed).\n\n1. Each studio has exactly one president and a person presides over at most one studio. Runs (Studios–Presidents) is…Mỗi hãng có đúng một chủ tịch và một người làm chủ tịch tối đa một hãng. Runs (Studios–Presidents) là…\n2. Sequel-of links Movies to Movies (original, sequel). What are \"original\" and \"sequel\"?Sequel-of nối Movies với Movies (bản gốc, phần tiếp). \"original\" và \"sequel\" là gì?\n3. Crews(number, crewChief) of a studio: crew 1 of Disney and crew 1 of Fox are different crews. Crews is…Crews(number, crewChief) của một hãng: đội 1 của Disney và đội 1 của Fox là hai đội khác nhau. Crews là…\n4. How is a weak entity set drawn?Tập thực thể yếu được vẽ thế nào?\n5. Contracts(star, movie, studio of the star, producing studio) needs Studios twice. Why not split it into binary relationships?Contracts(diễn viên, phim, hãng của diễn viên, hãng sản xuất) cần Studios hai lần. Sao không tách thành các liên kết hai ngôi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Multiplicity, roles, weak entity sets — answer key\n\n1. Each studio has exactly one president and a person presides over at most one studio. Runs (Studios–Presidents) is…Mỗi hãng có đúng một chủ tịch và một người làm chủ tịch tối đa một hãng. Runs (Studios–Presidents) là…\n   Answer: a) one-one (arrows to both sides)\n   At most one in each direction ⇒ one-one, arrows on both ends. \"Exactly one\" adds a rounded arrow (referential integrity).VI: Tối đa một theo cả hai chiều ⇒ một-một, mũi tên hai đầu. \"Đúng một\" thêm mũi tên tròn (toàn vẹn tham chiếu).\n\n2. Sequel-of links Movies to Movies (original, sequel). What are \"original\" and \"sequel\"?Sequel-of nối Movies với Movies (bản gốc, phần tiếp). \"original\" và \"sequel\" là gì?\n   Answer: d) roles — the same entity set appears twice in one relationship\n   A recursive relationship needs role names on its two edges.VI: Liên kết đệ quy cần tên vai trò trên hai cạnh.\n\n3. Crews(number, crewChief) of a studio: crew 1 of Disney and crew 1 of Fox are different crews. Crews is…Crews(number, crewChief) của một hãng: đội 1 của Disney và đội 1 của Fox là hai đội khác nhau. Crews là…\n   Answer: a) a weak entity set, identified by (studio name, number)\n   number is unique only inside its studio (partial key); the key borrows the studio's key through the supporting relationship Unit-of.VI: number chỉ duy nhất trong hãng (khoá bộ phận); khoá mượn khoá của hãng qua liên kết hỗ trợ Unit-of.\n\n4. How is a weak entity set drawn?Tập thực thể yếu được vẽ thế nào?\n   Answer: c) double rectangle, and a double diamond for its supporting relationship\n   Double rectangle + double diamond (supporting relationship), partial key underlined.VI: Hình chữ nhật đôi + hình thoi đôi (liên kết hỗ trợ), khoá bộ phận gạch chân.\n\n5. Contracts(star, movie, studio of the star, producing studio) needs Studios twice. Why not split it into binary relationships?Contracts(diễn viên, phim, hãng của diễn viên, hãng sản xuất) cần Studios hai lần. Sao không tách thành các liên kết hai ngôi?\n   Answer: d) Binary pieces cannot say which studio pair goes with which star-movie pair\n   A multiway relationship records combinations; splitting it loses which combination was real (unless a dependency allows it).VI: Liên kết nhiều ngôi ghi lại tổ hợp; tách ra là mất thông tin tổ hợp nào là thật (trừ khi có phụ thuộc cho phép).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> one-one (arrows to both sides)</p><p>At most one in each direction ⇒ one-one, arrows on both ends. \"Exactly one\" adds a rounded arrow (referential integrity).</p><p><i>VI: Tối đa một theo cả hai chiều ⇒ một-một, mũi tên hai đầu. \"Đúng một\" thêm mũi tên tròn (toàn vẹn tham chiếu).</i></p></li><li><p><b>d)</b> roles — the same entity set appears twice in one relationship</p><p>A recursive relationship needs role names on its two edges.</p><p><i>VI: Liên kết đệ quy cần tên vai trò trên hai cạnh.</i></p></li><li><p><b>a)</b> a weak entity set, identified by (studio name, number)</p><p>number is unique only inside its studio (partial key); the key borrows the studio's key through the supporting relationship Unit-of.</p><p><i>VI: number chỉ duy nhất trong hãng (khoá bộ phận); khoá mượn khoá của hãng qua liên kết hỗ trợ Unit-of.</i></p></li><li><p><b>c)</b> double rectangle, and a double diamond for its supporting relationship</p><p>Double rectangle + double diamond (supporting relationship), partial key underlined.</p><p><i>VI: Hình chữ nhật đôi + hình thoi đôi (liên kết hỗ trợ), khoá bộ phận gạch chân.</i></p></li><li><p><b>d)</b> Binary pieces cannot say which studio pair goes with which star-movie pair</p><p>A multiway relationship records combinations; splitting it loses which combination was real (unless a dependency allows it).</p><p><i>VI: Liên kết nhiều ngôi ghi lại tổ hợp; tách ra là mất thông tin tổ hợp nào là thật (trừ khi có phụ thuộc cho phép).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Each studio has exactly one president and a person presides over at most one studio. Runs (Studios–Presidents) is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mỗi hãng có đúng một chủ tịch và một người làm chủ tịch tối đa một hãng. Runs (Studios–Presidents) là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one-one (arrows to both sides)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a weak relationship"
+              },
+              {
+                "ma": "c",
+                "noiDung": "many-one towards Studios"
+              },
+              {
+                "ma": "d",
+                "noiDung": "many-many"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>At most one in each direction ⇒ one-one, arrows on both ends. \"Exactly one\" adds a rounded arrow (referential integrity).</p><p><i>VI: Tối đa một theo cả hai chiều ⇒ một-một, mũi tên hai đầu. \"Đúng một\" thêm mũi tên tròn (toàn vẹn tham chiếu).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Sequel-of links Movies to Movies (original, sequel). What are \"original\" and \"sequel\"?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sequel-of nối Movies với Movies (bản gốc, phần tiếp). \"original\" và \"sequel\" là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "two different entity sets that look alike"
+              },
+              {
+                "ma": "b",
+                "noiDung": "two attributes of Movies holding titles"
+              },
+              {
+                "ma": "c",
+                "noiDung": "two weak entity sets owned by Movies"
+              },
+              {
+                "ma": "d",
+                "noiDung": "roles — the same entity set appears twice in one relationship"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A recursive relationship needs role names on its two edges.</p><p><i>VI: Liên kết đệ quy cần tên vai trò trên hai cạnh.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Crews(number, crewChief) of a studio: crew 1 of Disney and crew 1 of Fox are different crews. Crews is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Crews(number, crewChief) của một hãng: đội 1 của Disney và đội 1 của Fox là hai đội khác nhau. Crews là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a weak entity set, identified by (studio name, number)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a relationship between Studios and numbers"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a strong entity set with key number"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an attribute of Studios"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>number is unique only inside its studio (partial key); the key borrows the studio's key through the supporting relationship Unit-of.</p><p><i>VI: number chỉ duy nhất trong hãng (khoá bộ phận); khoá mượn khoá của hãng qua liên kết hỗ trợ Unit-of.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How is a weak entity set drawn?</p><p style=\"opacity:.75;font-size:.92em\"><i>Tập thực thể yếu được vẽ thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "dashed rectangle with dashed attributes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a rectangle inside a diamond"
+              },
+              {
+                "ma": "c",
+                "noiDung": "double rectangle, and a double diamond for its supporting relationship"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an oval with two keys underlined"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Double rectangle + double diamond (supporting relationship), partial key underlined.</p><p><i>VI: Hình chữ nhật đôi + hình thoi đôi (liên kết hỗ trợ), khoá bộ phận gạch chân.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>Contracts(star, movie, studio of the star, producing studio) needs Studios twice. Why not split it into binary relationships?</p><p style=\"opacity:.75;font-size:.92em\"><i>Contracts(diễn viên, phim, hãng của diễn viên, hãng sản xuất) cần Studios hai lần. Sao không tách thành các liên kết hai ngôi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "E/R diagrams forbid binary relationships between more than two sets"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Weak entity sets can never take part in a binary relationship"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Splitting would need fewer tables, which E/R does not allow"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Binary pieces cannot say which studio pair goes with which star-movie pair"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A multiway relationship records combinations; splitting it loses which combination was real (unless a dependency allows it).</p><p><i>VI: Liên kết nhiều ngôi ghi lại tổ hợp; tách ra là mất thông tin tổ hợp nào là thật (trừ khi có phụ thuộc cho phép).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Treating every ID-less entity as weak — weak means the key needs the owner.|||Coi mọi thực thể không có ID là yếu — yếu là khoá cần khoá của chủ."
+        },
+        {
+          "loi": "Drawing a recursive relationship without role names.|||Vẽ liên kết đệ quy mà không ghi tên vai trò."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "weak entity set",
+          "vi": "tập thực thể yếu"
+        },
+        {
+          "en": "role",
+          "vi": "vai trò"
+        }
+      ]
+    },
+    {
+      "title": "Owns: a many-one relationship becomes a foreign key",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "many-one",
+        "foreign key",
+        "composite key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "slide"
+      ],
+      "problemHtml": "<p>Turn this part of the diagram into tables: <code>Studios(name, address)</code>, <code>Movies(title, year, length)</code>, and the many-one relationship <b>Owns</b> (each movie owned by at most one studio). Use exactly these names: <code>Studios(name VARCHAR(30) PK, address VARCHAR(60))</code>, <code>Movies(title VARCHAR(60), year INT, length INT, studioName VARCHAR(30))</code> with key (title, year).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Two tables, Studios first. Owns gets NO table of its own: it is the column studioName on the many side.</li>\n  <li>studioName is a foreign key to Studios(name) and may be NULL (a movie may not be owned).</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuyển phần sơ đồ này thành bảng: <code>Studios(name, address)</code>, <code>Movies(title, year, length)</code> và liên kết nhiều-một <b>Owns</b> (mỗi phim thuộc tối đa một hãng). Dùng đúng tên: <code>Studios(name VARCHAR(30) PK, address VARCHAR(60))</code>, <code>Movies(title VARCHAR(60), year INT, length INT, studioName VARCHAR(30))</code> với khoá (title, year).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai bảng, Studios trước. Owns KHÔNG có bảng riêng: nó là cột studioName ở phía nhiều.</li>\n  <li>studioName là khoá ngoại tới Studios(name) và được NULL (phim có thể không thuộc hãng nào).</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl     | col        | type             \n--------+------------+------------------\nstudios | name       | character varying\nstudios | address    | character varying\nmovies  | title      | character varying\nmovies  | year       | integer          \nmovies  | length     | integer          \nmovies  | studioname | character varying",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Rule R3: a many-one relationship = a foreign key on the \"many\" side.|||Luật R3: liên kết nhiều-một = khoá ngoại ở phía \"nhiều\".",
+        "studioName VARCHAR(30) NULL REFERENCES Studios (name)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Studios (\n    name    VARCHAR(30) NOT NULL PRIMARY KEY,\n    address VARCHAR(60) NULL\n);\nCREATE TABLE Movies (\n    title      VARCHAR(60) NOT NULL,\n    year       INT         NOT NULL,\n    length     INT         NULL,\n    studioName VARCHAR(30) NULL REFERENCES Studios (name),   -- Owns: many movies → one studio\n    PRIMARY KEY (title, year)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A relationship with an arrow merges into the entity at its tail. Studios must be created first so the foreign key has something to reference.</p>",
+      "solutionExplanationHtmlVi": "<p>Liên kết có mũi tên được gộp vào thực thể ở đuôi mũi tên. Studios phải tạo trước để khoá ngoại có chỗ tham chiếu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('studios', 'movies')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "studios",
+                  "name",
+                  "character varying"
+                ],
+                [
+                  "studios",
+                  "address",
+                  "character varying"
+                ],
+                [
+                  "movies",
+                  "title",
+                  "character varying"
+                ],
+                [
+                  "movies",
+                  "year",
+                  "integer"
+                ],
+                [
+                  "movies",
+                  "length",
+                  "integer"
+                ],
+                [
+                  "movies",
+                  "studioname",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A studio with two movies|||Một hãng có hai phim",
+            "thu": "INSERT INTO Studios (name) VALUES ('Disney'); INSERT INTO Movies (title, year, length, studioName) VALUES ('E.T.', 1982, 115, 'Disney'), ('Jaws', 1975, 124, 'Disney')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A movie of an unknown studio is rejected|||Phim của hãng không tồn tại bị từ chối",
+            "thu": "INSERT INTO Movies (title, year, length, studioName) VALUES ('Alien', 1979, 117, 'Fox')",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same (title, year) twice is rejected|||Cùng (title, year) hai lần bị từ chối",
+            "thu": "INSERT INTO Movies (title, year) VALUES ('Jaws', 1975), ('Jaws', 1975)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A movie without a studio is allowed|||Phim không thuộc hãng nào được phép",
+            "thu": "INSERT INTO Movies (title, year) VALUES ('Indie', 2001)"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting REFERENCES — a movie can point to a studio that does not exist.|||Quên REFERENCES — phim trỏ được tới hãng không tồn tại."
+        },
+        {
+          "loi": "Creating a table Owns(title, year, studioName) — it adds a join and lets a movie have two studios, which the arrow forbids.|||Tạo bảng Owns(title, year, studioName) — thêm một phép nối và cho phép một phim có hai hãng, điều mũi tên cấm."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        }
+      ]
+    }
+  ]
+}

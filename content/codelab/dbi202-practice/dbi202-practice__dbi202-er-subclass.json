@@ -1,0 +1,433 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-er-subclass",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-er-subclass"
+  },
+  "exercises": [
+    {
+      "title": "Strategy 1 (ER way): Person, Student, Lecturer",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "ISA",
+        "subclass table",
+        "PK = FK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "subclass"
+      ],
+      "problemHtml": "<p><code>Person(personID INT PK, fullName VARCHAR(50) NOT NULL, email VARCHAR(80))</code> has two subclasses: <code>Student(personID, gpa DECIMAL(3,2))</code> and <code>Lecturer(personID, salary DECIMAL(12,0))</code>. One table per class; a subclass row holds only the key and its own attribute.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>In Student and Lecturer, personID is the PRIMARY KEY and a FOREIGN KEY to Person (ON DELETE CASCADE).</li>\n  <li>gpa between 0 and 4; salary &gt; 0.</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p><code>Person(personID INT PK, fullName VARCHAR(50) NOT NULL, email VARCHAR(80))</code> có hai lớp con: <code>Student(personID, gpa DECIMAL(3,2))</code> và <code>Lecturer(personID, salary DECIMAL(12,0))</code>. Mỗi lớp một bảng; dòng lớp con chỉ chứa khoá và thuộc tính riêng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trong Student và Lecturer, personID là PRIMARY KEY và FOREIGN KEY tới Person (ON DELETE CASCADE).</li>\n  <li>gpa từ 0 tới 4; salary &gt; 0.</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl      | col      | type             \n---------+----------+------------------\nperson   | personid | integer          \nperson   | fullname | character varying\nperson   | email    | character varying\nstudent  | personid | integer          \nstudent  | gpa      | numeric          \nlecturer | personid | integer          \nlecturer | salary   | numeric          ",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Subclass table = (superclass key, own attributes); the key references the superclass.|||Bảng lớp con = (khoá lớp cha, thuộc tính riêng); khoá tham chiếu lớp cha.",
+        "personID INT NOT NULL PRIMARY KEY REFERENCES Person (personID) ON DELETE CASCADE"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Person (\n    personID INT         NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    email    VARCHAR(80) NULL\n);\nCREATE TABLE Student (\n    personID INT          NOT NULL PRIMARY KEY REFERENCES Person (personID) ON DELETE CASCADE,\n    gpa      DECIMAL(3,2) NULL CHECK (gpa BETWEEN 0 AND 4)\n);\nCREATE TABLE Lecturer (\n    personID INT           NOT NULL PRIMARY KEY REFERENCES Person (personID) ON DELETE CASCADE,\n    salary   DECIMAL(12,0) NULL CHECK (salary > 0)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reading a student's full data needs a join Person ⋈ Student — the price of no NULLs and no redundancy.</p>",
+      "solutionExplanationHtmlVi": "<p>Đọc đủ thông tin một sinh viên cần phép nối Person ⋈ Student — cái giá cho việc không NULL và không dư thừa.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('person', 'student', 'lecturer')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "person",
+                  "personid",
+                  "integer"
+                ],
+                [
+                  "person",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "person",
+                  "email",
+                  "character varying"
+                ],
+                [
+                  "student",
+                  "personid",
+                  "integer"
+                ],
+                [
+                  "student",
+                  "gpa",
+                  "numeric"
+                ],
+                [
+                  "lecturer",
+                  "personid",
+                  "integer"
+                ],
+                [
+                  "lecturer",
+                  "salary",
+                  "numeric"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A teaching assistant is both a student and a lecturer|||Trợ giảng vừa là sinh viên vừa là giảng viên",
+            "thu": "INSERT INTO Person VALUES (1, 'An', NULL); INSERT INTO Student VALUES (1, 3.50); INSERT INTO Lecturer VALUES (1, 8000000)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A student who is not a person is rejected|||Sinh viên không có trong Person bị từ chối",
+            "thu": "INSERT INTO Student VALUES (9, 3.0)",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "gpa 5 is rejected|||gpa 5 bị từ chối",
+            "thu": "INSERT INTO Person VALUES (1, 'An', NULL); INSERT INTO Student VALUES (1, 5.0)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Deleting the person deletes the subclass rows|||Xoá người thì xoá luôn dòng lớp con",
+            "kiemTra": "INSERT INTO Person VALUES (1, 'An', NULL), (2, 'Binh', NULL); INSERT INTO Student VALUES (1, 3.0), (2, 2.5); INSERT INTO Lecturer VALUES (1, 100); DELETE FROM Person WHERE personID = 1; SELECT (SELECT COUNT(*) FROM Student) AS students, (SELECT COUNT(*) FROM Lecturer) AS lecturers",
+            "mongDoi": {
+              "cot": [
+                "students",
+                "lecturers"
+              ],
+              "hang": [
+                [
+                  1,
+                  0
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No REFERENCES — a \"student\" can exist with no person row.|||Không REFERENCES — có \"sinh viên\" mà không có dòng Person."
+        },
+        {
+          "loi": "Copying fullName into the subclass tables — redundant and can disagree.|||Chép fullName vào bảng lớp con — dư thừa và có thể lệch nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ISA / subclass",
+          "vi": "lớp con"
+        }
+      ]
+    },
+    {
+      "title": "Strategy 3 (one wide table) with a type column",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "single-table inheritance",
+        "discriminator",
+        "table-level CHECK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "subclass",
+        "check"
+      ],
+      "problemHtml": "<p>Store full-time and part-time staff in ONE table: <code>Staff(staffID INT PK, fullName VARCHAR(50) NOT NULL, staffType CHAR(1) NOT NULL, monthlySalary DECIMAL(12,0), hourlyRate DECIMAL(10,0))</code>. <code>staffType</code> is 'F' or 'P'. A full-time row must have a monthly salary and no hourly rate; a part-time row the opposite.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>CHECK (staffType IN ('F', 'P')).</li>\n  <li>A table-level CHECK tying the type to which salary column is filled.</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lưu nhân viên toàn thời gian và bán thời gian trong MỘT bảng: <code>Staff(staffID INT PK, fullName VARCHAR(50) NOT NULL, staffType CHAR(1) NOT NULL, monthlySalary DECIMAL(12,0), hourlyRate DECIMAL(10,0))</code>. <code>staffType</code> là 'F' hoặc 'P'. Dòng toàn thời gian phải có lương tháng và không có lương giờ; bán thời gian thì ngược lại.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>CHECK (staffType IN ('F', 'P')).</li>\n  <li>Một CHECK cấp bảng ràng loại nhân viên với cột lương nào được điền.</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl   | col           | type             \n------+---------------+------------------\nstaff | staffid       | integer          \nstaff | fullname      | character varying\nstaff | stafftype     | character        \nstaff | monthlysalary | numeric          \nstaff | hourlyrate    | numeric          ",
+          "explanation": "Expected result of check \"Columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Các cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The discriminator column says which subclass a row belongs to.|||Cột phân loại cho biết dòng thuộc lớp con nào.",
+        "One CHECK with two branches joined by OR: (F AND salary AND no rate) OR (P AND rate AND no salary).|||Một CHECK hai nhánh nối bằng OR: (F VÀ có lương tháng VÀ không lương giờ) OR (P VÀ có lương giờ VÀ không lương tháng)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Staff (\n    staffID       INT           NOT NULL PRIMARY KEY,\n    fullName      VARCHAR(50)   NOT NULL,\n    staffType     CHAR(1)       NOT NULL CHECK (staffType IN ('F', 'P')),   -- discriminator\n    monthlySalary DECIMAL(12,0) NULL,\n    hourlyRate    DECIMAL(10,0) NULL,\n    CONSTRAINT ck_staff_kind CHECK (\n        (staffType = 'F' AND monthlySalary IS NOT NULL AND hourlyRate IS NULL) OR\n        (staffType = 'P' AND hourlyRate IS NOT NULL AND monthlySalary IS NULL))\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The wide table avoids joins but pays with NULLs and with rules that the database cannot see unless you write them as CHECKs — this is the trade-off of lesson 3.3.</p>",
+      "solutionExplanationHtmlVi": "<p>Bảng rộng tránh được phép nối nhưng trả giá bằng NULL và bằng những luật CSDL không tự thấy nếu bạn không viết thành CHECK — đó là đánh đổi của bài 3.3.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Columns|||Các cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('staff')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "staff",
+                  "staffid",
+                  "integer"
+                ],
+                [
+                  "staff",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "staff",
+                  "stafftype",
+                  "character"
+                ],
+                [
+                  "staff",
+                  "monthlysalary",
+                  "numeric"
+                ],
+                [
+                  "staff",
+                  "hourlyrate",
+                  "numeric"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "One full-time and one part-time row|||Một dòng toàn thời gian, một dòng bán thời gian",
+            "thu": "INSERT INTO Staff VALUES (1, 'An', 'F', 15000000, NULL), (2, 'Binh', 'P', NULL, 50000)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Type X is rejected|||Loại X bị từ chối",
+            "thu": "INSERT INTO Staff VALUES (3, 'Chi', 'X', 1, NULL)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Full-time without a monthly salary is rejected|||Toàn thời gian thiếu lương tháng bị từ chối",
+            "thu": "INSERT INTO Staff VALUES (4, 'Dung', 'F', NULL, NULL)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Part-time with BOTH salaries is rejected|||Bán thời gian có CẢ HAI loại lương bị từ chối",
+            "thu": "INSERT INTO Staff VALUES (5, 'Em', 'P', 9000000, 50000)",
+            "maLoi": "23514"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only CHECK (staffType IN …) — a full-time employee without a salary slips in.|||Chỉ CHECK (staffType IN …) — nhân viên toàn thời gian không lương vẫn lọt."
+        },
+        {
+          "loi": "Forgetting \"and the other column IS NULL\" — a part-time row with both salaries passes.|||Quên \"và cột kia IS NULL\" — dòng bán thời gian có cả hai loại lương vẫn qua."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "discriminator column",
+          "vi": "cột phân loại"
+        }
+      ]
+    },
+    {
+      "title": "Which strategy would you defend?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "strategy trade-offs"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "subclass"
+      ],
+      "problemHtml": "<p>The comparison table you must be able to argue (lesson 3.3). For each property, which strategy wins?</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bảng so sánh bạn phải biện luận được (bài 3.3). Với mỗi tiêu chí, chiến lược nào thắng?</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask: where do the common attributes live in each strategy?|||Hỏi: thuộc tính chung nằm ở đâu trong từng chiến lược?",
+        "NULLs appear when a row has columns that do not apply to it.|||NULL xuất hiện khi một dòng có cột không áp dụng cho nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which strategy would you defend?\n\nAnswer in the answer panel (no code needed).\n\n1. Property → best strategyTiêu chí → chiến lược tốt nhất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which strategy would you defend? — answer key\n\n1. Property → best strategyTiêu chí → chiến lược tốt nhất\n   - r1.cl: OO (table per concrete class)\n   - r2.cl: single wide table\n   - r3.cl: ER (table per class)\n   - r4.cl: ER (table per class)\n   OO has no NULLs at all (each table has exactly the attributes its objects have). The wide table needs no join. ER keeps all common data in the superclass table, so \"all people\" is one SELECT and a new subclass is just one new table.VI: OO không có NULL nào (mỗi bảng đúng các thuộc tính đối tượng của nó có). Bảng rộng không cần nối. ER giữ dữ liệu chung ở bảng lớp cha nên \"mọi người\" là một SELECT và thêm lớp con chỉ là thêm một bảng.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>OO has no NULLs at all (each table has exactly the attributes its objects have). The wide table needs no join. ER keeps all common data in the superclass table, so \"all people\" is one SELECT and a new subclass is just one new table.</p><p><i>VI: OO không có NULL nào (mỗi bảng đúng các thuộc tính đối tượng của nó có). Bảng rộng không cần nối. ER giữ dữ liệu chung ở bảng lớp cha nên \"mọi người\" là một SELECT và thêm lớp con chỉ là thêm một bảng.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Property → best strategy</p><p style=\"opacity:.75;font-size:.92em\"><i>Tiêu chí → chiến lược tốt nhất</i></p>",
+            "cot": [
+              {
+                "ma": "tc",
+                "ten": "Property / Tiêu chí"
+              },
+              {
+                "ma": "cl",
+                "ten": "Best / Tốt nhất",
+                "luaChon": [
+                  "ER (table per class)",
+                  "OO (table per concrete class)",
+                  "single wide table"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "tc": "Fewest NULL values"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "tc": "No join needed to read one person with all attributes"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "tc": "Easiest to query \"all people\" without UNION, while keeping subclass attributes out of the superclass table"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "tc": "Adding a new subclass without touching existing tables"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.cl": "OO (table per concrete class)",
+              "r2.cl": "single wide table",
+              "r3.cl": "ER (table per class)",
+              "r4.cl": "ER (table per class)"
+            },
+            "giaiThich": "<p>OO has no NULLs at all (each table has exactly the attributes its objects have). The wide table needs no join. ER keeps all common data in the superclass table, so \"all people\" is one SELECT and a new subclass is just one new table.</p><p><i>VI: OO không có NULL nào (mỗi bảng đúng các thuộc tính đối tượng của nó có). Bảng rộng không cần nối. ER giữ dữ liệu chung ở bảng lớp cha nên \"mọi người\" là một SELECT và thêm lớp con chỉ là thêm một bảng.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the wide table has the fewest NULLs — it has the most.|||Tưởng bảng rộng ít NULL nhất — nó nhiều NULL nhất."
+        },
+        {
+          "loi": "Claiming OO makes \"all people\" easy — it needs a UNION over every table.|||Cho rằng OO làm \"mọi người\" dễ — nó cần UNION qua mọi bảng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "single-table inheritance",
+          "vi": "kế thừa một bảng"
+        }
+      ]
+    }
+  ]
+}

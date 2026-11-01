@@ -1,0 +1,485 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-phan-ra",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-phan-ra"
+  },
+  "exercises": [
+    {
+      "title": "Find the spurious tuples of a lossy decomposition",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "lossy join",
+        "spurious tuples",
+        "EXCEPT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "decomposition",
+        "except"
+      ],
+      "problemHtml": "<p>Join SP and PC back on <code>part</code>. Return the tuples that the join produces but that were <b>not</b> in Supply — the spurious tuples that prove the decomposition is lossy.</p>\n<p><b>Tables</b> (tab <code>Lossy.sql</code>): <code>Supply(supplier, part, city)</code> with supplier → city, and a careless decomposition <code>SP(supplier, part)</code>, <code>PC(part, city)</code> — the common attribute <code>part</code> determines nothing.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>supplier, part, city</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nối SP và PC lại trên <code>part</code>. Trả các bộ mà phép nối sinh ra nhưng <b>không</b> có trong Supply — các bộ thừa chứng minh phân rã bị mất thông tin.</p>\n<p><b>Bảng</b> (tab <code>Lossy.sql</code>): <code>Supply(supplier, part, city)</code> với supplier → city, và một phân rã cẩu thả <code>SP(supplier, part)</code>, <code>PC(part, city)</code> — thuộc tính chung <code>part</code> không xác định được gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>supplier, part, city</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "supplier | part | city  \n---------+------+-------\nAcme     | bolt | Danang\nBravo    | bolt | Hanoi ",
+          "explanation": "Expected result of check \"Spurious tuples\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Các bộ thừa\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "First compute SP ⋈ PC, then subtract Supply.|||Tính SP ⋈ PC trước, rồi trừ Supply.",
+        "A lossy join never loses tuples — it ADDS wrong ones.|||Nối mất thông tin không làm mất bộ — nó THÊM bộ sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Lossy.sql",
+          "language": "sql",
+          "code": "-- Lossy.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Lossy.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Supply (                       -- the original relation\n  supplier NVARCHAR(20) NOT NULL,\n  part     NVARCHAR(20) NOT NULL,\n  city     NVARCHAR(20) NOT NULL,\n  CONSTRAINT pk_supply PRIMARY KEY (supplier, part)\n);\nINSERT INTO Supply VALUES\n (N'Acme', N'bolt', N'Hanoi'), (N'Acme', N'nut', N'Hanoi'),\n (N'Bravo', N'bolt', N'Danang'), (N'Cobra', N'screw', N'Hue');\n-- a careless decomposition on part (part does NOT determine anything)\nCREATE TABLE SP (supplier NVARCHAR(20) NOT NULL, part NVARCHAR(20) NOT NULL);\nCREATE TABLE PC (part NVARCHAR(20) NOT NULL, city NVARCHAR(20) NOT NULL);\nINSERT INTO SP SELECT supplier, part FROM Supply;\nINSERT INTO PC SELECT DISTINCT part, city FROM Supply;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT sp.supplier, sp.part, pc.city\nFROM SP sp JOIN PC pc ON pc.part = sp.part      -- SP ⋈ PC\nEXCEPT\nSELECT supplier, part, city FROM Supply;          -- minus the truth = spurious tuples\n"
+        },
+        {
+          "name": "Lossy.sql",
+          "language": "sql",
+          "code": "-- Lossy.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Lossy.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Supply (                       -- the original relation\n  supplier NVARCHAR(20) NOT NULL,\n  part     NVARCHAR(20) NOT NULL,\n  city     NVARCHAR(20) NOT NULL,\n  CONSTRAINT pk_supply PRIMARY KEY (supplier, part)\n);\nINSERT INTO Supply VALUES\n (N'Acme', N'bolt', N'Hanoi'), (N'Acme', N'nut', N'Hanoi'),\n (N'Bravo', N'bolt', N'Danang'), (N'Cobra', N'screw', N'Hue');\n-- a careless decomposition on part (part does NOT determine anything)\nCREATE TABLE SP (supplier NVARCHAR(20) NOT NULL, part NVARCHAR(20) NOT NULL);\nCREATE TABLE PC (part NVARCHAR(20) NOT NULL, city NVARCHAR(20) NOT NULL);\nINSERT INTO SP SELECT supplier, part FROM Supply;\nINSERT INTO PC SELECT DISTINCT part, city FROM Supply;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: (Acme, bolt, Danang) and (Bravo, bolt, Hanoi) — \"bolt\" links Acme with Bravo's city. The decomposition is lossless only if the common attribute determines one side; here part → city is false.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: (Acme, bolt, Danang) và (Bravo, bolt, Hanoi) — \"bolt\" nối nhầm Acme với thành phố của Bravo. Phân rã chỉ không mất khi thuộc tính chung xác định được một phía; ở đây part → city sai.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Supply (                       -- the original relation\n  supplier NVARCHAR(20) NOT NULL,\n  part     NVARCHAR(20) NOT NULL,\n  city     NVARCHAR(20) NOT NULL,\n  CONSTRAINT pk_supply PRIMARY KEY (supplier, part)\n);\nINSERT INTO Supply VALUES\n (N'Acme', N'bolt', N'Hanoi'), (N'Acme', N'nut', N'Hanoi'),\n (N'Bravo', N'bolt', N'Danang'), (N'Cobra', N'screw', N'Hue');\n-- a careless decomposition on part (part does NOT determine anything)\nCREATE TABLE SP (supplier NVARCHAR(20) NOT NULL, part NVARCHAR(20) NOT NULL);\nCREATE TABLE PC (part NVARCHAR(20) NOT NULL, city NVARCHAR(20) NOT NULL);\nINSERT INTO SP SELECT supplier, part FROM Supply;\nINSERT INTO PC SELECT DISTINCT part, city FROM Supply;\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Spurious tuples|||Các bộ thừa",
+            "mongDoi": {
+              "cot": [
+                "supplier",
+                "part",
+                "city"
+              ],
+              "hang": [
+                [
+                  "Acme",
+                  "bolt",
+                  "Danang"
+                ],
+                [
+                  "Bravo",
+                  "bolt",
+                  "Hanoi"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Another shared part|||Thêm một linh kiện dùng chung",
+            "an": true,
+            "themCsdl": "INSERT INTO Supply VALUES (N'Delta', N'nut', N'Cantho'); INSERT INTO SP VALUES (N'Delta', N'nut'); INSERT INTO PC VALUES (N'nut', N'Cantho')",
+            "mongDoi": {
+              "cot": [
+                "supplier",
+                "part",
+                "city"
+              ],
+              "hang": [
+                [
+                  "Acme",
+                  "bolt",
+                  "Danang"
+                ],
+                [
+                  "Bravo",
+                  "bolt",
+                  "Hanoi"
+                ],
+                [
+                  "Acme",
+                  "nut",
+                  "Cantho"
+                ],
+                [
+                  "Delta",
+                  "nut",
+                  "Hanoi"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses EXCEPT or NOT EXISTS|||Dùng EXCEPT hoặc NOT EXISTS",
+            "khop": "\\bEXCEPT\\b|\\bNOT\\s+EXISTS\\b|\\bNOT\\s+IN\\b|\\bIS\\s+NULL\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the whole join — the true tuples are in it too.|||Trả cả phép nối — bộ đúng cũng nằm trong đó."
+        },
+        {
+          "loi": "Subtracting in the wrong direction (Supply − join) — always empty.|||Trừ ngược chiều (Supply − phép nối) — luôn rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "spurious tuple",
+          "vi": "bộ thừa (giả)"
+        },
+        {
+          "en": "lossy decomposition",
+          "vi": "phân rã mất thông tin"
+        }
+      ]
+    },
+    {
+      "title": "Lossless? Preserving? Check five decompositions",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "lossless join test",
+        "dependency preservation test",
+        "chase"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "decomposition"
+      ],
+      "problemHtml": "<p>R(A, B, C, D), F = {A → B, B → C, CD → A}. For each decomposition answer yes/no (use the two-piece shortcut or the chase for three pieces).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R(A, B, C, D), F = {A → B, B → C, CD → A}. Với mỗi phân rã trả lời yes/no (dùng mẹo hai mảnh hoặc chase cho ba mảnh).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "R1 ∩ R2 → R1 or R1 ∩ R2 → R2 (in F⁺) ⇔ lossless for two pieces.|||R1 ∩ R2 → R1 hoặc R1 ∩ R2 → R2 (trong F⁺) ⇔ không mất với hai mảnh.",
+        "Preservation and losslessness are independent — answer them separately.|||Bảo toàn và không mất là độc lập — trả lời riêng từng cái."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lossless? Preserving? Check five decompositions\n\nAnswer in the answer panel (no code needed).\n\n1. Decomposition propertiesTính chất phân rã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lossless? Preserving? Check five decompositions — answer key\n\n1. Decomposition propertiesTính chất phân rã\n   - r1.ll: yes\n   - r1.bt: no\n   - r2.ll: no\n   - r2.bt: no\n   - r3.ll: yes\n   - r3.bt: no\n   - r4.ll: no\n   - r4.bt: no\n   - r5.ll: yes\n   - r5.bt: yes\n   Two pieces: lossless iff the common attributes determine one piece (AB ∩ ACD = A, A → B ✓; AB ∩ BCD = B, B → C but not B → A or B → D ✗). Three pieces need the chase. Preservation: can each FD be checked inside one piece or derived from the projections?VI: Hai mảnh: không mất khi và chỉ khi thuộc tính chung xác định một mảnh (AB ∩ ACD = A, A → B ✓; AB ∩ BCD = B, B → C nhưng không có B → A hay B → D ✗). Ba mảnh cần chase. Bảo toàn: mỗi FD kiểm được trong một mảnh hoặc suy ra từ các phép chiếu không?\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two pieces: lossless iff the common attributes determine one piece (AB ∩ ACD = A, A → B ✓; AB ∩ BCD = B, B → C but not B → A or B → D ✗). Three pieces need the chase. Preservation: can each FD be checked inside one piece or derived from the projections?</p><p><i>VI: Hai mảnh: không mất khi và chỉ khi thuộc tính chung xác định một mảnh (AB ∩ ACD = A, A → B ✓; AB ∩ BCD = B, B → C nhưng không có B → A hay B → D ✗). Ba mảnh cần chase. Bảo toàn: mỗi FD kiểm được trong một mảnh hoặc suy ra từ các phép chiếu không?</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Decomposition properties</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính chất phân rã</i></p>",
+            "cot": [
+              {
+                "ma": "pr",
+                "ten": "Decomposition / Phân rã"
+              },
+              {
+                "ma": "ll",
+                "ten": "Lossless?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              },
+              {
+                "ma": "bt",
+                "ten": "Preserves F?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "pr": "{AB, ACD}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "pr": "{AB, BCD}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "pr": "{AD, AC, BCD}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "pr": "{AB, BC, CD}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "pr": "{ABC, ACD}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ll": "yes",
+              "r1.bt": "no",
+              "r2.ll": "no",
+              "r2.bt": "no",
+              "r3.ll": "yes",
+              "r3.bt": "no",
+              "r4.ll": "no",
+              "r4.bt": "no",
+              "r5.ll": "yes",
+              "r5.bt": "yes"
+            },
+            "giaiThich": "<p>Two pieces: lossless iff the common attributes determine one piece (AB ∩ ACD = A, A → B ✓; AB ∩ BCD = B, B → C but not B → A or B → D ✗). Three pieces need the chase. Preservation: can each FD be checked inside one piece or derived from the projections?</p><p><i>VI: Hai mảnh: không mất khi và chỉ khi thuộc tính chung xác định một mảnh (AB ∩ ACD = A, A → B ✓; AB ∩ BCD = B, B → C nhưng không có B → A hay B → D ✗). Ba mảnh cần chase. Bảo toàn: mỗi FD kiểm được trong một mảnh hoặc suy ra từ các phép chiếu không?</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Concluding \"lossless\" because every attribute appears in some piece — that is only a requirement, not a proof.|||Kết luận \"không mất\" vì thuộc tính nào cũng có mặt ở một mảnh — đó chỉ là điều kiện cần."
+        },
+        {
+          "loi": "Checking only FDs that fit literally inside a piece and missing ones derived through other pieces.|||Chỉ kiểm FD nằm gọn trong một mảnh và bỏ sót FD suy ra qua các mảnh khác."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chase test",
+          "vi": "phép kiểm chase"
+        }
+      ]
+    },
+    {
+      "title": "The classic case: street, city, zip",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "BCNF vs 3NF",
+        "dependency preservation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "bcnf"
+      ],
+      "problemHtml": "<p>Address(street, city, zip) with street, city → zip and zip → city (lesson 4.3 worked example).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Address(street, city, zip) với street, city → zip và zip → city (ví dụ có lời giải bài 4.3).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Find both keys first.|||Tìm cả hai khoá trước.",
+        "Lossless ≠ dependency-preserving.|||Không mất ≠ bảo toàn phụ thuộc."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The classic case: street, city, zip\n\nAnswer in the answer panel (no code needed).\n\n1. Highest normal form of Address?Dạng chuẩn cao nhất của Address?\n2. The BCNF decomposition is {(zip, city), (street, zip)}. Is it lossless?Phân rã BCNF là {(zip, city), (street, zip)}. Có không mất?\n3. Which FD can no longer be checked inside one table after that decomposition?Sau phân rã đó, FD nào không còn kiểm được trong một bảng?\n4. So which design keeps every FD AND is lossless?Vậy thiết kế nào giữ mọi FD VÀ không mất?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The classic case: street, city, zip — answer key\n\n1. Highest normal form of Address?Dạng chuẩn cao nhất của Address?\n   Answer: d) 3NF\n   Keys (street, city) and (street, zip); zip → city has a non-superkey left side but city is prime.VI: Khoá (street, city) và (street, zip); zip → city có vế trái không là siêu khoá nhưng city là thuộc tính khoá.\n\n2. The BCNF decomposition is {(zip, city), (street, zip)}. Is it lossless?Phân rã BCNF là {(zip, city), (street, zip)}. Có không mất?\n   Answer: a) Yes — the common attribute zip is the key of (zip, city)\n   zip → city makes zip a key of the first piece.VI: zip → city làm zip thành khoá của mảnh thứ nhất.\n\n3. Which FD can no longer be checked inside one table after that decomposition?Sau phân rã đó, FD nào không còn kiểm được trong một bảng?\n   Answer: b) street, city → zip\n   street and city are now in different tables; enforcing \"one zip per street and city\" needs a join (or a trigger).VI: street và city giờ ở hai bảng khác nhau; muốn bảo đảm \"mỗi (street, city) một zip\" phải nối (hoặc trigger).\n\n4. So which design keeps every FD AND is lossless?Vậy thiết kế nào giữ mọi FD VÀ không mất?\n   Answer: a) keeping Address as it is (3NF)\n   3NF is always reachable with both properties; here R itself is already 3NF.VI: 3NF luôn đạt được với cả hai tính chất; ở đây chính R đã ở 3NF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> 3NF</p><p>Keys (street, city) and (street, zip); zip → city has a non-superkey left side but city is prime.</p><p><i>VI: Khoá (street, city) và (street, zip); zip → city có vế trái không là siêu khoá nhưng city là thuộc tính khoá.</i></p></li><li><p><b>a)</b> Yes — the common attribute zip is the key of (zip, city)</p><p>zip → city makes zip a key of the first piece.</p><p><i>VI: zip → city làm zip thành khoá của mảnh thứ nhất.</i></p></li><li><p><b>b)</b> street, city → zip</p><p>street and city are now in different tables; enforcing \"one zip per street and city\" needs a join (or a trigger).</p><p><i>VI: street và city giờ ở hai bảng khác nhau; muốn bảo đảm \"mỗi (street, city) một zip\" phải nối (hoặc trigger).</i></p></li><li><p><b>a)</b> keeping Address as it is (3NF)</p><p>3NF is always reachable with both properties; here R itself is already 3NF.</p><p><i>VI: 3NF luôn đạt được với cả hai tính chất; ở đây chính R đã ở 3NF.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "z1",
+            "de": "<p>Highest normal form of Address?</p><p style=\"opacity:.75;font-size:.92em\"><i>Dạng chuẩn cao nhất của Address?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "2NF"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1NF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "BCNF"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3NF"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Keys (street, city) and (street, zip); zip → city has a non-superkey left side but city is prime.</p><p><i>VI: Khoá (street, city) và (street, zip); zip → city có vế trái không là siêu khoá nhưng city là thuộc tính khoá.</i></p>"
+          },
+          {
+            "ma": "z2",
+            "de": "<p>The BCNF decomposition is {(zip, city), (street, zip)}. Is it lossless?</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân rã BCNF là {(zip, city), (street, zip)}. Có không mất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — the common attribute zip is the key of (zip, city)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — zip is not a key of R"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It depends on the data"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — street is missing from one piece"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>zip → city makes zip a key of the first piece.</p><p><i>VI: zip → city làm zip thành khoá của mảnh thứ nhất.</i></p>"
+          },
+          {
+            "ma": "z3",
+            "de": "<p>Which FD can no longer be checked inside one table after that decomposition?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau phân rã đó, FD nào không còn kiểm được trong một bảng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "street → zip"
+              },
+              {
+                "ma": "b",
+                "noiDung": "street, city → zip"
+              },
+              {
+                "ma": "c",
+                "noiDung": "city → street"
+              },
+              {
+                "ma": "d",
+                "noiDung": "zip → city"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>street and city are now in different tables; enforcing \"one zip per street and city\" needs a join (or a trigger).</p><p><i>VI: street và city giờ ở hai bảng khác nhau; muốn bảo đảm \"mỗi (street, city) một zip\" phải nối (hoặc trigger).</i></p>"
+          },
+          {
+            "ma": "z4",
+            "de": "<p>So which design keeps every FD AND is lossless?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vậy thiết kế nào giữ mọi FD VÀ không mất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "keeping Address as it is (3NF)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "splitting into three single-column tables"
+              },
+              {
+                "ma": "c",
+                "noiDung": "none exists"
+              },
+              {
+                "ma": "d",
+                "noiDung": "the BCNF decomposition"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>3NF is always reachable with both properties; here R itself is already 3NF.</p><p><i>VI: 3NF luôn đạt được với cả hai tính chất; ở đây chính R đã ở 3NF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Assuming BCNF is always better — here it costs an FD.|||Cho rằng BCNF luôn tốt hơn — ở đây nó tốn một FD."
+        },
+        {
+          "loi": "Calling the BCNF split lossy.|||Gọi phép tách BCNF là mất thông tin."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dependency preservation",
+          "vi": "bảo toàn phụ thuộc"
+        }
+      ]
+    }
+  ]
+}

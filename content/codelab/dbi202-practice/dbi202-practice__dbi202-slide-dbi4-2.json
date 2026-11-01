@@ -1,0 +1,749 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi4-2",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi4-2"
+  },
+  "exercises": [
+    {
+      "title": "Name the anomaly",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "update anomaly",
+        "deletion anomaly",
+        "insertion anomaly",
+        "redundancy"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "slide"
+      ],
+      "problemHtml": "<p>On Movies1 (one row per movie and star — tab <code>Movies1.sql</code>), name the anomaly each event shows (slides 21–22).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trên Movies1 (mỗi phim × diễn viên một dòng — tab <code>Movies1.sql</code>), gọi tên dị thường mà mỗi sự kiện cho thấy (slide 21–22).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Update = copies disagree; deletion = deleting one fact loses another; insertion = cannot add a fact alone.|||Cập nhật = các bản sao lệch nhau; xoá = xoá một sự kiện mất luôn sự kiện khác; chèn = không thêm được một sự kiện riêng.",
+        "Redundancy is the root; the three anomalies are its symptoms.|||Dư thừa là gốc; ba dị thường là triệu chứng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Name the anomaly\n\nAnswer in the answer panel (no code needed).\n\n1. Event → anomalySự kiện → dị thường\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Name the anomaly — answer key\n\n1. Event → anomalySự kiện → dị thường\n   - r1.dt: redundancy\n   - r2.dt: update anomaly\n   - r3.dt: deletion anomaly\n   - r4.dt: insertion anomaly\n   All four come from one cause: facts about a movie depend on (title, year) only, but the table's key is (title, year, starName).VI: Cả bốn có chung một nguyên nhân: thông tin về phim chỉ phụ thuộc (title, year), nhưng khoá của bảng là (title, year, starName).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>All four come from one cause: facts about a movie depend on (title, year) only, but the table's key is (title, year, starName).</p><p><i>VI: Cả bốn có chung một nguyên nhân: thông tin về phim chỉ phụ thuộc (title, year), nhưng khoá của bảng là (title, year, starName).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Event → anomaly</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự kiện → dị thường</i></p>",
+            "cot": [
+              {
+                "ma": "sk",
+                "ten": "Event / Sự kiện"
+              },
+              {
+                "ma": "dt",
+                "ten": "Anomaly / Dị thường",
+                "luaChon": [
+                  "redundancy",
+                  "update anomaly",
+                  "deletion anomaly",
+                  "insertion anomaly"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "sk": "Star Wars' length 124 is stored three times, once per star."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "sk": "The length of Star Wars is corrected in one row only; the three rows now disagree."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "sk": "Vivien Leigh is removed and the movie Gone With the Wind disappears with her."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "sk": "A new movie without any star yet cannot be stored (starName is part of the key)."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dt": "redundancy",
+              "r2.dt": "update anomaly",
+              "r3.dt": "deletion anomaly",
+              "r4.dt": "insertion anomaly"
+            },
+            "giaiThich": "<p>All four come from one cause: facts about a movie depend on (title, year) only, but the table's key is (title, year, starName).</p><p><i>VI: Cả bốn có chung một nguyên nhân: thông tin về phim chỉ phụ thuộc (title, year), nhưng khoá của bảng là (title, year, starName).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling the deletion case an update anomaly.|||Gọi trường hợp xoá là dị thường cập nhật."
+        },
+        {
+          "loi": "Thinking redundancy is harmless \"because disk is cheap\" — the anomalies are the cost.|||Tưởng dư thừa vô hại \"vì đĩa rẻ\" — các dị thường mới là cái giá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "anomaly",
+          "vi": "dị thường"
+        }
+      ]
+    },
+    {
+      "title": "Decompose Movies1 into Movies2 and Movies3",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "decomposition",
+        "INSERT … SELECT DISTINCT",
+        "composite foreign key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "decomposition",
+        "ddl",
+        "slide"
+      ],
+      "problemHtml": "<p>Slide 23 splits Movies1 into <code>Movies2(title, year, length, genre, studioName)</code> and <code>Movies3(title, year, starName)</code>. Create both tables (VARCHAR(40)/INT/INT/VARCHAR(10)/VARCHAR(20) and VARCHAR(30) for starName; keys (title, year) and (title, year, starName); Movies3 references Movies2) and fill them from Movies1.</p>\n<p><b>The relation of slides 5 and 21</b> (tab <code>Movies1.sql</code>): <code>Movies1(title, year, length, genre, studioName, starName)</code>, key (title, year, starName) — one row per (movie, star), so every movie fact is repeated once per star.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Two CREATE TABLE, then two INSERT … SELECT.</li>\n  <li>Movies2 gets each movie ONCE (SELECT DISTINCT).</li>\n  <li>Use VARCHAR in the CREATE TABLE here (the grader flags NVARCHAR as SQL Server–only).</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 23 tách Movies1 thành <code>Movies2(title, year, length, genre, studioName)</code> và <code>Movies3(title, year, starName)</code>. Tạo hai bảng (VARCHAR(40)/INT/INT/VARCHAR(10)/VARCHAR(20) và VARCHAR(30) cho starName; khoá (title, year) và (title, year, starName); Movies3 tham chiếu Movies2) rồi đổ dữ liệu từ Movies1.</p>\n<p><b>Quan hệ của slide 5 và 21</b> (tab <code>Movies1.sql</code>): <code>Movies1(title, year, length, genre, studioName, starName)</code>, khoá (title, year, starName) — mỗi (phim, diễn viên) một dòng, nên mọi thông tin của phim lặp lại theo số diễn viên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hai CREATE TABLE, rồi hai INSERT … SELECT.</li>\n  <li>Movies2 nhận mỗi phim MỘT lần (SELECT DISTINCT).</li>\n  <li>Ở đây dùng VARCHAR trong CREATE TABLE (máy chấm báo NVARCHAR là riêng SQL Server).</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "title              | year | length | genre  | studioName\n-------------------+------+--------+--------+-----------\nStar Wars          | 1977 | 124    | SciFi  | Fox       \nWayne's World      | 1992 | 95     | comedy | Paramount \nGone With the Wind | 1939 | 231    | drama  | MGM       ",
+          "explanation": "Expected result of check \"Movies2 has one row per movie\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Movies2 có mỗi phim một dòng\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Without DISTINCT the INSERT into Movies2 fails: Star Wars would appear 3 times and break its key.|||Thiếu DISTINCT thì INSERT vào Movies2 lỗi: Star Wars xuất hiện 3 lần và phá khoá.",
+        "Fill the parent (Movies2) before the child (Movies3) — the foreign key checks every row.|||Đổ bảng cha (Movies2) trước bảng con (Movies3) — khoá ngoại kiểm từng dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies1.sql",
+          "language": "sql",
+          "code": "-- Movies1.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies1.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Movies2 (\n    title      VARCHAR(40) NOT NULL,\n    year       INT         NOT NULL,\n    length     INT         NULL,\n    genre      VARCHAR(10) NULL,\n    studioName VARCHAR(20) NULL,\n    PRIMARY KEY (title, year)\n);\nCREATE TABLE Movies3 (\n    title    VARCHAR(40) NOT NULL,\n    year     INT         NOT NULL,\n    starName VARCHAR(30) NOT NULL,\n    PRIMARY KEY (title, year, starName),\n    FOREIGN KEY (title, year) REFERENCES Movies2 (title, year)\n);\nINSERT INTO Movies2 (title, year, length, genre, studioName)\nSELECT DISTINCT title, year, length, genre, studioName FROM Movies1;     -- one row per movie\nINSERT INTO Movies3 (title, year, starName)\nSELECT title, year, starName FROM Movies1;                               -- one row per (movie, star)\n"
+        },
+        {
+          "name": "Movies1.sql",
+          "language": "sql",
+          "code": "-- Movies1.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies1.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The projections are taken with set semantics (DISTINCT). Movies2 now stores each length once: the update, deletion and insertion anomalies are gone. Next exercise: prove nothing was lost.</p>",
+      "solutionExplanationHtmlVi": "<p>Các phép chiếu lấy theo ngữ nghĩa tập (DISTINCT). Movies2 giờ lưu mỗi độ dài một lần: dị thường cập nhật, xoá, chèn đều hết. Bài sau: chứng minh không mất gì.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Movies2 has one row per movie|||Movies2 có mỗi phim một dòng",
+            "kiemTra": "SELECT title, year, length, genre, studioName FROM Movies2",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year",
+                "length",
+                "genre",
+                "studioName"
+              ],
+              "hang": [
+                [
+                  "Star Wars",
+                  1977,
+                  124,
+                  "SciFi",
+                  "Fox"
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  95,
+                  "comedy",
+                  "Paramount"
+                ],
+                [
+                  "Gone With the Wind",
+                  1939,
+                  231,
+                  "drama",
+                  "MGM"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Movies3 has one row per (movie, star)|||Movies3 có mỗi (phim, diễn viên) một dòng",
+            "kiemTra": "SELECT title, year, starName FROM Movies3",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year",
+                "starName"
+              ],
+              "hang": [
+                [
+                  "Star Wars",
+                  1977,
+                  "Carrie Fisher"
+                ],
+                [
+                  "Star Wars",
+                  1977,
+                  "Mark Hamill"
+                ],
+                [
+                  "Star Wars",
+                  1977,
+                  "Harrison Ford"
+                ],
+                [
+                  "Gone With the Wind",
+                  1939,
+                  "Vivien Leigh"
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  "Dana Carvey"
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  "Mike Meyers"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: works on new data too|||Ẩn: đúng cả với dữ liệu mới",
+            "kiemTra": "SELECT (SELECT COUNT(*) FROM Movies2) AS movies, (SELECT COUNT(*) FROM Movies3) AS castRows",
+            "an": true,
+            "themCsdl": "INSERT INTO Movies1 VALUES (N'Alien', 1979, 117, N'SciFi', N'Fox', N'Sigourney Weaver'), (N'Alien', 1979, 117, N'SciFi', N'Fox', N'Tom Skerritt')",
+            "mongDoi": {
+              "cot": [
+                "movies",
+                "castRows"
+              ],
+              "hang": [
+                [
+                  4,
+                  8
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Fills the tables with INSERT … SELECT|||Đổ dữ liệu bằng INSERT … SELECT",
+            "khop": "\\bINSERT\\s+INTO\\s+Movies2\\b[\\s\\S]*\\bSELECT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Picking \"one star per movie\" by name — any new movie is lost (hidden check).|||Chọn \"mỗi phim một diễn viên\" theo tên — phim mới bị mất (kiểm ẩn)."
+        },
+        {
+          "loi": "Typing the rows by hand — correct today, wrong tomorrow.|||Gõ tay các dòng — đúng hôm nay, sai ngày mai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "decomposition",
+          "vi": "phân rã"
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        }
+      ]
+    },
+    {
+      "title": "Join the pieces back: is the decomposition lossless?",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "lossless join",
+        "natural join"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "decomposition",
+        "join",
+        "slide"
+      ],
+      "problemHtml": "<p>Rebuild the original relation from the two pieces: <code>Movies2 ⋈ Movies3</code> on (title, year). The result must equal Movies1 exactly — no tuple lost, no spurious tuple.</p>\n<p><b>Tables</b> (tab <code>Movies123.sql</code>): Movies1 (the original) plus its decomposition Movies2(title, year, length, genre, studioName) and Movies3(title, year, starName), already filled.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns in the order of Movies1: <code>title, year, length, genre, studioName, starName</code>.</li>\n  <li>Join on BOTH title and year. Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng lại quan hệ gốc từ hai mảnh: <code>Movies2 ⋈ Movies3</code> trên (title, year). Kết quả phải đúng bằng Movies1 — không mất bộ nào, không có bộ thừa.</p>\n<p><b>Bảng</b> (tab <code>Movies123.sql</code>): Movies1 (gốc) cùng phân rã của nó Movies2(title, year, length, genre, studioName) và Movies3(title, year, starName), đã có dữ liệu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột theo thứ tự Movies1: <code>title, year, length, genre, studioName, starName</code>.</li>\n  <li>Nối trên CẢ title và year. Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "title              | year | length | genre  | studioName | starName     \n-------------------+------+--------+--------+------------+--------------\nStar Wars          | 1977 | 124    | SciFi  | Fox        | Carrie Fisher\nStar Wars          | 1977 | 124    | SciFi  | Fox        | Mark Hamill  \nStar Wars          | 1977 | 124    | SciFi  | Fox        | Harrison Ford\nGone With the Wind | 1939 | 231    | drama  | MGM        | Vivien Leigh \nWayne's World      | 1992 | 95     | comedy | Paramount  | Dana Carvey  \nWayne's World      | 1992 | 95     | comedy | Paramount  | Mike Meyers  ",
+          "explanation": "Expected result of check \"The rebuilt Movies1\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Movies1 dựng lại\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The common attributes of the pieces are title and year.|||Thuộc tính chung của hai mảnh là title và year.",
+        "ON s.title = m.title AND s.year = m.year"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies123.sql",
+          "language": "sql",
+          "code": "-- Movies123.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies123.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n\nCREATE TABLE Movies2 (\n    title      NVARCHAR(40) NOT NULL,\n    year       INT         NOT NULL,\n    length     INT         NULL,\n    genre      NVARCHAR(10) NULL,\n    studioName NVARCHAR(20) NULL,\n    PRIMARY KEY (title, year)\n);\nCREATE TABLE Movies3 (\n    title    NVARCHAR(40) NOT NULL,\n    year     INT         NOT NULL,\n    starName NVARCHAR(30) NOT NULL,\n    PRIMARY KEY (title, year, starName),\n    FOREIGN KEY (title, year) REFERENCES Movies2 (title, year)\n);\nINSERT INTO Movies2 (title, year, length, genre, studioName)\nSELECT DISTINCT title, year, length, genre, studioName FROM Movies1;     -- one row per movie\nINSERT INTO Movies3 (title, year, starName)\nSELECT title, year, starName FROM Movies1;                               -- one row per (movie, star)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT m.title, m.year, m.length, m.genre, m.studioName, s.starName\nFROM Movies2 m\nJOIN Movies3 s ON s.title = m.title AND s.year = m.year;   -- the common attributes = a key of Movies2 ⇒ lossless\n"
+        },
+        {
+          "name": "Movies123.sql",
+          "language": "sql",
+          "code": "-- Movies123.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies123.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n\nCREATE TABLE Movies2 (\n    title      NVARCHAR(40) NOT NULL,\n    year       INT         NOT NULL,\n    length     INT         NULL,\n    genre      NVARCHAR(10) NULL,\n    studioName NVARCHAR(20) NULL,\n    PRIMARY KEY (title, year)\n);\nCREATE TABLE Movies3 (\n    title    NVARCHAR(40) NOT NULL,\n    year     INT         NOT NULL,\n    starName NVARCHAR(30) NOT NULL,\n    PRIMARY KEY (title, year, starName),\n    FOREIGN KEY (title, year) REFERENCES Movies2 (title, year)\n);\nINSERT INTO Movies2 (title, year, length, genre, studioName)\nSELECT DISTINCT title, year, length, genre, studioName FROM Movies1;     -- one row per movie\nINSERT INTO Movies3 (title, year, starName)\nSELECT title, year, starName FROM Movies1;                               -- one row per (movie, star)\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A binary decomposition is lossless when the common attributes functionally determine one of the pieces: (title, year) → length, genre, studioName, i.e. they are a key of Movies2.</p>",
+      "solutionExplanationHtmlVi": "<p>Phân rã hai mảnh không mất khi thuộc tính chung xác định hàm một trong hai mảnh: (title, year) → length, genre, studioName, tức là khoá của Movies2.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n\nCREATE TABLE Movies2 (\n    title      NVARCHAR(40) NOT NULL,\n    year       INT         NOT NULL,\n    length     INT         NULL,\n    genre      NVARCHAR(10) NULL,\n    studioName NVARCHAR(20) NULL,\n    PRIMARY KEY (title, year)\n);\nCREATE TABLE Movies3 (\n    title    NVARCHAR(40) NOT NULL,\n    year     INT         NOT NULL,\n    starName NVARCHAR(30) NOT NULL,\n    PRIMARY KEY (title, year, starName),\n    FOREIGN KEY (title, year) REFERENCES Movies2 (title, year)\n);\nINSERT INTO Movies2 (title, year, length, genre, studioName)\nSELECT DISTINCT title, year, length, genre, studioName FROM Movies1;     -- one row per movie\nINSERT INTO Movies3 (title, year, starName)\nSELECT title, year, starName FROM Movies1;                               -- one row per (movie, star)",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "The rebuilt Movies1|||Movies1 dựng lại",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year",
+                "length",
+                "genre",
+                "studioName",
+                "starName"
+              ],
+              "hang": [
+                [
+                  "Star Wars",
+                  1977,
+                  124,
+                  "SciFi",
+                  "Fox",
+                  "Carrie Fisher"
+                ],
+                [
+                  "Star Wars",
+                  1977,
+                  124,
+                  "SciFi",
+                  "Fox",
+                  "Mark Hamill"
+                ],
+                [
+                  "Star Wars",
+                  1977,
+                  124,
+                  "SciFi",
+                  "Fox",
+                  "Harrison Ford"
+                ],
+                [
+                  "Gone With the Wind",
+                  1939,
+                  231,
+                  "drama",
+                  "MGM",
+                  "Vivien Leigh"
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  95,
+                  "comedy",
+                  "Paramount",
+                  "Dana Carvey"
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  95,
+                  "comedy",
+                  "Paramount",
+                  "Mike Meyers"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A remake: same title, other year|||Phim làm lại: cùng tên, khác năm",
+            "an": true,
+            "themCsdl": "INSERT INTO Movies2 VALUES (N'Star Wars', 2077, 130, N'SciFi', N'Disney'); INSERT INTO Movies3 VALUES (N'Star Wars', 2077, N'Daisy Ridley')",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year",
+                "length",
+                "genre",
+                "studioName",
+                "starName"
+              ],
+              "hang": [
+                [
+                  "Star Wars",
+                  1977,
+                  124,
+                  "SciFi",
+                  "Fox",
+                  "Carrie Fisher"
+                ],
+                [
+                  "Star Wars",
+                  1977,
+                  124,
+                  "SciFi",
+                  "Fox",
+                  "Mark Hamill"
+                ],
+                [
+                  "Star Wars",
+                  1977,
+                  124,
+                  "SciFi",
+                  "Fox",
+                  "Harrison Ford"
+                ],
+                [
+                  "Gone With the Wind",
+                  1939,
+                  231,
+                  "drama",
+                  "MGM",
+                  "Vivien Leigh"
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  95,
+                  "comedy",
+                  "Paramount",
+                  "Dana Carvey"
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  95,
+                  "comedy",
+                  "Paramount",
+                  "Mike Meyers"
+                ],
+                [
+                  "Star Wars",
+                  2077,
+                  130,
+                  "SciFi",
+                  "Disney",
+                  "Daisy Ridley"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Joins the two pieces|||Nối hai mảnh",
+            "khop": "\\bJOIN\\b|\\bFROM\\s+Movies2\\b[^;]*,",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Joining on title only — with a remake, every star of one Star Wars is paired with the other film: spurious tuples.|||Nối chỉ theo title — có phim làm lại thì diễn viên của Star Wars này ghép nhầm với phim kia: bộ thừa."
+        },
+        {
+          "loi": "Using a comma join without condition — the product.|||Nối dấu phẩy không điều kiện — thành tích."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "lossless join",
+          "vi": "nối không mất mát"
+        }
+      ]
+    },
+    {
+      "title": "1NF and 2NF in four questions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "1NF",
+        "2NF",
+        "partial dependency",
+        "prime attribute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 30–38.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 30–38.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "1NF: atomic values. 2NF: no non-prime attribute depends on part of a key.|||1NF: giá trị nguyên tố. 2NF: không thuộc tính không khoá nào phụ thuộc một phần khoá.",
+        "Find all keys first.|||Tìm mọi khoá trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1NF and 2NF in four questions\n\nAnswer in the answer panel (no code needed).\n\n1. A column skills = \"SQL, Java, C#\" violates…Cột skills = \"SQL, Java, C#\" vi phạm…\n2. Movies1, key (title, year, starName), with title, year → length. This FD is…Movies1, khoá (title, year, starName), với title, year → length. FD này là…\n3. A relation whose only key has ONE attribute is always in…Quan hệ có khoá duy nhất gồm MỘT thuộc tính luôn ở…\n4. A \"prime\" attribute is…Thuộc tính \"khoá\" (prime) là…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 1NF and 2NF in four questions — answer key\n\n1. A column skills = \"SQL, Java, C#\" violates…Cột skills = \"SQL, Java, C#\" vi phạm…\n   Answer: b) 1NF — values must be atomic\n   A list inside one cell is a repeating group: not atomic, not 1NF.VI: Danh sách trong một ô là nhóm lặp: không nguyên tố, không 1NF.\n\n2. Movies1, key (title, year, starName), with title, year → length. This FD is…Movies1, khoá (title, year, starName), với title, year → length. FD này là…\n   Answer: b) a partial dependency: length depends on part of the key\n   A non-prime attribute depending on a proper subset of a key breaks 2NF.VI: Thuộc tính không khoá phụ thuộc vào tập con thực sự của khoá phá 2NF.\n\n3. A relation whose only key has ONE attribute is always in…Quan hệ có khoá duy nhất gồm MỘT thuộc tính luôn ở…\n   Answer: b) 2NF (if it is in 1NF) — no proper part of the key exists\n   Partial dependencies need a composite key; a single-attribute key leaves only transitive problems.VI: Phụ thuộc bộ phận cần khoá ghép; khoá một thuộc tính chỉ còn có thể vướng bắc cầu.\n\n4. A \"prime\" attribute is…Thuộc tính \"khoá\" (prime) là…\n   Answer: c) an attribute that belongs to SOME candidate key\n   Prime = member of any candidate key — that is why you must find ALL keys before judging 2NF/3NF.VI: Prime = thuộc một khoá ứng viên nào đó — vì vậy phải tìm MỌI khoá trước khi xét 2NF/3NF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 1NF — values must be atomic</p><p>A list inside one cell is a repeating group: not atomic, not 1NF.</p><p><i>VI: Danh sách trong một ô là nhóm lặp: không nguyên tố, không 1NF.</i></p></li><li><p><b>b)</b> a partial dependency: length depends on part of the key</p><p>A non-prime attribute depending on a proper subset of a key breaks 2NF.</p><p><i>VI: Thuộc tính không khoá phụ thuộc vào tập con thực sự của khoá phá 2NF.</i></p></li><li><p><b>b)</b> 2NF (if it is in 1NF) — no proper part of the key exists</p><p>Partial dependencies need a composite key; a single-attribute key leaves only transitive problems.</p><p><i>VI: Phụ thuộc bộ phận cần khoá ghép; khoá một thuộc tính chỉ còn có thể vướng bắc cầu.</i></p></li><li><p><b>c)</b> an attribute that belongs to SOME candidate key</p><p>Prime = member of any candidate key — that is why you must find ALL keys before judging 2NF/3NF.</p><p><i>VI: Prime = thuộc một khoá ứng viên nào đó — vì vậy phải tìm MỌI khoá trước khi xét 2NF/3NF.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A column skills = \"SQL, Java, C#\" violates…</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột skills = \"SQL, Java, C#\" vi phạm…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BCNF only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1NF — values must be atomic"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3NF — transitive dependency"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2NF — partial dependency"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A list inside one cell is a repeating group: not atomic, not 1NF.</p><p><i>VI: Danh sách trong một ô là nhóm lặp: không nguyên tố, không 1NF.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Movies1, key (title, year, starName), with title, year → length. This FD is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Movies1, khoá (title, year, starName), với title, year → length. FD này là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a trivial dependency: length is in the key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a partial dependency: length depends on part of the key"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a BCNF-safe dependency on a superkey"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a transitive dependency through starName"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A non-prime attribute depending on a proper subset of a key breaks 2NF.</p><p><i>VI: Thuộc tính không khoá phụ thuộc vào tập con thực sự của khoá phá 2NF.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A relation whose only key has ONE attribute is always in…</p><p style=\"opacity:.75;font-size:.92em\"><i>Quan hệ có khoá duy nhất gồm MỘT thuộc tính luôn ở…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing above 1NF — it needs a composite key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2NF (if it is in 1NF) — no proper part of the key exists"
+              },
+              {
+                "ma": "c",
+                "noiDung": "BCNF — one-attribute keys forbid every anomaly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3NF — transitive dependencies are impossible"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Partial dependencies need a composite key; a single-attribute key leaves only transitive problems.</p><p><i>VI: Phụ thuộc bộ phận cần khoá ghép; khoá một thuộc tính chỉ còn có thể vướng bắc cầu.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A \"prime\" attribute is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuộc tính \"khoá\" (prime) là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an attribute of the primary key only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a numeric attribute"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an attribute that belongs to SOME candidate key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an attribute with a UNIQUE constraint"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Prime = member of any candidate key — that is why you must find ALL keys before judging 2NF/3NF.</p><p><i>VI: Prime = thuộc một khoá ứng viên nào đó — vì vậy phải tìm MỌI khoá trước khi xét 2NF/3NF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling a list column a 2NF problem.|||Gọi cột danh sách là vấn đề 2NF."
+        },
+        {
+          "loi": "Judging \"prime\" using only the primary key.|||Xét \"prime\" chỉ dựa vào khoá chính."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "partial dependency",
+          "vi": "phụ thuộc bộ phận"
+        },
+        {
+          "en": "prime attribute",
+          "vi": "thuộc tính khoá"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,688 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-bao-dong-tim-khoa",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-bao-dong-tim-khoa"
+  },
+  "exercises": [
+    {
+      "title": "Attribute closures, pass by pass",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "attribute closure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "closure"
+      ],
+      "problemHtml": "<p>R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. Compute each closure; letters in alphabetical order (e.g. <code>ABCDE</code>).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. Tính từng bao đóng; chữ theo thứ tự (vd <code>ABCDE</code>).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Fire every FD whose left side is already inside the set; repeat until stable.|||Cho chạy mọi FD có vế trái đã nằm trong tập; lặp tới khi ổn định.",
+        "(BE)⁺: E → C gives C, then BC → D gives D.|||(BE)⁺: E → C cho C, rồi BC → D cho D."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Attribute closures, pass by pass\n\nAnswer in the answer panel (no code needed).\n\n1. X⁺X⁺\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Attribute closures, pass by pass — answer key\n\n1. X⁺X⁺\n   - r1.cl: AB / A,B / A, B / {A,B} / {A, B} / A B\n   - r2.cl: ABCDE / A,B,C,D,E / A, B, C, D, E / {A,B,C,D,E} / {A, B, C, D, E} / A B C D E\n   - r3.cl: ABCDE / A,B,C,D,E / A, B, C, D, E / {A,B,C,D,E} / {A, B, C, D, E} / A B C D E\n   - r4.cl: BCDE / B,C,D,E / B, C, D, E / {B,C,D,E} / {B, C, D, E} / B C D E\n   - r5.cl: CDE / C,D,E / C, D, E / {C,D,E} / {C, D, E} / C D E\n   (A)⁺ = AB; (AC)⁺ = ABCDE; (AD)⁺ = ABCDE; (BE)⁺ = BCDE; (D)⁺ = CDE. AC and AD reach every attribute, so both are superkeys.VI: (A)⁺ = AB; (AC)⁺ = ABCDE; (AD)⁺ = ABCDE; (BE)⁺ = BCDE; (D)⁺ = CDE. AC và AD tới được mọi thuộc tính nên cả hai là siêu khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(A)⁺ = AB; (AC)⁺ = ABCDE; (AD)⁺ = ABCDE; (BE)⁺ = BCDE; (D)⁺ = CDE. AC and AD reach every attribute, so both are superkeys.</p><p><i>VI: (A)⁺ = AB; (AC)⁺ = ABCDE; (AD)⁺ = ABCDE; (BE)⁺ = BCDE; (D)⁺ = CDE. AC và AD tới được mọi thuộc tính nên cả hai là siêu khoá.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>X⁺</p><p style=\"opacity:.75;font-size:.92em\"><i>X⁺</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "X"
+              },
+              {
+                "ma": "cl",
+                "ten": "X⁺"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "{A}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "{A, C}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "{A, D}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "{B, E}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "{D}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.cl": [
+                "AB",
+                "A,B",
+                "A, B",
+                "{A,B}",
+                "{A, B}",
+                "A B"
+              ],
+              "r2.cl": [
+                "ABCDE",
+                "A,B,C,D,E",
+                "A, B, C, D, E",
+                "{A,B,C,D,E}",
+                "{A, B, C, D, E}",
+                "A B C D E"
+              ],
+              "r3.cl": [
+                "ABCDE",
+                "A,B,C,D,E",
+                "A, B, C, D, E",
+                "{A,B,C,D,E}",
+                "{A, B, C, D, E}",
+                "A B C D E"
+              ],
+              "r4.cl": [
+                "BCDE",
+                "B,C,D,E",
+                "B, C, D, E",
+                "{B,C,D,E}",
+                "{B, C, D, E}",
+                "B C D E"
+              ],
+              "r5.cl": [
+                "CDE",
+                "C,D,E",
+                "C, D, E",
+                "{C,D,E}",
+                "{C, D, E}",
+                "C D E"
+              ]
+            },
+            "giaiThich": "<p>(A)⁺ = AB; (AC)⁺ = ABCDE; (AD)⁺ = ABCDE; (BE)⁺ = BCDE; (D)⁺ = CDE. AC and AD reach every attribute, so both are superkeys.</p><p><i>VI: (A)⁺ = AB; (AC)⁺ = ABCDE; (AD)⁺ = ABCDE; (BE)⁺ = BCDE; (D)⁺ = CDE. AC và AD tới được mọi thuộc tính nên cả hai là siêu khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Firing BC → D from B alone.|||Cho BC → D chạy khi chỉ có B."
+        },
+        {
+          "loi": "Forgetting that X ⊆ X⁺ (the closure always contains X itself).|||Quên rằng X ⊆ X⁺ (bao đóng luôn chứa chính X)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "closure",
+          "vi": "bao đóng"
+        }
+      ]
+    },
+    {
+      "title": "Find ALL candidate keys",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "candidate keys",
+        "left-only / right-only attributes"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "keys"
+      ],
+      "problemHtml": "<p>The systematic method of lesson 4.2: attributes that never appear on a right side are in every key; attributes only on the right are in no key; try the rest one by one.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phương pháp có hệ thống của bài 4.2: thuộc tính không bao giờ ở vế phải nằm trong mọi khoá; chỉ ở vế phải thì không thuộc khoá nào; thử phần còn lại từng cái.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Classify every attribute: left-only, right-only, both, neither.|||Phân loại mọi thuộc tính: chỉ trái, chỉ phải, cả hai, không bên nào.",
+        "Close the left-only core; if it is not everything, add one \"both\" attribute at a time.|||Tính bao đóng phần lõi chỉ-trái; chưa đủ thì thêm từng thuộc tính \"cả hai\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Find ALL candidate keys\n\nAnswer in the answer panel (no code needed).\n\n1. R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. All candidate keys:R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. Mọi khoá ứng viên:\n2. R(A, B, C, D), F = {AB → C, C → D, D → A}. All candidate keys:R(A, B, C, D), F = {AB → C, C → D, D → A}. Mọi khoá ứng viên:\n3. R(A, B, C, D, E), F = {A → BC, B → D, CD → E, E → A}. How many candidate keys?R(A, B, C, D, E), F = {A → BC, B → D, CD → E, E → A}. Có bao nhiêu khoá ứng viên?\n4. Which attributes can NEVER be part of a key?Thuộc tính nào KHÔNG BAO GIỜ nằm trong khoá?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Find ALL candidate keys — answer key\n\n1. R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. All candidate keys:R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. Mọi khoá ứng viên:\n   Answer: b) AC, AD, AE\n   A is in every key (never on a right side) but A⁺ = AB. Adding C, D or E reaches everything: keys AC, AD, AE.VI: A nằm trong mọi khoá (không bao giờ ở vế phải) nhưng A⁺ = AB. Thêm C, D hoặc E là tới hết: khoá AC, AD, AE.\n\n2. R(A, B, C, D), F = {AB → C, C → D, D → A}. All candidate keys:R(A, B, C, D), F = {AB → C, C → D, D → A}. Mọi khoá ứng viên:\n   Answer: d) AB, BC, BD\n   B is never on a right side; B⁺ = B. With one more attribute: AB, BC, BD all reach ABCD.VI: B không bao giờ ở vế phải; B⁺ = B. Thêm một thuộc tính: AB, BC, BD đều tới ABCD.\n\n3. R(A, B, C, D, E), F = {A → BC, B → D, CD → E, E → A}. How many candidate keys?R(A, B, C, D, E), F = {A → BC, B → D, CD → E, E → A}. Có bao nhiêu khoá ứng viên?\n   Answer: d) 4\n   Keys: A, E, BC, CD. A and E are keys; BC and CD reach E and therefore A.VI: Khoá: A, E, BC, CD. A và E là khoá; BC và CD tới E rồi tới A.\n\n4. Which attributes can NEVER be part of a key?Thuộc tính nào KHÔNG BAO GIỜ nằm trong khoá?\n   Answer: d) those that appear only on right sides (and are not left-only)\n   A right-only attribute is always derivable from the others, so a minimal key never needs it.VI: Thuộc tính chỉ ở vế phải luôn suy ra được từ thuộc tính khác nên khoá tối thiểu không bao giờ cần nó.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> AC, AD, AE</p><p>A is in every key (never on a right side) but A⁺ = AB. Adding C, D or E reaches everything: keys AC, AD, AE.</p><p><i>VI: A nằm trong mọi khoá (không bao giờ ở vế phải) nhưng A⁺ = AB. Thêm C, D hoặc E là tới hết: khoá AC, AD, AE.</i></p></li><li><p><b>d)</b> AB, BC, BD</p><p>B is never on a right side; B⁺ = B. With one more attribute: AB, BC, BD all reach ABCD.</p><p><i>VI: B không bao giờ ở vế phải; B⁺ = B. Thêm một thuộc tính: AB, BC, BD đều tới ABCD.</i></p></li><li><p><b>d)</b> 4</p><p>Keys: A, E, BC, CD. A and E are keys; BC and CD reach E and therefore A.</p><p><i>VI: Khoá: A, E, BC, CD. A và E là khoá; BC và CD tới E rồi tới A.</i></p></li><li><p><b>d)</b> those that appear only on right sides (and are not left-only)</p><p>A right-only attribute is always derivable from the others, so a minimal key never needs it.</p><p><i>VI: Thuộc tính chỉ ở vế phải luôn suy ra được từ thuộc tính khác nên khoá tối thiểu không bao giờ cần nó.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "k1",
+            "de": "<p>R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. All candidate keys:</p><p style=\"opacity:.75;font-size:.92em\"><i>R(A, B, C, D, E), F = {A → B, BC → D, D → E, E → C}. Mọi khoá ứng viên:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "AC"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AC, AD, AE"
+              },
+              {
+                "ma": "c",
+                "noiDung": "AB, AC, AD"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A is in every key (never on a right side) but A⁺ = AB. Adding C, D or E reaches everything: keys AC, AD, AE.</p><p><i>VI: A nằm trong mọi khoá (không bao giờ ở vế phải) nhưng A⁺ = AB. Thêm C, D hoặc E là tới hết: khoá AC, AD, AE.</i></p>"
+          },
+          {
+            "ma": "k2",
+            "de": "<p>R(A, B, C, D), F = {AB → C, C → D, D → A}. All candidate keys:</p><p style=\"opacity:.75;font-size:.92em\"><i>R(A, B, C, D), F = {AB → C, C → D, D → A}. Mọi khoá ứng viên:</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "AB"
+              },
+              {
+                "ma": "b",
+                "noiDung": "B"
+              },
+              {
+                "ma": "c",
+                "noiDung": "AB, BC"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AB, BC, BD"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>B is never on a right side; B⁺ = B. With one more attribute: AB, BC, BD all reach ABCD.</p><p><i>VI: B không bao giờ ở vế phải; B⁺ = B. Thêm một thuộc tính: AB, BC, BD đều tới ABCD.</i></p>"
+          },
+          {
+            "ma": "k3",
+            "de": "<p>R(A, B, C, D, E), F = {A → BC, B → D, CD → E, E → A}. How many candidate keys?</p><p style=\"opacity:.75;font-size:.92em\"><i>R(A, B, C, D, E), F = {A → BC, B → D, CD → E, E → A}. Có bao nhiêu khoá ứng viên?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "1"
+              },
+              {
+                "ma": "b",
+                "noiDung": "5"
+              },
+              {
+                "ma": "c",
+                "noiDung": "2"
+              },
+              {
+                "ma": "d",
+                "noiDung": "4"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Keys: A, E, BC, CD. A and E are keys; BC and CD reach E and therefore A.</p><p><i>VI: Khoá: A, E, BC, CD. A và E là khoá; BC và CD tới E rồi tới A.</i></p>"
+          },
+          {
+            "ma": "k4",
+            "de": "<p>Which attributes can NEVER be part of a key?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuộc tính nào KHÔNG BAO GIỜ nằm trong khoá?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "those that appear only on left sides"
+              },
+              {
+                "ma": "b",
+                "noiDung": "those that appear on both sides"
+              },
+              {
+                "ma": "c",
+                "noiDung": "none — any attribute can be part of a key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "those that appear only on right sides (and are not left-only)"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A right-only attribute is always derivable from the others, so a minimal key never needs it.</p><p><i>VI: Thuộc tính chỉ ở vế phải luôn suy ra được từ thuộc tính khác nên khoá tối thiểu không bao giờ cần nó.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping at the first key.|||Dừng ở khoá đầu tiên."
+        },
+        {
+          "loi": "Listing a superkey (AB… with an extra attribute) as a candidate key.|||Ghi một siêu khoá (thừa thuộc tính) như khoá ứng viên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "candidate key",
+          "vi": "khoá ứng viên"
+        }
+      ]
+    },
+    {
+      "title": "Does F imply this FD? Are two FD sets equivalent?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "FD implication",
+        "equivalent FD sets"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "closure"
+      ],
+      "problemHtml": "<p>Use closures: F ⊨ X → Y exactly when Y ⊆ X⁺ (computed under F). Two sets are equivalent when each implies every FD of the other.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dùng bao đóng: F ⊨ X → Y khi và chỉ khi Y ⊆ X⁺ (tính theo F). Hai tập tương đương khi mỗi tập suy ra mọi FD của tập kia.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compute X⁺ under F, then look for Y inside it.|||Tính X⁺ theo F, rồi tìm Y trong đó.",
+        "For equivalence, test both directions.|||Với tương đương, kiểm cả hai chiều."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Does F imply this FD? Are two FD sets equivalent?\n\nAnswer in the answer panel (no code needed).\n\n1. yes or noyes hay no\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Does F imply this FD? Are two FD sets equivalent? — answer key\n\n1. yes or noyes hay no\n   - r1.dap: yes\n   - r2.dap: no\n   - r3.dap: yes\n   - r4.dap: yes\n   - r5.dap: yes\n   - r6.dap: yes\n   (AE)⁺ = ABCDE ∋ D; (BD)⁺ = BCDE ∌ A; (BE)⁺ = BCDE ∋ D. A → C follows by transitivity, so the first pair is equivalent; A → BC is just A → B plus A → C, so the second pair too. AB → C follows from A → BC by augmentation/decomposition.VI: (AE)⁺ = ABCDE có D; (BD)⁺ = BCDE không có A; (BE)⁺ = BCDE có D. A → C suy ra bằng bắc cầu nên cặp thứ nhất tương đương; A → BC chỉ là A → B cộng A → C nên cặp thứ hai cũng vậy. AB → C suy ra từ A → BC bằng tăng trưởng/tách.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(AE)⁺ = ABCDE ∋ D; (BD)⁺ = BCDE ∌ A; (BE)⁺ = BCDE ∋ D. A → C follows by transitivity, so the first pair is equivalent; A → BC is just A → B plus A → C, so the second pair too. AB → C follows from A → BC by augmentation/decomposition.</p><p><i>VI: (AE)⁺ = ABCDE có D; (BD)⁺ = BCDE không có A; (BE)⁺ = BCDE có D. A → C suy ra bằng bắc cầu nên cặp thứ nhất tương đương; A → BC chỉ là A → B cộng A → C nên cặp thứ hai cũng vậy. AB → C suy ra từ A → BC bằng tăng trưởng/tách.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>yes or no</p><p style=\"opacity:.75;font-size:.92em\"><i>yes hay no</i></p>",
+            "cot": [
+              {
+                "ma": "hoi",
+                "ten": "Question / Câu hỏi"
+              },
+              {
+                "ma": "dap",
+                "ten": "Answer",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "hoi": "F = {A → B, BC → D, D → E, E → C}: does AE → D follow?"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "hoi": "Same F: does BD → A follow?"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "hoi": "Same F: does BE → D follow?"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "hoi": "Are {A → B, B → C} and {A → B, B → C, A → C} equivalent?"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "hoi": "Are {A → B, B → C} and {A → BC, B → C} equivalent?"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "hoi": "Does {A → BC} imply AB → C?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dap": "yes",
+              "r2.dap": "no",
+              "r3.dap": "yes",
+              "r4.dap": "yes",
+              "r5.dap": "yes",
+              "r6.dap": "yes"
+            },
+            "giaiThich": "<p>(AE)⁺ = ABCDE ∋ D; (BD)⁺ = BCDE ∌ A; (BE)⁺ = BCDE ∋ D. A → C follows by transitivity, so the first pair is equivalent; A → BC is just A → B plus A → C, so the second pair too. AB → C follows from A → BC by augmentation/decomposition.</p><p><i>VI: (AE)⁺ = ABCDE có D; (BD)⁺ = BCDE không có A; (BE)⁺ = BCDE có D. A → C suy ra bằng bắc cầu nên cặp thứ nhất tương đương; A → BC chỉ là A → B cộng A → C nên cặp thứ hai cũng vậy. AB → C suy ra từ A → BC bằng tăng trưởng/tách.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Testing only one direction of equivalence.|||Chỉ kiểm một chiều của tương đương."
+        },
+        {
+          "loi": "Thinking an FD must appear literally in F to be implied.|||Tưởng FD phải xuất hiện nguyên văn trong F mới được suy ra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "logical implication",
+          "vi": "suy diễn logic"
+        }
+      ]
+    },
+    {
+      "title": "Armstrong's axioms: which rule was used?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "reflexivity",
+        "augmentation",
+        "transitivity",
+        "union",
+        "decomposition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "armstrong"
+      ],
+      "problemHtml": "<p>Name the rule behind each derivation.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Gọi tên luật đứng sau mỗi bước suy diễn.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Three axioms: reflexivity, augmentation, transitivity. Union and decomposition are derived from them.|||Ba tiên đề: phản xạ, tăng trưởng, bắc cầu. Hợp và tách được suy ra từ chúng.",
+        "Look at what changed: a side grew, two FDs chained, or right sides merged/split.|||Xem cái gì đổi: một vế lớn lên, hai FD nối nhau, hay vế phải gộp/tách."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Armstrong's axioms: which rule was used?\n\nAnswer in the answer panel (no code needed).\n\n1. AB → AAB → A\n2. From A → B derive AC → BCTừ A → B suy ra AC → BC\n3. From A → B and B → C derive A → CTừ A → B và B → C suy ra A → C\n4. From A → B and A → C derive A → BCTừ A → B và A → C suy ra A → BC\n5. From A → BC derive A → BTừ A → BC suy ra A → B\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Armstrong's axioms: which rule was used? — answer key\n\n1. AB → AAB → A\n   Answer: a) reflexivity\n   Y ⊆ X ⇒ X → Y (a trivial FD).VI: Y ⊆ X ⇒ X → Y (FD tầm thường).\n\n2. From A → B derive AC → BCTừ A → B suy ra AC → BC\n   Answer: c) augmentation\n   Add C to both sides.VI: Thêm C vào hai vế.\n\n3. From A → B and B → C derive A → CTừ A → B và B → C suy ra A → C\n   Answer: d) transitivity\n   Chain the two FDs.VI: Nối hai FD.\n\n4. From A → B and A → C derive A → BCTừ A → B và A → C suy ra A → BC\n   Answer: c) union (combining)\n   Same left side ⇒ combine the right sides.VI: Cùng vế trái ⇒ gộp vế phải.\n\n5. From A → BC derive A → BTừ A → BC suy ra A → B\n   Answer: c) decomposition (splitting)\n   Split the right side.VI: Tách vế phải.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> reflexivity</p><p>Y ⊆ X ⇒ X → Y (a trivial FD).</p><p><i>VI: Y ⊆ X ⇒ X → Y (FD tầm thường).</i></p></li><li><p><b>c)</b> augmentation</p><p>Add C to both sides.</p><p><i>VI: Thêm C vào hai vế.</i></p></li><li><p><b>d)</b> transitivity</p><p>Chain the two FDs.</p><p><i>VI: Nối hai FD.</i></p></li><li><p><b>c)</b> union (combining)</p><p>Same left side ⇒ combine the right sides.</p><p><i>VI: Cùng vế trái ⇒ gộp vế phải.</i></p></li><li><p><b>c)</b> decomposition (splitting)</p><p>Split the right side.</p><p><i>VI: Tách vế phải.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "a1",
+            "de": "<p>AB → A</p><p style=\"opacity:.75;font-size:.92em\"><i>AB → A</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "reflexivity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "transitivity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "augmentation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "union"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Y ⊆ X ⇒ X → Y (a trivial FD).</p><p><i>VI: Y ⊆ X ⇒ X → Y (FD tầm thường).</i></p>"
+          },
+          {
+            "ma": "a2",
+            "de": "<p>From A → B derive AC → BC</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ A → B suy ra AC → BC</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "decomposition"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reflexivity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "augmentation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "transitivity"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Add C to both sides.</p><p><i>VI: Thêm C vào hai vế.</i></p>"
+          },
+          {
+            "ma": "a3",
+            "de": "<p>From A → B and B → C derive A → C</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ A → B và B → C suy ra A → C</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "union"
+              },
+              {
+                "ma": "b",
+                "noiDung": "reflexivity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "augmentation"
+              },
+              {
+                "ma": "d",
+                "noiDung": "transitivity"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Chain the two FDs.</p><p><i>VI: Nối hai FD.</i></p>"
+          },
+          {
+            "ma": "a4",
+            "de": "<p>From A → B and A → C derive A → BC</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ A → B và A → C suy ra A → BC</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "reflexivity"
+              },
+              {
+                "ma": "b",
+                "noiDung": "transitivity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "union (combining)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "decomposition (splitting)"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Same left side ⇒ combine the right sides.</p><p><i>VI: Cùng vế trái ⇒ gộp vế phải.</i></p>"
+          },
+          {
+            "ma": "a5",
+            "de": "<p>From A → BC derive A → B</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ A → BC suy ra A → B</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "augmentation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "union (combining)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "decomposition (splitting)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "transitivity"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Split the right side.</p><p><i>VI: Tách vế phải.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling AC → BC \"transitivity\".|||Gọi AC → BC là \"bắc cầu\"."
+        },
+        {
+          "loi": "Thinking union and decomposition are separate axioms rather than consequences.|||Tưởng hợp và tách là tiên đề riêng chứ không phải hệ quả."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Armstrong's axioms",
+          "vi": "hệ tiên đề Armstrong"
+        }
+      ]
+    }
+  ]
+}

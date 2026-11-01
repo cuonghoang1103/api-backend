@@ -1,0 +1,517 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi5-3",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi5-3"
+  },
+  "exercises": [
+    {
+      "title": "Three strategies for Movies, Cartoons and Murder Mysteries",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "E/R style",
+        "object-oriented style",
+        "null style"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "subclass",
+        "slide"
+      ],
+      "problemHtml": "<p>Movies(title, year, length, genre) has two subclasses: Cartoons(voices) and MurderMysteries(weapon); a movie may be both. Fill the comparison of slides 36–42.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Movies(title, year, length, genre) có hai lớp con: Cartoons(voices) và MurderMysteries(weapon); một phim có thể là cả hai. Điền bảng so sánh của slide 36–42.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "OO style needs one table for every combination of classes an object can belong to.|||Kiểu OO cần một bảng cho mỗi tổ hợp lớp mà một đối tượng có thể thuộc.",
+        "Null style puts every attribute in one relation; missing ones are NULL.|||Kiểu NULL đặt mọi thuộc tính vào một quan hệ; thiếu thì NULL."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Three strategies for Movies, Cartoons and Murder Mysteries\n\nAnswer in the answer panel (no code needed).\n\n1. Strategy comparisonSo sánh chiến lược\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Three strategies for Movies, Cartoons and Murder Mysteries — answer key\n\n1. Strategy comparisonSo sánh chiến lược\n   - r1.so: 3\n   - r1.uu: subclass tables hold only key + own attribute\n   - r2.so: 4\n   - r2.uu: no NULLs; one table per possible class combination\n   - r3.so: 1\n   - r3.uu: one table, no joins, but many NULLs\n   E/R: Movies, Cartoons(title, year, voices), MurderMysteries(title, year, weapon) = 3. OO: Movies, MoviesC, MoviesMM, MoviesCMM (cartoon AND mystery) = 4. Null: Movies(title, year, length, genre, voices, weapon) = 1.VI: E/R: Movies, Cartoons(title, year, voices), MurderMysteries(title, year, weapon) = 3. OO: Movies, MoviesC, MoviesMM, MoviesCMM (vừa hoạt hình vừa trinh thám) = 4. NULL: Movies(title, year, length, genre, voices, weapon) = 1.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>E/R: Movies, Cartoons(title, year, voices), MurderMysteries(title, year, weapon) = 3. OO: Movies, MoviesC, MoviesMM, MoviesCMM (cartoon AND mystery) = 4. Null: Movies(title, year, length, genre, voices, weapon) = 1.</p><p><i>VI: E/R: Movies, Cartoons(title, year, voices), MurderMysteries(title, year, weapon) = 3. OO: Movies, MoviesC, MoviesMM, MoviesCMM (vừa hoạt hình vừa trinh thám) = 4. NULL: Movies(title, year, length, genre, voices, weapon) = 1.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Strategy comparison</p><p style=\"opacity:.75;font-size:.92em\"><i>So sánh chiến lược</i></p>",
+            "cot": [
+              {
+                "ma": "cl",
+                "ten": "Strategy / Chiến lược"
+              },
+              {
+                "ma": "so",
+                "ten": "Number of relations / Số quan hệ"
+              },
+              {
+                "ma": "uu",
+                "ten": "Strength / Ưu điểm",
+                "luaChon": [
+                  "no NULLs; one table per possible class combination",
+                  "subclass tables hold only key + own attribute",
+                  "one table, no joins, but many NULLs"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cl": "E/R style (one relation per entity set)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cl": "Object-oriented style (one relation per subtree / class combination)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cl": "Null style (one wide relation)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.so": "3",
+              "r1.uu": "subclass tables hold only key + own attribute",
+              "r2.so": "4",
+              "r2.uu": "no NULLs; one table per possible class combination",
+              "r3.so": "1",
+              "r3.uu": "one table, no joins, but many NULLs"
+            },
+            "giaiThich": "<p>E/R: Movies, Cartoons(title, year, voices), MurderMysteries(title, year, weapon) = 3. OO: Movies, MoviesC, MoviesMM, MoviesCMM (cartoon AND mystery) = 4. Null: Movies(title, year, length, genre, voices, weapon) = 1.</p><p><i>VI: E/R: Movies, Cartoons(title, year, voices), MurderMysteries(title, year, weapon) = 3. OO: Movies, MoviesC, MoviesMM, MoviesCMM (vừa hoạt hình vừa trinh thám) = 4. NULL: Movies(title, year, length, genre, voices, weapon) = 1.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting 3 for the OO style — the \"both\" combination (cartoon murder mystery) needs its own table.|||Đếm 3 cho kiểu OO — tổ hợp \"cả hai\" (phim hoạt hình trinh thám) cần bảng riêng."
+        },
+        {
+          "loi": "Repeating length and genre in the E/R-style subclass tables.|||Lặp length và genre trong các bảng lớp con kiểu E/R."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "isa hierarchy",
+          "vi": "phân cấp isa"
+        }
+      ]
+    },
+    {
+      "title": "E/R style: Movies with Cartoons and MurderMysteries",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "subclass",
+        "primary key as foreign key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "subclass",
+        "slide"
+      ],
+      "problemHtml": "<p>Implement the E/R-style strategy: <code>Movies(title VARCHAR(60), year INT, length INT, genre VARCHAR(10))</code> key (title, year); <code>Cartoons(title, year, voices VARCHAR(200))</code>; <code>MurderMysteries(title, year, weapon VARCHAR(30))</code>. A subclass row must belong to an existing movie and disappears with it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The key of each subclass table is (title, year), and that key is ALSO a foreign key to Movies (ON DELETE CASCADE).</li>\n  <li>A movie may be in both subclasses.</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cài chiến lược kiểu E/R: <code>Movies(title VARCHAR(60), year INT, length INT, genre VARCHAR(10))</code> khoá (title, year); <code>Cartoons(title, year, voices VARCHAR(200))</code>; <code>MurderMysteries(title, year, weapon VARCHAR(30))</code>. Dòng lớp con phải thuộc một phim có sẵn và mất theo phim đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá của mỗi bảng lớp con là (title, year), và khoá đó ĐỒNG THỜI là khoá ngoại tới Movies (ON DELETE CASCADE).</li>\n  <li>Một phim có thể thuộc cả hai lớp con.</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl             | col    | type             \n----------------+--------+------------------\nmurdermysteries | title  | character varying\nmurdermysteries | year   | integer          \nmurdermysteries | weapon | character varying\nmovies          | title  | character varying\nmovies          | year   | integer          \nmovies          | length | integer          \nmovies          | genre  | character varying\ncartoons        | title  | character varying\n… (10 rows)",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Subclass table = superclass key + its own attributes.|||Bảng lớp con = khoá của lớp cha + thuộc tính riêng.",
+        "PRIMARY KEY (title, year) and FOREIGN KEY (title, year) REFERENCES Movies (title, year) ON DELETE CASCADE.|||PRIMARY KEY (title, year) và FOREIGN KEY (title, year) REFERENCES Movies (title, year) ON DELETE CASCADE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Movies (\n    title  VARCHAR(60) NOT NULL,\n    year   INT         NOT NULL,\n    length INT         NULL,\n    genre  VARCHAR(10) NULL,\n    PRIMARY KEY (title, year)\n);\nCREATE TABLE Cartoons (                         -- E/R style: only the key + the subclass's own attribute\n    title  VARCHAR(60) NOT NULL,\n    year   INT         NOT NULL,\n    voices VARCHAR(200) NULL,\n    PRIMARY KEY (title, year),\n    FOREIGN KEY (title, year) REFERENCES Movies (title, year) ON DELETE CASCADE\n);\nCREATE TABLE MurderMysteries (\n    title  VARCHAR(60) NOT NULL,\n    year   INT         NOT NULL,\n    weapon VARCHAR(30) NULL,\n    PRIMARY KEY (title, year),\n    FOREIGN KEY (title, year) REFERENCES Movies (title, year) ON DELETE CASCADE\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Primary key that is also a foreign key\" is the signature of a subclass (or a 1-1) — the reverse-engineering rule of lesson 3.4.</p>",
+      "solutionExplanationHtmlVi": "<p>\"Khoá chính đồng thời là khoá ngoại\" là dấu hiệu của lớp con (hoặc 1-1) — luật đọc ngược của bài 3.4.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('movies', 'cartoons', 'murdermysteries')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "murdermysteries",
+                  "title",
+                  "character varying"
+                ],
+                [
+                  "murdermysteries",
+                  "year",
+                  "integer"
+                ],
+                [
+                  "murdermysteries",
+                  "weapon",
+                  "character varying"
+                ],
+                [
+                  "movies",
+                  "title",
+                  "character varying"
+                ],
+                [
+                  "movies",
+                  "year",
+                  "integer"
+                ],
+                [
+                  "movies",
+                  "length",
+                  "integer"
+                ],
+                [
+                  "movies",
+                  "genre",
+                  "character varying"
+                ],
+                [
+                  "cartoons",
+                  "title",
+                  "character varying"
+                ],
+                [
+                  "cartoons",
+                  "year",
+                  "integer"
+                ],
+                [
+                  "cartoons",
+                  "voices",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Roger Rabbit is a cartoon AND a murder mystery|||Roger Rabbit vừa là phim hoạt hình VỪA là trinh thám",
+            "thu": "INSERT INTO Movies VALUES ('Who Framed Roger Rabbit', 1988, 104, 'comedy'); INSERT INTO Cartoons VALUES ('Who Framed Roger Rabbit', 1988, 'Roger, Jessica'); INSERT INTO MurderMysteries VALUES ('Who Framed Roger Rabbit', 1988, 'dip')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A cartoon that is not a movie is rejected|||Phim hoạt hình không có trong Movies bị từ chối",
+            "thu": "INSERT INTO Cartoons VALUES ('Lion King', 1994, 'Simba')",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same movie twice in Cartoons is rejected|||Một phim hai lần trong Cartoons bị từ chối",
+            "thu": "INSERT INTO Movies VALUES ('Lion King', 1994, 88, 'drama'); INSERT INTO Cartoons VALUES ('Lion King', 1994, 'Simba'), ('Lion King', 1994, 'Nala')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Deleting the movie deletes its subclass rows|||Xoá phim thì xoá luôn dòng lớp con",
+            "kiemTra": "INSERT INTO Movies VALUES ('Lion King', 1994, 88, 'drama'); INSERT INTO Cartoons VALUES ('Lion King', 1994, 'Simba'); DELETE FROM Movies WHERE title = 'Lion King'; SELECT COUNT(*) AS cartoonsLeft FROM Cartoons",
+            "mongDoi": {
+              "cot": [
+                "cartoonsLeft"
+              ],
+              "hang": [
+                [
+                  0
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No foreign key — a \"cartoon\" can exist without being a movie.|||Không khoá ngoại — một \"phim hoạt hình\" tồn tại được mà không là phim."
+        },
+        {
+          "loi": "No CASCADE — deleting a movie that is a cartoon fails.|||Không CASCADE — xoá một phim là phim hoạt hình sẽ lỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "subclass",
+          "vi": "lớp con"
+        }
+      ]
+    },
+    {
+      "title": "UML class diagrams for databases",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "UML",
+        "association",
+        "multiplicity",
+        "composition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "uml",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 43–53: the same model in UML.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 43–53: cùng mô hình viết bằng UML.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Read the multiplicity at the FAR end of the line.|||Đọc bản số ở đầu XA của đường nối.",
+        "Composition ⇔ weak entity; generalisation (triangle) ⇔ isa.|||Composition ⇔ thực thể yếu; tổng quát hoá (tam giác) ⇔ isa."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# UML class diagrams for databases\n\nAnswer in the answer panel (no code needed).\n\n1. In UML, an association end labelled 0..* means…Trong UML, đầu liên kết ghi 0..* nghĩa là…\n2. Movies 0..* —— 0..1 Studios. In E/R this is…Movies 0..* —— 0..1 Studios. Trong E/R đây là…\n3. A filled diamond (composition) from Crews to Studios corresponds in E/R to…Hình thoi đặc (composition) từ Crews tới Studios tương ứng trong E/R với…\n4. How does UML show a key attribute like title, year in class Movies?UML thể hiện thuộc tính khoá như title, year của lớp Movies thế nào?\n5. An association class in UML corresponds to…Lớp liên kết (association class) trong UML tương ứng với…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# UML class diagrams for databases — answer key\n\n1. In UML, an association end labelled 0..* means…Trong UML, đầu liên kết ghi 0..* nghĩa là…\n   Answer: b) any number, possibly none\n   0..* = zero or more; 1..1 = exactly one; 0..1 = at most one; 1..* = at least one.VI: 0..* = không hoặc nhiều; 1..1 = đúng một; 0..1 = tối đa một; 1..* = ít nhất một.\n\n2. Movies 0..* —— 0..1 Studios. In E/R this is…Movies 0..* —— 0..1 Studios. Trong E/R đây là…\n   Answer: a) many-one from Movies to Studios\n   Each movie has at most one studio (0..1 at the Studios end), a studio has many movies.VI: Mỗi phim có tối đa một hãng (0..1 ở đầu Studios), một hãng có nhiều phim.\n\n3. A filled diamond (composition) from Crews to Studios corresponds in E/R to…Hình thoi đặc (composition) từ Crews tới Studios tương ứng trong E/R với…\n   Answer: c) a weak entity set with its supporting relationship\n   Composition: the part cannot exist without the whole — exactly a weak entity set.VI: Composition: phần không tồn tại thiếu toàn thể — đúng là tập thực thể yếu.\n\n4. How does UML show a key attribute like title, year in class Movies?UML thể hiện thuộc tính khoá như title, year của lớp Movies thế nào?\n   Answer: d) with the stereotype PK after the attribute\n   The deck writes \"title PK, year PK\" inside the class box.VI: Bộ slide viết \"title PK, year PK\" trong khung lớp.\n\n5. An association class in UML corresponds to…Lớp liên kết (association class) trong UML tương ứng với…\n   Answer: a) a relationship that has its own attributes\n   e.g. a Contracts class on the Movies–Stars association carrying salary.VI: vd lớp Contracts trên liên kết Movies–Stars mang thuộc tính salary.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> any number, possibly none</p><p>0..* = zero or more; 1..1 = exactly one; 0..1 = at most one; 1..* = at least one.</p><p><i>VI: 0..* = không hoặc nhiều; 1..1 = đúng một; 0..1 = tối đa một; 1..* = ít nhất một.</i></p></li><li><p><b>a)</b> many-one from Movies to Studios</p><p>Each movie has at most one studio (0..1 at the Studios end), a studio has many movies.</p><p><i>VI: Mỗi phim có tối đa một hãng (0..1 ở đầu Studios), một hãng có nhiều phim.</i></p></li><li><p><b>c)</b> a weak entity set with its supporting relationship</p><p>Composition: the part cannot exist without the whole — exactly a weak entity set.</p><p><i>VI: Composition: phần không tồn tại thiếu toàn thể — đúng là tập thực thể yếu.</i></p></li><li><p><b>d)</b> with the stereotype PK after the attribute</p><p>The deck writes \"title PK, year PK\" inside the class box.</p><p><i>VI: Bộ slide viết \"title PK, year PK\" trong khung lớp.</i></p></li><li><p><b>a)</b> a relationship that has its own attributes</p><p>e.g. a Contracts class on the Movies–Stars association carrying salary.</p><p><i>VI: vd lớp Contracts trên liên kết Movies–Stars mang thuộc tính salary.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In UML, an association end labelled 0..* means…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong UML, đầu liên kết ghi 0..* nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "exactly one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "any number, possibly none"
+              },
+              {
+                "ma": "c",
+                "noiDung": "at most one"
+              },
+              {
+                "ma": "d",
+                "noiDung": "at least one"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>0..* = zero or more; 1..1 = exactly one; 0..1 = at most one; 1..* = at least one.</p><p><i>VI: 0..* = không hoặc nhiều; 1..1 = đúng một; 0..1 = tối đa một; 1..* = ít nhất một.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Movies 0..* —— 0..1 Studios. In E/R this is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Movies 0..* —— 0..1 Studios. Trong E/R đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "many-one from Movies to Studios"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a weak relationship"
+              },
+              {
+                "ma": "c",
+                "noiDung": "many-many"
+              },
+              {
+                "ma": "d",
+                "noiDung": "one-one"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Each movie has at most one studio (0..1 at the Studios end), a studio has many movies.</p><p><i>VI: Mỗi phim có tối đa một hãng (0..1 ở đầu Studios), một hãng có nhiều phim.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A filled diamond (composition) from Crews to Studios corresponds in E/R to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Hình thoi đặc (composition) từ Crews tới Studios tương ứng trong E/R với…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a derived attribute shown with a dashed oval"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a many-many relationship with attributes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a weak entity set with its supporting relationship"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a subclass connected by an isa triangle"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Composition: the part cannot exist without the whole — exactly a weak entity set.</p><p><i>VI: Composition: phần không tồn tại thiếu toàn thể — đúng là tập thực thể yếu.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>How does UML show a key attribute like title, year in class Movies?</p><p style=\"opacity:.75;font-size:.92em\"><i>UML thể hiện thuộc tính khoá như title, year của lớp Movies thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "by underlining the class name"
+              },
+              {
+                "ma": "b",
+                "noiDung": "with a double rectangle"
+              },
+              {
+                "ma": "c",
+                "noiDung": "with a dashed line"
+              },
+              {
+                "ma": "d",
+                "noiDung": "with the stereotype PK after the attribute"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The deck writes \"title PK, year PK\" inside the class box.</p><p><i>VI: Bộ slide viết \"title PK, year PK\" trong khung lớp.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>An association class in UML corresponds to…</p><p style=\"opacity:.75;font-size:.92em\"><i>Lớp liên kết (association class) trong UML tương ứng với…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a relationship that has its own attributes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "an index"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a subclass with no attributes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an entity without a key"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>e.g. a Contracts class on the Movies–Stars association carrying salary.</p><p><i>VI: vd lớp Contracts trên liên kết Movies–Stars mang thuộc tính salary.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading 0..1 as \"zero to many\".|||Đọc 0..1 thành \"không tới nhiều\"."
+        },
+        {
+          "loi": "Confusing aggregation (hollow diamond) with composition (filled).|||Nhầm aggregation (thoi rỗng) với composition (thoi đặc)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "composition",
+          "vi": "quan hệ hợp thành"
+        },
+        {
+          "en": "association class",
+          "vi": "lớp liên kết"
+        }
+      ]
+    }
+  ]
+}

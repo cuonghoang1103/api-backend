@@ -1,0 +1,628 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-er-nang-cao",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-er-nang-cao"
+  },
+  "exercises": [
+    {
+      "title": "Weak entity: rooms of a hotel",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "weak entity",
+        "partial key",
+        "ON DELETE CASCADE"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "weak-entity"
+      ],
+      "problemHtml": "<p>A hotel chain: <code>Hotel(hotelID INT PK, hotelName VARCHAR(60) NOT NULL)</code>. Room 101 exists in many hotels, so a room is identified by (hotel, roomNo): <code>Room(hotelID INT, roomNo INT, roomType VARCHAR(10), price DECIMAL(10,2))</code>. Prices are positive; closing a hotel removes its rooms.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Room's key = (hotelID, roomNo); hotelID references Hotel ON DELETE CASCADE.</li>\n  <li>CHECK (price &gt; 0).</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Chuỗi khách sạn: <code>Hotel(hotelID INT PK, hotelName VARCHAR(60) NOT NULL)</code>. Phòng 101 có ở nhiều khách sạn nên phòng được xác định bằng (khách sạn, số phòng): <code>Room(hotelID INT, roomNo INT, roomType VARCHAR(10), price DECIMAL(10,2))</code>. Giá dương; đóng cửa khách sạn thì xoá các phòng của nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá của Room = (hotelID, roomNo); hotelID tham chiếu Hotel ON DELETE CASCADE.</li>\n  <li>CHECK (price &gt; 0).</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl   | col       | type             \n------+-----------+------------------\nhotel | hotelid   | integer          \nhotel | hotelname | character varying\nroom  | hotelid   | integer          \nroom  | roomno    | integer          \nroom  | roomtype  | character varying\nroom  | price     | numeric          ",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Partial key (roomNo) + owner key (hotelID) = key of the weak entity.|||Khoá bộ phận (roomNo) + khoá chủ (hotelID) = khoá của thực thể yếu.",
+        "A weak entity dies with its owner: ON DELETE CASCADE.|||Thực thể yếu chết theo chủ: ON DELETE CASCADE."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Hotel (\n    hotelID   INT         NOT NULL PRIMARY KEY,\n    hotelName VARCHAR(60) NOT NULL\n);\nCREATE TABLE Room (\n    hotelID  INT           NOT NULL REFERENCES Hotel (hotelID) ON DELETE CASCADE,  -- owner\n    roomNo   INT           NOT NULL,                                               -- partial key\n    roomType VARCHAR(10)   NULL,\n    price    DECIMAL(10,2) NULL CHECK (price > 0),\n    PRIMARY KEY (hotelID, roomNo)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ask \"is this number unique on its own, or only inside something?\" — \"only inside\" means weak entity, and the \"something\" joins the key.</p>",
+      "solutionExplanationHtmlVi": "<p>Hỏi \"số này tự nó duy nhất, hay chỉ duy nhất bên trong một thứ khác?\" — \"chỉ bên trong\" nghĩa là thực thể yếu, và \"thứ khác\" đó tham gia vào khoá.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('hotel', 'room')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "hotel",
+                  "hotelid",
+                  "integer"
+                ],
+                [
+                  "hotel",
+                  "hotelname",
+                  "character varying"
+                ],
+                [
+                  "room",
+                  "hotelid",
+                  "integer"
+                ],
+                [
+                  "room",
+                  "roomno",
+                  "integer"
+                ],
+                [
+                  "room",
+                  "roomtype",
+                  "character varying"
+                ],
+                [
+                  "room",
+                  "price",
+                  "numeric"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Room 101 in two hotels|||Phòng 101 ở hai khách sạn",
+            "thu": "INSERT INTO Hotel VALUES (1, 'CT Hanoi'), (2, 'CT Danang'); INSERT INTO Room VALUES (1, 101, 'single', 500000), (2, 101, 'double', 700000)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Room 101 twice in one hotel is rejected|||Hai phòng 101 trong một khách sạn bị từ chối",
+            "thu": "INSERT INTO Hotel VALUES (1, 'CT Hanoi'); INSERT INTO Room VALUES (1, 101, 'single', 500000), (1, 101, 'double', 700000)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A zero price is rejected|||Giá 0 bị từ chối",
+            "thu": "INSERT INTO Hotel VALUES (1, 'CT Hanoi'); INSERT INTO Room VALUES (1, 102, 'single', 0)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Closing a hotel removes its rooms|||Đóng cửa khách sạn thì xoá các phòng",
+            "kiemTra": "INSERT INTO Hotel VALUES (1, 'CT Hanoi'), (2, 'CT Danang'); INSERT INTO Room VALUES (1, 101, 'single', 1), (1, 102, 'single', 1), (2, 101, 'single', 1); DELETE FROM Hotel WHERE hotelID = 1; SELECT hotelID, roomNo FROM Room",
+            "mongDoi": {
+              "cot": [
+                "hotelID",
+                "roomNo"
+              ],
+              "hang": [
+                [
+                  2,
+                  101
+                ]
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "PRIMARY KEY (roomNo) — the second hotel cannot have a room 101.|||PRIMARY KEY (roomNo) — khách sạn thứ hai không có được phòng 101."
+        },
+        {
+          "loi": "No CASCADE — closing a hotel is blocked by its rooms.|||Không CASCADE — đóng cửa khách sạn bị các phòng chặn lại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "weak entity",
+          "vi": "thực thể yếu"
+        },
+        {
+          "en": "partial key",
+          "vi": "khoá bộ phận"
+        }
+      ]
+    },
+    {
+      "title": "Multivalued attribute: an employee's phone numbers",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "multivalued attribute",
+        "1NF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl"
+      ],
+      "problemHtml": "<p>An employee may have several phone numbers. Instead of a column <code>phones</code> holding \"0901…, 0912…\", create <code>Employee(empID INT PK, fullName VARCHAR(50) NOT NULL)</code> and <code>EmployeePhone(empID INT, phone VARCHAR(15))</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>EmployeePhone's key = (empID, phone); empID references Employee.</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một nhân viên có thể có nhiều số điện thoại. Thay vì một cột <code>phones</code> chứa \"0901…, 0912…\", tạo <code>Employee(empID INT PK, fullName VARCHAR(50) NOT NULL)</code> và <code>EmployeePhone(empID INT, phone VARCHAR(15))</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá của EmployeePhone = (empID, phone); empID tham chiếu Employee.</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl           | col      | type             \n--------------+----------+------------------\nemployee      | empid    | integer          \nemployee      | fullname | character varying\nemployeephone | empid    | integer          \nemployeephone | phone    | character varying",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Rule R7: multivalued attribute ⇒ its own table (owner key, value).|||Luật R7: thuộc tính đa trị ⇒ bảng riêng (khoá chủ, giá trị).",
+        "The key is both columns.|||Khoá là cả hai cột."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Employee (\n    empID    INT         NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL\n);\nCREATE TABLE EmployeePhone (                       -- one row per (employee, phone)\n    empID INT         NOT NULL REFERENCES Employee (empID),\n    phone VARCHAR(15) NOT NULL,\n    PRIMARY KEY (empID, phone)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A comma-separated list in one cell breaks 1NF: you cannot index it, constrain it or join on it. One row per value fixes all three.</p>",
+      "solutionExplanationHtmlVi": "<p>Danh sách ngăn bằng dấu phẩy trong một ô phá 1NF: không đánh chỉ mục, không ràng buộc, không nối được. Mỗi giá trị một dòng sửa cả ba.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('employee', 'employeephone')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "employee",
+                  "empid",
+                  "integer"
+                ],
+                [
+                  "employee",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "employeephone",
+                  "empid",
+                  "integer"
+                ],
+                [
+                  "employeephone",
+                  "phone",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "One employee, three phones|||Một nhân viên, ba số điện thoại",
+            "thu": "INSERT INTO Employee VALUES (1, 'An'); INSERT INTO EmployeePhone VALUES (1, '0901000001'), (1, '0912000002'), (1, '0283000003')"
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Two employees may share an office phone|||Hai nhân viên dùng chung một số văn phòng được",
+            "thu": "INSERT INTO Employee VALUES (1, 'An'), (2, 'Binh'); INSERT INTO EmployeePhone VALUES (1, '0283000003'), (2, '0283000003')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same phone twice for one employee is rejected|||Một số hai lần cho cùng nhân viên bị từ chối",
+            "thu": "INSERT INTO Employee VALUES (1, 'An'); INSERT INTO EmployeePhone VALUES (1, '0901000001'), (1, '0901000001')",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A phone of an unknown employee is rejected|||Số điện thoại của nhân viên không tồn tại bị từ chối",
+            "thu": "INSERT INTO EmployeePhone VALUES (9, '0901000001')",
+            "maLoi": "23503"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Key = empID — one phone per employee again.|||Khoá = empID — lại chỉ một số mỗi người."
+        },
+        {
+          "loi": "Key = phone — two employees cannot share an office number.|||Khoá = phone — hai người không dùng chung số văn phòng được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "multivalued attribute",
+          "vi": "thuộc tính đa trị"
+        }
+      ]
+    },
+    {
+      "title": "Ternary relationship: who supplies which part to which project",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "ternary relationship",
+        "n-ary key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "ternary"
+      ],
+      "problemHtml": "<p>A supplier supplies a part to a project, with a quantity. The same supplier can supply the same part to another project, and the same part for the same project can come from several suppliers. Create <code>Supplier(supID INT PK)</code>, <code>Part(partID INT PK)</code>, <code>Project(projID INT PK)</code> (one column each is enough here) and <code>Supplies(supID, partID, projID, qty INT)</code> with qty &gt; 0.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Rule R6: key of Supplies = all three foreign keys.</li>\n  <li>Each of the three columns references its table; CHECK (qty &gt; 0).</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nhà cung cấp cung cấp một linh kiện cho một dự án, kèm số lượng. Cùng nhà cung cấp có thể cấp cùng linh kiện cho dự án khác, và cùng linh kiện cho cùng dự án có thể đến từ nhiều nhà cung cấp. Tạo <code>Supplier(supID INT PK)</code>, <code>Part(partID INT PK)</code>, <code>Project(projID INT PK)</code> (mỗi bảng một cột là đủ) và <code>Supplies(supID, partID, projID, qty INT)</code> với qty &gt; 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Luật R6: khoá của Supplies = cả ba khoá ngoại.</li>\n  <li>Mỗi cột trong ba cột tham chiếu bảng của nó; CHECK (qty &gt; 0).</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl      | col    | type   \n---------+--------+--------\nsupplier | supid  | integer\nsupplies | supid  | integer\nsupplies | partid | integer\nsupplies | projid | integer\nsupplies | qty    | integer\npart     | partid | integer\nproject  | projid | integer",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "A ternary relationship without arrows ⇒ a table keyed by all three entity keys.|||Liên kết ba ngôi không mũi tên ⇒ bảng có khoá gồm cả ba khoá thực thể.",
+        "Three REFERENCES, one per entity set.|||Ba REFERENCES, mỗi tập thực thể một cái."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Supplier (supID  INT NOT NULL PRIMARY KEY);\nCREATE TABLE Part     (partID INT NOT NULL PRIMARY KEY);\nCREATE TABLE Project  (projID INT NOT NULL PRIMARY KEY);\nCREATE TABLE Supplies (\n    supID  INT NOT NULL REFERENCES Supplier (supID),\n    partID INT NOT NULL REFERENCES Part (partID),\n    projID INT NOT NULL REFERENCES Project (projID),\n    qty    INT NOT NULL CHECK (qty > 0),\n    PRIMARY KEY (supID, partID, projID)        -- no arrow in the diagram ⇒ all three keys\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>If the diagram had an arrow to Supplier (\"each part for each project comes from ONE supplier\"), the key would shrink to (partID, projID). Arrows remove an entity from the key.</p>",
+      "solutionExplanationHtmlVi": "<p>Nếu sơ đồ có mũi tên tới Supplier (\"mỗi linh kiện cho mỗi dự án chỉ từ MỘT NCC\"), khoá sẽ rút còn (partID, projID). Mũi tên đưa một thực thể ra khỏi khoá.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('supplier', 'part', 'project', 'supplies')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "supplier",
+                  "supid",
+                  "integer"
+                ],
+                [
+                  "supplies",
+                  "supid",
+                  "integer"
+                ],
+                [
+                  "supplies",
+                  "partid",
+                  "integer"
+                ],
+                [
+                  "supplies",
+                  "projid",
+                  "integer"
+                ],
+                [
+                  "supplies",
+                  "qty",
+                  "integer"
+                ],
+                [
+                  "part",
+                  "partid",
+                  "integer"
+                ],
+                [
+                  "project",
+                  "projid",
+                  "integer"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Same supplier, same part, two projects; same part and project from two suppliers|||Cùng NCC, cùng linh kiện, hai dự án; cùng linh kiện và dự án từ hai NCC",
+            "thu": "INSERT INTO Supplier VALUES (1), (2); INSERT INTO Part VALUES (10); INSERT INTO Project VALUES (100), (200); INSERT INTO Supplies VALUES (1, 10, 100, 5), (1, 10, 200, 3), (2, 10, 100, 7)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same triple twice is rejected|||Cùng bộ ba hai lần bị từ chối",
+            "thu": "INSERT INTO Supplier VALUES (1); INSERT INTO Part VALUES (10); INSERT INTO Project VALUES (100); INSERT INTO Supplies VALUES (1, 10, 100, 5), (1, 10, 100, 6)",
+            "maLoi": "23505"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An unknown project is rejected|||Dự án không tồn tại bị từ chối",
+            "thu": "INSERT INTO Supplier VALUES (1); INSERT INTO Part VALUES (10); INSERT INTO Supplies VALUES (1, 10, 999, 5)",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A quantity of 0 is rejected|||Số lượng 0 bị từ chối",
+            "thu": "INSERT INTO Supplier VALUES (1); INSERT INTO Part VALUES (10); INSERT INTO Project VALUES (100); INSERT INTO Supplies VALUES (1, 10, 100, 0)",
+            "maLoi": "23514"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Key (supID, partID) — the same supplier cannot then supply the same part to a second project.|||Khoá (supID, partID) — khi đó cùng NCC không cấp được cùng linh kiện cho dự án thứ hai."
+        },
+        {
+          "loi": "No foreign keys — supplies to projects that do not exist.|||Không có khoá ngoại — cung cấp cho dự án không tồn tại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ternary relationship",
+          "vi": "liên kết ba ngôi"
+        }
+      ]
+    },
+    {
+      "title": "Participation, composite and derived attributes",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "total participation",
+        "composite attribute",
+        "derived attribute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd"
+      ],
+      "problemHtml": "<p>Lesson 3.2, sections 2 and 4.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 3.2, mục 2 và 4.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Double line = total participation; arrow = at most one.|||Đường đôi = tham gia toàn phần; mũi tên = tối đa một.",
+        "Composite ⇒ columns; multivalued ⇒ table; derived ⇒ not stored.|||Phức hợp ⇒ nhiều cột; đa trị ⇒ bảng; dẫn xuất ⇒ không lưu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Participation, composite and derived attributes\n\nAnswer in the answer panel (no code needed).\n\n1. A double line between Employee and WorksIn means…Đường đôi giữa Employee và WorksIn nghĩa là…\n2. address = (street, district, city) is a composite attribute. In the table it becomes…address = (street, district, city) là thuộc tính phức hợp. Trong bảng nó thành…\n3. age is derived from birthDate. Do we store it?age được suy ra từ birthDate. Có lưu nó không?\n4. When can a ternary relationship be replaced by binary ones without losing information?Khi nào liên kết ba ngôi thay được bằng các liên kết hai ngôi mà không mất thông tin?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Participation, composite and derived attributes — answer key\n\n1. A double line between Employee and WorksIn means…Đường đôi giữa Employee và WorksIn nghĩa là…\n   Answer: b) every employee must take part (total participation)\n   Total participation ⇒ in SQL the foreign key is NOT NULL.VI: Tham gia toàn phần ⇒ trong SQL khoá ngoại là NOT NULL.\n\n2. address = (street, district, city) is a composite attribute. In the table it becomes…address = (street, district, city) là thuộc tính phức hợp. Trong bảng nó thành…\n   Answer: b) three columns street, district, city\n   Composite ⇒ one column per component (multivalued ⇒ a table).VI: Phức hợp ⇒ mỗi thành phần một cột (đa trị ⇒ một bảng).\n\n3. age is derived from birthDate. Do we store it?age được suy ra từ birthDate. Có lưu nó không?\n   Answer: d) No — compute it in a query or a view, it changes every year\n   A stored age becomes wrong on every birthday; derived attributes (dashed oval) are computed.VI: Tuổi lưu sẵn sẽ sai sau mỗi sinh nhật; thuộc tính dẫn xuất (oval nét đứt) được tính.\n\n4. When can a ternary relationship be replaced by binary ones without losing information?Khi nào liên kết ba ngôi thay được bằng các liên kết hai ngôi mà không mất thông tin?\n   Answer: b) When one entity is determined by the other two (or a pair is independent)\n   If the combination itself is the fact (supplier-part-project), splitting loses it; if one side is determined by the others, a binary design works.VI: Nếu chính tổ hợp là sự kiện (NCC-linh kiện-dự án), tách ra là mất; nếu một bên được hai bên kia quyết định thì thiết kế hai ngôi được.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> every employee must take part (total participation)</p><p>Total participation ⇒ in SQL the foreign key is NOT NULL.</p><p><i>VI: Tham gia toàn phần ⇒ trong SQL khoá ngoại là NOT NULL.</i></p></li><li><p><b>b)</b> three columns street, district, city</p><p>Composite ⇒ one column per component (multivalued ⇒ a table).</p><p><i>VI: Phức hợp ⇒ mỗi thành phần một cột (đa trị ⇒ một bảng).</i></p></li><li><p><b>d)</b> No — compute it in a query or a view, it changes every year</p><p>A stored age becomes wrong on every birthday; derived attributes (dashed oval) are computed.</p><p><i>VI: Tuổi lưu sẵn sẽ sai sau mỗi sinh nhật; thuộc tính dẫn xuất (oval nét đứt) được tính.</i></p></li><li><p><b>b)</b> When one entity is determined by the other two (or a pair is independent)</p><p>If the combination itself is the fact (supplier-part-project), splitting loses it; if one side is determined by the others, a binary design works.</p><p><i>VI: Nếu chính tổ hợp là sự kiện (NCC-linh kiện-dự án), tách ra là mất; nếu một bên được hai bên kia quyết định thì thiết kế hai ngôi được.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A double line between Employee and WorksIn means…</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường đôi giữa Employee và WorksIn nghĩa là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "the relationship is many-many"
+              },
+              {
+                "ma": "b",
+                "noiDung": "every employee must take part (total participation)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "WorksIn has two attributes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Employee is a weak entity"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Total participation ⇒ in SQL the foreign key is NOT NULL.</p><p><i>VI: Tham gia toàn phần ⇒ trong SQL khoá ngoại là NOT NULL.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>address = (street, district, city) is a composite attribute. In the table it becomes…</p><p style=\"opacity:.75;font-size:.92em\"><i>address = (street, district, city) là thuộc tính phức hợp. Trong bảng nó thành…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a CHECK constraint"
+              },
+              {
+                "ma": "b",
+                "noiDung": "three columns street, district, city"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one column holding the three parts"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a separate table Address"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Composite ⇒ one column per component (multivalued ⇒ a table).</p><p><i>VI: Phức hợp ⇒ mỗi thành phần một cột (đa trị ⇒ một bảng).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>age is derived from birthDate. Do we store it?</p><p style=\"opacity:.75;font-size:.92em\"><i>age được suy ra từ birthDate. Có lưu nó không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes — as part of the key, so ages stay unique"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only as a multivalued attribute in its own table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — as a NOT NULL INT column updated by the app"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — compute it in a query or a view, it changes every year"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A stored age becomes wrong on every birthday; derived attributes (dashed oval) are computed.</p><p><i>VI: Tuổi lưu sẵn sẽ sai sau mỗi sinh nhật; thuộc tính dẫn xuất (oval nét đứt) được tính.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>When can a ternary relationship be replaced by binary ones without losing information?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khi nào liên kết ba ngôi thay được bằng các liên kết hai ngôi mà không mất thông tin?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Never"
+              },
+              {
+                "ma": "b",
+                "noiDung": "When one entity is determined by the other two (or a pair is independent)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Always — ternary relationships are never needed"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Only when all three entities are weak"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>If the combination itself is the fact (supplier-part-project), splitting loses it; if one side is determined by the others, a binary design works.</p><p><i>VI: Nếu chính tổ hợp là sự kiện (NCC-linh kiện-dự án), tách ra là mất; nếu một bên được hai bên kia quyết định thì thiết kế hai ngôi được.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Storing age next to birthDate.|||Lưu age cạnh birthDate."
+        },
+        {
+          "loi": "Turning a composite attribute into a table (that is for multivalued ones).|||Biến thuộc tính phức hợp thành bảng (đó là cách cho thuộc tính đa trị)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "composite attribute",
+          "vi": "thuộc tính phức hợp"
+        },
+        {
+          "en": "derived attribute",
+          "vi": "thuộc tính dẫn xuất"
+        }
+      ]
+    }
+  ]
+}

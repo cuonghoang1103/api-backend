@@ -1,0 +1,702 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi4-1",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi4-1"
+  },
+  "exercises": [
+    {
+      "title": "Does title, year → starName hold? Find the counter-examples",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "functional dependency",
+        "checking an FD on data"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "group-by",
+        "slide"
+      ],
+      "problemHtml": "<p>An FD X → Y holds on an instance when no two tuples agree on X but differ on Y. Return every (title, year) whose tuples disagree on <code>starName</code> — the counter-examples to <code>title, year → starName</code> — with the number of different stars.</p>\n<p><b>The relation of slides 5 and 21</b> (tab <code>Movies1.sql</code>): <code>Movies1(title, year, length, genre, studioName, starName)</code>, key (title, year, starName) — one row per (movie, star), so every movie fact is repeated once per star.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>title, year, stars</code>.</li>\n  <li>Only the groups that break the FD; row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>FD X → Y đúng trên một thể hiện khi không có hai bộ trùng X mà khác Y. Trả mọi (title, year) có các bộ khác nhau ở <code>starName</code> — phản ví dụ của <code>title, year → starName</code> — kèm số diễn viên khác nhau.</p>\n<p><b>Quan hệ của slide 5 và 21</b> (tab <code>Movies1.sql</code>): <code>Movies1(title, year, length, genre, studioName, starName)</code>, khoá (title, year, starName) — mỗi (phim, diễn viên) một dòng, nên mọi thông tin của phim lặp lại theo số diễn viên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>title, year, stars</code>.</li>\n  <li>Chỉ các nhóm phá FD; thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "title         | year | stars\n--------------+------+------\nStar Wars     | 1977 | 3    \nWayne's World | 1992 | 2    ",
+          "explanation": "Expected result of check \"Groups violating title, year → starName\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Các nhóm vi phạm title, year → starName\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Group the tuples by the left side X.|||Gộp các bộ theo vế trái X.",
+        "A group violates X → Y when it contains more than one distinct Y: HAVING COUNT(DISTINCT Y) &gt; 1.|||Một nhóm vi phạm X → Y khi nó có hơn một giá trị Y khác nhau: HAVING COUNT(DISTINCT Y) &gt; 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Movies1.sql",
+          "language": "sql",
+          "code": "-- Movies1.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies1.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT title, year, COUNT(DISTINCT starName) AS stars\nFROM Movies1\nGROUP BY title, year                      -- tuples that agree on X = title, year …\nHAVING COUNT(DISTINCT starName) > 1;      -- … but differ on Y = starName\n"
+        },
+        {
+          "name": "Movies1.sql",
+          "language": "sql",
+          "code": "-- Movies1.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Movies1.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: Star Wars 3, Wayne's World 2. An instance can only refute an FD; that title, year → length holds here is evidence, not proof — FDs come from the meaning of the data.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: Star Wars 3, Wayne's World 2. Một thể hiện chỉ bác bỏ được FD; việc title, year → length đúng ở đây là bằng chứng, không phải chứng minh — FD đến từ ý nghĩa dữ liệu.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Movies1 (\n  title      NVARCHAR(40) NOT NULL,\n  year       INT          NOT NULL,\n  length     INT          NULL,\n  genre      NVARCHAR(10) NULL,\n  studioName NVARCHAR(20) NULL,\n  starName   NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_movies1 PRIMARY KEY (title, year, starName)\n);\nINSERT INTO Movies1 VALUES\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Carrie Fisher'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Mark Hamill'),\n (N'Star Wars', 1977, 124, N'SciFi', N'Fox', N'Harrison Ford'),\n (N'Gone With the Wind', 1939, 231, N'drama', N'MGM', N'Vivien Leigh'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Dana Carvey'),\n (N'Wayne''s World', 1992, 95, N'comedy', N'Paramount', N'Mike Meyers');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Groups violating title, year → starName|||Các nhóm vi phạm title, year → starName",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year",
+                "stars"
+              ],
+              "hang": [
+                [
+                  "Star Wars",
+                  1977,
+                  3
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "A one-star movie and a two-star movie added|||Thêm phim một diễn viên và phim hai diễn viên",
+            "an": true,
+            "themCsdl": "INSERT INTO Movies1 VALUES (N'Jaws', 1975, 124, N'drama', N'Universal', N'Roy Scheider'), (N'Alien', 1979, 117, N'SciFi', N'Fox', N'Sigourney Weaver'), (N'Alien', 1979, 117, N'SciFi', N'Fox', N'Tom Skerritt')",
+            "mongDoi": {
+              "cot": [
+                "title",
+                "year",
+                "stars"
+              ],
+              "hang": [
+                [
+                  "Alien",
+                  1979,
+                  2
+                ],
+                [
+                  "Star Wars",
+                  1977,
+                  3
+                ],
+                [
+                  "Wayne's World",
+                  1992,
+                  2
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses COUNT(DISTINCT …) with HAVING|||Dùng COUNT(DISTINCT …) với HAVING",
+            "khop": "\\bCOUNT\\s*\\(\\s*DISTINCT\\b[\\s\\S]*\\bHAVING\\b|\\bHAVING\\b[\\s\\S]*\\bCOUNT\\s*\\(\\s*DISTINCT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No HAVING — Gone With the Wind (one star) is listed though it breaks nothing.|||Không HAVING — Gone With the Wind (một diễn viên) hiện dù không phá gì."
+        },
+        {
+          "loi": "Testing length instead of starName — title, year → length DOES hold, so the result is empty.|||Kiểm length thay vì starName — title, year → length ĐÚNG nên kết quả rỗng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "functional dependency (FD)",
+          "vi": "phụ thuộc hàm"
+        }
+      ]
+    },
+    {
+      "title": "Splitting, combining, trivial FDs and Armstrong's axioms",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "splitting rule",
+        "combining rule",
+        "trivial FD",
+        "Armstrong axioms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 6–14.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 6–14.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Right sides split and combine; left sides never split.|||Vế phải tách và gộp được; vế trái không bao giờ tách.",
+        "Trivial: Y ⊆ X.|||Tầm thường: Y ⊆ X."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Splitting, combining, trivial FDs and Armstrong's axioms\n\nAnswer in the answer panel (no code needed).\n\n1. title, year → length, genre is equivalent to…title, year → length, genre tương đương với…\n2. Can we split the LEFT side: from title, year → length conclude title → length?Có tách được vế TRÁI: từ title, year → length suy ra title → length?\n3. Which FD is trivial?FD nào là tầm thường?\n4. From A → B and B → C we conclude A → C by…Từ A → B và B → C suy ra A → C bằng…\n5. From A → B, augmentation with C gives…Từ A → B, tăng trưởng với C cho…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Splitting, combining, trivial FDs and Armstrong's axioms — answer key\n\n1. title, year → length, genre is equivalent to…title, year → length, genre tương đương với…\n   Answer: c) title, year → length AND title, year → genre\n   Splitting/combining applies to the RIGHT side only.VI: Tách/gộp chỉ áp dụng cho vế PHẢI.\n\n2. Can we split the LEFT side: from title, year → length conclude title → length?Có tách được vế TRÁI: từ title, year → length suy ra title → length?\n   Answer: c) No — remakes share a title but not a length\n   Left sides cannot be split: King Kong 1933 and 2005 have different lengths.VI: Không tách được vế trái: King Kong 1933 và 2005 dài khác nhau.\n\n3. Which FD is trivial?FD nào là tầm thường?\n   Answer: d) title, year → title\n   Trivial = the right side is a subset of the left side; it holds in every relation.VI: Tầm thường = vế phải là tập con của vế trái; đúng trong mọi quan hệ.\n\n4. From A → B and B → C we conclude A → C by…Từ A → B và B → C suy ra A → C bằng…\n   Answer: b) transitivity\n   Armstrong: reflexivity (Y ⊆ X ⇒ X → Y), augmentation (X → Y ⇒ XZ → YZ), transitivity.VI: Armstrong: phản xạ (Y ⊆ X ⇒ X → Y), tăng trưởng (X → Y ⇒ XZ → YZ), bắc cầu.\n\n5. From A → B, augmentation with C gives…Từ A → B, tăng trưởng với C cho…\n   Answer: d) AC → BC\n   Add the same attributes to both sides.VI: Thêm cùng thuộc tính vào cả hai vế.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> title, year → length AND title, year → genre</p><p>Splitting/combining applies to the RIGHT side only.</p><p><i>VI: Tách/gộp chỉ áp dụng cho vế PHẢI.</i></p></li><li><p><b>c)</b> No — remakes share a title but not a length</p><p>Left sides cannot be split: King Kong 1933 and 2005 have different lengths.</p><p><i>VI: Không tách được vế trái: King Kong 1933 và 2005 dài khác nhau.</i></p></li><li><p><b>d)</b> title, year → title</p><p>Trivial = the right side is a subset of the left side; it holds in every relation.</p><p><i>VI: Tầm thường = vế phải là tập con của vế trái; đúng trong mọi quan hệ.</i></p></li><li><p><b>b)</b> transitivity</p><p>Armstrong: reflexivity (Y ⊆ X ⇒ X → Y), augmentation (X → Y ⇒ XZ → YZ), transitivity.</p><p><i>VI: Armstrong: phản xạ (Y ⊆ X ⇒ X → Y), tăng trưởng (X → Y ⇒ XZ → YZ), bắc cầu.</i></p></li><li><p><b>d)</b> AC → BC</p><p>Add the same attributes to both sides.</p><p><i>VI: Thêm cùng thuộc tính vào cả hai vế.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>title, year → length, genre is equivalent to…</p><p style=\"opacity:.75;font-size:.92em\"><i>title, year → length, genre tương đương với…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "length, genre → title, year"
+              },
+              {
+                "ma": "b",
+                "noiDung": "title → length AND year → genre"
+              },
+              {
+                "ma": "c",
+                "noiDung": "title, year → length AND title, year → genre"
+              },
+              {
+                "ma": "d",
+                "noiDung": "title, year, length → genre only"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Splitting/combining applies to the RIGHT side only.</p><p><i>VI: Tách/gộp chỉ áp dụng cho vế PHẢI.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Can we split the LEFT side: from title, year → length conclude title → length?</p><p style=\"opacity:.75;font-size:.92em\"><i>Có tách được vế TRÁI: từ title, year → length suy ra title → length?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only if length is numeric"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes — splitting works on both sides"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — remakes share a title but not a length"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Yes, but only for keys"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Left sides cannot be split: King Kong 1933 and 2005 have different lengths.</p><p><i>VI: Không tách được vế trái: King Kong 1933 và 2005 dài khác nhau.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which FD is trivial?</p><p style=\"opacity:.75;font-size:.92em\"><i>FD nào là tầm thường?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "title, year → length"
+              },
+              {
+                "ma": "b",
+                "noiDung": "starName → title"
+              },
+              {
+                "ma": "c",
+                "noiDung": "title → year"
+              },
+              {
+                "ma": "d",
+                "noiDung": "title, year → title"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Trivial = the right side is a subset of the left side; it holds in every relation.</p><p><i>VI: Tầm thường = vế phải là tập con của vế trái; đúng trong mọi quan hệ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>From A → B and B → C we conclude A → C by…</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ A → B và B → C suy ra A → C bằng…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "augmentation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "transitivity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "reflexivity"
+              },
+              {
+                "ma": "d",
+                "noiDung": "splitting"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Armstrong: reflexivity (Y ⊆ X ⇒ X → Y), augmentation (X → Y ⇒ XZ → YZ), transitivity.</p><p><i>VI: Armstrong: phản xạ (Y ⊆ X ⇒ X → Y), tăng trưởng (X → Y ⇒ XZ → YZ), bắc cầu.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>From A → B, augmentation with C gives…</p><p style=\"opacity:.75;font-size:.92em\"><i>Từ A → B, tăng trưởng với C cho…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "C → B"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AB → C"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A → BC"
+              },
+              {
+                "ma": "d",
+                "noiDung": "AC → BC"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Add the same attributes to both sides.</p><p><i>VI: Thêm cùng thuộc tính vào cả hai vế.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting the left side.|||Tách vế trái."
+        },
+        {
+          "loi": "Confusing augmentation with transitivity.|||Nhầm tăng trưởng với bắc cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "trivial FD",
+          "vi": "FD tầm thường"
+        },
+        {
+          "en": "Armstrong's axioms",
+          "vi": "hệ tiên đề Armstrong"
+        }
+      ]
+    },
+    {
+      "title": "Compute the closures (slide 15 algorithm)",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "attribute closure"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "closure",
+        "slide"
+      ],
+      "problemHtml": "<p>R(A, B, C, D, E, G), F = {AB → C, C → A, BC → D, ACD → B, D → EG, BE → C, CG → BD, CE → AG}. Compute each closure. Write the attributes in alphabetical order, e.g. <code>ADEG</code> (or <code>{A, D, E, G}</code>). Keep looping over F until nothing changes.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R(A, B, C, D, E, G), F như trên. Tính từng bao đóng. Viết thuộc tính theo thứ tự chữ cái, vd <code>ADEG</code> (hoặc <code>{A, D, E, G}</code>). Lặp qua F tới khi không còn gì thay đổi.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start with X; add the right side of every FD whose left side is inside the current set.|||Bắt đầu từ X; thêm vế phải của mọi FD có vế trái nằm trong tập hiện tại.",
+        "Repeat full passes until a pass adds nothing.|||Lặp cả lượt tới khi một lượt không thêm được gì."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Compute the closures (slide 15 algorithm)\n\nAnswer in the answer panel (no code needed).\n\n1. X⁺X⁺\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Compute the closures (slide 15 algorithm) — answer key\n\n1. X⁺X⁺\n   - r1.cl: ABCDEG / A,B,C,D,E,G / A, B, C, D, E, G / {A,B,C,D,E,G} / {A, B, C, D, E, G} / A B C D E G\n   - r2.cl: ABCDEG / A,B,C,D,E,G / A, B, C, D, E, G / {A,B,C,D,E,G} / {A, B, C, D, E, G} / A B C D E G\n   - r3.cl: ADEG / A,D,E,G / A, D, E, G / {A,D,E,G} / {A, D, E, G} / A D E G\n   - r4.cl: AC / A,C / A, C / {A,C} / {A, C} / A C\n   - r5.cl: ABCDEG / A,B,C,D,E,G / A, B, C, D, E, G / {A,B,C,D,E,G} / {A, B, C, D, E, G} / A B C D E G\n   Answers: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG; (AD)⁺ = ADEG; (C)⁺ = AC; (BE)⁺ = ABCDEG. (CE)⁺ needs a second pass: CG → BD fires only after CE → AG has added G.VI: Đáp án: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG; (AD)⁺ = ADEG; (C)⁺ = AC; (BE)⁺ = ABCDEG. (CE)⁺ cần lượt thứ hai: CG → BD chỉ chạy sau khi CE → AG thêm G.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Answers: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG; (AD)⁺ = ADEG; (C)⁺ = AC; (BE)⁺ = ABCDEG. (CE)⁺ needs a second pass: CG → BD fires only after CE → AG has added G.</p><p><i>VI: Đáp án: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG; (AD)⁺ = ADEG; (C)⁺ = AC; (BE)⁺ = ABCDEG. (CE)⁺ cần lượt thứ hai: CG → BD chỉ chạy sau khi CE → AG thêm G.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>X⁺</p><p style=\"opacity:.75;font-size:.92em\"><i>X⁺</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "X"
+              },
+              {
+                "ma": "cl",
+                "ten": "X⁺"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "{B, D}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "{C, E}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "{A, D}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "{C}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "{B, E}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.cl": [
+                "ABCDEG",
+                "A,B,C,D,E,G",
+                "A, B, C, D, E, G",
+                "{A,B,C,D,E,G}",
+                "{A, B, C, D, E, G}",
+                "A B C D E G"
+              ],
+              "r2.cl": [
+                "ABCDEG",
+                "A,B,C,D,E,G",
+                "A, B, C, D, E, G",
+                "{A,B,C,D,E,G}",
+                "{A, B, C, D, E, G}",
+                "A B C D E G"
+              ],
+              "r3.cl": [
+                "ADEG",
+                "A,D,E,G",
+                "A, D, E, G",
+                "{A,D,E,G}",
+                "{A, D, E, G}",
+                "A D E G"
+              ],
+              "r4.cl": [
+                "AC",
+                "A,C",
+                "A, C",
+                "{A,C}",
+                "{A, C}",
+                "A C"
+              ],
+              "r5.cl": [
+                "ABCDEG",
+                "A,B,C,D,E,G",
+                "A, B, C, D, E, G",
+                "{A,B,C,D,E,G}",
+                "{A, B, C, D, E, G}",
+                "A B C D E G"
+              ]
+            },
+            "giaiThich": "<p>Answers: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG; (AD)⁺ = ADEG; (C)⁺ = AC; (BE)⁺ = ABCDEG. (CE)⁺ needs a second pass: CG → BD fires only after CE → AG has added G.</p><p><i>VI: Đáp án: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG; (AD)⁺ = ADEG; (C)⁺ = AC; (BE)⁺ = ABCDEG. (CE)⁺ cần lượt thứ hai: CG → BD chỉ chạy sau khi CE → AG thêm G.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping after one pass — (CE)⁺ looks like ACEG instead of all of R.|||Dừng sau một lượt — (CE)⁺ thành ACEG thay vì cả R."
+        },
+        {
+          "loi": "Firing an FD whose left side is only partly present (ACD → B with only A, D).|||Cho FD chạy khi vế trái mới có một phần (ACD → B khi chỉ có A, D)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "closure X⁺",
+          "vi": "bao đóng X⁺"
+        }
+      ]
+    },
+    {
+      "title": "Minimal basis of a set of FDs",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "minimal basis",
+        "redundant FD",
+        "extraneous attribute"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "minimal-cover",
+        "slide"
+      ],
+      "problemHtml": "<p>Slides 16–19: a minimal basis has single-attribute right sides, no extraneous left-side attribute and no redundant FD.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 16–19: cơ sở tối thiểu có vế phải một thuộc tính, không thuộc tính thừa ở vế trái và không FD thừa.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Three steps: split right sides; remove extraneous left attributes; remove redundant FDs.|||Ba bước: tách vế phải; bỏ thuộc tính thừa vế trái; bỏ FD thừa.",
+        "To test an FD X → A for redundancy, compute X⁺ WITHOUT it.|||Để kiểm X → A có thừa không, tính X⁺ KHI BỎ nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Minimal basis of a set of FDs\n\nAnswer in the answer panel (no code needed).\n\n1. F = {A → BC, AB → D, B → C, AC → E, D → E}. A minimal basis is…F = {A → BC, AB → D, B → C, AC → E, D → E}. Một cơ sở tối thiểu là…\n2. F = {A → B, B → C, C → D, A → D}. Which FD is redundant?F = {A → B, B → C, C → D, A → D}. FD nào thừa?\n3. In AB → C with A → C also in F, the attribute B is…Trong AB → C khi F còn có A → C, thuộc tính B là…\n4. Why must step 2 (shrink left sides) come before step 3 (drop redundant FDs)?Vì sao bước 2 (rút vế trái) phải trước bước 3 (bỏ FD thừa)?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Minimal basis of a set of FDs — answer key\n\n1. F = {A → BC, AB → D, B → C, AC → E, D → E}. A minimal basis is…F = {A → BC, AB → D, B → C, AC → E, D → E}. Một cơ sở tối thiểu là…\n   Answer: a) {A → B, A → D, B → C, D → E}\n   Split, then shrink AB → D to A → D and AC → E to A → E, then drop A → C (via A → B, B → C) and A → E (via A → D, D → E).VI: Tách, rồi rút AB → D thành A → D và AC → E thành A → E, rồi bỏ A → C (qua A → B, B → C) và A → E (qua A → D, D → E).\n\n2. F = {A → B, B → C, C → D, A → D}. Which FD is redundant?F = {A → B, B → C, C → D, A → D}. FD nào thừa?\n   Answer: d) A → D\n   A⁺ without A → D still reaches D through B and C.VI: A⁺ khi bỏ A → D vẫn tới được D qua B và C.\n\n3. In AB → C with A → C also in F, the attribute B is…Trong AB → C khi F còn có A → C, thuộc tính B là…\n   Answer: c) extraneous: AB → C can be replaced by A → C\n   A⁺ already contains C, so B adds nothing to the left side.VI: A⁺ đã chứa C nên B không thêm gì cho vế trái.\n\n4. Why must step 2 (shrink left sides) come before step 3 (drop redundant FDs)?Vì sao bước 2 (rút vế trái) phải trước bước 3 (bỏ FD thừa)?\n   Answer: d) A shrunk FD can make another FD redundant that was not redundant before\n   Exercise 3 of 4.5: A → E only becomes removable after AC → E has been shrunk.VI: Bài 3 của 4.5: A → E chỉ bỏ được sau khi AC → E đã rút gọn.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> {A → B, A → D, B → C, D → E}</p><p>Split, then shrink AB → D to A → D and AC → E to A → E, then drop A → C (via A → B, B → C) and A → E (via A → D, D → E).</p><p><i>VI: Tách, rồi rút AB → D thành A → D và AC → E thành A → E, rồi bỏ A → C (qua A → B, B → C) và A → E (qua A → D, D → E).</i></p></li><li><p><b>d)</b> A → D</p><p>A⁺ without A → D still reaches D through B and C.</p><p><i>VI: A⁺ khi bỏ A → D vẫn tới được D qua B và C.</i></p></li><li><p><b>c)</b> extraneous: AB → C can be replaced by A → C</p><p>A⁺ already contains C, so B adds nothing to the left side.</p><p><i>VI: A⁺ đã chứa C nên B không thêm gì cho vế trái.</i></p></li><li><p><b>d)</b> A shrunk FD can make another FD redundant that was not redundant before</p><p>Exercise 3 of 4.5: A → E only becomes removable after AC → E has been shrunk.</p><p><i>VI: Bài 3 của 4.5: A → E chỉ bỏ được sau khi AC → E đã rút gọn.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>F = {A → BC, AB → D, B → C, AC → E, D → E}. A minimal basis is…</p><p style=\"opacity:.75;font-size:.92em\"><i>F = {A → BC, AB → D, B → C, AC → E, D → E}. Một cơ sở tối thiểu là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{A → B, A → D, B → C, D → E}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{A → BCDE}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{A → B, AB → D, B → C, D → E}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{A → B, A → C, A → D, B → C, D → E}"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Split, then shrink AB → D to A → D and AC → E to A → E, then drop A → C (via A → B, B → C) and A → E (via A → D, D → E).</p><p><i>VI: Tách, rồi rút AB → D thành A → D và AC → E thành A → E, rồi bỏ A → C (qua A → B, B → C) và A → E (qua A → D, D → E).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>F = {A → B, B → C, C → D, A → D}. Which FD is redundant?</p><p style=\"opacity:.75;font-size:.92em\"><i>F = {A → B, B → C, C → D, A → D}. FD nào thừa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A → B"
+              },
+              {
+                "ma": "b",
+                "noiDung": "B → C"
+              },
+              {
+                "ma": "c",
+                "noiDung": "C → D"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A → D"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A⁺ without A → D still reaches D through B and C.</p><p><i>VI: A⁺ khi bỏ A → D vẫn tới được D qua B và C.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>In AB → C with A → C also in F, the attribute B is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong AB → C khi F còn có A → C, thuộc tính B là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "trivial, because B is on both sides"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a key attribute that must stay in AB"
+              },
+              {
+                "ma": "c",
+                "noiDung": "extraneous: AB → C can be replaced by A → C"
+              },
+              {
+                "ma": "d",
+                "noiDung": "essential: AB → C needs both A and B"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A⁺ already contains C, so B adds nothing to the left side.</p><p><i>VI: A⁺ đã chứa C nên B không thêm gì cho vế trái.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why must step 2 (shrink left sides) come before step 3 (drop redundant FDs)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao bước 2 (rút vế trái) phải trước bước 3 (bỏ FD thừa)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because step 2 adds new FDs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because step 3 needs single-attribute left sides"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The order does not matter"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A shrunk FD can make another FD redundant that was not redundant before"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Exercise 3 of 4.5: A → E only becomes removable after AC → E has been shrunk.</p><p><i>VI: Bài 3 của 4.5: A → E chỉ bỏ được sau khi AC → E đã rút gọn.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping A → C — it follows from A → B and B → C.|||Giữ A → C — nó suy ra từ A → B và B → C."
+        },
+        {
+          "loi": "Merging everything into A → BCDE — that is not a minimal basis (right side not single, information lost about B and D).|||Gộp tất cả thành A → BCDE — không phải cơ sở tối thiểu (vế phải không đơn, mất thông tin về B và D)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "minimal basis / minimal cover",
+          "vi": "phủ tối thiểu"
+        }
+      ]
+    }
+  ]
+}

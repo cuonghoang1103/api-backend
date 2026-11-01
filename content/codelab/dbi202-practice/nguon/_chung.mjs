@@ -356,3 +356,9 @@ GO
 
 /** Một module = một bài học (slug = slug bài học ⇒ thẻ "🏋️ Luyện tập" dưới video bài đó tự hiện). */
 export const mod = (slug, ten, deDs, baiHoc = slug) => doiDau({ slug, ten, khoa: KHOA, baiHoc, de: deDs });
+
+/** Truy vấn cấu trúc (dùng trong `sau`): mọi cột của các bảng `ds` — tên bảng, tên cột, kiểu (tên kiểu PostgreSQL: integer,
+ *  character varying, character, numeric, date…). Không phụ thuộc thứ tự cột người học viết. */
+export const cot = (ds) => `SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN (${ds.map((t) => `'${t.toLowerCase()}'`).join(', ')})`;
+/** Câu nhắc chung cho đề DDL chấm trong trình duyệt: VARCHAR thay NVARCHAR, DATE thay DATETIME. */
+export const YC_DDL = ['Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.', 'Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.'];

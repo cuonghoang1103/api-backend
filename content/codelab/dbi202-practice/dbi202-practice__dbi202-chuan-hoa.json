@@ -1,0 +1,614 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-chuan-hoa",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-chuan-hoa"
+  },
+  "exercises": [
+    {
+      "title": "Which normal form does each FD break?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "partial dependency",
+        "transitive dependency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization"
+      ],
+      "problemHtml": "<p>The worked example: Enrollment(StudentID, StudentName, StudentDept, DeptHead, CourseID, CourseName, Grade), key (StudentID, CourseID). For each FD say what kind of dependency it is and which normal form it violates.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ví dụ có lời giải: Enrollment(StudentID, StudentName, StudentDept, DeptHead, CourseID, CourseName, Grade), khoá (StudentID, CourseID). Với mỗi FD cho biết loại phụ thuộc và dạng chuẩn nó vi phạm.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Compare the left side with the key: part of it ⇒ partial; outside it ⇒ transitive.|||So vế trái với khoá: là một phần khoá ⇒ bộ phận; nằm ngoài khoá ⇒ bắc cầu.",
+        "A dependency on the whole key is fine.|||Phụ thuộc vào cả khoá thì ổn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which normal form does each FD break?\n\nAnswer in the answer panel (no code needed).\n\n1. FD → violationFD → vi phạm\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which normal form does each FD break? — answer key\n\n1. FD → violationFD → vi phạm\n   - r1.loai: full dependency on the key\n   - r1.vp: nothing\n   - r2.loai: partial dependency\n   - r2.vp: 2NF\n   - r3.loai: partial dependency\n   - r3.vp: 2NF\n   - r4.loai: transitive dependency\n   - r4.vp: 3NF\n   Partial = depends on half of the composite key ⇒ 2NF. Transitive = non-key → non-key (StudentID → StudentDept → DeptHead) ⇒ 3NF.VI: Bộ phận = phụ thuộc một nửa khoá ghép ⇒ 2NF. Bắc cầu = không khoá → không khoá (StudentID → StudentDept → DeptHead) ⇒ 3NF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Partial = depends on half of the composite key ⇒ 2NF. Transitive = non-key → non-key (StudentID → StudentDept → DeptHead) ⇒ 3NF.</p><p><i>VI: Bộ phận = phụ thuộc một nửa khoá ghép ⇒ 2NF. Bắc cầu = không khoá → không khoá (StudentID → StudentDept → DeptHead) ⇒ 3NF.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>FD → violation</p><p style=\"opacity:.75;font-size:.92em\"><i>FD → vi phạm</i></p>",
+            "cot": [
+              {
+                "ma": "fd",
+                "ten": "FD"
+              },
+              {
+                "ma": "loai",
+                "ten": "Kind / Loại",
+                "luaChon": [
+                  "full dependency on the key",
+                  "partial dependency",
+                  "transitive dependency"
+                ]
+              },
+              {
+                "ma": "vp",
+                "ten": "Violates / Vi phạm",
+                "luaChon": [
+                  "nothing",
+                  "2NF",
+                  "3NF"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "fd": "StudentID, CourseID → Grade"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "fd": "StudentID → StudentName"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "fd": "CourseID → CourseName"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "fd": "StudentDept → DeptHead (inside Student after the 2NF split)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.loai": "full dependency on the key",
+              "r1.vp": "nothing",
+              "r2.loai": "partial dependency",
+              "r2.vp": "2NF",
+              "r3.loai": "partial dependency",
+              "r3.vp": "2NF",
+              "r4.loai": "transitive dependency",
+              "r4.vp": "3NF"
+            },
+            "giaiThich": "<p>Partial = depends on half of the composite key ⇒ 2NF. Transitive = non-key → non-key (StudentID → StudentDept → DeptHead) ⇒ 3NF.</p><p><i>VI: Bộ phận = phụ thuộc một nửa khoá ghép ⇒ 2NF. Bắc cầu = không khoá → không khoá (StudentID → StudentDept → DeptHead) ⇒ 3NF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling StudentDept → DeptHead partial — StudentDept is not part of the key.|||Gọi StudentDept → DeptHead là bộ phận — StudentDept không thuộc khoá."
+        },
+        {
+          "loi": "Thinking 2NF already removes transitive dependencies.|||Tưởng 2NF đã xoá phụ thuộc bắc cầu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "full functional dependency",
+          "vi": "phụ thuộc đầy đủ"
+        }
+      ]
+    },
+    {
+      "title": "Normalize the worked example to 3NF — with real tables",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "2NF and 3NF decomposition",
+        "INSERT … SELECT DISTINCT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "3nf",
+        "decomposition"
+      ],
+      "problemHtml": "<p>Carry out the worked example of lesson 4.1 on real data: create <code>Department(StudentDept CHAR(3) PK, DeptHead VARCHAR(40))</code>, <code>Student(StudentID CHAR(8) PK, StudentName VARCHAR(40), StudentDept → Department)</code>, <code>Course(CourseID CHAR(6) PK, CourseName VARCHAR(40))</code>, <code>Enrollment(StudentID → Student, CourseID → Course, Grade DECIMAL(4,2))</code> with key (StudentID, CourseID); then move every row of EnrollmentFlat into them.</p>\n<p><b>The 1NF table of the worked example</b> (tab <code>EnrollmentFlat.sql</code>): <code>EnrollmentFlat(StudentID, StudentName, StudentDept, DeptHead, CourseID, CourseName, Grade)</code>, key (StudentID, CourseID). FDs: StudentID → StudentName, StudentDept · StudentDept → DeptHead · CourseID → CourseName · StudentID, CourseID → Grade.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Four CREATE TABLE (parents first) and four INSERT … SELECT.</li>\n  <li>Each department, student and course stored once.</li>\n  <li>VARCHAR instead of NVARCHAR here.</li>\n</ul>",
+      "problemHtmlVi": "<p>Làm ví dụ có lời giải của bài 4.1 trên dữ liệu thật: tạo <code>Department(StudentDept CHAR(3) PK, DeptHead VARCHAR(40))</code>, <code>Student(StudentID CHAR(8) PK, StudentName VARCHAR(40), StudentDept → Department)</code>, <code>Course(CourseID CHAR(6) PK, CourseName VARCHAR(40))</code>, <code>Enrollment(StudentID → Student, CourseID → Course, Grade DECIMAL(4,2))</code> khoá (StudentID, CourseID); rồi chuyển mọi dòng của EnrollmentFlat vào đó.</p>\n<p><b>Bảng 1NF của ví dụ có lời giải</b> (tab <code>EnrollmentFlat.sql</code>): <code>EnrollmentFlat(StudentID, StudentName, StudentDept, DeptHead, CourseID, CourseName, Grade)</code>, khoá (StudentID, CourseID). FD: StudentID → StudentName, StudentDept · StudentDept → DeptHead · CourseID → CourseName · StudentID, CourseID → Grade.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bốn CREATE TABLE (cha trước) và bốn INSERT … SELECT.</li>\n  <li>Mỗi phòng, sinh viên, môn lưu một lần.</li>\n  <li>Ở đây dùng VARCHAR thay NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl        | col         | type             \n-----------+-------------+------------------\ndepartment | studentdept | character        \ndepartment | depthead    | character varying\nstudent    | studentid   | character        \nstudent    | studentname | character varying\nstudent    | studentdept | character        \nenrollment | studentid   | character        \nenrollment | courseid    | character        \nenrollment | grade       | numeric          \n… (10 rows)",
+          "explanation": "Expected result of check \"The four tables and their columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bốn bảng và các cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Step 1 (2NF): split off what depends on StudentID alone and on CourseID alone.|||Bước 1 (2NF): tách phần chỉ phụ thuộc StudentID và phần chỉ phụ thuộc CourseID.",
+        "Step 2 (3NF): inside Student, StudentDept → DeptHead is transitive — move it to Department.|||Bước 2 (3NF): trong Student, StudentDept → DeptHead là bắc cầu — đưa ra Department."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "EnrollmentFlat.sql",
+          "language": "sql",
+          "code": "-- EnrollmentFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EnrollmentFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EnrollmentFlat (\n  StudentID   CHAR(8)      NOT NULL,\n  StudentName NVARCHAR(40) NOT NULL,\n  StudentDept CHAR(3)      NOT NULL,\n  DeptHead    NVARCHAR(40) NOT NULL,\n  CourseID    CHAR(6)      NOT NULL,\n  CourseName  NVARCHAR(40) NOT NULL,\n  Grade       DECIMAL(4,2) NULL,\n  CONSTRAINT pk_enrollmentflat PRIMARY KEY (StudentID, CourseID)\n);\nINSERT INTO EnrollmentFlat VALUES\n ('HE190001', N'An',   'SE', N'Dr. Hoa',  'DBI202', N'Database Systems', 8.5),\n ('HE190001', N'An',   'SE', N'Dr. Hoa',  'CSD201', N'Data Structures',  7.0),\n ('HE190002', N'Bình', 'SE', N'Dr. Hoa',  'DBI202', N'Database Systems', 6.5),\n ('HE190003', N'Chi',  'AI', N'Dr. Minh', 'DBI202', N'Database Systems', 9.0),\n ('HE190003', N'Chi',  'AI', N'Dr. Minh', 'AIL303', N'Machine Learning', NULL);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Department (\n    StudentDept CHAR(3)     NOT NULL PRIMARY KEY,\n    DeptHead    VARCHAR(40) NOT NULL\n);\nCREATE TABLE Student (\n    StudentID   CHAR(8)     NOT NULL PRIMARY KEY,\n    StudentName VARCHAR(40) NOT NULL,\n    StudentDept CHAR(3)     NOT NULL REFERENCES Department (StudentDept)\n);\nCREATE TABLE Course (\n    CourseID   CHAR(6)     NOT NULL PRIMARY KEY,\n    CourseName VARCHAR(40) NOT NULL\n);\nCREATE TABLE Enrollment (\n    StudentID CHAR(8)      NOT NULL REFERENCES Student (StudentID),\n    CourseID  CHAR(6)      NOT NULL REFERENCES Course (CourseID),\n    Grade     DECIMAL(4,2) NULL,\n    PRIMARY KEY (StudentID, CourseID)\n);\nINSERT INTO Department SELECT DISTINCT StudentDept, DeptHead FROM EnrollmentFlat;          -- 3NF: the transitive FD\nINSERT INTO Student    SELECT DISTINCT StudentID, StudentName, StudentDept FROM EnrollmentFlat;   -- 2NF: partial FD on StudentID\nINSERT INTO Course     SELECT DISTINCT CourseID, CourseName FROM EnrollmentFlat;           -- 2NF: partial FD on CourseID\nINSERT INTO Enrollment SELECT StudentID, CourseID, Grade FROM EnrollmentFlat;              -- the whole key\n"
+        },
+        {
+          "name": "EnrollmentFlat.sql",
+          "language": "sql",
+          "code": "-- EnrollmentFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EnrollmentFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EnrollmentFlat (\n  StudentID   CHAR(8)      NOT NULL,\n  StudentName NVARCHAR(40) NOT NULL,\n  StudentDept CHAR(3)      NOT NULL,\n  DeptHead    NVARCHAR(40) NOT NULL,\n  CourseID    CHAR(6)      NOT NULL,\n  CourseName  NVARCHAR(40) NOT NULL,\n  Grade       DECIMAL(4,2) NULL,\n  CONSTRAINT pk_enrollmentflat PRIMARY KEY (StudentID, CourseID)\n);\nINSERT INTO EnrollmentFlat VALUES\n ('HE190001', N'An',   'SE', N'Dr. Hoa',  'DBI202', N'Database Systems', 8.5),\n ('HE190001', N'An',   'SE', N'Dr. Hoa',  'CSD201', N'Data Structures',  7.0),\n ('HE190002', N'Bình', 'SE', N'Dr. Hoa',  'DBI202', N'Database Systems', 6.5),\n ('HE190003', N'Chi',  'AI', N'Dr. Minh', 'DBI202', N'Database Systems', 9.0),\n ('HE190003', N'Chi',  'AI', N'Dr. Minh', 'AIL303', N'Machine Learning', NULL);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Result: 4 tables in 3NF — and in BCNF, because every determinant (StudentID, StudentDept, CourseID, the pair) is the key of its own table. Joining them back reproduces EnrollmentFlat.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: 4 bảng ở 3NF — và cả BCNF, vì mọi định thuộc (StudentID, StudentDept, CourseID, cặp khoá) là khoá của bảng mình. Nối lại cho đúng EnrollmentFlat.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE EnrollmentFlat (\n  StudentID   CHAR(8)      NOT NULL,\n  StudentName NVARCHAR(40) NOT NULL,\n  StudentDept CHAR(3)      NOT NULL,\n  DeptHead    NVARCHAR(40) NOT NULL,\n  CourseID    CHAR(6)      NOT NULL,\n  CourseName  NVARCHAR(40) NOT NULL,\n  Grade       DECIMAL(4,2) NULL,\n  CONSTRAINT pk_enrollmentflat PRIMARY KEY (StudentID, CourseID)\n);\nINSERT INTO EnrollmentFlat VALUES\n ('HE190001', N'An',   'SE', N'Dr. Hoa',  'DBI202', N'Database Systems', 8.5),\n ('HE190001', N'An',   'SE', N'Dr. Hoa',  'CSD201', N'Data Structures',  7.0),\n ('HE190002', N'Bình', 'SE', N'Dr. Hoa',  'DBI202', N'Database Systems', 6.5),\n ('HE190003', N'Chi',  'AI', N'Dr. Minh', 'DBI202', N'Database Systems', 9.0),\n ('HE190003', N'Chi',  'AI', N'Dr. Minh', 'AIL303', N'Machine Learning', NULL);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "The four tables and their columns|||Bốn bảng và các cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('department', 'student', 'course', 'enrollment')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "department",
+                  "studentdept",
+                  "character"
+                ],
+                [
+                  "department",
+                  "depthead",
+                  "character varying"
+                ],
+                [
+                  "student",
+                  "studentid",
+                  "character"
+                ],
+                [
+                  "student",
+                  "studentname",
+                  "character varying"
+                ],
+                [
+                  "student",
+                  "studentdept",
+                  "character"
+                ],
+                [
+                  "enrollment",
+                  "studentid",
+                  "character"
+                ],
+                [
+                  "enrollment",
+                  "courseid",
+                  "character"
+                ],
+                [
+                  "enrollment",
+                  "grade",
+                  "numeric"
+                ],
+                [
+                  "course",
+                  "courseid",
+                  "character"
+                ],
+                [
+                  "course",
+                  "coursename",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Department|||Department",
+            "kiemTra": "SELECT StudentDept, DeptHead FROM Department",
+            "mongDoi": {
+              "cot": [
+                "StudentDept",
+                "DeptHead"
+              ],
+              "hang": [
+                [
+                  "AI ",
+                  "Dr. Minh"
+                ],
+                [
+                  "SE ",
+                  "Dr. Hoa"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Student|||Student",
+            "kiemTra": "SELECT StudentID, StudentName, StudentDept FROM Student",
+            "mongDoi": {
+              "cot": [
+                "StudentID",
+                "StudentName",
+                "StudentDept"
+              ],
+              "hang": [
+                [
+                  "HE190001",
+                  "An",
+                  "SE "
+                ],
+                [
+                  "HE190003",
+                  "Chi",
+                  "AI "
+                ],
+                [
+                  "HE190002",
+                  "Bình",
+                  "SE "
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Course|||Course",
+            "kiemTra": "SELECT CourseID, CourseName FROM Course",
+            "mongDoi": {
+              "cot": [
+                "CourseID",
+                "CourseName"
+              ],
+              "hang": [
+                [
+                  "AIL303",
+                  "Machine Learning"
+                ],
+                [
+                  "DBI202",
+                  "Database Systems"
+                ],
+                [
+                  "CSD201",
+                  "Data Structures"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Enrollment|||Enrollment",
+            "kiemTra": "SELECT StudentID, CourseID, Grade FROM Enrollment",
+            "mongDoi": {
+              "cot": [
+                "StudentID",
+                "CourseID",
+                "Grade"
+              ],
+              "hang": [
+                [
+                  "HE190001",
+                  "DBI202",
+                  8.5
+                ],
+                [
+                  "HE190001",
+                  "CSD201",
+                  7
+                ],
+                [
+                  "HE190002",
+                  "DBI202",
+                  6.5
+                ],
+                [
+                  "HE190003",
+                  "DBI202",
+                  9
+                ],
+                [
+                  "HE190003",
+                  "AIL303",
+                  null
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: new department, student and course|||Ẩn: phòng, sinh viên, môn mới",
+            "kiemTra": "SELECT (SELECT COUNT(*) FROM Department) AS d, (SELECT COUNT(*) FROM Student) AS s, (SELECT COUNT(*) FROM Course) AS c, (SELECT COUNT(*) FROM Enrollment) AS e",
+            "an": true,
+            "themCsdl": "INSERT INTO EnrollmentFlat VALUES ('HE190004', N'Dũng', 'GD', N'Dr. Lan', 'DBI202', N'Database Systems', 7.5), ('HE190004', N'Dũng', 'GD', N'Dr. Lan', 'PRF192', N'Programming', 8.0)",
+            "mongDoi": {
+              "cot": [
+                "d",
+                "s",
+                "c",
+                "e"
+              ],
+              "hang": [
+                [
+                  3,
+                  4,
+                  4,
+                  7
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses INSERT … SELECT|||Dùng INSERT … SELECT",
+            "khop": "\\bINSERT\\s+INTO\\s+Department\\b[^;]*\\bSELECT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping at 2NF: DeptHead stays in Student and is repeated for every student of the department.|||Dừng ở 2NF: DeptHead nằm lại trong Student và lặp cho mọi sinh viên của phòng."
+        },
+        {
+          "loi": "Typing the departments by hand — a new department in the data breaks the Student INSERT.|||Gõ tay các phòng — phòng mới trong dữ liệu làm hỏng INSERT Student."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normalization",
+          "vi": "chuẩn hoá"
+        }
+      ]
+    },
+    {
+      "title": "What normalization removes",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "anomalies",
+        "normal forms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization"
+      ],
+      "problemHtml": "<p>Lesson 4.1 summary.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Tóm tắt bài 4.1.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Ask what a single fact (a department head) costs to change.|||Hỏi đổi một sự kiện (trưởng khoa) tốn bao nhiêu.",
+        "Anomalies disappear when each fact lives in one row.|||Dị thường biến mất khi mỗi sự kiện nằm ở một dòng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What normalization removes\n\nAnswer in the answer panel (no code needed).\n\n1. In EnrollmentFlat, a new course with no student yet cannot be stored. This is…Trong EnrollmentFlat, môn mới chưa có sinh viên thì không lưu được. Đây là…\n2. The head of department SE changes; in EnrollmentFlat you must update…Trưởng khoa SE đổi; trong EnrollmentFlat bạn phải sửa…\n3. After the 3NF decomposition, how many rows change when the SE head changes?Sau phân rã 3NF, đổi trưởng khoa SE thì sửa bao nhiêu dòng?\n4. Normalization mainly trades…Chuẩn hoá chủ yếu đánh đổi…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# What normalization removes — answer key\n\n1. In EnrollmentFlat, a new course with no student yet cannot be stored. This is…Trong EnrollmentFlat, môn mới chưa có sinh viên thì không lưu được. Đây là…\n   Answer: c) an insertion anomaly\n   StudentID is part of the key and cannot be NULL, so a course alone has no row.VI: StudentID là một phần khoá, không NULL được, nên môn đứng một mình không có dòng nào.\n\n2. The head of department SE changes; in EnrollmentFlat you must update…Trưởng khoa SE đổi; trong EnrollmentFlat bạn phải sửa…\n   Answer: d) every row of every SE student\n   DeptHead is repeated per enrolment of every SE student — the update anomaly 3NF removes.VI: DeptHead lặp theo mỗi lượt đăng ký của mọi sinh viên SE — dị thường cập nhật mà 3NF loại bỏ.\n\n3. After the 3NF decomposition, how many rows change when the SE head changes?Sau phân rã 3NF, đổi trưởng khoa SE thì sửa bao nhiêu dòng?\n   Answer: c) 1 — the Department row\n   One fact, one place.VI: Một sự kiện, một chỗ.\n\n4. Normalization mainly trades…Chuẩn hoá chủ yếu đánh đổi…\n   Answer: d) redundancy and anomalies for extra joins\n   Reads need joins; writes become safe. Chapter 8 and CS.6 discuss when to denormalize on purpose.VI: Đọc cần nối; ghi trở nên an toàn. Chương 8 và CS.6 bàn khi nào cố ý phi chuẩn hoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> an insertion anomaly</p><p>StudentID is part of the key and cannot be NULL, so a course alone has no row.</p><p><i>VI: StudentID là một phần khoá, không NULL được, nên môn đứng một mình không có dòng nào.</i></p></li><li><p><b>d)</b> every row of every SE student</p><p>DeptHead is repeated per enrolment of every SE student — the update anomaly 3NF removes.</p><p><i>VI: DeptHead lặp theo mỗi lượt đăng ký của mọi sinh viên SE — dị thường cập nhật mà 3NF loại bỏ.</i></p></li><li><p><b>c)</b> 1 — the Department row</p><p>One fact, one place.</p><p><i>VI: Một sự kiện, một chỗ.</i></p></li><li><p><b>d)</b> redundancy and anomalies for extra joins</p><p>Reads need joins; writes become safe. Chapter 8 and CS.6 discuss when to denormalize on purpose.</p><p><i>VI: Đọc cần nối; ghi trở nên an toàn. Chương 8 và CS.6 bàn khi nào cố ý phi chuẩn hoá.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>In EnrollmentFlat, a new course with no student yet cannot be stored. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trong EnrollmentFlat, môn mới chưa có sinh viên thì không lưu được. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a deletion anomaly"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a lossy join"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an insertion anomaly"
+              },
+              {
+                "ma": "d",
+                "noiDung": "an update anomaly"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>StudentID is part of the key and cannot be NULL, so a course alone has no row.</p><p><i>VI: StudentID là một phần khoá, không NULL được, nên môn đứng một mình không có dòng nào.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The head of department SE changes; in EnrollmentFlat you must update…</p><p style=\"opacity:.75;font-size:.92em\"><i>Trưởng khoa SE đổi; trong EnrollmentFlat bạn phải sửa…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing: DeptHead is derived"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one row"
+              },
+              {
+                "ma": "c",
+                "noiDung": "only the Course rows"
+              },
+              {
+                "ma": "d",
+                "noiDung": "every row of every SE student"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>DeptHead is repeated per enrolment of every SE student — the update anomaly 3NF removes.</p><p><i>VI: DeptHead lặp theo mỗi lượt đăng ký của mọi sinh viên SE — dị thường cập nhật mà 3NF loại bỏ.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After the 3NF decomposition, how many rows change when the SE head changes?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau phân rã 3NF, đổi trưởng khoa SE thì sửa bao nhiêu dòng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one per SE student"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one per enrolment"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1 — the Department row"
+              },
+              {
+                "ma": "d",
+                "noiDung": "0"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>One fact, one place.</p><p><i>VI: Một sự kiện, một chỗ.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Normalization mainly trades…</p><p style=\"opacity:.75;font-size:.92em\"><i>Chuẩn hoá chủ yếu đánh đổi…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "nothing — it is free"
+              },
+              {
+                "ma": "b",
+                "noiDung": "joins for more redundancy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "keys for indexes"
+              },
+              {
+                "ma": "d",
+                "noiDung": "redundancy and anomalies for extra joins"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Reads need joins; writes become safe. Chapter 8 and CS.6 discuss when to denormalize on purpose.</p><p><i>VI: Đọc cần nối; ghi trở nên an toàn. Chương 8 và CS.6 bàn khi nào cố ý phi chuẩn hoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking normalization makes queries faster — it usually adds joins.|||Tưởng chuẩn hoá làm truy vấn nhanh hơn — thường nó thêm phép nối."
+        },
+        {
+          "loi": "Mixing insertion and deletion anomalies.|||Nhầm dị thường chèn và xoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "anomaly",
+          "vi": "dị thường"
+        }
+      ]
+    }
+  ]
+}

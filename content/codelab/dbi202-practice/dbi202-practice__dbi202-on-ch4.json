@@ -1,0 +1,655 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-on-ch4",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-ch4"
+  },
+  "exercises": [
+    {
+      "title": "Exercise 1 — closures and implied FDs",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "closure",
+        "implication",
+        "key test"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "closure"
+      ],
+      "problemHtml": "<p>R(A, B, C, D, E, G), F = {AB → C, C → A, BC → D, ACD → B, D → EG, BE → C, CG → BD, CE → AG}. Closures: letters in alphabetical order.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R(A, B, C, D, E, G), F như trên. Bao đóng: chữ theo thứ tự bảng chữ cái.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep looping until a whole pass adds nothing.|||Lặp tới khi cả một lượt không thêm được gì.",
+        "BD is a key if (BD)⁺ = R and neither B⁺ nor D⁺ is R.|||BD là khoá nếu (BD)⁺ = R và cả B⁺ lẫn D⁺ đều chưa là R."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 1 — closures and implied FDs\n\nAnswer in the answer panel (no code needed).\n\n1. Exercise 1Bài 1\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 1 — closures and implied FDs — answer key\n\n1. Exercise 1Bài 1\n   - r1.dap: ABCDEG / A,B,C,D,E,G / A, B, C, D, E, G / {A,B,C,D,E,G} / {A, B, C, D, E, G} / A B C D E G\n   - r2.dap: yes\n   - r3.dap: yes\n   - r4.dap: ABCDEG / A,B,C,D,E,G / A, B, C, D, E, G / {A,B,C,D,E,G} / {A, B, C, D, E, G} / A B C D E G\n   - r5.dap: no\n   - r6.dap: 7\n   (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG (needs a second pass); (AD)⁺ = ADEG has no B. Keys: AB, BC, BD, BE, CD, CE, CG.VI: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG (cần lượt hai); (AD)⁺ = ADEG không có B. Khoá: AB, BC, BD, BE, CD, CE, CG.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG (needs a second pass); (AD)⁺ = ADEG has no B. Keys: AB, BC, BD, BE, CD, CE, CG.</p><p><i>VI: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG (cần lượt hai); (AD)⁺ = ADEG không có B. Khoá: AB, BC, BD, BE, CD, CE, CG.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Exercise 1</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài 1</i></p>",
+            "cot": [
+              {
+                "ma": "hoi",
+                "ten": "Question / Câu hỏi"
+              },
+              {
+                "ma": "dap",
+                "ten": "Answer / Đáp án"
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "hoi": "(a) (BD)⁺"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "hoi": "(b) does BD → AC follow? (yes/no)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "hoi": "(c) is BD a key? (yes/no)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "hoi": "(d) (CE)⁺"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "hoi": "(e) does AD → B follow? (yes/no)"
+                }
+              },
+              {
+                "ma": "r6",
+                "o": {
+                  "hoi": "(f) how many candidate keys does R have?"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.dap": [
+                "ABCDEG",
+                "A,B,C,D,E,G",
+                "A, B, C, D, E, G",
+                "{A,B,C,D,E,G}",
+                "{A, B, C, D, E, G}",
+                "A B C D E G"
+              ],
+              "r2.dap": "yes",
+              "r3.dap": "yes",
+              "r4.dap": [
+                "ABCDEG",
+                "A,B,C,D,E,G",
+                "A, B, C, D, E, G",
+                "{A,B,C,D,E,G}",
+                "{A, B, C, D, E, G}",
+                "A B C D E G"
+              ],
+              "r5.dap": "no",
+              "r6.dap": "7"
+            },
+            "giaiThich": "<p>(BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG (needs a second pass); (AD)⁺ = ADEG has no B. Keys: AB, BC, BD, BE, CD, CE, CG.</p><p><i>VI: (BD)⁺ = ABCDEG; (CE)⁺ = ABCDEG (cần lượt hai); (AD)⁺ = ADEG không có B. Khoá: AB, BC, BD, BE, CD, CE, CG.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping (CE)⁺ after one pass.|||Dừng (CE)⁺ sau một lượt."
+        },
+        {
+          "loi": "Answering \"2 keys\" — this F has 7.|||Trả lời \"2 khoá\" — F này có 7 khoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "closure",
+          "vi": "bao đóng"
+        }
+      ]
+    },
+    {
+      "title": "Exercises 2–3 — all keys, prime attributes, minimal cover",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "candidate keys",
+        "prime attributes",
+        "minimal cover"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "fd",
+        "keys",
+        "minimal-cover"
+      ],
+      "problemHtml": "<p>Exercise 2: R(A, B, C, D, E), F = {A → B, BC → E, ED → A}. Exercise 3: R(A, B, C, D, E), F = {A → BC, AB → D, B → C, AC → E, D → E}.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bài 2: R(A, B, C, D, E), F = {A → B, BC → E, ED → A}. Bài 3: R(A, B, C, D, E), F = {A → BC, AB → D, B → C, AC → E, D → E}.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Classify attributes (left-only / right-only / both) to find keys quickly.|||Phân loại thuộc tính (chỉ trái / chỉ phải / cả hai) để tìm khoá nhanh.",
+        "Minimal cover: split → shrink left sides → drop redundant FDs, in that order.|||Phủ tối thiểu: tách → rút vế trái → bỏ FD thừa, đúng thứ tự."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercises 2–3 — all keys, prime attributes, minimal cover\n\nAnswer in the answer panel (no code needed).\n\n1. Exercise 2: the candidate keys are…Bài 2: các khoá ứng viên là…\n2. Exercise 2: which attributes are prime?Bài 2: thuộc tính nào là thuộc tính khoá?\n3. Exercise 2: highest normal form?Bài 2: dạng chuẩn cao nhất?\n4. Exercise 3: a minimal cover is…Bài 3: một phủ tối thiểu là…\n5. Exercise 3: the key of R and its normal form?Bài 3: khoá của R và dạng chuẩn?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercises 2–3 — all keys, prime attributes, minimal cover — answer key\n\n1. Exercise 2: the candidate keys are…Bài 2: các khoá ứng viên là…\n   Answer: b) ACD, BCD, CDE\n   C and D are left-only (in every key) but (CD)⁺ = CD; adding A, B or E gives a key each.VI: C và D chỉ ở vế trái (trong mọi khoá) nhưng (CD)⁺ = CD; thêm A, B hoặc E đều ra một khoá.\n\n2. Exercise 2: which attributes are prime?Bài 2: thuộc tính nào là thuộc tính khoá?\n   Answer: d) A, B, C, D, E — all of them\n   Every attribute appears in some key (ACD, BCD, CDE).VI: Thuộc tính nào cũng nằm trong một khoá (ACD, BCD, CDE).\n\n3. Exercise 2: highest normal form?Bài 2: dạng chuẩn cao nhất?\n   Answer: b) 3NF\n   All attributes are prime ⇒ 3NF holds; A → B has a non-superkey left side ⇒ not BCNF.VI: Mọi thuộc tính đều là khoá ⇒ đạt 3NF; A → B có vế trái không là siêu khoá ⇒ không BCNF.\n\n4. Exercise 3: a minimal cover is…Bài 3: một phủ tối thiểu là…\n   Answer: c) {A → B, A → D, B → C, D → E}\n   Split, shrink AB → D and AC → E to A → D and A → E, drop A → C and A → E as redundant.VI: Tách, rút AB → D và AC → E thành A → D và A → E, bỏ A → C và A → E vì thừa.\n\n5. Exercise 3: the key of R and its normal form?Bài 3: khoá của R và dạng chuẩn?\n   Answer: d) A — 2NF\n   A⁺ = ABCDE ⇒ key A; B → C and D → E are transitive ⇒ 2NF only.VI: A⁺ = ABCDE ⇒ khoá A; B → C và D → E là bắc cầu ⇒ chỉ 2NF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> ACD, BCD, CDE</p><p>C and D are left-only (in every key) but (CD)⁺ = CD; adding A, B or E gives a key each.</p><p><i>VI: C và D chỉ ở vế trái (trong mọi khoá) nhưng (CD)⁺ = CD; thêm A, B hoặc E đều ra một khoá.</i></p></li><li><p><b>d)</b> A, B, C, D, E — all of them</p><p>Every attribute appears in some key (ACD, BCD, CDE).</p><p><i>VI: Thuộc tính nào cũng nằm trong một khoá (ACD, BCD, CDE).</i></p></li><li><p><b>b)</b> 3NF</p><p>All attributes are prime ⇒ 3NF holds; A → B has a non-superkey left side ⇒ not BCNF.</p><p><i>VI: Mọi thuộc tính đều là khoá ⇒ đạt 3NF; A → B có vế trái không là siêu khoá ⇒ không BCNF.</i></p></li><li><p><b>c)</b> {A → B, A → D, B → C, D → E}</p><p>Split, shrink AB → D and AC → E to A → D and A → E, drop A → C and A → E as redundant.</p><p><i>VI: Tách, rút AB → D và AC → E thành A → D và A → E, bỏ A → C và A → E vì thừa.</i></p></li><li><p><b>d)</b> A — 2NF</p><p>A⁺ = ABCDE ⇒ key A; B → C and D → E are transitive ⇒ 2NF only.</p><p><i>VI: A⁺ = ABCDE ⇒ khoá A; B → C và D → E là bắc cầu ⇒ chỉ 2NF.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "k1",
+            "de": "<p>Exercise 2: the candidate keys are…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài 2: các khoá ứng viên là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "CD"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ACD, BCD, CDE"
+              },
+              {
+                "ma": "c",
+                "noiDung": "ACD, BCD"
+              },
+              {
+                "ma": "d",
+                "noiDung": "ACD"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>C and D are left-only (in every key) but (CD)⁺ = CD; adding A, B or E gives a key each.</p><p><i>VI: C và D chỉ ở vế trái (trong mọi khoá) nhưng (CD)⁺ = CD; thêm A, B hoặc E đều ra một khoá.</i></p>"
+          },
+          {
+            "ma": "k2",
+            "de": "<p>Exercise 2: which attributes are prime?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài 2: thuộc tính nào là thuộc tính khoá?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "C, D only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A, C, D only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "none"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A, B, C, D, E — all of them"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every attribute appears in some key (ACD, BCD, CDE).</p><p><i>VI: Thuộc tính nào cũng nằm trong một khoá (ACD, BCD, CDE).</i></p>"
+          },
+          {
+            "ma": "k3",
+            "de": "<p>Exercise 2: highest normal form?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài 2: dạng chuẩn cao nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BCNF"
+              },
+              {
+                "ma": "b",
+                "noiDung": "3NF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1NF"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2NF"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>All attributes are prime ⇒ 3NF holds; A → B has a non-superkey left side ⇒ not BCNF.</p><p><i>VI: Mọi thuộc tính đều là khoá ⇒ đạt 3NF; A → B có vế trái không là siêu khoá ⇒ không BCNF.</i></p>"
+          },
+          {
+            "ma": "k4",
+            "de": "<p>Exercise 3: a minimal cover is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài 3: một phủ tối thiểu là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "{A → B, AB → D, B → C, D → E}"
+              },
+              {
+                "ma": "b",
+                "noiDung": "{A → BCDE}"
+              },
+              {
+                "ma": "c",
+                "noiDung": "{A → B, A → D, B → C, D → E}"
+              },
+              {
+                "ma": "d",
+                "noiDung": "{A → B, A → C, A → D, A → E, B → C, D → E}"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Split, shrink AB → D and AC → E to A → D and A → E, drop A → C and A → E as redundant.</p><p><i>VI: Tách, rút AB → D và AC → E thành A → D và A → E, bỏ A → C và A → E vì thừa.</i></p>"
+          },
+          {
+            "ma": "k5",
+            "de": "<p>Exercise 3: the key of R and its normal form?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bài 3: khoá của R và dạng chuẩn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A — 3NF"
+              },
+              {
+                "ma": "b",
+                "noiDung": "AB — 1NF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "AD — BCNF"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A — 2NF"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A⁺ = ABCDE ⇒ key A; B → C and D → E are transitive ⇒ 2NF only.</p><p><i>VI: A⁺ = ABCDE ⇒ khoá A; B → C và D → E là bắc cầu ⇒ chỉ 2NF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking CD is a key because C, D are in every key.|||Tưởng CD là khoá vì C, D có trong mọi khoá."
+        },
+        {
+          "loi": "Dropping redundant FDs before shrinking left sides.|||Bỏ FD thừa trước khi rút vế trái."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "prime attribute",
+          "vi": "thuộc tính khoá"
+        },
+        {
+          "en": "minimal cover",
+          "vi": "phủ tối thiểu"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 4 — keys and highest normal form",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "normal forms"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "normal-forms"
+      ],
+      "problemHtml": "<p>For each relation write ALL keys (shortest first, comma-separated) and the highest normal form.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi quan hệ ghi MỌI khoá (ngắn trước, cách bằng dấu phẩy) và dạng chuẩn cao nhất.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "All keys first — (c) has two keys, which makes B prime.|||Mọi khoá trước — (c) có hai khoá nên B là thuộc tính khoá.",
+        "Then test each FD against 2NF, 3NF, BCNF in turn.|||Rồi xét từng FD theo 2NF, 3NF, BCNF lần lượt."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — keys and highest normal form\n\nAnswer in the answer panel (no code needed).\n\n1. Keys and NFKhoá và dạng chuẩn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 4 — keys and highest normal form — answer key\n\n1. Keys and NFKhoá và dạng chuẩn\n   - r1.k: AB / {A, B} / BA / {B, A}\n   - r1.nf: 1NF\n   - r2.k: A / {A}\n   - r2.nf: 2NF\n   - r3.k: AB, AC / AB,AC / AB AC / AB and AC / AB; AC\n   - r3.nf: 3NF\n   - r4.k: A, BC / A,BC / A BC / A and BC / A; BC\n   - r4.nf: BCNF\n   - r5.k: ACD, BCD, CDE / ACD,BCD,CDE / ACD BCD CDE / ACD and BCD and CDE / ACD; BCD; CDE\n   - r5.nf: 3NF\n   (a) keys AB → 1NF; (b) keys A → 2NF; (c) keys AB, AC → 3NF; (d) keys A, BC → BCNF; (e) keys ACD, BCD, CDE → 3NFVI: Như trên. (c): C⁺ = BC nên C không là siêu khoá, nhưng B là thuộc tính khoá (khoá AB, AC) ⇒ 3NF. (d): BC là khoá thứ hai ⇒ BCNF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>(a) keys AB → 1NF; (b) keys A → 2NF; (c) keys AB, AC → 3NF; (d) keys A, BC → BCNF; (e) keys ACD, BCD, CDE → 3NF</p><p><i>VI: Như trên. (c): C⁺ = BC nên C không là siêu khoá, nhưng B là thuộc tính khoá (khoá AB, AC) ⇒ 3NF. (d): BC là khoá thứ hai ⇒ BCNF.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Keys and NF</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá và dạng chuẩn</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Relation / Quan hệ"
+              },
+              {
+                "ma": "k",
+                "ten": "Keys / Khoá"
+              },
+              {
+                "ma": "nf",
+                "ten": "Highest NF",
+                "luaChon": [
+                  "1NF",
+                  "2NF",
+                  "3NF",
+                  "BCNF"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "(a) R(A, B, C, D), {AB → C, B → D}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "(b) R(A, B, C, D), {A → B, B → C, A → D}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "(c) R(A, B, C), {AB → C, C → B}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "(d) R(A, B, C, D), {A → BCD, BC → A}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "r": "(e) R(A, B, C, D, E), {A → B, BC → E, ED → A}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": [
+                "AB",
+                "{A, B}",
+                "BA",
+                "{B, A}"
+              ],
+              "r1.nf": "1NF",
+              "r2.k": [
+                "A",
+                "{A}"
+              ],
+              "r2.nf": "2NF",
+              "r3.k": [
+                "AB, AC",
+                "AB,AC",
+                "AB AC",
+                "AB and AC",
+                "AB; AC"
+              ],
+              "r3.nf": "3NF",
+              "r4.k": [
+                "A, BC",
+                "A,BC",
+                "A BC",
+                "A and BC",
+                "A; BC"
+              ],
+              "r4.nf": "BCNF",
+              "r5.k": [
+                "ACD, BCD, CDE",
+                "ACD,BCD,CDE",
+                "ACD BCD CDE",
+                "ACD and BCD and CDE",
+                "ACD; BCD; CDE"
+              ],
+              "r5.nf": "3NF"
+            },
+            "giaiThich": "<p>(a) keys AB → 1NF; (b) keys A → 2NF; (c) keys AB, AC → 3NF; (d) keys A, BC → BCNF; (e) keys ACD, BCD, CDE → 3NF</p><p><i>VI: Như trên. (c): C⁺ = BC nên C không là siêu khoá, nhưng B là thuộc tính khoá (khoá AB, AC) ⇒ 3NF. (d): BC là khoá thứ hai ⇒ BCNF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering 2NF for (c) with only AB in mind.|||Trả 2NF cho (c) khi chỉ nghĩ tới khoá AB."
+        },
+        {
+          "loi": "Missing BC as a key of (d).|||Bỏ sót BC là khoá của (d)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "highest normal form",
+          "vi": "dạng chuẩn cao nhất"
+        }
+      ]
+    },
+    {
+      "title": "Exercise 7 — the chase test",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "chase",
+        "lossless join"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "chase"
+      ],
+      "problemHtml": "<p>R(A, B, C, D), F = {A → B, B → C, CD → A}. Run the chase (one row per piece) and decide whether each decomposition is lossless.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R(A, B, C, D), F = {A → B, B → C, CD → A}. Chạy chase (mỗi mảnh một dòng) và quyết định mỗi phân rã có không mất không.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Start: each row has plain letters on its piece's attributes, subscripts elsewhere.|||Bắt đầu: mỗi dòng có chữ không chỉ số ở thuộc tính của mảnh mình, chữ có chỉ số ở chỗ khác.",
+        "Apply FDs: rows equal on the left side ⇒ make the right side equal (prefer the plain letter).|||Áp FD: các dòng bằng nhau ở vế trái ⇒ cho vế phải bằng nhau (ưu tiên chữ không chỉ số)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 7 — the chase test\n\nAnswer in the answer panel (no code needed).\n\n1. ChaseChase\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Exercise 7 — the chase test — answer key\n\n1. ChaseChase\n   - r1.ll: yes\n   - r2.ll: no\n   - r3.ll: no\n   - r4.ll: yes\n   A decomposition is lossless when some row of the tableau becomes all plain letters. {AD, AC, BCD}: A → B, B → C, CD → A, A → B fill row AD ⇒ yes. {AB, BC, CD}: rows agree on C but never on CD ⇒ no. {ABC, CD}: common C determines neither piece ⇒ no. {ACD, AB}: common A → B ⇒ yes.VI: Phân rã không mất khi có một dòng của bảng trở thành toàn chữ không chỉ số. Xem lời giải chi tiết ở bài 4.5.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A decomposition is lossless when some row of the tableau becomes all plain letters. {AD, AC, BCD}: A → B, B → C, CD → A, A → B fill row AD ⇒ yes. {AB, BC, CD}: rows agree on C but never on CD ⇒ no. {ABC, CD}: common C determines neither piece ⇒ no. {ACD, AB}: common A → B ⇒ yes.</p><p><i>VI: Phân rã không mất khi có một dòng của bảng trở thành toàn chữ không chỉ số. Xem lời giải chi tiết ở bài 4.5.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Chase</p><p style=\"opacity:.75;font-size:.92em\"><i>Chase</i></p>",
+            "cot": [
+              {
+                "ma": "pr",
+                "ten": "Decomposition"
+              },
+              {
+                "ma": "ll",
+                "ten": "Lossless?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "pr": "{AD, AC, BCD}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "pr": "{AB, BC, CD}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "pr": "{ABC, CD}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "pr": "{ACD, AB}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ll": "yes",
+              "r2.ll": "no",
+              "r3.ll": "no",
+              "r4.ll": "yes"
+            },
+            "giaiThich": "<p>A decomposition is lossless when some row of the tableau becomes all plain letters. {AD, AC, BCD}: A → B, B → C, CD → A, A → B fill row AD ⇒ yes. {AB, BC, CD}: rows agree on C but never on CD ⇒ no. {ABC, CD}: common C determines neither piece ⇒ no. {ACD, AB}: common A → B ⇒ yes.</p><p><i>VI: Phân rã không mất khi có một dòng của bảng trở thành toàn chữ không chỉ số. Xem lời giải chi tiết ở bài 4.5.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping after one pass of FDs.|||Dừng sau một lượt áp FD."
+        },
+        {
+          "loi": "Declaring lossless because every attribute is covered.|||Kết luận không mất chỉ vì thuộc tính nào cũng được phủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "chase",
+          "vi": "phép chase"
+        }
+      ]
+    }
+  ]
+}

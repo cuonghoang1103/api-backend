@@ -1,0 +1,616 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-3-lab-phong-kham",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-ch3"
+  },
+  "exercises": [
+    {
+      "title": "Lab 3 — Clinic database: ERD → CREATE TABLE (PE question 1 style)",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "ERD to tables",
+        "N-1 as foreign key",
+        "M-N with attributes",
+        "CHECK / UNIQUE",
+        "ON DELETE CASCADE"
+      ],
+      "prerequisites": [
+        "3.4 and 3.5 of this track"
+      ],
+      "tags": [
+        "dbi202",
+        "lab",
+        "erd",
+        "ddl",
+        "pe-q1"
+      ],
+      "problemHtml": "<h1>Lab 3 — Clinic database: ERD → CREATE TABLE (PE question 1 style)</h1>\n<p class=\"bi-phu\">DBI202 · Chapter 3 — ER modelling · Suggested time: 60 minutes · Total: 10 marks (5 × 2)</p>\n<h2>1. Overview</h2>\n<p>A clinic manages doctors (ID, full name), each belonging to exactly one specialty (code, unique name). Patients have an ID, a full name, a gender (M/F) and a birth date. Each visit has an ID, a date, a diagnosis, and is for one patient with one doctor. During a visit the doctor prescribes several medicines (ID, name, unit), each with a positive quantity and a dosage.</p><pre>[Specialty] specID*, specName ── 1 ──&lt;belongs to&gt;── N ── [Doctor] doctorID*, fullName\n[Doctor] ── 1 ──&lt;examines&gt;── N ── [Visit] visitID*, visitDate, diagnosis ── N ──&lt;has&gt;── 1 ── [Patient]\n[Visit] ── M ──&lt;prescribes (quantity, dosage)&gt;── N ── [Medicine] medID*, medName, unit</pre><p>Build the database question by question. Each question is graded on the <b>reference</b> schema of the previous ones (tab <code>Clinic.sql</code>).</p>\n<h3>General requirements</h3>\n<ul>\n  <li>Portable types only: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE (on the real PE, NVARCHAR for Vietnamese text and DATETIME for a time stamp). Names exactly as in the data model.</li>\n  <li>Graded by behaviour: valid rows accepted, invalid rows rejected; plus the list of columns.</li>\n</ul>\n<h2>2. Submission files</h2>\n<pre>RollNo_Name_DBI202_Lab3/\n├── Q1.sql    -- Specialty and Doctor (2 marks)\n├── Q2.sql    -- Patient with a gender rule (2 marks)\n├── Q3.sql    -- Visit — a strong entity with two foreign keys (2 marks)\n├── Q4.sql    -- Medicine and the M-N Prescribes (2 marks)\n├── Q5.sql    -- Visits with their number of medicines (2 marks)</pre>\n<h2>3. Data model</h2>\n<p><b>Specialty</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>specID</code></td><td>CHAR(3)</td><td>PK</td></tr><tr><td><code>specName</code></td><td>VARCHAR(40)</td><td>required, UNIQUE</td></tr></tbody></table>\n<p><b>Doctor</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>doctorID</code></td><td>CHAR(5)</td><td>PK</td></tr><tr><td><code>fullName</code></td><td>VARCHAR(50)</td><td>required</td></tr><tr><td><code>specID</code></td><td>CHAR(3)</td><td>required, FK → Specialty</td></tr></tbody></table>\n<p><b>Patient</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>patientID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>fullName</code></td><td>VARCHAR(50)</td><td>required</td></tr><tr><td><code>gender</code></td><td>CHAR(1)</td><td>'M' / 'F'</td></tr><tr><td><code>birthDate</code></td><td>DATE</td><td>optional</td></tr></tbody></table>\n<p><b>Visit</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>visitID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>visitDate</code></td><td>DATE</td><td>required</td></tr><tr><td><code>diagnosis</code></td><td>VARCHAR(200)</td><td>optional</td></tr><tr><td><code>patientID</code></td><td>INT</td><td>required, FK → Patient</td></tr><tr><td><code>doctorID</code></td><td>CHAR(5)</td><td>required, FK → Doctor</td></tr></tbody></table>\n<p><b>Medicine</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>medID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>medName</code></td><td>VARCHAR(60)</td><td>required</td></tr><tr><td><code>unit</code></td><td>VARCHAR(10)</td><td>required</td></tr></tbody></table>\n<p><b>Prescribes</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>visitID</code></td><td>INT</td><td>PK, FK → Visit (cascade)</td></tr><tr><td><code>medID</code></td><td>INT</td><td>PK, FK → Medicine</td></tr><tr><td><code>quantity</code></td><td>INT</td><td>required, > 0</td></tr><tr><td><code>dosage</code></td><td>VARCHAR(100)</td><td>optional</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Specialty and Doctor <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create Specialty and Doctor. Every doctor belongs to exactly one specialty; specialty names are unique.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>belongs to (N-1) ⇒ Doctor.specID NOT NULL REFERENCES Specialty.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Patient with a gender rule <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create Patient. Gender is M or F (optional); the birth date is optional.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>CHECK (gender IN ('M', 'F')).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Visit — a strong entity with two foreign keys <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create Visit. A visit is for exactly one patient with exactly one doctor; its date is required.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Visit has its own key visitID (it is NOT weak); patientID and doctorID are NOT NULL foreign keys.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Medicine and the M-N Prescribes <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create Medicine and Prescribes. A visit prescribes a medicine at most once, with a positive quantity; deleting a visit deletes its prescriptions.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>PRIMARY KEY (visitID, medID); visitID → Visit ON DELETE CASCADE; CHECK (quantity &gt; 0).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Visits with their number of medicines <span class=\"bi-diem\">2 marks</span></h3>\n<p>On the reference database: for every visit give visitID, the patient's name, the doctor's name, the specialty name and the number of medicines prescribed — 0 for a visit without prescriptions.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: visitID, patient, doctor, specName, medicines. Row order does not matter.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Specialty and Doctor</td><td>2</td></tr><tr><td>2</td><td>Patient with a gender rule</td><td>2</td></tr><tr><td>3</td><td>Visit — a strong entity with two foreign keys</td><td>2</td></tr><tr><td>4</td><td>Medicine and the M-N Prescribes</td><td>2</td></tr><tr><td>5</td><td>Visits with their number of medicines</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>A separate table for a 1-N relationship (BelongsTo, Examines, Has) — they are foreign keys.</li>\n  <li>Making Visit weak (key patientID + something) — it has its own ID.</li>\n  <li>Q5: COUNT(*) on the outer join gives 1 to a visit without medicines.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Tabs Q1.sql … Q5.sql. <b>Run</b> = sample checks; <b>Submit</b> = all checks and the 10-mark score table. The Clinic.sql tab holds the reference schema + data.</p>",
+      "problemHtmlVi": "<h1>Lab 3 — Clinic database: ERD → CREATE TABLE (PE question 1 style)</h1>\n<p class=\"bi-phu\">DBI202 · Chương 3 — Mô hình ER · Thời gian gợi ý: 60 phút · Tổng: 10 điểm (5 × 2)</p>\n<h2>1. Tổng quan</h2>\n<p>Một phòng khám quản lý bác sĩ (mã, họ tên), mỗi bác sĩ thuộc đúng một chuyên khoa (mã, tên duy nhất). Bệnh nhân có mã, họ tên, giới tính (M/F) và ngày sinh. Mỗi lượt khám có mã, ngày, chẩn đoán, dành cho một bệnh nhân với một bác sĩ. Trong lượt khám bác sĩ kê nhiều thuốc (mã, tên, đơn vị), mỗi thuốc có số lượng dương và liều dùng.</p><p>Dựng CSDL từng câu một (ERD ở bản tiếng Anh). Mỗi câu được chấm trên lược đồ <b>chuẩn</b> của các câu trước (tab <code>Clinic.sql</code>).</p>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Chỉ kiểu chạy mọi hệ: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE (PE thật dùng NVARCHAR cho chữ Việt và DATETIME cho mốc giờ). Tên đúng như mô hình dữ liệu.</li>\n  <li>Chấm theo hành vi: dòng hợp lệ vào được, dòng sai bị chặn; cộng danh sách cột.</li>\n</ul>\n<h2>2. Tệp nộp bài</h2>\n<pre>RollNo_Name_DBI202_Lab3/\n├── Q1.sql    -- Specialty and Doctor (2 marks)\n├── Q2.sql    -- Patient with a gender rule (2 marks)\n├── Q3.sql    -- Visit — a strong entity with two foreign keys (2 marks)\n├── Q4.sql    -- Medicine and the M-N Prescribes (2 marks)\n├── Q5.sql    -- Visits with their number of medicines (2 marks)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Specialty</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>specID</code></td><td>CHAR(3)</td><td>PK</td></tr><tr><td><code>specName</code></td><td>VARCHAR(40)</td><td>required, UNIQUE</td></tr></tbody></table>\n<p><b>Doctor</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>doctorID</code></td><td>CHAR(5)</td><td>PK</td></tr><tr><td><code>fullName</code></td><td>VARCHAR(50)</td><td>required</td></tr><tr><td><code>specID</code></td><td>CHAR(3)</td><td>required, FK → Specialty</td></tr></tbody></table>\n<p><b>Patient</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>patientID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>fullName</code></td><td>VARCHAR(50)</td><td>required</td></tr><tr><td><code>gender</code></td><td>CHAR(1)</td><td>'M' / 'F'</td></tr><tr><td><code>birthDate</code></td><td>DATE</td><td>optional</td></tr></tbody></table>\n<p><b>Visit</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>visitID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>visitDate</code></td><td>DATE</td><td>required</td></tr><tr><td><code>diagnosis</code></td><td>VARCHAR(200)</td><td>optional</td></tr><tr><td><code>patientID</code></td><td>INT</td><td>required, FK → Patient</td></tr><tr><td><code>doctorID</code></td><td>CHAR(5)</td><td>required, FK → Doctor</td></tr></tbody></table>\n<p><b>Medicine</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>medID</code></td><td>INT</td><td>PK</td></tr><tr><td><code>medName</code></td><td>VARCHAR(60)</td><td>required</td></tr><tr><td><code>unit</code></td><td>VARCHAR(10)</td><td>required</td></tr></tbody></table>\n<p><b>Prescribes</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>visitID</code></td><td>INT</td><td>PK, FK → Visit (cascade)</td></tr><tr><td><code>medID</code></td><td>INT</td><td>PK, FK → Medicine</td></tr><tr><td><code>quantity</code></td><td>INT</td><td>required, > 0</td></tr><tr><td><code>dosage</code></td><td>VARCHAR(100)</td><td>optional</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Specialty và Doctor <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo Specialty và Doctor. Mỗi bác sĩ thuộc đúng một chuyên khoa; tên chuyên khoa không trùng.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>belongs to (N-1) ⇒ Doctor.specID NOT NULL REFERENCES Specialty.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Patient với luật giới tính <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo Patient. Giới tính là M hoặc F (không bắt buộc); ngày sinh không bắt buộc.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>CHECK (gender IN ('M', 'F')).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Visit — thực thể mạnh có hai khoá ngoại <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo Visit. Mỗi lượt khám dành cho đúng một bệnh nhân với đúng một bác sĩ; ngày khám bắt buộc.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Visit có khoá riêng visitID (KHÔNG phải thực thể yếu); patientID và doctorID là khoá ngoại NOT NULL.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. Medicine và M-N Prescribes <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo Medicine và Prescribes. Một lượt khám kê một thuốc tối đa một lần, số lượng dương; xoá lượt khám thì xoá đơn thuốc của nó.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>PRIMARY KEY (visitID, medID); visitID → Visit ON DELETE CASCADE; CHECK (quantity &gt; 0).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Lượt khám kèm số loại thuốc <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Trên CSDL chuẩn: với mọi lượt khám cho visitID, tên bệnh nhân, tên bác sĩ, tên chuyên khoa và số loại thuốc được kê — 0 với lượt khám không kê thuốc.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: visitID, patient, doctor, specName, medicines. Thứ tự dòng không quan trọng.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Specialty và Doctor</td><td>2</td></tr><tr><td>2</td><td>Patient với luật giới tính</td><td>2</td></tr><tr><td>3</td><td>Visit — thực thể mạnh có hai khoá ngoại</td><td>2</td></tr><tr><td>4</td><td>Medicine và M-N Prescribes</td><td>2</td></tr><tr><td>5</td><td>Lượt khám kèm số loại thuốc</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Bảng riêng cho liên kết 1-N (BelongsTo, Examines, Has) — chúng là khoá ngoại.</li>\n  <li>Biến Visit thành thực thể yếu (khoá patientID + gì đó) — nó có mã riêng.</li>\n  <li>Q5: COUNT(*) trên phép nối ngoài cho 1 với lượt khám không có thuốc.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Các tab Q1.sql … Q5.sql. <b>Chạy thử</b> = kiểm mẫu; <b>Nộp</b> = mọi kiểm và bảng điểm thang 10. Tab Clinic.sql chứa lược đồ chuẩn + dữ liệu.</p>",
+      "inputSpec": "The database built by Clinic.sql (schema below; full script in the Clinic.sql tab).|||CSDL dựng bởi Clinic.sql (lược đồ bên dưới; script đầy đủ ở tab Clinic.sql).",
+      "outputSpec": "One file per question (Q1.sql … Qn.sql) containing only the statement(s) that answer it; each question is graded independently.|||Mỗi câu một tệp (Q1.sql … Qn.sql) chỉ chứa (các) lệnh trả lời câu đó; mỗi câu chấm độc lập.",
+      "constraints": "Portable types only: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE (on the real PE, NVARCHAR for Vietnamese text and DATETIME for a time stamp). Names exactly as in the data model.|||Chỉ kiểu chạy mọi hệ: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE (PE thật dùng NVARCHAR cho chữ Việt và DATETIME cho mốc giờ). Tên đúng như mô hình dữ liệu.\nGraded by behaviour: valid rows accepted, invalid rows rejected; plus the list of columns.|||Chấm theo hành vi: dòng hợp lệ vào được, dòng sai bị chặn; cộng danh sách cột.",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl       | col      | type             \n----------+----------+------------------\nspecialty | specid   | character        \nspecialty | specname | character varying\ndoctor    | doctorid | character        \ndoctor    | fullname | character varying\ndoctor    | specid   | character        ",
+          "explanation": "Expected result of check \"Q1 · tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Q1 · tables and columns\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Nouns → tables (Specialty, Doctor, Patient, Visit, Medicine); the only M-N (prescribes) → the sixth table.|||Danh từ → bảng (Specialty, Doctor, Patient, Visit, Medicine); M-N duy nhất (prescribes) → bảng thứ sáu.",
+        "\"exactly one\" ⇒ NOT NULL foreign key; \"unique\" ⇒ UNIQUE; \"positive\" ⇒ CHECK (&gt; 0).|||\"đúng một\" ⇒ khoá ngoại NOT NULL; \"duy nhất\" ⇒ UNIQUE; \"dương\" ⇒ CHECK (&gt; 0)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "-- Q1. Specialty and Doctor\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "-- Q2. Patient with a gender rule\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "-- Q3. Visit — a strong entity with two foreign keys\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "-- Q4. Medicine and the M-N Prescribes\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "-- Q5. Visits with their number of medicines\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Clinic.sql",
+          "language": "sql",
+          "code": "-- Clinic.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Clinic.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);\nCREATE TABLE Medicine (\n    medID   INT         NOT NULL PRIMARY KEY,\n    medName VARCHAR(60) NOT NULL,\n    unit    VARCHAR(10) NOT NULL\n);\nCREATE TABLE Prescribes (                                          -- M-N Visit–Medicine with attributes\n    visitID  INT          NOT NULL REFERENCES Visit (visitID) ON DELETE CASCADE,\n    medID    INT          NOT NULL REFERENCES Medicine (medID),\n    quantity INT          NOT NULL CHECK (quantity > 0),\n    dosage   VARCHAR(100) NULL,\n    PRIMARY KEY (visitID, medID)\n);\nINSERT INTO Specialty VALUES ('NOI', 'Internal medicine'), ('NHI', 'Paediatrics'), ('MAT', 'Ophthalmology');\nINSERT INTO Doctor VALUES ('D0001', 'Tran Hoa', 'NOI'), ('D0002', 'Le Mai', 'NHI'), ('D0003', 'Pham Son', 'MAT');\nINSERT INTO Patient VALUES (1, 'Nguyen An', 'M', '1990-05-01'), (2, 'Do Bich', 'F', '2019-03-12'), (3, 'Vo Cuong', 'M', NULL);\nINSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'), (1002, '2026-10-02', 'fever', 2, 'D0002'), (1003, '2026-10-05', 'check-up', 3, 'D0003'), (1004, '2026-10-06', 'cough', 1, 'D0001');\nINSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'), (2, 'Vitamin C', 'tablet'), (3, 'Cough syrup', 'bottle');\nINSERT INTO Prescribes VALUES (1001, 1, 10, '2/day'), (1001, 2, 20, '1/day'), (1002, 1, 6, '3/day'), (1004, 3, 1, '10 ml x 3');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Medicine (\n    medID   INT         NOT NULL PRIMARY KEY,\n    medName VARCHAR(60) NOT NULL,\n    unit    VARCHAR(10) NOT NULL\n);\nCREATE TABLE Prescribes (                                          -- M-N Visit–Medicine with attributes\n    visitID  INT          NOT NULL REFERENCES Visit (visitID) ON DELETE CASCADE,\n    medID    INT          NOT NULL REFERENCES Medicine (medID),\n    quantity INT          NOT NULL CHECK (quantity > 0),\n    dosage   VARCHAR(100) NULL,\n    PRIMARY KEY (visitID, medID)\n);\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "SELECT v.visitID, p.fullName AS patient, d.fullName AS doctor, s.specName,\n       COUNT(pr.medID) AS medicines                       -- NULL padding of the outer join is not counted\nFROM Visit v\nJOIN Patient p   ON p.patientID = v.patientID\nJOIN Doctor d    ON d.doctorID = v.doctorID\nJOIN Specialty s ON s.specID = d.specID\nLEFT JOIN Prescribes pr ON pr.visitID = v.visitID\nGROUP BY v.visitID, p.fullName, d.fullName, s.specName;\n"
+        },
+        {
+          "name": "Clinic.sql",
+          "language": "sql",
+          "code": "-- Clinic.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Clinic.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);\nCREATE TABLE Medicine (\n    medID   INT         NOT NULL PRIMARY KEY,\n    medName VARCHAR(60) NOT NULL,\n    unit    VARCHAR(10) NOT NULL\n);\nCREATE TABLE Prescribes (                                          -- M-N Visit–Medicine with attributes\n    visitID  INT          NOT NULL REFERENCES Visit (visitID) ON DELETE CASCADE,\n    medID    INT          NOT NULL REFERENCES Medicine (medID),\n    quantity INT          NOT NULL CHECK (quantity > 0),\n    dosage   VARCHAR(100) NULL,\n    PRIMARY KEY (visitID, medID)\n);\nINSERT INTO Specialty VALUES ('NOI', 'Internal medicine'), ('NHI', 'Paediatrics'), ('MAT', 'Ophthalmology');\nINSERT INTO Doctor VALUES ('D0001', 'Tran Hoa', 'NOI'), ('D0002', 'Le Mai', 'NHI'), ('D0003', 'Pham Son', 'MAT');\nINSERT INTO Patient VALUES (1, 'Nguyen An', 'M', '1990-05-01'), (2, 'Do Bich', 'F', '2019-03-12'), (3, 'Vo Cuong', 'M', NULL);\nINSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'), (1002, '2026-10-02', 'fever', 2, 'D0002'), (1003, '2026-10-05', 'check-up', 3, 'D0003'), (1004, '2026-10-06', 'cough', 1, 'D0001');\nINSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'), (2, 'Vitamin C', 'tablet'), (3, 'Cough syrup', 'bottle');\nINSERT INTO Prescribes VALUES (1001, 1, 10, '2/day'), (1001, 2, 20, '1/day'), (1002, 1, 6, '3/day'), (1004, 3, 1, '10 ml x 3');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>6 tables, created parents first (Specialty, Doctor, Patient, Visit, Medicine, Prescribes). The reference DDL + data are in the Clinic.sql tab.</p>",
+      "solutionExplanationHtmlVi": "<p>6 bảng, tạo cha trước (Specialty, Doctor, Patient, Visit, Medicine, Prescribes). DDL chuẩn + dữ liệu nằm ở tab Clinic.sql.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);\nCREATE TABLE Medicine (\n    medID   INT         NOT NULL PRIMARY KEY,\n    medName VARCHAR(60) NOT NULL,\n    unit    VARCHAR(10) NOT NULL\n);\nCREATE TABLE Prescribes (                                          -- M-N Visit–Medicine with attributes\n    visitID  INT          NOT NULL REFERENCES Visit (visitID) ON DELETE CASCADE,\n    medID    INT          NOT NULL REFERENCES Medicine (medID),\n    quantity INT          NOT NULL CHECK (quantity > 0),\n    dosage   VARCHAR(100) NULL,\n    PRIMARY KEY (visitID, medID)\n);\nINSERT INTO Specialty VALUES ('NOI', 'Internal medicine'), ('NHI', 'Paediatrics'), ('MAT', 'Ophthalmology');\nINSERT INTO Doctor VALUES ('D0001', 'Tran Hoa', 'NOI'), ('D0002', 'Le Mai', 'NHI'), ('D0003', 'Pham Son', 'MAT');\nINSERT INTO Patient VALUES (1, 'Nguyen An', 'M', '1990-05-01'), (2, 'Do Bich', 'F', '2019-03-12'), (3, 'Vo Cuong', 'M', NULL);\nINSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'), (1002, '2026-10-02', 'fever', 2, 'D0002'), (1003, '2026-10-05', 'check-up', 3, 'D0003'), (1004, '2026-10-06', 'cough', 1, 'D0001');\nINSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'), (2, 'Vitamin C', 'tablet'), (3, 'Cough syrup', 'bottle');\nINSERT INTO Prescribes VALUES (1001, 1, 10, '2/day'), (1001, 2, 20, '1/day'), (1002, 1, 6, '3/day'), (1004, 3, 1, '10 ml x 3');",
+        "tepChinh": "Q1.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · tables and columns",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('specialty', 'doctor')",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "specialty",
+                  "specid",
+                  "character"
+                ],
+                [
+                  "specialty",
+                  "specname",
+                  "character varying"
+                ],
+                [
+                  "doctor",
+                  "doctorid",
+                  "character"
+                ],
+                [
+                  "doctor",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "doctor",
+                  "specid",
+                  "character"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Q1 · two doctors in one specialty",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'), ('D0002', 'Mai', 'NOI')",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · duplicate specialty name",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'), ('NO2', 'Internal')",
+            "maLoi": "23505",
+            "csdl": "",
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · doctor without specialty",
+            "thu": "INSERT INTO Doctor (doctorID, fullName) VALUES ('D0001', 'Ha')",
+            "maLoi": "23502",
+            "csdl": "",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q1 · doctor of an unknown specialty",
+            "thu": "INSERT INTO Doctor VALUES ('D0001', 'Ha', 'XYZ')",
+            "maLoi": "23503",
+            "csdl": "",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q2 · columns",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('patient')",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);",
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "patient",
+                  "patientid",
+                  "integer"
+                ],
+                [
+                  "patient",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "patient",
+                  "gender",
+                  "character"
+                ],
+                [
+                  "patient",
+                  "birthdate",
+                  "date"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Q2 · patients with and without gender/birth date",
+            "thu": "INSERT INTO Patient VALUES (1, 'An', 'M', '1990-05-01'), (2, 'Bich', NULL, NULL)",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);",
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · gender X is rejected",
+            "thu": "INSERT INTO Patient VALUES (3, 'Cuong', 'X', NULL)",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);",
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · a patient without a name is rejected",
+            "thu": "INSERT INTO Patient (patientID) VALUES (4)",
+            "maLoi": "23502",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);",
+            "an": true,
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q3 · columns",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('visit')",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);",
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "visit",
+                  "visitid",
+                  "integer"
+                ],
+                [
+                  "visit",
+                  "visitdate",
+                  "date"
+                ],
+                [
+                  "visit",
+                  "diagnosis",
+                  "character varying"
+                ],
+                [
+                  "visit",
+                  "patientid",
+                  "integer"
+                ],
+                [
+                  "visit",
+                  "doctorid",
+                  "character"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Q3 · two visits of the same patient with the same doctor",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'), (1002, '2026-10-08', 'flu', 1, 'D0001')",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);",
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · visit of an unknown patient",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 9, 'D0001')",
+            "maLoi": "23503",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);",
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · visit without a doctor",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit (visitID, visitDate, patientID) VALUES (1001, '2026-10-01', 1)",
+            "maLoi": "23502",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);",
+            "an": true,
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · visit without a date",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit (visitID, patientID, doctorID) VALUES (1001, 1, 'D0001')",
+            "maLoi": "23502",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);",
+            "an": true,
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q4 · columns",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('medicine', 'prescribes')",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);",
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "prescribes",
+                  "visitid",
+                  "integer"
+                ],
+                [
+                  "prescribes",
+                  "medid",
+                  "integer"
+                ],
+                [
+                  "prescribes",
+                  "quantity",
+                  "integer"
+                ],
+                [
+                  "prescribes",
+                  "dosage",
+                  "character varying"
+                ],
+                [
+                  "medicine",
+                  "medid",
+                  "integer"
+                ],
+                [
+                  "medicine",
+                  "medname",
+                  "character varying"
+                ],
+                [
+                  "medicine",
+                  "unit",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Q4 · two medicines in one visit",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'); INSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'); INSERT INTO Medicine VALUES (2, 'Vitamin C', 'tablet'); INSERT INTO Prescribes VALUES (1001, 1, 10, '2/day'), (1001, 2, 20, NULL)",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);",
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · the same medicine twice in one visit",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'); INSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'); INSERT INTO Prescribes VALUES (1001, 1, 10, NULL), (1001, 1, 5, NULL)",
+            "maLoi": "23505",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);",
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · quantity 0",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'); INSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'); INSERT INTO Prescribes VALUES (1001, 1, 0, NULL)",
+            "maLoi": "23514",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);",
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q4 · deleting a visit deletes its prescriptions",
+            "kiemTra": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'); INSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'); INSERT INTO Prescribes VALUES (1001, 1, 10, NULL); DELETE FROM Visit WHERE visitID = 1001; SELECT COUNT(*) AS left_over FROM Prescribes",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);",
+            "an": true,
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "left_over"
+              ],
+              "hang": [
+                [
+                  0
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · unknown medicine",
+            "thu": "INSERT INTO Specialty VALUES ('NOI', 'Internal'); INSERT INTO Doctor VALUES ('D0001', 'Ha', 'NOI'); INSERT INTO Patient VALUES (1, 'An', 'M', NULL); INSERT INTO Visit VALUES (1001, '2026-10-01', 'flu', 1, 'D0001'); INSERT INTO Medicine VALUES (1, 'Paracetamol', 'tablet'); INSERT INTO Prescribes VALUES (1001, 42, 1, NULL)",
+            "maLoi": "23503",
+            "csdl": "CREATE TABLE Specialty (\n    specID   CHAR(3)     NOT NULL PRIMARY KEY,\n    specName VARCHAR(40) NOT NULL UNIQUE\n);\nCREATE TABLE Doctor (\n    doctorID CHAR(5)     NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    specID   CHAR(3)     NOT NULL REFERENCES Specialty (specID)      -- belongs to: N-1\n);\nCREATE TABLE Patient (\n    patientID INT         NOT NULL PRIMARY KEY,\n    fullName  VARCHAR(50) NOT NULL,\n    gender    CHAR(1)     NULL CHECK (gender IN ('M', 'F')),\n    birthDate DATE        NULL\n);\nCREATE TABLE Visit (                                               -- strong entity: its own id\n    visitID   INT          NOT NULL PRIMARY KEY,\n    visitDate DATE         NOT NULL,\n    diagnosis VARCHAR(200) NULL,\n    patientID INT          NOT NULL REFERENCES Patient (patientID),\n    doctorID  CHAR(5)      NOT NULL REFERENCES Doctor (doctorID)\n);",
+            "an": true,
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · one row per visit",
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "visitID",
+                "patient",
+                "doctor",
+                "specName",
+                "medicines"
+              ],
+              "hang": [
+                [
+                  1004,
+                  "Nguyen An",
+                  "Tran Hoa",
+                  "Internal medicine",
+                  1
+                ],
+                [
+                  1003,
+                  "Vo Cuong",
+                  "Pham Son",
+                  "Ophthalmology",
+                  0
+                ],
+                [
+                  1001,
+                  "Nguyen An",
+                  "Tran Hoa",
+                  "Internal medicine",
+                  2
+                ],
+                [
+                  1002,
+                  "Do Bich",
+                  "Le Mai",
+                  "Paediatrics",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · more visits and prescriptions",
+            "an": true,
+            "themCsdl": "INSERT INTO Visit VALUES (1005, '2026-10-07', 'eye check', 2, 'D0003'); INSERT INTO Prescribes VALUES (1003, 2, 30, NULL), (1003, 3, 1, NULL)",
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "visitID",
+                "patient",
+                "doctor",
+                "specName",
+                "medicines"
+              ],
+              "hang": [
+                [
+                  1004,
+                  "Nguyen An",
+                  "Tran Hoa",
+                  "Internal medicine",
+                  1
+                ],
+                [
+                  1003,
+                  "Vo Cuong",
+                  "Pham Son",
+                  "Ophthalmology",
+                  2
+                ],
+                [
+                  1001,
+                  "Nguyen An",
+                  "Tran Hoa",
+                  "Internal medicine",
+                  2
+                ],
+                [
+                  1002,
+                  "Do Bich",
+                  "Le Mai",
+                  "Paediatrics",
+                  1
+                ],
+                [
+                  1005,
+                  "Do Bich",
+                  "Pham Son",
+                  "Ophthalmology",
+                  0
+                ]
+              ]
+            }
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Specialty and Doctor",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Patient with a gender rule",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Visit — a strong entity with two foreign keys",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Medicine and the M-N Prescribes",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Visits with their number of medicines",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Q1: forgetting UNIQUE on specName.|||Q1: quên UNIQUE ở specName."
+        },
+        {
+          "loi": "Q4: no ON DELETE CASCADE — a visit with prescriptions cannot be deleted.|||Q4: không ON DELETE CASCADE — không xoá được lượt khám có đơn thuốc."
+        },
+        {
+          "loi": "Q5: INNER JOIN Prescribes — visits without medicines disappear.|||Q5: INNER JOIN Prescribes — lượt khám không thuốc biến mất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "CHECK constraint",
+          "vi": "ràng buộc kiểm tra",
+          "giaiThich": "Điều kiện mọi dòng phải thoả (vd salary > 0)."
+        },
+        {
+          "en": "LEFT (OUTER) JOIN",
+          "vi": "nối ngoài trái",
+          "giaiThich": "Giữ MỌI dòng bảng trái; không có cặp ⇒ cột bảng phải là NULL."
+        }
+      ]
+    }
+  ]
+}

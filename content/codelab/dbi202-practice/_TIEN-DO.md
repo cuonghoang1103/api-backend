@@ -31,8 +31,8 @@ Vì sao `manual`: máy chấm trình duyệt là PostgreSQL (WASM) — T-SQL l�
 | Mục 0 | buoi-dau-tien, cai-dat-ket-noi | 0 → 8 | ✅ (1 đề tay: kiểm bản cài + Unicode) |
 | Ch1 | slide-dbi2-1, csdl-dbms, on-ch1 | 0 → 12 | ✅ |
 | Ch2 | slide-dbi3-1/3-2/6-1/6-2, mo-hinh-quan-he, dai-so-quan-he, dai-so-nang-cao, rang-buoc-quan-he, on-ch2 | 0 → 42 | ✅ |
-| Ch3 | slide-dbi5-1/5-2/5-3, er-model, er-nang-cao, er-subclass, er-to-relation, xuong-erd, on-ch3 + Lab 3 | 0 → … | ⏳ |
-| Ch4 | slide-dbi4-1..4, chuan-hoa, bao-dong-tim-khoa, phan-ra, chuan-hoa-vi-du, on-ch4 + Lab 4 | 0 → … | ⏳ |
+| Ch3 | slide-dbi5-1/5-2/5-3, er-model, er-nang-cao, er-subclass, er-to-relation, xuong-erd, on-ch3 + Lab 3 (phòng khám) | 0 → 35 | ✅ (ERD → CREATE TABLE chấm theo hành vi: dòng hợp lệ vào, dòng sai bị chặn + cấu trúc cột) |
+| Ch4 | slide-dbi4-1..4, chuan-hoa, bao-dong-tim-khoa, phan-ra, chuan-hoa-vi-du, on-ch4 + Lab 4 (đơn hàng → BCNF) | 0 → 32 | ✅ (đáp án bao đóng/khoá/dạng chuẩn/chase TÍNH BẰNG `nguon/_fd.mjs`, không tính nhẩm; phân rã làm thật bằng CREATE TABLE + INSERT … SELECT DISTINCT) |
 | Ch5 | slide-dbi7-1/7-2, kieu-du-lieu, on-ch5 (+ sql-ddl, rang-buoc-sql, Lab 5 có sẵn) | 15 → … | ⏳ |
 | Ch6 | slide-dbi7-3/7-5/7-6, on-ch6 (+ 6 module + Lab 6 có sẵn) | 33 → … | ⏳ |
 | Ch7 | slide-dbi9-1..3, plsql, proc-function, trigger-cursor, on-ch7 + Lab 7 (+ view có sẵn) | 4 → … | ⏳ |

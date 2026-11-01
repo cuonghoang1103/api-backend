@@ -1,0 +1,658 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-4-lab-chuan-hoa-don-hang",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-on-ch4"
+  },
+  "exercises": [
+    {
+      "title": "Lab 4 — Order table: decompose to BCNF and prove nothing was lost",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 60,
+      "points": 100,
+      "concepts": [
+        "2NF / 3NF decomposition",
+        "INSERT … SELECT DISTINCT",
+        "foreign keys",
+        "lossless join"
+      ],
+      "prerequisites": [
+        "4.1–4.4 of this track"
+      ],
+      "tags": [
+        "dbi202",
+        "lab",
+        "normalization",
+        "ddl"
+      ],
+      "problemHtml": "<h1>Lab 4 — Order table: decompose to BCNF and prove nothing was lost</h1>\n<p class=\"bi-phu\">DBI202 · Chapter 4 — Normalization · Suggested time: 60 minutes · Total: 10 marks (5 × 2)</p>\n<h2>1. Overview</h2>\n<p>The shop keeps every order line in one 1NF table <code>Order1NF(order_id, order_date, cust_id, cust_name, cust_city, product_id, qty, unit_price)</code>, key (order_id, product_id), with FDs order_id → order_date, cust_id · cust_id → cust_name, cust_city · product_id → unit_price · order_id, product_id → qty. Decompose it into BCNF tables <b>and move the data</b>, one table per question, then prove the decomposition is lossless.</p>\n<h3>General requirements</h3>\n<ul>\n  <li>Each question: one CREATE TABLE and one INSERT … SELECT from Order1NF (never type the rows by hand — the grader changes the data).</li>\n  <li>Portable types: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE. The order table is called Orders (ORDER is a reserved word).</li>\n</ul>\n<h2>2. Submission files</h2>\n<pre>RollNo_Name_DBI202_Lab4/\n├── Q1.sql    -- Customer (3NF: cust_id → cust_name, cust_city) (2 marks)\n├── Q2.sql    -- Product (2NF: product_id → unit_price) (2 marks)\n├── Q3.sql    -- Orders (2NF: order_id → order_date, cust_id) (2 marks)\n├── Q4.sql    -- OrderLine (the full key: order_id, product_id → qty) (2 marks)\n├── Q5.sql    -- Join everything back (lossless) (2 marks)</pre>\n<h2>3. Data model</h2>\n<p><b>Customer</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>cust_id</code></td><td>CHAR(4)</td><td>PK</td></tr><tr><td><code>cust_name</code></td><td>VARCHAR(40)</td><td>required</td></tr><tr><td><code>cust_city</code></td><td>VARCHAR(30)</td><td>required</td></tr></tbody></table>\n<p><b>Product</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>product_id</code></td><td>CHAR(3)</td><td>PK</td></tr><tr><td><code>unit_price</code></td><td>DECIMAL(10,0)</td><td>required, > 0</td></tr></tbody></table>\n<p><b>Orders</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>order_id</code></td><td>INT</td><td>PK</td></tr><tr><td><code>order_date</code></td><td>DATE</td><td>required</td></tr><tr><td><code>cust_id</code></td><td>CHAR(4)</td><td>required, FK → Customer</td></tr></tbody></table>\n<p><b>OrderLine</b></p>\n<table><thead><tr><th>Field</th><th>Type</th><th>Notes</th></tr></thead><tbody><tr><td><code>order_id</code></td><td>INT</td><td>PK, FK → Orders</td></tr><tr><td><code>product_id</code></td><td>CHAR(3)</td><td>PK, FK → Product</td></tr><tr><td><code>qty</code></td><td>INT</td><td>required, > 0</td></tr></tbody></table>\n<h2>4. Functional requirements</h2>\n<div class=\"bi-cn\"><h3>1. Customer (3NF: cust_id → cust_name, cust_city) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create Customer and fill it: each customer once.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>SELECT DISTINCT — C001 appears in four rows of Order1NF.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Product (2NF: product_id → unit_price) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create Product and fill it: each product once; prices are positive.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>CHECK (unit_price &gt; 0).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Orders (2NF: order_id → order_date, cust_id) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create Orders and fill it: each order once, with a foreign key to Customer.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>cust_id NOT NULL REFERENCES Customer; do NOT copy cust_name / cust_city (they are in Customer).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. OrderLine (the full key: order_id, product_id → qty) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Create OrderLine and fill it: one row per line, two foreign keys, qty &gt; 0.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>PRIMARY KEY (order_id, product_id).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Join everything back (lossless) <span class=\"bi-diem\">2 marks</span></h3>\n<p>Write the query Customer ⋈ Orders ⋈ OrderLine ⋈ Product that reproduces Order1NF exactly, columns in the order of Order1NF.</p>\n<p><b>Requirements:</b></p>\n<ul>\n  <li>Columns: order_id, order_date, cust_id, cust_name, cust_city, product_id, qty, unit_price.</li>\n</ul>\n</div>\n<h2>5. Grading rubric</h2>\n<table><thead><tr><th>#</th><th>Feature</th><th>Marks</th></tr></thead><tbody><tr><td>1</td><td>Customer (3NF: cust_id → cust_name, cust_city)</td><td>2</td></tr><tr><td>2</td><td>Product (2NF: product_id → unit_price)</td><td>2</td></tr><tr><td>3</td><td>Orders (2NF: order_id → order_date, cust_id)</td><td>2</td></tr><tr><td>4</td><td>OrderLine (the full key: order_id, product_id → qty)</td><td>2</td></tr><tr><td>5</td><td>Join everything back (lossless)</td><td>2</td></tr><tr><td></td><td><b>Total</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Common deductions</h3>\n<ul>\n  <li>Typing rows with INSERT … VALUES instead of moving them with INSERT … SELECT.</li>\n  <li>Keeping cust_name / cust_city in Orders — the transitive dependency (3NF) is still there.</li>\n  <li>Q5: a join condition that pairs every order with every customer.</li>\n</ul>\n<h2>6. Submission</h2>\n<p>Tabs Q1.sql … Q5.sql. Q1–Q4 start from Order1NF plus the reference tables of the previous questions; Q5 runs on the full reference schema (tab OrderDB.sql).</p>",
+      "problemHtmlVi": "<h1>Lab 4 — Order table: decompose to BCNF and prove nothing was lost</h1>\n<p class=\"bi-phu\">DBI202 · Chương 4 — Chuẩn hoá · Thời gian gợi ý: 60 phút · Tổng: 10 điểm (5 × 2)</p>\n<h2>1. Tổng quan</h2>\n<p>Cửa hàng lưu mọi dòng đơn trong một bảng 1NF <code>Order1NF(order_id, order_date, cust_id, cust_name, cust_city, product_id, qty, unit_price)</code>, khoá (order_id, product_id), với FD order_id → order_date, cust_id · cust_id → cust_name, cust_city · product_id → unit_price · order_id, product_id → qty. Phân rã về các bảng BCNF <b>và chuyển dữ liệu</b>, mỗi câu một bảng, rồi chứng minh phân rã không mất.</p>\n<h3>Yêu cầu chung</h3>\n<ul>\n  <li>Mỗi câu: một CREATE TABLE và một INSERT … SELECT từ Order1NF (đừng gõ tay dòng nào — máy chấm đổi dữ liệu).</li>\n  <li>Kiểu chạy mọi hệ: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE. Bảng đơn hàng tên Orders (ORDER là từ khoá).</li>\n</ul>\n<h2>2. Tệp nộp bài</h2>\n<pre>RollNo_Name_DBI202_Lab4/\n├── Q1.sql    -- Customer (3NF: cust_id → cust_name, cust_city) (2 marks)\n├── Q2.sql    -- Product (2NF: product_id → unit_price) (2 marks)\n├── Q3.sql    -- Orders (2NF: order_id → order_date, cust_id) (2 marks)\n├── Q4.sql    -- OrderLine (the full key: order_id, product_id → qty) (2 marks)\n├── Q5.sql    -- Join everything back (lossless) (2 marks)</pre>\n<h2>3. Mô hình dữ liệu</h2>\n<p><b>Customer</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>cust_id</code></td><td>CHAR(4)</td><td>PK</td></tr><tr><td><code>cust_name</code></td><td>VARCHAR(40)</td><td>required</td></tr><tr><td><code>cust_city</code></td><td>VARCHAR(30)</td><td>required</td></tr></tbody></table>\n<p><b>Product</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>product_id</code></td><td>CHAR(3)</td><td>PK</td></tr><tr><td><code>unit_price</code></td><td>DECIMAL(10,0)</td><td>required, > 0</td></tr></tbody></table>\n<p><b>Orders</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>order_id</code></td><td>INT</td><td>PK</td></tr><tr><td><code>order_date</code></td><td>DATE</td><td>required</td></tr><tr><td><code>cust_id</code></td><td>CHAR(4)</td><td>required, FK → Customer</td></tr></tbody></table>\n<p><b>OrderLine</b></p>\n<table><thead><tr><th>Trường</th><th>Kiểu</th><th>Ghi chú</th></tr></thead><tbody><tr><td><code>order_id</code></td><td>INT</td><td>PK, FK → Orders</td></tr><tr><td><code>product_id</code></td><td>CHAR(3)</td><td>PK, FK → Product</td></tr><tr><td><code>qty</code></td><td>INT</td><td>required, > 0</td></tr></tbody></table>\n<h2>4. Yêu cầu chức năng</h2>\n<div class=\"bi-cn\"><h3>1. Customer (3NF: cust_id → cust_name, cust_city) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo Customer và đổ dữ liệu: mỗi khách một lần.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>SELECT DISTINCT — C001 có ở bốn dòng của Order1NF.</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>2. Product (2NF: product_id → unit_price) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo Product và đổ dữ liệu: mỗi sản phẩm một lần; giá dương.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>CHECK (unit_price &gt; 0).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>3. Orders (2NF: order_id → order_date, cust_id) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo Orders và đổ dữ liệu: mỗi đơn một lần, khoá ngoại tới Customer.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>cust_id NOT NULL REFERENCES Customer; KHÔNG chép cust_name / cust_city (đã ở Customer).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>4. OrderLine (khoá đầy đủ: order_id, product_id → qty) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Tạo OrderLine và đổ dữ liệu: mỗi dòng đơn một dòng, hai khoá ngoại, qty &gt; 0.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>PRIMARY KEY (order_id, product_id).</li>\n</ul>\n</div>\n<div class=\"bi-cn\"><h3>5. Nối tất cả lại (không mất) <span class=\"bi-diem\">2 điểm</span></h3>\n<p>Viết truy vấn Customer ⋈ Orders ⋈ OrderLine ⋈ Product cho lại đúng Order1NF, cột theo thứ tự của Order1NF.</p>\n<p><b>Yêu cầu:</b></p>\n<ul>\n  <li>Cột: order_id, order_date, cust_id, cust_name, cust_city, product_id, qty, unit_price.</li>\n</ul>\n</div>\n<h2>5. Thang điểm</h2>\n<table><thead><tr><th>#</th><th>Chức năng</th><th>Điểm</th></tr></thead><tbody><tr><td>1</td><td>Customer (3NF: cust_id → cust_name, cust_city)</td><td>2</td></tr><tr><td>2</td><td>Product (2NF: product_id → unit_price)</td><td>2</td></tr><tr><td>3</td><td>Orders (2NF: order_id → order_date, cust_id)</td><td>2</td></tr><tr><td>4</td><td>OrderLine (khoá đầy đủ: order_id, product_id → qty)</td><td>2</td></tr><tr><td>5</td><td>Nối tất cả lại (không mất)</td><td>2</td></tr><tr><td></td><td><b>Tổng</b></td><td><b>10</b></td></tr></tbody></table>\n<h3>Lỗi hay bị trừ điểm</h3>\n<ul>\n  <li>Gõ dòng bằng INSERT … VALUES thay vì chuyển bằng INSERT … SELECT.</li>\n  <li>Giữ cust_name / cust_city trong Orders — phụ thuộc bắc cầu (3NF) vẫn còn.</li>\n  <li>Q5: điều kiện nối ghép mọi đơn với mọi khách.</li>\n</ul>\n<h2>6. Nộp bài</h2>\n<p>Các tab Q1.sql … Q5.sql. Q1–Q4 bắt đầu từ Order1NF cộng các bảng chuẩn của câu trước; Q5 chạy trên lược đồ chuẩn đầy đủ (tab OrderDB.sql).</p>",
+      "inputSpec": "The database built by OrderDB.sql (schema below; full script in the OrderDB.sql tab).|||CSDL dựng bởi OrderDB.sql (lược đồ bên dưới; script đầy đủ ở tab OrderDB.sql).",
+      "outputSpec": "One file per question (Q1.sql … Qn.sql) containing only the statement(s) that answer it; each question is graded independently.|||Mỗi câu một tệp (Q1.sql … Qn.sql) chỉ chứa (các) lệnh trả lời câu đó; mỗi câu chấm độc lập.",
+      "constraints": "Each question: one CREATE TABLE and one INSERT … SELECT from Order1NF (never type the rows by hand — the grader changes the data).|||Mỗi câu: một CREATE TABLE và một INSERT … SELECT từ Order1NF (đừng gõ tay dòng nào — máy chấm đổi dữ liệu).\nPortable types: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE. The order table is called Orders (ORDER is a reserved word).|||Kiểu chạy mọi hệ: INT, CHAR(n), VARCHAR(n), DECIMAL(p,s), DATE. Bảng đơn hàng tên Orders (ORDER là từ khoá).",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl      | col       | type             \n---------+-----------+------------------\ncustomer | cust_id   | character        \ncustomer | cust_name | character varying\ncustomer | cust_city | character varying",
+          "explanation": "Expected result of check \"Q1 · columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Q1 · columns\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Parents before children: Customer and Product, then Orders, then OrderLine.|||Cha trước con: Customer và Product, rồi Orders, rồi OrderLine.",
+        "DISTINCT when a table holds the right side of an FD whose left side repeats in Order1NF.|||DISTINCT khi bảng chứa vế phải của một FD có vế trái lặp trong Order1NF."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "-- Q1. Customer (3NF: cust_id → cust_name, cust_city)\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "-- Q2. Product (2NF: product_id → unit_price)\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "-- Q3. Orders (2NF: order_id → order_date, cust_id)\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "-- Q4. OrderLine (the full key: order_id, product_id → qty)\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "-- Q5. Join everything back (lossless)\n-- Write only the statement(s) that answer this question (no USE, no GO, no test commands).\n-- Chỉ viết (các) lệnh trả lời câu này (không USE, không GO, không lệnh chạy thử).\n"
+        },
+        {
+          "name": "OrderDB.sql",
+          "language": "sql",
+          "code": "-- OrderDB.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- OrderDB.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;\nCREATE TABLE Orders (\n    order_id   INT     NOT NULL PRIMARY KEY,\n    order_date DATE    NOT NULL,\n    cust_id    CHAR(4) NOT NULL REFERENCES Customer (cust_id)\n);\nINSERT INTO Orders SELECT DISTINCT order_id, order_date, cust_id FROM Order1NF;\nCREATE TABLE OrderLine (\n    order_id   INT     NOT NULL REFERENCES Orders (order_id),\n    product_id CHAR(3) NOT NULL REFERENCES Product (product_id),\n    qty        INT     NOT NULL CHECK (qty > 0),\n    PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO OrderLine SELECT order_id, product_id, qty FROM Order1NF;\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "Q1.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\n"
+        },
+        {
+          "name": "Q2.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;\n"
+        },
+        {
+          "name": "Q3.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Orders (\n    order_id   INT     NOT NULL PRIMARY KEY,\n    order_date DATE    NOT NULL,\n    cust_id    CHAR(4) NOT NULL REFERENCES Customer (cust_id)\n);\nINSERT INTO Orders SELECT DISTINCT order_id, order_date, cust_id FROM Order1NF;\n"
+        },
+        {
+          "name": "Q4.sql",
+          "language": "sql",
+          "code": "CREATE TABLE OrderLine (\n    order_id   INT     NOT NULL REFERENCES Orders (order_id),\n    product_id CHAR(3) NOT NULL REFERENCES Product (product_id),\n    qty        INT     NOT NULL CHECK (qty > 0),\n    PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO OrderLine SELECT order_id, product_id, qty FROM Order1NF;\n"
+        },
+        {
+          "name": "Q5.sql",
+          "language": "sql",
+          "code": "SELECT o.order_id, o.order_date, c.cust_id, c.cust_name, c.cust_city, l.product_id, l.qty, p.unit_price\nFROM OrderLine l\nJOIN Orders   o ON o.order_id   = l.order_id\nJOIN Customer c ON c.cust_id    = o.cust_id\nJOIN Product  p ON p.product_id = l.product_id;\n"
+        },
+        {
+          "name": "OrderDB.sql",
+          "language": "sql",
+          "code": "-- OrderDB.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- OrderDB.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;\nCREATE TABLE Orders (\n    order_id   INT     NOT NULL PRIMARY KEY,\n    order_date DATE    NOT NULL,\n    cust_id    CHAR(4) NOT NULL REFERENCES Customer (cust_id)\n);\nINSERT INTO Orders SELECT DISTINCT order_id, order_date, cust_id FROM Order1NF;\nCREATE TABLE OrderLine (\n    order_id   INT     NOT NULL REFERENCES Orders (order_id),\n    product_id CHAR(3) NOT NULL REFERENCES Product (product_id),\n    qty        INT     NOT NULL CHECK (qty > 0),\n    PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO OrderLine SELECT order_id, product_id, qty FROM Order1NF;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four BCNF tables; every join is on a key of one side, so the join back is lossless and reproduces Order1NF exactly.</p>",
+      "solutionExplanationHtmlVi": "<p>Bốn bảng BCNF; mọi phép nối đều trên khoá của một phía nên nối lại không mất và cho đúng Order1NF.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;\nCREATE TABLE Orders (\n    order_id   INT     NOT NULL PRIMARY KEY,\n    order_date DATE    NOT NULL,\n    cust_id    CHAR(4) NOT NULL REFERENCES Customer (cust_id)\n);\nINSERT INTO Orders SELECT DISTINCT order_id, order_date, cust_id FROM Order1NF;\nCREATE TABLE OrderLine (\n    order_id   INT     NOT NULL REFERENCES Orders (order_id),\n    product_id CHAR(3) NOT NULL REFERENCES Product (product_id),\n    qty        INT     NOT NULL CHECK (qty > 0),\n    PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO OrderLine SELECT order_id, product_id, qty FROM Order1NF;",
+        "tepChinh": "Q1.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · columns",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('customer')",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "customer",
+                  "cust_id",
+                  "character"
+                ],
+                [
+                  "customer",
+                  "cust_name",
+                  "character varying"
+                ],
+                [
+                  "customer",
+                  "cust_city",
+                  "character varying"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · rows",
+            "kiemTra": "SELECT cust_id, cust_name, cust_city FROM Customer",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n",
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "cust_id",
+                "cust_name",
+                "cust_city"
+              ],
+              "hang": [
+                [
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội"
+                ],
+                [
+                  "C002",
+                  "Trần Bình",
+                  "Đà Nẵng"
+                ],
+                [
+                  "C003",
+                  "Lê Chi",
+                  "Cần Thơ"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q1 · new customer in the data",
+            "kiemTra": "SELECT cust_id FROM Customer",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n",
+            "themCsdl": "INSERT INTO Order1NF VALUES (1005, '2026-09-08', 'C004', N'Phạm Dũng', N'Huế', 'P09', 2, 12000), (1005, '2026-09-08', 'C004', N'Phạm Dũng', N'Huế', 'P01', 1, 5000)",
+            "an": true,
+            "tep": "Q1.sql",
+            "nhom": "f1",
+            "mongDoi": {
+              "cot": [
+                "cust_id"
+              ],
+              "hang": [
+                [
+                  "C001"
+                ],
+                [
+                  "C002"
+                ],
+                [
+                  "C004"
+                ],
+                [
+                  "C003"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q2 · rows",
+            "kiemTra": "SELECT product_id, unit_price FROM Product",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;",
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "product_id",
+                "unit_price"
+              ],
+              "hang": [
+                [
+                  "P03",
+                  7000
+                ],
+                [
+                  "P01",
+                  5000
+                ],
+                [
+                  "P07",
+                  18000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q2 · a price of 0 is rejected",
+            "thu": "INSERT INTO Product VALUES ('P99', 0)",
+            "maLoi": "23514",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;",
+            "tep": "Q2.sql",
+            "nhom": "f2"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q2 · new product in the data",
+            "kiemTra": "SELECT product_id, unit_price FROM Product",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;",
+            "themCsdl": "INSERT INTO Order1NF VALUES (1005, '2026-09-08', 'C004', N'Phạm Dũng', N'Huế', 'P09', 2, 12000), (1005, '2026-09-08', 'C004', N'Phạm Dũng', N'Huế', 'P01', 1, 5000)",
+            "an": true,
+            "tep": "Q2.sql",
+            "nhom": "f2",
+            "mongDoi": {
+              "cot": [
+                "product_id",
+                "unit_price"
+              ],
+              "hang": [
+                [
+                  "P03",
+                  7000
+                ],
+                [
+                  "P01",
+                  5000
+                ],
+                [
+                  "P07",
+                  18000
+                ],
+                [
+                  "P09",
+                  12000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q3 · columns",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('orders')",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;",
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "orders",
+                  "order_id",
+                  "integer"
+                ],
+                [
+                  "orders",
+                  "order_date",
+                  "date"
+                ],
+                [
+                  "orders",
+                  "cust_id",
+                  "character"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q3 · rows",
+            "kiemTra": "SELECT order_id, order_date, cust_id FROM Orders",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;",
+            "tep": "Q3.sql",
+            "nhom": "f3",
+            "mongDoi": {
+              "cot": [
+                "order_id",
+                "order_date",
+                "cust_id"
+              ],
+              "hang": [
+                [
+                  1004,
+                  "2026-09-06",
+                  "C003"
+                ],
+                [
+                  1001,
+                  "2026-09-01",
+                  "C001"
+                ],
+                [
+                  1002,
+                  "2026-09-02",
+                  "C002"
+                ],
+                [
+                  1003,
+                  "2026-09-05",
+                  "C001"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q3 · an order of an unknown customer is rejected",
+            "thu": "INSERT INTO Orders VALUES (9999, '2026-10-01', 'C999')",
+            "maLoi": "23503",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;",
+            "tep": "Q3.sql",
+            "nhom": "f3"
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Q4 · rows",
+            "kiemTra": "SELECT order_id, product_id, qty FROM OrderLine",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;\nCREATE TABLE Orders (\n    order_id   INT     NOT NULL PRIMARY KEY,\n    order_date DATE    NOT NULL,\n    cust_id    CHAR(4) NOT NULL REFERENCES Customer (cust_id)\n);\nINSERT INTO Orders SELECT DISTINCT order_id, order_date, cust_id FROM Order1NF;",
+            "tep": "Q4.sql",
+            "nhom": "f4",
+            "mongDoi": {
+              "cot": [
+                "order_id",
+                "product_id",
+                "qty"
+              ],
+              "hang": [
+                [
+                  1001,
+                  "P01",
+                  2
+                ],
+                [
+                  1001,
+                  "P07",
+                  1
+                ],
+                [
+                  1002,
+                  "P01",
+                  10
+                ],
+                [
+                  1003,
+                  "P03",
+                  1
+                ],
+                [
+                  1003,
+                  "P07",
+                  3
+                ],
+                [
+                  1004,
+                  "P03",
+                  4
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · the same product twice in one order is rejected",
+            "thu": "INSERT INTO OrderLine VALUES (1001, 'P01', 5)",
+            "maLoi": "23505",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;\nCREATE TABLE Orders (\n    order_id   INT     NOT NULL PRIMARY KEY,\n    order_date DATE    NOT NULL,\n    cust_id    CHAR(4) NOT NULL REFERENCES Customer (cust_id)\n);\nINSERT INTO Orders SELECT DISTINCT order_id, order_date, cust_id FROM Order1NF;",
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Q4 · a line of an unknown product is rejected",
+            "thu": "INSERT INTO OrderLine VALUES (1002, 'P99', 1)",
+            "maLoi": "23503",
+            "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n\nCREATE TABLE Customer (\n    cust_id   CHAR(4)     NOT NULL PRIMARY KEY,\n    cust_name VARCHAR(40) NOT NULL,\n    cust_city VARCHAR(30) NOT NULL\n);\nINSERT INTO Customer SELECT DISTINCT cust_id, cust_name, cust_city FROM Order1NF;\nCREATE TABLE Product (\n    product_id CHAR(3)       NOT NULL PRIMARY KEY,\n    unit_price DECIMAL(10,0) NOT NULL CHECK (unit_price > 0)\n);\nINSERT INTO Product SELECT DISTINCT product_id, unit_price FROM Order1NF;\nCREATE TABLE Orders (\n    order_id   INT     NOT NULL PRIMARY KEY,\n    order_date DATE    NOT NULL,\n    cust_id    CHAR(4) NOT NULL REFERENCES Customer (cust_id)\n);\nINSERT INTO Orders SELECT DISTINCT order_id, order_date, cust_id FROM Order1NF;",
+            "an": true,
+            "tep": "Q4.sql",
+            "nhom": "f4"
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · the rebuilt table equals Order1NF",
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "order_id",
+                "order_date",
+                "cust_id",
+                "cust_name",
+                "cust_city",
+                "product_id",
+                "qty",
+                "unit_price"
+              ],
+              "hang": [
+                [
+                  1001,
+                  "2026-09-01",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P01",
+                  2,
+                  5000
+                ],
+                [
+                  1001,
+                  "2026-09-01",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P07",
+                  1,
+                  18000
+                ],
+                [
+                  1002,
+                  "2026-09-02",
+                  "C002",
+                  "Trần Bình",
+                  "Đà Nẵng",
+                  "P01",
+                  10,
+                  5000
+                ],
+                [
+                  1003,
+                  "2026-09-05",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P03",
+                  1,
+                  7000
+                ],
+                [
+                  1003,
+                  "2026-09-05",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P07",
+                  3,
+                  18000
+                ],
+                [
+                  1004,
+                  "2026-09-06",
+                  "C003",
+                  "Lê Chi",
+                  "Cần Thơ",
+                  "P03",
+                  4,
+                  7000
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Q5 · another order line",
+            "an": true,
+            "themCsdl": "INSERT INTO OrderLine VALUES (1002, 'P03', 2)",
+            "tep": "Q5.sql",
+            "nhom": "f5",
+            "mongDoi": {
+              "cot": [
+                "order_id",
+                "order_date",
+                "cust_id",
+                "cust_name",
+                "cust_city",
+                "product_id",
+                "qty",
+                "unit_price"
+              ],
+              "hang": [
+                [
+                  1001,
+                  "2026-09-01",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P01",
+                  2,
+                  5000
+                ],
+                [
+                  1001,
+                  "2026-09-01",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P07",
+                  1,
+                  18000
+                ],
+                [
+                  1002,
+                  "2026-09-02",
+                  "C002",
+                  "Trần Bình",
+                  "Đà Nẵng",
+                  "P01",
+                  10,
+                  5000
+                ],
+                [
+                  1003,
+                  "2026-09-05",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P03",
+                  1,
+                  7000
+                ],
+                [
+                  1003,
+                  "2026-09-05",
+                  "C001",
+                  "Nguyễn An",
+                  "Hà Nội",
+                  "P07",
+                  3,
+                  18000
+                ],
+                [
+                  1004,
+                  "2026-09-06",
+                  "C003",
+                  "Lê Chi",
+                  "Cần Thơ",
+                  "P03",
+                  4,
+                  7000
+                ],
+                [
+                  1002,
+                  "2026-09-02",
+                  "C002",
+                  "Trần Bình",
+                  "Đà Nẵng",
+                  "P03",
+                  2,
+                  7000
+                ]
+              ]
+            }
+          }
+        ],
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Customer (3NF: cust_id → cust_name, cust_city)",
+            "diem": 2
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Product (2NF: product_id → unit_price)",
+            "diem": 2
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Orders (2NF: order_id → order_date, cust_id)",
+            "diem": 2
+          },
+          {
+            "ma": "f4",
+            "ten": "4. OrderLine (the full key: order_id, product_id → qty)",
+            "diem": 2
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Join everything back (lossless)",
+            "diem": 2
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Forgetting DISTINCT: the primary key rejects the duplicated customer rows.|||Quên DISTINCT: khoá chính từ chối các dòng khách hàng lặp."
+        },
+        {
+          "loi": "Q4 without a primary key — the same product could appear twice in an order.|||Q4 thiếu khoá chính — một sản phẩm có thể xuất hiện hai lần trong một đơn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PRIMARY KEY",
+          "vi": "khoá chính",
+          "giaiThich": "Định danh duy nhất mỗi dòng: UNIQUE + NOT NULL."
+        },
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "INNER JOIN",
+          "vi": "nối trong",
+          "giaiThich": "Chỉ giữ cặp dòng thoả điều kiện ON ở cả hai bảng."
+        }
+      ]
+    }
+  ]
+}

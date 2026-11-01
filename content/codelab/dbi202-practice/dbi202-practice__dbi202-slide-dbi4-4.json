@@ -1,0 +1,643 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi4-4",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi4-4"
+  },
+  "exercises": [
+    {
+      "title": "Remove the transitive dependency: Employee + Department",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "3NF",
+        "transitive dependency",
+        "decomposition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "3nf",
+        "decomposition"
+      ],
+      "problemHtml": "<p>deptName and location depend on empID only through deptID. Split EmpFlat into <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> and <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, then fill both from EmpFlat.</p>\n<p><b>Table</b> (tab <code>EmpFlat.sql</code>): <code>EmpFlat(empID, fullName, deptID, deptName, location)</code>, key empID. FDs: empID → fullName, deptID; deptID → deptName, location.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Department first (Employee references it); each department once.</li>\n  <li>VARCHAR instead of NVARCHAR here.</li>\n</ul>",
+      "problemHtmlVi": "<p>deptName và location chỉ phụ thuộc empID thông qua deptID. Tách EmpFlat thành <code>Department(deptID CHAR(3) PK, deptName VARCHAR(40), location VARCHAR(30))</code> và <code>Employee(empID INT PK, fullName VARCHAR(40), deptID CHAR(3) FK)</code>, rồi đổ dữ liệu từ EmpFlat.</p>\n<p><b>Bảng</b> (tab <code>EmpFlat.sql</code>): <code>EmpFlat(empID, fullName, deptID, deptName, location)</code>, khoá empID. FD: empID → fullName, deptID; deptID → deptName, location.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Department trước (Employee tham chiếu nó); mỗi phòng một lần.</li>\n  <li>Ở đây dùng VARCHAR thay NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "deptID | deptName   | location\n-------+------------+---------\nACC    | Accounting | Cau Giay\nSAL    | Sales      | Cau Giay\nIT1    | Software   | Hoa Lac ",
+          "explanation": "Expected result of check \"Department\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Department\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "The transitive FD deptID → deptName, location becomes its own table keyed by deptID.|||FD bắc cầu deptID → deptName, location thành bảng riêng có khoá deptID.",
+        "Keep deptID in Employee as the foreign key that joins them back.|||Giữ deptID trong Employee làm khoá ngoại để nối lại."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "EmpFlat.sql",
+          "language": "sql",
+          "code": "-- EmpFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EmpFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Bình', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dũng', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Department (\n    deptID   CHAR(3)     NOT NULL PRIMARY KEY,\n    deptName VARCHAR(40) NOT NULL,\n    location VARCHAR(30) NOT NULL\n);\nCREATE TABLE Employee (\n    empID    INT         NOT NULL PRIMARY KEY,\n    fullName VARCHAR(40) NOT NULL,\n    deptID   CHAR(3)     NOT NULL REFERENCES Department (deptID)    -- the transitive FD now lives in Department\n);\nINSERT INTO Department SELECT DISTINCT deptID, deptName, location FROM EmpFlat;\nINSERT INTO Employee   SELECT empID, fullName, deptID FROM EmpFlat;\n"
+        },
+        {
+          "name": "EmpFlat.sql",
+          "language": "sql",
+          "code": "-- EmpFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EmpFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Bình', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dũng', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Both tables are now in BCNF: the only determinants are empID and deptID, each the key of its table. The decomposition is lossless because the common attribute deptID is the key of Department.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai bảng giờ đều ở BCNF: định thuộc duy nhất là empID và deptID, mỗi cái là khoá của bảng nó. Phân rã không mất vì thuộc tính chung deptID là khoá của Department.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE EmpFlat (\n  empID    INT          NOT NULL,\n  fullName NVARCHAR(40) NOT NULL,\n  deptID   CHAR(3)      NOT NULL,\n  deptName NVARCHAR(40) NOT NULL,\n  location NVARCHAR(30) NOT NULL,\n  CONSTRAINT pk_empflat PRIMARY KEY (empID)\n);\nINSERT INTO EmpFlat VALUES\n (1, N'An',   'IT1', N'Software',   N'Hoa Lac'),\n (2, N'Bình', 'IT1', N'Software',   N'Hoa Lac'),\n (3, N'Chi',  'SAL', N'Sales',      N'Cau Giay'),\n (4, N'Dũng', 'ACC', N'Accounting', N'Cau Giay'),\n (5, N'Em',   'SAL', N'Sales',      N'Cau Giay');\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Department|||Department",
+            "kiemTra": "SELECT deptID, deptName, location FROM Department",
+            "mongDoi": {
+              "cot": [
+                "deptID",
+                "deptName",
+                "location"
+              ],
+              "hang": [
+                [
+                  "ACC",
+                  "Accounting",
+                  "Cau Giay"
+                ],
+                [
+                  "SAL",
+                  "Sales",
+                  "Cau Giay"
+                ],
+                [
+                  "IT1",
+                  "Software",
+                  "Hoa Lac"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Employee|||Employee",
+            "kiemTra": "SELECT empID, fullName, deptID FROM Employee",
+            "mongDoi": {
+              "cot": [
+                "empID",
+                "fullName",
+                "deptID"
+              ],
+              "hang": [
+                [
+                  1,
+                  "An",
+                  "IT1"
+                ],
+                [
+                  2,
+                  "Bình",
+                  "IT1"
+                ],
+                [
+                  3,
+                  "Chi",
+                  "SAL"
+                ],
+                [
+                  4,
+                  "Dũng",
+                  "ACC"
+                ],
+                [
+                  5,
+                  "Em",
+                  "SAL"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: a new department appears|||Ẩn: có phòng mới",
+            "kiemTra": "SELECT deptID, deptName FROM Department",
+            "an": true,
+            "themCsdl": "INSERT INTO EmpFlat VALUES (6, N'Giang', 'HR1', N'Human Resources', N'Hoa Lac'), (7, N'Hà', 'ACC', N'Accounting', N'Cau Giay')",
+            "mongDoi": {
+              "cot": [
+                "deptID",
+                "deptName"
+              ],
+              "hang": [
+                [
+                  "ACC",
+                  "Accounting"
+                ],
+                [
+                  "SAL",
+                  "Sales"
+                ],
+                [
+                  "HR1",
+                  "Human Resources"
+                ],
+                [
+                  "IT1",
+                  "Software"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Fills Department with INSERT … SELECT DISTINCT|||Đổ Department bằng INSERT … SELECT DISTINCT",
+            "khop": "\\bINSERT\\s+INTO\\s+Department\\b[^;]*\\bSELECT\\s+DISTINCT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Typing the departments by hand — HR1 in the hidden data is missing and the Employee INSERT fails.|||Gõ tay các phòng — HR1 trong dữ liệu ẩn bị thiếu và INSERT Employee lỗi."
+        },
+        {
+          "loi": "Dropping deptID from Employee — lossy: nobody knows who works where.|||Bỏ deptID khỏi Employee — mất thông tin: không biết ai làm ở đâu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "3NF",
+          "vi": "dạng chuẩn 3"
+        }
+      ]
+    },
+    {
+      "title": "The BCNF decomposition algorithm, in order",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "BCNF decomposition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "bcnf"
+      ],
+      "problemHtml": "<p>Slide 70: decomposing R into BCNF.</p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 70: phân rã R về BCNF.</p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "BCNF: split on a violating FD using its closure.|||BCNF: tách theo FD vi phạm bằng bao đóng của nó.",
+        "3NF synthesis: start from a minimal basis; the key relation guarantees losslessness.|||Tổng hợp 3NF: bắt đầu từ phủ tối thiểu; quan hệ chứa khoá bảo đảm không mất."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The BCNF decomposition algorithm, in order\n\nAnswer in the answer panel (no code needed).\n\n1. BCNF decomposition (one round, then recurse)Phân rã BCNF (một vòng, rồi đệ quy)\n2. 3NF synthesis algorithm (slide 71)Thuật toán tổng hợp 3NF (slide 71)\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The BCNF decomposition algorithm, in order — answer key\n\n1. BCNF decomposition (one round, then recurse)Phân rã BCNF (một vòng, rồi đệ quy)\n   Answer: m2) Find all keys of R  →  m1) Find an FD X → Y whose left side X is not a superkey  →  m3) Compute X⁺  →  m5) Split R into R1 = X⁺ and R2 = X ∪ (R − X⁺)  →  m4) Project the FDs onto R1 and R2 and repeat on any piece still not in BCNF\n   Keys first (to know what a superkey is), a violation, its closure, the split, then recurse. Each split is lossless because R1 ∩ R2 = X and X → R1.VI: Khoá trước (để biết siêu khoá), tìm vi phạm, tính bao đóng, tách, rồi đệ quy. Mỗi lần tách đều không mất vì R1 ∩ R2 = X và X → R1.\n\n2. 3NF synthesis algorithm (slide 71)Thuật toán tổng hợp 3NF (slide 71)\n   Answer: m1) Compute a minimal basis of F  →  m4) Make one relation XA for every FD X → A of the basis (merge same left sides)  →  m3) If no relation contains a key of R, add one relation that is a key  →  m2) Remove a relation whose attributes are contained in another\n   Minimal basis → one relation per FD → make sure some relation holds a key (lossless) → drop subsumed relations.VI: Phủ tối thiểu → mỗi FD một quan hệ → bảo đảm có quan hệ chứa khoá (không mất) → bỏ quan hệ bị bao.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Keys first (to know what a superkey is), a violation, its closure, the split, then recurse. Each split is lossless because R1 ∩ R2 = X and X → R1.</p><p><i>VI: Khoá trước (để biết siêu khoá), tìm vi phạm, tính bao đóng, tách, rồi đệ quy. Mỗi lần tách đều không mất vì R1 ∩ R2 = X và X → R1.</i></p><p>Minimal basis → one relation per FD → make sure some relation holds a key (lossless) → drop subsumed relations.</p><p><i>VI: Phủ tối thiểu → mỗi FD một quan hệ → bảo đảm có quan hệ chứa khoá (không mất) → bỏ quan hệ bị bao.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>BCNF decomposition (one round, then recurse)</p><p style=\"opacity:.75;font-size:.92em\"><i>Phân rã BCNF (một vòng, rồi đệ quy)</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Find an FD X → Y whose left side X is not a superkey"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Find all keys of R"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Compute X⁺"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Project the FDs onto R1 and R2 and repeat on any piece still not in BCNF"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "Split R into R1 = X⁺ and R2 = X ∪ (R − X⁺)"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m3",
+              "m5",
+              "m4"
+            ],
+            "giaiThich": "<p>Keys first (to know what a superkey is), a violation, its closure, the split, then recurse. Each split is lossless because R1 ∩ R2 = X and X → R1.</p><p><i>VI: Khoá trước (để biết siêu khoá), tìm vi phạm, tính bao đóng, tách, rồi đệ quy. Mỗi lần tách đều không mất vì R1 ∩ R2 = X và X → R1.</i></p>"
+          },
+          {
+            "ma": "o2",
+            "de": "<p>3NF synthesis algorithm (slide 71)</p><p style=\"opacity:.75;font-size:.92em\"><i>Thuật toán tổng hợp 3NF (slide 71)</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Compute a minimal basis of F"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Remove a relation whose attributes are contained in another"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "If no relation contains a key of R, add one relation that is a key"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Make one relation XA for every FD X → A of the basis (merge same left sides)"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Minimal basis → one relation per FD → make sure some relation holds a key (lossless) → drop subsumed relations.</p><p><i>VI: Phủ tối thiểu → mỗi FD một quan hệ → bảo đảm có quan hệ chứa khoá (không mất) → bỏ quan hệ bị bao.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Splitting before finding the keys.|||Tách trước khi tìm khoá."
+        },
+        {
+          "loi": "Forgetting the \"add a key relation\" step of 3NF synthesis — the result may be lossy.|||Quên bước \"thêm quan hệ chứa khoá\" của tổng hợp 3NF — kết quả có thể mất thông tin."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "BCNF or 3NF: lossless? dependency-preserving?",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "lossless join",
+        "dependency preservation",
+        "BCNF vs 3NF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "bcnf",
+        "3nf"
+      ],
+      "problemHtml": "<p>R(A, B, C, D) — student A takes subject B with lecturer C who has office D — with F = {AB → C, C → B, C → D}. For each decomposition answer yes/no.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>R(A, B, C, D) — sinh viên A học môn B với giảng viên C có phòng làm việc D — với F = {AB → C, C → B, C → D}. Với mỗi phân rã trả lời yes/no.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two pieces are lossless when their common attributes determine one piece.|||Hai mảnh không mất khi thuộc tính chung xác định được một mảnh.",
+        "An FD is preserved when it can be checked inside one piece (or follows from the projected FDs).|||FD được bảo toàn khi kiểm được trong một mảnh (hoặc suy ra từ các FD đã chiếu)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BCNF or 3NF: lossless? dependency-preserving?\n\nAnswer in the answer panel (no code needed).\n\n1. PropertiesTính chất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BCNF or 3NF: lossless? dependency-preserving? — answer key\n\n1. PropertiesTính chất\n   - r1.ll: yes\n   - r1.bt: no\n   - r2.ll: yes\n   - r2.bt: yes\n   - r3.ll: no\n   - r3.bt: no\n   - r4.ll: no\n   - r4.bt: no\n   BCNF {BCD, AC}: lossless (C is a key of BCD) but AB → C is lost. 3NF {ABC, BCD}: lossless and every FD kept, at the price of C → B inside ABC. {AB, CD} shares nothing ⇒ lossy. {ABD, BC}: B alone determines nothing ⇒ lossy, and C → D is lost.VI: BCNF {BCD, AC}: không mất (C là khoá của BCD) nhưng mất AB → C. 3NF {ABC, BCD}: không mất và giữ mọi FD, đổi lại C → B nằm trong ABC. {AB, CD} không có gì chung ⇒ mất. {ABD, BC}: riêng B không xác định gì ⇒ mất, và mất C → D.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>BCNF {BCD, AC}: lossless (C is a key of BCD) but AB → C is lost. 3NF {ABC, BCD}: lossless and every FD kept, at the price of C → B inside ABC. {AB, CD} shares nothing ⇒ lossy. {ABD, BC}: B alone determines nothing ⇒ lossy, and C → D is lost.</p><p><i>VI: BCNF {BCD, AC}: không mất (C là khoá của BCD) nhưng mất AB → C. 3NF {ABC, BCD}: không mất và giữ mọi FD, đổi lại C → B nằm trong ABC. {AB, CD} không có gì chung ⇒ mất. {ABD, BC}: riêng B không xác định gì ⇒ mất, và mất C → D.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Properties</p><p style=\"opacity:.75;font-size:.92em\"><i>Tính chất</i></p>",
+            "cot": [
+              {
+                "ma": "pr",
+                "ten": "Decomposition / Phân rã"
+              },
+              {
+                "ma": "ll",
+                "ten": "Lossless?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              },
+              {
+                "ma": "bt",
+                "ten": "Preserves F?",
+                "luaChon": [
+                  "yes",
+                  "no"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "pr": "BCNF result: {BCD, AC}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "pr": "3NF synthesis: {ABC, BCD}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "pr": "a careless split: {AB, CD}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "pr": "{ABD, BC}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.ll": "yes",
+              "r1.bt": "no",
+              "r2.ll": "yes",
+              "r2.bt": "yes",
+              "r3.ll": "no",
+              "r3.bt": "no",
+              "r4.ll": "no",
+              "r4.bt": "no"
+            },
+            "giaiThich": "<p>BCNF {BCD, AC}: lossless (C is a key of BCD) but AB → C is lost. 3NF {ABC, BCD}: lossless and every FD kept, at the price of C → B inside ABC. {AB, CD} shares nothing ⇒ lossy. {ABD, BC}: B alone determines nothing ⇒ lossy, and C → D is lost.</p><p><i>VI: BCNF {BCD, AC}: không mất (C là khoá của BCD) nhưng mất AB → C. 3NF {ABC, BCD}: không mất và giữ mọi FD, đổi lại C → B nằm trong ABC. {AB, CD} không có gì chung ⇒ mất. {ABD, BC}: riêng B không xác định gì ⇒ mất, và mất C → D.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"BCNF is always dependency-preserving\" — false, see {BCD, AC}.|||\"BCNF luôn bảo toàn phụ thuộc\" — sai, xem {BCD, AC}."
+        },
+        {
+          "loi": "Thinking lossless and preserving are the same property.|||Tưởng không mất và bảo toàn là cùng một tính chất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "dependency preservation",
+          "vi": "bảo toàn phụ thuộc"
+        }
+      ]
+    },
+    {
+      "title": "BCNF in four questions",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "BCNF definition"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "bcnf"
+      ],
+      "problemHtml": "<p>Slides 64–69.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 64–69.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "BCNF: every determinant is a superkey.|||BCNF: mọi định thuộc đều là siêu khoá.",
+        "3NF adds \"or the right side is prime\".|||3NF thêm \"hoặc vế phải là thuộc tính khoá\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BCNF in four questions\n\nAnswer in the answer panel (no code needed).\n\n1. R is in BCNF when, for every non-trivial FD X → A…R ở BCNF khi, với mọi FD không tầm thường X → A…\n2. Address(street, city, zip), {street, city → zip, zip → city}. Highest NF?Address(street, city, zip), {street, city → zip, zip → city}. Dạng chuẩn cao nhất?\n3. Every BCNF relation is also in…Mọi quan hệ BCNF cũng ở…\n4. Why do designers often stop at 3NF?Vì sao người thiết kế hay dừng ở 3NF?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# BCNF in four questions — answer key\n\n1. R is in BCNF when, for every non-trivial FD X → A…R ở BCNF khi, với mọi FD không tầm thường X → A…\n   Answer: c) X is a superkey of R\n   BCNF drops the 3NF escape clause \"or A is prime\".VI: BCNF bỏ ngoại lệ \"hoặc A là thuộc tính khoá\" của 3NF.\n\n2. Address(street, city, zip), {street, city → zip, zip → city}. Highest NF?Address(street, city, zip), {street, city → zip, zip → city}. Dạng chuẩn cao nhất?\n   Answer: a) 3NF, not BCNF\n   Keys: (street, city) and (street, zip). zip → city: zip is not a superkey, but city is prime ⇒ 3NF only.VI: Khoá: (street, city) và (street, zip). zip → city: zip không là siêu khoá nhưng city là thuộc tính khoá ⇒ chỉ 3NF.\n\n3. Every BCNF relation is also in…Mọi quan hệ BCNF cũng ở…\n   Answer: a) 3NF\n   BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF.VI: BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF.\n\n4. Why do designers often stop at 3NF?Vì sao người thiết kế hay dừng ở 3NF?\n   Answer: a) 3NF is always reachable lossless AND dependency-preserving; BCNF is not\n   The synthesis algorithm guarantees both properties for 3NF; BCNF may lose an FD (street/city/zip).VI: Thuật toán tổng hợp bảo đảm cả hai tính chất cho 3NF; BCNF có thể mất một FD (street/city/zip).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> X is a superkey of R</p><p>BCNF drops the 3NF escape clause \"or A is prime\".</p><p><i>VI: BCNF bỏ ngoại lệ \"hoặc A là thuộc tính khoá\" của 3NF.</i></p></li><li><p><b>a)</b> 3NF, not BCNF</p><p>Keys: (street, city) and (street, zip). zip → city: zip is not a superkey, but city is prime ⇒ 3NF only.</p><p><i>VI: Khoá: (street, city) và (street, zip). zip → city: zip không là siêu khoá nhưng city là thuộc tính khoá ⇒ chỉ 3NF.</i></p></li><li><p><b>a)</b> 3NF</p><p>BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF.</p><p><i>VI: BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF.</i></p></li><li><p><b>a)</b> 3NF is always reachable lossless AND dependency-preserving; BCNF is not</p><p>The synthesis algorithm guarantees both properties for 3NF; BCNF may lose an FD (street/city/zip).</p><p><i>VI: Thuật toán tổng hợp bảo đảm cả hai tính chất cho 3NF; BCNF có thể mất một FD (street/city/zip).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>R is in BCNF when, for every non-trivial FD X → A…</p><p style=\"opacity:.75;font-size:.92em\"><i>R ở BCNF khi, với mọi FD không tầm thường X → A…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A is not part of any key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "X is a single attribute"
+              },
+              {
+                "ma": "c",
+                "noiDung": "X is a superkey of R"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A is a prime attribute"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>BCNF drops the 3NF escape clause \"or A is prime\".</p><p><i>VI: BCNF bỏ ngoại lệ \"hoặc A là thuộc tính khoá\" của 3NF.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Address(street, city, zip), {street, city → zip, zip → city}. Highest NF?</p><p style=\"opacity:.75;font-size:.92em\"><i>Address(street, city, zip), {street, city → zip, zip → city}. Dạng chuẩn cao nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3NF, not BCNF"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2NF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1NF"
+              },
+              {
+                "ma": "d",
+                "noiDung": "BCNF"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Keys: (street, city) and (street, zip). zip → city: zip is not a superkey, but city is prime ⇒ 3NF only.</p><p><i>VI: Khoá: (street, city) và (street, zip). zip → city: zip không là siêu khoá nhưng city là thuộc tính khoá ⇒ chỉ 3NF.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Every BCNF relation is also in…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mọi quan hệ BCNF cũng ở…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3NF"
+              },
+              {
+                "ma": "b",
+                "noiDung": "nothing else"
+              },
+              {
+                "ma": "c",
+                "noiDung": "4NF"
+              },
+              {
+                "ma": "d",
+                "noiDung": "only 1NF"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF.</p><p><i>VI: BCNF ⊂ 3NF ⊂ 2NF ⊂ 1NF.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Why do designers often stop at 3NF?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao người thiết kế hay dừng ở 3NF?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3NF is always reachable lossless AND dependency-preserving; BCNF is not"
+              },
+              {
+                "ma": "b",
+                "noiDung": "BCNF tables need much more disk space than 3NF ones"
+              },
+              {
+                "ma": "c",
+                "noiDung": "3NF already removes every possible redundancy"
+              },
+              {
+                "ma": "d",
+                "noiDung": "SQL Server cannot create tables that are in BCNF"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The synthesis algorithm guarantees both properties for 3NF; BCNF may lose an FD (street/city/zip).</p><p><i>VI: Thuật toán tổng hợp bảo đảm cả hai tính chất cho 3NF; BCNF có thể mất một FD (street/city/zip).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling Address BCNF because it \"looks clean\".|||Gọi Address là BCNF vì \"trông gọn\"."
+        },
+        {
+          "loi": "Believing 3NF has no redundancy.|||Tin 3NF không có dư thừa."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BCNF",
+          "vi": "dạng chuẩn Boyce–Codd"
+        }
+      ]
+    }
+  ]
+}

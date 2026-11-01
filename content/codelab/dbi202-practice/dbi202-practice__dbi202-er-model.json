@@ -1,0 +1,495 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-er-model",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-er-model"
+  },
+  "exercises": [
+    {
+      "title": "Entity, attribute or relationship?",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "entity vs attribute",
+        "relationship"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd"
+      ],
+      "problemHtml": "<p>\"A library lends <b>books</b> to <b>members</b>. Each book has an ISBN, a title and a <b>publisher</b>; publishers have a name and a country. A member borrows a book on a date and must return it by a due date.\"</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Thư viện cho <b>độc giả</b> mượn <b>sách</b>. Mỗi cuốn có ISBN, tên và <b>nhà xuất bản</b>; nhà xuất bản có tên và quốc gia. Độc giả mượn sách vào một ngày và phải trả trước hạn.\"</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Nouns with their own attributes ⇒ entities; verbs ⇒ relationships; adjectives/values ⇒ attributes.|||Danh từ có thuộc tính riêng ⇒ thực thể; động từ ⇒ liên kết; tính từ/giá trị ⇒ thuộc tính.",
+        "An attribute that describes a pairing belongs to the relationship.|||Thuộc tính mô tả một cặp thì thuộc về liên kết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Entity, attribute or relationship?\n\nAnswer in the answer panel (no code needed).\n\n1. Publisher has its own attributes (name, country) and many books share one publisher. Model it as…Nhà xuất bản có thuộc tính riêng (tên, quốc gia) và nhiều sách chung một nhà xuất bản. Mô hình hoá nó là…\n2. \"borrows\" between Member and Book is…\"mượn\" giữa Member và Book là…\n3. Where do borrowDate and dueDate belong?borrowDate và dueDate thuộc về đâu?\n4. A member may borrow many books and a book is borrowed by many members over time. Borrows is…Một độc giả mượn nhiều sách và một cuốn được nhiều độc giả mượn theo thời gian. Borrows là…\n5. ISBN is underlined in the diagram because…ISBN được gạch chân trong sơ đồ vì…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Entity, attribute or relationship? — answer key\n\n1. Publisher has its own attributes (name, country) and many books share one publisher. Model it as…Nhà xuất bản có thuộc tính riêng (tên, quốc gia) và nhiều sách chung một nhà xuất bản. Mô hình hoá nó là…\n   Answer: c) an entity set related to Book\n   Something with its own attributes, shared by many, is an entity — otherwise country would be repeated in every book.VI: Thứ có thuộc tính riêng và được nhiều đối tượng dùng chung là thực thể — nếu không quốc gia sẽ lặp ở mọi cuốn sách.\n\n2. \"borrows\" between Member and Book is…\"mượn\" giữa Member và Book là…\n   Answer: b) a relationship\n   A verb linking two entity sets ⇒ relationship (diamond).VI: Động từ nối hai tập thực thể ⇒ liên kết (hình thoi).\n\n3. Where do borrowDate and dueDate belong?borrowDate và dueDate thuộc về đâu?\n   Answer: a) to the relationship Borrows\n   They describe one particular loan (a member + a book), not the book or the member alone.VI: Chúng mô tả một lượt mượn cụ thể (độc giả + sách), không phải riêng sách hay độc giả.\n\n4. A member may borrow many books and a book is borrowed by many members over time. Borrows is…Một độc giả mượn nhiều sách và một cuốn được nhiều độc giả mượn theo thời gian. Borrows là…\n   Answer: b) many-many\n   Many on both sides ⇒ M-N ⇒ its own table later (lesson 3.4).VI: Nhiều ở cả hai phía ⇒ M-N ⇒ sau này thành bảng riêng (bài 3.4).\n\n5. ISBN is underlined in the diagram because…ISBN được gạch chân trong sơ đồ vì…\n   Answer: d) it is the key of Book\n   Underlined attribute = key attribute (identifies the entity).VI: Thuộc tính gạch chân = thuộc tính khoá (xác định thực thể).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> an entity set related to Book</p><p>Something with its own attributes, shared by many, is an entity — otherwise country would be repeated in every book.</p><p><i>VI: Thứ có thuộc tính riêng và được nhiều đối tượng dùng chung là thực thể — nếu không quốc gia sẽ lặp ở mọi cuốn sách.</i></p></li><li><p><b>b)</b> a relationship</p><p>A verb linking two entity sets ⇒ relationship (diamond).</p><p><i>VI: Động từ nối hai tập thực thể ⇒ liên kết (hình thoi).</i></p></li><li><p><b>a)</b> to the relationship Borrows</p><p>They describe one particular loan (a member + a book), not the book or the member alone.</p><p><i>VI: Chúng mô tả một lượt mượn cụ thể (độc giả + sách), không phải riêng sách hay độc giả.</i></p></li><li><p><b>b)</b> many-many</p><p>Many on both sides ⇒ M-N ⇒ its own table later (lesson 3.4).</p><p><i>VI: Nhiều ở cả hai phía ⇒ M-N ⇒ sau này thành bảng riêng (bài 3.4).</i></p></li><li><p><b>d)</b> it is the key of Book</p><p>Underlined attribute = key attribute (identifies the entity).</p><p><i>VI: Thuộc tính gạch chân = thuộc tính khoá (xác định thực thể).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Publisher has its own attributes (name, country) and many books share one publisher. Model it as…</p><p style=\"opacity:.75;font-size:.92em\"><i>Nhà xuất bản có thuộc tính riêng (tên, quốc gia) và nhiều sách chung một nhà xuất bản. Mô hình hoá nó là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a text attribute of Book"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a relationship with no entity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an entity set related to Book"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a multivalued attribute of Member"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Something with its own attributes, shared by many, is an entity — otherwise country would be repeated in every book.</p><p><i>VI: Thứ có thuộc tính riêng và được nhiều đối tượng dùng chung là thực thể — nếu không quốc gia sẽ lặp ở mọi cuốn sách.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>\"borrows\" between Member and Book is…</p><p style=\"opacity:.75;font-size:.92em\"><i>\"mượn\" giữa Member và Book là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "an attribute of Book"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a relationship"
+              },
+              {
+                "ma": "c",
+                "noiDung": "an entity set"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a key"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A verb linking two entity sets ⇒ relationship (diamond).</p><p><i>VI: Động từ nối hai tập thực thể ⇒ liên kết (hình thoi).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Where do borrowDate and dueDate belong?</p><p style=\"opacity:.75;font-size:.92em\"><i>borrowDate và dueDate thuộc về đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "to the relationship Borrows"
+              },
+              {
+                "ma": "b",
+                "noiDung": "to Publisher"
+              },
+              {
+                "ma": "c",
+                "noiDung": "to Book"
+              },
+              {
+                "ma": "d",
+                "noiDung": "to Member"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>They describe one particular loan (a member + a book), not the book or the member alone.</p><p><i>VI: Chúng mô tả một lượt mượn cụ thể (độc giả + sách), không phải riêng sách hay độc giả.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>A member may borrow many books and a book is borrowed by many members over time. Borrows is…</p><p style=\"opacity:.75;font-size:.92em\"><i>Một độc giả mượn nhiều sách và một cuốn được nhiều độc giả mượn theo thời gian. Borrows là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one-one"
+              },
+              {
+                "ma": "b",
+                "noiDung": "many-many"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one-many"
+              },
+              {
+                "ma": "d",
+                "noiDung": "many-one towards Member"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Many on both sides ⇒ M-N ⇒ its own table later (lesson 3.4).</p><p><i>VI: Nhiều ở cả hai phía ⇒ M-N ⇒ sau này thành bảng riêng (bài 3.4).</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>ISBN is underlined in the diagram because…</p><p style=\"opacity:.75;font-size:.92em\"><i>ISBN được gạch chân trong sơ đồ vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it is optional"
+              },
+              {
+                "ma": "b",
+                "noiDung": "it is a foreign key"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it is multivalued"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is the key of Book"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Underlined attribute = key attribute (identifies the entity).</p><p><i>VI: Thuộc tính gạch chân = thuộc tính khoá (xác định thực thể).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Storing publisher name and country inside Book — redundancy (Chapter 4 calls it an anomaly).|||Lưu tên và quốc gia NXB trong Book — dư thừa (Chương 4 gọi là dị thường)."
+        },
+        {
+          "loi": "Putting dueDate on Book — a book has a different due date on every loan.|||Đặt dueDate vào Book — mỗi lần mượn một hạn khác nhau."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "entity",
+          "vi": "thực thể"
+        },
+        {
+          "en": "attribute",
+          "vi": "thuộc tính"
+        },
+        {
+          "en": "relationship",
+          "vi": "liên kết"
+        }
+      ]
+    },
+    {
+      "title": "Read the cardinality from a business sentence",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "cardinality",
+        "1-1",
+        "1-N",
+        "M-N"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd"
+      ],
+      "problemHtml": "<p>For each sentence give the cardinality of the relationship (left entity – right entity).</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi câu, cho bản số của liên kết (thực thể trái – thực thể phải).</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Always read both directions.|||Luôn đọc cả hai chiều.",
+        "N-1 is just 1-N written from the many side.|||N-1 chỉ là 1-N viết từ phía nhiều."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the cardinality from a business sentence\n\nAnswer in the answer panel (no code needed).\n\n1. CardinalityBản số\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the cardinality from a business sentence — answer key\n\n1. CardinalityBản số\n   - r1.bs: 1-N\n   - r2.bs: M-N\n   - r3.bs: 1-1\n   - r4.bs: N-1\n   - r5.bs: M-N\n   Ask the question twice: \"one X has how many Y?\" and \"one Y has how many X?\". One-many in one direction and one in the other gives 1-N (or N-1 read from the other side).VI: Hỏi hai lần: \"một X có bao nhiêu Y?\" và \"một Y có bao nhiêu X?\". Một chiều nhiều, chiều kia một ⇒ 1-N (hoặc N-1 khi đọc từ phía kia).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ask the question twice: \"one X has how many Y?\" and \"one Y has how many X?\". One-many in one direction and one in the other gives 1-N (or N-1 read from the other side).</p><p><i>VI: Hỏi hai lần: \"một X có bao nhiêu Y?\" và \"một Y có bao nhiêu X?\". Một chiều nhiều, chiều kia một ⇒ 1-N (hoặc N-1 khi đọc từ phía kia).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Cardinality</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản số</i></p>",
+            "cot": [
+              {
+                "ma": "cau",
+                "ten": "Sentence / Câu"
+              },
+              {
+                "ma": "bs",
+                "ten": "Cardinality / Bản số",
+                "luaChon": [
+                  "1-1",
+                  "1-N",
+                  "N-1",
+                  "M-N"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "cau": "Department – Employee: an employee works in one department; a department has many employees."
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "cau": "Student – Course: a student takes many courses; a course has many students."
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "cau": "Country – Capital: each country has one capital city; a capital belongs to one country."
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "cau": "Order – Customer: an order is placed by one customer; a customer places many orders."
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "cau": "Doctor – Patient: a doctor treats many patients; a patient sees many doctors."
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.bs": "1-N",
+              "r2.bs": "M-N",
+              "r3.bs": "1-1",
+              "r4.bs": "N-1",
+              "r5.bs": "M-N"
+            },
+            "giaiThich": "<p>Ask the question twice: \"one X has how many Y?\" and \"one Y has how many X?\". One-many in one direction and one in the other gives 1-N (or N-1 read from the other side).</p><p><i>VI: Hỏi hai lần: \"một X có bao nhiêu Y?\" và \"một Y có bao nhiêu X?\". Một chiều nhiều, chiều kia một ⇒ 1-N (hoặc N-1 khi đọc từ phía kia).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Reading only one direction and answering 1-N for a real M-N.|||Chỉ đọc một chiều và trả 1-N cho một liên kết thật ra M-N."
+        },
+        {
+          "loi": "Writing 1-N for Order–Customer when the order is on the left (it is N-1).|||Ghi 1-N cho Order–Customer khi Order đứng bên trái (đúng là N-1)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "cardinality",
+          "vi": "bản số"
+        }
+      ]
+    },
+    {
+      "title": "1-N: Department and Employee",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 9,
+      "points": 20,
+      "concepts": [
+        "1-N",
+        "foreign key on the N side",
+        "total participation"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl"
+      ],
+      "problemHtml": "<p>Every employee works in exactly one department; a department has many employees. Create <code>Department(depID INT PK, depName VARCHAR(50) NOT NULL UNIQUE)</code> and <code>Employee(empID INT PK, fullName VARCHAR(50) NOT NULL, depID INT)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>The relationship becomes the column Employee.depID: a FOREIGN KEY to Department.</li>\n  <li>\"Exactly one\" = total participation ⇒ depID NOT NULL.</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Mỗi nhân viên làm ở đúng một phòng; một phòng có nhiều nhân viên. Tạo <code>Department(depID INT PK, depName VARCHAR(50) NOT NULL UNIQUE)</code> và <code>Employee(empID INT PK, fullName VARCHAR(50) NOT NULL, depID INT)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Liên kết thành cột Employee.depID: FOREIGN KEY tới Department.</li>\n  <li>\"Đúng một\" = tham gia toàn phần ⇒ depID NOT NULL.</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl        | col      | type             \n-----------+----------+------------------\ndepartment | depid    | integer          \ndepartment | depname  | character varying\nemployee   | empid    | integer          \nemployee   | fullname | character varying\nemployee   | depid    | integer          ",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "1-N ⇒ no new table: put the key of the \"1\" side into the \"N\" side.|||1-N ⇒ không bảng mới: đưa khoá của phía \"1\" sang phía \"N\".",
+        "Total participation ⇒ NOT NULL on that foreign key.|||Tham gia toàn phần ⇒ NOT NULL trên khoá ngoại đó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Department (\n    depID   INT         NOT NULL PRIMARY KEY,\n    depName VARCHAR(50) NOT NULL UNIQUE\n);\nCREATE TABLE Employee (\n    empID    INT         NOT NULL PRIMARY KEY,\n    fullName VARCHAR(50) NOT NULL,\n    depID    INT         NOT NULL REFERENCES Department (depID)   -- 1-N: FK on the N side, NOT NULL = \"exactly one\"\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Participation decides NULL/NOT NULL of the foreign key; cardinality decides where it goes. Never put the FK on the \"1\" side — a department cannot hold a list of employees in one column.</p>",
+      "solutionExplanationHtmlVi": "<p>Mức tham gia quyết NULL/NOT NULL của khoá ngoại; bản số quyết nó nằm đâu. Đừng đặt khoá ngoại ở phía \"1\" — một phòng không chứa được danh sách nhân viên trong một cột.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('department', 'employee')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "department",
+                  "depid",
+                  "integer"
+                ],
+                [
+                  "department",
+                  "depname",
+                  "character varying"
+                ],
+                [
+                  "employee",
+                  "empid",
+                  "integer"
+                ],
+                [
+                  "employee",
+                  "fullname",
+                  "character varying"
+                ],
+                [
+                  "employee",
+                  "depid",
+                  "integer"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Two employees in one department|||Hai nhân viên cùng một phòng",
+            "thu": "INSERT INTO Department VALUES (1, 'IT'); INSERT INTO Employee VALUES (10, 'An', 1), (11, 'Binh', 1)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An employee without a department is rejected|||Nhân viên không có phòng bị từ chối",
+            "thu": "INSERT INTO Employee (empID, fullName) VALUES (12, 'Chi')",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An employee of an unknown department is rejected|||Nhân viên của phòng không tồn tại bị từ chối",
+            "thu": "INSERT INTO Employee VALUES (13, 'Dung', 99)",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Two departments with the same name are rejected|||Hai phòng trùng tên bị từ chối",
+            "thu": "INSERT INTO Department VALUES (1, 'IT'), (2, 'IT')",
+            "maLoi": "23505"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Leaving depID nullable — \"exactly one\" becomes \"at most one\".|||Để depID cho phép NULL — \"đúng một\" thành \"tối đa một\"."
+        },
+        {
+          "loi": "Forgetting UNIQUE on depName.|||Quên UNIQUE ở depName."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "FOREIGN KEY",
+          "vi": "khoá ngoại",
+          "giaiThich": "Giá trị phải có ở cột khoá của bảng được tham chiếu (toàn vẹn tham chiếu)."
+        },
+        {
+          "en": "total participation",
+          "vi": "tham gia toàn phần"
+        }
+      ]
+    }
+  ]
+}

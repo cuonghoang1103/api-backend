@@ -1,0 +1,573 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-slide-dbi4-3",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-slide-dbi4-3"
+  },
+  "exercises": [
+    {
+      "title": "From 1NF to 2NF: split EnrollFlat into Student, Course, Enroll",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "partial dependency",
+        "2NF decomposition",
+        "INSERT … SELECT DISTINCT"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "2nf",
+        "decomposition"
+      ],
+      "problemHtml": "<p>studentName depends on studentID only and courseTitle, credits on courseID only — partial dependencies on the key (studentID, courseID). Apply the four steps of slides 39–50: create <code>Student(studentID CHAR(8) PK, studentName VARCHAR(40))</code>, <code>Course(courseID CHAR(6) PK, courseTitle VARCHAR(40), credits INT)</code>, <code>Enroll(studentID, courseID, grade DECIMAL(4,2))</code> with key (studentID, courseID) and two foreign keys, then fill them from EnrollFlat.</p>\n<p><b>A flat 1NF table</b> (tab <code>EnrollFlat.sql</code>): <code>EnrollFlat(studentID, studentName, courseID, courseTitle, credits, grade)</code>, key (studentID, courseID). FDs: studentID → studentName; courseID → courseTitle, credits; studentID, courseID → grade.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Three CREATE TABLE then three INSERT … SELECT (parents first).</li>\n  <li>Each student and each course stored once.</li>\n  <li>VARCHAR instead of NVARCHAR here.</li>\n</ul>",
+      "problemHtmlVi": "<p>studentName chỉ phụ thuộc studentID, courseTitle và credits chỉ phụ thuộc courseID — phụ thuộc bộ phận vào khoá (studentID, courseID). Làm bốn bước của slide 39–50: tạo <code>Student(studentID CHAR(8) PK, studentName VARCHAR(40))</code>, <code>Course(courseID CHAR(6) PK, courseTitle VARCHAR(40), credits INT)</code>, <code>Enroll(studentID, courseID, grade DECIMAL(4,2))</code> có khoá (studentID, courseID) và hai khoá ngoại, rồi đổ dữ liệu từ EnrollFlat.</p>\n<p><b>Bảng phẳng ở 1NF</b> (tab <code>EnrollFlat.sql</code>): <code>EnrollFlat(studentID, studentName, courseID, courseTitle, credits, grade)</code>, khoá (studentID, courseID). FD: studentID → studentName; courseID → courseTitle, credits; studentID, courseID → grade.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba CREATE TABLE rồi ba INSERT … SELECT (bảng cha trước).</li>\n  <li>Mỗi sinh viên, mỗi môn lưu một lần.</li>\n  <li>Ở đây dùng VARCHAR thay NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "studentID | studentName\n----------+------------\nHE190003  | Lê Chi     \nHE190001  | Nguyễn An  \nHE190002  | Trần Bình  ",
+          "explanation": "Expected result of check \"Student\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Student\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "One table per left side of a partial dependency, plus the \"rest\" keyed by the full key.|||Mỗi vế trái của phụ thuộc bộ phận một bảng, cộng phần \"còn lại\" có khoá đầy đủ.",
+        "SELECT DISTINCT studentID, studentName FROM EnrollFlat — DISTINCT, or the primary key rejects the copies.|||SELECT DISTINCT studentID, studentName FROM EnrollFlat — có DISTINCT, không thì khoá chính từ chối các bản sao."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "EnrollFlat.sql",
+          "language": "sql",
+          "code": "-- EnrollFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EnrollFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EnrollFlat (\n  studentID   CHAR(8)      NOT NULL,\n  studentName NVARCHAR(40) NOT NULL,\n  courseID    CHAR(6)      NOT NULL,\n  courseTitle NVARCHAR(40) NOT NULL,\n  credits     INT          NOT NULL,\n  grade       DECIMAL(4,2) NULL,\n  CONSTRAINT pk_enrollflat PRIMARY KEY (studentID, courseID)\n);\nINSERT INTO EnrollFlat VALUES\n ('HE190001', N'Nguyễn An',  'DBI202', N'Database Systems', 3, 8.5),\n ('HE190001', N'Nguyễn An',  'CSD201', N'Data Structures',  3, 7.0),\n ('HE190002', N'Trần Bình',  'DBI202', N'Database Systems', 3, 6.0),\n ('HE190003', N'Lê Chi',     'DBI202', N'Database Systems', 3, NULL),\n ('HE190003', N'Lê Chi',     'MAE101', N'Mathematics',      3, 9.0);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Student (\n    studentID   CHAR(8)     NOT NULL PRIMARY KEY,\n    studentName VARCHAR(40) NOT NULL\n);\nCREATE TABLE Course (\n    courseID    CHAR(6)     NOT NULL PRIMARY KEY,\n    courseTitle VARCHAR(40) NOT NULL,\n    credits     INT         NOT NULL\n);\nCREATE TABLE Enroll (\n    studentID CHAR(8)      NOT NULL REFERENCES Student (studentID),\n    courseID  CHAR(6)      NOT NULL REFERENCES Course (courseID),\n    grade     DECIMAL(4,2) NULL,\n    PRIMARY KEY (studentID, courseID)\n);\nINSERT INTO Student SELECT DISTINCT studentID, studentName FROM EnrollFlat;           -- the part that depends on studentID only\nINSERT INTO Course  SELECT DISTINCT courseID, courseTitle, credits FROM EnrollFlat;   -- the part that depends on courseID only\nINSERT INTO Enroll  SELECT studentID, courseID, grade FROM EnrollFlat;                -- what depends on the whole key\n"
+        },
+        {
+          "name": "EnrollFlat.sql",
+          "language": "sql",
+          "code": "-- EnrollFlat.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- EnrollFlat.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE EnrollFlat (\n  studentID   CHAR(8)      NOT NULL,\n  studentName NVARCHAR(40) NOT NULL,\n  courseID    CHAR(6)      NOT NULL,\n  courseTitle NVARCHAR(40) NOT NULL,\n  credits     INT          NOT NULL,\n  grade       DECIMAL(4,2) NULL,\n  CONSTRAINT pk_enrollflat PRIMARY KEY (studentID, courseID)\n);\nINSERT INTO EnrollFlat VALUES\n ('HE190001', N'Nguyễn An',  'DBI202', N'Database Systems', 3, 8.5),\n ('HE190001', N'Nguyễn An',  'CSD201', N'Data Structures',  3, 7.0),\n ('HE190002', N'Trần Bình',  'DBI202', N'Database Systems', 3, 6.0),\n ('HE190003', N'Lê Chi',     'DBI202', N'Database Systems', 3, NULL),\n ('HE190003', N'Lê Chi',     'MAE101', N'Mathematics',      3, 9.0);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each new table is in 2NF (Student and Course have single-attribute keys; grade depends on the whole key of Enroll), and joining the three gives EnrollFlat back.</p>",
+      "solutionExplanationHtmlVi": "<p>Mỗi bảng mới ở 2NF (Student và Course có khoá một thuộc tính; grade phụ thuộc cả khoá của Enroll), và nối ba bảng cho lại đúng EnrollFlat.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE EnrollFlat (\n  studentID   CHAR(8)      NOT NULL,\n  studentName NVARCHAR(40) NOT NULL,\n  courseID    CHAR(6)      NOT NULL,\n  courseTitle NVARCHAR(40) NOT NULL,\n  credits     INT          NOT NULL,\n  grade       DECIMAL(4,2) NULL,\n  CONSTRAINT pk_enrollflat PRIMARY KEY (studentID, courseID)\n);\nINSERT INTO EnrollFlat VALUES\n ('HE190001', N'Nguyễn An',  'DBI202', N'Database Systems', 3, 8.5),\n ('HE190001', N'Nguyễn An',  'CSD201', N'Data Structures',  3, 7.0),\n ('HE190002', N'Trần Bình',  'DBI202', N'Database Systems', 3, 6.0),\n ('HE190003', N'Lê Chi',     'DBI202', N'Database Systems', 3, NULL),\n ('HE190003', N'Lê Chi',     'MAE101', N'Mathematics',      3, 9.0);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Student|||Student",
+            "kiemTra": "SELECT studentID, studentName FROM Student",
+            "mongDoi": {
+              "cot": [
+                "studentID",
+                "studentName"
+              ],
+              "hang": [
+                [
+                  "HE190003",
+                  "Lê Chi"
+                ],
+                [
+                  "HE190001",
+                  "Nguyễn An"
+                ],
+                [
+                  "HE190002",
+                  "Trần Bình"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Course|||Course",
+            "kiemTra": "SELECT courseID, courseTitle, credits FROM Course",
+            "mongDoi": {
+              "cot": [
+                "courseID",
+                "courseTitle",
+                "credits"
+              ],
+              "hang": [
+                [
+                  "DBI202",
+                  "Database Systems",
+                  3
+                ],
+                [
+                  "MAE101",
+                  "Mathematics",
+                  3
+                ],
+                [
+                  "CSD201",
+                  "Data Structures",
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Enroll|||Enroll",
+            "kiemTra": "SELECT studentID, courseID, grade FROM Enroll",
+            "mongDoi": {
+              "cot": [
+                "studentID",
+                "courseID",
+                "grade"
+              ],
+              "hang": [
+                [
+                  "HE190001",
+                  "DBI202",
+                  8.5
+                ],
+                [
+                  "HE190001",
+                  "CSD201",
+                  7
+                ],
+                [
+                  "HE190002",
+                  "DBI202",
+                  6
+                ],
+                [
+                  "HE190003",
+                  "DBI202",
+                  null
+                ],
+                [
+                  "HE190003",
+                  "MAE101",
+                  9
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Hidden: new students and a new course|||Ẩn: sinh viên và môn mới",
+            "kiemTra": "SELECT (SELECT COUNT(*) FROM Student) AS s, (SELECT COUNT(*) FROM Course) AS c, (SELECT COUNT(*) FROM Enroll) AS e",
+            "an": true,
+            "themCsdl": "INSERT INTO EnrollFlat VALUES ('HE190004', N'Phạm Dũng', 'PRF192', N'Programming', 3, 5.5), ('HE190002', N'Trần Bình', 'PRF192', N'Programming', 3, 7.5)",
+            "mongDoi": {
+              "cot": [
+                "s",
+                "c",
+                "e"
+              ],
+              "hang": [
+                [
+                  4,
+                  4,
+                  7
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Copies the data with INSERT … SELECT|||Chép dữ liệu bằng INSERT … SELECT",
+            "khop": "\\bINSERT\\s+INTO\\s+Student\\b[^;]*\\bSELECT\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Hard-coding the courses — the hidden data adds PRF192.|||Ghi cứng các môn — dữ liệu ẩn thêm PRF192."
+        },
+        {
+          "loi": "Key of Enroll = studentID — a student can then take only one course.|||Khoá của Enroll = studentID — khi đó mỗi sinh viên chỉ học được một môn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "2NF",
+          "vi": "dạng chuẩn 2"
+        },
+        {
+          "en": "partial dependency",
+          "vi": "phụ thuộc bộ phận"
+        }
+      ]
+    },
+    {
+      "title": "Keys and highest normal form of five relations",
+      "language": "text",
+      "difficulty": "HARD",
+      "estimatedMinutes": 14,
+      "points": 30,
+      "concepts": [
+        "candidate keys",
+        "1NF/2NF/3NF/BCNF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "normal-forms"
+      ],
+      "problemHtml": "<p>For each relation write ALL candidate keys (shortest first, separated by a comma, letters in alphabetical order inside a key, e.g. <code>AB, AC</code>) and the highest normal form.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với mỗi quan hệ, ghi MỌI khoá ứng viên (ngắn trước, cách nhau dấu phẩy, chữ trong một khoá theo thứ tự chữ cái, vd <code>AB, AC</code>) và dạng chuẩn cao nhất.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Attributes never on a right side belong to every key; start from them and add attributes one by one.|||Thuộc tính không bao giờ ở vế phải nằm trong mọi khoá; bắt đầu từ chúng rồi thêm từng thuộc tính.",
+        "Then test each FD: partial (2NF), non-key → non-prime (3NF), left side not a superkey (BCNF).|||Rồi xét từng FD: bộ phận (2NF), không khoá → không khoá (3NF), vế trái không là siêu khoá (BCNF)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Keys and highest normal form of five relations\n\nAnswer in the answer panel (no code needed).\n\n1. Keys and normal formKhoá và dạng chuẩn\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Keys and highest normal form of five relations — answer key\n\n1. Keys and normal formKhoá và dạng chuẩn\n   - r1.k: AC / {A, C} / CA / {C, A}\n   - r1.nf: 1NF\n   - r2.k: AB / {A, B} / BA / {B, A}\n   - r2.nf: 2NF\n   - r3.k: AB, BD / AB,BD / AB BD / AB and BD / AB; BD\n   - r3.nf: 3NF\n   - r4.k: A, B, C / A,B,C / A B C / A and B and C / A; B; C\n   - r4.nf: BCNF\n   - r5.k: CS / {C, S} / SC / {S, C}\n   - r5.nf: 1NF\n   Keys / NF: R(A… → AC / 1NF · R(A… → AB / 2NF · R(A… → AB, BD / 3NF · R(A… → A, B, C / BCNF · R(S… → CS / 1NF. Find every key with closures before judging: in R(A, B, C, D) with D → A, BD is a second key, so A is prime and D → A only breaks BCNF; in R(A, B, C) with the cycle A → B → C → A every attribute is a key.VI: Khoá / dạng chuẩn như trên. Tìm mọi khoá bằng bao đóng trước khi xét: trong R(A, B, C, D) với D → A, BD là khoá thứ hai nên A là thuộc tính khoá và D → A chỉ phá BCNF; trong R(A, B, C) với vòng A → B → C → A, thuộc tính nào cũng là khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Keys / NF: R(A… → AC / 1NF · R(A… → AB / 2NF · R(A… → AB, BD / 3NF · R(A… → A, B, C / BCNF · R(S… → CS / 1NF. Find every key with closures before judging: in R(A, B, C, D) with D → A, BD is a second key, so A is prime and D → A only breaks BCNF; in R(A, B, C) with the cycle A → B → C → A every attribute is a key.</p><p><i>VI: Khoá / dạng chuẩn như trên. Tìm mọi khoá bằng bao đóng trước khi xét: trong R(A, B, C, D) với D → A, BD là khoá thứ hai nên A là thuộc tính khoá và D → A chỉ phá BCNF; trong R(A, B, C) với vòng A → B → C → A, thuộc tính nào cũng là khoá.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Keys and normal form</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá và dạng chuẩn</i></p>",
+            "cot": [
+              {
+                "ma": "r",
+                "ten": "Relation / Quan hệ"
+              },
+              {
+                "ma": "k",
+                "ten": "Keys / Khoá"
+              },
+              {
+                "ma": "nf",
+                "ten": "Highest NF / Dạng chuẩn cao nhất",
+                "luaChon": [
+                  "1NF",
+                  "2NF",
+                  "3NF",
+                  "BCNF"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "r": "R(A, B, C, D), F = {A → B, C → D}"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "r": "R(A, B, C, D, E), F = {AB → C, C → D, D → E}"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "r": "R(A, B, C, D), F = {AB → CD, D → A}"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "r": "R(A, B, C), F = {A → B, B → C, C → A}"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "r": "R(S, C, N, T, G), F = {S → N, C → T, SC → G}"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.k": [
+                "AC",
+                "{A, C}",
+                "CA",
+                "{C, A}"
+              ],
+              "r1.nf": "1NF",
+              "r2.k": [
+                "AB",
+                "{A, B}",
+                "BA",
+                "{B, A}"
+              ],
+              "r2.nf": "2NF",
+              "r3.k": [
+                "AB, BD",
+                "AB,BD",
+                "AB BD",
+                "AB and BD",
+                "AB; BD"
+              ],
+              "r3.nf": "3NF",
+              "r4.k": [
+                "A, B, C",
+                "A,B,C",
+                "A B C",
+                "A and B and C",
+                "A; B; C"
+              ],
+              "r4.nf": "BCNF",
+              "r5.k": [
+                "CS",
+                "{C, S}",
+                "SC",
+                "{S, C}"
+              ],
+              "r5.nf": "1NF"
+            },
+            "giaiThich": "<p>Keys / NF: R(A… → AC / 1NF · R(A… → AB / 2NF · R(A… → AB, BD / 3NF · R(A… → A, B, C / BCNF · R(S… → CS / 1NF. Find every key with closures before judging: in R(A, B, C, D) with D → A, BD is a second key, so A is prime and D → A only breaks BCNF; in R(A, B, C) with the cycle A → B → C → A every attribute is a key.</p><p><i>VI: Khoá / dạng chuẩn như trên. Tìm mọi khoá bằng bao đóng trước khi xét: trong R(A, B, C, D) với D → A, BD là khoá thứ hai nên A là thuộc tính khoá và D → A chỉ phá BCNF; trong R(A, B, C) với vòng A → B → C → A, thuộc tính nào cũng là khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Stopping at the first key found.|||Dừng ở khoá đầu tiên tìm được."
+        },
+        {
+          "loi": "Calling R(A, B, C, D) with D → A \"2NF\" because A looks non-prime.|||Gọi R(A, B, C, D) với D → A là \"2NF\" vì tưởng A không phải thuộc tính khoá."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "candidate key",
+          "vi": "khoá ứng viên"
+        },
+        {
+          "en": "BCNF",
+          "vi": "dạng chuẩn Boyce–Codd"
+        }
+      ]
+    },
+    {
+      "title": "Is it 3NF? The transitive test",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "3NF",
+        "transitive dependency"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "3nf"
+      ],
+      "problemHtml": "<p>Slides 51–58: 3NF forbids a non-prime attribute depending on something that is not a superkey.</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Slide 51–58: 3NF cấm thuộc tính không khoá phụ thuộc vào thứ không phải siêu khoá.</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Transitive: key → X → A where X is not a superkey and A is non-prime.|||Bắc cầu: khoá → X → A với X không là siêu khoá và A không là thuộc tính khoá.",
+        "The fix is always \"move X → A into its own table\".|||Cách sửa luôn là \"đưa X → A ra bảng riêng\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Is it 3NF? The transitive test\n\nAnswer in the answer panel (no code needed).\n\n1. Employee(empID, name, deptID, deptName), empID → name, deptID; deptID → deptName. Highest NF?Employee(empID, name, deptID, deptName), empID → name, deptID; deptID → deptName. Dạng chuẩn cao nhất?\n2. How do you fix Employee?Sửa Employee thế nào?\n3. Which FD can never violate 3NF?FD nào không bao giờ vi phạm 3NF?\n4. Every relation with exactly two attributes is in…Mọi quan hệ có đúng hai thuộc tính đều ở…\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Is it 3NF? The transitive test — answer key\n\n1. Employee(empID, name, deptID, deptName), empID → name, deptID; deptID → deptName. Highest NF?Employee(empID, name, deptID, deptName), empID → name, deptID; deptID → deptName. Dạng chuẩn cao nhất?\n   Answer: b) 2NF — deptName depends on empID only through deptID\n   Single-attribute key ⇒ 2NF; deptID → deptName is non-key → non-prime ⇒ not 3NF.VI: Khoá một thuộc tính ⇒ 2NF; deptID → deptName là không khoá → không khoá ⇒ không 3NF.\n\n2. How do you fix Employee?Sửa Employee thế nào?\n   Answer: a) Employee(empID, name, deptID) + Department(deptID, deptName)\n   Move the transitive FD into its own table; keep deptID as a foreign key.VI: Đưa FD bắc cầu ra bảng riêng; giữ deptID làm khoá ngoại.\n\n3. Which FD can never violate 3NF?FD nào không bao giờ vi phạm 3NF?\n   Answer: c) one whose left side is a superkey\n   3NF test: X → A is fine if X is a superkey OR A is prime.VI: Phép thử 3NF: X → A ổn nếu X là siêu khoá HOẶC A là thuộc tính khoá.\n\n4. Every relation with exactly two attributes is in…Mọi quan hệ có đúng hai thuộc tính đều ở…\n   Answer: c) BCNF\n   Any non-trivial FD A → B makes A a key; otherwise the key is AB. Either way every left side is a superkey.VI: FD không tầm thường A → B làm A thành khoá; nếu không, khoá là AB. Cả hai cách mọi vế trái đều là siêu khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> 2NF — deptName depends on empID only through deptID</p><p>Single-attribute key ⇒ 2NF; deptID → deptName is non-key → non-prime ⇒ not 3NF.</p><p><i>VI: Khoá một thuộc tính ⇒ 2NF; deptID → deptName là không khoá → không khoá ⇒ không 3NF.</i></p></li><li><p><b>a)</b> Employee(empID, name, deptID) + Department(deptID, deptName)</p><p>Move the transitive FD into its own table; keep deptID as a foreign key.</p><p><i>VI: Đưa FD bắc cầu ra bảng riêng; giữ deptID làm khoá ngoại.</i></p></li><li><p><b>c)</b> one whose left side is a superkey</p><p>3NF test: X → A is fine if X is a superkey OR A is prime.</p><p><i>VI: Phép thử 3NF: X → A ổn nếu X là siêu khoá HOẶC A là thuộc tính khoá.</i></p></li><li><p><b>c)</b> BCNF</p><p>Any non-trivial FD A → B makes A a key; otherwise the key is AB. Either way every left side is a superkey.</p><p><i>VI: FD không tầm thường A → B làm A thành khoá; nếu không, khoá là AB. Cả hai cách mọi vế trái đều là siêu khoá.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Employee(empID, name, deptID, deptName), empID → name, deptID; deptID → deptName. Highest NF?</p><p style=\"opacity:.75;font-size:.92em\"><i>Employee(empID, name, deptID, deptName), empID → name, deptID; deptID → deptName. Dạng chuẩn cao nhất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "BCNF — the key empID has a single attribute"
+              },
+              {
+                "ma": "b",
+                "noiDung": "2NF — deptName depends on empID only through deptID"
+              },
+              {
+                "ma": "c",
+                "noiDung": "1NF — deptName depends on part of the key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "3NF — every FD has the key on its left side"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Single-attribute key ⇒ 2NF; deptID → deptName is non-key → non-prime ⇒ not 3NF.</p><p><i>VI: Khoá một thuộc tính ⇒ 2NF; deptID → deptName là không khoá → không khoá ⇒ không 3NF.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How do you fix Employee?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sửa Employee thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Employee(empID, name, deptID) + Department(deptID, deptName)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Remove deptID"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Department(deptID, empID, deptName)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Add deptName to the key"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Move the transitive FD into its own table; keep deptID as a foreign key.</p><p><i>VI: Đưa FD bắc cầu ra bảng riêng; giữ deptID làm khoá ngoại.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Which FD can never violate 3NF?</p><p style=\"opacity:.75;font-size:.92em\"><i>FD nào không bao giờ vi phạm 3NF?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "one with two attributes on the left"
+              },
+              {
+                "ma": "b",
+                "noiDung": "one whose right side is numeric"
+              },
+              {
+                "ma": "c",
+                "noiDung": "one whose left side is a superkey"
+              },
+              {
+                "ma": "d",
+                "noiDung": "one whose left side is a single attribute"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>3NF test: X → A is fine if X is a superkey OR A is prime.</p><p><i>VI: Phép thử 3NF: X → A ổn nếu X là siêu khoá HOẶC A là thuộc tính khoá.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Every relation with exactly two attributes is in…</p><p style=\"opacity:.75;font-size:.92em\"><i>Mọi quan hệ có đúng hai thuộc tính đều ở…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "3NF only"
+              },
+              {
+                "ma": "b",
+                "noiDung": "1NF only"
+              },
+              {
+                "ma": "c",
+                "noiDung": "BCNF"
+              },
+              {
+                "ma": "d",
+                "noiDung": "2NF only"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Any non-trivial FD A → B makes A a key; otherwise the key is AB. Either way every left side is a superkey.</p><p><i>VI: FD không tầm thường A → B làm A thành khoá; nếu không, khoá là AB. Cả hai cách mọi vế trái đều là siêu khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling Employee BCNF because the key has one attribute.|||Gọi Employee là BCNF vì khoá chỉ một thuộc tính."
+        },
+        {
+          "loi": "Fixing by dropping deptID — the link to the department is lost.|||Sửa bằng cách bỏ deptID — mất liên kết tới phòng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "transitive dependency",
+          "vi": "phụ thuộc bắc cầu"
+        },
+        {
+          "en": "3NF",
+          "vi": "dạng chuẩn 3"
+        }
+      ]
+    }
+  ]
+}

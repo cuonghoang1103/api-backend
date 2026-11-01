@@ -1,0 +1,861 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-xuong-erd",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-xuong-erd"
+  },
+  "exercises": [
+    {
+      "title": "Case 2 — categories inside categories (recursive 1-M)",
+      "language": "sql",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "recursive relationship",
+        "self foreign key"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "recursive"
+      ],
+      "problemHtml": "<p>\"Phones\" and \"Laptops\" sit inside \"Electronics\"; a top-level category has no parent. Each product is in exactly one category. Create <code>Category(categoryID INT PK, name VARCHAR(50) NOT NULL, parentID INT)</code> and <code>Product(productID INT PK, name VARCHAR(80) NOT NULL, price DECIMAL(12,0), categoryID INT)</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>parentID references Category itself and may be NULL (top level).</li>\n  <li>Product.categoryID NOT NULL references Category; price &gt; 0.</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>\"Điện thoại\" và \"Laptop\" nằm trong \"Điện tử\"; danh mục gốc không có cha. Mỗi sản phẩm thuộc đúng một danh mục. Tạo <code>Category(categoryID INT PK, name VARCHAR(50) NOT NULL, parentID INT)</code> và <code>Product(productID INT PK, name VARCHAR(80) NOT NULL, price DECIMAL(12,0), categoryID INT)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>parentID tham chiếu chính Category và được NULL (danh mục gốc).</li>\n  <li>Product.categoryID NOT NULL tham chiếu Category; price &gt; 0.</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl      | col        | type             \n---------+------------+------------------\ncategory | categoryid | integer          \ncategory | name       | character varying\ncategory | parentid   | integer          \nproduct  | productid  | integer          \nproduct  | name       | character varying\nproduct  | price      | numeric          \nproduct  | categoryid | integer          ",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Electronics, Phones, Laptops are ROWS of one entity set Category, not three entity sets.|||Điện tử, Điện thoại, Laptop là các DÒNG của một tập thực thể Category, không phải ba tập thực thể.",
+        "parentID INT NULL REFERENCES Category (categoryID)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Category (\n    categoryID INT         NOT NULL PRIMARY KEY,\n    name       VARCHAR(50) NOT NULL,\n    parentID   INT         NULL REFERENCES Category (categoryID)   -- recursive: a row points at another row of the same table\n);\nCREATE TABLE Product (\n    productID  INT           NOT NULL PRIMARY KEY,\n    name       VARCHAR(80)   NOT NULL,\n    price      DECIMAL(12,0) NOT NULL CHECK (price > 0),\n    categoryID INT           NOT NULL REFERENCES Category (categoryID)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A recursive 1-M is a nullable foreign key to the same table. Querying the whole tree needs a recursive CTE (⭐ CS.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Liên kết đệ quy 1-M là một khoá ngoại cho phép NULL tới chính bảng đó. Truy cả cây cần CTE đệ quy (⭐ CS.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('category', 'product')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "category",
+                  "categoryid",
+                  "integer"
+                ],
+                [
+                  "category",
+                  "name",
+                  "character varying"
+                ],
+                [
+                  "category",
+                  "parentid",
+                  "integer"
+                ],
+                [
+                  "product",
+                  "productid",
+                  "integer"
+                ],
+                [
+                  "product",
+                  "name",
+                  "character varying"
+                ],
+                [
+                  "product",
+                  "price",
+                  "numeric"
+                ],
+                [
+                  "product",
+                  "categoryid",
+                  "integer"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "A three-level tree and a product|||Cây ba tầng và một sản phẩm",
+            "thu": "INSERT INTO Category VALUES (1, 'Electronics', NULL), (2, 'Phones', 1), (3, 'Android phones', 2); INSERT INTO Product VALUES (10, 'Galaxy', 9000000, 3)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A parent that does not exist is rejected|||Danh mục cha không tồn tại bị từ chối",
+            "thu": "INSERT INTO Category VALUES (2, 'Phones', 99)",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A product without a category is rejected|||Sản phẩm không có danh mục bị từ chối",
+            "thu": "INSERT INTO Product (productID, name, price) VALUES (10, 'Galaxy', 9000000)",
+            "maLoi": "23502"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A free product (price 0) is rejected|||Sản phẩm giá 0 bị từ chối",
+            "thu": "INSERT INTO Category VALUES (1, 'Electronics', NULL); INSERT INTO Product VALUES (10, 'Gift', 0, 1)",
+            "maLoi": "23514",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "No REFERENCES on parentID — a category can point at a parent that does not exist.|||Không REFERENCES ở parentID — danh mục trỏ được tới cha không tồn tại."
+        },
+        {
+          "loi": "parentID NOT NULL — the top-level category can never be inserted.|||parentID NOT NULL — không bao giờ thêm được danh mục gốc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "recursive relationship",
+          "vi": "liên kết đệ quy"
+        }
+      ]
+    },
+    {
+      "title": "Case 4 — prerequisites: a recursive M-N",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 12,
+      "points": 30,
+      "concepts": [
+        "recursive M-N",
+        "two foreign keys to one table",
+        "CHECK between columns"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "recursive"
+      ],
+      "problemHtml": "<p>A course may require several other courses, and a course may be the prerequisite of several courses. Create <code>Course(courseCode CHAR(6) PK, courseName VARCHAR(80) NOT NULL)</code> and <code>Prerequisite(courseCode CHAR(6), prereqCode CHAR(6))</code>. A course cannot be its own prerequisite.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Key of Prerequisite = (courseCode, prereqCode); BOTH columns reference Course.</li>\n  <li>CHECK (courseCode &lt;&gt; prereqCode).</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một môn có thể yêu cầu nhiều môn khác, và một môn có thể là tiên quyết của nhiều môn. Tạo <code>Course(courseCode CHAR(6) PK, courseName VARCHAR(80) NOT NULL)</code> và <code>Prerequisite(courseCode CHAR(6), prereqCode CHAR(6))</code>. Một môn không được là tiên quyết của chính nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá của Prerequisite = (courseCode, prereqCode); CẢ HAI cột tham chiếu Course.</li>\n  <li>CHECK (courseCode &lt;&gt; prereqCode).</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl          | col        | type             \n-------------+------------+------------------\ncourse       | coursecode | character        \ncourse       | coursename | character varying\nprerequisite | coursecode | character        \nprerequisite | prereqcode | character        ",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "A recursive M-N needs its own table with TWO foreign keys to the same table (two roles).|||M-N đệ quy cần bảng riêng có HAI khoá ngoại tới cùng một bảng (hai vai trò).",
+        "A self-loop is forbidden with a table-level CHECK.|||Vòng tự thân bị cấm bằng CHECK cấp bảng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Course (\n    courseCode CHAR(6)     NOT NULL PRIMARY KEY,\n    courseName VARCHAR(80) NOT NULL\n);\nCREATE TABLE Prerequisite (                         -- M-N between Course and Course (roles: course / prerequisite)\n    courseCode CHAR(6) NOT NULL REFERENCES Course (courseCode),\n    prereqCode CHAR(6) NOT NULL REFERENCES Course (courseCode),\n    PRIMARY KEY (courseCode, prereqCode),\n    CHECK (courseCode <> prereqCode)\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Two roles of the same entity set ⇒ two columns, each with its own foreign key. Cycles (A needs B, B needs A) cannot be stopped by a CHECK; they need a trigger or application logic.</p>",
+      "solutionExplanationHtmlVi": "<p>Hai vai trò của cùng một tập thực thể ⇒ hai cột, mỗi cột một khoá ngoại. Vòng (A cần B, B cần A) không chặn được bằng CHECK; cần trigger hoặc logic ứng dụng.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('course', 'prerequisite')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "course",
+                  "coursecode",
+                  "character"
+                ],
+                [
+                  "course",
+                  "coursename",
+                  "character varying"
+                ],
+                [
+                  "prerequisite",
+                  "coursecode",
+                  "character"
+                ],
+                [
+                  "prerequisite",
+                  "prereqcode",
+                  "character"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "DBI202 needs PRF192; CSD201 needs PRF192 and MAE101|||DBI202 cần PRF192; CSD201 cần PRF192 và MAE101",
+            "thu": "INSERT INTO Course VALUES ('PRF192', 'Programming'), ('MAE101', 'Maths'), ('DBI202', 'Databases'), ('CSD201', 'Data Structures'); INSERT INTO Prerequisite VALUES ('DBI202', 'PRF192'), ('CSD201', 'PRF192'), ('CSD201', 'MAE101')"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A course as its own prerequisite is rejected|||Môn là tiên quyết của chính nó bị từ chối",
+            "thu": "INSERT INTO Course VALUES ('PRF192', 'Programming'); INSERT INTO Prerequisite VALUES ('PRF192', 'PRF192')",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "An unknown prerequisite is rejected|||Môn tiên quyết không tồn tại bị từ chối",
+            "thu": "INSERT INTO Course VALUES ('DBI202', 'Databases'); INSERT INTO Prerequisite VALUES ('DBI202', 'XXX999')",
+            "maLoi": "23503"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "The same pair twice is rejected|||Cùng cặp hai lần bị từ chối",
+            "thu": "INSERT INTO Course VALUES ('PRF192', 'P'), ('DBI202', 'D'); INSERT INTO Prerequisite VALUES ('DBI202', 'PRF192'), ('DBI202', 'PRF192')",
+            "maLoi": "23505"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "A single column prereqCode in Course — that allows only ONE prerequisite per course (recursive 1-M, not M-N).|||Một cột prereqCode trong Course — chỉ cho MỘT môn tiên quyết mỗi môn (đệ quy 1-M, không phải M-N)."
+        },
+        {
+          "loi": "Only one of the two columns has REFERENCES.|||Chỉ một trong hai cột có REFERENCES."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "role",
+          "vi": "vai trò"
+        }
+      ]
+    },
+    {
+      "title": "Case 8 — friendship: a symmetric pair stored once",
+      "language": "sql",
+      "difficulty": "HARD",
+      "estimatedMinutes": 10,
+      "points": 30,
+      "concepts": [
+        "symmetric relationship",
+        "canonical order",
+        "CHECK"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "ddl",
+        "recursive"
+      ],
+      "problemHtml": "<p>In a social network friendship is symmetric: if An is Binh's friend, Binh is An's friend. Store each friendship ONCE. Create <code>Users(userID INT PK, nickname VARCHAR(30) NOT NULL UNIQUE)</code> and <code>Friendship(user1 INT, user2 INT, since DATE)</code> where a pair is always stored with the smaller id first.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Key (user1, user2), both referencing Users.</li>\n  <li>CHECK (user1 &lt; user2): no self-friendship and no (2, 1) next to (1, 2).</li>\n  <li>Use <code>VARCHAR(n)</code> / <code>CHAR(n)</code> for text and <code>DATE</code> for dates here — the in-browser grader flags NVARCHAR/DATETIME as SQL Server–only. In the real PE on SQL Server write NVARCHAR for Vietnamese text.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trong mạng xã hội, quan hệ bạn bè là đối xứng: An là bạn của Bình thì Bình là bạn của An. Lưu mỗi quan hệ MỘT lần. Tạo <code>Users(userID INT PK, nickname VARCHAR(30) NOT NULL UNIQUE)</code> và <code>Friendship(user1 INT, user2 INT, since DATE)</code> trong đó cặp luôn lưu id nhỏ trước.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khoá (user1, user2), cả hai tham chiếu Users.</li>\n  <li>CHECK (user1 &lt; user2): không tự kết bạn và không có (2, 1) cạnh (1, 2).</li>\n  <li>Ở đây dùng <code>VARCHAR(n)</code> / <code>CHAR(n)</code> cho chữ và <code>DATE</code> cho ngày — máy chấm trình duyệt báo NVARCHAR/DATETIME là cú pháp riêng SQL Server. Thi PE thật trên SQL Server thì chữ tiếng Việt dùng NVARCHAR.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "tbl        | col      | type             \n-----------+----------+------------------\nusers      | userid   | integer          \nusers      | nickname | character varying\nfriendship | user1    | integer          \nfriendship | user2    | integer          \nfriendship | since    | date             ",
+          "explanation": "Expected result of check \"Tables and columns\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Bảng và cột\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Without a rule, (1, 2) and (2, 1) are two different rows describing one fact.|||Không có luật thì (1, 2) và (2, 1) là hai dòng khác nhau cho cùng một sự kiện.",
+        "Force a canonical order: CHECK (user1 &lt; user2).|||Buộc một thứ tự chuẩn: CHECK (user1 &lt; user2)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "CREATE TABLE Users (\n    userID   INT         NOT NULL PRIMARY KEY,\n    nickname VARCHAR(30) NOT NULL UNIQUE\n);\nCREATE TABLE Friendship (\n    user1 INT  NOT NULL REFERENCES Users (userID),\n    user2 INT  NOT NULL REFERENCES Users (userID),\n    since DATE NULL,\n    PRIMARY KEY (user1, user2),\n    CHECK (user1 < user2)          -- canonical order: each unordered pair has exactly one spelling\n);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>For a directed relationship (A follows B) both orders are different facts and only &lt;&gt; is wanted; for a symmetric one, &lt; gives each pair exactly one spelling. Queries then look in both columns: WHERE user1 = @me OR user2 = @me.</p>",
+      "solutionExplanationHtmlVi": "<p>Với liên kết có hướng (A theo dõi B) hai chiều là hai sự kiện khác nhau, chỉ cần &lt;&gt;; với liên kết đối xứng, &lt; cho mỗi cặp đúng một cách viết. Khi truy vấn thì tìm ở cả hai cột: WHERE user1 = @me OR user2 = @me.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "sau-lenh",
+            "moTa": "Tables and columns|||Bảng và cột",
+            "kiemTra": "SELECT lower(table_name) AS tbl, lower(column_name) AS col, lower(data_type) AS type FROM information_schema.columns WHERE table_schema NOT IN ('pg_catalog', 'information_schema') AND lower(table_name) IN ('users', 'friendship')",
+            "mongDoi": {
+              "cot": [
+                "tbl",
+                "col",
+                "type"
+              ],
+              "hang": [
+                [
+                  "users",
+                  "userid",
+                  "integer"
+                ],
+                [
+                  "users",
+                  "nickname",
+                  "character varying"
+                ],
+                [
+                  "friendship",
+                  "user1",
+                  "integer"
+                ],
+                [
+                  "friendship",
+                  "user2",
+                  "integer"
+                ],
+                [
+                  "friendship",
+                  "since",
+                  "date"
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "chay-duoc",
+            "moTa": "Three friendships in canonical order|||Ba quan hệ bạn theo thứ tự chuẩn",
+            "thu": "INSERT INTO Users VALUES (1, 'an'), (2, 'binh'), (3, 'chi'); INSERT INTO Friendship VALUES (1, 2, '2026-01-01'), (1, 3, NULL), (2, 3, NULL)"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "(2, 1) is rejected — it must be written (1, 2)|||(2, 1) bị từ chối — phải viết (1, 2)",
+            "thu": "INSERT INTO Users VALUES (1, 'an'), (2, 'binh'); INSERT INTO Friendship VALUES (2, 1, NULL)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "Being your own friend is rejected|||Tự kết bạn với mình bị từ chối",
+            "thu": "INSERT INTO Users VALUES (1, 'an'); INSERT INTO Friendship VALUES (1, 1, NULL)",
+            "maLoi": "23514"
+          },
+          {
+            "kiem": "bi-chan",
+            "moTa": "A duplicate nickname is rejected|||Trùng nickname bị từ chối",
+            "thu": "INSERT INTO Users VALUES (1, 'an'), (2, 'an')",
+            "maLoi": "23505",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "CHECK (user1 &lt;&gt; user2) — stops self-friendship but still allows both (1, 2) and (2, 1).|||CHECK (user1 &lt;&gt; user2) — chặn tự kết bạn nhưng vẫn cho cả (1, 2) lẫn (2, 1)."
+        },
+        {
+          "loi": "Forgetting UNIQUE on nickname.|||Quên UNIQUE ở nickname."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "symmetric relationship",
+          "vi": "liên kết đối xứng"
+        }
+      ]
+    },
+    {
+      "title": "10 ERD mistakes that lose marks",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "ERD review"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd"
+      ],
+      "problemHtml": "<p>Check a diagram the way a PE marker does (workshop, \"10 ERD mistakes\").</p><p><i>This set has 6 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Soát sơ đồ như người chấm PE (xưởng, \"10 lỗi ERD\").</p><p><i>Bộ này có 6 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "For each relationship ask the two cardinality questions again.|||Với mỗi liên kết hỏi lại hai câu về bản số.",
+        "For each attribute ask: does it describe the entity, or a pairing?|||Với mỗi thuộc tính hỏi: nó mô tả thực thể, hay một cặp?"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10 ERD mistakes that lose marks\n\nAnswer in the answer panel (no code needed).\n\n1. The diagram has entity sets \"Electronics\", \"Phones\", \"Laptops\". What is wrong?Sơ đồ có các tập thực thể \"Electronics\", \"Phones\", \"Laptops\". Sai ở đâu?\n2. A 1-N relationship \"Lecturer teaches Course\" drawn with a table Teaches(lecturerID, courseID). The marker says…Liên kết 1-N \"Lecturer teaches Course\" được chuyển thành bảng Teaches(lecturerID, courseID). Người chấm nói…\n3. totalPrice is stored in Order although it is the sum of the order lines. This is…totalPrice được lưu trong Order dù nó là tổng các dòng đơn. Đây là…\n4. An M-N relationship Enroll has the attribute grade drawn on the Student rectangle. Why is it wrong?Liên kết M-N Enroll có thuộc tính grade vẽ trên hình Student. Vì sao sai?\n5. A weak entity Room is drawn with a single rectangle and roomNo underlined as the full key. What is missing?Thực thể yếu Room vẽ bằng hình chữ nhật đơn, roomNo gạch chân như khoá đầy đủ. Thiếu gì?\n6. Two arrows point INTO a many-many relationship \"Stars-in\". What do the arrows claim?Hai mũi tên chỉ VÀO liên kết nhiều-nhiều \"Stars-in\". Các mũi tên khẳng định gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 10 ERD mistakes that lose marks — answer key\n\n1. The diagram has entity sets \"Electronics\", \"Phones\", \"Laptops\". What is wrong?Sơ đồ có các tập thực thể \"Electronics\", \"Phones\", \"Laptops\". Sai ở đâu?\n   Answer: b) They are rows of one entity set Category with a recursive relationship\n   Values are not entity sets; a hierarchy of values is a recursive relationship.VI: Giá trị không phải tập thực thể; phân cấp giá trị là liên kết đệ quy.\n\n2. A 1-N relationship \"Lecturer teaches Course\" drawn with a table Teaches(lecturerID, courseID). The marker says…Liên kết 1-N \"Lecturer teaches Course\" được chuyển thành bảng Teaches(lecturerID, courseID). Người chấm nói…\n   Answer: a) wrong: a 1-N is just a foreign key in Course\n   A separate table lets a course have two lecturers — exactly what 1-N forbids.VI: Bảng riêng cho phép một môn có hai giảng viên — đúng điều 1-N cấm.\n\n3. totalPrice is stored in Order although it is the sum of the order lines. This is…totalPrice được lưu trong Order dù nó là tổng các dòng đơn. Đây là…\n   Answer: b) a derived attribute stored as data — it can disagree with the lines\n   Derived ⇒ compute it (view/query); unitPrice in OrderItem, however, is a deliberate snapshot and IS stored.VI: Dẫn xuất ⇒ tính ra (view/truy vấn); còn unitPrice trong OrderItem là ảnh chụp có chủ ý và ĐƯỢC lưu.\n\n4. An M-N relationship Enroll has the attribute grade drawn on the Student rectangle. Why is it wrong?Liên kết M-N Enroll có thuộc tính grade vẽ trên hình Student. Vì sao sai?\n   Answer: b) grade depends on the pair (student, course), so it belongs on the relationship\n   A student has many grades — one per course; the attribute of a pairing goes on the diamond.VI: Một sinh viên có nhiều điểm — mỗi môn một điểm; thuộc tính của một cặp đặt trên hình thoi.\n\n5. A weak entity Room is drawn with a single rectangle and roomNo underlined as the full key. What is missing?Thực thể yếu Room vẽ bằng hình chữ nhật đơn, roomNo gạch chân như khoá đầy đủ. Thiếu gì?\n   Answer: c) the double rectangle/diamond and the owner (Hotel) in the identification\n   roomNo is only a partial key; the identifying relationship to Hotel must be drawn (double diamond).VI: roomNo chỉ là khoá bộ phận; phải vẽ liên kết xác định tới Hotel (hình thoi đôi).\n\n6. Two arrows point INTO a many-many relationship \"Stars-in\". What do the arrows claim?Hai mũi tên chỉ VÀO liên kết nhiều-nhiều \"Stars-in\". Các mũi tên khẳng định gì?\n   Answer: a) that it is one-one — contradicting \"many-many\"\n   Arrows mean \"at most one\": on both ends they make the relationship one-one.VI: Mũi tên nghĩa là \"tối đa một\": ở cả hai đầu thì liên kết thành một-một.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> They are rows of one entity set Category with a recursive relationship</p><p>Values are not entity sets; a hierarchy of values is a recursive relationship.</p><p><i>VI: Giá trị không phải tập thực thể; phân cấp giá trị là liên kết đệ quy.</i></p></li><li><p><b>a)</b> wrong: a 1-N is just a foreign key in Course</p><p>A separate table lets a course have two lecturers — exactly what 1-N forbids.</p><p><i>VI: Bảng riêng cho phép một môn có hai giảng viên — đúng điều 1-N cấm.</i></p></li><li><p><b>b)</b> a derived attribute stored as data — it can disagree with the lines</p><p>Derived ⇒ compute it (view/query); unitPrice in OrderItem, however, is a deliberate snapshot and IS stored.</p><p><i>VI: Dẫn xuất ⇒ tính ra (view/truy vấn); còn unitPrice trong OrderItem là ảnh chụp có chủ ý và ĐƯỢC lưu.</i></p></li><li><p><b>b)</b> grade depends on the pair (student, course), so it belongs on the relationship</p><p>A student has many grades — one per course; the attribute of a pairing goes on the diamond.</p><p><i>VI: Một sinh viên có nhiều điểm — mỗi môn một điểm; thuộc tính của một cặp đặt trên hình thoi.</i></p></li><li><p><b>c)</b> the double rectangle/diamond and the owner (Hotel) in the identification</p><p>roomNo is only a partial key; the identifying relationship to Hotel must be drawn (double diamond).</p><p><i>VI: roomNo chỉ là khoá bộ phận; phải vẽ liên kết xác định tới Hotel (hình thoi đôi).</i></p></li><li><p><b>a)</b> that it is one-one — contradicting \"many-many\"</p><p>Arrows mean \"at most one\": on both ends they make the relationship one-one.</p><p><i>VI: Mũi tên nghĩa là \"tối đa một\": ở cả hai đầu thì liên kết thành một-một.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The diagram has entity sets \"Electronics\", \"Phones\", \"Laptops\". What is wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sơ đồ có các tập thực thể \"Electronics\", \"Phones\", \"Laptops\". Sai ở đâu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "They should be attributes of Product"
+              },
+              {
+                "ma": "b",
+                "noiDung": "They are rows of one entity set Category with a recursive relationship"
+              },
+              {
+                "ma": "c",
+                "noiDung": "They should be weak entities of Product"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing — each category deserves its own rectangle"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Values are not entity sets; a hierarchy of values is a recursive relationship.</p><p><i>VI: Giá trị không phải tập thực thể; phân cấp giá trị là liên kết đệ quy.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A 1-N relationship \"Lecturer teaches Course\" drawn with a table Teaches(lecturerID, courseID). The marker says…</p><p style=\"opacity:.75;font-size:.92em\"><i>Liên kết 1-N \"Lecturer teaches Course\" được chuyển thành bảng Teaches(lecturerID, courseID). Người chấm nói…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "wrong: a 1-N is just a foreign key in Course"
+              },
+              {
+                "ma": "b",
+                "noiDung": "correct: every relationship needs a table"
+              },
+              {
+                "ma": "c",
+                "noiDung": "correct but the key must be lecturerID"
+              },
+              {
+                "ma": "d",
+                "noiDung": "wrong: it must be a weak entity"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A separate table lets a course have two lecturers — exactly what 1-N forbids.</p><p><i>VI: Bảng riêng cho phép một môn có hai giảng viên — đúng điều 1-N cấm.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>totalPrice is stored in Order although it is the sum of the order lines. This is…</p><p style=\"opacity:.75;font-size:.92em\"><i>totalPrice được lưu trong Order dù nó là tổng các dòng đơn. Đây là…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a composite attribute made of several parts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a derived attribute stored as data — it can disagree with the lines"
+              },
+              {
+                "ma": "c",
+                "noiDung": "a multivalued attribute that needs its own table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a partial key of the weak entity Order"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Derived ⇒ compute it (view/query); unitPrice in OrderItem, however, is a deliberate snapshot and IS stored.</p><p><i>VI: Dẫn xuất ⇒ tính ra (view/truy vấn); còn unitPrice trong OrderItem là ảnh chụp có chủ ý và ĐƯỢC lưu.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>An M-N relationship Enroll has the attribute grade drawn on the Student rectangle. Why is it wrong?</p><p style=\"opacity:.75;font-size:.92em\"><i>Liên kết M-N Enroll có thuộc tính grade vẽ trên hình Student. Vì sao sai?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "it is right: a grade always belongs to a student, not a course"
+              },
+              {
+                "ma": "b",
+                "noiDung": "grade depends on the pair (student, course), so it belongs on the relationship"
+              },
+              {
+                "ma": "c",
+                "noiDung": "grade should be a separate entity set with its own key attribute"
+              },
+              {
+                "ma": "d",
+                "noiDung": "grade must be part of the key of Student to stay unique"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A student has many grades — one per course; the attribute of a pairing goes on the diamond.</p><p><i>VI: Một sinh viên có nhiều điểm — mỗi môn một điểm; thuộc tính của một cặp đặt trên hình thoi.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>A weak entity Room is drawn with a single rectangle and roomNo underlined as the full key. What is missing?</p><p style=\"opacity:.75;font-size:.92em\"><i>Thực thể yếu Room vẽ bằng hình chữ nhật đơn, roomNo gạch chân như khoá đầy đủ. Thiếu gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "a derived attribute price computed from the room type"
+              },
+              {
+                "ma": "b",
+                "noiDung": "a recursive relationship linking each room to the next"
+              },
+              {
+                "ma": "c",
+                "noiDung": "the double rectangle/diamond and the owner (Hotel) in the identification"
+              },
+              {
+                "ma": "d",
+                "noiDung": "a second partial key such as floor, underlined twice"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>roomNo is only a partial key; the identifying relationship to Hotel must be drawn (double diamond).</p><p><i>VI: roomNo chỉ là khoá bộ phận; phải vẽ liên kết xác định tới Hotel (hình thoi đôi).</i></p>"
+          },
+          {
+            "ma": "c6",
+            "de": "<p>Two arrows point INTO a many-many relationship \"Stars-in\". What do the arrows claim?</p><p style=\"opacity:.75;font-size:.92em\"><i>Hai mũi tên chỉ VÀO liên kết nhiều-nhiều \"Stars-in\". Các mũi tên khẳng định gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "that it is one-one — contradicting \"many-many\""
+              },
+              {
+                "ma": "b",
+                "noiDung": "that the relationship has attributes"
+              },
+              {
+                "ma": "c",
+                "noiDung": "nothing, arrows are decoration"
+              },
+              {
+                "ma": "d",
+                "noiDung": "that both entities are weak"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Arrows mean \"at most one\": on both ends they make the relationship one-one.</p><p><i>VI: Mũi tên nghĩa là \"tối đa một\": ở cả hai đầu thì liên kết thành một-một.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Modelling values as entity sets.|||Mô hình hoá giá trị thành tập thực thể."
+        },
+        {
+          "loi": "Storing derived totals.|||Lưu tổng dẫn xuất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "derived attribute",
+          "vi": "thuộc tính dẫn xuất"
+        }
+      ]
+    },
+    {
+      "title": "Oral exam: what the lecturer asks while looking at your ERD",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "oral exam",
+        "ERD justification"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "erd",
+        "oral-exam"
+      ],
+      "problemHtml": "<p>Five questions from the 32-question oral bank of the workshop.</p><p><i>This set has 5 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Năm câu trong ngân hàng 32 câu vấn đáp của xưởng.</p><p><i>Bộ này có 5 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Every design choice must be traced back to a sentence of the brief.|||Mọi lựa chọn thiết kế phải chỉ ra được câu nào trong đề.",
+        "Weak ≠ \"depends on\"; weak = \"cannot be identified without\".|||Yếu ≠ \"phụ thuộc\"; yếu = \"không xác định được nếu thiếu\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Oral exam: what the lecturer asks while looking at your ERD\n\nAnswer in the answer panel (no code needed).\n\n1. \"Why is Enroll's key (studentID, courseCode, semester) and not just (studentID, courseCode)?\"\"Vì sao khoá của Enroll là (studentID, courseCode, semester) mà không chỉ (studentID, courseCode)?\"\n2. \"Why is Visit a strong entity and not weak, although it needs a patient?\"\"Vì sao Visit là thực thể mạnh chứ không yếu, dù nó cần một bệnh nhân?\"\n3. \"Where do you put the foreign key for a 1-1 relationship?\"\"Đặt khoá ngoại của liên kết 1-1 ở đâu?\"\n4. \"Your Order stores unitPrice in OrderItem but not totalPrice. Why the difference?\"\"Order của em lưu unitPrice ở OrderItem mà không lưu totalPrice. Vì sao khác nhau?\"\n5. \"What would change if each course could have several lecturers?\"\"Điều gì thay đổi nếu mỗi môn có thể có nhiều giảng viên?\"\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Oral exam: what the lecturer asks while looking at your ERD — answer key\n\n1. \"Why is Enroll's key (studentID, courseCode, semester) and not just (studentID, courseCode)?\"\"Vì sao khoá của Enroll là (studentID, courseCode, semester) mà không chỉ (studentID, courseCode)?\"\n   Answer: d) Because a failed course can be retaken in a later semester\n   The business rule \"retake later\" creates two rows for the same pair, so semester joins the key.VI: Luật nghiệp vụ \"học lại sau\" tạo hai dòng cho cùng một cặp nên semester vào khoá.\n\n2. \"Why is Visit a strong entity and not weak, although it needs a patient?\"\"Vì sao Visit là thực thể mạnh chứ không yếu, dù nó cần một bệnh nhân?\"\n   Answer: d) It has its own identifier visitID; needing a patient is just total participation\n   Weak = cannot be identified without the owner. visitID identifies it alone; patientID is an ordinary NOT NULL foreign key.VI: Yếu = không xác định được nếu thiếu chủ. visitID tự xác định nó; patientID là khoá ngoại NOT NULL bình thường.\n\n3. \"Where do you put the foreign key for a 1-1 relationship?\"\"Đặt khoá ngoại của liên kết 1-1 ở đâu?\"\n   Answer: d) On the side with total participation, with UNIQUE\n   Total side ⇒ NOT NULL is possible; UNIQUE keeps it 1-1.VI: Phía toàn phần ⇒ đặt NOT NULL được; UNIQUE giữ cho nó là 1-1.\n\n4. \"Your Order stores unitPrice in OrderItem but not totalPrice. Why the difference?\"\"Order của em lưu unitPrice ở OrderItem mà không lưu totalPrice. Vì sao khác nhau?\"\n   Answer: a) unitPrice is a historical snapshot; totalPrice can always be recomputed\n   A product price changes later; the price paid must be frozen. The total is derivable from the lines.VI: Giá sản phẩm sẽ đổi; giá đã trả phải được đóng băng. Tổng thì luôn tính lại được từ các dòng.\n\n5. \"What would change if each course could have several lecturers?\"\"Điều gì thay đổi nếu mỗi môn có thể có nhiều giảng viên?\"\n   Answer: b) teaches becomes M-N: a new table Teaches(lecturerID, courseCode)\n   Cardinality changes the mapping rule: 1-N (FK) becomes M-N (table).VI: Bản số đổi thì luật chuyển đổi đổi: 1-N (khoá ngoại) thành M-N (bảng).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Because a failed course can be retaken in a later semester</p><p>The business rule \"retake later\" creates two rows for the same pair, so semester joins the key.</p><p><i>VI: Luật nghiệp vụ \"học lại sau\" tạo hai dòng cho cùng một cặp nên semester vào khoá.</i></p></li><li><p><b>d)</b> It has its own identifier visitID; needing a patient is just total participation</p><p>Weak = cannot be identified without the owner. visitID identifies it alone; patientID is an ordinary NOT NULL foreign key.</p><p><i>VI: Yếu = không xác định được nếu thiếu chủ. visitID tự xác định nó; patientID là khoá ngoại NOT NULL bình thường.</i></p></li><li><p><b>d)</b> On the side with total participation, with UNIQUE</p><p>Total side ⇒ NOT NULL is possible; UNIQUE keeps it 1-1.</p><p><i>VI: Phía toàn phần ⇒ đặt NOT NULL được; UNIQUE giữ cho nó là 1-1.</i></p></li><li><p><b>a)</b> unitPrice is a historical snapshot; totalPrice can always be recomputed</p><p>A product price changes later; the price paid must be frozen. The total is derivable from the lines.</p><p><i>VI: Giá sản phẩm sẽ đổi; giá đã trả phải được đóng băng. Tổng thì luôn tính lại được từ các dòng.</i></p></li><li><p><b>b)</b> teaches becomes M-N: a new table Teaches(lecturerID, courseCode)</p><p>Cardinality changes the mapping rule: 1-N (FK) becomes M-N (table).</p><p><i>VI: Bản số đổi thì luật chuyển đổi đổi: 1-N (khoá ngoại) thành M-N (bảng).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>\"Why is Enroll's key (studentID, courseCode, semester) and not just (studentID, courseCode)?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Vì sao khoá của Enroll là (studentID, courseCode, semester) mà không chỉ (studentID, courseCode)?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because keys need three columns"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because studentID is not unique"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Because semester is a foreign key"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because a failed course can be retaken in a later semester"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>The business rule \"retake later\" creates two rows for the same pair, so semester joins the key.</p><p><i>VI: Luật nghiệp vụ \"học lại sau\" tạo hai dòng cho cùng một cặp nên semester vào khoá.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>\"Why is Visit a strong entity and not weak, although it needs a patient?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Vì sao Visit là thực thể mạnh chứ không yếu, dù nó cần một bệnh nhân?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because doctors are strong entities and visits copy their kind"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because it has more than two attributes, and weak entities have at most two"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It should be weak — the design is wrong and loses the patient"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It has its own identifier visitID; needing a patient is just total participation"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Weak = cannot be identified without the owner. visitID identifies it alone; patientID is an ordinary NOT NULL foreign key.</p><p><i>VI: Yếu = không xác định được nếu thiếu chủ. visitID tự xác định nó; patientID là khoá ngoại NOT NULL bình thường.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>\"Where do you put the foreign key for a 1-1 relationship?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Đặt khoá ngoại của liên kết 1-1 ở đâu?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "On the side with fewer rows, without UNIQUE"
+              },
+              {
+                "ma": "b",
+                "noiDung": "In a new table holding both keys"
+              },
+              {
+                "ma": "c",
+                "noiDung": "On both sides, each pointing at the other"
+              },
+              {
+                "ma": "d",
+                "noiDung": "On the side with total participation, with UNIQUE"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Total side ⇒ NOT NULL is possible; UNIQUE keeps it 1-1.</p><p><i>VI: Phía toàn phần ⇒ đặt NOT NULL được; UNIQUE giữ cho nó là 1-1.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>\"Your Order stores unitPrice in OrderItem but not totalPrice. Why the difference?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Order của em lưu unitPrice ở OrderItem mà không lưu totalPrice. Vì sao khác nhau?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "unitPrice is a historical snapshot; totalPrice can always be recomputed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "unitPrice takes less space, so it is cheaper to store"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both are wrong to store; the shop should compute them"
+              },
+              {
+                "ma": "d",
+                "noiDung": "totalPrice is part of the key of Order, so it is fixed"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A product price changes later; the price paid must be frozen. The total is derivable from the lines.</p><p><i>VI: Giá sản phẩm sẽ đổi; giá đã trả phải được đóng băng. Tổng thì luôn tính lại được từ các dòng.</i></p>"
+          },
+          {
+            "ma": "c5",
+            "de": "<p>\"What would change if each course could have several lecturers?\"</p><p style=\"opacity:.75;font-size:.92em\"><i>\"Điều gì thay đổi nếu mỗi môn có thể có nhiều giảng viên?\"</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Course gets a multivalued attribute lecturerID"
+              },
+              {
+                "ma": "b",
+                "noiDung": "teaches becomes M-N: a new table Teaches(lecturerID, courseCode)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Lecturer becomes a weak entity of Course"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Cardinality changes the mapping rule: 1-N (FK) becomes M-N (table).</p><p><i>VI: Bản số đổi thì luật chuyển đổi đổi: 1-N (khoá ngoại) thành M-N (bảng).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Answering \"because it is like that in the sample\" instead of naming the business rule.|||Trả lời \"vì mẫu làm vậy\" thay vì nêu luật nghiệp vụ."
+        },
+        {
+          "loi": "Calling every dependent entity weak.|||Gọi mọi thực thể phụ thuộc là yếu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "oral defence",
+          "vi": "bảo vệ vấn đáp"
+        }
+      ]
+    }
+  ]
+}

@@ -94,6 +94,126 @@
       "description": "Luyện: Exercise 3 — ∩: students who take both DBI202 and CSD201 · Exercise 4 — difference, then join back: who takes nothing? · Exercise 6 — bags: how many more cups did Q1 sell, per drink? · Exercise 7 — γ, σ after γ, τ: courses with 2+ students · Exercises 1–2 — set vs bag counts and tree order"
     },
     {
+      "slug": "dbi202-slide-dbi5-1",
+      "name": "3.A E/R model: entities, relationships, weak entities (slides 1–18)",
+      "level": "BEGINNER",
+      "description": "Luyện: Read the E/R diagram of the movie database · Multiplicity, roles, weak entity sets · Owns: a many-one relationship becomes a foreign key"
+    },
+    {
+      "slug": "dbi202-slide-dbi5-2",
+      "name": "3.B From E/R diagrams to relations (slides 19–32)",
+      "level": "BEGINNER",
+      "description": "Luyện: Stars-in: a many-many relationship becomes a table · Crews: a weak entity set and its owner · How many tables, and what key?"
+    },
+    {
+      "slug": "dbi202-slide-dbi5-3",
+      "name": "3.C Subclass structures to relations and UML (slides 33–53)",
+      "level": "BEGINNER",
+      "description": "Luyện: Three strategies for Movies, Cartoons and Murder Mysteries · E/R style: Movies with Cartoons and MurderMysteries · UML class diagrams for databases"
+    },
+    {
+      "slug": "dbi202-er-model",
+      "name": "3.1 Entities, relationships & diagrams",
+      "level": "BEGINNER",
+      "description": "Luyện: Entity, attribute or relationship? · Read the cardinality from a business sentence · 1-N: Department and Employee"
+    },
+    {
+      "slug": "dbi202-er-nang-cao",
+      "name": "3.2 Weak entities, n-ary & multivalued attributes",
+      "level": "BEGINNER",
+      "description": "Luyện: Weak entity: rooms of a hotel · Multivalued attribute: an employee's phone numbers · Ternary relationship: who supplies which part to which project · Participation, composite and derived attributes"
+    },
+    {
+      "slug": "dbi202-er-subclass",
+      "name": "3.3 Subclasses (ISA) & three ways to store them",
+      "level": "BEGINNER",
+      "description": "Luyện: Strategy 1 (ER way): Person, Student, Lecturer · Strategy 3 (one wide table) with a type column · Which strategy would you defend?"
+    },
+    {
+      "slug": "dbi202-er-to-relation",
+      "name": "3.4 ERD → relational schema: the seven rules",
+      "level": "BEGINNER",
+      "description": "Luyện: Which rule, which result? · Convert the library ERD completely (6 tables) · Create and drop in dependency order · Reverse engineering: read the ERD back from the tables"
+    },
+    {
+      "slug": "dbi202-xuong-erd",
+      "name": "3.4 ERD Workshop: recursive relationships and the oral exam",
+      "level": "BEGINNER",
+      "description": "Luyện: Case 2 — categories inside categories (recursive 1-M) · Case 4 — prerequisites: a recursive M-N · Case 8 — friendship: a symmetric pair stored once · 10 ERD mistakes that lose marks · Oral exam: what the lecturer asks while looking at your ERD"
+    },
+    {
+      "slug": "dbi202-on-ch3",
+      "name": "3.5 Practice: from a business paragraph to CREATE TABLE",
+      "level": "BEGINNER",
+      "description": "Luyện: Exercise 1 — course registration: 1-M and M-N · Exercise 4 — supplies with an arrow: each part for each project from ONE supplier · Exercise 6 — football clubs: a 1-1 captain and a recursive mentor · Exercises 2–3 — composite, multivalued and derived attributes"
+    },
+    {
+      "slug": "dbi202-3-lab-phong-kham",
+      "name": "Lab 3 — Clinic: from a business paragraph to a working database",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 3 — Clinic database: ERD → CREATE TABLE (PE question 1 style)"
+    },
+    {
+      "slug": "dbi202-slide-dbi4-1",
+      "name": "4.A Functional dependencies, closures & minimal bases (slides 1–19)",
+      "level": "BEGINNER",
+      "description": "Luyện: Does title, year → starName hold? Find the counter-examples · Splitting, combining, trivial FDs and Armstrong's axioms · Compute the closures (slide 15 algorithm) · Minimal basis of a set of FDs"
+    },
+    {
+      "slug": "dbi202-slide-dbi4-2",
+      "name": "4.B Anomalies, decomposition, 1NF & 2NF (slides 20–38)",
+      "level": "BEGINNER",
+      "description": "Luyện: Name the anomaly · Decompose Movies1 into Movies2 and Movies3 · Join the pieces back: is the decomposition lossless? · 1NF and 2NF in four questions"
+    },
+    {
+      "slug": "dbi202-slide-dbi4-3",
+      "name": "4.C Reaching 2NF step by step, then the 3NF check (slides 39–58)",
+      "level": "BEGINNER",
+      "description": "Luyện: From 1NF to 2NF: split EnrollFlat into Student, Course, Enroll · Keys and highest normal form of five relations · Is it 3NF? The transitive test"
+    },
+    {
+      "slug": "dbi202-slide-dbi4-4",
+      "name": "4.D The 3NF fix, BCNF & the two decomposition algorithms (slides 59–73)",
+      "level": "BEGINNER",
+      "description": "Luyện: Remove the transitive dependency: Employee + Department · The BCNF decomposition algorithm, in order · BCNF or 3NF: lossless? dependency-preserving? · BCNF in four questions"
+    },
+    {
+      "slug": "dbi202-chuan-hoa",
+      "name": "4.1 Functional dependencies & 1NF–BCNF",
+      "level": "BEGINNER",
+      "description": "Luyện: Which normal form does each FD break? · Normalize the worked example to 3NF — with real tables · What normalization removes"
+    },
+    {
+      "slug": "dbi202-bao-dong-tim-khoa",
+      "name": "4.2 Armstrong rules, closures & finding keys",
+      "level": "BEGINNER",
+      "description": "Luyện: Attribute closures, pass by pass · Find ALL candidate keys · Does F imply this FD? Are two FD sets equivalent? · Armstrong's axioms: which rule was used?"
+    },
+    {
+      "slug": "dbi202-phan-ra",
+      "name": "4.3 Decomposition: lossless join & dependency preservation",
+      "level": "BEGINNER",
+      "description": "Luyện: Find the spurious tuples of a lossy decomposition · Lossless? Preserving? Check five decompositions · The classic case: street, city, zip"
+    },
+    {
+      "slug": "dbi202-chuan-hoa-vi-du",
+      "name": "4.4 One table, normalized 1NF → BCNF step by step",
+      "level": "BEGINNER",
+      "description": "Luyện: Measure the redundancy: how often is each customer's city stored? · Which step removes which dependency? · The four-line answer template for the exam · Read the final schema"
+    },
+    {
+      "slug": "dbi202-on-ch4",
+      "name": "4.5 Practice: FDs, keys & normalization",
+      "level": "BEGINNER",
+      "description": "Luyện: Exercise 1 — closures and implied FDs · Exercises 2–3 — all keys, prime attributes, minimal cover · Exercise 4 — keys and highest normal form · Exercise 7 — the chase test"
+    },
+    {
+      "slug": "dbi202-4-lab-chuan-hoa-don-hang",
+      "name": "Lab 4 — Normalize the order table: from 1NF to BCNF with real data",
+      "level": "ADVANCED",
+      "description": "Luyện: Lab 4 — Order table: decompose to BCNF and prove nothing was lost"
+    },
+    {
       "slug": "dbi202-sql-ddl",
       "name": "5.1 CREATE TABLE: keys and constraints",
       "level": "BEGINNER",

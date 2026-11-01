@@ -1,0 +1,554 @@
+{
+  "trackSlug": "dbi202-practice",
+  "moduleSlug": "dbi202-chuan-hoa-vi-du",
+  "lesson": {
+    "course": "introduction-to-databases",
+    "slug": "dbi202-chuan-hoa-vi-du"
+  },
+  "exercises": [
+    {
+      "title": "Measure the redundancy: how often is each customer's city stored?",
+      "language": "sql",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "redundancy",
+        "GROUP BY"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "group-by"
+      ],
+      "problemHtml": "<p>The update anomaly in numbers: for every customer, how many rows of Order1NF repeat their city? (After 3NF it will be exactly 1 each.)</p>\n<p><b>The 1NF table of lesson 4.4</b> (tab <code>Order1NF.sql</code>): <code>Order1NF(order_id, order_date, cust_id, cust_name, cust_city, product_id, qty, unit_price)</code>, key (order_id, product_id). FDs: order_id → order_date, cust_id · cust_id → cust_name, cust_city · product_id → unit_price · order_id, product_id → qty.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Columns: <code>cust_id, copies</code>.</li>\n  <li>Row order does not matter.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dị thường cập nhật bằng con số: với mỗi khách hàng, Order1NF lặp thành phố của họ trong bao nhiêu dòng? (Sau 3NF sẽ đúng 1 mỗi người.)</p>\n<p><b>Bảng 1NF của bài 4.4</b> (tab <code>Order1NF.sql</code>): <code>Order1NF(order_id, order_date, cust_id, cust_name, cust_city, product_id, qty, unit_price)</code>, khoá (order_id, product_id). FD: order_id → order_date, cust_id · cust_id → cust_name, cust_city · product_id → unit_price · order_id, product_id → qty.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cột: <code>cust_id, copies</code>.</li>\n  <li>Thứ tự dòng không quan trọng.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "The sample database of this task (schema above).|||CSDL mẫu của bài (lược đồ ở trên).",
+          "output": "cust_id | copies\n--------+-------\nC001    | 4     \nC003    | 1     \nC002    | 1     ",
+          "explanation": "Expected result of check \"Copies of each customer's data\" (row order does not matter).|||Kết quả mong đợi của kiểm \"Số bản sao dữ liệu mỗi khách\" (thứ tự dòng không quan trọng)."
+        }
+      ],
+      "hintsJson": [
+        "Each row of Order1NF carries the customer's name and city.|||Mỗi dòng của Order1NF mang tên và thành phố của khách.",
+        "COUNT(*) per cust_id.|||COUNT(*) theo cust_id."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "-- Write ONE standard SQL statement below (it must run on SQL Server AND PostgreSQL).\n-- Viết MỘT câu SQL chuẩn bên dưới (chạy được trên cả SQL Server lẫn PostgreSQL).\n-- Ctrl/⌘ + Enter: run sample checks · + Shift: submit.\n"
+        },
+        {
+          "name": "Order1NF.sql",
+          "language": "sql",
+          "code": "-- Order1NF.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Order1NF.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "query.sql",
+          "language": "sql",
+          "code": "SELECT cust_id, COUNT(*) AS copies      -- every row repeats the customer's name and city\nFROM Order1NF\nGROUP BY cust_id;\n"
+        },
+        {
+          "name": "Order1NF.sql",
+          "language": "sql",
+          "code": "-- Order1NF.sql: sample schema + data of this task (READ ONLY — the grader loads it by itself; editing this tab changes nothing).\n-- Order1NF.sql: lược đồ + dữ liệu mẫu của bài (CHỈ ĐỂ ĐỌC — máy chấm tự nạp; sửa tab này không ảnh hưởng gì).\n-- Written in SQL Server syntax, like the PE's DBscript.sql — runs as-is in SSMS.\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Expected: C001 4, C002 1, C003 1. If An moves city, four rows must change together — miss one and the data contradicts itself.</p>",
+      "solutionExplanationHtmlVi": "<p>Kết quả: C001 4, C002 1, C003 1. Nếu An chuyển thành phố, bốn dòng phải đổi cùng lúc — sót một là dữ liệu tự mâu thuẫn.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "sql",
+        "phuongNgu": "ansi-sqlserver",
+        "csdl": "\nCREATE TABLE Order1NF (\n  order_id   INT           NOT NULL,\n  order_date DATE          NOT NULL,\n  cust_id    CHAR(4)       NOT NULL,\n  cust_name  NVARCHAR(40)  NOT NULL,\n  cust_city  NVARCHAR(30)  NOT NULL,\n  product_id CHAR(3)       NOT NULL,\n  qty        INT           NOT NULL,\n  unit_price DECIMAL(10,0) NOT NULL,\n  CONSTRAINT pk_order1nf PRIMARY KEY (order_id, product_id)\n);\nINSERT INTO Order1NF VALUES\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P01', 2, 5000),\n (1001, '2026-09-01', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 1, 18000),\n (1002, '2026-09-02', 'C002', N'Trần Bình',  N'Đà Nẵng',   'P01', 10, 5000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P03', 1, 7000),\n (1003, '2026-09-05', 'C001', N'Nguyễn An',  N'Hà Nội',    'P07', 3, 18000),\n (1004, '2026-09-06', 'C003', N'Lê Chi',     N'Cần Thơ',   'P03', 4, 7000);\n",
+        "tepChinh": "query.sql",
+        "kiem": [
+          {
+            "kiem": "ket-qua",
+            "moTa": "Copies of each customer's data|||Số bản sao dữ liệu mỗi khách",
+            "mongDoi": {
+              "cot": [
+                "cust_id",
+                "copies"
+              ],
+              "hang": [
+                [
+                  "C001",
+                  4
+                ],
+                [
+                  "C003",
+                  1
+                ],
+                [
+                  "C002",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ket-qua",
+            "moTa": "Another order of C002|||Thêm đơn của C002",
+            "an": true,
+            "themCsdl": "INSERT INTO Order1NF VALUES (1005, '2026-09-08', 'C002', N'Trần Bình', N'Đà Nẵng', 'P07', 1, 18000), (1005, '2026-09-08', 'C002', N'Trần Bình', N'Đà Nẵng', 'P03', 2, 7000)",
+            "mongDoi": {
+              "cot": [
+                "cust_id",
+                "copies"
+              ],
+              "hang": [
+                [
+                  "C001",
+                  4
+                ],
+                [
+                  "C003",
+                  1
+                ],
+                [
+                  "C002",
+                  3
+                ]
+              ]
+            }
+          },
+          {
+            "kiem": "ma-nguon",
+            "moTa": "Uses GROUP BY|||Dùng GROUP BY",
+            "khop": "\\bGROUP\\s+BY\\b",
+            "tep": "query.sql"
+          }
+        ]
+      },
+      "gradeKind": "sql",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting orders (COUNT(DISTINCT order_id)) — the city is stored once per LINE, not per order.|||Đếm đơn (COUNT(DISTINCT order_id)) — thành phố lưu theo mỗi DÒNG, không theo mỗi đơn."
+        },
+        {
+          "loi": "Counting only orders of one customer.|||Chỉ đếm đơn của một khách."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "redundancy",
+          "vi": "dư thừa"
+        }
+      ]
+    },
+    {
+      "title": "Which step removes which dependency?",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "1NF",
+        "2NF",
+        "3NF",
+        "BCNF"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization"
+      ],
+      "problemHtml": "<p>Follow lesson 4.4 on the order table. For each change, say which step (normal form) it belongs to.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Theo bài 4.4 trên bảng đơn hàng. Với mỗi thay đổi, cho biết nó thuộc bước (dạng chuẩn) nào.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Partial dependencies are removed at 2NF, transitive ones at 3NF.|||Phụ thuộc bộ phận gỡ ở 2NF, bắc cầu gỡ ở 3NF.",
+        "The customer FD survives 2NF because it hides inside Order.|||FD khách hàng sống sót qua 2NF vì nó nằm trong Order."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which step removes which dependency?\n\nAnswer in the answer panel (no code needed).\n\n1. Change → stepThay đổi → bước\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Which step removes which dependency? — answer key\n\n1. Change → stepThay đổi → bước\n   - r1.buoc: → 1NF\n   - r2.buoc: → 2NF\n   - r3.buoc: → 2NF\n   - r4.buoc: → 3NF\n   - r5.buoc: BCNF check (no change needed)\n   Lists → 1NF; FDs on part of the key (order_id, product_id) → 2NF; non-key → non-key (cust_id → city) → 3NF; final determinant check → BCNF.VI: Danh sách → 1NF; FD trên một phần khoá (order_id, product_id) → 2NF; không khoá → không khoá (cust_id → city) → 3NF; kiểm định thuộc cuối cùng → BCNF.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lists → 1NF; FDs on part of the key (order_id, product_id) → 2NF; non-key → non-key (cust_id → city) → 3NF; final determinant check → BCNF.</p><p><i>VI: Danh sách → 1NF; FD trên một phần khoá (order_id, product_id) → 2NF; không khoá → không khoá (cust_id → city) → 3NF; kiểm định thuộc cuối cùng → BCNF.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Change → step</p><p style=\"opacity:.75;font-size:.92em\"><i>Thay đổi → bước</i></p>",
+            "cot": [
+              {
+                "ma": "td",
+                "ten": "Change / Thay đổi"
+              },
+              {
+                "ma": "buoc",
+                "ten": "Step / Bước",
+                "luaChon": [
+                  "→ 1NF",
+                  "→ 2NF",
+                  "→ 3NF",
+                  "BCNF check (no change needed)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "td": "The column products = \"P1:2, P7:1\" becomes one row per product; total is dropped (derived)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "td": "product_id → unit_price is moved to Product(product_id, unit_price)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "td": "order_id → order_date, cust_id… is moved to Order(order_id, …)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "td": "cust_id → cust_name, cust_city is moved to Customer(cust_id, cust_name, cust_city)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "td": "Every determinant of the four tables is checked to be a key"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.buoc": "→ 1NF",
+              "r2.buoc": "→ 2NF",
+              "r3.buoc": "→ 2NF",
+              "r4.buoc": "→ 3NF",
+              "r5.buoc": "BCNF check (no change needed)"
+            },
+            "giaiThich": "<p>Lists → 1NF; FDs on part of the key (order_id, product_id) → 2NF; non-key → non-key (cust_id → city) → 3NF; final determinant check → BCNF.</p><p><i>VI: Danh sách → 1NF; FD trên một phần khoá (order_id, product_id) → 2NF; không khoá → không khoá (cust_id → city) → 3NF; kiểm định thuộc cuối cùng → BCNF.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Removing cust_id → cust_city at 2NF — cust_id is not part of the key.|||Gỡ cust_id → cust_city ở 2NF — cust_id không thuộc khoá."
+        },
+        {
+          "loi": "Keeping total because \"it is convenient\" — it is derived.|||Giữ total vì \"tiện\" — nó là dẫn xuất."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normal form",
+          "vi": "dạng chuẩn"
+        }
+      ]
+    },
+    {
+      "title": "The four-line answer template for the exam",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "exam answer"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization",
+        "exam"
+      ],
+      "problemHtml": "<p>Markers give half the points for justification. Order the four lines of the answer.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Người chấm cho nửa số điểm cho phần biện luận. Sắp bốn dòng của câu trả lời.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "You cannot name a partial dependency before you know the key.|||Chưa biết khoá thì không gọi được phụ thuộc bộ phận.",
+        "Verification comes last.|||Kiểm chứng ở cuối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The four-line answer template for the exam\n\nAnswer in the answer panel (no code needed).\n\n1. The answer templateKhuôn trả lời\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# The four-line answer template for the exam — answer key\n\n1. The answer templateKhuôn trả lời\n   Answer: m1) List all FDs and compute the candidate keys  →  m3) Name the violation: \"X → Y is a partial / transitive dependency, so not 2NF / 3NF\"  →  m4) Decompose and state the key of each new relation  →  m2) Verify: lossless (shared attribute is a key) and dependency preserving\n   Keys first (you cannot judge without them), then the named violation, then the decomposition with keys, then the two checks.VI: Khoá trước (không có thì không xét được), rồi gọi tên vi phạm, rồi phân rã kèm khoá, rồi hai phép kiểm.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Keys first (you cannot judge without them), then the named violation, then the decomposition with keys, then the two checks.</p><p><i>VI: Khoá trước (không có thì không xét được), rồi gọi tên vi phạm, rồi phân rã kèm khoá, rồi hai phép kiểm.</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>The answer template</p><p style=\"opacity:.75;font-size:.92em\"><i>Khuôn trả lời</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "List all FDs and compute the candidate keys"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Verify: lossless (shared attribute is a key) and dependency preserving"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Name the violation: \"X → Y is a partial / transitive dependency, so not 2NF / 3NF\""
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Decompose and state the key of each new relation"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m4",
+              "m2"
+            ],
+            "giaiThich": "<p>Keys first (you cannot judge without them), then the named violation, then the decomposition with keys, then the two checks.</p><p><i>VI: Khoá trước (không có thì không xét được), rồi gọi tên vi phạm, rồi phân rã kèm khoá, rồi hai phép kiểm.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Writing only the final schema — half the marks are lost.|||Chỉ viết lược đồ cuối — mất nửa điểm."
+        },
+        {
+          "loi": "Skipping the lossless check.|||Bỏ phép kiểm không mất."
+        }
+      ],
+      "glossaryJson": []
+    },
+    {
+      "title": "Read the final schema",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 6,
+      "points": 20,
+      "concepts": [
+        "BCNF",
+        "lossless"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "dbi202",
+        "normalization"
+      ],
+      "problemHtml": "<p>Final schema: Customer(cust_id, cust_name, cust_city), Order(order_id, order_date, cust_id), Product(product_id, unit_price), OrderLine(order_id, product_id, qty).</p><p><i>This set has 4 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper, or in SSMS on your own SQL Server), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lược đồ cuối: Customer(cust_id, cust_name, cust_city), Order(order_id, order_date, cust_id), Product(product_id, unit_price), OrderLine(order_id, product_id, qty).</p><p><i>Bộ này có 4 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy, hoặc chạy trong SSMS trên SQL Server của bạn) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Check each table separately.|||Kiểm từng bảng riêng.",
+        "A composite key does not prevent BCNF.|||Khoá ghép không cản BCNF."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the final schema\n\nAnswer in the answer panel (no code needed).\n\n1. Key of OrderLine?Khoá của OrderLine?\n2. Why is Order ⋈ OrderLine lossless?Vì sao Order ⋈ OrderLine không mất?\n3. A new customer with no order yet can now be stored because…Khách mới chưa có đơn giờ lưu được vì…\n4. Is the final schema in BCNF?Lược đồ cuối có ở BCNF?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Read the final schema — answer key\n\n1. Key of OrderLine?Khoá của OrderLine?\n   Answer: a) (order_id, product_id)\n   One line per product per order.VI: Mỗi đơn mỗi sản phẩm một dòng.\n\n2. Why is Order ⋈ OrderLine lossless?Vì sao Order ⋈ OrderLine không mất?\n   Answer: a) their common attribute order_id is the key of Order\n   Shared attribute = key of one side ⇒ lossless.VI: Thuộc tính chung = khoá của một phía ⇒ không mất.\n\n3. A new customer with no order yet can now be stored because…Khách mới chưa có đơn giờ lưu được vì…\n   Answer: b) Customer has its own table keyed by cust_id\n   The insertion anomaly is gone.VI: Dị thường chèn đã hết.\n\n4. Is the final schema in BCNF?Lược đồ cuối có ở BCNF?\n   Answer: c) Yes — every determinant is the key of its table\n   cust_id → … lives in Customer where cust_id is the key.VI: cust_id → … nằm trong Customer, nơi cust_id là khoá.\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> (order_id, product_id)</p><p>One line per product per order.</p><p><i>VI: Mỗi đơn mỗi sản phẩm một dòng.</i></p></li><li><p><b>a)</b> their common attribute order_id is the key of Order</p><p>Shared attribute = key of one side ⇒ lossless.</p><p><i>VI: Thuộc tính chung = khoá của một phía ⇒ không mất.</i></p></li><li><p><b>b)</b> Customer has its own table keyed by cust_id</p><p>The insertion anomaly is gone.</p><p><i>VI: Dị thường chèn đã hết.</i></p></li><li><p><b>c)</b> Yes — every determinant is the key of its table</p><p>cust_id → … lives in Customer where cust_id is the key.</p><p><i>VI: cust_id → … nằm trong Customer, nơi cust_id là khoá.</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Key of OrderLine?</p><p style=\"opacity:.75;font-size:.92em\"><i>Khoá của OrderLine?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "(order_id, product_id)"
+              },
+              {
+                "ma": "b",
+                "noiDung": "product_id"
+              },
+              {
+                "ma": "c",
+                "noiDung": "order_id"
+              },
+              {
+                "ma": "d",
+                "noiDung": "(order_id, product_id, qty)"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>One line per product per order.</p><p><i>VI: Mỗi đơn mỗi sản phẩm một dòng.</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why is Order ⋈ OrderLine lossless?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao Order ⋈ OrderLine không mất?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "their common attribute order_id is the key of Order"
+              },
+              {
+                "ma": "b",
+                "noiDung": "because both tables have the same number of rows"
+              },
+              {
+                "ma": "c",
+                "noiDung": "because qty is numeric"
+              },
+              {
+                "ma": "d",
+                "noiDung": "it is not lossless"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Shared attribute = key of one side ⇒ lossless.</p><p><i>VI: Thuộc tính chung = khoá của một phía ⇒ không mất.</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A new customer with no order yet can now be stored because…</p><p style=\"opacity:.75;font-size:.92em\"><i>Khách mới chưa có đơn giờ lưu được vì…</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "order_id can be NULL"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Customer has its own table keyed by cust_id"
+              },
+              {
+                "ma": "c",
+                "noiDung": "it still cannot be stored"
+              },
+              {
+                "ma": "d",
+                "noiDung": "qty defaults to 0"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The insertion anomaly is gone.</p><p><i>VI: Dị thường chèn đã hết.</i></p>"
+          },
+          {
+            "ma": "c4",
+            "de": "<p>Is the final schema in BCNF?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lược đồ cuối có ở BCNF?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "No — cust_id → cust_city remains"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only 2NF"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes — every determinant is the key of its table"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — OrderLine has a composite key"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>cust_id → … lives in Customer where cust_id is the key.</p><p><i>VI: cust_id → … nằm trong Customer, nơi cust_id là khoá.</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a composite key means \"not BCNF\".|||Tưởng khoá ghép nghĩa là \"không BCNF\"."
+        },
+        {
+          "loi": "Forgetting that the join back must reproduce exactly the original rows.|||Quên rằng nối lại phải ra đúng các dòng gốc."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "BCNF",
+          "vi": "dạng chuẩn Boyce–Codd"
+        }
+      ]
+    }
+  ]
+}

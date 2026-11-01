@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="760x320">
+<title>sticky inside a scroll box</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; display: flex; gap: 24px; }
+  .scroller { height: 260px; width: 330px; overflow: auto; border: 2px solid #94a3b8; border-radius: 8px; }
+  h4 { position: sticky; top: 0; margin: 0; padding: 8px 12px; background: #9333ea; color: #fff; }
+  p { margin: 0; padding: 10px 12px; border-bottom: 1px solid #e5e7eb; }
+  .wrapper-hidden { overflow: hidden; }   /* the trap: an ancestor between sticky and the scroller */
+</style>
+</head>
+<body>
+  <div class="scroller" id="ok">
+    <h4>Sticky works</h4>
+    <p>Row 1</p><p>Row 2</p><p>Row 3</p><p>Row 4</p><p>Row 5</p><p>Row 6</p><p>Row 7</p><p>Row 8</p><p>Row 9</p><p>Row 10</p>
+  </div>
+  <div class="scroller" id="broken">
+    <div class="wrapper-hidden" style="height:600px">
+      <h4>Sticky broken</h4>
+      <p>Row 1</p><p>Row 2</p><p>Row 3</p><p>Row 4</p><p>Row 5</p><p>Row 6</p><p>Row 7</p><p>Row 8</p><p>Row 9</p><p>Row 10</p>
+    </div>
+  </div>
+  <script>
+    for (const id of ['ok', 'broken']) {
+      const box = document.getElementById(id);
+      const h = box.querySelector('h4');
+      const before = Math.round(h.getBoundingClientRect().top - box.getBoundingClientRect().top);
+      box.scrollTop = 200;
+      const after = Math.round(h.getBoundingClientRect().top - box.getBoundingClientRect().top);
+      console.log(id.padEnd(6), '| header top inside the box: before scroll', before + 'px, after scrolling 200px', after + 'px');
+    }
+  </script>
+</body>
+</html>

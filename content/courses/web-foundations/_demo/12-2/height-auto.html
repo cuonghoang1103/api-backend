@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="cho-xong">
+<title>height: auto cannot be transitioned (and the grid trick)</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 20px; }
+  .panel { overflow: hidden; background: #f1f5f9; border: 1px solid #cbd5e1; }
+  #a { height: 0; transition: height 400ms linear; }
+  #a.open { height: auto; }                         /* jumps: auto is not a number */
+  #b { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 400ms linear; }
+  #b.open { grid-template-rows: 1fr; }               /* fr values CAN be interpolated */
+  #b > div { min-height: 0; }
+  p { margin: 0; padding: 8px; }
+</style>
+</head>
+<body>
+  <div class="panel" id="a"><p>Line 1</p><p>Line 2</p><p>Line 3</p></div>
+  <div class="panel" id="b"><div><p>Line 1</p><p>Line 2</p><p>Line 3</p></div></div>
+  <script>
+    const a = document.getElementById('a'), b = document.getElementById('b');
+    requestAnimationFrame(() => {
+      a.classList.add('open'); b.classList.add('open');
+      const t0 = performance.now();
+      const marks = [0, 100, 200, 300, 450];
+      const tick = () => {
+        const t = performance.now() - t0;
+        if (t >= marks[0]) {
+          console.log('t≈' + String(marks.shift()).padStart(3) + 'ms  height:auto ' + a.offsetHeight + 'px  |  grid 0fr→1fr ' + b.offsetHeight + 'px');
+        }
+        if (marks.length) requestAnimationFrame(tick); else window.__xong = true;
+      };
+      tick();
+    });
+  </script>
+</body>
+</html>

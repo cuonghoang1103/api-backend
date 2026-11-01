@@ -1,0 +1,2 @@
+spin      | duration 800ms | iterations Infinity | fill none | target .spinner
+slide-in  | duration 600ms | iterations 1 | fill both | target .toast

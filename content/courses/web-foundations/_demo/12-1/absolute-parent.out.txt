@@ -1,0 +1,2 @@
+broken | badge offsetParent = body | badge top-right inside card? false
+fixed  | badge offsetParent = div | badge top-right inside card? true

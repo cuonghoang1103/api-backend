@@ -68,3 +68,4 @@ Commit theo nhóm chương bằng index riêng (`GIT_INDEX_FILE=$(mktemp)`), kh�
 | Đợt | Bài | Trạng thái |
 |---|---|---|
 | Ch11 | 11.1–11.5 | ✅ 01/11 — bài 32–38k chữ, deck wf-11-1…5 (63 slide, WF/v1), Code Lab 5 module × 6 đề (máy chấm trình duyệt 170/170) |
+| Ch12 | 12.1–12.4 | ✅ 01/11 — bài 34–36k chữ, ảnh chụp thật trong deck wf-12-1…4 (46 slide, WF/v1), Code Lab 4 module × 6 đề (dom + 2 js; kiểm `chiTrinhDuyet` cho var/@layer), máy chấm trình duyệt 194/194 |

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="cho-xong">
+<title>Animating left vs transform: what the browser has to redo</title>
+<style>
+  body { margin: 0; font-family: system-ui, sans-serif; }
+  .lane { position: relative; height: 4px; }
+  .dot { position: absolute; left: 0; top: 0; width: 4px; height: 4px; background: #2563eb; }
+</style>
+</head>
+<body>
+  <div id="host"></div>
+  <script>
+    // 400 dots, moved for 60 frames, once with "left" and once with "transform".
+    // We count how often the browser had to recompute layout, using the Layout Instability-free counter:
+    // reading offsetTop after each write forces a synchronous layout ONLY if layout is dirty.
+    const host = document.getElementById('host');
+    for (let i = 0; i < 400; i++) host.insertAdjacentHTML('beforeend', '<div class="lane"><div class="dot"></div></div>');
+    const dots = [...document.querySelectorAll('.dot')];
+    function run(kind) {
+      const t0 = performance.now();
+      for (let f = 0; f < 60; f++) {
+        for (const d of dots) {
+          if (kind === 'left') d.style.left = f * 3 + 'px';
+          else d.style.transform = 'translateX(' + f * 3 + 'px)';
+        }
+        void host.offsetHeight;                 // force the browser to bring layout up to date now
+      }
+      return performance.now() - t0;
+    }
+    run('left'); run('transform');                // warm-up
+    const L = [], T = [];
+    for (let k = 0; k < 5; k++) { L.push(run('left')); T.push(run('transform')); }
+    const med = (a) => a.sort((x, y) => x - y)[2].toFixed(1);
+    console.log('60 frames × 400 dots, median of 5 runs');
+    console.log('  left      :', med(L), 'ms  (layout recomputed every frame)');
+    console.log('  transform :', med(T), 'ms  (layout untouched; only compositing changes)');
+    window.__xong = true;
+  </script>
+</body>
+</html>

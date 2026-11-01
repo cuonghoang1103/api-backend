@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="760x340">
+<title>Fix: move the modal out of the stacking context</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; }
+  header { position: relative; z-index: 10; background: #1e293b; color: #fff; padding: 14px 18px; height: 60px; }
+  main { position: relative; z-index: 1; padding: 18px; }
+  .modal { position: fixed; top: 52px; left: 120px; z-index: 100; width: 360px; padding: 16px;
+           background: #dcfce7; border: 3px solid #16a34a; border-radius: 10px; }
+</style>
+</head>
+<body>
+  <header>Site header (z-index: 10)</header>
+  <main><p>Page content (main has z-index: 1)</p></main>
+  <!-- the modal is a direct child of body: it competes with header and main directly -->
+  <div class="modal">Modal (z-index: 100), a child of &lt;body&gt; — on top</div>
+  <script>
+    const m = document.querySelector('.modal').getBoundingClientRect();
+    const winner = document.elementFromPoint(m.left + 30, m.top + 10);
+    console.log('at the overlap, the element on top is:', winner.className || winner.tagName.toLowerCase());
+  </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+static   x = 30 y = 30 | inside stage at 14,14
+relative x = 70 y = 82 | inside stage at 54,66
+absolute x = 584 y = 30 | inside stage at 568,14
+sticky   x = 30 y = 114 | inside stage at 14,98
+fixed    x = 602 y = 326 | inside stage at 586,310

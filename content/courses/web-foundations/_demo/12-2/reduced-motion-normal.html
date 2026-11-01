@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="mo-phong" content="reducedMotion=no-preference">
+<title>prefers-reduced-motion: normal</title>
+<link rel="stylesheet" href="reduced-motion.css">
+</head>
+<body>
+  <div class="card">Card</div>
+  <div class="spinner">◐</div>
+  <script>
+    const mq = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const s = getComputedStyle(document.querySelector('.spinner'));
+    const c = getComputedStyle(document.querySelector('.card'));
+    console.log('reduce =', mq, '| spinner', s.animationDuration, 'x', s.animationIterationCount, '| card transition', c.transitionDuration);
+  </script>
+</body>
+</html>

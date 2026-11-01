@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="cho-xong">
+<title>Removing an element after it fades out</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 20px; }
+  .alert { padding: 12px; background: #fee2e2; border: 1px solid #ef4444; transition: opacity 300ms ease, transform 300ms ease; }
+  .alert.leaving { opacity: 0; transform: translateX(40px); }
+</style>
+</head>
+<body>
+  <div class="alert" id="alert">Something went wrong. <button>Dismiss</button></div>
+  <script>
+    const alertBox = document.getElementById('alert');
+    let t0 = 0;
+    alertBox.addEventListener('transitionend', (e) => {
+      console.log('transitionend for', e.propertyName, 'after ~' + Math.round(performance.now() - t0) + 'ms');
+      if (e.propertyName === 'opacity') {          // two properties ⇒ two events; act on ONE of them
+        alertBox.remove();
+        console.log('removed from the DOM:', !document.getElementById('alert'));
+        setTimeout(() => (window.__xong = true), 50);
+      }
+    });
+    alertBox.querySelector('button').addEventListener('click', () => {
+      t0 = performance.now();
+      alertBox.classList.add('leaving');
+    });
+    setTimeout(() => alertBox.querySelector('button').click(), 100);   // a user clicks Dismiss
+  </script>
+</body>
+</html>

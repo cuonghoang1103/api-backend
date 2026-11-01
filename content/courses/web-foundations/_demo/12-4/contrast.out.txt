@@ -1,0 +1,6 @@
+light: text on bg               17.06:1 AA ✓
+light: muted on bg              9.90:1 AA ✓
+light: button text on primary   4.94:1 AA ✓
+dark: text on bg                17.06:1 AA ✓
+dark: button text on primary    9.90:1 AA ✓
+a bad pair: gray-400 on white   2.54:1 fails AA (needs 4.5:1)

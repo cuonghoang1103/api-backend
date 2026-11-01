@@ -1,0 +1,3 @@
+60 frames × 400 dots, median of 5 runs
+  left      : 34.6 ms  (layout recomputed every frame)
+  transform : 19.2 ms  (layout untouched; only compositing changes)

@@ -1,0 +1,2 @@
+ok     | header top inside the box: before scroll 2px, after scrolling 200px 2px
+broken | header top inside the box: before scroll 2px, after scrolling 200px -198px

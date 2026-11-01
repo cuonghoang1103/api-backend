@@ -1,0 +1,1 @@
+selectors: 8 | every one is a single class: true

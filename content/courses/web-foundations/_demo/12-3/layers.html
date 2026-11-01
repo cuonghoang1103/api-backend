@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Cascade layers: order beats specificity</title>
+<style>
+  @layer reset, base, components, utilities;      /* declared order = priority, last wins */
+
+  @layer components {
+    #checkout .btn { background: rgb(37, 99, 235); padding: 10px 16px; }   /* very specific */
+  }
+  @layer utilities {
+    .bg-green { background: rgb(22, 163, 74); }                           /* one class */
+  }
+  /* styles OUTSIDE any layer beat every layer */
+  .btn.legacy { background: rgb(107, 114, 128); }
+</style>
+</head>
+<body>
+  <div id="checkout">
+    <button class="btn" id="a">component only</button>
+    <button class="btn bg-green" id="b">component + utility</button>
+    <button class="btn bg-green legacy" id="c">+ unlayered legacy rule</button>
+  </div>
+  <script>
+    for (const id of ['a', 'b', 'c']) {
+      const b = document.getElementById(id);
+      console.log(b.textContent.padEnd(26), '→', getComputedStyle(b).backgroundColor);
+    }
+  </script>
+</body>
+</html>

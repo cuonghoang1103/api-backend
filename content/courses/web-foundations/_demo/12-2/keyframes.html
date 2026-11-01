@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="640x200">
+<meta name="cho" content="700">
+<title>@keyframes</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 24px; display: flex; gap: 40px; align-items: center; }
+  .spinner { width: 48px; height: 48px; border: 6px solid #cbd5e1; border-top-color: #2563eb; border-radius: 50%;
+             animation: spin 800ms linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .toast { padding: 12px 18px; background: #16a34a; color: #fff; border-radius: 8px;
+           animation: slide-in 600ms ease-out both; }
+  @keyframes slide-in { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+  <div class="spinner" aria-label="Loading"></div>
+  <div class="toast">Saved ✓</div>
+  <script>
+    for (const a of document.getAnimations()) {
+      const t = a.effect.getTiming();
+      console.log(a.animationName.padEnd(9), '| duration', t.duration + 'ms', '| iterations', t.iterations, '| fill', t.fill, '| target .' + a.effect.target.className);
+    }
+  </script>
+</body>
+</html>

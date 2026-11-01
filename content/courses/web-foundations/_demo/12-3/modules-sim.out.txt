@@ -1,0 +1,3 @@
+Card styles.title   = title_2leku
+Footer styles.title = title_1870c
+card title 20px rgb(37, 99, 235) | footer title 12px

@@ -1,0 +1,1 @@
+prefers dark? true | --color-bg = #0f172a | body background rgb(15, 23, 42)

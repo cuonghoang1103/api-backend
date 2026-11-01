@@ -1,0 +1,2 @@
+at the overlap, the element on top is: header "Site header (z-ind…"
+modal z-index: 9999 | but it competes inside <main>, whose z-index is 1

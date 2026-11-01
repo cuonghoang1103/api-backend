@@ -1,0 +1,44 @@
+/* 1. Primitive tokens: the raw palette (never used directly by components) */
+:root {
+  --blue-600: #2563eb;
+  --blue-300: #93c5fd;
+  --gray-50: #f8fafc;
+  --gray-900: #0f172a;
+  --gray-700: #334155;
+  --gray-300: #cbd5e1;
+  --radius-md: 10px;
+  --space-3: 12px;
+}
+
+/* 2. Semantic tokens: what a colour is FOR — light theme by default */
+:root {
+  --color-bg: var(--gray-50);
+  --color-text: var(--gray-900);
+  --color-muted: var(--gray-700);
+  --color-border: var(--gray-300);
+  --color-primary: var(--blue-600);
+}
+
+/* 3. Dark theme: only the semantic layer changes */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: var(--gray-900);
+    --color-text: var(--gray-50);
+    --color-muted: var(--gray-300);
+    --color-border: var(--gray-700);
+    --color-primary: var(--blue-300);
+  }
+}
+:root[data-theme="dark"] {
+  --color-bg: var(--gray-900);
+  --color-text: var(--gray-50);
+  --color-muted: var(--gray-300);
+  --color-border: var(--gray-700);
+  --color-primary: var(--blue-300);
+}
+
+/* 4. Components use semantic tokens only */
+body { margin: 0; padding: 20px; font-family: system-ui, sans-serif; background: var(--color-bg); color: var(--color-text); }
+.card { max-width: 420px; padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+.card p { color: var(--color-muted); }
+.btn { padding: 8px 14px; border: 0; border-radius: 8px; background: var(--color-primary); color: var(--color-bg); font-weight: 700; }

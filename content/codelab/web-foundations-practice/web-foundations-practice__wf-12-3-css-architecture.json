@@ -1,0 +1,731 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-12-3-css-architecture",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-12-3-css-architecture"
+  },
+  "exercises": [
+    {
+      "title": "Thẻ sản phẩm theo BEM",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "BEM",
+        "block__element--modifier"
+      ],
+      "prerequisites": [
+        "class selector"
+      ],
+      "tags": [
+        "css",
+        "bem"
+      ],
+      "problemHtml": "<p><em>Bài 12.3 — Đặt tên và tổ chức CSS.</em> Máy chấm đọc giá trị CSS đã tính trên trang của bạn và soi <code>styles.css</code> tìm id, <code>!important</code> và selector lồng.</p><p>HTML đã dùng tên BEM: khối <code>.product-card</code>, phần tử <code>__title</code>, <code>__price</code>, biến thể <code>--featured</code>. Code khởi đầu tạo kiểu bằng selector lồng theo thẻ (<code>.product-card h3</code>…). Viết lại <code>styles.css</code> chỉ dùng MỘT class mỗi selector, giữ nguyên giao diện: tiêu đề 18px, giá màu <code>rgb(22, 163, 74)</code>, thẻ nổi bật viền <code>rgb(245, 158, 11)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi selector đúng một class (không thẻ, không lồng).</li>\n  <li>Tiêu đề 18px; giá xanh lá; thẻ --featured viền cam.</li>\n  <li>Không id, không !important.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html (đã có class BEM) + styles.css.",
+      "outputSpec": "CSS phẳng theo BEM.",
+      "constraints": "Không sửa HTML.",
+      "examplesJson": [
+        {
+          "input": ".product-card__price { color: rgb(22, 163, 74); }",
+          "output": "giá màu xanh lá",
+          "explanation": "Một class, độ đặc hiệu (0,1,0)."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi thứ cần tạo kiểu đã có class riêng trong HTML — dùng nó.",
+        ".product-card__title { font-size: 18px; } .product-card--featured { border-color: rgb(245, 158, 11); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article class=\"product-card\">\n    <h3 class=\"product-card__title\">Bàn phím</h3>\n    <div class=\"product-card__price\">450.000đ</div>\n  </article>\n  <article class=\"product-card product-card--featured\">\n    <h3 class=\"product-card__title\">Chuột</h3>\n    <div class=\"product-card__price\">250.000đ</div>\n  </article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — selector lồng theo thẻ */\n.product-card { width: 220px; padding: 14px; border: 2px solid rgb(203, 213, 225); border-radius: 10px; }\n.product-card h3 { font-size: 18px; margin: 0 0 6px; }\ndiv.product-card div { color: rgb(22, 163, 74); font-weight: 700; }\narticle.product-card.product-card--featured { border-color: rgb(245, 158, 11); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article class=\"product-card\">\n    <h3 class=\"product-card__title\">Bàn phím</h3>\n    <div class=\"product-card__price\">450.000đ</div>\n  </article>\n  <article class=\"product-card product-card--featured\">\n    <h3 class=\"product-card__title\">Chuột</h3>\n    <div class=\"product-card__price\">250.000đ</div>\n  </article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — BEM: một class mỗi selector, độ đặc hiệu phẳng (0,1,0) */\n.product-card { width: 220px; padding: 14px; border: 2px solid rgb(203, 213, 225); border-radius: 10px; }\n.product-card__title { font-size: 18px; margin: 0 0 6px; }          /* element */\n.product-card__price { color: rgb(22, 163, 74); font-weight: 700; }  /* element */\n.product-card--featured { border-color: rgb(245, 158, 11); }        /* modifier, đứng sau ⇒ thắng */\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khi mọi selector cùng trọng lượng (một class), luật đứng sau thắng — dễ đoán. Biến thể <code>--featured</code> đặt SAU khối nên ghi đè được viền mà không cần tăng độ đặc hiệu. Đổi <code>h3</code> thành <code>h2</code> cũng không vỡ gì.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết .product-card .product-card__title — lồng không cần thiết.</li>\n  <li>Đặt modifier TRƯỚC khối — bị khối đè lại.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.3 Đặt tên và tổ chức CSS.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://getbem.com/introduction/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Title 18px|||Tiêu đề 18px",
+            "kiem": "css",
+            "selector": ".product-card__title",
+            "thuocTinh": "font-size",
+            "giaTri": "18px"
+          },
+          {
+            "moTa": "Price is green|||Giá màu xanh lá",
+            "kiem": "css",
+            "selector": ".product-card__price",
+            "thuocTinh": "color",
+            "giaTri": "rgb(22, 163, 74)"
+          },
+          {
+            "moTa": "Featured card has an orange border|||Thẻ nổi bật viền cam",
+            "kiem": "css",
+            "selector": ".product-card--featured",
+            "thuocTinh": "border-top-color",
+            "giaTri": "rgb(245, 158, 11)"
+          },
+          {
+            "moTa": "No tag or nested selectors|||Không selector theo thẻ hay lồng",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(^|\\})\\s*[^{}]*(\\s[a-z][\\w-]*|[a-z]+\\.)[^{}]*\\{",
+            "phuDinh": true
+          },
+          {
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(^|[\\s,}>+~])#[A-Za-z][\\w-]*[^;{]*\\{",
+            "phuDinh": true,
+            "moTa": "No id selectors|||Không selector id"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết .product-card .product-card__title — lồng không cần thiết."
+        },
+        {
+          "loi": "Đặt modifier TRƯỚC khối — bị khối đè lại."
+        }
+      ]
+    },
+    {
+      "title": "Gỡ id và !important khỏi thanh điều hướng",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "refactor",
+        "BEM",
+        "độ đặc hiệu"
+      ],
+      "prerequisites": [
+        "BEM"
+      ],
+      "tags": [
+        "css",
+        "bem",
+        "refactor"
+      ],
+      "problemHtml": "<p><em>Bài 12.3 — Đặt tên và tổ chức CSS.</em> Máy chấm đọc giá trị CSS đã tính trên trang của bạn và soi <code>styles.css</code> tìm id, <code>!important</code> và selector lồng.</p><p>Bài luyện của bài học. Thanh điều hướng cũ dùng <code>#nav ul li a</code> và hai <code>!important</code>. Đổi HTML sang BEM (<code>.site-nav</code>, <code>.site-nav__list</code>, <code>.site-nav__link</code>, <code>--active</code>, <code>--sale</code>) và viết lại CSS: list ngang (flex), link <code>rgb(51, 65, 85)</code>, link đang chọn <code>rgb(37, 99, 235)</code>, link khuyến mãi <code>rgb(220, 38, 38)</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>HTML dùng các class BEM như mô tả; không còn id=\"nav\".</li>\n  <li>Màu ba loại link đúng; danh sách là flex.</li>\n  <li>CSS không còn id selector và !important.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Thanh điều hướng BEM.",
+      "constraints": "Giữ nguyên chữ và thứ tự các link.",
+      "examplesJson": [
+        {
+          "input": ".site-nav__link--active { color: rgb(37, 99, 235); }",
+          "output": "link đang chọn màu xanh",
+          "explanation": "Modifier đứng sau link gốc."
+        }
+      ],
+      "hintsJson": [
+        "Đặt modifier sau .site-nav__link để thắng bằng thứ tự, không cần !important.",
+        ".site-nav__list { display: flex; gap: 8px; list-style: none; } .site-nav__link { color: rgb(51, 65, 85); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav id=\"nav\">\n    <ul>\n      <li><a href=\"#\" class=\"active\">Trang chủ</a></li>\n      <li><a href=\"#\">Khoá học</a></li>\n      <li><a href=\"#\" class=\"nav-link-red\">Khuyến mãi</a></li>\n    </ul>\n  </nav>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — thanh điều hướng cũ */\n#nav ul { display: flex; list-style: none; }\n#nav ul li a { color: rgb(51, 65, 85); padding: 8px; }\n#nav ul li a.active { color: rgb(37, 99, 235) !important; }\n.nav-link-red { color: rgb(220, 38, 38) !important; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav class=\"site-nav\">\n    <ul class=\"site-nav__list\">\n      <li><a href=\"#\" class=\"site-nav__link site-nav__link--active\">Trang chủ</a></li>\n      <li><a href=\"#\" class=\"site-nav__link\">Khoá học</a></li>\n      <li><a href=\"#\" class=\"site-nav__link site-nav__link--sale\">Khuyến mãi</a></li>\n    </ul>\n  </nav>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — thanh điều hướng BEM: không id, không !important */\n.site-nav__list { display: flex; gap: 8px; list-style: none; margin: 0; padding: 0; }\n.site-nav__link { color: rgb(51, 65, 85); padding: 8px; text-decoration: none; }\n.site-nav__link--active { color: rgb(37, 99, 235); }   /* đứng sau ⇒ thắng bằng thứ tự */\n.site-nav__link--sale { color: rgb(220, 38, 38); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Cả ba luật màu đều nặng (0,1,0); modifier đứng sau nên thắng. <code>!important</code> không còn cần — nó chỉ từng cần vì <code>#nav ul li a</code> nặng (1,0,3).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Giữ id=\"nav\" trong HTML \"cho chắc\" — rồi ai đó lại tạo kiểu bằng nó.</li>\n  <li>Đặt modifier trước luật gốc.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.3 Đặt tên và tổ chức CSS.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "BEM markup, no id=\"nav\"|||HTML theo BEM, không còn id=\"nav\"",
+            "kiem": "khong-ton-tai",
+            "selector": "#nav"
+          },
+          {
+            "moTa": "List is flex|||Danh sách là flex",
+            "kiem": "css",
+            "selector": ".site-nav__list",
+            "thuocTinh": "display",
+            "giaTri": "flex"
+          },
+          {
+            "moTa": "Active link is blue|||Link đang chọn màu xanh",
+            "kiem": "css",
+            "selector": ".site-nav__link--active",
+            "thuocTinh": "color",
+            "giaTri": "rgb(37, 99, 235)"
+          },
+          {
+            "moTa": "Sale link is red, others slate|||Link khuyến mãi đỏ, còn lại xám",
+            "kiem": "css",
+            "selector": ".site-nav__link--sale",
+            "thuocTinh": "color",
+            "giaTri": "rgb(220, 38, 38)"
+          },
+          {
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "(^|[\\s,}>+~])#[A-Za-z][\\w-]*[^;{]*\\{",
+            "phuDinh": true,
+            "moTa": "No id selectors|||Không selector id"
+          },
+          {
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "!important",
+            "phuDinh": true,
+            "moTa": "No !important|||Không !important"
+          },
+          {
+            "moTa": "Hidden: plain link colour|||Ẩn: màu link thường",
+            "an": true,
+            "kiem": "css",
+            "selector": ".site-nav__link:not(.site-nav__link--active):not(.site-nav__link--sale)",
+            "thuocTinh": "color",
+            "giaTri": "rgb(51, 65, 85)"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ id=\"nav\" trong HTML \"cho chắc\" — rồi ai đó lại tạo kiểu bằng nó."
+        },
+        {
+          "loi": "Đặt modifier trước luật gốc."
+        }
+      ]
+    },
+    {
+      "title": "Xếp lớp bằng @layer",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "@layer",
+        "thứ tự lớp"
+      ],
+      "prerequisites": [
+        "độ đặc hiệu"
+      ],
+      "tags": [
+        "css",
+        "layer"
+      ],
+      "problemHtml": "<p><em>Bài 12.3 — Đặt tên và tổ chức CSS.</em> Máy chấm đọc giá trị CSS đã tính trên trang của bạn và soi <code>styles.css</code> tìm id, <code>!important</code> và selector lồng.</p><p>Khai báo thứ tự <code>@layer base, components, utilities;</code> ở đầu file. Đưa kiểu chữ chung vào <code>base</code>, luật <code>.site-nav__link</code> (có <code>display: inline-block</code>) vào <code>components</code>, và utility <code>.hidden { display: none; }</code> vào <code>utilities</code>. Kết quả: link có thêm class <code>hidden</code> phải ẩn — dù luật component có độ đặc hiệu cao hơn (code khởi đầu cố ý viết <code>.site-nav .site-nav__link</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dòng khai báo thứ tự ba lớp.</li>\n  <li>Ba nhóm luật nằm trong đúng lớp.</li>\n  <li>Link có class hidden tính ra display: none; link khác inline-block.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "CSS có lớp.",
+      "constraints": "Không dùng !important.",
+      "examplesJson": [
+        {
+          "input": "@layer utilities { .hidden { display: none } }",
+          "output": "thắng .site-nav .site-nav__link",
+          "explanation": "Giữa các lớp, thứ tự lớp thắng độ đặc hiệu."
+        }
+      ],
+      "hintsJson": [
+        "@layer base, components, utilities; rồi @layer components { … } @layer utilities { … }",
+        "Không cần giảm độ đặc hiệu của component — lớp utilities đứng sau đã thắng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav class=\"site-nav\">\n    <a href=\"#\" class=\"site-nav__link\">Trang chủ</a>\n    <a href=\"#\" class=\"site-nav__link hidden\">Quản trị</a>\n  </nav>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — chưa có lớp */\nbody { font-family: system-ui, sans-serif; }\n.hidden { display: none; }\n.site-nav .site-nav__link { display: inline-block; padding: 8px; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <nav class=\"site-nav\">\n    <a href=\"#\" class=\"site-nav__link\">Trang chủ</a>\n    <a href=\"#\" class=\"site-nav__link hidden\">Quản trị</a>\n  </nav>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — thứ tự lớp khai báo MỘT lần: lớp sau thắng, bất kể độ đặc hiệu */\n@layer base, components, utilities;\n\n@layer base {\n  body { font-family: system-ui, sans-serif; }\n}\n@layer components {\n  .site-nav .site-nav__link { display: inline-block; padding: 8px; }\n}\n@layer utilities {\n  .hidden { display: none; }      /* một class vẫn thắng component (0,2,0) vì lớp đứng sau */\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không có lớp, <code>.site-nav .site-nav__link</code> (0,2,0) thắng <code>.hidden</code> (0,1,0) nên link \"Quản trị\" vẫn hiện. Trong lớp, so sánh đi theo THỨ TỰ LỚP trước: utilities khai báo sau components nên thắng, độ đặc hiệu chỉ còn ý nghĩa bên trong một lớp.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên dòng khai báo thứ tự — lớp được sắp theo lần đầu xuất hiện.</li>\n  <li>Thêm !important cho .hidden — đúng là chạy, nhưng mở lại chiến tranh.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.3 Đặt tên và tổ chức CSS.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/@layer",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Layer order declared|||Có khai báo thứ tự lớp",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@layer\\s+base\\s*,\\s*components\\s*,\\s*utilities\\s*;"
+          },
+          {
+            "moTa": "Hidden link computes display: none|||Link hidden tính ra display: none",
+            "kiem": "css",
+            "selector": ".site-nav__link.hidden",
+            "thuocTinh": "display",
+            "giaTri": "none",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Other links stay inline-block|||Link khác vẫn inline-block",
+            "kiem": "css",
+            "selector": ".site-nav__link:not(.hidden)",
+            "thuocTinh": "display",
+            "giaTri": "inline-block",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": ".hidden lives in @layer utilities|||.hidden nằm trong @layer utilities",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@layer\\s+utilities\\s*\\{[^}]*\\.hidden"
+          },
+          {
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "!important",
+            "phuDinh": true,
+            "moTa": "No !important|||Không !important"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên dòng khai báo thứ tự — lớp được sắp theo lần đầu xuất hiện."
+        },
+        {
+          "loi": "Thêm !important cho .hidden — đúng là chạy, nhưng mở lại chiến tranh."
+        }
+      ]
+    },
+    {
+      "title": "Giá trị mặc định dễ đè bằng :where()",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        ":where()",
+        ":is()",
+        "độ đặc hiệu 0"
+      ],
+      "prerequisites": [
+        "độ đặc hiệu"
+      ],
+      "tags": [
+        "css",
+        "where"
+      ],
+      "problemHtml": "<p><em>Bài 12.3 — Đặt tên và tổ chức CSS.</em> Máy chấm đọc giá trị CSS đã tính trên trang của bạn và soi <code>styles.css</code> tìm id, <code>!important</code> và selector lồng.</p><p>Bạn viết \"thư viện\" <code>lib.css</code> có giá trị mặc định cho <code>.lib-card</code>: tiêu đề <code>h3</code> màu đỏ, đoạn <code>p</code> cỡ 14px. Người dùng thư viện viết <code>styles.css</code> với luật đơn giản <code>h3 { color: rgb(37, 99, 235) }</code> và <code>p { font-size: 16px }</code> — và họ phải THẮNG. Sửa <code>lib.css</code> bằng <code>:where()</code> (không sửa styles.css, không đổi thứ tự file).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Luật trong lib.css bọc trong :where(…).</li>\n  <li>h3 trong .lib-card tính ra màu xanh của người dùng; p 16px.</li>\n  <li>Không !important.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + lib.css + styles.css.",
+      "outputSpec": "Thư viện dễ tuỳ biến.",
+      "constraints": "Không sửa styles.css.",
+      "examplesJson": [
+        {
+          "input": ":where(.lib-card h3) { color: red }",
+          "output": "độ đặc hiệu (0,0,0)",
+          "explanation": "Mọi luật của người dùng đều thắng."
+        }
+      ],
+      "hintsJson": [
+        ":where(.lib-card h3) — cả selector nằm trong :where ⇒ (0,0,0).",
+        ":where(.lib-card) h3 cũng được: (0,0,1), bằng h3 của người dùng và thua vì lib.css nạp trước."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"lib.css\">\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"lib-card\"><h3>Tiêu đề</h3><p>Mô tả ngắn.</p></div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "lib.css",
+          "language": "css",
+          "code": "/* lib.css — giá trị mặc định của \"thư viện\" */\n.lib-card h3 { color: rgb(220, 38, 38); }\n.lib-card p { font-size: 14px; }\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* styles.css — người dùng thư viện (không sửa) */\nh3 { color: rgb(37, 99, 235); }\np { font-size: 16px; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"lib.css\">\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"lib-card\"><h3>Tiêu đề</h3><p>Mô tả ngắn.</p></div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "lib.css",
+          "language": "css",
+          "code": "/* lib.css — mặc định bọc trong :where() ⇒ độ đặc hiệu 0, người dùng đè bằng selector đơn giản nhất */\n:where(.lib-card h3) { color: rgb(220, 38, 38); }\n:where(.lib-card p) { font-size: 14px; }\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* styles.css — người dùng thư viện (không sửa) */\nh3 { color: rgb(37, 99, 235); }\np { font-size: 16px; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>.lib-card h3</code> nặng (0,1,1) nên thắng <code>h3</code> (0,0,1) của người dùng dù đứng trước. Bọc trong <code>:where()</code> đưa độ đặc hiệu về 0 — bất kỳ luật nào của người dùng cũng thắng. Đây là cách các bộ reset hiện đại (và nhiều thư viện) viết giá trị mặc định.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng :is() — giữ độ đặc hiệu của .lib-card, vẫn thua.</li>\n  <li>Sửa styles.css thêm .lib-card — đẩy chiến tranh sang phía người dùng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.3 Đặt tên và tổ chức CSS.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/:where",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "User colour wins inside .lib-card|||Màu của người dùng thắng trong .lib-card",
+            "kiem": "css",
+            "selector": ".lib-card h3",
+            "thuocTinh": "color",
+            "giaTri": "rgb(37, 99, 235)",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "User font size wins|||Cỡ chữ của người dùng thắng",
+            "kiem": "css",
+            "selector": ".lib-card p",
+            "thuocTinh": "font-size",
+            "giaTri": "16px",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "lib.css uses :where()|||lib.css dùng :where()",
+            "kiem": "ma-nguon",
+            "tep": "lib.css",
+            "khop": ":where\\("
+          },
+          {
+            "moTa": "styles.css unchanged|||styles.css không đổi",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "^\\s*h3\\s*\\{\\s*color:\\s*rgb\\(37, 99, 235\\);\\s*\\}\\s*p\\s*\\{\\s*font-size:\\s*16px;\\s*\\}\\s*$"
+          },
+          {
+            "moTa": "No !important|||Không !important",
+            "kiem": "ma-nguon",
+            "khop": "!important",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng :is() — giữ độ đặc hiệu của .lib-card, vẫn thua."
+        },
+        {
+          "loi": "Sửa styles.css thêm .lib-card — đẩy chiến tranh sang phía người dùng."
+        }
+      ]
+    },
+    {
+      "title": "Sửa va chạm tên toàn cục",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "không gian tên",
+        "BEM"
+      ],
+      "prerequisites": [
+        "class selector"
+      ],
+      "tags": [
+        "css",
+        "bem"
+      ],
+      "problemHtml": "<p><em>Bài 12.3 — Đặt tên và tổ chức CSS.</em> Máy chấm đọc giá trị CSS đã tính trên trang của bạn và soi <code>styles.css</code> tìm id, <code>!important</code> và selector lồng.</p><p>Thẻ sản phẩm và footer cùng dùng <code>.title</code>; luật của footer (viết sau) làm hỏng tiêu đề thẻ. Đổi tên trong CẢ HTML và CSS: <code>.product-card__title</code> (20px, <code>rgb(37, 99, 235)</code>) và <code>.site-footer__title</code> (12px, chữ hoa, <code>rgb(156, 163, 175)</code>). Không còn class nào tên trần <code>title</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không phần tử nào còn class \"title\".</li>\n  <li>Tiêu đề thẻ 20px xanh; tiêu đề footer 12px xám chữ hoa.</li>\n  <li>Selector một class, không lồng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Hai tiêu đề độc lập.",
+      "constraints": "Giữ nguyên chữ hiển thị.",
+      "examplesJson": [
+        {
+          "input": ".site-footer__title { font-size: 12px }",
+          "output": "không ảnh hưởng thẻ",
+          "explanation": "Tiền tố khối là không gian tên."
+        }
+      ],
+      "hintsJson": [
+        "Tên khối làm tiền tố: product-card__, site-footer__.",
+        "Đổi class trong HTML trước, rồi đổi selector trong CSS."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article class=\"product-card\"><h3 class=\"title\">Bàn phím</h3></article>\n  <footer class=\"site-footer\"><span class=\"title\">Liên hệ</span></footer>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — va chạm */\n.title { font-size: 20px; color: rgb(37, 99, 235); }\n.title { font-size: 12px; color: rgb(156, 163, 175); text-transform: uppercase; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.3</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article class=\"product-card\"><h3 class=\"product-card__title\">Bàn phím</h3></article>\n  <footer class=\"site-footer\"><span class=\"site-footer__title\">Liên hệ</span></footer>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.3 — mỗi khối một không gian tên: không thể va nhau */\n.product-card__title { font-size: 20px; color: rgb(37, 99, 235); }\n.site-footer__title { font-size: 12px; color: rgb(156, 163, 175); text-transform: uppercase; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mọi class trong một trang chung một bảng tên; tên chung chung như <code>title</code> sớm muộn sẽ bị ai đó dùng lại. Tiền tố khối biến tên thành duy nhất mà không cần công cụ. CSS Modules làm đúng việc này tự động bằng hậu tố băm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa bằng .product-card .title — vẫn để lại tên chung cho người sau va.</li>\n  <li>Chỉ đổi CSS mà quên HTML.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.3 Đặt tên và tổ chức CSS.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://getbem.com/naming/",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "No bare \"title\" class left|||Không còn class \"title\" trần",
+            "kiem": "khong-ton-tai",
+            "selector": ".title"
+          },
+          {
+            "moTa": "Card title 20px blue|||Tiêu đề thẻ 20px xanh",
+            "kiem": "css",
+            "selector": ".product-card__title",
+            "thuocTinh": "font-size",
+            "giaTri": "20px"
+          },
+          {
+            "moTa": "Footer title uppercase grey|||Tiêu đề footer chữ hoa xám",
+            "kiem": "css",
+            "selector": ".site-footer__title",
+            "thuocTinh": "text-transform",
+            "giaTri": "uppercase"
+          },
+          {
+            "moTa": "Hidden: card title colour|||Ẩn: màu tiêu đề thẻ",
+            "an": true,
+            "kiem": "css",
+            "selector": ".product-card__title",
+            "thuocTinh": "color",
+            "giaTri": "rgb(37, 99, 235)"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa bằng .product-card .title — vẫn để lại tên chung cho người sau va."
+        },
+        {
+          "loi": "Chỉ đổi CSS mà quên HTML."
+        }
+      ]
+    },
+    {
+      "title": "Tự viết hàm tính độ đặc hiệu",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "specificity",
+        "regex",
+        ":where"
+      ],
+      "prerequisites": [
+        "regex",
+        "mảng"
+      ],
+      "tags": [
+        "css",
+        "javascript",
+        "specificity"
+      ],
+      "problemHtml": "<p><em>Bài 12.3 — Đặt tên và tổ chức CSS.</em> Máy chấm đọc giá trị CSS đã tính trên trang của bạn và soi <code>styles.css</code> tìm id, <code>!important</code> và selector lồng.</p><p>Viết <code>specificity(selector)</code> trả về mảng <code>[a, b, c]</code> cho một selector ĐƠN (không có dấu phẩy): <code>a</code> = số id (<code>#x</code>), <code>b</code> = số class (<code>.x</code>), thuộc tính (<code>[type=x]</code>) và pseudo-class (<code>:hover</code>), <code>c</code> = số thẻ (<code>div</code>) và pseudo-element (<code>::before</code>). <code>:where(…)</code> và nội dung của nó đóng góp 0; <code>*</code> và các dấu nối (<code>&gt; + ~</code>, khoảng trắng) đóng góp 0. Rồi viết <code>compare(s1, s2)</code> trả <code>1</code> nếu s1 thắng, <code>-1</code> nếu s2 thắng, <code>0</code> nếu bằng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>specificity(\"#nav ul li a.active\")</code> là <code>[1, 1, 3]</code>.</li>\n  <li>:where(…) đóng góp 0; ::before tính vào c; :hover tính vào b.</li>\n  <li>compare so a trước, rồi b, rồi c.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "selector: string (một selector đơn, không có :is/:not).",
+      "outputSpec": "[a, b, c]; -1 | 0 | 1.",
+      "constraints": "Không cần xử lý :is(), :not(), :has().",
+      "examplesJson": [
+        {
+          "input": "specificity(\".btn:hover::before\")",
+          "output": "[0, 2, 1]",
+          "explanation": ".btn và :hover là b; ::before là c."
+        }
+      ],
+      "hintsJson": [
+        "Bỏ :where(...) trước, rồi đếm: /#[\\w-]+/g, /\\.[\\w-]+|\\[[^\\]]+\\]|(?<!:):(?!:)[\\w-]+/g, /::[\\w-]+|(^|[\\s>+~])[a-zA-Z][\\w-]*/g.",
+        "compare: lặp i = 0..2, nếu x[i] !== y[i] trả Math.sign(x[i] - y[i])."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 12.3 — độ đặc hiệu (chưa xong: chỉ đếm class)\nfunction specificity(selector) {\n  const b = (selector.match(/\\.[\\w-]+/g) || []).length;\n  return [0, b, 0];\n}\nfunction compare(s1, s2) {\n  return 0;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 12.3 — độ đặc hiệu [a, b, c] của một selector đơn\nfunction specificity(selector) {\n  // :where(...) luôn đóng góp 0 ⇒ bỏ hẳn phần đó trước khi đếm\n  const s = selector.replace(/:where\\([^)]*\\)/g, ' ');\n  const a = (s.match(/#[\\w-]+/g) || []).length;                         // id\n  const b = (s.match(/\\.[\\w-]+|\\[[^\\]]+\\]|(?<!:):(?!:)[\\w-]+/g) || []).length; // class, [attr], :pseudo-class (không phải ::)\n  const pseudoEl = (s.match(/::[\\w-]+/g) || []).length;                  // ::before, ::after\n  // thẻ: chữ cái đứng đầu chuỗi hoặc ngay sau khoảng trắng / dấu nối (không phải sau . # : [)\n  const tags = (s.match(/(^|[\\s>+~])[a-zA-Z][\\w-]*/g) || []).length;\n  return [a, b, pseudoEl + tags];\n}\n\nfunction compare(s1, s2) {\n  const x = specificity(s1), y = specificity(s2);\n  for (let i = 0; i < 3; i++) {\n    if (x[i] !== y[i]) return Math.sign(x[i] - y[i]);   // cột trái quyết định trước\n  }\n  return 0;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Độ đặc hiệu là ba cột so từ trái sang: một id thắng mọi số class, một class thắng mọi số thẻ. Bỏ <code>:where(...)</code> trước vì nó luôn bằng 0. Regex thẻ chỉ đếm chữ cái ở đầu hoặc sau dấu nối, để <code>a.active</code> đếm <code>a</code> là thẻ còn <code>.active</code> là class.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cộng ba số thành một tổng — 11 class không thắng 1 id.</li>\n  <li>Đếm ::before thành pseudo-class (cột b).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.3 Đặt tên và tổ chức CSS.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Id + class + tags|||Id + class + thẻ",
+            "goi": "specificity(\"#nav ul li a.active\")",
+            "mongDoi": [
+              1,
+              1,
+              3
+            ]
+          },
+          {
+            "moTa": "Pseudo-class and pseudo-element|||Pseudo-class và pseudo-element",
+            "goi": "specificity(\".btn:hover::before\")",
+            "mongDoi": [
+              0,
+              2,
+              1
+            ]
+          },
+          {
+            "moTa": ":where() counts zero|||:where() tính 0",
+            "goi": "[specificity(\":where(.lib-card) h3\"), specificity(\":where(#a .b)\")]",
+            "mongDoi": [
+              [
+                0,
+                0,
+                1
+              ],
+              [
+                0,
+                0,
+                0
+              ]
+            ]
+          },
+          {
+            "moTa": "Attributes count as classes; * and combinators zero|||Thuộc tính tính như class; * và dấu nối tính 0",
+            "goi": "specificity(\"form > input[type=email] + *\")",
+            "mongDoi": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": "compare: one id beats eleven classes|||compare: một id thắng mười một class",
+            "goi": "[compare(\"#x\", \".a.b.c.d.e.f.g.h.i.j.k\"), compare(\"p\", \"div\"), compare(\".a\", \".a .b\")]",
+            "mongDoi": [
+              1,
+              0,
+              -1
+            ]
+          },
+          {
+            "moTa": "Hidden: BEM selector|||Ẩn: selector BEM",
+            "an": true,
+            "goi": "specificity(\".product-card__button--disabled\")",
+            "mongDoi": [
+              0,
+              1,
+              0
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng ba số thành một tổng — 11 class không thắng 1 id."
+        },
+        {
+          "loi": "Đếm ::before thành pseudo-class (cột b)."
+        }
+      ]
+    }
+  ]
+}

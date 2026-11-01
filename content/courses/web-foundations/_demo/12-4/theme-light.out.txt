@@ -1,0 +1,1 @@
+prefers dark? false | --color-bg = #f8fafc | body background rgb(248, 250, 252)

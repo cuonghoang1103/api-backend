@@ -1,0 +1,1 @@
+card title is now 12px rgb(156, 163, 175) uppercase — broken by a rule written for the footer

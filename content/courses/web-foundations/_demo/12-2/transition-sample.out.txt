@@ -1,0 +1,5 @@
+t≈   0ms   linear 100px   ease 100px
+t≈ 250ms   linear 150px   ease 182px
+t≈ 500ms   linear 202px   ease 262px
+t≈ 750ms   linear 250px   ease 292px
+t≈1000ms   linear 300px   ease 300px

@@ -24,7 +24,8 @@ const ma = (lang) => (k, tay, opts = {}) => {
   let s = k ? lay(k, CODE, 'CODE') : tay;
   if (opts.chi) s = s.split('\n').slice(opts.chi[0] - 1, opts.chi[1]).join('\n');
   // gon: bỏ chú thích cuối dòng (// …) và dòng chỉ có chú thích — slide hẹp, bài đọc vẫn giữ đủ chú thích
-  if (opts.gon !== false) s = s.split('\n').filter((l) => !/^\s*\/\/(?!\s*-)/.test(l)).map((l) => l.replace(/\s+\/\/ .*$/, '')).join('\n');
+  if (opts.gon !== false) s = s.split('\n').filter((l) => !/^\s*\/\/(?!\s*-)/.test(l) && !/^\s*\/\*.*\*\/\s*$/.test(l))
+    .map((l) => l.replace(/\s+\/\/ .*$/, '').replace(/(\S)\s+\/\*.*\*\/\s*$/, '$1')).join('\n');
   return sql(s.replace(/\n+$/, ''), { lang, sm: opts.sm ?? true, hl: opts.hl || [] });
 };
 export const js = ma('javascript');

@@ -9,7 +9,9 @@
  *   *.js   ⇒ script CỔ ĐIỂN (không strict trừ khi tự ghi 'use strict') — như <script src>
  *   *.mjs  ⇒ <script type="module"> (luôn strict, this ở cấp cao nhất = undefined)
  *   *.html ⇒ mở trang qua máy chủ http tạm (127.0.0.1, cổng ngẫu nhiên); <meta name="chup" content="800x450">
- *            ⇒ chụp ảnh khung nhìn ra <tên>.png; <meta name="cho" content="1500"> ⇒ chờ thêm N ms trước khi chốt.
+ *            ⇒ chụp ảnh khung nhìn ra <tên>.png; <meta name="cho" content="1500"> ⇒ chờ thêm N ms trước khi chốt;
+ *            <meta name="mo-phong" content="colorScheme=dark,reducedMotion=reduce"> ⇒ giả lập media (prefers-color-scheme…).
+ *            <meta name="cho-xong"> ⇒ chờ tới khi trang đặt window.__xong = true rồi mới chốt output + chụp ảnh.
  * Ghi <tên>.out.txt = các dòng console (mỗi lời gọi một dòng) + "Uncaught <Tên>: <thông điệp>" cho lỗi chưa bắt.
  * Tệp có dòng đầu chứa "chay: tay" ⇒ bỏ qua (output do công cụ khác chụp — Vitest, Vite…, ghi tay *.out.txt).
  *
@@ -86,12 +88,16 @@ for (const d of dirs) {
     if (ext === '.html') {
       const m = /<meta name="chup" content="(\d+)x(\d+)"/.exec(src); if (m) { chup = [+m[1], +m[2]]; await page.setViewportSize({ width: chup[0], height: chup[1] }); }
       const w = /<meta name="cho" content="(\d+)"/.exec(src); if (w) cho = +w[1];
+      // <meta name="mo-phong" content="colorScheme=dark,reducedMotion=reduce"> ⇒ page.emulateMedia(...)
+      const mp = /<meta name="mo-phong" content="([^"]+)"/.exec(src);
+      if (mp) await page.emulateMedia(Object.fromEntries(mp[1].split(',').map((kv) => kv.trim().split('='))));
       await page.goto(`${GOC_URL}/${d}/${f}`, { waitUntil: 'load' });
     } else {
       await page.goto(`${GOC_URL}/__trong`, { waitUntil: 'load' });
       await page.addScriptTag(ext === '.mjs' ? { url: `${GOC_URL}/${d}/${f}`, type: 'module' } : { url: `${GOC_URL}/${d}/${f}` }).catch(() => {});
     }
     await page.waitForTimeout(cho);
+    if (ext === '.html' && /<meta name="cho-xong"/.test(src)) await page.waitForFunction(() => window.__xong === true, null, { timeout: 15000 });
     const lines = await page.evaluate(() => window.__dong);
     const out = p.replace(/\.(m?js|html)$/, '.out.txt');
     fs.writeFileSync(out, lines.join('\n') + '\n');

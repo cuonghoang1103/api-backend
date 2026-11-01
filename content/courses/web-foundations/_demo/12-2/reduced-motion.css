@@ -1,0 +1,13 @@
+.card { transition: transform 300ms ease; }
+.card:hover { transform: scale(1.05); }
+.spinner { animation: spin 800ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* respect the user's operating-system setting */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

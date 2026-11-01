@@ -38,6 +38,8 @@
  *   - Bảng kiểu mặc định của jsdom bị tính như CSS tác giả (`:link` (0,1,0) thắng `nav a`);
  *     script vá bằng cách bọc nó trong :where() lúc nạp. Hai !important đánh nhau thì jsdom lấy
  *     cái sau cùng (trình duyệt so độ đặc hiệu) — chỉ ảnh hưởng code khởi đầu cố ý có !important.
+ *   - Không giải var(), không hiểu @layer, không có prefers-color-scheme ⇒ kiểm khai `chiTrinhDuyet: true`
+ *     được BỎ QUA ở đây (máy chấm trình duyệt thật vẫn chấm). Dùng cho Ch12 (token, layer, theme).
  *   - Trình duyệt có margin mặc định 8px cho body; jsdom không ⇒ script chèn
  *     `body{margin:8px}` làm bảng kiểu đầu tiên (tác giả đè được như thật).
  */
@@ -448,6 +450,10 @@ const LOAI_JS = new Set(['js', 'console', 'module']);
 
 async function chayKiem(k, files, tj) {
   if (k.kiem === 'ma-nguon') return chayKiemDom(k, files, tj.tepHtml, null);
+  // chiTrinhDuyet (01/11/2026, Ch12 CSS nâng cao): kiểm cần CSS mà jsdom không có — var(), @layer,
+  // prefers-color-scheme, transition-* đã tính… ⇒ jsdom BỎ QUA; máy chấm trình duyệt thật vẫn chấm đầy đủ
+  // (scripts/codelab-kiem-cham-trinh-duyet.mjs là thước đo chuẩn).
+  if (k.chiTrinhDuyet) return { boQua: 'chỉ chấm được trong trình duyệt thật (var/@layer/@media màu)' };
   if (tj.loai === 'module') return chamKiemModule(tj, k, files);
   if (LOAI_JS.has(tj.loai)) return chamKiemJs(tj, k, files);
   if (tj.chayScript) {

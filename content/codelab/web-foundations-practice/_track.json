@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao + Chương 12 CSS nâng cao.",
   "modules": [
     {
       "slug": "wf-2-1-html-basics",
@@ -158,6 +158,30 @@
       "name": "11.5 Biểu thức chính quy, vừa đủ dùng",
       "level": "INTERMEDIATE",
       "description": "Số di động Việt Nam có neo, đuôi ảnh không phân biệt hoa thường, đổi ngày bằng nhóm có tên, rút điểm bằng matchAll, slugify tiếng Việt, đếm từ nguyên vẹn có hiểu Unicode — 6 bài."
+    },
+    {
+      "slug": "wf-12-1-position-stacking",
+      "name": "12.1 Position và ngữ cảnh xếp chồng",
+      "level": "INTERMEDIATE",
+      "description": "Huy hiệu ở góc thẻ, header dính, thông báo cố định góc màn hình, lớp phủ toàn màn hình, đưa modal ra khỏi ngữ cảnh xếp chồng, thang z-index bằng token — 6 bài, chấm bằng giá trị CSS đã tính."
+    },
+    {
+      "slug": "wf-12-2-transition-animation",
+      "name": "12.2 Chuyển cảnh và hoạt hình",
+      "level": "INTERMEDIATE",
+      "description": "Nút đổi màu mượt, gọi tên thuộc tính thay vì all, accordion bằng grid 0fr→1fr, spinner @keyframes, ngăn kéo trượt bằng transform, khối prefers-reduced-motion — 6 bài."
+    },
+    {
+      "slug": "wf-12-3-css-architecture",
+      "name": "12.3 Đặt tên và tổ chức CSS",
+      "level": "INTERMEDIATE",
+      "description": "Đổi tên theo BEM, gỡ id và !important khỏi thanh điều hướng, xếp lớp bằng @layer, giá trị mặc định dễ đè bằng :where(), sửa va chạm tên toàn cục, tự viết hàm tính độ đặc hiệu — 6 bài."
+    },
+    {
+      "slug": "wf-12-4-tokens-theming",
+      "name": "12.4 Token thiết kế và chế độ sáng/tối",
+      "level": "INTERMEDIATE",
+      "description": "Khai báo token trên :root, component chỉ dùng token, sửa bẫy thiếu đơn vị, theme tối bằng [data-theme], nút chuyển theme bằng JavaScript, hàm tính tỉ lệ tương phản WCAG — 6 bài."
     }
   ]
 }

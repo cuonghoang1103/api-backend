@@ -52,7 +52,8 @@ export default {
   type: 'DOCUMENT',
   isFreePreview: true,
   description: 'Regex là gì, test/match, mười ký hiệu cần thiết, neo ^$, nhóm và replace, bẫy cờ g, tham lam và lười, tiếng Việt (\\p{L}, NFC), kiểm e-mail vừa đủ, làm sạch chữ và slugify, ReDoS đo thật trong Chromium.',
-  content: `${G}
+  content: `
+${G}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.5</span>
 <h2>A small pattern language for text</h2>

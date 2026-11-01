@@ -266,6 +266,36 @@
       "name": "6.8 🧪 Practice — sorting linked lists of cars, PE style",
       "level": "INTERMEDIATE",
       "description": "Luyện: Merge sort on a linked list of cars: price, then owner — O(n log n), no new nodes · PE style: sort only positions i..j of a linked list, descending by price · Insertion sort of a linked list by relinking nodes (stable)"
+    },
+    {
+      "slug": "csd201-bam",
+      "name": "7.1 Hash tables & collisions",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Two values with sum K: one pass with a HashSet · Word frequencies with a HashMap, and the top k · Group anagrams with a HashMap keyed by the sorted letters"
+    },
+    {
+      "slug": "csd201-ham-bam",
+      "name": "7.2 Hash functions & the hashCode/equals contract",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Polynomial hashing by Horner’s rule — and counting collisions · Your own key class: equals and hashCode that agree · Rabin–Karp: find every occurrence with a rolling hash"
+    },
+    {
+      "slug": "csd201-va-cham",
+      "name": "7.3 Collision handling in depth",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Linear probing with \"deleted\" marks: insert, search, delete · Quadratic probing with car plates: h, h+1, h+4, h+9, … · Separate chaining: one linked list per bucket"
+    },
+    {
+      "slug": "csd201-load-factor",
+      "name": "7.4 Load factor, rehashing & Java HashMap",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: A chained hash table that doubles when the load factor passes 0.75 · A bad hashCode turns HashMap into a list: fix the key class · An open-addressing int set that grows: no boxing, two million values"
+    },
+    {
+      "slug": "csd201-on-ch7",
+      "name": "7.5 🧪 Practice — consecutive runs, subarray sums, a PE-style chained catalogue",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: The longest run of consecutive integers in O(n) · How many subarrays sum to K? Prefix sums in a HashMap · PE style: a book catalogue with separate chaining (f1–f4)"
     }
   ]
 }

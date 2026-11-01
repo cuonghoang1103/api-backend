@@ -1035,5 +1035,116 @@
    "R 1 4 : A 5 B 2 C 9 D 4 E 7 F 1 -> (A,5) (C,9) (E,7) (D,4) (B,2) (F,1)\nR 0 9 : A 5 B 2 C 9 -> (C,9) (A,5) (B,2)\nR 2 99 : A 1 B 2 C 3 D 4 -> (A,1) (B,2) (D,4) (C,3)\n",
    "R 0 3 : A 5 B 7 C 5 D 7 -> (B,7) (D,7) (A,5) (C,5)\nR 3 1 : A 1 B 2 C 3 D 4 -> (A,1) (B,2) (C,3) (D,4)\nR 5 6 : A 1 B 2 -> (A,1) (B,2)\nR 2 2 : A 1 B 2 C 3 -> (A,1) (B,2) (C,3)\n"
   ]
+ },
+ "csd201-7-1-group-anagrams": {
+  "bam": "a6b4c30c99766686",
+  "ra": [
+   "eat tea tan ate nat bat -> [[eat, tea, ate], [tan, nat], [bat]]\nlisten silent enlist google -> [[listen, silent, enlist], [google]]\n",
+   "a a b -> [[a, a], [b]]\nabc cab bca abc -> [[abc, cab, bca, abc]]\nxy yz -> [[xy], [yz]]\n"
+  ]
+ },
+ "csd201-7-1-pair-sum": {
+  "bam": "2e02043d5cba4b2f",
+  "ra": [
+   "9 : 2 7 11 15 -> 2 + 7 = 9 | distinct 4\n10 : 1 4 6 5 5 -> 4 + 6 = 10 | distinct 4\n8 : 4 4 -> 4 + 4 = 8 | distinct 1\n8 : 4 -> none | distinct 1\n",
+   "0 : -3 1 3 -1 -> -3 + 3 = 0 | distinct 4\n4294967294 : 2147483647 2147483647 -> 2147483647 + 2147483647 = 4294967294 | distinct 1\n100 : 1 2 3 -> none | distinct 3\n",
+   "PERF -> n = 1,000,000, K odd: OK, none / distinct 1000000\n"
+  ]
+ },
+ "csd201-7-1-word-frequency": {
+  "bam": "34b9b50672ee11c9",
+  "ra": [
+   "3 : the cat and the hat and THE bat -> [the=3, and=2, bat=1]\n2 : To be, or not to be: that is the question. -> [be=2, to=2]\n",
+   "5 : b a c b a c -> [a=2, b=2, c=2]\n2 : hello...hello,world!! -> [hello=2, world=1]\n4 : --- -> []\n"
+  ]
+ },
+ "csd201-7-2-equals-hashcode": {
+  "bam": "737af6cbe6f815d6",
+  "ra": [
+   "ADD 29A-123.45 An -> true | set size 1, map size 1\nADD 29a_12345 Binh -> false | set size 1, map size 1\nHAS 29A12345 -> true | set size 1, map size 1\nOWNER 29a-123.45 -> Binh | set size 1, map size 1\nADD 30E-999.99 Chi -> true | set size 2, map size 2\nHAS 30e99999 -> true | set size 2, map size 2\nHAS 29A-123.46 -> false | set size 2, map size 2\nSAME 29A-123.45 29a_123_45 -> equals true, same hash true, equals(null) false, equals(String) false | set size 2, map size 2\n",
+   "ADD 51F-100.00 X -> true | set size 1, map size 1\nADD 51F-001.00 Y -> true | set size 2, map size 2\nHAS 51f10000 -> true | set size 2, map size 2\nOWNER 51F00100 -> Y | set size 2, map size 2\nSAME 51F-100.00 51F-001.00 -> equals false, same hash false, equals(null) false, equals(String) false | set size 2, map size 2\nSAME a-b A_B -> equals true, same hash true, equals(null) false, equals(String) false | set size 2, map size 2\n"
+  ]
+ },
+ "csd201-7-2-polynomial-hash": {
+  "bam": "2602a5948fa27025",
+  "ra": [
+   "HASH a -> 97 (String.hashCode 97) bucket13=6\nHASH abc -> 96354 (String.hashCode 96354) bucket13=11\nHASH Aa -> 2112 (String.hashCode 2112) bucket13=6\nHASH BB -> 2112 (String.hashCode 2112) bucket13=6\nCOLL 13 : Aa BB cat dog cat -> 1\n",
+   "HASH polygenelubricants -> -2147483648 (String.hashCode -2147483648) bucket13=2\nHASH hashtable -> 328463232 (String.hashCode 328463232) bucket13=6\nCOLL 7 : one two three four five six seven eight -> 3\nCOLL 1000 : alpha beta gamma -> 0\n"
+  ]
+ },
+ "csd201-7-2-rabin-karp": {
+  "bam": "7247ff725121f01a",
+  "ra": [
+   "abracadabra | abra -> [0, 7]\naaaaa | aa -> [0, 1, 2, 3]\nhello world | xyz -> []\nabc | abc -> [0]\n",
+   "ab | abc -> []\nbanana | a -> [1, 3, 5]\nmississippi | issi -> [1, 4]\n",
+   "PERF -> n = 1,000,000, m = 50,000: OK, found [50000, 150000, 250000, 350000, 450000, 550000, 650000, 750000, 850000, 950000]\n"
+  ]
+ },
+ "csd201-7-3-linear-probing": {
+  "bam": "7700b7417132462d",
+  "ra": [
+   "INS 10 -> true | [. . . 10 . . .]\nINS 17 -> true | [. . . 10 17 . .]\nINS 24 -> true | [. . . 10 17 24 .]\nINS 5 -> true | [. . . 10 17 24 5]\nFIND 24 -> 5 | [. . . 10 17 24 5]\nDEL 17 -> true | [. . . 10 D 24 5]\nFIND 24 -> 5 | [. . . 10 D 24 5]\nFIND 17 -> -1 | [. . . 10 D 24 5]\nINS 31 -> true | [. . . 10 31 24 5]\nINS 24 -> false | [. . . 10 31 24 5]\n",
+   "INS 4 -> true | [. . . . 4]\nINS 9 -> true | [9 . . . 4]\nINS 14 -> true | [9 14 . . 4]\nINS 0 -> true | [9 14 0 . 4]\nINS 1 -> true | [9 14 0 1 4]\nINS 2 -> false | [9 14 0 1 4]\nFIND 1 -> 3 | [9 14 0 1 4]\nDEL 4 -> true | [9 14 0 1 D]\nINS 19 -> true | [9 14 0 1 19]\nFIND 14 -> 1 | [9 14 0 1 19]\nDEL 99 -> false | [9 14 0 1 19]\n"
+  ]
+ },
+ "csd201-7-3-quadratic-probing": {
+  "bam": "4b62c9c44760ecca",
+  "ra": [
+   "ADD Aa An -> h=5 probes: 5 -> slot 5\nADD BB Binh -> h=5 probes: 5 6 -> slot 6\nADD C5 Chi -> h=2 probes: 2 -> slot 2\nADD Aa Dup -> duplicate\nOWNER BB -> Binh\nOWNER ZZ -> ?\nADD AaAa Dung -> h=1 probes: 1 -> slot 1\nADD BBBB Em -> h=1 probes: 1 2 5 3 -> slot 3\n",
+   "ADD Aa x -> h=0 probes: 0 -> slot 0\nADD BB y -> h=0 probes: 0 1 -> slot 1\nADD AaBB z -> no slot\nADD BBAa w -> no slot\nOWNER AaBB -> ?\nOWNER BBAa -> ?\n"
+  ]
+ },
+ "csd201-7-3-separate-chaining": {
+  "bam": "05a4ee28ec3fcbd5",
+  "ra": [
+   "PUT 12 a -> ok | 0: (empty) | 1: (empty) | 2: 12 | 3: (empty) | 4: (empty)\nPUT 7 b -> ok | 0: (empty) | 1: (empty) | 2: 7 12 | 3: (empty) | 4: (empty)\nPUT 22 c -> ok | 0: (empty) | 1: (empty) | 2: 22 7 12 | 3: (empty) | 4: (empty)\nPUT 3 d -> ok | 0: (empty) | 1: (empty) | 2: 22 7 12 | 3: 3 | 4: (empty)\nPUT 17 e -> ok | 0: (empty) | 1: (empty) | 2: 17 22 7 12 | 3: 3 | 4: (empty)\nGET 22 -> c | 0: (empty) | 1: (empty) | 2: 17 22 7 12 | 3: 3 | 4: (empty)\nPUT 7 B -> ok | 0: (empty) | 1: (empty) | 2: 17 22 7 12 | 3: 3 | 4: (empty)\nGET 7 -> B | 0: (empty) | 1: (empty) | 2: 17 22 7 12 | 3: 3 | 4: (empty)\nDEL 22 -> true | 0: (empty) | 1: (empty) | 2: 17 7 12 | 3: 3 | 4: (empty)\nDEL 17 -> true | 0: (empty) | 1: (empty) | 2: 7 12 | 3: 3 | 4: (empty)\nDEL 99 -> false | 0: (empty) | 1: (empty) | 2: 7 12 | 3: 3 | 4: (empty)\nGET 22 -> null | 0: (empty) | 1: (empty) | 2: 7 12 | 3: 3 | 4: (empty)\n",
+   "PUT 1 x -> ok | 0: 1\nPUT 2 y -> ok | 0: 2 1\nPUT 3 z -> ok | 0: 3 2 1\nDEL 3 -> true | 0: 2 1\nDEL 1 -> true | 0: 2\nGET 2 -> y | 0: 2\nDEL 2 -> true | 0: (empty)\nPUT 4 w -> ok | 0: 4\n"
+  ]
+ },
+ "csd201-7-4-bad-hashcode": {
+  "bam": "3c09d7b6412902be",
+  "ra": [
+   "PUT 1 2 10 -> size 1\nPUT 2 1 20 -> size 2\nPUT 1 2 30 -> size 2\nGET 1 2 -> 30\nGET 2 1 -> 20\nGET 3 3 -> null\n",
+   "PERF -> 1000 x 1000 grid: OK, sum 511213536, equal cells same hash true, (3,4) vs (4,3) different true\n"
+  ]
+ },
+ "csd201-7-4-open-addressing-set": {
+  "bam": "8325542b7aac2376",
+  "ra": [
+   "ADD 5 -> true | size 1, capacity 8\nADD -5 -> true | size 2, capacity 8\nADD 0 -> true | size 3, capacity 8\nADD 5 -> false | size 3, capacity 8\nADD 100 -> true | size 4, capacity 8\nADD 2147483647 -> true | size 5, capacity 16\nHAS -5 -> true | size 5, capacity 16\nHAS 6 -> false | size 5, capacity 16\nADD 7 -> true | size 6, capacity 16\nADD 8 -> true | size 7, capacity 16\nHAS 2147483647 -> true | size 7, capacity 16\n",
+   "ADD 1024 -> true | size 1, capacity 8\nADD 2048 -> true | size 2, capacity 8\nADD 4096 -> true | size 3, capacity 8\nADD 8192 -> true | size 4, capacity 8\nADD 16384 -> true | size 5, capacity 16\nADD 32768 -> true | size 6, capacity 16\nHAS 8192 -> true | size 6, capacity 16\nHAS 3072 -> false | size 6, capacity 16\n",
+   "PERF -> 2,000,000 adds: OK, distinct 1105036 | size 0, capacity 8\n"
+  ]
+ },
+ "csd201-7-4-rehash": {
+  "bam": "8178d05ac7890034",
+  "ra": [
+   "ADD 1 -> true | cap 4, size 1: 0[(empty)] 1[1] 2[(empty)] 3[(empty)]\nADD 5 -> true | cap 4, size 2: 0[(empty)] 1[5 1] 2[(empty)] 3[(empty)]\nADD 9 -> true | cap 4, size 3: 0[(empty)] 1[9 5 1] 2[(empty)] 3[(empty)]\nADD 2 -> true | cap 8, size 4: 0[(empty)] 1[1 9] 2[2] 3[(empty)] 4[(empty)] 5[5] 6[(empty)] 7[(empty)]\nADD 13 -> true | cap 8, size 5: 0[(empty)] 1[1 9] 2[2] 3[(empty)] 4[(empty)] 5[13 5] 6[(empty)] 7[(empty)]\nADD 5 -> false | cap 8, size 5: 0[(empty)] 1[1 9] 2[2] 3[(empty)] 4[(empty)] 5[13 5] 6[(empty)] 7[(empty)]\nHAS 13 -> true | cap 8, size 5: 0[(empty)] 1[1 9] 2[2] 3[(empty)] 4[(empty)] 5[13 5] 6[(empty)] 7[(empty)]\nHAS 6 -> false | cap 8, size 5: 0[(empty)] 1[1 9] 2[2] 3[(empty)] 4[(empty)] 5[13 5] 6[(empty)] 7[(empty)]\nADD 6 -> true | cap 8, size 6: 0[(empty)] 1[1 9] 2[2] 3[(empty)] 4[(empty)] 5[13 5] 6[6] 7[(empty)]\nADD 7 -> true | cap 16, size 7: 0[(empty)] 1[1] 2[2] 3[(empty)] 4[(empty)] 5[5] 6[6] 7[7] 8[(empty)] 9[9] 10[(empty)] 11[(empty)] 12[(empty)] 13[13] 14[(empty)] 15[(empty)]\nADD 17 -> true | cap 16, size 8: 0[(empty)] 1[17 1] 2[2] 3[(empty)] 4[(empty)] 5[5] 6[6] 7[7] 8[(empty)] 9[9] 10[(empty)] 11[(empty)] 12[(empty)] 13[13] 14[(empty)] 15[(empty)]\n",
+   "ADD 0 -> true | cap 4, size 1: 0[0] 1[(empty)] 2[(empty)] 3[(empty)]\nADD 8 -> true | cap 4, size 2: 0[8 0] 1[(empty)] 2[(empty)] 3[(empty)]\nADD 16 -> true | cap 4, size 3: 0[16 8 0] 1[(empty)] 2[(empty)] 3[(empty)]\nADD 24 -> true | cap 8, size 4: 0[0 8 16 24] 1[(empty)] 2[(empty)] 3[(empty)] 4[(empty)] 5[(empty)] 6[(empty)] 7[(empty)]\nADD 32 -> true | cap 8, size 5: 0[32 0 8 16 24] 1[(empty)] 2[(empty)] 3[(empty)] 4[(empty)] 5[(empty)] 6[(empty)] 7[(empty)]\nADD 40 -> true | cap 8, size 6: 0[40 32 0 8 16 24] 1[(empty)] 2[(empty)] 3[(empty)] 4[(empty)] 5[(empty)] 6[(empty)] 7[(empty)]\nADD 48 -> true | cap 16, size 7: 0[16 0 32 48] 1[(empty)] 2[(empty)] 3[(empty)] 4[(empty)] 5[(empty)] 6[(empty)] 7[(empty)] 8[24 8 40] 9[(empty)] 10[(empty)] 11[(empty)] 12[(empty)] 13[(empty)] 14[(empty)] 15[(empty)]\nHAS 40 -> true | cap 16, size 7: 0[16 0 32 48] 1[(empty)] 2[(empty)] 3[(empty)] 4[(empty)] 5[(empty)] 6[(empty)] 7[(empty)] 8[24 8 40] 9[(empty)] 10[(empty)] 11[(empty)] 12[(empty)] 13[(empty)] 14[(empty)] 15[(empty)]\nHAS 41 -> false | cap 16, size 7: 0[16 0 32 48] 1[(empty)] 2[(empty)] 3[(empty)] 4[(empty)] 5[(empty)] 6[(empty)] 7[(empty)] 8[24 8 40] 9[(empty)] 10[(empty)] 11[(empty)] 12[(empty)] 13[(empty)] 14[(empty)] 15[(empty)]\n",
+   "PERF -> 1,000,000 adds + 1,000,000 lookups: OK, found 142858, capacity 2097152 | \n"
+  ]
+ },
+ "csd201-7-5-book-catalogue": {
+  "bam": "4b9dc6a3ec2d0bf9",
+  "ra": [
+   "ADD 978-1 2001 Clean Code -> true | 0:- | 1:- | 2:978-1 | 3:- | 4:-\nADD 978-2 1994 Design Patterns -> true | 0:- | 1:- | 2:978-1 | 3:978-2 | 4:-\nADD 978-3 2014 Java 8 in Action -> true | 0:- | 1:- | 2:978-1 | 3:978-2 | 4:978-3\nADD 978-6 1999 Refactoring -> true | 0:- | 1:- | 2:978-6 978-1 | 3:978-2 | 4:978-3\nADD 978-7 2005 Head First Java -> true | 0:- | 1:- | 2:978-6 978-1 | 3:978-7 978-2 | 4:978-3\nADD 978-1 2020 Duplicate -> false | 0:- | 1:- | 2:978-6 978-1 | 3:978-7 978-2 | 4:978-3\nADD 978-9 1850 Too Old -> false | 0:- | 1:- | 2:978-6 978-1 | 3:978-7 978-2 | 4:978-3\nFIND 978-2 -> Design Patterns (1994) | 0:- | 1:- | 2:978-6 978-1 | 3:978-7 978-2 | 4:978-3\nFIND 000-0 -> not found | 0:- | 1:- | 2:978-6 978-1 | 3:978-7 978-2 | 4:978-3\nLONGEST -> bucket 2: 2 books | 0:- | 1:- | 2:978-6 978-1 | 3:978-7 978-2 | 4:978-3\nOLDER 2000 -> 2 | 0:- | 1:- | 2:978-1 | 3:978-7 | 4:978-3\nLONGEST -> bucket 2: 1 books | 0:- | 1:- | 2:978-1 | 3:978-7 | 4:978-3\n",
+   "ADD a 1990 A -> true | 0:a\nADD b 2000 B -> true | 0:b a\nADD c 1980 C -> true | 0:c b a\nADD d 2010 D -> true | 0:d c b a\nOLDER 1995 -> 2 | 0:d b\nOLDER 3000 -> 2 | 0:-\nLONGEST -> bucket 0: 0 books | 0:-\nFIND b -> not found | 0:-\n"
+  ]
+ },
+ "csd201-7-5-longest-consecutive": {
+  "bam": "2b7612d1bb954559",
+  "ra": [
+   "100 4 200 1 3 2 -> 4\n0 3 7 2 5 8 4 6 0 1 -> 9\n1 2 2 3 -> 3\n- -> 0\n",
+   "-1 -2 0 1 5 -> 4\n2147483647 2147483646 -2147483648 -> 2\n10 -> 1\n",
+   "PERF -> n = 1,000,000: OK, longest 1000000\n"
+  ]
+ },
+ "csd201-7-5-subarray-sum": {
+  "bam": "f56c93b62757f9db",
+  "ra": [
+   "2 : 1 1 1 -> 2\n3 : 1 2 3 -> 2\n0 : 1 -1 1 -1 -> 4\n7 : 3 4 7 2 -3 1 4 2 -> 4\n",
+   "0 : 0 0 0 0 -> 10\n100 : 1 2 3 -> 0\n4000000000 : 2000000000 2000000000 -> 1\n",
+   "PERF -> n = 1,000,000: OK, count 115398513\n"
+  ]
  }
 }

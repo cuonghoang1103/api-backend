@@ -749,7 +749,7 @@ if (!CHI) {
     docsUrl: 'https://developer.mozilla.org/vi/docs/Learn',
     status: 'PUBLISHED', // chủ web duyệt công khai 14/10/2026 (đã nạp prod)
     level: 'BEGINNER',
-    description: `Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. ${[['wf-2-', 'Chương 2 HTML'], ['wf-3-', 'Chương 3 CSS'], ['wf-4-', 'Chương 4 JavaScript'], ['wf-5-', 'Chương 5 JS bất đồng bộ & modules']].filter(([p]) => modules.some((m) => m.slug.startsWith(p))).map(([, t]) => t).join(' + ')}.`,
+    description: `Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. ${[['wf-1-', 'Chương 1 công cụ'], ['wf-2-', 'Chương 2 HTML'], ['wf-3-', 'Chương 3 CSS'], ['wf-4-', 'Chương 4 JavaScript'], ['wf-5-', 'Chương 5 JS bất đồng bộ & modules'], ['wf-11-', 'Chương 11 JS nâng cao'], ['wf-12-', 'Chương 12 CSS nâng cao'], ['wf-13-', 'Chương 13 kiểm thử'], ['wf-14-', 'Chương 14 đưa lên mạng']].filter(([p]) => modules.some((m) => m.slug.startsWith(p))).map(([, t]) => t).join(' + ')}.`,
     modules: modules.map((m) => ({ slug: m.slug, name: m.ten, level: m.level || 'BEGINNER', description: m.moTa })),
   };
   const tepTrack = path.join(THU_MUC, '_track.json');

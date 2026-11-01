@@ -1,0 +1,10 @@
+rabbit.jumps    true
+rabbit.eats     true
+rabbit.describe eats: true
+rabbit.flies    undefined
+own jumps? true | own eats? false
+'eats' in rabbit? true
+step 0 ['jumps']
+step 1 ['eats', 'describe']
+step 2 (Object.prototype: toString, hasOwnProperty, ...)
+end of chain: null

@@ -1,0 +1,5 @@
+typeof Product: function
+describe lives on the prototype? true
+own keys of p: ['name']
+JSON: {"name":"Mouse"}
+calling without new -> TypeError: Class constructor Product cannot be invoked without 'new'

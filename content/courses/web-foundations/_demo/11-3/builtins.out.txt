@@ -1,0 +1,7 @@
+list.map comes from Array.prototype? true
+own keys of list: ['0', '1', '2']
+true
+30
+for...in sees key: 0
+for...in sees key: 1
+for...in sees key: last

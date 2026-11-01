@@ -1,0 +1,7 @@
+groups by number: 2026 11 01
+named groups    : 01/11/2026
+01/11/2026
+price: 1.200.000đ
+Lan -> 9
+Minh -> 7
+Chi -> 10

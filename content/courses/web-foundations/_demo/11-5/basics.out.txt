@@ -1,0 +1,5 @@
+false true
+true cat i
+one match : ['1']
+all (g)   : ['1', '22', '333']
+no match  : null

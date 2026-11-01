@@ -7,7 +7,7 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao.",
   "modules": [
     {
       "slug": "wf-2-1-html-basics",
@@ -128,6 +128,36 @@
       "name": "5.5 ES modules: chia code thành nhiều file",
       "level": "BEGINNER",
       "description": "export có tên và export default, import đúng dạng, đường dẫn tương đối có đuôi .js, tách một tệp lớn thành module, module chạy một lần và trạng thái dùng chung, gom export qua index.js, ghép một ứng dụng nhỏ nhiều module — 7 bài, máy chấm nạp module thật."
+    },
+    {
+      "slug": "wf-11-1-closure",
+      "name": "11.1 Closure: hàm nhớ được nơi nó sinh ra",
+      "level": "INTERMEDIATE",
+      "description": "Bộ đếm riêng tư, hàm nhà máy, bộ giới hạn lượt gọi, bẫy var trong vòng lặp, once và memoize — 6 bài, mỗi lần kiểm chạy trong realm mới."
+    },
+    {
+      "slug": "wf-11-2-this",
+      "name": "11.2 this: bốn luật giải thích tất cả",
+      "level": "INTERMEDIATE",
+      "description": "Mất this khi tách method, callback và bind, call/apply, arrow trong method, arrow làm method (bẫy), tự viết bind — 6 bài."
+    },
+    {
+      "slug": "wf-11-3-prototype-class",
+      "name": "11.3 Prototype và class: object kế thừa thế nào",
+      "level": "INTERMEDIATE",
+      "description": "Class đầu tiên, Object.create và chuỗi prototype, giỏ hàng có #private + getter, lớp con với super, lớp lỗi riêng extends Error, tự viết new — 6 bài."
+    },
+    {
+      "slug": "wf-11-4-map-set-immutable",
+      "name": "11.4 Map, Set và tư duy bất biến",
+      "level": "INTERMEDIATE",
+      "description": "Xoá trùng bằng Set, đếm từ bằng Map, đảo trạng thái todo không sửa gốc, thêm thẻ không trùng, gom nhóm vào Map, cập nhật lồng nhiều tầng bất biến — 6 bài, kiểm cả tham chiếu."
+    },
+    {
+      "slug": "wf-11-5-regex",
+      "name": "11.5 Biểu thức chính quy, vừa đủ dùng",
+      "level": "INTERMEDIATE",
+      "description": "Số di động Việt Nam có neo, đuôi ảnh không phân biệt hoa thường, đổi ngày bằng nhóm có tên, rút điểm bằng matchAll, slugify tiếng Việt, đếm từ nguyên vẹn có hiểu Unicode — 6 bài."
     }
   ]
 }

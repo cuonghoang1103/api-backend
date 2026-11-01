@@ -1,0 +1,4 @@
+['1', '[object Object]']
+Minh
+4 number one | string one | Lan | Minh
+has minh? true | delete 1: true | size now 3

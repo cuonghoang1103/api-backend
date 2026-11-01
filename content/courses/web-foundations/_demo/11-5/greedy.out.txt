@@ -1,0 +1,3 @@
+greedy .+  : <b>bold</b> and <i>italic</i>
+lazy   .+? : <b>
+all tags   : ['<b>', '</b>', '<i>', '</i>']

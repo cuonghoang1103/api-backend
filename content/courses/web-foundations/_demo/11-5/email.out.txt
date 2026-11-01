@@ -1,0 +1,6 @@
+lan@example.com            true
+lan.nguyen+shop@mail.co    true
+lan@localhost              false
+lan @example.com           false
+lan@@example.com           false
+a@b.c                      true

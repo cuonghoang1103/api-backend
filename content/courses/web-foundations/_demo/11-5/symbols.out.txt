@@ -1,0 +1,9 @@
+/^\d{10}$/           "0912345678"    true - exactly 10 digits, nothing else
+/^\d{10}$/           "091 234 5678"  false - spaces are not digits
+/^0[35789]\d{8}$/    "0912345678"    true - VN mobile: 0 + 3/5/7/8/9 + 8 digits
+/^0[35789]\d{8}$/    "0212345678"    false - 02... is a landline prefix
+/colou?r/            "color"         true - ? = the u is optional
+/^[A-Z][a-z]+$/      "Hanoi"         true - one capital, then lowercase letters
+/^\w+$/              "user_01"       true - \w = letters, digits, underscore
+/^(jpg|png|webp)$/i  "PNG"           true - | = or, i = ignore case
+/^.{3,5}$/           "abcdef"        false - . = any char, {3,5} = 3 to 5 times

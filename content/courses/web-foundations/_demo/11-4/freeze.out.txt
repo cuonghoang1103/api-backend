@@ -1,0 +1,3 @@
+TypeError: Cannot assign to read only property 'lang' of object '#<Object>'
+vi [12, 14, 16]
+isFrozen: true false

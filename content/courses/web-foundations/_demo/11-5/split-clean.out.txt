@@ -1,0 +1,4 @@
+['  apple', '  banana ', '', 'cherry ;  mango  ']
+['apple', 'banana', 'cherry', 'mango']
+"too many spaces"
+hoc-javascript-nang-cao

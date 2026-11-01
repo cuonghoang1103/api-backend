@@ -1,0 +1,3 @@
+Keyboard 450.000đ
+price via getter: 450000
+Uncaught TypeError: Cannot set property price of [object Object] which has only a getter

@@ -1,0 +1,674 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-11-1-closure",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-11-1-closure"
+  },
+  "exercises": [
+    {
+      "title": "Bộ đếm riêng của mỗi người",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "closure",
+        "phạm vi hàm"
+      ],
+      "prerequisites": [
+        "hàm",
+        "let"
+      ],
+      "tags": [
+        "javascript",
+        "closure"
+      ],
+      "problemHtml": "<p><em>Bài 11.1 — Closure: hàm nhớ được nơi nó sinh ra.</em> Máy chấm nạp <code>main.js</code> như một script cổ điển trong một realm mới cho MỖI kiểm, rồi gọi hàm của bạn.</p><p>Code khởi đầu dùng MỘT biến <code>count</code> toàn cục, nên hai bộ đếm tạo bởi <code>makeCounter()</code> giẫm lên nhau: đếm ở bộ này làm bộ kia nhảy số. Hãy sửa để mỗi lần gọi <code>makeCounter()</code> tạo ra một bộ đếm có biến riêng, không ai ở ngoài đọc hay ghi được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>makeCounter()</code> trả về một hàm; mỗi lần gọi hàm đó trả 1, 2, 3, …</li>\n  <li>Hai bộ đếm không dùng chung số.</li>\n  <li>Không còn biến <code>count</code> ở cấp cao nhất của file.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không có.",
+      "outputSpec": "Một hàm () => number.",
+      "constraints": "Không dùng biến toàn cục để lưu số đếm.",
+      "examplesJson": [
+        {
+          "input": "const a = makeCounter(); a(); a(); a()",
+          "output": "3",
+          "explanation": "Lần gọi thứ ba của cùng một bộ đếm."
+        },
+        {
+          "input": "const b = makeCounter(); b()",
+          "output": "1",
+          "explanation": "Bộ đếm mới bắt đầu lại từ 1."
+        }
+      ],
+      "hintsJson": [
+        "Biến đếm phải sinh ra MỖI lần makeCounter chạy — tức là nằm bên trong makeCounter.",
+        "function makeCounter() { let count = 0; return () => { count++; return count; }; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — bộ đếm (đang hỏng: hai bộ đếm dùng chung một biến)\nlet count = 0;\n\nfunction makeCounter() {\n  return function () {\n    count = count + 1;\n    return count;\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — bộ đếm riêng: mỗi lần gọi makeCounter tạo một biến count MỚI\nfunction makeCounter() {\n  let count = 0;                 // sống trong phạm vi của lần gọi này\n  return function () {\n    count = count + 1;           // closure: vẫn với tới count sau khi makeCounter đã return\n    return count;\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi lần <code>makeCounter()</code> chạy, JavaScript tạo một phạm vi mới chứa một <code>count</code> mới. Hàm trả về mang theo phạm vi đó (closure), nên hai bộ đếm có hai biến khác nhau. Bên ngoài không có tên nào trỏ tới <code>count</code> — muốn đổi số chỉ có cách gọi hàm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Để let count = 0 ở ngoài hàm — mọi bộ đếm dùng chung.</li>\n  <li>Đặt let count = 0 BÊN TRONG hàm được trả về — mỗi lần gọi lại về 0, luôn trả 1.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.1 Closure.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/closure",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Three calls return 1, 2, 3|||Ba lần gọi trả 1, 2, 3",
+            "chuanBi": "const a = makeCounter();",
+            "goi": "[a(), a(), a()]",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "moTa": "Two counters are independent|||Hai bộ đếm độc lập",
+            "chuanBi": "const a = makeCounter(); const b = makeCounter(); a(); a(); a();",
+            "goi": "[a(), b()]",
+            "mongDoi": [
+              4,
+              1
+            ]
+          },
+          {
+            "moTa": "No global count variable|||Không có biến count toàn cục",
+            "goi": "typeof count",
+            "mongDoi": "undefined"
+          },
+          {
+            "moTa": "A new counter after many calls still starts at 1|||Bộ đếm mới tạo sau nhiều lần gọi vẫn bắt đầu từ 1",
+            "an": true,
+            "chuanBi": "const a = makeCounter(); for (let i = 0; i < 50; i++) a();",
+            "goi": "makeCounter()()",
+            "mongDoi": 1
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để let count = 0 ở ngoài hàm — mọi bộ đếm dùng chung."
+        },
+        {
+          "loi": "Đặt let count = 0 BÊN TRONG hàm được trả về — mỗi lần gọi lại về 0, luôn trả 1."
+        }
+      ]
+    },
+    {
+      "title": "Hàm nhà máy: nhân và chào",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "factory function",
+        "closure"
+      ],
+      "prerequisites": [
+        "arrow function"
+      ],
+      "tags": [
+        "javascript",
+        "closure"
+      ],
+      "problemHtml": "<p><em>Bài 11.1 — Closure: hàm nhớ được nơi nó sinh ra.</em> Máy chấm nạp <code>main.js</code> như một script cổ điển trong một realm mới cho MỖI kiểm, rồi gọi hàm của bạn.</p><p>Một <strong>hàm nhà máy</strong> nhận cấu hình rồi trả về một hàm đã \"nướng sẵn\" cấu hình đó. Viết hai hàm: <code>multiplyBy(factor)</code> trả về hàm nhân một số với <code>factor</code>; <code>makeGreeter(greeting)</code> trả về hàm nhận một tên và trả chuỗi <code>\"&lt;greeting&gt;, &lt;tên&gt;!\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>multiplyBy(3)(5)</code> là 15; các hàm tạo ra không ảnh hưởng lẫn nhau.</li>\n  <li><code>makeGreeter(\"Xin chào\")(\"Lan\")</code> là <code>\"Xin chào, Lan!\"</code>.</li>\n  <li>Hàm trả về đúng là một hàm (typeof === \"function\").</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "factor: number; greeting: string.",
+      "outputSpec": "Một hàm.",
+      "constraints": "Không dùng biến toàn cục để giữ factor hay greeting.",
+      "examplesJson": [
+        {
+          "input": "const double = multiplyBy(2); double(21)",
+          "output": "42",
+          "explanation": "factor = 2 được bắt giữ."
+        },
+        {
+          "input": "makeGreeter(\"Hello\")(\"An\")",
+          "output": "\"Hello, An!\"",
+          "explanation": "Ghép greeting, dấu phẩy, tên, dấu chấm than."
+        }
+      ],
+      "hintsJson": [
+        "return (n) => n * factor;",
+        "return (name) => greeting + \", \" + name + \"!\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — hàm nhà máy\nfunction multiplyBy(factor) {\n  // trả về một hàm nhân với factor\n}\n\nfunction makeGreeter(greeting) {\n  // trả về một hàm nhận name\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — hàm nhà máy: cấu hình được bắt giữ một lần, dùng ở mọi lần gọi\nfunction multiplyBy(factor) {\n  return (n) => n * factor;                       // factor nằm trong \"ba lô\" của hàm trả về\n}\n\nfunction makeGreeter(greeting) {\n  return (name) => greeting + ', ' + name + '!';  // mỗi greeter nhớ greeting riêng\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hàm trả về được tạo bên trong <code>multiplyBy</code>, nên nó nhìn thấy <code>factor</code> của đúng lần gọi đó. <code>multiplyBy(2)</code> và <code>multiplyBy(3)</code> là hai lần gọi ⇒ hai closure với hai giá trị factor khác nhau.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả về n * factor (một con số) thay vì một hàm.</li>\n  <li>Quên dấu cách sau dấu phẩy trong lời chào.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.1 Closure.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Closures",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "multiplyBy(3)(5) is 15|||multiplyBy(3)(5) bằng 15",
+            "goi": "multiplyBy(3)(5)",
+            "mongDoi": 15
+          },
+          {
+            "moTa": "Two factories do not interfere|||Hai hàm tạo ra không ảnh hưởng nhau",
+            "chuanBi": "const d = multiplyBy(2); const t = multiplyBy(3);",
+            "goi": "[d(10), t(10), d(1)]",
+            "mongDoi": [
+              20,
+              30,
+              2
+            ]
+          },
+          {
+            "moTa": "makeGreeter builds the greeting|||makeGreeter ghép đúng lời chào",
+            "goi": "makeGreeter(\"Xin chào\")(\"Lan\")",
+            "mongDoi": "Xin chào, Lan!"
+          },
+          {
+            "moTa": "Returns a function|||Trả về một hàm",
+            "goi": "typeof multiplyBy(1) + \"/\" + typeof makeGreeter(\"Hi\")",
+            "mongDoi": "function/function"
+          },
+          {
+            "moTa": "Hidden: greeters keep their own greeting|||Ẩn: mỗi greeter giữ lời chào riêng",
+            "an": true,
+            "chuanBi": "const a = makeGreeter(\"Hi\"); const b = makeGreeter(\"Yo\");",
+            "goi": "[b(\"X\"), a(\"Y\")]",
+            "mongDoi": [
+              "Yo, X!",
+              "Hi, Y!"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả về n * factor (một con số) thay vì một hàm."
+        },
+        {
+          "loi": "Quên dấu cách sau dấu phẩy trong lời chào."
+        }
+      ]
+    },
+    {
+      "title": "Bộ giới hạn lượt gọi",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "closure",
+        "state riêng tư"
+      ],
+      "prerequisites": [
+        "object",
+        "closure"
+      ],
+      "tags": [
+        "javascript",
+        "closure"
+      ],
+      "problemHtml": "<p><em>Bài 11.1 — Closure: hàm nhớ được nơi nó sinh ra.</em> Máy chấm nạp <code>main.js</code> như một script cổ điển trong một realm mới cho MỖI kiểm, rồi gọi hàm của bạn.</p><p>Đây là bài luyện cuối bài học. Viết <code>makeRateLimiter(limit)</code> trả về object <code>{ tryCall, remaining }</code>. <code>tryCall()</code> trả <code>true</code> khi số lượt đã cho phép còn ít hơn <code>limit</code> (và tính lượt đó), sau đó trả <code>false</code>. <code>remaining()</code> cho biết còn bao nhiêu lượt. Số đếm phải riêng tư: gán <code>limiter.count = 99</code> không được làm thay đổi gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>makeRateLimiter(2)</code>: ba lần <code>tryCall()</code> ⇒ true, true, false.</li>\n  <li><code>remaining()</code> giảm dần và dừng ở 0 (không âm).</li>\n  <li>Hai bộ giới hạn độc lập; ghi đè thuộc tính trên object trả về không ảnh hưởng số đếm thật.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "limit: số nguyên ≥ 0.",
+      "outputSpec": "Object { tryCall(): boolean, remaining(): number }.",
+      "constraints": "Số đếm không được là thuộc tính công khai của object trả về.",
+      "examplesJson": [
+        {
+          "input": "const l = makeRateLimiter(2); [l.tryCall(), l.tryCall(), l.tryCall()]",
+          "output": "[true, true, false]",
+          "explanation": "Hết hai lượt thì từ chối."
+        },
+        {
+          "input": "l.remaining()",
+          "output": "0",
+          "explanation": "Không xuống số âm."
+        }
+      ],
+      "hintsJson": [
+        "let used = 0; nằm trong makeRateLimiter, hai hàm trả về cùng nhìn thấy nó.",
+        "tryCall: if (used < limit) { used++; return true; } return false; — remaining: return limit - used;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — bộ giới hạn lượt gọi\nfunction makeRateLimiter(limit) {\n  return {\n    tryCall() {},\n    remaining() {},\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — bộ giới hạn lượt gọi: used sống trong closure, không phải trên object\nfunction makeRateLimiter(limit) {\n  let used = 0;                       // riêng tư: chỉ tryCall/remaining với tới\n  return {\n    tryCall() {\n      if (used < limit) {\n        used++;                       // tính lượt này\n        return true;\n      }\n      return false;                   // đã hết lượt\n    },\n    remaining() {\n      return limit - used;            // used không bao giờ vượt limit ⇒ không âm\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai method cùng được tạo trong một lần gọi <code>makeRateLimiter</code>, nên chúng chia sẻ CÙNG một biến <code>used</code>. Biến đó không phải thuộc tính, nên <code>l.count = 99</code> hay <code>l.used = 0</code> chỉ thêm thuộc tính mới vô dụng — số đếm thật không đổi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lưu số đếm thành this.used — người ngoài sửa được.</li>\n  <li>Tăng used cả khi đã hết lượt ⇒ remaining() âm.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.1 Closure.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/closure",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "limit 2: true, true, false|||limit 2: true, true, false",
+            "chuanBi": "const l = makeRateLimiter(2);",
+            "goi": "[l.tryCall(), l.tryCall(), l.tryCall()]",
+            "mongDoi": [
+              true,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "remaining() counts down and stops at 0|||remaining() giảm dần và dừng ở 0",
+            "chuanBi": "const l = makeRateLimiter(2); const r = [l.remaining()]; l.tryCall(); r.push(l.remaining()); l.tryCall(); l.tryCall(); r.push(l.remaining());",
+            "goi": "r",
+            "mongDoi": [
+              2,
+              1,
+              0
+            ]
+          },
+          {
+            "moTa": "Two limiters are independent|||Hai bộ giới hạn độc lập",
+            "chuanBi": "const a = makeRateLimiter(1); a.tryCall(); const b = makeRateLimiter(1);",
+            "goi": "[a.tryCall(), b.tryCall()]",
+            "mongDoi": [
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": "The count is private|||Số đếm là riêng tư",
+            "chuanBi": "const l = makeRateLimiter(1); l.tryCall(); l.count = 0; l.used = 0;",
+            "goi": "l.tryCall()",
+            "mongDoi": false
+          },
+          {
+            "moTa": "Hidden: limit 0 refuses at once|||Ẩn: limit 0 từ chối ngay",
+            "an": true,
+            "chuanBi": "const l = makeRateLimiter(0);",
+            "goi": "[l.tryCall(), l.remaining()]",
+            "mongDoi": [
+              false,
+              0
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu số đếm thành this.used — người ngoài sửa được."
+        },
+        {
+          "loi": "Tăng used cả khi đã hết lượt ⇒ remaining() âm."
+        }
+      ]
+    },
+    {
+      "title": "Sửa bẫy var trong vòng lặp",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "var vs let",
+        "closure trong vòng lặp"
+      ],
+      "prerequisites": [
+        "vòng lặp for"
+      ],
+      "tags": [
+        "javascript",
+        "closure",
+        "var"
+      ],
+      "problemHtml": "<p><em>Bài 11.1 — Closure: hàm nhớ được nơi nó sinh ra.</em> Máy chấm nạp <code>main.js</code> như một script cổ điển trong một realm mới cho MỖI kiểm, rồi gọi hàm của bạn.</p><p><code>makeHandlers(n)</code> phải trả về mảng <code>n</code> hàm; hàm thứ <code>i</code> trả về <code>\"button \" + i</code>. Code khởi đầu dùng <code>var</code> nên MỌI hàm đều trả <code>\"button \" + n</code> — đúng bẫy 3, 3, 3 trong bài học. Sửa cho đúng và bỏ hẳn <code>var</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>makeHandlers(3).map((h) =&gt; h())</code> là <code>[\"button 0\", \"button 1\", \"button 2\"]</code>.</li>\n  <li>Không còn từ khoá <code>var</code> trong file.</li>\n  <li><code>makeHandlers(0)</code> trả mảng rỗng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "n: số nguyên ≥ 0.",
+      "outputSpec": "Mảng n hàm () => string.",
+      "constraints": "Không dùng var.",
+      "examplesJson": [
+        {
+          "input": "makeHandlers(2)[1]()",
+          "output": "\"button 1\"",
+          "explanation": "Mỗi hàm nhớ chỉ số riêng của nó."
+        }
+      ],
+      "hintsJson": [
+        "let trong for tạo một biến mới cho mỗi vòng.",
+        "for (let i = 0; i < n; i++) handlers.push(() => \"button \" + i);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — bẫy var (mọi hàm đều trả \"button n\")\nfunction makeHandlers(n) {\n  var handlers = [];\n  for (var i = 0; i < n; i++) {\n    handlers.push(function () {\n      return 'button ' + i;\n    });\n  }\n  return handlers;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — let tạo một i MỚI cho mỗi vòng ⇒ mỗi closure giữ i của vòng đó\nfunction makeHandlers(n) {\n  const handlers = [];\n  for (let i = 0; i < n; i++) {\n    handlers.push(() => 'button ' + i);   // bắt giữ i của RIÊNG vòng này\n  }\n  return handlers;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Với <code>var</code> chỉ có một <code>i</code> cho cả hàm; khi các hàm được gọi thì vòng lặp đã xong và <code>i</code> bằng <code>n</code>. Với <code>let</code>, vòng <code>for</code> tạo một biến mới cho mỗi lần lặp, nên mỗi closure giữ đúng chỉ số của mình. Cách khác (kiểu cũ): <code>Array.from({ length: n }, (_, i) =&gt; () =&gt; \"button \" + i)</code> — mỗi lần gọi callback cũng tạo một <code>i</code> mới.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ đổi var handlers thành const mà vẫn giữ var i.</li>\n  <li>Gọi hàm ngay khi push (push(f())) ⇒ mảng chuỗi chứ không phải mảng hàm.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.1 Closure.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/closure#closures-in-loops",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Each handler returns its own index|||Mỗi hàm trả đúng chỉ số của nó",
+            "goi": "makeHandlers(3).map((h) => h())",
+            "mongDoi": [
+              "button 0",
+              "button 1",
+              "button 2"
+            ]
+          },
+          {
+            "moTa": "Elements are functions|||Các phần tử là hàm",
+            "goi": "makeHandlers(2).every((h) => typeof h === \"function\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": "n = 0 gives an empty array|||n = 0 cho mảng rỗng",
+            "goi": "makeHandlers(0)",
+            "mongDoi": []
+          },
+          {
+            "moTa": "No var keyword|||Không còn từ khoá var",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bvar\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Hidden: handler 7 of 10|||Ẩn: hàm thứ 7 trong 10",
+            "an": true,
+            "goi": "makeHandlers(10)[7]()",
+            "mongDoi": "button 7"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ đổi var handlers thành const mà vẫn giữ var i."
+        },
+        {
+          "loi": "Gọi hàm ngay khi push (push(f())) ⇒ mảng chuỗi chứ không phải mảng hàm."
+        }
+      ]
+    },
+    {
+      "title": "once: chỉ chạy một lần",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "closure",
+        "hàm bậc cao"
+      ],
+      "prerequisites": [
+        "rest parameter"
+      ],
+      "tags": [
+        "javascript",
+        "closure"
+      ],
+      "problemHtml": "<p><em>Bài 11.1 — Closure: hàm nhớ được nơi nó sinh ra.</em> Máy chấm nạp <code>main.js</code> như một script cổ điển trong một realm mới cho MỖI kiểm, rồi gọi hàm của bạn.</p><p>Viết <code>once(fn)</code>: trả về một hàm mới; lần gọi ĐẦU TIÊN chạy <code>fn</code> với đúng các đối số được đưa và nhớ kết quả; mọi lần gọi sau KHÔNG chạy <code>fn</code> nữa mà trả lại kết quả đã nhớ. Dùng cho việc \"khởi tạo kết nối một lần\", \"gửi form một lần\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>fn</code> chỉ được gọi đúng một lần dù hàm trả về bị gọi nhiều lần.</li>\n  <li>Mọi lần gọi trả cùng kết quả của lần đầu.</li>\n  <li>Đối số của lần đầu được chuyển nguyên cho fn; hai hàm once khác nhau độc lập.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "fn: một hàm bất kỳ.",
+      "outputSpec": "Một hàm có cùng cách gọi.",
+      "constraints": "Không dùng biến toàn cục.",
+      "examplesJson": [
+        {
+          "input": "const init = once((x) => x * 2); [init(5), init(100)]",
+          "output": "[10, 10]",
+          "explanation": "Lần hai không chạy lại, trả kết quả cũ."
+        }
+      ],
+      "hintsJson": [
+        "Hai biến riêng: let done = false; let result;",
+        "return (...args) => { if (!done) { done = true; result = fn(...args); } return result; };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — once\nfunction once(fn) {\n  return fn;   // sai: chạy fn mỗi lần\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — once: done và result sống trong closure của MỖI lần gọi once\nfunction once(fn) {\n  let done = false;\n  let result;\n  return (...args) => {\n    if (!done) {\n      done = true;             // đánh dấu TRƯỚC khi gọi, kể cả fn ném lỗi cũng không chạy lại\n      result = fn(...args);\n    }\n    return result;\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>done</code> và <code>result</code> là trạng thái riêng của từng hàm do <code>once</code> tạo ra. Lần đầu chuyển <code>done</code> thành true, chạy <code>fn</code>, cất kết quả; các lần sau chỉ trả kết quả đã cất. Đối số được chuyển bằng rest/spread <code>(...args)</code> ⇒ <code>fn(...args)</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Kiểm if (result) thay vì một cờ riêng — fn trả 0 hay undefined sẽ bị gọi lại.</li>\n  <li>Quên chuyển đối số cho fn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.1 Closure.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/closure",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "fn runs exactly once|||fn chạy đúng một lần",
+            "chuanBi": "let n = 0; const f = once(() => { n++; return \"ok\"; }); f(); f(); f();",
+            "goi": "n",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "Later calls return the first result|||Các lần sau trả kết quả lần đầu",
+            "chuanBi": "const f = once((x) => x * 2);",
+            "goi": "[f(5), f(100), f(7)]",
+            "mongDoi": [
+              10,
+              10,
+              10
+            ]
+          },
+          {
+            "moTa": "Arguments reach fn|||Đối số tới được fn",
+            "goi": "once((a, b, c) => a + b + c)(1, 2, 3)",
+            "mongDoi": 6
+          },
+          {
+            "moTa": "Hidden: a falsy result is not re-run|||Ẩn: kết quả \"falsy\" không làm chạy lại",
+            "an": true,
+            "chuanBi": "let n = 0; const f = once(() => { n++; return 0; }); f(); f();",
+            "goi": "n",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "Hidden: two once functions are independent|||Ẩn: hai hàm once độc lập",
+            "an": true,
+            "chuanBi": "const a = once(() => \"a\"); const b = once(() => \"b\"); a();",
+            "goi": "[b(), a()]",
+            "mongDoi": [
+              "b",
+              "a"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm if (result) thay vì một cờ riêng — fn trả 0 hay undefined sẽ bị gọi lại."
+        },
+        {
+          "loi": "Quên chuyển đối số cho fn."
+        }
+      ]
+    },
+    {
+      "title": "memoize: nhớ kết quả theo đối số",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "memoization",
+        "Map",
+        "closure"
+      ],
+      "prerequisites": [
+        "Map",
+        "JSON.stringify"
+      ],
+      "tags": [
+        "javascript",
+        "closure",
+        "hiệu năng"
+      ],
+      "problemHtml": "<p><em>Bài 11.1 — Closure: hàm nhớ được nơi nó sinh ra.</em> Máy chấm nạp <code>main.js</code> như một script cổ điển trong một realm mới cho MỖI kiểm, rồi gọi hàm của bạn.</p><p>Viết <code>memoize(fn)</code>: trả về hàm có cùng kết quả với <code>fn</code>, nhưng gọi lại với CÙNG đối số thì trả kết quả đã nhớ thay vì chạy lại <code>fn</code>. Hàm có thể nhận nhiều đối số (số, chuỗi). Ngoài ra hàm trả về có method <code>clear()</code> xoá bộ nhớ đệm. Mỗi hàm memoize có bộ nhớ đệm RIÊNG.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gọi <code>m(9)</code> ba lần chỉ chạy <code>fn</code> một lần.</li>\n  <li>Phân biệt được <code>m(1, 2)</code> với <code>m(12)</code> và <code>m(\"1\", 2)</code>.</li>\n  <li><code>m.clear()</code> làm lần gọi sau chạy lại <code>fn</code>; hai hàm memoize không dùng chung bộ nhớ đệm.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "fn: hàm thuần nhận số/chuỗi.",
+      "outputSpec": "Hàm có thêm method clear().",
+      "constraints": "Bộ nhớ đệm không được là biến toàn cục.",
+      "examplesJson": [
+        {
+          "input": "const sq = memoize((n) => n * n); sq(9); sq(9)",
+          "output": "81 (fn chỉ chạy 1 lần)",
+          "explanation": "Lần hai lấy từ Map."
+        },
+        {
+          "input": "const add = memoize((a, b) => a + b); add(1, 2); add(12)",
+          "output": "3 rồi NaN (12 + undefined)",
+          "explanation": "Hai khoá khác nhau: \"[1,2]\" và \"[12]\" — không được trả nhầm 3."
+        }
+      ],
+      "hintsJson": [
+        "Khoá = JSON.stringify(args) — \"[1,2]\" khác \"[12]\" và khác \"[\\\"1\\\",2]\".",
+        "const cache = new Map(); const g = (...args) => { const k = JSON.stringify(args); if (!cache.has(k)) cache.set(k, fn(...args)); return cache.get(k); }; g.clear = () => cache.clear(); return g;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — memoize\nfunction memoize(fn) {\n  const g = (...args) => fn(...args);   // chưa nhớ gì cả\n  return g;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.1 — memoize: một Map riêng cho MỖI hàm được memoize\nfunction memoize(fn) {\n  const cache = new Map();                    // nằm trong closure, ngoài không với tới\n  const g = (...args) => {\n    const key = JSON.stringify(args);         // [1,2] -> \"[1,2]\", [12] -> \"[12]\", [\"1\",2] -> \"[\\\"1\\\",2]\"\n    if (!cache.has(key)) {\n      cache.set(key, fn(...args));            // chỉ chạy fn khi chưa có\n    }\n    return cache.get(key);\n  };\n  g.clear = () => cache.clear();              // hàm cũng là object: gắn thêm method được\n  return g;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Closure giữ <code>cache</code> sống chừng nào <code>g</code> còn sống, và mỗi lần gọi <code>memoize</code> tạo một <code>Map</code> mới. Khoá phải mô tả ĐỦ các đối số: nối bằng <code>args.join(\"\")</code> sẽ biến <code>(1, 2)</code> và <code>(12)</code> thành cùng \"12\"; <code>JSON.stringify</code> giữ được ranh giới và kiểu (chuỗi có nháy). Dùng <code>cache.has</code> thay vì kiểm giá trị, để kết quả 0 hay <code>undefined</code> vẫn được nhớ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Khoá là args[0] — bỏ qua đối số thứ hai.</li>\n  <li>if (cache.get(k)) — kết quả 0 bị tính lại mãi.</li>\n  <li>Đặt cache ở ngoài memoize — mọi hàm dùng chung, kết quả lẫn nhau.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.1 Closure.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Glossary/Memoization",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Same argument runs fn once|||Cùng đối số chỉ chạy fn một lần",
+            "chuanBi": "let n = 0; const sq = memoize((x) => { n++; return x * x; }); sq(9); sq(9); sq(9);",
+            "goi": "[sq(9), n]",
+            "mongDoi": [
+              81,
+              1
+            ]
+          },
+          {
+            "moTa": "Different arguments are cached separately|||Đối số khác nhau được nhớ riêng",
+            "chuanBi": "let n = 0; const add = memoize((a, b) => { n++; return String(a) + \"|\" + String(b); });",
+            "goi": "[add(1, 2), add(12), add(\"1\", 2), add(1, 2), n]",
+            "mongDoi": [
+              "1|2",
+              "12|undefined",
+              "1|2",
+              "1|2",
+              3
+            ]
+          },
+          {
+            "moTa": "clear() empties the cache|||clear() xoá bộ nhớ đệm",
+            "chuanBi": "let n = 0; const f = memoize(() => ++n); f(); f(); f.clear(); f();",
+            "goi": "n",
+            "mongDoi": 2
+          },
+          {
+            "moTa": "A result of 0 is remembered|||Kết quả 0 vẫn được nhớ",
+            "chuanBi": "let n = 0; const z = memoize(() => { n++; return 0; }); z(); z();",
+            "goi": "n",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "Hidden: two memoized functions have separate caches|||Ẩn: hai hàm memoize có bộ nhớ đệm riêng",
+            "an": true,
+            "chuanBi": "const a = memoize((x) => \"a\" + x); const b = memoize((x) => \"b\" + x); a(1);",
+            "goi": "b(1)",
+            "mongDoi": "b1"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Khoá là args[0] — bỏ qua đối số thứ hai."
+        },
+        {
+          "loi": "if (cache.get(k)) — kết quả 0 bị tính lại mãi."
+        },
+        {
+          "loi": "Đặt cache ở ngoài memoize — mọi hàm dùng chung, kết quả lẫn nhau."
+        }
+      ]
+    }
+  ]
+}

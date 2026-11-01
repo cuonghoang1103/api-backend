@@ -1,0 +1,634 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-11-5-regex",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-11-5-regex"
+  },
+  "exercises": [
+    {
+      "title": "Số di động Việt Nam",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "neo ^$",
+        "lớp ký tự",
+        "lượng từ"
+      ],
+      "prerequisites": [
+        "regex test"
+      ],
+      "tags": [
+        "javascript",
+        "regex"
+      ],
+      "problemHtml": "<p><em>Bài 11.5 — Biểu thức chính quy, vừa đủ dùng.</em> Máy chấm gọi hàm của bạn với cả đầu vào đúng lẫn SAI — bug regex trốn ở đầu vào sai.</p><p>Viết <code>isVnMobile(s)</code>: true khi <code>s</code> là ĐÚNG 10 chữ số, bắt đầu bằng 0 rồi một trong 3, 5, 7, 8, 9. Mọi thứ khác (khoảng trắng, chữ, số máy bàn 02…, 9 hoặc 11 chữ số, số nằm lẫn trong câu) là false. Gọi nhiều lần liền với cùng đầu vào phải cho cùng đáp án.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>isVnMobile(\"0912345678\")</code> và <code>isVnMobile(\"0381234567\")</code> là true.</li>\n  <li><code>\" 0912345678\"</code>, <code>\"0212345678\"</code>, <code>\"091234567\"</code>, <code>\"09123456789\"</code> là false.</li>\n  <li>Gọi hai lần liền cùng số hợp lệ ⇒ true cả hai (không dùng cờ g).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "s: string.",
+      "outputSpec": "boolean.",
+      "constraints": "Dùng một regex có neo hai đầu.",
+      "examplesJson": [
+        {
+          "input": "isVnMobile(\"call 0912345678\")",
+          "output": "false",
+          "explanation": "Có neo ⇒ không nhận số nằm lẫn trong câu."
+        }
+      ],
+      "hintsJson": [
+        "^0[35789] rồi \\d{8} rồi $.",
+        "return /^0[35789]\\d{8}$/.test(s);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — số di động\nconst MOBILE = /0[35789]\\d{8}/g;   // thiếu neo + có cờ g\n\nfunction isVnMobile(s) {\n  return MOBILE.test(s);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — số di động: neo hai đầu, KHÔNG cờ g (test không được nhớ lastIndex)\nconst MOBILE = /^0[35789]\\d{8}$/;   // đầu · 0 · một trong 3/5/7/8/9 · đúng 8 chữ số · hết\n\nfunction isVnMobile(s) {\n  return MOBILE.test(s);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không có <code>^</code> và <code>$</code> là đang TÌM chứ không KIỂM: chuỗi có mười chữ số ở đâu đó cũng qua. Cờ <code>g</code> làm regex nhớ <code>lastIndex</code>, nên lần <code>test</code> thứ hai bắt đầu từ cuối lần trước và trả false.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên neo — \"091234567890\" (12 số) vẫn qua.</li>\n  <li>Dùng \\d{10} — nhận cả 02… và 01….</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.5 Regex.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/regexp-anchors",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Valid numbers|||Số hợp lệ",
+            "goi": "[isVnMobile(\"0912345678\"), isVnMobile(\"0381234567\"), isVnMobile(\"0587654321\")]",
+            "mongDoi": [
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Invalid numbers|||Số không hợp lệ",
+            "goi": "[\" 0912345678\", \"0212345678\", \"091234567\", \"09123456789\", \"09a2345678\"].map(isVnMobile)",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Same answer twice in a row|||Hai lần liền cùng đáp án",
+            "goi": "[isVnMobile(\"0912345678\"), isVnMobile(\"0912345678\")]",
+            "mongDoi": [
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Hidden: number inside a sentence|||Ẩn: số nằm lẫn trong câu",
+            "an": true,
+            "goi": "isVnMobile(\"call 0912345678 now\")",
+            "mongDoi": false
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên neo — \"091234567890\" (12 số) vẫn qua."
+        },
+        {
+          "loi": "Dùng \\d{10} — nhận cả 02… và 01…."
+        }
+      ]
+    },
+    {
+      "title": "Đuôi file ảnh",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "cờ i",
+        "nhóm |",
+        "thoát dấu chấm"
+      ],
+      "prerequisites": [
+        "regex test"
+      ],
+      "tags": [
+        "javascript",
+        "regex"
+      ],
+      "problemHtml": "<p><em>Bài 11.5 — Biểu thức chính quy, vừa đủ dùng.</em> Máy chấm gọi hàm của bạn với cả đầu vào đúng lẫn SAI — bug regex trốn ở đầu vào sai.</p><p>Viết <code>isImage(filename)</code>: true khi tên file KẾT THÚC bằng <code>.jpg</code>, <code>.jpeg</code>, <code>.png</code> hoặc <code>.webp</code>, không phân biệt hoa thường. <code>\"photo.PNG\"</code> đúng; <code>\"png.txt\"</code>, <code>\"photo.png.exe\"</code>, <code>\"photopng\"</code> sai.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhận bốn đuôi, mọi kiểu hoa thường.</li>\n  <li>Đuôi phải ở CUỐI tên và có dấu chấm thật trước nó.</li>\n  <li><code>\"archive.jpg.zip\"</code> là false.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "filename: string.",
+      "outputSpec": "boolean.",
+      "constraints": "Một regex.",
+      "examplesJson": [
+        {
+          "input": "isImage(\"A.JPEG\")",
+          "output": "true",
+          "explanation": "Cờ i bỏ qua hoa/thường."
+        }
+      ],
+      "hintsJson": [
+        "Dấu chấm phải thoát: \\. ; cuối chuỗi: $.",
+        "return /\\.(jpe?g|png|webp)$/i.test(filename);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — đuôi ảnh\nfunction isImage(filename) {\n  return /(jpg|jpeg|png|webp)/.test(filename);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — đuôi ảnh: dấu chấm thật (\\.) + một trong các đuôi + hết chuỗi, cờ i\n// \\.        dấu chấm THẬT (không thoát thì . là \"ký tự bất kỳ\")\n// (jpe?g|png|webp)  một trong các đuôi; jpe?g = jpg hoặc jpeg\n// $          đuôi phải nằm ở CUỐI tên file\n// i          không phân biệt hoa thường\nconst IMAGE = /\\.(jpe?g|png|webp)$/i;\n\nfunction isImage(filename) {\n  return IMAGE.test(filename);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>.</code> không thoát nghĩa là \"ký tự bất kỳ\" nên <code>\"photopng\"</code> sẽ qua; <code>\\\\.</code> là dấu chấm thật. <code>$</code> buộc đuôi nằm cuối, chặn <code>\"photo.png.exe\"</code>. <code>jpe?g</code> gọn hơn <code>jpg|jpeg</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên $ — \"x.png.exe\" lọt.</li>\n  <li>Viết . thay vì \\. — \"photopng\" lọt.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.5 Regex.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/regexp-escaping",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Accepts the four extensions, any case|||Nhận bốn đuôi, mọi kiểu chữ",
+            "goi": "[\"a.jpg\", \"b.JPEG\", \"c.Png\", \"d.webp\"].map(isImage)",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Rejects lookalikes|||Loại các tên trông giống",
+            "goi": "[\"png.txt\", \"photo.png.exe\", \"photopng\", \"archive.jpg.zip\"].map(isImage)",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Hidden: no extension|||Ẩn: không có đuôi",
+            "an": true,
+            "goi": "isImage(\"README\")",
+            "mongDoi": false
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên $ — \"x.png.exe\" lọt."
+        },
+        {
+          "loi": "Viết . thay vì \\. — \"photopng\" lọt."
+        }
+      ]
+    },
+    {
+      "title": "Đổi ngày dd/mm/yyyy sang ISO",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "nhóm có tên",
+        "match"
+      ],
+      "prerequisites": [
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "regex",
+        "date"
+      ],
+      "problemHtml": "<p><em>Bài 11.5 — Biểu thức chính quy, vừa đủ dùng.</em> Máy chấm gọi hàm của bạn với cả đầu vào đúng lẫn SAI — bug regex trốn ở đầu vào sai.</p><p>Viết <code>toIsoDate(s)</code>: <code>\"01/11/2026\"</code> ⇒ <code>\"2026-11-01\"</code>. Dùng nhóm có tên <code>(?&lt;day&gt;…)</code>. Chuỗi không đúng dạng (thiếu số 0, sai dấu, có chữ thừa) ⇒ <code>null</code>. Ngoài ra kiểm tháng 1–12 và ngày 1–31 (không cần kiểm ngày 31/2).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng dạng ⇒ chuỗi ISO.</li>\n  <li>Sai dạng hoặc tháng 13, ngày 00 ⇒ null.</li>\n  <li>Dùng nhóm có tên (groups).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "s: string.",
+      "outputSpec": "string | null.",
+      "constraints": "Không dùng Date để phân tích.",
+      "examplesJson": [
+        {
+          "input": "toIsoDate(\"1/11/2026\")",
+          "output": "null",
+          "explanation": "Ngày phải có hai chữ số."
+        }
+      ],
+      "hintsJson": [
+        "/^(?<day>\\d{2})\\/(?<month>\\d{2})\\/(?<year>\\d{4})$/ — nhớ kiểm m === null.",
+        "const { day, month, year } = m.groups; if (+month < 1 || +month > 12 || +day < 1 || +day > 31) return null;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — đổi ngày\nfunction toIsoDate(s) {\n  const p = s.split('/');\n  return p[2] + '-' + p[1] + '-' + p[0];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — đổi ngày: nhóm có tên + kiểm khoảng\nconst DMY = /^(?<day>\\d{2})\\/(?<month>\\d{2})\\/(?<year>\\d{4})$/;\n\nfunction toIsoDate(s) {\n  const m = s.match(DMY);\n  if (m === null) return null;                     // match trả null khi không khớp\n  const { day, month, year } = m.groups;\n  if (+month < 1 || +month > 12 || +day < 1 || +day > 31) return null;\n  return year + '-' + month + '-' + day;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Neo hai đầu loại chữ thừa; <code>\\\\d{2}</code> bắt buộc hai chữ số; <code>\\\\/</code> là dấu gạch chéo thật. <code>m.groups</code> cho <code>day</code>, <code>month</code>, <code>year</code> theo tên, không phải đếm ngoặc. Nhớ <code>match</code> trả <code>null</code> — đọc <code>.groups</code> trên null là sập.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không kiểm null trước khi đọc groups.</li>\n  <li>split(\"/\") — chấp nhận mọi rác.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.5 Regex.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/regexp-groups#named-groups",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Converts a valid date|||Đổi ngày hợp lệ",
+            "goi": "toIsoDate(\"01/11/2026\")",
+            "mongDoi": "2026-11-01"
+          },
+          {
+            "moTa": "Wrong shapes give null|||Sai dạng cho null",
+            "goi": "[\"1/11/2026\", \"01-11-2026\", \"01/11/2026x\", \"aa/bb/cccc\"].map(toIsoDate)",
+            "mongDoi": [
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": "Out-of-range parts give null|||Ngoài khoảng cho null",
+            "goi": "[toIsoDate(\"01/13/2026\"), toIsoDate(\"00/10/2026\"), toIsoDate(\"32/01/2026\")]",
+            "mongDoi": [
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": "Uses named groups|||Dùng nhóm có tên",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\(\\?<\\w+>"
+          },
+          {
+            "moTa": "Hidden: 31/12|||Ẩn: 31/12",
+            "an": true,
+            "goi": "toIsoDate(\"31/12/1999\")",
+            "mongDoi": "1999-12-31"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không kiểm null trước khi đọc groups."
+        },
+        {
+          "loi": "split(\"/\") — chấp nhận mọi rác."
+        }
+      ]
+    },
+    {
+      "title": "Rút điểm bằng matchAll",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "matchAll",
+        "cờ g",
+        "\\p{L}"
+      ],
+      "prerequisites": [
+        "nhóm bắt"
+      ],
+      "tags": [
+        "javascript",
+        "regex"
+      ],
+      "problemHtml": "<p><em>Bài 11.5 — Biểu thức chính quy, vừa đủ dùng.</em> Máy chấm gọi hàm của bạn với cả đầu vào đúng lẫn SAI — bug regex trốn ở đầu vào sai.</p><p>Văn bản dạng <code>\"Lan: 9, Minh: 7.5, Đức: 10\"</code>. Viết <code>parseScores(text)</code> trả mảng <code>{ name, score }</code> theo thứ tự xuất hiện, <code>score</code> là số. Tên có thể là chữ tiếng Việt có dấu; điểm có thể có phần thập phân. Không có cặp nào ⇒ mảng rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả đủ mọi cặp, đúng thứ tự, điểm là number.</li>\n  <li>Tên tiếng Việt có dấu được nhận nguyên vẹn (Đức, không phải \"c\").</li>\n  <li>Chuỗi không có cặp ⇒ [].</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "{ name: string, score: number }[].",
+      "constraints": "Dùng matchAll.",
+      "examplesJson": [
+        {
+          "input": "parseScores(\"Đức: 10\")",
+          "output": "[{ name: \"Đức\", score: 10 }]",
+          "explanation": "\\w sẽ chỉ bắt được \"c\"."
+        }
+      ],
+      "hintsJson": [
+        "/(\\p{L}+):\\s*(\\d+(?:\\.\\d+)?)/gu — matchAll cần cờ g.",
+        "[...text.matchAll(re)].map((m) => ({ name: m[1], score: Number(m[2]) }))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — rút điểm\nfunction parseScores(text) {\n  const m = text.match(/(\\w+): (\\d+)/);\n  return m ? [{ name: m[1], score: m[2] }] : [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — rút điểm: \\p{L} hiểu chữ có dấu (cờ u), matchAll cho mọi cặp (cờ g)\nconst PAIR = /(\\p{L}+):\\s*(\\d+(?:\\.\\d+)?)/gu;   // (?: ) = nhóm không bắt, cho phần thập phân tuỳ chọn\n\nfunction parseScores(text) {\n  return [...text.matchAll(PAIR)].map((m) => ({ name: m[1], score: Number(m[2]) }));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>match</code> không có <code>g</code> chỉ cho cặp đầu; <code>matchAll</code> (bắt buộc <code>g</code>) cho mọi cặp kèm nhóm. <code>\\\\w</code> là ASCII nên \"Đức\" thành \"c\" — dùng <code>\\\\p{L}</code> với cờ <code>u</code>. Điểm đọc ra là chuỗi, đổi bằng <code>Number</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng \\w — tên có dấu bị cắt.</li>\n  <li>Quên Number — score là \"9\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.5 Regex.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "All pairs, numbers|||Mọi cặp, điểm là số",
+            "goi": "parseScores(\"Lan: 9, Minh: 7.5, Đức: 10\")",
+            "mongDoi": [
+              {
+                "name": "Lan",
+                "score": 9
+              },
+              {
+                "name": "Minh",
+                "score": 7.5
+              },
+              {
+                "name": "Đức",
+                "score": 10
+              }
+            ]
+          },
+          {
+            "moTa": "No pairs ⇒ []|||Không có cặp ⇒ []",
+            "goi": "parseScores(\"no scores here\")",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Uses matchAll|||Dùng matchAll",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "matchAll"
+          },
+          {
+            "moTa": "Hidden: flexible spacing|||Ẩn: khoảng trắng linh hoạt",
+            "an": true,
+            "goi": "parseScores(\"Hà:8;  Nguyễn:   6.25\")",
+            "mongDoi": [
+              {
+                "name": "Hà",
+                "score": 8
+              },
+              {
+                "name": "Nguyễn",
+                "score": 6.25
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng \\w — tên có dấu bị cắt."
+        },
+        {
+          "loi": "Quên Number — score là \"9\"."
+        }
+      ]
+    },
+    {
+      "title": "slugify tiếng Việt",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "normalize NFD",
+        "\\p{M}",
+        "replace"
+      ],
+      "prerequisites": [
+        "regex replace"
+      ],
+      "tags": [
+        "javascript",
+        "regex",
+        "tiếng việt"
+      ],
+      "problemHtml": "<p><em>Bài 11.5 — Biểu thức chính quy, vừa đủ dùng.</em> Máy chấm gọi hàm của bạn với cả đầu vào đúng lẫn SAI — bug regex trốn ở đầu vào sai.</p><p>Viết <code>slugify(text)</code> cho URL: bỏ dấu tiếng Việt, <code>đ/Đ</code> ⇒ <code>d</code>, viết thường, mọi chuỗi ký tự không phải <code>a-z0-9</code> thành MỘT dấu gạch ngang, không có gạch ngang ở đầu/cuối. <code>\"Học CSS Nâng Cao!\"</code> ⇒ <code>\"hoc-css-nang-cao\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>\"Đà Nẵng\"</code> ⇒ <code>\"da-nang\"</code>; <code>\"Học CSS Nâng Cao!\"</code> ⇒ <code>\"hoc-css-nang-cao\"</code>.</li>\n  <li>Nhiều ký tự lạ liền nhau chỉ thành một gạch; không có gạch thừa hai đầu.</li>\n  <li>Chữ đã ở dạng NFD (tách dấu) vẫn cho cùng kết quả.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "string.",
+      "constraints": "Không dùng bảng tra từng chữ có dấu.",
+      "examplesJson": [
+        {
+          "input": "slugify(\"  --Xin   chào, thế giới!!  \")",
+          "output": "\"xin-chao-the-gioi\"",
+          "explanation": "Gạch ở hai đầu bị cắt."
+        }
+      ],
+      "hintsJson": [
+        "normalize(\"NFD\") tách chữ khỏi dấu; replace(/\\p{M}/gu, \"\") bỏ dấu.",
+        ".replace(/đ/gi, \"d\").toLowerCase().replace(/[^a-z0-9]+/g, \"-\").replace(/^-+|-+$/g, \"\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — slugify\nfunction slugify(text) {\n  return text.toLowerCase().replace(/ /g, '-');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — slugify: tách dấu, bỏ dấu, xử lý đ, gom mọi thứ khác thành một gạch\nfunction slugify(text) {\n  return text\n    .normalize('NFD')                // \"ọ\" -> \"o\" + dấu tổ hợp\n    .replace(/\\p{M}/gu, '')          // bỏ mọi dấu tổ hợp (Mark)\n    .replace(/đ/gi, 'd')             // đ/Đ không có dạng tổ hợp, xử lý riêng\n    .toLowerCase()\n    .replace(/[^a-z0-9]+/g, '-')     // chuỗi ký tự lạ -> một gạch\n    .replace(/^-+|-+$/g, '');        // không gạch ở hai đầu\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>NFD biến mỗi chữ có dấu thành chữ gốc + dấu tổ hợp; <code>\\\\p{M}</code> (cờ <code>u</code>) bắt đúng các dấu đó. <code>đ</code> là một chữ riêng nên phải thay tay. Lớp phủ định <code>[^a-z0-9]+</code> với <code>+</code> gom cả cụm ký tự lạ thành một gạch.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên đ — \"Đà Nẵng\" thành \"a-nang\".</li>\n  <li>Thiếu + — \"a  b\" thành \"a--b\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.5 Regex.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Vietnamese titles|||Tiêu đề tiếng Việt",
+            "goi": "[slugify(\"Học CSS Nâng Cao!\"), slugify(\"Đà Nẵng\")]",
+            "mongDoi": [
+              "hoc-css-nang-cao",
+              "da-nang"
+            ]
+          },
+          {
+            "moTa": "Collapses and trims dashes|||Gom và cắt gạch",
+            "goi": "slugify(\"  --Xin   chào, thế giới!!  \")",
+            "mongDoi": "xin-chao-the-gioi"
+          },
+          {
+            "moTa": "NFD input gives the same slug|||Đầu vào NFD cho cùng slug",
+            "goi": "slugify(\"Nguyễn Đức\".normalize(\"NFD\")) === slugify(\"Nguyễn Đức\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Hidden: digits kept|||Ẩn: giữ chữ số",
+            "an": true,
+            "goi": "slugify(\"Bài 11.5 — Regex\")",
+            "mongDoi": "bai-11-5-regex"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên đ — \"Đà Nẵng\" thành \"a-nang\"."
+        },
+        {
+          "loi": "Thiếu + — \"a  b\" thành \"a--b\"."
+        }
+      ]
+    },
+    {
+      "title": "Đếm một từ nguyên vẹn (Unicode)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "lookbehind/lookahead",
+        "\\p{L}",
+        "thoát ký tự đặc biệt",
+        "new RegExp"
+      ],
+      "prerequisites": [
+        "regex",
+        "normalize"
+      ],
+      "tags": [
+        "javascript",
+        "regex",
+        "tiếng việt"
+      ],
+      "problemHtml": "<p><em>Bài 11.5 — Biểu thức chính quy, vừa đủ dùng.</em> Máy chấm gọi hàm của bạn với cả đầu vào đúng lẫn SAI — bug regex trốn ở đầu vào sai.</p><p>Viết <code>countWord(text, word)</code>: đếm số lần <code>word</code> xuất hiện như một TỪ NGUYÊN VẸN (không dính chữ/số ở trước hoặc sau), không phân biệt hoa thường, hiểu tiếng Việt: đếm \"ăn\" trong \"Tôi ăn cơm, Văn ăn phở\" phải ra 2, không phải 3. <code>word</code> có thể chứa ký tự đặc biệt của regex (<code>\"C++\"</code>, <code>\"a.b\"</code>) — phải thoát trước khi dựng regex. So khớp sau khi chuẩn hoá NFC cả hai bên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>countWord(\"Tôi ăn cơm, Văn ăn phở\", \"ăn\")</code> là 2 (không đếm \"ăn\" trong \"Văn\").</li>\n  <li><code>countWord(\"C++ và c++, không phải XC++\", \"C++\")</code> xử lý đúng ký tự đặc biệt.</li>\n  <li>Không phân biệt hoa thường; chữ ở dạng NFD vẫn đếm được.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text, word: string.",
+      "outputSpec": "number.",
+      "constraints": "Không dùng \\b (ASCII).",
+      "examplesJson": [
+        {
+          "input": "countWord(\"a.b axb a.b\", \"a.b\")",
+          "output": "2",
+          "explanation": "Dấu chấm được thoát nên \"axb\" không khớp."
+        }
+      ],
+      "hintsJson": [
+        "Thoát: word.replace(/[.*+?^${}()|[\\]\\\\]/g, \"\\\\$&\")",
+        "new RegExp(\"(?<![\\\\p{L}\\\\p{N}])\" + esc + \"(?![\\\\p{L}\\\\p{N}])\", \"giu\") rồi (text.match(re) ?? []).length"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — đếm từ (hỏng: \\b là ASCII, không thoát ký tự đặc biệt)\nfunction countWord(text, word) {\n  const re = new RegExp('\\\\b' + word + '\\\\b', 'gi');\n  return (text.match(re) || []).length;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.5 — đếm từ nguyên vẹn, hiểu Unicode\nfunction escapeRegExp(s) {\n  return s.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');   // $& = chính ký tự vừa khớp, thêm \\ phía trước\n}\n\nfunction countWord(text, word) {\n  const t = text.normalize('NFC');\n  const w = escapeRegExp(word.normalize('NFC'));\n  // trước và sau từ KHÔNG được là chữ cái (\\p{L}) hay chữ số (\\p{N}) của bất kỳ ngôn ngữ nào\n  const re = new RegExp('(?<![\\\\p{L}\\\\p{N}])' + w + '(?![\\\\p{L}\\\\p{N}])', 'giu');\n  return (t.match(re) ?? []).length;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>\\\\b</code> coi \"ă\" không phải chữ cái, nên thấy ranh giới giữa \"V\" và \"ăn\". Lookbehind <code>(?&lt;![\\\\p{L}\\\\p{N}])</code> và lookahead <code>(?![\\\\p{L}\\\\p{N}])</code> nói đúng ý \"không dính chữ/số\". <code>escapeRegExp</code> thêm <code>\\\\</code> trước mọi ký tự đặc biệt để \"C++\" là chữ thường chứ không phải lượng từ. Chuẩn hoá NFC để \"ă\" dạng tách dấu vẫn khớp.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không thoát — new RegExp(\"C++\") ném SyntaxError (Nothing to repeat).</li>\n  <li>Quên cờ u — \\p{L} không có nghĩa.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.5 Regex.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/regexp-lookahead-lookbehind",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Whole Vietnamese words only|||Chỉ đếm từ tiếng Việt nguyên vẹn",
+            "goi": "countWord(\"Tôi ăn cơm, Văn ăn phở\", \"ăn\")",
+            "mongDoi": 2
+          },
+          {
+            "moTa": "Special characters escaped|||Thoát ký tự đặc biệt",
+            "goi": "[countWord(\"C++ và c++, không phải XC++\", \"C++\"), countWord(\"a.b axb a.b\", \"a.b\")]",
+            "mongDoi": [
+              2,
+              2
+            ]
+          },
+          {
+            "moTa": "Case-insensitive|||Không phân biệt hoa thường",
+            "goi": "countWord(\"Đức đức ĐỨC Đứcx\", \"đức\")",
+            "mongDoi": 3
+          },
+          {
+            "moTa": "NFD text still counts|||Chữ dạng NFD vẫn đếm",
+            "goi": "countWord(\"Văn ăn\".normalize(\"NFD\"), \"ăn\")",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "Does not use \\b|||Không dùng \\b",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\\\\\\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Hidden: no match ⇒ 0|||Ẩn: không khớp ⇒ 0",
+            "an": true,
+            "goi": "countWord(\"xin chào\", \"ăn\")",
+            "mongDoi": 0
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không thoát — new RegExp(\"C++\") ném SyntaxError (Nothing to repeat)."
+        },
+        {
+          "loi": "Quên cờ u — \\p{L} không có nghĩa."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+apple 5
+pear 0
+mango 12
+Map(4) {'to' => 2, 'be' => 2, 'or' => 1, 'not' => 1}
+{"to":2,"be":2,"or":1,"not":1}
+{} <- a Map does not survive JSON.stringify
+2

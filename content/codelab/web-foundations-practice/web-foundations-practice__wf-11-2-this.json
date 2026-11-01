@@ -1,0 +1,619 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-11-2-this",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-11-2-this"
+  },
+  "exercises": [
+    {
+      "title": "Giữ this khi chuyền method đi",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "this",
+        "bind"
+      ],
+      "prerequisites": [
+        "object",
+        "method"
+      ],
+      "tags": [
+        "javascript",
+        "this"
+      ],
+      "problemHtml": "<p><em>Bài 11.2 — this: bốn luật giải thích tất cả.</em> Lưu ý: máy chấm nạp <code>main.js</code> như script cổ điển; file bắt đầu bằng <code>'use strict'</code> để gọi trơn cho <code>this === undefined</code> giống module.</p><p><code>getGreeter(user)</code> phải trả về một HÀM; gọi hàm đó (gọi trơn, không có dấu chấm) phải ra lời chào của đúng <code>user</code>. Code khởi đầu trả về <code>user.greet</code> trần nên <code>this</code> bị mất và ném TypeError.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>getGreeter(lan)()</code> trả <code>\"Hi, I am Lan\"</code>.</li>\n  <li>Hàm trả về vẫn đúng khi được gán vào object khác hay đưa cho setTimeout.</li>\n  <li>Không sửa method <code>greet</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "user: { name, greet() }.",
+      "outputSpec": "Hàm () => string.",
+      "constraints": "Không sửa object user.",
+      "examplesJson": [
+        {
+          "input": "getGreeter(makeUser(\"Lan\"))()",
+          "output": "\"Hi, I am Lan\"",
+          "explanation": "this vẫn là user dù gọi trơn."
+        }
+      ],
+      "hintsJson": [
+        "Hai cách: user.greet.bind(user), hoặc () => user.greet().",
+        "return () => user.greet();"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — giữ this\nfunction makeUser(name) {\n  return { name, greet() { return 'Hi, I am ' + this.name; } };\n}\n\nfunction getGreeter(user) {\n  return user.greet;            // mất this khi bị gọi trơn\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — giữ this: bọc lời gọi để dấu chấm quay lại (hoặc dùng bind)\nfunction makeUser(name) {\n  return { name, greet() { return 'Hi, I am ' + this.name; } };\n}\n\nfunction getGreeter(user) {\n  return () => user.greet();    // bên trong vẫn là user.greet() ⇒ luật 3: this = user\n  // cách khác: return user.greet.bind(user);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>user.greet</code> chỉ là cái hàm; ai gọi nó trơn thì <code>this</code> là <code>undefined</code> (strict). Bọc trong arrow <code>() =&gt; user.greet()</code> đặt lại dấu chấm vào lời gọi; <code>bind</code> tạo bản sao có <code>this</code> cố định. Cả hai đều qua bài.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>return user.greet() — trả chuỗi chứ không trả hàm.</li>\n  <li>return () => this.greet() — this ở đây là của getGreeter (undefined).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.2 this.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/bind",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Returns a function|||Trả về một hàm",
+            "goi": "typeof getGreeter(makeUser(\"Lan\"))",
+            "mongDoi": "function"
+          },
+          {
+            "moTa": "Plain call keeps the user|||Gọi trơn vẫn đúng người",
+            "goi": "getGreeter(makeUser(\"Lan\"))()",
+            "mongDoi": "Hi, I am Lan"
+          },
+          {
+            "moTa": "Still correct on another object|||Vẫn đúng khi gắn lên object khác",
+            "chuanBi": "const other = { name: \"Minh\", g: getGreeter(makeUser(\"An\")) };",
+            "goi": "other.g()",
+            "mongDoi": "Hi, I am An"
+          },
+          {
+            "moTa": "Hidden: works as a timer callback|||Ẩn: chạy đúng khi làm callback của hẹn giờ",
+            "an": true,
+            "chuanBi": "let out = \"\"; setTimeout(() => { out = getGreeter(makeUser(\"Chi\"))(); }, 10); await new Promise((r) => setTimeout(r, 20));",
+            "goi": "out",
+            "mongDoi": "Hi, I am Chi"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "return user.greet() — trả chuỗi chứ không trả hàm."
+        },
+        {
+          "loi": "return () => this.greet() — this ở đây là của getGreeter (undefined)."
+        }
+      ]
+    },
+    {
+      "title": "map(t.tick) làm sập — sửa callback",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "this",
+        "callback"
+      ],
+      "prerequisites": [
+        "class",
+        "map"
+      ],
+      "tags": [
+        "javascript",
+        "this"
+      ],
+      "problemHtml": "<p><em>Bài 11.2 — this: bốn luật giải thích tất cả.</em> Lưu ý: máy chấm nạp <code>main.js</code> như script cổ điển; file bắt đầu bằng <code>'use strict'</code> để gọi trơn cho <code>this === undefined</code> giống module.</p><p><code>tickTimes(timer, n)</code> phải gọi <code>timer.tick()</code> đúng <code>n</code> lần và trả về mảng kết quả. Code khởi đầu viết <code>Array.from({ length: n }).map(timer.tick)</code> — đưa method làm callback nên <code>this</code> mất và sập. Sửa mà không đổi class <code>Timer</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>tickTimes(new Timer(\"lap\"), 3)</code> là <code>[\"lap 1\", \"lap 2\", \"lap 3\"]</code>.</li>\n  <li>Số tick được cộng dồn trên đúng timer đó.</li>\n  <li><code>tickTimes(t, 0)</code> là mảng rỗng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "timer: Timer; n: số nguyên ≥ 0.",
+      "outputSpec": "Mảng chuỗi.",
+      "constraints": "Không sửa class Timer.",
+      "examplesJson": [
+        {
+          "input": "tickTimes(new Timer(\"lap\"), 2)",
+          "output": "[\"lap 1\", \"lap 2\"]",
+          "explanation": "Mỗi lần tick tăng ticks."
+        }
+      ],
+      "hintsJson": [
+        "map nhận một arrow bọc lời gọi.",
+        "return Array.from({ length: n }).map(() => timer.tick());"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — callback làm mất this\nclass Timer {\n  constructor(label) { this.label = label; this.ticks = 0; }\n  tick() { this.ticks++; return this.label + ' ' + this.ticks; }\n}\n\nfunction tickTimes(timer, n) {\n  return Array.from({ length: n }).map(timer.tick);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — map gọi callback kiểu trơn ⇒ bọc lại để lời gọi có dấu chấm\nclass Timer {\n  constructor(label) { this.label = label; this.ticks = 0; }\n  tick() { this.ticks++; return this.label + ' ' + this.ticks; }\n}\n\nfunction tickTimes(timer, n) {\n  return Array.from({ length: n }).map(() => timer.tick());   // this = timer\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>map(timer.tick)</code> trao cho <code>map</code> cái hàm trần; <code>map</code> gọi nó kiểu <code>f(phầnTử, chỉSố, mảng)</code> nên <code>this</code> là <code>undefined</code>. Arrow <code>() =&gt; timer.tick()</code> gọi lại với dấu chấm. <code>timer.tick.bind(timer)</code> cũng được.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>map(timer.tick())  — gọi tick một lần rồi đưa CHUỖI cho map.</li>\n  <li>Sửa class thành arrow field — đề cấm đổi class.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.2 this.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this#callbacks",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Three ticks|||Ba lần tick",
+            "goi": "tickTimes(new Timer(\"lap\"), 3)",
+            "mongDoi": [
+              "lap 1",
+              "lap 2",
+              "lap 3"
+            ]
+          },
+          {
+            "moTa": "Ticks accumulate on the same timer|||Tick cộng dồn trên cùng timer",
+            "chuanBi": "const t = new Timer(\"x\"); tickTimes(t, 2); tickTimes(t, 1);",
+            "goi": "t.ticks",
+            "mongDoi": 3
+          },
+          {
+            "moTa": "n = 0 gives []|||n = 0 cho []",
+            "goi": "tickTimes(new Timer(\"x\"), 0)",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Hidden: Timer class untouched|||Ẩn: class Timer giữ nguyên",
+            "an": true,
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "tick\\(\\) \\{ this\\.ticks\\+\\+; return this\\.label \\+ ' ' \\+ this\\.ticks; \\}"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "map(timer.tick())  — gọi tick một lần rồi đưa CHUỖI cho map."
+        },
+        {
+          "loi": "Sửa class thành arrow field — đề cấm đổi class."
+        }
+      ]
+    },
+    {
+      "title": "call, apply và bind",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "call",
+        "apply",
+        "bind"
+      ],
+      "prerequisites": [
+        "this"
+      ],
+      "tags": [
+        "javascript",
+        "this"
+      ],
+      "problemHtml": "<p><em>Bài 11.2 — this: bốn luật giải thích tất cả.</em> Lưu ý: máy chấm nạp <code>main.js</code> như script cổ điển; file bắt đầu bằng <code>'use strict'</code> để gọi trơn cho <code>this === undefined</code> giống module.</p><p>Cho hàm <code>introduce(greeting, punctuation)</code> dùng <code>this.name</code>. Viết ba hàm: <code>introCall(person, g, p)</code> dùng <code>call</code>; <code>introApply(person, args)</code> dùng <code>apply</code> với mảng <code>args</code>; <code>introBound(person, g)</code> trả về HÀM đã <code>bind</code> sẵn <code>this</code> và greeting, chỉ còn chờ dấu câu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>introCall(lan, \"Hello\", \"!\")</code> là <code>\"Hello, I am Lan!\"</code>.</li>\n  <li><code>introApply(lan, [\"Hi\", \".\"])</code> là <code>\"Hi, I am Lan.\"</code>.</li>\n  <li><code>introBound(lan, \"Hey\")</code> trả hàm; gắn nó lên object khác rồi gọi vẫn nói \"Lan\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "person: { name }; chuỗi.",
+      "outputSpec": "Chuỗi, hoặc một hàm (introBound).",
+      "constraints": "Dùng đúng call / apply / bind cho từng hàm.",
+      "examplesJson": [
+        {
+          "input": "introBound({ name: \"Lan\" }, \"Hey\")(\"?\")",
+          "output": "\"Hey, I am Lan?\"",
+          "explanation": "bind điền sẵn this và đối số đầu."
+        }
+      ],
+      "hintsJson": [
+        "introduce.call(person, g, p) — introduce.apply(person, args)",
+        "return introduce.bind(person, g);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — call / apply / bind\nfunction introduce(greeting, punctuation) {\n  return greeting + ', I am ' + this.name + punctuation;\n}\n\nfunction introCall(person, g, p) {}\nfunction introApply(person, args) {}\nfunction introBound(person, g) {}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — ba cách tự chọn this\nfunction introduce(greeting, punctuation) {\n  return greeting + ', I am ' + this.name + punctuation;\n}\n\nfunction introCall(person, g, p) {\n  return introduce.call(person, g, p);       // chạy ngay, đối số lần lượt\n}\nfunction introApply(person, args) {\n  return introduce.apply(person, args);      // chạy ngay, đối số là mảng\n}\nfunction introBound(person, g) {\n  return introduce.bind(person, g);          // KHÔNG chạy: trả hàm mới, this + greeting cố định\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>call</code> và <code>apply</code> chạy hàm ngay với <code>this</code> bạn chọn — khác nhau ở cách đưa đối số. <code>bind</code> trả hàm mới; <code>this</code> của nó cố định vĩnh viễn (luật 2 thắng luật 3), nên gắn lên object khác cũng không đổi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>introduce.call(person, args) với args là mảng — greeting thành cả mảng.</li>\n  <li>introBound gọi luôn hàm thay vì trả về.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.2 this.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "call|||call",
+            "goi": "introCall({ name: \"Lan\" }, \"Hello\", \"!\")",
+            "mongDoi": "Hello, I am Lan!"
+          },
+          {
+            "moTa": "apply with an array|||apply với mảng",
+            "goi": "introApply({ name: \"Lan\" }, [\"Hi\", \".\"])",
+            "mongDoi": "Hi, I am Lan."
+          },
+          {
+            "moTa": "bind returns a pre-filled function|||bind trả hàm đã điền sẵn",
+            "goi": "introBound({ name: \"Lan\" }, \"Hey\")(\"?\")",
+            "mongDoi": "Hey, I am Lan?"
+          },
+          {
+            "moTa": "A bound function ignores the new object|||Hàm đã bind bỏ qua object mới",
+            "chuanBi": "const o = { name: \"Minh\", f: introBound({ name: \"Lan\" }, \"Yo\") };",
+            "goi": "o.f(\"!\")",
+            "mongDoi": "Yo, I am Lan!"
+          },
+          {
+            "moTa": "Uses call and apply|||Có dùng call và apply",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.call\\([\\s\\S]*\\.apply\\("
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "introduce.call(person, args) với args là mảng — greeting thành cả mảng."
+        },
+        {
+          "loi": "introBound gọi luôn hàm thay vì trả về."
+        }
+      ]
+    },
+    {
+      "title": "Arrow giữ this trong hẹn giờ",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "arrow function",
+        "setTimeout",
+        "this"
+      ],
+      "prerequisites": [
+        "setTimeout"
+      ],
+      "tags": [
+        "javascript",
+        "this",
+        "timer"
+      ],
+      "problemHtml": "<p><em>Bài 11.2 — this: bốn luật giải thích tất cả.</em> Lưu ý: máy chấm nạp <code>main.js</code> như script cổ điển; file bắt đầu bằng <code>'use strict'</code> để gọi trơn cho <code>this === undefined</code> giống module.</p><p>Đồng hồ <code>makeClock()</code> có <code>seconds</code> và method <code>startAfter(ms)</code>: sau <code>ms</code> mili giây phải tăng <code>seconds</code> thêm 1 và gọi <code>this.onTick(this.seconds)</code> nếu có. Code khởi đầu dùng <code>setTimeout(function () { … })</code> nên <code>this</code> không phải đồng hồ. Máy chấm dùng đồng hồ GIẢ — không phải chờ thật.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sau <code>startAfter(100)</code> và 100 ms, <code>clock.seconds</code> là 1.</li>\n  <li>Gọi startAfter hai lần ⇒ seconds là 2 sau khi cả hai hẹn giờ chạy.</li>\n  <li><code>onTick</code> được gọi với số giây mới.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ms: số mili giây.",
+      "outputSpec": "Không trả về; đổi state của clock.",
+      "constraints": "Giữ startAfter là method (không biến thành arrow field).",
+      "examplesJson": [
+        {
+          "input": "c.startAfter(100); /* 100 ms sau */ c.seconds",
+          "output": "1",
+          "explanation": "Callback arrow mượn this của startAfter."
+        }
+      ],
+      "hintsJson": [
+        "Đổi function () { … } thành () => { … }.",
+        "setTimeout(() => { this.seconds++; if (this.onTick) this.onTick(this.seconds); }, ms);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — this trong hẹn giờ\nfunction makeClock() {\n  return {\n    seconds: 0,\n    onTick: null,\n    startAfter(ms) {\n      setTimeout(function () {\n        this.seconds++;\n        if (this.onTick) this.onTick(this.seconds);\n      }, ms);\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — arrow không có this riêng ⇒ dùng this của startAfter (chính đồng hồ)\nfunction makeClock() {\n  return {\n    seconds: 0,\n    onTick: null,\n    startAfter(ms) {\n      setTimeout(() => {\n        this.seconds++;                                   // this = clock vì ta gọi clock.startAfter()\n        if (this.onTick) this.onTick(this.seconds);\n      }, ms);\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hàm thường được trình duyệt/máy chấm gọi trơn khi hết giờ, nên có <code>this</code> riêng (không phải đồng hồ). Arrow không có <code>this</code>: nó dùng <code>this</code> của <code>startAfter</code>, mà <code>startAfter</code> được gọi bằng <code>clock.startAfter()</code> ⇒ đồng hồ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đổi cả startAfter thành arrow — this của nó thành undefined.</li>\n  <li>Dùng biến toàn cục thay vì this.seconds.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.2 this.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/arrow-functions",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "One tick after 100 ms|||Một tick sau 100 ms",
+            "chuanBi": "const c = makeClock(); c.startAfter(100); await new Promise((r) => setTimeout(r, 150));",
+            "goi": "c.seconds",
+            "mongDoi": 1
+          },
+          {
+            "moTa": "Two timers ⇒ 2|||Hai hẹn giờ ⇒ 2",
+            "chuanBi": "const c = makeClock(); c.startAfter(50); c.startAfter(80); await new Promise((r) => setTimeout(r, 100));",
+            "goi": "c.seconds",
+            "mongDoi": 2
+          },
+          {
+            "moTa": "onTick receives the new value|||onTick nhận giá trị mới",
+            "chuanBi": "const got = []; const c = makeClock(); c.onTick = (s) => got.push(s); c.startAfter(10); c.startAfter(20); await new Promise((r) => setTimeout(r, 30));",
+            "goi": "got",
+            "mongDoi": [
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": "Nothing happens before the delay|||Chưa tới giờ thì chưa đổi",
+            "chuanBi": "const c = makeClock(); c.startAfter(100); await new Promise((r) => setTimeout(r, 50));",
+            "goi": "c.seconds",
+            "mongDoi": 0
+          },
+          {
+            "moTa": "startAfter stays a method|||startAfter vẫn là method",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "startAfter\\s*\\(ms\\)\\s*\\{"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đổi cả startAfter thành arrow — this của nó thành undefined."
+        },
+        {
+          "loi": "Dùng biến toàn cục thay vì this.seconds."
+        }
+      ]
+    },
+    {
+      "title": "Bẫy arrow làm method",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "arrow function",
+        "method shorthand"
+      ],
+      "prerequisites": [
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "this"
+      ],
+      "problemHtml": "<p><em>Bài 11.2 — this: bốn luật giải thích tất cả.</em> Lưu ý: máy chấm nạp <code>main.js</code> như script cổ điển; file bắt đầu bằng <code>'use strict'</code> để gọi trơn cho <code>this === undefined</code> giống module.</p><p>Object <code>shop</code> viết các method bằng arrow nên <code>this</code> không phải shop. Sửa để <code>shop.title()</code> trả <code>\"CT Shop (3 items)\"</code>, <code>shop.add(\"pen\")</code> thêm vào giỏ và trả số món, và <code>shop.names()</code> trả tên viết HOA — trong <code>names</code> có một callback cần <code>this</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>shop.title()</code> dùng <code>this.name</code> và số món hiện tại.</li>\n  <li><code>shop.add(x)</code> thêm vào <code>this.items</code> và trả độ dài mới.</li>\n  <li><code>shop.names()</code> trả mảng <code>\"&lt;TÊN SHOP&gt;: &lt;món&gt;\"</code> — callback trong map dùng <code>this.name</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Không.",
+      "outputSpec": "Như mô tả.",
+      "constraints": "Giữ nguyên dữ liệu ban đầu của shop.",
+      "examplesJson": [
+        {
+          "input": "shop.names()",
+          "output": "[\"CT SHOP: book\", …]",
+          "explanation": "Callback arrow mượn this của names."
+        }
+      ],
+      "hintsJson": [
+        "Method: title() { … } (không phải title: () => …).",
+        "names() { return this.items.map((x) => this.name.toUpperCase() + \": \" + x); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — arrow làm method (hỏng)\nconst shop = {\n  name: 'CT Shop',\n  items: ['book', 'pen', 'bag'],\n  title: () => this.name + ' (' + this.items.length + ' items)',\n  add: (item) => { this.items.push(item); return this.items.length; },\n  names: () => this.items.map(function (x) { return this.name.toUpperCase() + ': ' + x; }),\n};\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — method viết bằng cú pháp method; arrow chỉ dùng cho callback BÊN TRONG\nconst shop = {\n  name: 'CT Shop',\n  items: ['book', 'pen', 'bag'],\n  title() {\n    return this.name + ' (' + this.items.length + ' items)';   // luật 3: this = shop\n  },\n  add(item) {\n    this.items.push(item);\n    return this.items.length;\n  },\n  names() {\n    return this.items.map((x) => this.name.toUpperCase() + ': ' + x);   // arrow mượn this của names\n  },\n};\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Object literal không tạo <code>this</code>; arrow viết làm method nhìn ra cấp cao nhất của file (strict ⇒ <code>undefined</code>). Đổi thành cú pháp method để luật 3 áp dụng. Trong <code>names</code> ngược lại: callback phải là arrow để mượn <code>this</code> của method — một hàm thường ở đó lại mất <code>this</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa title nhưng quên callback trong names.</li>\n  <li>Thay this bằng shop — chạy được nhưng không học được gì, và vỡ khi đổi tên biến.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.2 this.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/arrow-functions#arrow-functions-have-no-this",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "title() uses this|||title() dùng this",
+            "goi": "shop.title()",
+            "mongDoi": "CT Shop (3 items)"
+          },
+          {
+            "moTa": "add() pushes and returns the length|||add() thêm và trả độ dài",
+            "goi": "[shop.add(\"cap\"), shop.title()]",
+            "mongDoi": [
+              4,
+              "CT Shop (4 items)"
+            ]
+          },
+          {
+            "moTa": "names() callback keeps this|||callback trong names() giữ this",
+            "goi": "shop.names()",
+            "mongDoi": [
+              "CT SHOP: book",
+              "CT SHOP: pen",
+              "CT SHOP: bag"
+            ]
+          },
+          {
+            "moTa": "Hidden: methods work on a copy with another name|||Ẩn: method chạy đúng trên bản sao có tên khác",
+            "an": true,
+            "chuanBi": "const other = { ...shop, name: \"B\", items: [\"x\"] };",
+            "goi": "other.title()",
+            "mongDoi": "B (1 items)"
+          },
+          {
+            "moTa": "No arrow methods left|||Không còn method viết bằng arrow",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "(title|add|names)\\s*:\\s*\\(",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa title nhưng quên callback trong names."
+        },
+        {
+          "loi": "Thay this bằng shop — chạy được nhưng không học được gì, và vỡ khi đổi tên biến."
+        }
+      ]
+    },
+    {
+      "title": "Tự viết bind",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "bind",
+        "apply",
+        "closure",
+        "rest/spread"
+      ],
+      "prerequisites": [
+        "call/apply",
+        "closure"
+      ],
+      "tags": [
+        "javascript",
+        "this",
+        "phỏng vấn"
+      ],
+      "problemHtml": "<p><em>Bài 11.2 — this: bốn luật giải thích tất cả.</em> Lưu ý: máy chấm nạp <code>main.js</code> như script cổ điển; file bắt đầu bằng <code>'use strict'</code> để gọi trơn cho <code>this === undefined</code> giống module.</p><p>Câu phỏng vấn kinh điển: viết <code>myBind(fn, thisArg, ...preset)</code> hoạt động như <code>fn.bind(thisArg, ...preset)</code> mà KHÔNG dùng <code>.bind(</code>. Hàm trả về nhận thêm đối số và nối sau <code>preset</code>; <code>this</code> luôn là <code>thisArg</code> dù hàm trả về được gọi kiểu method của object khác.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>myBind(f, obj)()</code> chạy <code>f</code> với <code>this === obj</code>.</li>\n  <li>Đối số điền sẵn đứng trước đối số lúc gọi.</li>\n  <li>Không dùng <code>.bind(</code>; giá trị trả về của <code>fn</code> được trả lại nguyên vẹn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "fn: hàm; thisArg: bất kỳ; preset: các đối số điền sẵn.",
+      "outputSpec": "Một hàm mới.",
+      "constraints": "Không dùng Function.prototype.bind.",
+      "examplesJson": [
+        {
+          "input": "myBind(function (a, b) { return this.x + a + b; }, { x: 1 }, 2)(3)",
+          "output": "6",
+          "explanation": "this.x = 1, a = 2 (điền sẵn), b = 3."
+        }
+      ],
+      "hintsJson": [
+        "Hàm trả về là một closure giữ fn, thisArg và preset.",
+        "return (...later) => fn.apply(thisArg, [...preset, ...later]);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — tự viết bind\nfunction myBind(fn, thisArg, ...preset) {\n  return fn;   // chưa gắn this, chưa điền sẵn gì\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "'use strict';\n// Bài 11.2 — myBind: closure giữ fn, thisArg, preset; apply chọn this mỗi lần gọi\nfunction myBind(fn, thisArg, ...preset) {\n  return function bound(...later) {\n    // bỏ qua this của lời gọi hiện tại — luôn dùng thisArg đã chốt\n    return fn.apply(thisArg, [...preset, ...later]);\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>bind</code> chẳng có gì thần bí: nó là một closure (bài 11.1) nhớ <code>fn</code>, <code>thisArg</code> và các đối số đầu, cộng một lần <code>apply</code> (luật 2) mỗi khi được gọi. Vì hàm trả về không dùng <code>this</code> của chính nó, gọi <code>other.f()</code> cũng không đổi được gì. (<code>bind</code> thật còn xử lý trường hợp gọi bằng <code>new</code> — ngoài phạm vi bài này.)</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>fn.call(thisArg, preset, later) — truyền hai MẢNG thay vì trải ra.</li>\n  <li>Quên return giá trị của fn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.2 this.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "this is thisArg|||this là thisArg",
+            "goi": "myBind(function () { return this.name; }, { name: \"Lan\" })()",
+            "mongDoi": "Lan"
+          },
+          {
+            "moTa": "Preset arguments come first|||Đối số điền sẵn đứng trước",
+            "goi": "myBind(function (a, b, c) { return [this.x, a, b, c]; }, { x: 0 }, 1, 2)(3)",
+            "mongDoi": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "moTa": "Calling as another object's method does not change this|||Gọi như method của object khác không đổi this",
+            "chuanBi": "const o = { name: \"Minh\", f: myBind(function () { return this.name; }, { name: \"Lan\" }) };",
+            "goi": "o.f()",
+            "mongDoi": "Lan"
+          },
+          {
+            "moTa": "Return value is passed back|||Giá trị trả về được trả lại",
+            "goi": "myBind((a, b) => a * b, null, 6)(7)",
+            "mongDoi": 42
+          },
+          {
+            "moTa": "Does not use .bind(|||Không dùng .bind(",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\.bind\\(",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Hidden: works with a class method|||Ẩn: chạy với method của class",
+            "an": true,
+            "chuanBi": "class C { constructor() { this.v = 5; } get2(k) { return this.v * k; } } const c1 = new C(); const g = myBind(c1.get2, c1);",
+            "goi": "g(3)",
+            "mongDoi": 15
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "fn.call(thisArg, preset, later) — truyền hai MẢNG thay vì trải ra."
+        },
+        {
+          "loi": "Quên return giá trị của fn."
+        }
+      ]
+    }
+  ]
+}

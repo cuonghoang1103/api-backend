@@ -1,0 +1,4 @@
+map(t.tick)        -> TypeError: Cannot read properties of undefined (reading 'ticks')
+map(() => t.tick())-> ['lap 1', 'lap 2']
+map(boundTick)     -> ['lap 3', 'lap 4']
+setTimeout(fn) this -> [object Window]

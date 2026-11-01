@@ -1,0 +1,4 @@
+mutate, then set the same object:
+  same reference -> React skips the re-render
+build a new object:
+  new reference  -> re-render with ["milk","eggs","bread"]

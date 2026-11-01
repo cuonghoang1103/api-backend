@@ -1,0 +1,4 @@
+Hi, Lan | Hi, Minh
+same greet function? true
+prototype of a is User.prototype? true
+Hi, Chi | instanceof User? true

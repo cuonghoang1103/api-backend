@@ -1,0 +1,680 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-11-4-map-set-immutable",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-11-4-map-set-immutable"
+  },
+  "exercises": [
+    {
+      "title": "Xoá trùng, giữ thứ tự",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "Set",
+        "spread"
+      ],
+      "prerequisites": [
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "set"
+      ],
+      "problemHtml": "<p><em>Bài 11.4 — Map, Set và tư duy bất biến.</em> Máy chấm so SÂU giá trị trả về, và nhiều kiểm soi THAM CHIẾU (<code>===</code>) để chắc bạn không sửa dữ liệu gốc.</p><p>Viết <code>unique(arr)</code> trả về MẢNG MỚI chỉ giữ mỗi giá trị một lần, theo thứ tự xuất hiện đầu tiên. Không được sửa mảng đầu vào. Lưu ý <code>1</code> và <code>\"1\"</code> là hai giá trị khác nhau.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>unique([\"js\", \"css\", \"js\", \"html\", \"css\"])</code> là <code>[\"js\", \"css\", \"html\"]</code>.</li>\n  <li>Phân biệt <code>1</code> và <code>\"1\"</code>; mảng gốc giữ nguyên.</li>\n  <li>Trả về một mảng (không phải Set).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "arr: mảng giá trị nguyên thuỷ.",
+      "outputSpec": "Mảng mới.",
+      "constraints": "Không sửa arr.",
+      "examplesJson": [
+        {
+          "input": "unique([3, 1, 3, 2, 1])",
+          "output": "[3, 1, 2]",
+          "explanation": "Giữ lần xuất hiện đầu."
+        }
+      ],
+      "hintsJson": [
+        "Set giữ thứ tự thêm vào.",
+        "return [...new Set(arr)];"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — unique\nfunction unique(arr) {\n  return arr;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — unique: Set bỏ trùng (so như ===) và giữ thứ tự thêm vào\nfunction unique(arr) {\n  const seen = new Set(arr);  // Set chỉ nhận mỗi giá trị một lần; 1 và \"1\" là hai giá trị\n  return [...seen];           // trải Set ra mảng MỚI theo thứ tự thêm vào, arr không bị đụng tới\n}\n// Cách viết tay tương đương (chậm hơn với mảng lớn vì includes phải quét):\n// const out = []; for (const x of arr) if (!out.includes(x)) out.push(x); return out;\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Set giữ mỗi giá trị một lần theo luật <code>===</code> (riêng NaN được coi là bằng chính nó), nên <code>1</code> và <code>\"1\"</code> là hai phần tử. Trải <code>[...set]</code> ra mảng mới theo thứ tự thêm vào.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả về new Set(arr) — đề cần mảng.</li>\n  <li>Dùng arr.sort() trước — đổi thứ tự và sửa luôn mảng gốc.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.4 Map, Set và bất biến.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/map-set#set",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Removes duplicates in order|||Bỏ trùng, giữ thứ tự",
+            "goi": "unique([\"js\", \"css\", \"js\", \"html\", \"css\"])",
+            "mongDoi": [
+              "js",
+              "css",
+              "html"
+            ]
+          },
+          {
+            "moTa": "1 and \"1\" are different|||1 và \"1\" khác nhau",
+            "goi": "unique([1, \"1\", 1])",
+            "mongDoi": [
+              1,
+              "1"
+            ]
+          },
+          {
+            "moTa": "Input untouched, new array returned|||Đầu vào nguyên vẹn, trả mảng mới",
+            "chuanBi": "const a = [1, 1, 2]; const r = unique(a);",
+            "goi": "[a, r !== a, Array.isArray(r)]",
+            "mongDoi": [
+              [
+                1,
+                1,
+                2
+              ],
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Hidden: empty array|||Ẩn: mảng rỗng",
+            "an": true,
+            "goi": "unique([])",
+            "mongDoi": []
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả về new Set(arr) — đề cần mảng."
+        },
+        {
+          "loi": "Dùng arr.sort() trước — đổi thứ tự và sửa luôn mảng gốc."
+        }
+      ]
+    },
+    {
+      "title": "Đếm từ bằng Map",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Map",
+        "??"
+      ],
+      "prerequisites": [
+        "split",
+        "vòng lặp"
+      ],
+      "tags": [
+        "javascript",
+        "map"
+      ],
+      "problemHtml": "<p><em>Bài 11.4 — Map, Set và tư duy bất biến.</em> Máy chấm so SÂU giá trị trả về, và nhiều kiểm soi THAM CHIẾU (<code>===</code>) để chắc bạn không sửa dữ liệu gốc.</p><p>Viết <code>countWords(text)</code> trả về một <code>Map</code>: khoá là từ (viết thường), giá trị là số lần xuất hiện, theo thứ tự gặp lần đầu. Từ được tách bởi một hoặc nhiều khoảng trắng; bỏ khoảng trắng đầu/cuối. Rồi viết <code>toPlain(map)</code> đổi Map thành object thường để gửi JSON.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>countWords(\"To be or not to be\")</code> có <code>to → 2</code>, <code>be → 2</code>, <code>or → 1</code>, <code>not → 1</code>.</li>\n  <li>Chuỗi rỗng hoặc toàn khoảng trắng ⇒ Map rỗng.</li>\n  <li><code>JSON.stringify(toPlain(m))</code> cho <code>{\"to\":2,…}</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "Map<string, number>; object.",
+      "constraints": "Kết quả của countWords phải là Map.",
+      "examplesJson": [
+        {
+          "input": "countWords(\"a  A b\").get(\"a\")",
+          "output": "2",
+          "explanation": "Viết thường trước khi đếm; hai khoảng trắng vẫn là một ranh giới."
+        }
+      ],
+      "hintsJson": [
+        "text.trim().toLowerCase().split(/\\s+/) — nhớ trường hợp chuỗi rỗng cho [\"\"].",
+        "m.set(w, (m.get(w) ?? 0) + 1); — toPlain: Object.fromEntries(map)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — đếm từ\nfunction countWords(text) {\n  const m = {};\n  for (const w of text.split(' ')) m[w] = (m[w] || 0) + 1;\n  return m;\n}\nfunction toPlain(map) {}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — đếm từ: Map giữ thứ tự gặp lần đầu, ?? giữ được số 0\nfunction countWords(text) {\n  const m = new Map();\n  const clean = text.trim().toLowerCase();\n  if (clean === '') return m;                 // ''.split(...) cho [''] — tránh đếm từ rỗng\n  for (const w of clean.split(/\\s+/)) {\n    m.set(w, (m.get(w) ?? 0) + 1);\n  }\n  return m;\n}\n\nfunction toPlain(map) {\n  return Object.fromEntries(map);             // Map → object để JSON.stringify hiểu\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>split(/\\\\s+/)</code> coi mọi chuỗi khoảng trắng là một ranh giới. <code>m.get(w) ?? 0</code> đọc số cũ hoặc 0. <code>JSON.stringify</code> không hiểu Map (ra <code>{}</code>), nên phải <code>Object.fromEntries</code> trước khi gửi đi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>split(\" \") — hai khoảng trắng liền tạo từ rỗng.</li>\n  <li>Quên toLowerCase — \"To\" và \"to\" thành hai từ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.4 Map, Set và bất biến.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/map-set#map",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Counts words|||Đếm đúng",
+            "goi": "countWords(\"To be or not to be\")",
+            "mongDoi": {
+              "$js": "Map",
+              "muc": [
+                [
+                  "to",
+                  2
+                ],
+                [
+                  "be",
+                  2
+                ],
+                [
+                  "or",
+                  1
+                ],
+                [
+                  "not",
+                  1
+                ]
+              ]
+            }
+          },
+          {
+            "moTa": "Extra spaces and case|||Khoảng trắng thừa và hoa/thường",
+            "goi": "countWords(\"  a  A b \").get(\"a\")",
+            "mongDoi": 2
+          },
+          {
+            "moTa": "Empty text gives an empty Map|||Chuỗi rỗng cho Map rỗng",
+            "goi": "[countWords(\"\").size, countWords(\"   \").size]",
+            "mongDoi": [
+              0,
+              0
+            ]
+          },
+          {
+            "moTa": "toPlain makes it JSON-ready|||toPlain sẵn sàng cho JSON",
+            "goi": "JSON.stringify(toPlain(countWords(\"x y x\")))",
+            "mongDoi": "{\"x\":2,\"y\":1}"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "split(\" \") — hai khoảng trắng liền tạo từ rỗng."
+        },
+        {
+          "loi": "Quên toLowerCase — \"To\" và \"to\" thành hai từ."
+        }
+      ]
+    },
+    {
+      "title": "Đảo trạng thái todo không sửa gốc",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "immutable update",
+        "map",
+        "spread"
+      ],
+      "prerequisites": [
+        "mảng object"
+      ],
+      "tags": [
+        "javascript",
+        "immutable",
+        "react"
+      ],
+      "problemHtml": "<p><em>Bài 11.4 — Map, Set và tư duy bất biến.</em> Máy chấm so SÂU giá trị trả về, và nhiều kiểm soi THAM CHIẾU (<code>===</code>) để chắc bạn không sửa dữ liệu gốc.</p><p>Viết <code>toggleTodo(todos, id)</code> trả về MẢNG MỚI trong đó todo có <code>id</code> bị đảo <code>done</code>. Mảng gốc và mọi object gốc phải giữ nguyên; các todo KHÔNG đổi phải được dùng lại (cùng tham chiếu) — đó là thứ giúp React bỏ qua render những dòng không đổi. Không có id ⇒ trả mảng mới với nội dung như cũ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Todo được chọn có done đảo ngược; todo khác giữ nguyên tham chiếu.</li>\n  <li>Mảng gốc và object gốc không bị sửa.</li>\n  <li>Luôn trả về một mảng mới.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "todos: { id, done, … }[]; id: number.",
+      "outputSpec": "Mảng mới.",
+      "constraints": "Không dùng phương thức sửa tại chỗ trên todos.",
+      "examplesJson": [
+        {
+          "input": "toggleTodo(todos, 2)[1].done",
+          "output": "true",
+          "explanation": "Chỉ todo 2 đổi."
+        }
+      ],
+      "hintsJson": [
+        "map trả mảng mới; phần tử không khớp thì trả nguyên t.",
+        "todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — toggleTodo (đang sửa tại chỗ)\nfunction toggleTodo(todos, id) {\n  const t = todos.find((x) => x.id === id);\n  if (t) t.done = !t.done;\n  return todos;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — toggleTodo bất biến: mảng mới, chỉ phần tử đổi là object mới\nfunction toggleTodo(todos, id) {\n  return todos.map((t) =>\n    t.id === id ? { ...t, done: !t.done } : t   // không đổi ⇒ dùng lại đúng object cũ\n  );\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>map</code> luôn tạo mảng mới. Với phần tử cần đổi, spread tạo object mới có <code>done</code> đảo; phần tử khác được trả nguyên, nên <code>next[0] === todos[0]</code>. React (và memo) so tham chiếu: dòng nào cùng tham chiếu thì bỏ qua — vừa đúng vừa nhanh.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa t.done rồi trả todos — cùng tham chiếu, React không render.</li>\n  <li>structuredClone cả mảng — đúng dữ liệu nhưng mọi dòng đều thành object mới.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.4 Map, Set và bất biến.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/updating-arrays-in-state",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The chosen todo flips|||Todo được chọn bị đảo",
+            "chuanBi": "const todos = [{ id: 1, title: \"a\", done: false, tags: [] }, { id: 2, title: \"b\", done: false, tags: [\"x\"] }, { id: 3, title: \"c\", done: true, tags: [] }];",
+            "goi": "toggleTodo(todos, 2).map((t) => t.done)",
+            "mongDoi": [
+              false,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Originals untouched|||Bản gốc nguyên vẹn",
+            "chuanBi": "const todos = [{ id: 1, title: \"a\", done: false, tags: [] }, { id: 2, title: \"b\", done: false, tags: [\"x\"] }, { id: 3, title: \"c\", done: true, tags: [] }]; toggleTodo(todos, 2);",
+            "goi": "todos.map((t) => t.done)",
+            "mongDoi": [
+              false,
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": "New array, unchanged items reused|||Mảng mới, phần tử không đổi được dùng lại",
+            "chuanBi": "const todos = [{ id: 1, title: \"a\", done: false, tags: [] }, { id: 2, title: \"b\", done: false, tags: [\"x\"] }, { id: 3, title: \"c\", done: true, tags: [] }]; const n = toggleTodo(todos, 2);",
+            "goi": "[n !== todos, n[0] === todos[0], n[1] !== todos[1], n[2] === todos[2]]",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Hidden: unknown id ⇒ new array, same items|||Ẩn: id lạ ⇒ mảng mới, phần tử cũ",
+            "an": true,
+            "chuanBi": "const todos = [{ id: 1, title: \"a\", done: false, tags: [] }, { id: 2, title: \"b\", done: false, tags: [\"x\"] }, { id: 3, title: \"c\", done: true, tags: [] }]; const n = toggleTodo(todos, 99);",
+            "goi": "[n !== todos, n.every((t, i) => t === todos[i])]",
+            "mongDoi": [
+              true,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa t.done rồi trả todos — cùng tham chiếu, React không render."
+        },
+        {
+          "loi": "structuredClone cả mảng — đúng dữ liệu nhưng mọi dòng đều thành object mới."
+        }
+      ]
+    },
+    {
+      "title": "Thêm thẻ không trùng, không sửa gốc",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Set",
+        "spread lồng nhau"
+      ],
+      "prerequisites": [
+        "spread"
+      ],
+      "tags": [
+        "javascript",
+        "immutable",
+        "set"
+      ],
+      "problemHtml": "<p><em>Bài 11.4 — Map, Set và tư duy bất biến.</em> Máy chấm so SÂU giá trị trả về, và nhiều kiểm soi THAM CHIẾU (<code>===</code>) để chắc bạn không sửa dữ liệu gốc.</p><p>Viết <code>addTag(todo, tag)</code> trả về todo MỚI có mảng <code>tags</code> MỚI chứa <code>tag</code> đúng một lần (thêm vào cuối nếu chưa có). Thẻ được chuẩn hoá: cắt khoảng trắng, viết thường; thẻ rỗng ⇒ trả lại chính <code>todo</code> (không tạo object mới). Không được sửa <code>todo.tags</code> gốc — đây là bẫy \"spread chỉ chép nông\".</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>addTag(t, \" JS \").tags</code> có <code>\"js\"</code> một lần, kể cả khi gọi hai lần.</li>\n  <li><code>todo</code> và <code>todo.tags</code> gốc không đổi; kết quả có <code>tags</code> là mảng khác.</li>\n  <li>Thẻ rỗng ⇒ trả về đúng object <code>todo</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "todo: { tags: string[] }; tag: string.",
+      "outputSpec": "Todo mới (hoặc chính todo).",
+      "constraints": "Không push vào todo.tags.",
+      "examplesJson": [
+        {
+          "input": "addTag({ id: 1, tags: [\"x\"] }, \"Y\").tags",
+          "output": "[\"x\", \"y\"]",
+          "explanation": "Chuẩn hoá rồi thêm vào cuối."
+        }
+      ],
+      "hintsJson": [
+        "const t = tag.trim().toLowerCase(); if (!t) return todo;",
+        "return { ...todo, tags: [...new Set([...todo.tags, t])] };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — addTag (bẫy spread nông)\nfunction addTag(todo, tag) {\n  const copy = { ...todo };\n  copy.tags.push(tag);       // vẫn là mảng tags CŨ!\n  return copy;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — addTag: chép CẢ tầng tags, Set chống trùng\nfunction addTag(todo, tag) {\n  const t = tag.trim().toLowerCase();\n  if (!t) return todo;                                    // không có gì đổi ⇒ giữ tham chiếu cũ\n  return { ...todo, tags: [...new Set([...todo.tags, t])] };   // object mới + mảng mới\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>{ ...todo }</code> chỉ chép tầng đầu; <code>copy.tags</code> vẫn là mảng cũ nên <code>push</code> sửa luôn bản gốc. Phải tạo mảng mới cho đúng tầng đang đổi. Set loại thẻ trùng mà giữ thứ tự. Không đổi gì thì trả chính <code>todo</code> — giữ tham chiếu là \"không có gì thay đổi\".</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ spread object, push vào tags — sửa gốc.</li>\n  <li>Không chuẩn hoá — \"JS\" và \"js\" thành hai thẻ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.4 Map, Set và bất biến.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/updating-objects-in-state#updating-a-nested-object",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Adds a normalised tag once|||Thêm thẻ đã chuẩn hoá đúng một lần",
+            "goi": "addTag(addTag({ id: 1, tags: [\"x\"] }, \" JS \"), \"js\").tags",
+            "mongDoi": [
+              "x",
+              "js"
+            ]
+          },
+          {
+            "moTa": "Originals untouched|||Bản gốc nguyên vẹn",
+            "chuanBi": "const t = { id: 1, tags: [\"x\"] }; const tags = t.tags; const n = addTag(t, \"y\");",
+            "goi": "[t.tags, t.tags === tags, n !== t, n.tags !== t.tags]",
+            "mongDoi": [
+              [
+                "x"
+              ],
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Empty tag returns the same object|||Thẻ rỗng trả lại chính object",
+            "chuanBi": "const t = { id: 1, tags: [] };",
+            "goi": "addTag(t, \"   \") === t",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Hidden: other fields are kept|||Ẩn: các trường khác được giữ",
+            "an": true,
+            "goi": "addTag({ id: 7, title: \"z\", tags: [] }, \"a\")",
+            "mongDoi": {
+              "id": 7,
+              "title": "z",
+              "tags": [
+                "a"
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ spread object, push vào tags — sửa gốc."
+        },
+        {
+          "loi": "Không chuẩn hoá — \"JS\" và \"js\" thành hai thẻ."
+        }
+      ]
+    },
+    {
+      "title": "Gom nhóm todo vào Map",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Map",
+        "gom nhóm"
+      ],
+      "prerequisites": [
+        "Map",
+        "vòng lặp"
+      ],
+      "tags": [
+        "javascript",
+        "map"
+      ],
+      "problemHtml": "<p><em>Bài 11.4 — Map, Set và tư duy bất biến.</em> Máy chấm so SÂU giá trị trả về, và nhiều kiểm soi THAM CHIẾU (<code>===</code>) để chắc bạn không sửa dữ liệu gốc.</p><p>Viết <code>groupByStatus(todos)</code> trả về <code>Map</code> có ĐÚNG hai khoá theo thứ tự <code>\"open\"</code> rồi <code>\"done\"</code>, mỗi khoá là mảng todo (giữ thứ tự gốc, dùng lại object gốc). Rồi viết <code>summary(todos)</code> trả chuỗi <code>\"open: 2, done: 1\"</code> dựa trên Map đó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Map luôn có cả hai khoá, kể cả khi một nhóm rỗng.</li>\n  <li>Phần tử trong nhóm là chính object gốc (không chép).</li>\n  <li><code>summary</code> trả <code>\"open: N, done: M\"</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "todos: { done: boolean }[].",
+      "outputSpec": "Map<\"open\"|\"done\", todo[]>; string.",
+      "constraints": "Không sửa todos.",
+      "examplesJson": [
+        {
+          "input": "groupByStatus(todos).get(\"done\").length",
+          "output": "1",
+          "explanation": "Một todo đã xong."
+        }
+      ],
+      "hintsJson": [
+        "const m = new Map([[\"open\", []], [\"done\", []]]);",
+        "for (const t of todos) m.get(t.done ? \"done\" : \"open\").push(t);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — gom nhóm\nfunction groupByStatus(todos) {\n  return { open: todos.filter((t) => !t.done), done: todos.filter((t) => t.done) };   // object, không phải Map\n}\nfunction summary(todos) {}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — gom nhóm vào Map có sẵn hai khoá theo thứ tự cố định\nfunction groupByStatus(todos) {\n  const m = new Map([['open', []], ['done', []]]);   // thứ tự khoá = thứ tự thêm\n  for (const t of todos) {\n    m.get(t.done ? 'done' : 'open').push(t);         // push vào mảng MỚI của Map, không đụng todos\n  }\n  return m;\n}\n\nfunction summary(todos) {\n  const m = groupByStatus(todos);\n  return 'open: ' + m.get('open').length + ', done: ' + m.get('done').length;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khởi tạo Map với hai khoá sẵn giúp nhóm rỗng vẫn có mặt và thứ tự cố định. <code>push</code> ở đây hợp lệ: mảng nhóm là mảng MỚI ta vừa tạo, không phải state của ai. Phần tử trong nhóm là chính object gốc — gom nhóm không cần chép.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ tạo khoá khi gặp phần tử — nhóm rỗng biến mất.</li>\n  <li>Trả object thường — kiểm instanceof Map trượt.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.4 Map, Set và bất biến.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Returns a Map with open then done|||Trả Map với open rồi done",
+            "chuanBi": "const todos = [{ id: 1, title: \"a\", done: false, tags: [] }, { id: 2, title: \"b\", done: false, tags: [\"x\"] }, { id: 3, title: \"c\", done: true, tags: [] }];",
+            "goi": "[groupByStatus(todos) instanceof Map, [...groupByStatus(todos).keys()]]",
+            "mongDoi": [
+              true,
+              [
+                "open",
+                "done"
+              ]
+            ]
+          },
+          {
+            "moTa": "Groups reuse the original objects|||Nhóm dùng lại object gốc",
+            "chuanBi": "const todos = [{ id: 1, title: \"a\", done: false, tags: [] }, { id: 2, title: \"b\", done: false, tags: [\"x\"] }, { id: 3, title: \"c\", done: true, tags: [] }]; const g = groupByStatus(todos);",
+            "goi": "[g.get(\"open\").length, g.get(\"done\")[0] === todos[2]]",
+            "mongDoi": [
+              2,
+              true
+            ]
+          },
+          {
+            "moTa": "Empty group still present|||Nhóm rỗng vẫn có mặt",
+            "goi": "groupByStatus([{ done: false }]).get(\"done\")",
+            "mongDoi": []
+          },
+          {
+            "moTa": "summary|||summary",
+            "chuanBi": "const todos = [{ id: 1, title: \"a\", done: false, tags: [] }, { id: 2, title: \"b\", done: false, tags: [\"x\"] }, { id: 3, title: \"c\", done: true, tags: [] }];",
+            "goi": "summary(todos)",
+            "mongDoi": "open: 2, done: 1"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ tạo khoá khi gặp phần tử — nhóm rỗng biến mất."
+        },
+        {
+          "loi": "Trả object thường — kiểm instanceof Map trượt."
+        }
+      ]
+    },
+    {
+      "title": "setIn: cập nhật sâu mà bất biến",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "immutable update",
+        "đệ quy",
+        "spread"
+      ],
+      "prerequisites": [
+        "spread",
+        "đệ quy"
+      ],
+      "tags": [
+        "javascript",
+        "immutable"
+      ],
+      "problemHtml": "<p><em>Bài 11.4 — Map, Set và tư duy bất biến.</em> Máy chấm so SÂU giá trị trả về, và nhiều kiểm soi THAM CHIẾU (<code>===</code>) để chắc bạn không sửa dữ liệu gốc.</p><p>Viết <code>setIn(obj, path, value)</code>: <code>path</code> là mảng khoá (chuỗi cho object, số cho mảng), trả về bản MỚI của <code>obj</code> trong đó vị trí <code>path</code> mang <code>value</code>. Chỉ những object/mảng NẰM TRÊN đường đi được chép; mọi nhánh khác giữ nguyên tham chiếu. Khoá chưa tồn tại thì tạo object rỗng. <code>path</code> rỗng ⇒ trả <code>value</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>setIn(user, [\"address\", \"city\"], \"Hue\")</code> đổi thành phố, <code>user</code> gốc không đổi.</li>\n  <li>Nhánh không nằm trên đường đi giữ nguyên tham chiếu; mảng vẫn là mảng.</li>\n  <li>Khoá thiếu được tạo; path rỗng ⇒ value.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "obj: object/mảng; path: (string|number)[]; value: bất kỳ.",
+      "outputSpec": "Bản mới.",
+      "constraints": "Không dùng structuredClone hay JSON (chép quá nhiều).",
+      "examplesJson": [
+        {
+          "input": "setIn({ a: [1, 2] }, [\"a\", 1], 9)",
+          "output": "{ a: [1, 9] }",
+          "explanation": "Chép object ngoài và mảng a; phần còn lại giữ nguyên."
+        }
+      ],
+      "hintsJson": [
+        "Đệ quy: const [k, ...rest] = path; const child = obj?.[k] ?? {}; const next = setIn(child, rest, value);",
+        "Array.isArray(obj) ? obj.with(k, next) — hoặc copy = [...obj]; copy[k] = next — : { ...obj, [k]: next }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — setIn (đang sửa tại chỗ)\nfunction setIn(obj, path, value) {\n  let cur = obj;\n  for (let i = 0; i < path.length - 1; i++) cur = cur[path[i]];\n  cur[path[path.length - 1]] = value;\n  return obj;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.4 — setIn: chép đúng các tầng nằm trên đường đi, mọi nhánh khác dùng lại\nfunction setIn(obj, path, value) {\n  if (path.length === 0) return value;               // tới đích: giá trị mới thay chỗ này\n  const [k, ...rest] = path;\n  const child = obj != null && obj[k] !== undefined ? obj[k] : {};   // khoá thiếu ⇒ tạo object rỗng\n  const next = setIn(child, rest, value);            // đệ quy xuống tầng dưới\n  if (Array.isArray(obj)) {\n    const copy = [...obj];                           // mảng mới, phần tử khác dùng lại\n    copy[k] = next;\n    return copy;\n  }\n  return { ...(obj ?? {}), [k]: next };              // object mới, thuộc tính khác dùng lại\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi tầng đệ quy chỉ chép một container (object hoặc mảng) — đúng những tầng trên đường đi. Thuộc tính khác được spread sang nên giữ nguyên tham chiếu. Đây chính là việc các thư viện như Immer làm hộ bạn trong React/Redux.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chép nông một lần ở ngoài cùng — tầng sâu vẫn bị sửa.</li>\n  <li>Biến mảng thành object khi spread ({ ...arr }).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.4 Map, Set và bất biến.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://react.dev/learn/updating-objects-in-state#write-concise-update-logic-with-immer",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Deep update, original untouched|||Đổi sâu, gốc nguyên vẹn",
+            "chuanBi": "const u = { name: \"Lan\", address: { city: \"Hanoi\", zip: \"100000\" } }; const n = setIn(u, [\"address\", \"city\"], \"Hue\");",
+            "goi": "[n.address.city, u.address.city, n.address.zip]",
+            "mongDoi": [
+              "Hue",
+              "Hanoi",
+              "100000"
+            ]
+          },
+          {
+            "moTa": "Only the path is copied|||Chỉ chép trên đường đi",
+            "chuanBi": "const u = { a: { b: 1 }, other: { x: 1 } }; const n = setIn(u, [\"a\", \"b\"], 2);",
+            "goi": "[n !== u, n.a !== u.a, n.other === u.other]",
+            "mongDoi": [
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Arrays stay arrays|||Mảng vẫn là mảng",
+            "goi": "setIn({ a: [1, 2, 3] }, [\"a\", 1], 9)",
+            "mongDoi": {
+              "a": [
+                1,
+                9,
+                3
+              ]
+            }
+          },
+          {
+            "moTa": "Missing keys are created|||Khoá thiếu được tạo",
+            "goi": "setIn({}, [\"x\", \"y\"], 1)",
+            "mongDoi": {
+              "x": {
+                "y": 1
+              }
+            }
+          },
+          {
+            "moTa": "Empty path returns value|||Path rỗng trả value",
+            "goi": "setIn({ a: 1 }, [], \"z\")",
+            "mongDoi": "z"
+          },
+          {
+            "moTa": "Hidden: array element objects reused|||Ẩn: phần tử mảng không đổi được dùng lại",
+            "an": true,
+            "chuanBi": "const s = { list: [{ id: 1 }, { id: 2 }] }; const n = setIn(s, [\"list\", 1, \"id\"], 5);",
+            "goi": "[n.list[0] === s.list[0], n.list[1].id, s.list[1].id, Array.isArray(n.list)]",
+            "mongDoi": [
+              true,
+              5,
+              2,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chép nông một lần ở ngoài cùng — tầng sâu vẫn bị sửa."
+        },
+        {
+          "loi": "Biến mảng thành object khi spread ({ ...arr })."
+        }
+      ]
+    }
+  ]
+}

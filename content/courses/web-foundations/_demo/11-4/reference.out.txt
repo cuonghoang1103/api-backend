@@ -1,0 +1,5 @@
+a.name = Minh
+false <- two objects, even with the same content
+true <- same object
+nums = [1, 2, 3, 4]
+const object changed: dark

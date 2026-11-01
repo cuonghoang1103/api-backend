@@ -1,0 +1,5 @@
+sort(): [5, 7, 9] | original: [5, 7, 9] | same? true
+toSorted(): [5, 7, 9] | original: [7, 9, 5]
+toReversed(): [5, 9, 7] | with(0, 10): [10, 9, 5] | original: [7, 9, 5]
+3 1 true | original untouched: false
+unchanged item reused? true

@@ -1,0 +1,7 @@
+Set(3) {'js', 'css', 'html'} | size 3
+back to array: ['js', 'css', 'html']
+has css? true | has py? false
+union         Set(5) {1, 2, 3, 4, 5}
+intersection  Set(2) {3, 4}
+difference    Set(2) {1, 2}
+look-alike objects in a Set: 2

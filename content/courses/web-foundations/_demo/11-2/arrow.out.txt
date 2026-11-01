@@ -1,0 +1,3 @@
+arrow as method: this is undefined
+function: this is clock? false
+arrow:    this is clock? true | seconds = 1

@@ -1,0 +1,5 @@
+1. new        -> Lan
+2. call       -> An
+2. bind       -> Binh
+3. user.who() -> Chi
+4. whoAmI()   -> undefined

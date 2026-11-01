@@ -1,0 +1,4 @@
+a.inc === b.inc           true
+a.incArrow === b.incArrow false
+detached arrow works: 1
+detached method: TypeError: Cannot read properties of undefined (reading 'count')

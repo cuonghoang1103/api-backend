@@ -1,0 +1,8 @@
+\w+      : ['Nguy', 'n', 'V', 'n', 'c']
+\p{L}+ u : ['Nguyễn', 'Văn', 'Đức']
+\bVăn\b  : true
+\băn\b   : true <- wrong: "ăn" is inside "Văn"
+Unicode  : false | "Văn": true
+length NFC / NFD: 3 / 5
+equal? false
+after normalize("NFC")? true

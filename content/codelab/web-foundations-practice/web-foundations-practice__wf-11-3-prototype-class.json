@@ -1,0 +1,648 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-11-3-prototype-class",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-11-3-prototype-class"
+  },
+  "exercises": [
+    {
+      "title": "Class đầu tiên: hình chữ nhật",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "class",
+        "constructor",
+        "method"
+      ],
+      "prerequisites": [
+        "object",
+        "this"
+      ],
+      "tags": [
+        "javascript",
+        "class"
+      ],
+      "problemHtml": "<p><em>Bài 11.3 — Prototype và class.</em> Máy chấm nạp <code>main.js</code> trong realm mới cho mỗi kiểm rồi dùng class/hàm của bạn.</p><p>Viết <code>class Rectangle</code>: constructor nhận <code>width</code>, <code>height</code>; method <code>area()</code>, <code>perimeter()</code>; và method <code>scale(k)</code> nhân cả hai cạnh với <code>k</code> rồi trả về <code>this</code> để nối chuỗi. Các method phải nằm trên prototype (dùng chung), không tạo lại cho từng hình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>new Rectangle(3, 4).area()</code> là 12, <code>perimeter()</code> là 14.</li>\n  <li><code>new Rectangle(1, 2).scale(3).area()</code> là 18.</li>\n  <li>Hai hình dùng chung một method area (a.area === b.area).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "width, height: số dương.",
+      "outputSpec": "Một thực thể Rectangle.",
+      "constraints": "Dùng cú pháp class.",
+      "examplesJson": [
+        {
+          "input": "new Rectangle(3, 4).perimeter()",
+          "output": "14",
+          "explanation": "2 × (3 + 4)."
+        }
+      ],
+      "hintsJson": [
+        "constructor(width, height) { this.width = width; this.height = height; }",
+        "scale(k) { this.width *= k; this.height *= k; return this; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — class Rectangle\nclass Rectangle {\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — class Rectangle: dữ liệu trên từng thực thể, method trên prototype\nclass Rectangle {\n  constructor(width, height) {\n    this.width = width;\n    this.height = height;\n  }\n  area() { return this.width * this.height; }\n  perimeter() { return 2 * (this.width + this.height); }\n  scale(k) {\n    this.width *= k;\n    this.height *= k;\n    return this;               // trả chính object ⇒ nối được .area()\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thân class tách hai loại thành viên: dữ liệu gán vào <code>this</code> trong constructor (mỗi hình một bản) và method (một bản trên <code>Rectangle.prototype</code>). <code>return this</code> cho phép viết <code>r.scale(3).area()</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết area = () => … làm class field — mỗi hình một hàm, kiểm \"dùng chung\" trượt.</li>\n  <li>Quên return this trong scale.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.3 Prototype và class.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/class",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "area and perimeter|||area và perimeter",
+            "goi": "[new Rectangle(3, 4).area(), new Rectangle(3, 4).perimeter()]",
+            "mongDoi": [
+              12,
+              14
+            ]
+          },
+          {
+            "moTa": "scale is chainable|||scale nối chuỗi được",
+            "goi": "new Rectangle(1, 2).scale(3).area()",
+            "mongDoi": 18
+          },
+          {
+            "moTa": "Methods are shared on the prototype|||Method dùng chung trên prototype",
+            "goi": "new Rectangle(1, 1).area === new Rectangle(2, 2).area && Object.hasOwn(Rectangle.prototype, \"area\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Hidden: instanceof|||Ẩn: instanceof",
+            "an": true,
+            "goi": "new Rectangle(1, 1) instanceof Rectangle",
+            "mongDoi": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết area = () => … làm class field — mỗi hình một hàm, kiểm \"dùng chung\" trượt."
+        },
+        {
+          "loi": "Quên return this trong scale."
+        }
+      ]
+    },
+    {
+      "title": "Object.create và chuỗi prototype",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "prototype",
+        "Object.create",
+        "hasOwn"
+      ],
+      "prerequisites": [
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "prototype"
+      ],
+      "problemHtml": "<p><em>Bài 11.3 — Prototype và class.</em> Máy chấm nạp <code>main.js</code> trong realm mới cho mỗi kiểm rồi dùng class/hàm của bạn.</p><p>Có sẵn object <code>animal</code>. Viết <code>makeRabbit(name)</code> trả về một object có prototype là <code>animal</code> (dùng <code>Object.create</code>), sở hữu riêng <code>name</code> và <code>jumps: true</code>. Rồi viết <code>ownKeys(obj)</code> trả các khoá RIÊNG đã sắp xếp, và <code>canReach(obj, key)</code> cho biết khoá có với tới được qua chuỗi không.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>Object.getPrototypeOf(makeRabbit(\"Thỏ\")) === animal</code>.</li>\n  <li><code>makeRabbit(\"Thỏ\").describe()</code> dùng được method của animal.</li>\n  <li><code>ownKeys</code> chỉ trả khoá riêng; <code>canReach</code> xét cả chuỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "name: string; obj, key.",
+      "outputSpec": "Object; mảng khoá; boolean.",
+      "constraints": "Không chép thuộc tính của animal sang rabbit.",
+      "examplesJson": [
+        {
+          "input": "ownKeys(makeRabbit(\"Thỏ\"))",
+          "output": "[\"jumps\", \"name\"]",
+          "explanation": "eats và describe là đi mượn."
+        }
+      ],
+      "hintsJson": [
+        "const r = Object.create(animal); r.name = name; r.jumps = true; return r;",
+        "Object.keys(obj).sort() — key in obj."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — Object.create\nconst animal = {\n  eats: true,\n  describe() { return this.name + ' eats: ' + this.eats; },\n};\n\nfunction makeRabbit(name) {\n  return { ...animal, name, jumps: true };   // sai: CHÉP chứ không nối prototype\n}\nfunction ownKeys(obj) {}\nfunction canReach(obj, key) {}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — nối prototype bằng Object.create, không chép\nconst animal = {\n  eats: true,\n  describe() { return this.name + ' eats: ' + this.eats; },\n};\n\nfunction makeRabbit(name) {\n  const r = Object.create(animal);   // prototype của r là animal\n  r.name = name;                     // thuộc tính RIÊNG\n  r.jumps = true;\n  return r;\n}\nfunction ownKeys(obj) {\n  return Object.keys(obj).sort();    // chỉ khoá riêng, liệt kê được\n}\nfunction canReach(obj, key) {\n  return key in obj;                 // in đi theo cả chuỗi prototype\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Spread CHÉP thuộc tính của animal sang object mới — không có chuỗi nào cả, sửa animal sau đó rabbit không thấy. <code>Object.create(animal)</code> chỉ tạo LIÊN KẾT. <code>Object.keys</code> chỉ đọc thuộc tính riêng; <code>in</code> đi theo chuỗi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng spread — kiểm getPrototypeOf trượt.</li>\n  <li>Dùng for…in để lấy khoá riêng — nó liệt kê cả khoá đi mượn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.3 Prototype và class.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/prototype-inheritance",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Prototype is animal|||Prototype là animal",
+            "goi": "Object.getPrototypeOf(makeRabbit(\"Thỏ\")) === animal",
+            "mongDoi": true
+          },
+          {
+            "moTa": "Borrowed method works|||Method đi mượn chạy được",
+            "goi": "makeRabbit(\"Thỏ\").describe()",
+            "mongDoi": "Thỏ eats: true"
+          },
+          {
+            "moTa": "ownKeys lists own keys only|||ownKeys chỉ liệt kê khoá riêng",
+            "goi": "ownKeys(makeRabbit(\"Thỏ\"))",
+            "mongDoi": [
+              "jumps",
+              "name"
+            ]
+          },
+          {
+            "moTa": "canReach follows the chain|||canReach đi theo chuỗi",
+            "goi": "[canReach(makeRabbit(\"A\"), \"eats\"), canReach(makeRabbit(\"A\"), \"flies\")]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Hidden: later changes to animal are visible|||Ẩn: đổi animal sau đó vẫn thấy",
+            "an": true,
+            "chuanBi": "const r = makeRabbit(\"A\"); animal.eats = \"carrots\";",
+            "goi": "r.describe()",
+            "mongDoi": "A eats: carrots"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng spread — kiểm getPrototypeOf trượt."
+        },
+        {
+          "loi": "Dùng for…in để lấy khoá riêng — nó liệt kê cả khoá đi mượn."
+        }
+      ]
+    },
+    {
+      "title": "Giỏ hàng có dữ liệu riêng tư",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "#private",
+        "getter",
+        "RangeError"
+      ],
+      "prerequisites": [
+        "class"
+      ],
+      "tags": [
+        "javascript",
+        "class"
+      ],
+      "problemHtml": "<p><em>Bài 11.3 — Prototype và class.</em> Máy chấm nạp <code>main.js</code> trong realm mới cho mỗi kiểm rồi dùng class/hàm của bạn.</p><p>Bài luyện trong bài học. Viết <code>class Cart</code> với mảng riêng tư <code>#items</code>; <code>add(name, price, qty = 1)</code> ném <code>RangeError</code> khi <code>qty &lt; 1</code> và trả về <code>this</code>; getter <code>total</code>; getter <code>count</code> (tổng số lượng); <code>clear()</code>. Bên ngoài không được thấy danh sách món: <code>Object.keys(cart)</code> phải rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>new Cart().add(\"pen\", 50000, 2).add(\"book\", 100000).total</code> là 200000.</li>\n  <li><code>add(\"x\", 1, 0)</code> ném RangeError; <code>count</code> là tổng qty.</li>\n  <li><code>Object.keys(cart)</code> là <code>[]</code>; <code>clear()</code> đưa total về 0.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "name: string; price: number; qty: số nguyên ≥ 1.",
+      "outputSpec": "Cart.",
+      "constraints": "Danh sách món phải là #private.",
+      "examplesJson": [
+        {
+          "input": "new Cart().add(\"a\", 10, 3).count",
+          "output": "3",
+          "explanation": "count cộng qty."
+        }
+      ],
+      "hintsJson": [
+        "#items = []; add(...) { if (qty < 1) throw new RangeError(\"qty\"); this.#items.push({ name, price, qty }); return this; }",
+        "get total() { return this.#items.reduce((s, i) => s + i.price * i.qty, 0); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — Cart\nclass Cart {\n  items = [];          // công khai — ai cũng sửa được\n  add(name, price, qty = 1) {\n    this.items.push({ name, price, qty });\n  }\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — Cart: #items riêng tư, getter tính từ dữ liệu, add nối chuỗi được\nclass Cart {\n  #items = [];                                   // chỉ code trong class đọc/ghi được\n\n  add(name, price, qty = 1) {\n    if (qty < 1) throw new RangeError('qty must be at least 1');\n    this.#items.push({ name, price, qty });\n    return this;                                 // cho phép .add(...).add(...)\n  }\n  get total() {\n    return this.#items.reduce((sum, i) => sum + i.price * i.qty, 0);\n  }\n  get count() {\n    return this.#items.reduce((sum, i) => sum + i.qty, 0);\n  }\n  clear() {\n    this.#items = [];\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>#items</code> không phải thuộc tính thường: <code>Object.keys</code>, <code>JSON.stringify</code> và code ngoài class đều không thấy. Getter cho người dùng đọc <code>cart.total</code> như một thuộc tính nhưng giá trị luôn được tính từ dữ liệu thật, không thể lệch.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lưu total thành một số rồi quên cập nhật khi clear().</li>\n  <li>Quên return this — chuỗi .add().add() sập.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.3 Prototype và class.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_properties",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Chained adds give the total|||Nối add cho đúng tổng",
+            "goi": "new Cart().add(\"pen\", 50000, 2).add(\"book\", 100000).total",
+            "mongDoi": 200000
+          },
+          {
+            "moTa": "count sums the quantities|||count cộng số lượng",
+            "goi": "new Cart().add(\"a\", 10, 3).add(\"b\", 1).count",
+            "mongDoi": 4
+          },
+          {
+            "moTa": "qty < 1 throws RangeError|||qty < 1 ném RangeError",
+            "goi": "new Cart().add(\"x\", 1, 0)",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": "Items are private|||Danh sách món là riêng tư",
+            "goi": "Object.keys(new Cart().add(\"a\", 1))",
+            "mongDoi": []
+          },
+          {
+            "moTa": "clear() resets|||clear() đặt lại",
+            "chuanBi": "const k = new Cart().add(\"a\", 5, 2); k.clear();",
+            "goi": "[k.total, k.count]",
+            "mongDoi": [
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lưu total thành một số rồi quên cập nhật khi clear()."
+        },
+        {
+          "loi": "Quên return this — chuỗi .add().add() sập."
+        }
+      ]
+    },
+    {
+      "title": "Lớp con VipCart dùng super",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "extends",
+        "super",
+        "override"
+      ],
+      "prerequisites": [
+        "class",
+        "getter"
+      ],
+      "tags": [
+        "javascript",
+        "class",
+        "kế thừa"
+      ],
+      "problemHtml": "<p><em>Bài 11.3 — Prototype và class.</em> Máy chấm nạp <code>main.js</code> trong realm mới cho mỗi kiểm rồi dùng class/hàm của bạn.</p><p><code>Cart</code> đã có sẵn (giống bài trước). Viết <code>class VipCart extends Cart</code>: constructor nhận <code>discount</code> (mặc định 0.1) và PHẢI gọi <code>super()</code>; ghi đè getter <code>total</code> để trả tổng của cha nhân <code>(1 - discount)</code>, làm tròn bằng <code>Math.round</code> — dùng lại <code>super.total</code>, không tính lại từ đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>new VipCart().add(\"pen\", 50000, 2).add(\"book\", 100000).total</code> là 180000.</li>\n  <li><code>new VipCart(0.25)</code> giảm 25%; <code>count</code> và <code>add</code> kế thừa nguyên vẹn.</li>\n  <li><code>vip instanceof Cart</code> là true; lời giải dùng <code>super.total</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "discount: 0 … 1.",
+      "outputSpec": "VipCart.",
+      "constraints": "Không sửa class Cart.",
+      "examplesJson": [
+        {
+          "input": "new VipCart(0.5).add(\"a\", 101).total",
+          "output": "51",
+          "explanation": "Math.round(50.5) = 51."
+        }
+      ],
+      "hintsJson": [
+        "constructor(discount = 0.1) { super(); this.discount = discount; }",
+        "get total() { return Math.round(super.total * (1 - this.discount)); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — VipCart\nclass Cart {\n  #items = [];\n  add(name, price, qty = 1) {\n    if (qty < 1) throw new RangeError('qty must be at least 1');\n    this.#items.push({ name, price, qty });\n    return this;\n  }\n  get total() { return this.#items.reduce((s, i) => s + i.price * i.qty, 0); }\n  get count() { return this.#items.reduce((s, i) => s + i.qty, 0); }\n}\n\nclass VipCart extends Cart {\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — VipCart: kế thừa mọi thứ, chỉ đổi cách tính total\nclass Cart {\n  #items = [];\n  add(name, price, qty = 1) {\n    if (qty < 1) throw new RangeError('qty must be at least 1');\n    this.#items.push({ name, price, qty });\n    return this;\n  }\n  get total() { return this.#items.reduce((s, i) => s + i.price * i.qty, 0); }\n  get count() { return this.#items.reduce((s, i) => s + i.qty, 0); }\n}\n\nclass VipCart extends Cart {\n  constructor(discount = 0.1) {\n    super();                          // cha dựng object (và #items) trước\n    this.discount = discount;\n  }\n  get total() {\n    return Math.round(super.total * (1 - this.discount));   // dùng lại tổng của cha\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Lớp con không đọc được <code>#items</code> của cha (riêng tư thật sự là riêng của class khai báo nó) — nên đường duy nhất là <code>super.total</code>. Đây chính là lợi ích: VipCart không cần biết giỏ hàng lưu món thế nào. <code>super()</code> phải chạy trước <code>this.discount = …</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gán this.discount trước super() — ReferenceError.</li>\n  <li>Cố đọc this.#items trong VipCart — SyntaxError.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.3 Prototype và class.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/class-inheritance",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Default 10% off|||Mặc định giảm 10%",
+            "goi": "new VipCart().add(\"pen\", 50000, 2).add(\"book\", 100000).total",
+            "mongDoi": 180000
+          },
+          {
+            "moTa": "Custom discount + rounding|||Giảm tuỳ chọn + làm tròn",
+            "goi": "[new VipCart(0.25).add(\"a\", 100).total, new VipCart(0.5).add(\"a\", 101).total]",
+            "mongDoi": [
+              75,
+              51
+            ]
+          },
+          {
+            "moTa": "Inherits add/count and instanceof|||Kế thừa add/count và instanceof",
+            "chuanBi": "const v = new VipCart().add(\"a\", 1, 3);",
+            "goi": "[v.count, v instanceof Cart]",
+            "mongDoi": [
+              3,
+              true
+            ]
+          },
+          {
+            "moTa": "Uses super.total|||Dùng super.total",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "super\\.total"
+          },
+          {
+            "moTa": "Hidden: plain Cart unchanged|||Ẩn: Cart thường không đổi",
+            "an": true,
+            "goi": "new Cart().add(\"a\", 100).total",
+            "mongDoi": 100
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gán this.discount trước super() — ReferenceError."
+        },
+        {
+          "loi": "Cố đọc this.#items trong VipCart — SyntaxError."
+        }
+      ]
+    },
+    {
+      "title": "Lớp lỗi riêng: ValidationError",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "extends Error",
+        "instanceof",
+        "try/catch"
+      ],
+      "prerequisites": [
+        "class",
+        "throw"
+      ],
+      "tags": [
+        "javascript",
+        "class",
+        "error"
+      ],
+      "problemHtml": "<p><em>Bài 11.3 — Prototype và class.</em> Máy chấm nạp <code>main.js</code> trong realm mới cho mỗi kiểm rồi dùng class/hàm của bạn.</p><p>Ứng dụng thật hay kế thừa đúng một tầng từ <code>Error</code>. Viết <code>class ValidationError extends Error</code> có thêm thuộc tính <code>field</code> và <code>name === \"ValidationError\"</code>. Rồi viết <code>validateAge(value)</code>: không phải số nguyên ⇒ ném <code>ValidationError</code> với field <code>\"age\"</code>; ngoài 0–150 ⇒ cũng ném; hợp lệ ⇒ trả số. Cuối cùng <code>safeAge(value)</code> bắt riêng ValidationError và trả <code>{ ok: false, field, message }</code>, lỗi khác thì ném tiếp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>validateAge(\"abc\")</code> ném ValidationError, <code>instanceof Error</code> vẫn đúng.</li>\n  <li><code>err.field</code> là <code>\"age\"</code>, <code>err.name</code> là <code>\"ValidationError\"</code>.</li>\n  <li><code>safeAge(20)</code> ⇒ <code>{ ok: true, value: 20 }</code>; <code>safeAge(200)</code> ⇒ ok false.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "value: bất kỳ.",
+      "outputSpec": "number / object kết quả.",
+      "constraints": "safeAge chỉ nuốt ValidationError.",
+      "examplesJson": [
+        {
+          "input": "safeAge(-1)",
+          "output": "{ ok: false, field: \"age\", message: \"age must be 0-150\" }",
+          "explanation": "Lỗi xác thực được đổi thành dữ liệu."
+        }
+      ],
+      "hintsJson": [
+        "constructor(message, field) { super(message); this.name = \"ValidationError\"; this.field = field; }",
+        "catch (e) { if (e instanceof ValidationError) return {...}; throw e; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — ValidationError\nfunction validateAge(value) {\n  if (!Number.isInteger(value)) throw new Error('age must be an integer');\n  return value;\n}\nfunction safeAge(value) {}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — một tầng kế thừa từ Error, có thêm dữ liệu riêng\nclass ValidationError extends Error {\n  constructor(message, field) {\n    super(message);                 // Error đặt message + stack\n    this.name = 'ValidationError';  // console sẽ in \"ValidationError: <message>\"\n    this.field = field;\n  }\n}\n\nfunction validateAge(value) {\n  if (!Number.isInteger(value)) throw new ValidationError('age must be an integer', 'age');\n  if (value < 0 || value > 150) throw new ValidationError('age must be 0-150', 'age');\n  return value;\n}\n\nfunction safeAge(value) {\n  try {\n    return { ok: true, value: validateAge(value) };\n  } catch (e) {\n    if (e instanceof ValidationError) return { ok: false, field: e.field, message: e.message };\n    throw e;                        // lỗi lạ: đừng nuốt\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>extends Error</code> cho bạn message, stack và <code>instanceof Error</code> miễn phí; thêm <code>field</code> để giao diện biết ô nào sai. <code>instanceof ValidationError</code> đi theo chuỗi prototype nên phân biệt được lỗi xác thực với lỗi lập trình — chỉ nuốt cái mình hiểu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên super(message) — ReferenceError khi gán this.name.</li>\n  <li>catch mọi lỗi và trả ok:false — che mất bug thật.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.3 Prototype và class.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://javascript.info/custom-errors",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Throws ValidationError|||Ném ValidationError",
+            "goi": "validateAge(\"abc\")",
+            "mongDoi": {
+              "loi": "ValidationError",
+              "thongDiep": "integer"
+            }
+          },
+          {
+            "moTa": "Is still an Error, with field|||Vẫn là Error, có field",
+            "chuanBi": "let e; try { validateAge(1.5); } catch (x) { e = x; }",
+            "goi": "[e instanceof Error, e instanceof ValidationError, e.field, e.name]",
+            "mongDoi": [
+              true,
+              true,
+              "age",
+              "ValidationError"
+            ]
+          },
+          {
+            "moTa": "Range check|||Kiểm khoảng",
+            "goi": "validateAge(151)",
+            "mongDoi": {
+              "loi": "ValidationError",
+              "thongDiep": "0-150"
+            }
+          },
+          {
+            "moTa": "safeAge turns errors into data|||safeAge đổi lỗi thành dữ liệu",
+            "goi": "[safeAge(20), safeAge(-1)]",
+            "mongDoi": [
+              {
+                "ok": true,
+                "value": 20
+              },
+              {
+                "ok": false,
+                "field": "age",
+                "message": "age must be 0-150"
+              }
+            ]
+          },
+          {
+            "moTa": "Hidden: other errors are re-thrown|||Ẩn: lỗi khác được ném tiếp",
+            "an": true,
+            "chuanBi": "const goc = validateAge; validateAge = () => { throw new TypeError(\"boom\"); };",
+            "goi": "safeAge(1)",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên super(message) — ReferenceError khi gán this.name."
+        },
+        {
+          "loi": "catch mọi lỗi và trả ok:false — che mất bug thật."
+        }
+      ]
+    },
+    {
+      "title": "Tự viết new",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "new",
+        "Object.create",
+        "apply",
+        "prototype"
+      ],
+      "prerequisites": [
+        "constructor function",
+        "apply"
+      ],
+      "tags": [
+        "javascript",
+        "prototype",
+        "phỏng vấn"
+      ],
+      "problemHtml": "<p><em>Bài 11.3 — Prototype và class.</em> Máy chấm nạp <code>main.js</code> trong realm mới cho mỗi kiểm rồi dùng class/hàm của bạn.</p><p>Câu phỏng vấn: \"<code>new</code> làm gì?\". Viết <code>fakeNew(Ctor, ...args)</code> làm đúng việc của <code>new Ctor(...args)</code> với hàm constructor kiểu cũ: (1) tạo object nối tới <code>Ctor.prototype</code>, (2) chạy <code>Ctor</code> với <code>this</code> là object đó, (3) trả object — TRỪ KHI constructor tự trả về một object khác (khi đó trả object đó). Không dùng từ khoá <code>new</code> trong lời giải.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>fakeNew(User, \"Lan\").greet()</code> là <code>\"Hi, Lan\"</code> và <code>instanceof User</code> đúng.</li>\n  <li>Constructor trả object ⇒ fakeNew trả object đó; trả số/chuỗi ⇒ bị bỏ qua.</li>\n  <li>Không có từ khoá <code>new</code> trong main.js.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "Ctor: hàm constructor; args.",
+      "outputSpec": "Object.",
+      "constraints": "Không dùng new, không dùng Reflect.construct.",
+      "examplesJson": [
+        {
+          "input": "fakeNew(User, \"Lan\").name",
+          "output": "\"Lan\"",
+          "explanation": "Constructor gán this.name."
+        }
+      ],
+      "hintsJson": [
+        "const obj = Object.create(Ctor.prototype); const r = Ctor.apply(obj, args);",
+        "return (typeof r === \"object\" && r !== null) || typeof r === \"function\" ? r : obj;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — fakeNew\nfunction User(name) { this.name = name; }\nUser.prototype.greet = function () { return 'Hi, ' + this.name; };\n\nfunction fakeNew(Ctor, ...args) {\n  const obj = {};\n  Ctor.apply(obj, args);\n  return obj;            // thiếu liên kết prototype\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 11.3 — fakeNew: ba bước của new, viết tay\nfunction User(name) { this.name = name; }\nUser.prototype.greet = function () { return 'Hi, ' + this.name; };\n\nfunction fakeNew(Ctor, ...args) {\n  const obj = Object.create(Ctor.prototype);        // 1. object mới nối tới prototype\n  const result = Ctor.apply(obj, args);             // 2. chạy constructor với this = obj\n  const laObject = (typeof result === 'object' && result !== null) || typeof result === 'function';\n  return laObject ? result : obj;                   // 3. constructor trả object thì ưu tiên nó\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thiếu bước 1 thì object không có <code>greet</code> và <code>instanceof</code> sai — vì <code>instanceof</code> chỉ là đi theo chuỗi prototype. Bước 3 khớp đặc tả: constructor trả giá trị nguyên thuỷ thì bị bỏ qua, trả object (hoặc hàm) thì thay thế object mới.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả result luôn — constructor bình thường trả undefined.</li>\n  <li>typeof null === \"object\" — quên loại null.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 11.3 Prototype và class.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new#description",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Prototype link: greet works|||Có liên kết prototype: greet chạy",
+            "goi": "fakeNew(User, \"Lan\").greet()",
+            "mongDoi": "Hi, Lan"
+          },
+          {
+            "moTa": "instanceof is true|||instanceof đúng",
+            "goi": "fakeNew(User, \"A\") instanceof User",
+            "mongDoi": true
+          },
+          {
+            "moTa": "A returned object wins|||Constructor trả object thì thắng",
+            "goi": "fakeNew(function () { this.a = 1; return { b: 2 }; })",
+            "mongDoi": {
+              "b": 2
+            }
+          },
+          {
+            "moTa": "A returned primitive is ignored|||Constructor trả giá trị nguyên thuỷ bị bỏ qua",
+            "goi": "fakeNew(function () { this.a = 1; return 5; })",
+            "mongDoi": {
+              "a": 1
+            }
+          },
+          {
+            "moTa": "No new keyword|||Không có từ khoá new",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "\\bnew\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Hidden: null return is ignored|||Ẩn: trả null bị bỏ qua",
+            "an": true,
+            "goi": "fakeNew(function (x) { this.x = x; return null; }, 9).x",
+            "mongDoi": 9
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả result luôn — constructor bình thường trả undefined."
+        },
+        {
+          "loi": "typeof null === \"object\" — quên loại null."
+        }
+      ]
+    }
+  ]
+}

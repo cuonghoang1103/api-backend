@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="640x240">
+<title>Closures in event handlers</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 24px; }
+  button { font-size: 18px; padding: 10px 18px; margin-right: 10px; border-radius: 8px; border: 1px solid #888; }
+  #log { margin-top: 18px; font-family: monospace; font-size: 16px; color: #333; }
+</style>
+</head>
+<body>
+  <button>Like</button><button>Share</button><button>Save</button>
+  <div id="log"></div>
+  <script>
+    const log = document.querySelector('#log');
+    document.querySelectorAll('button').forEach((btn, index) => {
+      let clicks = 0;                                // one "clicks" per button
+      btn.addEventListener('click', () => {
+        clicks++;                                    // the handler remembers index AND clicks
+        const line = btn.textContent + ' (#' + index + ') clicked ' + clicks + ' time(s)';
+        log.textContent = line;
+        console.log(line);
+      });
+    });
+    // simulate a user: Like twice, then Save once
+    const [like, , save] = document.querySelectorAll('button');
+    like.click(); like.click(); save.click();
+  </script>
+</body>
+</html>

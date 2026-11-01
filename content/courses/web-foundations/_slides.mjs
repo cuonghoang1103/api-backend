@@ -58,3 +58,54 @@ export function slide(deck, n, caption) {
 
 /** Cả bộ: rows = [[n, caption], …] */
 export const gallery = (deck, rows) => rows.map((r) => slide(deck, ...r)).join('\n');
+
+/* ═══════════════ Deck BÀI (01/11/2026) — khuôn _pg-chung, slide tiếng Anh, lời giảng EN/VI ═══════════════
+ * Deck mỗi bài `wf-N-M` (vd wf-11-1), dựng từ scripts/slides-src/wf-N-M.mjs, đẩy lên WF/v1/<deck>/.
+ * Dựng lại một deck đã đẩy ⇒ đẩy sang WF/v2 và ghi vào VER — Cloudflare giữ bytes cũ của key bị ghi đè.
+ */
+export const VER = {};
+const imgBai = (deck, n) => `${CDN.replace(/\/v1$/, '')}/${VER[deck] || 'v1'}/${deck}/${pad(n)}.webp`;
+const maDeck = (deck) => deck.replace(/^wf-(\d+)-(\d+)$/, 'WF $1.$2');
+
+function slideBai(deck, n, title, en, vi, total) {
+  if (!/^wf-\d+-\d+$/.test(deck)) throw new Error(`deck bài lạ: ${deck}`);
+  if (!Number.isInteger(n) || n < 1 || n > total) throw new Error(`${deck} có ${total} slide, nhận ${n}`);
+  return `<div class="anh-slide"><img src="${imgBai(deck, n)}" alt="${attr(`${maDeck(deck)} slide ${n}: ${title}`)}" loading="lazy" width="1280" height="720" />` +
+    `<p class="chu-thich">📑 <strong>${maDeck(deck)}</strong> · slide ${n}/${total} — ${title}</p></div>\n` +
+    `<div class="ml-en giang">${en}</div>\n<div class="ml-vi giang">${vi}</div>`;
+}
+
+/** Phần "học theo slide" của một bài. rows = [[n, title, en, vi], …] phủ ĐỦ 1..total, đúng thứ tự. */
+export function walkWf(deck, tenEn, tenVi, rows) {
+  const total = rows.length;
+  rows.forEach((r, i) => { if (r[0] !== i + 1) throw new Error(`${deck}: dòng ${i + 1} mang số slide ${r[0]}`); });
+  const head = `<div class="ml-en"><h2>📑 Slides — ${tenEn}</h2><p>Every slide of this lesson, each followed by a short explanation. The full written lesson — every example with its real output from Chromium — follows after the slides.</p></div>\n` +
+    `<div class="ml-vi"><h2>📑 Học theo slide — ${tenVi}</h2><p>Toàn bộ slide của bài, mỗi slide kèm lời giảng ngắn. Bài đọc chi tiết (mọi ví dụ kèm output chạy thật trong Chromium) nằm ngay sau phần slide.</p></div>\n`;
+  const tail = `\n<div class="ml-en"><h2>📖 Full written lesson</h2></div>\n<div class="ml-vi"><h2>📖 Bài đọc chi tiết</h2></div>\n`;
+  return head + rows.map((r) => slideBai(deck, ...r, total)).join('\n') + tail;
+}
+
+const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+/** Khối mã (nguồn lấy từ _ma.mjs — tự thoát HTML). dong = [từ, tới] (1-based, gồm cả hai đầu) ⇒ chỉ lấy đoạn đó. */
+export const ma = (lang, src, dong) => {
+  if (src == null) throw new Error('ma(): thiếu mã — chạy lại scripts/wf/sinh-ma.mjs?');
+  let s = String(src);
+  if (dong) s = s.split('\n').slice(dong[0] - 1, dong[1]).join('\n');
+  return `<pre><code class="language-${lang}">${escHtml(s.replace(/^\n/, '').replace(/\n+$/, ''))}</code></pre>`;
+};
+/** Output chạy thật (từ _ma.mjs). */
+export const ra = (text) => {
+  if (text == null) throw new Error('ra(): thiếu output — chạy lại scripts/wf/chay-demo.mjs + sinh-ma.mjs?');
+  return `<div class="out">${escHtml(String(text).replace(/^\n/, '').replace(/\n+$/, ''))}</div>`;
+};
+
+/** Thẻ liên kết chéo. khoa = slug khoá (Courses HOẶC Academy — trang học dùng chung /courses/<slug>/learn). */
+export function lienKet({ khoa, bai, title, sub, cta }) {
+  return `<a class="link-card lien-ket-cheo" href="/courses/${khoa}/learn?lessonSlug=${bai}" target="_blank" rel="noopener">\n` +
+    `  <span class="lc-ico">🔗</span>\n  <span class="lc-body"><span class="lc-title">${title}</span><span class="lc-sub">${sub}</span></span>\n` +
+    `  <span class="lc-cta">${cta}</span>\n</a>`;
+}
+
+/** Thẻ nguồn tham khảo ngoài. */
+export const nguon = (ico, title, sub, url) => `<a class="link-card" href="${url}" target="_blank" rel="noopener">\n` +
+  `  <span class="lc-ico">${ico}</span>\n  <span class="lc-body"><span class="lc-title">${title}</span><span class="lc-sub">${sub}</span></span>\n</a>`;

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="640x200">
+<title>this in event handlers</title>
+<style>body{font-family:system-ui,sans-serif;padding:24px} button{font-size:18px;padding:10px 18px;border-radius:8px;margin-right:10px} .on{background:#2f9d58;color:#fff}</style>
+</head>
+<body>
+  <button id="a">function handler</button>
+  <button id="b">arrow handler</button>
+  <script type="module">
+    document.querySelector('#a').addEventListener('click', function (e) {
+      console.log('function: this is the button?', this === e.currentTarget, '| id =', this.id);
+      this.classList.add('on');
+    });
+    document.querySelector('#b').addEventListener('click', (e) => {
+      console.log('arrow:    this =', String(this), '| use e.currentTarget.id =', e.currentTarget.id);
+      e.currentTarget.classList.add('on');
+    });
+    document.querySelector('#a').click();
+    document.querySelector('#b').click();
+  </script>
+</body>
+</html>

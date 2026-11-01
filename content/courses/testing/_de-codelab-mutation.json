@@ -1,5 +1,5 @@
 {
-  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH. Chương 7: \"runner\": \"playwright\" (+ \"args\", mặc định --project=chromium; [] = cả 5 project) — chạy npx playwright test, mỗi lần tự build web + bật server e2e ở cổng 4173.",
+  "ghiChu": "Đề Code Lab kiểu mutation dự kiến cho khoá Testing (01/11/2026). Mã đúng = content/courses/testing/_labflow-lite; mỗi đột biến khớp đúng 1 chỗ (from) và đã được kiểm là BỊ DIỆT bởi testThamKhao bằng scripts/tst/kiem-de-mutation.mjs. Khi có máy chấm mutation: người học nộp file test; máy chạy test trên code đúng (phải xanh) rồi với từng đột biến (phải đỏ). Đề có \"config\" (Chương 4) chạy bằng cấu hình test tích hợp — cần Docker; \"voHai\" = thay đổi vô hại mà test phải VẪN XANH. Chương 7: \"runner\": \"playwright\" (+ \"args\", mặc định --project=chromium; [] = cả 5 project) — chạy npx playwright test, mỗi lần tự build web + bật server e2e ở cổng 4173. Chương 8: đề Vitest có \"args\" thêm vào lệnh vitest run — [\"--sequence.shuffle\", \"--repeats=9\"] bắt test chập chờn (phải xanh ở mọi thứ tự, mọi lần lặp), [\"--testTimeout=500\"] bắt test ngủ thật.",
   "de": [
     {
       "id": "tst-cl-1-1",
@@ -1866,6 +1866,302 @@
           "from": "const app = createApp({ repo: createMemoryRepo(), auth });",
           "to": "const slowRepo = ((repo) => ({ ...repo, insert: async (b) => { await new Promise((ok) => setTimeout(ok, 1500)); return repo.insert(b); } }))(createMemoryRepo());\nconst app = createApp({ repo: slowRepo, auth });",
           "label": "slow server: every booking is saved 1.5 s later (web-first assertions keep waiting)"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-8-1",
+      "bai": "tst-8-1-do-phu",
+      "tieuDe": "The lines coverage showed red: the API's error paths|||Những dòng độ phủ báo đỏ: nhánh lỗi của API",
+      "ham": "createApp (error middleware), bookLab (STORAGE_DOWN)",
+      "fileDung": [
+        "src/api/server.js",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "demo8/th81.test.js"
+      ],
+      "yeuCau": "Cover server.js lines 54–56 with tests that check the answer, not just run the line: a database that cannot be reached while booking → 503 { error: { code: 'STORAGE_DOWN' } }; any other error → 500 { error: { code: 'INTERNAL' } } and nothing else in the body|||Phủ dòng 54–56 của server.js bằng test kiểm câu trả lời, không chỉ chạy qua dòng đó: CSDL không với tới được khi đặt phòng → 503 { error: { code: 'STORAGE_DOWN' } }; mọi lỗi khác → 500 { error: { code: 'INTERNAL' } } và body không có gì thêm",
+      "dotBien": [
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 503, 'STORAGE_DOWN');",
+          "to": "return fail(res, 500, 'STORAGE_DOWN');",
+          "label": "a database outage is reported as a server bug (500)"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "if (err.code === 'STORAGE_DOWN')",
+          "to": "if (err.code === 'STORAGE')",
+          "label": "STORAGE_DOWN no longer recognised: 500 INTERNAL"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 500, 'INTERNAL');",
+          "to": "return fail(res, 500, 'INTERNAL', { message: err.message });",
+          "label": "the internal error message leaks to the client"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "    clash = await repo.findOverlap(input.lab, input.date, input.start, input.end);\n  } catch (err) {\n    throw new BookingError('STORAGE_DOWN', { cause: err });",
+          "to": "    clash = await repo.findOverlap(input.lab, input.date, input.start, input.end);\n  } catch (err) {\n    throw err;",
+          "label": "a failed lookup escapes as a raw error (500 instead of 503)"
+        },
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 500, 'INTERNAL');",
+          "to": "return fail(res, 503, 'INTERNAL');",
+          "label": "unknown errors are reported as a temporary outage (503)"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/api/server.js",
+          "from": "return fail(res, 500, 'INTERNAL');",
+          "to": "return res.status(500).json({ error: { code: 'INTERNAL' } });",
+          "label": "the same 500 answer written without the helper"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-8-2",
+      "bai": "tst-8-2-mutation",
+      "tieuDe": "Kill what Stryker found alive|||Diệt những đột biến Stryker thấy còn sống",
+      "ham": "needsApproval, createBooking, usageRate, parseTime, newBookingRecord, retry",
+      "fileDung": [
+        "src/rules/booking.js",
+        "src/rules/time.js",
+        "src/rules/code.js",
+        "src/lib/retry.js"
+      ],
+      "testThamKhao": [
+        "src/rules/mutation-gaps.test.js",
+        "src/lib/retry-last.test.js"
+      ],
+      "yeuCau": "Stryker's first run on LabFlow Lite left these alive. Write tests (only in your own files) that kill each one: one seat is valid; a small student booking is CONFIRMED; usageRate adds up shares of the 14 opening hours; parseTime accepts exactly HH:MM and its TypeError is its own; newBookingRecord makes an id and a timestamp by itself; retry gives up right after the last attempt|||Lần chạy Stryker đầu tiên trên LabFlow Lite để sống những con này. Viết test (chỉ trong file của bạn) diệt từng con: 1 chỗ là hợp lệ; lượt đặt nhỏ của sinh viên là CONFIRMED; usageRate cộng phần trăm của 14 giờ mở cửa; parseTime chỉ nhận đúng HH:MM và TypeError là của chính nó; newBookingRecord tự tạo id và thời điểm; retry bỏ cuộc ngay sau lần thử cuối",
+      "dotBien": [
+        {
+          "file": "src/rules/booking.js",
+          "from": "seats < 1",
+          "to": "seats <= 1",
+          "label": "a 1-seat booking is refused"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "? 'PENDING' : 'CONFIRMED'",
+          "to": "? 'PENDING' : ''",
+          "label": "small bookings get an empty status"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "rate += b.minutes / (CLOSE - OPEN)",
+          "to": "rate += b.minutes / (CLOSE + OPEN)",
+          "label": "usage counted over 28 hours, not 14"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "/^([0-9]{2})",
+          "to": "/([0-9]{2})",
+          "label": "\"108:00\" is read as 08:00"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "([0-9]{2})$/",
+          "to": "([0-9]{2})/",
+          "label": "\"08:000\" is read as 08:00"
+        },
+        {
+          "file": "src/rules/time.js",
+          "from": "if (!m) throw",
+          "to": "if (false) throw",
+          "label": "a bad time crashes on null instead of explaining"
+        },
+        {
+          "file": "src/rules/code.js",
+          "from": "newId = () => crypto.randomUUID()",
+          "to": "newId = () => undefined",
+          "label": "records created without an id"
+        },
+        {
+          "file": "src/lib/retry.js",
+          "from": "if (i < attempts) await",
+          "to": "if (true) await",
+          "label": "one more pointless wait after the last attempt"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-8-3",
+      "bai": "tst-8-3-flaky",
+      "args": [
+        "--sequence.shuffle",
+        "--repeats=9"
+      ],
+      "tieuDe": "Deterministic tests for clock, numbers, state and a race|||Test tất định cho đồng hồ, con số, trạng thái và tranh chấp",
+      "ham": "daysAheadVN, needsApproval, createLoginGuard, bookLab, createHttpMailer",
+      "fileDung": [
+        "src/rules/days.js",
+        "src/rules/booking.js",
+        "src/auth/login-guard.js",
+        "src/booking/service.js"
+      ],
+      "testThamKhao": [
+        "demo8/da-sua.test.js"
+      ],
+      "yeuCau": "Rewrite the five flaky tests of lesson 8.3 so they pass in any order, ten times in a row (the grader runs them with --sequence.shuffle --repeats=9): pass the clock in and test 06:30 in Viet Nam; name the seat counts around 30; give each test its own login guard; serialise the two concurrent bookings and expect exactly one winner; fake the mail provider at the network boundary|||Viết lại năm test chập chờn của bài 8.3 để chúng xanh ở mọi thứ tự, mười lần liền (máy chấm chạy với --sequence.shuffle --repeats=9): truyền đồng hồ vào và test 06:30 giờ Việt Nam; gọi tên số chỗ quanh mốc 30; mỗi test một login guard riêng; xếp hàng hai lượt đặt cùng lúc và đòi đúng một người thắng; giả nhà cung cấp mail ở ranh giới mạng",
+      "dotBien": [
+        {
+          "file": "src/rules/days.js",
+          "from": "new Date(now.getTime() + VN_OFFSET_MS)",
+          "to": "new Date(now.getTime())",
+          "label": "days counted on the UTC calendar (wrong before 07:00 in Viet Nam)"
+        },
+        {
+          "file": "src/rules/booking.js",
+          "from": "return seats > APPROVAL_SEATS;",
+          "to": "return seats >= APPROVAL_SEATS;",
+          "label": "30 seats needs approval"
+        },
+        {
+          "file": "src/auth/login-guard.js",
+          "from": "if (s.failures >= MAX_FAILURES)",
+          "to": "if (s.failures > MAX_FAILURES)",
+          "label": "the 5th wrong password does not lock"
+        },
+        {
+          "file": "src/booking/service.js",
+          "from": "if (clash) throw new BookingError('OVERLAP');",
+          "to": "",
+          "label": "the overlap check is gone: double bookings"
+        },
+        {
+          "file": "src/lib/mailer.js",
+          "from": "return body.id;",
+          "to": "return body.messageId;",
+          "label": "the message id is read from the wrong field"
+        }
+      ],
+      "voHai": [
+        {
+          "file": "src/rules/days.js",
+          "from": "const VN_OFFSET_MS = 7 * 60 * 60 * 1000;",
+          "to": "const VN_OFFSET_MS = 25200000;",
+          "label": "the same offset written as a number"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-8-4",
+      "bai": "tst-8-4-toc-do",
+      "args": [
+        "--testTimeout=500"
+      ],
+      "tieuDe": "The same checks, without sleeping|||Cùng những phép kiểm, không ngủ",
+      "ham": "bookAndNotify, buildMail, retry",
+      "fileDung": [
+        "src/notify/notify.js",
+        "src/lib/retry.js"
+      ],
+      "testThamKhao": [
+        "demo8/th84.test.js"
+      ],
+      "yeuCau": "Test that a confirmed booking e-mails the student, a 31-seat booking asks the approver, and a provider that fails twice is retried until it works — every test under 500 ms (the grader sets --testTimeout=500): await the work instead of sleeping, fake the clock for the retry waits|||Test rằng lượt đặt được xác nhận gửi mail cho sinh viên, lượt 31 chỗ hỏi người duyệt, và nhà cung cấp hỏng hai lần được thử lại tới khi được — mỗi test dưới 500 ms (máy chấm đặt --testTimeout=500): await công việc thay vì ngủ, giả đồng hồ cho các lần chờ của retry",
+      "dotBien": [
+        {
+          "file": "src/notify/notify.js",
+          "from": "subject: 'Booking confirmed: ' + when",
+          "to": "subject: 'Booked: ' + when",
+          "label": "the confirmation subject lost \"Booking confirmed\""
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "return { to: studentEmail, subject:",
+          "to": "return { to: APPROVER, subject:",
+          "label": "confirmations go to the approver"
+        },
+        {
+          "file": "src/notify/notify.js",
+          "from": "return { to: APPROVER, subject:",
+          "to": "return { to: studentEmail, subject:",
+          "label": "approval requests go to the student"
+        },
+        {
+          "file": "src/lib/retry.js",
+          "from": "attempts = 3",
+          "to": "attempts = 2",
+          "label": "only two attempts: the third would have worked"
+        }
+      ]
+    },
+    {
+      "id": "tst-cl-lab-8",
+      "bai": "tst-8-5-lab-chat-luong",
+      "args": [
+        "--sequence.shuffle"
+      ],
+      "tieuDe": "Lab 8: check-in and no-shows — strong and stable|||Lab 8: check-in và vắng mặt — mạnh và ổn định",
+      "ham": "checkIn, bannedUntil, createNoShowLog",
+      "fileDung": [
+        "src/rules/checkin.js"
+      ],
+      "testThamKhao": [
+        "src/rules/checkin.test.js"
+      ],
+      "yeuCau": "BR-07: check-in opens 10 minutes before the start and closes 15 minutes after it (later = NO_SHOW; after the start = late); only CONFIRMED bookings. BR-08: 3 no-shows within 30 days ban new bookings until 7 days after the latest one. Tests must pass in any order|||BR-07: check-in mở 10 phút trước giờ bắt đầu và đóng 15 phút sau đó (muộn hơn = NO_SHOW; sau giờ bắt đầu = trễ); chỉ lượt CONFIRMED. BR-08: 3 lần vắng trong 30 ngày ⇒ cấm đặt mới tới 7 ngày sau lần vắng gần nhất. Test phải xanh ở mọi thứ tự",
+      "dotBien": [
+        {
+          "file": "src/rules/checkin.js",
+          "from": "if (t < start - EARLY)",
+          "to": "if (t <= start - EARLY)",
+          "label": "check-in refused exactly 10 minutes before the start"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "if (t > start + GRACE)",
+          "to": "if (t >= start + GRACE)",
+          "label": "the 15th minute already counts as a no-show"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "late: t > start",
+          "to": "late: t >= start",
+          "label": "arriving exactly on time is marked late"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "booking.status !== 'CONFIRMED'",
+          "to": "booking.status === 'CANCELLED'",
+          "label": "a PENDING booking can check in"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "t - d < LOOKBACK_DAYS",
+          "to": "t - d <= LOOKBACK_DAYS",
+          "label": "a no-show 30 days ago still counts"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "recent.length < STRIKES",
+          "to": "recent.length <= STRIKES",
+          "label": "three no-shows are not enough for a ban"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "Math.max(...recent)",
+          "to": "Math.min(...recent)",
+          "label": "the ban counts from the first no-show, not the last"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "end < t ? null",
+          "to": "end <= t ? null",
+          "label": "the last day of the ban is no longer banned"
+        },
+        {
+          "file": "src/rules/checkin.js",
+          "from": "(d) => d <= t &&",
+          "to": "(d) => d < t &&",
+          "label": "a no-show dated today does not count yet"
         }
       ]
     }

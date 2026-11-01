@@ -11,7 +11,9 @@
     "test:web": "vitest run --config vitest.web.config.js web/",
     "build:web": "vite build",
     "test:e2e": "playwright test e2e/ --project=chromium",
-    "test:e2e:all": "playwright test e2e/"
+    "test:e2e:all": "playwright test e2e/",
+    "test:cov": "vitest run src/ --coverage",
+    "test:mutation": "stryker run"
   },
   "keywords": [],
   "author": "",
@@ -19,11 +21,15 @@
   "type": "module",
   "devDependencies": {
     "@playwright/test": "1.64.1",
+    "@stryker-mutator/core": "10.1.1",
+    "@stryker-mutator/vitest-runner": "10.1.1",
     "@testcontainers/postgresql": "^12.2.1",
     "@testing-library/dom": "10.4.2",
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.8",
+    "@vitest/coverage-istanbul": "5.0.5",
+    "@vitest/coverage-v8": "5.0.5",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "fast-check": "^4.10.2",

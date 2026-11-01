@@ -513,6 +513,16 @@ disc-2   Coverage.discount  lines 4/4  branches 2/2 (100%)</code></pre>
       ['sp4', '§5.2 "White Box Testing Techniques": statement coverage p.146, decision coverage p.148 (PDF pp.161–165)', '§5.2 "White Box Testing Techniques": statement coverage trang 146, decision coverage trang 148 (PDF 161–165)'],
       ['junit', 'Ch.6 "Test quality" — code coverage and how to measure it, PDF pp.103–126', 'Chương 6 "Test quality" — code coverage và cách đo, PDF 103–126'],
     ]),
+    // Liên kết chéo sang khoá Courses /courses/testing (01/11/2026)
+    bi(`<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-1-do-phu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 8.1: coverage measured with a real tool</span><span class="lc-sub">Same as this lesson: statement coverage counts the statements that ran, decision coverage asks for both outcomes of every decision, and 100% statement coverage does not imply 100% decision coverage. Deeper there: Vitest measures it on a real Node project (v8 and istanbul, lines/branches/functions); a suite that only checks toBeDefined reaches 100% on all four and still lets two planted bugs through; one condition (ADMIN) is never true although every branch ran — the gap that condition coverage and MC/DC close; thresholds in the config, and why chasing 100% is the wrong goal.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-1-do-phu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 8.1: đo độ phủ bằng công cụ thật</span><span class="lc-sub">Giống bài này: statement coverage đếm câu lệnh đã chạy, decision coverage đòi cả hai kết quả của mỗi quyết định, và 100% statement không kéo theo 100% decision. Sâu thêm ở đó: Vitest đo trên dự án Node thật (v8 và istanbul; dòng, nhánh, hàm); một bộ test chỉ kiểm toBeDefined đạt 100% cả bốn chỉ số mà vẫn để lọt hai bug cài sẵn; một điều kiện (ADMIN) chưa bao giờ đúng dù mọi nhánh đã chạy — đúng chỗ condition coverage và MC/DC bịt lại; ngưỡng trong file cấu hình, và vì sao đuổi theo 100% là mục tiêu sai.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>`),
   ].join('\n'),
 };
 

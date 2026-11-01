@@ -1,7 +1,7 @@
 # Hợp đồng soạn khoá "Testing" (/courses/testing)
 
 > Đọc HẾT file này trước khi soạn một chương mới. Viết 01/11/2026 sau Mục 0 + Chương 1 (đợt mẫu, `bdd965397`) và Chương 2
-> (`73346c69c`); cập nhật khi xong Chương 3–4, 5–6, 7. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
+> (`73346c69c`); cập nhật khi xong Chương 3–4, 5–6, 7, 8. **Bài mẫu độ dài chuẩn (từ Ch3):** Chương 3–4 — `testing/s03-*.mjs`, `s04-*.mjs` +
 > deck `tst-03-*`, `tst-04-*`, `tst-lab-3/4`. Chỗ nào file này không nói, bắt chước đúng các file đó.
 
 ## 0. Khoá này là gì, dạy ai
@@ -60,13 +60,16 @@
 ```bash
 cp -r content/courses/testing/_labflow-lite <SCRATCH>/lab/labflow-lite
 cd <SCRATCH>/lab/labflow-lite && npm ci            # Node 22 (chuẩn: 22.23.3), Vitest 5.0.5, fast-check 4, Express 5, Supertest 7
-npm run test:unit                                   # = vitest run src/ · 85 passed (cuối Ch6) — đây là “unit suite”
+npm run test:unit                                   # = vitest run src/ · 85 passed (cuối Ch6), 116 passed / 15 file (cuối Ch8) — đây là “unit suite”
 npm run test:web                                    # = vitest run --config vitest.web.config.js web/ · 16 passed (Ch6, jsdom)
 npm run test:int -- test/integration                # 11 passed — cần Docker (Testcontainers, postgres:17)
 for s in dot-bien dot-bien-2 dot-bien-3 dot-bien-4 dot-bien-5 dot-bien-6; do node scripts/$s.mjs | tail -1; done   # 6 × 8/8
 npm run test:e2e                                    # = playwright test e2e/ --project=chromium · 9 passed (7 + 2 setup) — Ch7, cổng 4173 phải trống
 npm run test:e2e:all                                # 5 project · 37 passed
 node scripts/dot-bien-7.mjs | tail -1               # 8/8, ~1,5 phút (mỗi đột biến build + server + Chromium)
+npm run test:cov                                    # = vitest run src/ --coverage (Ch8, v8, ngưỡng 85/80/80/85) · lines 98,41%
+npm run test:mutation                               # = stryker run (Ch8, src/rules) · 98,73%, ~12 s; ngưỡng break 80
+node scripts/dot-bien-8.mjs | tail -1               # 8/8 + “green in 10/10 shuffled orders”, ~10 s
 ```
 - ⚠️ `npm test` = `vitest run` chạy CẢ `demo*/` (có test cố ý đỏ) ⇒ bài/slide/lab luôn ghi **`npm run test:unit`** (script `"test:unit": "vitest run src/"`,
   giới thiệu ở phần Setup của Lab 1, dùng nhất quán Ch1–Ch5 từ 01/11 theo yêu cầu điều phối). Không viết “npm test xanh”.
@@ -93,6 +96,15 @@ node scripts/dot-bien-7.mjs | tail -1               # 8/8, ~1,5 phút (mỗi đ�
   Đo được: `getByLabel('Lab')` khớp cả form "Book a lab" (strict mode); API trễ 1,5 s ⇒ chỉ assertion web-first xanh; storageState KHÔNG nhanh hơn
   (đăng nhập demo gần như miễn phí); dữ liệu cố định + 2 project (firefox+webkit) ⇒ Firefox đỏ 3/3 vì WebKit đặt trước; ảnh gốc `-darwin.png`
   KHÔNG đưa vào snapshot (`*-snapshots/` bị loại khi rsync) — lần chạy đầu tự ghi. Output Playwright có mã màu ⇒ `perl -pi -e 's/\e\[[0-9;]*m//g'`.
+- Ch8: `@vitest/coverage-v8` + `@vitest/coverage-istanbul` 5.0.5, `@stryker-mutator/core` + `vitest-runner` 10.1.1. `vitest.config.js` có khối `coverage`
+  (include `src/**/*.js`, loại test/main.js/pgRepo.js/app.js, reporter `text` skipFull:false + html + json-summary, ngưỡng) và `tags: [quarantine]`; exclude thêm
+  `.stryker-tmp/**` (đo 01/11: một lượt Stryker chết để lại sandbox ⇒ `vitest run src/` chạy 20 file/170 test). `stryker.config.mjs` (vitest dir `src`, mutate
+  `src/rules/**`, perTest, thresholds break 80, html ⇒ `reports/mutation/`). Test mới trong src: `rules/code.test.js`, `notify/reminder.test.js` (đưa từ demo2/3 lên,
+  bài 8.1), `rules/mutation-gaps.test.js` (8.2), `lib/retry-last.test.js` (thực hành 8.2), `rules/checkin.js` + `checkin.test.js` (Lab 8: BR-07 check-in, BR-08 cấm
+  sau 3 lần vắng). `scripts/lap-lai.mjs N <args>` = chạy vitest N lần, mỗi lần một tiến trình, in số lần đỏ + seed. `demo8/` (có test CỐ Ý đỏ/chập chờn;
+  `gio-that.test.js` đỏ trước 07:00 giờ VN). Đo được: v8 và istanbul ra số giống nhau trên src/, lệch nhẹ trên JSX; 100% cả bốn chỉ số mà Stryker chỉ 41,49%;
+  `if (!m)`→`if (false)` sống vì null[1] cũng ném TypeError; days.js có 2 đột biến tương đương; retry che lỗi 17/50 → 0/50; `--changed` cần git.
+  Output Stryker có mã màu ⇒ `perl -pi -e 's/\e\[[0-9;]*m//g'`.
 - Ch4: `vitest.integration.config.js` (include `test/integration/**`, `demo4/**/*.int.test.js`; `globalSetup`; `fileParallelism: false`),
   `vitest.config.js` loại `test/integration/**` và `demo4/**`. `TEST_DATABASE_URL` có ⇒ dùng CSDL đó (compose `compose.test.yml`, cổng 54329);
   không ⇒ Testcontainers. `TST_SCHEMA` đổi file schema (demo). Test tích hợp nhận URL bằng `inject('databaseUrl')` (`test/support/db.js`).
@@ -148,7 +160,7 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
   Deck đã đẩy mà phải dựng lại ⇒ đẩy sang `TST/v2` (v3…) và ghi `VER = { '<deck>': 'v2' }` trong `_slides.mjs` — đừng ghi đè v1.
   Hiện (01/11): `tst-lab-1`, `tst-lab-2` = v3; `tst-02-2`, `tst-lab-3`, `tst-lab-4`, `tst-04-1/2/3` = v2 (đổi sang `npm run test:unit`);
   `tst-05-1` = v2 (sửa “no port” → Supertest tự mở cổng tạm); `tst-07-4` = v2 (slide 8: chạy dau-tien trên firefox+webkit KHÔNG xanh hết;
-  slide 7 bớt chữ cho khỏi chạm chân trang); còn lại v1. Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
+  slide 7 bớt chữ cho khỏi chạm chân trang); còn lại v1 (Ch8: tst-08-1…4 + tst-lab-8 đẩy TST/v1 01/11, 53 ảnh). Không sửa `_render-slides.mjs`, `_cs-chung.mjs`, `_pg-chung.mjs`.
 
 ## 5. Lời giảng dưới slide (`giang/<deck>.mjs`)
 - Đúng **một dòng/slide**, đủ 1..N (walkTst ném lỗi nếu thiếu/trùng). EN 50–90 từ, VI tương đương, giải thích **vì sao**, không đọc lại slide.
@@ -180,11 +192,12 @@ Trích một đoạn của file (vd chỉ class lỗi) ⇒ hằng ở đầu fil
 - Deck lab 9 slide: cover · mission · code under test · 8 bugs · first attempt · reference · rubric · hints · checklist.
 
 ### 7.2 Đề Code Lab kiểu `mutation` (chờ máy chấm)
-`testing/_de-codelab-mutation.json` — 34 đề, 190 đột biến + 16 thay đổi vô hại (Ch7: 5 đề, 27 đột biến + 5 vô hại, 32/32), kiểm trên một bản sao mới của
+`testing/_de-codelab-mutation.json` — 39 đề, 221 đột biến + 18 thay đổi vô hại (Ch7: 5 đề, 27 đột biến + 5 vô hại, 32/32; Ch8: 5 đề, 31 đột biến + 2 vô hại, 33/33; cả 39 đề 239/239 trên bản sao mới 01/11), kiểm trên một bản sao mới của
 `_labflow-lite` (`npm ci`, Docker bật) bằng
 `node scripts/tst/kiem-de-mutation.mjs <SCRATCH>/lab/labflow-lite content/courses/testing/_de-codelab-mutation.json [id…]` (01/11/2026).
 Trường thêm: `config` (Ch4: `vitest.integration.config.js`, cần Docker) · `runner: "playwright"` (Ch7: chạy `npx playwright test <testThamKhao> <args>`,
-`args` mặc định `["--project=chromium"]`, `[]` = cả 5 project; mỗi lần tự build web + bật server cổng 4173) · `voHai[{file, from, to, label}]` = thay đổi VÔ HẠI mà test
+`args` mặc định `["--project=chromium"]`, `[]` = cả 5 project; mỗi lần tự build web + bật server cổng 4173) · Ch8: đề Vitest cũng có `args` (thêm vào cuối
+`vitest run`): `["--sequence.shuffle", "--repeats=9"]` bắt test chập chờn, `["--testTimeout=500"]` bắt test ngủ thật · `voHai[{file, from, to, label}]` = thay đổi VÔ HẠI mà test
 phải VẪN XANH (bắt test quá chi tiết — đề 3.3).
 Mỗi đề: `id`, `bai` (slug bài gắn), `tieuDe` EN\|\|\|VI, `ham`, `fileDung` (code đúng trong `_labflow-lite`), `testThamKhao` (bộ test
 chứng minh mọi đột biến diệt được), `yeuCau`, `dotBien[{ file, from, to, label }]` (`from` khớp **đúng 1 chỗ**, kể cả xuống dòng).
@@ -226,6 +239,11 @@ Máy chấm sau này: chạy file test của người học trên code đúng (p
 | tst-cl-7-3 | tst-7-3-on-dinh | `--repeat-each=3` | trùng đúng khung được nhận · 409 thành lỗi chung · đảo thông báo chờ duyệt · 31 chỗ không cần duyệt · **vô hại:** server lưu chậm 1,5 s, đăng nhập chậm 1,5 s |
 | tst-cl-7-4 | tst-7-4-da-trinh-duyet | style.css, index.html (`args: []` = 5 project) | media query 400px (Pixel 7 rộng 412) · điện thoại cỡ chữ máy tính · đổi cỡ chữ máy tính · mất thẻ meta viewport |
 | tst-cl-lab-7 | tst-7-5-lab-e2e | (8 đột biến của `dot-bien-7.mjs`) | **vô hại:** server lưu chậm 1,5 s |
+| tst-cl-8-1 | tst-8-1-do-phu | createApp (middleware lỗi), bookLab | CSDL sập → 500 · STORAGE_DOWN không nhận ra · lộ message lỗi · lỗi tra cứu thoát thô · lỗi lạ thành 503 · **vô hại:** viết 500 không qua helper |
+| tst-cl-8-2 | tst-8-2-mutation | needsApproval, createBooking, usageRate, parseTime, newBookingRecord, retry | 1 chỗ bị từ chối · status rỗng · usageRate chia 28 giờ · bỏ `^` / `$` của regex · `if (false)` · thiếu id mặc định · chờ thừa sau lần thử cuối |
+| tst-cl-8-3 | tst-8-3-flaky (`args` shuffle + repeats=9) | daysAheadVN, needsApproval, login guard, bookLab, mailer | ngày theo lịch UTC · 30 chỗ cần duyệt · lần sai thứ 5 không khoá · mất kiểm trùng · đọc sai trường id · **vô hại:** hằng 25200000 |
+| tst-cl-8-4 | tst-8-4-toc-do (`args` testTimeout=500) | bookAndNotify, buildMail, retry | mất “Booking confirmed” · xác nhận gửi người duyệt · yêu cầu duyệt gửi sinh viên · chỉ 2 lần thử |
+| tst-cl-lab-8 | tst-8-5-lab-chat-luong (`args` shuffle) | (8 đột biến của `dot-bien-8.mjs`) + vắng mặt hôm nay chưa tính | |
 
 Chương mới ⇒ thêm 1 đề/bài dạy (3–8 đột biến, mỗi con là một bug THẬT có nghĩa với người dùng, không đột biến tương đương), chạy
 `kiem-de-mutation.mjs` tới khi `N/N`, rồi cập nhật bảng này. Đột biến phải giữ cú pháp hợp lệ: xoá `lab = $1 AND` làm `$1` thừa ⇒ cả câu

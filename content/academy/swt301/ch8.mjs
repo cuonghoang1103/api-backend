@@ -2474,6 +2474,11 @@ Luôn đọc số test đã chạy, đừng chỉ nhìn màu.</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 1.3: names and it.each (≈ @DisplayName, @ParameterizedTest)</span><span class="lc-sub">Same as @DisplayName and @CsvSource here: readable names and one test fed by a table. Different: Courses shows why a good name turns a red CI line into a diagnosis, with a planted bug.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-2-mutation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 8.2: mutation testing with StrykerJS</span><span class="lc-sub">Same as the “100% coverage did not find the bug” box above: coverage proves lines ran, mutation testing (PIT for Java) measures whether the tests notice a change. Deeper there: StrykerJS on a real Node project — the same 100%-coverage suite kills only 41.49% of 94 mutants; reading the survivors leads to nine new tests (88.96% → 98.16%); equivalent mutants that no test can kill; incremental mode, and the cost in time (10.5 s against 0.8 s for the plain suite).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
 </a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-2-cai-dat" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 0.3: cùng ý tưởng với Vitest</span><span class="lc-sub">Giống bài này: bộ chạy tìm test, in expected và actual, thoát với mã 1 khi hỏng. Khác: Courses làm bằng JavaScript với Vitest 5 — npm script, lọc test, chế độ watch, và bảng so JUnit ↔ Vitest.</span></span>
@@ -2482,6 +2487,11 @@ Luôn đọc số test đã chạy, đừng chỉ nhìn màu.</div>
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-1-3-ten-test" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 1.3: đặt tên và it.each (≈ @DisplayName, @ParameterizedTest)</span><span class="lc-sub">Giống @DisplayName và @CsvSource ở đây: tên dễ đọc và một test được nuôi bằng bảng. Khác: Courses cho thấy vì sao tên tốt biến dòng đỏ trên CI thành bản chẩn đoán, bằng một con bug cài sẵn.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-2-mutation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 8.2: mutation testing với StrykerJS</span><span class="lc-sub">Giống hộp “coverage 100% không tìm ra bug” ở trên: coverage chỉ chứng minh dòng đã chạy, mutation testing (PIT cho Java) đo xem test có nhận ra thay đổi không. Sâu thêm ở đó: StrykerJS trên dự án Node thật — chính bộ test 100% độ phủ chỉ diệt 41,49% trong 94 đột biến; đọc các đột biến sống dẫn tới chín test mới (88,96% → 98,16%); đột biến tương đương không test nào diệt được; chế độ incremental và cái giá thời gian (10,5 s so với 0,8 s của bộ test thường).</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>`),
   ].join('\n'),
@@ -2766,9 +2776,19 @@ ${SEL}`),
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 0.2: test pyramid and testing trophy</span><span class="lc-sub">Same as this lesson: Mike Cohn’s pyramid and the ice-cream-cone anti-pattern. Different: Courses measures the speed gap on a running Node API and adds Kent C. Dodds’ testing trophy; CI itself is built step by step in Chapter 9.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-3-flaky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in the Testing course (Courses) — lesson 8.3: flaky tests, reproduced and fixed</span><span class="lc-sub">Same as this lesson: a flaky test fails without any code change, and a fixed sleep is too short on a slow CI machine and too long everywhere else. Deeper there: five causes reproduced on purpose and measured (real clock, random data, order and shared state, network, a race) — 21, 28 and 33 failures in 100 runs, 13 red runs in 20 when the order is shuffled; retries that turned 17 red runs in 50 into 0 while a real double booking stayed; quarantine with test tags; and a fix at each cause.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
 </a>`, `<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 0.2: kim tự tháp và chiếc cúp</span><span class="lc-sub">Giống bài này: kim tự tháp của Mike Cohn và dạng sai "cây kem". Khác: Courses đo khoảng cách tốc độ trên một API Node đang chạy và thêm chiếc cúp của Kent C. Dodds; phần CI được dựng từng bước ở Chương 9.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-3-flaky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing (Courses) — bài 8.3: test chập chờn, tái hiện và sửa</span><span class="lc-sub">Giống bài này: test chập chờn đỏ mà code không đổi, và một lần sleep cố định thì quá ngắn trên máy CI chậm, quá dài ở mọi chỗ khác. Sâu thêm ở đó: năm nguyên nhân được tái hiện có chủ đích và đo (đồng hồ thật, dữ liệu ngẫu nhiên, thứ tự và trạng thái chung, mạng, tranh chấp) — 21, 28 và 33 lần đỏ trong 100 lần chạy, 13 lần đỏ trong 20 khi xáo thứ tự; retry biến 17/50 lần đỏ thành 0 trong khi một lượt đặt trùng thật vẫn còn; cách ly bằng tag; và sửa ở từng nguyên nhân.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>`),
   ].join('\n'),

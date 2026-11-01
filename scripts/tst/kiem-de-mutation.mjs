@@ -5,6 +5,8 @@
 // Luôn trả file về trong finally. Cần Node 22 (TST_NODE_BIN như chay.sh).
 // Chương 7: đề có "runner": "playwright" chạy `npx playwright test <testThamKhao> <args>` (args mặc định ['--project=chromium'];
 // [] = mọi project). Mỗi lần chạy Playwright tự build web + bật server e2e (webServer, reuseExistingServer: false) ⇒ cổng 4173 phải trống.
+// Chương 8: đề Vitest cũng nhận "args" (thêm vào cuối lệnh vitest run), vd ["--sequence.shuffle", "--repeats=9"] (test tham khảo phải
+// xanh ở mọi thứ tự, mọi lần lặp — bắt test chập chờn) hoặc ["--testTimeout=500"] (bắt test ngủ thật).
 import { readFileSync, writeFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
@@ -16,7 +18,7 @@ let cfg = [];
 let cur = {};
 const run = (t) => (cur.runner === 'playwright'
   ? spawnSync('npx', ['playwright', 'test', ...t, ...(cur.args ?? ['--project=chromium'])], { encoding: 'utf8', env, shell: process.platform === 'win32' })
-  : spawnSync('npx', ['vitest', 'run', ...cfg, ...t], { encoding: 'utf8', env, shell: process.platform === 'win32' })).status;
+  : spawnSync('npx', ['vitest', 'run', ...cfg, ...t, ...(cur.args ?? [])], { encoding: 'utf8', env, shell: process.platform === 'win32' })).status;
 let song = 0, tong = 0;
 for (const d of de.filter((x) => !chi.length || chi.includes(x.id))) {
   cfg = d.config ? ['--config', d.config] : [];   // vd vitest.integration.config.js cho Chương 4 (cần Docker)

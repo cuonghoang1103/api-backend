@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 8 (deck tst-lab-8, 9 slide). */
+import { walkTst } from '../_slides.mjs';
+
+export default walkTst('tst-lab-8', 'Lab 8 — Strong and stable: from 3/8 to 8/8, in any order', 'Lab 8 — Mạnh và ổn định: từ 3/8 tới 8/8, ở mọi thứ tự', [
+  [1, 'Lab 8 — Strong and stable: from 3/8 to 8/8, in any order',
+    `<p>The chapter lab puts its three tools together on one small module. A teammate’s tests look perfect — green and fully covered — and you measure, with coverage, planted bugs and a shuffled order, how much they really protect. Then you rewrite them so that a script, not your opinion, says they are strong and stable.</p>`,
+    `<p>Lab của chương gộp ba công cụ lại trên một module nhỏ. Bộ test của một bạn cùng nhóm trông hoàn hảo — xanh và phủ kín — và bạn đo, bằng độ phủ, bug cài sẵn và thứ tự xáo trộn, xem chúng thật sự bảo vệ được bao nhiêu. Rồi bạn viết lại để một script, chứ không phải ý kiến của bạn, xác nhận chúng mạnh và ổn định.</p>`],
+  [2, 'Your mission',
+    `<p>Two new rules, one existing test file and one grader. The grader checks the same file twice: first in ten shuffled but reproducible orders, because a test that needs another test to run first is a bug in the suite; then with eight planted bugs, because a test that stays green when the code is wrong protects nothing.</p>`,
+    `<p>Hai luật mới, một file test có sẵn và một máy chấm. Máy chấm kiểm cùng một file hai lần: đầu tiên ở mười thứ tự xáo trộn nhưng lặp lại được, vì test cần một test khác chạy trước là bug của bộ test; sau đó với tám bug cài sẵn, vì test vẫn xanh khi code sai thì không bảo vệ được gì.</p>`],
+  [3, 'The code under test',
+    `<p>Check-in opens ten minutes before the start and closes fifteen minutes after it; three no-shows in thirty days ban new bookings until seven days after the latest one. Read it as a list of boundaries: 07:50, 08:00 and 08:15 for an eight o’clock booking, and the window, the third strike and the last banned day for the ban.</p>`,
+    `<p>Check-in mở mười phút trước giờ bắt đầu và đóng mười lăm phút sau đó; ba lần vắng trong ba mươi ngày thì bị cấm đặt mới tới bảy ngày sau lần vắng gần nhất. Hãy đọc code như một danh sách các biên: 07:50, 08:00 và 08:15 cho lượt tám giờ, và cửa sổ thời gian, lần vắng thứ ba, ngày bị cấm cuối cùng cho lệnh cấm.</p>`],
+  [4, 'The 8 planted bugs',
+    `<p>Every bug sits exactly on one of those boundaries: one minute too strict, one day too long, the wrong end of a list. Each one is small in the code and real for a student — told to come back later while standing at the door, or banned on a day the rule says is free. That is why boundaries deserve their own tests.</p>`,
+    `<p>Bug nào cũng nằm đúng trên một trong các biên đó: chặt hơn một phút, dài hơn một ngày, lấy nhầm đầu danh sách. Con nào cũng nhỏ trong code nhưng có thật với sinh viên — bị bảo quay lại sau khi đang đứng ở cửa phòng, hoặc bị cấm vào một ngày mà luật nói là đã hết cấm. Đó là lý do mỗi biên xứng đáng có test riêng.</p>`],
+  [5, 'The first attempt: green, 100% — and weak',
+    `<p>All lines covered, eight tests green, yet only three bugs caught. The values sit far from every boundary, truthy checks accept any answer, and one shared log makes two tests depend on their order: red in ten of twenty shuffled runs. Even the test called “a ban ends” never reaches the line that ends a ban.</p>`,
+    `<p>Phủ hết mọi dòng, tám test xanh, nhưng chỉ bắt được ba bug. Các giá trị nằm xa mọi biên, phép kiểm truthy nhận mọi câu trả lời, và một cuốn sổ dùng chung khiến hai test phụ thuộc thứ tự: đỏ mười trên hai mươi lần xáo. Ngay cả test tên “a ban ends” cũng không bao giờ chạy tới dòng kết thúc lệnh cấm.</p>`],
+  [6, 'The reference: 8 of 8, in any order',
+    `<p>The fix is not more tests in general, it is the right rows: each boundary with the value just inside and just outside, whole results compared with toEqual, and a fresh log in every test. Grading takes about ten seconds. Stryker then found one more gap, a no-show dated today, which no planted bug had asked for.</p>`,
+    `<p>Cách sửa không phải là thêm test nói chung, mà là đúng những dòng cần có: mỗi biên với giá trị ngay bên trong và ngay bên ngoài, so cả kết quả bằng toEqual, và một cuốn sổ mới cho từng test. Chấm mất khoảng mười giây. Sau đó Stryker còn tìm thêm một lỗ, lần vắng ghi đúng hôm nay, mà không bug cài sẵn nào đòi hỏi.</p>`],
+  [7, 'Rubric (10 points)',
+    `<p>Killing mutants earns only four of the ten points. The rest rewards the habits that keep a suite useful after the lab: independence from order, boundaries you can read in the test names, exact assertions, honest branch coverage and no hidden dependence on the real clock or on shared objects.</p>`,
+    `<p>Diệt đột biến chỉ được bốn trên mười điểm. Phần còn lại thưởng cho những thói quen giữ bộ test có ích sau lab: không phụ thuộc thứ tự, các biên đọc được ngay trong tên test, khẳng định chính xác, độ phủ nhánh trung thực và không ngầm dựa vào đồng hồ thật hay object dùng chung.</p>`],
+  [8, 'Hints, from gentle to strong',
+    `<p>Open them one at a time. Write the check-in table first, then the refused statuses, then the ban with today fixed as a plain string. Count the thirty days on a calendar, because October has thirty-one. Finish by running the file twenty times in a shuffled order: if anything is still shared, that is where it shows.</p>`,
+    `<p>Mở từng gợi ý một. Viết bảng check-in trước, rồi các trạng thái bị từ chối, rồi lệnh cấm với hôm nay cố định bằng một chuỗi. Đếm ba mươi ngày trên lịch, vì tháng Mười có ba mươi mốt ngày. Kết thúc bằng việc chạy file hai mươi lần theo thứ tự xáo trộn: nếu còn gì dùng chung, nó sẽ lộ ra ở đó.</p>`],
+  [9, 'Before you call it done',
+    `<p>Done means measured: ten orders out of ten, eight mutants out of eight, full branch coverage of the module and the whole unit suite green with its 116 tests. If you have a few minutes left, run Stryker on the one file and see whether your own tests also caught the bug nobody planted.</p>`,
+    `<p>Xong nghĩa là đã đo: mười trên mười thứ tự, tám trên tám đột biến, phủ hết nhánh của module và cả bộ unit test xanh với 116 test. Nếu còn vài phút, chạy Stryker trên đúng file đó và xem test của bạn có bắt được con bug mà không ai cài sẵn không.</p>`],
+]);

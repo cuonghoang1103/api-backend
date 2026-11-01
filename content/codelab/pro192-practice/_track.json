@@ -224,6 +224,30 @@
       "name": "L.6 🎓 LAB211 J1.S.P0073 — Handy Expense",
       "level": "INTERMEDIATE",
       "description": "Luyện: L.6 — LAB211 J1.S.P0073: Handy Expense (saved to a file)"
+    },
+    {
+      "slug": "pro192-cs1-on",
+      "name": "⭐ CS.1 Generics & lambdas (Java 17)",
+      "level": "ADVANCED",
+      "description": "Luyện: A generic max that accepts List<LocalDate>, any Collection and inherited ordering · A PECS utility: move the passing marks into one List<Number> · Sort a class list by four keys — and the TreeSet that drops students · A generic repository Repo<T, ID> — Spring Data’s shape in plain Java · From anonymous classes to lambdas and method references — same output"
+    },
+    {
+      "slug": "pro192-cs2-on",
+      "name": "⭐ CS.2 Stream API (Java 17)",
+      "level": "ADVANCED",
+      "description": "Luyện: A grade report in three pipelines · The three most frequent words · A CSV with a repeated product code: toMap with a merge function · PE question 3 with streams — that still compiles on JDK 8 · Fix three Optional mistakes (and count the database calls)"
+    },
+    {
+      "slug": "pro192-cs3-on",
+      "name": "⭐ CS.3 Modern Java 17: records, enums, sealed, text blocks",
+      "level": "ADVANCED",
+      "description": "Luyện: The PE Student as a record that cannot hold bad data · Magic numbers to an enum, a fall-through bug to a switch expression · A sealed Payment and its fees with instanceof patterns · An SQL query and a JSON body as text blocks, checked character by character · Bring Java 17 code back to the JDK 8 exam room — identical output"
+    },
+    {
+      "slug": "pro192-cs4-on",
+      "name": "⭐ CS.4 Object contracts: equals/hashCode, immutability, BigDecimal, builders",
+      "level": "ADVANCED",
+      "description": "Luyện: Bug hunt: equals ignores case, hashCode does not · An immutable invoice, attacked four ways · VAT on a VND invoice: round each line or round the total? · A borrow slip: static factory plus a builder that reports every problem at once"
     }
   ]
 }

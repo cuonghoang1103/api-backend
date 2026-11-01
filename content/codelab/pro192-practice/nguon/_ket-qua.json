@@ -314,6 +314,151 @@
    "REPORT (0 students)\naverage: 0.00\nskipped: 1\n-- report.txt: 3 lines\n"
   ]
  },
+ "pro192-cs1-an-danh-sang-lambda": {
+  "bam": "5c53d4be3059a61a",
+  "ra": [
+   "sorted: [CSD201(3), LAB211(2), MAE101(3), MAE102(2), PRJ301(3), PRO192(3)]\njava: [LAB211(2), PRJ301(3), PRO192(3)]\ncredits: 16\nafter removeIf: [CSD201(3), LAB211(2), MAE102(2), PRJ301(3), PRO192(3)]\n",
+   "sorted: [JPD113(3), MAE001(2), MAE101(3), MAE201(4)]\njava: []\ncredits: 12\nafter removeIf: [JPD113(3), MAE001(2)]\n"
+  ]
+ },
+ "pro192-cs1-kho-generic": {
+  "bam": "f114769b92bd743a",
+  "ra": [
+   "saved Lab[id=1, name=LAB-A, seats=30]\nsaved Lab[id=2, name=LAB-B, seats=45]\nsaved Lab[id=3, name=LAB-C, seats=30]\nLab[id=2, name=LAB-B, seats=45]\nerror: lab 9 not found\nLAB-C\nseats >= 40: [Lab[id=2, name=LAB-B, seats=45]]\n[Lab[id=2, name=LAB-B, seats=45], Lab[id=1, name=LAB-A, seats=30], Lab[id=3, name=LAB-C, seats=30]]\n[LAB-A, LAB-B, LAB-C]\ndelete 1: true\ndelete 1: false\ncount = 2\nafter clearing a copy: 2\nbooks 2 [Book[isbn=978-0134685991, title=Effective Java 3rd], Book[isbn=978-0132350884, title=Clean Code]] [18, 10]\n",
+   "count = 0\n[]\nerror: lab 1 not found\nsaved Lab[id=7, name=R7, seats=10]\nsaved Lab[id=5, name=R5, seats=50]\nsaved Lab[id=7, name=R7-new, seats=60]\n[R7-new, R5]\n[Lab[id=7, name=R7-new, seats=60], Lab[id=5, name=R5, seats=50]]\nseats >= 60: [Lab[id=7, name=R7-new, seats=60]]\ncount = 2\nafter clearing a copy: 2\nbooks 2 [Book[isbn=978-0134685991, title=Effective Java 3rd], Book[isbn=978-0132350884, title=Clean Code]] [18, 10]\n"
+  ]
+ },
+ "pro192-cs1-max-generic": {
+  "bam": "cb0a154facb5f707",
+  "ra": [
+   "latest date : 2026-12-01\nmax int     : 9\nmax of set  : Hoa\nbest lab    : lab 9.25\n",
+   "date: empty collection\nmax int     : -5\nset: empty collection\nbest lab    : lab 6.0\nlab: empty collection\n",
+   "latest date : 2027-01-01\nmax int     : -1\nmax of set  : zeta\nbest lab    : lab 10.0\n"
+  ]
+ },
+ "pro192-cs1-pecs": {
+  "bam": "e64838e2dcc6bf02",
+  "ra": [
+   "moved from lab: 3, from PE: 2\npassed: [8, 6, 10, 7.5, 9.25]\naverage lab 6.20 | PE 7.17 | passed 8.15\neven lab marks moved: 4\nset: [8, 4, 6, 10]\nlab list unchanged: [8, 4, 6, 10, 3]\n",
+   "moved from lab: 0, from PE: 0\npassed: []\naverage lab 2.00 | PE 0.00 | passed 0.00\neven lab marks moved: 1\nset: [2]\nlab list unchanged: [1, 2, 3]\n",
+   "moved from lab: 3, from PE: 2\npassed: [5, 7, 9, 5.0, 10.0]\naverage lab 5.50 | PE 6.66 | passed 7.20\neven lab marks moved: 0\nset: []\nlab list unchanged: [5, 7, 9, 1]\n"
+  ]
+ },
+ "pro192-cs1-sap-nhieu-khoa": {
+  "bam": "149acd2440cb3ed5",
+  "ra": [
+   "AI02   An           AI    9.0\nAI07   Chi          AI    9.0\nSE01   Binh         SE    8.5\nSE05   binh         SE    8.5\nXX09   Dung         -     9.5\nXX03   Em           -     7.0\nTreeSet by GPA keeps 4 of 6\nTreeSet by ORDER keeps 6 of 6\n",
+   "A9     hoa          IS    8.0\nB1     Hoa          IS    8.0\nB2     hoa          IS    8.0\nC0     an           -     8.0\nC1     An           -     8.0\nTreeSet by GPA keeps 1 of 5\nTreeSet by ORDER keeps 5 of 5\n",
+   "Z1     Zed          -     5.5\nTreeSet by GPA keeps 1 of 1\nTreeSet by ORDER keeps 1 of 1\n"
+  ]
+ },
+ "pro192-cs2-bang-diem": {
+  "bam": "b789bb60d383b89b",
+  "ra": [
+   "average by major:\n  AI 8.63\n  IS 4.75\n  SE 8.07\nbest by major: {AI=Giang, IS=Khoa, SE=Dung}\nranks:\n  Excellent 3\n  Very good 1\n  Good 2\n  Average 1\n  Fail 1\n",
+   "average by major:\n  GD 6.50\n  SE 9.00\nbest by major: {GD=Nam, SE=Lan}\nranks:\n  Excellent 2\n  Very good 1\n  Good 1\n  Average 0\n  Fail 1\n",
+   "average by major:\n  MKT 5.00\nbest by major: {MKT=Quy}\nranks:\n  Excellent 0\n  Very good 0\n  Good 0\n  Average 1\n  Fail 0\n"
+  ]
+ },
+ "pro192-cs2-pe-cau-3-stream": {
+  "bam": "10090de6d4a2b69a",
+  "ra": [
+   "f1 = 10.38\nf2 = [SQL(30.0), C Book(4.0), Clean Code(30.0), Java Puzzlers(8.25), Head First Java(12.5)]\nf3 = [Head First Java(12.5), Java Puzzlers(8.25), C Book(4.0)]\n",
+   "f1 = 0.00\nf2 = [AI(5.0), UML(5.0), Algorithms(99.0), learn java(10.0)]\nf3 = [learn java(10.0), AI(5.0), UML(5.0)]\n",
+   "f1 = 0.00\nf2 = []\nf3 = []\n"
+  ]
+ },
+ "pro192-cs2-sua-optional": {
+  "bam": "55516b6a28b7afbd",
+  "ra": [
+   "an: phone 0901\nbinh: phone 0940\noanh: no phone\nem: phone 0933\nchi: no phone\ndatabase calls: 2\n",
+   "an: phone 0901\nem: phone 0933\nan: phone 0901\ndatabase calls: 0\n",
+   "hung: phone 0940\nlong: phone 0940\nkhoa: phone 0940\ndatabase calls: 3\n"
+  ]
+ },
+ "pro192-cs2-tomap-trung-khoa": {
+  "bam": "80c8d27aecbb286e",
+  "ra": [
+   "plain toMap: IllegalStateException\nduplicated: [C07=2, P03=2]\nP03 -> Mouse Pro 450000\nC07 -> USB-C cable 90000\nK01 -> Keyboard 700000\nH02 -> Headset 550000\n",
+   "plain toMap: ok (2 codes)\nduplicated: []\nA1 -> Pen 5000\nB2 -> Book 85000\n",
+   "plain toMap: IllegalStateException\nduplicated: [Z9=3]\nZ9 -> New 300\nY1 -> Ruler 7000\n"
+  ]
+ },
+ "pro192-cs2-top-3-tu": {
+  "bam": "32acf5ef5a045cae",
+  "ra": [
+   "distinct: 18\ntop: [java=3, the=3, a=2]\n",
+   "distinct: 2\ntop: [a=3, b=3]\n",
+   "distinct: 0\ntop: []\n"
+  ]
+ },
+ "pro192-cs3-enum-switch": {
+  "bam": "bd1ec4675fa73fc0",
+  "ra": [
+   "OSCILLOSCOPE x 5 days: fee 50000, deposit 200000\nRASPBERRY_PI x 10 days: fee 20000, deposit 100000\nMULTIMETER x 7 days: fee 0, deposit 0\nLAPTOP x 3 days: fee 81000, deposit 500000\nLAPTOP x 2 days: fee 60000, deposit 500000\nerror: LAPTOP: 1..3 days\n",
+   "error: MULTIMETER: 1..7 days\nOSCILLOSCOPE x 1 days: fee 10000, deposit 200000\nRASPBERRY_PI x 14 days: fee 28000, deposit 100000\nerror: RASPBERRY_PI: 1..14 days\nerror: No enum constant DeviceType.PRINTER\nLAPTOP x 1 days: fee 30000, deposit 500000\n"
+  ]
+ },
+ "pro192-cs3-record-sinh-vien": {
+  "bam": "4dc851f8d6217c45",
+  "ra": [
+   "line 3 skipped: bad code: SE10A1\nline 5 skipped: blank name\nline 6 skipped: mark out of range: 11.0\n3 distinct student(s):\n  SE1001 | Nguyen An | 8.5 | passed\n  SE1005 | Vo Em | 7.5 | passed\n  SE1002 | Tran Binh | 4.0 | failed\n",
+   "line 3 skipped: expected 3 fields\nline 4 skipped: bad mark: muoi\nline 6 skipped: bad code: AB12345\n3 distinct student(s):\n  AB1235 | Anh | 10.0 | passed\n  AB1234 | Zed | 10.0 | passed\n  AB1238 | Dat | 0.0 | failed\n"
+  ]
+ },
+ "pro192-cs3-sealed-payment": {
+  "bam": "33340dd94fd28de5",
+  "ra": [
+   "Cash 500000 -> fee 0\nCard VISA intl 2000000 -> fee 60000\nCard NAPAS 1000000 -> fee 10000\nCard JCB 333333 -> fee 5000\nEWallet MoMo 12000000 -> fee 50000\nEWallet ZaloPay 2000000 -> fee 10000\ntotal fees: 135000\n",
+   "EWallet MoMo 10000000 -> fee 50000\nEWallet MoMo 10000001 -> fee 50000\nCard NAPAS 999 -> fee 10\nCard VISA intl 101 -> fee 3\nCash 0 -> fee 0\ntotal fees: 100013\n"
+  ]
+ },
+ "pro192-cs3-text-block": {
+  "bam": "230bd2d9a0a268d5",
+  "ra": [
+   "SELECT s.code, s.name, COUNT(*) AS loans\nFROM   loan l JOIN student s ON s.id = l.student_id\nWHERE  l.returned_at IS NULL\nGROUP  BY s.code, s.name\n-- lines: 4, ends with newline: false\n{\n  \"name\": \"Nguyen An\",\n  \"id\": 7,\n  \"device\": \"Oscilloscope\"\n}\n-- 2-space fields: 3, ends with newline: true\n{\n  \"name\": \"Tran \\\"Bin\\\" Binh\",\n  \"id\": 12,\n  \"device\": \"Raspberry Pi 4\"\n}\n-- 2-space fields: 3, ends with newline: true\n",
+   "SELECT s.code, s.name, COUNT(*) AS loans\nFROM   loan l JOIN student s ON s.id = l.student_id\nWHERE  l.returned_at IS NULL\nGROUP  BY s.code, s.name\n-- lines: 4, ends with newline: false\n{\n  \"name\": \"C:\\\\Users\\\\An\",\n  \"id\": 1,\n  \"device\": \"Lab\\\\PC-03\"\n}\n-- 2-space fields: 3, ends with newline: true\n{\n  \"name\": \"X\",\n  \"id\": 0,\n  \"device\": \"\\\"quoted\\\"\"\n}\n-- 2-space fields: 3, ends with newline: true\n"
+  ]
+ },
+ "pro192-cs3-ve-jdk8": {
+  "bam": "205aa9b84956a9c2",
+  "ra": [
+   "skip: blank code\nskip: bad mark 10.5\n====================\nMark[code=SE1, mark=8.5] B\nMark[code=SE2, mark=4.0] F\nMark[code=SE1, mark=8.5] B\nMark[code=SE4, mark=9.0] A\nSE1 passed\ntext ignored\n42 ignored\nunique marks: 3\n",
+   "====================\nMark[code=A, mark=3.0] F\nMark[code=B, mark=5.0] C\nMark[code=C, mark=0.0] F\nMark[code=A, mark=3.0] ignored\ntext ignored\n42 ignored\nunique marks: 3\n",
+   "skip: blank code\nskip: bad mark -1.0\n====================\nnone ignored\ntext ignored\n42 ignored\nunique marks: 0\n"
+  ]
+ },
+ "pro192-cs4-builder-phieu-muon": {
+  "bam": "7c42c7a185cecf00",
+  "ra": [
+   "SE1001 borrows 1 x Arduino Uno 2026-11-02 -> 2026-11-09\nSE1002 borrows 2 x Raspberry Pi 2026-11-02 -> 2026-11-20 (note: lab 3)\ninvalid: quantity must be 1..10; borrow date missing\ninvalid: quantity must be 1..10; due date must be after the borrow date\n",
+   "A1 borrows 1 x Scope 2026-01-01 -> 2026-01-31\ninvalid: loan longer than 30 days\ninvalid: borrow date missing; due date missing\nA4 borrows 1 x Breadboard 2026-12-28 -> 2027-01-04\ninvalid: due date must be after the borrow date\n"
+  ]
+ },
+ "pro192-cs4-equals-hashcode": {
+  "bam": "c3ee86ff2293f24e",
+  "ra": [
+   "typed 5, distinct in the set 2, keys in the map 2\ncounts {PRJ301=3, SWE201=2}\nPRJ301: list true, set true, map 3\npRJ301: list true, set true, map 3\nMAD101: list false, set false, map 0\n",
+   "typed 4, distinct in the set 4, keys in the map 4\ncounts {CSD201=1, DBI202=1, OSG202=1, MAE101=1}\ncsd201: list true, set true, map 1\nDbi202: list true, set true, map 1\nosg201: list false, set false, map 0\n",
+   "typed 5, distinct in the set 1, keys in the map 1\ncounts {JPD113=5}\nJPD113: list true, set true, map 5\n"
+  ]
+ },
+ "pro192-cs4-hoa-don-bat-bien": {
+  "bam": "ec33718e7e569e72",
+  "ra": [
+   "created HD-001: total 3960000, date 2026-11-01, lines 3\n(1) after changing the caller's list: total 3960000, date 2026-11-01, lines 3\n(2) add through the getter: refused\n(2): total 3960000, date 2026-11-01, lines 3\n(3) plusDays gave 2026-12-01 but the invoice says 2026-11-01\n(4) new invoice: total 4050000, date 2026-11-01, lines 4\n(4) old invoice: total 3960000, date 2026-11-01, lines 3\n",
+   "rejected: an invoice needs at least one line\n",
+   "created HD-003: total 50000, date 2026-01-31, lines 1\n(1) after changing the caller's list: total 50000, date 2026-01-31, lines 1\n(2) add through the getter: refused\n(2): total 50000, date 2026-01-31, lines 1\n(3) plusDays gave 2026-03-02 but the invoice says 2026-01-31\n(4) new invoice: total 140000, date 2026-01-31, lines 2\n(4) old invoice: total 50000, date 2026-01-31, lines 1\n"
+  ]
+ },
+ "pro192-cs4-vat-bigdecimal": {
+  "bam": "cb6125d3d878b38a",
+  "ra": [
+   "exact VAT: 1811.6\nrule A (round each line): 1811\nrule B (round the total): 1812\nA - B: -1\ndouble: 1811.6000000000001\n",
+   "exact VAT: 12.5\nrule A (round each line): 15\nrule B (round the total): 13\nA - B: 2\ndouble: 12.5\n",
+   "exact VAT: 55555556.05\nrule A (round each line): 55555556\nrule B (round the total): 55555556\nA - B: 0\ndouble: 5.5555556050000004E7\n"
+  ]
+ },
  "pro192-l211-p0011": {
   "bam": "e872eef450ae4539",
   "ra": [

@@ -94,7 +94,7 @@ const ORDER = new Map(course.sections.flatMap((s) => s.lessons.map((l) => l.slug
 for (const m of mods) if (!ORDER.has(m.baiHoc)) { console.log(`✗ module ${m.slug}: bài ${m.baiHoc} không có trong PRO192.mjs`); loi++; }
 mods.sort((a, b) => (ORDER.get(a.baiHoc) ?? 1e9) - (ORDER.get(b.baiHoc) ?? 1e9));
 const en = (t) => (typeof t === 'string' ? t : t.en);
-const capDo = (m) => (/^(1|2|3)\./.test(m.ten) ? 'BEGINNER' : /^(1[1-9])\./.test(m.ten) ? 'ADVANCED' : 'INTERMEDIATE');
+const capDo = (m) => (/^(1|2|3)\./.test(m.ten) ? 'BEGINNER' : /^(1[1-9])\.|^⭐|^🏁/.test(m.ten) ? 'ADVANCED' : 'INTERMEDIATE');
 const track = {
   groupSlug: 'fptu',
   slug: 'pro192-practice',

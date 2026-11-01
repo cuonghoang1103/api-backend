@@ -33,6 +33,7 @@ export const KHOA_CUA_TRACK: Readonly<Record<string, string>> = Object.freeze({
   'nwc204-practice': 'nwc204-computer-networking',
   'mad101-practice': 'discrete-mathematics',
   'pro192-practice': 'object-oriented-programming',
+  'csd201-practice': 'data-structures-and-algorithms',
 });
 
 /**
@@ -195,6 +196,22 @@ export const TEN_CHUONG: Readonly<Record<string, Readonly<Record<number, string>
     11: '⭐ Chuyên sâu: Java 17, JVM, thiết kế, đa luồng',
     12: 'Dự án cuối khoá — CT Library 1.0',
     13: 'Luyện PE — đề thi thực hành',
+  },
+  // CSD201 (01/11/2026) — số chương theo khoá data-structures-and-algorithms (content/academy/CSD201.mjs); 9 = Nâng cao,
+  // 10 = ⭐ Chuyên sâu, 11 = Luyện PE bằng đề thật (tên module "N.M …" do content/codelab/csd201-practice đặt).
+  'csd201-practice': {
+    0: 'Mở đầu — độ phức tạp & Big-O',
+    1: 'Danh sách & danh sách liên kết',
+    2: 'Ngăn xếp, hàng đợi & hàng đợi ưu tiên',
+    3: 'Đệ quy',
+    4: 'Cây & cây nhị phân tìm kiếm',
+    5: 'Đồ thị',
+    6: 'Sắp xếp',
+    7: 'Băm',
+    8: 'Xử lý văn bản & nén',
+    9: 'Nâng cao — Red-Black, B-tree, Union-Find, khấu hao',
+    10: '⭐ Chuyên sâu — thuật toán phỏng vấn',
+    11: '🎯 Luyện PE — đề thi thật',
   },
 });
 

@@ -13,6 +13,7 @@ import { CheckCircle2, XCircle, Loader2, Lock, MinusCircle, ChevronRight, Trophy
 import type { Diem, Kiem, KetQuaKiem, TestsJson } from './cham/kieu';
 import { chapNhan, demDotBien } from './cham/diem';
 import { BangSqlNho, BangSqlSo } from './BangSqlSo';
+import { pickLang } from '@/lib/utils';
 
 export type CheDoCham = 'chay' | 'nop';
 
@@ -31,6 +32,22 @@ export interface TrangThaiCham {
 }
 
 export const CHAM_RONG: TrangThaiCham = { dang: null, cheDo: null, ketQua: null, diem: null, dat: 0, tong: 0, ms: 0, loi: null, daLuu: null };
+
+/**
+ * `moTa` của một kiểm có thể là chuỗi thường, chuỗi song ngữ "EN|||VI", hoặc object `{ en, vi }`
+ * (nhiều track viết dạng này: api-design, authentication, networking, mad101, osg202…). Render thẳng
+ * object ⇒ React #31 "Objects are not valid as a React child" làm sập cả trang đề (01/11/2026).
+ * Panel này nói tiếng Việt nên ưu tiên `vi`.
+ */
+export function chuMoTa(m: unknown): string {
+  if (typeof m === 'string') return pickLang(m, 'vi');
+  if (m && typeof m === 'object') {
+    const o = m as { vi?: unknown; en?: unknown };
+    const v = typeof o.vi === 'string' && o.vi ? o.vi : typeof o.en === 'string' ? o.en : '';
+    return v;
+  }
+  return m == null ? '' : String(m);
+}
 
 function moTaLoiGoi(k: Kiem): string | null {
   const goi = typeof k.goi === 'string' ? k.goi : null;
@@ -83,7 +100,7 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
               const loiGoi = moTaLoiGoi(k);
               return (
                 <li key={idx} className="cl-tp-case">
-                  <div className="cl-tp-row"><span className="cl-tp-n">{idx + 1}</span><span className="min-w-0 flex-1">{k.moTa}</span></div>
+                  <div className="cl-tp-row"><span className="cl-tp-n">{idx + 1}</span><span className="min-w-0 flex-1">{chuMoTa(k.moTa)}</span></div>
                   {loiGoi && (
                     <dl className="cl-tp-io">
                       <div><dt>Gọi</dt><dd><code>{loiGoi}</code></dd></div>
@@ -166,7 +183,7 @@ export function TestPanel({ tj, st, onDong, videoHref, chiKetQua }: { tj: TestsJ
                     <button type="button" className="cl-tp-row" onClick={() => setMo((m) => ({ ...m, [idx]: !mo1 }))} disabled={an || (!r.thay && !r.mong)}>
                       {r.boQua ? <MinusCircle size={15} className="cl-tp-ic skip" /> : r.dat ? <CheckCircle2 size={15} className="cl-tp-ic ok" /> : <XCircle size={15} className="cl-tp-ic bad" />}
                       <span className="min-w-0 flex-1 text-left">
-                        {an ? <><Lock size={11} className="mr-1 inline" />{laMut ? 'Đột biến ẩn' : 'Kiểm ẩn'} #{r.i + 1}</> : r.moTa}
+                        {an ? <><Lock size={11} className="mr-1 inline" />{laMut ? 'Đột biến ẩn' : 'Kiểm ẩn'} #{r.i + 1}</> : chuMoTa(r.moTa)}
                         {laMut && r.nhom === 'dot-bien' && !r.boQua && <b className="ml-2 text-xs">{r.dat ? '· đã diệt' : mut && !mut.xanh ? '· chưa chấm' : '· CÒN SỐNG'}</b>}
                       </span>
                       {typeof r.ms === 'number' && <span className="cl-tp-ms">{r.ms} ms</span>}

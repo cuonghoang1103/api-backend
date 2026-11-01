@@ -272,6 +272,9 @@ app.use(
     crossOriginResourcePolicy: { policy: 'cross-origin' },
     contentSecurityPolicy: false, // Disable CSP — let Next.js handle it
     crossOriginEmbedderPolicy: false,
+    // HSTS do nginx đặt (2 năm + preload, mọi location). Helmet cũng đặt bản 1 năm ⇒ /api/v1/*
+    // từng trả HAI header Strict-Transport-Security (01/11/2026). Một chỗ thôi: nginx.
+    strictTransportSecurity: false,
   }),
 );
 

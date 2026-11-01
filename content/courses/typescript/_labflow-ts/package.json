@@ -9,7 +9,8 @@
     "test": "node --test --test-reporter=spec \"src/**/*.test.ts\"",
     "check": "npm run typecheck && npm test",
     "lab1": "node scripts/cham-lab-1.mjs",
-    "lab2": "node scripts/cham-lab-2.mjs"
+    "lab2": "node scripts/cham-lab-2.mjs",
+    "lab3": "node scripts/cham-lab-3.mjs"
   },
   "engines": {
     "node": ">=22.18"

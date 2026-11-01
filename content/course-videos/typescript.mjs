@@ -40,6 +40,7 @@ export default {
     "typescript-3-2-callback": { yt: "m8O-Bo3I8pc", credit: "Smartherd — Functions as Type | TypeScript Tutorial" },
     "typescript-3-3-overload-void": { yt: "322L8At_sBo", credit: "nevsky.programming — Function Overloading in TypeScript  - TypeScript Tutorial" },
     "typescript-3-4-this": { yt: "wueQKy86aSY", credit: "Typed Rocks — The Secret THIS Parameter: TypeScript’s overlooked Superpower Explained!" },
+    "typescript-3-6-lab-luat-dat-phong": { yt: "XnyZXNnWAOA", credit: "Jack Herrington — No BS TS #4 - Function Overloading in Typescript" },
     /* ── Chương 4 ── */
     "typescript-4-1-dang-object": { yt: "9dw2ik9N8wo", credit: "Dave Gray — Typescript Objects, Arrays, Tuples & Enums | Basics Tutorial" },
     "typescript-4-2-interface-vs-type": { yt: "IXAT3If0pGI", credit: "basarat — TypeScript TYPES vs INTERFACES (Key Differences)" },

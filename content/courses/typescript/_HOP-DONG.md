@@ -90,6 +90,18 @@ _labflow-ts/
   `vua/` "null thật, mảng thường" **7/10** (E 4/8: S5–S8 lọt) · tham khảo **10/10**. Mã đo được: S1 TS2532, S2 TS18047, S3 TS18048, S4 TS2531,
   S5 TS2322, S6 TS2540, S7 TS2322 (tsc 7 in union đã sắp: `"AL-301" | "BE-201" | "BE-202"`), S8 TS2339.
 
+### 3.1c Chương 3 thêm gì (01/11/2026)
+- `src/rules/validate.ts` + `validate.test.ts` (10 test; `npm test` = 33 test) = lời giải Lab 3: `ProblemCode`, `Problem`,
+  `type Rule = (input: BookingInput) => Problem | null`, 4 luật hằng `: Rule`, `maxSeats(limit): Rule` (closure), `RULES`, overload
+  `toMinutes(text): number` / `toMinutes(texts: readonly string[]): number[]` (KHÔNG overload `parseTime` của `time.ts` — làm thế phá máy chấm
+  Lab 1: S1 sẽ ra TS2769 thay vì TS2345), `validate(input, rules, onProblem?)`, `totalMinutes(...ranges: TimeRange[])`,
+  `Validator` với `run(this: Validator, …)` + `createValidator`.
+- `lab3/` (khởi đầu dùng `Function`, bản sao time/booking/schedule, test, `kiem/`, `yeu/`, `vua/`), `scripts/cham-lab-3.mjs` (`npm run lab3`;
+  phần C cấm thêm `Function`), `demo3/<deck>/`.
+- Số đo Lab 3: khởi đầu tsc chỉ **2 lỗi** (TS7006, TS7019 — `Function` tắt kiểm) · **1/10** (E 2/8) · `yeu/` "(...args: any[]) => any" **6/10** ·
+  `vua/` "Rule thật, toMinutes trả union, không this" **8/10** (S4 ra TS2345 thay vì TS2769, S8 lọt) · tham khảo **10/10**. Mã: S1–S3 TS2322,
+  S4 TS2769, S5–S6 TS2345, S7 TS2554 ("Expected 2-3 arguments"), S8 TS2684.
+
 ### 3.2 Số đo nền của Lab 1 (01/11/2026, chạy thật)
 | Bài nộp | A tsc src (2) | B gọi đúng (1) | C không any (1) | D 15 test (2) | E 8 lời gọi sai bị từ chối (4) | Tổng |
 |---|---|---|---|---|---|---|
@@ -238,12 +250,20 @@ typescript: 'typescript-practice',
 ## 10. Trạng thái
 - 01/11/2026 — đợt mẫu **Mục 0 + Chương 1**: 7 + 6 bài (2 bài "Bắt đầu" + Lab 1 + quiz Mục 0 là bài MỚI), 11 deck / 130 slide đẩy `TS/v1`
   (`VER` rỗng), 31 đề Code Lab `ts` / 66 bài sai mẫu (kiem-de-ts 31/31), 8 cặp liên kết chéo. Độ dài (nguồn bài + giảng): 38–42k ký tự/bài.
-  Các chương 3–16 (lúc viết dòng này) vẫn là bài cũ (chữ, video YouTube, chưa slide/lab/Code Lab) — soạn theo §5 + §9, bắt chước đợt mẫu.
+  Các chương 4–16 (lúc viết dòng này) vẫn là bài cũ (chữ, video YouTube, chưa slide/lab/Code Lab) — soạn theo §5 + §9, bắt chước đợt mẫu.
 - 01/11/2026 — **Chương 2 trọn**: 4 bài (slug giữ) + Lab 2 (MỚI `typescript-2-6-lab-lich-phong`) + quiz 10 câu; 5 deck / 58 slide đẩy `TS/v1`
   (ts-02-1..4 mỗi deck 12, ts-lab-2 10); 17 đề Code Lab `ts` mới (ts-cl-2-1..4 a–d + ts-cl-lab-2), 38 sai mẫu — kiem-de-ts 48/48 (tsc 7.0.2) và
   17/17 với tsc 6.0.3; 4 cặp liên kết chéo (postgresql 4.2, react 2.3, api-design 4.1, prisma-orm 8.3). Độ dài nguồn bài + giảng 43–47k ký tự.
   Cách làm: viết `$S/ts/BRIEF-CH2.md` rồi fork 4 tác tử soạn 4 bài song song (demo riêng `demo2/<deck>`, đề Code Lab ra tệp riêng rồi gộp),
   phiên chính làm Lab, quiz, tệp chương, liên kết chiều ngược, upload, ảnh chụp dự án.
+- 01/11/2026 — **Chương 3 trọn**: 4 bài (slug giữ, nguồn bài + giảng 39–43k) + Lab 3 (MỚI `typescript-3-6-lab-luat-dat-phong`) + quiz 10 câu;
+  5 deck / 58 slide đẩy `TS/v1`; 17 đề Code Lab `ts` mới (ts-cl-3-1..4 + ts-cl-lab-3) — kiem-de-ts 64/64 (tsc 7.0.2), ch3 16/16 với tsc 6.0.3;
+  4 cặp liên kết chéo (api-design 3.1, nodejs 1.2, nodejs 1.4, react 2.2). Brief: `$S/ts/BRIEF-CH3.md` (cùng cách làm Ch2).
+  ⚠️ Bẫy khi fork song song: một tác tử chạy tsc với `extends` sai ⇒ không `noEmit` ⇒ đẻ `.js`/`.d.ts` vào `src/rules/` và `demo*/` của dự án chung —
+  luôn `find . -name "*.d.ts" -o -name "*.js"` (trừ `js/`, demo cố ý) trước khi rsync ảnh chụp.
+- **Việc tiếp theo: Chương 4** (Object, interface & type alias — §9: mô hình miền Lab/User/Booking readonly/optional + `Record<LabCode, Lab>`, Lab 4).
+  Làm y Ch2/Ch3: viết `$S/ts/BRIEF-CH4.md` (chép BRIEF-CH3, đổi bảng bài), fork 4 bài, phiên chính làm Lab 4 + quiz + tệp chương + liên kết ngược +
+  upload + ảnh chụp `_labflow-ts` (cuối Ch3: 33 test, lab1/2/3 tham khảo 10/10).
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

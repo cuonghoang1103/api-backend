@@ -1,0 +1,1 @@
+{ "extends": "../../../tsconfig.json", "compilerOptions": { "noImplicitThis": false }, "include": ["plain.ts"] }

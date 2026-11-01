@@ -274,6 +274,11 @@ EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY create
   <span class="lc-body"><span class="lc-title">You met this in PRJ301 — lesson 6.3: search, sorting and paging</span><span class="lc-sub">If you took PRJ301 on Academy, OFFSET/FETCH and the page formula are the same mechanism. Same: offset = (page − 1) × pageSize, an ORDER BY is required, a whitelist for the sort column. Different: PRJ301 renders pages in JSP; here the API returns pages to any client. This lesson adds: a maximum page size, a tie-breaker, the Link header, and measured problems — duplicates while data changes and 78 ms deep pages on a million rows. Not taken PRJ301? This lesson stands on its own.</span></span>
   <span class="lc-cta">OPEN PRJ301 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Defaults inside the code — TypeScript 3.1: Typing parameters</span><span class="lc-sub">Same: a value the caller may leave out gets a default, and “absent” must not be confused with “present but empty”. Different: there tsc checks a function’s defaults and its whole parameter list before anything runs (TS2554, TS18048) — and a JSON null skips a default unless the type says | null and the code uses ??.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -525,6 +530,11 @@ EXPLAIN (ANALYZE, COSTS OFF) SELECT id, created_at FROM bookings ORDER BY create
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp phần này ở PRJ301 — bài 6.3: tìm kiếm, sắp xếp và phân trang</span><span class="lc-sub">Nếu đã học PRJ301 trên Academy, OFFSET/FETCH và công thức tính trang là cùng một cơ chế. Giống: offset = (page − 1) × pageSize, bắt buộc có ORDER BY, danh sách cho phép cho cột sắp xếp. Khác: PRJ301 vẽ trang bằng JSP; ở đây API trả trang cho mọi loại client. Bài này thêm: kích thước trang tối đa, khoá phụ phân xử, header Link, và các vấn đề đo được — trùng dòng khi dữ liệu đổi, trang sâu 78 ms trên một triệu dòng. Chưa học PRJ301? Bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI PRJ301 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-1-tham-so" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Giá trị mặc định ngay trong code — TypeScript 3.1: Gõ kiểu tham số</span><span class="lc-sub">Giống: giá trị người gọi được bỏ qua thì có mặc định, và “vắng mặt” không được lẫn với “có mặt nhưng rỗng”. Khác: bên đó tsc kiểm giá trị mặc định và cả danh sách tham số của hàm trước khi chạy (TS2554, TS18048) — và null từ JSON bỏ qua giá trị mặc định trừ khi kiểu ghi | null và code dùng ??.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

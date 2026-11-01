@@ -234,6 +234,11 @@ rebound with bind: Hello from NotesAPI</div>
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">MDN — Closures</span><span class="lc-sub">The mechanism behind private state, and the loop trap from lesson 1.1.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-2-callback" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Closures with types — TypeScript 3.2: Function types &amp; callbacks</span><span class="lc-sub">Same: a factory returns a function that remembers its configuration (createCounter here, maxSeats(limit) there) — the shape of requireRole(role). Different: the factory has a return type (Rule), so a callback with the wrong parameters or return is refused before it runs (TS2322), and .map(parseInt) compiles yet returns [7, NaN, 0, 3].</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 
 </div>
 
@@ -303,6 +308,11 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Closures" target="_blank" rel="noopener">
   <span class="lc-ico">🔒</span>
   <span class="lc-body"><span class="lc-title">MDN — Closure</span><span class="lc-sub">Cơ chế đứng sau trạng thái riêng tư, và cái bẫy vòng lặp ở bài 1.1.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-2-callback" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Closure có kiểu — TypeScript 3.2: Kiểu hàm &amp; callback</span><span class="lc-sub">Giống: factory trả về một hàm nhớ cấu hình (createCounter ở đây, maxSeats(limit) bên kia) — đúng hình dạng requireRole(role). Khác: factory có kiểu trả về (Rule), nên callback sai tham số hay sai kiểu trả về bị từ chối trước khi chạy (TS2322), và .map(parseInt) biên dịch được mà vẫn trả [7, NaN, 0, 3].</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 
 </div>
@@ -536,6 +546,11 @@ Node.js v22.21.0
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Practise async — Module 318</span><span class="lc-sub">Promise chaining, error handling and parallelism exercises with solutions.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-3-overload-void" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Why TypeScript lets this crash through — TS 3.3: Overloads &amp; the void-return subtlety</span><span class="lc-sub">Same: an unhandled rejected Promise ends the Node process; forEach(async …) waits for nothing. Different: a <code>=&gt; void</code> callback slot accepts an async function with tsc 0 errors (measured: exit code 1); type the slot as a Promise you await, or lint with no-misused-promises.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -624,6 +639,11 @@ Node.js v22.21.0
 <a class="link-card codelab" href="/code-lab/nodejs-express${REF}#module-318" target="_blank" rel="noopener">
   <span class="lc-ico">⌨️</span>
   <span class="lc-body"><span class="lc-title">Luyện bất đồng bộ — Module 318</span><span class="lc-sub">Bài tập nối chuỗi Promise, xử lý lỗi và chạy song song, có lời giải.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-3-overload-void" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Vì sao TypeScript để lọt cú sập này — TS 3.3: Overload &amp; điều tinh tế của void</span><span class="lc-sub">Giống: Promise bị reject không ai xử lý làm tiến trình Node kết thúc; forEach(async …) không chờ gì. Khác: chỗ callback <code>=&gt; void</code> nhận hàm async mà tsc 0 lỗi (đo: thoát mã 1); gõ kiểu chỗ đó là Promise rồi await, hoặc bật lint no-misused-promises.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

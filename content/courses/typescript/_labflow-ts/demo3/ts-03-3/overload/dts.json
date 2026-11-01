@@ -1,0 +1,7 @@
+{
+  // Ask tsc what callers SEE: write only the declaration file of minutes.ts, into a temporary folder.
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": { "noEmit": false, "declaration": true, "emitDeclarationOnly": true, "rootDir": "../../..", "outDir": "../../../.dts-03-3" },
+  "include": [],
+  "files": ["minutes.ts"]
+}

@@ -936,6 +936,11 @@ ${LINK('https://react.dev/reference/react-dom/components/input', '📄', 'react.
   <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 6.1: Event handlers, synthetic events &amp; forms</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: passing handlers, passing parameters, preventDefault. Different: Courses adds event types in TypeScript and bubbling. In this lesson we add: give React a function — do not call it, three ways to write a handler, event bubbling, the form reloading the page. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN FER202 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-4-this" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Why the handler lost this — TypeScript 3.4: this, the parameter you did not know you had</span><span class="lc-sub">Same: a method handed over as a callback (onClick={this.handleClick}) loses this and throws “Cannot read properties of undefined”. Different: there you see why (this is set by the call), measured in Node; a this parameter makes tsc refuse plain calls (TS2684), but callbacks in map/setTimeout still slip through — the closure design avoids this entirely.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -1081,6 +1086,11 @@ ${LINK('https://react.dev/reference/react-dom/components/input', '📄', 'react.
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 6.1: Sự kiện, synthetic event &amp; form</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: truyền hàm xử lý, truyền tham số, preventDefault. Khác: Courses thêm kiểu sự kiện trong TypeScript và chuyện nổi bọt. Ở bài này mình học thêm: đưa cho React một hàm — đừng gọi nó, ba cách viết handler, sự kiện nổi bọt, form tải lại trang. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-4-this" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Vì sao handler mất this — TypeScript 3.4: this, tham số bạn không biết mình có</span><span class="lc-sub">Giống: method bị đưa đi làm callback (onClick={this.handleClick}) mất this và ném “Cannot read properties of undefined”. Khác: bên đó thấy được vì sao (this do lời gọi quyết định), đo trong Node; tham số this khiến tsc từ chối lời gọi trần (TS2684), nhưng callback trong map/setTimeout vẫn lọt — thiết kế closure né hẳn this.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,
